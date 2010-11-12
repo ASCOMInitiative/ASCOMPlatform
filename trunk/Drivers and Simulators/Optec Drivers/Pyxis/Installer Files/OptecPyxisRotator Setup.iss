@@ -6,7 +6,7 @@
 AppId=OptecPyxisPrograms
 ;Do not include verison number in AppName. Displayed thoroughout the install process
 AppName=Optec Pyxis Rotator Programs    
-AppVerName=Optec Pyxis Rotator Programs 2.0.0
+AppVerName=Optec Pyxis Rotator Programs 2.0.0 BETA
 AppVersion=2.0.0
 AppPublisher=Jordan Schaenzle <support@optecinc.com>
 AppPublisherURL=mailto:support@optecinc.com
@@ -28,7 +28,6 @@ LicenseFile="C:\Program Files (x86)\ASCOM\InstallGen\Resources\CreativeCommons.t
 UninstallFilesDir="{app}\Uninstall"
 UninstallDisplayIcon="I:\Software Development\ICONS\Pyxis LE\Rotator.ico"
 SetupLogging=yes
-
 
 
 [Languages]
