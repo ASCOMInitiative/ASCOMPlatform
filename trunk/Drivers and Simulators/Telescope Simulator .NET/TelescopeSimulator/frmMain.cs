@@ -15,6 +15,7 @@ namespace ASCOM.TelescopeSimulator
         public frmMain()
         {
             InitializeComponent();
+            this.BringToFront();
 
         }
         public void DoSetupDialog()

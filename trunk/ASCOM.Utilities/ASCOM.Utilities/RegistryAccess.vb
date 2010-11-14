@@ -237,7 +237,7 @@ Friend Class RegistryAccess
             GetProfileMutex("GetProfile", p_SubKeyName & " " & p_ValueName & " " & p_DefaultValue)
             sw.Reset() : sw.Start() 'Start timing this call
             TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """ Name: """ & p_ValueName & """" & """ DefaultValue: """ & p_DefaultValue & """")
-
+            TL.LogMessage("  DefaultValue", "is nothing... " & (p_DefaultValue Is Nothing).ToString)
             RetVal = "" 'Initialise return value to null string
             Try
                 RetVal = ProfileRegKey.OpenSubKey(CleanSubKey(p_SubKeyName)).GetValue(p_ValueName).ToString

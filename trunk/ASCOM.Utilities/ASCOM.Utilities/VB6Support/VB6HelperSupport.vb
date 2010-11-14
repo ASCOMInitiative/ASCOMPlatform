@@ -23,6 +23,7 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
         <DispId(5)> Sub CreateKey(ByVal p_SubKeyName As String, ByVal CName As String)
         <DispId(6)> Function EnumKeys(ByVal p_SubKeyName As String, ByVal CName As String) As ArrayList 'Scripting.Dictionary 'Hashtable
         <DispId(7)> Sub DeleteKey(ByVal p_SubKeyName As String, ByVal CName As String)
+        <DispId(8)> Function IsRegistered(ByVal p_DriverID As String, ByVal p_DriverType As String) As Boolean
     End Interface
 
     <Guid("ABE720E6-9C2C-47e9-8476-6CE5A3F994E2"), _
@@ -74,6 +75,7 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
 
         Private Profile As RegistryAccess
         Private TL As TraceLogger
+        Private LastDriverID As String, LastResult As Boolean ' Cache values to improve IsRegistered performance
 
 #Region "New and IDisposable Support"
         Public Sub New()
@@ -208,6 +210,40 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
 
             Profile.DeleteKey(p_SubKeyName)
         End Sub
+
+        Public Function IsRegistered(ByVal DriverID As String, ByVal DriverType As String) As Boolean Implements IProfileAccess.IsRegistered
+            'Confirm that the specified driver is registered
+            Dim keys As Generic.SortedList(Of String, String)
+            Dim IndStr As String = "  "
+
+            'If DriverID = LastDriverID Then
+            ' TL.LogMessage(IndStr & "IsRegistered", IndStr & DriverID.ToString & " - using cached value: " & LastResult)
+            ' Return LastResult
+            ' End If
+            TL.LogStart(IndStr & "IsRegistered", IndStr & DriverID.ToString & " ")
+
+            IsRegistered = False ' Assume failure
+            If DriverID = "" Then
+                TL.LogFinish("Null string so exiting False")
+                Exit Function ' Nothing is a failure
+            End If
+
+            Try
+                keys = Profile.EnumKeys(DriverType & " Drivers")
+                If keys.ContainsKey(DriverID) Then
+                    TL.LogFinish("Key " & DriverID & " found")
+                    IsRegistered = True ' Found it
+                Else
+                    TL.LogFinish("Key " & DriverID & " not found")
+                End If
+            Catch ex As Exception
+                TL.LogFinish("Exception: " & ex.ToString)
+            End Try
+
+            LastDriverID = DriverID
+            LastResult = IsRegistered
+        End Function
+
 #End Region
 
     End Class
