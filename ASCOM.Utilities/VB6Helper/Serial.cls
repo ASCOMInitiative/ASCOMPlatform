@@ -60,14 +60,12 @@ Public Enum PortSpeed
 End Enum
 
 Private m_fSafeForScripting As Boolean
-Private m_COM As ASCOM_Utilities.Serial
+Private m_COM As Object
 
 Private Sub Class_Initialize()
 'MsgBox "DRIVERHELPER.SERIAL Class init"
     m_fSafeForScripting = True
-  'Set m_COM = CreateObject("DriverHelper.SerialSupport")
-  
-  Set m_COM = New ASCOM_Utilities.Serial
+  Set m_COM = CreateObject("DriverHelper.SerialSupport")
 End Sub
 
 Private Sub Class_Terminate()
@@ -80,6 +78,7 @@ Public Property Get Port() As Integer
 Attribute Port.VB_Description = "The COM port number to use for serial communication"
 'MsgBox "DRIVERHELPER.SERIAL Get port"
     Port = m_COM.Port
+    
 End Property
 
 Public Property Let Port(ByVal iNewValue As Integer)

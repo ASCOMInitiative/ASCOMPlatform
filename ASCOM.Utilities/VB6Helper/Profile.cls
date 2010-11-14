@@ -106,9 +106,11 @@ Attribute IsRegistered.VB_Description = "Return True if the driver with the give
     
     IsRegistered = False                        ' Assume failure
     If DriverID = "" Then Exit Function         ' Nothing is a failure
-    On Error GoTo NOT_THERE
-    Reg.GetProfile MakeKey(DriverID, ""), "", ERR_SOURCE_PROFILE ' Try to get friendly name
-    IsRegistered = True                         ' Found it
+    'On Error GoTo NOT_THERE
+    'Reg.GetProfile MakeKey(DriverID, ""), "", ERR_SOURCE_PROFILE ' Try to get friendly name
+    'IsRegistered = True                         ' Found it
+    IsRegistered = Reg.IsRegistered(DriverID, m_sDeviceType) 'Create a new support function to handle registration better
+    
 NOT_THERE:
     
 End Function
