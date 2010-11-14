@@ -176,7 +176,7 @@ Friend Class ChooserForm
             ProfileStore.WriteProfile("Chooser", sProgID & " Init", "True") ' Remember it has been initialized
             Me.cmdOK.Enabled = True
         Catch ex As Exception
-            MsgBox("Failed to load driver: " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+            MsgBox("Failed to load driver: " & ex.ToString, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
         End Try
 
         'Clean up and release resources

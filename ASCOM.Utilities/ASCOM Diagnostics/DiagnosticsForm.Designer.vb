@@ -23,19 +23,19 @@ Partial Class DiagnosticsForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(DiagnosticsForm))
-        Me.btnCOM = New System.Windows.Forms.Button
-        Me.btnExit = New System.Windows.Forms.Button
-        Me.lblMessage = New System.Windows.Forms.Label
-        Me.lblTitle = New System.Windows.Forms.Label
-        Me.lblResult = New System.Windows.Forms.Label
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip
-        Me.ChooserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.ChooserToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem
-        Me.ChooserNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.ConnectToDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.ListAvailableCOMPortsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.lblAction = New System.Windows.Forms.Label
-        Me.btnLastLog = New System.Windows.Forms.Button
+        Me.btnCOM = New System.Windows.Forms.Button()
+        Me.btnExit = New System.Windows.Forms.Button()
+        Me.lblMessage = New System.Windows.Forms.Label()
+        Me.lblTitle = New System.Windows.Forms.Label()
+        Me.lblResult = New System.Windows.Forms.Label()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.ChooserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ChooserToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ChooserNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConnectToDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ListAvailableCOMPortsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.lblAction = New System.Windows.Forms.Label()
+        Me.btnLastLog = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -104,7 +104,7 @@ Partial Class DiagnosticsForm
         '
         'ChooserToolStripMenuItem
         '
-        Me.ChooserToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChooserToolStripMenuItem1, Me.ChooserNETToolStripMenuItem, Me.ConnectToDeviceToolStripMenuItem, Me.ListAvailableCOMPortsToolStripMenuItem})
+        Me.ChooserToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConnectToDeviceToolStripMenuItem, Me.ChooserToolStripMenuItem1, Me.ChooserNETToolStripMenuItem, Me.ListAvailableCOMPortsToolStripMenuItem})
         Me.ChooserToolStripMenuItem.Name = "ChooserToolStripMenuItem"
         Me.ChooserToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
         Me.ChooserToolStripMenuItem.Text = "Tools"
@@ -125,7 +125,7 @@ Partial Class DiagnosticsForm
         '
         Me.ConnectToDeviceToolStripMenuItem.Name = "ConnectToDeviceToolStripMenuItem"
         Me.ConnectToDeviceToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
-        Me.ConnectToDeviceToolStripMenuItem.Text = "Connect to Device"
+        Me.ConnectToDeviceToolStripMenuItem.Text = "Choose and Connect to Device"
         '
         'ListAvailableCOMPortsToolStripMenuItem
         '

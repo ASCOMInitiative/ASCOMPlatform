@@ -425,6 +425,7 @@ namespace ASCOM.Simulator
             if (bRegister)
             {
                 p.Register(sCsDriverId, sCsDriverDescription);
+                p.CreateSubKey(sCsDriverId,"Switches"); //Driver instantiation fails if this subkey is not present
             }
             else
             {

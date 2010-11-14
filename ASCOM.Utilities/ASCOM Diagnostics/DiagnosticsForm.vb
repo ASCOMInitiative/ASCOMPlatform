@@ -52,6 +52,7 @@ Public Class DiagnosticsForm
         System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
 
         btnLastLog.Enabled = False 'Disable last log button
+        Me.BringToFront()
     End Sub
 
     Sub Status(ByVal Msg As String)

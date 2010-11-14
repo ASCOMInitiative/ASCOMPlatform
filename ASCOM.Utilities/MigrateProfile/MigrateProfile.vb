@@ -15,7 +15,8 @@ Module MigrateProfile
     Sub Main()
         Dim args() As String
         Dim PR As Profile
-        Dim parmEraseOnly, parmForce, parmMigrateIfNeeded, parmSavePlatformVersion, parmCreateRegistryKey As Boolean
+        'Dim parmEraseOnly, parmForce, 
+        Dim parmMigrateIfNeeded, parmSavePlatformVersion, parmCreateRegistryKey As Boolean
         Dim Utl As Util, Key As RegistryKey, CurrentProfileVersion As String
 
         Const LAST_PROFILE_VALUE_NAME As String = "LastPlatformVersion"
@@ -27,46 +28,57 @@ Module MigrateProfile
             args = System.Environment.GetCommandLineArgs
 
             'Initialise default values
-            parmForce = False
-            parmEraseOnly = False
+            'parmForce = False
+            'parmEraseOnly = False
             parmMigrateIfNeeded = False
+            parmCreateRegistryKey = False
+            parmSavePlatformVersion = False
             For Each arg As String In args
-                If Len(arg) > 1 Then
-                    Select Case UCase(Mid(arg, 2))
-                        Case "FORCE" 'Migrate without prompts
-                            parmForce = True
-                        Case "ERASE" 'Erase the new profile only, do not migrate
-                            parmEraseOnly = True
-                        Case "MIGRATEIFNEEDED" '
-                            parmMigrateIfNeeded = True
-                        Case "SAVEPLATFORMVERSION"
-                            parmSavePlatformVersion = True
-                        Case "CREATEREGISTRYKEY"
-                            parmCreateRegistryKey = True
-                        Case Else
-                    End Select
-                End If
+                'Select Case UCase(Mid(arg, 2))
+                Select Case UCase(Trim(arg))
+                    'Case "FORCE" 'Migrate without prompts
+                    '    parmForce = True
+                    'Case "ERASE" 'Erase the new profile only, do not migrate
+                    '    parmEraseOnly = True
+                    Case "MIGRATEPROFILE", "MIGRATEPROFILE.EXE" 'Name of executable so do nothing!
+                    Case "MIGRATEIFNEEDED" '
+                        parmMigrateIfNeeded = True
+                    Case "SAVEPLATFORMVERSION"
+                        parmSavePlatformVersion = True
+                    Case "CREATEREGISTRYKEY"
+                        parmCreateRegistryKey = True
+                    Case Else 'Ignore migrate profile 0th parameter, otherwise give error message
+                        If InStr(UCase(Trim(arg)), "MIGRATEPROFILE") = 0 Then MsgBox("Migrate: Unrecognised parameter - """ & arg & """ CREATEREGISTRYKEY")
+                End Select
             Next
+            LogEvent("MigrateProfile", "CreateRegistryKey: " & parmCreateRegistryKey & ", SavePlatformVersion: " & parmSavePlatformVersion & ", MigrateifNeeded: " & parmMigrateIfNeeded, EventLogEntryType.Information, 0, Nothing)
+            If Not (parmCreateRegistryKey Or parmMigrateIfNeeded Or parmSavePlatformVersion) Then
+                MsgBox("MirateProfile: No parameter supplied, requires - SAVEPLATFORMVERSION CREATEREGISTRYKEY MIGRATEIFNEEDED, these can be used in combination")
+            Else
+                If parmSavePlatformVersion Then ' Save the platform version
+                    Try
+                        Utl = New Util 'Get a Util object
 
-            LogEvent("MigrateProfile", "Force: " & parmForce & ", Erase: " & parmEraseOnly & ", MigrateifNeeded: " & parmMigrateIfNeeded & ", SavePlatformVersion: " & parmSavePlatformVersion, EventLogEntryType.Information, 0, Nothing)
+                        Key = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
+                        Key.SetValue(LAST_PROFILE_VALUE_NAME, Utl.PlatformVersion, RegistryValueKind.String) ' Save the value
+                        Key.Close() 'flush the value to disk and close the key
 
-            If parmSavePlatformVersion Then ' Just save the platform version
-                Utl = New Util 'Get a Util object
+                        Key = Nothing
+                        Utl.Dispose() 'Dispose of the Util object
+                        Utl = Nothing
+                    Catch ex As Exception ' Something went horriby wrong so platform may not be installed or it is corrupted so do not create a saved value
+                    End Try
+                End If
 
-                Key = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
-                Key.SetValue(LAST_PROFILE_VALUE_NAME, Utl.PlatformVersion, RegistryValueKind.String) ' Save the value
-                Key.Close() 'flush the value to disk and close the key
+                If parmCreateRegistryKey Then ' Create registy key
+                    Try
+                        SetRegistryACL()
+                    Catch ex As Exception
+                        MsgBox("Exception creating Key: " & ex.ToString)
+                    End Try
+                End If
 
-                Key = Nothing
-                Utl.Dispose() 'Dispose of the Util object
-                Utl = Nothing
-            ElseIf parmCreateRegistryKey Then
-                Try
-                    SetRegistryACL()
-                Catch ex As Exception
-                    MsgBox("Exception creating Key: " & ex.ToString)
-                End Try
-            Else 'Migrate the Profile if required
+                If parmMigrateIfNeeded Then 'Migrate the Profile if required
                     'Get the version of the Profile last in use
                     Key = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME) 'Create or open a registry key in which to save the value, use HKCU so we do have write accesto it by default
                     CurrentProfileVersion = Key.GetValue(LAST_PROFILE_VALUE_NAME, "Unknown") ' Read the value
@@ -81,13 +93,15 @@ Module MigrateProfile
                     End Try
 
                     Try
-                        If Not parmEraseOnly Then PR.MigrateProfile(CurrentProfileVersion) ' Migrate the profile and set platform version
+                        'If Not parmEraseOnly Then PR.MigrateProfile(CurrentProfileVersion) ' Migrate the profile and set platform version
+                        PR.MigrateProfile(CurrentProfileVersion) ' Migrate the profile and set platform version
                     Catch Ex2 As Exception
                         MsgBox("MigrateProfile - Unexpected migration exception: " & Ex2.ToString)
                     End Try
 
                     PR.Dispose() 'Clean up profile object
                     PR = Nothing
+                End If
             End If
         Catch Ex1 As Exception
             MsgBox("MigrateProfile - Unexpected overall migration exception: " & Ex1.ToString)

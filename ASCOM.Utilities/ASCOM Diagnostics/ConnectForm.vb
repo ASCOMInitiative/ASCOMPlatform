@@ -182,7 +182,7 @@ Public Class ConnectForm
         txtStatus.Clear()
         TL = New TraceLogger("", "DiagnosticScript")
         TL.Enabled = True
-
+        Prof.DeviceType = CurrentDeviceType
         Result = Prof.GetProfileXML(txtDevice.Text)
         LogMsg("GetProfile", Result)
         LogMsg("Script", "Diagnostic Script Completed")
