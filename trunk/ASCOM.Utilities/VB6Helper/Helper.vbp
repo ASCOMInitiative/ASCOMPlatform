@@ -1,9 +1,9 @@
 Type=OleDll
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\windows\system32\stdole2.tlb#OLE Automation
-Reference=*\G{3F4DACA7-160D-11D2-A8E9-00104B365C9F}#1.0#0#..\..\..\..\..\..\windows\system32\vbscript.dll\2#Microsoft VBScript Regular Expressions 1.0
-Reference=*\G{420B2830-E718-11CF-893D-00A0C9054228}#1.0#0#..\..\..\..\..\..\WINDOWS\system32\scrrun.dll#Microsoft Scripting Runtime
-Reference=*\G{C67830E0-D11D-11CF-BD80-00AA00575603}#1.0#0#..\..\..\..\..\..\Program Files\Common Files\ASCOM\Interface\IObjectSafety.tlb#VB IObjectSafety Interface
-Object={648A5603-2C6E-101B-82B6-000000000014}#1.1#0; MSCOMM32.OCX
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Reference=*\G{3F4DACA7-160D-11D2-A8E9-00104B365C9F}#1.0#0#..\..\..\Windows\system32\vbscript.dll\2#Microsoft VBScript Regular Expressions 1.0
+Reference=*\G{420B2830-E718-11CF-893D-00A0C9054228}#1.0#0#..\..\..\Windows\SysWOW64\scrrun.dll#Microsoft Scripting Runtime
+Reference=*\G{C67830E0-D11D-11CF-BD80-00AA00575603}#1.0#0#..\..\..\Program Files (x86)\Common Files\ASCOM\Interface\IObjectSafety.tlb#VB IObjectSafety Interface
+Object={648A5603-2C6E-101B-82B6-000000000014}#1.1#0; MSComm32.Ocx
 Class=Serial; Serial.cls
 Module=COM_Errors; Errors.bas
 Class=Util; Util.cls
