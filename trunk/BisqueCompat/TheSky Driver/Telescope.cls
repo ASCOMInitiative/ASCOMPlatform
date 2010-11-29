@@ -153,6 +153,11 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 '                   not tested.
 ' 17-Jun-10 rbd     5.2.4 - Fix disconnect by calling the unsupported LocalServer
 '                   member on TheSkyX.exe. Temporary fix!
+' 20-Nov-10 rbd     5.2.5 - Do not set our own Connected = False as part
+'                   of the "parking disappearance" simulation for TheSky X.
+'                   Just let TheSKy X do whatever it is going to do. It's
+'                   Bisque's responsibility to determine that behavior.
+'                   Restore previous logic for TheSKy 6. It works fine.
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -1048,26 +1053,13 @@ Public Sub Park()
     ' I suppose I could rely on just waiting for IsConnected to go to 0,
     ' but that seems like shaky ground.
     '
-    ' But this is different in TheSkyX. It stays connected but you cannot
-    ' tell if it is really parked. So, to prevent surprises to clients who
-    ' expect the behavior to stay the same, we'll disconnect after it
-    ' stops slewing, with some waiting for good measure.
-    '
     CheckConnected
     m_SkyTele.Park
-    If m_eTheSkyType = TheSkyX Then
-        m_Util.WaitForMilliseconds 5000
-        While Me.Slewing
-            m_Util.WaitForMilliseconds 5000
-        Wend
-        Me.Connected = False
-    Else
-        On Error GoTo PARK_DONE
-        Do While m_SkyTele.IsConnected = 1 And m_SkyTele.IsSlewComplete = 0
-            m_Util.WaitForMilliseconds 1000
-        Loop
+    On Error GoTo PARK_DONE
+    Do While m_SkyTele.IsConnected = 1 And m_SkyTele.IsSlewComplete = 0
+        m_Util.WaitForMilliseconds 1000
+    Loop
 PARK_DONE:
-    End If
 
 End Sub
 

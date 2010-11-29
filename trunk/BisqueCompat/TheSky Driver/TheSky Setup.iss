@@ -5,11 +5,12 @@
 ; Bob Denny (5.0.3) - New track offset capability control
 ; Bob Denny (5.2.4) - Telescope V2, TheSky X, several other improvements
 ; Modified for 64-bit and Platform > 5 by Bob Denny 16-Sep-09
+; Bob Denny (5.2.5) - Fix parking logic, remove disconnect simulation.
 ;
 [Setup]
 AppName=ASCOM TheSky Telescope Driver
-AppVerName=ASCOM TheSky Telescope Driver 5.2.4
-AppVersion=5.2.4
+AppVerName=ASCOM TheSky Telescope Driver 5.2.5
+AppVersion=5.2.5
 AppPublisher=Bob Denny <rdenny@dc3.com>
 AppPublisherURL=mailto:rdenny@dc3.com
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -19,7 +20,7 @@ DefaultDirName="{cf}\ASCOM\Telescope"
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="."
-OutputBaseFilename="TheSkyTelescope(5.2.4)Setup"
+OutputBaseFilename="TheSkyTelescope(5.2.5)Setup"
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
