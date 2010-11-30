@@ -212,6 +212,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_0BADC35AB5C34BD78F3FD1A98EEAD2D0"
+            {
+            "Name" = "8:OptecDriverTools.dll"
+            "Condition" = "8:ASCOM OR CONTROL"
+            "Object" = "8:_A7FBB8494A634357AC24CFBD1B978C31"
+            "FileType" = "3:1"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_E0EC7496_BB6D_4E21_8185_E70A5BF67153"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_25136F2C8DEC4BFC86A3B757383D448D"
             {
             "Name" = "8:Primary output from Pyxis ASCOM Driver (Active)"
@@ -221,7 +235,7 @@
             "InstallAction" = "3:1"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
-            "Sequence" = "3:1"
+            "Sequence" = "3:2"
             "Identifier" = "8:_27D6FE07_AB5E_4879_B644_86A53CACDB52"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
@@ -288,7 +302,7 @@
             "SourcePath" = "8:I:\\Software Development\\ICONS\\Pyxis LE\\Rotator.ico"
             "TargetName" = "8:Rotator.ico"
             "Tag" = "8:"
-            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
+            "Folder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -412,7 +426,7 @@
             "SourcePath" = "8:..\\..\\OptecDriverTools\\OptecDriverTools\\bin\\Release\\OptecDriverTools.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
+            "Folder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
             "Condition" = "8:ASCOM OR CONTROL"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -507,6 +521,28 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_3381C5FD49B94103AFBCA4C6CDBC29DB"
+                    {
+                    "Name" = "8:Executable Files"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_C17A80AA1F9F42E69F3DB76060733683"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_6C985227A18647068B8DD5BC476361A9"
+                    {
+                    "Name" = "8:Documentation"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_8A05D810E57B42F0A3ECDF3E138A21FD"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_C3C3DBFFCA6E4D3EA1E34512E1898611"
@@ -535,9 +571,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:OptecPyxisSetup_x64"
+        "ProductName" = "8:Optec Pyxis Programs (x64)"
         "ProductCode" = "8:{7B8C93FC-3D17-473F-9F4F-6DA16C5AA416}"
-        "PackageCode" = "8:{DF8ED47E-0679-4E3C-8360-A51EC4D78423}"
+        "PackageCode" = "8:{19A2B865-911C-4D48-98CA-D50DB9D3855B}"
         "UpgradeCode" = "8:{652E9C6F-AC20-494A-A903-4F9D90FFEB06}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -657,6 +693,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_62E47070669A4E1B8455BBDE242AACEB"
+            {
+            "Name" = "8:Optec Pyxis Rotator Control"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_D492278EE3194EC5B692DD0FEECDDE3E"
+            "Folder" = "8:_C3C3DBFFCA6E4D3EA1E34512E1898611"
+            "WorkingFolder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
+            "Icon" = "8:_19C566C8B42342EF866510AA7F35785E"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F05ED4CB80CD41F0B7C7E0FA12A48C14"
             {
             "Name" = "8:Optec Pyxis Rotator Control"
@@ -1296,7 +1346,7 @@
             "SourcePath" = "8:..\\Pyxis\\obj\\Release\\ASCOM.Pyxis.Rotator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
+            "Folder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
             "Condition" = "8:ASCOM"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1324,7 +1374,7 @@
             "SourcePath" = "8:..\\Pyxis Rotator Control\\obj\\Release\\Pyxis Rotator Control.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
+            "Folder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
             "Condition" = "8:CONTROL"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1352,7 +1402,7 @@
             "SourcePath" = "8:..\\PyxisAPI\\obj\\Release\\PyxisAPI.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
+            "Folder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
             "Condition" = "8:ASCOM OR CONTROL"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
