@@ -71,20 +71,5 @@ namespace ASCOM.Pyxis
             }
         }
 
-        protected override void OnBeforeInstall(System.Collections.IDictionary savedState)
-        {
-            // Try to call get
-            if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles), "\\ASCOM\\.net\\ASCOM.Utilities.dll")))
-            {
-                Trace.WriteLine("ASCOM.Utilities.dll Found! Platform 5.5 is installed!");
-            }
-            else
-            {
-                Trace.WriteLine("ASCOM.Utilities.dll NOT Found! Platform 5.5 is NOT installed!");
-                throw new InstallException("The ASCOM Platform 5.5 is required for this ASCOM driver however the platform can not be found on this PC. " +
-                    "The install process will now be cancelled. Please install the ASCOM Platform before continuing.");
-            }
-            base.OnBeforeInstall(savedState);
-        }
     }
 }

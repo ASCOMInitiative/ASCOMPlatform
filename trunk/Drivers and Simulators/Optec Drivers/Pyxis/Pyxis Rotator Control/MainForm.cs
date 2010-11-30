@@ -55,7 +55,6 @@ namespace Pyxis_Rotator_Control
             myPyxis.ErrorOccurred -= new EventHandler(OptecPyxis_ErrorCodeReceived);
             myPyxis.ConnectionEstablished -= new EventHandler(OptecPyxis_ConnectionEstablished);
             myPyxis.MotionHalted -= new EventHandler(OptecPyxis_MotionHalted);
-            myPyxis.DisposeSettings();
             try
             {
                 myPyxis.Disconnect();
