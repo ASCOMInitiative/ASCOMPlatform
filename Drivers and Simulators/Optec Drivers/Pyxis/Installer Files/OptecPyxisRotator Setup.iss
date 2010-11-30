@@ -19,7 +19,7 @@ DefaultDirName="{pf}\Optec\Pyxis"
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="."
-OutputBaseFilename="OptecPyxis_Installer(2.0.0)"
+OutputBaseFilename="OptecPyxis_Installer(2.0.0) Beta"
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
@@ -53,11 +53,13 @@ Name: "Control/desktopIcon"; Description:"Place Icon on my Desktop"; Types:full;
 ; THIS SECTION LISTS THE FILES TO BE INSTALLED/UNSTALLED 
 [Files] 
 ; Install the main ASCOM driver dll
-Source: "D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\Pyxis\Pyxis\bin\Release\ASCOM.Pyxis.Rotator.dll"; DestDir: "{app}\Executable Files";  Components:"ASCOM";
+Source: "D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\Pyxis\Pyxis\bin\Release\ASCOM.Pyxis.Rotator.dll"; DestDir: "{app}\Executable Files";  Components:ASCOM;
 ; Install the main control program 
-Source: "D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\Pyxis\Pyxis Rotator Control\bin\Release\Pyxis Rotator Control.exe"; DestDir: "{app}\Executable Files"; Components:"Control";
-; Install the EventLogger dll to be used by all
-Source: "D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\Pyxis\Dependencies\OptecEventLogger\bin\Release\Optec.EventLogger.dll"; DestDir: "{app}\Executable Files"; Components:Control or ASCOM
+Source: "D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\Pyxis\Pyxis Rotator Control\bin\Release\Pyxis Rotator Control.exe"; DestDir: "{app}\Executable Files"; Components:Control;
+; Install the OptecDriverTools dll
+Source: "D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\OptecDriverTools\OptecDriverTools\bin\Release\OptecDriverTools.dll"; DestDir: "{app}\Executable Files"; Components:Control or ASCOM
+; Install the PyxisAPI dll
+Source: "D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\Pyxis\PyxisAPI\bin\Release\PyxisAPI.dll"; DestDir: "{app}\Executable Files"; Components:Control or ASCOM
 ; Install ReadMe file with 
 Source: "D:\ASCOM REPO\Drivers and Simulators\Optec Drivers\Pyxis\Installer Files\RevisionHistory.txt"; DestDir: "{app}\Documentation"; Flags: isreadme
 ; Install the Documentation file (.chm)
@@ -75,8 +77,8 @@ Name: "{commonprograms}\Optec\Pyxis\Pyxis Rotator Control";  Filename:"{app}\Exe
 ; Only if driver is .NET
 [Run]
 ; Only for .NET assembly/in-proc drivers
-Filename: "{dotnet20}\regasm.exe";    Parameters: "/codebase ""{app}\Executable Files\ASCOM.Pyxis.Rotator.dll"""; Flags: runhidden; Components:"ASCOM"; StatusMsg: Registering Driver for COM;
-Filename: "{dotnet2032}\regasm.exe";  Parameters: "/codebase ""{app}\Executable Files\ASCOM.Pyxis.Rotator.dll"""; Flags: runhidden; Components:"ASCOM"; Check: IsWin64; StatusMsg: Registering Driver for 32 bit COM;
+Filename: "{dotnet20}\regasm.exe";    Parameters: "/codebase ""{app}\Executable Files\ASCOM.Pyxis.Rotator.dll"""; Flags: runhidden; Components:"ASCOM"; Check: IsWin64; StatusMsg: Registering Driver for COM;
+Filename: "{dotnet2032}\regasm.exe";  Parameters: "/codebase ""{app}\Executable Files\ASCOM.Pyxis.Rotator.dll"""; Flags: runhidden; Components:"ASCOM"; Check: NOT IsWin64; StatusMsg: Registering Driver for 32 bit COM;
 
 ; Only if driver is .NET
 [UninstallRun]
@@ -86,9 +88,11 @@ Filename: "{dotnet2032}\regasm.exe";  Parameters: "-u ""{app}\Executable Files\A
 
 ; THIS SECTION LISTS ANY ADDITION FILES TO DELETE THAT THE PROGRAM MAY HAVE CREATED
 [UninstallDelete]
-Type: files; Name:"{userappdata}\Optec\Pyxis\PyxisSettings.xml";
+Type: files; Name:"{userappdata}\Optec\Pyxis\1.0.0.1\GlobalSettings.xml";
+Type: files; Name:"{userappdata}\Optec\Pyxis\1.0.0.1\Inst_*.xml";
 Type: dirifempty; Name:"{userappdata}\Optec\Pyxis";
 Type: dirifempty; Name:"{userappdata}\Optec";
+Type: dirifempty; Name:"{userappdata}\Documentation";
 
 ; THIS SECTION IS USED TO CREATE CUSTOM PASCEL FUNCTIONS TO BE RUN DURING INSTALL
 [CODE]
@@ -132,29 +136,46 @@ begin
     result := success and (install = 1) and (serviceCount >= service);
 end;
 
-
-function InitializeSetup(): Boolean;
+procedure CurStepChanged(CurStep: TSetupStep);
 var
    H : Variant;
-begin
-   Result := FALSE;  // Assume failure
 
-   try               // Will catch all errors including missing reg data
-      H := CreateOLEObject('ASCOM.Utilities.Util');  // Assure both are available
-      if (Not H.IsMinimumRequiredVersion(5,5)) then   // Check for ASCOM Platform 5.5 at least
-	  begin
-		MsgBox('The ASCOM Platform 5.5 or greater is required for this driver.', mbInformation, MB_OK);
-        Result := FALSE;
-	  end
-	  else if (Not IsDotNetDetected('v3.5',0)) then     // Check for .NET Platform 
-	  begin
-         MsgBox('The Microsoft .NET Framework 3.5 is required for this driver. Please download it before continuing.', mbInformation, MB_OK);
-	     Result := FALSE;
-	  end
-	  else Result := True;
-   except
-   end;      
+begin
+  if(CurStep = ssInstall) THEN
+    begin
+      if(IsComponentSelected('ASCOM')) THEN
+        begin
+          try
+            H := CreateOLEObject('ASCOM.Utilities.Util');  // Assure both are available
+            if (Not H.IsMinimumRequiredVersion(5,5)) then
+              begin
+                MsgBox('The ASCOM Platform 5.5 or greater is required for this driver but not found on the PC. Install will abort.', mbInformation, MB_OK);
+                Abort
+              end
+          except
+            MsgBox('The ASCOM Platform 5.5 or greater is required for this driver but not found on the PC. Install will abort.', mbInformation, MB_OK);
+            Abort
+          end
+        end
+    end
 end;
 
 
+function InitializeSetup(): Boolean;
+begin
+  Result := FALSE
 
+  try
+    begin
+      if (Not IsDotNetDetected('v3.5',0)) then     // Check for .NET Platform
+        begin
+          Result := False
+          MsgBox('The .NET Framework 3.5 is required for this driver but not found on the PC. Install will abort.', mbInformation, MB_OK);
+        end
+      else 
+         Result := True
+      end
+  except
+    MsgBox('The .NET Framework 3.5 is required for this driver but not found on the PC. Install will abort.', mbInformation, MB_OK);
+  end
+end;

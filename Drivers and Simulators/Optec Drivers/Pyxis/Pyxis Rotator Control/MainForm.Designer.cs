@@ -42,6 +42,7 @@
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cOMPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.instancesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -80,6 +81,8 @@
             this.SetSkyPA_BTN = new System.Windows.Forms.Button();
             this.CurrentPosition_LBL = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.addEditRemoveInstanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.RelativeMovePanel.SuspendLayout();
@@ -104,7 +107,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(294, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(292, 24);
             this.menuStrip1.TabIndex = 41;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -181,7 +184,10 @@
             // 
             this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cOMPortToolStripMenuItem,
-            this.advancedSettingsToolStripMenuItem});
+            this.advancedSettingsToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.instancesToolStripMenuItem,
+            this.addEditRemoveInstanceToolStripMenuItem});
             this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
             this.setupToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
             this.setupToolStripMenuItem.Text = "Setup";
@@ -189,16 +195,23 @@
             // cOMPortToolStripMenuItem
             // 
             this.cOMPortToolStripMenuItem.Name = "cOMPortToolStripMenuItem";
-            this.cOMPortToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.cOMPortToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.cOMPortToolStripMenuItem.Text = "COM Port";
             this.cOMPortToolStripMenuItem.MouseEnter += new System.EventHandler(this.cOMPortToolStripMenuItem_MouseEnter);
             // 
             // advancedSettingsToolStripMenuItem
             // 
             this.advancedSettingsToolStripMenuItem.Name = "advancedSettingsToolStripMenuItem";
-            this.advancedSettingsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.advancedSettingsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.advancedSettingsToolStripMenuItem.Text = "Advanced Settings";
             this.advancedSettingsToolStripMenuItem.Click += new System.EventHandler(this.advancedSettingsToolStripMenuItem_Click);
+            // 
+            // instancesToolStripMenuItem
+            // 
+            this.instancesToolStripMenuItem.Name = "instancesToolStripMenuItem";
+            this.instancesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.instancesToolStripMenuItem.Text = "Change Instance";
+            this.instancesToolStripMenuItem.MouseEnter += new System.EventHandler(this.instancesToolStripMenuItem_MouseEnter);
             // 
             // viewToolStripMenuItem
             // 
@@ -313,7 +326,7 @@
             this.StatusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 491);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(294, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(292, 22);
             this.statusStrip1.TabIndex = 42;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -333,7 +346,7 @@
             this.RelativeMovePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RelativeMovePanel.Location = new System.Drawing.Point(3, 386);
             this.RelativeMovePanel.Name = "RelativeMovePanel";
-            this.RelativeMovePanel.Size = new System.Drawing.Size(263, 68);
+            this.RelativeMovePanel.Size = new System.Drawing.Size(261, 68);
             this.RelativeMovePanel.TabIndex = 3;
             // 
             // groupBox1
@@ -415,7 +428,7 @@
             this.AbsoluteMovePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AbsoluteMovePanel.Location = new System.Drawing.Point(3, 302);
             this.AbsoluteMovePanel.Name = "AbsoluteMovePanel";
-            this.AbsoluteMovePanel.Size = new System.Drawing.Size(263, 78);
+            this.AbsoluteMovePanel.Size = new System.Drawing.Size(261, 78);
             this.AbsoluteMovePanel.TabIndex = 2;
             // 
             // groupBox2
@@ -495,7 +508,7 @@
             this.RotatorDiagram_Panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RotatorDiagram_Panel.Location = new System.Drawing.Point(3, 58);
             this.RotatorDiagram_Panel.Name = "RotatorDiagram_Panel";
-            this.RotatorDiagram_Panel.Size = new System.Drawing.Size(263, 238);
+            this.RotatorDiagram_Panel.Size = new System.Drawing.Size(261, 238);
             this.RotatorDiagram_Panel.TabIndex = 1;
             // 
             // RotatorDiagram
@@ -520,7 +533,7 @@
             this.SkyPA_Panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SkyPA_Panel.Location = new System.Drawing.Point(3, 3);
             this.SkyPA_Panel.Name = "SkyPA_Panel";
-            this.SkyPA_Panel.Size = new System.Drawing.Size(263, 49);
+            this.SkyPA_Panel.Size = new System.Drawing.Size(261, 49);
             this.SkyPA_Panel.TabIndex = 0;
             // 
             // PowerLight_Pic
@@ -583,14 +596,26 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(269, 461);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(267, 461);
             this.tableLayoutPanel1.TabIndex = 43;
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(222, 6);
+            // 
+            // addEditRemoveInstanceToolStripMenuItem
+            // 
+            this.addEditRemoveInstanceToolStripMenuItem.Name = "addEditRemoveInstanceToolStripMenuItem";
+            this.addEditRemoveInstanceToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.addEditRemoveInstanceToolStripMenuItem.Text = "Add/Edit/Remove Instance...";
+            this.addEditRemoveInstanceToolStripMenuItem.Click += new System.EventHandler(this.addEditRemoveInstanceToolStripMenuItem_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 513);
+            this.ClientSize = new System.Drawing.Size(292, 513);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -598,6 +623,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Pyxis Rotator Control";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -674,6 +700,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem alwaysOnTopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem instancesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem addEditRemoveInstanceToolStripMenuItem;
     }
 }
 

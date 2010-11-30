@@ -59,9 +59,11 @@
     <AssemblyOriginatorKeyFile>Optec.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OptecDriverTools">
+      <HintPath>..\..\OptecDriverTools\OptecDriverTools\bin\Release\OptecDriverTools.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -82,7 +84,6 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="OptecPyxis.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetSkyPAForm.cs">
@@ -91,7 +92,6 @@
     <Compile Include="SetSkyPAForm.designer.cs">
       <DependentUpon>SetSkyPAForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="XMLSettings.cs" />
     <EmbeddedResource Include="AdvancedSettingsForm.resx">
       <DependentUpon>AdvancedSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -124,12 +124,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dependencies\OptecEventLogger\Optec.EventLogger.csproj">
-      <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
-      <Name>Optec.EventLogger</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Rotator_ERROR.png" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +137,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\RedLight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PyxisAPI\PyxisAPI.csproj">
+      <Project>{516840D2-FC4D-44D5-B62E-D50E270DA47C}</Project>
+      <Name>PyxisAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
