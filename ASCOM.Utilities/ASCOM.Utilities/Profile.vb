@@ -531,19 +531,7 @@ Public Class Profile
     <EditorBrowsable(EditorBrowsableState.Never), _
     ComVisible(False)> _
     Public Sub MigrateProfile(ByVal CurrentPlatformVersion As String) Implements IProfileExtra.MigrateProfile
-        TL.Enabled = True 'Force tracing on when migrating a profile
-        TL.LogMessage("MigrateProfile", "Migrating profile from Platform " & CurrentPlatformVersion & " to Platform " & PLATFORM_VERSION)
-        Try
-            ProfileStore.MigrateProfile(CurrentPlatformVersion)
-            TL.LogMessage("MigrateProfile", "Successfully migrated Profile")
-            TL.LogMessage("MigrateProfile", "Setting Platform version string to: " & PLATFORM_VERSION)
-            ProfileStore.WriteProfile("", "PlatformVersion", PLATFORM_VERSION) 'Set the platform version in the ASCOM root key
-            TL.LogMessage("MigrateProfile", "Successfully set PlatformVersion to: " & PLATFORM_VERSION)
-            TL.LogMessage("MigrateProfile", "Completed migration")
-        Catch ex As Exception
-            TL.LogMessageCrLf("MigrateProfile", "Exception: " & ex.ToString)
-            Throw New ASCOM.Utilities.Exceptions.ProfilePersistenceException("Profile.MigrateProfileException", ex)
-        End Try
+        ProfileStore.MigrateProfile(CurrentPlatformVersion)
     End Sub
 
     ''' <summary>

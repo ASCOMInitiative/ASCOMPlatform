@@ -298,7 +298,6 @@ Friend Class RegistryAccess
     End Sub
 
     Friend Sub MigrateProfile(ByVal CurrentPlatformVersion As String) Implements IAccess.MigrateProfile
-        Dim LogEnabled As Boolean
         Dim Prof55 As XMLAccess
         Dim Key As RegistryKey
 
@@ -307,29 +306,29 @@ Friend Class RegistryAccess
             sw.Reset() : sw.Start() 'Start timing this call
 
             'Force logging to be enabled for this...
-            LogEnabled = TL.Enabled 'Save logging state
             TL.Enabled = True
             RunningVersions(TL) 'Capture debug date in case logging wasn't initially enabled
 
             TL.LogMessage("MigrateProfile", "From platform: " & CurrentPlatformVersion & ", OS: " & [Enum].GetName(GetType(Bitness), OSBits()))
+            Call SetRegistryACL() ' Always set the registry ACL, even if it is already set, this will also print out the current ACLs for information
 
             Select Case CurrentPlatformVersion
+                Case "" 'New installation
+                    TL.LogMessage("MigrateProfile", "New installation so nothing to migrate")
                 Case "4", "5" 'Currently on Platform 4 or 5 so Profile is in 32bit registry
                     'Profile is already in correct place so leave as is and just set the security ACL
-                    Call SetRegistryACL(CurrentPlatformVersion)
                     TL.LogMessage("MigrateProfile", "The Profile is already in the correct place from Platform " & CurrentPlatformVersion)
                 Case "5.5" 'Currently on Platform 5.5 so migrate Profile is in file system
                     'Backup old 5.0 Profile and Copy 5.5 Profile to registry
                     Call Backup50()
-                    Call SetRegistryACL(CurrentPlatformVersion)
                     TL.LogMessage("MigrateProfile", "Creating Profile 5.5 XMLAccess object")
                     Prof55 = New XMLAccess()
-                    TL.LogMessage("MigrateProfile", "OPening " & REGISTRY_ROOT_KEY_NAME & " Registry Key")
-                    Key = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
+                    TL.LogMessage("MigrateProfile", "Opening " & REGISTRY_ROOT_KEY_NAME & " Registry Key")
+                    'Key = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True) - This line replaced with next to ensure we work on the 32bit registry on a 64bit machine
+                    Key = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, ASCOM.Utilities.RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
                     TL.LogMessage("MigrateProfile", "Copying Profile 5.5 to Profile 6")
                     Copy55To60("", Prof55, Key)
-                Case "Unknown", "" ' Don't know current platform
-                    Throw New ProfilePersistenceException("Unable to determine current Platform version: """ & CurrentPlatformVersion & """ - " & "OS has bit size: " & [Enum].GetName(GetType(Bitness), OSBits()))
+                    TL.LogMessage("MigrateProfile", "Completed copying the Profile")
                 Case Else '6.0 or above, leave as is!
                     'Do nothing as Profile is already in the Registry
                     TL.LogMessage("MigrateProfile", "Profile reports previous Platform as " & CurrentPlatformVersion & " - no migration required")
@@ -339,13 +338,12 @@ Friend Class RegistryAccess
             ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
 
             'Restore original logging state
-            TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
-            TL.Enabled = LogEnabled 'Restore logging state
         Catch ex As Exception
             TL.LogMessageCrLf("MigrateProfile", "Exception: " & ex.ToString)
             Throw New ProfilePersistenceException("RegistryAccess.MigrateProfile exception", ex)
         Finally
+            TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Restore enabled / disabled trace state from the user registry
             ProfileMutex.ReleaseMutex()
         End Try
     End Sub
@@ -461,13 +459,20 @@ Friend Class RegistryAccess
     Private Sub Backup50()
         Dim FromKey, ToKey As RegistryKey
         Dim swLocal As Stopwatch
+        Dim PlatformVersion As String
+
         swLocal = Stopwatch.StartNew
 
-        FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
+        'FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
+        FromKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
         ToKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_BACKUP_SUBKEY)
-
-        TL.LogMessage("Backup50", "Backing up Profile 5 to " & REGISTRY_BACKUP_SUBKEY)
-        Copy50(FromKey, ToKey)
+        PlatformVersion = ToKey.GetValue("PlatformVersion", "").ToString ' Test whether we have already backed up the profile
+        If String.IsNullOrEmpty(PlatformVersion) Then
+            TL.LogMessage("Backup50", "Backup PlatformVersion not found, backing up Profile 5 to " & REGISTRY_BACKUP_SUBKEY)
+            Copy50(FromKey, ToKey)
+        Else
+            TL.LogMessage("Backup50", "Platform 5 backup found at HKCU\" & REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_BACKUP_SUBKEY & ", no further action taken.")
+        End If
 
         FromKey.Close() 'Close the key after migration
         ToKey.Close()
@@ -487,13 +492,13 @@ Friend Class RegistryAccess
 
         swLocal = Stopwatch.StartNew
         TL.LogMessage("Copy50 " & RecurseDepth.ToString, "Copy from: " & FromKey.Name & " to: " & ToKey.Name)
-
+        TL.LogMessage("Copy501", "Number of values: " & FromKey.ValueCount.ToString & ", number of subkeys: " & FromKey.SubKeyCount.ToString)
         'First copy values from the from key to the to key
         ValueNames = FromKey.GetValueNames()
         For Each ValueName As String In ValueNames
             Value = FromKey.GetValue(ValueName, "").ToString
             ToKey.SetValue(ValueName, Value)
-            TL.LogMessage("  Copy50", "  FromKey: " & FromKey.Name & " - """ & ValueName & """  """ & Value & """")
+            TL.LogMessage("  CopyValue", "  FromKey: " & FromKey.Name & " - """ & ValueName & """  """ & Value & """")
         Next
 
         'Now process the keys
@@ -501,13 +506,13 @@ Friend Class RegistryAccess
         For Each SubKey As String In SubKeys
             If SubKey <> REGISTRY_BACKUP_SUBKEY Then 'Copy all keys except the backup key itself! Without this we would have infinite recursion...
                 Value = FromKey.OpenSubKey(SubKey).GetValue("", "").ToString
-                TL.LogMessage("  Copy50", "  Processing subkey: " & SubKey & " " & Value)
+                TL.LogMessage("  CopyKey", "  Processing subkey: " & SubKey & " " & Value)
                 NewFromKey = FromKey.OpenSubKey(SubKey) 'Create the new subkey and get a handle to it
                 NewToKey = ToKey.CreateSubKey(SubKey) 'Create the new subkey and get a handle to it
                 If Not Value = "" Then NewToKey.SetValue("", Value) 'Set the default value if present
                 Copy50(NewFromKey, NewToKey) 'Recursively process each key
             Else
-                TL.LogMessage("  Copy50", "  Skipping subkey: " & SubKey)
+                TL.LogMessage("  CopyKey", "  Skipping subkey: " & SubKey)
             End If
         Next
         swLocal.Stop() : TL.LogMessage("  Copy50", "  Completed subkey: " & FromKey.Name & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
@@ -515,43 +520,71 @@ Friend Class RegistryAccess
         swLocal = Nothing
     End Sub
 
-    Private Sub SetRegistryACL(ByVal CurrentPlatformVersion As String)
+    Private Sub SetRegistryACL() 'ByVal CurrentPlatformVersion As String)
         'Subroutine to control the migration of a Platform 5.5 profile to Platform 6
         Dim Values As New Generic.SortedList(Of String, String)
         Dim swLocal As Stopwatch
         Dim Key As RegistryKey, KeySec As RegistrySecurity, RegAccessRule As RegistryAccessRule
         Dim DomainSid, Ident As SecurityIdentifier
+        Dim RuleCollection As AuthorizationRuleCollection
 
         swLocal = Stopwatch.StartNew
 
-        TL.LogMessage("MigrateTo60", "Creating root key ""\""")
-        Key = Registry.LocalMachine.CreateSubKey(REGISTRY_ROOT_KEY_NAME)
+        TL.LogMessage("SetRegistryACL", "Creating root key ""\""")
+        'Key = Registry.LocalMachine.CreateSubKey(REGISTRY_ROOT_KEY_NAME)
+        Key = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
 
         'Set a security ACL on the ASCOM Profile key giving the Users group Full Control of the key
-        TL.LogMessage("MigrateTo60", "Creating security identifier")
+        TL.LogMessage("SetRegistryACL", "Creating security identifier")
         DomainSid = New SecurityIdentifier("S-1-0-0") 'Create a starting point domain SID
         Ident = New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid) 'Create a security Identifier for the BuiltinUsers Group to be passed to the new accessrule
 
-        TL.LogMessage("MigrateTo60", "Creating new ACL rule")
+        TL.LogMessage("SetRegistryACL", "Creating new ACL rule")
         RegAccessRule = New RegistryAccessRule(Ident, _
                                                RegistryRights.FullControl, _
                                                InheritanceFlags.ContainerInherit, _
                                                PropagationFlags.None, _
                                                AccessControlType.Allow) ' Create the new access permission rule
 
-        TL.LogMessage("MigrateTo60", "Retrieving current ACL rule")
+        TL.LogMessage("SetRegistryACL", "Retrieving current ACL rule")
+        TL.BlankLine()
         KeySec = Key.GetAccessControl() ' Get existing ACL rules on the key 
-        TL.LogMessage("MigrateTo60", "Adding new ACL rule")
+
+        RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules
+
+        For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
+            TL.LogMessage("SecurityACL Before", RegRule.AccessControlType.ToString() & " " & _
+                                                RegRule.IdentityReference.ToString() & " " & _
+                                                RegRule.RegistryRights.ToString() & " " & _
+                                                RegRule.IsInherited.ToString() & " " & _
+                                                RegRule.InheritanceFlags.ToString() & " " & _
+                                                RegRule.PropagationFlags.ToString())
+        Next
+
+        TL.LogMessage("SetRegistryACL", "Adding new ACL rule")
+        TL.BlankLine()
         KeySec.AddAccessRule(RegAccessRule) 'Add the new rule to the existing rules
-        TL.LogMessage("MigrateTo60", "Setting new ACL rule")
+
+        RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules after adding the new one
+
+        For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
+            TL.LogMessage("SecurityACL After", RegRule.AccessControlType.ToString() & " " & _
+                                               RegRule.IdentityReference.ToString() & " " & _
+                                               RegRule.RegistryRights.ToString() & " " & _
+                                               RegRule.IsInherited.ToString() & " " & _
+                                               RegRule.InheritanceFlags.ToString() & " " & _
+                                               RegRule.PropagationFlags.ToString())
+        Next
+
+        TL.LogMessage("SetRegistryACL", "Setting new ACL rule")
         Key.SetAccessControl(KeySec) 'Apply the new rules to the Profile key
 
-        TL.LogMessage("MigrateTo60", "Flushing key")
+        TL.LogMessage("SetRegistryACL", "Flushing key")
         Key.Flush() 'Flush the key to make sure the permission is committed
-        TL.LogMessage("MigrateTo60", "Closing key")
+        TL.LogMessage("SetRegistryACL", "Closing key")
         Key.Close() 'Close the key after migration
 
-        swLocal.Stop() : TL.LogMessage("MigrateTo60", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
+        swLocal.Stop() : TL.LogMessage("SetRegistryACL", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
         swLocal = Nothing
     End Sub
 
@@ -614,9 +647,11 @@ Friend Class RegistryAccess
         Dim Rights As System.Int32 = RegistryRights.ReadKey ' Or RegistryRights.EnumerateSubKeys Or RegistryRights.QueryValues Or RegistryRights.Notify
         If Writeable Then
             Rights = RegistryRights.WriteKey
+            '                       hKey                             SubKey      Res lpClass     dwOpts samDesired     SecAttr      Handle        Disp
+            Result = RegCreateKeyEx(GetRegistryKeyHandle(ParentKey), SubKeyName, 0, IntPtr.Zero, 0, Rights Or Options, IntPtr.Zero.ToInt32, SubKeyHandle, IntPtr.Zero.ToInt32)
+        Else
+            Result = RegOpenKeyEx(GetRegistryKeyHandle(ParentKey), SubKeyName, 0, Rights Or Options, SubKeyHandle)
         End If
-
-        Result = RegOpenKeyEx(GetRegistryKeyHandle(ParentKey), SubKeyName, 0, Rights Or Options, SubKeyHandle)
 
         Select Case Result
             Case 0 'All OK so return result
@@ -680,7 +715,23 @@ Friend Class RegistryAccess
         KEY_WOW64_32KEY = &H200
     End Enum
 
-    Private Declare Auto Function RegOpenKeyEx Lib "advapi32.dll" (ByVal hKey As System.IntPtr, ByVal lpSubKey As System.String, ByVal ulOptions As System.Int32, ByVal samDesired As System.Int32, ByRef phkResult As System.Int32) As System.Int32
+    Private Declare Auto Function RegOpenKeyEx Lib "advapi32.dll" (ByVal hKey As System.IntPtr, _
+                                                                   ByVal lpSubKey As System.String, _
+                                                                   ByVal ulOptions As System.Int32, _
+                                                                   ByVal samDesired As System.Int32, _
+                                                                   ByRef phkResult As System.Int32) As System.Int32
+
+
+    Private Declare Auto Function RegCreateKeyEx Lib "advapi32.dll" (ByVal hKey As System.IntPtr, _
+                                                                     ByVal lpSubKey As System.String, _
+                                                                     ByVal Reserved As System.Int32, _
+                                                                     ByVal lpClass As System.IntPtr, _
+                                                                     ByVal dwOptions As System.Int32, _
+                                                                     ByVal samDesired As System.Int32, _
+                                                                     ByVal lpSecurityAttributes As System.Int32, _
+                                                                     ByRef phkResult As System.Int32, _
+                                                                     ByVal lpdwDisposition As System.Int32) As System.Int32
+
 #End Region
 #End Region
 
