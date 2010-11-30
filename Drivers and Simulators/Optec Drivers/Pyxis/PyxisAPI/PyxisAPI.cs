@@ -735,39 +735,52 @@ namespace PyxisAPI
         /// </summary>
         public void Connect()
         {
-           
-            // 1. Make sure that the Port is Open
-            openSerialPort();
 
-            //TODO 2.0 Handle the situation where the device is already moving or homing here
-            while (checkIfInMotion())
+            try
             {
-                System.Threading.Thread.Sleep(500);
-            }
+                // 1. Make sure that the Port is Open
+                openSerialPort();
 
-
-            // 3. Attempt to "Link" to the device.
-            if (checkDeviceState() != DeviceStates.Connected)
-            {
-                if (currentDeviceState == DeviceStates.Sleep)
+                //TODO 2.0 Handle the situation where the device is already moving or homing here
+                while (checkIfInMotion())
                 {
-                    wakeDevice();
+                    System.Threading.Thread.Sleep(500);
                 }
-                else throw new ApplicationException("Communication with Pyxis has failed. Connection could not be established.");
+
+
+                // 3. Attempt to "Link" to the device.
+                if (checkDeviceState() != DeviceStates.Connected)
+                {
+                    if (currentDeviceState == DeviceStates.Sleep)
+                    {
+                        wakeDevice();
+                    }
+                    else throw new ApplicationException("Communication with Pyxis has failed. Connection could not be established.");
+                }
+
+
+                currentDevicePosition = refreshDevicePosition();
+                Debug.WriteLine("Refreshed CurrentDevicePossition - " + currentDevicePosition.ToString());
+                targetDevicePosition = currentDevicePosition;
+                getFirmwareVersion();
+                currentDirection = getDirectionFlag();
+                checkIfCanHalt();
+                determineDeviceType();
+                MarkInstanceInUse(true);
+
+                // 6. Trigger the Connection established event
+                TriggerAnEvent(ConnectionEstablished, null);
             }
-
-
-            currentDevicePosition = refreshDevicePosition();
-            Debug.WriteLine("Refreshed CurrentDevicePossition - " + currentDevicePosition.ToString());
-            targetDevicePosition = currentDevicePosition;
-            getFirmwareVersion();
-            currentDirection = getDirectionFlag();
-            checkIfCanHalt();
-            determineDeviceType();
-
-
-            // 6. Trigger the Connection established event
-            TriggerAnEvent(ConnectionEstablished, null);
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                Disconnect();
+                throw;
+            }
+            finally
+            {
+               
+            }
         }
 
         /// <summary>
@@ -782,8 +795,10 @@ namespace PyxisAPI
                     case DeviceStates.Disconnected:
                         break;
                     case DeviceStates.Connected:
+                        MarkInstanceInUse(false);
                         break;
                     case DeviceStates.Sleep:
+                        MarkInstanceInUse(false);
                         wakeDevice();
                         break;
                 }

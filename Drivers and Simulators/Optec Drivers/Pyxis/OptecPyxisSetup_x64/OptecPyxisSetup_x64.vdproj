@@ -15,26 +15,62 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0A02267548D71D7C44EA05DEF0355028"
-        "OwnerKey" = "8:_966B504D93A73E49FF742BAA589E26A5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_19C566C8B42342EF866510AA7F35785E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_41370129575CA99C097AB481A725270A"
+        "MsmKey" = "8:_27666730AA8697E507A55DCB56EDCAE9"
         "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_41370129575CA99C097AB481A725270A"
+        "MsmKey" = "8:_27666730AA8697E507A55DCB56EDCAE9"
         "OwnerKey" = "8:_D492278EE3194EC5B692DD0FEECDDE3E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3899C2EC6219AFDCA6698C2E6A55FFCD"
+        "OwnerKey" = "8:_81E1EF46A2CBBD4EBE88EF095A81C1D7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
+        "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
+        "OwnerKey" = "8:_D71177780A074DCCBE7A84FB78DEFAB4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
+        "OwnerKey" = "8:_D492278EE3194EC5B692DD0FEECDDE3E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
+        "OwnerKey" = "8:_27666730AA8697E507A55DCB56EDCAE9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6E771F34E52C218B2AB0C3708DF24009"
+        "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6E771F34E52C218B2AB0C3708DF24009"
+        "OwnerKey" = "8:_81E1EF46A2CBBD4EBE88EF095A81C1D7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -45,19 +81,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8A091D5E3F8329B6C40132AFAC37328C"
-        "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8A091D5E3F8329B6C40132AFAC37328C"
-        "OwnerKey" = "8:_966B504D93A73E49FF742BAA589E26A5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_966B504D93A73E49FF742BAA589E26A5"
+        "MsmKey" = "8:_81E1EF46A2CBBD4EBE88EF095A81C1D7"
         "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -65,30 +89,6 @@
         {
         "MsmKey" = "8:_A7FBB8494A634357AC24CFBD1B978C31"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C566287F5D5850DA95C1056BB9345310"
-        "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C566287F5D5850DA95C1056BB9345310"
-        "OwnerKey" = "8:_D71177780A074DCCBE7A84FB78DEFAB4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C566287F5D5850DA95C1056BB9345310"
-        "OwnerKey" = "8:_D492278EE3194EC5B692DD0FEECDDE3E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C566287F5D5850DA95C1056BB9345310"
-        "OwnerKey" = "8:_41370129575CA99C097AB481A725270A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -106,7 +106,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C566287F5D5850DA95C1056BB9345310"
+        "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -130,25 +130,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
+        "OwnerKey" = "8:_27666730AA8697E507A55DCB56EDCAE9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_41370129575CA99C097AB481A725270A"
+        "OwnerKey" = "8:_81E1EF46A2CBBD4EBE88EF095A81C1D7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_966B504D93A73E49FF742BAA589E26A5"
+        "OwnerKey" = "8:_6E771F34E52C218B2AB0C3708DF24009"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8A091D5E3F8329B6C40132AFAC37328C"
+        "OwnerKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -169,6 +169,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -224,12 +232,12 @@
             "Sequence" = "3:1"
             "Identifier" = "8:_E0EC7496_BB6D_4E21_8185_E70A5BF67153"
             "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
+            "CustomActionData" = "8:/Ascom=[ASCOM] /PlatformFound=[PLATFORM_FOUND]"
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_25136F2C8DEC4BFC86A3B757383D448D"
             {
             "Name" = "8:Primary output from Pyxis ASCOM Driver (Active)"
-            "Condition" = "8:ASCOM"
+            "Condition" = "8:ASCOM And PLATFORM_FOUND"
             "Object" = "8:_737B560F219443A5B87E7DB3E1E42952"
             "FileType" = "3:1"
             "InstallAction" = "3:1"
@@ -243,7 +251,7 @@
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_D81DBD8100754562992CC215F1AC4C1A"
             {
             "Name" = "8:Primary output from Pyxis ASCOM Driver (Active)"
-            "Condition" = "8:ASCOM"
+            "Condition" = "8:ASCOM And PLATFORM_FOUND"
             "Object" = "8:_737B560F219443A5B87E7DB3E1E42952"
             "FileType" = "3:1"
             "InstallAction" = "3:4"
@@ -277,26 +285,6 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0A02267548D71D7C44EA05DEF0355028"
-            {
-            "SourcePath" = "8:ASCOM.Utilities.tlb"
-            "TargetName" = "8:ASCOM.Utilities.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_19C566C8B42342EF866510AA7F35785E"
             {
             "SourcePath" = "8:I:\\Software Development\\ICONS\\Pyxis LE\\Rotator.ico"
@@ -317,14 +305,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_41370129575CA99C097AB481A725270A"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_27666730AA8697E507A55DCB56EDCAE9"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:PyxisAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_41370129575CA99C097AB481A725270A"
+                    "_27666730AA8697E507A55DCB56EDCAE9"
                     {
                     "Name" = "8:PyxisAPI.dll"
                     "Attributes" = "3:512"
@@ -348,14 +336,65 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8A091D5E3F8329B6C40132AFAC37328C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3899C2EC6219AFDCA6698C2E6A55FFCD"
+            {
+            "SourcePath" = "8:ASCOM.Utilities.tlb"
+            "TargetName" = "8:ASCOM.Utilities.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_46E18D6E1486637C39EB84325B4B0B31"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:OptecDriverTools, Version=1.0.0.1, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_46E18D6E1486637C39EB84325B4B0B31"
+                    {
+                    "Name" = "8:OptecDriverTools.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:OptecDriverTools.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6E771F34E52C218B2AB0C3708DF24009"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8A091D5E3F8329B6C40132AFAC37328C"
+                    "_6E771F34E52C218B2AB0C3708DF24009"
                     {
                     "Name" = "8:ASCOM.Exceptions.dll"
                     "Attributes" = "3:512"
@@ -379,14 +418,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_966B504D93A73E49FF742BAA589E26A5"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_81E1EF46A2CBBD4EBE88EF095A81C1D7"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_966B504D93A73E49FF742BAA589E26A5"
+                    "_81E1EF46A2CBBD4EBE88EF095A81C1D7"
                     {
                     "Name" = "8:ASCOM.Utilities.dll"
                     "Attributes" = "3:512"
@@ -439,37 +478,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C566287F5D5850DA95C1056BB9345310"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:OptecDriverTools, Version=1.0.0.1, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_C566287F5D5850DA95C1056BB9345310"
-                    {
-                    "Name" = "8:OptecDriverTools.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:OptecDriverTools.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_C39DAB70BB97481B8014885DACFDC375"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
         }
@@ -562,6 +570,21 @@
         }
         "Locator"
         {
+            "{39E1837C-0DB9-45A2-89C8-438377A77565}:_E5AD4B962EE845EAB307F0726F6BCB19"
+            {
+            "Name" = "8:SearchForASCOMPlat"
+            "Folder" = "8:[CommonProgramFiles]ASCOM\\.NET"
+            "Depth" = "2:2"
+            "FileName" = "8:ASCOM.Utilities.dll"
+            "MinVesion" = "8:"
+            "MaxVersion" = "8:"
+            "MinSize" = "8:"
+            "MaxSize" = "8:"
+            "MinDate" = "8:"
+            "MaxDate" = "8:"
+            "Languages" = "8:"
+            "Property" = "8:PLATFORM_FOUND"
+            }
         }
         "MsiBootstrapper"
         {
@@ -573,7 +596,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec Pyxis Programs (x64)"
         "ProductCode" = "8:{7B8C93FC-3D17-473F-9F4F-6DA16C5AA416}"
-        "PackageCode" = "8:{19A2B865-911C-4D48-98CA-D50DB9D3855B}"
+        "PackageCode" = "8:{DB10E138-4BBF-45BD-B68F-0483187E9C2F}"
         "UpgradeCode" = "8:{652E9C6F-AC20-494A-A903-4F9D90FFEB06}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1347,7 +1370,7 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
-            "Condition" = "8:ASCOM"
+            "Condition" = "8:ASCOM && PLATFORM_FOUND"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"

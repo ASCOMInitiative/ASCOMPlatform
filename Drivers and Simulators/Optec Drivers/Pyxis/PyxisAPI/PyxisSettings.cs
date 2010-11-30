@@ -82,12 +82,6 @@ namespace PyxisAPI
             }
             set { SetPropertyInXml(XmlPropNames.HomeOnStart.ToString(), value.ToString()); }
         }
- 
-        public void DisposeSettings()
-        {
-            Dispose();
-        }
-
 
     }
 
