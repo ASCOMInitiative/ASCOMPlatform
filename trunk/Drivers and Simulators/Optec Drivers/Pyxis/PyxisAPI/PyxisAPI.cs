@@ -9,41 +9,41 @@ using System.Diagnostics;
 using System.Threading;
 using System.Globalization;
 
-namespace Pyxis_Rotator_Control
+namespace PyxisAPI
 {
-    class OptecPyxis
+    public class OptecPyxis : PyxisSettings
     {
 
         public enum DeviceStates { Disconnected, Connected, Sleep }
         public enum SteppingModes { HalfStep, FullStep }
         public enum DeviceTypes { TwoInch, ThreeInch }
-        private static DeviceStates currentDeviceState;
-        private static DeviceTypes currentDeviceType = DeviceTypes.TwoInch;
+        private DeviceStates currentDeviceState;
+        private DeviceTypes currentDeviceType = DeviceTypes.TwoInch;
 
-        public static event EventHandler ConnectionEstablished;
-        public static event EventHandler ConnectionTerminated;
-        public static event EventHandler MotionStarted;
-        public static event EventHandler MotionCompleted;
-        public static event EventHandler MotionHalted;
-        public static event EventHandler ErrorOccurred;
+        public event EventHandler ConnectionEstablished;
+        public event EventHandler ConnectionTerminated;
+        public event EventHandler MotionStarted;
+        public event EventHandler MotionCompleted;
+        public event EventHandler MotionHalted;
+        public event EventHandler ErrorOccurred;
 
-        private static DateTime moveStartTime;
-        private static TimeSpan moveTotalTime;
-        private static int targetDevicePosition = 0;
-        private static int currentDevicePosition = 0;
-        private static string firmwareVersion = "";
-        private static int currentDirection = 0;
-        private static bool canHalt = false;
-        private static bool HaltNOW = false;
-        private static Thread MotionMonitorThread;
-        private static int StepsMoved = 0;
+        private DateTime moveStartTime;
+        private TimeSpan moveTotalTime;
+        private int targetDevicePosition = 0;
+        private int currentDevicePosition = 0;
+        private string firmwareVersion = "";
+        private int currentDirection = 0;
+        private bool canHalt = false;
+        private bool HaltNOW = false;
+        private Thread MotionMonitorThread;
+        private int StepsMoved = 0;
 
-        private static SerialPort mySerialPort;
-        private static int mGuessDirection = 0;
-        private static volatile bool isHoming = false;
-        private static volatile bool isMoving = false;
+        private SerialPort mySerialPort;
+        private int mGuessDirection = 0;
+        private volatile bool isHoming = false;
+        private volatile bool isMoving = false;
 
-        private static object ComLock = new object();
+        private object ComLock = new object();
 
         public const int CCW = 1;
         public const int CW = 0;
@@ -51,11 +51,13 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         ///  STATIC CONTRUCTOR FOR OptecPyxis CLASS
         /// </summary>
-        static OptecPyxis()
+        public OptecPyxis()
         {
             currentDeviceState = DeviceStates.Disconnected;
 #if DEBUG
             //  EventLogger.LoggingLevel = TraceLevel.Info;
+#else
+            EventLogger.LoggingLevel = this.LoggerTraceLevel;
 #endif
         }
 
@@ -66,7 +68,7 @@ namespace Pyxis_Rotator_Control
         /// It will set the state based on the response and also return the current state.
         /// </summary>
         /// <returns></returns>
-        private static DeviceStates checkDeviceState()
+        private DeviceStates checkDeviceState()
         {
             if (mySerialPort == null) return DeviceStates.Disconnected;
             if (!mySerialPort.IsOpen)
@@ -122,7 +124,7 @@ namespace Pyxis_Rotator_Control
         /// Make sure the port is open before calling this method.
         /// </summary>
         /// <returns></returns>
-        private static bool checkIfInMotion()
+        private bool checkIfInMotion()
         {
 
 #if DEBUG
@@ -151,14 +153,15 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Creates (if necessary) and opens(if necessary) an instance of mySerialPort based on the COM port name setting in the xml file.
         /// </summary>
-        private static void openSerialPort()
+        private void openSerialPort()
         {
             // If the port is already exists, make sure it's open
             if (mySerialPort == null)
             {
-                mySerialPort = new SerialPort(XMLSettings.SavedSerialPortName, 19200, Parity.None, 8, StopBits.One);
+                mySerialPort = new SerialPort(SavedSerialPortName, 19200, Parity.None, 8, StopBits.One);
                 mySerialPort.NewLine = "\n\r";
             }
+            else mySerialPort.PortName = SavedSerialPortName;
 
             if (!mySerialPort.IsOpen)
             {
@@ -170,7 +173,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Sends the CVxxxx command to the device to get the firmware version
         /// </summary>
-        private static void getFirmwareVersion()
+        private void getFirmwareVersion()
         {
 
 #if DEBUG
@@ -209,7 +212,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Call this when Disconnecting to close the port and free up the resources it uses.
         /// </summary>
-        private static void closeSerialPortandDispose()
+        private void closeSerialPortandDispose()
         {
             if (mySerialPort == null) return;
             else
@@ -225,7 +228,7 @@ namespace Pyxis_Rotator_Control
         /// Send the CGETPA command to the device to get the current device position angle
         /// </summary>
         /// <returns></returns>
-        private static int refreshDevicePosition()
+        private int refreshDevicePosition()
         {
 #if DEBUG
             // 1. Make sure the Port is open
@@ -269,7 +272,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Send the CWAKEx command to wake the device from sleep mode
         /// </summary>
-        private static void wakeDevice()
+        private void wakeDevice()
         {
 #if DEBUG
             // 1. Make sure the Port is open
@@ -306,10 +309,10 @@ namespace Pyxis_Rotator_Control
         /// Versions 3.0 through 3.2 can NOT Halt
         /// Versions 3.3 and greater can Halt
         /// </summary>
-        private static void checkIfCanHalt()
+        private void checkIfCanHalt()
         {
             double firmwareDouble = 0;
-            bool FirmwareIsDouble = double.TryParse(firmwareVersion,NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out firmwareDouble);
+            bool FirmwareIsDouble = double.TryParse(firmwareVersion, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out firmwareDouble);
             if (FirmwareIsDouble)
             {
                 if (firmwareDouble <= 1.42) canHalt = false;
@@ -331,7 +334,7 @@ namespace Pyxis_Rotator_Control
         /// Versions less than 2.99 are 2"
         /// Versions 3.0 and greater are 3"
         /// </summary>
-        private static void determineDeviceType()
+        private void determineDeviceType()
         {
             double firmwareDouble = 0;
             bool FirmwareIsDouble = double.TryParse(firmwareVersion, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out firmwareDouble);
@@ -348,7 +351,7 @@ namespace Pyxis_Rotator_Control
         /// </summary>
         /// <param name="tp">The target device position</param>
         /// <param name="cp">The current device position as last read from the device</param>
-        public static void setMoveDirection(int tp, int cp)
+        public void setMoveDirection(int tp, int cp)
         {
             if (cp < tp)
             {
@@ -374,7 +377,7 @@ namespace Pyxis_Rotator_Control
         /// Range: 0 to 359
         /// </summary>
         /// <param name="PA"></param>
-        private static void goToPA(int PA)
+        private void goToPA(int PA)
         {
             // 1. Check for appropriate PA
             if (PA < 0 || PA > 359)
@@ -436,7 +439,7 @@ namespace Pyxis_Rotator_Control
         /// Request the default move direction from the device.
         /// </summary>
         /// <returns></returns>
-        private static int getDirectionFlag()
+        private int getDirectionFlag()
         {
             // 1. Check for connected
             if (currentDeviceState != DeviceStates.Connected)
@@ -483,7 +486,7 @@ namespace Pyxis_Rotator_Control
         /// The default is CCW - positive moves
         /// </summary>
         /// <param name="dir"></param>
-        private static void setCurrentDirection(int dir)
+        private void setCurrentDirection(int dir)
         {
             // 1. Check for appropriate direction value
             if (dir < 0 || dir > 1)
@@ -517,35 +520,10 @@ namespace Pyxis_Rotator_Control
         }
 
         /// <summary>
-        /// Sends the CZxxxx command to the device to set the stepping mode of the stepper motor. 
-        /// </summary>
-        /// <param name="mode"></param>
-        private static void setHalfStep(SteppingModes mode)
-        {
-
-            // 1. Make sure the device is connected...
-            if (CurrentDeviceState != DeviceStates.Connected)
-            {
-                throw new ApplicationException("The device must be connected to set the half step property");
-            }
-
-            // 2. Send the command
-            string cmd = (mode == SteppingModes.HalfStep) ? "CZ1111" : "CZ0000";
-            mySerialPort.DiscardInBuffer();
-            mySerialPort.DiscardOutBuffer();
-            mySerialPort.Write(cmd);
-            System.Threading.Thread.Sleep(200); // Pause just to allow the device to process the command.
-            // This command does not return anything so we have to assume it worked!
-
-            // 3. Update the xml file with the new value.
-            XMLSettings.SteppingMode = mode;
-        }
-
-        /// <summary>
         /// Send the CJxxxx command to the device to set the HomeOnStart property in the firmware.
         /// </summary>
         /// <param name="homeOnStart"></param>
-        private static void setHomeOnStart(bool homeOnStart)
+        private void setHomeOnStart(bool homeOnStart)
         {
             // 1. Make sure the device is connected...
             if (CurrentDeviceState != DeviceStates.Connected)
@@ -565,7 +543,7 @@ namespace Pyxis_Rotator_Control
             // This command does not return anything so we have to assume it worked!
 
             // 3. Update the xml file with the new value.
-            XMLSettings.HomeOnStart = homeOnStart;
+            HomeOnStart = homeOnStart;
         }
 
         /// <summary>
@@ -575,7 +553,7 @@ namespace Pyxis_Rotator_Control
         /// is complete. The thread will automatically exit if no data is received on the 
         /// serial line for 100ms.
         /// </summary>
-        private static void MotionMonitor(object sender, EventArgs e)
+        private void MotionMonitor(object sender, EventArgs e)
         {
             string buffer = sender.ToString();
             int LastBufferCount = 1;
@@ -714,7 +692,7 @@ namespace Pyxis_Rotator_Control
         /// </summary>
         /// <param name="EH"></param>
         /// <param name="e"></param>
-        private static void TriggerAnEvent(EventHandler EH, object e)
+        private void TriggerAnEvent(EventHandler EH, object e)
         {
             if (EH == null) return;
             var EventListeners = EH.GetInvocationList();
@@ -732,7 +710,7 @@ namespace Pyxis_Rotator_Control
         }
 
 
-        private static void EndAsyncEvent(IAsyncResult iar)
+        private void EndAsyncEvent(IAsyncResult iar)
         {
             var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
             var invokedMethod = (EventHandler)ar.AsyncDelegate;
@@ -755,8 +733,9 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Attempt to establish a connection to a Pyxis Rotator.
         /// </summary>
-        public static void Connect()
+        public void Connect()
         {
+           
             // 1. Make sure that the Port is Open
             openSerialPort();
 
@@ -777,6 +756,7 @@ namespace Pyxis_Rotator_Control
                 else throw new ApplicationException("Communication with Pyxis has failed. Connection could not be established.");
             }
 
+
             currentDevicePosition = refreshDevicePosition();
             Debug.WriteLine("Refreshed CurrentDevicePossition - " + currentDevicePosition.ToString());
             targetDevicePosition = currentDevicePosition;
@@ -785,6 +765,7 @@ namespace Pyxis_Rotator_Control
             checkIfCanHalt();
             determineDeviceType();
 
+
             // 6. Trigger the Connection established event
             TriggerAnEvent(ConnectionEstablished, null);
         }
@@ -792,7 +773,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Disconnect from the Pyxis Rotator device
         /// </summary>
-        public static void Disconnect()
+        public void Disconnect()
         {
             try
             {
@@ -808,7 +789,6 @@ namespace Pyxis_Rotator_Control
                 }
 
                 closeSerialPortandDispose();
-
             }
             catch
             {
@@ -824,7 +804,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Stop the device during a home or move procedure. 
         /// </summary>
-        public static void HaltMove()
+        public void HaltMove()
         {
             HaltNOW = true;
 
@@ -834,7 +814,7 @@ namespace Pyxis_Rotator_Control
         /// Starts a process to home the device
         /// Note: Check IsMoving to see when the process is complete
         /// </summary>
-        public static void Home()
+        public void Home()
         {
 
             // 1. Check for connected
@@ -879,7 +859,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Puts the device into  a low power sleep state. Call the wake up method to wake the device.
         /// </summary>
-        public static void PutToSleep()
+        public void PutToSleep()
         {
             // 1. Check for connected
             if (checkDeviceState() != DeviceStates.Connected)
@@ -914,7 +894,7 @@ namespace Pyxis_Rotator_Control
         /// The default rate is 8.
         /// </summary>
         /// <param name="r"></param>
-        public static void SetStepTime(int r)
+        public void SetStepTime(int r)
         {
             // 1. Check for appropriate rate
             if (r < 2 || r > 12)
@@ -939,7 +919,7 @@ namespace Pyxis_Rotator_Control
                 string resp = mySerialPort.ReadLine();
                 if (resp.Contains("!"))
                 {
-                    XMLSettings.StepTime = r;
+                    StepTime = r;
                     return;
                 }
                 else throw new ApplicationException("Device did not respond to command to set step rate");
@@ -957,7 +937,7 @@ namespace Pyxis_Rotator_Control
         /// WARNING: This not update the CurrentPosition of the rotator and rotator will be out of home.
         /// This moves the rotator one step in the specified direction
         /// </summary>
-        public static void Derotate1Step()
+        public void Derotate1Step()
         {
             // TODO: Make sure this always moves in the correct direction based on the device type
         }
@@ -965,7 +945,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// This will cause the rotator to travel to the device angle specified by the ParkPosition property.
         /// </summary>
-        public static void ParkRotator()
+        public void ParkRotator()
         {
             goToPA(ParkPosition);
         }
@@ -974,7 +954,7 @@ namespace Pyxis_Rotator_Control
         /// Sets the current rotators position as the new 0° position. 
         /// </summary>
         [Obsolete("This should no longer be used now that the SkyPA Offset is available")]
-        public static void RedefineHome()
+        public void RedefineHome()
         {
             // 1. Make sure the device is connected...
             if (CurrentDeviceState != DeviceStates.Connected)
@@ -1010,7 +990,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Restores the stored device properties back to zero and sets the Sky PA Offset to zero
         /// </summary>
-        public static void RestoreDeviceDefaults()
+        public void RestoreDeviceDefaults()
         {
             // 1. Make sure the device is connected...
             if (currentDeviceState != DeviceStates.Connected)
@@ -1021,7 +1001,7 @@ namespace Pyxis_Rotator_Control
             mySerialPort.DiscardInBuffer();
             mySerialPort.DiscardOutBuffer();
             mySerialPort.Write(cmd);
-           // XMLSettings.StepTime = 
+            // XMLSettings.StepTime = 
             System.Threading.Thread.Sleep(50);
             // There is no response from this command so we can't verify its success.
 
@@ -1033,7 +1013,7 @@ namespace Pyxis_Rotator_Control
         /// <param name="desiredCurrentPosition">
         /// The value of the new current position to calculate the new sky pa value from.
         /// </param>
-        public static void RedefineSkyPAOffset(double desiredCurrentPosition)
+        public void RedefineSkyPAOffset(double desiredCurrentPosition)
         {
             //Determine the offset
             double offset = desiredCurrentPosition - refreshDevicePosition();
@@ -1041,7 +1021,7 @@ namespace Pyxis_Rotator_Control
             else if (offset < -180) offset = 360 + offset;
 
             // Set the new value in the XML file.
-            XMLSettings.SkyPAOffset = (int)offset;
+            SkyPAOffset = (int)offset;
         }
 
 
@@ -1052,7 +1032,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Gets or Sets the current default direction of travel for the Pyxis Rotator
         /// </summary>
-        public static bool Reverse
+        public bool Reverse
         {
             get
             {
@@ -1092,66 +1072,24 @@ namespace Pyxis_Rotator_Control
                         setCurrentDirection(0);
                 }
                 else throw new ApplicationException("Invalid Device type in Reverse.Set");
- 
-            }
-        }
 
-        /// <summary>
-        /// This represent the position that the focuser travels to when the park method is called.
-        /// </summary>
-        public static int ParkPosition
-        {
-            get { return XMLSettings.ParkPosition; }
-            set
-            {
-                if (value < 0 || value >= 360)
-                    throw new ArgumentOutOfRangeException("Park position must be between 0 and 359 degrees");
-                XMLSettings.ParkPosition = value;
             }
         }
+ 
 
         /// <summary>
         /// Gets the firmware version of the currently connected rotator device.
         /// </summary>
-        public static string FirmwareVersion
+        public string FirmwareVersion
         {
             get { return firmwareVersion; }
         }
-
-        /// <summary>
-        /// Get or set value which indicates whether the device will automatically home when power is first supplied or reset.
-        /// Note: This must be set to TRUE for 2" Pyxii.
-        /// </summary>
-        public static bool HomeOnStart
-        {
-            get
-            {
-                if (DeviceType == DeviceTypes.ThreeInch)
-                    return XMLSettings.HomeOnStart;
-                else return true;
-            }
-            set
-            {
-                setHomeOnStart(value);
-            }
-        }
-
-        /// <summary>
-        ///  Get or set the stepping mode of the connected Rotator as HalfStepping or FullStepping.
-        /// </summary>
-        public static SteppingModes SteppingMode
-        {
-            get { return XMLSettings.SteppingMode; }
-            set
-            {
-                setHalfStep(value);
-            }
-        }
+ 
 
         /// <summary>
         /// Indicates whether the connected rotator is capable of halting during a move.
         /// </summary>
-        public static bool CanHalt
+        public bool CanHalt
         {
             get { return canHalt; }
         }
@@ -1159,33 +1097,15 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         ///  Represents the type of Pyxis connected; either 2 inch or 3 inch
         /// </summary>
-        public static DeviceTypes DeviceType
+        public DeviceTypes DeviceType
         {
-            get { return currentDeviceType; }        
-        }
-
-        /// <summary>
-        /// The COM port used to communicate with the Pyxis. Note: The connectionState must be Disconnected to change this property.
-        /// This will store the new value in the XML file when updating.
-        /// </summary>
-        public static string PortName
-        {
-            get
-            {
-                return XMLSettings.SavedSerialPortName;
-            }
-            set
-            {
-                if (currentDeviceState != DeviceStates.Disconnected)
-                    throw new ApplicationException("You must disconnect before attempting to change the serial port name.");
-                XMLSettings.SavedSerialPortName = value;
-            }
+            get { return currentDeviceType; }
         }
 
         /// <summary>
         /// This number of steps per revolution for the current connected Pyxis. This is determined by the device type.
         /// </summary>
-        public static int Resolution
+        public int Resolution
         {
             get
             {
@@ -1198,11 +1118,11 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// The number of degrees traveled per second for the connected Pyxis when in motion. This is dependant on The Resolution and StepTime properties.
         /// </summary>
-        public static double SlewRate
+        public double SlewRate
         {
             get
             {
-                double r = 1 / ((double)Resolution * (double)XMLSettings.StepTime / (360D * 1000D));
+                double r = 1 / ((double)Resolution * (double)StepTime / (360D * 1000D));
                 return Math.Round(r, 3);
             }
         }
@@ -1210,11 +1130,11 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// The target position of the current move adjusted by the SkyPA Offset.
         /// </summary>
-        public static int AdjustedTargetPosition
+        public int AdjustedTargetPosition
         {
             get
             {
-                int ap = targetDevicePosition + XMLSettings.SkyPAOffset;
+                int ap = targetDevicePosition + SkyPAOffset;
                 if (ap < 0)
                 {
                     return 360 + ap;
@@ -1230,7 +1150,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Indicates whether the connected rotator is currently moving.
         /// </summary>
-        public static bool IsMoving
+        public bool IsMoving
         {
             get
             {
@@ -1241,7 +1161,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// Indicates whether the connected rotator is currently homing.
         /// </summary>
-        public static bool IsHoming
+        public bool IsHoming
         {
             get { return isHoming; }
         }
@@ -1249,7 +1169,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// The current state of the connected Pyxis rotator
         /// </summary>
-        public static DeviceStates CurrentDeviceState
+        public DeviceStates CurrentDeviceState
         {
             get
             {
@@ -1261,7 +1181,7 @@ namespace Pyxis_Rotator_Control
         /// <summary>
         /// The current position angle of the connected rotator adjusted by the Sky PA Offset
         /// </summary>
-        public static int CurrentAdjustedPA
+        public int CurrentAdjustedPA
         {
             get
             {
@@ -1276,12 +1196,12 @@ namespace Pyxis_Rotator_Control
                     // elap *= SlewRate;
                     //  elap *= .95;
                     // Debug.WriteLine("elap = " + elap.ToString());
-                   
+
                     double elap = StepsMoved * 360 / Resolution;
                     Debug.Print("CDP = " + currentDevicePosition.ToString());
                     if (mGuessDirection == OptecPyxis.CCW)
-                        mGuessPosition = currentDevicePosition + XMLSettings.SkyPAOffset + (int)elap;
-                    else mGuessPosition = currentDevicePosition + XMLSettings.SkyPAOffset - (int)elap;
+                        mGuessPosition = currentDevicePosition + SkyPAOffset + (int)elap;
+                    else mGuessPosition = currentDevicePosition + SkyPAOffset - (int)elap;
 
                     if (mGuessPosition >= 360)
                         return (mGuessPosition) % 360;
@@ -1292,7 +1212,7 @@ namespace Pyxis_Rotator_Control
                 else
                 {
                     // The device is not moving...
-                    int ap = currentDevicePosition + XMLSettings.SkyPAOffset;
+                    int ap = currentDevicePosition + SkyPAOffset;
                     if (ap < 0)
                     {
                         ap = 360 + ap;
@@ -1306,7 +1226,7 @@ namespace Pyxis_Rotator_Control
             }
             set
             {
-                double tp = value - XMLSettings.SkyPAOffset;
+                double tp = value - SkyPAOffset;
                 if (tp < 0)
                 {
                     tp = 360 + tp;
@@ -1320,5 +1240,7 @@ namespace Pyxis_Rotator_Control
         }
 
         #endregion
+
+       
     }
 }

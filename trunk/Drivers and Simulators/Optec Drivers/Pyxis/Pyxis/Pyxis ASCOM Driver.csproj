@@ -73,7 +73,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\ASCOMPlatformDependencies\ASCOM.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="OptecDriverTools">
+      <HintPath>..\..\OptecDriverTools\OptecDriverTools\bin\Release\OptecDriverTools.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -82,7 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Driver.cs" />
-    <Compile Include="OptecPyxisA.cs" />
+    <Compile Include="InstallerCustomActions.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
@@ -101,7 +107,6 @@
     <Compile Include="SetupDialogForm.designer.cs">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="XMLSettingsA.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -142,9 +147,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dependencies\OptecEventLogger\Optec.EventLogger.csproj">
-      <Project>{9EC2D59F-5842-43FA-A943-625B23295484}</Project>
-      <Name>Optec.EventLogger</Name>
+    <ProjectReference Include="..\PyxisAPI\PyxisAPI.csproj">
+      <Project>{516840D2-FC4D-44D5-B62E-D50E270DA47C}</Project>
+      <Name>PyxisAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

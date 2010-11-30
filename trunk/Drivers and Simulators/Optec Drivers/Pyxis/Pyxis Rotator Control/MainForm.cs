@@ -9,12 +9,15 @@ using System.Windows.Forms;
 using Optec;
 using System.IO.Ports;
 using System.Diagnostics;
+using PyxisAPI;
 
 namespace Pyxis_Rotator_Control
 {
     public partial class MainForm : Form
     {
-        private static bool ExitPositionUpdaterLoop = true;
+        private bool ExitPositionUpdaterLoop = true;
+
+        private OptecPyxis myPyxis = new OptecPyxis();
 
         #region Form Methods
 
@@ -22,12 +25,12 @@ namespace Pyxis_Rotator_Control
         {
             InitializeComponent();
 
-            OptecPyxis.MotionStarted += new EventHandler(OptecPyxis_MotionStarted);
-            OptecPyxis.MotionCompleted += new EventHandler(OptecPyxis_MotionCompleted);
-            OptecPyxis.ErrorOccurred += new EventHandler(OptecPyxis_ErrorCodeReceived);
-            OptecPyxis.ConnectionEstablished += new EventHandler(OptecPyxis_ConnectionEstablished);
-            OptecPyxis.ConnectionTerminated += new EventHandler(OptecPyxis_ConnectionTerminated);
-            OptecPyxis.MotionHalted += new EventHandler(OptecPyxis_MotionHalted);
+            myPyxis.MotionStarted += new EventHandler(OptecPyxis_MotionStarted);
+            myPyxis.MotionCompleted += new EventHandler(OptecPyxis_MotionCompleted);
+            myPyxis.ErrorOccurred += new EventHandler(OptecPyxis_ErrorCodeReceived);
+            myPyxis.ConnectionEstablished += new EventHandler(OptecPyxis_ConnectionEstablished);
+            myPyxis.ConnectionTerminated += new EventHandler(OptecPyxis_ConnectionTerminated);
+            myPyxis.MotionHalted += new EventHandler(OptecPyxis_MotionHalted);
 
             skyPADisplayToolStripMenuItem.Checked = Properties.Settings.Default.ViewSkyPADisplay;
             rotatorDiagramToolStripMenuItem.Checked = Properties.Settings.Default.ViewRotatorDiagram;
@@ -46,15 +49,16 @@ namespace Pyxis_Rotator_Control
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            OptecPyxis.ConnectionTerminated -= new EventHandler(OptecPyxis_ConnectionTerminated);
-            OptecPyxis.MotionStarted -= new EventHandler(OptecPyxis_MotionStarted);
-            OptecPyxis.MotionCompleted -= new EventHandler(OptecPyxis_MotionCompleted);
-            OptecPyxis.ErrorOccurred -= new EventHandler(OptecPyxis_ErrorCodeReceived);
-            OptecPyxis.ConnectionEstablished -= new EventHandler(OptecPyxis_ConnectionEstablished);
-            OptecPyxis.MotionHalted -= new EventHandler(OptecPyxis_MotionHalted);
+            myPyxis.ConnectionTerminated -= new EventHandler(OptecPyxis_ConnectionTerminated);
+            myPyxis.MotionStarted -= new EventHandler(OptecPyxis_MotionStarted);
+            myPyxis.MotionCompleted -= new EventHandler(OptecPyxis_MotionCompleted);
+            myPyxis.ErrorOccurred -= new EventHandler(OptecPyxis_ErrorCodeReceived);
+            myPyxis.ConnectionEstablished -= new EventHandler(OptecPyxis_ConnectionEstablished);
+            myPyxis.MotionHalted -= new EventHandler(OptecPyxis_MotionHalted);
+            myPyxis.DisposeSettings();
             try
             {
-                OptecPyxis.Disconnect();
+                myPyxis.Disconnect();
             }
             catch { }
             base.OnFormClosing(e);
@@ -75,7 +79,7 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Connect();
+                myPyxis.Connect();
             }
             catch (Exception ex)
             {
@@ -93,7 +97,7 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Disconnect();
+                myPyxis.Disconnect();
             }
             catch (Exception ex)
             {
@@ -111,10 +115,10 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                if (OptecPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.Disconnected)
-                    OptecPyxis.Connect();
+                if (myPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.Disconnected)
+                    myPyxis.Connect();
                 else
-                    OptecPyxis.Disconnect();
+                    myPyxis.Disconnect();
 
             }
             catch (Exception ex)
@@ -134,7 +138,7 @@ namespace Pyxis_Rotator_Control
 
         private void cOMPortToolStripMenuItem_MouseEnter(object sender, EventArgs e)
         {
-            string currentName = OptecPyxis.PortName;
+            string currentName = myPyxis.SavedSerialPortName;
             ToolStripMenuItem MainItem = sender as ToolStripMenuItem;
             MainItem.DropDownItems.Clear();
             foreach (string x in SerialPort.GetPortNames())
@@ -154,21 +158,59 @@ namespace Pyxis_Rotator_Control
 
         private void ComPortName_Clicked(object sender, EventArgs e)
         {
-            if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Disconnected)
+            if (myPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Disconnected)
             {
                 MessageBox.Show("You must disconnect before you can change the COM Port!");
                 return;
             }
             ToolStripMenuItem Sender = sender as ToolStripMenuItem;
-            XMLSettings.SavedSerialPortName = Sender.Text;
+            myPyxis.SavedSerialPortName = Sender.Text;
+        }
+
+        private void instancesToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+        {
+            string currentName = myPyxis.CurrentInstance;
+            ToolStripMenuItem MainItem = sender as ToolStripMenuItem;
+            MainItem.DropDownItems.Clear();
+            foreach (string x in myPyxis.SettingsInstanceNames)
+            {
+                ToolStripItem addedItem = MainItem.DropDownItems.Add(x, null, InstanceName_Clicked);
+            }
+
+            foreach (ToolStripMenuItem tsmi in MainItem.DropDownItems)
+            {
+                if (tsmi.Text == currentName)
+                {
+                    tsmi.Checked = true;
+                    break;
+                }
+            }
+        }
+
+        private void InstanceName_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (myPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Disconnected)
+                {
+                    MessageBox.Show("You must disconnect before you can change the Profile Instance!");
+                    return;
+                }
+                ToolStripMenuItem Sender = sender as ToolStripMenuItem;
+                myPyxis.CurrentInstance = Sender.Text;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void RotatorDiagram_Paint(object sender, PaintEventArgs e)
         {
             try
             {
-                if (OptecPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.Disconnected) return;
-                else if (OptecPyxis.IsHoming) return;
+                if (myPyxis.CurrentDeviceState == OptecPyxis.DeviceStates.Disconnected) return;
+                else if (myPyxis.IsHoming) return;
 
                 PictureBox sndr = sender as PictureBox;
                 double center_x = sndr.Size.Width / 2;
@@ -177,9 +219,9 @@ namespace Pyxis_Rotator_Control
                 double x_zero = 0;
                 double y_zero = -((double)center_y * 0.72D);
 
-                double RotationAngle_deg = (double)OptecPyxis.CurrentAdjustedPA;
+                double RotationAngle_deg = (double)myPyxis.CurrentAdjustedPA;
 
-                if (OptecPyxis.Reverse)
+                if (myPyxis.Reverse)
                 {
                     if (RotationAngle_deg == 0) { }
                     else if (RotationAngle_deg < 180)
@@ -211,7 +253,7 @@ namespace Pyxis_Rotator_Control
 
         private void RotatorDiagram_Click(object sender, EventArgs e)
         {
-            if (OptecPyxis.IsHoming || OptecPyxis.IsMoving)
+            if (myPyxis.IsHoming || myPyxis.IsMoving)
             {
                 MessageBox.Show(
                  "Please wait until current move/home is finished.");
@@ -234,7 +276,7 @@ namespace Pyxis_Rotator_Control
                 angle = angle + 90;
                 if (angle > 360) angle = (angle - 360);
 
-                if (OptecPyxis.Reverse)
+                if (myPyxis.Reverse)
                 {
                     if (angle == 0) { }
                     else if (angle < 180)
@@ -247,7 +289,7 @@ namespace Pyxis_Rotator_Control
                     }
                 }
 
-                OptecPyxis.CurrentAdjustedPA = (int)angle;
+                myPyxis.CurrentAdjustedPA = (int)angle;
             }
         }
 
@@ -276,7 +318,7 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.CurrentAdjustedPA = (int)double.Parse(this.AdjustedTargetPA_TB.Text);
+                myPyxis.CurrentAdjustedPA = (int)double.Parse(this.AdjustedTargetPA_TB.Text);
 
             }
             catch (Exception ex)
@@ -296,9 +338,9 @@ namespace Pyxis_Rotator_Control
             {
                 this.Cursor = Cursors.WaitCursor;
                 int increment = (int)RelativeIncrement_NUD.Value;
-                int newPos = OptecPyxis.CurrentAdjustedPA + increment;
-                newPos %= 359;
-                OptecPyxis.CurrentAdjustedPA = newPos;
+                int newPos = myPyxis.CurrentAdjustedPA + increment;
+                newPos %= 360;
+                myPyxis.CurrentAdjustedPA = newPos;
             }
             catch (Exception ex)
             {
@@ -317,9 +359,9 @@ namespace Pyxis_Rotator_Control
             {
                 this.Cursor = Cursors.WaitCursor;
                 int increment = (int)RelativeIncrement_NUD.Value;
-                int newPos = OptecPyxis.CurrentAdjustedPA - increment;
-                newPos %= 359;
-                OptecPyxis.CurrentAdjustedPA = newPos;
+                int newPos = myPyxis.CurrentAdjustedPA - increment;
+                newPos %= 360;
+                myPyxis.CurrentAdjustedPA = newPos;
             }
             catch (Exception ex)
             {
@@ -334,9 +376,9 @@ namespace Pyxis_Rotator_Control
 
         private void Halt_BTN_Click(object sender, EventArgs e)
         {
-            if (OptecPyxis.IsMoving || OptecPyxis.IsHoming)
+            if (myPyxis.IsMoving || myPyxis.IsHoming)
             {
-                OptecPyxis.HaltMove();
+                myPyxis.HaltMove();
             }  
         }
 
@@ -345,7 +387,7 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Home();
+                myPyxis.Home();
             }
             catch (Exception ex)
             {
@@ -363,7 +405,7 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.PutToSleep();
+                myPyxis.PutToSleep();
                 UpdateFormDeviceInSleepMode();
             }
             catch (Exception ex)
@@ -382,7 +424,7 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Connect();
+                myPyxis.Connect();
                 UpdateFormConnectionEstablished();
             }
             catch (Exception ex)
@@ -401,7 +443,7 @@ namespace Pyxis_Rotator_Control
             try
             {
 
-                if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+                if (myPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
                 {
                     MessageBox.Show("Pyxis must be connected in order to access its settings");
                     return;
@@ -409,16 +451,16 @@ namespace Pyxis_Rotator_Control
 
                 this.Cursor = Cursors.WaitCursor;
 
-                while (OptecPyxis.IsMoving)
+                while (myPyxis.IsMoving)
                 {
                     // Wait until device is not moving...
                 }
 
-                AdvancedSettingsForm frm = new AdvancedSettingsForm();
+                AdvancedSettingsForm frm = new AdvancedSettingsForm(myPyxis);
                 frm.ShowDialog();
 
                 // Update the rotator diagram incase it changed...
-                if (OptecPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
+                if (myPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
                 else RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
 
                 UpdatePosition();
@@ -440,7 +482,7 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+                if (myPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
                 {
                     MessageBox.Show("The device must be in the connected state and not moving or homing to perform this action.");
                     return;
@@ -451,7 +493,7 @@ namespace Pyxis_Rotator_Control
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     //Set the new offset...
-                    OptecPyxis.RedefineSkyPAOffset(newPA);
+                    myPyxis.RedefineSkyPAOffset(newPA);
 
                     // Update the form controls
                     UpdateFormMotionCompleted();
@@ -473,7 +515,7 @@ namespace Pyxis_Rotator_Control
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.ParkRotator();
+                myPyxis.ParkRotator();
             }
             catch (Exception ex)
             {
@@ -557,7 +599,7 @@ namespace Pyxis_Rotator_Control
 
         private void UpdatePosition()
         {
-            this.CurrentPosition_LBL.Text = OptecPyxis.CurrentAdjustedPA.ToString("000°");
+            this.CurrentPosition_LBL.Text = myPyxis.CurrentAdjustedPA.ToString("000°");
             RotatorDiagram.Refresh();
         }
 
@@ -628,7 +670,7 @@ namespace Pyxis_Rotator_Control
         private void UpdateFormConnectionEstablished()
         {
             PowerLight_Pic.Image = Properties.Resources.RedLight;
-            if (OptecPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
+            if (myPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
             else RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
             sleepToolStripMenuItem.Enabled = true;
             SetSkyPA_BTN.Enabled = true;
@@ -639,7 +681,7 @@ namespace Pyxis_Rotator_Control
             wakeToolStripMenuItem.Enabled = false;
             connectToolStripMenuItem.Enabled = false;
             disconnectToolStripMenuItem.Enabled = true;
-            CurrentPosition_LBL.Text = OptecPyxis.CurrentAdjustedPA.ToString("000°");
+            CurrentPosition_LBL.Text = myPyxis.CurrentAdjustedPA.ToString("000°");
             RelMoveBack_BTN.Enabled = true;
             RelMoveFwd_BTN.Enabled = true;
             RelativeIncrement_NUD.Enabled = true;
@@ -692,14 +734,14 @@ namespace Pyxis_Rotator_Control
             RelativeIncrement_NUD.Enabled = false;
             GoToAdjustedPA_BTN.Enabled = false;
             AdjustedTargetPA_TB.Enabled = false;
-            if (OptecPyxis.IsMoving) StatusLabel.Text = "Moving to PA: " + OptecPyxis.AdjustedTargetPosition.ToString() + "...";
-            else if (OptecPyxis.IsHoming) StatusLabel.Text = "Pyxis is Homing";
+            if (myPyxis.IsMoving) StatusLabel.Text = "Moving to PA: " + myPyxis.AdjustedTargetPosition.ToString() + "...";
+            else if (myPyxis.IsHoming) StatusLabel.Text = "Pyxis is Homing";
             StartMotionBackgroundWorker();
         }
 
         private void UpdateFormMotionCompleted()
         {
-            if (OptecPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
+            if (myPyxis.Reverse) RotatorDiagram.Image = Properties.Resources.Rotator_REV;
             else RotatorDiagram.Image = Properties.Resources.Rotator_FWD;
             RotatorDiagram.Enabled = true;
             ExitPositionUpdaterLoop = true;
@@ -770,7 +812,7 @@ namespace Pyxis_Rotator_Control
 
         private void PositionUpdateBGWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (OptecPyxis.IsHoming)
+            if (myPyxis.IsHoming)
             {
                 this.Invoke(new PositionUpdater(UpdatePosition));
                 Debug.Print("Background worker exited because device is homing");
@@ -784,11 +826,11 @@ namespace Pyxis_Rotator_Control
                 double CurrentPosition = 1;
 
                 // Calculate Maximum time for one degree
-                double degreeMaxTime = (1 / OptecPyxis.SlewRate) * 10;
+                double degreeMaxTime = (1 / myPyxis.SlewRate) * 10;
 
                 while (DateTime.Now.Subtract(LastPositionChange).TotalSeconds < degreeMaxTime)
                 {
-                    CurrentPosition = OptecPyxis.CurrentAdjustedPA;
+                    CurrentPosition = myPyxis.CurrentAdjustedPA;
                     if (CurrentPosition != LastPosition)
                     {
                         this.Invoke(new PositionUpdater(UpdatePosition));
@@ -805,20 +847,26 @@ namespace Pyxis_Rotator_Control
 
         #endregion
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
 
+        }
 
-
-
-
-
+        private void addEditRemoveInstanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InstanceSetupForm frm = new InstanceSetupForm(this.myPyxis);
+            frm.ShowDialog();
+        }
 
     }
 
     class PyxisPropertyGrid
     {
-        public PyxisPropertyGrid()
+        private OptecPyxis myPyxis;
+        public PyxisPropertyGrid(OptecPyxis somePyxis)
         {
-            if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+            myPyxis = somePyxis;
+            if (myPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
             {
                 throw new ApplicationException("You must connect to the Pyxis before you can access its settings.");
             }
@@ -831,7 +879,7 @@ namespace Pyxis_Rotator_Control
         {
             get
             {
-                return OptecPyxis.PortName;
+                return myPyxis.SavedSerialPortName;
             }
         }
 
@@ -843,7 +891,7 @@ namespace Pyxis_Rotator_Control
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.CurrentAdjustedPA;
+                return myPyxis.CurrentAdjustedPA;
             }
         }
 
@@ -855,7 +903,7 @@ namespace Pyxis_Rotator_Control
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.Reverse;
+                return myPyxis.Reverse;
             }
             set
             {
@@ -867,7 +915,7 @@ namespace Pyxis_Rotator_Control
                     "it will move there automatically. Would you like to continue changing this property?",
                     "Attention", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if(result== DialogResult.Yes)
-                    OptecPyxis.Reverse = value;
+                    myPyxis.Reverse = value;
             }
         }
 
@@ -879,13 +927,13 @@ namespace Pyxis_Rotator_Control
             get
             {
                 CheckIfConnected();
-                return XMLSettings.StepTime;
+                return myPyxis.StepTime;
             }
             set
             {
                 try { CheckIfConnected(); }
                 catch { return; }
-                OptecPyxis.SetStepTime(value);
+                myPyxis.SetStepTime(value);
             }
         }
 
@@ -897,7 +945,7 @@ namespace Pyxis_Rotator_Control
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.SlewRate;
+                return myPyxis.SlewRate;
             }
         }
 
@@ -909,7 +957,7 @@ namespace Pyxis_Rotator_Control
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.Resolution;
+                return myPyxis.Resolution;
             }
 
         }
@@ -922,7 +970,7 @@ namespace Pyxis_Rotator_Control
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.DeviceType;
+                return myPyxis.DeviceType;
             }
         }
 
@@ -934,7 +982,7 @@ namespace Pyxis_Rotator_Control
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.FirmwareVersion;
+                return myPyxis.FirmwareVersion;
             }
         }
 
@@ -946,13 +994,13 @@ namespace Pyxis_Rotator_Control
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.HomeOnStart;
+                return myPyxis.HomeOnStart;
             }
             set
             {
                 try { CheckIfConnected(); }
                 catch { return; }
-                OptecPyxis.HomeOnStart = value;
+                myPyxis.HomeOnStart = value;
             }
         }
 
@@ -963,9 +1011,9 @@ namespace Pyxis_Rotator_Control
         {
             get
             {
-                return OptecPyxis.ParkPosition;
+                return myPyxis.ParkPosition;
             }
-            set { OptecPyxis.ParkPosition = value; }
+            set { myPyxis.ParkPosition = value; }
 
         }
 
@@ -973,7 +1021,7 @@ namespace Pyxis_Rotator_Control
 
         private void CheckIfConnected()
         {
-            switch (OptecPyxis.CurrentDeviceState)
+            switch (myPyxis.CurrentDeviceState)
             {
                 case OptecPyxis.DeviceStates.Connected:
                     return;

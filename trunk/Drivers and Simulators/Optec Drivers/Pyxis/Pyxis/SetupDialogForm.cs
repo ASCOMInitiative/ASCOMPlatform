@@ -8,38 +8,41 @@ using System.Windows.Forms;
 using Optec;
 using System.IO.Ports;
 using System.Diagnostics;
+using PyxisAPI;
 
 namespace ASCOM.Pyxis
 {
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
-        private static bool ExitPositionUpdaterLoop = true;
+        private bool ExitPositionUpdaterLoop = true;
+        private OptecPyxis myPyxis;
 
         #region Form Methods
 
-        public SetupDialogForm()
+        public SetupDialogForm(OptecPyxis somePyxis)
         {
             InitializeComponent();
-            OptecPyxis.MotionStarted += new EventHandler(OptecPyxis_MotionStarted);
-            OptecPyxis.MotionCompleted += new EventHandler(OptecPyxis_MotionCompleted);
-            OptecPyxis.ErrorOccurred += new EventHandler(OptecPyxis_ErrorCodeReceived);
-            OptecPyxis.ConnectionEstablished += new EventHandler(OptecPyxis_ConnectionEstablished);
-            OptecPyxis.ConnectionTerminated += new EventHandler(OptecPyxis_ConnectionTerminated);
-            OptecPyxis.MotionHalted += new EventHandler(OptecPyxis_MotionHalted);
+            myPyxis = somePyxis;
+            myPyxis.MotionStarted += new EventHandler(OptecPyxis_MotionStarted);
+            myPyxis.MotionCompleted += new EventHandler(OptecPyxis_MotionCompleted);
+            myPyxis.ErrorOccurred += new EventHandler(OptecPyxis_ErrorCodeReceived);
+            myPyxis.ConnectionEstablished += new EventHandler(OptecPyxis_ConnectionEstablished);
+            myPyxis.ConnectionTerminated += new EventHandler(OptecPyxis_ConnectionTerminated);
+            myPyxis.MotionHalted += new EventHandler(OptecPyxis_MotionHalted);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            OptecPyxis.ConnectionTerminated -= new EventHandler(OptecPyxis_ConnectionTerminated);
-            OptecPyxis.MotionStarted -= new EventHandler(OptecPyxis_MotionStarted);
-            OptecPyxis.MotionCompleted -= new EventHandler(OptecPyxis_MotionCompleted);
-            OptecPyxis.ErrorOccurred -= new EventHandler(OptecPyxis_ErrorCodeReceived);
-            OptecPyxis.ConnectionEstablished -= new EventHandler(OptecPyxis_ConnectionEstablished);
-            OptecPyxis.MotionHalted -= new EventHandler(OptecPyxis_MotionHalted);
+            myPyxis.ConnectionTerminated -= new EventHandler(OptecPyxis_ConnectionTerminated);
+            myPyxis.MotionStarted -= new EventHandler(OptecPyxis_MotionStarted);
+            myPyxis.MotionCompleted -= new EventHandler(OptecPyxis_MotionCompleted);
+            myPyxis.ErrorOccurred -= new EventHandler(OptecPyxis_ErrorCodeReceived);
+            myPyxis.ConnectionEstablished -= new EventHandler(OptecPyxis_ConnectionEstablished);
+            myPyxis.MotionHalted -= new EventHandler(OptecPyxis_MotionHalted);
             try
             {
-                OptecPyxis.Disconnect();
+                myPyxis.Disconnect();
             }
             catch { }
             base.OnFormClosing(e);
@@ -86,7 +89,7 @@ namespace ASCOM.Pyxis
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Connect();
+                myPyxis.Connect();
             }
             catch (Exception ex)
             {
@@ -104,7 +107,7 @@ namespace ASCOM.Pyxis
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Disconnect();
+                myPyxis.Disconnect();
             }
             catch (Exception ex)
             {
@@ -119,7 +122,7 @@ namespace ASCOM.Pyxis
 
         private void cOMPortToolStripMenuItem_MouseEnter(object sender, EventArgs e)
         {
-            string currentName = OptecPyxis.PortName;
+            string currentName = myPyxis.SavedSerialPortName;
             ToolStripMenuItem MainItem = sender as ToolStripMenuItem;
             MainItem.DropDownItems.Clear();
             foreach (string x in SerialPort.GetPortNames())
@@ -139,13 +142,13 @@ namespace ASCOM.Pyxis
 
         private void ComPortName_Clicked(object sender, EventArgs e)
         {
-            if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Disconnected)
+            if (myPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Disconnected)
             {
                 MessageBox.Show("You must disconnect before you can change the COM Port!");
                 return;
             }
             ToolStripMenuItem Sender = sender as ToolStripMenuItem;
-            XMLSettings.SavedSerialPortName = Sender.Text;
+            myPyxis.SavedSerialPortName = Sender.Text;
         }
 
         private void Home_Btn_Click(object sender, EventArgs e)
@@ -153,7 +156,7 @@ namespace ASCOM.Pyxis
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Home();
+                myPyxis.Home();
             }
             catch (Exception ex)
             {
@@ -171,7 +174,7 @@ namespace ASCOM.Pyxis
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.ParkRotator();
+                myPyxis.ParkRotator();
             }
             catch (Exception ex)
             {
@@ -189,7 +192,7 @@ namespace ASCOM.Pyxis
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.PutToSleep();
+                myPyxis.PutToSleep();
                 UpdateFormDeviceInSleepMode();
             }
             catch (Exception ex)
@@ -208,7 +211,7 @@ namespace ASCOM.Pyxis
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.Connect();
+                myPyxis.Connect();
                 UpdateFormConnectionEstablished();
             }
             catch (Exception ex)
@@ -227,7 +230,7 @@ namespace ASCOM.Pyxis
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+                if (myPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
                 {
                     MessageBox.Show("The device must be in the connected state and not moving or homing to perform this action.");
                     return;
@@ -238,7 +241,7 @@ namespace ASCOM.Pyxis
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     //Set the new offset...
-                    OptecPyxis.RedefineSkyPAOffset(newPA);
+                    myPyxis.RedefineSkyPAOffset(newPA);
 
                     // Update the form controls
                     UpdateFormMotionCompleted();
@@ -260,7 +263,7 @@ namespace ASCOM.Pyxis
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                OptecPyxis.CurrentAdjustedPA = (int)double.Parse(this.AdjustedTargetPA_TB.Text);
+                myPyxis.CurrentAdjustedPA = (int)double.Parse(this.AdjustedTargetPA_TB.Text);
             }
             catch (Exception ex)
             {
@@ -299,9 +302,9 @@ namespace ASCOM.Pyxis
             {
                 this.Cursor = Cursors.WaitCursor;
                 int increment = (int)RelativeIncrement_NUD.Value;
-                int newPos = OptecPyxis.CurrentAdjustedPA + increment;
-                newPos %= 359;
-                OptecPyxis.CurrentAdjustedPA = newPos;
+                int newPos = myPyxis.CurrentAdjustedPA + increment;
+                newPos %= 360;
+                myPyxis.CurrentAdjustedPA = newPos;
             }
             catch (Exception ex)
             {
@@ -320,9 +323,9 @@ namespace ASCOM.Pyxis
             {
                 this.Cursor = Cursors.WaitCursor;
                 int increment = (int)RelativeIncrement_NUD.Value;
-                int newPos = OptecPyxis.CurrentAdjustedPA - increment;
-                newPos %= 359;
-                OptecPyxis.CurrentAdjustedPA = newPos;
+                int newPos = myPyxis.CurrentAdjustedPA - increment;
+                newPos %= 360;
+                myPyxis.CurrentAdjustedPA = newPos;
             }
             catch (Exception ex)
             {
@@ -337,9 +340,9 @@ namespace ASCOM.Pyxis
 
         private void Halt_BTN_Click(object sender, EventArgs e)
         {
-            if (OptecPyxis.IsMoving || OptecPyxis.IsHoming)
+            if (myPyxis.IsMoving || myPyxis.IsHoming)
             {
-                OptecPyxis.HaltMove();
+                myPyxis.HaltMove();
             } 
         }
 
@@ -391,7 +394,7 @@ namespace ASCOM.Pyxis
 
         private void PositionUpdateBGWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (OptecPyxis.IsHoming)
+            if (myPyxis.IsHoming)
             {
                 this.Invoke(new PositionUpdater(UpdatePosition));
                 Debug.Print("Background worker exited because device is homing");
@@ -405,11 +408,11 @@ namespace ASCOM.Pyxis
                 double CurrentPosition = 1;
 
                 // Calculate Maximum time for one degree
-                double degreeMaxTime = (1 / OptecPyxis.SlewRate) * 10;
+                double degreeMaxTime = (1 / myPyxis.SlewRate) * 10;
 
                 while (DateTime.Now.Subtract(LastPositionChange).TotalSeconds < degreeMaxTime)
                 {
-                    CurrentPosition = OptecPyxis.CurrentAdjustedPA;
+                    CurrentPosition = myPyxis.CurrentAdjustedPA;
                     if (CurrentPosition != LastPosition)
                     {
                         this.Invoke(new PositionUpdater(UpdatePosition));
@@ -428,12 +431,12 @@ namespace ASCOM.Pyxis
 
         private void UpdatePosition()
         {
-            this.CurrentPosition_LBL.Text = OptecPyxis.CurrentAdjustedPA.ToString("000°");
+            this.CurrentPosition_LBL.Text = myPyxis.CurrentAdjustedPA.ToString("000°");
         }
 
         private void UpdateFormConnectionEstablished()
         {
-            propertyGrid1.SelectedObject = new PyxisPropertyGrid();
+            propertyGrid1.SelectedObject = new PyxisPropertyGrid(myPyxis);
             Sleep_BTN.Enabled = true;
             sleepToolStripMenuItem.Enabled = true;
             SetSkyPA_BTN.Enabled = true;
@@ -445,7 +448,7 @@ namespace ASCOM.Pyxis
             wakeToolStripMenuItem.Enabled = false;
             connectToolStripMenuItem.Enabled = false;
             disconnectToolStripMenuItem.Enabled = true;
-            CurrentPosition_LBL.Text = OptecPyxis.CurrentAdjustedPA.ToString("000°");
+            CurrentPosition_LBL.Text = myPyxis.CurrentAdjustedPA.ToString("000°");
             RelMoveBack_BTN.Enabled = true;
             RelMoveFwd_BTN.Enabled = true;
             RelativeIncrement_NUD.Enabled = true;
@@ -501,8 +504,8 @@ namespace ASCOM.Pyxis
             GoToAdjustedPA_BTN.Enabled = false;
             AdjustedTargetPA_TB.Enabled = false;
 
-            if (OptecPyxis.IsMoving) StatusLabel.Text = "Moving to PA: " + OptecPyxis.AdjustedTargetPosition.ToString() + "...";
-            else if (OptecPyxis.IsHoming) StatusLabel.Text = "Pyxis is Homing";
+            if (myPyxis.IsMoving) StatusLabel.Text = "Moving to PA: " + myPyxis.AdjustedTargetPosition.ToString() + "...";
+            else if (myPyxis.IsHoming) StatusLabel.Text = "Pyxis is Homing";
             StartMotionBackgroundWorker();
         }
 
@@ -578,9 +581,11 @@ namespace ASCOM.Pyxis
 
     class PyxisPropertyGrid
     {
-        public PyxisPropertyGrid()
+        private OptecPyxis myPyxis;
+        public PyxisPropertyGrid(OptecPyxis somePyxis)
         {
-            if (OptecPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
+            myPyxis = somePyxis;
+            if (myPyxis.CurrentDeviceState != OptecPyxis.DeviceStates.Connected)
             {
                 throw new ApplicationException("You must connect to the Pyxis before you can access its settings.");
             }
@@ -593,7 +598,7 @@ namespace ASCOM.Pyxis
         {
             get
             {
-                return OptecPyxis.PortName;
+                return myPyxis.SavedSerialPortName;
             }
         }
 
@@ -605,7 +610,7 @@ namespace ASCOM.Pyxis
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.CurrentAdjustedPA;
+                return myPyxis.CurrentAdjustedPA;
             }
         }
 
@@ -617,7 +622,7 @@ namespace ASCOM.Pyxis
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.Reverse;
+                return myPyxis.Reverse;
             }
             set
             {
@@ -629,7 +634,7 @@ namespace ASCOM.Pyxis
                     "it will move there automatically. Would you like to continue changing this property?",
                     "Attention", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                 if (result == DialogResult.Yes)
-                    OptecPyxis.Reverse = value;
+                    myPyxis.Reverse = value;
             }
         }
 
@@ -641,13 +646,13 @@ namespace ASCOM.Pyxis
             get
             {
                 CheckIfConnected();
-                return XMLSettings.StepTime;
+                return myPyxis.StepTime;
             }
             set
             {
                 try { CheckIfConnected(); }
                 catch { return; }
-                OptecPyxis.SetStepTime(value);
+                myPyxis.SetStepTime(value);
             }
         }
 
@@ -659,7 +664,7 @@ namespace ASCOM.Pyxis
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.SlewRate;
+                return myPyxis.SlewRate;
             }
         }
 
@@ -671,7 +676,7 @@ namespace ASCOM.Pyxis
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.Resolution;
+                return myPyxis.Resolution;
             }
 
         }
@@ -684,7 +689,7 @@ namespace ASCOM.Pyxis
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.DeviceType;
+                return myPyxis.DeviceType;
             }
         }
 
@@ -696,7 +701,7 @@ namespace ASCOM.Pyxis
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.FirmwareVersion;
+                return myPyxis.FirmwareVersion;
             }
         }
 
@@ -708,13 +713,13 @@ namespace ASCOM.Pyxis
             get
             {
                 CheckIfConnected();
-                return OptecPyxis.HomeOnStart;
+                return myPyxis.HomeOnStart;
             }
             set
             {
                 try { CheckIfConnected(); }
                 catch { return; }
-                OptecPyxis.HomeOnStart = value;
+                myPyxis.HomeOnStart = value;
             }
         }
 
@@ -725,9 +730,9 @@ namespace ASCOM.Pyxis
         {
             get
             {
-                return OptecPyxis.ParkPosition;
+                return myPyxis.ParkPosition;
             }
-            set { OptecPyxis.ParkPosition = value; }
+            set { myPyxis.ParkPosition = value; }
 
         }
 
@@ -735,7 +740,7 @@ namespace ASCOM.Pyxis
 
         private void CheckIfConnected()
         {
-            switch (OptecPyxis.CurrentDeviceState)
+            switch (myPyxis.CurrentDeviceState)
             {
                 case OptecPyxis.DeviceStates.Connected:
                     return;
