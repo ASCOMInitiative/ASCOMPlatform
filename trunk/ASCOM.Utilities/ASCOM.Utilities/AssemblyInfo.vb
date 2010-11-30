@@ -24,11 +24,11 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("5.5.2.0")> 
+<Assembly: AssemblyVersion("6.0.0.0")> 
 
 <Assembly: ComVisibleAttribute(False)> 
 <Assembly: GuidAttribute("EC785106-0F00-4e7f-90BA-7CCC9E9740E1")> 
-<Assembly: AssemblyFileVersionAttribute("5.5.27.0")> 
+<Assembly: AssemblyFileVersionAttribute("6.0.0.0")> 
 
 'Permissions for particular assemblies to access internal "Friend" variables and methods of the ASCOM.Utilities assembly
 <Assembly: InternalsVisibleToAttribute("ProfileExplorer, PublicKey= " + _

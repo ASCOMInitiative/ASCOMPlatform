@@ -50,18 +50,27 @@ welcome.dfm.miaf
 wizard.dfm
 wizard.dfm.miaf
 $
-ASCOM.Utilities.dll
-ASCOM.Utilities.pdb
+ASCOM.Exceptions.dll
+ASCOM.Exceptions.pdb
 icon.ico
 Index.htm
 license.rtf
-MigrateProfile.exe
-MigrateProfile.pdb
+MigrationSupport.dll
+MigrationSupport.pdb
+MigrationSupport.xml
 moon.bmp
 readme.rtf
 swoosh.avi
 UninstallAscom.exe
+UninstallAscom.pdb
 $
+
+
+
+
+
+
+
 
 
 
@@ -682,7 +691,7 @@ Ascom Platform 6
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{09E1282A-4F2B-4B59-9E99-E495D5C99B4B}
+{F791AEE6-73F0-4349-8911-D0E6D3F910B4}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk/

@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("ASCOM Astrometry")> 
-<Assembly: AssemblyDescription("ASCOM Astrometry")> 
+<Assembly: AssemblyTitle("Migration Support")> 
+<Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
-<Assembly: AssemblyProduct("ASCOM.Astrometry")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009")> 
+<Assembly: AssemblyProduct("Migration Support")> 
+<Assembly: AssemblyCopyright("Copyright © ASCOM 2010")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(False)> 
+<Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("7f3582e3-9aa8-42ca-845c-2e6b13f362c1")> 
+<Assembly: Guid("43234d78-8dfc-44b5-9d39-e18d568748c1")> 
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("6.0.0.0")> 
-<Assembly: AssemblyFileVersion("6.0.0.0")> 
+<Assembly: AssemblyVersion("1.0.0.0")> 
+<Assembly: AssemblyFileVersion("1.0.0.0")> 
