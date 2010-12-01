@@ -47,8 +47,7 @@ namespace ASCOM.Pyxis
             catch { }
             base.OnFormClosing(e);
         }
-
-     
+  
 
         private void SetupDialogForm_Shown(object sender, EventArgs e)
         {
@@ -576,6 +575,11 @@ namespace ASCOM.Pyxis
         }
 
         #endregion
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
     }
 

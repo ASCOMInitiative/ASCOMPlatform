@@ -133,8 +133,9 @@ namespace ASCOM.Pyxis
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // deviceToolStripMenuItem
             // 
@@ -224,42 +225,42 @@ namespace ASCOM.Pyxis
             // whatsThisToolStripMenuItem
             // 
             this.whatsThisToolStripMenuItem.Name = "whatsThisToolStripMenuItem";
-            this.whatsThisToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.whatsThisToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.whatsThisToolStripMenuItem.Text = "What\'s This?";
             // 
             // createNewToolStripMenuItem
             // 
             this.createNewToolStripMenuItem.Name = "createNewToolStripMenuItem";
-            this.createNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.createNewToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.createNewToolStripMenuItem.Text = "Create new...";
             // 
             // editNameToolStripMenuItem
             // 
             this.editNameToolStripMenuItem.Name = "editNameToolStripMenuItem";
-            this.editNameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editNameToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.editNameToolStripMenuItem.Text = "Edit name...";
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.deleteToolStripMenuItem.Text = "Delete...";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
             // 
             // instance1ToolStripMenuItem
             // 
             this.instance1ToolStripMenuItem.Name = "instance1ToolStripMenuItem";
-            this.instance1ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.instance1ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.instance1ToolStripMenuItem.Text = "Pyxis 1";
             // 
             // pyxis2ToolStripMenuItem
             // 
             this.pyxis2ToolStripMenuItem.Name = "pyxis2ToolStripMenuItem";
-            this.pyxis2ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pyxis2ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.pyxis2ToolStripMenuItem.Text = "Pyxis 2";
             // 
             // helpToolStripMenuItem

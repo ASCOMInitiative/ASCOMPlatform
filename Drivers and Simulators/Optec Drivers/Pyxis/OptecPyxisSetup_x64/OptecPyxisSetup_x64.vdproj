@@ -176,6 +176,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -183,7 +196,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\OptecPyxisSetup_x64.msi"
+        "OutputFilename" = "8:Release\\OptecPyxisSetup_x64(2.0.0).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -309,7 +322,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PyxisAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:PyxisAPI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_27666730AA8697E507A55DCB56EDCAE9"
@@ -595,15 +608,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec Pyxis Programs (x64)"
-        "ProductCode" = "8:{7B8C93FC-3D17-473F-9F4F-6DA16C5AA416}"
-        "PackageCode" = "8:{DB10E138-4BBF-45BD-B68F-0483187E9C2F}"
+        "ProductCode" = "8:{B7288E0B-289B-4C61-870F-4CEB1C9D38C1}"
+        "PackageCode" = "8:{6892C2DE-F7C8-43DE-9D83-3542C12C2C7D}"
         "UpgradeCode" = "8:{652E9C6F-AC20-494A-A903-4F9D90FFEB06}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:2.0.0"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
