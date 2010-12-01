@@ -219,7 +219,19 @@ namespace ASCOM.Pyxis
                 // Check that the new position is in the range of possible values
                 if (Position < 0 || Position >= 360)
                 {
-                    throw new ASCOM.InvalidValueException("MoveAbsolute", Position.ToString(), "0 through 359.99");
+                    // Add "tricky" support for Pyxis to be able to move in increments smaller than 1°
+                    if (Position == -7171985)
+                    {
+                        myPyxis.Derotate1Step();
+                    }
+                    else
+                    {
+                        string msg = "";
+                        if (myPyxis.DeviceType == OptecPyxis.DeviceTypes.ThreeInch)
+                            msg = "Optec Pyxis3 - MoveAbsolute";
+                        else msg = "Optec Pyxis2 - MoveAbsolute";
+                        throw new ASCOM.InvalidValueException(msg, Position.ToString(), "0 through 359.99");
+                    }
                 }
                 if (myPyxis.CurrentAdjustedPA != (int)Position)
                     myPyxis.CurrentAdjustedPA = (int)Position;
