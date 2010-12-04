@@ -31,7 +31,7 @@ Namespace NOVAS
         Private Const JPL_EPHEM_START_DATE As Double = 2305424.5 'First date of data in the ephemeredes file
         Private Const JPL_EPHEM_END_DATE As Double = 2525008.5 'Last date of data in the ephemeredes file
 
-        Private Const NOVAS_DLL_LOCATION As String = "\ASCOM\.net" 'This is appended to the Common Files path
+        Private Const NOVAS_DLL_LOCATION As String = "\ASCOM\Astrometry" 'This is appended to the Common Files path
         Private Const RACIO_FILE As String = "\cio_ra.bin" 'Name of the RA of CIO binary data file
 
 #Region "New and IDisposable"

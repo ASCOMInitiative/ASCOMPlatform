@@ -540,6 +540,7 @@ else
         Register assembly ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Attributes, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=5.5.1.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
         if Variable GACINSTALLRC Equals 0
@@ -549,7 +550,7 @@ else
         end
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
         if Variable GACINSTALLRC Equals 0
-          MessageBalloon: GACInstall, DriverAccess policy installed OK
+          Comment: MessageBalloon: GACInstall, DriverAccess policy installed OK
         else
           MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
         end
@@ -558,18 +559,14 @@ else
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
         Comment: Register Platform 6 components
-        Register assembly ASCOM.Controls, Version=6.0.3964.30488, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Attributes, Version=6.0.3964.30483, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Attributes, Version=6.0.3962.32292, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Controls, Version=6.0.3962.32293, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Controls, Version=6.0.3985.40454, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Utilities, Version=5.5.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register in-process simulator DLL files with Codebase option
         Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll, set the code base in the registry
