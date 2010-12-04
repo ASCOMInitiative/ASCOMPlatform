@@ -39,7 +39,7 @@ Namespace NOVAS
 
         Private Const NOVAS32Dll As String = "NOVAS-C.dll"
         Private Const NOVAS64Dll As String = "NOVAS-C64.dll"
-        Private Const NOVAS_DLL_LOCATION As String = "\ASCOM\.net" 'This is appended to the Common Files path
+        Private Const NOVAS_DLL_LOCATION As String = "\ASCOM\Astrometry" 'This is appended to the Common Files path
 
 #Region "Private Structures"
         'Version of marshaling required by the DLLs
