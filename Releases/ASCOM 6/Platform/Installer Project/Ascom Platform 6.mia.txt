@@ -283,9 +283,9 @@ else
   [END REGION]
   [DEFINE REGION: Perform First Time or Maintenance Installation]
   Comment: Install/Re-Install product
-  Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Tools\Uninstall #TITLE# to $UNINSTALLLINK$
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Uninstall #TITLE# to $UNINSTALLLINK$
   [OFFLINE CONTENT]
-  Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Tools\#TITLE# Update to $UNINSTALLLINK$
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\#TITLE# Update to $UNINSTALLLINK$
   [DEFINE WEB MEDIA Platform 5]
   if Variable SELECTED Equals TRUE
   end
@@ -435,7 +435,7 @@ else
     Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\PlatformHelp.chm to $TARGETDIR$\Docs
     Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
     Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
-    Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
     Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
     Comment: Platform 6 Internal
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
@@ -478,15 +478,15 @@ else
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ServedClasses
     [END REGION]
     [DEFINE REGION: Create shortcuts]
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Docs\Compatible Software (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Drivers and Downloads (web) to $TARGETDIR$\Docs\Drivers and Downloads (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Supported Devices (web) to $TARGETDIR$\Docs\Supported Devices (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Docs\Compatible Software (web).url
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Drivers and Downloads (web) to $TARGETDIR$\Docs\Drivers and Downloads (web).url
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Supported Devices (web) to $TARGETDIR$\Docs\Supported Devices (web).url
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
     Create Shortcut $DESKTOPDIR$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Docs\Platform 6.0.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\ASCOM Help File to $TARGETDIR$\Docs\PlatformHelp.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Docs\Platform 6.0.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Help File to $TARGETDIR$\Docs\PlatformHelp.chm
     Create Shortcut $DESKTOPDIR$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
     [END REGION]
     [DEFINE REGION: Registry Keys]

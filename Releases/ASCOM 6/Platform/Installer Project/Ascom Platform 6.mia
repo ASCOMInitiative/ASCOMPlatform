@@ -3179,19 +3179,19 @@ FALSE
 FALSE
 {0A038DAF-02DA-4B26-BF0D-0288E18C961A}
 $SUPPORTDIR$\UninstallAscom.exe
-FALSE
+TRUE
 
 TRUE
 
 {4F86B8E6-F14F-4061-A055-8D37DFCD8C47}
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe
-FALSE
+TRUE
 -register
 TRUE
 
 {B71A4B1B-A04A-41AB-86C9-A7C631059906}
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator.exe
-FALSE
+TRUE
 -register
 TRUE
 
@@ -3257,7 +3257,7 @@ TRUE
 
 {1D14EC4F-892B-4588-BDEC-011B741BB88A}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
-FALSE
+TRUE
 "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb"
 TRUE
 
@@ -3269,73 +3269,73 @@ TRUE
 
 {8BC1FDE3-788E-499D-BF7F-3A37368E44CC}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
-FALSE
+TRUE
 "$COMMONFILES$\ASCOM\Interface\Helper.tlb"
 TRUE
 
 {297DB399-FE63-453C-83C0-5BE9EDAEA209}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
-FALSE
+TRUE
 "$COMMONFILES$\ASCOM\Interface\Helper2.tlb"
 TRUE
 
 {DABB2678-0707-435D-B212-F2B46D4EB26D}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
-FALSE
+TRUE
 "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb"
 TRUE
 
 {25910F33-C071-478C-BD95-0AF2C89F77E8}
 $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
 {6DC0FE45-DDC6-4D3C-A9E2-C5D616A8A255}
 $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
 {FF93E943-17CD-4749-9F20-C63C37F5E224}
 $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
 {C3CE82CC-EC99-421E-91C1-4809B462B131}
 $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
 {965A2440-F572-42A5-9866-1F0B1CD3B6D4}
 $COMMONFILES$\ASCOM\Dome\DomeSim.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
 {5AA10E6E-1C80-4752-A881-60B0F4C403CE}
 $COMMONFILES$\ASCOM\Telescope\POTH.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
 {20D959D1-CE8C-4559-A4E9-5EE5F3554327}
 $COMMONFILES$\ASCOM\Telescope\Pipe.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
 {10A3B218-3333-469A-95CB-2A371CBFF8F1}
 $COMMONFILES$\ASCOM\Telescope\Hub.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
 {28BC08CC-3A00-4169-B4B9-9BF23BC57531}
 $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
-FALSE
+TRUE
 /regserver
 TRUE
 
@@ -3354,7 +3354,7 @@ FALSE
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
 /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7
-2
+1
 
 
 
@@ -3365,7 +3365,7 @@ TRUE
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
 /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.0.0__565de7938946fba7
-2
+1
 
 
 
@@ -3376,7 +3376,7 @@ TRUE
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
 /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.3.0__565de7938946fba7
-2
+1
 
 
 
@@ -3387,7 +3387,7 @@ TRUE
 $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
 policy.5.5.ASCOM.Utilities.dll
-0
+1
 
 
 
@@ -3398,7 +3398,7 @@ TRUE
 $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
 policy.1.0.ASCOM.DriverAccess.dll
-0
+1
 
 
 
@@ -3408,7 +3408,7 @@ TRUE
 {4872BD2A-7CB6-40E2-91B2-9BEEC8AA1541}
 $UNINSTALLLINK$
 Uninstall #TITLE#
-$SHORTCUTFILES$\ASCOM\Platform 6\Tools
+$SHORTCUTFILES$\ASCOM Platform 6\Tools
 Removes ASCOM 6
 
 
@@ -3418,7 +3418,7 @@ c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 {C177DEEE-DEEE-4E73-A786-18F225B9F330}
 $UNINSTALLLINK$
 #TITLE# Update
-$SHORTCUTFILES$\ASCOM\Platform 6\Tools
+$SHORTCUTFILES$\ASCOM Platform 6\Tools
 Updates ASCOM 6
 /update
 
@@ -3428,7 +3428,7 @@ c:\ascom trunk\releases\ascom 6\platform\installer project\ASCOM.ico
 {C75671BE-C676-4459-A526-D41DC9539D28}
 $TARGETDIR$\Docs\Platform 6.0.pdf
 Platform 6.0
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3438,7 +3438,7 @@ $SHORTCUTFILES$\ASCOM\Platform 6\Docs
 {9B88038B-C230-43D2-BB6F-6BD0ED4FBB66}
 $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 ASCOM Diagnostics
-$SHORTCUTFILES$\ASCOM\Platform 6\Tools
+$SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
@@ -3448,7 +3448,7 @@ $SHORTCUTFILES$\ASCOM\Platform 6\Tools
 {BE6115F2-22CE-4510-B0EF-148B76088808}
 $TARGETDIR$\Tools\ProfileExplorer.exe
 Profile Explorer
-$SHORTCUTFILES$\ASCOM\Platform 6\Tools
+$SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
@@ -3458,7 +3458,7 @@ $SHORTCUTFILES$\ASCOM\Platform 6\Tools
 {627B7EB2-224E-49AB-95E6-3AE663DB787A}
 $TARGETDIR$\Docs\Supported Devices (web).url
 Supported Devices (web)
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3468,7 +3468,7 @@ c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 {2C631ADC-EEB2-4375-B166-D9D9F15F3DAD}
 $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
 Platform 6 Client-Driver Interaction V2
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3478,7 +3478,7 @@ $SHORTCUTFILES$\ASCOM\Platform 6\Docs
 {5932FCA5-986B-4061-828D-B98D9E87246D}
 $TARGETDIR$\Docs\Drivers and Downloads (web).url
 Drivers and Downloads (web)
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3488,7 +3488,7 @@ c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 {6389496C-2EA4-4C08-AEDC-9553ADA6A762}
 $TARGETDIR$\Docs\Compatible Software (web).url
 Compatible Software (web)
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3508,7 +3508,7 @@ $DESKTOPDIR$
 {1E006CA0-2BD3-4205-A34E-FF0DFE4734DB}
 $TARGETDIR$\Docs\PlatformHelp.chm
 ASCOM Help File
-$SHORTCUTFILES$\ASCOM\Platform 6
+$SHORTCUTFILES$\ASCOM Platform 6
 
 
 
@@ -3528,12 +3528,12 @@ $DESKTOPDIR$
 {FF41893F-14D0-4547-A8BF-7FF2DB912D29}
 $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
 ASCOM User Guide
-$SHORTCUTFOLDER$
+$SHORTCUTFILES$\ASCOM Platform 6
 ASCOM User Guide
 
 
 
-
+|
 0|
 {27F9384A-697A-49F9-A7F5-06EBF23BF6BE}
 REMOVE=ALL,TRUE,$PRODUCTCODE$,FALSE,,,REMOVEOLD,ERROROLD,TRUE
