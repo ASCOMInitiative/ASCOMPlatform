@@ -1,10 +1,6 @@
 ﻿'NOVAS2 component implementation
 'This class is a public front that simply calls the relevant 32 or 64bit funciton in compiled C code
 
-'Version 5.5.6 is identical to the component shipped with Platform 5.5. except that the location of the support
-'files has been updated to match the new ASCOM\Astrometry Platform 6 location and the code is now able to find the copy
-'in the 32bit part of the file system when running on a 64bit system. There are no interface or funciton changes in this version.
-
 Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities
 'See the Is64Bit function for code that enables this assembly to find the C NOVAS DLLs
@@ -1142,19 +1138,22 @@ Namespace NOVAS
                 sun_eph32(jd, ra, dec, dis)
             End If
         End Sub
-        
-#End Region
-
-#Region "DeltaT Member"
-        ''' <summary>
-        ''' Return the value of DeltaT for the given Julian date
-        ''' </summary>
-        ''' <param name="Tjd">Julian date for which the delta T value is required</param>
-        ''' <returns>Double value of DeltaT (seconds)</returns>
-        ''' <remarks>Valid between the years 1650 and 2050</remarks>
-        Public Shared Function DeltaT(ByVal Tjd As Double) As Double
-            Return ASCOM.Astrometry.DeltaTCalc(Tjd)
-        End Function
+        'Public Shared Function solarsystem(ByVal tjd As Double, _
+        '                                      ByVal body As Body, _
+        '                                      ByRef origin As Origin, _
+        '                                      ByRef pos As Double(), _
+        '                                      ByRef vel As Double()) As Short
+        'Dim vpos As New posvector, vvel As New velvector
+        'Dim rc As Short
+        '    If Is64Bit() Then
+        '        rc = solarsystem64(tjd, body, origin, vpos, vvel)
+        '    Else
+        '        rc = solarsystem32(tjd, body, origin, vpos, vvel)
+        '    End If
+        '    PosVecToArr(vpos, pos)
+        '    VelVecToArr(vvel, vel)
+        '    Return rc
+        'End Function
 #End Region
 
 #Region "DLL Entry Points (32bit)"

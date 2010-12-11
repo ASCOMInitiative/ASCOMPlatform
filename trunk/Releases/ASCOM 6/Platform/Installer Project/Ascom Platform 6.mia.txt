@@ -1,6 +1,4 @@
 Comment: Prompts the user if they want to create an install log
-Set Variable NATIVE_ENGINE to TRUE
-Set Variable DELAYUNTIL_APPLYCHANGES to FALSE
 Get System Setting Processor Architecture into PROCESSOR
 MessageBalloon: Processor, Processor is $PROCESSOR$
 Comment: Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
@@ -388,13 +386,6 @@ else
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
     Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
-    Comment: Platform 5.5 Astrometry
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll to Global Assembly Cache
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\.net
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\.net
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\.net
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\.net
     [END REGION]
     [DEFINE REGION: Platform 6 files]
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
@@ -422,8 +413,12 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
     Comment: Platform 6 Astrometry
     Install Assembly c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
     Install Files c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Assembly C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\AstrometryPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
     Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
@@ -434,20 +429,6 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
-    Install Files c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
     Comment: Platform 6 Documents
     Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Docs
     Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Docs
@@ -581,9 +562,15 @@ else
         else
           MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
         end
+        Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+        if Variable GACINSTALLRC Equals 0
+          MessageBalloon: GACInstall, DriverAccess policy installed OK
+        else
+          MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+        end
         Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.3.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
-        Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
+        Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
         Comment: Register Platform 6 components
         Comment: Register assembly ASCOM.Attributes, Version=6.0.3962.32292, Culture=neutral, PublicKeyToken=565de7938946fba7
