@@ -36,16 +36,26 @@ Namespace NOVAS
 
 #Region "New and IDisposable"
         Sub New()
-            Dim rc As Boolean, rc1 As Short
+            Dim rc As Boolean, rc1 As Short, CommonProgramFilesPath As String
+            Dim ReturnedPath As New System.Text.StringBuilder(260)
 
+            'Find the root location of the common files directory containing the ASCOM support files.
+            'On a 32bit system this is \Program Files\Common Files
+            'On a 64bit system this is \Program Files (x86)\Common Files
+            If Is64Bit() Then ' 64bit application so find the 32bit folder location
+                rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, False)
+                CommonProgramFilesPath = ReturnedPath.ToString
+            Else '32bit application so just go with the .NET returned value
+                CommonProgramFilesPath = GetFolderPath(SpecialFolder.CommonProgramFiles)
+            End If
             'Add the ASCOM\.net directory to the DLL search path so that the NOVAS C 32 and 64bit DLLs can be found
-            rc = SetDllDirectory(GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION)
+            rc = SetDllDirectory(CommonProgramFilesPath & NOVAS_DLL_LOCATION)
 
             'Establish the location of the file of CIO RAs
-            SetRACIOFile(GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & RACIO_FILE)
+            SetRACIOFile(CommonProgramFilesPath & NOVAS_DLL_LOCATION & RACIO_FILE)
 
             ' Open the ephemerides file and set its applicable date range
-            rc1 = Ephem_Open(GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & "\" & JPL_EPHEM_FILE_NAME, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE)
+            rc1 = Ephem_Open(CommonProgramFilesPath & NOVAS_DLL_LOCATION & "\" & JPL_EPHEM_FILE_NAME, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE)
             If rc1 > 0 Then Throw New HelperException("Unable to open ephemeris file: " & GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & "\" & JPL_EPHEM_FILE_NAME & ", RC: " & rc1)
         End Sub
 
@@ -3354,6 +3364,30 @@ Namespace NOVAS
 #End Region
 
 #Region "Private Support Code"
+        'Constants for SHGetSpecialFolderPath shell call
+        Private Const CSIDL_PROGRAM_FILES As Integer = 38 '0x0026
+        Private Const CSIDL_PROGRAM_FILESX86 As Integer = 42 '0x002a,
+        Private Const CSIDL_WINDOWS As Integer = 36 ' 0x0024,
+        Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
+
+        'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
+        ''' <summary>
+        ''' Get path to a system folder
+        ''' </summary>
+        ''' <param name="hwndOwner">SUpply null / nothing to use "current user"</param>
+        ''' <param name="lpszPath">returned string folder path</param>
+        ''' <param name="nFolder">Folder Number from CSIDL enumeration e.g. CSIDL_PROGRAM_FILES_COMMONX86 = 44 = 0x2c</param>
+        ''' <param name="fCreate">Indicates whether the folder should be created if it does not already exist. If this value is nonzero, 
+        ''' the folder is created. If this value is zero, the folder is not created</param>
+        ''' <returns>TRUE if successful; otherwise, FALSE.</returns>
+        ''' <remarks></remarks>
+        <DllImport("shell32.dll")> _
+        Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
+                                               <Out()> ByVal lpszPath As System.Text.StringBuilder, _
+                                               ByVal nFolder As Integer, _
+                                               ByVal fCreate As Boolean) As Boolean
+        End Function
+
         'Declare the api call that sets the additional DLL search directory
         <DllImport("kernel32.dll", SetLastError:=False)> _
         Private Shared Function SetDllDirectory(ByVal lpPathName As String) As Boolean
