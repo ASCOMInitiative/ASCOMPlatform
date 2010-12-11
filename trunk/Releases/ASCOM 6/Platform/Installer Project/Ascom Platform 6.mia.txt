@@ -1,11 +1,14 @@
 Comment: Prompts the user if they want to create an install log
-if Variable CMDLINE not Contains /l
-  Set Variable CreateLogFile to No
-  Comment: MessageBox: Create Install Log File, Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
-  if Variable CreateLogFile Equals YES
-    Run Program $EXEFILE$ /l="C:\ASCOMInstall.txt"
-    GoTo Label: Finish
-  end
+Set Variable NATIVE_ENGINE to TRUE
+Set Variable DELAYUNTIL_APPLYCHANGES to FALSE
+Get System Setting Processor Architecture into PROCESSOR
+MessageBalloon: Processor, Processor is $PROCESSOR$
+Comment: Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+Set Variable CreateLogFile to No
+Comment: MessageBox: Create Install Log File, Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
+if Variable CreateLogFile Equals YES
+  Run Program $EXEFILE$ /l="C:\ASCOMInstall.txt"
+  GoTo Label: Finish
 end
  
 [DEFINE REGION: Application Updates]
@@ -376,9 +379,10 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
     Comment: New files in Platform 5.5
-    Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to $COMMONFILES$\ASCOM\Platform
-    Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml to $COMMONFILES$\ASCOM\Platform
-    Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Assembly C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to Global Assembly Cache
+    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to $COMMONFILES$\ASCOM\Platform
+    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml to $COMMONFILES$\ASCOM\Platform
+    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $COMMONFILES$\ASCOM\Platform
     Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINDIR$\Symbols\dll
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
@@ -407,15 +411,18 @@ else
     Install Assembly c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
     Install Files c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
     Install Assembly c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Files c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
     Install Assembly c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to Global Assembly Cache
     Install Files c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
     Install Assembly c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
     Install Files c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
-    Install Files c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
     Install Assembly c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
     Comment: Platform 6 Astrometry
     Install Assembly c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
     Install Files c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
     Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
@@ -427,6 +434,20 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Files c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
     Comment: Platform 6 Documents
     Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Docs
     Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Docs
@@ -472,10 +493,10 @@ else
     Install Assembly c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch
     Comment: Telescope simulator
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ServedClasses
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ServedClasses
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ServedClasses
     [END REGION]
     [DEFINE REGION: Create shortcuts]
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Docs\Compatible Software (web).url
@@ -565,12 +586,12 @@ else
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
         Comment: Register Platform 6 components
-        Register assembly ASCOM.Attributes, Version=6.0.3962.32292, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register assembly ASCOM.Attributes, Version=6.0.3962.32292, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Controls, Version=6.0.3985.40454, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register assembly ASCOM.Controls, Version=6.0.3985.40454, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register assembly ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register in-process simulator DLL files with Codebase option
@@ -583,6 +604,14 @@ else
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe -register (WAIT)
         Comment: Install policy files
         [END REGION]
+        if Variable PROCESSOR Equals AMD64
+          Comment: Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+          Set Variable REGASM64 to $WINDIR$\Microsoft.NET\Framework64\v2.0.50727\regasm.exe
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC1)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC3)
+          MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$
+        end
       end
     end
   end

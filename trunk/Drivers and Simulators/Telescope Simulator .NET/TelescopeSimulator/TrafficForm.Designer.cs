@@ -1,4 +1,4 @@
-﻿namespace ASCOM.TelescopeSimulator
+﻿namespace ASCOM.Simulator
 {
     partial class TrafficForm
     {
@@ -139,7 +139,7 @@
             // 
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.ErrorImage = null;
-            this.picASCOM.Image = global::ASCOM.TelescopeSimulator.Properties.Resources.ASCOM;
+            this.picASCOM.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
             this.picASCOM.InitialImage = null;
             this.picASCOM.Location = new System.Drawing.Point(311, 18);
             this.picASCOM.Name = "picASCOM";

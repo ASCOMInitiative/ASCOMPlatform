@@ -22,7 +22,7 @@ using Microsoft.Win32;
 using System.Text;
 using System.Threading;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     public class TelescopeSimulator
     {

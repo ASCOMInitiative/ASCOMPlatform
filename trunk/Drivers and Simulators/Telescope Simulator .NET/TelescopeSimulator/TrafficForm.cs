@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     public partial class TrafficForm : Form
     {

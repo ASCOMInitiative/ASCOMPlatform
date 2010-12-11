@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     [ComVisible(false)]
     public class ReferenceCountedObjectBase

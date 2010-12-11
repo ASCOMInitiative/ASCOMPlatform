@@ -1,11 +1,11 @@
 Comment
-If
+Get System Settings
+MessageBalloon
 Set Variable
 MessageBox
 If
 Run Program As
 GoTo Label
-End
 End
 Comment
 Code Folding Region
@@ -376,6 +376,7 @@ Comment
 Install Files
 Install Files
 Comment
+Install Assembly
 Install Files
 Install Files
 Install Files
@@ -413,6 +414,7 @@ Install Assembly
 Install Files
 Install Files
 Install Assembly
+Install Files
 Install Files
 Comment
 Install Assembly
@@ -583,6 +585,11 @@ Run Program
 Run Program
 Comment
 Code Folding Region
+If
+Set 64 Bit Mode
+Run Program
+MessageBalloon
+End
 End
 End
 End
@@ -617,14 +624,14 @@ Code Folding Region
 Comment
 $
 {FC7A3C0C-BFF8-4D6B-8C08-D0DD8ADF1ABA}
-{569162D7-C6BF-4929-8F09-E3274078D77A}
+{28AFDC68-469E-4A8D-859B-27139F88751C}
+{B112A9CF-A202-43C0-81EE-7B83604E259A}
 {7DEEC42C-E525-4106-8674-3B81AE1DE53D}
 {2F8A385A-8979-4C4D-94C3-87E6D877AE96}
 {50C70E0F-34B3-4FF2-9C6D-49499C935A67}
 {45D4BA85-EC46-41B3-944E-261F3A23184C}
 {819A655A-21B3-4D69-B773-F5A6C8D5C190}
 {4544B0B9-A654-4CE1-9659-9493745EB181}
-{B57991A4-3DAA-4E0B-9D94-2120C536FFDC}
 {AA62D93F-9E77-4545-9DFC-6281DFF4EED5}
 {DCD13871-CEBE-4697-B0DC-4578CD0208BA}
 {73D4CE89-B727-45A6-8F31-90F9629F1D1A}
@@ -994,6 +1001,7 @@ $
 {228C9A5A-477A-44DC-8D82-CC5FC3C63ADA}
 {131B0EA4-591B-4513-83E8-DB895C757C82}
 {3C13E605-7E5B-4BF6-8CAD-61805C02F6FA}
+{A0B2AB81-F4CC-49F5-AFE0-D34C022D8EC8}
 {B00DFC9E-D4EA-49AB-9C57-B6C68D33E506}
 {64A8C0EE-50AB-43F1-9E61-9DFE50F4BD3A}
 {BA632DD6-FB56-45F4-9C0C-78E4C2C9BF89}
@@ -1031,6 +1039,7 @@ $
 {5DAD9FEA-2959-42FC-9F45-6FD38E1B0403}
 {A2A8D814-DB9E-4A06-9944-D1B85EA16DAD}
 {2B523786-35CE-4829-860F-F68D66DD8488}
+{B004B917-A2F3-462A-883E-E4CE8EC5AFD9}
 {3C21A620-FA47-435F-AF98-CB57904B341B}
 {8A968B7F-09FD-4424-AFB8-77CE26966454}
 {5DA9FD0A-3EF9-4121-9A7F-886E817E74C3}
@@ -1201,6 +1210,11 @@ $
 {4F86B8E6-F14F-4061-A055-8D37DFCD8C47}
 {AD62045B-723E-4269-BC76-32C60B38FF24}
 {59492394-EA2B-4625-8D00-DED0E51937A8}
+{073F19E6-7462-414F-8D04-55D0EDBEA86E}
+{28DE70B1-9EDF-42B9-9E61-CF6D47F6DD19}
+{3DBB43A1-C8FE-4BEE-951F-001EAF8C8ECA}
+{1178C52C-DBF4-4755-8C53-B7ACD5C49995}
+{01B7B7F1-5704-451A-A16B-CBF11C2FF66F}
 {8C88DBF8-2C65-4F6C-AD61-4E6F968F66CD}
 {A2F641C3-444D-42B3-BF5C-76E1D2E983FE}
 {B81AEAEB-ED4C-4C94-B72B-4CEC82172775}
@@ -1704,11 +1718,6 @@ PreviousVersionsInstalled
 0
 True
 FALSE
-{569162D7-C6BF-4929-8F09-E3274078D77A}
-CMDLINE
-1
-/l
-TRUE
 {50C70E0F-34B3-4FF2-9C6D-49499C935A67}
 CreateLogFile
 0
@@ -1748,6 +1757,11 @@ FALSE
 GACINSTALLRC
 0
 0
+FALSE
+{073F19E6-7462-414F-8D04-55D0EDBEA86E}
+PROCESSOR
+0
+AMD64
 FALSE
 {0E0152EA-EEEA-4EA4-9B85-51D60359A442}
 $TITLE$ Setup Error
@@ -1994,6 +2008,9 @@ CHECKSYSTEM
 {C896AF85-ADFD-464E-BA95-084731138D23}
 CHECKSYSTEM
 25
+{28AFDC68-469E-4A8D-859B-27139F88751C}
+PROCESSOR
+75
 {228C9A5A-477A-44DC-8D82-CC5FC3C63ADA}
 c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll
 FALSE|
@@ -3177,6 +3194,19 @@ FALSE
 FALSE
 FALSE
 FALSE
+{B004B917-A2F3-462A-883E-E4CE8EC5AFD9}
+C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
+FALSE|
+$COMMONFILES$\ASCOM\Platform\v6
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {0A038DAF-02DA-4B26-BF0D-0288E18C961A}
 $SUPPORTDIR$\UninstallAscom.exe
 TRUE
@@ -3339,6 +3369,12 @@ TRUE
 /regserver
 TRUE
 
+{3DBB43A1-C8FE-4BEE-951F-001EAF8C8ECA}
+$WINDIR$\Microsoft.NET\Framework64\v2.0.50727\regasm.exe
+TRUE
+"$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll"
+TRUE
+RC
 {45D4BA85-EC46-41B3-944E-261F3A23184C}
 $EXEFILE$
 
@@ -3408,7 +3444,7 @@ TRUE
 {4872BD2A-7CB6-40E2-91B2-9BEEC8AA1541}
 $UNINSTALLLINK$
 Uninstall #TITLE#
-$SHORTCUTFILES$\ASCOM\Platform 6\Tools
+$SHORTCUTFILES$\ASCOM Platform 6\Tools
 Removes ASCOM 6
 
 
@@ -3418,7 +3454,7 @@ c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 {C177DEEE-DEEE-4E73-A786-18F225B9F330}
 $UNINSTALLLINK$
 #TITLE# Update
-$SHORTCUTFILES$\ASCOM\Platform 6\Tools
+$SHORTCUTFILES$\ASCOM Platform 6\Tools
 Updates ASCOM 6
 /update
 
@@ -3428,7 +3464,7 @@ c:\ascom trunk\releases\ascom 6\platform\installer project\ASCOM.ico
 {C75671BE-C676-4459-A526-D41DC9539D28}
 $TARGETDIR$\Docs\Platform 6.0.pdf
 Platform 6.0
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3438,7 +3474,7 @@ $SHORTCUTFILES$\ASCOM\Platform 6\Docs
 {9B88038B-C230-43D2-BB6F-6BD0ED4FBB66}
 $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 ASCOM Diagnostics
-$SHORTCUTFILES$\ASCOM\Platform 6\Tools
+$SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
@@ -3448,7 +3484,7 @@ $SHORTCUTFILES$\ASCOM\Platform 6\Tools
 {BE6115F2-22CE-4510-B0EF-148B76088808}
 $TARGETDIR$\Tools\ProfileExplorer.exe
 Profile Explorer
-$SHORTCUTFILES$\ASCOM\Platform 6\Tools
+$SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
@@ -3458,7 +3494,7 @@ $SHORTCUTFILES$\ASCOM\Platform 6\Tools
 {627B7EB2-224E-49AB-95E6-3AE663DB787A}
 $TARGETDIR$\Docs\Supported Devices (web).url
 Supported Devices (web)
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3468,7 +3504,7 @@ c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 {2C631ADC-EEB2-4375-B166-D9D9F15F3DAD}
 $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
 Platform 6 Client-Driver Interaction V2
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3478,7 +3514,7 @@ $SHORTCUTFILES$\ASCOM\Platform 6\Docs
 {5932FCA5-986B-4061-828D-B98D9E87246D}
 $TARGETDIR$\Docs\Drivers and Downloads (web).url
 Drivers and Downloads (web)
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3488,7 +3524,7 @@ c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 {6389496C-2EA4-4C08-AEDC-9553ADA6A762}
 $TARGETDIR$\Docs\Compatible Software (web).url
 Compatible Software (web)
-$SHORTCUTFILES$\ASCOM\Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
@@ -3508,7 +3544,7 @@ $DESKTOPDIR$
 {1E006CA0-2BD3-4205-A34E-FF0DFE4734DB}
 $TARGETDIR$\Docs\PlatformHelp.chm
 ASCOM Help File
-$SHORTCUTFILES$\ASCOM\Platform 6
+$SHORTCUTFILES$\ASCOM Platform 6
 
 
 
@@ -3528,12 +3564,12 @@ $DESKTOPDIR$
 {FF41893F-14D0-4547-A8BF-7FF2DB912D29}
 $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
 ASCOM User Guide
-$SHORTCUTFOLDER$
+$SHORTCUTFILES$\ASCOM Platform 6
 ASCOM User Guide
 
 
 
-
+|
 0|
 {27F9384A-697A-49F9-A7F5-06EBF23BF6BE}
 REMOVE=ALL,TRUE,$PRODUCTCODE$,FALSE,,,REMOVEOLD,ERROROLD,TRUE
@@ -3951,6 +3987,10 @@ TRUE
 C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\bin\Release\ASCOM.Utilities.dll
 TRUE
 
+{A0B2AB81-F4CC-49F5-AFE0-D34C022D8EC8}
+C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll
+TRUE
+
 {D3AC286E-D3FE-485E-9DF9-3EEC7899E859}
 SUCCESS
 {0849039C-A9FA-4F0D-8AD5-A0DF9EBA3744}
@@ -4087,6 +4127,20 @@ GACInstall
 DriverAccess policy installed OK
 0
 5
+{B112A9CF-A202-43C0-81EE-7B83604E259A}
+Processor
+Processor is $PROCESSOR$
+1
+5
+{1178C52C-DBF4-4755-8C53-B7ACD5C49995}
+RegAsm 64
+Running 64 bit RegAsm for ASCOM.Utilities RC: $RC$
+0
+5
+{28DE70B1-9EDF-42B9-9E61-CF6D47F6DD19}
+FALSE
+FALSE
+TRUE
 {233D8327-E811-4AF8-B19C-EDA9D264AA86}
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll|FALSE
 {C4B3EC23-BA7E-4CE7-8828-0EB3CC1A05DC}
@@ -4169,211 +4223,6 @@ $
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4489,6 +4338,83 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
 
 
 
@@ -4641,6 +4567,136 @@ C
 
 
 
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4725,6 +4781,11 @@ C
 
 
 C
+
+
+
+
+
 
 
 
@@ -4784,6 +4845,13 @@ C
 
 
 $
+
+
+
+
+
+
+
 
 
 

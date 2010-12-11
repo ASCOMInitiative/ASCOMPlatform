@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using System.Windows.Forms;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     //
     // Your driver's ID is ASCOM.Telescope.Telescope
