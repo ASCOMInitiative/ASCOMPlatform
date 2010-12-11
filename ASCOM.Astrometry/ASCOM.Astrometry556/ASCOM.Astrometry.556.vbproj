@@ -73,7 +73,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\ASCOM.Utilities\ASCOM.Utilities.553\SharedConstantsAndCode.vb">
+    <Compile Include="..\..\ASCOM.Utilities\ASCOM.Utilities.556\SharedConstantsAndCode.vb">
       <Link>SharedConstantsAndCode.vb</Link>
     </Compile>
     <Compile Include="AstrometryExceptions.vb" />

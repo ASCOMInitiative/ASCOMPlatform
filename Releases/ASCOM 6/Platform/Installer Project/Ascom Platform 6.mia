@@ -3089,7 +3089,7 @@ FALSE
 FALSE
 FALSE
 {3D24E160-2DC4-4C8D-A176-BBEC1F3EACE5}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\Publisher Policy 5.5.3\PublisherPolicy.xml
+C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -3102,7 +3102,7 @@ FALSE
 FALSE
 FALSE
 {F9446A71-43A6-4ECB-8BD5-B4595EC80925}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\Publisher Policy 5.5.3\policy.5.5.ASCOM.Utilities.dll
+C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -3115,7 +3115,7 @@ FALSE
 FALSE
 FALSE
 {AD460588-8DC5-4DEC-8902-3D07F73D87B5}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\bin\Release\ASCOM.Utilities.pdb
+C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -4027,7 +4027,7 @@ c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dl
 TRUE
 $COMMONFILES$\ASCOM\Platform
 {10D35D2F-C244-4AA3-8ED1-F91420CA125D}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\bin\Release\ASCOM.Utilities.dll
+C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll
 TRUE
 
 {A0B2AB81-F4CC-49F5-AFE0-D34C022D8EC8}
@@ -4265,7 +4265,7 @@ ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946f
 {34365FA5-833E-4185-BB62-A6F3DE17F1A3}
 ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {A8285547-B11B-445B-B5BC-41142F5A3D58}
-ASCOM.Utilities, Version=5.5.3.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
+ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {2233D256-D6C3-47DA-B1E5-ABE43231E0EA}
 ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {5394C883-94E6-4048-832B-35C9514E84BB}
@@ -4283,7 +4283,7 @@ ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba
 $
 
 
-
+C
 C
 
 C
