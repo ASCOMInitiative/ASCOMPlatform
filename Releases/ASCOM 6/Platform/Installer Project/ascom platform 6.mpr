@@ -681,6 +681,35 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
 $
 1
@@ -697,7 +726,7 @@ Ascom Platform 6
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{55D2860A-C042-497D-BB2B-8484BB4EAD3B}
+{1665027A-74C2-4F45-BEC4-7ED219950520}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -711,7 +740,7 @@ FALSE
 
 http://timestamp.verisign.com/scripts/timstamp.dll
 http://ascom-standards.org/
-UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator
+UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,"LANGUAGE=English","TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00
 $
 $
 

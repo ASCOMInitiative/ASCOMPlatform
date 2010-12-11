@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using ASCOM.DeviceInterface;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     public class TelescopeHardware
     {
@@ -170,8 +170,9 @@ namespace ASCOM.TelescopeSimulator
                 //' Setup dialog.
                 Random r = new Random();
                 TimeZone localZone = TimeZone.CurrentTimeZone;
-                double latitude = (r.NextDouble() * 60);
+                double latitude = 51.07861;// (r.NextDouble() * 60); lock for testing
                 double longitude = (((-(double)(localZone.GetUtcOffset(DateTime.Now).Seconds) / 3600) + r.NextDouble() - 0.5) * 15);
+                if (localZone.GetUtcOffset(DateTime.Now).Seconds == 0) longitude = -0.29444; //lock for testing
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Elevation", Math.Round((r.NextDouble()*1000),0).ToString());
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Longitude", longitude.ToString());
                 m_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", latitude.ToString());

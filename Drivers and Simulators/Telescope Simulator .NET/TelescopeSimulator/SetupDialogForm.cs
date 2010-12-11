@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
 
     [ComVisible(false)]					// Form not registered for COM!

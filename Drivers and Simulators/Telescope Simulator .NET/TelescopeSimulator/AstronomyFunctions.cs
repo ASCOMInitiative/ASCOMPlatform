@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     public class AstronomyFunctions
     {

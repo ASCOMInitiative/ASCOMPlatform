@@ -8,8 +8,8 @@
     <ProjectGuid>{20CD9164-D5BF-4DA5-A248-EC6B81830610}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ASCOM.TelescopeSimulator</RootNamespace>
-    <AssemblyName>ASCOM.TelescopeSimulator.Telescope</AssemblyName>
+    <RootNamespace>ASCOM.Simulator</RootNamespace>
+    <AssemblyName>ASCOM.Simulator.Telescope</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>

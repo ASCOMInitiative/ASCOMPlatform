@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     public enum SlewType
     {
@@ -61,7 +61,7 @@ namespace ASCOM.TelescopeSimulator
         }
 
         //Constant Definitions
-        public static string PROGRAM_ID = "ASCOM.TelescopeSimulator.Telescope";  //Key used to store the settings
+        public static string PROGRAM_ID = "ASCOM.Simulator.Telescope";  //Key used to store the settings
         public static string REGISTRATION_VERSION = "1";
 
         //public static double DEG_RAD = 0.0174532925;

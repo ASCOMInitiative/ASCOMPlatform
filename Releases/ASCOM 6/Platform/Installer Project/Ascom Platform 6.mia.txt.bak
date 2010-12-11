@@ -1,11 +1,11 @@
 Comment: Prompts the user if they want to create an install log
-if Variable CMDLINE not Contains /l
-  Set Variable CreateLogFile to No
-  Comment: MessageBox: Create Install Log File, Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
-  if Variable CreateLogFile Equals YES
-    Run Program $EXEFILE$ /l="C:\ASCOMInstall.txt"
-    GoTo Label: Finish
-  end
+Get System Setting Processor Architecture into PROCESSOR
+MessageBalloon: Processor, Processor is $PROCESSOR$
+Set Variable CreateLogFile to No
+MessageBox: Create Install Log File, Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
+if Variable CreateLogFile Equals YES
+  Run Program $EXEFILE$ /l="C:\ASCOMInstall.txt"
+  GoTo Label: Finish
 end
  
 [DEFINE REGION: Application Updates]
@@ -283,9 +283,9 @@ else
   [END REGION]
   [DEFINE REGION: Perform First Time or Maintenance Installation]
   Comment: Install/Re-Install product
-  Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Tools\Uninstall #TITLE# to $UNINSTALLLINK$
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Uninstall #TITLE# to $UNINSTALLLINK$
   [OFFLINE CONTENT]
-  Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Tools\#TITLE# Update to $UNINSTALLLINK$
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\#TITLE# Update to $UNINSTALLLINK$
   [DEFINE WEB MEDIA Platform 5]
   if Variable SELECTED Equals TRUE
   end
@@ -376,9 +376,10 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
     Comment: New files in Platform 5.5
-    Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to $COMMONFILES$\ASCOM\Platform
-    Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml to $COMMONFILES$\ASCOM\Platform
-    Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $COMMONFILES$\ASCOM\Platform
+    Install Assembly C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to Global Assembly Cache
+    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to $COMMONFILES$\ASCOM\Platform
+    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml to $COMMONFILES$\ASCOM\Platform
+    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $COMMONFILES$\ASCOM\Platform
     Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINDIR$\Symbols\dll
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
@@ -413,6 +414,7 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
     Install Files c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
     Install Assembly c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
     Comment: Platform 6 Astrometry
     Install Assembly c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
@@ -435,7 +437,7 @@ else
     Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\PlatformHelp.chm to $TARGETDIR$\Docs
     Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
     Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
-    Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
     Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
     Comment: Platform 6 Internal
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
@@ -478,15 +480,15 @@ else
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.TelescopeSimulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ServedClasses
     [END REGION]
     [DEFINE REGION: Create shortcuts]
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Docs\Compatible Software (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Drivers and Downloads (web) to $TARGETDIR$\Docs\Drivers and Downloads (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Supported Devices (web) to $TARGETDIR$\Docs\Supported Devices (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Docs\Compatible Software (web).url
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Drivers and Downloads (web) to $TARGETDIR$\Docs\Drivers and Downloads (web).url
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Supported Devices (web) to $TARGETDIR$\Docs\Supported Devices (web).url
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
     Create Shortcut $DESKTOPDIR$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Docs\Platform 6.0.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM\Platform 6\ASCOM Help File to $TARGETDIR$\Docs\PlatformHelp.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Docs\Platform 6.0.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Help File to $TARGETDIR$\Docs\PlatformHelp.chm
     Create Shortcut $DESKTOPDIR$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
     [END REGION]
     [DEFINE REGION: Registry Keys]
@@ -583,6 +585,11 @@ else
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe -register (WAIT)
         Comment: Install policy files
         [END REGION]
+        if Variable PROCESSOR Equals AMD64
+          Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+          Run Program $WINDIR$\Microsoft.NET\Framework64\v2.0.50727\regasm.exe "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
+          MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC$
+        end
       end
     end
   end

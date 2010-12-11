@@ -1,6 +1,6 @@
 using System;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     partial class frmMain
     {
@@ -442,7 +442,7 @@ namespace ASCOM.TelescopeSimulator
             // picASCOM
             // 
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picASCOM.Image = global::ASCOM.TelescopeSimulator.Properties.Resources.ASCOM;
+            this.picASCOM.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
             this.picASCOM.Location = new System.Drawing.Point(79, 10);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);

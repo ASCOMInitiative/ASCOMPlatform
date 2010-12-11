@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace ASCOM.TelescopeSimulator
+namespace ASCOM.Simulator
 {
     /// <summary>
     /// Summary description for GarbageCollection.
