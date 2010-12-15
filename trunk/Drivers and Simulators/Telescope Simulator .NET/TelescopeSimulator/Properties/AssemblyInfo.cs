@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCopyright("Copyright © 2009, Robert Turner")]
 
-// Version information for Platform components is set at the solution level.
-
 [assembly: ComVisibleAttribute(false)]
+
+// AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
+[assembly: AssemblyVersion("6.0.0.0")]

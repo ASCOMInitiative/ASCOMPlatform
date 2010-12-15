@@ -122,10 +122,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyVersionInfo.cs">
-      <Link>AssemblyVersionInfo.cs</Link>
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="..\SolutionInfo.cs">
-      <Link>SolutionInfo.cs</Link>
+      <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="DeviceIdAttribute.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>

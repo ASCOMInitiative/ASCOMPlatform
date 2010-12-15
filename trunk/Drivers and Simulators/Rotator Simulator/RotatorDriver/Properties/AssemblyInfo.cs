@@ -10,10 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RotatorSimulator Rotator Driver")]
 [assembly: AssemblyDescription("ASCOM Rotator Driver for RotatorSimulator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("The ASCOM Initiative")]
-[assembly: AssemblyProduct("ASCOM.Simulator.Rotator")]
 [assembly: AssemblyCopyright("Copyright © 2010 The ASCOM Initiative")]
-[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -26,6 +23,5 @@ using System.Runtime.InteropServices;
 
 // Versioning for platform components is done at the solution level.
 
-//[assembly: ASCOM.ServedClassName("Rotator Simulator for .NET")]
-[assembly: AssemblyVersion("6.0.0.0")]		// .Net Assembly Version
-[assembly: AssemblyFileVersion("6.0.0.0")]	// Win32 File Version
+// AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
+[assembly: AssemblyVersion("6.0.0.0")]

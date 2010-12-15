@@ -20,3 +20,6 @@ using System.Runtime.InteropServices;
 [assembly: Guid("5c53ff1c-b4f2-49d6-85ca-e7b3d249d12e")]
 
 [assembly: ASCOM.ServedClassNameAttribute("Telescope Simulator .NET")]
+
+// AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
+[assembly: AssemblyVersion("6.0.0.0")]

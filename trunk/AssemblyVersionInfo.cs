@@ -16,12 +16,10 @@
  * The build server will replace this entire file with a machine-generated one. Therefore,
  * this file should contain ONLY the global version number and no other settings.
  * 
- * For local builds, the major and minor versions are fixed and the
- * revision and build numbers are set automatically by Visual Studio.
+ * For local builds, the major and minor versions are fixed at 6.0.99999.99999 indicating an uncontrolled item.
  * ***/
 
 using System.Reflection;
-
-[assembly: AssemblyVersion("6.0.*")]		// .NET Assembly Version
-[assembly: AssemblyFileVersion("6.0")]	    // Win32 File Version (not used by .NET)
+// Revision and Build both set to 9999 indicates a private build on a developer's private workstation.
+[assembly: AssemblyFileVersion("6.0.9999.9999")]	    // Win32 File Version (not used by .NET)
 

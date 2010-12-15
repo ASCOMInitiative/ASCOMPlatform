@@ -22,3 +22,6 @@ using System.Resources;
 
 // Version information for platform components is set at the solution level.
 [assembly: NeutralResourcesLanguageAttribute("en")]
+
+// AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
+[assembly: AssemblyVersion("6.0.0.0")]

@@ -197,10 +197,10 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Compile Include="..\..\AssemblyVersionInfo.cs">
-      <Link>AssemblyVersionInfo.cs</Link>
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="..\..\SolutionInfo.cs">
-      <Link>SolutionInfo.cs</Link>
+      <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Annunciator.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
