@@ -32,11 +32,9 @@
     -->
     <AssemblyInfo CodeLanguage="CS"
                 OutputFile="AssemblyVersionInfo.cs"
-                AssemblyVersion="$(BUILD_NUMBER)"
                 AssemblyFileVersion="$(BUILD_NUMBER)" />
     <AssemblyInfo CodeLanguage="VB"
                 OutputFile="AssemblyVersionInfo.vb"
-                AssemblyVersion="$(BUILD_NUMBER)"
                 AssemblyFileVersion="$(BUILD_NUMBER)" />
     
     <MSBuild

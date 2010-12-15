@@ -1,4 +1,4 @@
-﻿' This file sets the assembly version for all generated assemblies.
+﻿' This file sets the file version for all generated assemblies.
 ' All projects in the build should reference this file by including the following
 ' in their project file:
 '
@@ -11,10 +11,8 @@
 ' 
 ' Version information is isolated in a seperate file to facilitate integration with the build server.
 ' The build server will replace this entire file with a machine-generated one. Therefore,
-' this file should contain ONLY the global version number and no other settings.
+' this file should contain ONLY the global file version number and no other settings.
 ' 
-' For local builds, the major and minor versions are fixed and the
-' revision and build numbers are set automatically by Visual Studio.
+' For local builds, the version is always 6.0.9999.9999, indicating an uncontrolled release.
 
-<Assembly: AssemblyVersion("6.0.*")> 
-<Assembly: AssemblyFileVersionAttribute("6.0")> 
+<Assembly: AssemblyFileVersionAttribute("6.0.9999.9999")> 
