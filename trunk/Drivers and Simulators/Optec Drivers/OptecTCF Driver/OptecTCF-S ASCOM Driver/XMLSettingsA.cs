@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Reflection;
 using Optec;
 using System.Diagnostics;
+using System.IO;
 
 
 namespace Optec_TCF_S_Focuser
@@ -13,9 +14,10 @@ namespace Optec_TCF_S_Focuser
 
     class XMLSettings
     {
+        private static string xpath = string.Empty;
         private static string XmlFilename = "TCFSettings.XML";
-        private static string asmpath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        private static string xpath = System.IO.Path.Combine(asmpath, XmlFilename);
+
+
         private static XDocument TCFSettingsDocument;
 
         static XMLSettings()
@@ -33,6 +35,13 @@ namespace Optec_TCF_S_Focuser
             try
             {
                 EventLogger.LogMessage("Loading XML Settings Data.", TraceLevel.Info);
+                string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                xpath = appDataPath + "\\Optec\\" + "TCF_S" + "\\" + "SingleInstance";
+                if (!Directory.Exists(xpath))
+                    Directory.CreateDirectory(xpath);
+
+                xpath = Path.Combine(xpath, XmlFilename);
+
                 if (!System.IO.File.Exists(xpath))
                 {
                     // Create the settings file...
@@ -51,9 +60,9 @@ namespace Optec_TCF_S_Focuser
 
                 else TCFSettingsDocument = XDocument.Load(xpath);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                EventLogger.LogMessage(ex);
                 throw;
             }
 
@@ -75,7 +84,7 @@ namespace Optec_TCF_S_Focuser
                 else return Convert.ChangeType(e.Value, t);
 
             }
-            catch (InvalidOperationException ex)
+            catch (System.InvalidOperationException ex)
             {
                 EventLogger.LogMessage(ex);
                 CreatePropertyInXML(PropertyName, defaultValue);
@@ -93,7 +102,7 @@ namespace Optec_TCF_S_Focuser
                 x.SetValue(NewValue);
                 TCFSettingsDocument.Save(xpath);
             }
-            catch (System.InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 EventLogger.LogMessage(ex);
                 CreatePropertyInXML(PropertyName, NewValue);

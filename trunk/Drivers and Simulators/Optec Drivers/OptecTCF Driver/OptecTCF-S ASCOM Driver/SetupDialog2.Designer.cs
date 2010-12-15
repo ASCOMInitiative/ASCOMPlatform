@@ -176,7 +176,7 @@
             // 
             this.PowerLight.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PowerLight.Image = global::ASCOM.OptecTCF_S.Properties.Resources.GreyLight;
-            this.PowerLight.Location = new System.Drawing.Point(40, 37);
+            this.PowerLight.Location = new System.Drawing.Point(23, 37);
             this.PowerLight.Name = "PowerLight";
             this.PowerLight.Size = new System.Drawing.Size(20, 20);
             this.PowerLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
