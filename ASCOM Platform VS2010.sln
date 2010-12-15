@@ -13,6 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		External Dependencies\StyleCop\v4.3\Settings.StyleCop = External Dependencies\StyleCop\v4.3\Settings.StyleCop
 		SolutionInfo.cs = SolutionInfo.cs
 		SolutionInfo.vb = SolutionInfo.vb
+		TeamCity_GenerateVersionStamp.msbuild = TeamCity_GenerateVersionStamp.msbuild
+		TeamCity_PopulateProfileRegistry.msbuild = TeamCity_PopulateProfileRegistry.msbuild
+		TeamCity_UnitTest.msbuild = TeamCity_UnitTest.msbuild
 		TeamCityBuild.msbuild = TeamCityBuild.msbuild
 		TeamCityDocumentationBuild.msbuild = TeamCityDocumentationBuild.msbuild
 	EndProjectSection
@@ -1024,6 +1027,7 @@ Global
 		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}.Release|x86.Build.0 = Release|Any CPU
 		{342EC739-BA3D-48BF-B007-BBDDEA9E882A}.Debug Quick|Any CPU.ActiveCfg = Debug|x86
 		{342EC739-BA3D-48BF-B007-BBDDEA9E882A}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|x86
 		{342EC739-BA3D-48BF-B007-BBDDEA9E882A}.Debug Quick|Mixed Platforms.Build.0 = Debug|x86
@@ -1053,17 +1057,18 @@ Global
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{CE0387AA-0376-4001-8092-46D4561561EE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CE0387AA-0376-4001-8092-46D4561561EE}.Debug|x86.ActiveCfg = Debug|x86
+		{CE0387AA-0376-4001-8092-46D4561561EE}.Debug|x86.Build.0 = Debug|x86
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Peter|Any CPU.ActiveCfg = Release|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Peter|Any CPU.Build.0 = Release|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Peter|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Peter|Mixed Platforms.Build.0 = Release|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Peter|x86.ActiveCfg = Release|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE0387AA-0376-4001-8092-46D4561561EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CE0387AA-0376-4001-8092-46D4561561EE}.Release|x86.ActiveCfg = Release|Any CPU
+		{CE0387AA-0376-4001-8092-46D4561561EE}.Release|x86.Build.0 = Release|Any CPU
 		{62A5D47B-BF6E-4799-9629-14E81DEFE794}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
 		{62A5D47B-BF6E-4799-9629-14E81DEFE794}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
 		{62A5D47B-BF6E-4799-9629-14E81DEFE794}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -1166,13 +1171,13 @@ Global
 		{81091BA8-725D-465D-AC6B-A36912B73AA7} = {F0B54D82-741C-4EC1-A620-E5DEA1038EAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal
