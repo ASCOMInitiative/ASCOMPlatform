@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Reflection;
 using Optec;
 using System.Diagnostics;
+using System.IO;
 
 
 namespace Optec_TCF_S_Focuser
@@ -13,9 +14,10 @@ namespace Optec_TCF_S_Focuser
 
     class XMLSettings
     {
+        private static string xpath = string.Empty;
         private static string XmlFilename = "TCFSettings.XML";
-        private static string asmpath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        private static string xpath = System.IO.Path.Combine(asmpath, XmlFilename);
+        
+ 
         private static XDocument TCFSettingsDocument;
 
         static XMLSettings()
@@ -33,6 +35,13 @@ namespace Optec_TCF_S_Focuser
             try
             {
                 EventLogger.LogMessage("Loading XML Settings Data.", TraceLevel.Info);
+                string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                xpath = appDataPath + "\\Optec\\" + "TCF_S" + "\\" + "SingleInstance";
+                if (!Directory.Exists(xpath))
+                    Directory.CreateDirectory(xpath);
+
+                xpath = Path.Combine(xpath, XmlFilename);
+
                 if (!System.IO.File.Exists(xpath))
                 {
                     // Create the settings file...
