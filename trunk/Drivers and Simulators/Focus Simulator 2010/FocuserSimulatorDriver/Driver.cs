@@ -44,7 +44,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 6;
+        private const short interfaceVersion = 2;
 
         /// <summary>
         /// Driver version number
@@ -69,6 +69,18 @@ namespace ASCOM.Simulator
 
         #endregion
 
+        #region local parameters
+        private bool isConnected;
+
+        internal int position;
+        internal int target;
+        private int roc = 25;       // rate of change in steps per 1/20 sec
+
+        private Timer moveTimer;    // drives the position and temperature changers
+
+        #endregion
+
+
         #region Public Focuser ASCOM Members
 
         /// <summary>
@@ -86,18 +98,14 @@ namespace ASCOM.Simulator
                     {
                         DeleteProfileSettings();
                         SetDefaultProfileSettings();
-                        Connected = false;
-                        Link = false;
                     }
+                    StartSimulation();
                 }
                 else
                 {
                     DeleteProfileSettings();
                     SetDefaultProfileSettings();
-                    Connected = false;
-                    Link = false;
                 }    
-
             }
             else
             {
@@ -115,7 +123,29 @@ namespace ASCOM.Simulator
         /// Gets or sets a value indicating whether this <see cref="Focuser"/> is connected.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-        public bool Connected { get; set; }
+        public bool Connected
+        {
+            get { return this.isConnected; }
+            set
+            {
+                if (isConnected == value)
+                    return;
+                if (value)
+                {
+                    if (moveTimer == null)
+                        moveTimer = new Timer();
+                    moveTimer.Tick += new Timer.TickEventHandler(moveTimer_Tick);
+                    moveTimer.Interval = 100;
+                    moveTimer.Enabled = true;
+                }
+                else
+                {
+                    moveTimer.Enabled = false;
+                    moveTimer.Tick -= moveTimer_Tick;
+                }
+                this.isConnected = value;
+            }
+        }
 
         /// <summary>
         /// Gets the description.
@@ -160,7 +190,10 @@ namespace ASCOM.Simulator
         /// True if the focuser is currently moving to a new position. False if the focuser is stationary.
         /// </summary>
         /// <value><c>true</c> if moving; otherwise, <c>false</c>.</value>
-        public bool IsMoving { get; set; }
+        public bool IsMoving
+        {
+            get { return (this.position != this.target);} 
+        }
 
         /// <summary>
         /// State of the connection to the focuser. et True to start the link to the focuser; 
@@ -169,7 +202,11 @@ namespace ASCOM.Simulator
         /// change state for any reason.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-        public bool Link { get; set; }
+        public bool Link
+        { 
+            get { return this.Connected; }
+            set { this.Connected = value; }
+        }
 
         /// <summary>
         /// Maximum increment size allowed by the focuser; i.e. the maximum number 
@@ -177,14 +214,14 @@ namespace ASCOM.Simulator
         /// same as the MaxStep property. This is normally used to limit the 
         /// Increment display in the host software.
         /// </summary>
-        public int MaxIncrement { get; set; }
+        public int MaxIncrement { get; internal set; }
 
         /// <summary>
         /// Maximum step position permitted. The focuser can step between 0 and MaxStep. 
         /// If an attempt is made to move the focuser beyond these limits, 
         /// it will automatically stop at the limit.
         /// </summary>
-        public int MaxStep { get; set; }
+        public int MaxStep { get; internal set; }
 
         /// <summary>
         /// Gets the name.
@@ -200,13 +237,27 @@ namespace ASCOM.Simulator
         /// focusers (see the Absolute property). An exception will be raised for 
         /// relative positioning focusers.
         /// </summary>
-        public int Position { get; set; }
+        public int Position
+        {
+            get
+            {
+                CheckConnected("get Position");
+                if (!this.Absolute)
+                    throw new PropertyNotImplementedException("Position", false);
+                return this.position;
+            }
+            internal set
+            {
+                this.position = value;
+                this.target = value;
+            } 
+        }
 
         /// <summary>
         /// Step size (microns) for the focuser. Raises an exception if the focuser 
         /// does not intrinsically know what the step size is.
         /// </summary>
-        public double StepSize { get; set; }
+        public double StepSize { get; internal set; }
 
         /// <summary>
         /// Gets the supported actions.
@@ -234,7 +285,7 @@ namespace ASCOM.Simulator
         /// only if the focuser's temperature compensation can be turned on and 
         /// off via the TempComp property.
         /// </summary>
-        public bool TempCompAvailable { get; set; }
+        public bool TempCompAvailable { get; internal set; }
 
         /// <summary>
         /// Current ambient temperature as measured by the focuser. Raises an 
@@ -242,7 +293,7 @@ namespace ASCOM.Simulator
         /// available on focusers with a built-in temperature compensation 
         /// mode.
         /// </summary>
-        public double Temperature { get; set; }
+        public double Temperature { get; internal set; }
 
         /// <summary>
         /// Dispose the late-bound interface, if needed. Will release it 
@@ -264,9 +315,11 @@ namespace ASCOM.Simulator
         /// </summary>
         public void Halt()
         {
-            if (!CanHalt) return;
-            IsMoving = false;
-            Connected = false;
+            if (!CanHalt)
+                throw new MethodNotImplementedException("Halt");
+
+            CheckConnected("Halt");
+            target = position;
         }
 
         /// <summary>
@@ -275,24 +328,16 @@ namespace ASCOM.Simulator
         /// </summary>
         public void Move(int val)
         {
-            Connected = true;
-            Link = true;
-            IsMoving = true;
-            Position = Position + val;
-
-            if (Position >= MaxStep)
+            CheckConnected("Move");
+            if (this.TempComp)
+                throw new InvalidOperationException("Move not allowed when temperature compensation is active");
+            if (this.Absolute)
+                this.target = this.Truncate(0, val, MaxStep);
+            else
             {
-                Position = MaxStep;
+                this.target = 0;
+                this.position = this.Truncate(-MaxStep, val, MaxStep);
             }
-            if (Position + val <= 0)
-            {
-                Position = 0;
-            }
-            IsMoving = false;
-            Connected = false;
-            Link = false;
-
-
         }
 
         /// <summary>
@@ -367,6 +412,68 @@ namespace ASCOM.Simulator
 
         #region Focuser Private Members
 
+        private void StartSimulation()
+        {
+            // start a timer that monitors and moves the focuser
+            if (moveTimer == null)
+                moveTimer = new Timer();
+            moveTimer.Tick += new Timer.TickEventHandler(moveTimer_Tick);
+            moveTimer.Interval = 100;
+            moveTimer.Enabled = true;
+            lt = Temperature;
+        }
+
+        double lt;
+
+        /// <summary>
+        /// Ticks 10 times a second, updating the focuser position and IsMoving properties
+        /// </summary>
+        private void moveTimer_Tick()
+        {
+            if (this.position != this.target)
+            {
+                if (Math.Abs(this.position - this.target) < this.roc)
+                {
+                    this.position = this.target;
+                }
+                else
+                {
+                    this.position += (this.position > this.target) ? -this.roc : this.roc;
+                }
+            }
+            Random r = new Random();
+            double tempOffset = (r.NextDouble() - 0.5) / 10.0;
+            this.Temperature = Math.Round(this.Temperature + tempOffset, 2);
+
+            if (this.TempComp)
+            {
+                int dt = (int)((Temperature - lt) * TempSteps);
+                if (dt != 0)
+                {
+                    this.target += dt;
+                    lt = Temperature;
+                }
+            }
+        }
+
+        private void CheckConnected(string property)
+        {
+            if (!this.isConnected)
+                throw new NotConnectedException(property);
+        }
+
+        /// <summary>
+        /// Truncate val to be between min and max
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="val"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        private int Truncate(int min, int val, int max)
+        {
+            return Math.Max(Math.Min(max, val), min);
+        }
+
         /// <summary>
         /// Validate the profile is in good shape
         /// </summary>
@@ -392,6 +499,7 @@ namespace ASCOM.Simulator
             try
             {
                 Absolute = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Absolute"));
+
                 MaxIncrement = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxIncrement"));
                 MaxStep = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxStep"));
                 Position = Convert.ToInt32(Profile.GetValue(sCsDriverId, "Position"));
@@ -401,7 +509,6 @@ namespace ASCOM.Simulator
                 TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable"));
 
                 return true;
-
             }
             catch (Exception)
             {
@@ -427,7 +534,6 @@ namespace ASCOM.Simulator
                 TempSteps = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempSteps"));
 
                 return true;
-
             }
             catch (Exception)
             {
@@ -471,14 +577,17 @@ namespace ASCOM.Simulator
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            var p = new Profile { DeviceType = "Focuser" };
-            if (bRegister)
+            using (var p = new Profile())
             {
-                p.Register(sCsDriverId, sCsDriverDescription);
-            }
-            else
-            {
-                p.Unregister(sCsDriverId);
+                p.DeviceType = "Focuser";
+                if (bRegister)
+                {
+                    p.Register(sCsDriverId, sCsDriverDescription);
+                }
+                else
+                {
+                    p.Unregister(sCsDriverId);
+                }
             }
         }
 
@@ -554,15 +663,15 @@ namespace ASCOM.Simulator
             if (Temperature < TempMin)
             { Temperature = TempMin; }
 
-            if (Position > MaxStep)
-            { Position = MaxStep;}
+            if (position > MaxStep)
+            { position = MaxStep;}
 
             //ascom items
             Profile.WriteValue(sCsDriverId,"MaxStep", MaxStep.ToString()) ;
             Profile.WriteValue(sCsDriverId, "StepSize", StepSize.ToString());
             Profile.WriteValue(sCsDriverId, "Absolute", Absolute.ToString());
             Profile.WriteValue(sCsDriverId, "MaxIncrement", MaxIncrement.ToString());
-            Profile.WriteValue(sCsDriverId, "Position", Position.ToString());
+            Profile.WriteValue(sCsDriverId, "Position", position.ToString());
             Profile.WriteValue(sCsDriverId, "Temperature", Temperature.ToString());
             Profile.WriteValue(sCsDriverId, "TempComp", TempComp.ToString());
             Profile.WriteValue(sCsDriverId, "TempCompAvailable", TempCompAvailable.ToString());

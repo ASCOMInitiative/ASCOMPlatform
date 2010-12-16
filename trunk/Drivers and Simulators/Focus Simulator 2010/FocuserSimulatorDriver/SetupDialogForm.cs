@@ -100,9 +100,15 @@ namespace ASCOM.Simulator
         {
             if (offSet != 0)
             {
-                _focuser.Move(offSet);
+                if (_focuser.Absolute)
+                    _focuser.target = _focuser.position + offSet;
+                else
+                {
+                    _focuser.position = offSet;
+                    _focuser.target = 0;
+                }
             }
-            label2.Text = _focuser.Position.ToString();
+            label2.Text = _focuser.position.ToString();
         }
 
         /// <summary>
