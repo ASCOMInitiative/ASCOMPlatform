@@ -392,8 +392,8 @@ else
     Comment: Updated Utiities 5.5.3 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
     Install Assembly C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
     Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\Publisher Policy 5.5.6\PublisherPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
     Comment: Updated driver access v1.0.6 to improve compatibility with Platform 5 drivers
     Install Assembly c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
     Install Files c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5

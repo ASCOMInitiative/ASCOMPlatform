@@ -3089,7 +3089,7 @@ FALSE
 FALSE
 FALSE
 {3D24E160-2DC4-4C8D-A176-BBEC1F3EACE5}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\Publisher Policy 5.5.6\PublisherPolicy.xml
+C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
@@ -3102,7 +3102,7 @@ FALSE
 FALSE
 FALSE
 {F9446A71-43A6-4ECB-8BD5-B4595EC80925}
-C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.553\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll
+C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll
 FALSE|
 $COMMONFILES$\ASCOM\Platform\v5.5
 FALSE
