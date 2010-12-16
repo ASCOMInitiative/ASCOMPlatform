@@ -330,6 +330,7 @@ Create Folder
 Create Folder
 Create Folder
 Create Folder
+Create Folder
 Code Folding Region
 Code Folding Region
 Comment
@@ -459,16 +460,10 @@ Comment
 Comment
 Install Assembly
 Install Files
+Install Assembly
 Comment
 Install Assembly
 Install Files
-Install Assembly
-Install Files
-Comment
-Install Assembly
-Install Files
-Comment
-Install Assembly
 Install Files
 Comment
 Install Assembly
@@ -476,8 +471,19 @@ Install Files
 Comment
 Install Assembly
 Install Files
+Comment
 Install Assembly
 Install Files
+Comment
+Install Assembly
+Install Files
+Install Assembly
+Install Files
+Comment
+Install Files
+Install Assembly
+Install Files
+Install Assembly
 Code Folding Region
 Code Folding Region
 Create Shortcut
@@ -493,6 +499,8 @@ Create Shortcut
 Code Folding Region
 Code Folding Region
 Comment
+Write Registry
+Write Registry
 Write Registry
 Write Registry
 Write Registry
@@ -587,6 +595,7 @@ Register Assembly
 Register Assembly
 Register Assembly
 Comment
+Run Program
 Run Program
 Run Program
 Comment
@@ -958,6 +967,7 @@ $
 {A7DCA34C-913A-45EC-B800-AA51A0742E09}
 {434F42D5-DDA2-4842-B516-B8420D477985}
 {88CFE10E-AAD8-4B42-A379-29544A60D2BD}
+{CCA7F6D4-1991-4D1A-BD6B-675D2CA43E01}
 {96079F81-3CB6-4B0B-9807-6DE2F4B8BBD9}
 {9D5BA99E-2945-40C1-A029-77BC80419EE1}
 {F3318935-5EDC-4061-AB01-0EAE3A3673E1}
@@ -1093,10 +1103,10 @@ $
 {1434950C-5C3A-4DFE-A376-3B90F08023C6}
 {0074A899-4886-4160-A67F-CE7D7413F179}
 {75DD9876-0F33-4847-9196-FB6B7B1C0491}
+{7BDB7295-F7E7-4465-BE86-C1E8EA3E817A}
 {A942AC63-6A43-40ED-BBEB-0C24E10A0B1F}
 {AC2018F1-0D8C-40B3-BAF2-23B9CB255443}
 {CB314A4C-BA01-4C50-AAE8-3FB9D95DE7A9}
-{2F2EDB50-88FE-4466-8E75-BF69F17C8210}
 {18C930EE-441F-49CA-BDE8-B6846CF73D3E}
 {AFA6D457-0639-40E9-B55D-DC078037E20A}
 {CFAA5810-A98F-4B54-88F7-2CE1565B7AFF}
@@ -1112,6 +1122,11 @@ $
 {041454B0-73FE-4B1F-AEE6-096A0553BEC1}
 {6DE5DE2B-5099-42B6-B91B-1DFE62D7476E}
 {FBA0F8DC-DC88-4E19-AC84-96B5A2DC6805}
+{02EF642D-4EBC-4637-A86F-C7B39C7D0B9B}
+{9BA6D2A3-8D73-477F-95DD-24AEAEDF765C}
+{51BBD1C7-2815-4A75-9C2E-D67C8040257E}
+{8D642395-AA28-456A-B478-1EBC876C45CE}
+{BE8F2201-B443-4456-95AE-3993FBCBE67E}
 {0F8F7E53-0359-4437-96D6-7BB5CA573BA9}
 {4CCB6932-09C4-401F-8801-EB337DE56855}
 {6389496C-2EA4-4C08-AEDC-9553ADA6A762}
@@ -1144,6 +1159,8 @@ $
 {189BB465-177B-4C63-BB2E-0B5D9148BE54}
 {291396B3-9997-4879-8355-BD4873F0AFDF}
 {971F5116-05EC-4CF2-9574-B72A074CB962}
+{D8765FBB-18ED-42F7-867F-5DD4D15E0D35}
+{B02E36A5-8521-41FA-A274-6ABC6A6E56E9}
 {1589B9A7-1F26-462F-97EE-00669BF23416}
 {B3201D28-157F-4427-BF58-0E2C23DB1624}
 {291A84C3-EC41-4A60-A58E-ACC1972CA7D8}
@@ -1223,6 +1240,7 @@ $
 {0C9C96AE-1167-4476-A4A4-92333F1A197B}
 {B71A4B1B-A04A-41AB-86C9-A7C631059906}
 {4F86B8E6-F14F-4061-A055-8D37DFCD8C47}
+{20D9D83A-4609-4752-A77D-D50D578AB7D6}
 {AD62045B-723E-4269-BC76-32C60B38FF24}
 {59492394-EA2B-4625-8D00-DED0E51937A8}
 {073F19E6-7462-414F-8D04-55D0EDBEA86E}
@@ -1408,6 +1426,8 @@ I'm sorry, I know this is an unforgiveable hack but I can't see any other way to
 ASCOM.DriverAccess 1.0.5 is not copied because it is replaced with 1.0.6 in Platform 6
 {44794D4F-0E9C-433A-957B-ACDDF0AB3D63}
 Updated Utiities 5.5.3 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
+{02EF642D-4EBC-4637-A86F-C7B39C7D0B9B}
+Rotator simulator
 {E601333E-999C-4EFE-A61F-0D1FFD86E003}
 SHORTCUTFILESALL
 $SHORTCUTFILES$
@@ -1969,6 +1989,8 @@ $COMMONFILES$\ASCOM\Uninstall
 $COMMONFILES$\ASCOM\Dome
 {88CFE10E-AAD8-4B42-A379-29544A60D2BD}
 $COMMONFILES$\ASCOM\Rotator
+{CCA7F6D4-1991-4D1A-BD6B-675D2CA43E01}
+$COMMONFILES$\ASCOM\Rotator\ServedClasses
 {C310BE10-8986-434D-A45B-138E9ABB413E}
 progress
 SUCCESS
@@ -3231,6 +3253,32 @@ FALSE
 FALSE
 FALSE
 FALSE
+{9BA6D2A3-8D73-477F-95DD-24AEAEDF765C}
+C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.pdb
+FALSE|
+$COMMONFILES$\ASCOM\Rotator\ServedClasses
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{8D642395-AA28-456A-B478-1EBC876C45CE}
+C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb
+FALSE|
+$COMMONFILES$\ASCOM\Rotator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {0A038DAF-02DA-4B26-BF0D-0288E18C961A}
 $SUPPORTDIR$\UninstallAscom.exe
 TRUE
@@ -3411,6 +3459,12 @@ TRUE
 "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll"
 TRUE
 RC3
+{20D9D83A-4609-4752-A77D-D50D578AB7D6}
+$COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator.exe
+TRUE
+-register
+TRUE
+
 {45D4BA85-EC46-41B3-944E-261F3A23184C}
 $EXEFILE$
 
@@ -3834,6 +3888,22 @@ SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch
 Simulator
 TRUE
 FALSE
+{D8765FBB-18ED-42F7-867F-5DD4D15E0D35}
+10
+2
+SOFTWARE\ASCOM\Rotator Drivers
+
+
+TRUE
+FALSE
+{B02E36A5-8521-41FA-A274-6ABC6A6E56E9}
+0
+2
+SOFTWARE\ASCOM\Rotator Drivers\RotatorSimulator\
+
+Rotator Simulator
+TRUE
+FALSE
 {BEE709E4-16FE-4E1E-8FB4-96459FB4665B}
 
 
@@ -3958,10 +4028,6 @@ $COMMONFILES$\ASCOM\Telescope
 C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.Simulator.Telescope.dll
 FALSE
 $COMMONFILES$\ASCOM\Telescope\ServedClasses
-{2F2EDB50-88FE-4466-8E75-BF69F17C8210}
-c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll
-FALSE
-$COMMONFILES$\ASCOM\FilterWheel\ServedClasses\
 {C5A8CB1B-6320-4DF6-B44A-F8FB84FF6C65}
 C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll
 TRUE
@@ -4038,6 +4104,18 @@ TRUE
 C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll
 TRUE
 
+{BE8F2201-B443-4456-95AE-3993FBCBE67E}
+C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe
+FALSE
+$COMMONFILES$\ASCOM\Rotator
+{7BDB7295-F7E7-4465-BE86-C1E8EA3E817A}
+c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll
+FALSE
+$COMMONFILES$\ASCOM\FilterWheel\ServedClasses\
+{51BBD1C7-2815-4A75-9C2E-D67C8040257E}
+C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll
+FALSE
+$COMMONFILES$\ASCOM\Rotator\ServedClasses
 {D3AC286E-D3FE-485E-9DF9-3EEC7899E859}
 SUCCESS
 {0849039C-A9FA-4F0D-8AD5-A0DF9EBA3744}
@@ -4629,181 +4707,8 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 C
-C
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4836,6 +4741,187 @@ C
 
 
 C
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
 
 
 
@@ -4862,6 +4948,7 @@ C
 C
 C
 C
+
 
 
 
@@ -4915,6 +5002,15 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
 
 
 
