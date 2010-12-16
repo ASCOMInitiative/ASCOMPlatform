@@ -92,20 +92,9 @@ namespace ASCOM.Simulator
             //check to see if the profile is ok
             if (ValidateProfile())
             {
-                if (LoadFocuserKeyValues())
-                {
-                    if (!LoadStaticFocuserKeyValues())
-                    {
-                        DeleteProfileSettings();
-                        SetDefaultProfileSettings();
-                    }
-                    StartSimulation();
-                }
-                else
-                {
-                    DeleteProfileSettings();
-                    SetDefaultProfileSettings();
-                }    
+                LoadFocuserKeyValues();
+                LoadStaticFocuserKeyValues();
+                StartSimulation();
             }
             else
             {
@@ -347,7 +336,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public void SetupDialog()
         {
-            var f = new SetupDialogForm();
+            var f = new SettingsForm();
             f.ShowDialog();
         }
 
@@ -420,10 +409,10 @@ namespace ASCOM.Simulator
             moveTimer.Tick += new Timer.TickEventHandler(moveTimer_Tick);
             moveTimer.Interval = 100;
             moveTimer.Enabled = true;
-            lt = Temperature;
+            lastTemp = Temperature;
         }
 
-        double lt;
+        double lastTemp;
 
         /// <summary>
         /// Ticks 10 times a second, updating the focuser position and IsMoving properties
@@ -441,17 +430,20 @@ namespace ASCOM.Simulator
                     this.position += (this.position > this.target) ? -this.roc : this.roc;
                 }
             }
+
+            // apply a random change to the temperature
             Random r = new Random();
             double tempOffset = (r.NextDouble() - 0.5) / 10.0;
             this.Temperature = Math.Round(this.Temperature + tempOffset, 2);
 
+            // move the focuser to track the temperature if required
             if (this.TempComp)
             {
-                int dt = (int)((Temperature - lt) * TempSteps);
+                int dt = (int)((Temperature - lastTemp) * TempSteps);
                 if (dt != 0)
                 {
                     this.target += dt;
-                    lt = Temperature;
+                    lastTemp = Temperature;
                 }
             }
         }
@@ -494,51 +486,33 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Load the profile values
         /// </summary>
-        private bool LoadFocuserKeyValues()
+        private void LoadFocuserKeyValues()
         {
-            try
-            {
-                Absolute = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Absolute"));
+            Absolute = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Absolute", string.Empty, "true"));
 
-                MaxIncrement = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxIncrement"));
-                MaxStep = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxStep"));
-                Position = Convert.ToInt32(Profile.GetValue(sCsDriverId, "Position"));
-                StepSize = Convert.ToDouble(Profile.GetValue(sCsDriverId, "StepSize"));
-                Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature"));
-                TempComp = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempComp"));
-                TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable"));
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }  
+            MaxIncrement = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxIncrement", string.Empty, "50000"));
+            MaxStep = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxStep", string.Empty, "50000"));
+            Position = Convert.ToInt32(Profile.GetValue(sCsDriverId, "Position", string.Empty, "25000"));
+            StepSize = Convert.ToDouble(Profile.GetValue(sCsDriverId, "StepSize", string.Empty, "20"));
+            Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature", string.Empty, "5.0"));
+            TempComp = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempComp", string.Empty, "false"));
+            TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable", string.Empty, "true"));
         }
 
         /// <summary>
         /// Load the profile values
         /// </summary>
-        private bool LoadStaticFocuserKeyValues()
+        private void LoadStaticFocuserKeyValues()
         {
-            try
-            {
-                //extended focuser items
-                CanHalt = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanHalt"));
-                TempProbe = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempProbe"));
-                Synchronus = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Synchronus"));
-                CanStepSize = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanStepSize"));
-                TempMax = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempMax"));
-                TempMin = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempMin"));
-                TempPeriod = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempPeriod"));
-                TempSteps = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempSteps"));
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            //extended focuser items
+            CanHalt = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanHalt", string.Empty, "true"));
+            TempProbe = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempProbe", string.Empty, "true"));
+            Synchronus = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Synchronus", string.Empty, "true"));
+            CanStepSize = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanStepSize", string.Empty, "true"));
+            TempMax = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempMax", string.Empty, "50"));
+            TempMin = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempMin", string.Empty, "-50"));
+            TempPeriod = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempPeriod", string.Empty, "3"));
+            TempSteps = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempSteps", string.Empty, "10"));
         }
 
         /// <summary>

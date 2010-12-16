@@ -37,7 +37,6 @@ namespace ASCOM.Simulator
 
             radioButton1.Checked = _focuser.Absolute;
             radioButton2.Checked = !radioButton1.Checked;
-
         }
 
         /// <summary>
@@ -45,8 +44,9 @@ namespace ASCOM.Simulator
         /// </summary>
         private void Button1Click(object sender, EventArgs e)
         {
-            _focuser.SetDefaultProfileSettings();
-            _focuser.SaveStaticProfileSettings();
+            //_focuser.SetDefaultProfileSettings();
+            //_focuser.SaveStaticProfileSettings();
+            Dispose();
         }
 
         /// <summary>
@@ -76,8 +76,7 @@ namespace ASCOM.Simulator
 
             _focuser.SaveProfileSettings();
             Hide();
-            var f = new SetupDialogForm();
-            f.ShowDialog();
+            Dispose();
         }
 
         /// <summary>
@@ -114,7 +113,6 @@ namespace ASCOM.Simulator
         private void CheckBox2CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox2.Checked) checkBox1.Checked = true;
-     
         }
 
         /// <summary>
