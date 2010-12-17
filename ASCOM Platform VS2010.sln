@@ -108,10 +108,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomActions", "CustomActions\CustomActions.csproj", "{C9BD6FCB-97C7-4096-B917-6E59B6E2C684}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls", "ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj", "{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}"
-	ProjectSection(ProjectDependencies) = postProject
-		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3} = {BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}
-		{C9BF0A8B-594F-4AB9-938A-EDC8448D8520} = {C9BF0A8B-594F-4AB9-938A-EDC8448D8520}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls.Demo", "ASCOM.Controls\ASCOM.Controls.Demo\ASCOM.Controls.Demo.csproj", "{D1A5A486-8C9C-4421-91AB-508F63B684C2}"
 EndProject
@@ -1169,13 +1165,13 @@ Global
 		{81091BA8-725D-465D-AC6B-A36912B73AA7} = {F0B54D82-741C-4EC1-A620-E5DEA1038EAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal
