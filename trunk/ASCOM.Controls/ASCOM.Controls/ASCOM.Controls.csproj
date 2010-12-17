@@ -216,17 +216,6 @@
       <SubType>Code</SubType>
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Chooser.cs">
-      <SubType>UserControl</SubType>
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="ChooserMRU.cs">
-      <SubType>Code</SubType>
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="DeviceDescriptor.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
     <Compile Include="LEDIndicator.cs">
       <SubType>UserControl</SubType>
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
@@ -237,18 +226,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Settings.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="SettingsProvider.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
     <EmbeddedResource Include="Annunciator.resx">
       <DependentUpon>Annunciator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Chooser.resx">
-      <DependentUpon>Chooser.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LEDIndicator.resx">
       <DependentUpon>LEDIndicator.cs</DependentUpon>
@@ -283,25 +262,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
-      <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
-      <Name>ASCOM.Attributes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj">
       <Project>{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}</Project>
       <Name>ASCOM.Internal.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj">
-      <Project>{4FFFD202-81D4-4549-880B-09B640D72C1D}</Project>
-      <Name>ASCOM.SettingsProvider</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>ASCOM.Utilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
-      <Name>ASCOM.Exceptions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
