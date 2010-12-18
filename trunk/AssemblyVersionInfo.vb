@@ -1,4 +1,6 @@
-﻿' This file sets the file version for all generated assemblies.
+﻿Imports System.Reflection
+
+' This file sets the file version for all generated assemblies.
 ' All projects in the build should reference this file by including the following
 ' in their project file:
 '
@@ -15,4 +17,4 @@
 ' 
 ' For local builds, the version is always 6.0.9999.9999, indicating an uncontrolled release.
 
-<Assembly: AssemblyFileVersionAttribute("6.0.9999.9999")> 
+<Assembly: AssemblyFileVersion("6.0.9999.9999")> 

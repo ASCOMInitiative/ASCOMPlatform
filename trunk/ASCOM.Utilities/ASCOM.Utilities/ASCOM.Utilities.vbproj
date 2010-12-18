@@ -159,7 +159,10 @@
   <ItemGroup>
     <Compile Include="AllUsersFileSystemProvider.vb" />
     <Compile Include="ASCOMProfile.vb" />
-    <Compile Include="AssemblyInfo.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="..\..\AssemblyVersionInfo.vb">
+      <Link>My Project\AssemblyVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Chooser.vb">
       <SubType>Code</SubType>
     </Compile>
