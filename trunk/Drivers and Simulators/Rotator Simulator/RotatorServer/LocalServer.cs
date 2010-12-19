@@ -226,7 +226,7 @@ namespace ASCOM.Simulator
 			string assyPath = Assembly.GetEntryAssembly().Location;
 			int i = assyPath.LastIndexOf(@"\RotatorServer\bin\");						// Look for us running in IDE
 			if (i == -1) i = assyPath.LastIndexOf('\\');
-			assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\RotatorSimulatorServedClasses";
+			assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\ServedClasses";
 
 			DirectoryInfo d = new DirectoryInfo(assyPath);
 			foreach (FileInfo fi in d.GetFiles("*.dll"))

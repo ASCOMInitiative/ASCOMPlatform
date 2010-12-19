@@ -152,7 +152,7 @@ namespace ASCOM.Simulator
 
         public static void SetupDialog()
         {
-            frmMain form = new frmMain();
+            frmSetup form = new frmSetup();
             Initialize();
             form.Show();
  

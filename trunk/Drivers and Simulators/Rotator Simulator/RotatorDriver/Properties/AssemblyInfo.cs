@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("18458B04-7057-4169-B755-B6DB2405C0B0")]
 
-// Versioning for platform components is done at the solution level.
+[assembly: ASCOM.ServedClassNameAttribute("Rotator Simulator .NET")]// Versioning for platform components is done at the solution level.
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
 [assembly: AssemblyVersion("6.0.0.0")]
