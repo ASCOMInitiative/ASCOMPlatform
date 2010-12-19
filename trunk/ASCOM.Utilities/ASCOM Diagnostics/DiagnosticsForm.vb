@@ -44,7 +44,9 @@ Public Class DiagnosticsForm
 
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Initialise form
-        lblTitle.Text = lblTitle.Text & " " & Application.ProductVersion
+        Dim MyVersion As Version
+        MyVersion = Assembly.GetExecutingAssembly.GetName.Version
+        lblTitle.Text = lblTitle.Text & " " & MyVersion.ToString
         lblResult.Text = ""
         lblAction.Text = ""
 
