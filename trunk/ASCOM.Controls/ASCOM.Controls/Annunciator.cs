@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -20,7 +19,7 @@ namespace ASCOM.Controls
     ///    represent alarm conditions.
     ///    <example>
     ///      An anunciator may represent the slewing state of a telescope. It would be represented by the word "SLEW". When the telescope is stationary,
-    ///      the anunciator remains inactive. When teh telescope begins to slew, the anunciator is set to <see cref = "CadencePattern.BlinkFast" /> 
+    ///      the anunciator remains inactive. When the telescope begins to slew, the anunciator is set to <see cref = "CadencePattern.BlinkFast" /> 
     ///      to alert the user that the equipment is in motion.
     ///    </example>
     ///  </para>
@@ -37,38 +36,22 @@ namespace ASCOM.Controls
     ///    an <see cref = "AnnunciatorPanel" />) and is not directly settable by the user.
     ///  </para>
     ///</summary>
-    public sealed class Annunciator : Label
+    public sealed class Annunciator : Label, ICadencedControl
     {
-        /// <summary>
-        ///   A timer that triggers updates to anunciators to simulate flashing.
-        /// </summary>
-        private static readonly Timer CadenceTimer = new Timer();
-
-        /// <summary>
-        ///   The delegate that will be used to handle cadence timer events.
-        /// </summary>
-        private static readonly EventHandler CadenceEventHandler = tmrCadence_Tick;
-
-        /// <summary>
-        ///   A list of all the anunciator controls that have been created which need updating
-        ///   when the timer ticks.
-        /// </summary>
-        private static readonly List<Annunciator> UpdateList = new List<Annunciator>();
-
-        /// <summary>
-        ///   Indicates the current bit position within the cadence register.
-        /// </summary>
-        private static int cadenceBitPosition;
-
         /// <summary>
         ///   A flag that records the anunciator's last known state.
         /// </summary>
-        private bool active;
+        private bool lastState;
 
         /// <summary>
         ///   Stores the mute status for the anunciator.
         /// </summary>
         private bool mute;
+
+        /// <summary>
+        /// Tracks whether this object has been disposed.
+        /// </summary>
+        private bool disposed;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "Annunciator" /> class.
@@ -85,21 +68,11 @@ namespace ASCOM.Controls
             if (Parent != null)
                 BackColor = Parent.BackColor; // Inherit background colour from parent.
 
-            ParentChanged += Anunciator_ParentChanged;
+            ParentChanged += AnunciatorParentChanged;
 
-            active = ((uint) Cadence).Bit(cadenceBitPosition);
-            ForeColor = active ? ActiveColor : InactiveColor;
-            lock (UpdateList)
-            {
-                UpdateList.Add(this);
-                // If this is the first instance, then create and start the timer.
-                if (UpdateList.Count == 1)
-                {
-                    CadenceTimer.Interval = 125; // 125 millisecond ticks gives 8 cadence updates per second.
-                    CadenceTimer.Tick += CadenceEventHandler; // Wire up the event handler delegate.
-                    CadenceTimer.Start(); // Let rip.
-                }
-            }
+            lastState = ((uint) Cadence).Bit(CadenceManager.CadenceBitPosition);
+            ForeColor = lastState ? ActiveColor : InactiveColor;
+            CadenceManager.Instance.Add(this);
         }
 
 
@@ -172,19 +145,6 @@ namespace ASCOM.Controls
         }
 
         /// <summary>
-        ///   Gets or sets the cadence (blink pattern) of the anunciator.
-        ///   Different cadence patterns imply different levels of urgency or severity.
-        /// </summary>
-        /// <value>The cadence pattern.</value>
-        [Category("Appearance")]
-        [DefaultValue(CadencePattern.SteadyOn)]
-        [EditorBrowsable(EditorBrowsableState.Always)]
-        [Description(
-            "Determines the cadence (blink pattern) for the anunciator. Different cadences imply different levels of severity or urgency."
-            )]
-        public CadencePattern Cadence { get; set; }
-
-        /// <summary>
         ///   Gets or sets a value indicating whether the control can respond to user interaction.
         ///   For an anunciator, this affects how it displays. A disabled anunciator will always display in
         ///   its <see cref = "InactiveColor" /> regardless of other settings and it will not participate in
@@ -213,17 +173,11 @@ namespace ASCOM.Controls
                 mute = value;
                 if (value)
                 {
-                    StopTimerUpdates();
-                    CadenceUpdate(false); // Make the display state Inactive.
+                    StopCadenceUpdates();
                 }
                 else
                 {
-                    lock (this)
-                    {
-                        bool activeState = ((uint) Cadence).Bit(cadenceBitPosition);
-                        CadenceUpdate(activeState);
-                        StartTimerUpdates();
-                    }
+                    StartCadenceUpdates();
                 }
             }
         }
@@ -231,45 +185,82 @@ namespace ASCOM.Controls
         #region IDisposable pattern
 
         /// <summary>
-        ///   Stops the timer updates by removing this instance from the <see cref = "UpdateList" />.
+        ///   Unregisters this control from the <see cref="CadenceManager"/> so that it will no longer receive cadence updates.
         /// </summary>
-        private void StopTimerUpdates()
+        private void StopCadenceUpdates()
         {
-            lock (UpdateList)
-            {
-                if (UpdateList.Contains(this))
-                    UpdateList.Remove(this); // Make sure this object doesn't receive any more timer updates.
-            }
+            CadenceManager.Instance.Remove(this);
         }
 
         /// <summary>
-        ///   Registers the anunciator control for timed cadence updates by adding it to <see cref = "UpdateList" />.
+        ///   Registers this control with the <see cref="CadenceManager"/> so that it will receive cadence updates.
         /// </summary>
-        private void StartTimerUpdates()
+        private void StartCadenceUpdates()
         {
-            lock (UpdateList)
-            {
-                if (!UpdateList.Contains(this))
-                    UpdateList.Add(this);
-            }
+            CadenceManager.Instance.Add(this);
         }
 
         /// <summary>
-        ///   Releases all resources used by the <see cref = "T:System.ComponentModel.Component" />.
+        /// Releases all resources used by the <see cref="T:System.ComponentModel.Component"/>.
         /// </summary>
         public new void Dispose()
         {
-            StopTimerUpdates();
-            Dispose(true); // Allow disposal of both managed and unmanaged resources.
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
-        ///   Releases unmanaged resources and performs other cleanup operations before the
-        ///   <see cref = "Annunciator" /> is reclaimed by garbage collection.
+        /// Releases the unmanaged resources used by the <see cref="T:System.Windows.Forms.Label"/> and optionally releases the managed resources.
         /// </summary>
-        ~Annunciator()
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        protected override void Dispose(bool disposing)
         {
-            Dispose(false); // Allow disposal of only unmanaged resources.
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    StopCadenceUpdates();   // Unregister from CadenceManager.
+                }
+                disposed = true;
+            }
+            base.Dispose(disposing);        // Let the underlying control class clean itself up.
+        }        #endregion
+
+        #region ICadencedControl Members
+
+        /// <summary>
+        ///   Gets or sets the cadence (blink pattern) of the anunciator.
+        ///   Different cadence patterns imply different levels of urgency or severity.
+        /// </summary>
+        /// <value>The cadence pattern.</value>
+        [Category("Appearance")]
+        [DefaultValue(CadencePattern.SteadyOn)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Description(
+            "Determines the cadence (blink pattern) for the anunciator. Different cadences imply different levels of severity or urgency."
+            )]
+        public CadencePattern Cadence { get; set; }
+
+
+        /// <summary>
+        ///   Updates the anunciator's display, if it has changed since the last update.
+        /// </summary>
+        /// <param name="newState">The new state of the control's appearance ('on' or 'off').</param>
+        /// <remarks>
+        /// Implements the <see cref="ICadencedControl.CadenceUpdate"/> method.
+        /// The <see cref="CadenceManager"/> always calls this method on the GUI thread.
+        /// </remarks>
+        public void CadenceUpdate(bool newState)
+        {
+            if (IsDisposed) throw new ObjectDisposedException("Attempt to update an annunciator control after it has been disposed.");
+            // Update the control's display, but only if there has been a change of state.
+            if (newState != lastState)
+            {
+                ForeColor = (newState ? ActiveColor : InactiveColor);
+                Invalidate();
+                Update();
+                lastState = newState;
+            }
         }
 
         #endregion
@@ -280,7 +271,7 @@ namespace ASCOM.Controls
         /// </summary>
         /// <param name = "sender">The source of the event.</param>
         /// <param name = "e">The <see cref = "System.EventArgs" /> instance containing the event data.</param>
-        private void Anunciator_ParentChanged(object sender, EventArgs e)
+        private void AnunciatorParentChanged(object sender, EventArgs e)
         {
             if (Parent != null)
             {
@@ -289,72 +280,6 @@ namespace ASCOM.Controls
             else
             {
                 BackColor = Color.FromArgb(64, 0, 0);
-            }
-        }
-
-        /// <summary>
-        ///   Handles the Tick event of the tmrCadence control.
-        ///   Computes the new display status for each anunciator control based on its <see cref = "Cadence" />
-        ///   property and requests the anunciator update itself with the new value.
-        /// </summary>
-        /// <param name = "sender">The source of the event.</param>
-        /// <param name = "e">The <see cref = "System.EventArgs" /> instance containing the event data.</param>
-        private static void tmrCadence_Tick(object sender, EventArgs e)
-        {
-            // Critical region, prevent addition or removal of anunciator controls during
-            // the update cycle.
-            lock (UpdateList)
-            {
-                if (UpdateList.Count < 1)
-                {
-                    CadenceTimer.Stop(); // Stop any further tick events.
-                    CadenceTimer.Tick -= CadenceEventHandler; // Withdraw the event handler delegate.
-                    return; // Nothing more to do.
-                }
-
-                // Increment and (if necessary) wrap the cadence bit position index.
-                if (++cadenceBitPosition > 31)
-                {
-                    cadenceBitPosition = 0;
-                }
-
-                // Visit each anunciator and ask it to update its status.
-                foreach (Annunciator item in UpdateList)
-                {
-                    try
-                    {
-                        uint cadenceMask = (uint) item.Cadence;
-                        item.CadenceUpdate(cadenceMask.Bit(cadenceBitPosition));
-                    }
-                    catch
-                    {
-                    } // ToDo: log the exception, maybe?
-                }
-            }
-        }
-
-        /// <summary>
-        ///   Updates the anunciator's display, if it has changed since the last update.
-        ///   this is performed in a thread-safe manner.
-        /// </summary>
-        private void CadenceUpdate(bool newState)
-        {
-            // If we're on a different thread than the control, we need to marshall
-            // execution over onto the correct thread.
-            if (InvokeRequired)
-            {
-                Invoke(new CadenceUpdateDelegate(CadenceUpdate), new object[] {newState});
-                return;
-            }
-
-            // OK, we're on the control's thread, now we are completely thread-safe.
-            // Update the control's display, but only if there has been a change of state.
-            if (newState != active)
-            {
-                ForeColor = (newState ? ActiveColor : InactiveColor);
-                Invalidate();
-                Update();
-                active = newState;
             }
         }
 

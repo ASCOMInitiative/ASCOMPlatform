@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace ASCOM.Controls
@@ -17,5 +18,14 @@ namespace ASCOM.Controls
 		{
 			BackColor = Color.FromArgb(64, 0, 0);
 		}
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="T:System.ComponentModel.Component"/>.
+        /// </summary>
+        public new void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 	}
 }

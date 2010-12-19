@@ -39,6 +39,15 @@
                 this.anunciator7 = new ASCOM.Controls.Annunciator();
                 this.anunciator6 = new ASCOM.Controls.Annunciator();
                 this.anunciator8 = new ASCOM.Controls.Annunciator();
+                this.label1 = new System.Windows.Forms.Label();
+                this.label2 = new System.Windows.Forms.Label();
+                this.ledIndicator1 = new ASCOM.Controls.LedIndicator();
+                this.ledIndicator2 = new ASCOM.Controls.LedIndicator();
+                this.ledIndicator4 = new ASCOM.Controls.LedIndicator();
+                this.ledIndicator5 = new ASCOM.Controls.LedIndicator();
+                this.ledIndicator6 = new ASCOM.Controls.LedIndicator();
+                this.ledIndicator3 = new ASCOM.Controls.LedIndicator();
+                this.ledIndicator7 = new ASCOM.Controls.LedIndicator();
                 this.anunciatorPanel1.SuspendLayout();
                 this.SuspendLayout();
                 // 
@@ -77,7 +86,7 @@
                 this.anunciatorPanel1.Controls.Add(this.anunciator7);
                 this.anunciatorPanel1.Controls.Add(this.anunciator6);
                 this.anunciatorPanel1.Controls.Add(this.anunciator8);
-                this.anunciatorPanel1.Location = new System.Drawing.Point(13, 13);
+                this.anunciatorPanel1.Location = new System.Drawing.Point(12, 50);
                 this.anunciatorPanel1.Name = "anunciatorPanel1";
                 this.anunciatorPanel1.Size = new System.Drawing.Size(291, 38);
                 this.anunciatorPanel1.TabIndex = 3;
@@ -134,7 +143,7 @@
                 this.anunciator4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
                 this.anunciator4.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
                 this.anunciator4.Font = new System.Drawing.Font("Consolas", 10F);
-                this.anunciator4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
+                this.anunciator4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
                 this.anunciator4.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(4)))), ((int)(((byte)(4)))));
                 this.anunciator4.Location = new System.Drawing.Point(165, 0);
                 this.anunciator4.Mute = false;
@@ -205,6 +214,96 @@
                 this.anunciator8.TabIndex = 7;
                 this.anunciator8.Text = "SYNC";
                 // 
+                // label1
+                // 
+                this.label1.AutoSize = true;
+                this.label1.Location = new System.Drawing.Point(18, 31);
+                this.label1.Name = "label1";
+                this.label1.Size = new System.Drawing.Size(260, 13);
+                this.label1.TabIndex = 4;
+                this.label1.Text = "Annunciator Panel with Annunciators in various states";
+                // 
+                // label2
+                // 
+                this.label2.AutoSize = true;
+                this.label2.Location = new System.Drawing.Point(9, 127);
+                this.label2.Name = "label2";
+                this.label2.Size = new System.Drawing.Size(238, 13);
+                this.label2.TabIndex = 5;
+                this.label2.Text = "LED Indicators with various states and cadences";
+                // 
+                // ledIndicator1
+                // 
+                this.ledIndicator1.AutoSize = true;
+                this.ledIndicator1.Cadence = ASCOM.Controls.CadencePattern.SteadyOff;
+                this.ledIndicator1.LabelText = "SteadyOff";
+                this.ledIndicator1.Location = new System.Drawing.Point(18, 143);
+                this.ledIndicator1.Name = "ledIndicator1";
+                this.ledIndicator1.Size = new System.Drawing.Size(100, 16);
+                this.ledIndicator1.TabIndex = 6;
+                // 
+                // ledIndicator2
+                // 
+                this.ledIndicator2.AutoSize = true;
+                this.ledIndicator2.LabelText = "SteadyOn";
+                this.ledIndicator2.Location = new System.Drawing.Point(132, 142);
+                this.ledIndicator2.Name = "ledIndicator2";
+                this.ledIndicator2.Size = new System.Drawing.Size(100, 16);
+                this.ledIndicator2.TabIndex = 6;
+                // 
+                // ledIndicator4
+                // 
+                this.ledIndicator4.AutoSize = true;
+                this.ledIndicator4.Cadence = ASCOM.Controls.CadencePattern.Strobe;
+                this.ledIndicator4.LabelText = "Strobe";
+                this.ledIndicator4.Location = new System.Drawing.Point(18, 165);
+                this.ledIndicator4.Name = "ledIndicator4";
+                this.ledIndicator4.Size = new System.Drawing.Size(68, 16);
+                this.ledIndicator4.TabIndex = 6;
+                // 
+                // ledIndicator5
+                // 
+                this.ledIndicator5.AutoSize = true;
+                this.ledIndicator5.Cadence = ASCOM.Controls.CadencePattern.Wink;
+                this.ledIndicator5.LabelText = "Wink";
+                this.ledIndicator5.Location = new System.Drawing.Point(132, 164);
+                this.ledIndicator5.Name = "ledIndicator5";
+                this.ledIndicator5.Size = new System.Drawing.Size(56, 16);
+                this.ledIndicator5.TabIndex = 6;
+                // 
+                // ledIndicator6
+                // 
+                this.ledIndicator6.AutoSize = true;
+                this.ledIndicator6.Cadence = ASCOM.Controls.CadencePattern.BlinkSlow;
+                this.ledIndicator6.LabelText = "BlinkSlow";
+                this.ledIndicator6.Location = new System.Drawing.Point(18, 187);
+                this.ledIndicator6.Name = "ledIndicator6";
+                this.ledIndicator6.Size = new System.Drawing.Size(113, 16);
+                this.ledIndicator6.Status = ASCOM.Controls.TrafficLight.Yellow;
+                this.ledIndicator6.TabIndex = 6;
+                // 
+                // ledIndicator3
+                // 
+                this.ledIndicator3.AutoSize = true;
+                this.ledIndicator3.Cadence = ASCOM.Controls.CadencePattern.BlinkFast;
+                this.ledIndicator3.LabelText = "BlinkFast";
+                this.ledIndicator3.Location = new System.Drawing.Point(132, 187);
+                this.ledIndicator3.Name = "ledIndicator3";
+                this.ledIndicator3.Size = new System.Drawing.Size(113, 16);
+                this.ledIndicator3.Status = ASCOM.Controls.TrafficLight.Yellow;
+                this.ledIndicator3.TabIndex = 6;
+                // 
+                // ledIndicator7
+                // 
+                this.ledIndicator7.AutoSize = true;
+                this.ledIndicator7.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
+                this.ledIndicator7.LabelText = "BlinkAlarm";
+                this.ledIndicator7.Location = new System.Drawing.Point(234, 187);
+                this.ledIndicator7.Name = "ledIndicator7";
+                this.ledIndicator7.Size = new System.Drawing.Size(113, 16);
+                this.ledIndicator7.Status = ASCOM.Controls.TrafficLight.Red;
+                this.ledIndicator7.TabIndex = 6;
+                // 
                 // frmDemo
                 // 
                 this.AcceptButton = this.btnOK;
@@ -214,6 +313,15 @@
                 this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
                 this.CancelButton = this.btnCancel;
                 this.ClientSize = new System.Drawing.Size(371, 366);
+                this.Controls.Add(this.ledIndicator7);
+                this.Controls.Add(this.ledIndicator3);
+                this.Controls.Add(this.ledIndicator6);
+                this.Controls.Add(this.ledIndicator5);
+                this.Controls.Add(this.ledIndicator2);
+                this.Controls.Add(this.ledIndicator4);
+                this.Controls.Add(this.ledIndicator1);
+                this.Controls.Add(this.label2);
+                this.Controls.Add(this.label1);
                 this.Controls.Add(this.anunciatorPanel1);
                 this.Controls.Add(this.btnCancel);
                 this.Controls.Add(this.btnOK);
@@ -223,6 +331,7 @@
                 this.anunciatorPanel1.ResumeLayout(false);
                 this.anunciatorPanel1.PerformLayout();
                 this.ResumeLayout(false);
+                this.PerformLayout();
 
 			}
 
@@ -239,6 +348,15 @@
 		private Annunciator anunciator6;
 		private Annunciator anunciator7;
         private Annunciator anunciator8;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private LedIndicator ledIndicator1;
+        private LedIndicator ledIndicator2;
+        private LedIndicator ledIndicator4;
+        private LedIndicator ledIndicator5;
+        private LedIndicator ledIndicator6;
+        private LedIndicator ledIndicator3;
+        private LedIndicator ledIndicator7;
 		}
 	}
 
