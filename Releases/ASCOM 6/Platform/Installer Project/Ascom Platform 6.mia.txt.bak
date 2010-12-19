@@ -450,6 +450,8 @@ else
     Install Assembly c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
     Comment: Platform 6 Tools
+    Install Files C:\ASCOM Trunk\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ShowPlatformVersion to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools

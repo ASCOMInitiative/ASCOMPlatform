@@ -1135,10 +1135,10 @@ Global
 		{F0B54D82-741C-4EC1-A620-E5DEA1038EAA} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{342EC739-BA3D-48BF-B007-BBDDEA9E882A} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{CE0387AA-0376-4001-8092-46D4561561EE} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
+		{1276545E-B141-48D8-AA99-3E169CF840FF} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
 		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
 		{C9BD6FCB-97C7-4096-B917-6E59B6E2C684} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{9EE7C0D0-D2D7-496B-8989-C44ECD53A45A} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
-		{1276545E-B141-48D8-AA99-3E169CF840FF} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 		{62A5D47B-BF6E-4799-9629-14E81DEFE794} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 		{4FFFD202-81D4-4549-880B-09B640D72C1D} = {6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6}
@@ -1165,13 +1165,13 @@ Global
 		{81091BA8-725D-465D-AC6B-A36912B73AA7} = {F0B54D82-741C-4EC1-A620-E5DEA1038EAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal
