@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using ASCOM.Controls;
 
 namespace ASCOM.Simulator
 {
@@ -409,13 +410,15 @@ namespace ASCOM.Simulator
         {
             if (SideOfPier == ASCOM.DeviceInterface.PierSide.pierEast)
             {
-                ledPierEast.Green = true;
-                ledPierWest.Red = false;
+                ledPierEast.Status=TrafficLight.Green;
+                ledPierEast.Enabled = true;
+                ledPierWest.Enabled = false;
             }
             else
             {
-                ledPierWest.Red = true;
-                ledPierEast.Green = false;
+                ledPierWest.Status=TrafficLight.Red;
+                ledPierWest.Enabled = true;
+                ledPierEast.Enabled = false;
             }
         }
 

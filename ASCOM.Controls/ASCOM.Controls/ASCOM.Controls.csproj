@@ -188,10 +188,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TrafficLights.cs" />
     <None Include="..\..\ASCOM.snk">
       <Link>ASCOM.snk</Link>
     </None>
     <None Include="app.config" />
+    <None Include="Controls.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -209,9 +211,11 @@
     <Compile Include="AnnunciatorPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CadenceManager.cs" />
     <Compile Include="CadencePattern.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="ICadencedControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>

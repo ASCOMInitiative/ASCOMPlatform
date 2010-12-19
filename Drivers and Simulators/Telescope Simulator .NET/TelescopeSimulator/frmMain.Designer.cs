@@ -49,8 +49,8 @@ namespace ASCOM.Simulator
             this.buttonSlew2 = new System.Windows.Forms.Button();
             this.buttonSlew0 = new System.Windows.Forms.Button();
             this.pictureBoxPierSideEast = new System.Windows.Forms.PictureBox();
-            this.ledPierEast = new ASCOM.Controls.LEDIndicator();
-            this.ledPierWest = new ASCOM.Controls.LEDIndicator();
+            this.ledPierEast = new ASCOM.Controls.LedIndicator();
+            this.ledPierWest = new ASCOM.Controls.LedIndicator();
             this.checkBoxTrack = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonTraffic = new System.Windows.Forms.Button();
@@ -307,9 +307,8 @@ namespace ASCOM.Simulator
             // ledPierEast
             // 
             this.ledPierEast.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ledPierEast.Cadence = ASCOM.Controls.CadencePattern.SteadyOn;
-            this.ledPierEast.Green = false;
-            this.ledPierEast.LabelText = "LED";
+            this.ledPierEast.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
+            this.ledPierEast.LabelText = "";
             this.ledPierEast.Location = new System.Drawing.Point(87, 84);
             this.ledPierEast.Name = "ledPierEast";
             this.ledPierEast.Size = new System.Drawing.Size(17, 16);
@@ -318,9 +317,7 @@ namespace ASCOM.Simulator
             // ledPierWest
             // 
             this.ledPierWest.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ledPierWest.Cadence = ASCOM.Controls.CadencePattern.SteadyOn;
-            this.ledPierWest.Green = false;
-            this.ledPierWest.LabelText = "LED";
+            this.ledPierWest.LabelText = "";
             this.ledPierWest.Location = new System.Drawing.Point(11, 84);
             this.ledPierWest.Name = "ledPierWest";
             this.ledPierWest.Size = new System.Drawing.Size(16, 16);
@@ -542,8 +539,8 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.PictureBox pictureBoxPierSideEast;
         internal System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         internal System.Windows.Forms.Label labelSlew;
-        private Controls.LEDIndicator ledPierEast;
-        private Controls.LEDIndicator ledPierWest;
+        private Controls.LedIndicator ledPierEast;
+        private Controls.LedIndicator ledPierWest;
 
 
     }
