@@ -154,7 +154,7 @@ namespace ASCOM.Simulator
         {
             frmSetup form = new frmSetup();
             Initialize();
-            form.Show();
+            form.ShowDialog();
  
         }
 
