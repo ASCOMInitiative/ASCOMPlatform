@@ -521,7 +521,7 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub
     Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\RotatorSimulator\\, Rotator Simulator
+    Comment: Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\RotatorSimulator\\, Rotator Simulator
     Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator
