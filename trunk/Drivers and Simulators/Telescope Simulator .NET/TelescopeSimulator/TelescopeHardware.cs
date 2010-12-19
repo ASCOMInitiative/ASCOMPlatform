@@ -370,7 +370,8 @@ namespace ASCOM.Simulator
             }
             else //Process the movement
             {
-                z = Math.Cos(m_Declination * SharedResources.DEG_RAD) * 15;
+                // CR divide by 15 to get the movement rate in hours per second
+                z = Math.Cos(m_Declination * SharedResources.DEG_RAD) / 15;
                 if (z < 0.001) {z = 0.001;}
 
                 if (m_SlewState == SlewType.SlewHandpad) //We are doing a slew with the handpad buttons
