@@ -70,22 +70,33 @@ Public Class DiagnosticsForm
     Private Sub btnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
         Dim ASCOMPath As String
         Dim PathShell As New System.Text.StringBuilder(260)
+        Dim MyVersion As Version
 
         Try
             Status("Diagnostics running...")
 
             TL = New TraceLogger("", "Diagnostics")
             TL.Enabled = True
-            TL.LogMessage("Diagnostics", "Version " & Application.ProductVersion & " - starting diagnostic run")
-            TL.LogMessage("", "")
+
+            'Log Diagnostics version information
+            MyVersion = Assembly.GetExecutingAssembly.GetName.Version
+            TL.LogMessage("Diagnostics", "Version " & MyVersion.ToString & ", " & Application.ProductVersion)
+            TL.BlankLine()
+            TL.LogMessage("Diagnostics", "Starting diagnostic run")
+            TL.BlankLine()
+
             LastLogFile = TL.LogFileName
             Try
-                Try : ASCOMRegistryAccess = New ASCOM.Utilities.RegistryAccess : Catch : End Try 'Try and create a registryaccess object
+                Try 'Try and create a registryaccess object
+                    ASCOMRegistryAccess = New ASCOM.Utilities.RegistryAccess
+                Catch ex As Exception
+                    TL.LogMessage("Diagnostics", "ERROR - Unexpected exception creating New RegistryAccess object, later steps will show errors")
+                    TL.LogMessageCrLf("Diagnostics", ex.ToString)
+                End Try
 
                 ScanInstalledPlatform()
 
                 RunningVersions(TL) 'Log diagnostic information
-                TL.LogMessage("", "")
 
                 ScanDrives() 'Scan PC drives and report information
 
@@ -685,28 +696,39 @@ Public Class DiagnosticsForm
     Sub FileDetails(ByVal FPath As String, ByVal FName As String)
         Dim FullPath As String
         Dim Att As FileAttributes, FVInfo As FileVersionInfo, FInfo As FileInfo
+        Dim Ass As Assembly, AssVer As String
 
         Try
             FullPath = FPath & FName 'Create full filename from path and simple filename
-            TL.LogMessage("FileDetails", FName & " " & FullPath)
+            'TL.LogMessage("FileDetails", FName & " " & FullPath)
             If File.Exists(FullPath) Then
+
+                'Try to get assembly version info if present
+                Try
+                    Ass = Assembly.ReflectionOnlyLoadFrom(FullPath)
+                    AssVer = Ass.FullName
+                Catch ex As Exception
+                    AssVer = "Not an assembly"
+                End Try
+
+                TL.LogMessage("FileDetails", "   Assembly Version: " & AssVer)
 
                 FVInfo = FileVersionInfo.GetVersionInfo(FullPath)
                 FInfo = Microsoft.VisualBasic.FileIO.FileSystem.GetFileInfo(FullPath)
 
-                TL.LogMessage("FileDetails", "   File Version:    " & FVInfo.FileMajorPart & "." & FVInfo.FileMinorPart & "." & FVInfo.FileBuildPart & "." & FVInfo.FilePrivatePart)
-                TL.LogMessage("FileDetails", "   Product Version: " & FVInfo.ProductMajorPart & "." & FVInfo.ProductMinorPart & "." & FVInfo.ProductBuildPart & "." & FVInfo.ProductPrivatePart)
+                TL.LogMessage("FileDetails", "   File Version:     " & FVInfo.FileMajorPart & "." & FVInfo.FileMinorPart & "." & FVInfo.FileBuildPart & "." & FVInfo.FilePrivatePart)
+                TL.LogMessage("FileDetails", "   Product Version:  " & FVInfo.ProductMajorPart & "." & FVInfo.ProductMinorPart & "." & FVInfo.ProductBuildPart & "." & FVInfo.ProductPrivatePart)
 
-                TL.LogMessage("FileDetails", "   Description:     " & FVInfo.FileDescription)
-                TL.LogMessage("FileDetails", "   Company Name:    " & FVInfo.CompanyName)
+                TL.LogMessage("FileDetails", "   Description:      " & FVInfo.FileDescription)
+                TL.LogMessage("FileDetails", "   Company Name:     " & FVInfo.CompanyName)
 
-                TL.LogMessage("FileDetails", "   Last Write Time: " & File.GetLastWriteTime(FullPath))
-                TL.LogMessage("FileDetails", "   Creation Time:   " & File.GetCreationTime(FullPath))
+                TL.LogMessage("FileDetails", "   Last Write Time:  " & File.GetLastWriteTime(FullPath))
+                TL.LogMessage("FileDetails", "   Creation Time:    " & File.GetCreationTime(FullPath))
 
-                TL.LogMessage("FileDetails", "   File Length:     " & Format(FInfo.Length, "#,0."))
+                TL.LogMessage("FileDetails", "   File Length:      " & Format(FInfo.Length, "#,0."))
 
                 Att = File.GetAttributes(FullPath)
-                TL.LogMessage("FileDetails", "   Attributes:      " & Att.ToString())
+                TL.LogMessage("FileDetails", "   Attributes:       " & Att.ToString())
 
             Else
                 TL.LogMessage("FileDetails", "   ### Unable to find file: " & FullPath)
@@ -1004,7 +1026,7 @@ Public Class DiagnosticsForm
     Private Sub ScanInstalledPlatform()
         Dim RegKey As RegistryKey
 
-        Try
+        Try ' Platform 5.5 Inno installer setup, should always be absent in Platform 6!
             RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
 
             TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
@@ -1013,8 +1035,22 @@ Public Class DiagnosticsForm
             TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
             TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
         Catch ex As Exception
-            TL.LogMessage("Installed Platform", "No Inno installer path found")
+            TL.LogMessage("Installed Platform", "OK - no Inno installer path found")
         End Try
+
+        Try ' Platform 6 installer GUID, should always be present in Platform 6
+            RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}", False)
+
+            TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
+            TL.LogMessage("Installed Platform", "Version - " & RegKey.GetValue("DisplayVersion"))
+            TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
+            TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
+            TL.LogMessage("Installed Platform", "Install Source - " & RegKey.GetValue("InstallSource"))
+
+        Catch ex As Exception
+            TL.LogMessage("Installed Platform", "OK - no Inno installer path found")
+        End Try
+
         TL.BlankLine()
     End Sub
     Sub ScanASCOMDrivers()
@@ -1030,29 +1066,35 @@ Public Class DiagnosticsForm
                 BaseDir = PathShell.ToString & "\ASCOM"
 
                 RecurseASCOMDrivers(BaseDir & "\Telescope") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check camera drivers
+                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check dome drivers
+                RecurseASCOMDrivers(BaseDir & "\FilterWheel") 'Check filterWheel drivers
                 RecurseASCOMDrivers(BaseDir & "\Focuser") 'Check focuser drivers
-                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check telescope drivers
-                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check focuser drivers
-                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check telescope drivers
-                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check rotator drivers
+                RecurseASCOMDrivers(BaseDir & "\SafetyMonitor") 'Check safetymonitor drivers
+                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check switch drivers
 
                 BaseDir = Environment.GetFolderPath(SpecialFolder.CommonProgramFiles) & "\ASCOM"
 
                 RecurseASCOMDrivers(BaseDir & "\Telescope") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check camera drivers
+                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check dome drivers
+                RecurseASCOMDrivers(BaseDir & "\FilterWheel") 'Check filterWheel drivers
                 RecurseASCOMDrivers(BaseDir & "\Focuser") 'Check focuser drivers
-                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check telescope drivers
-                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check focuser drivers
-                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check telescope drivers
-                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check rotator drivers
+                RecurseASCOMDrivers(BaseDir & "\SafetyMonitor") 'Check safetymonitor drivers
+                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check switch drivers
             Else '32 bit OS
                 BaseDir = Environment.GetFolderPath(SpecialFolder.CommonProgramFiles) & "\ASCOM"
 
                 RecurseASCOMDrivers(BaseDir & "\Telescope") 'Check telescope drivers
+                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check camera drivers
+                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check dome drivers
+                RecurseASCOMDrivers(BaseDir & "\FilterWheel") 'Check filterWheel drivers
                 RecurseASCOMDrivers(BaseDir & "\Focuser") 'Check focuser drivers
-                RecurseASCOMDrivers(BaseDir & "\Dome") 'Check telescope drivers
-                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check focuser drivers
-                RecurseASCOMDrivers(BaseDir & "\Camera") 'Check telescope drivers
-                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check focuser drivers
+                RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check rotator drivers
+                RecurseASCOMDrivers(BaseDir & "\SafetyMonitor") 'Check safetymonitor drivers
+                RecurseASCOMDrivers(BaseDir & "\Switch") 'Check switch drivers
             End If
 
             TL.BlankLine()

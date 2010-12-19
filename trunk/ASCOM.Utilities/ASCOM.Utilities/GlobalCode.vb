@@ -232,12 +232,11 @@ Module VersionCode
             TL.LogMessage("Versions", "")
 
             'Get assembly versions
-            AssemblyInfo(TL, "Executing Assembly", Assembly.GetExecutingAssembly)
             AssemblyInfo(TL, "Entry Assembly", Assembly.GetEntryAssembly)
-            AssemblyInfo(TL, "Calling Assembly", Assembly.GetCallingAssembly)
-            TL.LogMessage("Versions", "")
+            AssemblyInfo(TL, "Executing Assembly", Assembly.GetExecutingAssembly)
+            TL.BlankLine()
         Catch ex As Exception 'Just log the exception, we don't want the caller to know this diagnostic code failed
-            TL.LogMessage("Versions", "Exception: " & ex.ToString)
+            TL.LogMessageCrLf("Versions", "Unexpected exception: " & ex.ToString)
         End Try
     End Sub
 
