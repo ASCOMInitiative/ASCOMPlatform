@@ -464,10 +464,10 @@ Comment
 Comment
 Install Assembly
 Install Files
-Install Assembly
 Comment
 Install Assembly
 Install Files
+Install Assembly
 Install Files
 Comment
 Install Assembly
@@ -1110,10 +1110,10 @@ $
 {1434950C-5C3A-4DFE-A376-3B90F08023C6}
 {0074A899-4886-4160-A67F-CE7D7413F179}
 {75DD9876-0F33-4847-9196-FB6B7B1C0491}
-{7BDB7295-F7E7-4465-BE86-C1E8EA3E817A}
 {A942AC63-6A43-40ED-BBEB-0C24E10A0B1F}
 {AC2018F1-0D8C-40B3-BAF2-23B9CB255443}
 {CB314A4C-BA01-4C50-AAE8-3FB9D95DE7A9}
+{F2BF3980-B35C-4450-8DC4-9CF09966D0C4}
 {18C930EE-441F-49CA-BDE8-B6846CF73D3E}
 {AFA6D457-0639-40E9-B55D-DC078037E20A}
 {CFAA5810-A98F-4B54-88F7-2CE1565B7AFF}
@@ -4120,10 +4120,6 @@ TRUE
 C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe
 FALSE
 $COMMONFILES$\ASCOM\Rotator
-{7BDB7295-F7E7-4465-BE86-C1E8EA3E817A}
-c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll
-FALSE
-$COMMONFILES$\ASCOM\FilterWheel\ServedClasses\
 {51BBD1C7-2815-4A75-9C2E-D67C8040257E}
 C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll
 FALSE
@@ -4140,6 +4136,10 @@ TRUE
 c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll
 TRUE
 
+{F2BF3980-B35C-4450-8DC4-9CF09966D0C4}
+c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll
+FALSE
+$COMMONFILES$\ASCOM\FilterWheel\ServedClasses\
 {D3AC286E-D3FE-485E-9DF9-3EEC7899E859}
 SUCCESS
 {0849039C-A9FA-4F0D-8AD5-A0DF9EBA3744}
