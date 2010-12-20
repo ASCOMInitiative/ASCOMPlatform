@@ -107,14 +107,14 @@ namespace ASCOM.Simulator
         #endregion
 
         #region Private Data
-        private static uint m_uiMainThreadId;					// Stores the main thread's thread id.
-        private static int m_iObjsInUse;						// Keeps a count on the total number of objects alive.
-        private static int m_iServerLocks;						// Keeps a lock count on this application.
-        private static bool m_bComStart;						// True if server started by COM (-embedding)
+        private static uint m_uiMainThreadId;					        // Stores the main thread's thread id.
+        private static int m_iObjsInUse;						        // Keeps a count on the total number of objects alive.
+        private static int m_iServerLocks;						        // Keeps a lock count on this application.
+        private static bool m_bComStart;						        // True if server started by COM (-embedding)
         
-        private static ArrayList m_ComObjectAssys;				// Dynamically loaded assemblies containing served COM objects
-        private static ArrayList m_ComObjectTypes;				// Served COM object types
-        private static ArrayList m_ClassFactories;				// Served COM object class factories
+        private static ArrayList m_ComObjectAssys;				        // Dynamically loaded assemblies containing served COM objects
+        private static ArrayList m_ComObjectTypes;				        // Served COM object types
+        private static ArrayList m_ClassFactories;				        // Served COM object class factories
         private static string m_sAppId = "{fe02799d-b48a-46f0-add7-a06d40beb2e9}";	// Our AppId
         #endregion
 
@@ -212,10 +212,7 @@ namespace ASCOM.Simulator
         //
         // Load the assemblies that contain the classes that we will serve
         // via COM. These will be located in the subfolder ServedClasses
-        // below our executable. The code below takes care of the situation
-        // where we're running in the VS.NET IDE, allowing the ServedClasses
-        // folder to be in the solution folder, while we are executing in
-        // the TelescopeSimulator\bin\Debug subfolder.
+        // below our executable.
         //
         private static bool LoadComObjectAssemblies()
         {
@@ -224,37 +221,35 @@ namespace ASCOM.Simulator
 
             string assy = Assembly.GetEntryAssembly().Location;
             string assyPath = Assembly.GetEntryAssembly().Location;
-            int i = assyPath.LastIndexOf(@"\TelescopeSimulator\bin\");						// Look for us running in IDE
+            //int i = assyPath.LastIndexOf(@"\TelescopeSimulator\bin\");						// Look for us running in IDE
             ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "LoadComObjectAssemblies");
             TL.Enabled = true;
             TL.LogMessage("Assembly", assy);
             TL.LogMessage("AssemblyPath", assyPath);
 
+            //[TPL] The ServedClasses folder is always a subfolder of the executable location.
+            var executableFolder = Path.GetDirectoryName(assyPath);
+            var servedClassesPath = executableFolder;
 
+            TL.LogMessage("ServedClassesPath", servedClassesPath);
 
-            if (i == -1) i = assyPath.LastIndexOf('\\');
-            assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\ServedClasses";
-
-            //assyPath = "C:\\Documents and Settings\\Robert Turner\\My Documents\\Projects\\Robert\\ASCOM Platform\\Telescope Simulator .NET\\Telescope\\bin\\Debug";
-            TL.LogMessage("ServedClassesPath", assyPath);
-
-            DirectoryInfo d = new DirectoryInfo(assyPath);
-            foreach (FileInfo fi in d.GetFiles("*.dll"))  //Modified to only load *.DLL
+            DirectoryInfo d = new DirectoryInfo(servedClassesPath);
+            var assemblyFiles = d.GetFiles("*.dll");                        // We're only interested in .dll assemblies
+            foreach (FileInfo fi in assemblyFiles)                    
             {
                 string aPath = fi.FullName;
-                string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
+                string fqClassName = fi.Name.Replace(fi.Extension, "");		// The COM class name will be the assembly's file name (minus extension).
                 TL.LogMessage("FilePath", aPath);
                 TL.LogMessage("ClassName", fqClassName);
-                //
+
                 // First try to load the assembly and get the types for
                 // the class and the class facctory. If this doesn't work ????
-                //
                 try
                 {
-                    Assembly so = Assembly.LoadFrom(aPath);
+                    Assembly so = Assembly.LoadFrom(aPath); //[TPL] Potential malicious code injection vector, consider using ReflectionOnlyLoad.
 
-                    //Added check to see if the dll has the ServedClassNameAttribute
-                    object[] attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute),false);
+                    // Only use assemblies that are decorated with the [ServedClassName] Attribute
+                    var attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
                     if (attributes.Length > 0)
                     {
                         m_ComObjectTypes.Add(so.GetType(fqClassName, true));
@@ -268,7 +263,6 @@ namespace ASCOM.Simulator
                         "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
-
             }
             TL.Enabled = false;
             TL.Dispose();
