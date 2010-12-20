@@ -229,7 +229,7 @@ namespace ASCOM.Simulator
 
             //[TPL] The ServedClasses folder is always a subfolder of the executable location.
             var executableFolder = Path.GetDirectoryName(assyPath);
-            var servedClassesPath = executableFolder;
+            var servedClassesPath = executableFolder + "\\ServedClasses";
 
             TL.LogMessage("ServedClassesPath", servedClassesPath);
 
