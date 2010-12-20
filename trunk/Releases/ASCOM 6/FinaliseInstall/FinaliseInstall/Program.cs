@@ -91,7 +91,7 @@ namespace ConsoleApplication1
             //
             // MIRROR CALLS IN UNINSTALL!
             //
-            RegUnregExe(ascomPath + "\\Dome\\DomeSim.exe", true);
+            /*RegUnregExe(ascomPath + "\\Dome\\DomeSim.exe", true);
             RegUnregExe(ascomPath + "\\Dome\\ASCOMDome.exe", true);
             RegUnregExe(ascomPath + "\\Focuser\\FocusSim.exe", true);
             RegUnregExe(ascomPath + "\\Telescope\\ScopeSim.exe", true);
@@ -100,6 +100,7 @@ namespace ConsoleApplication1
             RegUnregExe(ascomPath + "\\Telescope\\Pipe.exe", true);
             RegUnregExe(ascomPath + "\\Telescope\\Hub.exe", true);
             RegUnregExe(ascomPath + "\\Switch\\SwitchSim.exe", true);
+            */
 
             //
             // Add AppID stuff for EXE simulators Must be in commit because
@@ -125,7 +126,7 @@ namespace ConsoleApplication1
             //
             // Register VB6 simulators for ASCOM. I set these friendly names.
             //
-            RegAscom("ScopeSim.Telescope", "Simulator");
+/*            RegAscom("ScopeSim.Telescope", "Simulator");
             RegAscom("FocusSim.Focuser", "Simulator");
             RegAscom("DomeSim.Dome", "Simulator");
             RegAscom("CCDSimulator.Camera", "Simulator");
@@ -140,7 +141,7 @@ namespace ConsoleApplication1
             RegAscom("Hub.Dome", "Generic Hub");
             RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
             RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
-
+            */
         }
 
         //

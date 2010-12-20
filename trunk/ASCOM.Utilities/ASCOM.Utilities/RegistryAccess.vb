@@ -304,7 +304,7 @@ Friend Class RegistryAccess
         Try
             GetProfileMutex("MigrateProfile", "")
             sw.Reset() : sw.Start() 'Start timing this call
-
+            LogEvent("MigrateProfile", "Current Platform Version: " & CurrentPlatformVersion, EventLogEntryType.Information, 0, Nothing)
             'Force logging to be enabled for this...
             TL.Enabled = True
             RunningVersions(TL) 'Capture debug date in case logging wasn't initially enabled
