@@ -21,6 +21,7 @@ Imports System.Security.Principal
 Public Class DiagnosticsForm
 
     Private Const COMPONENT_CATEGORIES = "Component Categories"
+    Private Const ASCOM_ROOT_KEY As String = " (ASCOM Root Key)"
     Private Const Indent As Integer = 3 ' Display indent for recursive loop output
 
     Private Const CSIDL_PROGRAM_FILES As Integer = 38 '0x0026
@@ -190,18 +191,21 @@ Public Class DiagnosticsForm
             Status("Scanning Registry Security")
             TL.LogMessage("RegistrySecurity", "Start")
 
+            'Dim RA As New ASCOM.Utilities.RegistryAccess
+            'ReadRegistryRights(RA.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, ASCOM.Utilities.RegistryAccess.RegWow64Options.KEY_WOW64_32KEY), ASCOM_ROOT_KEY)
+
             ReadRegistryRights(Registry.CurrentUser, "")
+            ReadRegistryRights(Registry.CurrentUser, "SOFTWARE\ASCOM")
             ReadRegistryRights(Registry.ClassesRoot, "")
             ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util")
-            ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util\Clsid")
 
             ReadRegistryRights(Registry.LocalMachine, "")
             ReadRegistryRights(Registry.LocalMachine, "SOFTWARE")
 
             If IntPtr.Size = 8 Then '64bit OS so look in Wow64node
-                ReadRegistryRights(Registry.LocalMachine, "Software\Wow6432Node\ASCOM")
+                ReadRegistryRights(Registry.LocalMachine, "SOFTWARE\Wow6432Node\ASCOM")
             Else '32 bit OS
-                ReadRegistryRights(Registry.LocalMachine, "Software\ASCOM")
+                ReadRegistryRights(Registry.LocalMachine, "SOFTWARE\ASCOM")
             End If
 
             TL.BlankLine()
@@ -216,32 +220,32 @@ Public Class DiagnosticsForm
 
         Try
             TL.LogMessage("RegistrySecurity", IIf(SubKey = "", key.Name.ToString, key.Name.ToString & "\" & SubKey))
-            If SubKey = "" Then
-                SKey = key.OpenSubKey(SubKey)
-            Else
+            If (SubKey = "") Or (SubKey = ASCOM_ROOT_KEY) Then
                 SKey = key
+            Else
+                SKey = key.OpenSubKey(SubKey)
             End If
 
-            sec = key.GetAccessControl(Security.AccessControl.AccessControlSections.All)
-            sec = key.GetAccessControl()
-            For Each ar As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount))
-                TL.LogMessage("ReadRegistryRights", "  User: " & ar.IdentityReference.ToString)
-                TL.LogMessage("ReadRegistryRights", "    Type: " & ar.AccessControlType.ToString)
-                TL.LogMessage("ReadRegistryRights", "    Rights: " & ar.RegistryRights.ToString)
-                TL.LogMessage("ReadRegistryRights", "    Inheritance: " & ar.InheritanceFlags.ToString)
-                TL.LogMessage("ReadRegistryRights", "    Propogation: " & ar.PropagationFlags.ToString)
-                TL.LogMessage("ReadRegistryRights", "    Inherited?: " & ar.IsInherited)
+            sec = SKey.GetAccessControl() 'System.Security.AccessControl.AccessControlSections.All)
+
+            For Each RegRule As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount)) 'Iterate over the rule set and list them
+                TL.LogMessage("RegistrySecurity", RegRule.AccessControlType.ToString() & " " & _
+                                                  RegRule.IdentityReference.ToString() & " " & _
+                                                  RegRule.RegistryRights.ToString() & " / " & _
+                                                  IIf(RegRule.IsInherited.ToString(), "Inherited", "NotInherited") & " / " & _
+                                                  RegRule.InheritanceFlags.ToString() & " / " & _
+                                                  RegRule.PropagationFlags.ToString())
             Next
         Catch ex As Exception
             TL.LogMessage("ReadRegistryRights", ex.ToString)
         End Try
-
+        TL.BlankLine()
     End Sub
 
     Sub ScanRegistry()
         Dim Key As RegistryKey
         Status("Scanning Registry")
-        TL.LogMessage("ScanRegistry", "Start")
+        'TL.LogMessage("ScanRegistry", "Start")
         If OSBits() = Bitness.Bits64 Then
             Try
                 'List the 32bit registry
@@ -281,6 +285,7 @@ Public Class DiagnosticsForm
             End Try
         End If
         TL.BlankLine()
+        TL.BlankLine()
 
         Try
             'List the user registry
@@ -292,7 +297,7 @@ Public Class DiagnosticsForm
             TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
         End Try
         TL.BlankLine()
-
+        TL.BlankLine()
     End Sub
 
     Sub RecurseRegistry(ByVal Key As RegistryKey)
@@ -314,6 +319,7 @@ Public Class DiagnosticsForm
         Try
             SubKeys = Key.GetSubKeyNames
             For Each SubKey As String In SubKeys
+                TL.BlankLine()
                 TL.LogMessage("Registry Profile Key", Space(RecursionLevel * 2) & SubKey)
                 RecurseRegistry(Key.OpenSubKey(SubKey))
             Next
@@ -383,12 +389,12 @@ Public Class DiagnosticsForm
             Files = Directory.GetFiles(Folder)
             For Each MyFile As String In Files
                 If MyFile.ToUpper.Contains("\HELPER.DLL") Then
-                    TL.LogMessage("Helper.DLL", MyFile)
-                    FileDetails(Folder & "\", "HELPER.DLL")
+                    'TL.LogMessage("Helper.DLL", MyFile)
+                    FileDetails(Folder & "\", "Helper.dll")
                 End If
                 If MyFile.ToUpper.Contains("\HELPER2.DLL") Then
-                    TL.LogMessage("Helper2.DLL", MyFile)
-                    FileDetails(Folder & "\", "HELPER2.DLL")
+                    'TL.LogMessage("Helper2.DLL", MyFile)
+                    FileDetails(Folder & "\", "Helper2.dll")
                 End If
             Next
         Catch ex As Exception
@@ -558,6 +564,8 @@ Public Class DiagnosticsForm
         Try
             Status("Scanning Registry")
             TL.LogMessage("COMRegistration", "") 'Report COM registation
+
+            'Original Platform 5 helpers
             GetCOMRegistration("DriverHelper.Chooser")
             GetCOMRegistration("DriverHelper.Profile")
             GetCOMRegistration("DriverHelper.Serial")
@@ -565,10 +573,13 @@ Public Class DiagnosticsForm
             GetCOMRegistration("DriverHelper.Util")
             GetCOMRegistration("DriverHelper2.Util")
 
+            'Platform 5 helper support components
             GetCOMRegistration("DriverHelper.ChooserSupport")
             GetCOMRegistration("DriverHelper.ProfileAccess")
             GetCOMRegistration("DriverHelper.SerialSupport")
             
+            'Utlities
+            GetCOMRegistration("ASCOM.Utilities.ASCOMProfile")
             GetCOMRegistration("ASCOM.Utilities.Chooser")
             GetCOMRegistration("ASCOM.Utilities.KeyValuePair")
             GetCOMRegistration("ASCOM.Utilities.Profile")
@@ -577,8 +588,10 @@ Public Class DiagnosticsForm
             GetCOMRegistration("ASCOM.Utilities.TraceLogger")
             GetCOMRegistration("ASCOM.Utilities.Util")
 
+            'Astrometry
             GetCOMRegistration("ASCOM.Astrometry.Kepler.Ephemeris")
             GetCOMRegistration("ASCOM.Astrometry.NOVAS.NOVAS2COM")
+            GetCOMRegistration("ASCOM.Astrometry.NOVAS.NOVAS3")
             GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Earth")
             GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.Planet")
             GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.PositionVector")
@@ -588,17 +601,44 @@ Public Class DiagnosticsForm
             GetCOMRegistration("ASCOM.Astrometry.Transform.Transform")
 
             'New Platform 6 Simulators 
-            GetCOMRegistration("ASCOM.TelescopeSimulator.Telescope")
             GetCOMRegistration("ASCOM.Simulator.Camera") 'If it exists
             GetCOMRegistration("ASCOM.FilterWheelSim.FilterWheel")
             GetCOMRegistration("ASCOM.Simulator.Focuser")
+            GetCOMRegistration("ASCOM.Simulator.Rotator")
             GetCOMRegistration("ASCOM.Simulator.SafetyMonitor")
+            GetCOMRegistration("ASCOM.Simulator.SetupDialogForm")
             GetCOMRegistration("ASCOM.Simulator.Switch")
+            GetCOMRegistration("ASCOM.Simulator.Telescope")
 
             'Original Platform 5 simulators if present
             GetCOMRegistration("ScopeSim.Telescope")
             GetCOMRegistration("FocusSim.Focuser")
             GetCOMRegistration("CCDSimulator.Camera")
+            GetCOMRegistration("DomeSim.Dome")
+            GetCOMRegistration("ASCOMDome.Dome")
+            GetCOMRegistration("ASCOMDome.Rate")
+            GetCOMRegistration("ASCOMDome.Telescope")
+            GetCOMRegistration("POTH.Telescope")
+            GetCOMRegistration("POTH.Dome")
+            GetCOMRegistration("POTH.Focuser")
+            GetCOMRegistration("Pipe.Telescope")
+            GetCOMRegistration("Pipe.Dome")
+            GetCOMRegistration("Pipe.Focuser")
+            GetCOMRegistration("Hub.Telescope")
+            GetCOMRegistration("Hub.Dome")
+            GetCOMRegistration("Hub.Focuser")
+
+            'Exceptions
+            GetCOMRegistration("ASCOM.DriverException")
+            GetCOMRegistration("ASCOM.InvalidOperationException")
+            GetCOMRegistration("ASCOM.InvalidValueException")
+            GetCOMRegistration("ASCOM.MethodNotImplementedException")
+            GetCOMRegistration("ASCOM.NotConnectedException")
+            GetCOMRegistration("ASCOM.NotImplementedException")
+            GetCOMRegistration("ASCOM.ParkedException")
+            GetCOMRegistration("ASCOM.PropertyNotImplementedException")
+            GetCOMRegistration("ASCOM.SlavedException")
+            GetCOMRegistration("ASCOM.ValueNotSetException")
 
             TL.LogMessage("", "")
         Catch ex As Exception
@@ -651,45 +691,60 @@ Public Class DiagnosticsForm
     End Function
 
     Sub ScanFiles(ByVal ASCOMPath As String)
-        Dim ASCOMPathTel, ASCOMPathInt, ASCOMPathNet, ASCOMPathUtl As String
+        Dim ASCOMPathPlatformV6, ASCOMPathInt, ASCOMPathPlatformInternal, ASCOMPathPlatformV55, ASCOMPathAstrometry As String
 
         Try
             Status("Scanning Files")
 
             ASCOMPathInt = ASCOMPath & "Interface\" 'Create folder paths
-            ASCOMPathTel = ASCOMPath & "Telescope\"
-            ASCOMPathNet = ASCOMPath & ".net\"
-            ASCOMPathUtl = ASCOMPath & "Utilities\"
+            ASCOMPathPlatformV6 = ASCOMPath & "Platform\V6\"
+            ASCOMPathPlatformInternal = ASCOMPath & "Platform\Internal\"
+            ASCOMPathPlatformV55 = ASCOMPath & "Platform\v5.5\"
+            ASCOMPathAstrometry = ASCOMPath & "Astrometry\"
 
+            'ASCOM Root files
             FileDetails(ASCOMPath, "Helper.dll") 'Report on files
             FileDetails(ASCOMPath, "Helper2.dll")
-            FileDetails(ASCOMPathNet, "ASCOM.Utilities.dll")
-            FileDetails(ASCOMPathUtl, "Helper.dll")
-            FileDetails(ASCOMPathUtl, "Helper2.dll")
 
-            FileDetails(ASCOMPath, "Astro32.dll")
-            FileDetails(ASCOMPathTel, "ScopeSim.exe")
+            'ASCOM\Astrometry
+            FileDetails(ASCOMPathAstrometry, "NOVAS3.dll")
+            FileDetails(ASCOMPathAstrometry, "NOVAS3.pdb")
+            FileDetails(ASCOMPathAstrometry, "NOVAS3-64.dll")
+            FileDetails(ASCOMPathAstrometry, "NOVAS3-64.pdb")
+            FileDetails(ASCOMPathAstrometry, "NOVAS-C.dll")
+            FileDetails(ASCOMPathAstrometry, "NOVAS-C.pdb")
+            FileDetails(ASCOMPathAstrometry, "NOVAS-C64.dll")
+            FileDetails(ASCOMPathAstrometry, "NOVAS-C64.pdb")
+
+            'ASCOM\Interfaces
             FileDetails(ASCOMPathInt, "Helper.tlb")
             FileDetails(ASCOMPathInt, "Helper2.tlb")
             FileDetails(ASCOMPathInt, "ASCOMMasterInterfaces.tlb")
+            FileDetails(ASCOMPathInt, "IObjectSafety.tlb")
 
-            FileDetails(ASCOMPathNet, "ASCOM.Astrometry.dll")
-            FileDetails(ASCOMPathNet, "ASCOM.Attributes.dll")
-            FileDetails(ASCOMPathNet, "ASCOM.DriverAccess.dll")
-            FileDetails(ASCOMPathNet, "ASCOM.Exceptions.dll")
-            FileDetails(ASCOMPathNet, "ASCOM.IConform.dll")
-            FileDetails(ASCOMPathNet, "ASCOM.Kepler.dll")
-            FileDetails(ASCOMPathNet, "ASCOM.NOVAS.dll")
-            FileDetails(ASCOMPathNet, "NOVAS-C64.dll")
-            FileDetails(ASCOMPathNet, "NOVAS-C.dll")
-            FileDetails(ASCOMPathNet, "policy.1.0.ASCOM.DriverAccess.dll")
-            FileDetails(ASCOMPathNet, "policy.5.5.ASCOM.Astrometry.dll")
-            FileDetails(ASCOMPathNet, "policy.5.5.ASCOM.Utilities.dll")
-            FileDetails(ASCOMPathUtl, "EraseProfile.exe")
-            FileDetails(ASCOMPathUtl, "MigrateProfile.exe")
+            'ASCOM\Platform\Internal
+            FileDetails(ASCOMPathPlatformInternal, "ASCOM.Internal.GACInstall.exe")
+            FileDetails(ASCOMPathPlatformInternal, "MigrateProfile.exe")
+            FileDetails(ASCOMPathPlatformInternal, "RegTlb.exe")
+
+            'ASCOM\Platform\v5.5
+            FileDetails(ASCOMPathPlatformV55, "policy.1.0.ASCOM.DriverAccess.dll")
+            FileDetails(ASCOMPathPlatformV55, "policy.5.5.ASCOM.Astrometry.dll")
+            FileDetails(ASCOMPathPlatformV55, "policy.5.5.ASCOM.Utilities.dll")
+            FileDetails(ASCOMPathPlatformV55, "ASCOM.Astrometry.pdb")
+            FileDetails(ASCOMPathPlatformV55, "ASCOM.Attributes.pdb")
+            FileDetails(ASCOMPathPlatformV55, "ASCOM.DriverAccess.pdb")
+            FileDetails(ASCOMPathPlatformV55, "ASCOM.Utilities.pdb")
+
+            'ASCOM\Platform\v6
+            FileDetails(ASCOMPathPlatformV6, "ASCOM.Astrometry.dll")
+            FileDetails(ASCOMPathPlatformV6, "ASCOM.Exceptions.dll")
+            FileDetails(ASCOMPathPlatformV6, "ASCOM.Utilities.dll")
+
         Catch ex As Exception
             TL.LogMessageCrLf("ScanFiles", "Exception: " & ex.ToString)
         End Try
+        TL.BlankLine()
 
     End Sub
 
@@ -700,9 +755,8 @@ Public Class DiagnosticsForm
 
         Try
             FullPath = FPath & FName 'Create full filename from path and simple filename
-            'TL.LogMessage("FileDetails", FName & " " & FullPath)
             If File.Exists(FullPath) Then
-
+                TL.LogMessage("FileDetails", FullPath)
                 'Try to get assembly version info if present
                 Try
                     Ass = Assembly.ReflectionOnlyLoadFrom(FullPath)
@@ -894,6 +948,7 @@ Public Class DiagnosticsForm
             Next
 
             TL.BlankLine()
+            TL.BlankLine()
         Catch ex As Exception
             TL.LogMessageCrLf("ScanSerial", ex.ToString)
         End Try
@@ -938,6 +993,7 @@ Public Class DiagnosticsForm
                 Next
             Next
             TL.BlankLine()
+            TL.BlankLine()
         Catch ex As Exception
             TL.LogMessageCrLf("RegisteredDevices", "Exception: " & ex.ToString)
         End Try
@@ -950,14 +1006,16 @@ Public Class DiagnosticsForm
         End Try
 
         TL.BlankLine()
-
+        TL.BlankLine()
     End Sub
 
     Sub RecurseProfile(ByVal ASCOMKey As String)
         Dim SubKeys, Values As New Generic.SortedList(Of String, String)
         Dim NextKey, DisplayName, DisplayValue As String
+
+        'List values in this key
         Try
-            TL.LogMessage("RecurseProfile", Space(3 * (If(RecursionLevel < 0, 0, RecursionLevel))) & ASCOMKey)
+            'TL.LogMessage("RecurseProfile", Space(3 * (If(RecursionLevel < 0, 0, RecursionLevel))) & ASCOMKey)
             Values = ASCOMRegistryAccess.EnumProfile(ASCOMKey)
             For Each kvp As KeyValuePair(Of String, String) In Values
                 If String.IsNullOrEmpty(kvp.Key) Then
@@ -976,6 +1034,7 @@ Public Class DiagnosticsForm
             TL.LogMessageCrLf("Profile 1", "Exception: " & ex.ToString)
         End Try
 
+        'Now recurse through all subkeys of this key
         Try
             RecursionLevel += 1 'Increment recursion level
             SubKeys = ASCOMRegistryAccess.EnumKeys(ASCOMKey)
@@ -991,7 +1050,7 @@ Public Class DiagnosticsForm
                 Else
                     DisplayValue = kvp.Value
                 End If
-
+                TL.BlankLine()
                 TL.LogMessage("Profile Key", Space(3 * RecursionLevel) & NextKey & "\" & kvp.Key & " - " & DisplayValue)
                 RecurseProfile(NextKey & "\" & kvp.Key)
             Next
@@ -1001,7 +1060,6 @@ Public Class DiagnosticsForm
         Finally
             RecursionLevel -= 1
         End Try
-
 
     End Sub
 
@@ -1053,6 +1111,7 @@ Public Class DiagnosticsForm
 
         TL.BlankLine()
     End Sub
+
     Sub ScanASCOMDrivers()
         Dim BaseDir As String
         Dim PathShell As New System.Text.StringBuilder(260)
@@ -1103,6 +1162,7 @@ Public Class DiagnosticsForm
             TL.LogMessageCrLf("ScanProgramFiles", "Exception: " & ex.ToString)
         End Try
     End Sub
+
     Sub RecurseASCOMDrivers(ByVal Folder As String)
         Dim Files(), Directories() As String
 
@@ -1111,7 +1171,7 @@ Public Class DiagnosticsForm
             Files = Directory.GetFiles(Folder)
             For Each MyFile As String In Files
                 If MyFile.ToUpper.Contains(".EXE") Or MyFile.ToUpper.Contains(".DLL") Then
-                    TL.LogMessage("Driver", MyFile)
+                    'TL.LogMessage("Driver", MyFile)
                     'FileDetails(Folder & "\", MyFile)
                     FileDetails("", MyFile)
                 End If

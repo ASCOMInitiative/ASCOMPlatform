@@ -617,6 +617,8 @@ else
           MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
         end
         [END REGION]
+        Comment: Tidy up COM registration (add AppID for DCOM etc.)
+        Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT)
       end
     end
   end
