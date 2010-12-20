@@ -107,7 +107,11 @@ namespace ASCOM.Simulator
 		static extern uint GetCurrentThreadId();
 		#endregion
 
-		#region Private Data
+        #region Public Data
+        public static frmMain m_MainForm = null;				// Reference to our main form. Changed to public for access in simulator
+        #endregion
+
+        #region Private Data
 		protected static uint m_uiMainThreadId;					// Stores the main thread's thread id.
 		protected static int m_iObjsInUse;						// Keeps a count on the total number of objects alive.
 		protected static int m_iServerLocks;					// Keeps a lock count on this application.
@@ -117,8 +121,6 @@ namespace ASCOM.Simulator
 		protected static ArrayList m_ClassFactories;			// Served COM object class factories
 		protected static string m_sAppId = "{770ba0e5-fb34-47c8-93df-1ac09118edb8}";	// Our AppId
 		#endregion
-
-		public static frmMain m_MainForm = null;				// Reference to our main form
 
 		// This property returns the main thread's id.
 		public static uint MainThreadId { get { return m_uiMainThreadId; } }
@@ -213,40 +215,40 @@ namespace ASCOM.Simulator
 		//
 		// Load the assemblies that contain the classes that we will serve
 		// via COM. These will be located in the subfolder ServedClasses
-		// below our executable. The code below takes care of the situation
-		// where we're running in the VS.NET IDE, allowing the ServedClasses
-		// folder to be in the solution folder, while we are executing in
-		// the RotatorSimulator\bin\Debug subfolder.
+		// below our executable.
 		//
 		protected static bool LoadComObjectAssemblies()
 		{
 			m_ComObjectAssys = new ArrayList();
 			m_ComObjectTypes = new ArrayList();
 
-			string assyPath = Assembly.GetEntryAssembly().Location;
-			int i = assyPath.LastIndexOf(@"\RotatorServer\bin\");						// Look for us running in IDE
-			if (i == -1) i = assyPath.LastIndexOf('\\');
-			assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\ServedClasses";
+            string assy = Assembly.GetEntryAssembly().Location;
+            string assyPath = Assembly.GetEntryAssembly().Location;
 
-			DirectoryInfo d = new DirectoryInfo(assyPath);
-			foreach (FileInfo fi in d.GetFiles("*.dll"))
-			{
+            //[TPL] The ServedClasses folder is always a subfolder of the executable location.
+            var executableFolder = Path.GetDirectoryName(assyPath);
+            var servedClassesPath = executableFolder;
+
+            DirectoryInfo d = new DirectoryInfo(servedClassesPath);
+            var assemblyFiles = d.GetFiles("*.dll");                        // We're only interested in .dll assemblies
+            foreach (FileInfo fi in assemblyFiles)
+            {
 				string aPath = fi.FullName;
 				string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
-				//
-				// First try to load the assembly and get the types for
+
+                // First try to load the assembly and get the types for
 				// the class and the class facctory. If this doesn't work ????
-				//
 				try
 				{
-					Assembly so = Assembly.LoadFrom(aPath);
+                    Assembly so = Assembly.LoadFrom(aPath); //[TPL] Potential malicious code injection vector, consider using ReflectionOnlyLoad.
+
                     //Added check to see if the dll has the ServedClassNameAttribute
-                    object[] attributes = so.GetCustomAttributes(typeof(ServedClassNameAttribute),false);
+                    var attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
                     if (attributes.Length > 0)
                     {
-					m_ComObjectTypes.Add(so.GetType(fqClassName, true));
-					m_ComObjectAssys.Add(so);
-				}
+					    m_ComObjectTypes.Add(so.GetType(fqClassName, true));
+					    m_ComObjectAssys.Add(so);
+                    }
                 }
 				catch (Exception e)
 				{
@@ -254,51 +256,14 @@ namespace ASCOM.Simulator
 						"Rotator Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 					return false;
 				}
-
 			}
-			return true;
+            return true;
 		}
 		#endregion
 
 		#region COM Registration and Unregistration
-		//
-        // Test if running elevated
-        //
-        private static bool IsAdministrator
-        {
-            get
-            {
-                WindowsIdentity i = WindowsIdentity.GetCurrent();
-                WindowsPrincipal p = new WindowsPrincipal(i);
-                return p.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-        }
 
-        //
-        // Elevate by re-running ourselves with elevation dialog
-        //
-        private static void ElevateSelf(string arg)
-        {
-            ProcessStartInfo si = new ProcessStartInfo();
-            si.Arguments = arg;
-            si.WorkingDirectory = Environment.CurrentDirectory;
-            si.FileName = Application.ExecutablePath;
-            si.Verb = "runas";
-            try { Process p = Process.Start(si); }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                MessageBox.Show("The RotatorSimulator was not " + (arg == "/register" ? "registered" : "unregistered") +
-                    " because you did not allow it.", "RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            }
-            return;
-        }
-
-		//
-		// Do everything to register this for COM. Never use REGASM on
+        // Do everything to register this for COM. Never use REGASM on
 		// this exe assembly! It would create InProcServer32 entries 
 		// which would prevent proper activation!
 		//
@@ -314,14 +279,6 @@ namespace ASCOM.Simulator
 			RegistryKey key2 = null;
 			RegistryKey key3 = null;
 
-            if (!IsAdministrator)
-            {
-                ElevateSelf("/register");
-                return;
-            }
-            //
-            // If reached here, we're running elevated
-            //
 			Assembly assy = Assembly.GetExecutingAssembly();
 			Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
 			string assyTitle = ((AssemblyTitleAttribute)attr).Title;
@@ -365,7 +322,7 @@ namespace ASCOM.Simulator
 			//
 			// For each of the driver assemblies
 			//
-			foreach (Type type in m_ComObjectTypes)
+            foreach (Type type in m_ComObjectTypes)
 			{
 				bool bFail = false;
 				try
@@ -375,7 +332,8 @@ namespace ASCOM.Simulator
 					//
 					string clsid = Marshal.GenerateGuidForType(type).ToString("B");
 					string progid = Marshal.GenerateProgIdForType(type);
-					key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
+
+                    key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
 					key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
 					key.SetValue("AppId", m_sAppId);
 					key2 = key.CreateSubKey("Implemented Categories");
@@ -450,14 +408,6 @@ namespace ASCOM.Simulator
 		//
 		protected static void UnregisterObjects()
 		{
-            if (!IsAdministrator)
-            {
-                ElevateSelf("/unregister");
-                return;
-            }
-
-			//
-			// If reached here, we're running elevated
 			//
 			// Local server's DCOM/AppID information
 			//
@@ -620,7 +570,8 @@ namespace ASCOM.Simulator
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			m_MainForm = new frmMain();
-			if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
+			//if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
+            m_MainForm.Visible = true;
 
 			// Initialize hardware layer
 			RotatorHardware.Initialize();
