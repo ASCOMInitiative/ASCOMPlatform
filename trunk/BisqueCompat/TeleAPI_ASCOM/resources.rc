@@ -27,7 +27,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 5,0,3,0
+ FILEVERSION 5,0,4,0
  PRODUCTVERSION 5,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -46,7 +46,7 @@ BEGIN
             VALUE "Comments", "Compatible with TheSky X and TheSky 6"
             VALUE "CompanyName", "ASCOM Initiative"
             VALUE "FileDescription", "TheSky TeleAPI Plugin for ASCOM Telescopes"
-            VALUE "FileVersion", "5.0.3"
+            VALUE "FileVersion", "5.0.4"
             VALUE "InternalName", "TeleAPI"
             VALUE "OriginalFilename", "TeleAPI.dll"
             VALUE "ProductName", "ASCOM Platform"

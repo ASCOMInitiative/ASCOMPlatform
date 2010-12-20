@@ -62,6 +62,8 @@
 
 #include "StdAfx.h"
 
+#define CROSS_THREAD
+
 #define OUR_REGISTRY_BASE HKEY_LOCAL_MACHINE
 #define OUR_REGISTRY_AREA "Software\\SPACE.com\\TheSky TeleAPI-ASCOM Plugin"
 #define OUR_DRIVER_SEL "ASCOM Driver ID"
@@ -77,9 +79,11 @@ static void set_bool(OLECHAR *name, bool val);
 static void switchThreadIf();
 
 static IDispatch *_p_DrvDisp = NULL;							// [sentinel] Pointer to driver interface
+#ifdef CROSS_THREAD
 static IGlobalInterfaceTable *_p_GIT;							// Pointer to Global Interface Table interface
 static DWORD dwIntfcCookie;										// Driver interface cookie for GIT
 static DWORD dCurrIntfcThreadId;								// ID of thread on which the interface is currently marshalled
+#endif
 static bool bSyncSlewing = false;								// True if scope is doing a sync slew
 
 // -------------
@@ -104,12 +108,14 @@ bool InitDrivers(void)
 				drvFail("Wrong version of OLE", NULL, true);
 			if(FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
 				drvFail("Failed to start OLE", NULL, true);
+#ifdef CROSS_THREAD
 			if(FAILED(CoCreateInstance(CLSID_StdGlobalInterfaceTable,
 						NULL,
 						CLSCTX_INPROC_SERVER,
 						IID_IGlobalInterfaceTable,
 						(void **)&_p_GIT)))
 				drvFail("Failed to connect to Global Interface Table", NULL, true);
+#endif
 			bInitDone = true;
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER)
@@ -199,6 +205,7 @@ short InitScope(void)
 			drvFail(buf, NULL, true);
 		}
 
+#ifdef CROSS_THREAD
 		//
 		// Get the marshalled interface pointer for later possible thread switching
 		//
@@ -208,6 +215,7 @@ short InitScope(void)
 				IID_IDispatch,
 				&dwIntfcCookie)))
 			drvFail("Failed to register driver interface in GIT", NULL, true);
+#endif
 		//
 		// We now need to connect the scope. To do this, we set the 
 		// Connected property to TRUE.
@@ -358,7 +366,9 @@ void TermScope(bool fatal)
 
 	if(_p_DrvDisp != NULL)										// Just in case! (see termPlugin())
 	{
+#ifdef CROSS_THREAD
 		switchThreadIf();
+#endif
 
 		//
 		// We now need to unconnect the scope. To do this, we set the 
@@ -393,7 +403,9 @@ void TermScope(bool fatal)
 			&excep, NULL)))
 			drvFail("the Connected = False failed internally.", &excep, !fatal);
 
+#ifdef CROSS_THREAD
 		_p_GIT->RevokeInterfaceFromGlobal(dwIntfcCookie);		// We're done with this driver/object
+#endif
 
 		_p_DrvDisp->Release();									// Release instance of the driver
 		_p_DrvDisp = NULL;										// So won't happen again in PROCESS_DETACH
@@ -539,7 +551,9 @@ char *GetName(void)
 	EXCEPINFO excep;
 	VARIANT vRes;
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// Get our dispatch ID
@@ -595,7 +609,9 @@ bool IsSlewing(void)
 	if(!_bScopeCanSlewAsync)									// If can't do async slew, or never slewed
 		return(bSyncSlewing);									// Use our sync slewing flag (never slewed = false)
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// We can do async slews, assume driver supports Slewing.
@@ -669,7 +685,9 @@ short SlewScope(double dRA, double dDec)
 	__try
 	{
 
+#ifdef CROSS_THREAD
 		switchThreadIf();
+#endif
 
 		//
 		// Get our dispatch ID
@@ -737,7 +755,9 @@ void AbortSlew(void)
 	EXCEPINFO excep;
 	VARIANT vRes;
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// Get our dispatch ID
@@ -797,7 +817,9 @@ short SyncScope(double dRA, double dDec)
 
 	__try
 		{
+#ifdef CROSS_THREAD
 			switchThreadIf();
+#endif
 
 			//
 			// Get our dispatch ID
@@ -859,7 +881,9 @@ void UnparkScope(void)
 	EXCEPINFO excep;
 	VARIANT vRes;
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// Get our dispatch ID
@@ -1079,7 +1103,9 @@ static int get_integer(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// Get our dispatch ID
@@ -1149,7 +1175,9 @@ static double get_double(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// Get our dispatch ID
@@ -1221,7 +1249,9 @@ static void set_double(OLECHAR *name, double val)
 	char *cp;
 	char buf[256];
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// Get our dispatch ID
@@ -1292,7 +1322,9 @@ static bool get_bool(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// Get our dispatch ID
@@ -1366,7 +1398,9 @@ static void set_bool(OLECHAR *name, bool val)
 	char buf[256];
 	HRESULT hr;
 
+#ifdef CROSS_THREAD
 	switchThreadIf();
+#endif
 
 	//
 	// Get our dispatch ID
@@ -1415,6 +1449,7 @@ static void set_bool(OLECHAR *name, bool val)
 
 }
 
+#ifdef CROSS_THREAD
 //
 // Gets the IDispatch interface on a new thread from a previously obtained
 // marshal stream, then gets a new interface marshaling stream on the new
@@ -1437,3 +1472,4 @@ static void switchThreadIf()
 		_p_DrvDisp = pTemp;
 	}
 }
+#endif
