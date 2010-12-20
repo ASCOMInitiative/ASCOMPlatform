@@ -20,6 +20,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
