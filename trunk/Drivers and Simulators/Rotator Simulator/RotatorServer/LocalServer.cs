@@ -225,7 +225,6 @@ namespace ASCOM.Simulator
             string assy = Assembly.GetEntryAssembly().Location;
             string assyPath = Assembly.GetEntryAssembly().Location;
 
-            //[TPL] The ServedClasses folder is always a subfolder of the executable location.
             var executableFolder = Path.GetDirectoryName(assyPath);
             var servedClassesPath = executableFolder;
 
@@ -233,37 +232,80 @@ namespace ASCOM.Simulator
             var assemblyFiles = d.GetFiles("*.dll");                        // We're only interested in .dll assemblies
             foreach (FileInfo fi in assemblyFiles)
             {
-				string aPath = fi.FullName;
-				string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
+                string aPath = fi.FullName;
+                string fqClassName = fi.Name.Replace(fi.Extension, ""); // COM class FQN
 
                 // First try to load the assembly and get the types for
-				// the class and the class facctory. If this doesn't work ????
-				try
-				{
-                    Assembly so = Assembly.LoadFrom(aPath); //[TPL] Potential malicious code injection vector, consider using ReflectionOnlyLoad.
+                // the class and the class facctory. If this doesn't work ????
+                try
+                {
+                    Assembly so = Assembly.LoadFrom(aPath);
+                        //[TPL] Potential malicious code injection vector, consider using ReflectionOnlyLoad.
 
-                    //Added check to see if the dll has the ServedClassNameAttribute
-                    var attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
+                    // Check to see if the dll has the ServedClassNameAttribute
+                    var attributes = so.GetCustomAttributes(typeof (ASCOM.ServedClassNameAttribute), false);
                     if (attributes.Length > 0)
                     {
-					    m_ComObjectTypes.Add(so.GetType(fqClassName, true));
-					    m_ComObjectAssys.Add(so);
+                        m_ComObjectTypes.Add(so.GetType(fqClassName, true));
+                        m_ComObjectAssys.Add(so);
                     }
                 }
-				catch (Exception e)
-				{
-					MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
-						"Rotator Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-					return false;
-				}
-			}
-            return true;
+                catch (BadImageFormatException)
+                {
+                    // Probably an attempt to load a Win32 DLL (i.e. not a .net assembly)
+                    // Just swallow the exception and continue to the next item.
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
+                                    "Rotator Simulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return false;
+                }
+            }
+		    return true;
 		}
 		#endregion
 
 		#region COM Registration and Unregistration
+		//
+        // Test if running elevated
+        //
+        private static bool IsAdministrator
+        {
+            get
+            {
+                WindowsIdentity i = WindowsIdentity.GetCurrent();
+                WindowsPrincipal p = new WindowsPrincipal(i);
+                return p.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
 
-        // Do everything to register this for COM. Never use REGASM on
+        //
+        // Elevate by re-running ourselves with elevation dialog
+        //
+        private static void ElevateSelf(string arg)
+        {
+            ProcessStartInfo si = new ProcessStartInfo();
+            si.Arguments = arg;
+            si.WorkingDirectory = Environment.CurrentDirectory;
+            si.FileName = Application.ExecutablePath;
+            si.Verb = "runas";
+            try { Process p = Process.Start(si); }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("The RotatorSimulator was not " + (arg == "/register" ? "registered" : "unregistered") +
+                    " because you did not allow it.", "RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            return;
+        }
+
+		//
+		// Do everything to register this for COM. Never use REGASM on
 		// this exe assembly! It would create InProcServer32 entries 
 		// which would prevent proper activation!
 		//
@@ -279,6 +321,14 @@ namespace ASCOM.Simulator
 			RegistryKey key2 = null;
 			RegistryKey key3 = null;
 
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/register");
+                return;
+            }
+            //
+            // If reached here, we're running elevated
+            //
 			Assembly assy = Assembly.GetExecutingAssembly();
 			Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
 			string assyTitle = ((AssemblyTitleAttribute)attr).Title;
@@ -332,8 +382,7 @@ namespace ASCOM.Simulator
 					//
 					string clsid = Marshal.GenerateGuidForType(type).ToString("B");
 					string progid = Marshal.GenerateProgIdForType(type);
-
-                    key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
+					key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
 					key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
 					key.SetValue("AppId", m_sAppId);
 					key2 = key.CreateSubKey("Implemented Categories");
@@ -408,6 +457,14 @@ namespace ASCOM.Simulator
 		//
 		protected static void UnregisterObjects()
 		{
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/unregister");
+                return;
+            }
+
+			//
+			// If reached here, we're running elevated
 			//
 			// Local server's DCOM/AppID information
 			//
