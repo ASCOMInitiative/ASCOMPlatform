@@ -229,7 +229,7 @@ namespace ASCOM.Simulator
 
             //[TPL] The ServedClasses folder is always a subfolder of the executable location.
             var executableFolder = Path.GetDirectoryName(assyPath);
-            var servedClassesPath = executableFolder + "\\ServedClasses";
+            var servedClassesPath = executableFolder;
 
             TL.LogMessage("ServedClassesPath", servedClassesPath);
 
@@ -256,6 +256,12 @@ namespace ASCOM.Simulator
                         m_ComObjectAssys.Add(so);
                         TL.LogMessage("  AddedOK", so.FullName.ToString());
                     }
+                }
+                catch (BadImageFormatException)
+                {
+                    // Probably an attempt to load a Win32 DLL (i.e. not a .net assembly)
+                    // Just swallow the exception and continue to the next item.
+                    continue;
                 }
                 catch (Exception e)
                 {
