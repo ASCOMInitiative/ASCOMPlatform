@@ -52,6 +52,8 @@ wizard.dfm.miaf
 $
 ASCOM.Exceptions.dll
 ASCOM.Exceptions.pdb
+FinaliseInstall.exe
+FinaliseInstall.pdb
 icon.ico
 Index.htm
 license.rtf
@@ -731,7 +733,7 @@ Ascom Platform 6
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{B750B42B-C860-499C-BE61-FEC0F5360CFB}
+{8FD84852-A1B6-4DA1-81A9-E28A7CCE7F49}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -745,7 +747,7 @@ FALSE
 
 http://timestamp.verisign.com/scripts/timstamp.dll
 http://ascom-standards.org/
-UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,"LANGUAGE=English","TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00
+UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,LANGUAGE=English,"TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00
 $
 $
 

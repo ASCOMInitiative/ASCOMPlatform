@@ -318,17 +318,15 @@ else
     Create Folder $COMMONFILES$\ASCOM\Camera
     Create Folder $COMMONFILES$\ASCOM\Dome
     Create Folder $COMMONFILES$\ASCOM\FilterWheel
-    Create Folder $COMMONFILES$\ASCOM\FilterWheel\ServedClasses
     Create Folder $COMMONFILES$\ASCOM\Focuser
     Create Folder $COMMONFILES$\ASCOM\Interface
     Create Folder $COMMONFILES$\ASCOM\Platform
     Create Folder $COMMONFILES$\ASCOM\Platform\v5.5
+    Create Folder $COMMONFILES$\ASCOM\Platform\v6
     Create Folder $COMMONFILES$\ASCOM\Rotator
-    Create Folder $COMMONFILES$\ASCOM\Rotator\ServedClasses
     Create Folder $COMMONFILES$\ASCOM\SafetyMonitor
     Create Folder $COMMONFILES$\ASCOM\Switch
     Create Folder $COMMONFILES$\ASCOM\Telescope
-    Create Folder $COMMONFILES$\ASCOM\Telescope\ServedClasses
     Create Folder $COMMONFILES$\ASCOM\Uninstall
     Create Folder $WINDIR$\Symbols\dll
     [END REGION]
@@ -465,10 +463,10 @@ else
     Install Assembly c:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera
     Install Files c:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera
     Comment: FilterWheel simulator
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ServedClasses\
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ServedClasses
+    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses\
+    Install Files c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
     Comment: Focuser simulator
     Install Assembly c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser
@@ -479,15 +477,15 @@ else
     Install Assembly c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch
     Comment: Telescope simulator
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ServedClasses
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ServedClasses
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Comment: Rotator simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ServedClasses
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ServedClasses
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     [END REGION]
     [DEFINE REGION: Create shortcuts]
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Docs\Compatible Software (web).url
@@ -599,9 +597,9 @@ else
         Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
         Comment: Register these LocalServer drivers using the -register option
-        Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator.exe -register (WAIT)
-        Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe -register (WAIT)
-        Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator.exe -register (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT)
+        Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT)
         Comment: Extra registration of 64bit components if on 64bit system
         if Variable PROCESSOR Equals AMD64
           Set Variable REGASM64 to $WINDIR$\Microsoft.NET\Framework64\v2.0.50727\regasm.exe
@@ -617,6 +615,8 @@ else
           MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
         end
         [END REGION]
+        Comment: Tidy up COM registration (add AppID for DCOM etc.)
+        Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT)
       end
     end
   end

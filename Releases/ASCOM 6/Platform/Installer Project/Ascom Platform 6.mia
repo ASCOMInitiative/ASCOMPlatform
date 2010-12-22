@@ -329,8 +329,6 @@ Create Folder
 Create Folder
 Create Folder
 Create Folder
-Create Folder
-Create Folder
 Code Folding Region
 Code Folding Region
 Comment
@@ -484,10 +482,10 @@ Install Files
 Install Assembly
 Install Files
 Comment
-Install Files
 Install Assembly
 Install Files
 Install Assembly
+Install Files
 Code Folding Region
 Code Folding Region
 Create Shortcut
@@ -972,17 +970,15 @@ $
 {433F6390-C558-42B3-9E76-1F4B695D604A}
 {058B562C-7588-413F-B83F-AC17C9C6AF1E}
 {3F2E5940-C3C4-4DAA-BBEF-7BB5B6A4E53F}
-{77907169-EF89-411B-A477-7BF6B7AD20E7}
 {3C459080-3FE9-48CD-A8A5-C31BB98309EC}
 {026C1CFB-E120-4FA2-9FDE-8836C020C329}
 {A7DCA34C-913A-45EC-B800-AA51A0742E09}
 {434F42D5-DDA2-4842-B516-B8420D477985}
+{3D769586-025A-4A7B-BD51-DC51B0EE61D2}
 {88CFE10E-AAD8-4B42-A379-29544A60D2BD}
-{CCA7F6D4-1991-4D1A-BD6B-675D2CA43E01}
 {96079F81-3CB6-4B0B-9807-6DE2F4B8BBD9}
 {9D5BA99E-2945-40C1-A029-77BC80419EE1}
 {F3318935-5EDC-4061-AB01-0EAE3A3673E1}
-{F954EA19-6D44-4955-8A82-E5ED15FEA014}
 {C7AC4064-2C20-4F30-8599-DA9077E0CE42}
 {A30B2C0E-AD9A-4689-85E7-E787881411B2}
 {D38A1F69-03B8-4B59-BF90-99EE576B073F}
@@ -1138,10 +1134,10 @@ $
 {6DE5DE2B-5099-42B6-B91B-1DFE62D7476E}
 {FBA0F8DC-DC88-4E19-AC84-96B5A2DC6805}
 {02EF642D-4EBC-4637-A86F-C7B39C7D0B9B}
+{09939645-47E0-486A-A76C-C2477E79BC3C}
+{33A2E992-50EE-4975-AA59-DF66F28D0AF5}
+{767219C8-DC07-487F-AD6F-55E5DF7A4A5E}
 {9BA6D2A3-8D73-477F-95DD-24AEAEDF765C}
-{51BBD1C7-2815-4A75-9C2E-D67C8040257E}
-{8D642395-AA28-456A-B478-1EBC876C45CE}
-{BE8F2201-B443-4456-95AE-3993FBCBE67E}
 {0F8F7E53-0359-4437-96D6-7BB5CA573BA9}
 {4CCB6932-09C4-401F-8801-EB337DE56855}
 {6389496C-2EA4-4C08-AEDC-9553ADA6A762}
@@ -2001,12 +1997,8 @@ $WINDIR$\Symbols\dll
 $COMMONFILES$\ASCOM\Platform
 {44CB55D6-C593-4F88-9392-30365F1C142B}
 $COMMONFILES$\ASCOM
-{F954EA19-6D44-4955-8A82-E5ED15FEA014}
-$COMMONFILES$\ASCOM\Telescope\ServedClasses
 {3C459080-3FE9-48CD-A8A5-C31BB98309EC}
 $COMMONFILES$\ASCOM\Focuser
-{77907169-EF89-411B-A477-7BF6B7AD20E7}
-$COMMONFILES$\ASCOM\FilterWheel\ServedClasses
 {433F6390-C558-42B3-9E76-1F4B695D604A}
 $COMMONFILES$\ASCOM\Camera
 {3F2E5940-C3C4-4DAA-BBEF-7BB5B6A4E53F}
@@ -2021,8 +2013,8 @@ $COMMONFILES$\ASCOM\Uninstall
 $COMMONFILES$\ASCOM\Dome
 {88CFE10E-AAD8-4B42-A379-29544A60D2BD}
 $COMMONFILES$\ASCOM\Rotator
-{CCA7F6D4-1991-4D1A-BD6B-675D2CA43E01}
-$COMMONFILES$\ASCOM\Rotator\ServedClasses
+{3D769586-025A-4A7B-BD51-DC51B0EE61D2}
+$COMMONFILES$\ASCOM\Platform\v6
 {C310BE10-8986-434D-A45B-138E9ABB413E}
 progress
 SUCCESS
@@ -2129,9 +2121,9 @@ FALSE
 FALSE
 FALSE
 {FBA0F8DC-DC88-4E19-AC84-96B5A2DC6805}
-C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.Simulator.Telescope.pdb
+C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb
 FALSE|
-$COMMONFILES$\ASCOM\Telescope\ServedClasses
+$COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
 FALSE
 FALSE
@@ -2157,7 +2149,7 @@ FALSE
 {041454B0-73FE-4B1F-AEE6-096A0553BEC1}
 C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb
 FALSE|
-$COMMONFILES$\ASCOM\Telescope
+$COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 FALSE
 FALSE
 FALSE
@@ -2170,7 +2162,7 @@ FALSE
 {CB314A4C-BA01-4C50-AAE8-3FB9D95DE7A9}
 c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.pdb
 FALSE|
-$COMMONFILES$\ASCOM\FilterWheel
+$COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 FALSE
 FALSE
 FALSE
@@ -2183,7 +2175,7 @@ FALSE
 {18C930EE-441F-49CA-BDE8-B6846CF73D3E}
 c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb
 FALSE|
-$COMMONFILES$\ASCOM\FilterWheel\ServedClasses
+$COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
 FALSE
 FALSE
 FALSE
@@ -3210,20 +3202,7 @@ FALSE
 {9BA6D2A3-8D73-477F-95DD-24AEAEDF765C}
 C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.pdb
 FALSE|
-$COMMONFILES$\ASCOM\Rotator\ServedClasses
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{8D642395-AA28-456A-B478-1EBC876C45CE}
-C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb
-FALSE|
-$COMMONFILES$\ASCOM\Rotator
+$COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 FALSE
 FALSE
 FALSE
@@ -3311,6 +3290,19 @@ FALSE
 FALSE
 FALSE
 FALSE
+{33A2E992-50EE-4975-AA59-DF66F28D0AF5}
+C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb
+FALSE|
+$COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {0A038DAF-02DA-4B26-BF0D-0288E18C961A}
 $SUPPORTDIR$\UninstallAscom.exe
 TRUE
@@ -3318,13 +3310,13 @@ TRUE
 TRUE
 
 {4F86B8E6-F14F-4061-A055-8D37DFCD8C47}
-$COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe
+$COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
 TRUE
 -register
 TRUE
 
 {B71A4B1B-A04A-41AB-86C9-A7C631059906}
-$COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator.exe
+$COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
 TRUE
 -register
 TRUE
@@ -3492,7 +3484,7 @@ TRUE
 TRUE
 RC3
 {20D9D83A-4609-4752-A77D-D50D578AB7D6}
-$COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator.exe
+$COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
 TRUE
 -register
 TRUE
@@ -3523,7 +3515,7 @@ TRUE
 RC6
 {0EF5300E-BC89-48A1-8A5C-A3A0D27B7296}
 $SUPPORTDIR$\FinaliseInstall.exe
-FALSE
+TRUE
 
 TRUE
 
@@ -4087,7 +4079,7 @@ $COMMONFILES$\ASCOM\Focuser
 {AC2018F1-0D8C-40B3-BAF2-23B9CB255443}
 c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe
 FALSE
-$COMMONFILES$\ASCOM\FilterWheel
+$COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
 {0074A899-4886-4160-A67F-CE7D7413F179}
 c:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll
 FALSE
@@ -4095,11 +4087,11 @@ $COMMONFILES$\ASCOM\Camera
 {E373DC68-7134-4654-B596-E2073A779F1A}
 C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe
 FALSE
-$COMMONFILES$\ASCOM\Telescope
+$COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 {6DE5DE2B-5099-42B6-B91B-1DFE62D7476E}
-C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulatorServedClasses\ASCOM.Simulator.Telescope.dll
+C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll
 FALSE
-$COMMONFILES$\ASCOM\Telescope\ServedClasses
+$COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
 {C5A8CB1B-6320-4DF6-B44A-F8FB84FF6C65}
 C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll
 TRUE
@@ -4168,14 +4160,6 @@ TRUE
 C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll
 TRUE
 
-{BE8F2201-B443-4456-95AE-3993FBCBE67E}
-C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe
-FALSE
-$COMMONFILES$\ASCOM\Rotator
-{51BBD1C7-2815-4A75-9C2E-D67C8040257E}
-C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll
-FALSE
-$COMMONFILES$\ASCOM\Rotator\ServedClasses
 {B56A68F7-B076-4ADE-9F09-D5567978C3EB}
 c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
 TRUE
@@ -4191,7 +4175,15 @@ TRUE
 {F2BF3980-B35C-4450-8DC4-9CF09966D0C4}
 c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll
 FALSE
-$COMMONFILES$\ASCOM\FilterWheel\ServedClasses\
+$COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses\
+{09939645-47E0-486A-A76C-C2477E79BC3C}
+C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe
+FALSE
+$COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+{767219C8-DC07-487F-AD6F-55E5DF7A4A5E}
+C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll
+FALSE
+$COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
 {D3AC286E-D3FE-485E-9DF9-3EEC7899E859}
 SUCCESS
 {0849039C-A9FA-4F0D-8AD5-A0DF9EBA3744}
@@ -4778,8 +4770,6 @@ C
 
 
 
-
-
 C
 
 
@@ -5085,8 +5075,6 @@ C
 
 
 $
-
-
 
 
 
