@@ -28,7 +28,17 @@ Public Class ConnectForm
 
     Private Sub DevicetypeChangedhandler()
         CurrentDeviceType = cmbDeviceType.SelectedItem.ToString
-        If CurrentDeviceType = "Telescope" Then 'Enable or disable the run script button as appropriate
+        CurrentDevice = ""
+        txtDevice.Text = ""
+        SetScriptButton()
+        btnConnect.Enabled = False
+        btnProperties.Enabled = False
+        btnScript.Enabled = False
+        btnGetProfile.Enabled = False
+    End Sub
+
+    Sub SetScriptButton()
+        If (CurrentDeviceType = "Telescope") And (CurrentDevice <> "") Then 'Enable or disable the run script button as appropriate
             btnScript.Enabled = True
         Else
             btnScript.Enabled = False
@@ -46,63 +56,71 @@ Public Class ConnectForm
 
         If CurrentDevice <> "" Then
             btnProperties.Enabled = True
+            btnConnect.Enabled = True
+            btnGetProfile.Enabled = True
         Else
             btnProperties.Enabled = False
+            btnConnect.Enabled = False
+            btnGetProfile.Enabled = False
         End If
 
         txtDevice.Text = CurrentDevice
-
+        SetScriptButton()
         Chooser.Dispose()
 
     End Sub
 
     Private Sub btnConnect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConnect.Click
+        If CurrentDevice <> "" Then
+            If Connected Then ' Disconnect
+                Try
+                    txtStatus.Text = "Disconnecting..."
+                    Application.DoEvents()
+                    Select Case CurrentDeviceType
+                        Case "Focuser"
+                            Device.Link = False
+                        Case Else
+                            Device.Connected = False
+                    End Select
+                    Connected = False
+                    txtStatus.Text = "Disconnected OK"
+                    Try : Marshal.ReleaseComObject(Device) : Catch : End Try
+                    Device = Nothing
+                    btnConnect.Text = "Connect"
+                    btnChoose.Enabled = True
+                    If CurrentDevice <> "" Then btnProperties.Enabled = True
+                    SetScriptButton() 'Enable or disable script button according todevice type
+                    cmbDeviceType.Enabled = True
+                Catch ex As Exception
+                    txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
+                End Try
 
-        If Connected Then ' Disconnect
-            Try
-                txtStatus.Text = "Disconnecting..."
-                Application.DoEvents()
-                Select Case CurrentDeviceType
-                    Case "Focuser"
-                        Device.Link = False
-                    Case Else
-                        Device.Connected = False
-                End Select
-                Connected = False
-                txtStatus.Text = "Disconnected OK"
-                Try : Marshal.ReleaseComObject(Device) : Catch : End Try
-                Device = Nothing
-                btnConnect.Text = "Connect"
-                btnChoose.Enabled = True
-                If CurrentDevice <> "" Then btnProperties.Enabled = True
-                DevicetypeChangedhandler() 'Enable or disable script button according todevice type
-            Catch ex As Exception
-                txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
-            End Try
+            Else 'Disconnected so connect
+                Try
+                    txtStatus.Text = "Connecting..."
+                    Application.DoEvents()
+                    Device = CreateObject(CurrentDevice)
+                    Select Case CurrentDeviceType
+                        Case "Focuser"
+                            Device.Link = True
+                        Case Else
+                            Device.Connected = True
+                    End Select
+                    Connected = True
+                    txtStatus.Text = "Connected OK"
+                    btnConnect.Text = "Disconnect"
+                    btnChoose.Enabled = False
+                    btnProperties.Enabled = False
+                    btnScript.Enabled = False
+                    cmbDeviceType.Enabled = False
+                Catch ex As Exception
+                    txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
+                End Try
 
-        Else 'Disconnected so connect
-            Try
-                txtStatus.Text = "Connecting..."
-                Application.DoEvents()
-                Device = CreateObject(CurrentDevice)
-                Select Case CurrentDeviceType
-                    Case "Focuser"
-                        Device.Link = True
-                    Case Else
-                        Device.Connected = True
-                End Select
-                Connected = True
-                txtStatus.Text = "Connected OK"
-                btnConnect.Text = "Disconnect"
-                btnChoose.Enabled = False
-                btnProperties.Enabled = False
-                btnScript.Enabled = False
-            Catch ex As Exception
-                txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
-            End Try
-
+            End If
+        Else
+            txtStatus.Text = "Cannot connect, no device has been set"
         End If
-
     End Sub
 
     Private Sub btnProperties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnProperties.Click
