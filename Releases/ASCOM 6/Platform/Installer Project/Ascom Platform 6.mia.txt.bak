@@ -244,15 +244,26 @@ Display Dialog: progress, use as progress dialog (non-modal)
 Comment: Modify Target System
 [DEFINE REGION: Perform Uninstallation]
 if Variable REMOVE Equals TRUE
-  Comment: Uninstall product
-  Comment: TO-DO: Insert any additional uninstall commands here
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Utilities, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$ $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
+  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.DriverAccess, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Astrometry, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+  end
+  Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
   Unregister assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll
   Unregister assembly $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe
   Unregister assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll
   Unregister assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll
   Unregister assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll
-  Unregister assembly ASCOM.Utilities, Version=5.5.2.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Unregister assembly ASCOM.Astrometry, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Attributes, Version=6.0.3954.33372, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.DriverAccess, Version=1.0.5.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -272,7 +283,6 @@ if Variable REMOVE Equals TRUE
   Unregister assembly ASCOM.Controls, Version=6.0.3964.30488, Culture=neutral, PublicKeyToken=565de7938946fba7
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u $COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb (WAIT)
   Unregister assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Unregister assembly 
   Apply Uninstall (get result into variable SUCCESS)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
@@ -313,22 +323,22 @@ else
     Apply Advertised (get result into variable SUCCESS)
   else
     [DEFINE REGION: Create directory structure]
-    Create Folder $TARGETDIR$\Docs
-    Create Folder $COMMONFILES$\ASCOM
-    Create Folder $COMMONFILES$\ASCOM\Camera
-    Create Folder $COMMONFILES$\ASCOM\Dome
-    Create Folder $COMMONFILES$\ASCOM\FilterWheel
-    Create Folder $COMMONFILES$\ASCOM\Focuser
-    Create Folder $COMMONFILES$\ASCOM\Interface
-    Create Folder $COMMONFILES$\ASCOM\Platform
-    Create Folder $COMMONFILES$\ASCOM\Platform\v5.5
-    Create Folder $COMMONFILES$\ASCOM\Platform\v6
-    Create Folder $COMMONFILES$\ASCOM\Rotator
-    Create Folder $COMMONFILES$\ASCOM\SafetyMonitor
-    Create Folder $COMMONFILES$\ASCOM\Switch
-    Create Folder $COMMONFILES$\ASCOM\Telescope
-    Create Folder $COMMONFILES$\ASCOM\Uninstall
-    Create Folder $WINDIR$\Symbols\dll
+    Comment: Create Folder $TARGETDIR$\Docs
+    Comment: Create Folder $COMMONFILES$\ASCOM
+    Comment: Create Folder $COMMONFILES$\ASCOM\Camera
+    Comment: Create Folder $COMMONFILES$\ASCOM\Dome
+    Comment: Create Folder $COMMONFILES$\ASCOM\FilterWheel
+    Comment: Create Folder $COMMONFILES$\ASCOM\Focuser
+    Comment: Create Folder $COMMONFILES$\ASCOM\Interface
+    Comment: Create Folder $COMMONFILES$\ASCOM\Platform
+    Comment: Create Folder $COMMONFILES$\ASCOM\Platform\v5.5
+    Comment: Create Folder $COMMONFILES$\ASCOM\Platform\v6
+    Comment: Create Folder $COMMONFILES$\ASCOM\Rotator
+    Comment: Create Folder $COMMONFILES$\ASCOM\SafetyMonitor
+    Comment: Create Folder $COMMONFILES$\ASCOM\Switch
+    Comment: Create Folder $COMMONFILES$\ASCOM\Telescope
+    Comment: Create Folder $COMMONFILES$\ASCOM\Uninstall
+    Comment: Create Folder $WINDIR$\Symbols\dll
     [END REGION]
     [DEFINE REGION: Platform 5 files]
     Comment: Type libraries
@@ -460,32 +470,32 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Tools
     Comment: Platform 6 Simulators
     Comment: Camera simulator
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera
     Comment: FilterWheel simulator
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\bin\Release\ServedClasses\ASCOM.FilterWheelSim.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses\
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
     Comment: Focuser simulator
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser
     Comment: SafetyMonitor simulator
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll to $COMMONFILES$\ASCOM\SafetyMonitor
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll to $COMMONFILES$\ASCOM\SafetyMonitor
     Install Files c:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.pdb to $COMMONFILES$\ASCOM\SafetyMonitor
     Comment: Switch simulator
-    Install Assembly c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch
     Comment: Telescope simulator
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Comment: Rotator simulator
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
-    Install Assembly C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorDriver\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     [END REGION]
     [DEFINE REGION: Create shortcuts]
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Docs\Compatible Software (web).url
@@ -629,6 +639,7 @@ end
 [DEFINE REGION: Finish Setup]
 Comment: End of Installation
 Hide Dialog
+Set Variable RUNAPP to FALSE
 Display Dialog: finish, wait for dialog to return (modal)
 if Variable SILENT Equals FALSE
   if Variable REBOOTCOMPUTER Equals TRUE
