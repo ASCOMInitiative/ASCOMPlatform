@@ -438,10 +438,14 @@ Friend Class RegistryAccess
 
         ValueNames = SKey.GetValueNames
 
-        For Each ValueName As String In ValueNames
-            Value = SKey.GetValue(ValueName).ToString
-            ProfileContents.SetValue(ValueName, Value, SubKeyOffset)
-        Next
+        If ValueNames.Count = 0 Then ' No values found so add a single blank value in order to ensure that an empty key is recorded
+            ProfileContents.SetValue("", "", SubKeyOffset)
+        Else ' Some values exist so add them to the collection
+            For Each ValueName As String In ValueNames
+                Value = SKey.GetValue(ValueName).ToString
+                ProfileContents.SetValue(ValueName, Value, SubKeyOffset)
+            Next
+        End If
 
         SubKeyNames = SKey.GetSubKeyNames
 
