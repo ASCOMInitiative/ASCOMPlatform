@@ -142,6 +142,7 @@ Public Class DiagnosticsForm
     Private NMatches, NNonMatches, NExceptions As Integer
     Private TL As TraceLogger
     Private ASCOMRegistryAccess As ASCOM.Utilities.RegistryAccess
+    Private WithEvents ASCOMTimer As ASCOM.Utilities.Timer
     Private RecursionLevel As Integer
     Private g_CountWarning, g_CountIssue, g_CountError As Integer
     Private sw, s1, s2 As Stopwatch
@@ -266,6 +267,7 @@ Public Class DiagnosticsForm
                 'Functional tests
                 UtilTests()
                 ProfileTests()
+                TimerTests()
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     TL.LogMessage("Diagnostics", "Completed function testing run. Congratualtions all " & NMatches & " tests passed!")
@@ -293,6 +295,38 @@ Public Class DiagnosticsForm
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
         End Try
+    End Sub
+
+    Private Sub TimerTests()
+        Dim start As Date
+        TL.LogMessage("TimerTests", "Started")
+        Status("Timer tests")
+        Try
+            ASCOMTimer = New ASCOM.Utilities.Timer
+            ASCOMTimer.Interval = 3000
+            ASCOMTimer.Enabled = True
+            start = Now
+            Do
+                Thread.Sleep(100)
+                Application.DoEvents()
+                TL.LogMessage("TimerTests", "Seconds - " & Now.Subtract(start).TotalSeconds)
+                Action("Seconds - " & Now.Subtract(start).Seconds)
+                Application.DoEvents()
+            Loop Until Now.Subtract(start).TotalSeconds > 10.0
+
+        Catch ex As Exception
+            TL.LogMessage("TimerTests Exception", ex.ToString)
+        Finally
+            ASCOMTimer.Enabled = False
+        End Try
+
+        TL.LogMessage("TimerTests", "Finished" & vbCrLf)
+        TL.BlankLine()
+    End Sub
+
+    Private Sub cnt_TickNet() Handles ASCOMTimer.Tick
+        TL.LogMessage("TimerTests", "Fired Net")
+        Application.DoEvents()
     End Sub
 
     Sub ProfileTests()
