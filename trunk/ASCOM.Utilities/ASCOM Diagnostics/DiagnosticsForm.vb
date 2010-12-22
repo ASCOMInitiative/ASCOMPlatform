@@ -17,11 +17,121 @@ Imports System.Reflection
 Imports System.Environment
 Imports System.Security.AccessControl
 Imports System.Security.Principal
+Imports System.Threading
 
 Public Class DiagnosticsForm
 
     Private Const COMPONENT_CATEGORIES = "Component Categories"
     Private Const ASCOM_ROOT_KEY As String = " (ASCOM Root Key)"
+    Const TestTelescopeDescription As String = "This is a test telescope"
+    Const RevisedTestTelescopeDescription As String = "Updated description for test telescope!!!"
+    Const NewTestTelescopeDescription As String = "New description for test telescope!!!"
+#Region "XML  test String"
+    Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf & _
+                                    "<ASCOMProfile>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName />" & vbCrLf & _
+                                    "    <DefaultValue>" & TestTelescopeDescription & "</DefaultValue>" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Results 1</Name>" & vbCrLf & _
+                                    "        <Data />" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Root Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in Root key</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Test Name Default</Name>" & vbCrLf & _
+                                    "        <Data>123456</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values />" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1\SubKey2</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue>Null Key in SubKey2</DefaultValue>" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2 Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2 Test Name1</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2a Test Name2a</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2a</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a\SubKey2b</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2b Test Name2b</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2b</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2c</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2c Test Name2c</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2c</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey3</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey3 Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value SubKey 3</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey4</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey4 Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value SubKey 4</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKeyDefault</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Test Name Default</Name>" & vbCrLf & _
+                                    "        <Data>123456</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "</ASCOMProfile>"
+#End Region
     Private Const Indent As Integer = 3 ' Display indent for recursive loop output
 
     Private Const CSIDL_PROGRAM_FILES As Integer = 38 '0x0026
@@ -29,9 +139,15 @@ Public Class DiagnosticsForm
     Private Const CSIDL_WINDOWS As Integer = 36 ' 0x0024,
     Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
 
-    Dim TL As TraceLogger
-    Dim ASCOMRegistryAccess As ASCOM.Utilities.RegistryAccess
-    Dim RecursionLevel As Integer
+    Private NMatches, NNonMatches, NExceptions As Integer
+    Private TL As TraceLogger
+    Private ASCOMRegistryAccess As ASCOM.Utilities.RegistryAccess
+    Private RecursionLevel As Integer
+    Private g_CountWarning, g_CountIssue, g_CountError As Integer
+    Private sw, s1, s2 As Stopwatch
+    Private DrvHlpUtil As Object
+    Private AscomUtil As ASCOM.Utilities.Util
+    Private g_Util2 As Object
 
     Private LastLogFile As String ' Name of last diagnostics log file
 
@@ -55,6 +171,7 @@ Public Class DiagnosticsForm
         System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
 
         btnLastLog.Enabled = False 'Disable last log button
+        sw = New Stopwatch
         Me.BringToFront()
     End Sub
 
@@ -93,6 +210,7 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     TL.LogMessage("Diagnostics", "ERROR - Unexpected exception creating New RegistryAccess object, later steps will show errors")
                     TL.LogMessageCrLf("Diagnostics", ex.ToString)
+                    NExceptions += 1
                 End Try
 
                 ScanInstalledPlatform()
@@ -107,7 +225,7 @@ Public Class DiagnosticsForm
 
                 ScanASCOMDrivers() 'Report installed driver versions
 
-                ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+                'ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
 
                 ScanProfile() 'Report profile information
 
@@ -140,16 +258,32 @@ Public Class DiagnosticsForm
                 'Scan event log messages
                 ScanEventLog()
 
-                TL.LogMessage("Diagnostics", "Completed diagnostic run")
+                TL.BlankLine()
+                TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
+                TL.BlankLine()
+                TL.BlankLine()
+
+                'Functional tests
+                UtilTests()
+                ProfileTests()
+
+                If (NNonMatches = 0) And (NExceptions = 0) Then
+                    TL.LogMessage("Diagnostics", "Completed function testing run. Congratualtions all " & NMatches & " tests passed!")
+                Else
+                    TL.LogMessage("Diagnostics", "Completed function testing run: " & NMatches & " matches, " & NNonMatches & " fail(s), " & NExceptions & " exception(s).")
+                End If
+
                 TL.Enabled = False
                 TL.Dispose()
                 TL = Nothing
-                lblResult.Text = "Diagnostic log created OK"
+                Status("Diagnostic log created OK")
+                Action("")
             Catch ex As Exception
-                lblResult.Text = "Diagnostics exception, please see log"
+                Status("Diagnostics exception, please see log")
                 TL.LogMessageCrLf("DiagException", ex.ToString)
                 TL.Enabled = False
                 TL.Dispose()
+                Action("")
                 TL = Nothing
             Finally
                 Try : ASCOMRegistryAccess.Dispose() : Catch : End Try 'Clean up registryaccess object
@@ -159,6 +293,697 @@ Public Class DiagnosticsForm
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
         End Try
+    End Sub
+
+    Sub ProfileTests()
+        Dim RetVal As String = "", RetValProfileKey As New ASCOMProfile
+
+        'Dim DrvHlpProf As Object
+        Dim AscomUtlProf As ASCOM.Utilities.Profile
+        Const TestScope As String = "Test Telescope"
+
+        Dim keys, values As ArrayList
+        Try
+            Status("Profile tests")
+            TL.LogMessage("ProfileTest", "Creating ASCOM.Utilities.Profile")
+            sw.Reset() : sw.Start()
+            AscomUtlProf = New ASCOM.Utilities.Profile
+            sw.Stop()
+            TL.LogMessage("ProfileTest", "ASCOM.Utilities.Profile Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
+            AscomUtlProf.DeviceType = "Telescope"
+
+            Compare("ProfileTest", "DeviceType", AscomUtlProf.DeviceType, "Telescope")
+
+            Try : AscomUtlProf.Unregister(TestScope) : Catch : End Try 'Esnure the test scope is not registered
+            Compare("ProfileTest", "IsRegistered when not registered should be False", AscomUtlProf.IsRegistered(TestScope).ToString, "False")
+
+            AscomUtlProf.Register(TestScope, "This is a test telescope")
+            TL.LogMessage("ProfileTest", TestScope & " registered OK")
+            Compare("ProfileTest", "IsRegistered when registered should be True", AscomUtlProf.IsRegistered(TestScope).ToString, "True")
+
+            Compare("ProfileTest", "Get Default Value", "123456", AscomUtlProf.GetValue(TestScope, "Test Name Default", "", "123456"))
+            Compare("ProfileTest", "Get Defaulted Value", "123456", AscomUtlProf.GetValue(TestScope, "Test Name Default"))
+
+            Compare("ProfileTest", "Get Default Value SubKey", "123456", AscomUtlProf.GetValue(TestScope, "Test Name Default", "SubKeyDefault", "123456"))
+            Compare("ProfileTest", "Get Defaulted Value SubKey", "123456", AscomUtlProf.GetValue(TestScope, "Test Name Default", "SubKeyDefault"))
+
+            AscomUtlProf.WriteValue(TestScope, "Test Name", "Test Value")
+            AscomUtlProf.WriteValue(TestScope, "Root Test Name", "Test Value in Root key")
+
+            AscomUtlProf.WriteValue(TestScope, "Test Name", "Test Value SubKey 2", "SubKey1\SubKey2")
+            AscomUtlProf.WriteValue(TestScope, "SubKey2 Test Name", "Test Value in SubKey 2", "SubKey1\SubKey2")
+            AscomUtlProf.WriteValue(TestScope, "SubKey2 Test Name1", "Test Value in SubKey 2", "SubKey1\SubKey2")
+            AscomUtlProf.WriteValue(TestScope, "SubKey2a Test Name2a", "Test Value in SubKey 2a", "SubKey1\SubKey2\SubKey2a")
+            AscomUtlProf.WriteValue(TestScope, "SubKey2b Test Name2b", "Test Value in SubKey 2b", "SubKey1\SubKey2\SubKey2a\SubKey2b")
+            AscomUtlProf.WriteValue(TestScope, "SubKey2c Test Name2c", "Test Value in SubKey 2c", "SubKey1\SubKey2\SubKey2c")
+            AscomUtlProf.WriteValue(TestScope, "", "Null Key in SubKey2", "SubKey1\SubKey2")
+            AscomUtlProf.CreateSubKey(TestScope, "SubKey2")
+            AscomUtlProf.WriteValue(TestScope, "SubKey3 Test Name", "Test Value SubKey 3", "SubKey3")
+            AscomUtlProf.WriteValue(TestScope, "SubKey4 Test Name", "Test Value SubKey 4", "SubKey4")
+            Compare("ProfileTest", "GetValue", AscomUtlProf.GetValue(TestScope, "Test Name"), "Test Value")
+            Compare("ProfileTest", "GetValue SubKey", AscomUtlProf.GetValue(TestScope, "Test Name", "SubKey1\SubKey2"), "Test Value SubKey 2")
+
+            'Null value write test
+            Try
+                AscomUtlProf.WriteValue(TestScope, "Results 1", Nothing)
+                Compare("ProfileTest", "Null value write test", """" & AscomUtlProf.GetValue(TestScope, "Results 1") & """", """""")
+            Catch ex As Exception
+                TL.LogMessageCrLf("Null Value Write Test 1 Exception: ", ex.ToString)
+                NExceptions += 1
+            End Try
+            TL.BlankLine()
+
+            TL.LogMessage("ProfileTest", "Testing Profile.SubKeys")
+            keys = AscomUtlProf.SubKeys(TestScope, "")
+            Compare("ProfileTest", "Create SubKey1", keys(0).Key.ToString & keys(0).Value.ToString, "SubKey1")
+            Compare("ProfileTest", "Create SubKey2", keys(1).Key.ToString & keys(1).Value.ToString, "SubKey2")
+            Compare("ProfileTest", "Create SubKey3", keys(2).Key.ToString & keys(2).Value.ToString, "SubKey3")
+            Compare("ProfileTest", "Create SubKey4", keys(3).Key.ToString & keys(3).Value.ToString, "SubKey4")
+            Compare("ProfileTest", "Create SubKeyDefault", keys(4).Key.ToString & keys(4).Value.ToString, "SubKeyDefault")
+            Compare("ProfileTest", "SubKey Count", keys.Count.ToString, "5")
+            TL.BlankLine()
+
+            TL.LogMessage("ProfileTest", "Testing Profile.Values")
+            values = AscomUtlProf.Values(TestScope, "SubKey1\SubKey2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Value 0", values(0).Key.ToString & " " & values(0).Value.ToString, " Null Key in SubKey2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Value 1", values(1).Key.ToString & " " & values(1).Value.ToString, "SubKey2 Test Name Test Value in SubKey 2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Value 2", values(2).Key.ToString & " " & values(2).Value.ToString, "SubKey2 Test Name1 Test Value in SubKey 2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Value 3", values(3).Key.ToString & " " & values(3).Value.ToString, "Test Name Test Value SubKey 2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Count", values.Count.ToString, "4")
+            TL.BlankLine()
+
+            TL.LogMessage("ProfileTest", "Testing Profile.DeleteSubKey - SubKey2")
+            AscomUtlProf.DeleteSubKey(TestScope, "Subkey2")
+            keys = AscomUtlProf.SubKeys(TestScope, "")
+            Compare("ProfileTest", "Create SubKey1", keys(0).Key.ToString & keys(0).Value.ToString, "SubKey1")
+            Compare("ProfileTest", "Create SubKey3", keys(1).Key.ToString & keys(1).Value.ToString, "SubKey3")
+            Compare("ProfileTest", "Create SubKey4", keys(2).Key.ToString & keys(2).Value.ToString, "SubKey4")
+            Compare("ProfileTest", "Create SubKeyDefault", keys(3).Key.ToString & keys(3).Value.ToString, "SubKeyDefault")
+            Compare("ProfileTest", "SubKey Count", keys.Count.ToString, "4")
+            TL.BlankLine()
+
+            TL.LogMessage("ProfileTest", "Testing Profile.DeleteValue - SubKey1\SubKey2\Test Name")
+            AscomUtlProf.DeleteValue(TestScope, "Test Name", "SubKey1\SubKey2")
+            values = AscomUtlProf.Values(TestScope, "SubKey1\SubKey2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Value 0", values(0).Key.ToString & " " & values(0).Value.ToString, " Null Key in SubKey2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Value 1", values(1).Key.ToString & " " & values(1).Value.ToString, "SubKey2 Test Name Test Value in SubKey 2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Value 2", values(2).Key.ToString & " " & values(2).Value.ToString, "SubKey2 Test Name1 Test Value in SubKey 2")
+            Compare("ProfileTest", "SubKey1\SubKey2 Count", values.Count.ToString, "3")
+            TL.BlankLine()
+
+            TL.LogMessage("ProfileTest", "Bulk Profile operation tests")
+            Try
+                Compare("ProfileTest", "XML Read", AscomUtlProf.GetProfileXML(TestScope), XMLTestString)
+            Catch ex As Exception
+                TL.LogMessage("GetProfileXML", ex.ToString)
+                NExceptions += 1
+            End Try
+
+            Try
+                RetVal = AscomUtlProf.GetProfileXML(TestScope)
+                RetVal = RetVal.Replace(TestTelescopeDescription, RevisedTestTelescopeDescription)
+                AscomUtlProf.SetProfileXML(TestScope, RetVal)
+                Compare("ProfileTest", "XML Write", AscomUtlProf.GetValue(TestScope, ""), RevisedTestTelescopeDescription)
+            Catch ex As Exception
+                TL.LogMessageCrLf("SetProfileXML", ex.ToString)
+                NExceptions += 1
+            End Try
+
+            Try
+                RetValProfileKey = AscomUtlProf.GetProfile(TestScope)
+                For Each subkey As String In RetValProfileKey.ProfileValues.Keys
+                    'TL.LogMessage("SetProfileXML", "Found: " & subkey)
+                    For Each valuename As String In RetValProfileKey.ProfileValues.Item(subkey).Keys
+                        'TL.LogMessage("SetProfileXML", "Found Value: " & valuename & " = " & RetValProfileKey.ProfileValues.Item(subkey).Item(valuename))
+                    Next
+                Next
+                Compare("ProfileTest", "ASCOMProfile Read", RetValProfileKey.ProfileValues.Item("SubKey1\SubKey2\SubKey2c").Item("SubKey2c Test Name2c"), "Test Value in SubKey 2c")
+                RetValProfileKey.SetValue("", NewTestTelescopeDescription)
+                RetValProfileKey.SetValue("NewName", "New value")
+
+                RetValProfileKey.SetValue("NewName 2", "New value 2", "\New Subkey 2")
+                RetValProfileKey.SetValue("Newname 3", "New value 3", "New Subkey 3")
+                AscomUtlProf.SetProfile(TestScope, RetValProfileKey)
+
+                Compare("ProfileTest", "ASCOMProfile Write", AscomUtlProf.GetValue(TestScope, ""), NewTestTelescopeDescription)
+                Compare("ProfileTest", "ASCOMProfile Write", AscomUtlProf.GetValue(TestScope, "NewName"), "New value")
+                Compare("ProfileTest", "ASCOMProfile Write", AscomUtlProf.GetValue(TestScope, "NewName 2", "\New Subkey 2"), "New value 2")
+                Compare("ProfileTest", "ASCOMProfile Write", AscomUtlProf.GetValue(TestScope, "NewName 3", "New Subkey 3"), "New value 3")
+
+                TL.BlankLine()
+            Catch ex As Exception
+                TL.LogMessageCrLf("SetProfile", ex.ToString)
+                NExceptions += 1
+            End Try
+
+            'Registered device types test
+            Dim DevTypes As String()
+            Try
+                DevTypes = AscomUtlProf.RegisteredDeviceTypes
+                TL.LogMessage("ProfileTest", "DeviceTypes - found " & DevTypes.Length & " device types")
+                Compare("ProfileTest", "DeviceTypes", DevTypes(0), "Camera")
+                Compare("ProfileTest", "DeviceTypes", DevTypes(1), "Dome")
+                Compare("ProfileTest", "DeviceTypes", DevTypes(2), "FilterWheel")
+                Compare("ProfileTest", "DeviceTypes", DevTypes(3), "Focuser")
+                Compare("ProfileTest", "DeviceTypes", DevTypes(4), "Rotator")
+                Compare("ProfileTest", "DeviceTypes", DevTypes(5), "SafetyMonitor")
+                Compare("ProfileTest", "DeviceTypes", DevTypes(6), "Switch")
+                Compare("ProfileTest", "DeviceTypes", DevTypes(7), "Telescope")
+                TL.BlankLine()
+            Catch ex As Exception
+                TL.LogMessage("RegisteredDeviceTypes", ex.ToString)
+                NExceptions += 1
+            End Try
+
+            'Registered devices tests
+            Try
+                TL.LogMessage("ProfileTest", "Installed Simulator Devices")
+                keys = AscomUtlProf.RegisteredDevices("Camera")
+                CheckSimulator(keys, "Camera", "ASCOM.Simulator.Camera")
+                CheckSimulator(keys, "Camera", "CCDSimulator.Camera")
+                keys = AscomUtlProf.RegisteredDevices("Dome")
+                CheckSimulator(keys, "Dome", "DomeSim.Dome")
+                CheckSimulator(keys, "Dome", "Hub.Dome")
+                CheckSimulator(keys, "Dome", "Pipe.Dome")
+                CheckSimulator(keys, "Dome", "POTH.Dome")
+                keys = AscomUtlProf.RegisteredDevices("FilterWheel")
+                CheckSimulator(keys, "FilterWheel", "ASCOM.FilterWheelSim.FilterWheel")
+                CheckSimulator(keys, "FilterWheel", "FilterWheelSim.FilterWheel")
+                keys = AscomUtlProf.RegisteredDevices("Focuser")
+                CheckSimulator(keys, "Focuser", "FocusSim.Focuser")
+                CheckSimulator(keys, "Focuser", "Hub.Focuser")
+                CheckSimulator(keys, "Focuser", "Pipe.Focuser")
+                CheckSimulator(keys, "Focuser", "POTH.Focuser")
+                keys = AscomUtlProf.RegisteredDevices("Rotator")
+                CheckSimulator(keys, "Rotator", "ASCOM.Simulator.Rotator")
+                keys = AscomUtlProf.RegisteredDevices("SafetyMonitor")
+                CheckSimulator(keys, "SafetyMonitor", "ASCOM.Simulator.SafetyMonitor")
+                keys = AscomUtlProf.RegisteredDevices("Switch")
+                CheckSimulator(keys, "Switch", "ASCOM.Simulator.Switch")
+                CheckSimulator(keys, "Switch", "SwitchSim.Switch")
+                keys = AscomUtlProf.RegisteredDevices("Telescope")
+                CheckSimulator(keys, "Telescope", "ASCOM.Simulator.Telescope")
+                CheckSimulator(keys, "Telescope", "ASCOMDome.Telescope")
+                CheckSimulator(keys, "Telescope", "Hub.Telescope")
+                CheckSimulator(keys, "Telescope", "Pipe.Telescope")
+                CheckSimulator(keys, "Telescope", "POTH.Telescope")
+                CheckSimulator(keys, "Telescope", "ScopeSim.Telescope")
+
+                DevTypes = AscomUtlProf.RegisteredDeviceTypes
+                For Each DevType As String In DevTypes
+                    'TL.LogMessage("RegisteredDevices", "Found " & DevType)
+                    keys = AscomUtlProf.RegisteredDevices(DevType)
+                    For Each kvp As KeyValuePair In keys
+                        'TL.LogMessage("RegisteredDevices", "  " & kvp.Key & " - " & kvp.Value)
+                    Next
+                Next
+            Catch ex As Exception
+                TL.LogMessageCrLf("RegisteredDevices", ex.ToString)
+                NExceptions += 1
+            End Try
+
+            'Empty string
+            Try
+                keys = AscomUtlProf.RegisteredDevices("")
+                TL.LogMessage("RegisteredDevices EmptyString", "Found " & keys.Count & " devices")
+                For Each kvp As KeyValuePair(Of String, String) In keys
+                    TL.LogMessage("RegisteredDevices EmptyString", "  " & kvp.Key & " - " & kvp.Value)
+                Next
+            Catch ex As ASCOM.Utilities.Exceptions.InvalidValueException
+                Compare("ProfileTest", "RegisteredDevices with an empty string", "InvalidValueException", "InvalidValueException")
+            Catch ex As Exception
+                TL.LogMessageCrLf("RegisteredDevices EmptyString", ex.ToString)
+                NExceptions += 1
+            End Try
+
+            'Nothing
+            Try
+                keys = AscomUtlProf.RegisteredDevices(Nothing)
+                TL.LogMessage("RegisteredDevices Nothing", "Found " & keys.Count & " devices")
+                For Each kvp As KeyValuePair(Of String, String) In keys
+                    TL.LogMessage("RegisteredDevices Nothing", "  " & kvp.Key & " - " & kvp.Value)
+                Next
+            Catch ex As ASCOM.Utilities.Exceptions.InvalidValueException
+                Compare("ProfileTest", "RegisteredDevices with a null value", "InvalidValueException", "InvalidValueException")
+            Catch ex As Exception
+                TL.LogMessageCrLf("RegisteredDevices Nothing", ex.ToString)
+                NExceptions += 1
+            End Try
+
+            'Bad value
+            Try
+                keys = AscomUtlProf.RegisteredDevices("asdwer vbn tyu")
+                Compare("ProfileTest", "RegisteredDevices with an Unknown DeviceType", keys.Count.ToString, "0")
+                For Each kvp As KeyValuePair(Of String, String) In keys
+                    TL.LogMessage("RegisteredDevices Bad", "  " & kvp.Key & " - " & kvp.Value)
+                Next
+            Catch ex As ASCOM.Utilities.Exceptions.InvalidValueException
+                TL.LogMessage("ProfileTest", "RegisteredDevices Unknown DeviceType incorrectly generated an InvalidValueException")
+            Catch ex As Exception
+                TL.LogMessage("RegisteredDevices Bad", ex.ToString)
+                NExceptions += 1
+            End Try
+            TL.BlankLine()
+
+            Status("Profile performance tests")
+            'Timing tests
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                AscomUtlProf.WriteValue(TestScope, "Test Name " & i.ToString, "Test Value")
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "Writevalue : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                keys = AscomUtlProf.SubKeys(TestScope, "")
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "SubKeys : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                keys = AscomUtlProf.Values(TestScope, "SubKey1\SubKey2")
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "Values : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                RetVal = AscomUtlProf.GetValue(TestScope, "Test Name " & i.ToString)
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "GetValue : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset()
+            For i = 1 To 100
+                AscomUtlProf.WriteValue(TestScope, "Test Name", "Test Value SubKey 2", "SubKey1\SubKey2")
+                sw.Start()
+                AscomUtlProf.DeleteValue(TestScope, "Test Name", "SubKey1\SubKey2")
+                sw.Stop()
+            Next
+            TL.LogMessage("ProfilePerformance", "Delete : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                RetVal = AscomUtlProf.GetProfileXML(TestScope)
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "GetProfileXML : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                RetVal = AscomUtlProf.GetProfileXML("ScopeSim.Telescope")
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "GetProfileXML : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                RetValProfileKey = AscomUtlProf.GetProfile(TestScope)
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "GetProfile : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                RetValProfileKey = AscomUtlProf.GetProfile("ScopeSim.Telescope")
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "GetProfile : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                AscomUtlProf.SetProfile("ScopeSim.Telescope", RetValProfileKey)
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "SetProfile : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            sw.Reset() : sw.Start()
+            For i = 1 To 100
+                AscomUtlProf.SetProfileXML("ScopeSim.Telescope", RetVal)
+            Next
+            sw.Stop() : TL.LogMessage("ProfilePerformance", "SetProfileXML : " & sw.ElapsedMilliseconds / 100 & " milliseconds")
+
+            TL.BlankLine()
+
+            AscomUtlProf.Unregister(TestScope)
+            Compare("ProfileTest", "Test telescope registered after unregister", AscomUtlProf.IsRegistered(TestScope), "False")
+
+            AscomUtlProf.Dispose()
+            TL.LogMessage("ProfileTest", "Profile Disposed OK")
+            AscomUtlProf = Nothing
+            TL.BlankLine()
+
+            Status("Profile multi-tasking tests")
+
+            Dim P1, P2 As New Profile, R1, R2 As String
+
+            P1.Register(TestScope, "Multi access tester")
+
+            P1.WriteValue(TestScope, TestScope, "1")
+            R1 = P1.GetValue(TestScope, TestScope)
+            R2 = P2.GetValue(TestScope, TestScope)
+            Compare("ProfileMultiAccess", "MultiAccess", R1, R2)
+
+            P1.WriteValue(TestScope, TestScope, "2")
+            R1 = P1.GetValue(TestScope, TestScope)
+            R2 = P2.GetValue(TestScope, TestScope)
+            Compare("ProfileMultiAccess", "MultiAccess", R1, R2)
+
+            P2.Dispose()
+            P1.Dispose()
+
+            'Multiple writes to the same value - single threaded
+            TL.LogMessage("ProfileMultiAccess", "MultiWrite - SingleThread Started")
+            Try
+                Dim P(100) As Profile
+                For i = 1 To 100
+                    P(i) = New Profile
+                    P(i).WriteValue(TestScope, TestScope, "27")
+                Next
+            Catch ex As Exception
+                TL.LogMessage("MultiWrite - SingleThread", ex.ToString)
+                NExceptions += 1
+            End Try
+
+            TL.LogMessage("ProfileMultiAccess", "MultiWrite - SingleThread Finished")
+
+            TL.LogMessage("ProfileMultiAccess", "MultiWrite - MultiThread Started")
+            'Multiple writes -multi-threaded
+            Const NThreads As Integer = 3
+
+            Dim ProfileThreads(NThreads) As Thread
+            For i = 0 To NThreads
+                ProfileThreads(i) = New Thread(AddressOf ProfileThread)
+                ProfileThreads(i).Start(i)
+            Next
+            For i = 0 To NThreads
+                ProfileThreads(i).Join()
+            Next
+
+            TL.LogMessage("ProfileMultiAccess", "MultiWrite - MultiThread Finished")
+            TL.BlankLine()
+            TL.BlankLine()
+
+        Catch ex As Exception
+            TL.LogMessageCrLf("Exception", ex.ToString)
+            NExceptions += 1
+        End Try
+
+    End Sub
+
+    Sub CheckSimulator(ByVal Devices As ArrayList, ByVal DeviceType As String, ByVal DeviceName As String)
+        Dim Found As Boolean = False
+        For Each Device In Devices
+            If Device.Key = DeviceName Then Found = True
+        Next
+
+        If Found Then
+            Compare("ProfileTest", DeviceType, DeviceName, DeviceName)
+        Else
+            Compare("ProfileTest", DeviceType, DeviceName, "")
+        End If
+    End Sub
+
+    Sub ProfileThread(ByVal inst As Integer)
+        Dim TL As New TraceLogger("", "ProfileTrace " & inst.ToString)
+        Dim ts As String = "Test Telescope"
+        TL.Enabled = True
+        'TL.LogMessage("MultiWrite - MultiThread", "ThreadStart")
+        TL.LogMessage("Started", "")
+        Try
+            Dim P(100) As Profile
+            For i = 1 To 100
+                P(i) = New Profile
+                P(i).WriteValue(ts, ts, i.ToString)
+                TL.LogMessage("Written", i.ToString)
+                P(i).Dispose()
+            Next
+        Catch ex As Exception
+            TL.LogMessage("MultiWrite - MultiThread", ex.ToString)
+            'Throw New ASCOM.Utilities.Exceptions.RestrictedAccessException("Multi-write issue", ex)
+        End Try
+        'TL.LogMessage("MultiWrite - MultiThread", "ThreadEnd")
+        TL.Enabled = False
+        TL.Dispose()
+        TL = Nothing
+
+    End Sub
+
+    Private Sub Compare(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As String, ByVal p_Orig As String)
+        If p_New = p_Orig Then
+            If p_New.Length > 200 Then p_New = p_New.Substring(1, 200) & "..."
+            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
+            NMatches += 1
+        Else
+            TL.LogMessageCrLf(p_Section, "***** NOT Matched " & p_Name & " #" & p_New & "#" & p_Orig & "#")
+            NNonMatches += 1
+        End If
+    End Sub
+
+    Private Sub CompareDouble(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Double, ByVal p_Orig As Double, ByVal p_Tolerance As Double)
+        If System.Math.Abs(p_New - p_Orig) < p_Tolerance Then
+            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
+            NMatches += 1
+        Else
+            TL.LogMessage(p_Section, "NOT Matched " & p_Name & " #" & p_New.ToString & "#" & p_Orig.ToString & "#")
+            NNonMatches += 1
+        End If
+    End Sub
+
+    Sub UtilTests()
+        Dim t As Double
+        Dim ts As String
+        Const TestDate As Date = #6/1/2010 4:37:00 PM#
+        Const TestJulianDate As Double = 2455551.0
+        Dim i As Integer, Is64Bit As Boolean
+
+        Try
+            Is64Bit = (IntPtr.Size = 8) 'Create a simple variable to record whether or not we are 64bit
+            Status("Running Utilities funcitonal tests")
+            TL.LogMessage("UtilTests", "Creating ASCOM.Utilities.Util")
+            sw.Reset() : sw.Start()
+            AscomUtil = New ASCOM.Utilities.Util
+            TL.LogMessage("UtilTests", "ASCOM.Utilities.Util Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
+            If Not Is64Bit Then
+                TL.LogMessage("UtilTests", "Creating DriverHelper.Util")
+                DrvHlpUtil = CreateObject("DriverHelper.Util")
+                TL.LogMessage("UtilTests", "DriverHelper.Util Created OK")
+
+                TL.LogMessage("UtilTests", "Creating DriverHelper2.Util")
+                g_Util2 = CreateObject("DriverHelper2.Util")
+                TL.LogMessage("UtilTests", "DriverHelper2.Util Created OK")
+            Else
+                TL.LogMessage("UtilTests", "Running 64bit so avoiding use of 32bit DriverHelper components")
+            End If
+            TL.BlankLine()
+
+            Compare("UtilTests", "IsMinimumRequiredVersion 5.0", AscomUtil.IsMinimumRequiredVersion(5, 0).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 5.4", AscomUtil.IsMinimumRequiredVersion(5, 4).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 5.5", AscomUtil.IsMinimumRequiredVersion(5, 5).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 5.6", AscomUtil.IsMinimumRequiredVersion(5, 6).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.0", AscomUtil.IsMinimumRequiredVersion(6, 0).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.3", AscomUtil.IsMinimumRequiredVersion(6, 3).ToString, "False")
+            TL.BlankLine()
+            If Is64Bit Then ' Run tests just on the new 64bit component
+                t = 30.123456789 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, ":").ToString, "30:07'")
+                t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, ":", ":", "", 4).ToString, "60:59:15.5556")
+                t = 50.123453456 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t).ToString, "03:20")
+                t = 70.763245689 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t).ToString, "04:43:03")
+                ts = "43:56:78.2567" : Compare("UtilTests", "DMSToDegrees", AscomUtil.DMSToDegrees(ts).ToString, "43.9550713055555")
+                ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", AscomUtil.HMSToDegrees(ts).ToString, "219.845833333333")
+                ts = "14:37:23" : Compare("UtilTests", "HMSToHours", AscomUtil.HMSToHours(ts).ToString, "14.6230555555556")
+                t = 15.567234086 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), "15:34")
+                t = 9.4367290317 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), "09:26:12")
+                TL.BlankLine()
+
+                Compare("UtilTests", "Platform Version", AscomUtil.PlatformVersion.ToString, ASCOMRegistryAccess.GetProfile("", "PlatformVersion"))
+                Compare("UtilTests", "SerialTrace", AscomUtil.SerialTrace, (ASCOMRegistryAccess.GetProfile("", "SerTraceFile", "") <> ""))
+                Compare("UtilTests", "Trace File", AscomUtil.SerialTraceFile, IIf(ASCOMRegistryAccess.GetProfile("", "SerTraceFile") = "", "C:\SerialTrace.txt", ASCOMRegistryAccess.GetProfile("", "SerTraceFile")))
+                TL.BlankLine()
+
+                Compare("UtilTests", "TimeZoneName", AscomUtil.TimeZoneName.ToString, GetTimeZoneName)
+                CompareDouble("UtilTests", "TimeZoneOffset", AscomUtil.TimeZoneOffset, -CDbl(TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours), 0.017) '1 minute tolerance
+                Compare("UtilTests", "UTCDate", AscomUtil.UTCDate.ToString, Date.UtcNow)
+                CompareDouble("UtilTests", "Julian date", AscomUtil.JulianDate, Date.UtcNow.ToOADate() + 2415018.5, 0.00002) '1 second tolerance
+                TL.BlankLine()
+
+                Compare("UtilTests", "DateJulianToLocal", Format(AscomUtil.DateJulianToLocal(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), "20 Dec 2010 12:00:00.0000")
+                Compare("UtilTests", "DateJulianToUTC", Format(AscomUtil.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), "20 Dec 2010 12:00:00.0000")
+                Compare("UtilTests", "DateLocalToJulian", AscomUtil.DateLocalToJulian(TestDate), "2455349.19236111")
+                Compare("UtilTests", "DateLocalToUTC", Format(AscomUtil.DateLocalToUTC(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), "01 Jun 2010 04:37:00.0000")
+                Compare("UtilTests", "DateUTCToJulian", AscomUtil.DateUTCToJulian(TestDate).ToString, "2455349.19236111")
+                Compare("UtilTests", "DateUTCToLocal", Format(AscomUtil.DateUTCToLocal(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), "01 Jun 2010 04:37:00.0000")
+                TL.BlankLine()
+
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t), "43" & Chr(&HB0) & " 07'")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-"), "43-07'")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";"), "43-07;")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";", 3), "43-07.434;")
+                TL.BlankLine()
+
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t), "43" & Chr(&HB0) & " 07' 26""")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-"), "43-07' 26""")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";"), "43-07;26""")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#"), "43-07;26#")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#", 3), "43-07;26.021#")
+                TL.BlankLine()
+
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t), "02:52")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-"), "02-52")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";"), "02-52;")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";", 3), "02-52.496;")
+                TL.BlankLine()
+
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t), "02:52:30")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-"), "02-52:30")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";"), "02-52;30")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#"), "02-52;30#")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#", 3), "02-52;29.735#")
+                TL.BlankLine()
+
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), "03:07")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-"), "03-07")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";"), "03-07;")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";", 3), "03-07.434;")
+                TL.BlankLine()
+
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), "03:07:26")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-"), "03-07:26")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";"), "03-07;26")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#"), "03-07;26#")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#", 3), "03-07;26.021#")
+            Else 'Run teststo compare original 32bit only and new 32/64bit capabale components
+                t = 30.123456789 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, ":").ToString, DrvHlpUtil.DegreesToDM(t, ":").ToString)
+                t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, ":", ":", "", 4).ToString, DrvHlpUtil.DegreesToDMS(t, ":", ":", "", 4).ToString)
+                t = 50.123453456 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t).ToString, DrvHlpUtil.DegreesToHM(t).ToString)
+                t = 70.763245689 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t).ToString, DrvHlpUtil.DegreesToHMS(t).ToString)
+                ts = "43:56:78.2567" : Compare("UtilTests", "DMSToDegrees", AscomUtil.DMSToDegrees(ts).ToString, DrvHlpUtil.DMSToDegrees(ts).ToString)
+                ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", AscomUtil.HMSToDegrees(ts).ToString, DrvHlpUtil.HMSToDegrees(ts))
+                ts = "14:37:23" : Compare("UtilTests", "HMSToHours", AscomUtil.HMSToHours(ts).ToString, DrvHlpUtil.HMSToHours(ts))
+                t = 15.567234086 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), DrvHlpUtil.HoursToHM(t))
+                t = 9.4367290317 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), DrvHlpUtil.HoursToHMS(t))
+                TL.BlankLine()
+
+                Compare("UtilTests", "Platform Version", AscomUtil.PlatformVersion.ToString, g_Util2.PlatformVersion.ToString)
+                Compare("UtilTests", "SerialTrace", AscomUtil.SerialTrace, g_Util2.SerialTrace)
+                Compare("UtilTests", "Trace File", AscomUtil.SerialTraceFile, g_Util2.SerialTraceFile)
+                TL.BlankLine()
+
+                Compare("UtilTests", "TimeZoneName", AscomUtil.TimeZoneName.ToString, g_Util2.TimeZoneName.ToString)
+                CompareDouble("UtilTests", "TimeZoneOffset", AscomUtil.TimeZoneOffset, g_Util2.TimeZoneOffset, 0.017) '1 minute tolerance
+                Compare("UtilTests", "UTCDate", AscomUtil.UTCDate.ToString, g_Util2.UTCDate.ToString)
+                CompareDouble("UtilTests", "Julian date", AscomUtil.JulianDate, g_Util2.JulianDate, 0.00002) '1 second tolerance
+                TL.BlankLine()
+
+                Compare("UtilTests", "DateJulianToLocal", Format(AscomUtil.DateJulianToLocal(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateJulianToLocal(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"))
+                Compare("UtilTests", "DateJulianToUTC", Format(AscomUtil.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"))
+                Compare("UtilTests", "DateLocalToJulian", AscomUtil.DateLocalToJulian(TestDate), g_Util2.DateLocalToJulian(TestDate))
+                Compare("UtilTests", "DateLocalToUTC", Format(AscomUtil.DateLocalToUTC(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateLocalToUTC(TestDate), "dd MMM yyyy hh:mm:ss.ffff"))
+                Compare("UtilTests", "DateUTCToJulian", AscomUtil.DateUTCToJulian(TestDate).ToString, g_Util2.DateUTCToJulian(TestDate).ToString)
+                Compare("UtilTests", "DateUTCToLocal", Format(AscomUtil.DateUTCToLocal(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateUTCToLocal(TestDate), "dd MMM yyyy hh:mm:ss.ffff"))
+                TL.BlankLine()
+
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t), DrvHlpUtil.DegreesToDM(t))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-"), DrvHlpUtil.DegreesToDM(t, "-"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";"), DrvHlpUtil.DegreesToDM(t, "-", ";"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";", 3), DrvHlpUtil.DegreesToDM(t, "-", ";", 3))
+                TL.BlankLine()
+
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t), DrvHlpUtil.DegreesToDMS(t))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-"), DrvHlpUtil.DegreesToDMS(t, "-"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";"), DrvHlpUtil.DegreesToDMS(t, "-", ";"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#"), DrvHlpUtil.DegreesToDMS(t, "-", ";", "#"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#", 3), DrvHlpUtil.DegreesToDMS(t, "-", ";", "#", 3))
+                TL.BlankLine()
+
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t), DrvHlpUtil.DegreesToHM(t))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-"), DrvHlpUtil.DegreesToHM(t, "-"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";"), DrvHlpUtil.DegreesToHM(t, "-", ";"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";", 3), DrvHlpUtil.DegreesToHM(t, "-", ";", 3))
+                TL.BlankLine()
+
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t), DrvHlpUtil.DegreesToHMS(t))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-"), DrvHlpUtil.DegreesToHMS(t, "-"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";"), DrvHlpUtil.DegreesToHMS(t, "-", ";"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#"), DrvHlpUtil.DegreesToHMS(t, "-", ";", "#"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#", 3), DrvHlpUtil.DegreesToHMS(t, "-", ";", "#", 3))
+                TL.BlankLine()
+
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), DrvHlpUtil.HoursToHM(t))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-"), DrvHlpUtil.HoursToHM(t, "-"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";"), DrvHlpUtil.HoursToHM(t, "-", ";"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";", 3), DrvHlpUtil.HoursToHM(t, "-", ";", 3))
+                TL.BlankLine()
+
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), DrvHlpUtil.HoursToHMS(t))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-"), DrvHlpUtil.HoursToHMS(t, "-"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";"), DrvHlpUtil.HoursToHMS(t, "-", ";"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#"), DrvHlpUtil.HoursToHMS(t, "-", ";", "#"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#", 3), DrvHlpUtil.HoursToHMS(t, "-", ";", "#", 3))
+            End If
+            TL.BlankLine()
+            Status("Running Utilities timing tests")
+            TL.LogMessage("UtilTests", "Timing tests")
+            For i = 0 To 5
+                TimingTest(i, Is64Bit)
+            Next
+
+            For i = 10 To 50 Step 10
+                TimingTest(i, Is64Bit)
+            Next
+
+            TimingTest(100, Is64Bit)
+            TimingTest(500, Is64Bit)
+            TimingTest(1000, Is64Bit)
+            TimingTest(2000, Is64Bit)
+            TL.BlankLine()
+
+            Try
+                AscomUtil.Dispose()
+                TL.LogMessage("UtilTests", "ASCOM.Utilities.Dispose, Disposed OK")
+            Catch ex As Exception
+                TL.LogMessage("UtilTests", "ASCOM.Utilities.Dispose Exception: ", ex.ToString)
+                NExceptions += 1
+            End Try
+            If Not Is64Bit Then
+                Try
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(DrvHlpUtil)
+                    TL.LogMessage("UtilTests", "Helper Util.Release OK")
+                Catch ex As Exception
+                    TL.LogMessage("UtilTests", "Helper Util.Release Exception: ", ex.ToString)
+                    NExceptions += 1
+                End Try
+            End If
+            AscomUtil = Nothing
+            DrvHlpUtil = Nothing
+            TL.LogMessage("UtilTests", "Finished")
+            TL.BlankLine()
+
+        Catch ex As Exception
+            TL.LogMessageCrLf("UtilTests", "Exception: " & ex.ToString)
+            NExceptions += 1
+        End Try
+
+    End Sub
+
+    Private Function GetTimeZoneName() As String
+        If TimeZone.CurrentTimeZone.IsDaylightSavingTime(Now) Then
+            Return TimeZone.CurrentTimeZone.DaylightName
+        Else
+            Return TimeZone.CurrentTimeZone.StandardName
+        End If
+    End Function
+
+    Sub TimingTest(ByVal p_NumberOfMilliSeconds As Integer, ByVal Is64Bit As Boolean)
+        Action("TimingTest " & p_NumberOfMilliSeconds & "ms")
+        s1 = Stopwatch.StartNew 'Test time using new ASCOM component
+        AscomUtil.WaitForMilliseconds(p_NumberOfMilliSeconds)
+        s1.Stop()
+        Application.DoEvents()
+
+        If Is64Bit Then
+            TL.LogMessage("UtilTests - Timing", "Timer test (64bit): " & p_NumberOfMilliSeconds.ToString & " milliseconds - ASCOM.Utillities.WaitForMilliSeconds: " & Format(s1.ElapsedTicks * 1000.0 / Stopwatch.Frequency, "0.00") & "ms")
+        Else
+            System.Threading.Thread.Sleep(100)
+            s2 = Stopwatch.StartNew 'Test time using original Platform 5 component
+            DrvHlpUtil.WaitForMilliseconds(p_NumberOfMilliSeconds)
+            s2.Stop()
+            TL.LogMessage("UtilTests - Timing", "Timer test: " & p_NumberOfMilliSeconds.ToString & " milliseconds - ASCOM.Utillities.WaitForMilliSeconds: " & Format(s1.ElapsedTicks * 1000.0 / Stopwatch.Frequency, "0.00") & "ms DriverHelper.Util.WaitForMilliSeconds: " & Format(s2.ElapsedTicks * 1000.0 / Stopwatch.Frequency, "0.00") & "ms")
+        End If
+        Application.DoEvents()
     End Sub
 
     Sub ScanEventLog()
@@ -577,7 +1402,7 @@ Public Class DiagnosticsForm
             GetCOMRegistration("DriverHelper.ChooserSupport")
             GetCOMRegistration("DriverHelper.ProfileAccess")
             GetCOMRegistration("DriverHelper.SerialSupport")
-            
+
             'Utlities
             GetCOMRegistration("ASCOM.Utilities.ASCOMProfile")
             GetCOMRegistration("ASCOM.Utilities.Chooser")
