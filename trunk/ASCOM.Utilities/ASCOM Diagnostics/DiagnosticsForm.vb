@@ -164,7 +164,7 @@ Public Class DiagnosticsForm
         'Initialise form
         Dim MyVersion As Version
         MyVersion = Assembly.GetExecutingAssembly.GetName.Version
-        lblTitle.Text = lblTitle.Text & " " & MyVersion.ToString
+        lblTitle.Text = InstallerName() & " - Diagnostics " & " " & MyVersion.ToString
         lblResult.Text = ""
         lblAction.Text = ""
 
@@ -1965,25 +1965,45 @@ Public Class DiagnosticsForm
             TL.LogMessage("Installed Platform", "Inno Setup Version - " & RegKey.GetValue("Inno Setup: Setup Version"))
             TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
             TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
+            RegKey.Close()
         Catch ex As Exception
-            TL.LogMessage("Installed Platform", "OK - no Inno installer path found")
+            TL.LogMessageCrLf("Installed Platform", "OK - no Inno installer path found")
         End Try
 
         Try ' Platform 6 installer GUID, should always be present in Platform 6
-            RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}", False)
+            RegKey = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & INSTALLER_PROPDUCT_CODE, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
 
             TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
             TL.LogMessage("Installed Platform", "Version - " & RegKey.GetValue("DisplayVersion"))
             TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
             TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
             TL.LogMessage("Installed Platform", "Install Source - " & RegKey.GetValue("InstallSource"))
-
+            RegKey.Close()
         Catch ex As Exception
-            TL.LogMessage("Installed Platform", "OK - no Inno installer path found")
+            TL.LogMessageCrLf("Installed Platform", "Exception: " & ex.ToString)
+            NExceptions += 1
         End Try
-
         TL.BlankLine()
     End Sub
+
+    Private Function InstallerName() As String
+        Dim RegKey As RegistryKey, DisplayName As String
+
+        Try ' Platform 6 installer GUID, should always be present in Platform 6
+            If ApplicationBits() = Bitness.Bits32 Then '32bit OS
+                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & INSTALLER_PROPDUCT_CODE, False)
+            Else '64bit OS
+                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & INSTALLER_PROPDUCT_CODE, False)
+            End If
+
+            DisplayName = RegKey.GetValue("DisplayName")
+            RegKey.Close()
+        Catch ex As Exception
+            DisplayName = ""
+        End Try
+
+        Return DisplayName
+    End Function
 
     Sub ScanASCOMDrivers()
         Dim BaseDir As String

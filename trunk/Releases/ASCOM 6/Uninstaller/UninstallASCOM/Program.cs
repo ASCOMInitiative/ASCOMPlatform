@@ -232,9 +232,9 @@ namespace UninstallAscom
                 DeleteDirectory(ascomDir);
 
             //clean up files
-            const string pathToAscom = @"C:\Program Files (x86)\Common Files\ASCOM";
-            if (Directory.Exists(pathToAscom))
-                DeleteDirectory(pathToAscom);
+            //const string pathToAscom = @"C:\Program Files (x86)\Common Files\ASCOM";
+            //if (Directory.Exists(pathToAscom))
+            //    DeleteDirectory(pathToAscom);
         }
 
         //clean up any left over files from 5.5
@@ -252,9 +252,9 @@ namespace UninstallAscom
                     DeleteDirectory(ascomDir);
 
                 //clean up files
-                const string pathToAscom = @"C:\Program Files (x86)\Common Files\ASCOM";
-                if (Directory.Exists(pathToAscom))
-                    DeleteDirectory(pathToAscom);
+               // const string pathToAscom = @"C:\Program Files (x86)\Common Files\ASCOM";
+                //if (Directory.Exists(pathToAscom))
+                //    DeleteDirectory(pathToAscom);
                 
             //clean up files
                 const string pathToAscom1 = @"C:\Program Files (x86)\ASCOM";

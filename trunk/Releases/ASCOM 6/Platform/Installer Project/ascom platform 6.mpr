@@ -723,6 +723,7 @@ $
 
 
 
+
 $
 $
 1
@@ -730,7 +731,7 @@ $
 FALSE
 C:\projects\ASCOM\InstallerBuilds\
 ASCOM Initiative
-Ascom Platform 6
+Ascom Platform 6 Alpha 4
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0
@@ -739,21 +740,21 @@ Ascom Platform 6
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{5BC45CE5-993A-4BDC-97D3-3ABC898DCF73}
+{A2E21697-F0AC-4B1E-9DB3-0D76BB001EE3}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk/
 http://ascom-standards.org/updates/
 Copyright © 1998-2010, The ASCOM Initiative. All rights reserved. 
 FALSE
-
+ASCOMPlatform6Alpha4.exe
 TRUE
 FALSE
 
 
 http://timestamp.verisign.com/scripts/timstamp.dll
 http://ascom-standards.org/
-UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,LANGUAGE=English,"TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00
+UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,LANGUAGE=English,"TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00,LANGUAGE=English,CACHESOURCES=TRUE
 $
 $
 

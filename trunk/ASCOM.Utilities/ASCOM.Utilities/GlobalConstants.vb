@@ -57,4 +57,7 @@ Module GlobalConstants
     'Location of the list of 32bit only drivers
     Public Const DRIVERS_32BIT As String = "Drivers Not Compatible With 64bit Applications"
     Public Const DRIVERS_32BIT_WARNING_TEXT As String = "!!32bit Driver!! - "
+
+    'Installer Variables
+    Public Const INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}"
 End Module
