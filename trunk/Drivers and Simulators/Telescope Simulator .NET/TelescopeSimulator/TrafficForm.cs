@@ -35,20 +35,20 @@ namespace ASCOM.Simulator
                 ButtonDisable.Text ="Disable";
             }
         }
-        public void TrafficLine(string Message)
+        public void TrafficLine(string message)
         {
             if (m_Disable) { return; }
-            txtTraffic.Text += Message + Environment.NewLine;
+            txtTraffic.Text += message + Environment.NewLine;
         }
-        public void TrafficStart(string Message)
+        public void TrafficStart(string message)
         {
             if (m_Disable) { return; }
-            txtTraffic.Text += Message;
+            txtTraffic.Text += message;
         }
-        public void TrafficEnd(string Message)
+        public void TrafficEnd(string message)
         {
             if (m_Disable) { return; }
-            txtTraffic.Text += Message + Environment.NewLine;
+            txtTraffic.Text += message + Environment.NewLine;
         }
 
         public bool Capabilities

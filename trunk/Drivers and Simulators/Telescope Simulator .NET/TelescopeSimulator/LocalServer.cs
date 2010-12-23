@@ -339,91 +339,93 @@ namespace ASCOM.Simulator
             //
             // For each of the driver assemblies
             //
-            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "FilterWheelregister");
-            TL.Enabled = true;
-            TL.LogMessage("Register", "Start");
-            foreach (Type type in m_ComObjectTypes)
+            using (ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "Telescoperegister"))
             {
-                bool bFail = false;
-                try
+                TL.Enabled = true;
+                TL.LogMessage("Register", "Start");
+                foreach (Type type in m_ComObjectTypes)
                 {
-                    //
-                    // HKCR\CLSID\clsid
-                    //
-                    string clsid = Marshal.GenerateGuidForType(type).ToString("B");
-                    string progid = Marshal.GenerateProgIdForType(type);
-                    TL.LogMessage("Register", progid + " " + clsid);
-
-                    key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
-                    key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
-                    key.SetValue("AppId", m_sAppId);
-                    key2 = key.CreateSubKey("Implemented Categories");
-                    key3 = key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
-                    key3.Close();
-                    key3 = null;
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("ProgId");
-                    key2.SetValue(null, progid);
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("Programmable");
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("LocalServer32");
-                    key2.SetValue(null, Application.ExecutablePath);
-                    key2.Close();
-                    key2 = null;
-                    key.Close();
-                    key = null;
-                    //
-                    // HKCR\CLSID\progid
-                    //
-                    key = Registry.ClassesRoot.CreateSubKey(progid);
-                    key.SetValue(null, assyTitle);
-                    key2 = key.CreateSubKey("CLSID");
-                    key2.SetValue(null, clsid);
-                    key2.Close();
-                    key2 = null;
-                    key.Close();
-                    key = null;
-                    //
-                    // ASCOM 
-                    //
-                    assy = type.Assembly;
-                    //attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
-                    //string chooserName = ((AssemblyProductAttribute)attr).Product;
-
-                    //Modified to pull from the custom Attribute ServedClassName
-                    attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
-                    string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName;
-
-					var P = new ASCOM.Utilities.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) };
-                    P.Register(progid, chooserName);
-                    try										// In case Helper becomes native .NET
+                    bool bFail = false;
+                    try
                     {
-                        Marshal.ReleaseComObject(P);
+                        //
+                        // HKCR\CLSID\clsid
+                        //
+                        string clsid = Marshal.GenerateGuidForType(type).ToString("B");
+                        string progid = Marshal.GenerateProgIdForType(type);
+                        TL.LogMessage("Register", progid + " " + clsid);
+
+                        key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
+                        key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
+                        key.SetValue("AppId", m_sAppId);
+                        key2 = key.CreateSubKey("Implemented Categories");
+                        key3 = key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
+                        key3.Close();
+                        key3 = null;
+                        key2.Close();
+                        key2 = null;
+                        key2 = key.CreateSubKey("ProgId");
+                        key2.SetValue(null, progid);
+                        key2.Close();
+                        key2 = null;
+                        key2 = key.CreateSubKey("Programmable");
+                        key2.Close();
+                        key2 = null;
+                        key2 = key.CreateSubKey("LocalServer32");
+                        key2.SetValue(null, Application.ExecutablePath);
+                        key2.Close();
+                        key2 = null;
+                        key.Close();
+                        key = null;
+                        //
+                        // HKCR\CLSID\progid
+                        //
+                        key = Registry.ClassesRoot.CreateSubKey(progid);
+                        key.SetValue(null, assyTitle);
+                        key2 = key.CreateSubKey("CLSID");
+                        key2.SetValue(null, clsid);
+                        key2.Close();
+                        key2 = null;
+                        key.Close();
+                        key = null;
+                        //
+                        // ASCOM 
+                        //
+                        assy = type.Assembly;
+                        //attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
+                        //string chooserName = ((AssemblyProductAttribute)attr).Product;
+
+                        //Modified to pull from the custom Attribute ServedClassName
+                        attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
+                        string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName;
+
+                        using (var P = new ASCOM.Utilities.Profile())
+                        {
+                            P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);
+                            P.Register(progid, chooserName);
+                            try										// In case Helper becomes native .NET
+                            {
+                                Marshal.ReleaseComObject(P);
+                            }
+                            catch (Exception) { }
+                        }
                     }
-                    catch (Exception) { }
-                    P = null;
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
+                                "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        bFail = true;
+                    }
+                    finally
+                    {
+                        if (key != null) key.Close();
+                        if (key2 != null) key2.Close();
+                        if (key3 != null) key3.Close();
+                    }
+                    if (bFail) break;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-                            "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    bFail = true;
-                }
-                finally
-                {
-                    if (key != null) key.Close();
-                    if (key2 != null) key2.Close();
-                    if (key3 != null) key3.Close();
-                }
-                if (bFail) break;
+                TL.Enabled = false;
             }
-            TL.Enabled = false;
-            TL.Dispose();
-            TL = null;
 
         }
 
@@ -471,14 +473,16 @@ namespace ASCOM.Simulator
                     //
                     // ASCOM
                     //
-					var P = new ASCOM.Utilities.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) };
-                    P.Unregister(progid);
-                    try										// In case Helper becomes native .NET
+                    using (var P = new ASCOM.Utilities.Profile())
                     {
-                        Marshal.ReleaseComObject(P);
+                        P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);
+                        P.Unregister(progid);
+                        //try										// In case Helper becomes native .NET
+                        //{
+                        //    Marshal.ReleaseComObject(P);
+                        //}
+                        //catch (Exception) { }
                     }
-                    catch (Exception) { }
-                    P = null;
                 }
                 catch (Exception) { }
             }
@@ -493,25 +497,25 @@ namespace ASCOM.Simulator
         //
         private static bool RegisterClassFactories()
         {
-            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "RegisterClassFactories");
-            TL.Enabled = true;
-            m_ClassFactories = new ArrayList();
-            foreach (Type type in m_ComObjectTypes)
+            using (ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "RegisterClassFactories"))
             {
-                TL.LogMessage("New ClassFactory", type.AssemblyQualifiedName); 
-                ClassFactory factory = new ClassFactory(type);					// Use default context & flags
-                m_ClassFactories.Add(factory);
-                if (!factory.RegisterClassObject())
+                TL.Enabled = true;
+                m_ClassFactories = new ArrayList();
+                foreach (Type type in m_ComObjectTypes)
                 {
-                    MessageBox.Show("Failed to register class factory for " + type.Name,
-                        "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    return false;
+                    TL.LogMessage("New ClassFactory", type.AssemblyQualifiedName);
+                    ClassFactory factory = new ClassFactory(type);					// Use default context & flags
+                    m_ClassFactories.Add(factory);
+                    if (!factory.RegisterClassObject())
+                    {
+                        MessageBox.Show("Failed to register class factory for " + type.Name,
+                            "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        return false;
+                    }
                 }
+                ClassFactory.ResumeClassObjects();									// Served objects now go live
+                TL.Enabled = false;
             }
-            ClassFactory.ResumeClassObjects();									// Served objects now go live
-            TL.Enabled = false;
-            TL.Dispose();
-            TL = null;
             return true;
         }
 

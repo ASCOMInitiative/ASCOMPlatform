@@ -30,6 +30,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -63,6 +64,7 @@ namespace ASCOM.Simulator
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.labelSlew = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideWest)).BeginInit();
@@ -307,12 +309,12 @@ namespace ASCOM.Simulator
             // ledPierEast
             // 
             this.ledPierEast.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ledPierEast.Cadence = ASCOM.Controls.CadencePattern.BlinkAlarm;
             this.ledPierEast.LabelText = "";
             this.ledPierEast.Location = new System.Drawing.Point(87, 84);
             this.ledPierEast.Name = "ledPierEast";
             this.ledPierEast.Size = new System.Drawing.Size(17, 16);
             this.ledPierEast.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.ledPierEast, "Scope on East side of Pier");
             // 
             // ledPierWest
             // 
@@ -322,6 +324,7 @@ namespace ASCOM.Simulator
             this.ledPierWest.Name = "ledPierWest";
             this.ledPierWest.Size = new System.Drawing.Size(16, 16);
             this.ledPierWest.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.ledPierWest, "Scope on West Side of Pier");
             // 
             // checkBoxTrack
             // 
@@ -383,6 +386,7 @@ namespace ASCOM.Simulator
             this.buttonHome.TabIndex = 1;
             this.buttonHome.Text = "Home";
             this.buttonHome.UseVisualStyleBackColor = true;
+            this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
             // 
             // buttonUnpark
             // 
@@ -422,6 +426,7 @@ namespace ASCOM.Simulator
             this.lblHOME.Size = new System.Drawing.Size(41, 20);
             this.lblHOME.TabIndex = 1;
             this.lblHOME.Text = "HOME";
+            this.toolTip1.SetToolTip(this.lblHOME, "Scope is at the home position");
             // 
             // lblPARK
             // 
@@ -435,6 +440,7 @@ namespace ASCOM.Simulator
             this.lblPARK.Size = new System.Drawing.Size(38, 20);
             this.lblPARK.TabIndex = 2;
             this.lblPARK.Text = "PARK";
+            this.toolTip1.SetToolTip(this.lblPARK, "Scope is parked");
             // 
             // picASCOM
             // 
@@ -472,6 +478,12 @@ namespace ASCOM.Simulator
             this.labelSlew.Size = new System.Drawing.Size(43, 20);
             this.labelSlew.TabIndex = 0;
             this.labelSlew.Text = "SLEW";
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 1000;
+            this.toolTip1.InitialDelay = 500;
+            this.toolTip1.ReshowDelay = 100;
             // 
             // frmMain
             // 
@@ -541,6 +553,7 @@ namespace ASCOM.Simulator
         internal System.Windows.Forms.Label labelSlew;
         private Controls.LedIndicator ledPierEast;
         private Controls.LedIndicator ledPierWest;
+        private System.Windows.Forms.ToolTip toolTip1;
 
 
     }

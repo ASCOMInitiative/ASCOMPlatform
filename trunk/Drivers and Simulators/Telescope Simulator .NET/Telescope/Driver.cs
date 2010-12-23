@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -69,11 +70,11 @@ namespace ASCOM.Simulator
 
         #region ITelescope Members
 
-        public string Action(string Command, string Parameters)
+        public string Action(string ActionName, string ActionParameters)
         {
             //throw new MethodNotImplementedException("Action");
             string Response = "";
-            switch (Command.ToUpper())
+            switch (ActionName.ToUpper(CultureInfo.InvariantCulture))
             {
                 case AssemblyVersionNumberUpper:
                     Response = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -81,13 +82,13 @@ namespace ASCOM.Simulator
                 case SlewToHAUpper:
                     //Assume that we have just been supplied with an HA
                     //Let errors just go straight back to the caller
-                        double HA = double.Parse(Parameters);
+                        double HA = double.Parse(ActionParameters, CultureInfo.InvariantCulture);
                         double RA = this.SiderealTime - HA;
                         this.SlewToCoordinates(RA, 0.0);
                         Response = "Slew successful!";
                     break;
                 default:
-                    throw new ASCOM.InvalidOperationException("Command: '" + Command + "' is not recognised by the Scope Simulator .NET driver. " + AssemblyVersionNumberUpper + " " + SlewToHAUpper);
+                    throw new ASCOM.InvalidOperationException("Command: '" + ActionName + "' is not recognised by the Scope Simulator .NET driver. " + AssemblyVersionNumberUpper + " " + SlewToHAUpper);
             }
             return Response;
         }
@@ -281,7 +282,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.ApertureArea.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.ApertureArea.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -316,7 +317,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.ApertureDiameter.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.ApertureDiameter.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1188,7 +1189,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.FocalLength.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.FocalLength.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1224,7 +1225,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.GuideRateDeclination.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.GuideRateDeclination.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1258,7 +1259,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1293,7 +1294,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1327,7 +1328,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1435,10 +1436,10 @@ namespace ASCOM.Simulator
                 throw new MethodNotImplementedException("MoveAxis");
             }
 
-            if (Rate > 50.0) throw new InvalidValueException("MoveAxis", Rate.ToString(), "-50 to -10, 0 and 10 to 50");
-            if ((Rate < 10.0) && (Rate > 0.0)) throw new InvalidValueException("MoveAxis", Rate.ToString(), "-50 to -10, 0 and 10 to 50");
-            if (Rate < -50.0) throw new InvalidValueException("MoveAxis", Rate.ToString(), "-50 to -10, 0 and 10 to 50");
-            if ((Rate > -10.0) && (Rate < 0.0)) throw new InvalidValueException("MoveAxis", Rate.ToString(), "-50 to -10, 0 and 10 to 50");
+            if (Rate > 50.0) throw new InvalidValueException("MoveAxis", Rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+            if ((Rate < 10.0) && (Rate > 0.0)) throw new InvalidValueException("MoveAxis", Rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+            if (Rate < -50.0) throw new InvalidValueException("MoveAxis", Rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+            if ((Rate > -10.0) && (Rate < 0.0)) throw new InvalidValueException("MoveAxis", Rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
 
             if (!CanMoveAxis(Axis)) throw new MethodNotImplementedException("CanMoveAxis " + Enum.GetName(typeof(TelescopeAxes), Axis));
 
@@ -1449,7 +1450,6 @@ namespace ASCOM.Simulator
                 if (TelescopeHardware.SlewState != SlewType.SlewMoveAxis)
                 {
                     TelescopeHardware.SlewState = SlewType.SlewNone;
-                    TelescopeHardware.ChangeHome(false);
                     TelescopeHardware.ChangePark(false);
                     TelescopeHardware.m_DeltaAlt = 0;
                     TelescopeHardware.m_DeltaAz = 0;
@@ -1589,7 +1589,7 @@ namespace ASCOM.Simulator
                         case GuideDirections.guideWest: directionString = "West"; break;
                     }
 
-                    SharedResources.TrafficForm.TrafficStart("Pulse Guide: " + directionString + ", " + Duration.ToString());
+                    SharedResources.TrafficForm.TrafficStart("Pulse Guide: " + directionString + ", " + Duration.ToString(CultureInfo.InvariantCulture));
 
                 }
             }
@@ -1601,7 +1601,7 @@ namespace ASCOM.Simulator
             }
 
 
-            if (Duration < 0) throw new ASCOM.InvalidValueException("PulseGuide",Duration.ToString(),">0");
+            if (Duration < 0) throw new ASCOM.InvalidValueException("PulseGuide",Duration.ToString(CultureInfo.InvariantCulture),">0");
 
             tempTicks = TelescopeHardware.GetTickCount() + Duration;
 
@@ -1714,7 +1714,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficStart("RightAscensionRate:<- " + value.ToString());
+                        SharedResources.TrafficForm.TrafficStart("RightAscensionRate:<- " + value.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1845,7 +1845,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Elevation.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Elevation.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1889,7 +1889,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1927,7 +1927,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Latitude.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Latitude.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -1971,7 +1971,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -2008,7 +2008,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Longitude.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Longitude.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -2052,7 +2052,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficEnd(value.ToString());
+                        SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -2069,7 +2069,7 @@ namespace ASCOM.Simulator
                 {
                     if (SharedResources.TrafficForm.Other)
                     {
-                        SharedResources.TrafficForm.TrafficLine("SlewSettleTime: " + (TelescopeHardware.SlewSettleTime * 1000).ToString());
+                        SharedResources.TrafficForm.TrafficLine("SlewSettleTime: " + (TelescopeHardware.SlewSettleTime * 1000).ToString(CultureInfo.InvariantCulture));
 
                     }
                 }
@@ -2382,7 +2382,6 @@ namespace ASCOM.Simulator
 
             if (TelescopeHardware.AtPark) throw new ParkedException();
 
-            TelescopeHardware.ChangeHome(false);
             TelescopeHardware.ChangePark(false);
 
             TelescopeHardware.Altitude = Altitude;
@@ -2425,7 +2424,6 @@ namespace ASCOM.Simulator
             TelescopeHardware.TargetDeclination = Declination;
             TelescopeHardware.TargetRightAscension = RightAscension;
 
-            TelescopeHardware.ChangeHome(false);
             TelescopeHardware.ChangePark(false);
 
             TelescopeHardware.RightAscension = RightAscension;
@@ -2462,7 +2460,6 @@ namespace ASCOM.Simulator
 
             if (TelescopeHardware.AtPark) throw new ParkedException();
 
-            TelescopeHardware.ChangeHome(false);
             TelescopeHardware.ChangePark(false);
 
             TelescopeHardware.RightAscension = TelescopeHardware.TargetRightAscension;
@@ -2962,7 +2959,7 @@ namespace ASCOM.Simulator
     [Guid("af5510b9-3108-4237-83da-ae70524aab7d"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class AxisRates : IAxisRates, IEnumerable, IEnumerator, IDisposable
     {
-        private TelescopeAxes m_Axis;
+        private TelescopeAxes m_axis;
         private Rate[] m_Rates;
         private int pos;
 
@@ -2972,7 +2969,7 @@ namespace ASCOM.Simulator
         //
         internal AxisRates(TelescopeAxes Axis)
         {
-            m_Axis = Axis;
+            m_axis = Axis;
             //
             // This collection must hold zero or more Rate objects describing the 
             // rates of motion ranges for the Telescope.MoveAxis() method
@@ -2983,7 +2980,7 @@ namespace ASCOM.Simulator
             // to the constructor. Thus we switch() below, and each case should 
             // initialize the array for the rate for the selected axis.
             //
-            switch (Axis)
+            switch (m_axis)
             {
                 case TelescopeAxes.axisPrimary:
                     // TODO Initialize this array with any Primary axis rates that your driver may provide
@@ -3015,9 +3012,9 @@ namespace ASCOM.Simulator
             return this as IEnumerator;
         }
 
-        public IRate this[int Index]
+        public IRate this[int index]
         {
-            get { return (IRate)m_Rates[Index - 1]; }	// 1-based
+            get { return (IRate)m_Rates[index - 1]; }	// 1-based
         }
 
         #endregion

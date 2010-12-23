@@ -411,14 +411,14 @@ namespace ASCOM.Simulator
             if (SideOfPier == ASCOM.DeviceInterface.PierSide.pierEast)
             {
                 ledPierEast.Status=TrafficLight.Green;
-                ledPierEast.Enabled = true;
-                ledPierWest.Enabled = false;
+                ledPierEast.Visible = true;
+                ledPierWest.Visible = false;
             }
             else
             {
                 ledPierWest.Status=TrafficLight.Red;
-                ledPierWest.Enabled = true;
-                ledPierEast.Enabled = false;
+                ledPierWest.Visible = true;
+                ledPierEast.Visible = false;
             }
         }
 
@@ -435,6 +435,11 @@ namespace ASCOM.Simulator
                 TelescopeHardware.Tracking = false;
             }
 
+        }
+
+        private void buttonHome_Click(object sender, EventArgs e)
+        {
+            TelescopeHardware.FindHome();
         }
     }
 }
