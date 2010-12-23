@@ -255,7 +255,6 @@ if Variable REMOVE Equals TRUE
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
   end
-  Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
   Unregister assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll
   Unregister assembly $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe
   Unregister assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll
@@ -289,9 +288,7 @@ else
   if Variable MAINTENANCE not Equals TRUE
     Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT)
   end
-  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Uninstall #TITLE# to $UNINSTALLLINK$
   [OFFLINE CONTENT]
-  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\#TITLE# Update to $UNINSTALLLINK$
   [DEFINE WEB MEDIA Platform 5]
   if Variable SELECTED Equals TRUE
   end
@@ -510,7 +507,7 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, 6.0 (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator
     Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator
     Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub
@@ -519,12 +516,14 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, This is a 32bit driver and cannot run on a 64bit system
     Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\, Filter Wheel Simulator [.Net]
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub
     Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\ASCOM.Simulator.Rotator, Rotator Simulator .NET
     Comment: Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\RotatorSimulator\\, Rotator Simulator
     Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
@@ -535,6 +534,12 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\\, Telescope Simulator for .NET
+    Comment: Remove TLB files created by RegAsm when application is uninstalled
+    Delete Files $COMMONFILES$\ASCOM\Switch\*.tlb (when uninstalling)
+    Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\*.tlb (when uninstalling)
+    Delete Files $COMMONFILES$\ASCOM\Focuser\*.tlb (when uninstalling)
+    Delete Files $COMMONFILES$\ASCOM\Camera\*.tlb (when uninstalling)
     [END REGION]
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
@@ -615,10 +620,6 @@ else
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll" /codebase (WAIT, get result into variable RC4)
           MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
           Comment: Remove tlb files left over by RegAsm
-          Recursively Delete Files $COMMONFILES$\ASCOM\Switch\*.tlb
-          Recursively Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\*.tlb
-          Recursively Delete Files $COMMONFILES$\ASCOM\Focuser\*.tlb
-          Recursively Delete Files $COMMONFILES$\ASCOM\Camera\*.tlb
         end
         [END REGION]
         Comment: Tidy up COM registration (add AppID for DCOM etc.)
