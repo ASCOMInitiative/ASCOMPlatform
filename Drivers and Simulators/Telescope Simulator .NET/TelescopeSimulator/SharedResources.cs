@@ -66,7 +66,7 @@ namespace ASCOM.Simulator
 
         //public static double DEG_RAD = 0.0174532925;
         public static double DEG_RAD = Math.PI / 180;
-        public static double RAD_DEG = 57.2957795;
+        public static double RAD_DEG =  180.0 / Math.PI;        //57.2957795;
         public static double HRS_RAD = 0.2617993881;
         public static double RAD_HRS = 3.81971863;
         public static double EARTH_ANG_ROT_DEG_MIN = 0.25068447733746215; //Angular rotation of earth in degrees/min
