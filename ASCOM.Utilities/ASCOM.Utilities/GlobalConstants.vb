@@ -54,4 +54,7 @@ Module GlobalConstants
     Public Const XML_VALUE_ELEMENTNAME As String = "Value"
     Public Const XML_VALUES_ELEMENTNAME As String = "Values"
 
+    'Location of the list of 32bit only drivers
+    Public Const DRIVERS_32BIT As String = "Drivers Not Compatible With 64bit Applications"
+    Public Const DRIVERS_32BIT_WARNING_TEXT As String = "!!32bit Driver!! - "
 End Module

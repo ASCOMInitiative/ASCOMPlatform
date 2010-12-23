@@ -274,10 +274,12 @@
     <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\FusionLib\FusionLib.csproj">
       <Project>{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2}</Project>
       <Name>FusionLib</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
