@@ -190,12 +190,17 @@ Public Class DiagnosticsForm
         Dim ASCOMPath As String
         Dim PathShell As New System.Text.StringBuilder(260)
         Dim MyVersion As Version
+        Dim SuccessMessage As String
 
         Try
             Status("Diagnostics running...")
 
             TL = New TraceLogger("", "Diagnostics")
             TL.Enabled = True
+
+            btnExit.Enabled = False ' Disable buttons during run
+            btnLastLog.Enabled = False
+            btnCOM.Enabled = False
 
             'Log Diagnostics version information
             MyVersion = Assembly.GetExecutingAssembly.GetName.Version
@@ -224,27 +229,27 @@ Public Class DiagnosticsForm
 
                 ScanSerial() 'Report serial port information
 
-                ScanASCOMDrivers() 'Report installed driver versions
+                ScanASCOMDrivers() : Action("") 'Report installed driver versions
 
                 'ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
 
-                ScanProfile() 'Report profile information
+                ScanProfile() : Action("") 'Report profile information
 
                 ScanRegistry() 'Scan Old ASCOM Registry Profile
 
-                ScanProfile55Files() 'List contents of Profile 5.5 XML files
+                ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
 
                 ScanCOMRegistration() 'Report Com Registration
 
                 'Scan files on 32 and 64bit systems
                 TL.LogMessage("Files", "")
                 ASCOMPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM\"
-                Call ScanFiles(ASCOMPath) 'Scan 32bit files on 32bit OS and 64bit files on 64bit OS
+                Call ScanFiles(ASCOMPath) : Action("") 'Scan 32bit files on 32bit OS and 64bit files on 64bit OS
 
                 If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 32bit locations for files as well
                     SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES_COMMONX86, False)
                     ASCOMPath = PathShell.ToString & "\ASCOM\"
-                    Call ScanFiles(ASCOMPath)
+                    Call ScanFiles(ASCOMPath) : Action("")
                 End If
 
                 'List GAC contents
@@ -265,21 +270,21 @@ Public Class DiagnosticsForm
                 TL.BlankLine()
 
                 'Functional tests
-                UtilTests()
-                ProfileTests()
-                TimerTests()
+                UtilTests() : Action("")
+                ProfileTests() : Action("")
+                TimerTests() : Action("")
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
-                    TL.LogMessage("Diagnostics", "Completed function testing run. Congratualtions all " & NMatches & " tests passed!")
+                    SuccessMessage = "Congratualtions, all " & NMatches & " function tests passed!"
                 Else
-                    TL.LogMessage("Diagnostics", "Completed function testing run: " & NMatches & " matches, " & NNonMatches & " fail(s), " & NExceptions & " exception(s).")
+                    SuccessMessage = "Completed function testing run: " & NMatches & " matches, " & NNonMatches & " fail(s), " & NExceptions & " exception(s)."
                 End If
-
+                TL.LogMessage("Diagnostics", SuccessMessage)
                 TL.Enabled = False
                 TL.Dispose()
                 TL = Nothing
                 Status("Diagnostic log created OK")
-                Action("")
+                Action(SuccessMessage)
             Catch ex As Exception
                 Status("Diagnostics exception, please see log")
                 TL.LogMessageCrLf("DiagException", ex.ToString)
@@ -292,9 +297,12 @@ Public Class DiagnosticsForm
                 ASCOMRegistryAccess = Nothing
             End Try
             btnLastLog.Enabled = True
+
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
         End Try
+        btnExit.Enabled = True ' Enable buttons during run
+        btnCOM.Enabled = True
     End Sub
 
     Private Sub TimerTests()
@@ -320,7 +328,7 @@ Public Class DiagnosticsForm
             ASCOMTimer.Enabled = False
         End Try
 
-        TL.LogMessage("TimerTests", "Finished" & vbCrLf)
+        TL.LogMessage("TimerTests", "Finished")
         TL.BlankLine()
     End Sub
 
@@ -681,6 +689,7 @@ Public Class DiagnosticsForm
 
             'Multiple writes to the same value - single threaded
             TL.LogMessage("ProfileMultiAccess", "MultiWrite - SingleThread Started")
+            Action("MultiWrite - SingleThread Started")
             Try
                 Dim P(100) As Profile
                 For i = 1 To 100
@@ -695,6 +704,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("ProfileMultiAccess", "MultiWrite - SingleThread Finished")
 
             TL.LogMessage("ProfileMultiAccess", "MultiWrite - MultiThread Started")
+            Action("MultiWrite - MultiThread Started")
             'Multiple writes -multi-threaded
             Const NThreads As Integer = 3
 
@@ -1779,10 +1789,14 @@ Public Class DiagnosticsForm
     Private Sub ChooserToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserToolStripMenuItem1.Click
         Dim Chooser As Object, Chosen As String
 
-        Chooser = CreateObject("DriverHelper.Chooser")
-        Chooser.DeviceType = "Telescope"
-        Chosen = Chooser.Choose("ScopeSim.Telescope")
 
+        If ApplicationBits() = Bitness.Bits32 Then
+            Chooser = CreateObject("DriverHelper.Chooser")
+            Chooser.DeviceType = "Telescope"
+            Chosen = Chooser.Choose("ScopeSim.Telescope")
+        Else
+            MsgBox("This component is 32bit only and cannot run on a 64bit system")
+        End If
     End Sub
 
     Sub ScanSerial()

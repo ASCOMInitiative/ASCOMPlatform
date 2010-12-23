@@ -14,7 +14,7 @@ Friend Class ChooserForm
     Private Const ALERT_TITLE As String = "ASCOM Chooser"
 
     Private m_sDeviceType, m_sResult, m_sStartSel As String
-    Private m_Drivers As New Generic.SortedList(Of String, String)
+    Private m_Drivers As Generic.SortedList(Of String, String)
 
     Private Sub ChooserForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim ProfileStore As RegistryAccess
@@ -22,6 +22,8 @@ Friend Class ChooserForm
         Dim cb As System.Windows.Forms.ComboBox
         Dim sDescription As String = ""
         Dim TraceFileName As String
+        Dim Drivers32bit As Generic.SortedList(Of String, String)
+        Dim Description As String
         '
         ' Enumerate the available ASCOM scope drivers, and
         ' load their descriptions and ProgIDs into the
@@ -30,20 +32,36 @@ Friend Class ChooserForm
         'MsgBox("ChooserformLoad Start")
         Try
             ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-            Try
+            Try 'Get the list of 32bit only drivers
+                Drivers32bit = ProfileStore.EnumProfile(DRIVERS_32BIT)
+            Catch ex1 As Exception
+                'Ignore any exceptions from this call e.g. if there are no 32bit only devices installed
+                'Just create an empty list
+                Drivers32bit = New Generic.SortedList(Of String, String)
+            End Try
+
+            Try 'Get the list of drivers of this device type
                 m_Drivers = ProfileStore.EnumKeys(m_sDeviceType & " Drivers") ' Get Key-Class pairs
             Catch ex1 As Exception
                 'Ignore any exceptions from this call e.g. if there are no devices of that type installed
                 'Just create an empty list
                 m_Drivers = New Generic.SortedList(Of String, String)
             End Try
+
             cb = Me.cbDriverSelector ' Handy shortcut
             cb.Items.Clear()
             If m_Drivers.Count = 0 Then
                 MsgBox("There are no ASCOM " & m_sDeviceType & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
             Else
                 For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
-                    cb.Items.Add(de.Value.ToString) ' Add items & allow to sort
+                    Description = de.Value ' Set the device description
+                    If de.Value = "" Then Description = de.Key 'Deal with the possibility that it is an empty string, i.e. the driver author has forgotton to set it!
+
+                    If (ApplicationBits() = Bitness.Bits64) And (Drivers32bit.ContainsKey(de.Key)) Then 'This is a 32bit driver being accessed by a 64bit application
+                        cb.Items.Add("!!32bit Driver!! - " & Description) ' Add items & allow to sort
+                    Else
+                        cb.Items.Add(Description) ' Add items & allow to sort
+                    End If
                 Next
             End If
 
@@ -210,21 +228,37 @@ Friend Class ChooserForm
         Dim ProfileStore As RegistryAccess
         Dim sProgID As String = ""
         Dim buf As String
+        Dim Drivers32bit As Generic.SortedList(Of String, String)
 
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+
+        Try 'Get the list of 32bit only drivers
+            Drivers32bit = ProfileStore.EnumProfile(DRIVERS_32BIT)
+        Catch ex1 As Exception
+            'Ignore any exceptions from this call e.g. if there are no 32bit only devices installed
+            'Just create an empty list
+            Drivers32bit = New Generic.SortedList(Of String, String)
+        End Try
 
         If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
             Me.cmdProperties.Enabled = True ' Turn on Properties
             'Find ProgID corresponding to description
             For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
                 If LCase(de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
+                'Also recognise if it has the 32bit warning text prefixed to the description
+                If LCase(DRIVERS_32BIT_WARNING_TEXT & de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
             Next
 
-            buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
-            If LCase(buf) = "true" Then
-                Me.cmdOK.Enabled = True ' This device has been initialized
-            Else
-                Me.cmdOK.Enabled = False ' Never been initialized
+            If (ApplicationBits() = Bitness.Bits64) And (Drivers32bit.ContainsKey(sProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
+                Me.cmdProperties.Enabled = False ' So prevent access!
+                Me.cmdOK.Enabled = False
+            Else ' Good to go!
+                buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
+                If LCase(buf) = "true" Then
+                    Me.cmdOK.Enabled = True ' This device has been initialized
+                Else
+                    Me.cmdOK.Enabled = False ' Never been initialized
+                End If
             End If
         Else
             Me.cmdProperties.Enabled = False

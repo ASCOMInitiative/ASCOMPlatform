@@ -30,9 +30,9 @@ Partial Class DiagnosticsForm
         Me.lblResult = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ChooserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConnectToDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChooserToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChooserNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ConnectToDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListAvailableCOMPortsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblAction = New System.Windows.Forms.Label()
         Me.btnLastLog = New System.Windows.Forms.Button()
@@ -109,6 +109,12 @@ Partial Class DiagnosticsForm
         Me.ChooserToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
         Me.ChooserToolStripMenuItem.Text = "Tools"
         '
+        'ConnectToDeviceToolStripMenuItem
+        '
+        Me.ConnectToDeviceToolStripMenuItem.Name = "ConnectToDeviceToolStripMenuItem"
+        Me.ConnectToDeviceToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
+        Me.ConnectToDeviceToolStripMenuItem.Text = "Choose and Connect to Device"
+        '
         'ChooserToolStripMenuItem1
         '
         Me.ChooserToolStripMenuItem1.Name = "ChooserToolStripMenuItem1"
@@ -121,12 +127,6 @@ Partial Class DiagnosticsForm
         Me.ChooserNETToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.ChooserNETToolStripMenuItem.Text = "Telescope Chooser (using .NET)"
         '
-        'ConnectToDeviceToolStripMenuItem
-        '
-        Me.ConnectToDeviceToolStripMenuItem.Name = "ConnectToDeviceToolStripMenuItem"
-        Me.ConnectToDeviceToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
-        Me.ConnectToDeviceToolStripMenuItem.Text = "Choose and Connect to Device"
-        '
         'ListAvailableCOMPortsToolStripMenuItem
         '
         Me.ListAvailableCOMPortsToolStripMenuItem.Name = "ListAvailableCOMPortsToolStripMenuItem"
@@ -136,14 +136,14 @@ Partial Class DiagnosticsForm
         'lblAction
         '
         Me.lblAction.AutoSize = True
-        Me.lblAction.Location = New System.Drawing.Point(12, 236)
+        Me.lblAction.Location = New System.Drawing.Point(22, 236)
         Me.lblAction.MinimumSize = New System.Drawing.Size(380, 0)
         Me.lblAction.Name = "lblAction"
         Me.lblAction.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblAction.Size = New System.Drawing.Size(380, 13)
         Me.lblAction.TabIndex = 6
         Me.lblAction.Text = "Label1"
-        Me.lblAction.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblAction.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'btnLastLog
         '
