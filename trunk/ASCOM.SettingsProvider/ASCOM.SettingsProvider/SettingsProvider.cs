@@ -47,9 +47,9 @@
 using System;
 using System.Configuration;
 using System.Reflection;
+using ASCOM.Internal;
 using ASCOM.Utilities;
 using ASCOM.Utilities.Interfaces;
-using TiGra.ExtensionMethods;
 using TiGra;
 
 namespace ASCOM

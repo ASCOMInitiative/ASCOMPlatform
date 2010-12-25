@@ -152,9 +152,6 @@
     <Compile Include="SettingsProvider.cs">
       <ExcludeFromStyleCop>false</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="StringExtensions.cs">
-      <ExcludeFromStyleCop>false</ExcludeFromStyleCop>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\ASCOM.snk">
@@ -169,6 +166,10 @@
     <ProjectReference Include="..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
       <Name>ASCOM.Attributes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj">
+      <Project>{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}</Project>
+      <Name>ASCOM.Internal.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
