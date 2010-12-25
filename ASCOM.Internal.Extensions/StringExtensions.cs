@@ -1,57 +1,88 @@
-﻿//tabs=4
-// --------------------------------------------------------------------------------
-// <summary>
-// ASCOM.Internal.StringExtensions
-// </summary>
-//
-// <copyright company="The ASCOM Initiative" author="Timothy P. Long">
-//	Copyright © 2010 TiGra Astronomy
-// </copyright>
-//
-// <license>
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject to
-// the following conditions:
-// 
-// The above copyright notice and this permission notice shall be
-// included in all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-// </license>
-//
-// Author:		(TPL) Timothy P. Long <Tim@tigranetworks.co.uk>
-//
-// Edit Log:
-//
-// Date			Who	Vers	Description
-// -----------	---	-----	-------------------------------------------------------
-// 11-Mar-2010	TPL	6.0.*	Initial edit.
-// --------------------------------------------------------------------------------
+﻿using System;
+using System.Linq;
+using System.Text;
 
 namespace ASCOM.Internal
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	/// <summary>
-	/// String extension methods.
-	/// </summary>
-	/// <remarks>
-	/// Internal use only. Driver and application developers should not rely on this class,
-	/// because the interface and method signatures may change at any time.
-	/// </remarks>
-	public static class StringExtensions
-	{
-	}
+    /// <summary>
+    ///   String extension methods.
+    /// </summary>
+    /// <remarks>
+    ///   Internal use only. Driver and application developers should not rely on this class,
+    ///   because the interface and method signatures may change at any time.
+    /// </remarks>
+    public static class StringExtensions
+    {
+        /// <summary>
+        ///   Returns the specified number of characters from the head of a string.
+        /// </summary>
+        /// <param name = "source">The source string.</param>
+        /// <param name = "length">The number of characters to be returned, must not be greater than the length of the string.</param>
+        /// <returns>The specified number of characters from the head of the source string, as a new string.</returns>
+        /// <exception cref = "ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
+        public static string Head(this string source, int length)
+        {
+            if (length > source.Length)
+                throw new ArgumentOutOfRangeException("source",
+                                                      "The specified length is greater than the length of the string.");
+            return source.Substring(0, length);
+        }
+
+        /// <summary>
+        ///   Returns the specified number of characters from the tail of a string.
+        /// </summary>
+        /// <param name = "source">The source string.</param>
+        /// <param name = "length">The number of characters to be returned, must not be greater than the length of the string.</param>
+        /// <returns>The specified number of characters from the tail of the source string, as a new string.</returns>
+        /// <exception cref = "ArgumentOutOfRangeException">Thrown if the requested number of characters exceeds the string length.</exception>
+        public static string Tail(this string source, int length)
+        {
+            int srcLength = source.Length;
+            if (length > srcLength)
+                throw new ArgumentOutOfRangeException("source",
+                                                      "The specified length is greater than the length of the string.");
+            return source.Substring(srcLength - length, length);
+        }
+
+        /// <summary>
+        ///   Cleans (that is, removes all unwanted characters) from the string.
+        /// </summary>
+        /// <param name = "source">The source string.</param>
+        /// <param name = "allowedCharacters">A list of the allowed characters. All other characters will be removed.</param>
+        /// <returns>A new string with all of the unwanted characters deleted.</returns>
+        public static string Clean(this string source, string allowedCharacters)
+        {
+            if (string.IsNullOrEmpty(source)) return string.Empty;
+            var cleanString = new StringBuilder(source.Length);
+            foreach (char ch in source)
+            {
+                if (allowedCharacters.Contains(ch)) cleanString.Append(ch);
+            }
+            return cleanString.ToString();
+        }
+
+        /// <summary>
+        ///   Remove the head of the string, leaving the tail.
+        /// </summary>
+        /// <param name = "source">The source string.</param>
+        /// <param name = "length">Number of characters to remove from the head.</param>
+        /// <returns>A new string containing the old string with <see cref = "length" /> characters removed from the head.</returns>
+        public static string RemoveHead(this string source, int length)
+        {
+            if (length < 1) return source;
+            return source.Tail(source.Length - length);
+        }
+
+        /// <summary>
+        ///   Remove the tail of the string, leaving the head.
+        /// </summary>
+        /// <param name = "source">The source string.</param>
+        /// <param name = "length">Number of characters to remove from the tail.</param>
+        /// <returns>A new string containing the old string with <see cref = "length" /> characters removed from the tail.</returns>
+        public static string RemoveTail(this string source, int length)
+        {
+            if (length < 1) return source;
+            return source.Head(source.Length - length);
+        }
+    }
 }
