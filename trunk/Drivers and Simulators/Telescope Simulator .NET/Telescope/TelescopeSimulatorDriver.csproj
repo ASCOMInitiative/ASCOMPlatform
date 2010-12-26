@@ -119,6 +119,7 @@
     <Compile Include="Driver.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -140,6 +141,9 @@
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </Content>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
   </ItemGroup>

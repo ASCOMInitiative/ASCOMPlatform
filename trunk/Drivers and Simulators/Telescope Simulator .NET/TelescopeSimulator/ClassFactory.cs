@@ -109,7 +109,7 @@ namespace ASCOM.Simulator
 
         #region Constructor and Private ClassFactory Data
 
-        protected Type m_ClassType;
+        private Type m_ClassType;
         protected Guid m_ClassId;
         protected ArrayList m_InterfaceTypes;
         protected uint m_ClassContext;
@@ -125,20 +125,19 @@ namespace ASCOM.Simulator
             m_Flags = (uint)REGCLS.REGCLS_MULTIPLEUSE |			// Default
                         (uint)REGCLS.REGCLS_SUSPENDED;
             m_InterfaceTypes = new ArrayList();
-            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "ClassFactory(Type)");
-            TL.Enabled = true;
-            TL.LogMessage("Type", type.AssemblyQualifiedName.ToString());
-            TL.LogMessage("Guid", m_ClassId.ToString());
-            
-            foreach (Type T in type.GetInterfaces())			// Save all of the implemented interfaces
+            using (ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "ClassFactory(Type)"))
             {
-                m_InterfaceTypes.Add(T);
-                TL.LogMessage("  Interface", T.AssemblyQualifiedName);
-            }
-            TL.Enabled = false;
-            TL.Dispose();
-            TL = null;
+                TL.Enabled = true;
+                TL.LogMessage("Type", type.AssemblyQualifiedName.ToString());
+                TL.LogMessage("Guid", m_ClassId.ToString());
 
+                foreach (Type T in type.GetInterfaces())			// Save all of the implemented interfaces
+                {
+                    m_InterfaceTypes.Add(T);
+                    TL.LogMessage("  Interface", T.AssemblyQualifiedName);
+                }
+                TL.Enabled = false;
+            }
         }
 
         #endregion
@@ -204,47 +203,47 @@ namespace ASCOM.Simulator
             IntPtr nullPtr = new IntPtr(0);
             ppvObject = nullPtr;
 
-            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "IClassFactory(CreateInstance)");
-            TL.Enabled = true;
-            TL.LogMessage("Riid Guid", riid.ToString());
-
-            //
-            // Handle specific requests for implemented interfaces
-            //
-            foreach (Type iType in m_InterfaceTypes)
+            using (ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "IClassFactory(CreateInstance)"))
             {
-                TL.LogMessage("  Checking iType", iType.AssemblyQualifiedName);
-                if (riid == Marshal.GenerateGuidForType(iType))
+                TL.Enabled = true;
+                TL.LogMessage("Riid Guid", riid.ToString());
+
+                //
+                // Handle specific requests for implemented interfaces
+                //
+                foreach (Type iType in m_InterfaceTypes)
                 {
-                    TL.LogMessage("    Found Riid", riid.ToString());
-                    ppvObject = Marshal.GetComInterfaceForObject(Activator.CreateInstance(m_ClassType), iType);
+                    TL.LogMessage("  Checking iType", iType.AssemblyQualifiedName);
+                    if (riid == Marshal.GenerateGuidForType(iType))
+                    {
+                        TL.LogMessage("    Found Riid", riid.ToString());
+                        ppvObject = Marshal.GetComInterfaceForObject(Activator.CreateInstance(m_ClassType), iType);
+                        return;
+                    }
+                }
+                //
+                // Handle requests for IDispatch or IUnknown on the class
+                //
+                if (riid == IID_IDispatch)
+                {
+                    TL.LogMessage("  Found I_Dispatch", riid.ToString());
+                    ppvObject = Marshal.GetIDispatchForObject(Activator.CreateInstance(m_ClassType));
                     return;
                 }
+                else if (riid == IID_IUnknown)
+                {
+                    TL.LogMessage("  Found I_Unknown", riid.ToString());
+                    ppvObject = Marshal.GetIUnknownForObject(Activator.CreateInstance(m_ClassType));
+                }
+                else
+                {
+                    //
+                    // Oops, some interface that the class doesn't implement
+                    //
+                    throw new COMException("No interface", unchecked((int)0x80004002));
+                }
+                TL.Enabled = false;
             }
-            //
-            // Handle requests for IDispatch or IUnknown on the class
-            //
-            if (riid == IID_IDispatch)
-            {
-                TL.LogMessage("  Found I_Dispatch", riid.ToString());
-                ppvObject = Marshal.GetIDispatchForObject(Activator.CreateInstance(m_ClassType));
-                return;
-            }
-            else if (riid == IID_IUnknown)
-            {
-                TL.LogMessage("  Found I_Unknown", riid.ToString());
-                ppvObject = Marshal.GetIUnknownForObject(Activator.CreateInstance(m_ClassType));
-            }
-            else
-            {
-                //
-                // Oops, some interface that the class doesn't implement
-                //
-                throw new COMException("No interface", unchecked((int)0x80004002));
-            }
-            TL.Enabled = false;
-            TL.Dispose();
-            TL = null;
         }
 
         void IClassFactory.LockServer(bool bLock)
