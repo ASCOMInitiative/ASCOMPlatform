@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -18,7 +19,7 @@ namespace ASCOM.Simulator
             InitializeComponent();
 
             Version version = new Version(Application.ProductVersion);
-            labelVersion.Text = "ASCOM Telescope Simulator .NET " + string.Format("Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
+            labelVersion.Text = string.Format(CultureInfo.CurrentCulture, "ASCOM Telescope Simulator .NET Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
             TimeZone localZone = TimeZone.CurrentTimeZone;
             labelTime.Text = "Time zone is " + localZone.StandardName;
             if (localZone.IsDaylightSavingTime(DateTime.Now))
@@ -104,11 +105,12 @@ namespace ASCOM.Simulator
             get 
             {
                 double elevation;
-                double.TryParse(textBoxElevation.Text, out elevation);
+                if (!double.TryParse(textBoxElevation.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out elevation))
+                    elevation = double.NaN;
                 return elevation;
                 
             }
-            set { textBoxElevation.Text = value.ToString(); }
+            set { textBoxElevation.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
         public double Latitude
         {
@@ -367,36 +369,33 @@ namespace ASCOM.Simulator
             get
             {
                 double area;
-                double.TryParse(textBoxApertureArea.Text, out area);
+                if (!double.TryParse(textBoxApertureArea.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out area))
+                    area = -1;  // indicates an error - for now
                 return area; 
-
-
             }
-            set { textBoxApertureArea.Text = value.ToString(); }
+            set { textBoxApertureArea.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
         public double ApertureDiameter
         {
             get
             {
                 double aperture;
-                double.TryParse(textBoxAperture.Text, out aperture);
+                if (!double.TryParse(textBoxAperture.Text, NumberStyles.Float | NumberStyles.AllowThousands , CultureInfo.CurrentCulture, out aperture))
+                    aperture = -1;
                 return aperture;
-
-
             }
-            set { textBoxAperture.Text = value.ToString(); }
+            set { textBoxAperture.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
         public double FocalLength
         {
             get
             {
                 double focal;
-                double.TryParse(textBoxFocalLength.Text, out focal);
+                if (!double.TryParse(textBoxFocalLength.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out focal))
+                    focal = -1;
                 return focal;
-
-
             }
-            set { textBoxFocalLength.Text = value.ToString(); }
+            set { textBoxFocalLength.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
         public ASCOM.DeviceInterface.AlignmentModes AlignmentMode
         {
@@ -433,7 +432,6 @@ namespace ASCOM.Simulator
             TelescopeHardware.ParkAltitude = TelescopeHardware.Altitude;
             TelescopeHardware.ParkAzimuth = TelescopeHardware.Azimuth;
         }
-
     }
 
     [ComVisible(false)]

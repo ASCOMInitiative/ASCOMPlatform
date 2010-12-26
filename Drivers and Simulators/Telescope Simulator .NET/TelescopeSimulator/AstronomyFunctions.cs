@@ -22,19 +22,21 @@ using System.Text;
 
 namespace ASCOM.Simulator
 {
-    public class AstronomyFunctions
+    public static class AstronomyFunctions
     {
-        private static Utilities.Util m_Util = new ASCOM.Utilities.Util();
+        private static Utilities.Util util = new ASCOM.Utilities.Util();
 
-        static AstronomyFunctions()
-        { }
+
+        //static AstronomyFunctions()
+        //{
+        //}
 
         //----------------------------------------------------------------------------------------
         // Calculate Precession
         //----------------------------------------------------------------------------------------
-        public static double Precess(DateTime datetime)
+        public static double Precess(DateTime dateTime)
         {
-            int y = datetime.Year + 1900;
+            int y = dateTime.Year + 1900;
             if (y >= 3900) { y = y - 1900; }
             int p = y - 1;
             int r = p / 1000;
@@ -50,12 +52,12 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Calculate the hour angle of the current pointing direction
         /// </summary>
-        /// <param name="RightAscension"></param>
-        /// <param name="Longitude"></param>
+        /// <param name="rightAscension"></param>
+        /// <param name="longitude"></param>
         /// <returns></returns>
-        public static double HourAngle(double RightAscension, double Longitude)
+        public static double HourAngle(double rightAscension, double longitude)
         {
-            return RangeHa(LocalSiderealTime(Longitude) - RightAscension) ;  // Hours
+            return RangeHa(LocalSiderealTime(longitude) - rightAscension) ;  // Hours
         }
 
 
@@ -64,7 +66,7 @@ namespace ASCOM.Simulator
         //----------------------------------------------------------------------------------------
         public static double LocalSiderealTime(double longitude)
         {
-            double days_since_j_2000 = m_Util.JulianDate - 2451545.0;
+            double days_since_j_2000 = util.JulianDate - 2451545.0;
             double t = days_since_j_2000 / 36525;
             double l1mst = 280.46061837 + 360.98564736629 * days_since_j_2000 + longitude ;
             if (l1mst < 0.0)
@@ -160,39 +162,39 @@ namespace ASCOM.Simulator
         //----------------------------------------------------------------------------------------
         // Calculate RA and Dec From Altitude and Azimuth and Site
         //----------------------------------------------------------------------------------------
-        public static double CalculateRa(double Altitude, double Azimuth, double Latitude, double Longitude)
+        public static double CalculateRa(double altitude, double azimuth, double latitude, double longitude)
         {
 
-            double hourAngle = Math.Atan2(-Math.Sin(Azimuth) * Math.Cos(Altitude),
-                                          -Math.Cos(Azimuth) * Math.Sin(Latitude) * Math.Cos(Altitude) + Math.Sin(Altitude) * Math.Cos(Latitude))
+            double hourAngle = Math.Atan2(-Math.Sin(azimuth) * Math.Cos(altitude),
+                                          -Math.Cos(azimuth) * Math.Sin(latitude) * Math.Cos(altitude) + Math.Sin(altitude) * Math.Cos(latitude))
                                           * SharedResources.RAD_HRS; 
 
-            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG); 
+            double lst = LocalSiderealTime(longitude * SharedResources.RAD_DEG); 
 
             return RangeRa(lst - hourAngle);
         }
 
-        public static double CalculateDec(double Altitude, double Azimuth, double Latitude)
+        public static double CalculateDec(double altitude, double azimuth, double latitude)
         {
             
-            return Math.Asin(Math.Cos(Azimuth) * Math.Cos(Latitude) * Math.Cos(Altitude) + Math.Sin(Latitude) * Math.Sin(Altitude)) * SharedResources.RAD_DEG;
+            return Math.Asin(Math.Cos(azimuth) * Math.Cos(latitude) * Math.Cos(altitude) + Math.Sin(latitude) * Math.Sin(altitude)) * SharedResources.RAD_DEG;
         }
 
         //----------------------------------------------------------------------------------------
         // Calculate Altitude and Azimuth From Ra/Dec and Site
         //----------------------------------------------------------------------------------------
-        public static double CalculateAltitude(double RightAscension, double Declination, double Latitude, double Longitude)
+        public static double CalculateAltitude(double rightAscension, double declination, double latitude, double longitude)
         {
 
-            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG); // Hours
-            double ha = (lst - RightAscension * SharedResources.RAD_HRS) * SharedResources.HRS_RAD; //Radians
+            double lst = LocalSiderealTime(longitude * SharedResources.RAD_DEG); // Hours
+            double ha = (lst - rightAscension * SharedResources.RAD_HRS) * SharedResources.HRS_RAD; //Radians
 
             double sh = Math.Sin(ha);
             double ch = Math.Cos(ha);
-            double sd = Math.Sin(Declination);
-            double cd = Math.Cos(Declination);
-            double sl = Math.Sin(Latitude);
-            double cl = Math.Cos(Latitude);
+            double sd = Math.Sin(declination);
+            double cd = Math.Cos(declination);
+            double sl = Math.Sin(latitude);
+            double cl = Math.Cos(latitude);
 
             double x = (sd * cl) - (ch * cd * sl);
             double y = -(sh * cd);
@@ -202,18 +204,18 @@ namespace ASCOM.Simulator
             return RangeAlt(Math.Atan2(z, r) * SharedResources.RAD_DEG);
         }
 
-        public static double CalculateAzimuth(double RightAscension, double Declination, double Latitude, double Longitude)
+        public static double CalculateAzimuth(double rightAscension, double declination, double latitude, double longitude)
         {
             
-            double lst = LocalSiderealTime(Longitude * SharedResources.RAD_DEG); // Hours
-            double ha = (lst - RightAscension * SharedResources.RAD_HRS) * SharedResources.HRS_RAD;  // Radians
+            double lst = LocalSiderealTime(longitude * SharedResources.RAD_DEG); // Hours
+            double ha = (lst - rightAscension * SharedResources.RAD_HRS) * SharedResources.HRS_RAD;  // Radians
 
             double sh = Math.Sin(ha);
             double ch = Math.Cos(ha);
-            double sd = Math.Sin(Declination);
-            double cd = Math.Cos(Declination);
-            double sl = Math.Sin(Latitude);
-            double cl = Math.Cos(Latitude);
+            double sd = Math.Sin(declination);
+            double cd = Math.Cos(declination);
+            double sl = Math.Sin(latitude);
+            double cl = Math.Cos(latitude);
 
             double x =  (sd * cl) - (ch * cd * sl);
             double y = -(sh * cd);
@@ -224,62 +226,63 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Return an hour angle in the range -12 to +12 hours
         /// </summary>
-        /// <param name="HourAngle">Value to range</param>
+        /// <param name="hourAngle">Value to range</param>
         /// <returns>Hour angle in the range -12 to +12 hours</returns>
-        public static double RangeHa(double HourAngle)
+        public static double RangeHa(double hourAngle)
         {
-            while ((HourAngle >= 12.0) || (HourAngle <= -12.0))
+            while ((hourAngle >= 12.0) || (hourAngle <= -12.0))
             {
-                if (HourAngle <= -12.0) HourAngle += 24.0;
-                if (HourAngle >= 12.0) HourAngle -= 24.0;
+                if (hourAngle <= -12.0) hourAngle += 24.0;
+                if (hourAngle >= 12.0) hourAngle -= 24.0;
             }
 
-            return HourAngle;
+            return hourAngle;
         }
         
         
         //----------------------------------------------------------------------------------------
         // Range RA and DEC
         //----------------------------------------------------------------------------------------
-        public static double RangeRa(double RightAscension)
+        public static double RangeRa(double rightAscension)
         {
-            while ((RightAscension >= 24.0) || (RightAscension < 0.0))
+            while ((rightAscension >= 24.0) || (rightAscension < 0.0))
             {
-                if (RightAscension < 0.0) RightAscension += 24.0;
-                if (RightAscension >= 24.0) RightAscension -= 24.0;
+                if (rightAscension < 0.0) rightAscension += 24.0;
+                if (rightAscension >= 24.0) rightAscension -= 24.0;
             }
 
-            return RightAscension;
+            return rightAscension;
         }
-        public static double RangeDec(double Declination)
+        public static double RangeDec(double declination)
         {
-            while ((Declination > 90.0) || (Declination < -90.0))
+            while ((declination > 90.0) || (declination < -90.0))
             {
-                if (Declination < -90.0) Declination += 90.0;
-                if (Declination > 90.0) Declination -= 90.0;
+                if (declination < -90.0) declination += 90.0;
+                if (declination > 90.0) declination -= 90.0;
             }
 
-            return Declination;
+            return declination;
         }
-        public static double RangeAlt(double Alitude)
+
+        public static double RangeAlt(double altitude)
         {
-            while ((Alitude > 90.0) || (Alitude < -90.0))
+            while ((altitude > 90.0) || (altitude < -90.0))
             {
-                if (Alitude < -90.0) Alitude += 90.0;
-                if (Alitude > 90.0) Alitude -= 90.0;
+                if (altitude < -90.0) altitude += 90.0;
+                if (altitude > 90.0) altitude -= 90.0;
             }
 
-            return Alitude;
+            return altitude;
         }
-        public static double RangeAzimuth(double Azimuth)
+        public static double RangeAzimuth(double azimuth)
         {
-            while ((Azimuth >= 360.0) || (Azimuth < 0.0))
+            while ((azimuth >= 360.0) || (azimuth < 0.0))
             {
-                if (Azimuth < 0.0) Azimuth += 360.0;
-                if (Azimuth >= 360.0) Azimuth -= 360.0;
+                if (azimuth < 0.0) azimuth += 360.0;
+                if (azimuth >= 360.0) azimuth -= 360.0;
             }
 
-            return Azimuth;
+            return azimuth;
         }
     }
 }

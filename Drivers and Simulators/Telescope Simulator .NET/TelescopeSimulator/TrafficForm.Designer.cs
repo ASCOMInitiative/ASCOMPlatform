@@ -79,6 +79,7 @@
             this.ButtonClear.TabIndex = 1;
             this.ButtonClear.Text = "Clear";
             this.ButtonClear.UseVisualStyleBackColor = false;
+            this.ButtonClear.Click += new System.EventHandler(this.ButtonClear_Click);
             // 
             // checkBoxTime
             // 
@@ -165,6 +166,9 @@
             // 
             // txtTraffic
             // 
+            this.txtTraffic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTraffic.BackColor = System.Drawing.SystemColors.Info;
             this.txtTraffic.CausesValidation = false;
             this.txtTraffic.Location = new System.Drawing.Point(12, 157);
@@ -172,7 +176,7 @@
             this.txtTraffic.Name = "txtTraffic";
             this.txtTraffic.ReadOnly = true;
             this.txtTraffic.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtTraffic.Size = new System.Drawing.Size(347, 313);
+            this.txtTraffic.Size = new System.Drawing.Size(344, 307);
             this.txtTraffic.TabIndex = 12;
             this.txtTraffic.Text = "Hello";
             // 
@@ -181,7 +185,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(372, 484);
+            this.ClientSize = new System.Drawing.Size(369, 478);
             this.Controls.Add(this.checkBoxAllOther);
             this.Controls.Add(this.checkBoxTime);
             this.Controls.Add(this.checkBoxCapabilities);
