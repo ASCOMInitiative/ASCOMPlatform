@@ -21,6 +21,7 @@ using System.Reflection;
 using Microsoft.Win32;
 using System.Text;
 using System.Threading;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -103,7 +104,7 @@ namespace ASCOM.Simulator
         #endregion
 
         #region Public Data
-        public static frmMain m_MainForm = null;				// Reference to our main form. Changed to public for access in simulator
+        public static FrmMain m_MainForm = null;				// Reference to our main form. Changed to public for access in simulator
         #endregion
 
         #region Private Data
@@ -403,11 +404,11 @@ namespace ASCOM.Simulator
                         {
                             P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);
                             P.Register(progid, chooserName);
-                            try										// In case Helper becomes native .NET
-                            {
-                                Marshal.ReleaseComObject(P);
-                            }
-                            catch (Exception) { }
+                            //try										// In case Helper becomes native .NET
+                            //{
+                            //    Marshal.ReleaseComObject(P);
+                            //}
+                            //catch (Exception) { }
                         }
                     }
                     catch (Exception ex)
@@ -543,24 +544,24 @@ namespace ASCOM.Simulator
             if (args.Length > 0)
             {
 
-                switch (args[0].ToLower())
+                switch (args[0].ToUpperInvariant())
                 {
-                    case "-embedding":
+                    case "-EMBEDDING":
                         m_bComStart = true;										// Indicate COM started us
                         break;
 
-                    case "-register":
-                    case "/register":
-                    case "-regserver":											// Emulate VB6
-                    case "/regserver":
+                    case "-REGISTER":
+                    case "/REGISTER":
+                    case "-REGSERVER":											// Emulate VB6
+                    case "/REGSERVER":
                         RegisterObjects();										// Register each served object
                         bRet = false;
                         break;
 
-                    case "-unregister":
-                    case "/unregister":
-                    case "-unregserver":										// Emulate VB6
-                    case "/unregserver":
+                    case "-UNREGISTER":
+                    case "/UNREGISTER":
+                    case "-UNREGSERVER":										// Emulate VB6
+                    case "/UNREGSERVER":
                         UnregisterObjects();									//Unregister each served object
                         bRet = false;
                         break;
@@ -599,7 +600,7 @@ namespace ASCOM.Simulator
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            m_MainForm = new frmMain();
+            m_MainForm = new FrmMain();
             m_MainForm.Show();
             //if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
             m_MainForm.Visible = true;

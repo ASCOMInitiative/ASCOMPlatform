@@ -1,11 +1,13 @@
 <!--Custom Distionary for ASCOM-->
 <Dictionary>
-  <!--<Words>
+  <Words>
     <Unrecognized>
-      <Word>knokker</Word>
+      <!--<Word>az</Word>-->
     </Unrecognized>
     <Recognized>
-      <Word></Word>
+      <Word>ASCOM</Word>
+      <Word>Az</Word>
+      <Word>Ra</Word>
     </Recognized>
     <Deprecated>
       <Term PreferredAlternate=""></Term>
@@ -16,7 +18,7 @@
     <DiscreteExceptions>
       <Term></Term>
     </DiscreteExceptions>
-  </Words>-->
+  </Words>
   <Acronyms>
     <CasingExceptions>
       <!--ASCOM is this way-->
@@ -26,6 +28,9 @@
       <Acronym>CMYG</Acronym>
       <Acronym>CMYG2</Acronym>
       <Acronym>LRGB</Acronym>
+      <!--more abbreviations-->
+      <Acronym>Az</Acronym>
+      <Acronym>Ra</Acronym>
     </CasingExceptions>
   </Acronyms>
 </Dictionary>

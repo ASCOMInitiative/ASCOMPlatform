@@ -34,6 +34,7 @@ namespace ASCOM.Simulator
         //----------------------------------------------------------------------------------------
         // Calculate Precession
         //----------------------------------------------------------------------------------------
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Precess")]
         public static double Precess(DateTime dateTime)
         {
             int y = dateTime.Year + 1900;
@@ -57,7 +58,7 @@ namespace ASCOM.Simulator
         /// <returns></returns>
         public static double HourAngle(double rightAscension, double longitude)
         {
-            return RangeHa(LocalSiderealTime(longitude) - rightAscension) ;  // Hours
+            return RangeHA(LocalSiderealTime(longitude) - rightAscension) ;  // Hours
         }
 
 
@@ -150,19 +151,19 @@ namespace ASCOM.Simulator
 
 
             double dp1 = (-17.2 * Math.Sin(om1)) - (1.32 * Math.Sin(2 * La)) - (0.23 *Math.Sin(2 * L11)) + (0.21 * Math.Sin(2 * om1));
-            double de1 = (9.2 * Math.Cos(om1)) + (0.57 * Math.Cos(2 * La)) + (0.1 * Math.Cos(2 * L11)) - (0.09 * Math.Cos(2 * om1));
-            double eps1 = ea1 + de1;
+            //double de1 = (9.2 * Math.Cos(om1)) + (0.57 * Math.Cos(2 * La)) + (0.1 * Math.Cos(2 * L11)) - (0.09 * Math.Cos(2 * om1));
+            //double eps1 = ea1 + de1;
             double correction1 = (dp1 * Math.Cos(ea1)) / 3600;
             l1mst = l1mst + correction1;
 
-            return RangeRa(l1mst * 24.0 / 360.0);
+            return RangeRA(l1mst * 24.0 / 360.0);
 
         }
             
         //----------------------------------------------------------------------------------------
         // Calculate RA and Dec From Altitude and Azimuth and Site
         //----------------------------------------------------------------------------------------
-        public static double CalculateRa(double altitude, double azimuth, double latitude, double longitude)
+        public static double CalculateRA(double altitude, double azimuth, double latitude, double longitude)
         {
 
             double hourAngle = Math.Atan2(-Math.Sin(azimuth) * Math.Cos(altitude),
@@ -171,7 +172,7 @@ namespace ASCOM.Simulator
 
             double lst = LocalSiderealTime(longitude * SharedResources.RAD_DEG); 
 
-            return RangeRa(lst - hourAngle);
+            return RangeRA(lst - hourAngle);
         }
 
         public static double CalculateDec(double altitude, double azimuth, double latitude)
@@ -228,7 +229,7 @@ namespace ASCOM.Simulator
         /// </summary>
         /// <param name="hourAngle">Value to range</param>
         /// <returns>Hour angle in the range -12 to +12 hours</returns>
-        public static double RangeHa(double hourAngle)
+        public static double RangeHA(double hourAngle)
         {
             while ((hourAngle >= 12.0) || (hourAngle <= -12.0))
             {
@@ -243,7 +244,7 @@ namespace ASCOM.Simulator
         //----------------------------------------------------------------------------------------
         // Range RA and DEC
         //----------------------------------------------------------------------------------------
-        public static double RangeRa(double rightAscension)
+        public static double RangeRA(double rightAscension)
         {
             while ((rightAscension >= 24.0) || (rightAscension < 0.0))
             {
