@@ -110,16 +110,18 @@ namespace ASCOM.Simulator
         #region Constructor and Private ClassFactory Data
 
         private Type m_ClassType;
-        protected Guid m_ClassId;
-        protected ArrayList m_InterfaceTypes;
-        protected uint m_ClassContext;
-        protected uint m_Flags;
-        protected UInt32 m_locked = 0;
-        protected uint m_Cookie;
+        private Guid m_ClassId;
+        private ArrayList m_InterfaceTypes;
+        private uint m_ClassContext;
+        private uint m_Flags;
+        //private UInt32 m_locked = 0;
+        private uint m_Cookie;
 
         public ClassFactory(Type type)
         {
             m_ClassType = type;
+            if (type == null)
+                throw new ArgumentNullException("type");
             m_ClassId = Marshal.GenerateGuidForType(type);		// Should be nailed down by [Guid(...)]
             m_ClassContext = (uint)CLSCTX.CLSCTX_LOCAL_SERVER;	// Default
             m_Flags = (uint)REGCLS.REGCLS_MULTIPLEUSE |			// Default

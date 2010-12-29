@@ -2,7 +2,7 @@ using System;
 
 namespace ASCOM.Simulator
 {
-    partial class frmMain
+    partial class FrmMain
     {
         /// <summary>
         /// Required designer variable.

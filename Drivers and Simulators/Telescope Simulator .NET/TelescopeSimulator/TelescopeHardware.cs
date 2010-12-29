@@ -24,18 +24,26 @@ using System.Timers;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using ASCOM.DeviceInterface;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
-    public class TelescopeHardware
+    public static class TelescopeHardware
     {
-        [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall)]
-        public static extern long GetTickCount();
+        // TODO replace with a .NET function, such as environment.TickCount or
+        // the DateTime functions
+        //[DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall)]
+        //public static extern long GetTickCount();
+
+        public static int GetTickCount()
+        {
+            return Environment.TickCount;
+        }
 
         //private static Timer m_Timer = new Timer(); // Simulated Hardware by running a Timer
 
         // change to using a Windows timer to avoid threading problems
-        private static System.Windows.Forms.Timer s_wTimer = new System.Windows.Forms.Timer();
+        private static System.Windows.Forms.Timer s_wTimer;
 
         private static Utilities.Profile s_Profile;
         private static bool m_OnTop;
@@ -124,15 +132,21 @@ namespace ASCOM.Simulator
 
         private static int m_DateDelta;
 
-        public static long m_PulseGuideTixRa = 0;
-        public static long m_PulseGuideTixDec = 0;
+        //public static long m_PulseGuideTixRa = 0;
+        //public static long m_PulseGuideTixDec = 0;
+
+        public static bool isPulseGuidingRa;
+        public static bool isPulseGuidingDec;
+        public static DateTime pulseGuideRaEndTime;
+        public static DateTime pulseGuideDecEndTime;
+
 
         public static double m_DeltaAz = 0;
         public static double m_DeltaAlt = 0;
         public static double m_DeltaRa = 0;
         public static double m_DeltaDec = 0;
 
-        private static double m_SettleTix;
+        private static DateTime settleTime;
 
         public static PierSide m_SideOfPier;
 
@@ -145,6 +159,7 @@ namespace ASCOM.Simulator
             //m_Timer.Elapsed += new ElapsedEventHandler(TimerEvent);
             //m_Timer.Interval = SharedResources.TIMER_INTERVAL * 1000;
 
+            s_wTimer = new System.Windows.Forms.Timer();
             s_wTimer.Interval = (int)(SharedResources.TIMER_INTERVAL * 1000);
             s_wTimer.Tick += new EventHandler(m_wTimer_Tick);
 
@@ -161,9 +176,9 @@ namespace ASCOM.Simulator
 
                 //Telescope Implementions
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "AlignMode", "1");
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ApertureArea", SharedResources.INSTRUMENT_APERTURE_AREA.ToString());
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Aperture", SharedResources.INSTRUMENT_APERTURE.ToString());
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", SharedResources.INSTRUMENT_FOCAL_LENGTH.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ApertureArea", SharedResources.INSTRUMENT_APERTURE_AREA.ToString(CultureInfo.InvariantCulture));
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Aperture", SharedResources.INSTRUMENT_APERTURE.ToString(CultureInfo.InvariantCulture));
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", SharedResources.INSTRUMENT_FOCAL_LENGTH.ToString(CultureInfo.InvariantCulture));
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "AutoTrack", "false");
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "DiscPark", "false");
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "NoCoordAtPark", "false");
@@ -183,9 +198,9 @@ namespace ASCOM.Simulator
                 double latitude = 51.07861;// (r.NextDouble() * 60); lock for testing
                 double longitude = (((-(double)(localZone.GetUtcOffset(DateTime.Now).Seconds) / 3600) + r.NextDouble() - 0.5) * 15);
                 if (localZone.GetUtcOffset(DateTime.Now).Seconds == 0) longitude = -0.29444; //lock for testing
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Elevation", Math.Round((r.NextDouble() * 1000), 0).ToString());
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Longitude", longitude.ToString());
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", latitude.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Elevation", Math.Round((r.NextDouble() * 1000), 0).ToString(CultureInfo.InvariantCulture));
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Longitude", longitude.ToString(CultureInfo.InvariantCulture));
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", latitude.ToString(CultureInfo.InvariantCulture));
 
                 //Start the scope in parked position
                 if (latitude >= 0)
@@ -198,8 +213,8 @@ namespace ASCOM.Simulator
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAzimuth", "90");
                     s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", "90");
                 }
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAltitude", (90 - Math.Abs(latitude)).ToString());
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAltitude", (90 - Math.Abs(latitude)).ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "StartAltitude", (90 - Math.Abs(latitude)).ToString(CultureInfo.InvariantCulture));
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAltitude", (90 - Math.Abs(latitude)).ToString(CultureInfo.InvariantCulture));
 
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "DateDelta", "0");
 
@@ -237,7 +252,7 @@ namespace ASCOM.Simulator
             //Load up the values from saved
             m_OnTop = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "AlwaysOnTop"));
 
-            switch (int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "AlignMode")))
+            switch (int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "AlignMode"), CultureInfo.InvariantCulture))
             {
                 case 0:
                     m_AlignmentMode = ASCOM.DeviceInterface.AlignmentModes.algAltAz;
@@ -253,29 +268,29 @@ namespace ASCOM.Simulator
                     break;
             }
 
-            m_ApertureArea = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ApertureArea"));
-            m_ApertureDiameter = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Aperture"));
-            m_FocalLength = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "FocalLength"));
+            m_ApertureArea = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ApertureArea"), CultureInfo.InvariantCulture);
+            m_ApertureDiameter = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Aperture"), CultureInfo.InvariantCulture);
+            m_FocalLength = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "FocalLength"), CultureInfo.InvariantCulture);
             m_AutoTrack = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "AutoTrack"));
             m_DisconnectOnPark = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "DiscPark"));
             m_Refraction = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Refraction"));
-            m_EquatorialSystem = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "EquatorialSystem"));
+            m_EquatorialSystem = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "EquatorialSystem"), CultureInfo.InvariantCulture);
             m_NoCoordinatesAtPark = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "NoCoordAtPark"));
-            m_Elevation = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Elevation"));
-            m_Latitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Latitude"));
-            m_Longitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Longitude"));
-            m_MaximumSlewRate = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "MaxSlewRate"));
+            m_Elevation = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Elevation"), CultureInfo.InvariantCulture);
+            m_Latitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Latitude"), CultureInfo.InvariantCulture);
+            m_Longitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "Longitude"), CultureInfo.InvariantCulture);
+            m_MaximumSlewRate = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "MaxSlewRate"), CultureInfo.InvariantCulture);
 
-            m_Altitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAltitude"));
-            m_Azimuth = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAzimuth"));
-            m_ParkAltitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAltitude"));
-            m_ParkAzimuth = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAzimuth"));
+            m_Altitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAltitude"), CultureInfo.InvariantCulture);
+            m_Azimuth = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "StartAzimuth"), CultureInfo.InvariantCulture);
+            m_ParkAltitude = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAltitude"), CultureInfo.InvariantCulture);
+            m_ParkAzimuth = double.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "ParkAzimuth"), CultureInfo.InvariantCulture);
 
             //TODO allow for version 1, 2 or 3
             m_VersionOne = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "V1", "Capabilities"));
             m_CanFindHome = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanFindHome", "Capabilities"));
             m_CanPark = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanPark", "Capabilities"));
-            m_NumberMoveAxis = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "NumMoveAxis", "Capabilities"));
+            m_NumberMoveAxis = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "NumMoveAxis", "Capabilities"), CultureInfo.InvariantCulture);
             m_CanPulseGuide = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanPulseGuide", "Capabilities"));
             m_CanSetEquatorialRates = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSetEquRates", "Capabilities"));
             m_CanSetGuideRates = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanSetGuideRates", "Capabilities"));
@@ -301,7 +316,7 @@ namespace ASCOM.Simulator
             m_CanTrackingRates = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "Capabilities"));
             m_CanDualAxisPulseGuide = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "Capabilities"));
 
-            m_DateDelta = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "DateDelta"));
+            m_DateDelta = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "DateDelta"), CultureInfo.InvariantCulture);
 
             if (m_Latitude < 0) { m_SouthernHemisphere = true; }
 
@@ -404,22 +419,22 @@ namespace ASCOM.Simulator
                         case SlewDirection.SlewUp:
                             m_Altitude += step;
                             m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-                            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            m_RightAscension = AstronomyFunctions.CalculateRA(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewDown:
                             m_Altitude -= step;
                             m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-                            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            m_RightAscension = AstronomyFunctions.CalculateRA(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewRight:
                             m_Azimuth += step;
                             m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-                            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            m_RightAscension = AstronomyFunctions.CalculateRA(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewLeft:
                             m_Azimuth -= step;
                             m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-                            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+                            m_RightAscension = AstronomyFunctions.CalculateRA(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         // equatorial mount scopes adjust the Ra and Dec
                         case SlewDirection.SlewNorth:
@@ -436,13 +451,13 @@ namespace ASCOM.Simulator
                             break;
                         case SlewDirection.SlewEast:
                             m_RightAscension += step * (z / 15);    // Ra is in hours
-                            m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
+                            m_RightAscension = AstronomyFunctions.RangeRA(m_RightAscension);
                             m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewWest:
                             m_RightAscension -= step * (z / 15);
-                            m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
+                            m_RightAscension = AstronomyFunctions.RangeRA(m_RightAscension);
                             m_Altitude = AstronomyFunctions.CalculateAltitude(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             m_Azimuth = AstronomyFunctions.CalculateAzimuth(m_RightAscension * SharedResources.HRS_RAD, m_Declination * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
                             break;
@@ -450,40 +465,39 @@ namespace ASCOM.Simulator
                 }
                 else if (m_SlewState == SlewType.SlewRaDec)
                 {
-                    m_SettleTix = GetTickCount() + m_SlewSettleTime;
+                    settleTime = DateTime.Now + TimeSpan.FromSeconds(m_SlewSettleTime);
                     TL.LogMessage("Fast, Med, Slow, Target RA, Dec", m_SlewSpeedFast + " " + m_SlewSpeedMedium + " " + m_SlewSpeedSlow + " " + m_TargetRightAscension + " " + m_TargetDeclination);
 
                     // determine the RA Step in degrees, adjusted by the dec factor z
                     y = Math.Abs(m_DeltaRa * 360.0 / 24.0); // In degrees
-                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50)
-                    {
-                        step = y * z;
-                        TL.LogStart("RA Speed z y step", "Maximum");
-                    }
-                    else if (y > 2 * m_SlewSpeedFast)
-                    {
-                        step = m_SlewSpeedFast * z;
-                        TL.LogStart("RA Speed z y step", "Fast");
-                    }
-                    else if (y > 2 * m_SlewSpeedMedium)
-                    {
-                        step = m_SlewSpeedMedium * z;
-                        TL.LogStart("RA Speed z y step", "Medium");
-                    }
-                    else if (y > 2 * m_SlewSpeedSlow)
-                    {
-                        step = m_SlewSpeedSlow * z;
-                        TL.LogStart("RA Speed z y step", "Slow");
-                    }
-                    else
-                    {
-                        step = y * z;
-                        TL.LogStart("RA Speed z y step", "Minimum");
-                    }
+                    step = GetStepSize(y);
+                    //if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50)
+                    //{
+                    //    step = y * z;
+                    //    TL.LogStart("RA Speed z y step", "Maximum");
+                    //}
+                    //else if (y > 2 * m_SlewSpeedFast)
+                    //{
+                    //    step = m_SlewSpeedFast * z;
+                    //    TL.LogStart("RA Speed z y step", "Fast");
+                    //}
+                    //else if (y > 2 * m_SlewSpeedMedium)
+                    //{
+                    //    step = m_SlewSpeedMedium * z;
+                    //    TL.LogStart("RA Speed z y step", "Medium");
+                    //}
+                    //else if (y > 2 * m_SlewSpeedSlow)
+                    //{
+                    //    step = m_SlewSpeedSlow * z;
+                    //    TL.LogStart("RA Speed z y step", "Slow");
+                    //}
+                    //else
+                    //{
+                    //    step = y * z;
+                    //    TL.LogStart("RA Speed z y step", "Minimum");
+                    //}
 
-                    // Reduce step size near pole so we dont overshoot and oscillate
-                    // haven't we already done this by multiplying by z?
-                    step *= Math.Sign(m_DeltaRa);// *Math.Cos(m_Declination * SharedResources.DEG_RAD);
+                    step *= Math.Sign(m_DeltaRa);
                     TL.LogFinish(" " + z + " " + y + " " + step);
 
                     // step is in degrees but the Ra values are in hours
@@ -492,31 +506,32 @@ namespace ASCOM.Simulator
 
                     //Dec Step
                     y = Math.Abs(m_DeltaDec);
-                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50)
-                    {
-                        step = y;
-                        TL.LogStart("Dec Speed z y step", "Maximum");
-                    }
-                    else if (y > 2 * m_SlewSpeedFast)
-                    {
-                        step = m_SlewSpeedFast;
-                        TL.LogStart("Dec Speed z y step", "Fast");
-                    }
-                    else if (y > 2 * m_SlewSpeedMedium)
-                    {
-                        step = m_SlewSpeedMedium;
-                        TL.LogStart("Dec Speed z y step", "Medium");
-                    }
-                    else if (y > 2 * m_SlewSpeedSlow)
-                    {
-                        step = m_SlewSpeedSlow;
-                        TL.LogStart("Dec Speed z y step", "Slow");
-                    }
-                    else
-                    {
-                        step = y;
-                        TL.LogStart("Dec Speed z y step", "Minimum");
-                    }
+                    step = GetStepSize(y);
+                    //if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50)
+                    //{
+                    //    step = y;
+                    //    TL.LogStart("Dec Speed z y step", "Maximum");
+                    //}
+                    //else if (y > 2 * m_SlewSpeedFast)
+                    //{
+                    //    step = m_SlewSpeedFast;
+                    //    TL.LogStart("Dec Speed z y step", "Fast");
+                    //}
+                    //else if (y > 2 * m_SlewSpeedMedium)
+                    //{
+                    //    step = m_SlewSpeedMedium;
+                    //    TL.LogStart("Dec Speed z y step", "Medium");
+                    //}
+                    //else if (y > 2 * m_SlewSpeedSlow)
+                    //{
+                    //    step = m_SlewSpeedSlow;
+                    //    TL.LogStart("Dec Speed z y step", "Slow");
+                    //}
+                    //else
+                    //{
+                    //    step = y;
+                    //    TL.LogStart("Dec Speed z y step", "Minimum");
+                    //}
 
                     step *= Math.Sign(m_DeltaDec);
                     TL.LogFinish(" " + z + " " + y + " " + step);
@@ -525,7 +540,7 @@ namespace ASCOM.Simulator
                     m_DeltaDec -= step;
 
                     m_Declination = AstronomyFunctions.RangeDec(m_Declination);
-                    m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
+                    m_RightAscension = AstronomyFunctions.RangeRA(m_RightAscension);
                     TL.LogMessage("RA, Dec", m_RightAscension + " " + m_DeltaRa + " " + m_Declination + " " + m_DeltaDec);
                     CalculateAltAz();
 
@@ -539,17 +554,18 @@ namespace ASCOM.Simulator
                 }
                 else if (m_SlewState == SlewType.SlewAltAz || m_SlewState == SlewType.SlewHome || m_SlewState == SlewType.SlewPark)
                 {
-                    m_SettleTix = GetTickCount() + m_SlewSettleTime;
+                    settleTime = DateTime.Now + TimeSpan.FromSeconds(m_SlewSettleTime);
 
                     //Altitude Step
                     y = Math.Abs(m_DeltaAlt);
-                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y; TL.LogStart("Alt Speed z y step", "Maximum"); }
-                    else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast; TL.LogStart("Alt Speed z y step", "Fast"); }
-                    else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium; TL.LogStart("Alt Speed z y step", "Medium"); }
-                    else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow; TL.LogStart("Alt Speed z y step", "Slow"); }
-                    else { step = y; TL.LogStart("Alt Speed z y step", "Minimum"); }
+                    step = GetStepSize(y);
+                    //if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y; TL.LogStart("Alt Speed z y step", "Maximum"); }
+                    //else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast; TL.LogStart("Alt Speed z y step", "Fast"); }
+                    //else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium; TL.LogStart("Alt Speed z y step", "Medium"); }
+                    //else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow; TL.LogStart("Alt Speed z y step", "Slow"); }
+                    //else { step = y; TL.LogStart("Alt Speed z y step", "Minimum"); }
 
-                    step = step * Math.Sign(m_DeltaAlt);
+                    step *= Math.Sign(m_DeltaAlt);
 
                     m_Altitude += step;
                     m_DeltaAlt -= step;
@@ -557,13 +573,14 @@ namespace ASCOM.Simulator
 
                     //Azimuth Step
                     y = Math.Abs(m_DeltaAz);
-                    if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y; TL.LogStart("Az Speed", "Maximum"); }
-                    else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast; TL.LogStart("Az Speed", "Fast"); }
-                    else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium; TL.LogStart("Az Speed", "Medium"); }
-                    else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow; TL.LogStart("Az Speed", "Slow"); }
-                    else { step = y; TL.LogStart("Az Speed", "Minimum"); }
+                    step = GetStepSize(y);
+                    //if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50) { step = y; TL.LogStart("Az Speed", "Maximum"); }
+                    //else if (y > 2 * m_SlewSpeedFast) { step = m_SlewSpeedFast; TL.LogStart("Az Speed", "Fast"); }
+                    //else if (y > 2 * m_SlewSpeedMedium) { step = m_SlewSpeedMedium; TL.LogStart("Az Speed", "Medium"); }
+                    //else if (y > 2 * m_SlewSpeedSlow) { step = m_SlewSpeedSlow; TL.LogStart("Az Speed", "Slow"); }
+                    //else { step = y; TL.LogStart("Az Speed", "Minimum"); }
 
-                    step = step * Math.Sign(m_DeltaAz);
+                    step *= Math.Sign(m_DeltaAz);
 
                     m_Azimuth += step;
                     m_DeltaAz -= step;
@@ -605,74 +622,50 @@ namespace ASCOM.Simulator
                         m_Declination = m_Declination + m_DeltaAlt * SharedResources.TIMER_INTERVAL;
 
                         m_Declination = AstronomyFunctions.RangeDec(m_Declination);
-                        m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
+                        m_RightAscension = AstronomyFunctions.RangeRA(m_RightAscension);
 
                         CalculateAltAz();
                     }
                 }
             }
-            if (m_PulseGuideTixRa > 0 || m_PulseGuideTixDec > 0)
+            if (isPulseGuidingRa || isPulseGuidingDec)
             {
+                // do pulse guiding
                 ChangePark(false);
-                if (m_PulseGuideTixRa > 0)
+                if (pulseGuideRaEndTime >= DateTime.Now)
                 {
-                    if (m_PulseGuideTixRa + (SharedResources.TIMER_INTERVAL / 2) <= GetTickCount())
-                    {
-                        if (SharedResources.TrafficForm != null)
-                        {
-                            if (SharedResources.TrafficForm.Slew)
-                            {
-                                SharedResources.TrafficForm.TrafficLine("(PulseGuide in RA complete)");
-                            }
-                        }
-                        m_PulseGuideTixRa = 0;
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Slew, "(PulseGuide in RA complete)");
+                    isPulseGuidingRa = false;
                 }
 
-                if (m_PulseGuideTixDec > 0)
+                if (pulseGuideDecEndTime > DateTime.Now)
                 {
-                    if (m_PulseGuideTixDec + (SharedResources.TIMER_INTERVAL / 2) <= GetTickCount())
-                    {
-                        if (SharedResources.TrafficForm != null)
-                        {
-                            if (SharedResources.TrafficForm.Slew)
-                            {
-                                SharedResources.TrafficForm.TrafficLine("(PulseGuide in Dec complete)");
-                            }
-                        }
-                        m_PulseGuideTixDec = 0;
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Slew, "(PulseGuide in Dec complete)");
+                    isPulseGuidingDec = false;
                 }
 
                 if (m_Tracking) raRate = m_RightAscensionRate;
                 else raRate = 15;
                 raRate = (raRate / SharedResources.SIDRATE) / 3600;
-                if (m_PulseGuideTixRa > 0) raRate = raRate + (m_GuideRateRightAscension / 15);
+                if (isPulseGuidingRa) raRate = raRate + (m_GuideRateRightAscension / 15);
 
                 decRate = m_DeclinationRate / 3600;
-                if (m_PulseGuideTixDec > 0) decRate = decRate + m_GuideRateDeclination;
+                if (isPulseGuidingDec) decRate = decRate + m_GuideRateDeclination;
 
                 m_RightAscension += raRate * SharedResources.TIMER_INTERVAL;
                 m_Declination += decRate * SharedResources.TIMER_INTERVAL;
 
                 m_Declination = AstronomyFunctions.RangeDec(m_Declination);
-                m_RightAscension = AstronomyFunctions.RangeRa(m_RightAscension);
+                m_RightAscension = AstronomyFunctions.RangeRA(m_RightAscension);
 
                 CalculateAltAz();
             }
 
             if (m_SlewState == SlewType.SlewSettle)
             {
-                if (GetTickCount() > m_SettleTix)
+                if (DateTime.Now >= settleTime)
                 {
-                    if (SharedResources.TrafficForm != null)
-                    {
-                        if (SharedResources.TrafficForm.Slew)
-                        {
-                            SharedResources.TrafficForm.TrafficLine("(Slew Complete)");
-
-                        }
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Slew, "(Slew Complete)");
                     m_SlewState = SlewType.SlewNone;
                 }
             }
@@ -681,11 +674,11 @@ namespace ASCOM.Simulator
             m_SiderealTime = AstronomyFunctions.LocalSiderealTime(m_Longitude);
             m_SideOfPier = SideOfPierRaDec(m_RightAscension, m_Declination);
 
-            TelescopeSimulator.m_MainForm.SiderealTime = m_SiderealTime;
-            TelescopeSimulator.m_MainForm.Altitude = m_Altitude;
-            TelescopeSimulator.m_MainForm.Azimuth = m_Azimuth;
-            TelescopeSimulator.m_MainForm.RightAscension = m_RightAscension;
-            TelescopeSimulator.m_MainForm.Declination = m_Declination;
+            TelescopeSimulator.m_MainForm.SiderealTime(m_SiderealTime);
+            TelescopeSimulator.m_MainForm.Altitude(m_Altitude);
+            TelescopeSimulator.m_MainForm.Azimuth(m_Azimuth);
+            TelescopeSimulator.m_MainForm.RightAscension(m_RightAscension);
+            TelescopeSimulator.m_MainForm.Declination(m_Declination);
             TelescopeSimulator.m_MainForm.Tracking();
             TelescopeSimulator.m_MainForm.LedPier(m_SideOfPier);
 
@@ -695,6 +688,42 @@ namespace ASCOM.Simulator
             else TelescopeSimulator.m_MainForm.lblHOME.ForeColor = Color.SaddleBrown;
             if (m_SlewState == SlewType.SlewNone) TelescopeSimulator.m_MainForm.labelSlew.ForeColor = Color.SaddleBrown;
             else TelescopeSimulator.m_MainForm.labelSlew.ForeColor = Color.Red;
+        }
+
+        /// <summary>
+        /// Returns the step size, adjusted for the current slew speed
+        /// </summary>
+        /// <param name="fullStepSize"></param>
+        /// <returns></returns>
+        private static double GetStepSize(double fullStepSize)
+        {
+            double step = 0;
+            if (m_SlewSpeedFast / SharedResources.TIMER_INTERVAL >= 50)
+            {
+                step = fullStepSize;
+                TL.LogStart("Speed z y step", "Maximum");
+            }
+            else if (fullStepSize > 2 * m_SlewSpeedFast)
+            {
+                step = m_SlewSpeedFast;
+                TL.LogStart("Speed z y step", "Fast");
+            }
+            else if (fullStepSize > 2 * m_SlewSpeedMedium)
+            {
+                step = m_SlewSpeedMedium;
+                TL.LogStart("Speed z y step", "Medium");
+            }
+            else if (fullStepSize > 2 * m_SlewSpeedSlow)
+            {
+                step = m_SlewSpeedSlow;
+                TL.LogStart("Speed z y step", "Slow");
+            }
+            else
+            {
+                step = fullStepSize;
+                TL.LogStart("Speed z y step", "Minimum");
+            }
+            return step;
         }
 
         #region Properties For Settings
@@ -786,7 +815,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_EquatorialSystem = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "EquatorialSystem", value.ToString(), "");
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "EquatorialSystem", value.ToString(CultureInfo.InvariantCulture), "");
             }
         }
 
@@ -796,7 +825,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_Elevation = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Elevation", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Elevation", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -806,7 +835,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_Latitude = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Latitude", value.ToString(CultureInfo.InvariantCulture));
                 if (m_Latitude < 0) { m_SouthernHemisphere = true; }
             }
         }
@@ -817,7 +846,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_Longitude = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Longitude", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Longitude", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -827,7 +856,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_MaximumSlewRate = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "MaxSlewRate", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "MaxSlewRate", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -867,7 +896,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_NumberMoveAxis = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "NumMoveAxis", value.ToString(), "Capabilities");
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "NumMoveAxis", value.ToString(CultureInfo.InvariantCulture), "Capabilities");
             }
         }
 
@@ -1127,7 +1156,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_ParkAltitude = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAltitude", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAltitude", value.ToString(CultureInfo.InvariantCulture));
             }
         }
         public static double ParkAzimuth
@@ -1136,7 +1165,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_ParkAzimuth = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ParkAzimuth", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1182,7 +1211,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_ApertureArea = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ApertureArea", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "ApertureArea", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1192,7 +1221,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_ApertureDiameter = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Aperture", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "Aperture", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1202,7 +1231,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_FocalLength = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "FocalLength", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1273,7 +1302,7 @@ namespace ASCOM.Simulator
             set
             {
                 m_DateDelta = value;
-                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "DateDelta", value.ToString());
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "DateDelta", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1313,7 +1342,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                return ((m_PulseGuideTixDec > 0) || (m_PulseGuideTixRa > 0));
+                return (isPulseGuidingDec || isPulseGuidingRa);
             }
 
         }
@@ -1455,11 +1484,11 @@ namespace ASCOM.Simulator
         //    m_AtHome = NewValue;
         //}
 
-        public static void ChangePark(bool NewValue)
+        public static void ChangePark(bool newValue)
         {
-            m_AtPark = NewValue;
-            if (m_AtPark) TelescopeSimulator.m_MainForm.ParkButton = "Unpark";
-            else TelescopeSimulator.m_MainForm.ParkButton = "Park";
+            m_AtPark = newValue;
+            if (m_AtPark) TelescopeSimulator.m_MainForm.ParkButton("Unpark");
+            else TelescopeSimulator.m_MainForm.ParkButton("Park");
         }
 
         public static void CalculateAltAz()
@@ -1471,7 +1500,7 @@ namespace ASCOM.Simulator
         public static void CalculateRaDec()
         {
             m_Declination = AstronomyFunctions.CalculateDec(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD);
-            m_RightAscension = AstronomyFunctions.CalculateRa(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
+            m_RightAscension = AstronomyFunctions.CalculateRA(m_Altitude * SharedResources.DEG_RAD, m_Azimuth * SharedResources.DEG_RAD, m_Latitude * SharedResources.DEG_RAD, m_Longitude * SharedResources.DEG_RAD);
             TL.LogMessage("TimerEvent:CalcRADec", m_Altitude + " " + m_Azimuth + " " + m_Latitude + " " + m_Longitude);
         }
         #endregion

@@ -30,7 +30,8 @@
     <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>
+    <StartWorkingDirectory>
+    </StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <StartWorkingDirectory>C:\Documents and Settings\Robert Turner\My Documents\Projects\Robert\ASCOM Platform\Telescope Simulator .NET\TelescopeSimulatorServedClasses\</StartWorkingDirectory>

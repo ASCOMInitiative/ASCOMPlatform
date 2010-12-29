@@ -14,6 +14,7 @@
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
 // 07-JUL-2009	rbt	1.0.0	Initial edit, from ASCOM Telescope Driver template
+// 29 Dec 2010  cdr         Extensive refactoring and bug fixes
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -61,7 +62,6 @@ namespace ASCOM.Simulator
 
             m_Util = new ASCOM.Utilities.Util();
         }
-
 
         //
         // PUBLIC COM INTERFACE ITelescope IMPLEMENTATION
@@ -112,44 +112,28 @@ namespace ASCOM.Simulator
 
         public void AbortSlew()
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("AbortSlew: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "AbortSlew: ");
             if (TelescopeHardware.AtPark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                {
-                    SharedResources.TrafficForm.TrafficEnd("At park!");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "At park!");
                 throw new ParkedException();
             }
             TelescopeHardware.SlewState = SlewType.SlewNone;
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficEnd("(done)");
-            }
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(done)");
         }
 
         public AlignmentModes AlignmentMode
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficStart("AlignmentMode: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "AlignmentMode: ");
                 if (!TelescopeHardware.CanAlignmentMode)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("false");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Capabilities, "false");
                     throw new MethodNotImplementedException("AlignmentMode");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.AlignmentMode.ToString());
+                SharedResources.TrafficEnd(SharedResources.MessageType.Capabilities, TelescopeHardware.AlignmentMode.ToString());
 
                 switch (TelescopeHardware.AlignmentMode)
                 {
@@ -169,28 +153,18 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("Altitude: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "Altitude: ");
                 if (!TelescopeHardware.CanAltAz)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented");
                     throw new PropertyNotImplementedException("Altitude", false);
                 }
                 if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("No coordinates at park!");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "No coordinates at park!");
                     throw new PropertyNotImplementedException("Altitude", false);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.Altitude));
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, m_Util.DegreesToDMS(TelescopeHardware.Altitude));
                 return TelescopeHardware.Altitude;
             }
         }
@@ -199,22 +173,13 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("ApertureArea: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "ApertureArea: ");
                 if (!TelescopeHardware.CanOptics)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("can't");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "can't");
                     throw new MethodNotImplementedException("ApertureArea");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.ApertureArea.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, TelescopeHardware.ApertureArea.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.ApertureArea;
             }
         }
@@ -223,22 +188,13 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("ApertureDiameter: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "ApertureDiameter: ");
                 if (!TelescopeHardware.CanOptics)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Can't");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Can't");
                     throw new MethodNotImplementedException("ApertureDiameter");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.ApertureDiameter.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, TelescopeHardware.ApertureDiameter.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.ApertureDiameter;
             }
         }
@@ -249,16 +205,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("AtHome: Not Implemented");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Polls, "AtHome: Not Implemented");
                     throw new MethodNotImplementedException("AtHome");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                {
-                    SharedResources.TrafficForm.TrafficLine("AtHome: " + TelescopeHardware.AtHome);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Polls, "AtHome: " + TelescopeHardware.AtHome);
                 return TelescopeHardware.AtHome;
             }
         }
@@ -269,16 +219,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("AtPark: Not Implemented");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Polls, "AtPark: Not Implemented");
                     throw new MethodNotImplementedException("AtPark");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                {
-                    SharedResources.TrafficForm.TrafficLine("AtPark: " + TelescopeHardware.AtPark);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Polls, "AtPark: " + TelescopeHardware.AtPark);
                 return TelescopeHardware.AtPark;
             }
         }
@@ -302,30 +246,20 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                {
-                    SharedResources.TrafficForm.TrafficStart("Azimuth: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Polls, "Azimuth: ");
 
                 if (!TelescopeHardware.CanAltAz)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Polls, "Not Implemented");
                     throw new PropertyNotImplementedException("Azimuth", false);
                 }
 
                 if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("No coordinates at park!");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Polls, "No coordinates at park!");
                     throw new PropertyNotImplementedException("Azimuth", false);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.Azimuth));
+                SharedResources.TrafficEnd(SharedResources.MessageType.Polls, m_Util.DegreesToDMS(TelescopeHardware.Azimuth));
                 return TelescopeHardware.Azimuth;
             }
         }
@@ -334,32 +268,20 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanFindHome: " + TelescopeHardware.CanFindHome);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanFindHome: " + TelescopeHardware.CanFindHome);
                 return TelescopeHardware.CanFindHome;
             }
         }
 
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-            {
-                SharedResources.TrafficForm.TrafficStart(string.Format("CanMoveAxis {0}: ", Axis.ToString()));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, string.Format(CultureInfo.CurrentCulture, "CanMoveAxis {0}: ", Axis.ToString()));
             if (TelescopeHardware.VersionOneOnly)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficEnd("false");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Capabilities, "false");
                 throw new MethodNotImplementedException("CanMoveAxis");
             }
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-            {
-                SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.CanMoveAxis(Axis).ToString());
-            }
+            SharedResources.TrafficEnd(SharedResources.MessageType.Capabilities, TelescopeHardware.CanMoveAxis(Axis).ToString());
 
             return TelescopeHardware.CanMoveAxis(Axis);
         }
@@ -368,10 +290,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanPark: " + TelescopeHardware.CanPark);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanPark: " + TelescopeHardware.CanPark);
                 return TelescopeHardware.CanPark;
             }
         }
@@ -380,10 +299,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanPulseGuide: " + TelescopeHardware.CanPulseGuide);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanPulseGuide: " + TelescopeHardware.CanPulseGuide);
                 return TelescopeHardware.CanPulseGuide;
             }
         }
@@ -394,16 +310,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanSetDeclinationRate: false");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetDeclinationRate: false");
                     throw new MethodNotImplementedException("CanSetDeclinationRate");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSetDeclinationRate: " + TelescopeHardware.CanSetDeclinationRate);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetDeclinationRate: " + TelescopeHardware.CanSetDeclinationRate);
                 return TelescopeHardware.CanSetDeclinationRate;
             }
         }
@@ -412,10 +322,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSetGuideRates: " + TelescopeHardware.CanSetGuideRates);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetGuideRates: " + TelescopeHardware.CanSetGuideRates);
                 return TelescopeHardware.CanSetGuideRates;
             }
         }
@@ -424,10 +331,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSetPark: " + TelescopeHardware.CanSetPark);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetPark: " + TelescopeHardware.CanSetPark);
                 return TelescopeHardware.CanSetPark;
             }
         }
@@ -438,16 +342,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanSetPierSide: false");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetPierSide: false");
                     throw new MethodNotImplementedException("CanSetPierSide");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSetPierSide: " + TelescopeHardware.CanSetPierSide);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetPierSide: " + TelescopeHardware.CanSetPierSide);
                 return TelescopeHardware.CanSetPierSide;
             }
         }
@@ -458,16 +356,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanSetRightAscensionRate: false");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetRightAscensionRate: false");
                     throw new MethodNotImplementedException("CanSetRightAscensionRate");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSetRightAscensionRate: " + TelescopeHardware.CanSetRightAscensionRate);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetRightAscensionRate: " + TelescopeHardware.CanSetRightAscensionRate);
                 return TelescopeHardware.CanSetRightAscensionRate;
             }
         }
@@ -476,10 +368,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSetTracking: " + TelescopeHardware.CanSetTracking);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSetTracking: " + TelescopeHardware.CanSetTracking);
                 return TelescopeHardware.CanSetTracking;
             }
         }
@@ -488,10 +377,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSlew: " + TelescopeHardware.CanSlew);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSlew: " + TelescopeHardware.CanSlew);
                 return TelescopeHardware.CanSlew;
             }
         }
@@ -502,16 +388,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanSlewAltAz: false");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSlewAltAz: false");
                     throw new MethodNotImplementedException("CanSlewAltAz");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSlewAltAz: " + TelescopeHardware.CanSlewAltAz);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSlewAltAz: " + TelescopeHardware.CanSlewAltAz);
                 return TelescopeHardware.CanSlewAltAz;
             }
         }
@@ -522,16 +402,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanSlewAltAzAsync: false");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSlewAltAzAsync: false");
                     throw new MethodNotImplementedException("CanSlewAltAzAsync");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSlewAltAzAsync: " + TelescopeHardware.CanSlewAltAzAsync);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSlewAltAzAsync: " + TelescopeHardware.CanSlewAltAzAsync);
                 return TelescopeHardware.CanSlewAltAzAsync;
             }
         }
@@ -540,10 +414,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSlewAsync: " + TelescopeHardware.CanSlewAsync);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSlewAsync: " + TelescopeHardware.CanSlewAsync);
                 return TelescopeHardware.CanSlewAsync;
             }
         }
@@ -552,10 +423,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSync: " + TelescopeHardware.CanSync);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSync: " + TelescopeHardware.CanSync);
                 return TelescopeHardware.CanSync;
             }
         }
@@ -566,16 +434,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("CanSyncAltAz: false");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSyncAltAz: false");
                     throw new MethodNotImplementedException("CanSyncAltAz");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanSyncAltAz: " + TelescopeHardware.CanSyncAltAz);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanSyncAltAz: " + TelescopeHardware.CanSyncAltAz);
                 return TelescopeHardware.CanSyncAltAz;
             }
         }
@@ -584,10 +446,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("CanUnPark: " + TelescopeHardware.CanUnpark);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "CanUnPark: " + TelescopeHardware.CanUnpark);
                 return TelescopeHardware.CanUnpark;
             }
         }
@@ -612,38 +471,36 @@ namespace ASCOM.Simulator
 
         public bool Connected
         {
-            get { return TelescopeHardware.Connected; }
-            set { TelescopeHardware.Connected = value; }
+            get
+            {
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "Connected = " + TelescopeHardware.Connected.ToString());
+                return TelescopeHardware.Connected;
+            }
+            set
+            {
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "Set Connected to " + value.ToString());
+                TelescopeHardware.Connected = value;
+            }
         }
 
         public double Declination
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("Declination: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "Declination: ");
 
                 if (!TelescopeHardware.CanEquatorial)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented");
                     throw new PropertyNotImplementedException("Declination", false);
                 }
 
                 if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("No coordinates at park!");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "No coordinates at park!");
                     throw new PropertyNotImplementedException("Declination", false);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.Declination));
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, m_Util.DegreesToDMS(TelescopeHardware.Declination));
                 return TelescopeHardware.Declination;
             }
         }
@@ -652,18 +509,12 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficLine("DeclinationRate: " + TelescopeHardware.DeclinationRate);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "DeclinationRate: " + TelescopeHardware.DeclinationRate);
                 return TelescopeHardware.DeclinationRate;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficLine("DeclinationRate:-> " + value);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "DeclinationRate:-> " + value);
                 TelescopeHardware.DeclinationRate = value;
             }
         }
@@ -672,10 +523,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("Description: " + SharedResources.INSTRUMENT_DESCRIPTION);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Gets, "Description: " + SharedResources.INSTRUMENT_DESCRIPTION);
                 return SharedResources.INSTRUMENT_DESCRIPTION;
             }
         }
@@ -684,20 +532,13 @@ namespace ASCOM.Simulator
         {
             if (TelescopeHardware.VersionOneOnly)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("DestinationSideOfPier: Not Implemented");
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "DestinationSideOfPier: Not Implemented");
                 throw new MethodNotImplementedException("DestinationSideOfPier");
             }
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-            {
-                SharedResources.TrafficForm.TrafficStart("DestinationSideOfPier RA " + RightAscension + " DEC " + Declination);
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Other, "DestinationSideOfPier RA " + RightAscension + " DEC " + Declination);
 
             PierSide ps = TelescopeHardware.SideOfPierRaDec(RightAscension, Declination);
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                SharedResources.TrafficForm.TrafficEnd(ps.ToString());
+            SharedResources.TrafficEnd(SharedResources.MessageType.Other, ps.ToString());
             return ps;
         }
 
@@ -707,32 +548,20 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("DoesRefraction: false");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "DoesRefraction: false");
                     throw new MethodNotImplementedException("DoesRefraction");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("DoesRefraction: " + TelescopeHardware.Refraction.ToString());
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "DoesRefraction: " + TelescopeHardware.Refraction.ToString());
                 return TelescopeHardware.Refraction;
             }
             set
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("DoesRefraction: ->");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "DoesRefraction: ->");
                     throw new MethodNotImplementedException("DoesRefraction");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Capabilities)
-                {
-                    SharedResources.TrafficForm.TrafficLine("DoesRefraction:-> " + value.ToString());
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Capabilities, "DoesRefraction:-> " + value.ToString());
                 TelescopeHardware.Refraction = value;
             }
         }
@@ -745,10 +574,7 @@ namespace ASCOM.Simulator
 
                 string driverinfo = asm.FullName;
 
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("DriverInfo: " + driverinfo);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "DriverInfo: " + driverinfo);
                 return driverinfo;
             }
         }
@@ -761,10 +587,7 @@ namespace ASCOM.Simulator
 
                 string driverinfo = asm.GetName().Version.ToString();
 
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("DriverVersion: " + driverinfo);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "DriverVersion: " + driverinfo);
                 return driverinfo;
             }
         }
@@ -775,16 +598,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("EquatorialSystem: Unknown");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Other, "EquatorialSystem: Unknown");
                     throw new MethodNotImplementedException("EquatorialSystem");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("EquatorialSystem: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "EquatorialSystem: ");
                 string output = "";
                 EquatorialCoordinateType eq = EquatorialCoordinateType.equOther;
 
@@ -813,31 +630,23 @@ namespace ASCOM.Simulator
                         break;
 
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(output);
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, output);
                 return eq;
             }
         }
 
         public void FindHome()
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("FindHome: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "FindHome: ");
             if (!TelescopeHardware.CanFindHome)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "can't");
                 throw new MethodNotImplementedException("FindHome");
             }
 
             if (TelescopeHardware.AtPark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("can't, parked");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "can't, parked");
                 throw new ParkedException();
             }
 
@@ -848,32 +657,20 @@ namespace ASCOM.Simulator
                 System.Windows.Forms.Application.DoEvents();
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("(done)");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "(done)");
         }
 
         public double FocalLength
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("FocalLength: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "FocalLength: ");
                 if (!TelescopeHardware.CanOptics)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "");
                     throw new MethodNotImplementedException("FocalLength");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.FocalLength.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, TelescopeHardware.FocalLength.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.FocalLength;
             }
         }
@@ -882,42 +679,24 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("GuideRateDeclination: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination: ");
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented in V1");
                     throw new MethodNotImplementedException("GuideRateDeclination");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.GuideRateDeclination.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, TelescopeHardware.GuideRateDeclination.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.GuideRateDeclination;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("GuideRateDeclination->: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "GuideRateDeclination->: ");
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented in V1");
                     throw new MethodNotImplementedException("GuideRateDeclination");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.GuideRateDeclination = value;
             }
         }
@@ -926,42 +705,24 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("GuideRateRightAscension: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "GuideRateRightAscension: ");
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented in V1");
                     throw new MethodNotImplementedException("GuideRateRightAscension");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.GuideRateRightAscension.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, TelescopeHardware.GuideRateRightAscension.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.GuideRateRightAscension;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("GuideRateRightAscension->: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "GuideRateRightAscension->: ");
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented in V1");
                     throw new MethodNotImplementedException("GuideRateRightAscension");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.GuideRateRightAscension = value;
             }
         }
@@ -972,16 +733,10 @@ namespace ASCOM.Simulator
             {
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficLine("InterfaceVersion:");
-                    }
+                    SharedResources.TrafficLine(SharedResources.MessageType.Other, "InterfaceVersion: V1");
                     throw new MethodNotImplementedException("InterfaceVersion");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("EquatorialSystem: 2");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "InterfaceVersion: 2");
                 return 2;
             }
         }
@@ -990,22 +745,14 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                {
-                    SharedResources.TrafficForm.TrafficStart("IsPulseGuiding: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Polls, "IsPulseGuiding: ");
                 if (!TelescopeHardware.CanPulseGuide)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("false");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Polls, "Can't");
+                    // is this correct? should it just return false?
                     throw new MethodNotImplementedException("IsPulseGuiding");
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.IsPulseGuiding.ToString());
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Polls, TelescopeHardware.IsPulseGuiding.ToString());
 
                 return TelescopeHardware.IsPulseGuiding;
             }
@@ -1013,27 +760,13 @@ namespace ASCOM.Simulator
 
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart(string.Format("MoveAxis {0} {1}:  ", Axis.ToString(), Rate));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "MoveAxis {0} {1}:  ", Axis.ToString(), Rate));
             if (TelescopeHardware.VersionOneOnly)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                {
-                    SharedResources.TrafficForm.TrafficEnd("false");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "false");
                 throw new MethodNotImplementedException("MoveAxis");
             }
-            // TODO add traffic reports for these exceptions
-            if (Rate > 50.0)
-                throw new InvalidValueException("MoveAxis", Rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-            if ((Rate < 10.0) && (Rate > 0.0))
-                throw new InvalidValueException("MoveAxis", Rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-            if (Rate < -50.0)
-                throw new InvalidValueException("MoveAxis", Rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-            if ((Rate > -10.0) && (Rate < 0.0))
-                throw new InvalidValueException("MoveAxis", Rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+            CheckRate(Rate);
 
             if (!CanMoveAxis(Axis))
                 throw new MethodNotImplementedException("CanMoveAxis " + Enum.GetName(typeof(TelescopeAxes), Axis));
@@ -1070,10 +803,7 @@ namespace ASCOM.Simulator
                     if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis)
                     {
                         TelescopeHardware.SlewState = SlewType.SlewNone;
-                        if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                        {
-                            SharedResources.TrafficForm.TrafficEnd("(stopped)");
-                        }
+                        SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(stopped)");
                         return;
                     }
                 }
@@ -1083,45 +813,30 @@ namespace ASCOM.Simulator
                 }
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficEnd("(done)");
-            }
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(done)");
         }
 
         public string Name
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("Description: " + SharedResources.INSTRUMENT_NAME);
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "Description: " + SharedResources.INSTRUMENT_NAME);
                 return SharedResources.INSTRUMENT_NAME;
             }
         }
 
         public void Park()
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("Park: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "Park: ");
             if (!TelescopeHardware.CanPark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                {
-                    SharedResources.TrafficForm.TrafficEnd("Can't Park");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't Park");
                 throw new MethodNotImplementedException("Park");
             }
 
             if (TelescopeHardware.IsParked)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                {
-                    SharedResources.TrafficForm.TrafficEnd("(done)");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(Is Parked)");
                 return;
             }
 
@@ -1132,54 +847,55 @@ namespace ASCOM.Simulator
                 System.Windows.Forms.Application.DoEvents();
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficEnd("(done)");
-            }
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(done)");
         }
 
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
-            long tempTicks = 0;
-
             if (TelescopeHardware.AtPark) throw new ParkedException();
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart(string.Format("Pulse Guide: {0}, {1}", Direction, Duration.ToString(CultureInfo.InvariantCulture)));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "Pulse Guide: {0}, {1}", Direction, Duration.ToString(CultureInfo.InvariantCulture)));
 
             if (!TelescopeHardware.CanPulseGuide)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't");
                 throw new ASCOM.MethodNotImplementedException("PulseGuide");
             }
 
             if (Duration < 0)
                 throw new ASCOM.InvalidValueException("PulseGuide", Duration.ToString(CultureInfo.InvariantCulture), ">0");
-
-            tempTicks = TelescopeHardware.GetTickCount() + Duration;
-
-            switch (Direction)
+            else if (Duration == 0)
             {
-                case GuideDirections.guideNorth:
-                    TelescopeHardware.m_GuideRateDeclination = Math.Abs(TelescopeHardware.m_GuideRateDeclination);
-                    TelescopeHardware.m_PulseGuideTixDec = tempTicks;
-                    break;
-                case GuideDirections.guideSouth:
-                    TelescopeHardware.m_GuideRateDeclination = -Math.Abs(TelescopeHardware.m_GuideRateDeclination);
-                    TelescopeHardware.m_PulseGuideTixDec = tempTicks;
-                    break;
+            }
+            else
+            {
 
-                case GuideDirections.guideEast:
-                    TelescopeHardware.m_GuideRateRightAscension = Math.Abs(TelescopeHardware.m_GuideRateRightAscension);
-                    TelescopeHardware.m_PulseGuideTixRa = tempTicks;
-                    break;
-                case GuideDirections.guideWest:
-                    TelescopeHardware.m_GuideRateRightAscension = -Math.Abs(TelescopeHardware.m_GuideRateRightAscension);
-                    TelescopeHardware.m_PulseGuideTixRa = tempTicks;
-                    break;
+                DateTime endTime = DateTime.Now + TimeSpan.FromMilliseconds(Duration);
+
+                switch (Direction)
+                {
+                    case GuideDirections.guideNorth:
+                        TelescopeHardware.m_GuideRateDeclination = Math.Abs(TelescopeHardware.m_GuideRateDeclination);
+                        TelescopeHardware.pulseGuideDecEndTime = endTime;
+                        TelescopeHardware.isPulseGuidingDec = true;
+                        break;
+                    case GuideDirections.guideSouth:
+                        TelescopeHardware.m_GuideRateDeclination = -Math.Abs(TelescopeHardware.m_GuideRateDeclination);
+                        TelescopeHardware.pulseGuideDecEndTime = endTime;
+                        TelescopeHardware.isPulseGuidingDec = true;
+                        break;
+
+                    case GuideDirections.guideEast:
+                        TelescopeHardware.m_GuideRateRightAscension = Math.Abs(TelescopeHardware.m_GuideRateRightAscension);
+                        TelescopeHardware.pulseGuideRaEndTime = endTime;
+                        TelescopeHardware.isPulseGuidingRa = true;
+                        break;
+                    case GuideDirections.guideWest:
+                        TelescopeHardware.m_GuideRateRightAscension = -Math.Abs(TelescopeHardware.m_GuideRateRightAscension);
+                        TelescopeHardware.pulseGuideRaEndTime = endTime;
+                        TelescopeHardware.isPulseGuidingRa = true;
+                        break;
+                }
             }
 
             if (!TelescopeHardware.CanDualAxisPulseGuide)
@@ -1187,40 +903,27 @@ namespace ASCOM.Simulator
                 System.Threading.Thread.Sleep(Duration); // Must be synchronous so wait out the pulseguide duration here
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficEnd(" (done) ");
-            }
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, " (done) ");
         }
 
         public double RightAscension
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("Right Ascension: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "Right Ascension: ");
 
                 if (!TelescopeHardware.CanEquatorial)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented");
                     throw new PropertyNotImplementedException("RightAscension", false);
                 }
 
                 if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("No coordinates at park!");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "No coordinates at park!");
                     throw new PropertyNotImplementedException("RightAscension", false);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.HoursToHMS(TelescopeHardware.RightAscension));
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, m_Util.HoursToHMS(TelescopeHardware.RightAscension));
                 return TelescopeHardware.RightAscension;
             }
         }
@@ -1229,24 +932,15 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("RightAscensionRate->: (done)");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "RightAscensionRate->: (done)");
                 return TelescopeHardware.RightAscensionRate;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("RightAscensionRate:<- " + value.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "RightAscensionRate:<- " + value.ToString(CultureInfo.InvariantCulture));
                 if (!TelescopeHardware.CanSetEquatorialRates)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented");
                     throw new PropertyNotImplementedException("RightAscensionRate", false);
                 }
                 TelescopeHardware.RightAscensionRate = value;
@@ -1255,26 +949,17 @@ namespace ASCOM.Simulator
 
         public void SetPark()
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-            {
-                SharedResources.TrafficForm.TrafficStart("Set Park: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Other, "Set Park: ");
             if (!TelescopeHardware.CanSetPark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                 throw new PropertyNotImplementedException("SetPark", false);
             }
 
             TelescopeHardware.ParkAltitude = TelescopeHardware.Altitude;
             TelescopeHardware.ParkAzimuth = TelescopeHardware.Azimuth;
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-            {
-                SharedResources.TrafficForm.TrafficEnd("(done)");
-            }
+            SharedResources.TrafficEnd(SharedResources.MessageType.Other, "(done)");
         }
 
         public void SetupDialog()
@@ -1295,22 +980,13 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Time)
-                {
-                    SharedResources.TrafficForm.TrafficStart("Sidereal Time: ");
-                }
-
+                SharedResources.TrafficStart(SharedResources.MessageType.Time, "Sidereal Time: ");
                 if (!TelescopeHardware.CanSiderealTime)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Time)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Time, "Not Implemented");
                     throw new PropertyNotImplementedException("SiderealTime", false);
                 }
-
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Time)
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToHMS(TelescopeHardware.SiderealTime));
+                SharedResources.TrafficEnd(SharedResources.MessageType.Time, m_Util.DegreesToHMS(TelescopeHardware.SiderealTime));
                 return TelescopeHardware.SiderealTime;
             }
         }
@@ -1319,51 +995,30 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("SiteElevation: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "SiteElevation: ");
 
                 if (!TelescopeHardware.CanLatLongElev)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                     throw new PropertyNotImplementedException("SiteElevation", false);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Elevation.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, TelescopeHardware.Elevation.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.Elevation;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("SiteElevation: ->");
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "SiteElevation: ->");
                 if (!TelescopeHardware.CanLatLongElev)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                     throw new PropertyNotImplementedException("SiteElevation", false);
                 }
                 if (value < -300 || value > 10000)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Out of Range");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Out of Range");
                     throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.Elevation = value;
             }
         }
@@ -1372,51 +1027,30 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("SiteLatitude: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "SiteLatitude: ");
 
                 if (!TelescopeHardware.CanLatLongElev)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                     throw new PropertyNotImplementedException("SiteLatitude", false);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Latitude.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, TelescopeHardware.Latitude.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.Latitude;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("SiteLatitude: ->");
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "SiteLatitude: ->");
                 if (!TelescopeHardware.CanLatLongElev)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                     throw new PropertyNotImplementedException("SiteLatitude", false);
                 }
                 if (value < -90 || value > 90)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Out of Range");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Out of Range");
                     throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.Latitude = value;
             }
         }
@@ -1425,51 +1059,30 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("SiteLongitude: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "SiteLongitude: ");
 
                 if (!TelescopeHardware.CanLatLongElev)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                     throw new PropertyNotImplementedException("SiteLongitude", false);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(TelescopeHardware.Longitude.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, TelescopeHardware.Longitude.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.Longitude;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("SiteLongitude: ->");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "SiteLongitude: ->");
                 if (!TelescopeHardware.CanLatLongElev)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                     throw new PropertyNotImplementedException("SiteLongitude", false);
                 }
                 if (value < -180 || value > 180)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Out of Range");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Out of Range");
                     throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.Longitude = value;
             }
         }
@@ -1478,57 +1091,37 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("SlewSettleTime: " + (TelescopeHardware.SlewSettleTime * 1000).ToString(CultureInfo.InvariantCulture));
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "SlewSettleTime: " + (TelescopeHardware.SlewSettleTime * 1000).ToString(CultureInfo.InvariantCulture));
                 return (short)(TelescopeHardware.SlewSettleTime * 1000);
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficStart("SlewSettleTime:-> ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "SlewSettleTime:-> ");
                 if (value > 100 || value < 0)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Out Of Range ");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Out Of Range ");
                     throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(value + " (done)");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, value + " (done)");
                 TelescopeHardware.SlewSettleTime = value / 1000;
             }
         }
 
         public void SlewToAltAz(double Azimuth, double Altitude)
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SlewToAltAz: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToAltAz: ");
             if (!TelescopeHardware.CanSlew)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't");
                 throw new MethodNotImplementedException("SlewToAltAz");
             }
             if (Azimuth > 360 || Azimuth < 0 || Altitude < -90 || Altitude > 90)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Out of Range");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Out of Range");
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, " Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
             TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true, SlewType.SlewAltAz);
 
@@ -1540,59 +1133,42 @@ namespace ASCOM.Simulator
 
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SlewToAltAzAsync: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToAltAzAsync: ");
             if (!TelescopeHardware.CanSlew)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't");
                 throw new MethodNotImplementedException("SlewToAltAzAsync");
             }
             if (Azimuth > 360 || Azimuth < 0 || Altitude < -90 || Altitude > 90)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Out of Range");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Out of Range");
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, " Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
             TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true, SlewType.SlewAltAz);
         }
 
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SlewToCoordinates: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToCoordinates: ");
             if (!TelescopeHardware.CanSlew)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't");
                 throw new MethodNotImplementedException("SlewToCoordinates");
             }
             if (RightAscension > 24 || RightAscension < 0 || Declination < -180 || Declination > 180)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Out of Range");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Out of Range");
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart(" RA " + m_Util.DegreesToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, " RA " + m_Util.HoursToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
             if (TelescopeHardware.AtPark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Can't, scope is parked");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't, scope is parked");
                 throw new ParkedException();
             }
 
@@ -1602,75 +1178,57 @@ namespace ASCOM.Simulator
             {
                 System.Windows.Forms.Application.DoEvents();
             }
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                SharedResources.TrafficForm.TrafficEnd("done");
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "done");
         }
 
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SlewToCoordinatesAsync: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToCoordinatesAsync: ");
             if (!TelescopeHardware.CanSlew)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't");
                 throw new MethodNotImplementedException("SlewToCoordinatesAsync");
             }
             if (RightAscension > 24 || RightAscension < 0 || Declination < -180 || Declination > 180)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Out of Range");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Out of Range");
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart(" RA " + m_Util.DegreesToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, " RA " + m_Util.HoursToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
             if (TelescopeHardware.AtPark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Can't, scope is parked");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't, scope is parked");
                 throw new ParkedException();
             }
 
             TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                SharedResources.TrafficForm.TrafficEnd("started");
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "started");
         }
 
         public void SlewToTarget()
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SlewToTarget: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToTarget: ");
             if (!TelescopeHardware.CanSlew)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Can't");
                 throw new MethodNotImplementedException("SlewToTarget");
             }
             if (TelescopeHardware.TargetRightAscension == SharedResources.INVALID_COORDINATE || TelescopeHardware.Declination == SharedResources.INVALID_COORDINATE)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("no target");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "no target");
                 throw new DriverException(SharedResources.MSG_NO_TARGET_COORDS, (int)SharedResources.SCODE_NO_TARGET_COORDS);
             }
-            if (TelescopeHardware.TargetRightAscension > 24 || TelescopeHardware.TargetRightAscension < 0 || TelescopeHardware.TargetDeclination < -180 || TelescopeHardware.TargetDeclination > 180)
+            if (TelescopeHardware.TargetRightAscension > 24 || TelescopeHardware.TargetRightAscension < 0 || TelescopeHardware.TargetDeclination < -90 || TelescopeHardware.TargetDeclination > 90)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("Out of Range");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Out of Range");
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
             if (TelescopeHardware.AtPark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("can't, scope is parked");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "can't, scope is parked");
                 throw new ParkedException();
             }
 
@@ -1680,39 +1238,31 @@ namespace ASCOM.Simulator
             {
                 System.Windows.Forms.Application.DoEvents();
             }
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                SharedResources.TrafficForm.TrafficEnd("done");
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "done");
         }
 
         public void SlewToTargetAsync()
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SlewToTargetAsync: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToTargetAsync: ");
             if (!TelescopeHardware.CanSlew)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "can't");
                 throw new MethodNotImplementedException("SlewToTargetAsync");
             }
             if (TelescopeHardware.TargetRightAscension == SharedResources.INVALID_COORDINATE || TelescopeHardware.Declination == SharedResources.INVALID_COORDINATE)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("invalid coordinates");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "invalid coordinates");
                 throw new DriverException(SharedResources.MSG_NO_TARGET_COORDS, (int)SharedResources.SCODE_NO_TARGET_COORDS);
             }
-            if (TelescopeHardware.RightAscension > 24 || TelescopeHardware.RightAscension < 0 || TelescopeHardware.Declination < -180 || TelescopeHardware.Declination > 180)
+            if (TelescopeHardware.RightAscension > 24 || TelescopeHardware.RightAscension < 0 || TelescopeHardware.Declination < -90 || TelescopeHardware.Declination > 90)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("out of range");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "out of range");
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
             if (TelescopeHardware.AtPark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("can't when parked");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "can't when parked");
                 throw new ParkedException();
             }
             TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
@@ -1722,37 +1272,26 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                {
-                    SharedResources.TrafficForm.TrafficLine(string.Format("Slewing: {0}", TelescopeHardware.SlewState != SlewType.SlewNone));
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "Slewing: {0}", TelescopeHardware.SlewState != SlewType.SlewNone));
                 return TelescopeHardware.SlewState != SlewType.SlewNone;
             }
         }
 
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SyncToAltAz: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SyncToAltAz: ");
             if (!TelescopeHardware.CanSync)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "can't");
                 throw new MethodNotImplementedException("SyncToAltAz");
             }
             if (Azimuth > 360 || Azimuth < 0 || Altitude < -90 || Altitude > 90)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("out of range");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "out of range");
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, " Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
             if (TelescopeHardware.AtPark)
                 throw new ParkedException();
@@ -1763,33 +1302,24 @@ namespace ASCOM.Simulator
             TelescopeHardware.Azimuth = Azimuth;
 
             TelescopeHardware.CalculateRaDec();
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                SharedResources.TrafficForm.TrafficEnd("done");
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "done");
         }
 
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SyncToCoordinates: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SyncToCoordinates: ");
             if (!TelescopeHardware.CanSync)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "can't");
                 throw new MethodNotImplementedException("SyncToCoordinates");
             }
-            if (RightAscension > 24 || RightAscension < 0 || Declination < -180 || Declination > 180)
+            if (RightAscension > 24 || RightAscension < 0 || Declination < -90 || Declination > 90)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("out of range");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "out of range");
                 throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart(string.Format(" RA {0} DEC {1}", m_Util.DegreesToHMS(RightAscension), m_Util.DegreesToDMS(Declination)));
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, " RA {0} DEC {1}", m_Util.HoursToHMS(RightAscension), m_Util.DegreesToDMS(Declination)));
 
             if (TelescopeHardware.AtPark)
                 throw new ParkedException();
@@ -1803,27 +1333,19 @@ namespace ASCOM.Simulator
             TelescopeHardware.Declination = Declination;
 
             TelescopeHardware.CalculateAltAz();
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                SharedResources.TrafficForm.TrafficEnd("done");
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "done");
         }
 
         public void SyncToTarget()
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("SyncToTarget: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SyncToTarget: ");
             if (!TelescopeHardware.CanSync)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                    SharedResources.TrafficForm.TrafficEnd("can't");
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "can't");
                 throw new MethodNotImplementedException("SyncToTarget");
             }
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficEnd(" RA " + m_Util.DegreesToHMS(TelescopeHardware.TargetRightAscension) + " DEC " + m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
-            }
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, " RA " + m_Util.HoursToHMS(TelescopeHardware.TargetRightAscension) + " DEC " + m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
 
             if (TelescopeHardware.AtPark)
                 throw new ParkedException();
@@ -1834,66 +1356,41 @@ namespace ASCOM.Simulator
             TelescopeHardware.Declination = TelescopeHardware.TargetDeclination;
 
             TelescopeHardware.CalculateAltAz();
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                SharedResources.TrafficForm.TrafficEnd("done");
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "done");
         }
 
         public double TargetDeclination
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("TargetDeclination: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetDeclination: ");
                 if (!TelescopeHardware.CanSlew)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented");
                     throw new MethodNotImplementedException("TargetDeclination");
                 }
                 if (TelescopeHardware.TargetDeclination == SharedResources.INVALID_COORDINATE)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Set");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Set");
                     throw new DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCOPE_PROP_NOT_SET);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
                 return TelescopeHardware.TargetDeclination;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("TargetDeclination:-> ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetDeclination:-> ");
                 if (!TelescopeHardware.CanSlew)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented");
                     throw new MethodNotImplementedException("TargetDeclination");
                 }
                 if (value < -90 || value > 90)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Out of Range");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Out of Range");
                     throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToDMS(value));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, m_Util.DegreesToDMS(value));
                 TelescopeHardware.TargetDeclination = value;
             }
         }
@@ -1902,58 +1399,34 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("TargetRightAscension: ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetRightAscension: ");
                 if (!TelescopeHardware.CanSlew)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented");
                     throw new MethodNotImplementedException("TargetRightAscension");
                 }
                 if (TelescopeHardware.TargetRightAscension == SharedResources.INVALID_COORDINATE)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Set");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Set");
                     throw new DriverException(SharedResources.MSG_PROP_NOT_SET, (int)SharedResources.SCOPE_PROP_NOT_SET);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToHMS(TelescopeHardware.TargetRightAscension));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, m_Util.HoursToHMS(TelescopeHardware.TargetRightAscension));
                 return TelescopeHardware.TargetRightAscension;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficStart("TargetRightAscension:-> ");
-                }
+                SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetRightAscension:-> ");
                 if (!TelescopeHardware.CanSlew)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Not Implemented");
                     throw new MethodNotImplementedException("TargetRightAscension");
                 }
                 if ((value < 0.0) || (value >= 24.0))
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Out of Range");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Gets, "Out of Range");
                     throw new DriverException(SharedResources.MSG_VAL_OUTOFRANGE + " " + value, (int)SharedResources.SCODE_VAL_OUTOFRANGE);
                 }
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Gets)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(m_Util.DegreesToHMS(value));
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Gets, m_Util.DegreesToHMS(value));
                 TelescopeHardware.TargetRightAscension = value;
             }
         }
@@ -1962,18 +1435,12 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                {
-                    SharedResources.TrafficForm.TrafficLine("Tracking: " + TelescopeHardware.Tracking.ToString());
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Polls, "Tracking: " + TelescopeHardware.Tracking.ToString());
                 return TelescopeHardware.Tracking;
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Polls)
-                {
-                    SharedResources.TrafficForm.TrafficLine("Tracking:-> " + value.ToString());
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Polls, "Tracking:-> " + value.ToString());
                 TelescopeHardware.Tracking = value;
             }
         }
@@ -1984,16 +1451,10 @@ namespace ASCOM.Simulator
             {
                 string output = "";
                 DriveRates rate = DriveRates.driveSidereal;
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("TrackingRate: ");
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "TrackingRate: ");
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                     throw new MethodNotImplementedException("TrackingRate");
                 }
                 switch (TelescopeHardware.TrackingRate)
@@ -2016,25 +1477,16 @@ namespace ASCOM.Simulator
                         break;
                 }
 
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(output);
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, output);
                 return rate;
             }
             set
             {
                 string output = "";
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("TrackingRate: -> ");
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "TrackingRate: -> ");
                 if (TelescopeHardware.VersionOneOnly)
                 {
-                    if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                    {
-                        SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                    }
+                    SharedResources.TrafficEnd(SharedResources.MessageType.Other, "Not Implemented");
                     throw new MethodNotImplementedException("TrackingRate");
                 }
                 switch (value)
@@ -2057,10 +1509,7 @@ namespace ASCOM.Simulator
                         break;
                 }
 
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficEnd(output + "(done)");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Other, output + "(done)");
             }
         }
 
@@ -2068,10 +1517,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Other)
-                {
-                    SharedResources.TrafficForm.TrafficLine("TrackingRates: (done)");
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "TrackingRates: (done)");
                 if (TelescopeHardware.CanTrackingRates)
                 {
                     return m_TrackingRates;
@@ -2087,45 +1533,48 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Time)
-                {
-                    SharedResources.TrafficForm.TrafficLine("UTCDate: " + DateTime.UtcNow.AddSeconds((double)TelescopeHardware.DateDelta).ToString());
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Time, "UTCDate: " + DateTime.UtcNow.AddSeconds((double)TelescopeHardware.DateDelta).ToString());
                 return DateTime.UtcNow.AddSeconds((double)TelescopeHardware.DateDelta);
             }
             set
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Time)
-                {
-                    SharedResources.TrafficForm.TrafficLine("UTCDate-> " + value.ToString());
-                }
+                SharedResources.TrafficLine(SharedResources.MessageType.Time, "UTCDate-> " + value.ToString());
                 TelescopeHardware.DateDelta = (int)value.Subtract(DateTime.UtcNow).TotalSeconds;
             }
         }
 
         public void Unpark()
         {
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficStart("UnPark: ");
-            }
+            SharedResources.TrafficStart(SharedResources.MessageType.Slew, "UnPark: ");
             if (!TelescopeHardware.CanUnpark)
             {
-                if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-                {
-                    SharedResources.TrafficForm.TrafficEnd("Not Implemented");
-                }
+                SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "Not Implemented");
                 throw new MethodNotImplementedException("UnPark");
             }
 
             TelescopeHardware.ChangePark(false);
             TelescopeHardware.Tracking = true;
 
-            if (SharedResources.TrafficForm != null && SharedResources.TrafficForm.Slew)
-            {
-                SharedResources.TrafficForm.TrafficEnd("(done)");
-            }
+            SharedResources.TrafficEnd(SharedResources.MessageType.Slew, "(done)");
         }
+
+        #endregion
+
+        #region private methods
+
+        private void CheckRate(double rate)
+        {
+            // TODO add traffic reports for these exceptions
+            if (rate > 50.0)
+                throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+            if ((rate < 10.0) && (rate > 0.0))
+                throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+            if (rate < -50.0)
+                throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+            if ((rate > -10.0) && (rate < 0.0))
+                throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+        }
+
 
         #endregion
 

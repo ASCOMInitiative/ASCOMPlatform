@@ -97,8 +97,8 @@ namespace ASCOM.Simulator
         #region Properties for Settings
         public int EquatorialSystem
         {
-            get { return int.Parse(comboBoxEquatorialSystem.SelectedValue.ToString()); }
-            set { comboBoxEquatorialSystem.SelectedValue = value.ToString(); }
+            get { return int.Parse(comboBoxEquatorialSystem.SelectedValue.ToString(), CultureInfo.CurrentCulture); }
+            set { comboBoxEquatorialSystem.SelectedValue = value.ToString(CultureInfo.CurrentCulture); }
         }
         public double Elevation
         {
@@ -119,7 +119,7 @@ namespace ASCOM.Simulator
                 double lat=0;
                 try
                 {
-                    lat = double.Parse(textBoxLatitudeDegrees.Text) + double.Parse(textBoxLatitudeMinutes.Text) / 60;
+                    lat = double.Parse(textBoxLatitudeDegrees.Text, CultureInfo.CurrentCulture) + double.Parse(textBoxLatitudeMinutes.Text, CultureInfo.CurrentCulture) / 60;
                     if (comboBoxLatitude.SelectedItem.ToString() == "S") { lat = -lat; }
                 }
                 catch { }
@@ -137,8 +137,8 @@ namespace ASCOM.Simulator
                     comboBoxLatitude.SelectedIndex = 0;
                 }
 
-                textBoxLatitudeDegrees.Text = ((int)value).ToString("00");
-                textBoxLatitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00");
+                textBoxLatitudeDegrees.Text = ((int)value).ToString("00", CultureInfo.CurrentCulture);
+                textBoxLatitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00", CultureInfo.CurrentCulture);
             }
         }
         public double Longitude
@@ -148,8 +148,8 @@ namespace ASCOM.Simulator
                 double log = 0;
                 try
                 {
-                    log = double.Parse(textBoxLongitudeDegrees.Text) + double.Parse(textBoxLongitudeMinutes.Text) / 60;
-                    if (comboBoxLongitude.SelectedItem.ToString() == "W") { log = -log; }
+                    log = double.Parse(textBoxLongitudeDegrees.Text, CultureInfo.CurrentCulture) + double.Parse(textBoxLongitudeMinutes.Text, CultureInfo.CurrentCulture) / 60;
+                    if (comboBoxLongitude.SelectedItem.ToString().ToUpper() == "W") { log = -log; }
                 }
                 catch { }
                 return log;
@@ -164,8 +164,8 @@ namespace ASCOM.Simulator
                     comboBoxLongitude.SelectedIndex = 0;
                 }
 
-                textBoxLongitudeDegrees.Text = ((int)value).ToString("000");
-                textBoxLongitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00");
+                textBoxLongitudeDegrees.Text = ((int)value).ToString("000", CultureInfo.CurrentCulture);
+                textBoxLongitudeMinutes.Text = ((value - (int)value) * 60).ToString("00.00", CultureInfo.CurrentCulture);
             }
         }
 
@@ -218,8 +218,8 @@ namespace ASCOM.Simulator
         }
         public int NumberMoveAxis
         {
-            get { return int.Parse(comboBoxNumberMoveAxis.SelectedItem.ToString()); }
-            set { comboBoxNumberMoveAxis.SelectedItem = value.ToString(); }
+            get { return int.Parse(comboBoxNumberMoveAxis.SelectedItem.ToString(), CultureInfo.CurrentCulture); }
+            set { comboBoxNumberMoveAxis.SelectedItem = value.ToString(CultureInfo.CurrentCulture); }
         }
 
         public bool CanPulseGuide
@@ -344,26 +344,26 @@ namespace ASCOM.Simulator
         {
             get { return checkBoxCanDoesRefraction.Checked; }
             set { checkBoxCanDoesRefraction.Checked = value; }
-
         }
+
         public bool CanLatLongElev
         {
             get { return checkBoxCanLatLongElev.Checked; }
             set { checkBoxCanLatLongElev.Checked = value; }
-
         }
+
         public bool CanEquatorial
         {
             get { return checkBoxCanEquatorial.Checked; }
             set { checkBoxCanEquatorial.Checked = value; }
-
         }
+
         public bool CanSiderealTime
         {
             get { return checkBoxCanSiderealTime.Checked; }
             set { checkBoxCanSiderealTime.Checked = value; }
-
         }
+
         public double ApertureArea
         {
             get
@@ -375,6 +375,7 @@ namespace ASCOM.Simulator
             }
             set { textBoxApertureArea.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
+
         public double ApertureDiameter
         {
             get
@@ -386,6 +387,7 @@ namespace ASCOM.Simulator
             }
             set { textBoxAperture.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
+
         public double FocalLength
         {
             get
@@ -397,6 +399,7 @@ namespace ASCOM.Simulator
             }
             set { textBoxFocalLength.Text = value.ToString(CultureInfo.CurrentCulture); }
         }
+
         public ASCOM.DeviceInterface.AlignmentModes AlignmentMode
         {
             get

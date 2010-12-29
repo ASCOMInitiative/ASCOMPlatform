@@ -8,12 +8,12 @@ using ASCOM.Controls;
 
 namespace ASCOM.Simulator
 {
-    public partial class frmMain : Form
+    public partial class FrmMain : Form
     {
         delegate void SetTextCallback(string text);
 
         private Utilities.Util m_Util = new ASCOM.Utilities.Util();
-        public frmMain()
+        public FrmMain()
         {
             InitializeComponent();
             this.BringToFront();
@@ -128,6 +128,7 @@ namespace ASCOM.Simulator
         {
             SharedResources.TrafficForm.Show();
         }
+
         private void SetSlewButtons()
         {
             if (TelescopeHardware.AlignmentMode == 0)
@@ -154,67 +155,53 @@ namespace ASCOM.Simulator
         }
 
 
-        public double SiderealTime
+        public void SiderealTime(double value)
         {
-            set
-            {
                 SetTextCallback setText = new SetTextCallback(SetLstText);
                 string text = m_Util.HoursToHMS(value);
                 try{this.Invoke(setText, text);}
                 catch { }
-                
-           
-            }
         }
-        public double RightAscension
+
+        public void RightAscension(double value)
         {
-            set
-            {
                 SetTextCallback setText = new SetTextCallback(SetRaText);
                 string text = m_Util.HoursToHMS(value);
                 try { this.Invoke(setText, text); }
                 catch { }
-            }
         }
-        public double Declination
+
+        public void Declination(double value)
         {
-            set
-            {
                 SetTextCallback setText = new SetTextCallback(SetDecText);
                 string text = m_Util.DegreesToDMS(value);
                 try { this.Invoke(setText, text); }
                 catch { }
-            }
         }
-        public double Altitude
+
+        public void Altitude(double value)
         {
-            set
-            {
                 SetTextCallback setText = new SetTextCallback(SetAltitudeText);
                 string text = m_Util.DegreesToDMS(value);
                 try { this.Invoke(setText, text); }
                 catch { }
-            }
         }
-        public double Azimuth
+
+        public void Azimuth(double value)
         {
-            set
-            {
                 SetTextCallback setText = new SetTextCallback(SetAzimuthText);
                 string text = m_Util.DegreesToDMS(value);
                 try { this.Invoke(setText, text); }
                 catch { }
-            }
         }
-        public string ParkButton
+
+        public void ParkButton(string value)
         {
-            set
-            {
                 SetTextCallback setText = new SetTextCallback(SetParkButtonText);
                 try { this.Invoke(setText, value); }
                 catch { }
-            }
         }
+
         private void frmMain_Load(object sender, EventArgs e)
         {
             SetSlewButtons();
@@ -407,9 +394,9 @@ namespace ASCOM.Simulator
             else checkBoxTrack.Checked = false;
         }
 
-        public void LedPier(ASCOM.DeviceInterface.PierSide SideOfPier)
+        public void LedPier(ASCOM.DeviceInterface.PierSide sideOfPier)
         {
-            if (SideOfPier == ASCOM.DeviceInterface.PierSide.pierEast)
+            if (sideOfPier == ASCOM.DeviceInterface.PierSide.pierEast)
             {
                 ledPierEast.Status=TrafficLight.Green;
                 ledPierEast.Visible = true;

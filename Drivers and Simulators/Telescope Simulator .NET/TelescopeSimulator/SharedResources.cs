@@ -46,6 +46,7 @@ namespace ASCOM.Simulator
         SlewLeft,
         SlewRight
     }
+
     public static class SharedResources
     {
         
@@ -97,6 +98,7 @@ namespace ASCOM.Simulator
         //
 
         public static int z { get { return s_z++; } }
+
         public static TrafficForm TrafficForm { 
             get 
             {
@@ -110,6 +112,105 @@ namespace ASCOM.Simulator
             set
             {
                 m_trafficForm = value;
+            }
+        }
+
+        /// <summary>
+        /// specifies the type of the traffic message, the message
+        /// is only displayed if the corresponding checkbox is checked.
+        /// </summary>
+        public enum MessageType
+        {
+            /// <summary>
+            /// Capabilities: Can Flags, Alignment Mode
+            /// </summary>
+            Capabilities,
+            /// <summary>
+            /// Slew, Sync, Park/Unpark, Find Home
+            /// </summary>
+            Slew,
+            /// <summary>
+            /// Get: Alt/Az, RA/Dec, Target RA/Dec
+            /// </summary>
+            Gets,
+            /// <summary>
+            /// Polls: Tracking, Slewing, At's
+            /// </summary>
+            Polls,
+            /// <summary>
+            /// UTC, Siderial Time
+            /// </summary>
+            Time,
+            /// <summary>
+            /// All Other messages
+            /// </summary>
+            Other
+        }
+
+        /// <summary>
+        /// Write a line to the traffis form
+        /// </summary>
+        /// <param name="msgType"></param>
+        /// <param name="msg"></param>
+        public static void TrafficLine(MessageType msgType, string msg)
+        {
+            if (CheckMsg(msgType))
+            {
+                m_trafficForm.TrafficLine(msg);
+            }
+        }
+
+        /// <summary>
+        /// Start a line to the traffic form, must be finished by TrafficLine or TrafficEnd
+        /// </summary>
+        /// <param name="msgType"></param>
+        /// <param name="msg"></param>
+        public static void TrafficStart(MessageType msgType, string msg)
+        {
+            if (CheckMsg(msgType))
+            {
+                m_trafficForm.TrafficStart(msg);
+            }
+        }
+
+        /// <summary>
+        /// Finish writing a line to the traffic form
+        /// </summary>
+        /// <param name="msgType"></param>
+        /// <param name="msg"></param>
+        public static void TrafficEnd(MessageType msgType, string msg)
+        {
+            if (CheckMsg(msgType))
+            {
+                m_trafficForm.TrafficEnd(msg);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the message type has been checked
+        /// </summary>
+        /// <param name="msgType"></param>
+        /// <returns></returns>
+        private static bool CheckMsg(MessageType msgType)
+        {
+            if (TrafficForm == null)
+                return false;
+            switch (msgType)
+            {
+                case MessageType.Capabilities:
+                    return m_trafficForm.Capabilities;
+                case MessageType.Slew:
+                    return m_trafficForm.Slew;
+                case MessageType.Gets:
+                    return m_trafficForm.Gets;
+                case MessageType.Polls:
+                    return m_trafficForm.Polls;
+                case MessageType.Time:
+                    return m_trafficForm.Time;
+                case MessageType.Other:
+                    return m_trafficForm.Other;
+                default:
+                    return false;
             }
         }
     }
