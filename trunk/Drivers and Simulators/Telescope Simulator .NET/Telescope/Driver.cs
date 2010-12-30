@@ -783,7 +783,6 @@ namespace ASCOM.Simulator
             {
                 System.Threading.Thread.Sleep(Duration); // Must be synchronous so wait out the pulseguide duration here
             }
-
             SharedResources.TrafficEnd(" (done) ");
         }
 
@@ -835,15 +834,25 @@ namespace ASCOM.Simulator
         public void SetupDialog()
         {
             if (TelescopeHardware.Connected)
-                throw new DriverException("The hardware is connected, cannot do SetupDialog()",
-                                    unchecked(ErrorCodes.DriverBase + 4));
+                throw new InvalidOperationException("The hardware is connected, cannot do SetupDialog()");
             TelescopeSimulator.m_MainForm.DoSetupDialog();
         }
 
         public PierSide SideOfPier
         {
             get { return TelescopeHardware.sideOfPier; }
-            set { throw new PropertyNotImplementedException("SideOfPier", true); }
+            set 
+            {
+                SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SideOfPier: ");
+                CheckCapability(TelescopeHardware.CanSetPierSide, "SideOfPier", true);
+
+                if (value == TelescopeHardware.sideOfPier)
+                    return;
+                // TODO implement this correctly, it needs an overlap which can be reached on either side
+                TelescopeHardware.sideOfPier = value;
+                // slew in RaDec to the same position, setting the side of pier appropriately
+                TelescopeHardware.StartSlewRaDec(TelescopeHardware.RightAscension, TelescopeHardware.Declination, true);
+            }
         }
 
         public double SiderealTime
