@@ -121,6 +121,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public enum MessageType
         {
+            none,
             /// <summary>
             /// Capabilities: Can Flags, Alignment Mode
             /// </summary>
@@ -154,6 +155,7 @@ namespace ASCOM.Simulator
         /// <param name="msg"></param>
         public static void TrafficLine(MessageType msgType, string msg)
         {
+            lastMsg = msgType;
             if (CheckMsg(msgType))
             {
                 m_trafficForm.TrafficLine(msg);
@@ -167,7 +169,16 @@ namespace ASCOM.Simulator
         /// <param name="msg"></param>
         public static void TrafficStart(MessageType msgType, string msg)
         {
+            lastMsg = msgType;
             if (CheckMsg(msgType))
+            {
+                m_trafficForm.TrafficStart(msg);
+            }
+        }
+
+        public static void TrafficStart(string msg)
+        {
+            if (CheckMsg(lastMsg))
             {
                 m_trafficForm.TrafficStart(msg);
             }
@@ -184,7 +195,19 @@ namespace ASCOM.Simulator
             {
                 m_trafficForm.TrafficEnd(msg);
             }
+            lastMsg = msgType;
         }
+
+        public static void TrafficEnd(string msg)
+        {
+            if (CheckMsg(lastMsg))
+            {
+                m_trafficForm.TrafficEnd(msg);
+            }
+            lastMsg = MessageType.none;
+        }
+
+        private static MessageType lastMsg = MessageType.none;
 
         /// <summary>
         /// Returns true if the message type has been checked

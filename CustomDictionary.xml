@@ -6,10 +6,12 @@
     </Unrecognized>
     <Recognized>
       <Word>ASCOM</Word>
-      <Word>Az</Word>
-      <Word>Ra</Word>
+      <Word>Elev</Word>
+      <Word>Unpark</Word>
+      <!--<Word>CanAltAz</Word>
+      <Word>CanLatLongElev</Word>-->
     </Recognized>
-    <Deprecated>
+    <!--<Deprecated>
       <Term PreferredAlternate=""></Term>
     </Deprecated>
     <Compound>
@@ -17,7 +19,7 @@
     </Compound>
     <DiscreteExceptions>
       <Term></Term>
-    </DiscreteExceptions>
+    </DiscreteExceptions>-->
   </Words>
   <Acronyms>
     <CasingExceptions>
