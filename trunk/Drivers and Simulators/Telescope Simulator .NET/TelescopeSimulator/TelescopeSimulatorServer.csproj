@@ -196,9 +196,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\CustomDictionary.xml">
+    <CodeAnalysisDictionary Include="..\..\..\CustomDictionary.xml">
       <Link>CustomDictionary.xml</Link>
-    </Content>
+    </CodeAnalysisDictionary>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
   </ItemGroup>
