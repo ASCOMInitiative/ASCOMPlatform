@@ -54,6 +54,9 @@ if Variable NEEDSUPGRADE Equals TRUE
 end
 Include Script: checkmsi31
 [compiler end]
+Include Script: checknet2sp2
+Include Script: checknet3sp2
+Include Script: checknet351
 [END REGION]
  
 [DEFINE REGION: Install Application Pre-Requisites]
@@ -62,6 +65,23 @@ if Variable PREREQ not Equals FALSE
   Display Dialog: prereq, wait for dialog to return (modal)
   if Variable WIZARD Equals CANCEL
     Terminate Installation
+  end
+  if Variable WIZARD Equals NEXT
+    Comment: Check for .NET 2 SP2
+    if Variable NET2SP2 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+      Terminate Installation
+    end
+    Comment: Check for .NET 3 SP2
+    if Variable NET3SP2 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+      Terminate Installation
+    end
+    Comment: Check for .NET 3.5 SP1
+    if Variable NET351 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+      Terminate Installation
+    end
   end
   Display Dialog: progressprereq, use as progress dialog (non-modal)
   [compiler if Variable BUILDMODE not Equals PATCH]
@@ -83,7 +103,7 @@ if Variable PREREQ not Equals FALSE
     end
     Set Variable MAINTENANCE to FALSE
   end
-  [DEFINE WEB MEDIA Microsoft Windows Installer 3.1, Exclude from Build]
+  [DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
   Include Script: setupmsi31
   [compiler end]
   Hide Dialog
@@ -314,24 +334,6 @@ else
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
-    [DEFINE REGION: Create directory structure]
-    Comment: Create Folder $TARGETDIR$\Docs
-    Comment: Create Folder $COMMONFILES$\ASCOM
-    Comment: Create Folder $COMMONFILES$\ASCOM\Camera
-    Comment: Create Folder $COMMONFILES$\ASCOM\Dome
-    Comment: Create Folder $COMMONFILES$\ASCOM\FilterWheel
-    Comment: Create Folder $COMMONFILES$\ASCOM\Focuser
-    Comment: Create Folder $COMMONFILES$\ASCOM\Interface
-    Comment: Create Folder $COMMONFILES$\ASCOM\Platform
-    Comment: Create Folder $COMMONFILES$\ASCOM\Platform\v5.5
-    Comment: Create Folder $COMMONFILES$\ASCOM\Platform\v6
-    Comment: Create Folder $COMMONFILES$\ASCOM\Rotator
-    Comment: Create Folder $COMMONFILES$\ASCOM\SafetyMonitor
-    Comment: Create Folder $COMMONFILES$\ASCOM\Switch
-    Comment: Create Folder $COMMONFILES$\ASCOM\Telescope
-    Comment: Create Folder $COMMONFILES$\ASCOM\Uninstall
-    Comment: Create Folder $WINDIR$\Symbols\dll
-    [END REGION]
     [DEFINE REGION: Platform 5 files]
     Comment: Type libraries
     Install Files C:\ASCOM Trunk\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
@@ -347,7 +349,6 @@ else
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\comdlg32.ocx to $WINSYSDIR$ (Never Overwrite)
     Comment: Platform 5 assemblies
     Comment: ASCOM.DriverAccess 1.0.5 is not copied because it is replaced with 1.0.6 in Platform 6
-    Comment: Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.dll to Global Assembly Cache
     Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
     Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\v5.5
     Install Assembly C:\ASCOM Trunk\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
@@ -379,14 +380,14 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
     Comment: New files in Platform 5.5
     Install Assembly C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to Global Assembly Cache
-    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to $COMMONFILES$\ASCOM\Platform
-    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.xml to $COMMONFILES$\ASCOM\Platform
-    Comment: Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $COMMONFILES$\ASCOM\Platform
     Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINDIR$\Symbols\dll
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
     Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
     Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
+    Comment: Copy Utilities and DriverAccess to .Net directory to ensure Inno installers that test for this run OK
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
     [END REGION]
     [DEFINE REGION: Platform 6 files]
     Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
@@ -433,17 +434,6 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Comment: Platform 6 Documents
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
-    Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\PlatformHelp.chm to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
     Comment: Platform 6 Internal
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
     Install Files c:\ASCOM Trunk\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
@@ -451,7 +441,6 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
     Comment: Platform 6 Tools
     Install Files C:\ASCOM Trunk\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ShowPlatformVersion to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
@@ -489,17 +478,50 @@ else
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     [END REGION]
+    [DEFINE REGION: Platform 6 Content]
+    Comment: Platform 6 Documents
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
+    Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\PlatformHelp.chm to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
+    Install Files C:\ASCOM Trunk\NOVAS\Algorithms.pdf to $TARGETDIR$\Docs
+    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Docs
+    [END REGION]
     [DEFINE REGION: Create shortcuts]
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Compatible Software (web) to $TARGETDIR$\Docs\Compatible Software (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Drivers and Downloads (web) to $TARGETDIR$\Docs\Drivers and Downloads (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Supported Devices (web) to $TARGETDIR$\Docs\Supported Devices (web).url
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Comment: Menu shortcuts
     Create Shortcut $DESKTOPDIR$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Docs\Platform 6.0.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Help File to $TARGETDIR$\Docs\PlatformHelp.chm
     Create Shortcut $DESKTOPDIR$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Help to $TARGETDIR$\Docs\PlatformHelp.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\How to get support to http://ascom-standards.org/Support/index.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Docs\Platform 6.0.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Fundamental Astrometry Theory Paper to $TARGETDIR$\Docs\Algorithms.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\NOVAS 3 Function and Usage Guide to $TARGETDIR$\Docs\NOVAS_C3.0_Guide.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
     [END REGION]
     [DEFINE REGION: Registry Keys]
     Comment: Create registry keys
@@ -516,14 +538,12 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, This is a 32bit driver and cannot run on a 64bit system
     Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
-    Comment: Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\ASCOM.FilterWheelSim.FilterWheel\, Filter Wheel Simulator [.Net]
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
-    Comment: Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\ASCOM.Simulator.Rotator, Rotator Simulator .NET
     Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
@@ -533,12 +553,14 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
-    Comment: Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope\\, Telescope Simulator for .NET
+    [END REGION]
+    [DEFINE REGION: Additional clean-up when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
     Delete Files $COMMONFILES$\ASCOM\Switch\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\Focuser\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\Camera\*.tlb (when uninstalling)
+    Delete Files $COMMONFILES$\ASCOM\.net\GACInstall.exe (when installing)
     [END REGION]
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
@@ -566,7 +588,6 @@ else
         Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT)
         Comment: Register Platform 5.5 components
         Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Comment: Register assembly ASCOM.Attributes, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7

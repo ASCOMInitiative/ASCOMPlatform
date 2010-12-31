@@ -725,14 +725,34 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
 $
 1
-0
+4
 FALSE
 C:\projects\ASCOM\InstallerBuilds\
 ASCOM Initiative
-Ascom Platform 6 Alpha 4
+Ascom Platform 6 Alpha 5
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0
@@ -741,21 +761,21 @@ Ascom Platform 6
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{A2F1F75D-AD09-498B-8FA9-DAF880DB2525}
+{82192181-F274-42F4-99AD-B4479ED92F42}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk/
 http://ascom-standards.org/updates/
 Copyright © 1998-2010, The ASCOM Initiative. All rights reserved. 
 FALSE
-
+ASCOMPlatform6Alpha5.exe
 TRUE
 FALSE
 
 
 http://timestamp.verisign.com/scripts/timstamp.dll
 http://ascom-standards.org/
-UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,LANGUAGE=English,"TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00,LANGUAGE=English,CACHESOURCES=TRUE
+UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,LANGUAGE=English,"TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00,LANGUAGE=English,CACHESOURCES=TRUE,LANGUAGE=English
 $
 $
 
@@ -770,8 +790,11 @@ FALSE
 FALSE
 FALSE
 
+checknet351.mia
 checkmsi31.mia
 setupmsi31.mia
+..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet2sp2.mia
+..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet3sp2.mia
 $
 FALSE
 
