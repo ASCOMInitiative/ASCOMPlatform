@@ -8,6 +8,7 @@ using ASCOM.Utilities;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.GAC;
+using System.Text;
 
 namespace UninstallAscom
 {
@@ -20,14 +21,28 @@ namespace UninstallAscom
         const string uninstallString = "UninstallString";
         const string REGISTRY_ROOT_KEY_NAME = @"SOFTWARE\ASCOM"; //Location of ASCOM profile in HKLM registry hive
 
+        //Constants for use with SHGetSpecialFolderPath
+        const int CSIDL_PROGRAM_FILES = 38; //0x0026 
+        const int CSIDL_PROGRAM_FILESX86 = 42; //0x002a
+        const int CSIDL_WINDOWS = 36; // 0x0024
+        const int CSIDL_PROGRAM_FILES_COMMONX86 = 44; // 0x002c
+        
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsWow64Process(
             [In] IntPtr hProcess,
             [Out] out bool wow64Process
         ); 
-        static TraceLogger TL = new TraceLogger("","UninstallASCOM"); // Create a tracelogger so we can log what happens
 
+        [DllImport("Shell32.dll")]
+        static extern int SHGetSpecialFolderPath([In] IntPtr hwndOwner, 
+                                                 [Out] StringBuilder lpszPath, 
+                                                 [In] int nFolder, 
+                                                 [In] int fCreate);
+       
+        static TraceLogger TL = new TraceLogger("","UninstallASCOM"); // Create a tracelogger so we can log what happens
+        static string AscomDirectory;
+ 
         static void Main()
         {
             TL.Enabled = true; 
@@ -42,11 +57,22 @@ namespace UninstallAscom
             string platform5564KeyValue = null;
             bool found = false;
 
-            if (is64BitOperatingSystem)
+            if (is64BitOperatingSystem) // Is a 64bit OS
             {
                 platform5564KeyValue = Read(uninstallString, platform5564);
-                platform564KeyValue =  Read(uninstallString, platform564);
+                platform564KeyValue = Read(uninstallString, platform564);
+                StringBuilder Path = new StringBuilder(260);
+                int rc;
+                rc = SHGetSpecialFolderPath(IntPtr.Zero,Path,CSIDL_PROGRAM_FILES_COMMONX86,0);
+                AscomDirectory = Path.ToString();
+                TL.LogMessage("Cleanup", "64bit Common Files Path: " + AscomDirectory);
             }
+            else //32 bit OS
+            {
+                AscomDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
+                TL.LogMessage("Cleanup", "32bit Common Files Path: " + AscomDirectory);
+            }
+
 
             var platform5532KeyValue = Read(uninstallString, platform5532);
             var platform532KeyValue = Read(uninstallString, platform532);
@@ -95,10 +121,13 @@ namespace UninstallAscom
                     RunProcess("MsiExec.exe", SplitKey(platform532KeyValue));
                 }
             }
-            if (found == false)
+            if (found == true)
             {
                 CleanUp55();
                 CleanUp5();
+            }
+            else
+            {
                 LogMessage("Cleanup", "Nothing Found");
             }
            
@@ -243,26 +272,31 @@ namespace UninstallAscom
                 //start menu
                 var startMenuDir = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
                 var shortcut = Path.Combine(startMenuDir, @"Programs\ASCOM Platform");
+                LogMessage("CleanUp55", "Start Menu Path: " + shortcut);
                 if (Directory.Exists(shortcut))
                     DeleteDirectory(shortcut);
 
                 //clean up prog files
                 const string ascomDir = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ASCOM Platform";
+                LogMessage("CleanUp55", "ProgramData Path: " + ascomDir);
                 if (Directory.Exists(ascomDir))
                     DeleteDirectory(ascomDir);
 
                 //clean up files
-               // const string pathToAscom = @"C:\Program Files (x86)\Common Files\ASCOM";
-                //if (Directory.Exists(pathToAscom))
-                //    DeleteDirectory(pathToAscom);
-                
-            //clean up files
+                /*string pathToAscom = AscomDirectory + @"\ASCOM\.net"; //Remove the .net directory to fully clean this up
+                LogMessage("CleanUp55", "ASCOM .net Path: " + pathToAscom);
+                if (Directory.Exists(pathToAscom))
+                    DeleteDirectory(pathToAscom);
+                */
+                //clean up files
                 const string pathToAscom1 = @"C:\Program Files (x86)\ASCOM";
+                LogMessage("CleanUp55", "ASCOM Program Files (x86) Path: " + pathToAscom1); 
                 if (Directory.Exists(pathToAscom1))
                     DeleteDirectory(pathToAscom1);
 
                 //clean up files
                 const string pathToAscom2 = @"C:\Program Files\ASCOM";
+                LogMessage("CleanUp55", "ASCOM Program Files Path: " + pathToAscom2);
                 if (Directory.Exists(pathToAscom2))
                     DeleteDirectory(pathToAscom2);
         }
@@ -272,6 +306,7 @@ namespace UninstallAscom
         {
             try
             {
+                LogMessage("DeleteDirectory", "Deleting directory: " + targetDir);
                 string[] files = Directory.GetFiles(targetDir);
                 string[] dirs = Directory.GetDirectories(targetDir);
 
@@ -293,7 +328,7 @@ namespace UninstallAscom
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                LogMessage("DeleteDirectory", e.Message);
                    return false;
             }
 
