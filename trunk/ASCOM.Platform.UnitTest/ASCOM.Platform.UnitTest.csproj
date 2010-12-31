@@ -126,11 +126,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\CustomDictionary.xml">
-      <Link>CustomDictionary.xml</Link>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\ASCOM.snk">
       <Link>ASCOM.snk</Link>
     </None>
