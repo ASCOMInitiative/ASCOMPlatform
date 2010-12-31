@@ -7,5 +7,5 @@
 
 Dim H2
 Set H2 = CreateObject("ASCOM.Utilities.Util")
-WScript.Echo "You have ASCOM Platform " & H2.PlatformVersion & " installed."
+WScript.Echo "This PC is running ASCOM Platform " & H2.PlatformVersion & VBcRlF & vbcRlF & "Please use the ASCOM Diagnostics tool to obtain further information."
 Set H2 = Nothing
