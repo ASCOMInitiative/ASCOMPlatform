@@ -18,6 +18,7 @@ Imports System.Environment
 Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
+Imports System.Globalization
 
 Public Class DiagnosticsForm
 
@@ -149,6 +150,10 @@ Public Class DiagnosticsForm
     Private DrvHlpUtil As Object
     Private AscomUtil As ASCOM.Utilities.Util
     Private g_Util2 As Object
+    Private ErrorList As New Generic.List(Of String)
+    Private DecimalSeparator As String = ""
+    Private AbbreviatedMonthNames() As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames ' List of monthnames in current culture language
+    Private StartTime As Date
 
     Private LastLogFile As String ' Name of last diagnostics log file
 
@@ -191,7 +196,6 @@ Public Class DiagnosticsForm
         Dim PathShell As New System.Text.StringBuilder(260)
         Dim MyVersion As Version
         Dim SuccessMessage As String
-
         Try
             Status("Diagnostics running...")
 
@@ -206,17 +210,30 @@ Public Class DiagnosticsForm
             MyVersion = Assembly.GetExecutingAssembly.GetName.Version
             TL.LogMessage("Diagnostics", "Version " & MyVersion.ToString & ", " & Application.ProductVersion)
             TL.BlankLine()
-            TL.LogMessage("Diagnostics", "Starting diagnostic run")
+            TL.LogMessage("Date", Date.Now.ToString)
+            TL.LogMessage("TimeZoneName", GetTimeZoneName)
+            TL.LogMessage("TimeZoneOffset", TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours)
+            TL.LogMessage("UTCDate", Date.UtcNow)
+            TL.LogMessage("Julian date", Date.UtcNow.ToOADate() + 2415018.5)
+            TL.BlankLine()
+            TL.LogMessage("CurrentCulture", CultureInfo.CurrentCulture.EnglishName & _
+                                            " " & CultureInfo.CurrentCulture.Name & _
+                                            " Decimal Separator """ & CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & """" & _
+                                            " Number Group Separator """ & CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator & """")
+            TL.LogMessage("CurrentUICulture", CultureInfo.CurrentUICulture.EnglishName & _
+                                            " " & CultureInfo.CurrentUICulture.Name & _
+                                            " Decimal Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator & """" & _
+                                            " Number Group Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberGroupSeparator & """")
             TL.BlankLine()
 
             LastLogFile = TL.LogFileName
             Try
+                DecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator
                 Try 'Try and create a registryaccess object
                     ASCOMRegistryAccess = New ASCOM.Utilities.RegistryAccess
                 Catch ex As Exception
                     TL.LogMessage("Diagnostics", "ERROR - Unexpected exception creating New RegistryAccess object, later steps will show errors")
-                    TL.LogMessageCrLf("Diagnostics", ex.ToString)
-                    NExceptions += 1
+                    LogException("Diagnostics", ex.ToString)
                 End Try
 
                 ScanInstalledPlatform()
@@ -278,6 +295,13 @@ Public Class DiagnosticsForm
                     SuccessMessage = "Congratualtions, all " & NMatches & " function tests passed!"
                 Else
                     SuccessMessage = "Completed function testing run: " & NMatches & " matches, " & NNonMatches & " fail(s), " & NExceptions & " exception(s)."
+                    TL.BlankLine()
+                    TL.LogMessage("Error", "Error List")
+                    For Each ErrorMessage As String In ErrorList
+                        TL.LogMessageCrLf("Error", ErrorMessage)
+                    Next
+                    TL.BlankLine()
+                    TL.BlankLine()
                 End If
                 TL.LogMessage("Diagnostics", SuccessMessage)
                 TL.Enabled = False
@@ -287,7 +311,7 @@ Public Class DiagnosticsForm
                 Action(SuccessMessage)
             Catch ex As Exception
                 Status("Diagnostics exception, please see log")
-                TL.LogMessageCrLf("DiagException", ex.ToString)
+                LogException("DiagException", ex.ToString)
                 TL.Enabled = False
                 TL.Dispose()
                 Action("")
@@ -306,24 +330,32 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TimerTests()
-        Dim start As Date
+        Const RunTime As Double = 10.0 ' Test runtime in seconds
+        Const TimerInterval As Integer = 3000 'Timer interval
+        Dim ElapsedTime As Double, LastSecond As Integer = -1
+
         TL.LogMessage("TimerTests", "Started")
         Status("Timer tests")
         Try
             ASCOMTimer = New ASCOM.Utilities.Timer
-            ASCOMTimer.Interval = 3000
+            ASCOMTimer.Interval = TimerInterval
             ASCOMTimer.Enabled = True
-            start = Now
+            StartTime = Now
+            sw.Reset() : sw.Start()
             Do
-                Thread.Sleep(100)
+                'Thread.Sleep(1)
                 Application.DoEvents()
-                TL.LogMessage("TimerTests", "Seconds - " & Now.Subtract(start).TotalSeconds)
-                Action("Seconds - " & Now.Subtract(start).Seconds)
-                Application.DoEvents()
-            Loop Until Now.Subtract(start).TotalSeconds > 10.0
-
+                ElapsedTime = Now.Subtract(StartTime).TotalSeconds
+                If Math.Floor(ElapsedTime) <> LastSecond Then
+                    TL.LogMessage("TimerTests", "Seconds - " & Math.Floor(ElapsedTime))
+                    Action("Seconds - " & CInt(ElapsedTime) & " / " & CInt(RunTime))
+                    LastSecond = Math.Floor(ElapsedTime)
+                End If
+                'Application.DoEvents()
+            Loop Until Now.Subtract(StartTime).TotalSeconds > RunTime
+            sw.Stop()
         Catch ex As Exception
-            TL.LogMessage("TimerTests Exception", ex.ToString)
+            LogException("TimerTests Exception", ex.ToString)
         Finally
             ASCOMTimer.Enabled = False
         End Try
@@ -332,9 +364,21 @@ Public Class DiagnosticsForm
         TL.BlankLine()
     End Sub
 
+    Private Sub LogException(ByVal FailingModule As String, ByVal Msg As String)
+        TL.LogMessageCrLf(FailingModule, Msg)
+        NExceptions += 1
+        ErrorList.Add(FailingModule & " - " & Msg)
+    End Sub
+
     Private Sub cnt_TickNet() Handles ASCOMTimer.Tick
-        TL.LogMessage("TimerTests", "Fired Net")
-        Application.DoEvents()
+        Static NumberOfTicks As Integer
+        Dim Duration As Double
+
+        Duration = Now.Subtract(StartTime).TotalSeconds
+        NumberOfTicks += 1
+        CompareDouble("TimerTests Tick ", "Tick", Duration, NumberOfTicks * 3.0, 0.1)
+        'TL.LogMessage("TimerTests", "Fired Net - " & Now.Subtract(StartTime).Seconds & " seconds")
+        '        Application.DoEvents()
     End Sub
 
     Sub ProfileTests()
@@ -390,8 +434,7 @@ Public Class DiagnosticsForm
                 AscomUtlProf.WriteValue(TestScope, "Results 1", Nothing)
                 Compare("ProfileTest", "Null value write test", """" & AscomUtlProf.GetValue(TestScope, "Results 1") & """", """""")
             Catch ex As Exception
-                TL.LogMessageCrLf("Null Value Write Test 1 Exception: ", ex.ToString)
-                NExceptions += 1
+                LogException("Null Value Write Test 1 Exception: ", ex.ToString)
             End Try
             TL.BlankLine()
 
@@ -437,8 +480,7 @@ Public Class DiagnosticsForm
             Try
                 Compare("ProfileTest", "XML Read", AscomUtlProf.GetProfileXML(TestScope), XMLTestString)
             Catch ex As Exception
-                TL.LogMessage("GetProfileXML", ex.ToString)
-                NExceptions += 1
+                LogException("GetProfileXML", ex.ToString)
             End Try
 
             Try
@@ -447,8 +489,7 @@ Public Class DiagnosticsForm
                 AscomUtlProf.SetProfileXML(TestScope, RetVal)
                 Compare("ProfileTest", "XML Write", AscomUtlProf.GetValue(TestScope, ""), RevisedTestTelescopeDescription)
             Catch ex As Exception
-                TL.LogMessageCrLf("SetProfileXML", ex.ToString)
-                NExceptions += 1
+                LogException("SetProfileXML", ex.ToString)
             End Try
 
             Try
@@ -474,8 +515,7 @@ Public Class DiagnosticsForm
 
                 TL.BlankLine()
             Catch ex As Exception
-                TL.LogMessageCrLf("SetProfile", ex.ToString)
-                NExceptions += 1
+                LogException("SetProfile", ex.ToString)
             End Try
 
             'Registered device types test
@@ -493,8 +533,7 @@ Public Class DiagnosticsForm
                 Compare("ProfileTest", "DeviceTypes", DevTypes(7), "Telescope")
                 TL.BlankLine()
             Catch ex As Exception
-                TL.LogMessage("RegisteredDeviceTypes", ex.ToString)
-                NExceptions += 1
+                LogException("RegisteredDeviceTypes", ex.ToString)
             End Try
 
             'Registered devices tests
@@ -540,8 +579,7 @@ Public Class DiagnosticsForm
                     Next
                 Next
             Catch ex As Exception
-                TL.LogMessageCrLf("RegisteredDevices", ex.ToString)
-                NExceptions += 1
+                LogException("RegisteredDevices", ex.ToString)
             End Try
 
             'Empty string
@@ -554,8 +592,7 @@ Public Class DiagnosticsForm
             Catch ex As ASCOM.Utilities.Exceptions.InvalidValueException
                 Compare("ProfileTest", "RegisteredDevices with an empty string", "InvalidValueException", "InvalidValueException")
             Catch ex As Exception
-                TL.LogMessageCrLf("RegisteredDevices EmptyString", ex.ToString)
-                NExceptions += 1
+                LogException("RegisteredDevices EmptyString", ex.ToString)
             End Try
 
             'Nothing
@@ -568,8 +605,7 @@ Public Class DiagnosticsForm
             Catch ex As ASCOM.Utilities.Exceptions.InvalidValueException
                 Compare("ProfileTest", "RegisteredDevices with a null value", "InvalidValueException", "InvalidValueException")
             Catch ex As Exception
-                TL.LogMessageCrLf("RegisteredDevices Nothing", ex.ToString)
-                NExceptions += 1
+                LogException("RegisteredDevices Nothing", ex.ToString)
             End Try
 
             'Bad value
@@ -580,10 +616,9 @@ Public Class DiagnosticsForm
                     TL.LogMessage("RegisteredDevices Bad", "  " & kvp.Key & " - " & kvp.Value)
                 Next
             Catch ex As ASCOM.Utilities.Exceptions.InvalidValueException
-                TL.LogMessage("ProfileTest", "RegisteredDevices Unknown DeviceType incorrectly generated an InvalidValueException")
+                LogException("ProfileTest", "RegisteredDevices Unknown DeviceType incorrectly generated an InvalidValueException")
             Catch ex As Exception
-                TL.LogMessage("RegisteredDevices Bad", ex.ToString)
-                NExceptions += 1
+                LogException("RegisteredDevices Bad", ex.ToString)
             End Try
             TL.BlankLine()
 
@@ -697,8 +732,7 @@ Public Class DiagnosticsForm
                     P(i).WriteValue(TestScope, TestScope, "27")
                 Next
             Catch ex As Exception
-                TL.LogMessage("MultiWrite - SingleThread", ex.ToString)
-                NExceptions += 1
+                LogException("MultiWrite - SingleThread", ex.ToString)
             End Try
 
             TL.LogMessage("ProfileMultiAccess", "MultiWrite - SingleThread Finished")
@@ -717,13 +751,15 @@ Public Class DiagnosticsForm
                 ProfileThreads(i).Join()
             Next
 
+            P1 = New Profile
+            P1.Unregister(TestScope)
+
             TL.LogMessage("ProfileMultiAccess", "MultiWrite - MultiThread Finished")
             TL.BlankLine()
             TL.BlankLine()
 
         Catch ex As Exception
-            TL.LogMessageCrLf("Exception", ex.ToString)
-            NExceptions += 1
+            LogException("Exception", ex.ToString)
         End Try
 
     End Sub
@@ -743,7 +779,7 @@ Public Class DiagnosticsForm
 
     Sub ProfileThread(ByVal inst As Integer)
         Dim TL As New TraceLogger("", "ProfileTrace " & inst.ToString)
-        Dim ts As String = "Test Telescope"
+        Const ts As String = "Test Telescope"
         TL.Enabled = True
         'TL.LogMessage("MultiWrite - MultiThread", "ThreadStart")
         TL.LogMessage("Started", "")
@@ -756,8 +792,7 @@ Public Class DiagnosticsForm
                 P(i).Dispose()
             Next
         Catch ex As Exception
-            TL.LogMessage("MultiWrite - MultiThread", ex.ToString)
-            'Throw New ASCOM.Utilities.Exceptions.RestrictedAccessException("Multi-write issue", ex)
+            LogException("MultiWrite - MultiThread", ex.ToString)
         End Try
         'TL.LogMessage("MultiWrite - MultiThread", "ThreadEnd")
         TL.Enabled = False
@@ -767,22 +802,25 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub Compare(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As String, ByVal p_Orig As String)
+        Dim ErrMsg As String
         If p_New = p_Orig Then
             If p_New.Length > 200 Then p_New = p_New.Substring(1, 200) & "..."
             TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
             NMatches += 1
         Else
-            TL.LogMessageCrLf(p_Section, "***** NOT Matched " & p_Name & " #" & p_New & "#" & p_Orig & "#")
+            ErrMsg = "##### NOT Matched " & p_Name & " #" & p_New & "#" & p_Orig & "#"
+            TL.LogMessageCrLf(p_Section, ErrMsg)
             NNonMatches += 1
+            ErrorList.Add(p_Section & " - " & ErrMsg)
         End If
     End Sub
 
     Private Sub CompareDouble(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Double, ByVal p_Orig As Double, ByVal p_Tolerance As Double)
         If System.Math.Abs(p_New - p_Orig) < p_Tolerance Then
-            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
+            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New & " within tolerance of " & p_Tolerance)
             NMatches += 1
         Else
-            TL.LogMessage(p_Section, "NOT Matched " & p_Name & " #" & p_New.ToString & "#" & p_Orig.ToString & "#")
+            TL.LogMessage(p_Section, "NOT Matched " & p_Name & " #" & p_New.ToString & "#" & p_Orig.ToString & "# within tolerance of " & p_Tolerance)
             NNonMatches += 1
         End If
     End Sub
@@ -793,7 +831,6 @@ Public Class DiagnosticsForm
         Const TestDate As Date = #6/1/2010 4:37:00 PM#
         Const TestJulianDate As Double = 2455551.0
         Dim i As Integer, Is64Bit As Boolean
-
         Try
             Is64Bit = (IntPtr.Size = 8) 'Create a simple variable to record whether or not we are 64bit
             Status("Running Utilities funcitonal tests")
@@ -823,12 +860,12 @@ Public Class DiagnosticsForm
             TL.BlankLine()
             If Is64Bit Then ' Run tests just on the new 64bit component
                 t = 30.123456789 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, ":").ToString, "30:07'")
-                t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, ":", ":", "", 4).ToString, "60:59:15.5556")
+                t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, ":", ":", "", 4).ToString, "60:59:15" & DecimalSeparator & "5556")
                 t = 50.123453456 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t).ToString, "03:20")
                 t = 70.763245689 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t).ToString, "04:43:03")
-                ts = "43:56:78.2567" : Compare("UtilTests", "DMSToDegrees", AscomUtil.DMSToDegrees(ts).ToString, "43.9550713055555")
-                ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", AscomUtil.HMSToDegrees(ts).ToString, "219.845833333333")
-                ts = "14:37:23" : Compare("UtilTests", "HMSToHours", AscomUtil.HMSToHours(ts).ToString, "14.6230555555556")
+                ts = "43:56:78" & DecimalSeparator & "2567" : Compare("UtilTests", "DMSToDegrees", AscomUtil.DMSToDegrees(ts).ToString, "43" & DecimalSeparator & "9550713055555")
+                ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", AscomUtil.HMSToDegrees(ts).ToString, "219" & DecimalSeparator & "845833333333")
+                ts = "14:37:23" : Compare("UtilTests", "HMSToHours", AscomUtil.HMSToHours(ts).ToString, "14" & DecimalSeparator & "6230555555556")
                 t = 15.567234086 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), "15:34")
                 t = 9.4367290317 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), "09:26:12")
                 TL.BlankLine()
@@ -844,57 +881,57 @@ Public Class DiagnosticsForm
                 CompareDouble("UtilTests", "Julian date", AscomUtil.JulianDate, Date.UtcNow.ToOADate() + 2415018.5, 0.00002) '1 second tolerance
                 TL.BlankLine()
 
-                Compare("UtilTests", "DateJulianToLocal", Format(AscomUtil.DateJulianToLocal(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), "20 Dec 2010 12:00:00.0000")
-                Compare("UtilTests", "DateJulianToUTC", Format(AscomUtil.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), "20 Dec 2010 12:00:00.0000")
-                Compare("UtilTests", "DateLocalToJulian", AscomUtil.DateLocalToJulian(TestDate), "2455349.19236111")
-                Compare("UtilTests", "DateLocalToUTC", Format(AscomUtil.DateLocalToUTC(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), "01 Jun 2010 04:37:00.0000")
-                Compare("UtilTests", "DateUTCToJulian", AscomUtil.DateUTCToJulian(TestDate).ToString, "2455349.19236111")
-                Compare("UtilTests", "DateUTCToLocal", Format(AscomUtil.DateUTCToLocal(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), "01 Jun 2010 04:37:00.0000")
+                Compare("UtilTests", "DateJulianToLocal", Format(AscomUtil.DateJulianToLocal(TestJulianDate).Subtract(TimeZone.CurrentTimeZone.GetUtcOffset(Now)), "dd MMM yyyy hh:mm:ss.ffff"), "20 " & AbbreviatedMonthNames(11) & " 2010 12:00:00.0000")
+                Compare("UtilTests", "DateJulianToUTC", Format(AscomUtil.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), "20 " & AbbreviatedMonthNames(11) & " 2010 12:00:00.0000")
+                Compare("UtilTests", "DateLocalToJulian", AscomUtil.DateLocalToJulian(TestDate.Add(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "2455349" & DecimalSeparator & "19236111")
+                Compare("UtilTests", "DateLocalToUTC", Format(AscomUtil.DateLocalToUTC(TestDate.Add(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "dd MMM yyyy hh:mm:ss.ffff"), "01 " & AbbreviatedMonthNames(5) & " 2010 04:37:00.0000")
+                Compare("UtilTests", "DateUTCToJulian", AscomUtil.DateUTCToJulian(TestDate).ToString, "2455349" & DecimalSeparator & "19236111")
+                Compare("UtilTests", "DateUTCToLocal", Format(AscomUtil.DateUTCToLocal(TestDate.Subtract(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "dd MMM yyyy hh:mm:ss.ffff"), "01 " & AbbreviatedMonthNames(5) & " 2010 04:37:00.0000")
                 TL.BlankLine()
 
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t), "43" & Chr(&HB0) & " 07'")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-"), "43-07'")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";"), "43-07;")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";", 3), "43-07.434;")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";", 3), "43-07" & DecimalSeparator & "434;")
                 TL.BlankLine()
 
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t), "43" & Chr(&HB0) & " 07' 26""")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-"), "43-07' 26""")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";"), "43-07;26""")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#"), "43-07;26#")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#", 3), "43-07;26.021#")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#", 3), "43-07;26" & DecimalSeparator & "021#")
                 TL.BlankLine()
 
                 t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t), "02:52")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-"), "02-52")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";"), "02-52;")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";", 3), "02-52.496;")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";", 3), "02-52" & DecimalSeparator & "496;")
                 TL.BlankLine()
 
                 t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t), "02:52:30")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-"), "02-52:30")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";"), "02-52;30")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#"), "02-52;30#")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#", 3), "02-52;29.735#")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#", 3), "02-52;29" & DecimalSeparator & "735#")
                 TL.BlankLine()
 
                 t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), "03:07")
                 t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-"), "03-07")
                 t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";"), "03-07;")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";", 3), "03-07.434;")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";", 3), "03-07" & DecimalSeparator & "434;")
                 TL.BlankLine()
 
                 t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), "03:07:26")
                 t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-"), "03-07:26")
                 t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";"), "03-07;26")
                 t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#"), "03-07;26#")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#", 3), "03-07;26.021#")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#", 3), "03-07;26" & DecimalSeparator & "021#")
             Else 'Run teststo compare original 32bit only and new 32/64bit capabale components
                 t = 30.123456789 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, ":").ToString, DrvHlpUtil.DegreesToDM(t, ":").ToString)
                 t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, ":", ":", "", 4).ToString, DrvHlpUtil.DegreesToDMS(t, ":", ":", "", 4).ToString)
                 t = 50.123453456 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t).ToString, DrvHlpUtil.DegreesToHM(t).ToString)
                 t = 70.763245689 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t).ToString, DrvHlpUtil.DegreesToHMS(t).ToString)
-                ts = "43:56:78.2567" : Compare("UtilTests", "DMSToDegrees", AscomUtil.DMSToDegrees(ts).ToString, DrvHlpUtil.DMSToDegrees(ts).ToString)
+                ts = "43:56:78" & DecimalSeparator & "2567" : Compare("UtilTests", "DMSToDegrees", AscomUtil.DMSToDegrees(ts).ToString, DrvHlpUtil.DMSToDegrees(ts).ToString)
                 ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", AscomUtil.HMSToDegrees(ts).ToString, DrvHlpUtil.HMSToDegrees(ts))
                 ts = "14:37:23" : Compare("UtilTests", "HMSToHours", AscomUtil.HMSToHours(ts).ToString, DrvHlpUtil.HMSToHours(ts))
                 t = 15.567234086 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), DrvHlpUtil.HoursToHM(t))
@@ -979,16 +1016,14 @@ Public Class DiagnosticsForm
                 AscomUtil.Dispose()
                 TL.LogMessage("UtilTests", "ASCOM.Utilities.Dispose, Disposed OK")
             Catch ex As Exception
-                TL.LogMessage("UtilTests", "ASCOM.Utilities.Dispose Exception: ", ex.ToString)
-                NExceptions += 1
+                LogException("UtilTests", "ASCOM.Utilities.Dispose Exception: " & ex.ToString)
             End Try
             If Not Is64Bit Then
                 Try
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(DrvHlpUtil)
                     TL.LogMessage("UtilTests", "Helper Util.Release OK")
                 Catch ex As Exception
-                    TL.LogMessage("UtilTests", "Helper Util.Release Exception: ", ex.ToString)
-                    NExceptions += 1
+                    LogException("UtilTests", "Helper Util.Release Exception: " & ex.ToString)
                 End Try
             End If
             AscomUtil = Nothing
@@ -997,8 +1032,7 @@ Public Class DiagnosticsForm
             TL.BlankLine()
 
         Catch ex As Exception
-            TL.LogMessageCrLf("UtilTests", "Exception: " & ex.ToString)
-            NExceptions += 1
+            LogException("UtilTests", "Exception: " & ex.ToString)
         End Try
 
     End Sub
@@ -1051,7 +1085,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("ScanEventLog", "ASCOM Log entries complete")
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanEventLog", "Exception: " & ex.ToString)
+            LogException("ScanEventLog", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -1079,7 +1113,7 @@ Public Class DiagnosticsForm
 
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessage("RegistrySecurity", "Exception: " & ex.ToString)
+            LogException("RegistrySecurity", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -1105,8 +1139,10 @@ Public Class DiagnosticsForm
                                                   RegRule.InheritanceFlags.ToString() & " / " & _
                                                   RegRule.PropagationFlags.ToString())
             Next
+        Catch ex As NullReferenceException
+            LogException("ReadRegistryRights", "The subkey: " & key.Name & "\" & SubKey & " does not exist.")
         Catch ex As Exception
-            TL.LogMessage("ReadRegistryRights", ex.ToString)
+            LogException("ReadRegistryRights", ex.ToString)
         End Try
         TL.BlankLine()
     End Sub
@@ -1123,7 +1159,7 @@ Public Class DiagnosticsForm
                 RecursionLevel = -1
                 RecurseRegistry(Key)
             Catch ex As Exception
-                TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
+                LogException("ScanRegistry", "Exception: " & ex.ToString)
             End Try
             TL.BlankLine()
 
@@ -1137,10 +1173,10 @@ Public Class DiagnosticsForm
                 If InStr(ex.Message, "0x2") > 0 Then
                     TL.LogMessage("ScanRegistry", "Key not found")
                 Else
-                    TL.LogMessageCrLf("ScanRegistry", "ProfilePersistenceException: " & ex.ToString)
+                    LogException("ScanRegistry", "ProfilePersistenceException: " & ex.ToString)
                 End If
             Catch ex As Exception
-                TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
+                LogException("ScanRegistry", "Exception: " & ex.ToString)
             End Try
         Else '32 bit OS
             Try
@@ -1150,7 +1186,7 @@ Public Class DiagnosticsForm
                 RecursionLevel = -1
                 RecurseRegistry(Key)
             Catch ex As Exception
-                TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
+                LogException("ScanRegistry", "Exception: " & ex.ToString)
             End Try
         End If
         TL.BlankLine()
@@ -1163,7 +1199,7 @@ Public Class DiagnosticsForm
             RecursionLevel = -1
             RecurseRegistry(Key)
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanRegistry", "Exception: " & ex.ToString)
+            LogException("ScanRegistry", "Exception: " & ex.ToString)
         End Try
         TL.BlankLine()
         TL.BlankLine()
@@ -1183,7 +1219,7 @@ Public Class DiagnosticsForm
                 TL.LogMessage("Registry Profile", Space(RecursionLevel * 2) & "   " & DisplayName & " = " & Key.GetValue(ValueName))
             Next
         Catch ex As Exception
-            TL.LogMessageCrLf("RecurseRegistry 1", "Exception: " & ex.ToString)
+            LogException("RecurseRegistry 1", "Exception: " & ex.ToString)
         End Try
         Try
             SubKeys = Key.GetSubKeyNames
@@ -1193,7 +1229,7 @@ Public Class DiagnosticsForm
                 RecurseRegistry(Key.OpenSubKey(SubKey))
             Next
         Catch ex As Exception
-            TL.LogMessageCrLf("RecurseRegistry 2", "Exception: " & ex.ToString)
+            LogException("RecurseRegistry 2", "Exception: " & ex.ToString)
         End Try
         RecursionLevel -= 1
     End Sub
@@ -1244,7 +1280,7 @@ Public Class DiagnosticsForm
                 TL.BlankLine()
             End If
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanProgramFiles", "Exception: " & ex.ToString)
+            LogException("ScanProgramFiles", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -1267,7 +1303,7 @@ Public Class DiagnosticsForm
                 End If
             Next
         Catch ex As Exception
-            TL.LogMessageCrLf("RecurseProgramFiles 1", "Exception: " & ex.ToString)
+            LogException("RecurseProgramFiles 1", "Exception: " & ex.ToString)
         End Try
 
         Try
@@ -1278,7 +1314,7 @@ Public Class DiagnosticsForm
             Next
             Action("")
         Catch ex As Exception
-            TL.LogMessageCrLf("RecurseProgramFiles 2", "Exception: " & ex.ToString)
+            LogException("RecurseProgramFiles 2", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -1298,7 +1334,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("ScanProfileFiles", "Profile 5.5 filestore not present")
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanProfileFiles", "Exception: " & ex.ToString)
+            LogException("ScanProfileFiles", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -1323,7 +1359,7 @@ Public Class DiagnosticsForm
 
             Next
         Catch ex As Exception
-            TL.LogMessageCrLf("RecurseProfileFiles 1", "Exception: " & ex.ToString)
+            LogException("RecurseProfileFiles 1", "Exception: " & ex.ToString)
         End Try
 
         Try
@@ -1333,7 +1369,7 @@ Public Class DiagnosticsForm
                 RecurseProfile55Files(Directory)
             Next
         Catch ex As Exception
-            TL.LogMessageCrLf("RecurseProfileFiles 2", "Exception: " & ex.ToString)
+            LogException("RecurseProfileFiles 2", "Exception: " & ex.ToString)
         End Try
 
     End Sub
@@ -1365,7 +1401,7 @@ Public Class DiagnosticsForm
             Next
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessageCrLf("Frameworks", "Exception: " & ex.ToString)
+            LogException("Frameworks", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -1413,7 +1449,7 @@ Public Class DiagnosticsForm
                     SR.Dispose()
                     SR = Nothing
                 Catch ex1 As Exception
-                    TL.LogMessageCrLf("SetupFile", "Exception 1: " & ex1.ToString)
+                    LogException("SetupFile", "Exception 1: " & ex1.ToString)
                     If Not (SR Is Nothing) Then 'Clean up streamreader
                         SR.Close()
                         SR.Dispose()
@@ -1425,7 +1461,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("SetupFile", "Completed scan")
             TL.BlankLine()
         Catch ex2 As Exception
-            TL.LogMessageCrLf("SetupFile", "Exception 2: " & ex2.ToString)
+            LogException("SetupFile", "Exception 2: " & ex2.ToString)
         End Try
     End Sub
 
@@ -1511,7 +1547,7 @@ Public Class DiagnosticsForm
 
             TL.LogMessage("", "")
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanCOMRegistration", "Exception: " & ex.ToString)
+            LogException("ScanCOMRegistration", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -1537,12 +1573,12 @@ Public Class DiagnosticsForm
                         TL.LogMessage("Assemblies", name.FullName)
                     End If
                 Catch ex As Exception
-                    TL.LogMessageCrLf("Assemblies", "Exception: " & ex.ToString)
+                    LogException("Assemblies", "Exception: " & ex.ToString)
                 End Try
             Loop
             TL.LogMessage("", "")
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanGac", "Exception: " & ex.ToString)
+            LogException("ScanGac", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -1554,7 +1590,7 @@ Public Class DiagnosticsForm
             AssName.CultureInfo = AssemblyCache.GetCulture(nameRef)
             AssName.SetPublicKeyToken(AssemblyCache.GetPublicKeyToken(nameRef))
         Catch ex As Exception
-            TL.LogMessageCrLf("GetAssemblyName", "Exception: " & ex.ToString)
+            LogException("GetAssemblyName", "Exception: " & ex.ToString)
         End Try
         Return AssName
     End Function
@@ -1611,7 +1647,7 @@ Public Class DiagnosticsForm
             FileDetails(ASCOMPathPlatformV6, "ASCOM.Utilities.dll")
 
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanFiles", "Exception: " & ex.ToString)
+            LogException("ScanFiles", "Exception: " & ex.ToString)
         End Try
         TL.BlankLine()
 
@@ -1657,7 +1693,7 @@ Public Class DiagnosticsForm
                 TL.LogMessage("FileDetails", "   ### Unable to find file: " & FullPath)
             End If
         Catch ex As Exception
-            TL.LogMessageCrLf("FileDetails", "### Exception: " & ex.ToString)
+            LogException("FileDetails", "### Exception: " & ex.ToString)
         End Try
 
         TL.LogMessage("", "")
@@ -1676,7 +1712,7 @@ Public Class DiagnosticsForm
                 TL.LogMessage("Finished", "*** ProgID " & ProgID & " not found")
             End If
         Catch ex As Exception
-            TL.LogMessageCrLf("Exception", ex.ToString)
+            LogException("Exception", ex.ToString)
         End Try
         TL.LogMessage("", "")
     End Sub
@@ -1740,7 +1776,7 @@ Public Class DiagnosticsForm
                     End If
                 Next
             Catch ex As Exception
-                TL.LogMessageCrLf("ProcessSubKey Exception 1", ex.ToString)
+                LogException("ProcessSubKey Exception 1", ex.ToString)
             End Try
             Try
                 SubKeys = p_Key.GetSubKeyNames
@@ -1775,7 +1811,7 @@ Public Class DiagnosticsForm
                     RKey.Close()
                 Next
             Catch ex As Exception
-                TL.LogMessageCrLf("ProcessSubKey Exception 2", ex.ToString)
+                LogException("ProcessSubKey Exception 2", ex.ToString)
             End Try
             ' TL.LogMessage("End of ProcessSubKey", p_Container & " " & p_Depth)
         End If
@@ -1800,21 +1836,32 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub ScanSerial()
-        Dim SerialRegKey As RegistryKey, SerialDevices() As String
+        Dim SerialRegKey As RegistryKey = Nothing, SerialDevices() As String
         Try
             'First list out the ports we can see through .NET
             Status("Scanning Serial Ports")
-            For Each Port As String In System.IO.Ports.SerialPort.GetPortNames
-                TL.LogMessage("Serial Ports (.NET)", Port)
-            Next
+            If System.IO.Ports.SerialPort.GetPortNames.Length > 0 Then
+                For Each Port As String In System.IO.Ports.SerialPort.GetPortNames
+                    TL.LogMessage("Serial Ports (.NET)", Port)
+                Next
+            Else
+                TL.LogMessage("Serial Ports (.NET)", "No ports found")
+            End If
             TL.BlankLine()
-
-            SerialRegKey = Registry.LocalMachine.OpenSubKey("HARDWARE\DEVICEMAP\SERIALCOMM")
-            SerialDevices = SerialRegKey.GetValueNames
-            For Each SerialDevice As String In SerialDevices
-                TL.LogMessage("Serial Ports (Registry)", SerialRegKey.GetValue(SerialDevice).ToString & " - " & SerialDevice)
-            Next
-            TL.BlankLine()
+            Try
+                SerialRegKey = Registry.LocalMachine.OpenSubKey("HARDWARE\DEVICEMAP\SERIALCOMM")
+            Catch ex1 As Exception
+                LogException("ScanSerial", "Exception opening HARDWARE\DEVICEMAP\SERIALCOMM : " & ex1.ToString)
+            End Try
+            If Not (SerialRegKey Is Nothing) Then
+                SerialDevices = SerialRegKey.GetValueNames
+                For Each SerialDevice As String In SerialDevices
+                    TL.LogMessage("Serial Ports (Registry)", SerialRegKey.GetValue(SerialDevice).ToString & " - " & SerialDevice)
+                Next
+                TL.BlankLine()
+            Else
+                TL.LogMessage("Serial Ports (Registry)", "No ports found")
+            End If
 
             For i As Integer = 1 To 30
                 Call SerialPortDetails(i)
@@ -1823,7 +1870,7 @@ Public Class DiagnosticsForm
             TL.BlankLine()
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanSerial", ex.ToString)
+            LogException("ScanSerial", ex.ToString)
         End Try
 
     End Sub
@@ -1868,14 +1915,14 @@ Public Class DiagnosticsForm
             TL.BlankLine()
             TL.BlankLine()
         Catch ex As Exception
-            TL.LogMessageCrLf("RegisteredDevices", "Exception: " & ex.ToString)
+            LogException("RegisteredDevices", "Exception: " & ex.ToString)
         End Try
 
         Try
             TL.LogMessage("Profile", "Recusrsing Profile")
             RecurseProfile("\") 'Scan recurively over the profile
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanProfile", ex.Message)
+            LogException("ScanProfile", ex.Message)
         End Try
 
         TL.BlankLine()
@@ -1904,7 +1951,7 @@ Public Class DiagnosticsForm
                 TL.LogMessage("Profile Value", Space(3 * (RecursionLevel + 1)) & DisplayName & " = " & DisplayValue)
             Next
         Catch ex As Exception
-            TL.LogMessageCrLf("Profile 1", "Exception: " & ex.ToString)
+            LogException("Profile 1", "Exception: " & ex.ToString)
         End Try
 
         'Now recurse through all subkeys of this key
@@ -1929,7 +1976,7 @@ Public Class DiagnosticsForm
             Next
 
         Catch ex As Exception
-            TL.LogMessageCrLf("Profile 2", "Exception: " & ex.ToString)
+            LogException("Profile 2", "Exception: " & ex.ToString)
         Finally
             RecursionLevel -= 1
         End Try
@@ -1967,7 +2014,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
             RegKey.Close()
         Catch ex As Exception
-            TL.LogMessageCrLf("Installed Platform", "OK - no Inno installer path found")
+            TL.LogMessage("Installed Platform", "OK - no Inno installer path found")
         End Try
 
         Try ' Platform 6 installer GUID, should always be present in Platform 6
@@ -1979,9 +2026,14 @@ Public Class DiagnosticsForm
             TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
             TL.LogMessage("Installed Platform", "Install Source - " & RegKey.GetValue("InstallSource"))
             RegKey.Close()
+        Catch ex As ProfilePersistenceException
+            If ex.Message.Contains("as it does not exist") Then
+                LogException("Installed Platform", "Exception: " & ex.Message)
+            Else
+                LogException("Installed Platform", "Exception: " & ex.ToString)
+            End If
         Catch ex As Exception
-            TL.LogMessageCrLf("Installed Platform", "Exception: " & ex.ToString)
-            NExceptions += 1
+            LogException("Installed Platform", "Exception: " & ex.ToString)
         End Try
         TL.BlankLine()
     End Sub
@@ -2052,7 +2104,7 @@ Public Class DiagnosticsForm
             TL.BlankLine()
 
         Catch ex As Exception
-            TL.LogMessageCrLf("ScanProgramFiles", "Exception: " & ex.ToString)
+            LogException("ScanProgramFiles", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -2073,7 +2125,7 @@ Public Class DiagnosticsForm
             TL.LogMessageCrLf("Driver", "Directory not present: " & Folder)
             Exit Sub
         Catch ex As Exception
-            TL.LogMessageCrLf("RecurseASCOMDrivers 1", "Exception: " & ex.ToString)
+            LogException("RecurseASCOMDrivers 1", "Exception: " & ex.ToString)
         End Try
 
         Try
@@ -2086,7 +2138,7 @@ Public Class DiagnosticsForm
         Catch ex As DirectoryNotFoundException
             TL.LogMessage("Driver", "Directory not present: " & Folder)
         Catch ex As Exception
-            TL.LogMessageCrLf("RecurseASCOMDrivers 2", "Exception: " & ex.ToString)
+            LogException("RecurseASCOMDrivers 2", "Exception: " & ex.ToString)
         End Try
     End Sub
 
