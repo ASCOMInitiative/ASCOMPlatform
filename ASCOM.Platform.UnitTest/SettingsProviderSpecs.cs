@@ -1,5 +1,36 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿// --------------------------------------------------------------------------------
+// <summary
+// MSpec Specifications for ASCOM.SettingsProvider
+// </summary>
+// 
+// <copyright company="TiGra Astronomy">
+// 	Copyright © 2009-2010 Timothy P. Long, .
+// 	http://www.tigranetworks.co.uk/Astronomy
+// </copyright>
+// 
+// <license>
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// </license>
+// 
+// Original Author:		[TPL] Timothy P. Long <Tim@tigranetworks.co.uk>
+using System;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
@@ -26,10 +57,8 @@ using It = Machine.Specifications.It;
 
 namespace ASCOM.Platform.UnitTest
 {
-
-
-    /// <summary>
-    /// The base context
+    ///<summary>
+    ///  The base context
     ///</summary>
     public class With_mock_ascom_profile
     {
@@ -50,48 +79,52 @@ namespace ASCOM.Platform.UnitTest
 
         Establish context = () =>
             {
-                MockProfile=new Mock<IProfile>();
+                MockProfile = new Mock<IProfile>();
                 Target = new SettingsProvider(MockProfile.Object);
                 // Create and populate a fake SettingsAttributeSictionary
                 DeviceId = String.Format("{0}.{1}", DeviceName, DeviceType);
-                var deviceAttribute = new ASCOM.DeviceIdAttribute(DeviceId);
-                var FakeAttributeDictionary = new SettingsAttributeDictionary();
+                DeviceIdAttribute deviceAttribute = new DeviceIdAttribute(DeviceId);
+                SettingsAttributeDictionary FakeAttributeDictionary = new SettingsAttributeDictionary();
                 FakeAttributeDictionary.Add(deviceAttribute.GetType(), deviceAttribute);
             };
     }
 
-    [Subject(typeof(SettingsProvider), "Construction")]
+    [Subject(typeof (SettingsProvider), "Construction")]
     public class When_constructed : With_mock_ascom_profile
     {
-        Because of = () => { /* default contructor */ };
-        It should_have_empty_app_name = () => Target.ApplicationName.ShouldBeEmpty();
+        Because of = () =>
+            {
+                /* default contructor */
+            };
+
         It shoul_have_a_non_empty_description = () => Target.Description.ShouldNotBeEmpty();
+        It should_have_empty_app_name = () => Target.ApplicationName.ShouldBeEmpty();
         It should_have_non_empty_name = () => Target.Name.ShouldNotBeEmpty();
     }
 
-    [Subject(typeof(SettingsProvider))]
+    [Subject(typeof (SettingsProvider))]
     public class When_initialized_with_null_name : With_mock_ascom_profile
     {
         Because of = () => Target.Initialize(null, null);
 
-        It should_return_assembly_name_for_app_name =
-            () => Target.ApplicationName.ShouldEqual(Assembly.GetExecutingAssembly().GetName().Name);
-
         It should_have_a_non_empty_description = () => Target.Description.ShouldNotBeEmpty();
         It should_have_non_empty_name = () => Target.Name.ShouldNotBeEmpty();
+
+        It should_return_assembly_name_for_app_name =
+            () => Target.ApplicationName.ShouldEqual(Assembly.GetExecutingAssembly().GetName().Name);
     }
 
-    [Subject(typeof(SettingsProvider))]
+    [Subject(typeof (SettingsProvider))]
     public class When_initialised_with_name : With_mock_ascom_profile
     {
         Because of = () => Target.Initialize(csUnitTest, null);
-        It should_return_name_for_app_name = () => Target.ApplicationName.ShouldEqual(csUnitTest);
         It shoul_have_a_non_empty_description = () => Target.Description.ShouldNotBeEmpty();
         It should_have_non_empty_name = () => Target.Name.ShouldNotBeEmpty();
+        It should_return_name_for_app_name = () => Target.ApplicationName.ShouldEqual(csUnitTest);
     }
 
     // Tests that a property retrieved from a device that hasn't been registered returns the property's default value.
-    [Subject(typeof(SettingsProvider), "Property defaults")]
+    [Subject(typeof (SettingsProvider), "Property defaults")]
     public class When_getting_properties_for_an_unregistered_device : With_mock_ascom_profile
     {
         static SettingsPropertyValueCollection result;
@@ -100,12 +133,13 @@ namespace ASCOM.Platform.UnitTest
         //	- mockProfile should capture whatever the DeviceType is configured to.
         Establish context = () =>
             {
-                var settingsProperty = new SettingsProperty(SettingName, typeof(string), null, false,
-                                                            SettingDefaultValue, SettingsSerializeAs.String, FakeAttributeDictionary,
-                                                            true, true);
+                SettingsProperty settingsProperty = new SettingsProperty(SettingName, typeof (string), null, false,
+                                                                         SettingDefaultValue, SettingsSerializeAs.String,
+                                                                         FakeAttributeDictionary,
+                                                                         true, true);
                 Properties = new SettingsPropertyCollection();
                 Properties.Add(settingsProperty);
-                SetDeviceType = String.Empty;   // Captures the device type that has been set.
+                SetDeviceType = String.Empty; // Captures the device type that has been set.
                 MockProfile.SetupSet(x => x.DeviceType).Callback(y => SetDeviceType = y);
                 Target = new SettingsProvider(MockProfile.Object);
                 SettingsContext = new SettingsContext();
@@ -120,19 +154,20 @@ namespace ASCOM.Platform.UnitTest
         //	- The entry must match the value of SettingDefaultValue. 
 
         //It should_have_the_correct_device_type = () => SetDeviceType.ShouldEqual(DeviceType);
-        It should_return_a_non_empty_collection = () => result.ShouldNotBeEmpty();
         It should_have_exactly_one_property_item = () => result.Count.ShouldEqual(1);
 
         It should_have_propert_value_equal_setting_default_value = () =>
             {
-                var settingsPropertyValue = result.OfType<SettingsPropertyValue>().First();
+                SettingsPropertyValue settingsPropertyValue = result.OfType<SettingsPropertyValue>().First();
                 settingsPropertyValue.IsDirty.ShouldBeFalse();
                 settingsPropertyValue.PropertyValue.ShouldEqual(SettingDefaultValue);
             };
+
+        It should_return_a_non_empty_collection = () => result.ShouldNotBeEmpty();
     }
 
     // Tests that a property correctly returns the value it was set to (for a registered device).
-    [Subject(typeof(SettingsProvider), "Property defaults")]
+    [Subject(typeof (SettingsProvider), "Property defaults")]
     public class When_setting_then_getting_properties_for_a_registered_device : With_mock_ascom_profile
     {
         static SettingsPropertyValueCollection result;
@@ -141,10 +176,10 @@ namespace ASCOM.Platform.UnitTest
         //	- mockProfile should capture whatever the DeviceType is configured to.
         Establish context = () =>
             {
-                var settingsProperty = new SettingsProperty(SettingName, typeof(string), null, false,
-                                                            SettingDefaultValue, SettingsSerializeAs.String,
-                                                            FakeAttributeDictionary,
-                                                            true, true);
+                SettingsProperty settingsProperty = new SettingsProperty(SettingName, typeof (string), null, false,
+                                                                         SettingDefaultValue, SettingsSerializeAs.String,
+                                                                         FakeAttributeDictionary,
+                                                                         true, true);
                 SettingsProperties = new SettingsPropertyCollection();
                 SettingsProperties.Add(settingsProperty);
 
@@ -164,9 +199,9 @@ namespace ASCOM.Platform.UnitTest
         //	- IProfile.WriteValue should be called with the correct values(deviceId, item.Name, item.SerializedValue.ToString(), String.Empty);
 
         //It should_have_the_correct_device_type = () => SetDeviceType.ShouldEqual(DeviceType);
-        It should_return_a_non_empty_collection = () => result.ShouldNotBeEmpty();
+        It should_call_writevalue_correctly = () => MockProfile.Verify(); // ToDo: Verify the actual call values.
         It should_have_exactly_one_property_item = () => result.Count.ShouldEqual(1);
-        It should_call_writevalue_correctly = () => MockProfile.Verify();   // ToDo: Verify the actual call values.
+        It should_return_a_non_empty_collection = () => result.ShouldNotBeEmpty();
     }
 
     // The tests below this point are still to be converted.
