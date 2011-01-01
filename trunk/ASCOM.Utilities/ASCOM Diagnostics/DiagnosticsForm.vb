@@ -19,6 +19,7 @@ Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
 Imports System.Globalization
+Imports ASCOM.Astrometry
 
 Public Class DiagnosticsForm
 
@@ -290,6 +291,7 @@ Public Class DiagnosticsForm
                 UtilTests() : Action("")
                 ProfileTests() : Action("")
                 TimerTests() : Action("")
+                KeplerTests() : Action("")
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratualtions, all " & NMatches & " function tests passed!"
@@ -303,6 +305,7 @@ Public Class DiagnosticsForm
                     TL.BlankLine()
                     TL.BlankLine()
                 End If
+
                 TL.LogMessage("Diagnostics", SuccessMessage)
                 TL.Enabled = False
                 TL.Dispose()
@@ -329,6 +332,163 @@ Public Class DiagnosticsForm
         btnCOM.Enabled = True
     End Sub
 
+    Sub KeplerTests()
+        Dim JD As Double
+        Dim Util As New ASCOM.Utilities.Util
+        Dim EA As New ASCOM.Astrometry.NOVASCOM.Earth
+
+        Const ToleranceE9 As Double = 0.000000001
+        Const ToleranceE10 As Double = 0.0000000001
+
+        'Test data for planets obtained from the original 32bit Kepler coponent
+        'The data is for the arbitary test date Thursday, 30 December 2010 09:00:00" 
+        Const TestDate As String = "Thursday, 30 December 2010 09:00:00" ' Arbitary test date used to generate data above, it must conform to the "F" date format for the invariant culture
+
+        Dim Uranus() As Double = New Double() {20.2306046509148, -0.944778087940209, -0.693874737147122, _
+                                                  20.2305809175823, -0.945147799559502, -0.694063183048263, _
+                                                  20.233665104794, -0.893841634639764, -0.671770710247389, _
+                                                  20.2305964586587, -0.945137337897977, -0.694095638580723, _
+                                                  20.2336806550414, -0.893831133568696, -0.671803148655406}
+
+        Dim Neptune() As Double = New Double() {25.5771370144156, -15.409403535665, -6.96191248591339, _
+                                                25.5759958639324, -15.4109792947898, -6.96261684888268, _
+                                                25.6226500915255, -15.3460649228334, -6.93440511594961, _
+                                                25.5760116932439, -15.4109610670775, -6.96264327213014, _
+                                                25.6226659036666, -15.3460466550117, -6.93443152177256}
+
+        Dim Pluto() As Double = New Double() {2.92990303317673, -31.0320730022551, -10.6309560278551, _
+                                              2.92658680141819, -31.0323439400104, -10.6310785882777, _
+                                              3.01698355034971, -31.0248119250537, -10.627792242015, _
+                                              2.92662685257385, -31.0323223789174, -10.6311050132883, _
+                                              2.99849040874885, -31.0401256627947, -10.5882115993866}
+
+        Dim MercuryPosVecs(,) As Double = New Double(,) {{-0.273826054895093, -0.332907079792611, -0.149433886467295, 0.0168077277855921, -0.0131641564589086, -0.00877483629689174}, _
+                                                         {0.341715100611224, -0.15606206441965, -0.118796704430727, 0.00818341889620433, 0.0231859105741514, 0.0115367662530341}, _
+                                                         {-0.290111477510344, 0.152752021696643, 0.11167615364006, -0.0208610666648984, -0.0207283399022831, -0.00890975564191571}, _
+                                                         {-0.0948016996541467, -0.407064938162915, -0.207618339106762, 0.0218998992953613, -0.00301004943316363, -0.00387841048587606}, _
+                                                         {0.335104649167322, 0.0711444942030144, 0.00326561005720837, -0.0109228475729584, 0.0251353246085599, 0.0145593566074213}}
+
+        Dim Earth() As Double = New Double() {-0.147896190667482, 0.892857938625284, 0.387075601638547, _
+                                              -0.0173032744107731, -0.00236387487195205, -0.00102513648587834, _
+                                              -0.143537477185852, 0.892578667572019, 0.386954522818712, _
+                                              -0.0173040812547209, -0.00235851019511069, -0.00102281061381548, _
+                                              2455560.875, 1.06091018181116, 23.437861319031, _
+                                              17.3476127157785, -0.0796612008211573, 23.4378391909196}
+
+        Try
+            Status("Kepler Tests")
+            'Create the Julian date corresponding to the arbitary test date
+            JD = Util.DateUTCToJulian(Date.ParseExact(TestDate, "F", System.Globalization.CultureInfo.InvariantCulture))
+            TL.LogMessage("Kepler Tests", "Julian Date = " & JD & " = " & TestDate)
+            CompareDouble("Kepler", "JulianDate", JD, 2455560.875, ToleranceE10)
+
+            KeplerTest("Uranus", 7, JD, Uranus, ToleranceE9) ' Test Uranus prediction
+            KeplerTest("Neptune", 8, JD, Neptune, ToleranceE10) 'Test Neptune prediction
+            KeplerTest("Pluto", 9, JD, Pluto, ToleranceE10) 'Test Pluto Prediction
+            KepTest("Mercury", Body.Mercury, JD, MercuryPosVecs, ToleranceE10) 'Test Mercury position vectors
+
+            Action("Earth")
+            EA.SetForTime(JD) ' Test earth properties
+            CompareDouble("Kepler", "Earth BaryPos x", EA.BarycentricPosition.x, Earth(0), ToleranceE10)
+            CompareDouble("Kepler", "Earth BaryPos y", EA.BarycentricPosition.y, Earth(1), ToleranceE10)
+            CompareDouble("Kepler", "Earth BaryPos z", EA.BarycentricPosition.z, Earth(2), ToleranceE10)
+            CompareDouble("Kepler", "Earth BaryVel x", EA.BarycentricVelocity.x, Earth(3), ToleranceE10)
+            CompareDouble("Kepler", "Earth BaryVel y", EA.BarycentricVelocity.y, Earth(4), ToleranceE10)
+            CompareDouble("Kepler", "Earth BaryVel z", EA.BarycentricVelocity.z, Earth(5), ToleranceE10)
+            CompareDouble("Kepler", "Earth HeliPos x", EA.HeliocentricPosition.x, Earth(6), ToleranceE10)
+            CompareDouble("Kepler", "Earth HeliPos y", EA.HeliocentricPosition.y, Earth(7), ToleranceE10)
+            CompareDouble("Kepler", "Earth HeliPos z", EA.HeliocentricPosition.z, Earth(8), ToleranceE10)
+            CompareDouble("Kepler", "Earth HeliVel x", EA.HeliocentricVelocity.x, Earth(9), ToleranceE10)
+            CompareDouble("Kepler", "Earth HeliVel y", EA.HeliocentricVelocity.y, Earth(10), ToleranceE10)
+            CompareDouble("Kepler", "Earth HeliVel z", EA.HeliocentricVelocity.z, Earth(11), ToleranceE10)
+            CompareDouble("Kepler", "Barycentric Time", EA.BarycentricTime, Earth(12), ToleranceE10)
+            CompareDouble("Kepler", "Equation Of Equinoxes", EA.EquationOfEquinoxes, Earth(13), ToleranceE10)
+            CompareDouble("Kepler", "Mean Obliquity", EA.MeanObliquity, Earth(14), ToleranceE10)
+            CompareDouble("Kepler", "Nutation in Longitude", EA.NutationInLongitude, Earth(15), ToleranceE10)
+            CompareDouble("Kepler", "Nutation in Obliquity", EA.NutationInObliquity, Earth(16), ToleranceE10)
+            CompareDouble("Kepler", "True Obliquity", EA.TrueObliquity, Earth(17), ToleranceE10)
+
+            TL.BlankLine()
+        Catch ex As Exception
+            LogException("KeplerTests Exception", ex.ToString)
+        End Try
+        Status("")
+    End Sub
+
+    Sub KepTest(ByVal p_Name As String, ByVal p_KepNum As Body, ByVal JD As Double, ByVal Results(,) As Double, ByVal Tolerance As Double)
+        Dim K As New Kepler.Ephemeris
+        Dim POSVEC() As Double
+        Dim u As New Util
+        Dim JDIndex As Integer = 0
+
+        Const STEPSIZE As Double = 1000.0
+
+        For jdate As Double = -2.0 * STEPSIZE To +2.0 * STEPSIZE Step STEPSIZE
+            K.BodyType = BodyType.MajorPlanet
+            K.Number = p_KepNum
+            K.Name = p_Name
+            POSVEC = K.GetPositionAndVelocity(JD + jdate)
+            For i = 0 To 5
+                CompareDouble("Kepler", p_Name & " " & jdate & " PV(" & i & ")", POSVEC(i), Results(JDIndex, i), Tolerance)
+            Next
+            JDIndex += 1
+        Next
+    End Sub
+
+    Sub KeplerTest(ByVal p_Name As String, ByVal p_Num As Double, ByVal JD As Double, ByVal Results() As Double, ByVal Tolerance As Double)
+        Dim pl As New NOVASCOM.Planet
+        Dim K, KE As New Kepler.Ephemeris
+
+        Dim POSVECO(5) As Double
+        Dim pv As NOVASCOM.PositionVector
+        Dim site As New NOVASCOM.Site
+
+        Try
+            Action(p_Name)
+
+            site.Height = 80
+            site.Latitude = 51.0
+            site.Longitude = 0.0
+            site.Pressure = 1000
+            site.Temperature = 10.0
+
+            KE.BodyType = BodyType.MajorPlanet
+            KE.Number = 3
+
+            pl.Name = p_Name
+            pl.Number = p_Num
+            pl.Type = BodyType.MajorPlanet
+
+            pv = pl.GetAstrometricPosition(JD)
+            CompareDouble("Kepler", p_Name & " Astro x", pv.x, Results(0), Tolerance)
+            CompareDouble("Kepler", p_Name & " Astro y", pv.y, Results(1), Tolerance)
+            CompareDouble("Kepler", p_Name & " Astro z", pv.z, Results(2), Tolerance)
+
+            pv = pl.GetVirtualPosition(JD)
+            CompareDouble("Kepler", p_Name & " Virtual x", pv.x, Results(3), Tolerance)
+            CompareDouble("Kepler", p_Name & " Virtual y", pv.y, Results(4), Tolerance)
+            CompareDouble("Kepler", p_Name & " Virtual z", pv.z, Results(5), Tolerance)
+
+            pv = pl.GetApparentPosition(JD)
+            CompareDouble("Kepler", p_Name & " Apparent x", pv.x, Results(6), Tolerance)
+            CompareDouble("Kepler", p_Name & " Apparent y", pv.y, Results(7), Tolerance)
+            CompareDouble("Kepler", p_Name & " Apparent z", pv.z, Results(8), Tolerance)
+
+            pv = pl.GetLocalPosition(JD, site)
+            CompareDouble("Kepler", p_Name & " Local x", pv.x, Results(9), Tolerance)
+            CompareDouble("Kepler", p_Name & " Local y", pv.y, Results(10), Tolerance)
+            CompareDouble("Kepler", p_Name & " Local z", pv.z, Results(11), Tolerance)
+
+            pv = pl.GetTopocentricPosition(JD, site, True)
+            CompareDouble("Kepler", p_Name & " Topo x", pv.x, Results(12), Tolerance)
+            CompareDouble("Kepler", p_Name & " Topo y", pv.y, Results(13), Tolerance)
+            CompareDouble("Kepler", p_Name & " Topo z", pv.z, Results(14), Tolerance)
+            Action("")
+        Catch ex As Exception
+            LogException("NovComTest Exception", ex.ToString)
+        End Try
+    End Sub
+
     Private Sub TimerTests()
         Const RunTime As Double = 10.0 ' Test runtime in seconds
         Const TimerInterval As Integer = 3000 'Timer interval
@@ -343,7 +503,6 @@ Public Class DiagnosticsForm
             StartTime = Now
             sw.Reset() : sw.Start()
             Do
-                'Thread.Sleep(1)
                 Application.DoEvents()
                 ElapsedTime = Now.Subtract(StartTime).TotalSeconds
                 If Math.Floor(ElapsedTime) <> LastSecond Then
@@ -351,7 +510,6 @@ Public Class DiagnosticsForm
                     Action("Seconds - " & CInt(ElapsedTime) & " / " & CInt(RunTime))
                     LastSecond = Math.Floor(ElapsedTime)
                 End If
-                'Application.DoEvents()
             Loop Until Now.Subtract(StartTime).TotalSeconds > RunTime
             sw.Stop()
         Catch ex As Exception
@@ -816,12 +974,17 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub CompareDouble(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Double, ByVal p_Orig As Double, ByVal p_Tolerance As Double)
-        If System.Math.Abs(p_New - p_Orig) < p_Tolerance Then
+        Dim ErrMsg As String, Divisor As Double
+        Divisor = p_Orig
+        If Divisor = 0.0 Then Divisor = 1.0 'Deal withpossible divide by zero error
+        If System.Math.Abs((p_New - p_Orig) / Divisor) < p_Tolerance Then
             TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New & " within tolerance of " & p_Tolerance)
             NMatches += 1
         Else
-            TL.LogMessage(p_Section, "NOT Matched " & p_Name & " #" & p_New.ToString & "#" & p_Orig.ToString & "# within tolerance of " & p_Tolerance)
+            ErrMsg = "##### NOT Matched " & p_Name & " #" & p_New.ToString & "#" & p_Orig.ToString & "# within tolerance of " & p_Tolerance
+            TL.LogMessage(p_Section, ErrMsg)
             NNonMatches += 1
+            ErrorList.Add(p_Section & " - " & ErrMsg)
         End If
     End Sub
 
