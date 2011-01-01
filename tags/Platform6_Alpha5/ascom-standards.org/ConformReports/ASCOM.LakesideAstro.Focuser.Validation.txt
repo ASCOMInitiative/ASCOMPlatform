@@ -1,0 +1,51 @@
+Conform Report Hash (V1): 02693581CD2B7D753992AFB49DAFF2B46B07429B5A8707FE064B7B4C7D9F82D82B3497319F03A135AD1C72DA78EAC25F6B9516FD722FB797CD3BC5E6A900A2CD
+
+ConformanceCheck ASCOM Device Conformance Checker Version 3.0.0.15
+ConformanceCheck Running on ASCOM Platform 5.5
+ 
+ConformanceCheck Driver ProgID: ASCOM.LakesideAstro.Focuser
+ 
+Error numbers 
+Error number for "Not Implemented" is: 80040400
+Error number for "Invalid Value 1" is: 80040404
+Error number for "Invalid Value 3" is: 0
+Error number for "Value Not Set"   is: 80040403
+ 
+10:59:03.781 Driver Access Checks          OK       
+10:59:04.057 AccessChecks                  OK       Successfully created driver using late binding
+10:59:05.488 AccessChecks                  OK       Successfully connected using late binding
+10:59:05.491 AccessChecks                  INFO     The driver is a .NET object
+10:59:05.495 AccessChecks                  INFO     The AssemblyQualifiedName is: ASCOM.LakesideAstro.Focuser, LakesideAstro, Version=1.0.0.0, Culture=neutral
+10:59:05.498 AccessChecks                  INFO     The driver implements interface: IFocuser
+10:59:05.785 AccessChecks                  OK       Successfully created driver using early binding to IFocuser interface
+10:59:05.789 AccessChecks                  OK       Successfully connected using early binding to IFocuser interface
+10:59:06.000 AccessChecks                  OK       Successfully created driver using driver access toolkit
+10:59:06.004 AccessChecks                  OK       Successfully connected using driver access toolkit
+ 
+Conform is using CreateObject to get a Focuser object
+10:59:06.220 ConformanceCheck              OK       Driver instance created successfully
+10:59:06.226 ConformanceCheck              OK       Connected OK
+ 
+Properties 
+10:59:06.247 Absolute                      OK       True
+10:59:06.252 IsMoving                      OK       False
+10:59:06.258 MaxStep                       OK       4000
+10:59:06.263 MaxIncrement                  OK       4000
+10:59:06.268 Position                      OK       3001
+10:59:06.274 StepSize                      OK       1
+10:59:06.279 TempCompAvailable             OK       False
+10:59:06.285 TempComp Read                 OK       False
+10:59:06.319 TempComp Write                OK       .NET Not implemented exception correctly raised as expected
+10:59:06.358 Temperature                   OK       19
+ 
+Methods 
+10:59:06.380 Halt                          OK       Focuser halted OK
+10:59:06.392 Move                                   Moving to position: 3401
+10:59:09.553 Move                          OK       Asynchronous move found
+10:59:09.559 Move                          OK       Absolute move OK
+ 
+Conformance test complete 
+ 
+No errors, warnings or issues found: your driver passes ASCOM validation!! 
+ 
+Driver Hash Value: E23D67306AAE95513D92555D75827F13DF789851A0DC84FFB425125DE358D11B4102614414F2B93CC3993911C80ABAEF8E628D25D81BDF68576532615086759E

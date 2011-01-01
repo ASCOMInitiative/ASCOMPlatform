@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6c2d0f0d-6460-494e-9c1f-08545fcff623" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        	
+    	<section address="Changes">
+      		<title>Changes</title>
+      		<content>
+				<list class="bullet">
+ 		 			<listItem>Diagnostics - Now has a menu option to list available COM ports.</listItem>
+ 		 			<listItem>TraceLogger - Has a new menu option to return the full path name of the log file being created.</listItem>
+ 		 			<listItem>TraceLogger - New LogMessageCrLf method that respects carriage returns and line feeds in 
+ 		 			messages and doesn't translate these to hex display characters.</listItem>>
+ 		 			
+ 		 			<listItem>ASCOM.Astrometry - Now includes a full presentation of the NOVAS3 library including:
+ 		 				<list class="bullet">
+		 		 			<listItem>the the most recent JPL DE421 planet ephemeris data.</listItem>>
+		 		 			<listItem>the full table of CIO RAs</listItem>>
+		 		 			<listItem>the AE98 readeph routine to parse locally held minor planet ephemeris files</listItem>
+		 		 		</list>
+		 		 	</listItem>
+ 		 			<listItem>Profile - Improved resilience to tranient operational issues</listItem>>
+ 		 			<listItem>Profile - Improved recovery from profile file corruption</listItem>>
+ 		 			<listItem>Utilities - ASCOM event log introduced to record serious Platform code failures,
+ 		 			improving fault diagnosis, leading to better Platform stability.</listItem>
+ 		 			<listItem>Profile - Implemented four new methods to retrieve and set all values in a device
+ 		 			profile in one operation. GetProfileXML and SetProfileXML work with an XML encoding of the profile
+ 		 			while GetProfile and SetProfile work with the new ASCOMProfile object that contains all 
+ 		 			entries in the profile and provides simple methods to read and set values.</listItem>
+	  			</list>
+            </content>
+		</section>
+          			
+        <section address="IssuesFixed">
+           	<title>Issues Fixed</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>ASCOM.Utilities.Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
+ 		 			improved to actively test for COM ports rather than simply relying on the list of ports returned by the .NET Framework.</listItem>
+					<listItem>MigrateProfile - Now applies the "Full Control" security attribute to the entire ASCOM shared
+					file area where the Profile is stored to remove access control issues seen by some people.</listItem>
+					<listItem>Installer - Now applies required security attributes every time the installer is run,
+					regardless of whether the profile is already migrated. This ensures correct attributes are applied
+					for early adopters whose profile was migrated by an early "HelperNET" install.</listItem>
+					<listItem>TraceLogger - Fixed exception thrown if object was disposed while writing</listItem>
+					<listItem>TraceLogger - Fixed low probability IOException thrown when creating the object
+					if multiple traceloggers were created simulateously in multi-threaded applications.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+        <section address="BreakingChanges">
+           	<title>Breaking Changes</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>RegisteredDevices(ByVal DeviceType As String) has been changed from a property to a method to maximise 
+ 		 			compatibility between .NET programming languages.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+  </developerConceptualDocument>
+</topic>
