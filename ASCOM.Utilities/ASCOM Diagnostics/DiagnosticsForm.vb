@@ -25,9 +25,20 @@ Public Class DiagnosticsForm
 
     Private Const COMPONENT_CATEGORIES = "Component Categories"
     Private Const ASCOM_ROOT_KEY As String = " (ASCOM Root Key)"
-    Const TestTelescopeDescription As String = "This is a test telescope"
-    Const RevisedTestTelescopeDescription As String = "Updated description for test telescope!!!"
-    Const NewTestTelescopeDescription As String = "New description for test telescope!!!"
+    Private Const TestTelescopeDescription As String = "This is a test telescope"
+    Private Const RevisedTestTelescopeDescription As String = "Updated description for test telescope!!!"
+    Private Const NewTestTelescopeDescription As String = "New description for test telescope!!!"
+    Private Const ToleranceE6 As Double = 0.000001 ' Used in evaluating precision match of double values
+    Private Const ToleranceE7 As Double = 0.0000001 ' Used in evaluating precision match of double values
+    Private Const ToleranceE8 As Double = 0.00000001 ' Used in evaluating precision match of double values
+    Private Const ToleranceE9 As Double = 0.000000001
+    Private Const ToleranceE10 As Double = 0.0000000001
+
+    'Astrometry test data for planets obtained from the original 32bit  components
+    'The data is for the arbitary test date Thursday, 30 December 2010 09:00:00" 
+    Private Const TestDate As String = "Thursday, 30 December 2010 09:00:00" ' Arbitary test date used to generate data above, it must conform to the "F" date format for the invariant culture
+    Private Const J2000 As Double = 2451545.0 'Julian day for J2000 epoch
+
 #Region "XML  test String"
     Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf & _
                                     "<ASCOMProfile>" & vbCrLf & _
@@ -183,11 +194,13 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub Status(ByVal Msg As String)
+        Application.DoEvents()
         lblResult.Text = Msg
         Application.DoEvents()
     End Sub
 
     Sub Action(ByVal Msg As String)
+        Application.DoEvents()
         lblAction.Text = Msg
         Application.DoEvents()
     End Sub
@@ -291,7 +304,10 @@ Public Class DiagnosticsForm
                 UtilTests() : Action("")
                 ProfileTests() : Action("")
                 TimerTests() : Action("")
+                NovasComTests() : Action("")
                 KeplerTests() : Action("")
+                TransformTest() : Action("")
+                Novas2Tests() : Action("")
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratualtions, all " & NMatches & " function tests passed!"
@@ -332,17 +348,564 @@ Public Class DiagnosticsForm
         btnCOM.Enabled = True
     End Sub
 
-    Sub KeplerTests()
+    Enum NOVAS2Functions
+        Abberation
+        App_Planet
+        App_Star
+        Astro_Planet
+        Astro_Star
+        Bary_To_Geo
+        Cal_Date
+        Cel_Pole
+        EarthTilt
+        Ephemeris
+        Equ2Hor
+        Fund_Args
+        Get_Earth
+        Julian_Date
+        Local_Planet
+        Local_Star
+        Make_Cat_Entry
+        Mean_Star
+        Nutate
+        Nutation_Angles
+        PNSW
+        Precession
+        Proper_Motion
+        RADEC2Vector
+        Refract
+        Set_Body
+        Sideral_Time
+        SolarSystem
+        Spin
+        StarVectors
+        Sun_Field
+        Tdb2Tdt
+        Terra
+        Topo_Planet
+        Topo_Star
+        Transform_Cat
+        Transform_Hip
+        Vector2RADEC
+        Virtual_Planet
+        Virtual_Star
+        Wobble
+        'Not in DLL  from Tim
+        Sun_Eph
+    End Enum
+
+    Sub Novas2Tests()
+        Dim T As Transform.Transform = New Transform.Transform
+        Dim u As New Util
+        Dim EarthBody, SunBody As New BodyDescription, StarStruct As New CatEntry, LocationStruct As New SiteInfo
+        Dim Star(), SKYPOS(), POS(), POS2(), POSEarth(), VEL2(), POSNow(), VEL() As Double
+        ReDim Star(10), SKYPOS(10), POS(3), VEL(3), POSNow(3), POS2(3), VEL2(3), POSEarth(3)
+        Dim P(5), FundArgsValue(4) As Double
+        Dim ZenithDistance, Azimuth, Tdb, LightTime, RATarget, DECTarget, JD, Distance As Double
+        Dim RANow, DECNow, Hour, TdtJd, SecDiff, LongNutation, ObliqNutation, GreenwichSiderealTime, MObl, TObl, Eq, DPsi, DEpsilon As Double
+        Dim RC, Year, Month, day As Short
+        Dim Fmt As String
+
+        Const SiteLat = 51.0 + (4.0 / 60.0) + (43.0 / 3600.0)
+        Const SiteLong = 0.0 - (17.0 / 60.0) - (40.0 / 3600.0)
+        Const SiteElev = 80.0
+
+        Const StarRAJ2000 = 12.0
+        Const StarDecJ2000 = 30.0
+
+        JD = TestJulianDate()
+
+        EarthBody.Name = "Earth"
+        EarthBody.Type = BodyType.MajorPlanet
+        EarthBody.Number = 3
+
+        SunBody.Name = "Sun"
+        SunBody.Type = BodyType.Sun
+        SunBody.Number = Body.Sun
+
+        LocationStruct.Height = SiteElev
+        LocationStruct.Latitude = SiteLat
+        LocationStruct.Longitude = SiteLong
+        LocationStruct.Pressure = 1000.0
+        LocationStruct.Temperature = 10.0
+
+        StarStruct.Dec = StarDecJ2000
+        StarStruct.RA = StarRAJ2000
+        StarStruct.Parallax = 2.0
+        StarStruct.ProMoDec = 1.5
+        StarStruct.ProMoRA = 2.5
+        StarStruct.RadialVelocity = 3
+
+        NOVAS.NOVAS2.StarVectors(StarStruct, POS, VEL)
+        NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
+        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, ToleranceE10)
+        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, ToleranceE10)
+
+        NOVAS.NOVAS2.Precession(J2000, POS, u.JulianDate, POSNow)
+        NOVAS.NOVAS2.Vector2RADec(POSNow, RANow, DECNow)
+        RC = NOVAS.NOVAS2.TopoStar(JD, EarthBody, 0, StarStruct, LocationStruct, RANow, DECNow)
+        Compare("Novas2Tests", "TopoStar RC", RC, 0)
+        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, ToleranceE10)
+        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, ToleranceE10)
+
+        NOVAS.NOVAS2.RADec2Vector(StarRAJ2000, StarDecJ2000, 10000000000.0, POS)
+        NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
+        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, ToleranceE10)
+        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, ToleranceE10)
+
+        CompareDouble("Novas2Tests", "JulianDate", NOVAS.NOVAS2.JulianDate(2010, 12, 30, 9.0), TestJulianDate, ToleranceE10)
+
+        RC = NOVAS.NOVAS2.AstroPlanet(JD, SunBody, EarthBody, RATarget, DECTarget, Distance)
+        Compare("Novas2Tests", "AstroPlanet RC", RC, 0)
+        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, ToleranceE10)
+        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, ToleranceE10)
+        CompareDouble("Novas2Tests", "AstroPlanet Dist", Distance, 0.983376046291495, ToleranceE10)
+
+        RC = NOVAS.NOVAS2.VirtualPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
+        Compare("Novas2Tests", "VirtualPlanet RC", RC, 0)
+        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, ToleranceE10)
+        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, ToleranceE10)
+        CompareDouble("Novas2Tests", "VirtualPlanet Dist", Distance, 0.983376046291495, ToleranceE10)
+
+        RC = NOVAS.NOVAS2.AppPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
+        Compare("Novas2Tests", "AppPlanet RC", RC, 0)
+        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, ToleranceE10)
+        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, ToleranceE10)
+        CompareDouble("Novas2Tests", "AppPlanet Dist", Distance, 0.983376046291495, ToleranceE10)
+
+        RC = NOVAS.NOVAS2.TopoPlanet(JD, SunBody, EarthBody, 0.0, LocationStruct, RANow, DECNow, Distance)
+        Compare("Novas2Tests", "TopoPlanet RC", RC, 0)
+        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, ToleranceE10)
+        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, ToleranceE10)
+        CompareDouble("Novas2Tests", "TopoPlanet Dist", Distance, 0.983371860482251, ToleranceE10)
+        TL.BlankLine()
+
+        NOVAS.NOVAS2.Equ2Hor(JD, 0.0, 0.0, 0.0, LocationStruct, StarRAJ2000, StarDecJ2000, RefractionOption.LocationRefraction, ZenithDistance, Azimuth, RANow, DECNow)
+        TL.LogMessage("Novas2Tests", "Equ2Hor RA - " & u.HoursToHMS(RANow, ":", ":", "", 3) & "  DEC: " & u.DegreesToDMS(DECNow, ":", ":", "", 3))
+        TL.LogMessage("Novas2Tests", RANow & " " & DECNow & " " & ZenithDistance & " " & Azimuth)
+
+        NOVAS.NOVAS2.EarthTilt(u.JulianDate, MObl, TObl, Eq, DPsi, DEpsilon)
+        TL.LogMessage("Novas2Tests", "EarthTilt - Equation of Equinoxes - " & Eq & " DPsi: " & DPsi & " DEps: " & DEpsilon)
+        NOVAS.NOVAS2.CelPole(10.0, 10.0)
+        NOVAS.NOVAS2.EarthTilt(u.JulianDate, MObl, TObl, Eq, DPsi, DEpsilon)
+        TL.LogMessage("Novas2Tests", "CelPole - Set Equation of Equinoxes - " & Eq & " DPsi: " & DPsi & " DEps: " & DEpsilon)
+        NOVAS.NOVAS2.CelPole(0.0, 0.0)
+        NOVAS.NOVAS2.EarthTilt(u.JulianDate, MObl, TObl, Eq, DPsi, DEpsilon)
+        TL.LogMessage("Novas2Tests", "CelPole - Unset Equation of Equinoxes - " & Eq & " DPsi: " & DPsi & " DEps: " & DEpsilon)
+
+        NOVAS.NOVAS2.SiderealTime(u.JulianDate, 0.0, Eq, GreenwichSiderealTime)
+        TL.LogMessage("Novas2Tests", "SiderealTime - " & u.HoursToHMS(GreenwichSiderealTime))
+
+        NOVAS.NOVAS2.Ephemeris(u.JulianDate, EarthBody, Origin.Heliocentric, POS, VEL)
+        Fmt = "0.000000000000"
+        TL.LogMessage("Novas2Tests", "Ephemeris Ea - " & Format(POS(0), Fmt) & " " & Format(POS(1), Fmt) & " " & Format(POS(2), Fmt) & " " & Format(VEL(0), Fmt) & " " & Format(VEL(1), Fmt) & " " & Format(VEL(2), Fmt))
+
+        NOVAS.NOVAS2.Ephemeris(u.JulianDate, SunBody, Origin.Heliocentric, POS, VEL)
+        TL.LogMessage("Novas2Tests", "Ephemeris Pl - " & Format(POS(0), Fmt) & " " & Format(POS(1), Fmt) & " " & Format(POS(2), Fmt) & " " & Format(VEL(0), Fmt) & " " & Format(VEL(1), Fmt) & " " & Format(VEL(2), Fmt))
+
+        NOVAS.NOVAS2.SolarSystem(u.JulianDate, Body.Earth, Origin.Heliocentric, POS, VEL)
+        TL.LogMessage("Novas2Tests", "SolarSystem Ea - " & Format(POS(0), Fmt) & " " & Format(POS(1), Fmt) & " " & Format(POS(2), Fmt) & " " & Format(VEL(0), Fmt) & " " & Format(VEL(1), Fmt) & " " & Format(VEL(2), Fmt))
+
+        RC = NOVAS.NOVAS2.Vector2RADec(POS, RANow, DECNow)
+        Compare("Novas2Tests", "Vector2RADec RC", RC, 0)
+        TL.LogMessage("Novas2Tests", "Vector2RADec RA - " & u.HoursToHMS(RANow, ":", ":", "", 3) & "  DEC: " & u.DegreesToDMS(DECNow, ":", ":", "", 3))
+
+        NOVAS.NOVAS2.StarVectors(StarStruct, POS, VEL)
+
+        RC = NOVAS.NOVAS2.Vector2RADec(POS, RANow, DECNow)
+        Compare("Novas2Tests", "Vector2RADec RC", RC, 0)
+        TL.LogMessage("Novas2Tests", "StarVectors - " & Format(POS(0), Fmt) & " " & Format(POS(1), Fmt) & " " & Format(POS(2), Fmt) & " " & Format(VEL(0), Fmt) & " " & Format(VEL(1), Fmt) & " " & Format(VEL(2), Fmt))
+        TL.LogMessage("Novas2Tests", "StarVectors RA - " & u.HoursToHMS(RANow, ":", ":", "", 3) & "  DEC: " & u.DegreesToDMS(DECNow, ":", ":", "", 3))
+
+        NOVAS.NOVAS2.RADec2Vector(12.0, 30.0, 1000, POS)
+        TL.LogMessage("Novas2Tests", "RADec2Vector - " & Format(POS(0), Fmt) & " " & Format(POS(1), Fmt) & " " & Format(POS(2), Fmt))
+
+        RC = NOVAS.NOVAS2.GetEarth(u.JulianDate, EarthBody, Tdb, POS, VEL, POS2, VEL2)
+        Compare("Novas2Tests", "GetEarth RC", RC, 0)
+        TL.LogMessage("Novas2Tests", "GetEarth TDB - " & Tdb)
+        TL.LogMessage("Novas2Tests", "GetEarth - " & Format(POS(0), Fmt) & " " & Format(POS(1), Fmt) & " " & Format(POS(2), Fmt) & " " & Format(VEL(0), Fmt) & " " & Format(VEL(1), Fmt) & " " & Format(VEL(2), Fmt))
+        TL.LogMessage("Novas2Tests", "GetEarth - " & Format(POS2(0), Fmt) & " " & Format(POS2(1), Fmt) & " " & Format(POS2(2), Fmt) & " " & Format(VEL2(0), Fmt) & " " & Format(VEL2(1), Fmt) & " " & Format(VEL2(2), Fmt))
+
+        RC = NOVAS.NOVAS2.MeanStar(u.JulianDate, EarthBody, 12.0, 30.0, RANow, DECNow)
+        Compare("Novas2Tests", "MeanStar RC", RC, 0)
+        TL.LogMessage("Novas2Tests", "MeanStar RA -  " & u.HoursToHMS(RANow, ":", ":", "", 3) & "  DEC: " & u.DegreesToDMS(DECNow, ":", ":", "", 3))
+
+        NOVAS.NOVAS2.StarVectors(StarStruct, POS, VEL)
+        TL.LogMessage("Novas2Tests", "Pnsw In - " & Format(POS(0), Fmt) & " " & Format(POS(1), Fmt) & " " & Format(POS(2), Fmt))
+
+        NOVAS.NOVAS2.Pnsw(u.JulianDate, 15.0, 2.5, 5, POS, POSNow)
+        TL.LogMessage("Novas2Tests", "Pnsw Out" & Format(POSNow(0), Fmt) & " " & Format(POSNow(1), Fmt) & " " & Format(POSNow(2), Fmt))
+
+        NOVAS.NOVAS2.Spin(u.JulianDate, POS, POSNow)
+        TL.LogMessage("Novas2Tests", "Spin - " & Format(POSNow(0), Fmt) & " " & Format(POSNow(1), Fmt) & " " & Format(POSNow(2), Fmt))
+
+        NOVAS.NOVAS2.Wobble(2.5, 5.0, POS, POSNow)
+        TL.LogMessage("Novas2Tests", "Wobble - " & Format(POSNow(0), Fmt) & " " & Format(POSNow(1), Fmt) & " " & Format(POSNow(2), Fmt))
+
+        NOVAS.NOVAS2.Terra(LocationStruct, 15.0, POS, VEL)
+        TL.LogMessage("Novas2Tests", "Terra - " & Format(POS(0), Fmt) & " " & Format(POS(1), Fmt) & " " & Format(POS(2), Fmt) & " " & Format(VEL(0), Fmt) & " " & Format(VEL(1), Fmt) & " " & Format(VEL(2), Fmt))
+
+        NOVAS.NOVAS2.ProperMotion(J2000, POS, VEL, u.JulianDate, POSNow)
+        TL.LogMessage("Novas2Tests", "ProperMotion - " & Format(POSNow(0), Fmt) & " " & Format(POSNow(1), Fmt) & " " & Format(POSNow(2), Fmt))
+
+        RC = NOVAS.NOVAS2.GetEarth(u.JulianDate, EarthBody, Tdb, POSEarth, VEL, POS2, VEL2)
+        Compare("Novas2Tests", "GetEarth RC", RC, 0)
+        NOVAS.NOVAS2.BaryToGeo(POS, POSEarth, POSNow, LightTime)
+        TL.LogMessage("Novas2Tests", "BaryToGeo - " & Format(POSNow(0), Fmt) & " " & Format(POSNow(1), Fmt) & " " & Format(POSNow(2), Fmt) & " LightTime: " & LightTime)
+
+        RC = NOVAS.NOVAS2.SunField(POS, POSEarth, POSNow)
+        Compare("Novas2Tests", "SunField RC", RC, 0)
+        TL.LogMessage("Novas2Tests", "SunField - " & Format(POSNow(0), Fmt) & " " & Format(POSNow(1), Fmt) & " " & Format(POSNow(2), Fmt))
+
+        RC = NOVAS.NOVAS2.Aberration(POS, VEL, LightTime, POSNow)
+        Compare("Novas2Tests", "Aberration RC", RC, 0)
+        TL.LogMessage("Novas2Tests", "Aberration - " & Format(POSNow(0), Fmt) & " " & Format(POSNow(1), Fmt) & " " & Format(POSNow(2), Fmt))
+
+        RC = NOVAS.NOVAS2.Nutate(u.JulianDate, NutationDirection.MeanToTrue, POS, POSNow)
+        Compare("Novas2Tests", "Nutate RC", RC, 0)
+        TL.LogMessage("Novas2Tests", "Nutate - " & Format(POSNow(0), Fmt) & " " & Format(POSNow(1), Fmt) & " " & Format(POSNow(2), Fmt))
+
+        RC = NOVAS.NOVAS2.NutationAngles(1.0, LongNutation, ObliqNutation)
+        Compare("Novas2Tests", "NutationAngles RC", RC, 0)
+        TL.LogMessage("Novas2Tests", "NutationAngles - Long Nutation: " & LongNutation & " Oblique Nutation: " & ObliqNutation)
+
+        NOVAS.NOVAS2.FundArgs(1.0, FundArgsValue)
+        TL.LogMessage("Novas2Tests", "FundArgs - " & FundArgsValue(0) & " " & FundArgsValue(1) & " " & FundArgsValue(2) & " " & FundArgsValue(3) & " " & FundArgsValue(4))
+
+        NOVAS.NOVAS2.Tdb2Tdt(u.JulianDate, TdtJd, SecDiff)
+        TL.LogMessage("Novas2Tests", "Tdb2Tdt - TDT JD: " & TdtJd & " Sec Diff: " & SecDiff)
+
+        NOVAS.NOVAS2.SetBody(BodyType.MajorPlanet, Body.Earth, "Earth", SunBody)
+        TL.LogMessage("Novas2Tests", "SetBody - Name: " & SunBody.Name & " Number: " & SunBody.Number & " Type: " & SunBody.Type)
+
+        NOVAS.NOVAS2.MakeCatEntry("HIP", "PStar", 23045, 15.0, 30.0, 1, 2, 3, 4, StarStruct)
+        TL.LogMessage("Novas2Tests", "MakeCatEntry - Cat: " & StarStruct.Catalog & " Name: " & StarStruct.StarName & " Number: " & StarStruct.StarNumber & " " & StarStruct.RA & " " & StarStruct.Dec & " " & StarStruct.ProMoRA & " " & StarStruct.ProMoDec & " " & StarStruct.Parallax & " " & StarStruct.RadialVelocity)
+
+        ZenithDistance = NOVAS.NOVAS2.Refract(LocationStruct, 2, 65.0)
+        TL.LogMessage("Novas2Tests", "Refract (65deg) - Refracted Offset (Degrees): " & u.DegreesToDMS(ZenithDistance, ":", ":"))
+
+        JD = NOVAS.NOVAS2.JulianDate(2009, 6, 7, 12.0)
+        TL.LogMessage("Novas2Tests", "JulianDate - JD (6/7/2009 12:00): " & JD)
+
+        NOVAS.NOVAS2.CalDate(JD, Year, Month, day, Hour)
+        TL.LogMessage("Novas2Tests", "CalDate - " & day & " " & Month & " " & Year & " " & u.HoursToHMS(Hour))
+        TL.BlankLine()
+
+        Status("Novas2Static Tests")
+        NOVAS2StaticTest(NOVAS2Functions.Abberation)
+        NOVAS2StaticTest(NOVAS2Functions.App_Planet)
+        NOVAS2StaticTest(NOVAS2Functions.App_Star)
+        NOVAS2StaticTest(NOVAS2Functions.Astro_Planet)
+        NOVAS2StaticTest(NOVAS2Functions.Astro_Star)
+        NOVAS2StaticTest(NOVAS2Functions.Bary_To_Geo)
+        NOVAS2StaticTest(NOVAS2Functions.Cal_Date)
+        NOVAS2StaticTest(NOVAS2Functions.Cel_Pole)
+        NOVAS2StaticTest(NOVAS2Functions.EarthTilt)
+        NOVAS2StaticTest(NOVAS2Functions.Ephemeris)
+        NOVAS2StaticTest(NOVAS2Functions.Equ2Hor)
+        NOVAS2StaticTest(NOVAS2Functions.Fund_Args)
+        NOVAS2StaticTest(NOVAS2Functions.Get_Earth)
+        NOVAS2StaticTest(NOVAS2Functions.Julian_Date)
+        NOVAS2StaticTest(NOVAS2Functions.Local_Planet)
+        NOVAS2StaticTest(NOVAS2Functions.Local_Star)
+        NOVAS2StaticTest(NOVAS2Functions.Make_Cat_Entry)
+        NOVAS2StaticTest(NOVAS2Functions.Mean_Star)
+        NOVAS2StaticTest(NOVAS2Functions.Nutate)
+        NOVAS2StaticTest(NOVAS2Functions.Nutation_Angles)
+        NOVAS2StaticTest(NOVAS2Functions.PNSW)
+        NOVAS2StaticTest(NOVAS2Functions.Precession)
+        NOVAS2StaticTest(NOVAS2Functions.Proper_Motion)
+        NOVAS2StaticTest(NOVAS2Functions.RADEC2Vector)
+        NOVAS2StaticTest(NOVAS2Functions.Refract)
+        NOVAS2StaticTest(NOVAS2Functions.Set_Body)
+        NOVAS2StaticTest(NOVAS2Functions.Sideral_Time)
+        NOVAS2StaticTest(NOVAS2Functions.SolarSystem)
+        NOVAS2StaticTest(NOVAS2Functions.Spin)
+        NOVAS2StaticTest(NOVAS2Functions.StarVectors)
+        NOVAS2StaticTest(NOVAS2Functions.Sun_Field)
+        NOVAS2StaticTest(NOVAS2Functions.Tdb2Tdt)
+        NOVAS2StaticTest(NOVAS2Functions.Terra)
+        NOVAS2StaticTest(NOVAS2Functions.Topo_Planet)
+        NOVAS2StaticTest(NOVAS2Functions.Topo_Star)
+        NOVAS2StaticTest(NOVAS2Functions.Transform_Cat)
+        NOVAS2StaticTest(NOVAS2Functions.Transform_Hip)
+        NOVAS2StaticTest(NOVAS2Functions.Vector2RADEC)
+        NOVAS2StaticTest(NOVAS2Functions.Virtual_Planet)
+        NOVAS2StaticTest(NOVAS2Functions.Virtual_Star)
+        NOVAS2StaticTest(NOVAS2Functions.Wobble)
+        TL.BlankLine()
+    End Sub
+
+    Sub CheckRC(ByVal RC As Short, ByVal Section As String, ByVal Name As String)
+        Compare(Section, Name & " Return Code", RC.ToString, "0")
+    End Sub
+
+    Sub NOVAS2StaticTest(ByVal TestFunction As NOVAS2Functions)
+        Dim RA, DEC, Dis, POS(2), VEL(2), POS2(2), VEL2(2), EarthVector(2), LightTime, Hour, MObl, TObl, Eq, DPsi, DEps As Double
+        Dim RadVel, JD, TDB, DeltaT, x, y, ZD, Az, rar, decr, a(4) As Double, SiteInfo As New ASCOM.Astrometry.SiteInfo
+        Dim Gast, MRA, MDEC, LongNutation, ObliqueNutation, TdtJD, SecDiff, ST As Double
+        Dim Year, Month, Day As Short
+        Dim CatName(2) As Byte
+        Dim rc As Integer
+        Dim SS_Object, Earth As New ASCOM.Astrometry.BodyDescription, Star, NewCat As New ASCOM.Astrometry.CatEntry
+        Dim Utl As New ASCOM.Utilities.Util
+        Action(TestFunction.ToString)
+        Earth.Number = Body.Earth
+        Earth.Name = "Earth"
+        Earth.Type = BodyType.MajorPlanet
+
+        SS_Object.Name = "Sun"
+        SS_Object.Number = Body.Sun
+        SS_Object.Type = BodyType.Sun
+
+        Star.Dec = 40.0
+        Star.RA = 23
+        Star.StarName = "Test Star"
+        Star.Catalog = "HIP"
+
+        SiteInfo.Height = 80.0
+        SiteInfo.Latitude = 51.0
+        SiteInfo.Longitude = 0.0
+        SiteInfo.Pressure = 1020
+        SiteInfo.Temperature = 25.0
+
+        CatName(0) = Asc("P")
+        CatName(1) = Asc("S")
+        CatName(2) = Asc("1")
+
+        rc = Integer.MaxValue 'Initialise to a silly value
+
+        Try
+            Select Case TestFunction
+                Case NOVAS2Functions.Abberation
+                    rc = NOVAS.NOVAS2.Aberration(POS, VEL, LightTime, POS2)
+                Case NOVAS2Functions.App_Planet
+                    rc = NOVAS.NOVAS2.AppPlanet(Utl.JulianDate, SS_Object, Earth, RA, DEC, Dis)
+                Case NOVAS2Functions.App_Star
+                    rc = NOVAS.NOVAS2.AppStar(Utl.JulianDate, Earth, Star, RA, DEC)
+                Case NOVAS2Functions.Astro_Planet
+                    rc = NOVAS.NOVAS2.AstroPlanet(Utl.JulianDate, SS_Object, Earth, RA, DEC, Dis)
+                Case NOVAS2Functions.Astro_Star
+                    rc = NOVAS.NOVAS2.AstroStar(Utl.JulianDate, Earth, Star, RA, DEC)
+                Case NOVAS2Functions.Bary_To_Geo
+                    NOVAS.NOVAS2.BaryToGeo(POS, EarthVector, POS2, LightTime)
+                    rc = 0
+                Case NOVAS2Functions.Cal_Date
+                    NOVAS.NOVAS2.CalDate(Utl.JulianDate, Year, Month, Day, Hour)
+                    rc = 0
+                Case NOVAS2Functions.Cel_Pole
+                    NOVAS.NOVAS2.CelPole(0.0, 0.0)
+                    rc = 0
+                Case NOVAS2Functions.EarthTilt
+                    NOVAS.NOVAS2.EarthTilt(Utl.JulianDate, MObl, TObl, Eq, DPsi, DEps)
+                    rc = 0
+                Case NOVAS2Functions.Ephemeris
+                    rc = NOVAS.NOVAS2.Ephemeris(Utl.JulianDate, SS_Object, Origin.Barycentric, POS, VEL)
+                Case NOVAS2Functions.Equ2Hor
+                    NOVAS.NOVAS2.Equ2Hor(Utl.JulianDate, DeltaT, x, y, SiteInfo, RA, DEC, RefractionOption.LocationRefraction, ZD, Az, rar, decr)
+                    rc = 0
+                Case NOVAS2Functions.Fund_Args
+                    NOVAS.NOVAS2.FundArgs(0.1, a)
+                    rc = 0
+                Case NOVAS2Functions.Get_Earth
+                    rc = NOVAS.NOVAS2.GetEarth(Utl.JulianDate, Earth, TDB, POS, VEL, POS2, VEL2)
+                Case NOVAS2Functions.Julian_Date
+                    JD = NOVAS.NOVAS2.JulianDate(2010, 9, 4, 5)
+                    rc = 0
+                Case NOVAS2Functions.Local_Planet
+                    rc = NOVAS.NOVAS2.LocalPlanet(Utl.JulianDate, SS_Object, Earth, 0.0, SiteInfo, RA, DEC, Dis)
+                Case NOVAS2Functions.Local_Star
+                    rc = NOVAS.NOVAS2.LocalStar(Utl.JulianDate, Earth, 0.0, Star, SiteInfo, RA, DEC)
+                Case NOVAS2Functions.Make_Cat_Entry
+                    NOVAS.NOVAS2.MakeCatEntry("ABC", "TestStarName", 12345, 7.0, 65.0, 0.0, 0.0, 0.0, RadVel, Star)
+                    rc = 0
+                Case NOVAS2Functions.Mean_Star
+                    rc = NOVAS.NOVAS2.MeanStar(Utl.JulianDate, Earth, RA, DEC, MRA, MDEC)
+                Case NOVAS2Functions.Nutate
+                    rc = NOVAS.NOVAS2.Nutate(Utl.JulianDate, NutationDirection.MeanToTrue, POS, POS2)
+                Case NOVAS2Functions.Nutation_Angles
+                    rc = NOVAS.NOVAS2.NutationAngles(TDB, LongNutation, ObliqueNutation)
+                Case NOVAS2Functions.PNSW
+                    NOVAS.NOVAS2.Pnsw(Utl.JulianDate, Gast, x, y, POS, POS2)
+                    rc = 0
+                Case NOVAS2Functions.Precession
+                    NOVAS.NOVAS2.Precession(Utl.JulianDate, POS, Utl.JulianDate + 100.0, POS2)
+                    rc = 0
+                Case NOVAS2Functions.Proper_Motion
+                    NOVAS.NOVAS2.ProperMotion(Utl.JulianDate, POS, VEL, Utl.JulianDate + 100.0, POS)
+                    rc = 0
+                Case NOVAS2Functions.RADEC2Vector
+                    NOVAS.NOVAS2.RADec2Vector(RA, DEC, Dis, POS)
+                    rc = 0
+                Case NOVAS2Functions.Refract
+                    ZD = NOVAS.NOVAS2.Refract(SiteInfo, 0, 75.0)
+                    rc = 0
+                Case NOVAS2Functions.Set_Body
+                    rc = NOVAS.NOVAS2.SetBody(BodyType.MajorPlanet, Body.Moon, "Moon", SS_Object)
+                Case NOVAS2Functions.Sideral_Time
+                    NOVAS.NOVAS2.SiderealTime(Utl.JulianDate, 0.123, 65.0, Gast)
+                    rc = 0
+                Case NOVAS2Functions.SolarSystem
+                    rc = NOVAS.NOVAS2.SolarSystem(Utl.JulianDate, Body.Earth, Origin.Barycentric, POS, VEL)
+                Case NOVAS2Functions.Spin
+                    NOVAS.NOVAS2.Spin(12.0, POS, POS2)
+                    rc = 0
+                Case NOVAS2Functions.StarVectors
+                    NOVAS.NOVAS2.StarVectors(Star, POS, VEL)
+                    rc = 0
+                Case NOVAS2Functions.Sun_Field
+                    rc = NOVAS.NOVAS2.SunField(POS, POS, POS2)
+                Case NOVAS2Functions.Tdb2Tdt
+                    NOVAS.NOVAS2.Tdb2Tdt(TDB, TdtJD, SecDiff)
+                    rc = 0
+                Case NOVAS2Functions.Terra
+                    NOVAS.NOVAS2.Terra(SiteInfo, ST, POS, VEL)
+                    rc = 0
+                Case NOVAS2Functions.Topo_Planet
+                    rc = NOVAS.NOVAS2.TopoPlanet(Utl.JulianDate, SS_Object, Earth, 0.0, SiteInfo, RA, DEC, Dis)
+                Case NOVAS2Functions.Topo_Star
+                    rc = NOVAS.NOVAS2.TopoStar(Utl.JulianDate, Earth, DeltaT, Star, SiteInfo, RA, DEC)
+                Case NOVAS2Functions.Transform_Cat
+                    NOVAS.NOVAS2.TransformCat(TransformationOption.ChangeEquatorAndEquinoxAndEpoch, Utl.JulianDate, Star, Utl.JulianDate + 1000, CatName, NewCat)
+                    rc = 0
+                Case NOVAS2Functions.Transform_Hip
+                    NOVAS.NOVAS2.TransformHip(Star, NewCat)
+                    rc = 0
+                Case NOVAS2Functions.Vector2RADEC
+                    NOVAS.NOVAS2.RADec2Vector(23.0, 50.0, 100000000, POS)
+                    rc = NOVAS.NOVAS2.Vector2RADec(POS, RA, DEC)
+                Case NOVAS2Functions.Virtual_Planet
+                    rc = NOVAS.NOVAS2.VirtualPlanet(Utl.JulianDate, SS_Object, Earth, RA, DEC, Dis)
+                Case NOVAS2Functions.Virtual_Star
+                    rc = NOVAS.NOVAS2.VirtualStar(Utl.JulianDate, Earth, Star, RA, DEC)
+                Case NOVAS2Functions.Wobble
+                    NOVAS.NOVAS2.Wobble(x, y, POS, POS2)
+                    rc = 0
+                Case NOVAS2Functions.Sun_Eph
+                    'Not in DLL  from Tim
+                    NOVAS.NOVAS2.SunEph(Utl.JulianDate, RA, DEC, Dis)
+                    rc = 0
+            End Select
+            Select Case rc
+                Case 0
+                    TL.LogMessage("Novas2Static", TestFunction.ToString & " - Passed")
+                    NMatches += 1
+                Case Integer.MaxValue
+                    TL.LogMessage("Novas2Static", TestFunction.ToString & " - Test not implemented")
+                Case Else
+                    Dim Msg As String = "Non zero return code: " & rc
+                    TL.LogMessage("Novas2Static", TestFunction.ToString & " - " & Msg)
+                    NNonMatches += 1
+                    ErrorList.Add("Novas2Static - " & TestFunction.ToString & ": " & Msg)
+            End Select
+
+            Utl.Dispose()
+            Utl = Nothing
+        Catch ex As Exception
+            LogException("NOVAS2StaticTest", ex.ToString)
+        End Try
+    End Sub
+
+
+
+    Sub TransformTest()
+        TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", ToleranceE10)
+        TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", ToleranceE10)
+        TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", ToleranceE10)
+        TL.BlankLine()
+    End Sub
+
+    Sub TransformTest2000(ByVal Name As String, ByVal AstroRAString As String, ByVal AstroDECString As String, ByVal Tolerance As Double)
+        Dim Util As New Util
+        Dim AstroRA, AstroDEC As Double
+        Dim SiteLat, SiteLong, SiteElev As Double
+        Dim T As Transform.Transform = New Transform.Transform
+        Dim Earth As New BodyDescription
+        Dim tjd, RA, DEC As Double
+        Dim star As New CatEntry
+        Dim rc As Short
+        Dim location As New SiteInfo
+
+        'RA and DEC
+        AstroRA = Util.HMSToHours(AstroRAString)
+        AstroDEC = Util.DMSToDegrees(AstroDECString)
+
+
+        'Site parameters
+        SiteElev = 80.0
+        SiteLat = 51.0 + (4.0 / 60.0) + (43.0 / 3600.0)
+        SiteLong = 0.0 - (17.0 / 60.0) - (40.0 / 3600.0)
+
+        'Set up Transform component
+        T.SiteElevation = 80.0
+        T.SiteLatitude = SiteLat
+        T.SiteLongitude = SiteLong
+        T.SiteTemperature = 10.0
+        T.Refraction = False
+
+        'Set up NOVAS parameters
+        tjd = Util.JulianDate
+        Earth.Name = "Earth"
+        Earth.Number = Body.Earth
+        Earth.Type = BodyType.MajorPlanet
+        star.RA = AstroRA
+        star.Dec = AstroDEC
+        location.Height = SiteElev
+        location.Latitude = SiteLat
+        location.Longitude = SiteLong
+        location.Pressure = 1000
+        location.Temperature = 10
+
+        T.SetJ2000(AstroRA, AstroDEC)
+        rc = NOVAS.NOVAS2.TopoStar(tjd, Earth, 0, star, location, RA, DEC) ' Compare to the NOVAS 2 prediction
+        TL.LogMessage("TransformTest", Name & ": Astrometric(" & Util.HoursToHMS(AstroRA, ":", ":", "", 3) & ", " & Util.DegreesToDMS(AstroDEC, ":", ":", "", 2) & _
+                                                 ") Topocentric(" & Util.HoursToHMS(RA, ":", ":", "", 3) & " DEC: " & Util.DegreesToDMS(DEC, ":", ":", "", 2) & ")")
+
+        CompareDouble("TransformTest", Name & " Topocentric RA", T.RATopocentric, RA, Tolerance)
+        CompareDouble("TransformTest", Name & " Topocentric Dec", T.DECTopocentric, DEC, Tolerance)
+
+    End Sub
+
+    Sub NovasComTests()
         Dim JD As Double
-        Dim Util As New ASCOM.Utilities.Util
         Dim EA As New ASCOM.Astrometry.NOVASCOM.Earth
 
-        Const ToleranceE9 As Double = 0.000000001
-        Const ToleranceE10 As Double = 0.0000000001
+        Dim Mercury() As Double = New Double() {-0.146477263357071, -0.739730529540394, -0.275237058490435, _
+                                                -0.146552680905756, -0.73971718813053, -0.275232768188589, _
+                                                -0.144373027430296, -0.740086172152297, -0.275392756115203, _
+                                                -0.146535954004373, -0.739695817952422, -0.27526565650813, _
+                                                -0.144631609584528, -0.740282847942203, -0.274694144671298}
 
-        'Test data for planets obtained from the original 32bit Kepler coponent
-        'The data is for the arbitary test date Thursday, 30 December 2010 09:00:00" 
-        Const TestDate As String = "Thursday, 30 December 2010 09:00:00" ' Arbitary test date used to generate data above, it must conform to the "F" date format for the invariant culture
+        Dim Venus() As Double = New Double() {-0.372100971951828, -0.449343256389233, -0.154902566021356, _
+                                              -0.372134026409355, -0.449318563980132, -0.154894786229779, _
+                                              -0.370822518399929, -0.450260651717891, -0.155303914026952, _
+                                              -0.372117531588399, -0.449297391719315, -0.154927789061455, _
+                                              -0.370858459989012, -0.450324120624622, -0.154965842632926}
+
+        Dim Earth() As Double = New Double() {-0.147896190667482, 0.892857938625284, 0.387075601638547, _
+                                             -0.0173032744107731, -0.00236387487195205, -0.00102513648587834, _
+                                             -0.143537477185852, 0.892578667572019, 0.386954522818712, _
+                                             -0.0173040812547209, -0.00235851019511069, -0.00102281061381548, _
+                                             2455560.875, 1.06091018181116, 23.437861319031, _
+                                             17.3476127157785, -0.0796612008211573, 23.4378391909196}
+
+        Dim Mars() As Double = New Double() {0.693859781031977, -2.07097170353203, -0.942316778727103, _
+                                             0.693632762626122, -2.07103494950845, -0.942344911675691, _
+                                             0.699920307729267, -2.06926836488007, -0.941576391467848, _
+                                             0.693650157043109, -2.07101326327704, -0.942377215846966, _
+                                             0.694585522035482, -2.07602310877394, -0.930591370257697}
+
+        Dim Jupiter() As Double = New Double() {5.05143975731352, -0.264744225667142, -0.237337980646129, _
+                                                5.05143226054377, -0.264839400889264, -0.237391349301542, _
+                                                5.05234611594448, -0.252028458651431, -0.231824986961043, _
+                                                5.05144816590343, -0.264820597160675, -0.237424161148292, _
+                                                5.05236200971188, -0.252009614615973, -0.231857781296635}
+
+        Dim Saturn() As Double = New Double() {-9.26931711919579, -2.66882658902422, -0.715270438185988, _
+                                               -9.2693570741403, -2.66869165249896, -0.715256117911115, _
+                                               -9.26176606870019, -2.69218837105073, -0.725464045762982, _
+                                               -9.2693389177143, -2.66867733760923, -0.71528954188717, _
+                                               -9.26144908836291, -2.69455677562765, -0.720448748375586}
 
         Dim Uranus() As Double = New Double() {20.2306046509148, -0.944778087940209, -0.693874737147122, _
                                                   20.2305809175823, -0.945147799559502, -0.694063183048263, _
@@ -362,80 +925,114 @@ Public Class DiagnosticsForm
                                               2.92662685257385, -31.0323223789174, -10.6311050132883, _
                                               2.99849040874885, -31.0401256627947, -10.5882115993866}
 
-        Dim MercuryPosVecs(,) As Double = New Double(,) {{-0.273826054895093, -0.332907079792611, -0.149433886467295, 0.0168077277855921, -0.0131641564589086, -0.00877483629689174}, _
-                                                         {0.341715100611224, -0.15606206441965, -0.118796704430727, 0.00818341889620433, 0.0231859105741514, 0.0115367662530341}, _
-                                                         {-0.290111477510344, 0.152752021696643, 0.11167615364006, -0.0208610666648984, -0.0207283399022831, -0.00890975564191571}, _
-                                                         {-0.0948016996541467, -0.407064938162915, -0.207618339106762, 0.0218998992953613, -0.00301004943316363, -0.00387841048587606}, _
-                                                         {0.335104649167322, 0.0711444942030144, 0.00326561005720837, -0.0109228475729584, 0.0251353246085599, 0.0145593566074213}}
-
-        Dim Earth() As Double = New Double() {-0.147896190667482, 0.892857938625284, 0.387075601638547, _
-                                              -0.0173032744107731, -0.00236387487195205, -0.00102513648587834, _
-                                              -0.143537477185852, 0.892578667572019, 0.386954522818712, _
-                                              -0.0173040812547209, -0.00235851019511069, -0.00102281061381548, _
-                                              2455560.875, 1.06091018181116, 23.437861319031, _
-                                              17.3476127157785, -0.0796612008211573, 23.4378391909196}
-
         Try
-            Status("Kepler Tests")
+            Status("NovasCom Tests")
             'Create the Julian date corresponding to the arbitary test date
-            JD = Util.DateUTCToJulian(Date.ParseExact(TestDate, "F", System.Globalization.CultureInfo.InvariantCulture))
-            TL.LogMessage("Kepler Tests", "Julian Date = " & JD & " = " & TestDate)
-            CompareDouble("Kepler", "JulianDate", JD, 2455560.875, ToleranceE10)
+            JD = TestJulianDate()
+            TL.LogMessage("NovasCom Tests", "Julian Date = " & JD & " = " & TestDate)
+            CompareDouble("NovasCom", "JulianDate", JD, 2455560.875, ToleranceE10)
 
-            KeplerTest("Uranus", 7, JD, Uranus, ToleranceE9) ' Test Uranus prediction
-            KeplerTest("Neptune", 8, JD, Neptune, ToleranceE10) 'Test Neptune prediction
-            KeplerTest("Pluto", 9, JD, Pluto, ToleranceE10) 'Test Pluto Prediction
-            KepTest("Mercury", Body.Mercury, JD, MercuryPosVecs, ToleranceE10) 'Test Mercury position vectors
+            Dim s As New NOVASCOM.Site
+            s.Height = 80.0
+            s.Latitude = 51.0
+            s.Longitude = 0.0
+            s.Pressure = 1000.0
+            s.Temperature = 10.0
+            Dim pv As New NOVASCOM.PositionVector
+            pv.SetFromSite(s, 11.0)
+            CompareDouble("NovasCom", "SetFromSite X", pv.x, -0.0000259698466733494, ToleranceE10)
+            CompareDouble("NovasCom", "SetFromSite Y", pv.y, 0.00000695859944368407, ToleranceE10)
+            CompareDouble("NovasCom", "SetFromSite Z", pv.z, 0.0000329791401243054, ToleranceE10)
+            CompareDouble("NovasCom", "SetFromSite LightTime", pv.LightTime, 0.000000245746690359414, ToleranceE10)
+
+            Dim st As New NOVASCOM.Star
+            st.Set(9.0, 25.0, 0.0, 0.0, 0.0, 0.0)
+
+            JD = TestJulianDate()
+            pv = st.GetAstrometricPosition(JD)
+            Dim AstroResults() As Double = New Double() {9.0, 25.0, 2062648062470.13, 0.0, 11912861640.6606, -1321861174769.38, 1321861174768.63, 871712738743.913, _
+                                                    9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+            ComparePosVec("NovasCom Astrometric", st, pv, AstroResults, False, ToleranceE10)
+
+            Dim TopoNoReractResults() As Double = New Double() {9.01140781883559, 24.9535152700125, 2062648062470.13, 14.2403113213804, 11912861640.6606, -1326304233902.68, 1318405625773.8, 870195790998.564, _
+                                        9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+            pv = st.GetTopocentricPosition(JD, s, False)
+            ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, True, ToleranceE10)
+            pv = st.GetTopocentricPosition(JD, s, True)
+
+            Dim TopoReractResults() As Double = New Double() {9.01438008140491, 25.0016930437008, 2062648062470.13, 14.3031953401364, 11912861640.6606, -1326809918883.5, 1316857267239.29, 871767977436.204, _
+                                                              9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+
+            ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, True, ToleranceE10)
+
+            NovasComTest("Mercury", Body.Mercury, JD, Mercury, ToleranceE6) 'Test Neptune prediction
+            NovasComTest("Venus", Body.Venus, JD, Venus, ToleranceE7) 'Test Neptune prediction
+            NovasComTest("Mars", Body.Mars, JD, Mars, ToleranceE8) 'Test Neptune prediction
+            NovasComTest("Jupiter", Body.Jupiter, JD, Jupiter, ToleranceE8) 'Test Neptune prediction
+            NovasComTest("Saturn", Body.Saturn, JD, Saturn, ToleranceE9) 'Test Neptune prediction
+            NovasComTest("Uranus", Body.Uranus, JD, Uranus, ToleranceE9) ' Test Uranus prediction
+            NovasComTest("Neptune", Body.Neptune, JD, Neptune, ToleranceE10) 'Test Neptune prediction
+            NovasComTest("Pluto", Body.Pluto, JD, Pluto, ToleranceE10) 'Test Pluto Prediction
 
             Action("Earth")
             EA.SetForTime(JD) ' Test earth properties
-            CompareDouble("Kepler", "Earth BaryPos x", EA.BarycentricPosition.x, Earth(0), ToleranceE10)
-            CompareDouble("Kepler", "Earth BaryPos y", EA.BarycentricPosition.y, Earth(1), ToleranceE10)
-            CompareDouble("Kepler", "Earth BaryPos z", EA.BarycentricPosition.z, Earth(2), ToleranceE10)
-            CompareDouble("Kepler", "Earth BaryVel x", EA.BarycentricVelocity.x, Earth(3), ToleranceE10)
-            CompareDouble("Kepler", "Earth BaryVel y", EA.BarycentricVelocity.y, Earth(4), ToleranceE10)
-            CompareDouble("Kepler", "Earth BaryVel z", EA.BarycentricVelocity.z, Earth(5), ToleranceE10)
-            CompareDouble("Kepler", "Earth HeliPos x", EA.HeliocentricPosition.x, Earth(6), ToleranceE10)
-            CompareDouble("Kepler", "Earth HeliPos y", EA.HeliocentricPosition.y, Earth(7), ToleranceE10)
-            CompareDouble("Kepler", "Earth HeliPos z", EA.HeliocentricPosition.z, Earth(8), ToleranceE10)
-            CompareDouble("Kepler", "Earth HeliVel x", EA.HeliocentricVelocity.x, Earth(9), ToleranceE10)
-            CompareDouble("Kepler", "Earth HeliVel y", EA.HeliocentricVelocity.y, Earth(10), ToleranceE10)
-            CompareDouble("Kepler", "Earth HeliVel z", EA.HeliocentricVelocity.z, Earth(11), ToleranceE10)
-            CompareDouble("Kepler", "Barycentric Time", EA.BarycentricTime, Earth(12), ToleranceE10)
-            CompareDouble("Kepler", "Equation Of Equinoxes", EA.EquationOfEquinoxes, Earth(13), ToleranceE10)
-            CompareDouble("Kepler", "Mean Obliquity", EA.MeanObliquity, Earth(14), ToleranceE10)
-            CompareDouble("Kepler", "Nutation in Longitude", EA.NutationInLongitude, Earth(15), ToleranceE10)
-            CompareDouble("Kepler", "Nutation in Obliquity", EA.NutationInObliquity, Earth(16), ToleranceE10)
-            CompareDouble("Kepler", "True Obliquity", EA.TrueObliquity, Earth(17), ToleranceE10)
+            CompareDouble("NovasCom", "Earth BaryPos x", EA.BarycentricPosition.x, Earth(0), ToleranceE10)
+            CompareDouble("NovasCom", "Earth BaryPos y", EA.BarycentricPosition.y, Earth(1), ToleranceE10)
+            CompareDouble("NovasCom", "Earth BaryPos z", EA.BarycentricPosition.z, Earth(2), ToleranceE10)
+            CompareDouble("NovasCom", "Earth BaryVel x", EA.BarycentricVelocity.x, Earth(3), ToleranceE10)
+            CompareDouble("NovasCom", "Earth BaryVel y", EA.BarycentricVelocity.y, Earth(4), ToleranceE10)
+            CompareDouble("NovasCom", "Earth BaryVel z", EA.BarycentricVelocity.z, Earth(5), ToleranceE10)
+            CompareDouble("NovasCom", "Earth HeliPos x", EA.HeliocentricPosition.x, Earth(6), ToleranceE10)
+            CompareDouble("NovasCom", "Earth HeliPos y", EA.HeliocentricPosition.y, Earth(7), ToleranceE10)
+            CompareDouble("NovasCom", "Earth HeliPos z", EA.HeliocentricPosition.z, Earth(8), ToleranceE10)
+            CompareDouble("NovasCom", "Earth HeliVel x", EA.HeliocentricVelocity.x, Earth(9), ToleranceE10)
+            CompareDouble("NovasCom", "Earth HeliVel y", EA.HeliocentricVelocity.y, Earth(10), ToleranceE10)
+            CompareDouble("NovasCom", "Earth HeliVel z", EA.HeliocentricVelocity.z, Earth(11), ToleranceE10)
+            CompareDouble("NovasCom", "Barycentric Time", EA.BarycentricTime, Earth(12), ToleranceE10)
+            CompareDouble("NovasCom", "Equation Of Equinoxes", EA.EquationOfEquinoxes, Earth(13), ToleranceE10)
+            CompareDouble("NovasCom", "Mean Obliquity", EA.MeanObliquity, Earth(14), ToleranceE10)
+            CompareDouble("NovasCom", "Nutation in Longitude", EA.NutationInLongitude, Earth(15), ToleranceE10)
+            CompareDouble("NovasCom", "Nutation in Obliquity", EA.NutationInObliquity, Earth(16), ToleranceE10)
+            CompareDouble("NovasCom", "True Obliquity", EA.TrueObliquity, Earth(17), ToleranceE10)
 
             TL.BlankLine()
         Catch ex As Exception
-            LogException("KeplerTests Exception", ex.ToString)
+            LogException("NovasComTests Exception", ex.ToString)
         End Try
         Status("")
     End Sub
 
-    Sub KepTest(ByVal p_Name As String, ByVal p_KepNum As Body, ByVal JD As Double, ByVal Results(,) As Double, ByVal Tolerance As Double)
-        Dim K As New Kepler.Ephemeris
-        Dim POSVEC() As Double
-        Dim u As New Util
-        Dim JDIndex As Integer = 0
-
-        Const STEPSIZE As Double = 1000.0
-
-        For jdate As Double = -2.0 * STEPSIZE To +2.0 * STEPSIZE Step STEPSIZE
-            K.BodyType = BodyType.MajorPlanet
-            K.Number = p_KepNum
-            K.Name = p_Name
-            POSVEC = K.GetPositionAndVelocity(JD + jdate)
-            For i = 0 To 5
-                CompareDouble("Kepler", p_Name & " " & jdate & " PV(" & i & ")", POSVEC(i), Results(JDIndex, i), Tolerance)
-            Next
-            JDIndex += 1
-        Next
+    Sub ComparePosVec(ByVal TestName As String, ByVal st As NOVASCOM.Star, ByVal pv As NOVASCOM.PositionVector, ByVal Results() As Double, ByVal TestAzEl As Boolean, ByVal Tolerance As Double)
+        CompareDouble(TestName, "RA Pos", pv.RightAscension, Results(0), Tolerance)
+        CompareDouble(TestName, "DEC Pos", pv.Declination, Results(1), Tolerance)
+        CompareDouble(TestName, "Dist", pv.Distance, Results(2), Tolerance)
+        If TestAzEl Then
+            CompareDouble(TestName, "Elev", pv.Elevation, Results(3), Tolerance)
+        End If
+        CompareDouble(TestName, "LightT", pv.LightTime, Results(4), Tolerance)
+        CompareDouble(TestName, "x", pv.x, Results(5), Tolerance)
+        CompareDouble(TestName, "y", pv.y, Results(6), Tolerance)
+        CompareDouble(TestName, "z", pv.z, Results(7), Tolerance)
+        CompareDouble(TestName, "RA", st.RightAscension, Results(8), Tolerance)
+        CompareDouble(TestName, "DEC", st.Declination, Results(9), Tolerance)
+        CompareDouble(TestName, "Number", st.Number, Results(10), Tolerance)
+        CompareDouble(TestName, "Parallax", st.Parallax, Results(11), Tolerance)
+        CompareDouble(TestName, "PrMoDec", st.ProperMotionDec, Results(12), Tolerance)
+        CompareDouble(TestName, "PrMoRA", st.ProperMotionRA, Results(13), Tolerance)
+        CompareDouble(TestName, "RadVel", st.RadialVelocity, Results(14), Tolerance)
     End Sub
 
-    Sub KeplerTest(ByVal p_Name As String, ByVal p_Num As Double, ByVal JD As Double, ByVal Results() As Double, ByVal Tolerance As Double)
+    Function TestJulianDate() As Double
+        'Create the Julian date corresponding to the arbitary test date
+        Dim Util As New ASCOM.Utilities.Util
+        Dim JD As Double
+        JD = Util.DateUTCToJulian(Date.ParseExact(TestDate, "F", System.Globalization.CultureInfo.InvariantCulture))
+        Util.Dispose()
+        Util = Nothing
+        Return JD
+    End Function
+
+    Sub NovasComTest(ByVal p_Name As String, ByVal p_Num As Double, ByVal JD As Double, ByVal Results() As Double, ByVal Tolerance As Double)
         Dim pl As New NOVASCOM.Planet
         Dim K, KE As New Kepler.Ephemeris
 
@@ -460,33 +1057,66 @@ Public Class DiagnosticsForm
             pl.Type = BodyType.MajorPlanet
 
             pv = pl.GetAstrometricPosition(JD)
-            CompareDouble("Kepler", p_Name & " Astro x", pv.x, Results(0), Tolerance)
-            CompareDouble("Kepler", p_Name & " Astro y", pv.y, Results(1), Tolerance)
-            CompareDouble("Kepler", p_Name & " Astro z", pv.z, Results(2), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Astro x", pv.x, Results(0), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Astro y", pv.y, Results(1), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Astro z", pv.z, Results(2), Tolerance)
 
             pv = pl.GetVirtualPosition(JD)
-            CompareDouble("Kepler", p_Name & " Virtual x", pv.x, Results(3), Tolerance)
-            CompareDouble("Kepler", p_Name & " Virtual y", pv.y, Results(4), Tolerance)
-            CompareDouble("Kepler", p_Name & " Virtual z", pv.z, Results(5), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Virtual x", pv.x, Results(3), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Virtual y", pv.y, Results(4), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Virtual z", pv.z, Results(5), Tolerance)
 
             pv = pl.GetApparentPosition(JD)
-            CompareDouble("Kepler", p_Name & " Apparent x", pv.x, Results(6), Tolerance)
-            CompareDouble("Kepler", p_Name & " Apparent y", pv.y, Results(7), Tolerance)
-            CompareDouble("Kepler", p_Name & " Apparent z", pv.z, Results(8), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Apparent x", pv.x, Results(6), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Apparent y", pv.y, Results(7), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Apparent z", pv.z, Results(8), Tolerance)
 
             pv = pl.GetLocalPosition(JD, site)
-            CompareDouble("Kepler", p_Name & " Local x", pv.x, Results(9), Tolerance)
-            CompareDouble("Kepler", p_Name & " Local y", pv.y, Results(10), Tolerance)
-            CompareDouble("Kepler", p_Name & " Local z", pv.z, Results(11), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Local x", pv.x, Results(9), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Local y", pv.y, Results(10), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Local z", pv.z, Results(11), Tolerance)
 
             pv = pl.GetTopocentricPosition(JD, site, True)
-            CompareDouble("Kepler", p_Name & " Topo x", pv.x, Results(12), Tolerance)
-            CompareDouble("Kepler", p_Name & " Topo y", pv.y, Results(13), Tolerance)
-            CompareDouble("Kepler", p_Name & " Topo z", pv.z, Results(14), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Topo x", pv.x, Results(12), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Topo y", pv.y, Results(13), Tolerance)
+            CompareDouble("NovasCom", p_Name & " Topo z", pv.z, Results(14), Tolerance)
             Action("")
         Catch ex As Exception
-            LogException("NovComTest Exception", ex.ToString)
+            LogException("NovasComTest Exception", ex.ToString)
         End Try
+    End Sub
+
+    Sub KeplerTests()
+        Dim JD As Double
+        Dim MercuryPosVecs(,) As Double = New Double(,) {{-0.273826054895093, -0.332907079792611, -0.149433886467295, 0.0168077277855921, -0.0131641564589086, -0.00877483629689174}, _
+                                                 {0.341715100611224, -0.15606206441965, -0.118796704430727, 0.00818341889620433, 0.0231859105741514, 0.0115367662530341}, _
+                                                 {-0.290111477510344, 0.152752021696643, 0.11167615364006, -0.0208610666648984, -0.0207283399022831, -0.00890975564191571}, _
+                                                 {-0.0948016996541467, -0.407064938162915, -0.207618339106762, 0.0218998992953613, -0.00301004943316363, -0.00387841048587606}, _
+                                                 {0.335104649167322, 0.0711444942030144, 0.00326561005720837, -0.0109228475729584, 0.0251353246085599, 0.0145593566074213}}
+        Status("Kepler Tests")
+        JD = TestJulianDate()
+        KeplerTest("Mercury", Body.Mercury, JD, MercuryPosVecs, ToleranceE10) 'Test Mercury position vectors
+        TL.BlankLine()
+    End Sub
+
+    Sub KeplerTest(ByVal p_Name As String, ByVal p_KepNum As Body, ByVal JD As Double, ByVal Results(,) As Double, ByVal Tolerance As Double)
+        Dim K As New Kepler.Ephemeris
+        Dim POSVEC() As Double
+        Dim u As New Util
+        Dim JDIndex As Integer = 0
+
+        Const STEPSIZE As Double = 1000.0
+
+        For jdate As Double = -2.0 * STEPSIZE To +2.0 * STEPSIZE Step STEPSIZE
+            K.BodyType = BodyType.MajorPlanet
+            K.Number = p_KepNum
+            K.Name = p_Name
+            POSVEC = K.GetPositionAndVelocity(JD + jdate)
+            For i = 0 To 5
+                CompareDouble("Kepler", p_Name & " " & jdate & " PV(" & i & ")", POSVEC(i), Results(JDIndex, i), Tolerance)
+            Next
+            JDIndex += 1
+        Next
     End Sub
 
     Private Sub TimerTests()
