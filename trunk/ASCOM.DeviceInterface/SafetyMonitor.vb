@@ -6,7 +6,7 @@ Imports System.Collections
 ''' <summary>
 ''' Defines the ISafetyMonitor Interface
 ''' </summary> 
-<Guid("90F92092-DD68-4AA5-845C-7061F328B73E"), ComVisible(True)> _
+<ComVisible(True), Guid("90F92092-DD68-4AA5-845C-7061F328B73E"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface ISafetyMonitor
 
 #Region "Common Methods"

@@ -6,7 +6,7 @@ Imports System.Collections
 ''' <summary>
 ''' Defines the ISwitch Interface
 ''' </summary> 
-<Guid("E15267DD-E5EB-4a2c-A26E-56B68996A105"), ComVisible(True)> _
+<Guid("E15267DD-E5EB-4a2c-A26E-56B68996A105"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface ISwitch '44C03033-C60E-4101-856C-AAFB0F735F83
 
 #Region "Common Methods"

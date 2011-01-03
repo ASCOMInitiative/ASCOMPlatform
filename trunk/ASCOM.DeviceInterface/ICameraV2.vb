@@ -1,5 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
-Imports ASCOM.Conform
+'Imports ASCOM.Conform
 
 '-----------------------------------------------------------------------
 ' <summary>Defines the ICamera Interface</summary>

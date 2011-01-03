@@ -5,7 +5,7 @@
 ''' <summary>
 ''' Defines the IRotator Interface
 ''' </summary>
-<Guid("692FA48C-4A30-4543-8681-DA0733758F11"), ComVisible(True)> _
+<Guid("692FA48C-4A30-4543-8681-DA0733758F11"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface IRotator '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
 
 #Region "Common Methods"
