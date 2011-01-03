@@ -6,7 +6,7 @@
 ''' <summary>
 ''' Provides universal access to Focuser drivers
 ''' </summary>
-<Guid("E430C8A8-539E-4558-895D-A2F293D946E7"), ComVisible(True)> _
+<Guid("E430C8A8-539E-4558-895D-A2F293D946E7"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface IFocuser 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
 #Region "Common Methods"
     'IAscomDriver Methods
