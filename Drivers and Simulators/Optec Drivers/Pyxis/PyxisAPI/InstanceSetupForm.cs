@@ -49,6 +49,8 @@ namespace PyxisAPI
             {
                 this.Cursor = Cursors.WaitCursor;
                 myPyxis.CreateNewInstance(newNameTb.Text);
+                myPyxis.ReloadSettings(myPyxis.DeviceType);
+
                 listBox1.DataSource = null;
                 listBox1.DataSource = myPyxis.SettingsInstanceNames;
                 listBox1.Refresh();
@@ -165,6 +167,7 @@ namespace PyxisAPI
                     else return;
                 }
                 myPyxis.CurrentInstance = listBox1.SelectedItem.ToString();
+                myPyxis.ReloadSettings(myPyxis.DeviceType);
 
                 // Update the display box for the new current instance
                 CurrentInstanceLBL.Text = myPyxis.CurrentInstance;

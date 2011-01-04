@@ -24,7 +24,8 @@ namespace ASCOM.OptecTCF_S
         public override void Install(System.Collections.IDictionary stateSaver)
         {
             string msg = "Install custom action - Starting registration for COM Interop";
-            Trace.WriteLine(msg);
+            EventLogger.LogMessage(msg, TraceLevel.Info);
+            //Trace.WriteLine(msg);
     
 #if DEBUG
             MessageBox.Show("Attach debugger to this process now, if required", "Custom Action Debug", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);

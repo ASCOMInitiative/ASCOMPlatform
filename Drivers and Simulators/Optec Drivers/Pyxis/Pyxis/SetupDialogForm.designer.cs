@@ -61,7 +61,6 @@ namespace ASCOM.Pyxis
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.SetSkyPA_BTN = new System.Windows.Forms.Button();
-            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.AdjustedTargetPA_TB = new System.Windows.Forms.TextBox();
             this.GoToAdjustedPA_BTN = new System.Windows.Forms.Button();
@@ -76,12 +75,13 @@ namespace ASCOM.Pyxis
             this.RelativeIncrement_NUD = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.picASCOM = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RelativeIncrement_NUD)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -133,7 +133,7 @@ namespace ASCOM.Pyxis
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -278,6 +278,7 @@ namespace ASCOM.Pyxis
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // documentationToolStripMenuItem
             // 
@@ -290,6 +291,7 @@ namespace ASCOM.Pyxis
             this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
             this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.checkForUpdateToolStripMenuItem.Text = "Check for Update";
+            this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
             // 
             // CurrentPosition_LBL
             // 
@@ -357,20 +359,6 @@ namespace ASCOM.Pyxis
             this.SetSkyPA_BTN.Text = "Set Current Sky PA...";
             this.SetSkyPA_BTN.UseVisualStyleBackColor = true;
             this.SetSkyPA_BTN.Click += new System.EventHandler(this.SetSkyPA_BTN_Click);
-            // 
-            // picASCOM
-            // 
-            this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picASCOM.Image = global::ASCOM.Pyxis.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(266, 0);
-            this.picASCOM.Name = "picASCOM";
-            this.picASCOM.Size = new System.Drawing.Size(48, 56);
-            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picASCOM.TabIndex = 3;
-            this.picASCOM.TabStop = false;
-            this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
-            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
             // label4
             // 
@@ -526,6 +514,20 @@ namespace ASCOM.Pyxis
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Relative Move";
             // 
+            // picASCOM
+            // 
+            this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picASCOM.Image = global::ASCOM.Pyxis.Properties.Resources.ASCOM;
+            this.picASCOM.Location = new System.Drawing.Point(266, 0);
+            this.picASCOM.Name = "picASCOM";
+            this.picASCOM.Size = new System.Drawing.Size(48, 56);
+            this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picASCOM.TabIndex = 3;
+            this.picASCOM.TabStop = false;
+            this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
+            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -560,12 +562,12 @@ namespace ASCOM.Pyxis
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RelativeIncrement_NUD)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

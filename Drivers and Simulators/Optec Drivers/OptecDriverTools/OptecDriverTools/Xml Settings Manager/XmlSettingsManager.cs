@@ -395,6 +395,8 @@ namespace Optec
 
         protected void SetPropertyInXml(string propertyName, string newValue)
         {
+            // Reload the file first incase another program modified it...
+            CurrentInstXDoc = XDocument.Load(currentInstanceFilename);
             CurrentInstanceElement.SetElementValue(propertyName, newValue);
             CurrentInstXDoc.Save(currentInstanceFilename);
         }

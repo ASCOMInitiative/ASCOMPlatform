@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Pyxis Rotator Control")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This program can be used to control an Optec Pyxis rotator without the use of ASCOM. This program supports all versions of the standard Optec Pyxis.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Optec Inc.")]
 [assembly: AssemblyProduct("Pyxis Rotator Control")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCopyright("Copyright © Optec Inc. 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

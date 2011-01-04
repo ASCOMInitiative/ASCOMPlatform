@@ -17,6 +17,7 @@ namespace ASCOM.Pyxis
     {
         private bool ExitPositionUpdaterLoop = true;
         private OptecPyxis myPyxis;
+        private NewVersionChecker myNewVersionChecker = new NewVersionChecker();
 
         #region Form Methods
 
@@ -30,6 +31,21 @@ namespace ASCOM.Pyxis
             myPyxis.ConnectionEstablished += new EventHandler(OptecPyxis_ConnectionEstablished);
             myPyxis.ConnectionTerminated += new EventHandler(OptecPyxis_ConnectionTerminated);
             myPyxis.MotionHalted += new EventHandler(OptecPyxis_MotionHalted);
+
+            myNewVersionChecker.NewVersionDetected += new EventHandler(myNewVersionChecker_NewVersionDetected);
+        }
+
+        void myNewVersionChecker_NewVersionDetected(object sender, EventArgs e)
+        {
+            try
+            {
+                Form f = sender as Form;
+                f.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -40,6 +56,9 @@ namespace ASCOM.Pyxis
             myPyxis.ErrorOccurred -= new EventHandler(OptecPyxis_ErrorCodeReceived);
             myPyxis.ConnectionEstablished -= new EventHandler(OptecPyxis_ConnectionEstablished);
             myPyxis.MotionHalted -= new EventHandler(OptecPyxis_MotionHalted);
+
+            myNewVersionChecker.NewVersionDetected -= new EventHandler(myNewVersionChecker_NewVersionDetected);
+
             try
             {
                 myPyxis.Disconnect();
@@ -48,10 +67,26 @@ namespace ASCOM.Pyxis
             base.OnFormClosing(e);
         }
   
-
         private void SetupDialogForm_Shown(object sender, EventArgs e)
         {
-            UpdateFormConnectionTerminated();
+            try
+            {
+                UpdateFormConnectionTerminated();
+
+                // Check for new updates
+                myNewVersionChecker.CheckForNewVersion(
+                    System.Reflection.Assembly.GetExecutingAssembly(),
+                    "PyxisPrograms",
+                    false,
+                    this.Icon
+                    );
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         #endregion
@@ -60,6 +95,35 @@ namespace ASCOM.Pyxis
 
         private void cmdOK_Click(object sender, EventArgs e)
         {
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Sorry. No documentation is available at this time.");
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check for new updates
+                myNewVersionChecker.CheckForNewVersion(
+                    System.Reflection.Assembly.GetExecutingAssembly(),
+                    "PyxisPrograms",
+                    true,
+                    this.Icon
+                    );
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -576,10 +640,7 @@ namespace ASCOM.Pyxis
 
         #endregion
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        
 
     }
 
