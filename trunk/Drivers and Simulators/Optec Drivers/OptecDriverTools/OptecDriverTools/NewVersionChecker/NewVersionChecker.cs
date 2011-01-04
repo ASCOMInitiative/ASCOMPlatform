@@ -22,14 +22,27 @@ namespace Optec
 
         public void CheckForNewVersion(Assembly ExecutingAssembly, string ProductName, bool ShowResultsIfUpToDate, Icon IconImg)
         {
-            this.iconImg = IconImg;
-            AssemblyName asmName = ExecutingAssembly.GetName();
-            this.asmVersion = asmName.Version;
-            this.productName = ProductName;
-            showResultsIfUpToDate = ShowResultsIfUpToDate;
-            ThreadStart ts = new ThreadStart(checkForNewerVersion);
-            versionCheckerThread = new Thread(ts);
-            versionCheckerThread.Start();
+            try
+            {
+                this.iconImg = IconImg;
+                AssemblyName asmName = ExecutingAssembly.GetName();
+                this.asmVersion = asmName.Version;
+                this.productName = ProductName;
+                showResultsIfUpToDate = ShowResultsIfUpToDate;
+                if (showResultsIfUpToDate)
+                    checkForNewerVersion();
+                else
+                {
+                    ThreadStart ts = new ThreadStart(checkForNewerVersion);
+                    versionCheckerThread = new Thread(ts);
+                    versionCheckerThread.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                EventLogger.LogMessage(ex);
+                throw;
+            }
             
         }
 
@@ -56,7 +69,10 @@ namespace Optec
             else
             {
                 // Unable to find latest verison
-
+                if (showResultsIfUpToDate)
+                {
+                    throw new ApplicationException("Unable to connect to Optec Server. Is your PC connected to the internet?");
+                }
             }
         }
 
@@ -72,7 +88,7 @@ namespace Optec
                 url = v.Value;
                 return true;
             }
-            catch
+            catch 
             {
                 return false;
             }

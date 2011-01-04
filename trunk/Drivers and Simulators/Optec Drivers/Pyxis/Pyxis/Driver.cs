@@ -49,7 +49,7 @@ namespace ASCOM.Pyxis
         //
         private static string s_csDriverID = "ASCOM.Pyxis.Rotator";
         // TODO Change the descriptive string for your driver then remove this line
-        private static string s_csDriverDescription = "Pyxis Rotator";
+        private static string s_csDriverDescription = "Optec Pyxis Rotator - Beta";
 
         private OptecPyxis myPyxis;
 
@@ -178,16 +178,7 @@ namespace ASCOM.Pyxis
             try
             {
                 EventLogger.LogMessage("Move Requested to Position " + Position.ToString(), System.Diagnostics.TraceLevel.Info);
-                if (Position >= 1000000)
-                {
-                    // This is a special case for the Pyxis that when used by the Optec Derotation program
-                    // that tells the rotator to move just one step.
-
-                    myPyxis.Derotate1Step();
-                    return;
-                }
-
-                // Now check for normal values 
+                // Check for normal values 
                 if (Position <= -360 || Position >= 360)
                 {
                     throw new ASCOM.InvalidValueException("Move", Position.ToString(), "-359.99 through 359.99");
@@ -220,22 +211,30 @@ namespace ASCOM.Pyxis
                 if (Position < 0 || Position >= 360)
                 {
                     // Add "tricky" support for Pyxis to be able to move in increments smaller than 1°
-                    if (Position == -7171985)
+                    if (Position == -12345)
                     {
-                        myPyxis.Derotate1Step();
+                        if (myPyxis.DeviceType == OptecPyxis.DeviceTypes.ThreeInch)
+                            throw new ApplicationException("Optec Pyxis3 - MoveAbsolute");
+                        else throw new ApplicationException("Optec Pyxis2 - MoveAbsolute");
+                    }
+                    else if (Position == -12346)
+                    {
+                        myPyxis.Derotate1Step(true);
+                        return;
+                    }
+                    else if (Position == -12347)
+                    {
+                        myPyxis.Derotate1Step(false);
+                        return;
                     }
                     else
                     {
-                        string msg = "";
-                        if (myPyxis.DeviceType == OptecPyxis.DeviceTypes.ThreeInch)
-                            msg = "Optec Pyxis3 - MoveAbsolute";
-                        else msg = "Optec Pyxis2 - MoveAbsolute";
-                        throw new ASCOM.InvalidValueException(msg, Position.ToString(), "0 through 359.99");
+                        throw new ASCOM.InvalidValueException("MoveAbsolute", Position.ToString(), "0 through 359.99");
                     }
                 }
+
                 if (myPyxis.CurrentAdjustedPA != (int)Position)
                     myPyxis.CurrentAdjustedPA = (int)Position;
-               // while (OptecPyxis.IsMoving) { System.Windows.Forms.Application.DoEvents(); }
             }
             catch (Exception ex)
             {

@@ -85,6 +85,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionVersion.cs">
+      <Link>SolutionVersion.cs</Link>
+    </Compile>
     <Compile Include="Driver.cs" />
     <Compile Include="InstallerCustomActions.cs">
       <SubType>Component</SubType>

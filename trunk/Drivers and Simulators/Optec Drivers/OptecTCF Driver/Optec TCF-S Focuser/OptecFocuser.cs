@@ -514,7 +514,14 @@ namespace Optec_TCF_S_Focuser
             string response = "";
             bool success = false;
 
-            while (DateTime.Now.Subtract(start).TotalSeconds < 5)
+            try
+            {
+                mySerialCommunicator.SendCommand("FWAKEE", 200);
+            }
+            catch { }
+            mySerialCommunicator.ClearBuffers();
+			
+			while (DateTime.Now.Subtract(start).TotalSeconds < 5)
             {
                 try
                 {

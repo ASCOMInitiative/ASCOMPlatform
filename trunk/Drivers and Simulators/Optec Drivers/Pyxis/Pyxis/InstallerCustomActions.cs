@@ -25,7 +25,6 @@ namespace ASCOM.Pyxis
         {
             string msg = "Install custom action - Starting registration for COM Interop";
             Trace.WriteLine(msg);
-            
 #if DEBUG
             MessageBox.Show("Attach debugger to this process now, if required", "Custom Action Debug", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 

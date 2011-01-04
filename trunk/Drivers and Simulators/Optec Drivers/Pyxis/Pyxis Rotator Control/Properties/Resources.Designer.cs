@@ -74,6 +74,13 @@ namespace Pyxis_Rotator_Control.Properties {
             }
         }
         
+        internal static System.Drawing.Icon Rotator {
+            get {
+                object obj = ResourceManager.GetObject("Rotator", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Rotator_ERROR {
             get {
                 object obj = ResourceManager.GetObject("Rotator_ERROR", resourceCulture);

@@ -51,7 +51,7 @@ namespace PyxisAPI
         /// <summary>
         ///  STATIC CONTRUCTOR FOR OptecPyxis CLASS
         /// </summary>
-        public OptecPyxis()
+        public OptecPyxis() : base(DeviceTypes.TwoInch)
         {
             currentDeviceState = DeviceStates.Disconnected;
 #if DEBUG
@@ -161,10 +161,10 @@ namespace PyxisAPI
                 mySerialPort = new SerialPort(SavedSerialPortName, 19200, Parity.None, 8, StopBits.One);
                 mySerialPort.NewLine = "\n\r";
             }
-            else mySerialPort.PortName = SavedSerialPortName;
-
+            
             if (!mySerialPort.IsOpen)
             {
+                mySerialPort.PortName = SavedSerialPortName;
                 mySerialPort.Open();
             }
 
@@ -344,6 +344,8 @@ namespace PyxisAPI
                 else currentDeviceType = DeviceTypes.ThreeInch;
             }
             else currentDeviceType = DeviceTypes.TwoInch;
+
+            ReloadSettings(currentDeviceType);
         }
 
         /// <summary>
@@ -952,9 +954,47 @@ namespace PyxisAPI
         /// WARNING: This not update the CurrentPosition of the rotator and rotator will be out of home.
         /// This moves the rotator one step in the specified direction
         /// </summary>
-        public void Derotate1Step()
+        public void Derotate1Step(bool positive)
         {
             // TODO: Make sure this always moves in the correct direction based on the device type
+            
+
+            // 1. Check for connected
+            if (checkDeviceState() != DeviceStates.Connected)
+            {
+                throw new ApplicationException("Device must be connected in home the device");
+            }
+
+            // 1.5 Check if moving
+            if (isMoving)
+            {
+                throw new ApplicationException("Cannot home the device while it is already moving.");
+            }
+
+            // Determine the command to send
+            string cmd = "";
+            if((positive == true) && ( Reverse == false))
+                cmd = "CX0001";
+            else if((positive == false) && ( Reverse == false))
+                cmd = "CX0011";
+            else if((positive == true) && ( Reverse == true))
+                cmd = "CX0011";
+            else if((positive == false) && ( Reverse == true))
+                cmd = "CX0001";
+
+            // 2. Send the command to home
+            mySerialPort.DiscardInBuffer();
+            mySerialPort.DiscardOutBuffer();
+            mySerialPort.Write(cmd);
+            mySerialPort.ReadTimeout = 800;
+            try
+            {
+                mySerialPort.ReadTo("!");
+            }
+            catch (TimeoutException)
+            {
+                throw new ApplicationException("Device did not detorate one step.");
+            }
         }
 
         /// <summary>

@@ -17,6 +17,11 @@ namespace Optec
             this.Icon = IconImg;
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         
     }
 }

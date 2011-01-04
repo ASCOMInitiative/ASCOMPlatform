@@ -16,7 +16,7 @@ namespace Pyxis_Rotator_Control
     public partial class MainForm : Form
     {
         private bool ExitPositionUpdaterLoop = true;
-
+        private NewVersionChecker myNewVersionChecker = new NewVersionChecker();
         private OptecPyxis myPyxis = new OptecPyxis();
 
         #region Form Methods
@@ -31,6 +31,8 @@ namespace Pyxis_Rotator_Control
             myPyxis.ConnectionEstablished += new EventHandler(OptecPyxis_ConnectionEstablished);
             myPyxis.ConnectionTerminated += new EventHandler(OptecPyxis_ConnectionTerminated);
             myPyxis.MotionHalted += new EventHandler(OptecPyxis_MotionHalted);
+
+            myNewVersionChecker.NewVersionDetected += new EventHandler(myNewVersionChecker_NewVersionDetected);
 
             skyPADisplayToolStripMenuItem.Checked = Properties.Settings.Default.ViewSkyPADisplay;
             rotatorDiagramToolStripMenuItem.Checked = Properties.Settings.Default.ViewRotatorDiagram;
@@ -47,6 +49,19 @@ namespace Pyxis_Rotator_Control
             this.TopMost = Properties.Settings.Default.AlwaysOnTop;
         }
 
+        void myNewVersionChecker_NewVersionDetected(object sender, EventArgs e)
+        {
+            try
+            {
+                Form f = sender as Form;
+                f.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             myPyxis.ConnectionTerminated -= new EventHandler(OptecPyxis_ConnectionTerminated);
@@ -55,6 +70,9 @@ namespace Pyxis_Rotator_Control
             myPyxis.ErrorOccurred -= new EventHandler(OptecPyxis_ErrorCodeReceived);
             myPyxis.ConnectionEstablished -= new EventHandler(OptecPyxis_ConnectionEstablished);
             myPyxis.MotionHalted -= new EventHandler(OptecPyxis_MotionHalted);
+
+            myNewVersionChecker.NewVersionDetected -= new EventHandler(myNewVersionChecker_NewVersionDetected);
+
             try
             {
                 myPyxis.Disconnect();
@@ -65,8 +83,20 @@ namespace Pyxis_Rotator_Control
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            UpdateFormConnectionTerminated();
-            UpdateFormSize();
+            try
+            {
+                UpdateFormConnectionTerminated();
+                UpdateFormSize();
+
+                myNewVersionChecker.CheckForNewVersion(System.Reflection.Assembly.GetExecutingAssembly(),
+                    "PyxisPrograms",
+                    false,
+                    Properties.Resources.Rotator);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         #endregion
@@ -89,6 +119,44 @@ namespace Pyxis_Rotator_Control
             {
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void addEditRemoveInstanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InstanceSetupForm frm = new InstanceSetupForm(this.myPyxis);
+            frm.ShowDialog();
+        }
+
+        private void parkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Park_BTN_Click(this, EventArgs.Empty);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox1 x = new AboutBox1();
+            x.ShowDialog();
+        }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                myNewVersionChecker.CheckForNewVersion(
+                        System.Reflection.Assembly.GetExecutingAssembly(),
+                        "PyxisPrograms",
+                        true,
+                        Properties.Resources.Rotator);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Connection Error");
+            }
+        }
+
+        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Sorry. No documentation is available at this time.", "No Docs");
         }
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -786,7 +854,7 @@ namespace Pyxis_Rotator_Control
 
         private void UpdateFormDeviceInSleepMode()
         {
-
+            RotatorDiagram.Enabled = false;
             sleepToolStripMenuItem.Enabled = false;
             Park_BTN.Enabled = false;
             parkToolStripMenuItem.Enabled = false;
@@ -846,16 +914,7 @@ namespace Pyxis_Rotator_Control
 
         #endregion
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void addEditRemoveInstanceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            InstanceSetupForm frm = new InstanceSetupForm(this.myPyxis);
-            frm.ShowDialog();
-        }
+        
 
     }
 

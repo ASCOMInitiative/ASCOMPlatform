@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_096B67CF8F923025DCBEE3B0546F6EB3"
+        "OwnerKey" = "8:_9C7343D3E10F7469F49CD79A6D9FC208"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0A91E3EE6350B0D785C3B60D674AA3A7"
         "OwnerKey" = "8:_04CC55E8B4DD4D9590E3460414B392BB"
         "MsmSig" = "8:_UNDEFINED"
@@ -35,6 +41,18 @@
         {
         "MsmKey" = "8:_0A91E3EE6350B0D785C3B60D674AA3A7"
         "OwnerKey" = "8:_05FD0E92637D4CC8A4571FEF6A58F259"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3EA358FEDDFE48D0920A3531DC464A18"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_429DB67BDB130FACC3ED954626C50904"
+        "OwnerKey" = "8:_90280F33BF80C8F5A1711CA347D38DBF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -166,7 +184,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\OptecTCF-S_Installer_x64.msi"
+        "OutputFilename" = "8:Release\\OptecTCF-S_Installer_x64(5.3.2).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -268,6 +286,20 @@
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_E49BEEABE8BF41E1A333956B4F707A82"
+            {
+            "Name" = "8:Primary output from Optec TCF-S Focuser (Active)"
+            "Condition" = "8:INSTALL_FOCUSER"
+            "Object" = "8:_04CC55E8B4DD4D9590E3460414B392BB"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_A68FB488_0189_4FB0_B29E_0C7F06060D6E"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {
@@ -291,6 +323,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_096B67CF8F923025DCBEE3B0546F6EB3"
+            {
+            "SourcePath" = "8:ASCOM.Utilities.tlb"
+            "TargetName" = "8:ASCOM.Utilities.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0A91E3EE6350B0D785C3B60D674AA3A7"
             {
             "AssemblyRegister" = "3:1"
@@ -319,6 +371,46 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3EA358FEDDFE48D0920A3531DC464A18"
+            {
+            "SourcePath" = "8:..\\RevisionHistory.txt"
+            "TargetName" = "8:RevisionHistory.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_393CB8BA09414F18BAC008B345F47F22"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_429DB67BDB130FACC3ED954626C50904"
+            {
+            "SourcePath" = "8:AscomMasterInterfaces.tlb"
+            "TargetName" = "8:AscomMasterInterfaces.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_1C4CC00E43EE4C97B813519D0660D7F6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -599,15 +691,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec TCF-S Programs (64 Bit)"
-        "ProductCode" = "8:{207103BC-8B67-42BB-8431-0802E9ADA901}"
-        "PackageCode" = "8:{B7842FAF-B236-4964-A7D5-053EAA5720E7}"
+        "ProductCode" = "8:{27827CFF-8E20-430C-BA06-33079201C326}"
+        "PackageCode" = "8:{20AFA1EC-86B5-4594-9559-5686115EDB40}"
         "UpgradeCode" = "8:{DF502D19-C0EE-487E-A73B-CB13D898853D}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:5.3.1"
+        "ProductVersion" = "8:5.3.2"
         "Manufacturer" = "8:Optec Inc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.optecinc.com"

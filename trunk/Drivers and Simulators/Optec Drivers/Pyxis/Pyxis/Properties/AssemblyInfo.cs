@@ -11,8 +11,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("ASCOM Rotator Driver for Pyxis")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyProduct("Optec Pyxis ASCOM Driver")]
+[assembly: AssemblyCopyright("Copyright © Optec Inc. 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

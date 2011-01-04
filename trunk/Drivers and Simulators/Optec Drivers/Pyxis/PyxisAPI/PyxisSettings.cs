@@ -16,11 +16,28 @@ namespace PyxisAPI
         }
         private int skyPAOffset = 0;
         private int stepTime = 8;
+        private bool StepTimeIsDefault = true;
+        private OptecPyxis.DeviceTypes deviceType;
 
-        public PyxisSettings() : base("Pyxis")
+        public PyxisSettings(OptecPyxis.DeviceTypes type) : base("Pyxis")
         {
+            ReloadSettings(type);           
+        }
+
+        public void ReloadSettings(OptecPyxis.DeviceTypes type)
+        {
+            deviceType = type;
             skyPAOffset = int.Parse(GetPropertyFromXml(XmlPropNames.SkyPAOffset.ToString(), "0"));
-            stepTime = int.Parse(GetPropertyFromXml(XmlPropNames.StepTime.ToString(), "8"));
+            string stepTimeString = GetPropertyFromXml(XmlPropNames.StepTime.ToString(), "Default");
+            if (stepTimeString == "Default")
+            {
+                StepTimeIsDefault = true;
+            }
+            else
+            {
+                StepTimeIsDefault = false;
+                stepTime = int.Parse(stepTimeString);
+            }
         }
   
         public string SavedSerialPortName
@@ -53,8 +70,19 @@ namespace PyxisAPI
 
         public int StepTime
         {
-            get { return stepTime; }
-            set {
+            get 
+            {
+                if (StepTimeIsDefault)
+                {
+                    if (deviceType == OptecPyxis.DeviceTypes.TwoInch)
+                        return 8;
+                    else return 3;
+                }
+                else return stepTime; 
+            }
+            set 
+            {
+                StepTimeIsDefault = false;
                 stepTime = value;
                 SetPropertyInXml(XmlPropNames.StepTime.ToString(), value.ToString()); 
             }
