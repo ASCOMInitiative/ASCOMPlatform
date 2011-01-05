@@ -30,29 +30,29 @@ namespace ASCOM
 		}
 
         /// <summary>
-        /// Added to keep Code Analysis happy
+        /// Create a new exception
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Exception description</param>
         public SlavedException(string message)
             : base(message, ErrorCodes.InvalidWhileSlaved)
         {
         }
 
         /// <summary>
-        /// Added to keep Code Analysis happy
+        /// Create a new exception
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="inner"></param>
+        /// <param name="message">Exception description</param>
+        /// <param name="inner">Underlying exception that caused this exception to be thrown.</param>
         public SlavedException(string message, Exception inner)
             : base(message, ErrorCodes.InvalidWhileSlaved, inner)
         {
         }
 
         /// <summary>
-        /// Added to keep Code Analysis happy
+        /// Create a new exception
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
+        /// <param name="info">Information required to serialise the exception</param>
+        /// <param name="context">Information of the serialising stream context.</param>
         protected SlavedException(SerializationInfo info, 
          StreamingContext context) : base(info, context)
         {

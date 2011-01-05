@@ -31,19 +31,19 @@ namespace ASCOM
 		}
 
         /// <summary>
-        /// Keeps Code Analysis happy
+        /// Create a new exception
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Exception description</param>
         public ParkedException(string message)
             : base(message, ErrorCodes.InvalidWhileParked)
         {
         }
 
         /// <summary>
-        /// Keeps Code Analysis happy
+        /// Create a new exception
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="inner"></param>
+        /// <param name="message">Exception description</param>
+        /// <param name="inner">Underlying exception that caused this exception to be thrown.</param>
         public ParkedException(string message, Exception inner)
             : base(message, ErrorCodes.InvalidWhileParked, inner)
         {
