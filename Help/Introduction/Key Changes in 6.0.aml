@@ -25,7 +25,6 @@
 	  						<listItem>DriverInfo - Long description of the driver controlling the device</listItem>
 	  						<listItem>DriverVersion - m.n format driver version number</listItem>
 	  						<listItem>InterfaceVersion - Version number of the ASCOM interface that the driver supports</listItem>
-	  						<listItem>LastResult ??? TBD - Need Info from Bob and Doug ???</listItem>
 	  						<listItem>Name - Short display name of the driver</listItem>
 	  						<listItem>SetupDialog - DIsplays the driver / device configuration screen</listItem>
 	  						<listItem>SupportedActions - List of actions supported by this device</listItem>
@@ -36,31 +35,6 @@
   				<listItem>Tool to tell you when updated components are available</listItem>  	
   				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
   				<listItem>NOVAS2 and NOVAS3 components now have DeltaT methods valid for the year 1650 to 2050.</listItem>
-  			</list>
-      	</content>
-    </section>
-
-    <section address="KeyChangesin6.0Dev">
-     	<title>Key Changes in 5.5 - For Developers</title>
-      	<content>
-      		<list class="bullet">
-     			<listItem>New Driver Templates</listItem>
-     			<listItem>Settings Provider component</listItem>
-     			<listItem>Full .NET implementation of NOVAS3</listItem>
-  				<listItem>ASCOM Controls - reusbale components that can be embedded in forms to easedevelopment of common tasks
-  					<list class="bullet">
-  						<listItem>Chooser</listItem>
-  						<listItem>LED Indicator - a simple red / green indicator supporting various blink cadences</listItem>
-  						<listItem>Annunciator - Displays status with a standard look and feel</listItem>
-  						<listItem>Any others??</listItem>
-  					</list>
-  				</listItem>
-     			<listItem>Separate developer support install</listItem>
-     			<listItem>Support for early COM binding, introdued in Platform 5 removed to ease on-going platform development</listItem>
-     			<listItem>Enhanced Client Toolkit that can handle Platform 5 and Platform 6 conformant drivers.</listItem>     			
-     			<listItem>Enhanced version of Conform to confirm adherence to the new Platform 6 interfaces</listItem>
-     			<listItem></listItem>
-     			<listItem></listItem>     			
   			</list>
       	</content>
     </section>
