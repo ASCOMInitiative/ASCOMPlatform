@@ -22,7 +22,6 @@ Friend Class ChooserForm
         Dim cb As System.Windows.Forms.ComboBox
         Dim sDescription As String = ""
         Dim TraceFileName As String
-        Dim Drivers32bit As Generic.SortedList(Of String, String)
         Dim Description As String
         '
         ' Enumerate the available ASCOM scope drivers, and
@@ -32,14 +31,6 @@ Friend Class ChooserForm
         'MsgBox("ChooserformLoad Start")
         Try
             ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-            Try 'Get the list of 32bit only drivers
-                Drivers32bit = ProfileStore.EnumProfile(DRIVERS_32BIT)
-            Catch ex1 As Exception
-                'Ignore any exceptions from this call e.g. if there are no 32bit only devices installed
-                'Just create an empty list
-                Drivers32bit = New Generic.SortedList(Of String, String)
-            End Try
-
             Try 'Get the list of drivers of this device type
                 m_Drivers = ProfileStore.EnumKeys(m_sDeviceType & " Drivers") ' Get Key-Class pairs
             Catch ex1 As Exception
@@ -226,7 +217,7 @@ Friend Class ChooserForm
         Dim ProfileStore As RegistryAccess
         Dim sProgID As String = ""
         Dim buf As String
-        Dim Drivers32bit As Generic.SortedList(Of String, String)
+        Dim Drivers32Bit, Drivers64Bit As Generic.SortedList(Of String, String)
 
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
@@ -236,29 +227,45 @@ Friend Class ChooserForm
             'Ignore any exceptions from this call e.g. if there are no 32bit only devices installed
             'Just create an empty list
             Drivers32bit = New Generic.SortedList(Of String, String)
+            LogEvent("ChooserForm", "Exception creating SortedList of 32bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser32BitOnlyException, ex1.ToString)
         End Try
+
+        Try 'Get the list of 64bit only drivers
+            Drivers64Bit = ProfileStore.EnumProfile(DRIVERS_64BIT)
+        Catch ex1 As Exception
+            'Ignore any exceptions from this call e.g. if there are no 64bit only devices installed
+            'Just create an empty list
+            Drivers64Bit = New Generic.SortedList(Of String, String)
+            LogEvent("ChooserForm", "Exception creating SortedList of 64bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser64BitOnlyException, ex1.ToString)
+        End Try
+
 
         If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
             Me.cmdProperties.Enabled = True ' Turn on Properties
             'Find ProgID corresponding to description
             For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
                 If LCase(de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
-                'Also recognise if it has the 32bit warning text prefixed to the description
-                If LCase(DRIVERS_32BIT_WARNING_TEXT & de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
             Next
 
-            If (ApplicationBits() = Bitness.Bits64) And (Drivers32bit.ContainsKey(sProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
+            If (ApplicationBits() = Bitness.Bits64) And (Drivers32Bit.ContainsKey(sProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
                 Me.cmdProperties.Enabled = False ' So prevent access!
                 Me.cmdOK.Enabled = False
                 ToolTip1.Show("This 32bit driver is not compatible with your 64bit application." & vbCrLf & _
                               "Please contact the driver author to see if there is a 64bit compatible version.", cbDriverSelector, 50, -87)
-            Else ' Good to go!
-                ToolTip1.Hide(cbDriverSelector)
-                buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
-                If LCase(buf) = "true" Then
-                    Me.cmdOK.Enabled = True ' This device has been initialized
-                Else
-                    Me.cmdOK.Enabled = False ' Never been initialized
+            Else
+                If (ApplicationBits() = Bitness.Bits32) And (Drivers64Bit.ContainsKey(sProgID)) Then 'This is a 64bit driver being accessed by a 32bit application
+                    Me.cmdProperties.Enabled = False ' So prevent access!
+                    Me.cmdOK.Enabled = False
+                    ToolTip1.Show("This 64bit driver is not compatible with your 32bit application." & vbCrLf & _
+                                  "Please contact the driver author to see if there is a 32bit compatible version.", cbDriverSelector, 50, -87)
+                Else ' Good to go!
+                    ToolTip1.Hide(cbDriverSelector)
+                    buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
+                    If LCase(buf) = "true" Then
+                        Me.cmdOK.Enabled = True ' This device has been initialized
+                    Else
+                        Me.cmdOK.Enabled = False ' Never been initialized
+                    End If
                 End If
             End If
         Else

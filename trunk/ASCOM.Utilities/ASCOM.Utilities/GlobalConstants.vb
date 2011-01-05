@@ -54,9 +54,9 @@ Module GlobalConstants
     Public Const XML_VALUE_ELEMENTNAME As String = "Value"
     Public Const XML_VALUES_ELEMENTNAME As String = "Values"
 
-    'Location of the list of 32bit only drivers
-    Public Const DRIVERS_32BIT As String = "Drivers Not Compatible With 64bit Applications"
-    Public Const DRIVERS_32BIT_WARNING_TEXT As String = "!!32bit Driver!! - "
+    'Location of the lists of 32bit and 64bit only drivers
+    Public Const DRIVERS_32BIT As String = "Drivers Not Compatible With 64bit Applications" ' 32bit only registry location
+    Public Const DRIVERS_64BIT As String = "Drivers Not Compatible With 32bit Applications" ' 64bit only registry location
 
     'Installer Variables
     Public Const INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}"
@@ -74,5 +74,7 @@ Module GlobalConstants
         ChooserSetupFailed = 9
         ChooserDriverFailed = 10
         ChooserException = 11
+        Chooser32BitOnlyException = 12
+        Chooser64BitOnlyException = 13
     End Enum
 End Module

@@ -536,7 +536,9 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, This is a 32bit driver and cannot run on a 64bit system
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 32bit Applications\, List of drivers that are not compatible with 32bit applications
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\, List of drivers that are not compatible with 64bit applications
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, This is a 32bit in-process driver and cannot run within a 64bit application
     Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
