@@ -49,17 +49,17 @@ namespace ASCOM
 		}
 
         /// <summary>
-        /// 
+        /// Create a new exception
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="inner"></param>
+        /// <param name="message">Exception description</param>
+        /// <param name="inner">Underlying exception that caused this exception to be thrown.</param>
         public PropertyNotImplementedException(string message, Exception inner)
             : base(message, inner)
         {
         }
 
         /// <summary>
-        /// 
+        /// Create a new exception
         /// </summary>
         public PropertyNotImplementedException()
             : base(String.Format(CultureInfo.InvariantCulture, csMessage, "", "Unknown"))
@@ -67,9 +67,9 @@ namespace ASCOM
         }
 
         /// <summary>
-        /// 
+        /// Create a new exception
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Exception description</param>
         public PropertyNotImplementedException(string message)
             : base(message)
         {

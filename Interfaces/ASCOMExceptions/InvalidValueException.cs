@@ -51,19 +51,19 @@ namespace ASCOM
 		}
 
         /// <summary>
-        /// Keeps Code Analysis happy
+        /// Create a new exception
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Exception description</param>
         public InvalidValueException(string message)
             : base(message, ErrorCodes.InvalidValue)
         {
         }
 
         /// <summary>
-        /// Keeps Code Analysis happy
+        /// Create a new exception
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="inner"></param>
+        /// <param name="message">Exception description</param>
+        /// <param name="inner">The underlying exception that caused this exception to be thrown.</param>
         public InvalidValueException(string message, Exception inner)
             : base(message, ErrorCodes.InvalidValue, inner)
         {
@@ -105,7 +105,7 @@ namespace ASCOM
         }
 
         /// <summary>
-        /// 
+        /// Create a new exception object
         /// </summary>
         public InvalidValueException()
             : base(csUnspecified, ErrorCodes.InvalidValue)
