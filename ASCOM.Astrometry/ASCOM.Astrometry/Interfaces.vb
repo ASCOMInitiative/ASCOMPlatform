@@ -742,7 +742,7 @@ Namespace NOVASCOM
     ''' </summary>
     ''' <remarks></remarks>
     <ComVisible(False)> _
-        Public Interface IPositionVectorExtra
+    Public Interface IPositionVectorExtra
         ''' <summary>
         ''' Initialize the PositionVector from a Site object using UTC Julian date
         ''' </summary>
@@ -1065,7 +1065,7 @@ Namespace NOVASCOM
     ''' </summary>
     ''' <remarks></remarks>
     <ComVisible(False)> _
-        Public Interface IVelocityVectorExtra
+    Public Interface IVelocityVectorExtra
         ''' <summary>
         ''' Initialize the VelocityVector from a Site object using UTC Julian Date
         ''' </summary>
@@ -1094,7 +1094,7 @@ Namespace NOVAS
     ''' <remarks>Implemented by the NOVAS2COM component</remarks>
     <Guid("3D201554-007C-47e6-805D-F66D1CA35543"), _
         ComVisible(True)> _
-        Public Interface INOVAS2
+    Public Interface INOVAS2
         ''' <summary>
         ''' Computes the apparent place of a star 
         ''' </summary>

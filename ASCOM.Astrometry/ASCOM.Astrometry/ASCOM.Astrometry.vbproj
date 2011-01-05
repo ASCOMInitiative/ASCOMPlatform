@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AstrometryExceptions.vb" />
+    <Compile Include="DeltaT.vb" />
     <Compile Include="GlobalItems.vb" />
     <Compile Include="Interfaces.vb" />
     <Compile Include="Kepler\KeplerEphemeris.vb" />

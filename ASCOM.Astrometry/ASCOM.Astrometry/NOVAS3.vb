@@ -9,8 +9,8 @@ Namespace NOVAS
     ''' NOVAS was developed by the Astronomical Applications department of the United States Naval 
     ''' Observatory.
     ''' </summary>
-    ''' <remarks>If you wish to explore or utilise NOVAS3 please see the extensive help document 
-    ''' (NOVAS C3.0 Guide.pdf) on the USNO web site at
+    ''' <remarks>If you wish to explore or utilise NOVAS3 please see USNO's extensive help document "NOVAS 3 Users Guide" 
+    ''' (NOVAS C3.0 Guide.pdf) included in the ASCOM Platform Docs start menu folder. The latest revision is also available on the USNO web site at
     ''' <href>http://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas</href>
     ''' in the "C Edition of NOVAS" link. 
     ''' <para>If you use NOVAS, please send an e-mail through this page:
@@ -175,6 +175,10 @@ Namespace NOVAS
                     ' Convert to double()
                     For i As Integer = 0 To NUM_RETURN_VALUES - 1
                         PosVec(i) = BitConverter.ToDouble(Bytes, i * DOUBLE_LENGTH)
+                    Next
+                Else
+                    For i As Integer = 0 To NUM_RETURN_VALUES - 1
+                        PosVec(i) = Double.NaN 'Return invalid values
                     Next
                 End If
             End If
@@ -2233,6 +2237,10 @@ Namespace NOVAS
                                           ByRef Err As Integer) As System.IntPtr
         End Function
 
+        <DllImport(NOVAS32Dll, EntryPoint:="cleaneph")> _
+        Private Shared Sub CleanEph32()
+        End Sub
+
         <DllImport(NOVAS32Dll, EntryPoint:="solarsystem")> _
         Private Shared Function SolarSystem32(ByVal tjd As Double, _
                                               ByVal body As Short, _
@@ -2242,7 +2250,7 @@ Namespace NOVAS
         End Function
 
         <DllImport(NOVAS32Dll, EntryPoint:="State")> _
-         Private Shared Function State32(ByRef Jed As JDHighPrecision, _
+        Private Shared Function State32(ByRef Jed As JDHighPrecision, _
                                          ByVal Target As Target, _
                                          ByRef TargetPos As PosVector, _
                                          ByRef TargetVel As VelVector) As Short
@@ -2267,7 +2275,7 @@ Namespace NOVAS
         End Function
 
         <DllImport(NOVAS32Dll, EntryPoint:="app_star")> _
-           Private Shared Function AppStar32(ByVal JdTt As Double, _
+        Private Shared Function AppStar32(ByVal JdTt As Double, _
                                              ByRef Star As CatEntry3, _
                                              ByVal Accuracy As Accuracy, _
                                              ByRef Ra As Double, _
@@ -2438,7 +2446,7 @@ Namespace NOVAS
         End Sub
 
         <DllImport(NOVAS32Dll, EntryPoint:="gcrs2equ")> _
-         Private Shared Function Gcrs2Equ32(ByVal JdTt As Double, _
+        Private Shared Function Gcrs2Equ32(ByVal JdTt As Double, _
                                             ByVal CoordSys As CoordSys, _
                                             ByVal Accuracy As Accuracy, _
                                             ByVal RaG As Double, _
@@ -2504,7 +2512,7 @@ Namespace NOVAS
         End Sub
 
         <DllImport(NOVAS32Dll, EntryPoint:="local_planet")> _
-         Private Shared Function LocalPlanet32(ByVal JdTt As Double, _
+        Private Shared Function LocalPlanet32(ByVal JdTt As Double, _
                                                ByRef SsBody As Object3Internal, _
                                                ByVal DeltaT As Double, _
                                                ByRef Position As OnSurface, _
@@ -2813,6 +2821,10 @@ Namespace NOVAS
                                           ByRef Err As Integer) As System.IntPtr
         End Function
 
+        <DllImport(NOVAS64Dll, EntryPoint:="cleaneph")> _
+        Private Shared Sub CleanEph64()
+        End Sub
+
         <DllImport(NOVAS64Dll, EntryPoint:="solarsystem")> _
         Private Shared Function SolarSystem64(ByVal tjd As Double, _
                                               ByVal body As Short, _
@@ -2822,7 +2834,7 @@ Namespace NOVAS
         End Function
 
         <DllImport(NOVAS64Dll, EntryPoint:="State")> _
-         Private Shared Function State64(ByRef Jed As JDHighPrecision, _
+        Private Shared Function State64(ByRef Jed As JDHighPrecision, _
                                          ByVal Target As Target, _
                                          ByRef TargetPos As PosVector, _
                                          ByRef TargetVel As VelVector) As Short
@@ -2847,7 +2859,7 @@ Namespace NOVAS
         End Function
 
         <DllImport(NOVAS64Dll, EntryPoint:="app_star")> _
-           Private Shared Function AppStar64(ByVal JdTt As Double, _
+        Private Shared Function AppStar64(ByVal JdTt As Double, _
                                              ByRef Star As CatEntry3, _
                                              ByVal Accuracy As Accuracy, _
                                              ByRef Ra As Double, _
@@ -3018,7 +3030,7 @@ Namespace NOVAS
         End Sub
 
         <DllImport(NOVAS64Dll, EntryPoint:="gcrs2equ")> _
-         Private Shared Function Gcrs2Equ64(ByVal JdTt As Double, _
+        Private Shared Function Gcrs2Equ64(ByVal JdTt As Double, _
                                             ByVal CoordSys As CoordSys, _
                                             ByVal Accuracy As Accuracy, _
                                             ByVal RaG As Double, _
@@ -3084,7 +3096,7 @@ Namespace NOVAS
         End Sub
 
         <DllImport(NOVAS64Dll, EntryPoint:="local_planet")> _
-         Private Shared Function LocalPlanet64(ByVal JdTt As Double, _
+        Private Shared Function LocalPlanet64(ByVal JdTt As Double, _
                                                ByRef SsBody As Object3Internal, _
                                                ByVal DeltaT As Double, _
                                                ByRef Position As OnSurface, _
