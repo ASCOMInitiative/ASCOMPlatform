@@ -87,7 +87,7 @@ namespace ASCOM.DriverAccess
         /// upon StartExposure.
         /// </summary>
         /// <value>BinX sets/gets the X binning value</value>
-        /// <exception>Must throw an exception for illegal binning values</exception>
+        /// <remarks>Must throw an exception for illegal binning values</remarks>
         public short BinX
         {
             get { return Convert.ToInt16(_memberFactory.CallMember(1, "BinX", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
@@ -101,7 +101,7 @@ namespace ASCOM.DriverAccess
         /// upon StartExposure.
         /// </summary>
         /// <value>The bin Y.</value>
-        /// <exception>Must throw an exception for illegal binning values</exception>
+        /// <remarks>Must throw an exception for illegal binning values</remarks>
         public short BinY
         {
             get { return Convert.ToInt16(_memberFactory.CallMember(1, "BinY", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
@@ -113,7 +113,7 @@ namespace ASCOM.DriverAccess
         /// CanControlTemperature is True.
         /// </summary>
         /// <value>The CCD temperature.</value>
-        /// <exception>Must throw exception if data unavailable.</exception>
+        /// <remarks>Must throw exception if data unavailable.</remarks>
         public double CCDTemperature
         {
             get { return Convert.ToDouble(_memberFactory.CallMember(1, "CCDTemperature", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }

@@ -200,10 +200,10 @@ Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ReadOnly Property CanFindHome() As Boolean
 
     ''' <summary>
-    ''' True if this telescope is capable of programmed parking (Park() method)
+    ''' True if this telescope can move the requested axis
     ''' </summary>
-    ''' <param name="Axis"></param>
-    ''' <returns></returns>
+    ''' <param name="Axis">Primary, Secondary or Tertiary axis</param>
+    ''' <returns>Boolean indicating can or can not move the requested axis</returns>
     Function CanMoveAxis(ByVal Axis As TelescopeAxes) As Boolean
 
     ''' <summary>
@@ -525,7 +525,7 @@ Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     Property RightAscensionRate() As Double
 
     ''' <summary>
-    ''' 
+    ''' Sets the telescope's park position to be its current position.
     ''' </summary>
     Sub SetPark()
 
@@ -620,8 +620,8 @@ Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' The TargetRightAscension and TargetDeclination properties are not changed by this method. 
     ''' Raises an error if AtPark is True, or if Tracking is True. 
     ''' </summary>
-    ''' <param name="Azimuth"></param>
-    ''' <param name="Altitude"></param>
+    ''' <param name="Azimuth">Azimuth to which to move</param>
+    ''' <param name="Altitude">Altitude to which to move to</param>
     Sub SlewToAltAzAsync(ByVal Azimuth As Double, ByVal Altitude As Double)
 
     ''' <summary>

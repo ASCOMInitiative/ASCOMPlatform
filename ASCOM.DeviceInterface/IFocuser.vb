@@ -181,11 +181,14 @@ Public Interface IFocuser 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ReadOnly Property MaxStep() As Integer
 
     ''' <summary>
-    ''' Step size (microns) for the focuser.
-    ''' Raises an exception if the focuser does not intrinsically know what the step size is. 
+    '''  Moves the focuser by the specified amount or to the specified position depending on the value of the Absolute property.
     ''' </summary>
-    ''' <param name="val"></param>
-    Sub Move(ByVal val As Integer)
+    ''' <param name="Value">Step distance or absolute position, depending on the value of the Absolute property.</param>
+    ''' <remarks>If the Absolute property is True, then this is an absolute positioning focuser. The Move command tells the focuser 
+    ''' to move to an exact step position, and the Position parameter of the Move() method is an integer between 0 and MaxStep.
+    ''' <para>If the Absolute property is False, then this is a relative positioning focuser. The Move command tells the focuser to move in a relative direction, and the Position parameter of the Move() method (in this case, step distance) is an integer between minus MaxIncrement and plus MaxIncrement.</para>
+    '''</remarks>
+    Sub Move(ByVal Value As Integer)
 
     ''' <summary>
     ''' Current focuser position, in steps.
@@ -197,7 +200,6 @@ Public Interface IFocuser 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' <summary>
     ''' Step size (microns) for the focuser.
     ''' Raises an exception if the focuser does not intrinsically know what the step size is. 
-    ''' 
     ''' </summary>
     ReadOnly Property StepSize() As Double
 

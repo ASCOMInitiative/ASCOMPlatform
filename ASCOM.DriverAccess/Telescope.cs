@@ -203,10 +203,16 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// True if this telescope is capable of programmed parking (Park() method)
+        /// Shows whether the telescope can be controlled about the specified axis via the MoveAxis() method.
         /// </summary>
-        /// <param name="Axis"></param>
-        /// <returns></returns>
+        /// <param name="Axis">True if the telescope can be controlled about the specified axis via the MoveAxis() method.</param>
+        /// <returns>Boolean - True if the telescope can be controlled about the specified axis via the MoveAxis() method. </returns>
+        /// <remarks>See the description of MoveAxis() for more information. The (symbolic) values for TelescopeAxes are:
+        ///<bl>
+        ///<li>axisPrimary 0 Primary axis (e.g., Right Ascension or Azimuth)</li>
+        ///<li>axisSecondary 1 Secondary axis (e.g., Declination or Altitude)</li>
+        ///<li>axisTertiary 2 Tertiary axis (e.g. imager rotator/de-rotator)</li>
+        ///</bl></remarks>
         public bool CanMoveAxis(TelescopeAxes Axis)
         {
             return (bool)memberFactory.CallMember(3, "CanMoveAxis", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });
@@ -623,7 +629,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// 
+        /// Sets the telescope Park position to the current telescope position.
         /// </summary>
         public void SetPark()
         {
@@ -733,8 +739,8 @@ namespace ASCOM.DriverAccess
         /// The TargetRightAscension and TargetDeclination properties are not changed by this method. 
         /// Raises an error if AtPark is True, or if Tracking is True. 
         /// </summary>
-        /// <param name="Azimuth"></param>
-        /// <param name="Altitude"></param>
+        /// <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
+        /// <param name="Altitude">Target altitude (degrees, positive up)</param>
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
             memberFactory.CallMember(3, "SlewToAltAzAsync", new Type[] { typeof(double), typeof(double) }, new object[] { Azimuth, Altitude });

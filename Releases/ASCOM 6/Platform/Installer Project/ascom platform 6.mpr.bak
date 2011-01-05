@@ -745,14 +745,59 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
 $
 1
-4
+0
 FALSE
 C:\projects\ASCOM\InstallerBuilds\
 ASCOM Initiative
-Ascom Platform 6 Alpha 5
+Ascom Platform 6 Alpha 6
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0
@@ -761,14 +806,14 @@ Ascom Platform 6
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{82192181-F274-42F4-99AD-B4479ED92F42}
+{F9E8683B-2ED5-4DAD-B084-C9860EA9C05B}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk/
 http://ascom-standards.org/updates/
 Copyright © 1998-2010, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Alpha5.exe
+ASCOMPlatform6Alpha6.exe
 TRUE
 FALSE
 

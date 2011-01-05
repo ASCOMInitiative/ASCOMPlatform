@@ -480,23 +480,23 @@ Friend Class XMLAccess
                     If ValuesFileName = VALUES_FILENAME Then 'Attempt to recover information from the last good file
                         ValuesFileName = VALUES_FILENAME_ORIGINAL
                         RetryCount = -1
-                        LogEvent("XMLAccess:ReadValues", "Error reading profile on final retry - attempting recovery from previous version", EventLogEntryType.Warning, 4, ex.ToString)
+                        LogEvent("XMLAccess:ReadValues", "Error reading profile on final retry - attempting recovery from previous version", EventLogEntryType.Warning, EventLogErrors.XMLAccessRecoveryPreviousVersion, ex.ToString)
                         TL.LogMessageCrLf("  ReadValues", "Final retry exception - attempting recovery from previous version: " & ex.ToString)
                     Else 'Recovery not possible so throw exception
-                        LogEvent("XMLAccess:ReadValues", "Error reading profile on final retry", EventLogEntryType.Error, 3, ex.ToString)
+                        LogEvent("XMLAccess:ReadValues", "Error reading profile on final retry", EventLogEntryType.Error, EventLogErrors.XMLAccessReadError, ex.ToString)
                         TL.LogMessageCrLf("  ReadValues", "Final retry exception: " & ex.ToString)
                         Throw New ProfilePersistenceException("XMLAccess Exception", ex)
                     End If
 
                 Else
-                    LogEvent("XMLAccess:ReadValues", "Error reading profile - retry: " & RetryCount, EventLogEntryType.Warning, 2, ex.Message)
+                    LogEvent("XMLAccess:ReadValues", "Error reading profile - retry: " & RetryCount, EventLogEntryType.Warning, EventLogErrors.XMLAccessRecoveryPreviousVersion, ex.Message)
                     TL.LogMessageCrLf("  ReadValues", "Retry " & RetryCount & " exception: " & ex.ToString)
                 End If
             End Try
             If ErrorOccurred Then Threading.Thread.Sleep(RETRY_INTERVAL) ' Wait if an error occurred
         Loop Until ReadOK
         If ErrorOccurred Then 'Update the logs as we seem to have got round it
-            LogEvent("XMLAccess:ReadValues", "Recovered from read error OK", EventLogEntryType.SuccessAudit, 1, Nothing)
+            LogEvent("XMLAccess:ReadValues", "Recovered from read error OK", EventLogEntryType.SuccessAudit, EventLogErrors.XMLAccessRecoveredOK, Nothing)
             TL.LogMessage("  ReadValues", "Recovered from read error OK")
         End If
 
@@ -656,7 +656,7 @@ Friend Class XMLAccess
         GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
         If Not GotMutex Then
             TL.LogMessage("GetProfileMutex", "***** WARNING ***** Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters)
-            LogEvent(Method, "Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, 0, Nothing)
+            LogEvent(Method, "Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, EventLogErrors.XMLProfileMutexTimeout, Nothing)
             Throw New ProfilePersistenceException("Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters)
         End If
     End Sub

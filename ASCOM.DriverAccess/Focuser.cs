@@ -23,7 +23,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates a focuser object with the given Prog ID
         /// </summary>
-        /// <param name="focuserId"></param>
+        /// <param name="focuserId">ProgID of the focuser device to be accessed.</param>
         public Focuser(string focuserId) : base(focuserId)
 		{
             memberFactory = base.MemberFactory;
@@ -113,10 +113,10 @@ namespace ASCOM.DriverAccess
         /// Step size (microns) for the focuser.
         /// Raises an exception if the focuser does not intrinsically know what the step size is. 
         /// </summary>
-        /// <param name="val"></param>
-        public void Move(int val)
+        /// <param name="Value">Focuser position to which to move.</param>
+        public void Move(int Value)
         {
-            memberFactory.CallMember(3, "Move", new Type[] { typeof(int) }, new object[] { val });
+            memberFactory.CallMember(3, "Move", new Type[] { typeof(int) }, new object[] { Value });
         }
 
         /// <summary>

@@ -21,6 +21,28 @@
       </summary>
     </member>
 
+    <member name="N:ASCOM.DeviceInterface">
+      <summary>
+        <h2>ASCOM.DeviceInterface Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains master device interface definitions and is considered authoritative within the ASCOM community.
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.DriverAccess">
+      <summary>
+        <h2>ASCOM.DriverAccess Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains a class that provides easy access for .NET programs to device drivers. It handles differences 
+          between device interface versions transparently so that the client does not need to be concerned about these and sees a 
+          single cocnsistent interface to each device type.
+        </p>
+      </summary>
+    </member>
+
     <member name="N:ASCOM.Utilities">
       <summary>
         <h2>ASCOM.Utilities</h2>

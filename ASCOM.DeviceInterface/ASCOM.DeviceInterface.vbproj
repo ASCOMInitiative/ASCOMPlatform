@@ -109,7 +109,6 @@
     <Compile Include="IFilterWheel.vb" />
     <Compile Include="IFocuser.vb" />
     <Compile Include="IRate.vb" />
-    <Compile Include="IRateEnumerator.vb" />
     <Compile Include="IRotator.vb" />
     <Compile Include="ISwitch.vb" />
     <Compile Include="ITelescopeV2.vb" />

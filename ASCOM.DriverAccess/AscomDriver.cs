@@ -172,7 +172,7 @@ namespace ASCOM.DriverAccess
         /// formatted list of wheel names and the second taking a wheel name and making the change.
         /// </example>
         /// </param>
-        /// <param name="actionParameters">List of required parameters or <see cref="String.Empty"/>  if none are required.
+        /// <param name="actionParameters">List of required parameters or String.Empty if none are required.
         /// </param>
         /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
         public string Action(string actionName, string actionParameters)

@@ -304,7 +304,7 @@ Friend Class RegistryAccess
         Try
             GetProfileMutex("MigrateProfile", "")
             sw.Reset() : sw.Start() 'Start timing this call
-            LogEvent("MigrateProfile", "Current Platform Version: " & CurrentPlatformVersion, EventLogEntryType.Information, 0, Nothing)
+            LogEvent("MigrateProfile", "Current Platform Version: " & CurrentPlatformVersion, EventLogEntryType.Information, EventLogErrors.MigrateProfileVersions, Nothing)
             'Force logging to be enabled for this...
             TL.Enabled = True
             RunningVersions(TL) 'Capture debug date in case logging wasn't initially enabled
@@ -629,7 +629,7 @@ Friend Class RegistryAccess
         GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
         If Not GotMutex Then
             TL.LogMessage("GetProfileMutex", "***** WARNING ***** Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters)
-            LogEvent(Method, "Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, 0, Nothing)
+            LogEvent(Method, "Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, EventLogErrors.RegistryProfileMutexTimeout, Nothing)
             Throw New ProfilePersistenceException("Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters)
         End If
     End Sub

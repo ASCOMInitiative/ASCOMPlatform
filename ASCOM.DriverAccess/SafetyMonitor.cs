@@ -22,7 +22,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates a SafetyMonitor object with the given Prog ID
         /// </summary>
-        /// <param name="safetyMonitorId"></param>
+        /// <param name="safetyMonitorId">ProgID of the device to be accessed.</param>
         public SafetyMonitor(string safetyMonitorId)
             : base(safetyMonitorId)
         {

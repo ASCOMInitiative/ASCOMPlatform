@@ -144,6 +144,12 @@ Public Class [Timer]
 
 #Region "Support code"
     'Raise the external event whenever a timer tick event occurs
+    ''' <summary>
+    ''' Timer event handler
+    ''' </summary>
+    ''' <param name="source">Source object</param>
+    ''' <param name="e">Parameter object</param>
+    ''' <remarks>Raises the Tick event</remarks>
     Private Sub OnTimedEvent(ByVal source As Object, ByVal e As Object) Handles m_Timer.Tick
         RaiseEvent Tick()
     End Sub

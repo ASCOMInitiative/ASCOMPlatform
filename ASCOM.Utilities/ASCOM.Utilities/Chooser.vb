@@ -135,41 +135,20 @@ Public Class Chooser
         Dim RetVal As String = ""
         Try
 
-            If String.IsNullOrEmpty(m_sDeviceType) Then Throw New Exceptions.InvalidValueException("Chooser:Choose - Unknown device type, DeviceType property has not been set")
+            If String.IsNullOrEmpty(m_sDeviceType) Then Throw New Exceptions.InvalidValueException("Unknown device type, DeviceType property has not been set")
 
             m_frmChooser.DeviceType = m_sDeviceType
             m_frmChooser.StartSel = DriverProgID
             '   -------------------
             m_frmChooser.ShowDialog() ' -- MODAL --
             '   -------------------
-            Try
-                RetVal = m_frmChooser.Result
-            Catch ex As Exception
-                MsgBox("CHOOSER.VB Exception 0" & ex.ToString)
-                RetVal = "CHOOSER.VB Exception 0"
-            End Try
-
-            Try
-                m_frmChooser.Dispose()
-            Catch ex As Exception
-                MsgBox("CHOOSER.VB Exception 1" & ex.ToString)
-                RetVal = "CHOOSER.VB Exception 1"
-            End Try
-            Try
-                m_frmChooser = Nothing
-            Catch ex As Exception
-                MsgBox("CHOOSER.VB Exception 2" & ex.ToString)
-                RetVal = "CHOOSER.VB Exception 2"
-            End Try
-            Try
-                'Form.ActiveForm.BringToFront()
-            Catch ex As Exception
-                MsgBox("CHOOSER.VB Exception 3" & ex.ToString)
-                RetVal = "CHOOSER.VB Exception 3"
-            End Try
+            RetVal = m_frmChooser.Result
+            m_frmChooser.Dispose()
+            m_frmChooser = Nothing
         Catch ex As Exception
-            MsgBox("CHOOSER.VB Exception 4" & ex.ToString)
-            RetVal = "CHOOSER.VB Exception 4"
+            MsgBox("Chooser Exception: " & ex.ToString)
+            LogEvent("Chooser", "Exception", EventLogEntryType.Error, EventLogErrors.ChooserException, ex.ToString)
+            RetVal = ""
         End Try
         Return RetVal
     End Function
