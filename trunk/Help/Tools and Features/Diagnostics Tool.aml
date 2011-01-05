@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <introduction>
+    <introduction>
       <para>The Diagnostics Tool collects information about the ASCOM Platform to aid support.</para>
     </introduction>
 
@@ -9,7 +9,7 @@
       <title>Diagnostics Tool</title>
       <content>
          <para>This tool collects a variety of information about the system to help diagnose driver and client
-         issues. The collected data is:         
+         issues. The collected data is:
          </para>
   		 <list class="bullet">
 		    <listItem>Operating system name and version including 32/64bit</listItem>
@@ -17,6 +17,7 @@
 		    <listItem>Common Language Runtime version </listItem>
 		    <listItem>Key directory locations</listItem>
 		    <listItem>List of drives and free space</listItem>
+		    <listItem>List of COM ports</listItem>
 		    <listItem>List of loaded assemblies</listItem>
 		    <listItem>COM Registration entries from the registry</listItem>
 		    <listItem>Version information for key ASCOM files</listItem>
@@ -26,15 +27,17 @@
 		 <para>When the "Run Diagnostics" button is pressed, the information above is collected into a log file
 		 titled ASCOM.Diagnostics.hhmmssssss.txt that will be found in "My Documents\ASCOM\Logs yyyy-mm-dd".
 		 This file should be forwarded, together with other log files in the directory, to the person who
-		 is helping you.</para>
-		 
+		 is helping you.
+		 </para>
+		 <para>A suite of functional tests are also run to confirm that the installation performs as expected.</para>
 		 <para>
-<alert class="note">
-  <para>No personal information or passwords are recorded in the diagnostics file with the exception of 
-  machine name, username and domain name. If you do not wish to reveal this information, please delete line 8 
-  of the diagnostic log.</para>
-</alert>
-</para>
+			<alert class="note">
+  				<para>No personal information or passwords are recorded in the diagnostics file with the exception of 
+  				machine name, username and domain name. If you do not wish to reveal this information, 
+  				please delete relevant lines in the diagnostic log.
+  				</para>
+			</alert>
+		 </para>
       </content>
     </section>
   </developerConceptualDocument>
