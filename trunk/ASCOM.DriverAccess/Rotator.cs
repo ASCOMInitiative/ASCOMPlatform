@@ -23,7 +23,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates a rotator object with the given Prog ID
         /// </summary>
-        /// <param name="rotatorId"></param>
+        /// <param name="rotatorId">ProgID of the rotator to be accessed.</param>
         public Rotator(string rotatorId) : base(rotatorId)
 		{
             memberFactory = base.MemberFactory;

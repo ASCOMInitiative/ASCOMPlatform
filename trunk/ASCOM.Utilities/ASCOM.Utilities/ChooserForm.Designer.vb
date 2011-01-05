@@ -16,8 +16,7 @@
 	End Sub
 	'Required by the Windows Form Designer
 	Private components As System.ComponentModel.IContainer
-	Public ToolTip1 As System.Windows.Forms.ToolTip
-	Public WithEvents picASCOM As System.Windows.Forms.PictureBox
+    Public WithEvents picASCOM As System.Windows.Forms.PictureBox
 	Public WithEvents cmdCancel As System.Windows.Forms.Button
 	Public WithEvents cmdOK As System.Windows.Forms.Button
 	Public WithEvents cmdProperties As System.Windows.Forms.Button
@@ -28,27 +27,27 @@
     'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ChooserForm))
+        Me.picASCOM = New System.Windows.Forms.PictureBox()
+        Me.cmdCancel = New System.Windows.Forms.Button()
+        Me.cmdOK = New System.Windows.Forms.Button()
+        Me.cmdProperties = New System.Windows.Forms.Button()
+        Me.cbDriverSelector = New System.Windows.Forms.ComboBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lblTitle = New System.Windows.Forms.Label()
+        Me.ChooserMenu = New System.Windows.Forms.MenuStrip()
+        Me.MenuTrace = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MenuUseTraceAutoFilenames = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuUseTraceManualFilename = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuSerialTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuIncludeSerialTraceDebugInformation = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuProfileTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.picASCOM = New System.Windows.Forms.PictureBox
-        Me.cmdCancel = New System.Windows.Forms.Button
-        Me.cmdOK = New System.Windows.Forms.Button
-        Me.cmdProperties = New System.Windows.Forms.Button
-        Me.cbDriverSelector = New System.Windows.Forms.ComboBox
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.lblTitle = New System.Windows.Forms.Label
-        Me.ChooserMenu = New System.Windows.Forms.MenuStrip
-        Me.MenuTrace = New System.Windows.Forms.ToolStripMenuItem
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
-        Me.MenuUseTraceAutoFilenames = New System.Windows.Forms.ToolStripMenuItem
-        Me.MenuUseTraceManualFilename = New System.Windows.Forms.ToolStripMenuItem
-        Me.MenuSerialTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
-        Me.MenuIncludeSerialTraceDebugInformation = New System.Windows.Forms.ToolStripMenuItem
-        Me.MenuProfileTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
-        Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem
-        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -159,55 +158,64 @@
         '
         Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuTransformTraceEnabled})
         Me.MenuTrace.Name = "MenuTrace"
-        Me.MenuTrace.Size = New System.Drawing.Size(46, 20)
+        Me.MenuTrace.Size = New System.Drawing.Size(48, 20)
         Me.MenuTrace.Text = "Trace"
         '
         'NormallyLeaveTheseDisabledToolStripMenuItem
         '
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Name = "NormallyLeaveTheseDisabledToolStripMenuItem"
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Text = "Normally leave these disabled"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(269, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(277, 6)
         '
         'MenuUseTraceAutoFilenames
         '
         Me.MenuUseTraceAutoFilenames.Name = "MenuUseTraceAutoFilenames"
-        Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(272, 22)
+        Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(280, 22)
         Me.MenuUseTraceAutoFilenames.Text = "Use Automatic Serial Trace Filenames"
         '
         'MenuUseTraceManualFilename
         '
         Me.MenuUseTraceManualFilename.Name = "MenuUseTraceManualFilename"
-        Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(272, 22)
+        Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(280, 22)
         Me.MenuUseTraceManualFilename.Text = "Use a Manual Serial Trace Filename"
         '
         'MenuSerialTraceEnabled
         '
         Me.MenuSerialTraceEnabled.Name = "MenuSerialTraceEnabled"
-        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(272, 22)
+        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuSerialTraceEnabled.Text = "Serial Trace Enabled"
         '
         'MenuIncludeSerialTraceDebugInformation
         '
         Me.MenuIncludeSerialTraceDebugInformation.Name = "MenuIncludeSerialTraceDebugInformation"
-        Me.MenuIncludeSerialTraceDebugInformation.Size = New System.Drawing.Size(272, 22)
+        Me.MenuIncludeSerialTraceDebugInformation.Size = New System.Drawing.Size(280, 22)
         Me.MenuIncludeSerialTraceDebugInformation.Text = "Include Serial Trace Debug Information"
         '
         'MenuProfileTraceEnabled
         '
         Me.MenuProfileTraceEnabled.Name = "MenuProfileTraceEnabled"
-        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(272, 22)
+        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
         'MenuTransformTraceEnabled
         '
         Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
-        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(272, 22)
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
+        '
+        'ToolTip1
+        '
+        Me.ToolTip1.AutoPopDelay = 5000
+        Me.ToolTip1.InitialDelay = 0
+        Me.ToolTip1.IsBalloon = True
+        Me.ToolTip1.ReshowDelay = 100
+        Me.ToolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning
+        Me.ToolTip1.ToolTipTitle = "Incompatible Driver"
         '
         'ChooserForm
         '
@@ -252,5 +260,6 @@
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents MenuTransformTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuIncludeSerialTraceDebugInformation As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
 #End Region
 End Class

@@ -149,12 +149,12 @@ Module EventLogCode
     ''' <param name="Id">Id number</param>
     ''' <param name="Except">Initiating exception or Nothing</param>
     ''' <remarks></remarks>
-    Friend Sub LogEvent(ByVal Caller As String, ByVal Msg As String, ByVal Severity As EventLogEntryType, ByVal Id As Integer, ByVal Except As String)
+    Friend Sub LogEvent(ByVal Caller As String, ByVal Msg As String, ByVal Severity As EventLogEntryType, ByVal Id As EventLogErrors, ByVal Except As String)
         Dim ELog As EventLog, MsgTxt As String
 
         If Not EventLog.SourceExists(EVENT_SOURCE) Then 'Create the event log of it doesn't exist
             EventLog.CreateEventSource(EVENT_SOURCE, EVENTLOG_NAME)
-            LogEvent("LogEvent", "Event log created", EventLogEntryType.Information, 0, Nothing) 'Place an initial entry
+            LogEvent("LogEvent", "Event log created", EventLogEntryType.Information, EventLogErrors.EventLogCreated, Nothing) 'Place an initial entry
         End If
         ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE) 'Create a pointer to the event log
 

@@ -25,7 +25,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates a Switch object with the given Prog ID
         /// </summary>
-        /// <param name="switchId"></param>
+        /// <param name="switchId">ProgID of the device to be accessed.</param>
         public Switch(string switchId) : base(switchId)
 		{
             _memberFactory = base.MemberFactory;

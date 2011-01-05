@@ -45,7 +45,7 @@ Module GlobalConstants
     Friend Const VALUE_ATTRIBUTE_NAME As String = "Value" 'Profile element value attribute
 
     'XML constants used by ASCOMProfile class to serialise and de-serialise a profile
-    'These are public so that they can be used by applications to wrok directly with the returned XML
+    'These are public so that they can be used by applications to work directly with the returned XML
     Public Const XML_SUBKEYNAME_ELEMENTNAME As String = "SubKeyName"
     Public Const XML_DEFAULTVALUE_ELEMENTNAME As String = "DefaultValue"
     Public Const XML_NAME_ELEMENTNAME As String = "Name"
@@ -60,4 +60,19 @@ Module GlobalConstants
 
     'Installer Variables
     Public Const INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}"
+
+    Friend Enum EventLogErrors As Integer
+        EventLogCreated = 0
+        ChooserFormLoad = 1
+        MigrateProfileVersions = 2
+        MigrateProfileRegistryKey = 3
+        RegistryProfileMutexTimeout = 4
+        XMLProfileMutexTimeout = 5
+        XMLAccessReadError = 6
+        XMLAccessRecoveryPreviousVersion = 7
+        XMLAccessRecoveredOK = 8
+        ChooserSetupFailed = 9
+        ChooserDriverFailed = 10
+        ChooserException = 11
+    End Enum
 End Module

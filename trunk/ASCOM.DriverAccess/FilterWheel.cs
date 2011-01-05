@@ -24,7 +24,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Creates a FilterWheel object with the given Prog ID
         /// </summary>
-        /// <param name="filterWheelId"></param>
+        /// <param name="filterWheelId">ProgID of the filterwheel device to be accessed.</param>
         public FilterWheel(string filterWheelId) : base(filterWheelId)
 		{
             //memberFactory = new MemberFactory(filterWheelID);

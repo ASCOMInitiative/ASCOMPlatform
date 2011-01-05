@@ -56,12 +56,7 @@ Friend Class ChooserForm
                 For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
                     Description = de.Value ' Set the device description
                     If de.Value = "" Then Description = de.Key 'Deal with the possibility that it is an empty string, i.e. the driver author has forgotton to set it!
-
-                    If (ApplicationBits() = Bitness.Bits64) And (Drivers32bit.ContainsKey(de.Key)) Then 'This is a 32bit driver being accessed by a 64bit application
-                        cb.Items.Add("!!32bit Driver!! - " & Description) ' Add items & allow to sort
-                    Else
-                        cb.Items.Add(Description) ' Add items & allow to sort
-                    End If
+                    cb.Items.Add(Description) ' Add items & allow to sort
                 Next
             End If
 
@@ -130,6 +125,7 @@ Friend Class ChooserForm
             ProfileStore = Nothing
         Catch ex As Exception
             MsgBox("ChooserForm Load " & ex.ToString)
+            LogEvent("ChooserForm Load ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
         End Try
     End Sub
 
@@ -187,14 +183,16 @@ Friend Class ChooserForm
                 Try
                     oDrv.SetupDialog()
                 Catch ex As Exception
-                    MsgBox("Driver setup method failed: " & Err.Description, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+                    MsgBox("Driver setup method failed: """ & sProgID & """ " & Err.Description, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+                    LogEvent("ChooserForm", "Driver setup method failed for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, ex.ToString)
                 End Try
                 'Me.BringToFront()
             End If
             ProfileStore.WriteProfile("Chooser", sProgID & " Init", "True") ' Remember it has been initialized
             Me.cmdOK.Enabled = True
         Catch ex As Exception
-            MsgBox("Failed to load driver: " & ex.ToString, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+            MsgBox("Failed to load driver: """ & sProgID & """ " & ex.ToString, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+            LogEvent("ChooserForm", "Failed to load driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserDriverFailed, ex.ToString)
         End Try
 
         'Clean up and release resources
@@ -252,7 +250,10 @@ Friend Class ChooserForm
             If (ApplicationBits() = Bitness.Bits64) And (Drivers32bit.ContainsKey(sProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
                 Me.cmdProperties.Enabled = False ' So prevent access!
                 Me.cmdOK.Enabled = False
+                ToolTip1.Show("This 32bit driver is not compatible with your 64bit application." & vbCrLf & _
+                              "Please contact the driver author to see if there is a 64bit compatible version.", cbDriverSelector, 50, -87)
             Else ' Good to go!
+                ToolTip1.Hide(cbDriverSelector)
                 buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
                 If LCase(buf) = "true" Then
                     Me.cmdOK.Enabled = True ' This device has been initialized

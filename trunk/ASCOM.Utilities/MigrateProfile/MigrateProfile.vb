@@ -51,7 +51,7 @@ Module MigrateProfile
                         If InStr(UCase(Trim(arg)), "MIGRATEPROFILE") = 0 Then MsgBox("Migrate: Unrecognised parameter - """ & arg & """ CREATEREGISTRYKEY")
                 End Select
             Next
-            LogEvent("MigrateProfile", "CreateRegistryKey: " & parmCreateRegistryKey & ", SavePlatformVersion: " & parmSavePlatformVersion & ", MigrateifNeeded: " & parmMigrateIfNeeded, EventLogEntryType.Information, 0, Nothing)
+            LogEvent("MigrateProfile", "CreateRegistryKey: " & parmCreateRegistryKey & ", SavePlatformVersion: " & parmSavePlatformVersion & ", MigrateifNeeded: " & parmMigrateIfNeeded, EventLogEntryType.Information, EventLogErrors.MigrateProfileRegistryKey, Nothing)
             If Not (parmCreateRegistryKey Or parmMigrateIfNeeded Or parmSavePlatformVersion) Then
                 MsgBox("MirateProfile: No parameter supplied, requires - SAVEPLATFORMVERSION CREATEREGISTRYKEY MIGRATEIFNEEDED, these can be used in combination")
             Else
