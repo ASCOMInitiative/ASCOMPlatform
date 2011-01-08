@@ -785,14 +785,6 @@ $
 
 
 
-
-
-
-
-
-
-
-
 $
 $
 1
@@ -805,18 +797,18 @@ Ascom Platform 6 Alpha 6
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0
 English
-Ascom Platform 6
+Ascom Platform 6 Alpha 7
 Ascom Platform 6 Installation
 ASCOM Initiative
 http://ascom-standards.org/
-{150B3CB9-5976-47C6-94DD-804B9677E2F9}
+{C24539AB-9530-42B4-AF61-ABF037F5D25D}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk/
 http://ascom-standards.org/updates/
 Copyright © 1998-2010, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Alpha6.exe
+ASCOMPlatform6Alpha7
 TRUE
 FALSE
 
