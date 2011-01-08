@@ -8,7 +8,7 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("ASCOM.InterfacesP6")> 
+<Assembly: AssemblyTitle("ASCOM Device Interfaces")> 
 <Assembly: AssemblyDescription("ASCOM Interfaces for Platform 6")> 
 <Assembly: AssemblyCompany("ASCOM")> 
 <Assembly: AssemblyProduct("ASCOM.InterfacesP6")> 
