@@ -60,9 +60,9 @@ namespace ASCOM.InstallerGen.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Bug72T_sm {
+        internal static System.Drawing.Bitmap Bug72TSm {
             get {
-                object obj = ResourceManager.GetObject("Bug72T-sm", resourceCulture);
+                object obj = ResourceManager.GetObject("Bug72TSm", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

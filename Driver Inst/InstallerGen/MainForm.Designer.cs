@@ -380,7 +380,7 @@ namespace ASCOM.InstallerGen
 			// pbAscomLogo
 			// 
 			this.pbAscomLogo.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.pbAscomLogo.Image = global::ASCOM.InstallerGen.Properties.Resources.Bug72T_sm;
+			this.pbAscomLogo.Image = global::ASCOM.InstallerGen.Properties.Resources.Bug72TSm;
 			this.pbAscomLogo.Location = new System.Drawing.Point(342, 16);
 			this.pbAscomLogo.Name = "pbAscomLogo";
 			this.pbAscomLogo.Size = new System.Drawing.Size(48, 56);
