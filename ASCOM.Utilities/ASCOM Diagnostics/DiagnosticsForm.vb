@@ -6,6 +6,7 @@
 ' Added drive scan, reporting available space
 ' Version 1.0.2.0 - Released 15/10/09 Peter Simpson
 
+Imports System
 Imports ASCOM.Internal
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
@@ -14,7 +15,6 @@ Imports System.IO
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Reflection
-Imports System.Environment
 Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
@@ -55,7 +55,7 @@ Public Class DiagnosticsForm
     Private AscomUtil As ASCOM.Utilities.Util
     Private g_Util2 As Object
     Private ErrorList As New Generic.List(Of String)
-    Private DecimalSeparator As String = ""
+    Private DecimalSeparator As String = "", ThousandsSeparator As String = ""
     Private AbbreviatedMonthNames() As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames ' List of monthnames in current culture language
     Private StartTime As Date
     Private NumberOfTicks As Integer
@@ -260,6 +260,7 @@ Public Class DiagnosticsForm
                 End Try
 
                 DecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator
+                ThousandsSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator
                 Try 'Try and create a registryaccess object
                     ASCOMRegistryAccess = New ASCOM.Utilities.RegistryAccess
                 Catch ex As Exception
@@ -290,15 +291,16 @@ Public Class DiagnosticsForm
                 ScanCOMRegistration() 'Report Com Registration
 
                 'Scan files on 32 and 64bit systems
-                TL.LogMessage("Files", "")
-                ASCOMPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM\"
-                Call ScanFiles(ASCOMPath) : Action("") 'Scan 32bit files on 32bit OS and 64bit files on 64bit OS
-
-                If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 32bit locations for files as well
+                TL.LogMessage("Platform Files", "")
+                If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 32bit locations for files
                     SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES_COMMONX86, False)
                     ASCOMPath = PathShell.ToString & "\ASCOM\"
-                    Call ScanFiles(ASCOMPath) : Action("")
+                Else 'we are on a 32bit OS so look in the standard position
+                    ASCOMPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM\"
                 End If
+                Call ScanPlatformFiles(ASCOMPath) : Action("")
+
+                ScanDeveloperFiles()
 
                 'List GAC contents
                 ScanGac()
@@ -324,8 +326,8 @@ Public Class DiagnosticsForm
                 NovasComTests() : Action("")
                 KeplerTests() : Action("")
                 TransformTest() : Action("")
-                Novas2Tests() : Action("")
-                NOVAS3Tests()
+                NOVAS2Tests() : Action("")
+                NOVAS3Tests() : Action("")
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratualtions, all " & NMatches & " function tests passed!"
@@ -357,11 +359,11 @@ Public Class DiagnosticsForm
                 Try : ASCOMRegistryAccess.Dispose() : Catch : End Try 'Clean up registryaccess object
                 ASCOMRegistryAccess = Nothing
             End Try
-                btnLastLog.Enabled = True
+            btnLastLog.Enabled = True
 
-            Catch ex1 As Exception
-                lblResult.Text = "Can't create log: " & ex1.Message
-            End Try
+        Catch ex1 As Exception
+            lblResult.Text = "Can't create log: " & ex1.Message
+        End Try
         btnExit.Enabled = True ' Enable buttons during run
         btnCOM.Enabled = True
     End Sub
@@ -577,41 +579,24 @@ Public Class DiagnosticsForm
         geo_loc.Temperature = 10.0
         geo_loc.Pressure = 1010.0
 
-        'No need to do this as its done by ASCOM.NOVAS3
-        '/*
-        'Open the JPL ephemeris file.
-        '*/
-
-        'if ((error = Ephem_Open ("JPLEPH", &jd_beg,&jd_end)) != 0)
-        '{
-        'printf ("Error %d from Ephem_Open\n", error);
-        'return (error);
-        '}
-        'Else
-        '{
-        'printf ("JPL Ephemeris open. jd_beg = %10.2f  jd_end = %10.2f\n",
-        '  jd_beg, jd_end);
-        'printf ("\n");
-        '}
-
         '/*
         'Compute the topocentric places of the three stars at the four
         'selected Julian dates.
         '*/
 
         Dim ExpectedResults(N_TIMES - 1, N_STARS - 1) As String
-        ExpectedResults(0, 0) = "2450203.5 POLARIS RA = 2.446988922 Dec = 89.24635149"
-        ExpectedResults(0, 1) = "2450203.5 Delta ORI RA = 5.530110723 Dec = -0.30571737"
-        ExpectedResults(0, 2) = "2450203.5 Theta CAR RA = 10.714525513 Dec = -64.38130590"
-        ExpectedResults(1, 0) = "2450203.5 POLARIS RA = 2.446988922 Dec = 89.24635149"
-        ExpectedResults(1, 1) = "2450203.5 Delta ORI RA = 5.530110723 Dec = -0.30571737"
-        ExpectedResults(1, 2) = "2450203.5 Theta CAR RA = 10.714525513 Dec = -64.38130590"
-        ExpectedResults(2, 0) = "2450417.5 POLARIS RA = 2.509480139 Dec = 89.25196813"
-        ExpectedResults(2, 1) = "2450417.5 Delta ORI RA = 5.531195904 Dec = -0.30301961"
-        ExpectedResults(2, 2) = "2450417.5 Theta CAR RA = 10.714444761 Dec = -64.37366514"
-        ExpectedResults(3, 0) = "2450300.5 POLARIS RA = 2.481177532 Dec = 89.24254404"
-        ExpectedResults(3, 1) = "2450300.5 Delta ORI RA = 5.530372288 Dec = -0.30231606"
-        ExpectedResults(3, 2) = "2450300.5 Theta CAR RA = 10.713575394 Dec = -64.37966995"
+        ExpectedResults(0, 0) = "2450203" & DecimalSeparator & "5 POLARIS RA = 2" & DecimalSeparator & "446988922 Dec = 89" & DecimalSeparator & "24635149"
+        ExpectedResults(0, 1) = "2450203" & DecimalSeparator & "5 Delta ORI RA = 5" & DecimalSeparator & "530110723 Dec = -0" & DecimalSeparator & "30571737"
+        ExpectedResults(0, 2) = "2450203" & DecimalSeparator & "5 Theta CAR RA = 10" & DecimalSeparator & "714525513 Dec = -64" & DecimalSeparator & "38130590"
+        ExpectedResults(1, 0) = "2450203" & DecimalSeparator & "5 POLARIS RA = 2" & DecimalSeparator & "446988922 Dec = 89" & DecimalSeparator & "24635149"
+        ExpectedResults(1, 1) = "2450203" & DecimalSeparator & "5 Delta ORI RA = 5" & DecimalSeparator & "530110723 Dec = -0" & DecimalSeparator & "30571737"
+        ExpectedResults(1, 2) = "2450203" & DecimalSeparator & "5 Theta CAR RA = 10" & DecimalSeparator & "714525513 Dec = -64" & DecimalSeparator & "38130590"
+        ExpectedResults(2, 0) = "2450417" & DecimalSeparator & "5 POLARIS RA = 2" & DecimalSeparator & "509480139 Dec = 89" & DecimalSeparator & "25196813"
+        ExpectedResults(2, 1) = "2450417" & DecimalSeparator & "5 Delta ORI RA = 5" & DecimalSeparator & "531195904 Dec = -0" & DecimalSeparator & "30301961"
+        ExpectedResults(2, 2) = "2450417" & DecimalSeparator & "5 Theta CAR RA = 10" & DecimalSeparator & "714444761 Dec = -64" & DecimalSeparator & "37366514"
+        ExpectedResults(3, 0) = "2450300" & DecimalSeparator & "5 POLARIS RA = 2" & DecimalSeparator & "481177532 Dec = 89" & DecimalSeparator & "24254404"
+        ExpectedResults(3, 1) = "2450300" & DecimalSeparator & "5 Delta ORI RA = 5" & DecimalSeparator & "530372288 Dec = -0" & DecimalSeparator & "30231606"
+        ExpectedResults(3, 2) = "2450300" & DecimalSeparator & "5 Theta CAR RA = 10" & DecimalSeparator & "713575394 Dec = -64" & DecimalSeparator & "37966995"
 
         For i = 0 To N_TIMES - 1
 
@@ -786,7 +771,7 @@ Public Class DiagnosticsForm
                     Dim Year, Month, Day As Short, Hour As Double
                     rc = 0
                     Nov3.CalDate(JDTest, Year, Month, Day, Hour)
-                    LogRC(TestFunction, "Year Month Day Hour", rc, Year & " " & Month & " " & Day & " " & Format(Hour, "0.0"), "2010 12 30 9.0")
+                    LogRC(TestFunction, "Year Month Day Hour", rc, Year & " " & Month & " " & Day & " " & Format(Hour, "0.0"), "2010 12 30 9" & DecimalSeparator & "0")
                 Case NOVAS3Functions.CelPole
                     Dim DPole1, DPole2 As Double
                     rc = Nov3.CelPole(JDTest, PoleOffsetCorrection.ReferredToMeanEclipticOfDate, DPole1, DPole2)
@@ -1025,19 +1010,19 @@ Public Class DiagnosticsForm
                     LogRC(TestFunction, "Expect error 4", rc, Err & Eph(0) & Eph(1) & Eph(2) & Eph(3) & Eph(4) & Eph(5), "4000000")
                     JD = 2453415.5
                     Eph = Nov3.ReadEph(1, "Ceres", JD, Err)
-                    LogRC(TestFunction, "JD Before " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "3 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000")
+                    LogRC(TestFunction, "JD Before " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "3 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000")
                     JD = 2453425.5
                     Eph = Nov3.ReadEph(1, "Ceres", JD, Err)
-                    LogRC(TestFunction, "JD Start  " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 -2.23084 -1.38495 -0.19822 0.00482 -0.00838 -0.00493")
+                    LogRC(TestFunction, "JD Start  " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 -2" & DecimalSeparator & "23084 -1" & DecimalSeparator & "38495 -0" & DecimalSeparator & "19822 0" & DecimalSeparator & "00482 -0" & DecimalSeparator & "00838 -0" & DecimalSeparator & "00493")
                     JD = 2454400.5
                     Eph = Nov3.ReadEph(1, "Ceres", JD, Err)
-                    LogRC(TestFunction, "JD Mid    " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 2.02286 1.91181 0.48869 -0.00736 0.00559 0.00413")
+                    LogRC(TestFunction, "JD Mid    " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 2" & DecimalSeparator & "02286 1" & DecimalSeparator & "91181 0" & DecimalSeparator & "48869 -0" & DecimalSeparator & "00736 0" & DecimalSeparator & "00559 0" & DecimalSeparator & "00413")
                     JD = 2455370.5 'Fails (screws up the DLL for subsequent calls) beyond JD = 2455389.5, which is just below the theoretical end of 2455402.5
                     Eph = Nov3.ReadEph(1, "Ceres", JD, Err)
-                    LogRC(TestFunction, "JD End    " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 -0.08799 -2.57887 -1.19703 0.00983 -0.00018 -0.00209")
+                    LogRC(TestFunction, "JD End    " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 -0" & DecimalSeparator & "08799 -2" & DecimalSeparator & "57887 -1" & DecimalSeparator & "19703 0" & DecimalSeparator & "00983 -0" & DecimalSeparator & "00018 -0" & DecimalSeparator & "00209")
                     JD = 2455410.5
                     Eph = Nov3.ReadEph(1, "Ceres", JD, Err)
-                    LogRC(TestFunction, "JD After  " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "3 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000")
+                    LogRC(TestFunction, "JD After  " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "3 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000")
                 Case NOVAS3Functions.Refract
                     Dim Refracted As Double
                     rc = 0
@@ -1224,7 +1209,7 @@ Public Class DiagnosticsForm
         Sun_Eph
     End Enum
 
-    Sub Novas2Tests()
+    Sub NOVAS2Tests()
         Dim T As Transform.Transform = New Transform.Transform
         Dim u As New Util
         Dim EarthBody, SunBody As New BodyDescription, StarStruct As New CatEntry, LocationStruct As New SiteInfo
@@ -2878,7 +2863,7 @@ Public Class DiagnosticsForm
         Dim BaseDir As String
         Dim PathShell As New System.Text.StringBuilder(260)
         Try
-            BaseDir = System.Environment.GetFolderPath(SpecialFolder.ProgramFiles)
+            BaseDir = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
 
             Status("Scanning ProgramFiles Directory for Helper DLLs")
             TL.LogMessage("ProgramFiles Scan", "Searching for Helper.DLL etc.")
@@ -2890,7 +2875,7 @@ Public Class DiagnosticsForm
             'If on a 64bit OS, now scan the 32bit path
 
             If IntPtr.Size = 8 Then 'We are on a 64bit OS
-                BaseDir = System.Environment.GetFolderPath(SpecialFolder.ProgramFiles)
+                BaseDir = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
                 BaseDir = SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILESX86, False)
 
                 Status("Scanning ProgramFiles(x86) Directory for Helper DLLs")
@@ -3038,7 +3023,7 @@ Public Class DiagnosticsForm
             Status("Scanning setup logs")
             TL.LogMessage("SetupFile", "Starting scan")
             'Get an array of setup filenames from the Temp directory
-            TempFiles = Directory.GetFiles(Path.GetFullPath(GetEnvironmentVariable("Temp")), "Setup Log*.txt", SearchOption.TopDirectoryOnly)
+            TempFiles = Directory.GetFiles(Path.GetFullPath(Environment.GetEnvironmentVariable("Temp")), "Setup Log*.txt", SearchOption.TopDirectoryOnly)
             For Each TempFile As String In TempFiles 'Iterate over results
                 Try
                     TL.LogMessage("SetupFile", TempFile)
@@ -3216,21 +3201,97 @@ Public Class DiagnosticsForm
         Return AssName
     End Function
 
-    Sub ScanFiles(ByVal ASCOMPath As String)
-        Dim ASCOMPathPlatformV6, ASCOMPathInt, ASCOMPathPlatformInternal, ASCOMPathPlatformV55, ASCOMPathAstrometry As String
+    Sub ScanDeveloperFiles()
+        Dim ASCOMPath As String = "C:\Program Files\ASCOM\Platform 6 Developer Components\" ' Default location
+        Dim PathShell As New System.Text.StringBuilder(260)
+        Dim ASCOMPathComponents, ASCOMPathDocs, ASCOMPathInstallerGenerator, ASCOMPathResources As String
 
         Try
-            Status("Scanning Files")
+            Status("Scanning Developer Files")
 
-            ASCOMPathInt = ASCOMPath & "Interface\" 'Create folder paths
+            If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 32bit locations for files
+                SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILESX86, False)
+                ASCOMPath = PathShell.ToString & "\ASCOM\Platform 6 Developer Components\"
+            Else '32bit system so look in the normal Program Files place
+                ASCOMPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM\Platform 6 Developer Components\"""
+            End If
+        Catch ex As ProfilePersistenceException
+            If InStr(ex.Message, "0x2") > 0 Then
+                TL.LogMessage("Developer Files", "Installation registry key not present")
+            Else
+                LogException("ScanDeveloperFiles", "ProfilePersistenceException: " & ex.ToString)
+            End If
+        Catch ex As Exception
+            LogException("ScanDeveloperFiles", "Registry Exception: " & ex.ToString)
+        End Try
+
+        Try
+
+            If Directory.Exists(ASCOMPath) Then
+                ASCOMPathComponents = ASCOMPath & "Components\"
+                ASCOMPathDocs = ASCOMPath & "Docs\"
+                ASCOMPathInstallerGenerator = ASCOMPath & "Installer Generator\"
+                ASCOMPathResources = ASCOMPath & "Installer Generator\Resources\"
+                TL.LogMessage("Developer Files", "Start of scan")
+                FileDetails(ASCOMPathComponents, "ASCOM.Astrometry.dll")
+                FileDetails(ASCOMPathComponents, "ASCOM.Attributes.dll")
+                FileDetails(ASCOMPathComponents, "ASCOM.Controls.dll")
+                FileDetails(ASCOMPathComponents, "ASCOM.DeviceInterfaces.dll")
+                FileDetails(ASCOMPathComponents, "ASCOM.DriverAccess.dll")
+                FileDetails(ASCOMPathComponents, "ASCOM.Exceptions.dll")
+                FileDetails(ASCOMPathComponents, "ASCOM.Internal.Extensions.dll")
+                FileDetails(ASCOMPathComponents, "ASCOM.SettingsProvider.dll")
+                FileDetails(ASCOMPathComponents, "ASCOM.Utilities.dll")
+                FileDetails(ASCOMPathDocs, "Algorithms.pdf")
+                FileDetails(ASCOMPathDocs, "Bug72T-sm.jpg")
+                FileDetails(ASCOMPathDocs, "DriverInstallers.html")
+                FileDetails(ASCOMPathDocs, "NOVAS_C3.0_Guide.pdf")
+                FileDetails(ASCOMPathDocs, "Platform 6 Client-Driver Interaction V2.pdf")
+                FileDetails(ASCOMPathDocs, "Platform 6.0.pdf")
+                FileDetails(ASCOMPathDocs, "PlatformDeveloperHelp.chm")
+                FileDetails(ASCOMPathDocs, "Script56.chm")
+                FileDetails(ASCOMPathDocs, "Templates.html")
+                FileDetails(ASCOMPathDocs, "tip.gif")
+                FileDetails(ASCOMPathDocs, "wsh-56.chm")
+                FileDetails(ASCOMPathInstallerGenerator, "InstallerGen.exe")
+                FileDetails(ASCOMPathInstallerGenerator, "InstallerGen.pdb")
+                FileDetails(ASCOMPathInstallerGenerator, "Microsoft.Samples.WinForms.Extras.dll")
+                FileDetails(ASCOMPathInstallerGenerator, "Microsoft.Samples.WinForms.Extras.pdb")
+                FileDetails(ASCOMPathInstallerGenerator, "TemplateSubstitutionParameters.txt")
+                FileDetails(ASCOMPathResources, "CreativeCommons.txt")
+                FileDetails(ASCOMPathResources, "DriverInstallTemplate.iss")
+                FileDetails(ASCOMPathResources, "WizardImage.bmp")
+            Else
+                TL.LogMessage("Developer Files", "Files not installed")
+            End If
+        Catch ex As Exception
+            LogException("ScanDeveloperFiles", "File Exception: " & ex.ToString)
+        End Try
+        TL.BlankLine()
+        Status("")
+
+    End Sub
+
+    Sub ScanPlatformFiles(ByVal ASCOMPath As String)
+        Dim ASCOMPathPlatformV6, ASCOMPathInterface, ASCOMPathPlatformInternal, ASCOMPathPlatformV55, ASCOMPathAstrometry, ASCOMPathDotNet As String
+
+        Try
+            Status("Scanning Platform Files")
+
+            ASCOMPathInterface = ASCOMPath & "Interface\" 'Create folder paths
             ASCOMPathPlatformV6 = ASCOMPath & "Platform\V6\"
             ASCOMPathPlatformInternal = ASCOMPath & "Platform\Internal\"
             ASCOMPathPlatformV55 = ASCOMPath & "Platform\v5.5\"
             ASCOMPathAstrometry = ASCOMPath & "Astrometry\"
+            ASCOMPathDotNet = ASCOMPath & ".net\"
 
             'ASCOM Root files
             FileDetails(ASCOMPath, "Helper.dll") 'Report on files
             FileDetails(ASCOMPath, "Helper2.dll")
+
+            'ASCOM\.net
+            FileDetails(ASCOMPathDotNet, "ASCOM.DriverAccess.dll")
+            FileDetails(ASCOMPathDotNet, "ASCOM.Utilities.dll")
 
             'ASCOM\Astrometry
             FileDetails(ASCOMPathAstrometry, "NOVAS3.dll")
@@ -3243,10 +3304,10 @@ Public Class DiagnosticsForm
             FileDetails(ASCOMPathAstrometry, "NOVAS-C64.pdb")
 
             'ASCOM\Interfaces
-            FileDetails(ASCOMPathInt, "Helper.tlb")
-            FileDetails(ASCOMPathInt, "Helper2.tlb")
-            FileDetails(ASCOMPathInt, "ASCOMMasterInterfaces.tlb")
-            FileDetails(ASCOMPathInt, "IObjectSafety.tlb")
+            FileDetails(ASCOMPathInterface, "ASCOMMasterInterfaces.tlb")
+            FileDetails(ASCOMPathInterface, "Helper.tlb")
+            FileDetails(ASCOMPathInterface, "Helper2.tlb")
+            FileDetails(ASCOMPathInterface, "IObjectSafety.tlb")
 
             'ASCOM\Platform\Internal
             FileDetails(ASCOMPathPlatformInternal, "ASCOM.Internal.GACInstall.exe")
@@ -3277,7 +3338,8 @@ Public Class DiagnosticsForm
     Sub FileDetails(ByVal FPath As String, ByVal FName As String)
         Dim FullPath As String
         Dim Att As FileAttributes, FVInfo As FileVersionInfo, FInfo As FileInfo
-        Dim Ass As Assembly, AssVer As String
+        Dim Ass As Assembly, AssVer As String = "", CompareName As String
+        Dim ReflectionAssemblies() As Assembly = Nothing
 
         Try
             FullPath = FPath & FName 'Create full filename from path and simple filename
@@ -3287,8 +3349,28 @@ Public Class DiagnosticsForm
                 Try
                     Ass = Assembly.ReflectionOnlyLoadFrom(FullPath)
                     AssVer = Ass.FullName
-                Catch ex As Exception
+                Catch ex As FileLoadException ' Dela with possibility that this assembly has already been loaded
+                    ReflectionAssemblies = AppDomain.CurrentDomain.ReflectionOnlyGetAssemblies() ' Get list of assemblies already loaded to the reflection only context
+                    Dim LastPoint As Integer
+                    LastPoint = FName.LastIndexOf(".")
+                    CompareName = FName.Substring(0, LastPoint)
+
+                    For Each ReflectionAss As Assembly In ReflectionAssemblies ' Find the assembly already there and get its full name
+                        If ReflectionAss.FullName.ToUpper.Contains(CompareName.ToUpper) Then
+                            AssVer = ReflectionAss.FullName
+                        End If
+                    Next
+                    If String.IsNullOrEmpty(AssVer) Then
+                        For Each ReflectionAss As Assembly In ReflectionAssemblies ' Find the assembly already there and get its full name
+                            TL.LogMessage("ErrorDiagnostics", ReflectionAss.FullName)
+                            LogException("FileDetails", "FileLoadException: " & ex.ToString)
+                        Next
+                    End If
+                Catch ex As BadImageFormatException
                     AssVer = "Not an assembly"
+                Catch ex As Exception
+                    LogException("FileDetails", "Exception: " & ex.ToString)
+                    AssVer = "Not an assembly: " & ex.ToString
                 End Try
 
                 TL.LogMessage("FileDetails", "   Assembly Version: " & AssVer)
@@ -3305,13 +3387,15 @@ Public Class DiagnosticsForm
                 TL.LogMessage("FileDetails", "   Last Write Time:  " & File.GetLastWriteTime(FullPath))
                 TL.LogMessage("FileDetails", "   Creation Time:    " & File.GetCreationTime(FullPath))
 
-                TL.LogMessage("FileDetails", "   File Length:      " & Format(FInfo.Length, "#,0."))
+                TL.LogMessage("FileDetails", "   File Length:      " & Format(FInfo.Length, "#,0.").Replace(ThousandsSeparator, ","))
 
                 Att = File.GetAttributes(FullPath)
                 TL.LogMessage("FileDetails", "   Attributes:       " & Att.ToString())
-
+                NMatches += 1
             Else
                 TL.LogMessage("FileDetails", "   ### Unable to find file: " & FullPath)
+                NNonMatches += 1
+                ErrorList.Add("FileDetails - Unable to find file: " & FullPath)
             End If
         Catch ex As Exception
             LogException("FileDetails", "### Exception: " & ex.ToString)
@@ -3625,38 +3709,57 @@ Public Class DiagnosticsForm
     Private Sub ScanInstalledPlatform()
         Dim RegKey As RegistryKey
 
+        GetInstalledComponent("Platform 5", "{14C10725-0018-4534-AE5E-547C08B737B7}", False)
+
         Try ' Platform 5.5 Inno installer setup, should always be absent in Platform 6!
             RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
 
-            TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
-            TL.LogMessage("Installed Platform", "Inno Setup App Path - " & RegKey.GetValue("Inno Setup: App Path"))
-            TL.LogMessage("Installed Platform", "Inno Setup Version - " & RegKey.GetValue("Inno Setup: Setup Version"))
-            TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
-            TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
+            TL.LogMessage("Platform 5.5", RegKey.GetValue("DisplayName"))
+            TL.LogMessage("Platform 5.5", "Inno Setup App Path - " & RegKey.GetValue("Inno Setup: App Path"))
+            TL.LogMessage("Platform 5.5", "Inno Setup Version - " & RegKey.GetValue("Inno Setup: Setup Version"))
+            TL.LogMessage("Platform 5.5", "Install Date - " & RegKey.GetValue("InstallDate"))
+            TL.LogMessage("Platform 5.5", "Install Location - " & RegKey.GetValue("InstallLocation"))
             RegKey.Close()
+        Catch ex As NullReferenceException
+            TL.LogMessage("Platform 5.5", "Not Installed")
         Catch ex As Exception
-            TL.LogMessage("Installed Platform", "OK - no Inno installer path found")
-        End Try
-
-        Try ' Platform 6 installer GUID, should always be present in Platform 6
-            RegKey = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & INSTALLER_PROPDUCT_CODE, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
-
-            TL.LogMessage("Installed Platform", RegKey.GetValue("DisplayName"))
-            TL.LogMessage("Installed Platform", "Version - " & RegKey.GetValue("DisplayVersion"))
-            TL.LogMessage("Installed Platform", "Install Date - " & RegKey.GetValue("InstallDate"))
-            TL.LogMessage("Installed Platform", "Install Location - " & RegKey.GetValue("InstallLocation"))
-            TL.LogMessage("Installed Platform", "Install Source - " & RegKey.GetValue("InstallSource"))
-            RegKey.Close()
-        Catch ex As ProfilePersistenceException
-            If ex.Message.Contains("as it does not exist") Then
-                LogException("Installed Platform", "Exception: " & ex.Message)
-            Else
-                LogException("Installed Platform", "Exception: " & ex.ToString)
-            End If
-        Catch ex As Exception
-            LogException("Installed Platform", "Exception: " & ex.ToString)
+            LogException("Platform 5.5", "Execption: " & ex.ToString)
         End Try
         TL.BlankLine()
+
+        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True)
+        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False)
+
+        TL.BlankLine()
+    End Sub
+
+    Private Sub GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean)
+        Dim RegKey As RegistryKey
+        Try ' Platform 6 installer GUID, should always be present in Platform 6
+            RegKey = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+
+            TL.LogMessage(Name, RegKey.GetValue("DisplayName", "##### Missing"))
+            TL.LogMessage(Name, "Version - " & RegKey.GetValue("DisplayVersion", "##### Missing"))
+            TL.LogMessage(Name, "Install Date - " & RegKey.GetValue("InstallDate", "##### Missing"))
+            TL.LogMessage(Name, "Install Location - " & RegKey.GetValue("InstallLocation", "##### Missing"))
+            TL.LogMessage(Name, "Install Source - " & RegKey.GetValue("InstallSource", "##### Missing"))
+            RegKey.Close()
+            NMatches += 1
+        Catch ex As ProfilePersistenceException
+            If ex.Message.Contains("as it does not exist") Then
+                If Required Then ' Must be present so log an error if its not
+                    LogException(Name, "Exception: " & ex.Message)
+                Else ' Optional so just record absence
+                    TL.LogMessage(Name, "Not installed")
+                End If
+            Else
+                LogException(Name, "Exception: " & ex.ToString)
+            End If
+        Catch ex As Exception
+            LogException(Name, "Exception: " & ex.ToString)
+        End Try
+        TL.BlankLine()
+
     End Sub
 
     Private Function InstallerName() As String
@@ -3664,9 +3767,9 @@ Public Class DiagnosticsForm
 
         Try ' Platform 6 installer GUID, should always be present in Platform 6
             If ApplicationBits() = Bitness.Bits32 Then '32bit OS
-                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & INSTALLER_PROPDUCT_CODE, False)
+                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
             Else '64bit OS
-                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & INSTALLER_PROPDUCT_CODE, False)
+                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
             End If
 
             DisplayName = RegKey.GetValue("DisplayName")
@@ -3699,7 +3802,7 @@ Public Class DiagnosticsForm
                 RecurseASCOMDrivers(BaseDir & "\SafetyMonitor") 'Check safetymonitor drivers
                 RecurseASCOMDrivers(BaseDir & "\Switch") 'Check switch drivers
 
-                BaseDir = Environment.GetFolderPath(SpecialFolder.CommonProgramFiles) & "\ASCOM"
+                BaseDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM"
 
                 RecurseASCOMDrivers(BaseDir & "\Telescope") 'Check telescope drivers
                 RecurseASCOMDrivers(BaseDir & "\Camera") 'Check camera drivers
@@ -3710,7 +3813,7 @@ Public Class DiagnosticsForm
                 RecurseASCOMDrivers(BaseDir & "\SafetyMonitor") 'Check safetymonitor drivers
                 RecurseASCOMDrivers(BaseDir & "\Switch") 'Check switch drivers
             Else '32 bit OS
-                BaseDir = Environment.GetFolderPath(SpecialFolder.CommonProgramFiles) & "\ASCOM"
+                BaseDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM"
 
                 RecurseASCOMDrivers(BaseDir & "\Telescope") 'Check telescope drivers
                 RecurseASCOMDrivers(BaseDir & "\Camera") 'Check camera drivers

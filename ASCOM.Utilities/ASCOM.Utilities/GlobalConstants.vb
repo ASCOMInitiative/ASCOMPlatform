@@ -59,7 +59,8 @@ Module GlobalConstants
     Public Const DRIVERS_64BIT As String = "Drivers Not Compatible With 32bit Applications" ' 64bit only registry location
 
     'Installer Variables
-    Public Const INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}"
+    Public Const PLATFORM_INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}"
+    Public Const DEVELOPER_INSTALLER_PROPDUCT_CODE As String = "{4A195DC6-7DF9-459E-8F93-60B61EB45288}"
 
     Friend Enum EventLogErrors As Integer
         EventLogCreated = 0
