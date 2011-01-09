@@ -1,4 +1,4 @@
-IF (Name.Text <> )  THEN  Next.Enabled := True;
-IF (Company.Text <> )  THEN  Next.Enabled := True;
-IF (Name.Text = )  THEN  Next.Enabled := False;
-IF (Company.Text = )  THEN  Next.Enabled := False;
+IF (UserName.Text <> )  THEN  Next.Enabled := True;
+IF (UserCompany.Text <> )  THEN  Next.Enabled := True;
+IF (UserName.Text = )  THEN  Next.Enabled := False;
+IF (UserCompany.Text = )  THEN  Next.Enabled := False;

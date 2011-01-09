@@ -1,4 +1,4 @@
-..\..\..\..\..\Users\Peter\Documents\My Project\My Project.mia
+ASCOM Platform 6 Developer.mia
 componentstree.dfm
 componentstree.dfm.miaf
 destination.dfm
@@ -33,7 +33,24 @@ wizard.dfm
 wizard.dfm.miaf
 $
 icon.ico
+Index.htm
+moon.bmp
+swoosh.avi
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -336,23 +353,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Developer Components Alpha 7
+ASCOM Platform 6 Developer Components Alpha 8
 {4A195DC6-7DF9-459E-8F93-60B61EB45288}
 {DAF6A65F-A20B-4FB8-859C-1F82F1D1AEF5}
-6.0.0
+6.0.0.0
 English
-ASCOM Platform 6 Developer Components - Alpha 7
+ASCOM Platform 6 Developer Components - Alpha 8
 ASCOM Platform 6 Developer Components Installation
 ASCOM Initiative
-All rights reserved
-{5818BED2-CEA8-438A-804E-7646B8A53247}
+All rights reserved. http://www.ascom-standards.org
+{AF293D93-33DD-4220-8787-69E572B1E82A}
 ASCOM Initiative
 ASCOM Initiative
-http://www.mywebsite.com/
-http://www.mywebsite.com/
-All rights reserved
+http://tech.groups.yahoo.com/group/ASCOM-Talk
+http://ascom-standards.org/Downloads/Index.htm
+Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6DeveloperAlpha7
+ASCOMPlatform6DeveloperAlpha8
 TRUE
 FALSE
 
