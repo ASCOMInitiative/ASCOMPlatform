@@ -1,0 +1,156 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Telescope.MoveAxis() Method</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<div class="req">Optional</div>
+
+<h1><a name="TelescopeTelescopeMETHMoveAxis"></a>Telescope.MoveAxis() Method</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeTelescopeMETHMoveAxisC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeTelescopeMETHMoveAxisX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- parent class -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink">
+<param name="Text" value="Text:Telescope object">
+<param name="Flags" value=",,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeCLASSTelescopeO">
+</object>
+</p>
+
+<p class=desc>
+Move the telescope in one axis at the given rate.</p>
+
+<h2>Syntax</h2>
+
+<p class=indent><code>
+<b>Telescope.MoveAxis(</b><i>Axis</i>, <i>Rate</i><b>)</b></code></p>
+
+<p>
+The method syntax has these parts:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Part</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><i>Axis</i>&nbsp;(<a href="#TelescopeAxes">TelescopeAxes</a>)</td>
+  <td>The physical axis about which movement is desired</td>
+ </tr>
+ <tr>
+  <td><i>Rate</i>&nbsp;(Double)</td>
+  <td>The rate of motion (deg/sec, + = clockwise) about the specified axis</td>
+ </tr>
+
+ <tr>
+  <td>Return&nbsp;(Nothing)</td>
+  <td>Does not return a value.</td>
+ </tr>
+</table></div><br>
+
+<h2>Remarks</h2>
+
+This method supports control of the mount about its mechanical axes. The telescope will start moving at the specified rate about the specified axis and continue indefinitely. This method can be called for each axis separately, and have them all operate concurretly at separate rates of motion. The sign of the Rate parameter determines the direction of motion, with positive being clockwise and negative being counterclockwise.
+
+<p>Set the rate for an axis to zero to stop the motionabout that axis. Tracking motion (if enabled, see note below) is suspended during this mode of operation. Raises an error if AtPark is true.
+
+<p>This must be implemented for the if the <a href="TelescopeTelescopePROPCanMoveAxis.htm">CanMoveAxis</a> property returns True for the given axis.
+
+<p><b>Notes:</b>
+<ul>
+
+<li>The movement rate must be within the value(s) obtained from a <a href="TelescopeCLASSRate.htm">Rate</a> object in the the <a href="TelescopeTelescopePROPAxisRates.htm">AxisRates</a> collection. An out of range exception is raised the rate is out of range.</li>
+
+<li>The value of the <a href="TelescopeTelescopePROPSlewing.htm">Slewing</a> property must be True if the telescope is moving about <i>any</i> of its axes as a result of this method being called.
+
+<li>This can be used to simulate a handbox by initiating motion with the MouseDown event and stopping the motion with the MouseUp event.</li>
+
+<li>When the motion is stopped the scope will be set to the previous TrackingRate or to no movement, depending on the state of the <a href="TelescopeTelescopePROPTracking.htm">Tracking</a> property.</li>
+
+<li>It may be possible to implement satellite tracking by using the MoveAxis() method to move the scope in the required manner to track a satellite.</li>
+
+</ul>
+
+<h2>Symbolic Constants</h2>
+
+<p>
+<a name="TelescopeAxes"></a>The (symbolic) values for <b>TelescopeAxes</b> are:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Constant</th>
+  <th>Value</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><b>axisPrimary</b></td>
+  <td>0</td>
+  <td>Primary axis (e.g., Right Ascension or Azimuth)</td>
+ </tr>
+ <tr>
+  <td><b>axisSecondary</b></td>
+  <td>1</td>
+  <td>Secondary axis (e.g., Declination or Altitude)</td>
+ </tr>
+ <tr>
+  <td><b>axisTertiary</b></td>
+  <td>2</td>
+  <td>Tertiary axis (e.g. imager rotator/de-rotator)</td>
+ </tr>
+
+</table></div>
+
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2008, The ASCOM Initiative</div>
+
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeCLASSRateC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopeMETHAxisRatesC">
+</OBJECT>
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopeMETHCanMoveAxisC">
+</OBJECT>
+
+
+<object type="application/x-oleobject" 
+	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="TelescopeCLASSTelescopeM">
+</object>
+
+</body>
+</html>
+

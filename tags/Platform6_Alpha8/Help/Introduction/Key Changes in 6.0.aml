@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7a83428f-586f-44ac-bf65-91a5fe97e8cf" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+       
+    <section address="KeyChangesin6.0All">
+    	<title>Key Changes in 6.0 - For Everyone</title>
+      	<content>
+      		<list class="bullet">
+      			<listItem>Flexibility - Capability for driver authors to implement their own commands (Action and SupportedActions methods)</listItem>
+      			<listItem>Supported Device Types
+  					<list class="bullet">
+  						<listItem>New Switch device definition</listItem>
+  						<listItem>New SafetyDevice device definition</listItem>
+  						<listItem>New CameraV2 device definition</listItem>
+  						<listItem>All device types now support a common set of core capabilities
+  						<list class="bullet">
+  						</list>
+	  						<listItem>Action - Execute a device specific capability defined by the driver author</listItem>
+	  						<listItem>CommandBlind - Send a device specific control code to a device expecting no response</listItem>
+	  						<listItem>CommandBool - Send a device specific control code to a device expecting a boolean response</listItem>
+	  						<listItem>CommandString - Send a device specific control code to a device expecting a string response</listItem>
+	  						<listItem>Connected - connects and disconnects the controlled device</listItem>
+	  						<listItem>Description - Long description of the device being controlled</listItem>	  						
+	  						<listItem>Dispose - Clean up and release any driver resources prior to driver shutdown</listItem>
+	  						<listItem>DriverInfo - Long description of the driver controlling the device</listItem>
+	  						<listItem>DriverVersion - m.n format driver version number</listItem>
+	  						<listItem>InterfaceVersion - Version number of the ASCOM interface that the driver supports</listItem>
+	  						<listItem>Name - Short display name of the driver</listItem>
+	  						<listItem>SetupDialog - DIsplays the driver / device configuration screen</listItem>
+	  						<listItem>SupportedActions - List of actions supported by this device</listItem>
+	  					</listItem>
+  					</list>
+  				</listItem>
+  				<listItem>Multiple device instances ???</listItem>
+  				<listItem>Tool to tell you when updated components are available</listItem>  	
+  				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
+  				<listItem>NOVAS2 and NOVAS3 components now have DeltaT methods valid for the year 1650 to 2050.</listItem>
+  			</list>
+      	</content>
+    </section>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,106 @@
+[ISPP] Preprocessing.
+
+
+[ISPP] Preprocessed.
+
+
+Compilation started: Sat Sep 12 00:11:03 2009
+Running pre-compile steps
+
+Compiling script using Inno Setup 5.3.4 (a) (ISPP 5.3.3 (a))
+Parsing [Setup] section, line 23
+Parsing [Setup] section, line 27
+Parsing [Setup] section, line 28
+Parsing [Setup] section, line 29
+Parsing [Setup] section, line 30
+Parsing [Setup] section, line 31
+Parsing [Setup] section, line 32
+Parsing [Setup] section, line 34
+Parsing [Setup] section, line 35
+Parsing [Setup] section, line 36
+Parsing [Setup] section, line 37
+Parsing [Setup] section, line 38
+Parsing [Setup] section, line 39
+Parsing [Setup] section, line 40
+Parsing [Setup] section, line 41
+Parsing [Setup] section, line 42
+Parsing [Setup] section, line 43
+Parsing [Setup] section, line 44
+Parsing [Setup] section, line 45
+Parsing [Setup] section, line 46
+Parsing [Setup] section, line 47
+Parsing [Setup] section, line 48
+Parsing [Setup] section, line 49
+Parsing [Setup] section, line 50
+Parsing [Setup] section, line 51
+Parsing [Setup] section, line 52
+Parsing [Setup] section, line 53
+Parsing [Setup] section, line 54
+Parsing [Setup] section, line 55
+Parsing [Setup] section, line 56
+Parsing [Setup] section, line 57
+Parsing [Setup] section, line 58
+Parsing [Setup] section, line 59
+Parsing [Setup] section, line 60
+Parsing [Setup] section, line 61
+Parsing [Setup] section, line 62
+Parsing [Setup] section, line 63
+Reading file (WizardImageFile)
+   File: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\NewWizardImage.bmp
+Reading file (WizardSmallImageFile)
+   File: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\ASCOMLogo.bmp
+Preparing Setup program executable
+   Updating icons (SETUP.E32)
+Reading default messages from Default.isl
+Parsing [Languages] section, line 66
+   File: C:\Program Files\Inno Setup 5\Default.isl
+Parsing [LangOptions], [Messages], and [CustomMessages] sections
+   Messages in script file
+Reading [Code] section
+Parsing [Tasks] section, line 73
+Parsing [Dirs] section, line 69
+Parsing [Dirs] section, line 70
+Parsing [Icons] section, line 100
+Parsing [UninstallDelete] section, line 115
+Parsing [UninstallDelete] section, line 116
+Parsing [UninstallDelete] section, line 117
+Parsing [UninstallDelete] section, line 118
+Parsing [Run] section, line 105
+Parsing [UninstallRun] section, line 111
+Parsing [Files] section, line 77
+Parsing [Files] section, line 78
+Parsing [Files] section, line 80
+Parsing [Files] section, line 81
+Parsing [Files] section, line 83
+Parsing [Files] section, line 84
+Parsing [Files] section, line 85
+Parsing [Files] section, line 86
+Parsing [Files] section, line 88
+Parsing [Files] section, line 89
+Parsing [Files] section, line 90
+Parsing [Files] section, line 91
+Parsing [Files] section, line 97
+Compiling [Code] section
+Deleting GeminiTelescopeInstaller(1.0.2.1).exe from output directory
+Creating setup files
+   Updating icons (SETUP.EXE)
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescope\bin\Release\ASCOM.GeminiTelescope.exe
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescope\bin\Release\ASCOM.GeminiTelescope.pdb
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescope\bin\Debug\ASCOM.GeminiTelescope.exe
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescope\bin\Debug\ASCOM.GeminiTelescope.pdb
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescopeServedClasses\ASCOM.GeminiTelescope.Telescope.dll
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescopeServedClasses\ASCOM.GeminiTelescope.Telescope.pdb
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescopeServedClassesDebug\ASCOM.GeminiTelescope.Telescope.dll
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescopeServedClassesDebug\ASCOM.GeminiTelescope.Telescope.pdb
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescopeServedClasses\ASCOM.GeminiTelescope.Focuser.dll
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescopeServedClasses\ASCOM.GeminiTelescope.Focuser.pdb
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescopeServedClassesDebug\ASCOM.GeminiTelescope.Focuser.dll
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescopeServedClassesDebug\ASCOM.GeminiTelescope.Focuser.pdb
+   Compressing: C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\..\GeminiTelescope\bin\Release\GeminiSB32x32.ico
+   Compressing Setup program executable
+   Updating version info
+
+C:\Documents and Settings\Peter\My Documents\ASCOM Source\Drivers and Simulators\Gemini Driver\Setup\GeminiTelescopeInstaller(1.0.2.1).exe
+
+Running post-compile steps
+Compilation ended: Sat Sep 12 00:11:05 2009
