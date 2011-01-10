@@ -84,6 +84,8 @@ namespace ASCOM.Simulator
             this.cameraBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.checkBoxInterfaceVersion = new System.Windows.Forms.CheckBox();
+            this.groupBoxGuiding = new System.Windows.Forms.GroupBox();
+            this.checkBoxCanPulseGuide = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -92,13 +94,14 @@ namespace ASCOM.Simulator
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).BeginInit();
+            this.groupBoxGuiding.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(393, 290);
+            this.cmdOK.Location = new System.Drawing.Point(392, 290);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -110,7 +113,7 @@ namespace ASCOM.Simulator
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(393, 320);
+            this.cmdCancel.Location = new System.Drawing.Point(392, 320);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -131,7 +134,7 @@ namespace ASCOM.Simulator
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(404, 9);
+            this.picASCOM.Location = new System.Drawing.Point(403, 9);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -628,11 +631,32 @@ namespace ASCOM.Simulator
             this.checkBoxInterfaceVersion.UseVisualStyleBackColor = true;
             this.checkBoxInterfaceVersion.CheckedChanged += new System.EventHandler(this.checkBoxInterfaceVersion_CheckedChanged);
             // 
+            // groupBoxGuiding
+            // 
+            this.groupBoxGuiding.Controls.Add(this.checkBoxCanPulseGuide);
+            this.groupBoxGuiding.Location = new System.Drawing.Point(331, 101);
+            this.groupBoxGuiding.Name = "groupBoxGuiding";
+            this.groupBoxGuiding.Size = new System.Drawing.Size(124, 46);
+            this.groupBoxGuiding.TabIndex = 11;
+            this.groupBoxGuiding.TabStop = false;
+            this.groupBoxGuiding.Text = "Guiding";
+            // 
+            // checkBoxCanPulseGuide
+            // 
+            this.checkBoxCanPulseGuide.AutoSize = true;
+            this.checkBoxCanPulseGuide.Location = new System.Drawing.Point(6, 17);
+            this.checkBoxCanPulseGuide.Name = "checkBoxCanPulseGuide";
+            this.checkBoxCanPulseGuide.Size = new System.Drawing.Size(105, 17);
+            this.checkBoxCanPulseGuide.TabIndex = 0;
+            this.checkBoxCanPulseGuide.Text = "Can Pulse Guide";
+            this.checkBoxCanPulseGuide.UseVisualStyleBackColor = true;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(462, 353);
+            this.ClientSize = new System.Drawing.Size(461, 353);
+            this.Controls.Add(this.groupBoxGuiding);
             this.Controls.Add(this.checkBoxInterfaceVersion);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -665,6 +689,8 @@ namespace ASCOM.Simulator
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).EndInit();
+            this.groupBoxGuiding.ResumeLayout(false);
+            this.groupBoxGuiding.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -727,5 +753,7 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Button buttonSetImageFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.CheckBox checkBoxInterfaceVersion;
+        private System.Windows.Forms.GroupBox groupBoxGuiding;
+        private System.Windows.Forms.CheckBox checkBoxCanPulseGuide;
 	}
 }
