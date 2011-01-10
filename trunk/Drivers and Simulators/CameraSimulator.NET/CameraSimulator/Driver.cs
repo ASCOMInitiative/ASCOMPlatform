@@ -18,8 +18,10 @@
 // 09-Jan-2009  cdr 6.0.0   Get the basic functionality working, some V2 properties in place but no interface
 // 22-Jan-2009  cdr 6.0.0   More functionality, including temperature, noise, image
 // 03-Oct-2010  cdr 6.0.0   Should be close to complete.
+// 09-Jan-2010  cdr 6.0.0   Simple implementation of PulseGuide. Does nothing except manipulate isPulseGuiding
 // --------------------------------------------------------------------------------
 //
+
 using System;
 using System.Drawing;
 using System.Globalization;
@@ -41,6 +43,7 @@ namespace ASCOM.Simulator
     /// </summary>
 	[Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None),ComVisible(true)]
     public class Camera : ICameraV2
+
     {
         #region profile string constants
         private const string STR_InterfaceVersion = "InterfaceVersion";
@@ -70,6 +73,7 @@ namespace ASCOM.Simulator
         private const string STR_ExposureResolution = "ExposureResolution";
         private const string STR_ImagePath = "ImageFile";
         private const string STR_ApplyNoise = "ApplyNoise";
+        private const string STR_CanPulseGuide = "CanPulseGuide";
         #endregion
 
         #region internal properties
@@ -137,6 +141,13 @@ namespace ASCOM.Simulator
         private bool fastReadout;
         private short readoutMode;
         internal string[] readoutModes;
+
+        // guiding
+        internal bool canPulseGuide;
+        private System.Timers.Timer pulseGuideRaTimer;
+        private volatile bool isPulseGuidingRa;
+        private System.Timers.Timer pulseGuideDecTimer;
+        private volatile bool isPulseGuidingDec;
 
         // simulation
         internal string imagePath;
@@ -485,7 +496,7 @@ namespace ASCOM.Simulator
 		/// </summary>
 		public bool CanPulseGuide
 		{
-			get { return false; }
+			get { return this.canPulseGuide; }
 		}
 
 		/// <summary>
@@ -628,7 +639,7 @@ namespace ASCOM.Simulator
                 if (this.interfaceVersion == 1)
                     return "Simulated V1 Camera";
                 else
-                    return string.Format(CultureInfo.CurrentCulture, "Simulated {0} camera {1}", this.sensorType, this.SensorName);
+                    return string.Format(CultureInfo.CurrentCulture, "Simulated {0} camera {1}", this.sensorType, this.sensorName);
             }
 		}
 
@@ -801,7 +812,12 @@ namespace ASCOM.Simulator
 		/// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
 		public bool IsPulseGuiding
 		{
-			get { throw new System.InvalidOperationException("The method or operation is not implemented."); }
+			get
+            {
+                if (!this.canPulseGuide)
+                    throw new System.InvalidOperationException("The method or operation is not implemented.");
+                return this.isPulseGuidingRa || this.isPulseGuidingDec;
+            }
 		}
 
 		/// <summary>
@@ -976,10 +992,54 @@ namespace ASCOM.Simulator
 		/// <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
 		public void PulseGuide(GuideDirections Direction, int Duration)
 		{
-			throw new ASCOM.MethodNotImplementedException("PulseGuide");
+            if (! this.canPulseGuide)
+			    throw new ASCOM.MethodNotImplementedException("PulseGuide");
+
+            // very simple implementation, starts a timer that turns isPulseGuiding off when it elapses
+            // consider calculating and applying a shift to the image
+            // separate Ra and Dec timers
+            switch (Direction)
+            {
+                case GuideDirections.guideEast:
+                case GuideDirections.guideWest:
+                    if (this.pulseGuideRaTimer == null)
+                    {
+                        this.pulseGuideRaTimer = new System.Timers.Timer();
+                        this.pulseGuideRaTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideRaTimer_Elapsed);
+                    }
+                    this.isPulseGuidingRa = true;
+                    this.pulseGuideRaTimer.Interval = Duration;
+                    this.pulseGuideRaTimer.AutoReset = false;     // only one tick
+                    this.pulseGuideRaTimer.Enabled = true;
+                    break;
+                case GuideDirections.guideNorth:
+                case GuideDirections.guideSouth:
+                    if (this.pulseGuideDecTimer == null)
+                    {
+                        this.pulseGuideDecTimer = new System.Timers.Timer();
+                        this.pulseGuideDecTimer.Elapsed += new System.Timers.ElapsedEventHandler(pulseGuideDecTimer_Elapsed);
+                    }
+                    this.isPulseGuidingDec = true;
+                    this.pulseGuideDecTimer.Interval = Duration;
+                    this.pulseGuideDecTimer.AutoReset = false;     // only one tick
+                    this.pulseGuideDecTimer.Enabled = true;
+                    break;
+                default:
+                    break;
+            }
 		}
 
-		/// <summary>
+        private void  pulseGuideRaTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            this.isPulseGuidingRa = false;
+        }
+
+        private void  pulseGuideDecTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            this.isPulseGuidingDec = false;
+        }
+        
+        /// <summary>
 		/// Sets the camera cooler setpoint in degrees Celsius, and returns the current
 		/// setpoint.
 		/// Note:  camera hardware and/or driver should perform cooler ramping, to prevent
@@ -1104,7 +1164,7 @@ namespace ASCOM.Simulator
             }
             this.lastExposureStartTime = DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss", CultureInfo.InvariantCulture);
             // set the image array dimensions
-            if (this.SensorType == SensorType.Color)
+            if (this.sensorType == SensorType.Color)
                 this.imageArrayColour = new int[this.numX, this.numY, 3];
             else
                 this.imageArray = new int[this.numX, this.numY];
@@ -1634,6 +1694,7 @@ namespace ASCOM.Simulator
                 this.hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
                 this.sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
                 this.sensorType = (ASCOM.DeviceInterface.SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
+
                 this.bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
                 this.bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
 
@@ -1650,6 +1711,8 @@ namespace ASCOM.Simulator
                 string fullPath = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly((this.GetType())).Location);
                 this.imagePath = profile.GetValue(s_csDriverID, STR_ImagePath, string.Empty, Path.Combine(fullPath, @"m42-800x600.jpg"));
                 this.applyNoise = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_ApplyNoise, string.Empty, "false"), CultureInfo.InvariantCulture);
+
+                this.canPulseGuide = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanPulseGuide, string.Empty, "false"), CultureInfo.InvariantCulture);
 
                 // default to min = max && gains = null - no gain control
                 this.gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
@@ -1729,6 +1792,8 @@ namespace ASCOM.Simulator
                 profile.WriteValue(s_csDriverID, STR_ExposureResolution, this.exposureResolution.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_ImagePath, this.imagePath);
                 profile.WriteValue(s_csDriverID, STR_ApplyNoise, this.applyNoise.ToString(CultureInfo.InvariantCulture));
+
+                profile.WriteValue(s_csDriverID, STR_CanPulseGuide, this.canPulseGuide.ToString(CultureInfo.InvariantCulture));
 
                 // entertaining setting the gain options.
                 // TODO review this, it may not be correct.
@@ -2049,7 +2114,24 @@ namespace ASCOM.Simulator
             imageData[x, y, 1] = (bmp.GetPixel(x, y).G);
             imageData[x, y, 2] = (bmp.GetPixel(x, y).B);
         }
+
         #endregion
 
+
+
+
+
+
     }
+
+
+
+
+
+
+
+
+
+
+
 }

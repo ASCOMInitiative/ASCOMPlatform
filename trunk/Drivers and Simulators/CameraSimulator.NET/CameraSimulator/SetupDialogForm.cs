@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 
+
 namespace ASCOM.Simulator
 {
 	[ComVisible(false)]					// Form not registered for COM!
@@ -98,6 +99,8 @@ namespace ASCOM.Simulator
             this.textBoxGainMax.Text = theCamera.gainMax.ToString(CultureInfo.InvariantCulture);
             this.checkBoxApplyNoise.Checked = theCamera.applyNoise;
 
+            this.checkBoxCanPulseGuide.Checked = theCamera.canPulseGuide;
+
             this.camera = theCamera;
         }
 
@@ -130,6 +133,8 @@ namespace ASCOM.Simulator
             camera.exposureMax = Convert.ToDouble(this.textBoxMaxExposure.Text, CultureInfo.InvariantCulture);
             //camera.exposureResolution = Convert.ToDouble(this.textBoxExposureResolution.Text, CultureInfo.InvariantCulture);
             camera.applyNoise = this.checkBoxApplyNoise.Checked;
+
+            camera.canPulseGuide = this.checkBoxCanPulseGuide.Checked;
 
             if (this.radioButtonNoGain.Checked)
             {
