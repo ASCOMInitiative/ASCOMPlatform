@@ -36,7 +36,7 @@ namespace ASCOM.Simulator
     [Guid("347B5004-3662-42C0-96B8-3F8F6F0467D2")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)] 
-	public class Rotator : ReferenceCountedObjectBase, IRotator
+	public class Rotator : ReferenceCountedObjectBase, IRotatorV2
 	{
 
 		//
@@ -129,7 +129,7 @@ namespace ASCOM.Simulator
             get { return RotatorHardware.RotatorName; }
         }
 
-        ArrayList IRotator.SupportedActions
+        ArrayList IRotatorV2.SupportedActions
 	    {
             get { return new ArrayList(); }
 	    }
@@ -180,7 +180,7 @@ namespace ASCOM.Simulator
 			//RotatorSimulator.m_MainForm.DoSetupDialog();			// Kinda sleazy
 		}
 
-	    string IRotator.Action(string actionName, string actionParameters)
+	    string IRotatorV2.Action(string actionName, string actionParameters)
 	    {
 	        throw new System.NotImplementedException();
 	    }

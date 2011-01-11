@@ -8,7 +8,7 @@ Imports System.Collections
 ''' Defines the ITelescope Interface
 ''' </summary>
 <ComVisible(True), Guid("A007D146-AE3D-4754-98CA-199FEC03CF68"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
-Public Interface ITelescopeV2 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
+Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
 
 #Region "Common Methods"
     ''' <summary>

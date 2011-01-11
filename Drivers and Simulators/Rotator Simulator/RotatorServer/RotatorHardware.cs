@@ -37,7 +37,7 @@ namespace ASCOM.Simulator
         private static string _description = "ASCOM Rotator Driver for RotatorSimulator";
         private static string _driverInfo = "ASCOM.Simulator.Rotator";
         private static string _driverVersion = "6.0";
-        private static short _interfaceVersion = 6;
+        private static short _interfaceVersion = 2;
         private static string s_sProgID = "ASCOM.Simulator.Rotator";
 
         private static Profile Profile;

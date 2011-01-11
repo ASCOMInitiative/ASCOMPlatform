@@ -6,7 +6,7 @@
 ''' Defines the IDome Interface
 ''' </summary>
 <Guid("88CFA00C-DDD3-4b42-A1F0-9387E6823832"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
-Public Interface IDome 'CCDA0D85-474A-4775-8105-1D513ADC3896
+Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
 
 #Region "Common Methods"
     'IAscomDriver Methods

@@ -1,13 +1,12 @@
-﻿'-----------------------------------------------------------------------
-' <summary>Defines the ISwitch Interface</summary>
+﻿Imports System.Runtime.InteropServices
 '-----------------------------------------------------------------------
-Imports System.Runtime.InteropServices
-Imports System.Collections
+' <summary>Defines the IRotator Interface</summary>
+'-----------------------------------------------------------------------
 ''' <summary>
-''' Defines the ISwitch Interface
-''' </summary> 
-<Guid("E15267DD-E5EB-4a2c-A26E-56B68996A105"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
-Public Interface ISwitch '44C03033-C60E-4101-856C-AAFB0F735F83
+''' Defines the IRotator Interface
+''' </summary>
+<Guid("692FA48C-4A30-4543-8681-DA0733758F11"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
+Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
 
 #Region "Common Methods"
     'IAscomDriver Methods
@@ -140,16 +139,51 @@ Public Interface ISwitch '44C03033-C60E-4101-856C-AAFB0F735F83
 
 #Region "Device Methods"
     ''' <summary>
-    ''' Yields a collection of strings in an arraylist.
+    ''' Returns True if the Rotator supports the Rotator.Reverse() method.
     ''' </summary>
-    ReadOnly Property Switches() As ArrayList
+    ReadOnly Property CanReverse() As Boolean
 
     ''' <summary>
-    ''' Sets a switch to on or off
+    ''' Immediately stop any Rotator motion due to a previous Move() or MoveAbsolute() method call.
     ''' </summary>
-    ''' <param name="Name">Name=name of switch to set</param> 
-    ''' <param name="State">True=On, False=Off</param> 
-    Sub SetSwitch(ByVal Name As String, ByVal State As Boolean)
+    Sub Halt()
+
+    ''' <summary>
+    ''' True if the Rotator is currently moving to a new position. False if the Rotator is stationary.
+    ''' </summary>
+    ReadOnly Property IsMoving() As Boolean
+
+    ''' <summary>
+    ''' Causes the rotator to move Position degrees relative to the current Position value.
+    ''' </summary>
+    ''' <param name="Position">Relative position to move in degrees from current Position.</param>
+    Sub Move(ByVal Position As Single)
+
+    ''' <summary>
+    ''' Causes the rotator to move the absolute position of Position degrees.
+    ''' </summary>
+    ''' <param name="Position">absolute position in degrees.</param>
+    Sub MoveAbsolute(ByVal Position As Single)
+
+    ''' <summary>
+    ''' Current instantaneous Rotator position, in degrees.
+    ''' </summary>
+    ReadOnly Property Position() As Single
+
+    ''' <summary>
+    ''' Sets or Returns the rotator’s Reverse state.
+    ''' </summary>
+    Property Reverse() As Boolean
+
+    ''' <summary>
+    ''' The minimum StepSize, in degrees.
+    ''' </summary>
+    ReadOnly Property StepSize() As Single
+
+    ''' <summary>
+    ''' Current Rotator target position, in degrees.
+    ''' </summary>
+    ReadOnly Property TargetPosition() As Single
 #End Region
 
 End Interface

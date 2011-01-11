@@ -21,7 +21,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Implements a telescope class to access any registered ASCOM telescope
     /// </summary>
-    public class Telescope : AscomDriver, ITelescopeV2
+    public class Telescope : AscomDriver, ITelescopeV3
     {
         private MemberFactory memberFactory;
         private bool isPlatform6Telescope = false;
@@ -39,23 +39,8 @@ namespace ASCOM.DriverAccess
 
             foreach (Type objInterface in memberFactory.GetInterfaces)
             {
-                if (objInterface.Equals(typeof(ITelescopeV2))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
+                if (objInterface.Equals(typeof(ITelescopeV3))) isPlatform6Telescope = true; //If the type matches the V2 type flag this
                 if (objInterface.Equals(typeof(ASCOM.Interface.ITelescope))) isPlatform5Telescope = true; //If the type matches the PIA type flag this
-                //global::System.Windows.Forms.MessageBox.Show("Interfaces " + objInterface.AssemblyQualifiedName.ToString());
-
-                //if (objInterface.Name.Contains("ITelescope")) //Just check out the ITelescope interfaces
-                //{
-                    // Get the version of the executing assembly (that is, this assembly).
-                    // AssemblyName assemName = objInterface.Assembly.GetName();
-                    //Version ver = assemName.Version;
-                    //global::System.Windows.Forms.MessageBox.Show("Interface Version " + ver.ToString());
-
-                    //if (ver == new Version(1, 0, 0, 0)) isTelescopePIA = true;
-                    //if (ver == new Version(1, 0, 0, 2)) isTelescopeV2 = true;
-
-
-                    //else isTelescopePIA = true;
-                //}
             }
 
         }

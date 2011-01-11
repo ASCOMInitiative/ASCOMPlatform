@@ -44,7 +44,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 6;
+        private const short interfaceVersion = 2;
 
         /// <summary>
         /// Driver version number

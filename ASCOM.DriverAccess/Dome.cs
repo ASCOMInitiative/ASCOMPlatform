@@ -15,7 +15,7 @@ namespace ASCOM.DriverAccess
 	/// <summary>
 	/// Provides universal access to ASCOM Dome drivers
 	/// </summary>
-	public class Dome : AscomDriver, IDome
+	public class Dome : AscomDriver, IDomeV2
     {
         #region Dome constructors
 
