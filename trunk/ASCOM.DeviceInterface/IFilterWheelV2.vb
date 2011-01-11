@@ -7,7 +7,7 @@
 ''' Defines the IFilterWheel Interface
 ''' </summary>
 <Guid("DCF3858D-D68E-45ed-8141-1C899B4B432A"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
-Public Interface IFilterWheel '756FD725-A6E2-436F-8C7A-67E358622027
+Public Interface IFilterWheelV2 '756FD725-A6E2-436F-8C7A-67E358622027
     '    Inherits IAscomDriver
     '    Inherits IDeviceControl
 #Region "Common Methods"

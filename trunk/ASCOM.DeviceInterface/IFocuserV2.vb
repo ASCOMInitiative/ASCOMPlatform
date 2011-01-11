@@ -1,13 +1,13 @@
 ﻿Imports System.Runtime.InteropServices
 '-----------------------------------------------------------------------
-' <summary>Defines the IRotator Interface</summary>
+' <summary>Defines the IFocuser interface.</summary>
 '-----------------------------------------------------------------------
-''' <summary>
-''' Defines the IRotator Interface
-''' </summary>
-<Guid("692FA48C-4A30-4543-8681-DA0733758F11"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
-Public Interface IRotator '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
 
+''' <summary>
+''' Provides universal access to Focuser drivers
+''' </summary>
+<Guid("E430C8A8-539E-4558-895D-A2F293D946E7"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
+Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
 #Region "Common Methods"
     'IAscomDriver Methods
 
@@ -139,51 +139,92 @@ Public Interface IRotator '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
 
 #Region "Device Methods"
     ''' <summary>
-    ''' Returns True if the Rotator supports the Rotator.Reverse() method.
+    ''' True if the focuser is capable of absolute position; that is, being commanded to a specific step location.
     ''' </summary>
-    ReadOnly Property CanReverse() As Boolean
+    ReadOnly Property Absolute() As Boolean
 
     ''' <summary>
-    ''' Immediately stop any Rotator motion due to a previous Move() or MoveAbsolute() method call.
+    ''' Immediately stop any focuser motion due to a previous Move() method call.
+    ''' Some focusers may not support this function, in which case an exception will be raised. 
+    ''' Recommendation: Host software should call this method upon initialization and,
+    ''' if it fails, disable the Halt button in the user interface. 
     ''' </summary>
     Sub Halt()
 
     ''' <summary>
-    ''' True if the Rotator is currently moving to a new position. False if the Rotator is stationary.
+    ''' True if the focuser is currently moving to a new position. False if the focuser is stationary.
     ''' </summary>
     ReadOnly Property IsMoving() As Boolean
 
     ''' <summary>
-    ''' Causes the rotator to move Position degrees relative to the current Position value.
+    ''' State of the connection to the focuser.
+    ''' et True to start the link to the focuser; set False to terminate the link. 
+    ''' The current link status can also be read back as this property. 
+    ''' An exception will be raised if the link fails to change state for any reason. 
     ''' </summary>
-    ''' <param name="Position">Relative position to move in degrees from current Position.</param>
-    Sub Move(ByVal Position As Single)
+    Property Link() As Boolean
 
     ''' <summary>
-    ''' Causes the rotator to move the absolute position of Position degrees.
+    ''' Maximum increment size allowed by the focuser; 
+    ''' i.e. the maximum number of steps allowed in one move operation.
+    ''' For most focusers this is the same as the MaxStep property.
+    ''' This is normally used to limit the Increment display in the host software. 
     ''' </summary>
-    ''' <param name="Position">absolute position in degrees.</param>
-    Sub MoveAbsolute(ByVal Position As Single)
+    ReadOnly Property MaxIncrement() As Integer
 
     ''' <summary>
-    ''' Current instantaneous Rotator position, in degrees.
+    ''' Maximum step position permitted.
+    ''' The focuser can step between 0 and MaxStep. 
+    ''' If an attempt is made to move the focuser beyond these limits,
+    ''' it will automatically stop at the limit. 
     ''' </summary>
-    ReadOnly Property Position() As Single
+    ReadOnly Property MaxStep() As Integer
 
     ''' <summary>
-    ''' Sets or Returns the rotator’s Reverse state.
+    '''  Moves the focuser by the specified amount or to the specified position depending on the value of the Absolute property.
     ''' </summary>
-    Property Reverse() As Boolean
+    ''' <param name="Value">Step distance or absolute position, depending on the value of the Absolute property.</param>
+    ''' <remarks>If the Absolute property is True, then this is an absolute positioning focuser. The Move command tells the focuser 
+    ''' to move to an exact step position, and the Position parameter of the Move() method is an integer between 0 and MaxStep.
+    ''' <para>If the Absolute property is False, then this is a relative positioning focuser. The Move command tells the focuser to move in a relative direction, and the Position parameter of the Move() method (in this case, step distance) is an integer between minus MaxIncrement and plus MaxIncrement.</para>
+    '''</remarks>
+    Sub Move(ByVal Value As Integer)
 
     ''' <summary>
-    ''' The minimum StepSize, in degrees.
+    ''' Current focuser position, in steps.
+    ''' Valid only for absolute positioning focusers (see the Absolute property).
+    ''' An exception will be raised for relative positioning focusers.   
     ''' </summary>
-    ReadOnly Property StepSize() As Single
+    ReadOnly Property Position() As Integer
 
     ''' <summary>
-    ''' Current Rotator target position, in degrees.
+    ''' Step size (microns) for the focuser.
+    ''' Raises an exception if the focuser does not intrinsically know what the step size is. 
     ''' </summary>
-    ReadOnly Property TargetPosition() As Single
+    ReadOnly Property StepSize() As Double
+
+    ''' <summary>
+    ''' The state of temperature compensation mode (if available), else always False.
+    ''' If the TempCompAvailable property is True, then setting TempComp to True
+    ''' puts the focuser into temperature tracking mode. While in temperature tracking mode,
+    ''' Move commands will be rejected by the focuser. Set to False to turn off temperature tracking.
+    ''' An exception will be raised if TempCompAvailable is False and an attempt is made to set TempComp to true. 
+    ''' 
+    ''' </summary>
+    Property TempComp() As Boolean
+
+    ''' <summary>
+    ''' True if focuser has temperature compensation available.
+    ''' Will be True only if the focuser's temperature compensation can be turned on and off via the TempComp property. 
+    ''' </summary>
+    ReadOnly Property TempCompAvailable() As Boolean
+
+    ''' <summary>
+    ''' Current ambient temperature as measured by the focuser.
+    ''' Raises an exception if ambient temperature is not available.
+    ''' Commonly available on focusers with a built-in temperature compensation mode. 
+    ''' </summary>
+    ReadOnly Property Temperature() As Double
 #End Region
 
 End Interface

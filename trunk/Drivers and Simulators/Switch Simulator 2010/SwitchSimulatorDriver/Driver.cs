@@ -23,7 +23,7 @@ namespace ASCOM.Simulator
     [Guid("221DF9AE-22FD-46C9-A475-59E8EA9393BB")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Switch : ISwitch, IDisposable
+    public class Switch : ISwitchV2, IDisposable
     {
         #region Constants
 
@@ -45,7 +45,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 6;
+        private const short interfaceVersion = 2;
 
         /// <summary>
         /// Driver version number
@@ -209,7 +209,7 @@ namespace ASCOM.Simulator
             get{ return SwitchList;}
         }
 
-	    void ISwitch.Dispose()
+	    void ISwitchV2.Dispose()
 	    {
 	        Dispose();
 	    }

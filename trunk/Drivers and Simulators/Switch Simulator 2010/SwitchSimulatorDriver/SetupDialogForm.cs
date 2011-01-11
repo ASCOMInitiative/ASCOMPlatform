@@ -12,7 +12,7 @@ namespace ASCOM.Simulator
 	[ComVisible(true)]
 	public partial class SetupDialogForm : Form
 	{
-        private static readonly ISwitch SwitchA = new Switch();
+        private static readonly ISwitchV2 SwitchA = new Switch();
         private readonly ArrayList _switches = SwitchA.Switches;
         Assembly _assembly;
         Stream _redLed;

@@ -36,24 +36,9 @@ namespace ASCOM.DriverAccess
 
             foreach (Type objInterface in _memberFactory.GetInterfaces)
             {
-                if (objInterface.Equals(typeof(DeviceInterface.ITelescopeV2))) _isPlatform6Telescope = true; //If the type matches the V2 type flag this
+                if (objInterface.Equals(typeof(DeviceInterface.ITelescopeV3))) _isPlatform6Telescope = true; //If the type matches the V2 type flag this
                 if (objInterface.Equals(typeof(ITelescope))) _isPlatform5Telescope = true; //If the type matches the PIA type flag this
             }
-			// Get Type Information 
-            //objTypeScope = Type.GetTypeFromProgID(telescopeID);
-			
-			// Create an instance of the telescope object
-            //objScopeLateBound = memberFactory.GetLateBoundObject;//Activator.CreateInstance(objTypeScope);
-
-			// Try to see if this driver has an ASCOM.Telescope interface
-			/*try
-			{
-				ITelescope = (ASCOM.Interface.ITelescope)objScopeLateBound;
-			}
-			catch (Exception)
-			{
-				ITelescope = null;
-			}*/
 		}
 
         /// <summary>

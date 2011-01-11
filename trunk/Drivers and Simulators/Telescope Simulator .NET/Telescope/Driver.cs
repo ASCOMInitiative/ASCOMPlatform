@@ -35,7 +35,7 @@ namespace ASCOM.Simulator
     //
 
     [Guid("86931eac-1f52-4918-b6aa-7e9b0ff361bd"), ClassInterface(ClassInterfaceType.None)]
-    public class Telescope : ReferenceCountedObjectBase, ITelescopeV2
+    public class Telescope : ReferenceCountedObjectBase, ITelescopeV3
     {
         //
         // Driver private data (rate collections)
@@ -635,8 +635,8 @@ namespace ASCOM.Simulator
             get
             {
                 CheckVersionOne("InterfaceVersion", false);
-                SharedResources.TrafficStart(SharedResources.MessageType.Other, "InterfaceVersion: 2");
-                return 2;
+                SharedResources.TrafficStart(SharedResources.MessageType.Other, "InterfaceVersion: 3");
+                return 3;
             }
         }
 
