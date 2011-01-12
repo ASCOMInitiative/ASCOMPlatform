@@ -6,11 +6,14 @@
 ; Bob Denny (5.2.4) - Telescope V2, TheSky X, several other improvements
 ; Modified for 64-bit and Platform > 5 by Bob Denny 16-Sep-09
 ; Bob Denny (5.2.5) - Fix parking logic, remove disconnect simulation.
+; Bob Denny (5.2.6) - Fix another case of crazy coordinates from TheSky 6, 
+;                     fix TheSky 5 compatibility. Cosmetics.
+; Bob Denny (5.2.7) - Dang it, one more fix for TheSky 5.
 ;
 [Setup]
 AppName=ASCOM TheSky Telescope Driver
-AppVerName=ASCOM TheSky Telescope Driver 5.2.5
-AppVersion=5.2.5
+AppVerName=ASCOM TheSky Telescope Driver 5.2.7
+AppVersion=5.2.6
 AppPublisher=Bob Denny <rdenny@dc3.com>
 AppPublisherURL=mailto:rdenny@dc3.com
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -20,7 +23,7 @@ DefaultDirName="{cf}\ASCOM\Telescope"
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="."
-OutputBaseFilename="TheSkyTelescope(5.2.5)Setup"
+OutputBaseFilename="TheSkyTelescope(5.2.7)Setup"
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected

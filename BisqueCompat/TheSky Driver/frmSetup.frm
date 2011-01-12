@@ -76,7 +76,7 @@ Begin VB.Form frmSetup
       Top             =   1125
       Width           =   4095
       Begin VB.OptionButton rbSkyX 
-         Caption         =   "TheSky X Pro 10.1.6 or later"
+         Caption         =   "TheSky X Pro 10.1.9 or later"
          Height          =   195
          Left            =   225
          TabIndex        =   0
@@ -84,15 +84,15 @@ Begin VB.Form frmSetup
          Width           =   2895
       End
       Begin VB.OptionButton rbSky5 
-         Caption         =   "TheSky Version 5.0.110 or later"
+         Caption         =   "TheSky Version 5.0.108 (limited support)"
          Height          =   195
          Left            =   225
          TabIndex        =   2
          Top             =   900
-         Width           =   2865
+         Width           =   3405
       End
       Begin VB.OptionButton rbSky6 
-         Caption         =   "TheSky Version 6.0.0.40 or later"
+         Caption         =   "TheSky Version 6.0.0.65"
          Height          =   195
          Left            =   225
          TabIndex        =   1
@@ -167,6 +167,7 @@ Attribute VB_Exposed = False
 ' 25-Mar-09 rbd 5.1.3 - Add Tracking Rate checkbox
 ' 14-May-10 rbd 5.2.1 - Add support for TheSky X
 ' 16-Jun-10 rbd 5.2.4 - Disable PulseGuide if Tracking Offsets disabled
+' 03-Jan-11 rbd 5.2.6 - Disable some features for TheSky 5.
 
 Option Explicit
 
@@ -320,7 +321,7 @@ Private Sub Form_Load()
     Me.lblVersion = "Version " & App.Major & "." & _
                 App.Minor & "." & App.Revision
 
-
+    UpdateUI
     '
     ' Assure window pops up on top of others.
     '
@@ -415,23 +416,39 @@ End Sub
 
 Private Sub rbSky5_Click()
     m_eTheSkyType = TheSky5
+    UpdateUI
 End Sub
 
 Private Sub rbSky6_Click()
     m_eTheSkyType = TheSky6
+    UpdateUI
 End Sub
 
 Private Sub rbSkyX_Click()
     m_eTheSkyType = TheSkyX
+    UpdateUI
 End Sub
 
 Private Sub chkTrackOffs_Click()
-    If Me.chkTrackOffs.Value = 0 Then
+    UpdateUI
+End Sub
+
+Sub UpdateUI()
+    If m_eTheSkyType = TheSky5 Then
+        Me.chkTrackOffs.Value = 0
+        Me.chkTrackOffs.Enabled = False
         Me.chkPulseGuide.Value = 0
         Me.chkPulseGuide.Enabled = False
     Else
-        Me.chkPulseGuide.Enabled = True
+        Me.chkTrackOffs.Enabled = True
+        If Me.chkTrackOffs.Value = 0 Then
+            Me.chkPulseGuide.Value = 0
+            Me.chkPulseGuide.Enabled = False
+        Else
+            Me.chkPulseGuide.Enabled = True
+        End If
     End If
+    
 End Sub
 
 
