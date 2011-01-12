@@ -1593,7 +1593,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (index <= 1 || index > this.Count)
+                if (index < 1 || index > this.Count)
                     throw new InvalidValueException("TrackingRates.this", index.ToString(CultureInfo.CurrentCulture), string.Format(CultureInfo.CurrentCulture, "1 to {0}", this.Count));
                 return m_TrackingRates[index - 1];
             }	// 1-based
