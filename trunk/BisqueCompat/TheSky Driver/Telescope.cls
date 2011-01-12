@@ -158,6 +158,11 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 '                   Just let TheSKy X do whatever it is going to do. It's
 '                   Bisque's responsibility to determine that behavior.
 '                   Restore previous logic for TheSKy 6. It works fine.
+' 20-Dec-10 rbd     5.2.6 - Catch RA > 24 reported by Tom Krajci.
+' 03-Jan-11 rbd     5.2.6 - Fix for TheSky 5, no SkyChart or Util objects,
+'                   so features dependent on them are not implemented for
+'                   TheSky 5.
+' 11-Jan-11 rbd     5.2.7 - Fix the TheSky 5 fix! Silly typo.
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -524,9 +529,14 @@ Public Property Let Connected(ByVal newVal As Boolean)
             Case TheSky6: buf = "TheSky6"
             Case TheSkyX: buf = "TheSkyXAdaptor"
         End Select
-        Set m_SkyChart = CreateObject(buf & ".StarChart")
         Set m_SkyTele = CreateObject(buf & ".RASCOMTele")
-        Set m_SkyUtil = CreateObject(buf & ".Utils")
+        If m_eTheSkyType = TheSky5 Then
+            Set m_SkyChart = Nothing
+            Set m_SkyUtil = Nothing
+        Else
+            Set m_SkyChart = CreateObject(buf & ".StarChart")
+            Set m_SkyUtil = CreateObject(buf & ".Utils")
+        End If
         On Error GoTo 0
         m_SkyTele.Connect
         m_SkyTele.Asynchronous = 1                   ' Need this after Connect()
@@ -766,14 +776,24 @@ End Property
 
 Public Property Get SiderealTime() As Double
 
-    SiderealTime = m_SkyUtil.ComputeLocalSiderealTime
+    If m_eTheSkyType = TheSky5 Then
+        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                    "Property SiderealTime" & MSG_NOT_IMPLEMENTED
+    Else
+        SiderealTime = m_SkyUtil.ComputeLocalSiderealTime
+    End If
     
 End Property
 
 Public Property Get SiteElevation() As Double
 
-    SiteElevation = m_SkyChart.DocumentProperty(3)                          ' skDocProp_ElevationInMeters
-
+    If m_eTheSkyType = TheSky5 Then
+        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                    "Property SiteElevation" & MSG_NOT_IMPLEMENTED
+    Else
+        SiteElevation = m_SkyChart.DocumentProperty(3)                      ' skDocProp_ElevationInMeters
+    End If
+    
 End Property
 
 Public Property Let SiteElevation(ByVal newVal As Double)
@@ -785,7 +805,12 @@ End Property
 
 Public Property Get SiteLatitude() As Double
 
-    SiteLatitude = m_SkyChart.DocumentProperty(0)                           ' skDocProp_Latitude
+    If m_eTheSkyType = TheSky5 Then
+        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                    "Property SiteLatitude" & MSG_NOT_IMPLEMENTED
+    Else
+        SiteLatitude = m_SkyChart.DocumentProperty(0)                       ' skDocProp_Latitude
+    End If
     
 End Property
 
@@ -798,7 +823,12 @@ End Property
 
 Public Property Get SiteLongitude() As Double
 
-    SiteLongitude = -m_SkyChart.DocumentProperty(1)                          ' skDocProp_ElevationInMeters
+    If m_eTheSkyType = TheSky5 Then
+        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                    "Property SiteLongitude" & MSG_NOT_IMPLEMENTED
+    Else
+        SiteLongitude = -m_SkyChart.DocumentProperty(1)                     ' skDocProp_ElevationInMeters
+    End If
     
 End Property
 
@@ -1354,6 +1384,7 @@ Private Sub GetAndFixRaDec()
             m_dRA = m_dRA - 12#
         End If
         If m_dRA < 0 Then m_dRA = m_dRA + 24#
+        If m_dRA > 24# Then m_dRA = m_dRA - 24#
     End If
     
 End Sub
