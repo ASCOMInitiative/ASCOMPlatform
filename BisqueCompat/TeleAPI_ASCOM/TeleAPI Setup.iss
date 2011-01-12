@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "TheSky ASCOM Plugin"
-#define MyAppVerName "TheSky ASCOM Plugin V5.0.3"
+#define MyAppVerName "TheSky ASCOM Plugin V5.0.4"
 #define MyAppPublisher "The ASCOM Initiative"
 #define MyAppURL "http://ascom-standards.org/"
 
@@ -23,7 +23,7 @@ DisableProgramGroupPage=yes
 WizardImageFile="C:\Program Files (x86)\ASCOM\InstallGen\Resources\WizardImage.bmp"
 LicenseFile=C:\Program Files (x86)\ASCOM\InstallGen\Resources\CreativeCommons.txt
 OutputDir=D:\dev\astro\ascom\BisqueCompat\TeleAPI_ASCOM
-OutputBaseFilename=TeleAPI(5.0.3)Setup
+OutputBaseFilename=TeleAPI(5.0.4)Setup
 UninstallFilesDir={app}\teleapi
 Compression=lzma
 SolidCompression=yes

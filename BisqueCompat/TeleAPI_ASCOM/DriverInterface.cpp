@@ -56,6 +56,15 @@
 // 23-Aug-10	rbd		5.0.3 - Add GetAlignmentMode and integer COM support.
 //						Add support for registry value that tells TheSky
 //						whether the mount is a GEM or not (used by TPOINT).
+// 11-Jan-11	rbd		5.0.4 - Publishing the changes from December for
+//						conditional compilation of the cross-threading
+//						support. It did not work to have the cross-thread
+//						support disabled, in the end the calls from X are
+//						still coming in on multiple threads. If Bisque 
+//						does change it to be compatible with TheSky 6 (all
+//						calls on a single thread) then the cross thread 
+//						logic can be disabled, allowing exe/LocalServer 
+//						COM servers to be released successfully.
 //========================================================================
 
 /* #include "AscomScope.h" */
