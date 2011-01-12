@@ -1,9 +1,9 @@
-TheSky Telescope API Plugin (TeleAPI) V5.0.3
+TheSky Telescope API Plugin (TeleAPI) V5.0.4
 --------------------------------------------
 
 THIS FILE (TeleAPI-ReadMe.txt) IS LOCATED IN PROGRAM FILES\COMMON FILES\ASCOM (on 64-bit systems, look in "Program Files (x86)")
 
-The TeleAPI plugin provides TheSky X and TheSky 6 with the ability to control telescopes via their ASCOM standard drivers. With this plugin, you can use telescopes not supported internally by TheSky but which have ASCOM drivers. Also, some telescopes have ASCOM drivers that provide enhanced functionality as compared to that provided with the internal support in TheSky. You can use such a telescope via its ASCOM driver with this plugin. 5.0.3 adds support for a special registry value used by TPOINT to determine if the connected mount is a German Equatorial type. This has been tested with TheSky 6 and its TPOINT version, but not with TheSky X and its (newer) TPOINT. The registry value for TheSky X is set via a best guess at whatit should be. 
+The TeleAPI plugin provides TheSky X and TheSky 6 with the ability to control telescopes via their ASCOM standard drivers. With this plugin, you can use telescopes not supported internally by TheSky but which have ASCOM drivers. Also, some telescopes have ASCOM drivers that provide enhanced functionality as compared to that provided with the internal support in TheSky. You can use such a telescope via its ASCOM driver with this plugin. This version has support for a special registry value used by TPOINT to determine if the connected mount is a German Equatorial type. This has been tested with TheSky 6 and its TPOINT version, but not with TheSky X and its (newer) TPOINT. The registry value for TheSky X is set via a best guess at whatit should be. 
 
 Using with TheSky X
 -------------------
