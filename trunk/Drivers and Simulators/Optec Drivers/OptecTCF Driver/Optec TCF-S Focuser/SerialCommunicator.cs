@@ -77,6 +77,7 @@ namespace Optec_TCF_S_Focuser
                     if (!mySerialPort.IsOpen) mySerialPort.Open();
                     mySerialPort.DiscardInBuffer();
                     mySerialPort.DiscardOutBuffer();
+
                     EventLogger.LogMessage("Sending (SerialCommander): " + cmd, TraceLevel.Verbose);
                     mySerialPort.Write(cmd);
                     string r = mySerialPort.ReadLine();

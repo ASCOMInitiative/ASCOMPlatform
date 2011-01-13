@@ -21,12 +21,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_08BB7CE9E1C9DEDCF1F2259BB8915192"
-        "OwnerKey" = "8:_AD05B5E2E1A37E0CB4A51B0282EF79EF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_11A75F836A7249CB8FCC10A5B9C404AB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -39,12 +33,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_39875547F0DB434F88F230328A2BEBFF"
-        "OwnerKey" = "8:_4EC924A0D87CAC366E43589F79CDF2D2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_4EC924A0D87CAC366E43589F79CDF2D2"
         "OwnerKey" = "8:_11A75F836A7249CB8FCC10A5B9C404AB"
         "MsmSig" = "8:_UNDEFINED"
@@ -53,6 +41,18 @@
         {
         "MsmKey" = "8:_5D9D922993F540CCA3414C4D54B5018B"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_686977DD8FC1FB8FB90C353151CC7627"
+        "OwnerKey" = "8:_AD05B5E2E1A37E0CB4A51B0282EF79EF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82D1EDD66E60FC82CD2EC7397EA06B47"
+        "OwnerKey" = "8:_4EC924A0D87CAC366E43589F79CDF2D2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -184,7 +184,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\OptecTCF-S_Installer_x86(5.3.2).msi"
+        "OutputFilename" = "8:Release\\OptecTCF-S_Installer_x86(5.3.3).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -343,26 +343,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_08BB7CE9E1C9DEDCF1F2259BB8915192"
-            {
-            "SourcePath" = "8:ASCOM.Utilities.tlb"
-            "TargetName" = "8:ASCOM.Utilities.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_1C36E6A979774BB8A8EEB60CB0C3E1CE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_127674E5C8A74BB7B7AB2D73C3AE834D"
             {
             "SourcePath" = "8:I:\\Software Development\\ICONS\\TCF-S2010\\TCF-S 2010.ico"
@@ -381,26 +361,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_39875547F0DB434F88F230328A2BEBFF"
-            {
-            "SourcePath" = "8:AscomMasterInterfaces.tlb"
-            "TargetName" = "8:AscomMasterInterfaces.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_1C36E6A979774BB8A8EEB60CB0C3E1CE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4EC924A0D87CAC366E43589F79CDF2D2"
@@ -431,6 +391,46 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_686977DD8FC1FB8FB90C353151CC7627"
+            {
+            "SourcePath" = "8:ASCOM.Utilities.tlb"
+            "TargetName" = "8:ASCOM.Utilities.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_1C36E6A979774BB8A8EEB60CB0C3E1CE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_82D1EDD66E60FC82CD2EC7397EA06B47"
+            {
+            "SourcePath" = "8:AscomMasterInterfaces.tlb"
+            "TargetName" = "8:AscomMasterInterfaces.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_1C36E6A979774BB8A8EEB60CB0C3E1CE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -691,15 +691,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec TCF-S Programs (32 Bit)"
-        "ProductCode" = "8:{54406B59-DC39-4BB3-8EF4-7C08B3154F67}"
-        "PackageCode" = "8:{A6C855CC-7579-403C-A71F-0849141CE32A}"
+        "ProductCode" = "8:{9F3DFC7C-5256-4D8D-A836-612AF2D0338D}"
+        "PackageCode" = "8:{1C15EC4A-16BE-474F-B881-B6337C938DAA}"
         "UpgradeCode" = "8:{D13BC22A-7584-428E-BB86-78E43E49252A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:5.3.2"
+        "ProductVersion" = "8:5.3.3"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.optecinc.com"

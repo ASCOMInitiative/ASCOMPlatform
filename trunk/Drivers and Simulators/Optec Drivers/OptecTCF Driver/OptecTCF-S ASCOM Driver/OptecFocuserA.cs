@@ -366,7 +366,7 @@ namespace Optec_TCF_S_Focuser
                                 break;
                             case ConnectionStates.Sleep:
                                 // Wake up the device, (into serial mode)
-                                WakeDevice();
+                                // WakeDevice();            // COMMENTED OUT FOR VERSION 5.3.0, This is undesired
                                 // Release the device
                                 ReleaseDevice();
                                 break;
@@ -799,7 +799,13 @@ namespace Optec_TCF_S_Focuser
 
         private void ReleaseDevice()
         {
-            if (connectionState != ConnectionStates.SerialMode)
+            if (connectionState == ConnectionStates.Sleep)
+            {
+                PauseRefresh(); // Stop the Refresh Timer
+                connectionState = ConnectionStates.Disconnected;
+                return;
+            }
+            else if (connectionState != ConnectionStates.SerialMode)
                 throw new ApplicationException("Can not release device when not in serial mode");
 
             // Stop the Timer...
@@ -1344,7 +1350,7 @@ namespace Optec_TCF_S_Focuser
             {
                 try
                 {
-                    string cmd = "BKxxxx";
+                    string cmd = "FKxxxx";
                     string received = mySerialCommunicator.SendCommand(cmd, 1000);
                     if (received.Contains("=0")) return false;
                     else if (received.Contains("=1")) return true;
