@@ -5,6 +5,10 @@ Unzip to a temporary or permenant location on your hard drive.
 Double Click Setup.exe to begin the install process.
 
 Revision History:
+5.3.3.0		- Fixed bug that caused backlash compensation to return false even if it is on.
+			- Control program prompts user to wake device from sleeping on Connect.
+			- Control program now allows user to compensate for temperature changes which 
+				occurred while in sleep mode.
 
 5.3.2.0		- Fixed version checker to navigate to the correct url when the link is pressed
 			- ASCOM driver and Control program will connect to the device if it is in sleep mode

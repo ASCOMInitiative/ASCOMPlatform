@@ -147,6 +147,29 @@ namespace Optec_TCF_S_Focuser
             }
         }
 
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            try
+            {
+                NewVersionBGWorker.RunWorkerAsync();
+                this.LocationChanged += new EventHandler(Form1_LocationChanged);
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                DisplayStatusMessage("Attempting to Connect...", new TimeSpan(0, 0, 30));
+                connectToolStripMenuItem_Click(this, EventArgs.Empty);
+                DisplayStatusMessage("Connected Successfully!", new TimeSpan(0, 0, 4));
+            }
+            catch
+            {
+                DisplayStatusMessage("No TCF-S Found", new TimeSpan(0, 0, 4));
+            }
+        }
+
         private void In_BTN_Click(object sender, EventArgs e)
         {
             try
@@ -280,6 +303,9 @@ namespace Optec_TCF_S_Focuser
             {
                 this.Cursor = Cursors.WaitCursor;
                 string msg;
+
+                myFocuser.CheckIfDeviceIsSleeping();    // This will set connection state to sleeping if it's true
+
                 switch (myFocuser.ConnectionState)
                 {
                     case OptecFocuser.ConnectionStates.Disconnected:
@@ -295,9 +321,18 @@ namespace Optec_TCF_S_Focuser
                         MessageBox.Show(msg, "Attention");
                         break;
                     case OptecFocuser.ConnectionStates.Sleep:
-                        msg = "The device is currently in sleep mode." +
-                            " Please exit sleep mode before performing this operation.";
-                        MessageBox.Show(msg, "Attention");
+                        DialogResult res = MessageBox.Show("The device is currently in sleep mode. Would you like to wake it up?",
+                            "Wake Device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (res == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
+
+                            DialogResult result = MessageBox.Show("Would you like the device to compensate for any temperature change that occurred while in sleep mode?",
+                                "Adjust Focus?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            if (result == System.Windows.Forms.DialogResult.Yes)
+                                myFocuser.AdjustForTempChangeWhileSpeeping();
+                        }
+                        else return;
                         break;
                 }
             }
@@ -586,10 +621,16 @@ namespace Optec_TCF_S_Focuser
         {
             try
             {
-                
+                    
                     if(myFocuser.ConnectionState == OptecFocuser.ConnectionStates.Sleep)
                     {
                         myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
+
+                        DialogResult result = MessageBox.Show("Would you like the device to compensate for any temperature change that occurred while in sleep mode?",
+                            "Adjust Focus?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (result == System.Windows.Forms.DialogResult.Yes)
+                            myFocuser.AdjustForTempChangeWhileSpeeping();
+                        
                     }
                     else myFocuser.ConnectionState = OptecFocuser.ConnectionStates.Sleep;
               
@@ -689,28 +730,7 @@ namespace Optec_TCF_S_Focuser
             }
         }
 
-        private void Form1_Shown(object sender, EventArgs e)
-        {
-            try
-            {
-                NewVersionBGWorker.RunWorkerAsync();
-                this.LocationChanged += new EventHandler(Form1_LocationChanged);
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                DisplayStatusMessage( "Attempting to Connect...", new TimeSpan(0,0,30));
-                myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
-                DisplayStatusMessage("Connected Successfully!", new TimeSpan(0, 0, 4));
-            }
-            catch
-            {
-                DisplayStatusMessage("No TCF-S Found", new TimeSpan(0, 0, 4));
-            }
-        }
+        
 
         void Form1_LocationChanged(object sender, EventArgs e)
         {
@@ -947,12 +967,17 @@ namespace Optec_TCF_S_Focuser
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                if (myFocuser.ConnectionState != OptecFocuser.ConnectionStates.Disconnected)
+
+                myFocuser.CheckIfDeviceIsSleeping();
+
+                if(myFocuser.ConnectionState == OptecFocuser.ConnectionStates.Sleep)
+                    connectToolStripMenuItem_Click(this, EventArgs.Empty);
+                else if (myFocuser.ConnectionState != OptecFocuser.ConnectionStates.Disconnected)
                 {
                     myFocuser.ConnectionState = OptecFocuser.ConnectionStates.Disconnected;
                 }
                 else
-                    myFocuser.ConnectionState = OptecFocuser.ConnectionStates.SerialMode;
+                    connectToolStripMenuItem_Click(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
