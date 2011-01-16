@@ -29,8 +29,9 @@ Partial Class DiagnosticsForm
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.lblResult = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.ChooserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ConnectToDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuChooseDevice = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ChooseAndConncectToDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuTools = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChooserToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChooserNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListAvailableCOMPortsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -95,25 +96,32 @@ Partial Class DiagnosticsForm
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChooserToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuChooseDevice, Me.mnuTools})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(530, 24)
         Me.MenuStrip1.TabIndex = 5
         Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'ChooserToolStripMenuItem
+        'mnuChooseDevice
         '
-        Me.ChooserToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ConnectToDeviceToolStripMenuItem, Me.ChooserToolStripMenuItem1, Me.ChooserNETToolStripMenuItem, Me.ListAvailableCOMPortsToolStripMenuItem})
-        Me.ChooserToolStripMenuItem.Name = "ChooserToolStripMenuItem"
-        Me.ChooserToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
-        Me.ChooserToolStripMenuItem.Text = "Tools"
+        Me.mnuChooseDevice.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChooseAndConncectToDeviceToolStripMenuItem})
+        Me.mnuChooseDevice.Name = "mnuChooseDevice"
+        Me.mnuChooseDevice.Size = New System.Drawing.Size(97, 20)
+        Me.mnuChooseDevice.Text = "Choose Device"
         '
-        'ConnectToDeviceToolStripMenuItem
+        'ChooseAndConncectToDeviceToolStripMenuItem
         '
-        Me.ConnectToDeviceToolStripMenuItem.Name = "ConnectToDeviceToolStripMenuItem"
-        Me.ConnectToDeviceToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
-        Me.ConnectToDeviceToolStripMenuItem.Text = "Choose and Connect to Device"
+        Me.ChooseAndConncectToDeviceToolStripMenuItem.Name = "ChooseAndConncectToDeviceToolStripMenuItem"
+        Me.ChooseAndConncectToDeviceToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.ChooseAndConncectToDeviceToolStripMenuItem.Text = "Choose and Connect to Device"
+        '
+        'mnuTools
+        '
+        Me.mnuTools.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChooserToolStripMenuItem1, Me.ChooserNETToolStripMenuItem, Me.ListAvailableCOMPortsToolStripMenuItem})
+        Me.mnuTools.Name = "mnuTools"
+        Me.mnuTools.Size = New System.Drawing.Size(48, 20)
+        Me.mnuTools.Text = "Tools"
         '
         'ChooserToolStripMenuItem1
         '
@@ -186,12 +194,13 @@ Partial Class DiagnosticsForm
     Friend WithEvents lblTitle As System.Windows.Forms.Label
     Friend WithEvents lblResult As System.Windows.Forms.Label
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
-    Friend WithEvents ChooserToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuTools As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ChooserToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ChooserNETToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ConnectToDeviceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents lblAction As System.Windows.Forms.Label
     Friend WithEvents ListAvailableCOMPortsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnLastLog As System.Windows.Forms.Button
+    Friend WithEvents mnuChooseDevice As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ChooseAndConncectToDeviceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

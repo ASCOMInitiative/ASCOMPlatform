@@ -42,6 +42,8 @@ Public Class DiagnosticsForm
     Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
 
     Private NMatches, NNonMatches, NExceptions As Integer
+    Private ErrorList As New Generic.List(Of String)
+
     Private TL As TraceLogger
     Private ASCOMRegistryAccess As ASCOM.Utilities.RegistryAccess
     Private WithEvents ASCOMTimer As ASCOM.Utilities.Timer
@@ -51,7 +53,6 @@ Public Class DiagnosticsForm
     Private DrvHlpUtil As Object
     Private AscomUtil As ASCOM.Utilities.Util
     Private g_Util2 As Object
-    Private ErrorList As New Generic.List(Of String)
     Private DecimalSeparator As String = "", ThousandsSeparator As String = ""
     Private AbbreviatedMonthNames() As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames ' List of monthnames in current culture language
     Private StartTime As Date
@@ -2146,7 +2147,7 @@ Public Class DiagnosticsForm
                 CheckSimulator(keys, "Dome", "Pipe.Dome")
                 CheckSimulator(keys, "Dome", "POTH.Dome")
                 keys = AscomUtlProf.RegisteredDevices("FilterWheel")
-                CheckSimulator(keys, "FilterWheel", "ASCOM.FilterWheelSim.FilterWheel")
+                CheckSimulator(keys, "FilterWheel", "ASCOM.Simulator.FilterWheel")
                 CheckSimulator(keys, "FilterWheel", "FilterWheelSim.FilterWheel")
                 keys = AscomUtlProf.RegisteredDevices("Focuser")
                 CheckSimulator(keys, "Focuser", "FocusSim.Focuser")
@@ -3110,7 +3111,7 @@ Public Class DiagnosticsForm
 
             'New Platform 6 Simulators 
             GetCOMRegistration("ASCOM.Simulator.Camera") 'If it exists
-            GetCOMRegistration("ASCOM.FilterWheelSim.FilterWheel")
+            GetCOMRegistration("ASCOM.Simulator.FilterWheel")
             GetCOMRegistration("ASCOM.Simulator.Focuser")
             GetCOMRegistration("ASCOM.Simulator.Rotator")
             GetCOMRegistration("ASCOM.Simulator.SafetyMonitor")
@@ -3411,8 +3412,11 @@ Public Class DiagnosticsForm
                 ProcessSubKey(RKey, 1, "None")
                 RKey.Close()
                 TL.LogMessage("Finished", "")
+                NMatches += 1
             Else
                 TL.LogMessage("Finished", "*** ProgID " & ProgID & " not found")
+                NNonMatches += 1
+                ErrorList.Add("GetCOMRegistration - *** ProgID " & ProgID & " not found")
             End If
         Catch ex As Exception
             LogException("Exception", ex.ToString)
@@ -3696,12 +3700,16 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Private Sub ConnectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ConnectToDeviceToolStripMenuItem.Click
-        ConnectForm.Visible = True
-    End Sub
-
     Private Sub ListAvailableCOMPortsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListAvailableCOMPortsToolStripMenuItem.Click
         SerialForm.Visible = True
+    End Sub
+
+    Private Sub btnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
+        Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
+    End Sub
+
+    Private Sub ChooseAndConncectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConncectToDeviceToolStripMenuItem.Click
+        ConnectForm.Visible = True
     End Sub
 
     Private Sub ScanInstalledPlatform()
@@ -3864,7 +3872,4 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Private Sub btnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
-        Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
-    End Sub
 End Class
