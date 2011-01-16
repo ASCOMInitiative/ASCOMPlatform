@@ -22,7 +22,7 @@ namespace ASCOM.Simulator
     [Guid("24C040F2-2FA5-4DA4-B87B-6C1101828D2A")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Focuser : IFocuser, IDisposable
+    public class Focuser : IFocuserV2, IDisposable
     {
         #region Constants
 
@@ -387,7 +387,7 @@ namespace ASCOM.Simulator
 
         #region explicit Members
 
-        void IFocuser.Dispose()
+        void IFocuserV2.Dispose()
         {
             Dispose();
         }
