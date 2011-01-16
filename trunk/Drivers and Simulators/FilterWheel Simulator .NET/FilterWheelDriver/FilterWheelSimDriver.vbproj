@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F0654070-4450-461F-A484-58D356E1740E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ASCOM.FilterWheelSim</RootNamespace>
-    <AssemblyName>ASCOM.FilterWheelSim.FilterWheel</AssemblyName>
+    <RootNamespace>ASCOM.Simulator</RootNamespace>
+    <AssemblyName>ASCOM.Simulator.FilterWheel</AssemblyName>
     <MyType>Windows</MyType>
     <OptionStrict>On</OptionStrict>
     <FileUpgradeFlags>
@@ -169,6 +169,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

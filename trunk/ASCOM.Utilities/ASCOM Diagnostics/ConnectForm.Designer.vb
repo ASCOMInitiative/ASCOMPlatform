@@ -23,15 +23,16 @@ Partial Class ConnectForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConnectForm))
-        Me.cmbDeviceType = New System.Windows.Forms.ComboBox
-        Me.btnChoose = New System.Windows.Forms.Button
-        Me.txtDevice = New System.Windows.Forms.TextBox
-        Me.txtStatus = New System.Windows.Forms.TextBox
-        Me.btnConnect = New System.Windows.Forms.Button
-        Me.btnProperties = New System.Windows.Forms.Button
-        Me.btnScript = New System.Windows.Forms.Button
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.btnGetProfile = New System.Windows.Forms.Button
+        Me.cmbDeviceType = New System.Windows.Forms.ComboBox()
+        Me.btnChoose = New System.Windows.Forms.Button()
+        Me.txtDevice = New System.Windows.Forms.TextBox()
+        Me.txtStatus = New System.Windows.Forms.TextBox()
+        Me.btnConnect = New System.Windows.Forms.Button()
+        Me.btnProperties = New System.Windows.Forms.Button()
+        Me.btnScript = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.btnGetProfile = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'cmbDeviceType
@@ -113,11 +114,22 @@ Partial Class ConnectForm
         Me.btnGetProfile.Text = "GetProfile"
         Me.btnGetProfile.UseVisualStyleBackColor = True
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(12, 13)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(101, 13)
+        Me.Label2.TabIndex = 9
+        Me.Label2.Text = "Select Device Type"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'ConnectForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(794, 442)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.btnGetProfile)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btnScript)
@@ -143,4 +155,5 @@ Partial Class ConnectForm
     Friend WithEvents btnScript As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents btnGetProfile As System.Windows.Forms.Button
+    Friend WithEvents Label2 As System.Windows.Forms.Label
 End Class
