@@ -6,20 +6,17 @@
 ' Added drive scan, reporting available space
 ' Version 1.0.2.0 - Released 15/10/09 Peter Simpson
 
-Imports System
 Imports ASCOM.Internal
-Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
+Imports ASCOM.Astrometry
 Imports Microsoft.Win32
 Imports System.IO
-Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Reflection
 Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
 Imports System.Globalization
-Imports ASCOM.Astrometry
 
 Public Class DiagnosticsForm
 
@@ -3340,6 +3337,7 @@ Public Class DiagnosticsForm
         Dim Att As FileAttributes, FVInfo As FileVersionInfo, FInfo As FileInfo
         Dim Ass As Assembly, AssVer As String = "", CompareName As String
         Dim ReflectionAssemblies() As Assembly = Nothing
+        Dim Framework As String = ""
 
         Try
             FullPath = FPath & FName 'Create full filename from path and simple filename
@@ -3349,48 +3347,48 @@ Public Class DiagnosticsForm
                 Try
                     Ass = Assembly.ReflectionOnlyLoadFrom(FullPath)
                     AssVer = Ass.FullName
-                Catch ex As FileLoadException ' Dela with possibility that this assembly has already been loaded
+                    Framework = Ass.ImageRuntimeVersion
+                Catch ex As FileLoadException ' Deal with possibility that this assembly has already been loaded
                     ReflectionAssemblies = AppDomain.CurrentDomain.ReflectionOnlyGetAssemblies() ' Get list of assemblies already loaded to the reflection only context
-                    Dim LastPoint As Integer
-                    LastPoint = FName.LastIndexOf(".")
-                    CompareName = FName.Substring(0, LastPoint)
-
+                    CompareName = Path.GetFileNameWithoutExtension(FName)
                     For Each ReflectionAss As Assembly In ReflectionAssemblies ' Find the assembly already there and get its full name
                         If ReflectionAss.FullName.ToUpper.Contains(CompareName.ToUpper) Then
                             AssVer = ReflectionAss.FullName
                         End If
                     Next
                     If String.IsNullOrEmpty(AssVer) Then
-                        For Each ReflectionAss As Assembly In ReflectionAssemblies ' Find the assembly already there and get its full name
+                        TL.LogMessage("ErrorDiagnosticsCmp", CompareName)
+                        For Each ReflectionAss As Assembly In ReflectionAssemblies ' List the assemblies already loaded
                             TL.LogMessage("ErrorDiagnostics", ReflectionAss.FullName)
-                            LogException("FileDetails", "FileLoadException: " & ex.ToString)
                         Next
+                        LogException("FileDetails", "FileLoadException: " & ex.ToString)
                     End If
                 Catch ex As BadImageFormatException
-                    AssVer = "Not an assembly"
+                    AssVer = "Not an assembly - Bad Image"
                 Catch ex As Exception
                     LogException("FileDetails", "Exception: " & ex.ToString)
                     AssVer = "Not an assembly: " & ex.ToString
                 End Try
 
-                TL.LogMessage("FileDetails", "   Assembly Version: " & AssVer)
+                TL.LogMessage("FileDetails", "   Assembly Version:   " & AssVer)
+                TL.LogMessage("FileDetails", "   Assembly Framework: " & Framework)
 
                 FVInfo = FileVersionInfo.GetVersionInfo(FullPath)
                 FInfo = Microsoft.VisualBasic.FileIO.FileSystem.GetFileInfo(FullPath)
 
-                TL.LogMessage("FileDetails", "   File Version:     " & FVInfo.FileMajorPart & "." & FVInfo.FileMinorPart & "." & FVInfo.FileBuildPart & "." & FVInfo.FilePrivatePart)
-                TL.LogMessage("FileDetails", "   Product Version:  " & FVInfo.ProductMajorPart & "." & FVInfo.ProductMinorPart & "." & FVInfo.ProductBuildPart & "." & FVInfo.ProductPrivatePart)
+                TL.LogMessage("FileDetails", "   File Version:       " & FVInfo.FileMajorPart & "." & FVInfo.FileMinorPart & "." & FVInfo.FileBuildPart & "." & FVInfo.FilePrivatePart)
+                TL.LogMessage("FileDetails", "   Product Version:    " & FVInfo.ProductMajorPart & "." & FVInfo.ProductMinorPart & "." & FVInfo.ProductBuildPart & "." & FVInfo.ProductPrivatePart)
 
-                TL.LogMessage("FileDetails", "   Description:      " & FVInfo.FileDescription)
-                TL.LogMessage("FileDetails", "   Company Name:     " & FVInfo.CompanyName)
+                TL.LogMessage("FileDetails", "   Description:        " & FVInfo.FileDescription)
+                TL.LogMessage("FileDetails", "   Company Name:       " & FVInfo.CompanyName)
 
-                TL.LogMessage("FileDetails", "   Last Write Time:  " & File.GetLastWriteTime(FullPath))
-                TL.LogMessage("FileDetails", "   Creation Time:    " & File.GetCreationTime(FullPath))
+                TL.LogMessage("FileDetails", "   Last Write Time:    " & File.GetLastWriteTime(FullPath))
+                TL.LogMessage("FileDetails", "   Creation Time:      " & File.GetCreationTime(FullPath))
 
-                TL.LogMessage("FileDetails", "   File Length:      " & Format(FInfo.Length, "#,0.").Replace(ThousandsSeparator, ","))
+                TL.LogMessage("FileDetails", "   File Length:        " & Format(FInfo.Length, "#,0.").Replace(ThousandsSeparator, ","))
 
                 Att = File.GetAttributes(FullPath)
-                TL.LogMessage("FileDetails", "   Attributes:       " & Att.ToString())
+                TL.LogMessage("FileDetails", "   Attributes:         " & Att.ToString())
                 NMatches += 1
             Else
                 TL.LogMessage("FileDetails", "   ### Unable to find file: " & FullPath)
