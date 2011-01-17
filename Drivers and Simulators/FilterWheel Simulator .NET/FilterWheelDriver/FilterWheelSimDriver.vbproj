@@ -129,7 +129,6 @@
     <Import Include="ASCOM" />
     <Import Include="ASCOM.Conform" />
     <Import Include="ASCOM.DeviceInterface" />
-    <Import Include="ASCOM.FilterWheelSim" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
@@ -211,22 +210,27 @@
     <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
       <Name>ASCOM.Attributes</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
       <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
       <Name>ASCOM.DeviceInterface</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj">
       <Project>{44999847-A7B6-462D-B663-FE988D98E317}</Project>
       <Name>ASCOM.IConform</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\FilterWheelServer\FilterWheelSimServer.csproj">
       <Project>{D659379E-3131-4AD4-8D62-5C8BAC2C9A82}</Project>

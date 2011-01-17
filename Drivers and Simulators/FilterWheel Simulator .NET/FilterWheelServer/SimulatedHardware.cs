@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using ASCOM.Utilities;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.Simulator
 {
     // 
     // Implements the simulated hardware
@@ -44,7 +44,7 @@ namespace ASCOM.FilterWheelSim
         //
         private static object s_objSync = new object();	// Better than lock(this) - Jeffrey Richter, MSDN Jan 2003
 
-        public const string g_csDriverID = "ASCOM.FilterWheelSim.FilterWheel";
+        public const string g_csDriverID = "ASCOM.Simulator.FilterWheel";
         private const string g_csDriverDescription = "FilterWheelSimulator FilterWheel";
         public static Profile g_Profile;
 
@@ -334,7 +334,7 @@ namespace ASCOM.FilterWheelSim
         {
             int i;
 
-            if (g_Profile.GetValue(g_csDriverID, "RegVer") != m_sRegVer)
+            if (g_Profile.GetValue(g_csDriverID, "RegVer","","") != m_sRegVer)
             {
                 //
                 // initialize variables that are not present

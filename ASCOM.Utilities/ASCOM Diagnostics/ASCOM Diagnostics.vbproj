@@ -237,6 +237,7 @@
     <Compile Include="SerialForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SimulatorDescriptor.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ConnectForm.resx">
@@ -274,6 +275,12 @@
     <ProjectReference Include="..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
       <Project>{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}</Project>
       <Name>ASCOM.Astrometry</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
+      <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
+      <Name>ASCOM.DeviceInterface</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>

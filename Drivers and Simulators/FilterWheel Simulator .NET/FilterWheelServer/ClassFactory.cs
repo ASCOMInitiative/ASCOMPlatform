@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.Simulator
 {
 
     #region C# Definition of IClassFactory
