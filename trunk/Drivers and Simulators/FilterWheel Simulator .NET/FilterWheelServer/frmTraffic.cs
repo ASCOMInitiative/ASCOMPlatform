@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.Simulator
 {
     public partial class frmTraffic : Form
     {

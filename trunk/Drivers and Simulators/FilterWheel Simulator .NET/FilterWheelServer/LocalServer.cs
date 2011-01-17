@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading;
 using Helper = ASCOM.Utilities;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.Simulator
 {
     public class FilterWheelSim
     {

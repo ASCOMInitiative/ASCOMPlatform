@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.Simulator
 {
     /// <summary>
     /// Summary description for GarbageCollection.

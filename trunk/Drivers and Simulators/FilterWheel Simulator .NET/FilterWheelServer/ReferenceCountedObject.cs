@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.Simulator
 {
     [ComVisible(false)]
     public class ReferenceCountedObjectBase

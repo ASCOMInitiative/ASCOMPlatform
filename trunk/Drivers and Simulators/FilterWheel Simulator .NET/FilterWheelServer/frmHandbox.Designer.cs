@@ -1,4 +1,4 @@
-﻿namespace ASCOM.FilterWheelSim
+﻿namespace ASCOM.Simulator
 {
     partial class frmHandbox
     {
@@ -264,7 +264,7 @@
             // picFilter
             // 
             this.picFilter.BackColor = System.Drawing.Color.DimGray;
-            this.picFilter.Image = global::ASCOM.FilterWheelSim.Properties.Resources.FilterStop;
+            this.picFilter.Image = global::ASCOM.Simulator.Properties.Resources.FilterStop;
             this.picFilter.InitialImage = null;
             this.picFilter.Location = new System.Drawing.Point(20, 12);
             this.picFilter.Name = "picFilter";

@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.Simulator
 {
     class PictureBoxArray : System.Collections.CollectionBase
     {

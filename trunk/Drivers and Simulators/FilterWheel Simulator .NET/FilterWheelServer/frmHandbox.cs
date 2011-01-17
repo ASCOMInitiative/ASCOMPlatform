@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ASCOM.FilterWheelSim
+namespace ASCOM.Simulator
 {
     public partial class frmHandbox : Form
     {

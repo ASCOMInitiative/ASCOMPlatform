@@ -17,6 +17,7 @@ Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
 Imports System.Globalization
+Imports ASCOM.DeviceInterface
 
 Public Class DiagnosticsForm
 
@@ -59,6 +60,7 @@ Public Class DiagnosticsForm
     Private NumberOfTicks As Integer
 
     Private Nov3 As ASCOM.Astrometry.NOVAS.NOVAS3
+    Private DeviceObject As Object ' Device test object
 
     Private LastLogFile As String ' Name of last diagnostics log file
 
@@ -326,6 +328,7 @@ Public Class DiagnosticsForm
                 TransformTest() : Action("")
                 NOVAS2Tests() : Action("")
                 NOVAS3Tests() : Action("")
+                SimulatorTests() : Action("")
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratualtions, all " & NMatches & " function tests passed!"
@@ -365,6 +368,513 @@ Public Class DiagnosticsForm
         btnExit.Enabled = True ' Enable buttons during run
         btnCOM.Enabled = True
     End Sub
+
+    Private Sub SimulatorTests()
+        Dim Sim As SimulatorDescriptor
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.Telescope"
+        Sim.Description = "Platform 6 Telescope Simulator"
+        Sim.DeviceType = "Telescope"
+        Sim.Name = "Simulator"
+        Sim.DriverVersion = "6.0.0.0"
+        Sim.InterfaceVersion = 3
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        Sim.AxisRates = New Double(,) {{10.0, 43.6}, {30.2, 50.0}}
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ScopeSim.Telescope"
+        Sim.Description = "Platform 5 Telescope Simulator"
+        Sim.DeviceType = "Telescope"
+        Sim.Name = "Simulator"
+        Sim.DriverVersion = "5.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = True
+        Sim.SixtyFourBit = True
+        Sim.AxisRates = New Double(,) {{0.0}, {8.0}}
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "CCDSimulator.Camera"
+        Sim.Description = "Platform 5 Camera Simulator"
+        Sim.DeviceType = "Camera"
+        Sim.Name = "ASCOM CCD camera simulator"
+        Sim.DriverVersion = "5.0"
+        Sim.InterfaceVersion = 2
+        Sim.SixtyFourBit = False
+        Sim.IsPlatform5 = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.Camera"
+        Sim.Description = "Platform 6 Camera Simulator"
+        Sim.DeviceType = "Camera"
+        Sim.Name = "Sim "
+        Sim.DriverVersion = "6.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "FilterWheelSim.FilterWheel"
+        Sim.Description = "Platform 5 FilterWheel Simulator"
+        Sim.DeviceType = "FilterWheel"
+        Sim.Name = "xxxx"
+        Sim.DriverVersion = "5.0"
+        Sim.InterfaceVersion = 1
+        Sim.IsPlatform5 = True
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.FilterWheel"
+        Sim.Description = "Platform 6 FilterWheel Simulator"
+        Sim.DeviceType = "FilterWheel"
+        Sim.Name = "Filter Wheel Simulator .NET"
+        Sim.DriverVersion = "6.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "FocusSim.Focuser"
+        Sim.Description = "Platform 5 Focuser Simulator"
+        Sim.DeviceType = "Focuser"
+        Sim.Name = "Simulator"
+        Sim.DriverVersion = "5.0"
+        Sim.InterfaceVersion = 1
+        Sim.IsPlatform5 = True
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.Focuser"
+        Sim.Description = "Platform 6 Focuser Simulator"
+        Sim.DeviceType = "Focuser"
+        Sim.Name = "ASCOM.Simulator.Focuser"
+        Sim.DriverVersion = "6.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.SafetyMonitor"
+        Sim.Description = "Platform 6 Safety Monitor Simulator"
+        Sim.DeviceType = "SafetyMonitor"
+        Sim.Name = "ASCOM.Simulator.SafetyMonitor"
+        Sim.DriverVersion = "6.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.Switch"
+        Sim.Description = "Platform 6 Switch Simulator"
+        Sim.DeviceType = "Switch"
+        Sim.Name = "ASCOM.Simulator.Switch"
+        Sim.DriverVersion = "6.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "SwitchSim.Switch"
+        Sim.Description = "Platform 5 Switch Simulator"
+        Sim.DeviceType = "Switch"
+        Sim.Name = "Switch Simulator"
+        Sim.DriverVersion = "5.0"
+        Sim.InterfaceVersion = 1
+        Sim.IsPlatform5 = True
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        TL.BlankLine()
+    End Sub
+
+    Private Sub TestSimulator(ByVal Sim As SimulatorDescriptor)
+        Dim RetValString As String, DeviceAxisRates As Object, ct As Integer
+        Status(Sim.Description)
+
+        If (ApplicationBits() = Bitness.Bits64) And (Not Sim.SixtyFourBit) Then ' We are on a 64 bit OS and are testing a 32bit only app - so skip the test!
+            TL.LogMessage("TestSimulator", Sim.ProgID & " " & Sim.Description & " - Skipping test as this driver is not 64bit compatible")
+        Else
+            Try
+                TL.LogMessage("TestSimulator", "CreateObject for Device: " & Sim.ProgID & " " & Sim.Description)
+                DeviceObject = CreateObject(Sim.ProgID)
+                Select Case Sim.DeviceType
+                    Case "Focuser"
+                        Try
+                            DeviceObject.Connected = True
+                            Compare("TestSimulator", "Connected OK", "True", "True")
+                        Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
+                            DeviceObject.Link = True ' Try Link, if it fails the outer try will catch the exception
+                            Compare("TestSimulator", "Linked OK", "True", "True")
+                        End Try
+
+                    Case Else ' Everything else should be Connected 
+                        DeviceObject.Connected = True
+                        Compare("TestSimulator", "Connected OK", "True", "True")
+                End Select
+                Try
+                    RetValString = DeviceObject.Description
+                    Compare("TestSimulator", "Description member is present in Platform 6 Simulator", "True", "True")
+                    NMatches += 1
+                Catch ex1 As MissingMemberException
+                    If Sim.IsPlatform5 Then
+                        Compare("TestSimulator", "Description member is not present in Platform 5 Simulator", "True", "True")
+                    Else
+                        LogException("TestSimulator", "Description Exception: " & ex1.ToString)
+                    End If
+                Catch ex1 As Exception
+                    LogException("TestSimulator", "Description Exception: " & ex1.ToString)
+                End Try
+
+                Try
+                    RetValString = DeviceObject.DriverInfo
+                    Compare("TestSimulator", "DriverInfo member is present in Platform 6 Simulator", "True", "True")
+                Catch ex1 As MissingMemberException
+                    If Sim.IsPlatform5 Then
+                        Compare("TestSimulator", "DriverInfo member is not present in Platform 5 Simulator", "True", "True")
+                    Else
+                        LogException("TestSimulator", "DriverInfo Exception: " & ex1.ToString)
+                    End If
+                Catch ex1 As Exception
+                    LogException("TestSimulator", "DriverInfo Exception: " & ex1.ToString)
+                End Try
+
+                Try
+                    Compare("TestSimulator", Sim.DeviceType & " " & "Name", DeviceObject.Name, Sim.Name)
+                Catch ex1 As MissingMemberException
+                    If Sim.IsPlatform5 Then
+                        Compare("TestSimulator", "Name member is not present in Platform 5 Simulator", "True", "True")
+                    Else
+                        LogException("TestSimulator", "Name Exception: " & ex1.ToString)
+                    End If
+                Catch ex1 As Exception
+                    LogException("TestSimulator", "Name Exception: " & ex1.ToString)
+                End Try
+
+                Try
+                    Compare("TestSimulator", Sim.DeviceType & " " & "InterfaceVersion", DeviceObject.Interfaceversion, Sim.InterfaceVersion)
+                Catch ex1 As MissingMemberException
+                    If Sim.IsPlatform5 Then
+                        Compare("TestSimulator", "Interfaceversion member is not present in Platform 5 Simulator", "True", "True")
+                    Else
+                        LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
+                    End If
+                Catch ex1 As Exception
+                    LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
+                End Try
+
+                Try
+                    Compare("TestSimulator", Sim.DeviceType & " " & "DriverVersion", DeviceObject.DriverVersion, Sim.DriverVersion)
+                Catch ex1 As MissingMemberException
+                    If Sim.IsPlatform5 Then
+                        Compare("TestSimulator", "DriverVersion member is not present in Platform 5 Simulator", "True", "True")
+                    Else
+                        LogException("TestSimulator", "DriverVersion Exception: " & ex1.ToString)
+                    End If
+                Catch ex1 As Exception
+                    LogException("TestSimulator", "DriverVersion Exception: " & ex1.ToString)
+                End Try
+
+                Select Case Sim.DeviceType
+                    Case "Telescope"
+                        DeviceTest("Telescope", "UnPark")
+                        DeviceTest("Telescope", "TrackingTrue")
+                        DeviceTest("Telescope", "SiderealTime")
+                        DeviceTest("Telescope", "RightAscension")
+                        DeviceTest("Telescope", "TargetRightDeclination")
+                        DeviceTest("Telescope", "TargetRightAscension")
+                        DeviceTest("Telescope", "Slew")
+                        DeviceTest("Telescope", "TrackingRates")
+                        DeviceAxisRates = DeviceTest("Telescope", "AxisRates")
+                        ct = 0
+                        For Each AxRte As Object In DeviceAxisRates
+                            CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct), 0.000001)
+                            CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct), 0.000001)
+                            ct += 1
+                        Next
+                    Case "Camera"
+                        DeviceTest("Camera", "StartExposure")
+                    Case "FilterWheel"
+                        DeviceTest("FilterWheel", "Position")
+                    Case "Focuser"
+                        DeviceTest("Focuser", "Move")
+                    Case "SafetyMonitor"
+                        DeviceTest("SafetyMonitor", "IsSafe")
+                    Case "Switch"
+                        If Sim.IsPlatform5 Then
+                            DeviceTest("Switch", "GetSwitch")
+                            DeviceTest("Switch", "GetSwitchName")
+                        Else
+                            DeviceTest("Switch", "Switches")
+                        End If
+                    Case Else
+                        LogException("TestSimulator", "Unknown device type: " & Sim.DeviceType)
+                End Select
+
+                Select Case Sim.DeviceType
+                    Case "Focuser"
+                        Try
+                            DeviceObject.Connected = False
+                            NMatches += 1
+                        Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
+                            TL.LogMessage("TestSimulator", "Focuser Connected member missing, using Link instead")
+                            DeviceObject.Link = False ' Try Link, if it fails the outer try will catch the exception
+                            NMatches += 1
+                        End Try
+
+                    Case Else ' Everything else should be Connected 
+                        DeviceObject.Connected = True : NMatches += 1
+                End Select
+                TL.LogMessage("TestSimulator", "Completed Device: " & Sim.ProgID & " OK")
+                Try : DeviceObject.Dispose() : Catch : End Try
+                Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try
+                DeviceObject = Nothing
+            Catch ex As Exception
+                LogException("TestSimulator", "Exception: " & ex.ToString)
+            End Try
+        End If
+        Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try 'Always try and make sure we are properly tidied up!
+        TL.BlankLine()
+    End Sub
+
+
+    Private Sub TestSimulatorXX(ByVal ProgID As String, ByVal SixtyFourBit As Boolean, ByVal IsPlatform5 As Boolean, ByVal Description As String, ByVal DeviceType As String, ByVal InterfaceVersion As Integer, ByVal DriverVersion As String, ByVal Name As String, ByVal AxisRates(,) As Double)
+        Dim RetValString As String, DeviceAxisRates As Object, ct As Integer
+        Status(Description)
+
+        If (ApplicationBits() = Bitness.Bits64) And (Not SixtyFourBit) Then ' We are on a 64 bit OS and are testing a 32bit only app - so skip the test!
+            TL.LogMessage("TestSimulator", ProgID & " " & Description & " - Skipping test as this driver is not 64bit compatible")
+        Else
+            Try
+                TL.LogMessage("TestSimulator", "CreateObject Device: " & ProgID & " " & Description)
+                DeviceObject = CreateObject(ProgID)
+                Select Case DeviceType
+                    Case "Focuser"
+                        Try
+                            DeviceObject.Connected = True
+                            NMatches += 1
+                        Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
+                            TL.LogMessage("TestSimulator", "Focuser Connected member missing, using Link instead")
+                            DeviceObject.Link = True ' Try Link, if it fails the outer try will catch the exception
+                            NMatches += 1
+                        End Try
+
+                    Case Else ' Everything else should be Connected 
+                        DeviceObject.Connected = True : NMatches += 1
+                End Select
+                Try
+                    RetValString = DeviceObject.Description
+                    NMatches += 1
+                Catch ex1 As MissingMemberException
+                    TL.LogMessage("TestSimulator", "Description member is missing")
+                End Try
+                Try : RetValString = DeviceObject.DriverInfo : NMatches += 1 : Catch : End Try
+                Try : Compare("TestSimulator", DeviceType & " " & "Name", DeviceObject.Name, Name) : Catch : End Try
+                Try : Compare("TestSimulator", DeviceType & " " & "InterfaceVersion", DeviceObject.Interfaceversion, InterfaceVersion) : Catch : End Try
+                Try : Compare("TestSimulator", DeviceType & " " & "DriverVersion", DeviceObject.DriverVersion, DriverVersion) : Catch : End Try
+                Select Case DeviceType
+                    Case "Telescope"
+                        DeviceTest("Telescope", "UnPark")
+                        DeviceTest("Telescope", "TrackingTrue")
+                        DeviceTest("Telescope", "SiderealTime")
+                        DeviceTest("Telescope", "RightAscension")
+                        DeviceTest("Telescope", "TargetRightDeclination")
+                        DeviceTest("Telescope", "TargetRightAscension")
+                        DeviceTest("Telescope", "Slew")
+                        DeviceTest("Telescope", "TrackingRates")
+                        DeviceAxisRates = DeviceTest("Telescope", "AxisRates")
+                        ct = 0
+                        For Each AxRte As Object In DeviceAxisRates
+                            CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, AxisRates(0, ct), 0.000001)
+                            CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, AxisRates(1, ct), 0.000001)
+                            ct += 1
+                        Next
+                    Case "Camera"
+                        DeviceTest("Camera", "StartExposure")
+                    Case "FilterWheel"
+
+                    Case "Focuser"
+                    Case Else
+                        LogException("TestSimulator", "Unknown device type: " & DeviceType)
+                End Select
+
+                Select Case DeviceType
+                    Case "Focuser"
+                        Try
+                            DeviceObject.Connected = False
+                            NMatches += 1
+                        Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
+                            TL.LogMessage("TestSimulator", "Focuser Connected member missing, using Link instead")
+                            DeviceObject.Link = False ' Try Link, if it fails the outer try will catch the exception
+                            NMatches += 1
+                        End Try
+
+                    Case Else ' Everything else should be Connected 
+                        DeviceObject.Connected = True : NMatches += 1
+                End Select
+                TL.LogMessage("TestSimulator", "CreateObject Device: " & ProgID & " OK")
+                Try : DeviceObject.Dispose() : Catch : End Try
+                Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try
+                DeviceObject = Nothing
+            Catch ex As Exception
+                LogException("TestSimulator", "Exception: " & ex.ToString)
+            End Try
+        End If
+        Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try 'Always try and make sure we are properly tidied up!
+        TL.BlankLine()
+    End Sub
+
+    Private Function DeviceTest(ByVal Device As String, ByVal Test As String) As Object
+        Dim RetVal As Object = Nothing, SiderealTime, RetValDouble As Double, StartTime As Date
+        Dim DeviceTrackingRates As Object
+        Const PossibleDriveRates As String = "driveSidereal,driveKing,driveLunar,driveSolar"
+
+        Action(Test)
+        Try
+            StartTime = Now
+            Select Case Device
+                Case "SafetyMonitor"
+                    Select Case Test
+                        Case "IsSafe"
+                            Compare("DeviceTest", Test, DeviceObject.IsSafe, "False")
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
+
+                Case "Switch"
+                    Select Case Test
+                        Case "Switches"
+                            RetVal = DeviceObject.Switches
+                            Compare("DeviceTest", "Switches read OK", True, True)
+                        Case "GetSwitch"
+                            Compare("DeviceTest", Test, DeviceObject.GetSwitch(1), "True")
+                        Case "GetSwitchName"
+                            Compare("DeviceTest", Test, DeviceObject.GetSwitchName(1), "1")
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
+                Case "FilterWheel"
+                    Select Case Test
+                        Case "Position"
+                            DeviceObject.Position = 3
+                            Do
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds)
+                            Loop Until DeviceObject.Position > -1
+                            CompareDouble("DeviceTest", Test, CDbl(DeviceObject.Position), 3.0, 0.000001)
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
+                Case "Focuser"
+                    Select Case Test
+                        Case "Move"
+                            DeviceObject.Move(30000)
+                            Do
+                                Thread.Sleep(200)
+                                Application.DoEvents()
+                                Action(Test & " " & DeviceObject.Position & " / 30000") 'Now.Subtract(StartTime).Seconds)
+                            Loop Until Not DeviceObject.IsMoving
+                            CompareDouble("DeviceTest", Test, CDbl(DeviceObject.Position), 30000.0, 0.000001)
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
+                Case "Camera"
+                    Select Case Test
+                        Case "StartExposure"
+                            StartTime = Now
+                            DeviceObject.StartExposure(3.0, True)
+                            TL.LogMessage(Device, "Start exposure duration: " & Now.Subtract(StartTime).TotalSeconds)
+                            Do
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
+                            Loop Until ((DeviceObject.CameraState = CameraStates.cameraIdle) Or (Now.Subtract(StartTime).TotalSeconds) > 5.0)
+                            CompareDouble(Device, "StartExposure", Now.Subtract(StartTime).TotalSeconds, 3.0, 0.2)
+                            Compare(Device, "ImageReady", DeviceObject.ImageReady, True)
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
+                Case "Telescope"
+                    Select Case Test
+                        Case "UnPark"
+                            DeviceObject.UnPark()
+                            Compare(Device, Test, DeviceObject.AtPark, "False")
+                        Case "TrackingTrue"
+                            DeviceObject.UnPark()
+                            DeviceObject.Tracking = True
+                            Compare(Device, Test, DeviceObject.Tracking, "True")
+                        Case "SiderealTime"
+                            SiderealTime = DeviceObject.SiderealTime
+                            RetValDouble = DeviceObject.SiderealTime
+                            CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.000001)
+                        Case "TargetRightDeclination"
+                            DeviceObject.TargetDeclination = 0.0
+                            RetValDouble = DeviceObject.TargetDeclination
+                            CompareDouble(Device, Test, RetValDouble, 0.0, 0.00001)
+                        Case "TargetRightAscension"
+                            SiderealTime = DeviceObject.SiderealTime
+                            DeviceObject.TargetRightAscension = SiderealTime
+                            RetValDouble = DeviceObject.TargetRightAscension
+                            CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.00001)
+                        Case "Slew"
+                            DeviceObject.UnPark()
+                            DeviceObject.Tracking = True
+                            SiderealTime = DeviceObject.SiderealTime
+                            DeviceObject.TargetRightAscension = SiderealTime
+                            DeviceObject.TargetDeclination = 0.0
+                            DeviceObject.SlewToTarget()
+                            CompareDouble(Device, Test, DeviceObject.RightAscension, SiderealTime, 0.00001)
+                            CompareDouble(Device, Test, DeviceObject.Declination, 0.0, 0.00001)
+                        Case "RightAscension"
+                            SiderealTime = DeviceObject.SiderealTime
+                            DeviceObject.TargetRightAscension = SiderealTime
+                            RetValDouble = DeviceObject.TargetRightAscension
+                            CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.00001)
+                        Case "TrackingRates"
+                            DeviceTrackingRates = DeviceObject.TrackingRates
+                            For Each TrackingRate As DriveRates In DeviceTrackingRates
+                                If PossibleDriveRates.Contains(TrackingRate.ToString) Then
+                                    NMatches += 1
+                                    TL.LogMessage(Device, "Matched Tracking Rate = " & TrackingRate.ToString)
+                                Else
+                                    LogException(Device, "Found unexpected tracking rate: """ & TrackingRate.ToString & """")
+                                End If
+                            Next
+                        Case "AxisRates"
+                            RetVal = DeviceObject.AxisRates(TelescopeAxes.axisPrimary)
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
+                Case Else
+                    LogException("DeviceTest", "Unknown Device: " & Device)
+            End Select
+        Catch ex As Exception
+            LogException("DeviceTest", Device & " " & Test & " exception: " & ex.ToString)
+        End Try
+        Return RetVal
+    End Function
 
     Enum NOVAS3Functions
         PlanetEphemeris
@@ -2407,7 +2917,7 @@ Public Class DiagnosticsForm
             TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
             NMatches += 1
         Else
-            ErrMsg = "##### NOT Matched " & p_Name & " #" & p_New & "#" & p_Orig & "#"
+            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: """ & p_New & """, Expected: """ & p_Orig & """"
             TL.LogMessageCrLf(p_Section, ErrMsg)
             NNonMatches += 1
             ErrorList.Add(p_Section & " - " & ErrMsg)
@@ -2422,7 +2932,7 @@ Public Class DiagnosticsForm
             TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New & " within tolerance of " & p_Tolerance)
             NMatches += 1
         Else
-            ErrMsg = "##### NOT Matched " & p_Name & " #" & p_New.ToString & "#" & p_Orig.ToString & "# within tolerance of " & p_Tolerance
+            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: " & p_New.ToString & ", Expected: " & p_Orig.ToString & " within tolerance of " & p_Tolerance
             TL.LogMessage(p_Section, ErrMsg)
             NNonMatches += 1
             ErrorList.Add(p_Section & " - " & ErrMsg)

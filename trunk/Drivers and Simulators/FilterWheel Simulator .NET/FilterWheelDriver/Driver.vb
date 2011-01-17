@@ -74,7 +74,7 @@
 
     Public ReadOnly Property DriverVersion As String Implements IFilterWheelV2.DriverVersion
         Get
-            Return "1.0"
+            Return "6.0"
         End Get
     End Property
 
@@ -86,7 +86,7 @@
 
     Public ReadOnly Property Name As String Implements IFilterWheelV2.Name
         Get
-            Return "Filer Wheel Simulator .NET"
+            Return "Filter Wheel Simulator .NET"
         End Get
     End Property
 #End Region

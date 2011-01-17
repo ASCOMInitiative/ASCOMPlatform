@@ -74,7 +74,7 @@ namespace ASCOM.Simulator
 
         internal int position;
         internal int target;
-        private int roc = 25;       // rate of change in steps per 1/20 sec
+        private int roc = 100;       // rate of change in steps per 1/10 sec
 
         private Timer moveTimer;    // drives the position and temperature changers
 
