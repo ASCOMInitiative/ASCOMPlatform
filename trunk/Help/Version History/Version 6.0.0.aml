@@ -7,10 +7,10 @@
       		<content>
 				<list class="bullet">
  		 			<listItem>Diagnostics - Now has a menu option to list available COM ports.</listItem>
+ 		 			<listItem>Diagnostics - Now includes a comprehensive test suite and creates a more detailed report</listItem>
  		 			<listItem>TraceLogger - Has a new menu option to return the full path name of the log file being created.</listItem>
  		 			<listItem>TraceLogger - New LogMessageCrLf method that respects carriage returns and line feeds in 
  		 			messages and doesn't translate these to hex display characters.</listItem>>
- 		 			
  		 			<listItem>ASCOM.Astrometry - Now includes a full presentation of the NOVAS3 library including:
  		 				<list class="bullet">
 		 		 			<listItem>the the most recent JPL DE421 planet ephemeris data.</listItem>>

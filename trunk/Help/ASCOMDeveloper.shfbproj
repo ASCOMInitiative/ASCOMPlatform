@@ -142,6 +142,7 @@
       <ImageId>ManufLogos</ImageId>
     </Image>
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Introduction\Introduction - Developer.aml" />
     <None Include="Introduction\Key Changes in 6.0.aml" />
     <None Include="Examples\ProfileWhole.aml" />
     <None Include="Examples\SerialThreading.aml" />

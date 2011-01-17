@@ -356,7 +356,7 @@ else
     Install Assembly C:\ASCOM Trunk\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
     Install Assembly C:\ASCOM Trunk\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
     Comment: Platform 5 simulators
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\CCD Simulator\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
     Install Files C:\ASCOM Trunk\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt to $COMMONFILES$\ASCOM\Camera
     Install Files C:\ASCOM Trunk\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll to $COMMONFILES$\ASCOM\Camera
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator\DomeSim.exe to $COMMONFILES$\ASCOM\Dome
@@ -457,8 +457,8 @@ else
     Comment: FilterWheel simulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
     Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
     Comment: Focuser simulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser
@@ -630,6 +630,7 @@ else
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT)
         Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT)
         Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT)
+        Set Variable PROGRESS to 90
         Comment: Extra registration of 64bit components if on 64bit system
         if Variable PROCESSOR Equals AMD64
           Comment: Initialise variables
@@ -645,13 +646,13 @@ else
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
-          Set Variable PROGRESS to 90
+          Set Variable PROGRESS to 95
           Comment: Register simulators
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll" /codebase (WAIT, get result into variable RC6)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll" /codebase (WAIT, get result into variable RC7)
-          Set Variable PROGRESS to 95
+          Set Variable PROGRESS to 100
           if Variable RC1 not Equals 0
             MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
           else

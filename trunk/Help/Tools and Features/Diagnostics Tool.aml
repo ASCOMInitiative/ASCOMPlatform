@@ -23,6 +23,7 @@
 		    <listItem>Version information for key ASCOM files</listItem>
 		    <listItem>Version information for key ASCOM GAC files</listItem>
 		    <listItem>Contents of ASCOM releated Inno installer setup logs (from Temp directory)</listItem>
+		    <listItem>Results of several hundred application functionality tests</listItem>
 		 </list>
 		 <para>When the "Run Diagnostics" button is pressed, the information above is collected into a log file
 		 titled ASCOM.Diagnostics.hhmmssssss.txt that will be found in "My Documents\ASCOM\Logs yyyy-mm-dd".

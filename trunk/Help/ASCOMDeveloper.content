@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics defaultTopic="7d9253c2-fdfd-4c0d-8225-a96bddb49731">
   <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" />
-  <Topic id="7a83428f-586f-44ac-bf65-91a5fe97e8cf" visible="True" />
+  <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" />
   <Topic id="661ad380-12b9-4a1f-b79c-5dde4f5e781b" visible="True" />
   <Topic id="3d17234a-c873-4f65-af0f-52f182081a44" visible="True" title="ASCOM Platform for .NET Developers" />
   <Topic id="e7734c14-0562-4010-b0c9-ddb5055cd318" visible="True" title="ASCOM Platform for COM Developers" />
