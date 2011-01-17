@@ -6,8 +6,8 @@
       	<content>
       	<para>Platform 6 returns to a single installer for the whole platform, removing the need to install an update on top of 
       	the core platform and introduces a number of device interface changes to bring consistency
-      	to the information available. It also provides new flexibility for client and driver authors to innovate and add their own 
-      	driver commands without having to release new versions of the device interfaces.</para>
+      	to the information available. It also provides new flexibility for client and driver authors to innovate and add 
+      	their own driver commands without having to release new versions of the device interfaces.</para>
       	
       	<para>The following section describes changes introduced in Platform 5.5</para>
 		</content>
@@ -61,12 +61,12 @@
 		a report and supporting information to our Jira issue and enhancement tracking system:
 		<externalLink>
 			<linkText>ASCOM Jira Issue and Request Tracking System</linkText>
-			<linkAlternateText>http://teamserver.tigranetworks.co.uk:8010</linkAlternateText>
-			<linkUri>http://teamserver.tigranetworks.co.uk:8010</linkUri>
+			<linkAlternateText>http://teamserver.tigranetworks.co.uk/jira</linkAlternateText>
+			<linkUri>http://teamserver.tigranetworks.co.uk/jira</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
 		
-		at <quoteInline>http://teamserver.tigranetworks.co.uk:8010</quoteInline>
+		at <quoteInline>http://teamserver.tigranetworks.co.uk/jira</quoteInline>
 		</para>
 		
 		<para>The Jira system above is also a very good place to make Platform enhancement requests and, of course, you can 
@@ -75,103 +75,32 @@
 		
 		</content>
     </section>
-
-    <section address="Introduction-Developers-Platform-6">
-    	<title>Introduction - ASCOM-Platform 6 - ASCOM Driver and Application Developers</title>
-      	<content>
-      	<para>This release builds on the architectural changes introduced in Plaform 5.5 and introduces a set of common methods that 
-      	will be availabnle in all drivers. These have been based on the methods already implemented in the Telescope interface together
-      	with methods agreed in the IDeviceControl interface discussion. The full list of members is given 
-      	<link xlink:href="7a83428f-586f-44ac-bf65-91a5fe97e8cf">here</link> and is fully documented
-      	in the ASCOM.DeviceInterface namespace section of this help file.
-      	</para>
-      	
-      	<para>The following section describes changes introduced in Platform 5.5</para>
-		</content>
-    </section>
-
-	<section address="Introduction-Developers-Platform-55">
-    	<title>Introduction - Driver and Application Developers - Features Introduced in Platform 5.5</title>
-      	<content>
-		<para>The update introduces refactored, native, .NET implementations of the Helper 
-		components, which sit alongside the current VB6 COM components. The .NET components don't replace the COM components 
-		but do provide an alternate way for .NET applications to access their useful functionality.</para>
-		
-		<para>In addition to the original COM components all the new .NET components are exposed through COM to provide a 
-		migration path onwards from the ageing VB6 based COM helper components, see section 
-		<link xlink:href="e7734c14-0562-4010-b0c9-ddb5055cd318" />.</para>
-		
-		<para>This help file also documents the capabilities offered by the new native .NET platform components. 
-      	Instructions on how to access these capabilities are given in the 
-      	section <link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" /></para>
-      	
-      	<para>These new components are refactored from the original COM components and provide very similar functionality.
-      	They allow a .NET client or driver to use only .NET support components and to function as a 32 or 64 bit 
-      	application as required.</para>
-      	</content>
-    </section>
-
-    <section address="Architecture">
-    	<title>Architectural Changes</title>
-      	<content>
-      		<para>The following notes refer to the pictures in the pdf file entitiled "ASCOM Platform Architecture" installed 
-      		in the StartMenu ASCOM Platform/Docs folder and describe how the ASCOM Platform has evolved from Platform 4 through 
-      		to Platform 5.5. </para>
-      		
-      		<para>The first picture shows options available in ASCOM Platform Version 4. At this time all drivers and clients 
-      		used COM to access other clients and the helper components. </para>
-
-      		<para>The second picture shows the ASCOM Platform 5 world where COM clients continue
-      		as before and .NET clients are able to use the Client Access Toolkit to talk to drivers through either COM or 
-      		.NET interfaces. .NET clients and drivers continue to use the Helper components through COM interfaces.</para>
-      		
-      		<para>The third picture shows how original COM clients use Platform 5.5. They continue to use original drivers
-      		that use the VB6 Helpers but these have been "hollowed out" so that serial, profile and chooser functions 
-      		are transparently carried out in the Platform 5.5 .NET based components. The original COM applications
-      		are unaware of the change because they continue to see the original VB6 helper interface. Original COM 
-      		clients are also able to use new .NET drivers, through their COM interfaces as presented through the Chooser.</para>
-      		
-      		<para>The fourth picture shows a similar picture for newly developed or refactored COM applications,
-      		the difference being that they will go directly to the COM interfaces exposed by the new .NET components
-      		rather than to the original VB6 helper components and will thus have access to all the new functions in 
-      		Platform 5.5.</para>
-      		
-      		<para>The final picture shows the changes that the new components bring to .NET clients. These clients no
-      		longer need to use the COM component interfaces being able to access the .NET assemblies directly.
-      		They will also benefit from IntelliSense if developed in Visual Studio.</para>
-      		
-      	</content>
-    </section>
-
     <section address="Notes">
     	<title>Notes</title>
       	<content>
       		<list class="bullet">
  				<listItem>See the section titled 
- 				<link xlink:href="661ad380-12b9-4a1f-b79c-5dde4f5e781b" />
- 				for a summary of updates and new functionality.
+ 				<link xlink:href="7a83428f-586f-44ac-bf65-91a5fe97e8cf" />
+ 				for a summary of Platform 6 updates and new functionality.
  				</listItem>
-  				<listItem>This update appears as <quoteInline>ASCOM Platform 5.5 Update</quoteInline> in 
+ 				<listItem>See the section titled 
+ 				<link xlink:href="661ad380-12b9-4a1f-b79c-5dde4f5e781b" />
+ 				for a summary of Platform 5.5 updates and new functionality.
+ 				</listItem>
+  				<listItem>This platform appears as <quoteInline>ASCOM Platform 6.0</quoteInline> in 
   				the add/remove programs dialogue</listItem>
-  				<listItem>Install saves copies of the original helper components and restores these if the update is 
-  				uninstalled</listItem>
-  				<listItem>The registry based profile is not deleted and remains available to use if you uninstall the 
-  				update.</listItem>
   				<listItem>Testing has been carried out in Windows XP, WIndows Vista 64 and Windows 7 32 and 64bit bit 
-  				environments in the UK and US locales.</listItem>
+  				environments in the UK, French and US locales.</listItem>
 	  		</list>
       	</content>
     </section>
 
    	<relatedTopics>
-		<link xlink:href="3d17234a-c873-4f65-af0f-52f182081a44" />
-		<link xlink:href="e7734c14-0562-4010-b0c9-ddb5055cd318" />
 		<externalLink>
 			<linkText>ASCOM Initiative</linkText>
 			<linkAlternateText>Go to the ASCOM Initiative web site</linkAlternateText>
 			<linkUri>http://ascom-standards.org/</linkUri>
 		</externalLink>
-		<codeEntityReference>N:ASCOM.Utilities</codeEntityReference>
 	</relatedTopics>
 	</developerConceptualDocument>
 </topic>
