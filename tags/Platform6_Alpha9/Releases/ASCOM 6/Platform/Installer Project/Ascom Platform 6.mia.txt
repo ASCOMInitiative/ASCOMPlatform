@@ -1,0 +1,720 @@
+Comment: Prompts the user if they want to create an install log
+Get System Setting Processor Architecture into PROCESSOR
+Comment: MessageBalloon: Processor, Processor is $PROCESSOR$
+Comment: Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+Set Variable CreateLogFile to No
+Comment: MessageBox: Create Install Log File, Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
+if Variable CreateLogFile Equals YES
+  Run Program $EXEFILE$ /l="C:\ASCOMInstall.txt"
+  GoTo Label: Finish
+end
+ 
+[DEFINE REGION: Application Updates]
+Comment: Check and remove previous versions of ASCOM
+Set Persistent Variable PreviousVersionsInstalled to True
+if Variable PreviousVersionsInstalled Equals True
+  Comment: Run Program $SUPPORTDIR$\MigrateProfile.exe SAVEPLATFORMVERSION CREATEREGISTRYKEY (WAIT)
+end
+Comment: Set this to your local ASCOM trunk path
+Set Persistent Variable ASCOMTrunkPath to c:\ASCOM Trunk
+[END REGION]
+ 
+[DEFINE REGION: Check Application Requirements]
+Get System Setting Administrator Rights into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
+Comment: Check system has at least Windows 98
+Get System Setting Windows XP into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
+ 
+Comment: Check system has at least Internet Explorer 5.01 Service Pack 1
+Get System Setting Internet Explorer 5.01 Service Pack 1 into CHECKIE
+if Variable CHECKIE not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires Internet Explorer 5.01 Service Pack 1 or later. Please install it and try again.
+  Terminate Installation
+end
+ 
+[END REGION]
+ 
+[DEFINE REGION: Check/Install Application Pre-Requisites]
+ 
+[DEFINE REGION: Check Application Pre-Requisites]
+Comment: Check setup pre-requisites
+Set Variable PREREQ to FALSE
+Set Variable PRELIST to 
+[compiler if Variable BUILDMODE not Equals PATCH]
+if Variable NEEDSUPGRADE Equals TRUE
+  Set Variable PREREQ to TRUE
+  Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Uninstallation
+end
+Include Script: checkmsi31
+[compiler end]
+Include Script: checknet2sp2
+Include Script: checknet3sp2
+Include Script: checknet351
+[END REGION]
+ 
+[DEFINE REGION: Install Application Pre-Requisites]
+Comment: Install setup pre-requisites
+if Variable PREREQ not Equals FALSE
+  Display Dialog: prereq, wait for dialog to return (modal)
+  if Variable WIZARD Equals CANCEL
+    Terminate Installation
+  end
+  if Variable WIZARD Equals NEXT
+    Comment: Check for .NET 2 SP2
+    if Variable NET2SP2 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+      Terminate Installation
+    end
+    Comment: Check for .NET 3 SP2
+    if Variable NET3SP2 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+      Terminate Installation
+    end
+    Comment: Check for .NET 3.5 SP1
+    if Variable NET351 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+      Terminate Installation
+    end
+  end
+  Display Dialog: progressprereq, use as progress dialog (non-modal)
+  [compiler if Variable BUILDMODE not Equals PATCH]
+  if Variable NEEDSUPGRADE Equals TRUE
+    Set Variable REMOVEOLD to 
+    Set Variable ERROROLD to 
+    Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
+    if Variable REMOVEOLD Equals ERROR
+      MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
+      Terminate Installation
+    end
+    if Variable REMOVEOLD Equals REBOOT
+      MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+      if Variable REBOOTNOW Equals OK
+        Reboot Computer and Resume Setup
+      else
+        Terminate Installation
+      end
+    end
+    Set Variable MAINTENANCE to FALSE
+  end
+  [DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
+  Include Script: setupmsi31
+  [compiler end]
+  Hide Dialog
+end
+[END REGION]
+ 
+[END REGION]
+ 
+[DEFINE REGION: Define Setup Globals]
+Comment: Define Setup Components
+ 
+Comment: Initialize Setup Globals
+Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008) into ISNT
+Get Folder Location System->Program Files Directory into PROGRAMFILES
+Get Common Folder Location System->Program Files Directory into COMMONFILES
+Get Common Folder Location Start Menu->Programs Group into SHORTCUTFILESALL
+Get Folder Location Start Menu->Programs Group into SHORTCUTFILES
+if Variable SHORTCUTFILESALL Equals 
+  Set Variable SHORTCUTFILESALL to $SHORTCUTFILES$
+end
+Get Folder Location System->Desktop Directory into DESKTOPDIR
+Get Folder Location System->Windows Directory into WINDIR
+Get Folder Location System->System Directory into WINSYSDIR
+Get Folder Location Taskbar->Quick Launch Directory into QUICKLAUNCHDIR
+Get Folder Location WWW->WWWRoot into WWWROOTDIR
+Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
+Set Variable REGASM to $FRAMEWORKROOT$v2.0.50727\RegAsm.exe
+[END REGION]
+ 
+[DEFINE REGION: Setup User Interview]
+if Variable MAINTENANCE Equals TRUE
+  GoTo Label: Maintenance
+else
+  [compiler if Variable BUILDMODE not Equals PATCH]
+  Comment: First Time Install
+  Set Variable TARGETDIR to $PROGRAMFILES$\ASCOM\Platform 6
+  Set Variable STARTMENU to $TITLE$
+  [compiler end]
+end
+ 
+label: Welcome Dialog
+Display Dialog: welcome, wait for dialog to return (modal)
+if Variable WIZARD Equals CANCEL
+  GoTo Label: Main Install
+end
+[compiler if Variable BUILDMODE not Equals PATCH]
+label: License Check
+Comment: Display Dialog: licensecheck, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: Welcome Dialog
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: ReadMe Information
+Display Dialog: readme, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: License Check
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: User Registration
+Comment: Display Dialog: registration, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: ReadMe Information
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: Setup Type
+Comment: Display Dialog: setuptype, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: User Registration
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+Comment: TO-DO: Customize your minimum setup here
+if Variable MINIMUM Equals TRUE
+else
+  if Variable COMPLETE Equals TRUE
+  end
+end
+label: Custom Setup
+Set Variable PERSONALISED to TRUE
+Comment: Display Dialog: componentstree (if variable PERSONALIZED is TRUE), wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: Setup Type
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: Destination Directory
+Display Dialog: destination, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: Custom Setup
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+label: Start Menu
+Comment: Display Dialog: startmenu, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  GoTo Label: Destination Directory
+else
+  if Variable WIZARD Equals CANCEL
+    GoTo Label: Main Install
+  end
+end
+[compiler end]
+label: Start Installation
+Display Dialog: startinstallation, wait for dialog to return (modal)
+if Variable WIZARD Equals BACK
+  [compiler if Variable BUILDMODE not Equals PATCH]
+  GoTo Label: Start Menu
+  [compiler else]
+  GoTo Label: Welcome Dialog
+  [compiler end]
+else
+  GoTo Label: Main Install
+end
+ 
+label: Maintenance
+Comment: Maintenance Install/Uninstall
+wizard loop
+Display Dialog: maintenance, wait for dialog to return (modal)
+Comment: Display Dialog: componentstree (if variable MODIFY is TRUE), wait for dialog to return (modal)
+Display Dialog: startinstallation, wait for dialog to return (modal)
+end
+[END REGION]
+ 
+[DEFINE REGION: Process (Un)Installation]
+label: Main Install
+Comment: Exit Setup if Wizard Loop cancelled
+if Variable WIZARD Equals CANCEL
+  Terminate Installation
+end
+ 
+Comment: Prepare to install
+Set Variable PROGRESSTEXT to Installing $TITLE$
+Set Variable SUCCESS to 
+Set Variable LASTERROR to 
+if Variable ALLUSERS Equals TRUE
+  Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$\$STARTMENU$
+else
+  Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$\$STARTMENU$
+end
+Display Dialog: progress, use as progress dialog (non-modal)
+ 
+Comment: Modify Target System
+[DEFINE REGION: Perform Uninstallation]
+if Variable REMOVE Equals TRUE
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Utilities, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$ $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
+  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.DriverAccess, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Astrometry, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+  end
+  Comment: Unregister assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll
+  Comment: Unregister assembly $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe
+  Comment: Unregister assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll
+  Comment: Unregister assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll
+  Comment: Unregister assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll
+  Unregister assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Run Program %SystemRoot%\Microsoft.NET\Framework64\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework64\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll
+  Run Program %SystemRoot%\Microsoft.NET\Framework64\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u $COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb (WAIT)
+  Apply Uninstall (get result into variable SUCCESS)
+  if Variable SUCCESS not Equals ERROR
+    if Variable SUCCESS not Equals CANCEL
+      Remove Unpinned Assemblies
+    end
+  end
+  Set Variable PROGRESS to 100
+else
+  [END REGION]
+  [DEFINE REGION: Perform First Time or Maintenance Installation]
+  Comment: Install/Re-Install product
+  Comment: Only run old system uninstall on first install and not on maintenance option
+  if Variable MAINTENANCE not Equals TRUE
+    Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT)
+  end
+  [OFFLINE CONTENT]
+  [DEFINE WEB MEDIA Platform 5]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Platform 5.5]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Platform 5.5]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Platform 6]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Platform 6]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Ascom Platform 6, Exclude from Build]
+  if Variable SELECTED Equals TRUE
+  end
+  Comment: TO-DO: Insert any additional install commands here
+  [compiler if Variable BUILDMODE Equals PATCH]
+  Apply Patch (get result into variable SUCCESS)
+  [compiler else]
+  if Variable ADVERTISE Equals TRUE
+    Apply Advertised (get result into variable SUCCESS)
+  else
+    [DEFINE REGION: Platform 5 files]
+    Comment: Type libraries
+    Install Files C:\ASCOM Trunk\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
+    Install Files C:\ASCOM Trunk\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCOM\Interface
+    Install Files C:\ASCOM Trunk\Interfaces\HelperPIAs\Helper2.tlb to $COMMONFILES$\ASCOM\Interface
+    Install Files C:\ASCOM Trunk\Interfaces\IObjectSafety.tlb to $COMMONFILES$\ASCOM\Interface
+    Comment: Type library installer
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
+    Comment: Redistributable support files
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\mscomctl.OCX to $WINSYSDIR$ (Never Overwrite)
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\MSComm32.Ocx to $WINSYSDIR$ (Never Overwrite)
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\msvbvm60.dll to $WINSYSDIR$ (Never Overwrite)
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\comdlg32.ocx to $WINSYSDIR$ (Never Overwrite)
+    Comment: Platform 5 assemblies
+    Comment: ASCOM.DriverAccess 1.0.5 is not copied because it is replaced with 1.0.6 in Platform 6
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Assembly C:\ASCOM Trunk\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
+    Install Assembly C:\ASCOM Trunk\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
+    Comment: Platform 5 simulators
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator\DomeSim.exe to $COMMONFILES$\ASCOM\Dome
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\ASCOMDome\ASCOMDome.exe to $COMMONFILES$\ASCOM\Dome
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Dome
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator\FocusSim.exe to $COMMONFILES$\ASCOM\Focuser
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator\SwitchSim.exe to $COMMONFILES$\ASCOM\Switch
+    Install Files c:\ASCOM Trunk\Drivers and Simulators\Scope Simulator\ScopeSim.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\POTH\Source505\POTH.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files C:\ASCOM Trunk\POTH\Source505\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
+    [END REGION]
+    [DEFINE REGION: Platform 5.5 files]
+    Comment: Updated helpers that use Platform 5.5 support
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
+    Comment: New files in Platform 5.5
+    Install Assembly C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINDIR$\Symbols\dll
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
+    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
+    Comment: Copy Utilities and DriverAccess to .Net directory to ensure Inno installers that test for this run OK
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
+    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
+    [END REGION]
+    [DEFINE REGION: Platform 6 files]
+    Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
+    Install Assembly C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+    Comment: Updated driver access v1.0.6 to improve compatibility with Platform 5 drivers
+    Install Assembly c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Comment: Platform 6 core components
+    Install Assembly c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
+    Install Assembly c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
+    Install Assembly c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Files c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
+    Install Assembly c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Comment: Tim Long Platform 6 components
+    Install Assembly c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
+    Install Assembly C:\ASCOM Trunk\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb to $WINDIR$\Symbols\dll
+    Install Assembly c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
+    Comment: Platform 6 Astrometry
+    Install Assembly c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Assembly C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\AstrometryPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Comment: Platform 6 Internal
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Files c:\ASCOM Trunk\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Assembly c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
+    Comment: Platform 6 Tools
+    Install Files C:\ASCOM Trunk\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
+    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Tools
+    Comment: Platform 6 Simulators
+    Comment: Camera simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera
+    Comment: FilterWheel simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
+    Comment: Focuser simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser
+    Install Files c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser
+    Comment: SafetyMonitor simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll to $COMMONFILES$\ASCOM\SafetyMonitor
+    Install Files c:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.pdb to $COMMONFILES$\ASCOM\SafetyMonitor
+    Comment: Switch simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch
+    Install Files c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch
+    Comment: Telescope simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Comment: Rotator simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    [END REGION]
+    [DEFINE REGION: Platform 6 Content]
+    Comment: Platform 6 Documents
+    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
+    Install Files C:\ASCOM Trunk\Help\Help\PlatformHelp.chm to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
+    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
+    [END REGION]
+    [DEFINE REGION: Create shortcuts]
+    Comment: Menu shortcuts
+    Create Shortcut $DESKTOPDIR$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $DESKTOPDIR$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\How to get support to http://ascom-standards.org/Support/index.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
+    [END REGION]
+    [DEFINE REGION: Registry Keys]
+    Comment: Create registry keys
+    Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, 6.0 (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 32bit Applications\, List of drivers that are not compatible with 32bit applications
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\, List of drivers that are not compatible with 64bit applications
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, This is a 32bit in-process driver and cannot run within a 64bit application
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
+    [END REGION]
+    [DEFINE REGION: Additional clean-up when uninstalling]
+    Comment: Remove TLB files created by RegAsm when application is uninstalled
+    Delete Files $COMMONFILES$\ASCOM\Switch\*.tlb (when uninstalling)
+    Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\*.tlb (when uninstalling)
+    Delete Files $COMMONFILES$\ASCOM\Focuser\*.tlb (when uninstalling)
+    Delete Files $COMMONFILES$\ASCOM\Camera\*.tlb (when uninstalling)
+    Delete Files $COMMONFILES$\ASCOM\.net\GACInstall.exe (when installing)
+    [END REGION]
+    Apply Install (get result into variable SUCCESS)
+    if Variable SUCCESS not Equals ERROR
+      if Variable SUCCESS not Equals CANCEL
+        [DEFINE REGION: COM registrations]
+        Comment: Register Platform 5 components
+        Set Variable PROGRESS to 0
+        Register assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESS to 10
+        Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register the Platform 5 type libraries
+        Set Variable PROGRESS to 20
+        Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper2.tlb" (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT)
+        Set Variable PROGRESS to 30
+        Comment: Register Platform 5 Simulators
+        Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT)
+        Set Variable PROGRESS to 40
+        Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT)
+        Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT)
+        Set Variable PROGRESS to 50
+        Comment: Register Platform 5.5 components
+        Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+        if Variable GACINSTALLRC Equals 0
+          Comment: MessageBalloon: GACInstall, Utilities policy installed OK
+        else
+          MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
+        end
+        Set Variable PROGRESS to 60
+        Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+        if Variable GACINSTALLRC Equals 0
+          Comment: MessageBalloon: GACInstall, DriverAccess policy installed OK
+        else
+          MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+        end
+        Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+        if Variable GACINSTALLRC Equals 0
+          Comment: MessageBalloon: GACInstall, DriverAccess policy installed OK
+        else
+          MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+        end
+        Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
+        Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
+        Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
+        Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
+        Set Variable PROGRESS to 70
+        Comment: Register Platform 6 components
+        Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register in-process simulator DLL files with Codebase option
+        Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll, set the code base in the registry
+        Comment: Register these LocalServer drivers using the -register option
+        Set Variable PROGRESS to 80
+        Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT)
+        Set Variable PROGRESS to 90
+        Comment: Extra registration of 64bit components if on 64bit system
+        if Variable PROCESSOR Equals AMD64
+          Comment: Initialise variables
+          Set Variable RC1 to 1000
+          Set Variable RC2 to 1000
+          Set Variable RC3 to 1000
+          Set Variable RC4 to 1000
+          Set Variable RC5 to 1000
+          Set Variable RC6 to 1000
+          Set Variable RC7 to 1000
+          Set Variable REGASM64 to $WINDIR$\Microsoft.NET\Framework64\v2.0.50727\regasm.exe
+          Comment: Register core components
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
+          Set Variable PROGRESS to 95
+          Comment: Register simulators
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll" /codebase (WAIT, get result into variable RC6)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll" /codebase (WAIT, get result into variable RC7)
+          Set Variable PROGRESS to 100
+          if Variable RC1 not Equals 0
+            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+          else
+            if Variable RC2 not Equals 0
+              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+            else
+              if Variable RC3 not Equals 0
+                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+              else
+                if Variable RC4 not Equals 0
+                  MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                else
+                  if Variable RC5 not Equals 0
+                    MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                  else
+                    if Variable RC6 not Equals 0
+                      MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                    else
+                      if Variable RC7 not Equals 0
+                        MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+          Comment: Remove tlb files left over by RegAsm
+        end
+        [END REGION]
+        Comment: Tidy up COM registration (add AppID for DCOM etc.)
+        Set Variable PROGRESS to 100
+        Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT)
+      end
+    end
+  end
+  [compiler end]
+end
+[END REGION]
+[END REGION]
+ 
+[DEFINE REGION: Finish Setup]
+Comment: End of Installation
+Hide Dialog
+Set Variable RUNAPP to FALSE
+Display Dialog: finish, wait for dialog to return (modal)
+if Variable SILENT Equals FALSE
+  if Variable REBOOTCOMPUTER Equals TRUE
+    if Variable SUCCESS Equals REBOOT
+      Reboot Computer
+    end
+  end
+  if Variable RUNAPP Equals TRUE
+    if Variable REMOVE Equals FALSE
+      if Variable SUCCESS Equals COMPLETE
+        Comment: TO-DO: Insert command that starts your application here
+        Run Program $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf 
+      end
+    end
+  end
+end
+label: Finish
+Terminate with Exit Code 0
+[END REGION]
+ 

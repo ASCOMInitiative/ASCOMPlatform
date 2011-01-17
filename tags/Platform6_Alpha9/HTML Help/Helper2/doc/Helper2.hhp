@@ -1,0 +1,45 @@
+[OPTIONS]
+Auto Index=Yes
+Compatibility=1.1 or later
+Compiled file=Helper2.chm
+Default Window=main
+Default topic=Helper2HOME.htm
+Display compile progress=No
+Full text search stop list file=Helper2.stp
+Full-text search=Yes
+Index file=Helper2.hhk
+Language=0x409 English (United States)
+Title=ASCOM Helper2 Object
+
+[WINDOWS]
+main="ASCOM Helper2 Object","Helper2.hhc","Helper2.hhk","Helper2HOME.htm","Helper2HOME.htm",,,,,0x63520,,0x384e,[10,10,630,470],0xb0000,,,,,,0
+
+
+[FILES]
+images\important2.gif
+images\ro.gif
+images\rw.gif
+dc3_hh.css
+Helper2UtilPROPUTCDate.htm
+Helper2ERRORS.htm
+Helper2HOME.htm
+Helper2MSG80040400.htm
+Helper2RELNOTES.htm
+Helper2UtilMETHDateJulianToLocal.htm
+Helper2UtilMETHDateJulianToUTC.htm
+Helper2UtilMETHDateLocalToJulian.htm
+Helper2UtilMETHDateLocalToUTC.htm
+Helper2UtilMETHDateUTCToJulian.htm
+Helper2UtilMETHDateUTCToLocal.htm
+Helper2UtilMETHGetInterfaceSafetyOptions.htm
+Helper2UtilMETHSetInterfaceSafetyOptions.htm
+Helper2UtilPROPJulianDate.htm
+Helper2UtilPROPPlatformVersion.htm
+Helper2UtilPROPSerialTrace.htm
+Helper2UtilPROPSerialTraceFile.htm
+Helper2UtilPROPTimeZoneName.htm
+Helper2UtilPROPTimeZoneOffset.htm
+Helper2CLASSUtil.htm
+
+[INFOTYPES]
+
