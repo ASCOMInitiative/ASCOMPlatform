@@ -89,16 +89,23 @@ namespace ASCOM.Simulator
         /// </summary>
         public Focuser()
         {
-            //check to see if the profile is ok
-            if (ValidateProfile())
+            try
             {
-                LoadFocuserKeyValues();
-                LoadStaticFocuserKeyValues();
-                StartSimulation();
+                //check to see if the profile is ok
+                if (ValidateProfile())
+                {
+                    LoadFocuserKeyValues();
+                    LoadStaticFocuserKeyValues();
+                    StartSimulation();
+                }
+                else
+                {
+                    RegisterWithProfile();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                RegisterWithProfile();
+                System.Windows.Forms.MessageBox.Show("Focuser: " + ex.ToString());
             }
         }
 
@@ -494,7 +501,7 @@ namespace ASCOM.Simulator
             MaxStep = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxStep", string.Empty, "50000"));
             Position = Convert.ToInt32(Profile.GetValue(sCsDriverId, "Position", string.Empty, "25000"));
             StepSize = Convert.ToDouble(Profile.GetValue(sCsDriverId, "StepSize", string.Empty, "20"));
-            Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature", string.Empty, "5.0"));
+            Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature", string.Empty, "5"));
             TempComp = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempComp", string.Empty, "false"));
             TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable", string.Empty, "true"));
         }
