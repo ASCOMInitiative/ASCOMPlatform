@@ -10,7 +10,7 @@
 using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using ASCOM.Conform;
+//using ASCOM.Conform;
 using System.Globalization;
 
 namespace ASCOM.DriverAccess
