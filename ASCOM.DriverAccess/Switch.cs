@@ -28,7 +28,7 @@ namespace ASCOM.DriverAccess
         /// <param name="switchId">ProgID of the device to be accessed.</param>
         public Switch(string switchId) : base(switchId)
 		{
-            _memberFactory = base.MemberFactory;
+            _memberFactory = MemberFactory;
 		}
         #endregion
 
@@ -40,7 +40,7 @@ namespace ASCOM.DriverAccess
         /// <returns>Prog ID for chosen Switch or null for none</returns>
         public static string Choose(string switchId)
         {
-            using(Chooser chooser = new Chooser())
+            using(var chooser = new Chooser())
             {
                 chooser.DeviceType = "Switch";
                 return chooser.Choose(switchId);
@@ -54,24 +54,97 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Sets a switch to on or off
         /// </summary>
-        /// <param name="Name">Name=name of switch to set</param> 
-        /// <param name="State">True=On, False=Off</param> 
-        public void SetSwitch(string Name, bool State)
+        /// <param name="name">Name=name of switch to set</param> 
+        /// <param name="parameters">On or Off</param> 
+        public void SetSwitch(string name, string[] parameters)
         {
-            _memberFactory.CallMember(3, "SetSwitch", new[] { typeof(string), typeof(bool) }, new object[] { Name, State }, CultureInfo.InvariantCulture);
+            _memberFactory.CallMember(3, "SetSwitch", new[] { typeof(string), typeof(string[]) }, new object[] { name, parameters }, CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Returns a switch by name
+        /// </summary>
+        /// <param name="name">Name=name of switch</param> 
+        public object GetSwitch(string name)
+        {
+            return _memberFactory.CallMember(3, "GetSwitch", new[] { typeof(string) }, new object[] { name });
         }
 
         /// <summary>
         /// Yields a collection of strings in an arraylist.
         /// </summary>
-        /// <value></value>
         public ArrayList Switches
         {
             get { return (ArrayList)_memberFactory.CallMember(1, "Switches", new Type[] { }, new object[] { }); }
         }
-     
+
+
+        /// <summary>
+        /// Returns a string which identifies the type of switch
+        /// </summary>
+        public string SwitchType
+        {
+            get { return (String)_memberFactory.CallMember(1, "SwitchType", new Type[] { }, new object[] { }); }
+        }
+
+
         #endregion
-    
     }
     #endregion
-}
+
+    /// <summary>
+    /// The toggle switch is used to create a single on/off switch.
+    /// </summary>
+
+    public class ToggleSwitch : IToggleSwitch
+    {
+
+        #region IToggleSwitch Members
+
+        /// <summary>
+        /// Name of the toggleswitch
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// State of the toggleswitch On/Off
+        /// </summary>
+        public string[] State { get; set; }
+
+        /// <summary>
+        /// The type of device is a ToggleSwitch
+        /// </summary>
+        public string DeviceType { get; set; }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// The Rheostat switch
+    /// </summary>
+
+    public class Rheostat : IRheostat
+    {
+
+        #region IRheostat Members
+
+        /// <summary>
+        /// Name of the Rheostat
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// String array representing the state of the switch
+        /// First parameter is the current int setting 
+        /// Second Parameter is the upper int limit 
+        /// </summary>
+        public string[] State { get; set; }
+
+        /// <summary>
+        /// The type of device is a Rheostat
+        /// </summary>
+        public string DeviceType { get; set; }
+
+        #endregion
+    }
+}       
