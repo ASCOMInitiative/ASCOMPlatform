@@ -17,9 +17,8 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ApplicationIcon>ASCOM.ico</ApplicationIcon>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -93,9 +92,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\AssemblyVersionInfo.cs">
-      <Link>Properties\AssemblyVersionInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -111,11 +107,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
@@ -138,6 +134,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ASCOM.snk" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Test.js" />
   </ItemGroup>
   <ItemGroup>
@@ -146,16 +147,17 @@
     <Content Include="ReadMe.htm" />
     <EmbeddedResource Include="Resources\RedLED.bmp" />
     <EmbeddedResource Include="Resources\GreenLED.bmp" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <None Include="Resources\ASCOM.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
       <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
       <Name>ASCOM.DeviceInterface</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj">
+      <Project>{3B6C23F5-C590-4385-86BB-98B604B565BA}</Project>
+      <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>

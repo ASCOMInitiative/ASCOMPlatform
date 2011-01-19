@@ -1,44 +1,44 @@
 using System;
 using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.Simulator
 {
-	[ComVisible(true)]
-	public partial class SetupDialogForm : Form
-	{
+    public partial class SetupDialogForm : Form
+    {
         private static readonly ISwitchV2 SwitchA = new Switch();
-        private readonly ArrayList _switches = SwitchA.Switches;
-        Assembly _assembly;
-        Stream _redLed;
-        Stream _greenLed;
+        private Assembly _assembly;
+        private Stream _greenLed;
+        private Stream _redLed;
+        private ArrayList _switches = SwitchA.Switches;
 
         /// <summary>
         /// Initialize the setup form 
         /// </summary>
-		public SetupDialogForm()
-		{
-			InitializeComponent();
+        public SetupDialogForm()
+        {
+            InitializeComponent();
 
             //get the driver version number
             lb_DriverVersion.Text = @"v" + SwitchA.DriverVersion;
 
             LoadImagesFromResources();
             DisplaySwitchSettings();
-		    }
+        }
 
         /// <summary>
         /// Click the ok button, save, and quit
         /// </summary>
-		private void CmdOkClick(object sender, EventArgs e)
-		{
-			Dispose();
-		}
+        private void CmdOkClick(object sender, EventArgs e)
+        {
+            Dispose();
+        }
 
         /// <summary>
         /// Loads the red and green LED lights from resources 
@@ -54,17 +54,22 @@ namespace ASCOM.Simulator
         /// <summary>
         /// browser link to the ASCOM website
         /// </summary>
-		private void BrowseToAscom(object sender, EventArgs e)
-		{
-			try {
-				System.Diagnostics.Process.Start("http://ascom-standards.org/");
-			} catch (System.ComponentModel.Win32Exception noBrowser) {
-				if (noBrowser.ErrorCode == -2147467259)
-					MessageBox.Show(noBrowser.Message);
-			} catch (Exception other) {
-				MessageBox.Show(other.Message);
-			}
-		}
+        private static void BrowseToAscom(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start("http://ascom-standards.org/");
+            }
+            catch (Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                    MessageBox.Show(noBrowser.Message);
+            }
+            catch (Exception other)
+            {
+                MessageBox.Show(other.Message);
+            }
+        }
 
         /// <summary>
         /// Populates the form from the driver with the Switch ArrayList
@@ -73,27 +78,26 @@ namespace ASCOM.Simulator
         {
             int i = 1;
             //loop the switch devices
-            foreach (string[,] s in _switches)
+            foreach (IToggleSwitch t in _switches)
             {
                 //loop group one of text boxes
                 foreach (Control gbChild in groupBox1.Controls)
                 {
                     if (gbChild.Name == String.Format("textBox{0}", i))
                     {
-                        gbChild.Text = s[0,0]; 
+                        gbChild.Text = t.Name;
                     }
-                   
                 }
                 //loop group2 of picture boxes
                 foreach (Control pbChild in groupBox2.Controls)
                 {
                     if (pbChild.Name == String.Format("pictureBox{0}", i))
                     {
-                        PictureBox pb = (PictureBox)pbChild;
-                        ChangeImageState(pb, Convert.ToBoolean(s[0,1]));
+                        var pb = (PictureBox) pbChild;
+                        ChangeImageState(pb, t.State[0] == "On");
                     }
-                } 
-              i++;
+                }
+                i++;
             }
         }
 
@@ -102,18 +106,19 @@ namespace ASCOM.Simulator
         /// </summary>
         private bool ChangeSwitchState(int i)
         {
-            string[,] s = (string[,])_switches[i];
+            var t = (IToggleSwitch) _switches[i];
 
-            bool b = Convert.ToBoolean(s[0,1]);
-            if (b)
+            switch (t.State[0])
             {
-                s[0,1] = "False";
-                SwitchA.SetSwitch(s[0, 0], Convert.ToBoolean(s[0, 1]));
-                return false;
+                case "On":
+                    SwitchA.SetSwitch(t.Name, new[] {"Off"});
+                    _switches = SwitchA.Switches;
+                    return false;
+                default:
+                    SwitchA.SetSwitch(t.Name, new[] {"On"});
+                    _switches = SwitchA.Switches;
+                    return true;
             }
-            s[0,1] = "True";
-            SwitchA.SetSwitch(s[0, 0], Convert.ToBoolean(s[0, 1]));
-            return true;
         }
 
         /// <summary>
@@ -121,14 +126,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private void ChangeImageState(PictureBox p, bool b)
         {
-             if (b)
-            {
-                p.Image = new Bitmap(_greenLed);
-            }
-            else
-            {
-                p.Image = new Bitmap(_redLed);
-            }
+            p.Image = b ? new Bitmap(_greenLed) : new Bitmap(_redLed);
         }
 
         /// <summary>
@@ -138,6 +136,7 @@ namespace ASCOM.Simulator
         {
             bool b = ChangeSwitchState(i - 1);
             ChangeImageState(p, b);
+            DisplaySwitchSettings();
         }
 
         private void PictureBox1Click(object sender, EventArgs e)
@@ -147,38 +146,37 @@ namespace ASCOM.Simulator
 
         private void PictureBox2Click(object sender, EventArgs e)
         {
-              ChangeDisplay(pictureBox2, 2);
+            ChangeDisplay(pictureBox2, 2);
         }
 
         private void PictureBox3Click(object sender, EventArgs e)
         {
-              ChangeDisplay(pictureBox3, 3);
+            ChangeDisplay(pictureBox3, 3);
         }
 
         private void PictureBox4Click(object sender, EventArgs e)
         {
-              ChangeDisplay(pictureBox4, 4);
+            ChangeDisplay(pictureBox4, 4);
         }
 
         private void PictureBox5Click(object sender, EventArgs e)
         {
-               ChangeDisplay(pictureBox5, 5);
+            ChangeDisplay(pictureBox5, 5);
         }
 
         private void PictureBox6Click(object sender, EventArgs e)
         {
-               ChangeDisplay(pictureBox6, 6);
+            ChangeDisplay(pictureBox6, 6);
         }
 
         private void PictureBox7Click(object sender, EventArgs e)
         {
-              ChangeDisplay(pictureBox7, 7);
+            ChangeDisplay(pictureBox7, 7);
         }
 
         private void PictureBox8Click(object sender, EventArgs e)
         {
-               ChangeDisplay(pictureBox8, 8);
+            ChangeDisplay(pictureBox8, 8);
         }
-
-	}
+    }
 }

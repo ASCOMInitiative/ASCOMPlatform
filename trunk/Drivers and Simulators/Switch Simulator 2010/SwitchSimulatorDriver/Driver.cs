@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
-using ASCOM.Utilities;
+using System.Windows.Forms;
 using ASCOM.DeviceInterface;
-
+using ASCOM.DriverAccess;
+using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
-	//
+    //
     // Your driver's DeviceID is ASCOM.Simulator.Switch
-	//
+    //
     // The Guid attribute sets the CLSID for ASCOM.Simulator.Switch
-	// The ClassInterface/None addribute prevents an empty interface called
-	// _Conceptual from being created and used as the [default] interface
-	//
+    // The ClassInterface/None addribute prevents an empty interface called
+    // _Conceptual from being created and used as the [default] interface
+    //
 
-	/// <summary>
-	/// ASCOM Switch Driver for a conceptual switch (proof of concept).
-	/// This class is the implementation of the public ASCOM interface.
-	/// </summary>
-    [Guid("221DF9AE-22FD-46C9-A475-59E8EA9393BB")]
+    /// <summary>
+    /// ASCOM Switch Driver for a conceptual switch (proof of concept).
+    /// This class is the implementation of the public ASCOM interface.
+    /// </summary>
+    [Guid("1F07419A-0C9E-4B90-8B62-FC8053E89EE2")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
     public class Switch : ISwitchV2, IDisposable
     {
         #region Constants
 
-	    /// <summary>
+        /// <summary>
         /// Name of the Driver
         /// </summary>
         private const string name = "ASCOM.Simulator.Switch";
@@ -41,7 +43,7 @@ namespace ASCOM.Simulator
         /// Driver information
         /// </summary>
         private const string driverInfo = "Switch Simulator Driver and collection of Switch devices";
-        
+
         /// <summary>
         /// Driver interface version
         /// </summary>
@@ -57,11 +59,6 @@ namespace ASCOM.Simulator
         /// </summary>
         private const string lastResult = "False";
 
-        /// <summary>
-        /// Backing store for the private switch collection.
-        /// </summary>
-        private static readonly ArrayList SwitchList = new ArrayList(numSwitches);
-        
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
@@ -79,6 +76,16 @@ namespace ASCOM.Simulator
         private const int numSwitches = 7;
 
         /// <summary>
+        /// Type of switches for this driver
+        /// </summary>
+        private const string switchType = "ToggleSwitch";
+
+        /// <summary>
+        /// Backing store for the private switch collection.
+        /// </summary>
+        private static readonly ArrayList SwitchList = new ArrayList(numSwitches);
+
+        /// <summary>
         /// Sets up the permenant store for saved settings
         /// </summary>
         private static readonly Profile Profile = new Profile();
@@ -86,11 +93,15 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Sets up the permenant store for device names
         /// </summary>
-        private static readonly string[] DeviceNames = { "White Lights", "Red Lights", "Telescope Power", "Camera Power", "Focuser Power", "Dew Heaters", "Dome Power", "Self Destruct" };
+        private static readonly string[] DeviceNames = {
+                                                           "White Lights", "Red Lights", "Telescope Power",
+                                                           "Camera Power",
+                                                           "Focuser Power", "Dew Heaters", "Dome Power", "Self Destruct"
+                                                       };
 
         #endregion
 
-        #region ISwitch Public Members
+        #region Constructors
 
         //
         // PUBLIC COM INTERFACE ISwitch IMPLEMENTATION
@@ -104,18 +115,33 @@ namespace ASCOM.Simulator
         {
             //new instance so load switches
             LoadSwitchDevices();
-            //check to see if the profile is ok
-            if (ValidateProfile())
-            {
-                //load profile settings
-                GetProfileSettings();
-            }
-            else
-            {
-                //attempt to save a new profile
-                SaveProfileSettings();
-            }
+            SaveProfileSettings();
         }
+
+        #endregion
+
+        /// <summary>
+        /// Gets the last result.
+        /// </summary>
+        /// <value>
+        /// The result of the last executed action, or <see cref="String.Empty"	/>
+        /// if no action has yet been executed.
+        /// </value>
+        public string LastResult
+        {
+            get { return lastResult; }
+        }
+
+        #region IDisposable Members
+
+        void IDisposable.Dispose()
+        {
+            Dispose();
+        }
+
+        #endregion
+
+        #region ISwitchV2 Members
 
         /// <summary>
         /// Displays the Setup Dialog form.
@@ -125,22 +151,16 @@ namespace ASCOM.Simulator
         public void SetupDialog()
         {
             var f = new SetupDialogForm();
-            var result = f.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                Properties.Settings.Default.Save();
-                return;
-            }
-            Properties.Settings.Default.Reload();
+            DialogResult dialogResult = f.ShowDialog();
         }
 
-	    /// <summary>
-	    /// Gets or sets a value indicating whether this <see cref="Switch"/> is connected.
-	    /// </summary>
-	    /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-	    public bool Connected { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Switch"/> is connected.
+        /// </summary>
+        /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
+        public bool Connected { get; set; }
 
-	    /// <summary>
+        /// <summary>
         /// Gets the description.
         /// </summary>
         /// <value>The description.</value>
@@ -164,10 +184,7 @@ namespace ASCOM.Simulator
         /// <value>The driver version.</value>
         public string DriverVersion
         {
-            get
-            {
-                return driverVersion;
-            }
+            get { return driverVersion; }
         }
 
         /// <summary>
@@ -189,64 +206,49 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Gets the last result.
-        /// </summary>
-        /// <value>
-        /// The result of the last executed action, or <see cref="String.Empty"	/>
-        /// if no action has yet been executed.
-        /// </value>
-        public string LastResult
-        {
-            get { return lastResult; }
-        }
-
-        /// <summary>
         /// Yields a collection of string[] objects.
         /// </summary>
         /// <value></value>
         public ArrayList Switches
         {
-            get{ return SwitchList;}
+            get { return SwitchList; }
         }
 
-	    void ISwitchV2.Dispose()
-	    {
-	        Dispose();
-	    }
-
-        private static void Dispose()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        void IDisposable.Dispose()
+        void ISwitchV2.Dispose()
         {
             Dispose();
         }
 
-	    /// <summary>
+        /// <summary>
+        /// return a specific switch
+        /// </summary>
+        /// <value>name of the switch</value>
+        public object GetSwitch(string switchName)
+        {
+            if (switchName == null) throw new ArgumentNullException("switchName");
+            return SwitchList.Cast<ToggleSwitch>().FirstOrDefault(t => t.Name == switchName);
+        }
+
+        /// <summary>
         /// Flips a switch on or off
         /// </summary>
         /// <value>name of the switch</value>
-        public void SetSwitch(string switchName, bool state)
-	    {
-	        if (switchName == null) throw new ArgumentNullException("switchName");
-            foreach (string[,] sd in SwitchList)
+        public void SetSwitch(string switchName, string[] state)
+        {
+            if (switchName == null) throw new ArgumentNullException("switchName");
+            foreach (ToggleSwitch t in from ToggleSwitch t in SwitchList where t.Name == switchName select t)
             {
-                if (sd[0, 0] == switchName)
-                {
-                    sd[0, 1] = state.ToString();
-                    SaveProfileSetting(switchName, state.ToString());
-                }
+                t.State = state;
             }
-	    }
+            SaveProfileSettings();
+        }
 
         /// <summary>
         /// Gets the supported actions.
         /// </summary>
-	    public string Action(string actionName, string actionParameters)
+        public string Action(string actionName, string actionParameters)
         {
-            throw new MethodNotImplementedException("Action");
+            return null;
         }
 
         /// <summary>
@@ -256,7 +258,6 @@ namespace ASCOM.Simulator
         /// </summary>
         public void CommandBlind(string command, bool raw)
         {
-            throw new MethodNotImplementedException("CommandBlind");
         }
 
         /// <summary>
@@ -266,7 +267,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public bool CommandBool(string command, bool raw)
         {
-            throw new MethodNotImplementedException("CommandBool");
+            return false;
         }
 
         /// <summary>
@@ -276,7 +277,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public string CommandString(string command, bool raw)
         {
-            throw new MethodNotImplementedException("CommandString");
+            return null;
         }
 
         /// <summary>
@@ -285,86 +286,47 @@ namespace ASCOM.Simulator
         public ArrayList SupportedActions
         {
             // no supported actions, return empty array
-            get { ArrayList sa = new ArrayList(); return sa; }
+            get
+            {
+                var sa = new ArrayList();
+                return sa;
+            }
+        }
+
+        /// <summary>
+        /// Gets the driver version.
+        /// </summary>
+        /// <value>The driver version.</value>
+        public string SwitchType
+        {
+            get { return switchType; }
         }
 
         #endregion
 
-        #region Switch Private Members
+        private static void Dispose()
+        {
+        }
 
         /// <summary>
-        /// Load the switches and makes sure there is only 8 loaded
+        /// Simulate reading the hardware devices
         /// </summary>
         private static void LoadSwitchDevices()
         {
-            //each new instance load the switches, make sure this doesn't repeat
-            if (SwitchList.Count != 8)
+            foreach (string deviceName in DeviceNames)
             {
-                //too many or not enough found, start over
-                SwitchList.Clear();
-                //load a new set of switch devices
-                foreach (string device in DeviceNames)
+                string v = Profile.GetValue(sCsDriverId, deviceName, "Switches");
+                if ((v != "On") && (v != "Off"))
                 {
-                    if (device != null) SwitchList.Add(new string[1, 2] { { device, "False" } });
+                    v = "Off";
                 }
-            }
-        }
-
-        /// <summary>
-        /// Saves all settings to the profile for this driver
-        /// </summary>
-        private static void GetProfileSettings()
-        {
-            foreach (string[,] sw in SwitchList)
-             {
-                 bool state = Convert.ToBoolean(GetProfileSetting(sw[0,0], "false"));
-
-                 if (state != Convert.ToBoolean(sw[0,1]))
-                {
-                    sw[0, 1] = state.ToString();
-                }
-             }
-        }
-
-        /// <summary>
-        /// Validate the profile is in good shape
-        /// </summary>
-        private static bool ValidateProfile()
-        {
-            try
-            {
-                Profile.DeviceType = "Switch";
-                //check profile if the driver id is registered
-                bool chkRegistered = Profile.IsRegistered(sCsDriverId);
-                if (chkRegistered)
-                {
-                    //check proffile to see if the subkey is loaded 
-                    ArrayList pv = Profile.Values(sCsDriverId, "Switches");
-                    if (pv.Count == 8)
-                    {
-                        //check profile to see if key each named device exist
-                        // ReSharper disable LoopCanBeConvertedToQuery
-                        foreach (string device in DeviceNames)
-                        // ReSharper restore LoopCanBeConvertedToQuery
-                        {
-                            string s = Profile.GetValue(sCsDriverId, device, "Switches");
-                            if (s != "True" & s != "False")
-                            {
-                                //found something wrong, delete evertyhing
-                                DeleteProfileSettings();
-                                return false;
-                            }
-                        }
-                        return true;
-                    }
-                    DeleteProfileSettings();
-                    return false;
-                }
-                return false;
-            }
-            catch(System.IO.DirectoryNotFoundException)
-            {
-                return false;
+                var toggleSwitch = new ToggleSwitch
+                                       {
+                                           Name = deviceName,
+                                           DeviceType = switchType,
+                                           State = new[] {v}
+                                       };
+                int add = SwitchList.Add(toggleSwitch);
             }
         }
 
@@ -373,43 +335,14 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void SaveProfileSettings()
         {
-            foreach (string[,] sd in SwitchList)
+            foreach (ToggleSwitch t in SwitchList)
             {
-                Profile.WriteValue(sCsDriverId, sd[0,0], sd[0,1], "Switches");
-                Trace.WriteLine("Save Setting: " + sd[0, 0] + "-" + sd[0, 1]);
+                if (Profile != null) Profile.WriteValue(sCsDriverId, t.Name, t.State[0], "Switches");
             }
         }
 
-        /// <summary>
-        /// Loads a specific setting from the profile
-        /// </summary>
-        private static string GetProfileSetting(string switchName, string defValue)
-        {
-            if (switchName == null) throw new ArgumentNullException("switchName");
-            string s = Profile.GetValue(sCsDriverId, switchName, "Switches", "");
-            if (s == "") s = defValue;
-            return s;
-        }
-
-        /// <summary>
-        /// Delete all settings io the profile for this driver ID
-        /// </summary>
-        private static void DeleteProfileSettings()
-        {
-            Profile.DeleteSubKey(sCsDriverId, "Switches");
-        }
-
-        /// <summary>
-        /// Saves specific state setting to the profile a switchdevice
-        /// </summary>
-        protected internal static void SaveProfileSetting(string switchName, string state)
-        {
-            Profile.WriteValue(sCsDriverId, switchName, state, "Switches");
-            Trace.WriteLine("Save Setting: " + switchName + "-" + state);
-        }
-        #endregion
-
         #region ASCOM Registration
+
         //
         // Register or unregister driver for ASCOM. This is harmless if already
         // registered or unregistered. 
@@ -421,11 +354,11 @@ namespace ASCOM.Simulator
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            var p = new Profile { DeviceType = "Switch" };
+            var p = new Profile {DeviceType = "Switch"};
             if (bRegister)
             {
                 p.Register(sCsDriverId, sCsDriverDescription);
-                p.CreateSubKey(sCsDriverId,"Switches"); //Driver instantiation fails if this subkey is not present
+                p.CreateSubKey(sCsDriverId, "Switches"); //Driver instantiation fails if this subkey is not present
             }
             else
             {
@@ -480,6 +413,7 @@ namespace ASCOM.Simulator
             Trace.WriteLine("Unregistering -> {0} with ASCOM Profile", sCsDriverId);
             RegUnregASCOM(false);
         }
-        #endregion	   
+
+        #endregion
     }
 }
