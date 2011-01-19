@@ -140,16 +140,30 @@ Public Interface ISwitchV2 '44C03033-C60E-4101-856C-AAFB0F735F83
 
 #Region "Device Methods"
     ''' <summary>
-    ''' Yields a collection of strings in an arraylist.
+    ''' Yields a collection of switch objects in an arraylist.
     ''' </summary>
     ReadOnly Property Switches() As ArrayList
+
+    ''' <summary>
+    ''' Returns a string which identifies the type of switch
+    ''' </summary>
+    ''' <returns>String that identifies the type of switch</returns> 
+    ReadOnly Property SwitchType() As String
 
     ''' <summary>
     ''' Sets a switch to on or off
     ''' </summary>
     ''' <param name="Name">Name=name of switch to set</param> 
-    ''' <param name="State">True=On, False=Off</param> 
-    Sub SetSwitch(ByVal Name As String, ByVal State As Boolean)
+    ''' <param name="Parameters">On or Off</param> 
+    Sub SetSwitch(ByVal Name As String, ByVal Parameters As String())
+
+    ''' <summary>
+    ''' Returns a switch object
+    ''' </summary>
+    ''' <param name="Name">Name=name of switch to return</param>
+    ''' <returns>Returns a specific switch object</returns> 
+    Function GetSwitch(ByVal Name As String) As Object
+
 #End Region
 
 End Interface
