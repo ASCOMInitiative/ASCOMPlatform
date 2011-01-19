@@ -102,6 +102,8 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRheostat.vb" />
+    <Compile Include="IToggleSwitch.vb" />
     <Compile Include="Enumerations.vb" />
     <Compile Include="IAxisRates.vb" />
     <Compile Include="ICameraV2.vb" />
