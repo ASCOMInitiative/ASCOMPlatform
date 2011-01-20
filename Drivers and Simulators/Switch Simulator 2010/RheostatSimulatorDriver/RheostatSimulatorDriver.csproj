@@ -73,9 +73,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VU_MeterLibrary">
-      <HintPath>..\..\..\..\projects\VU_Meter\VU_MeterLibrary\bin\Debug\VU_MeterLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Driver.cs" />

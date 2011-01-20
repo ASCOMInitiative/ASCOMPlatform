@@ -12,7 +12,7 @@ namespace ASCOM.Simulator
 
         private void Timer1Tick(object sender, System.EventArgs e)
         {
-            vuMeter1.Level = trackBar1.Value;
+           
         }
     }
 }
