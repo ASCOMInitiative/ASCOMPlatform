@@ -40,6 +40,11 @@ namespace ASCOM.Simulator
         private const string description = "ASCOM Switch Simulator Driver";
 
         /// <summary>
+        /// Device type
+        /// </summary>
+        private const string deviceType = "Switch";
+        
+        /// <summary>
         /// Driver information
         /// </summary>
         private const string driverInfo = "Switch Simulator Driver and collection of Switch devices";
@@ -114,6 +119,7 @@ namespace ASCOM.Simulator
         public Switch()
         {
             //new instance so load switches
+            Profile.DeviceType = deviceType;
             LoadSwitchDevices();
             SaveProfileSettings();
         }
