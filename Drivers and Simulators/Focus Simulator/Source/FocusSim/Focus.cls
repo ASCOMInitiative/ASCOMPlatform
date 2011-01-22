@@ -332,7 +332,7 @@ Public Sub Halt()
 End Sub
 
 Public Sub SetupDialog()
-    
+    On Error GoTo SetUpError
     If Not g_show Is Nothing Then
         If g_show.chkOther.Value = 1 Then _
             g_show.TrafficStart "SetupDialog"
@@ -344,7 +344,10 @@ Public Sub SetupDialog()
         If g_show.chkOther.Value = 1 Then _
             g_show.TrafficEnd " (done)"
     End If
-    
+    Exit Sub
+SetUpError:
+    MsgBox "Setup Error: " & Err.Description & " at line: " & Erl
+    On Error GoTo 0
 End Sub
 
 Public Sub Move(ByVal val As Long)

@@ -684,7 +684,7 @@ Public Class Profile
 
     Private Sub CheckRegistered(ByVal DriverID As String)
         'Confirm that a given driver exists
-        TL.LogMessage("  CheckRegistered", """" & DriverID & """")
+        TL.LogMessage("  CheckRegistered", """" & DriverID & """ DeviceType: " & m_sDeviceType)
         If Not Me.IsRegisteredPrv(DriverID, True) Then
             TL.LogMessage("  CheckRegistered", "Driver is not registered")
             If DriverID = "" Then
@@ -692,9 +692,9 @@ Public Class Profile
                 'Err.Raise(SCODE_ILLEGAL_DRIVERID, ERR_SOURCE_PROFILE, MSG_ILLEGAL_DRIVERID)
                 Throw New Exceptions.InvalidValueException(MSG_ILLEGAL_DRIVERID)
             Else
-                TL.LogMessage("  CheckRegistered", "Throwing driver is not registered exception")
+                TL.LogMessage("  CheckRegistered", "Throwing driver is not registered exception. ProgID: " & DriverID & " DeviceType: " & m_sDeviceType)
                 'Err.Raise(SCODE_DRIVER_NOT_REG, ERR_SOURCE_PROFILE, "DriverID " & DriverID & " is not registered.")
-                Throw New Exceptions.DriverNotRegisteredException("DriverID " & DriverID & " is not registered.")
+                Throw New Exceptions.DriverNotRegisteredException("DriverID " & DriverID & " is not registered as a device of type: " & m_sDeviceType)
             End If
         Else
             TL.LogMessage("  CheckRegistered", "Driver is registered")

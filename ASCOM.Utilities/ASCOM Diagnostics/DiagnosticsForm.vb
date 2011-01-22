@@ -3194,7 +3194,12 @@ Public Class DiagnosticsForm
             ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE)
             Entries = ELog.Entries
             For Each Entry As EventLogEntry In Entries
-                TL.LogMessageCrLf("ScanEventLog", Entry.TimeGenerated & " " & Entry.EntryType.ToString & " " & Entry.UserName & " " & Entry.Source & " " & Entry.Message)
+                TL.LogMessageCrLf("ScanEventLog", Entry.TimeGenerated & " " & _
+                                                  Entry.Source & " " & _
+                                                  Entry.EntryType.ToString & " " & _
+                                                  Entry.UserName & " " & _
+                                                  Entry.InstanceId & " " & _
+                                                  Entry.Message)
             Next
             TL.LogMessage("ScanEventLog", "ASCOM Log entries complete")
             TL.BlankLine()

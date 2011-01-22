@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>ASCOM.Simulator</RootNamespace>
     <AssemblyName>ASCOM.Simulator.FilterWheel</AssemblyName>
+    <AssemblyOriginatorKeyFile>..\..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
     <MyType>Windows</MyType>
     <OptionStrict>On</OptionStrict>
     <FileUpgradeFlags>
@@ -139,6 +140,9 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\ASCOM.snk">
+      <Link>ASCOM.snk</Link>
+    </None>
     <Compile Include="Driver.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\..\AssemblyVersionInfo.vb">
