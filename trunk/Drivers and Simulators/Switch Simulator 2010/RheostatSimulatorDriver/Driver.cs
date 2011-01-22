@@ -22,17 +22,17 @@ namespace ASCOM.Simulator
     /// ASCOM Rheostat Driver for a conceptual switch (proof of concept).
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-    [Guid("98734DD0-336C-48DF-9282-B7B122D80F7E")]
+    [Guid("A5E797E1-2DC3-48DD-953C-08A3F34374A0")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Switch : ISwitchV2, IDisposable
+    public class RheostatSwitch : ISwitchV2, IDisposable
     {
         #region Constants
 
         /// <summary>
         /// Name of the Driver
         /// </summary>
-        private const string name = "ASCOM.Simulator.Rheostat";
+        private const string name = "ASCOM.Simulator.RheostatSwitch";
 
         /// <summary>
         /// Description of the driver
@@ -45,6 +45,11 @@ namespace ASCOM.Simulator
         private const string driverInfo = "Rheostat Simulator Driver and collection of Rheostat devices";
 
         /// <summary>
+        /// Device type
+        /// </summary>
+        private const string deviceType = "Switch";
+
+        /// <summary>
         /// Driver interface version
         /// </summary>
         private const short interfaceVersion = 2;
@@ -55,15 +60,10 @@ namespace ASCOM.Simulator
         private const string driverVersion = "6.0";
 
         /// <summary>
-        /// Gets the last result.
-        /// </summary>
-        private const string lastResult = "False";
-
-        /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
-        private const string sCsDriverId = "ASCOM.Simulator.Rheostat";
+        private const string sCsDriverId = "ASCOM.Simulator.RheostatSwitch";
 
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
@@ -73,7 +73,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// The number of physical switches that this device has.
         /// </summary>
-        private const int numSwitches = 3;
+        private const int numSwitches = 2;
 
         /// <summary>
         /// Type of switches for this driver
@@ -93,7 +93,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Sets up the permenant store for device names
         /// </summary>
-        private static readonly string[] DeviceNames = {"Dew Heater 1", "Dew Heater 2", "Dew Heater 3"};
+        private static readonly string[] DeviceNames = {"Heater 1", "Heater 2"};
 
         #endregion
 
@@ -107,9 +107,10 @@ namespace ASCOM.Simulator
         /// Initializes a new instance of the <see cref="Rheostat"/> class.
         /// Must be public for COM registration.
         /// </summary>
-        public Switch()
+        public RheostatSwitch()
         {
             //new instance so load switches
+            Profile.DeviceType = deviceType;
             LoadSwitchDevices();
             SaveProfileSettings();
         }
@@ -126,18 +127,6 @@ namespace ASCOM.Simulator
         #endregion
 
         #region ISwitchV2 Members
-
-        /// <summary>
-        /// Gets the last result.
-        /// </summary>
-        /// <value>
-        /// The result of the last executed action, or <see cref="String.Empty"	/>
-        /// if no action has yet been executed.
-        /// </value>
-        public string LastResult
-        {
-            get { return lastResult; }
-        }
 
         /// <summary>
         /// Displays the Setup Dialog form.
@@ -311,17 +300,15 @@ namespace ASCOM.Simulator
         {
             foreach (string deviceName in DeviceNames)
             {
-                string v = Profile.GetValue(sCsDriverId, deviceName, "Switches");
-                if ((v != "On") && (v != "Off"))
-                {
-                    v = "Off";
-                }
+                var s = Profile.GetValue(sCsDriverId, deviceName, "Switches") ?? "0,100,10";
+                if (s.Length < 6){s = "0,100,10";}
+
                 var rheostat = new Rheostat
-                                       {
-                                           Name = deviceName,
-                                           DeviceType = switchType,
-                                           State = new[] {v}
-                                       };
+                                   {
+                                       Name = deviceName,
+                                       DeviceType = switchType,
+                                       State = s.Split(',')
+                                   };
                 if (SwitchList != null) SwitchList.Add(rheostat);
             }
         }
@@ -331,9 +318,10 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void SaveProfileSettings()
         {
-            foreach (ToggleSwitch t in SwitchList)
+            foreach (Rheostat t in SwitchList)
             {
-                if (Profile != null) Profile.WriteValue(sCsDriverId, t.Name, t.State[0], "Switches");
+                var s = t.State[0] + "," + t.State[1] + "," + t.State[2];
+                if (Profile != null) Profile.WriteValue(sCsDriverId, t.Name, s, "Switches");
             }
         }
 
@@ -350,7 +338,7 @@ namespace ASCOM.Simulator
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            var p = new Profile {DeviceType = "Switch"};
+            var p = new Profile { DeviceType = "Switch" };
             if (bRegister)
             {
                 p.Register(sCsDriverId, sCsDriverDescription);
