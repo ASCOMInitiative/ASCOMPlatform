@@ -301,7 +301,10 @@ namespace ASCOM.Simulator
             foreach (string deviceName in DeviceNames)
             {
                 var s = Profile.GetValue(sCsDriverId, deviceName, "Switches") ?? "0,100,10";
-                if (s.Length < 6){s = "0,100,10";}
+                if (s.Length < 6)
+                {
+                    s = "0,100,10";
+                }
 
                 var rheostat = new Rheostat
                                    {
@@ -338,7 +341,7 @@ namespace ASCOM.Simulator
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            var p = new Profile { DeviceType = "Switch" };
+            var p = new Profile {DeviceType = "Switch"};
             if (bRegister)
             {
                 p.Register(sCsDriverId, sCsDriverDescription);
