@@ -88,6 +88,8 @@
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Focus Simulator 2010\FocuserSimulatorDriver\FocuserSimulatorDriver.csproj">
       <Project>{81091BA8-725D-465D-AC6B-A36912B73AA7}</Project>
@@ -96,10 +98,6 @@
     <ProjectReference Include="..\..\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\SafetyMonitorSimulatorDriver.csproj">
       <Project>{6D940101-25F1-45F1-8356-3E4D1CD1385D}</Project>
       <Name>SafetyMonitorSimulatorDriver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Switch Simulator 2010\SwitchSimulatorDriver\SwitchSimulatorDriver.csproj">
-      <Project>{C423D505-B4E4-4116-8560-8D9ADFCBD838}</Project>
-      <Name>SwitchSimulatorDriver</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

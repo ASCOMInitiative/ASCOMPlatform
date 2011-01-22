@@ -1,17 +1,18 @@
-﻿using System;
-using SafetyMonitor = ASCOM.Simulator.SafetyMonitor;
-using Switch = ASCOM.Simulator.Switch;
-using Focuser = ASCOM.Simulator.Focuser;
-using ASCOM.Utilities;
-
-namespace Simulator_Testing_Project
+﻿namespace Simulator_Testing_Project
 {
     class Program
     {
         static void Main(string[] args)
         {
+            object[] parameter = new object[1]; 
 
-
+            //Type a = Type.GetTypeFromProgID("ASCOM.Simulator.RheostatSwitch");
+            ////Create instance of excel 
+            //RheostatSwitch  b = (RheostatSwitch) Activator.CreateInstance(a);
+            ////Set the parameter whic u want to set 
+            //parameter[0] = true;
+            ////Set the Visible property 
+            //a.InvokeMember("Visible", BindingFlags.SetProperty, null, b, parameter);
 
             var chooser = new ASCOM.Utilities.Chooser { DeviceType = "Switch" };
             chooser.Choose();
