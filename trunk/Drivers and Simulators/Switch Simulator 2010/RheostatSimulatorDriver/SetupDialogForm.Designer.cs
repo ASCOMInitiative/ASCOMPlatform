@@ -31,6 +31,7 @@ namespace ASCOM.Simulator
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
@@ -202,6 +203,7 @@ namespace ASCOM.Simulator
             this.vuMeter3.Level = 0;
             this.vuMeter3.LevelMax = 100;
             this.vuMeter3.Location = new System.Drawing.Point(230, 10);
+            this.vuMeter3.MeterScale = ASCOM.Controls.MeterScale.Log10;
             this.vuMeter3.Name = "vuMeter3";
             this.vuMeter3.NeedleColor = System.Drawing.Color.Black;
             this.vuMeter3.PeakHold = true;
@@ -226,7 +228,7 @@ namespace ASCOM.Simulator
             // vuMeter2
             // 
             this.vuMeter2.AnalogMeter = true;
-            this.vuMeter2.BackColor = System.Drawing.Color.Transparent;
+            this.vuMeter2.BackColor = System.Drawing.Color.Black;
             this.vuMeter2.BorderColor = System.Drawing.Color.DimGray;
             this.vuMeter2.DialBackground = System.Drawing.Color.LightBlue;
             this.vuMeter2.DialTextNegative = System.Drawing.Color.Red;
@@ -246,6 +248,7 @@ namespace ASCOM.Simulator
             this.vuMeter2.Level = 0;
             this.vuMeter2.LevelMax = 100;
             this.vuMeter2.Location = new System.Drawing.Point(9, 144);
+            this.vuMeter2.MeterScale = ASCOM.Controls.MeterScale.Log10;
             this.vuMeter2.Name = "vuMeter2";
             this.vuMeter2.NeedleColor = System.Drawing.Color.Black;
             this.vuMeter2.PeakHold = true;
@@ -270,7 +273,7 @@ namespace ASCOM.Simulator
             // vuMeter1
             // 
             this.vuMeter1.AnalogMeter = true;
-            this.vuMeter1.BackColor = System.Drawing.Color.Transparent;
+            this.vuMeter1.BackColor = System.Drawing.Color.Black;
             this.vuMeter1.BorderColor = System.Drawing.Color.DimGray;
             this.vuMeter1.DialBackground = System.Drawing.Color.LightBlue;
             this.vuMeter1.DialTextNegative = System.Drawing.Color.Red;
@@ -290,6 +293,7 @@ namespace ASCOM.Simulator
             this.vuMeter1.Level = 0;
             this.vuMeter1.LevelMax = 100;
             this.vuMeter1.Location = new System.Drawing.Point(9, 10);
+            this.vuMeter1.MeterScale = ASCOM.Controls.MeterScale.Log10;
             this.vuMeter1.Name = "vuMeter1";
             this.vuMeter1.NeedleColor = System.Drawing.Color.Black;
             this.vuMeter1.PeakHold = true;
@@ -313,12 +317,32 @@ namespace ASCOM.Simulator
             // 
             // SetupDialogForm
             // 
+            this.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(362, 295);
+            this.ClientSize = new System.Drawing.Size(377, 301);
+            this.Controls.Add(this.vuMeter3);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.trackBar2);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.vuMeter2);
+            this.Controls.Add(this.vuMeter1);
+            this.ForeColor = System.Drawing.Color.Transparent;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SetupDialogForm";
-            this.Text = "SetupDialogForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Text = "ASCOM Rheostat Switch";
+            this.TransparencyKey = System.Drawing.Color.Transparent;
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
