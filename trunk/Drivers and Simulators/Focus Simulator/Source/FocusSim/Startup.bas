@@ -117,7 +117,7 @@ Public g_lMoveRate As Long        ' Delta steps/timer tick
 
 Public g_handBox As frmHandBox             ' Hand box
 Public g_show As frmShow                   ' Traffic window
-Public g_timer As VB.Timer                 ' Handy reference to timer
+Public g_timer As VB.timer                 ' Handy reference to timer
 Public g_bAlwaysTop As Boolean             ' True to keep sim topmost window
 Public g_bSetupAdvanced As Boolean         ' True to display advanced options
 
@@ -165,7 +165,7 @@ Sub DoStartupIf()
     g_ComponentState = csStarting
     
     Set g_handBox = New frmHandBox
-    Set g_timer = g_handBox.Timer
+    Set g_timer = g_handBox.timer
     Set g_Profile = New DriverHelper.Profile
     g_Profile.DeviceType = "Focuser"            ' We're a Focuser driver
     g_Profile.Register ID, DESC                 ' Self reg (skips if already reg)
@@ -192,8 +192,8 @@ Sub DoStartupIf()
         g_Profile.WriteValue ID, "Synchronous", "False"
         g_Profile.WriteValue ID, "MaxStep", "50000"
         g_Profile.WriteValue ID, "Position", "25000"
-        g_Profile.WriteValue ID, "StepSize", "20.0"
-        g_Profile.WriteValue ID, "Temp", "5.0"
+        g_Profile.WriteValue ID, "StepSize", "20"
+        g_Profile.WriteValue ID, "Temp", "5"
         g_Profile.WriteValue ID, "MaxInc", "50000"
         g_Profile.WriteValue ID, "AlwaysOnTop", "True"
         g_Profile.WriteValue ID, "Left", "100"
@@ -203,8 +203,8 @@ Sub DoStartupIf()
         g_Profile.WriteValue ID, "CanTemp", "True", "Capabilities"
         g_Profile.WriteValue ID, "CanStepSize", "True", "Capabilities"
         g_Profile.WriteValue ID, "CanHalt", "True", "Capabilities"
-        g_Profile.WriteValue ID, "TempMax", "5.0", "Capabilities"
-        g_Profile.WriteValue ID, "TempMin", "-5.0", "Capabilities"
+        g_Profile.WriteValue ID, "TempMax", "5", "Capabilities"
+        g_Profile.WriteValue ID, "TempMin", "-5", "Capabilities"
         g_Profile.WriteValue ID, "TempPeriod", "500", "Capabilities"
         g_Profile.WriteValue ID, "TempSteps", "10", "Capabilities"
     End If
@@ -296,7 +296,7 @@ End Sub
 '---------------------------------------------------------------------
 
 Sub DoSetup()
-
+On Error GoTo DoSetupErr
     g_timer.Enabled = False                         ' don't want races
     
     With frmSetup
@@ -366,6 +366,11 @@ Sub DoSetup()
     FloatWindow g_handBox.hwnd, g_bAlwaysTop
     g_handBox.Visible = True
     g_timer.Enabled = True                      ' restart time
+Exit Sub
+
+DoSetupErr:
+    MsgBox "DoSetupErr Error: " & Err.Description & " at line: " & Erl
+    On Error GoTo 0
 
 End Sub
 
@@ -421,6 +426,8 @@ End Sub
 Sub timer_tick()
     Dim step As Long
     Dim button As Long
+    
+On Error GoTo TimerErr
     
     '
     ' hand-box buttons first
@@ -516,5 +523,11 @@ Sub timer_tick()
     End If
     
     g_handBox.Position = g_lPosition
+      Exit Sub
+TimerErr:
+    MsgBox "TimerErr Error: " & Err.Description & " at line: " & Erl
+    On Error GoTo 0
+      
+      
       
 End Sub

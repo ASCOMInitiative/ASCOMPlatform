@@ -23,6 +23,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
+using ASCOM.Utilities;
+using System.Diagnostics;
 
 namespace ASCOM.Simulator
 {
@@ -53,14 +55,22 @@ namespace ASCOM.Simulator
         //
         public Telescope()
         {
-            m_AxisRates = new AxisRates[3];
-            m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
-            m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
-            m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
-            m_TrackingRates = new TrackingRates();
-            m_TrackingRatesSimple = new TrackingRatesSimple();
+            try
+            {
+                m_AxisRates = new AxisRates[3];
+                m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
+                m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
+                m_AxisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
+                m_TrackingRates = new TrackingRates();
+                m_TrackingRatesSimple = new TrackingRatesSimple();
+                m_Util = new ASCOM.Utilities.Util();
+            }
+            catch (Exception ex)
+            {
+                EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "Exception on New", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorNew, ex.ToString());
+                System.Windows.Forms.MessageBox.Show("Telescope New: " + ex.ToString());
+            }
 
-            m_Util = new ASCOM.Utilities.Util();
         }
 
         //
@@ -835,7 +845,15 @@ namespace ASCOM.Simulator
         {
             if (TelescopeHardware.Connected)
                 throw new InvalidOperationException("The hardware is connected, cannot do SetupDialog()");
-            TelescopeSimulator.m_MainForm.DoSetupDialog();
+            try
+            {
+                TelescopeSimulator.m_MainForm.DoSetupDialog();
+            }
+            catch (Exception ex)
+                {
+                    EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "Exception on SetupDialog", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorSetup, ex.ToString());
+                    System.Windows.Forms.MessageBox.Show("Telescope SetUp: " + ex.ToString());
+                }
         }
 
         public PierSide SideOfPier

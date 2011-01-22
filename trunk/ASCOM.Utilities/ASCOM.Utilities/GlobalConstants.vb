@@ -77,5 +77,9 @@ Module GlobalConstants
         ChooserException = 11
         Chooser32BitOnlyException = 12
         Chooser64BitOnlyException = 13
+        FocusSimulatorNew = 14
+        FocusSimulatorSetup = 15
+        TelescopeSimulatorNew = 16
+        TelescopeSimulatorSetup = 17
     End Enum
 End Module
