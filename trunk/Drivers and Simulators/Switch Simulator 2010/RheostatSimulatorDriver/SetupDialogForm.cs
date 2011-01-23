@@ -27,24 +27,26 @@ namespace ASCOM.Simulator
             vuMeter1.Name = _s1.Name;
             vuMeter1.LevelMax = Convert.ToInt32(_s1.State[1]);
             trackBar1.Value = Convert.ToInt32(_s1.State[2]);
+            vuMeter1.Level = Convert.ToInt32(_s1.State[2]);
 
             _s2 = (IRheostat) _switches[1];
             vuMeter2.VuText = _s2.Name;
             vuMeter2.Name = _s2.Name;
             vuMeter2.LevelMax = Convert.ToInt32(_s2.State[1]);
             trackBar2.Value = Convert.ToInt32(_s2.State[2]);
+            vuMeter2.Level = Convert.ToInt32(_s2.State[2]);
         }
 
         private void Timer1Tick(object sender, EventArgs e)
         {
             vuMeter1.Level = trackBar1.Value;
-            textBox2.Text = vuMeter1.PeakLevel.ToString();
             textBox1.Text = vuMeter1.Level.ToString();
+            textBox2.Text = vuMeter1.PeakLevel.ToString();      
 
             vuMeter2.Level = trackBar2.Value;
-            textBox4.Text = vuMeter2.PeakLevel.ToString();
             textBox3.Text = vuMeter2.Level.ToString();
-
+            textBox4.Text = vuMeter2.PeakLevel.ToString();
+            
             vuMeter3.Level = vuMeter2.PeakLevel;
             label2.Text = vuMeter3.Level.ToString();
         }

@@ -63,7 +63,7 @@ namespace ASCOM.Simulator
             this.button1.BackColor = System.Drawing.Color.Transparent;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(297, 262);
+            this.button1.Location = new System.Drawing.Point(272, 262);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(54, 23);
             this.button1.TabIndex = 0;
@@ -72,21 +72,21 @@ namespace ASCOM.Simulator
             // 
             // trackBar1
             // 
-            this.trackBar1.AutoSize = false;
-            this.trackBar1.BackColor = System.Drawing.Color.Black;
-            this.trackBar1.Location = new System.Drawing.Point(14, 93);
+            this.trackBar1.BackColor = System.Drawing.Color.Silver;
+            this.trackBar1.Location = new System.Drawing.Point(20, 95);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(142, 25);
+            this.trackBar1.Size = new System.Drawing.Size(147, 45);
             this.trackBar1.TabIndex = 2;
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar1.ValueChanged += new System.EventHandler(this.SetSwitch1);
             // 
             // textBox1
             // 
-            this.textBox1.BackColor = System.Drawing.Color.Black;
+            this.textBox1.BackColor = System.Drawing.Color.Silver;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.ForeColor = System.Drawing.Color.White;
-            this.textBox1.Location = new System.Drawing.Point(14, 76);
+            this.textBox1.ForeColor = System.Drawing.Color.Black;
+            this.textBox1.Location = new System.Drawing.Point(25, 81);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(30, 13);
@@ -96,7 +96,7 @@ namespace ASCOM.Simulator
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.pictureBox1.Location = new System.Drawing.Point(300, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(275, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(51, 58);
             this.pictureBox1.TabIndex = 4;
@@ -104,10 +104,10 @@ namespace ASCOM.Simulator
             // 
             // textBox2
             // 
-            this.textBox2.BackColor = System.Drawing.Color.Black;
+            this.textBox2.BackColor = System.Drawing.Color.Silver;
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.ForeColor = System.Drawing.Color.White;
-            this.textBox2.Location = new System.Drawing.Point(124, 78);
+            this.textBox2.ForeColor = System.Drawing.Color.Black;
+            this.textBox2.Location = new System.Drawing.Point(135, 82);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(30, 13);
@@ -119,7 +119,7 @@ namespace ASCOM.Simulator
             this.textBox3.BackColor = System.Drawing.Color.Black;
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.ForeColor = System.Drawing.Color.White;
-            this.textBox3.Location = new System.Drawing.Point(124, 212);
+            this.textBox3.Location = new System.Drawing.Point(20, 213);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(30, 13);
@@ -131,7 +131,7 @@ namespace ASCOM.Simulator
             this.textBox4.BackColor = System.Drawing.Color.Black;
             this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox4.ForeColor = System.Drawing.Color.White;
-            this.textBox4.Location = new System.Drawing.Point(14, 210);
+            this.textBox4.Location = new System.Drawing.Point(132, 213);
             this.textBox4.Name = "textBox4";
             this.textBox4.ReadOnly = true;
             this.textBox4.Size = new System.Drawing.Size(30, 13);
@@ -142,18 +142,19 @@ namespace ASCOM.Simulator
             // 
             this.trackBar2.AutoSize = false;
             this.trackBar2.BackColor = System.Drawing.Color.Black;
-            this.trackBar2.Location = new System.Drawing.Point(14, 227);
+            this.trackBar2.Location = new System.Drawing.Point(22, 232);
             this.trackBar2.Maximum = 100;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(142, 25);
             this.trackBar2.TabIndex = 7;
+            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar2.ValueChanged += new System.EventHandler(this.SetSwitch2);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(204, 237);
+            this.label1.Location = new System.Drawing.Point(184, 232);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 13);
             this.label1.TabIndex = 11;
@@ -162,10 +163,11 @@ namespace ASCOM.Simulator
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(248, 114);
+            this.label2.Location = new System.Drawing.Point(236, 122);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.Size = new System.Drawing.Size(60, 24);
             this.label2.TabIndex = 12;
             this.label2.Text = "label2";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -174,7 +176,7 @@ namespace ASCOM.Simulator
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(11, 267);
+            this.label3.Location = new System.Drawing.Point(19, 267);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 13;
@@ -202,7 +204,7 @@ namespace ASCOM.Simulator
             this.vuMeter3.LedSpace = 3;
             this.vuMeter3.Level = 0;
             this.vuMeter3.LevelMax = 100;
-            this.vuMeter3.Location = new System.Drawing.Point(230, 10);
+            this.vuMeter3.Location = new System.Drawing.Point(208, 10);
             this.vuMeter3.MeterScale = ASCOM.Controls.MeterScale.Log10;
             this.vuMeter3.Name = "vuMeter3";
             this.vuMeter3.NeedleColor = System.Drawing.Color.Black;
@@ -230,7 +232,7 @@ namespace ASCOM.Simulator
             this.vuMeter2.AnalogMeter = true;
             this.vuMeter2.BackColor = System.Drawing.Color.Black;
             this.vuMeter2.BorderColor = System.Drawing.Color.DimGray;
-            this.vuMeter2.DialBackground = System.Drawing.Color.LightBlue;
+            this.vuMeter2.DialBackground = System.Drawing.Color.WhiteSmoke;
             this.vuMeter2.DialTextNegative = System.Drawing.Color.Red;
             this.vuMeter2.DialTextPositive = System.Drawing.Color.Black;
             this.vuMeter2.DialTextZero = System.Drawing.Color.DarkGreen;
@@ -247,8 +249,8 @@ namespace ASCOM.Simulator
             this.vuMeter2.LedSpace = 3;
             this.vuMeter2.Level = 0;
             this.vuMeter2.LevelMax = 100;
-            this.vuMeter2.Location = new System.Drawing.Point(9, 144);
-            this.vuMeter2.MeterScale = ASCOM.Controls.MeterScale.Log10;
+            this.vuMeter2.Location = new System.Drawing.Point(17, 149);
+            this.vuMeter2.MeterScale = ASCOM.Controls.MeterScale.Analog;
             this.vuMeter2.Name = "vuMeter2";
             this.vuMeter2.NeedleColor = System.Drawing.Color.Black;
             this.vuMeter2.PeakHold = true;
@@ -273,9 +275,9 @@ namespace ASCOM.Simulator
             // vuMeter1
             // 
             this.vuMeter1.AnalogMeter = true;
-            this.vuMeter1.BackColor = System.Drawing.Color.Black;
-            this.vuMeter1.BorderColor = System.Drawing.Color.DimGray;
-            this.vuMeter1.DialBackground = System.Drawing.Color.LightBlue;
+            this.vuMeter1.BackColor = System.Drawing.Color.Silver;
+            this.vuMeter1.BorderColor = System.Drawing.Color.Silver;
+            this.vuMeter1.DialBackground = System.Drawing.Color.WhiteSmoke;
             this.vuMeter1.DialTextNegative = System.Drawing.Color.Red;
             this.vuMeter1.DialTextPositive = System.Drawing.Color.Black;
             this.vuMeter1.DialTextZero = System.Drawing.Color.DarkGreen;
@@ -292,8 +294,8 @@ namespace ASCOM.Simulator
             this.vuMeter1.LedSpace = 3;
             this.vuMeter1.Level = 0;
             this.vuMeter1.LevelMax = 100;
-            this.vuMeter1.Location = new System.Drawing.Point(9, 10);
-            this.vuMeter1.MeterScale = ASCOM.Controls.MeterScale.Log10;
+            this.vuMeter1.Location = new System.Drawing.Point(20, 15);
+            this.vuMeter1.MeterScale = ASCOM.Controls.MeterScale.Analog;
             this.vuMeter1.Name = "vuMeter1";
             this.vuMeter1.NeedleColor = System.Drawing.Color.Black;
             this.vuMeter1.PeakHold = true;
@@ -313,16 +315,14 @@ namespace ASCOM.Simulator
         "100"};
             this.vuMeter1.UseLedLight = true;
             this.vuMeter1.VerticalBar = false;
-            this.vuMeter1.VuText = "1";
+            this.vuMeter1.VuText = "Heater";
             // 
             // SetupDialogForm
             // 
-            this.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(377, 301);
-            this.Controls.Add(this.vuMeter3);
+            this.ClientSize = new System.Drawing.Size(345, 298);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
@@ -334,6 +334,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.vuMeter3);
             this.Controls.Add(this.vuMeter2);
             this.Controls.Add(this.vuMeter1);
             this.ForeColor = System.Drawing.Color.Transparent;
@@ -342,7 +343,7 @@ namespace ASCOM.Simulator
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ASCOM Rheostat Switch";
-            this.TransparencyKey = System.Drawing.Color.Transparent;
+            this.TransparencyKey = System.Drawing.Color.Gray;
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
