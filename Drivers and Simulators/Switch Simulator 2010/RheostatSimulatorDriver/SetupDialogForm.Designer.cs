@@ -36,7 +36,6 @@ namespace ASCOM.Simulator
             this.button1 = new System.Windows.Forms.Button();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
@@ -44,12 +43,14 @@ namespace ASCOM.Simulator
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.aMeter1 = new ASCOM.Controls.AMeter();
             this.vuMeter3 = new ASCOM.Controls.VuMeter();
             this.vuMeter2 = new ASCOM.Controls.VuMeter();
             this.vuMeter1 = new ASCOM.Controls.VuMeter();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -63,7 +64,7 @@ namespace ASCOM.Simulator
             this.button1.BackColor = System.Drawing.Color.Transparent;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(272, 262);
+            this.button1.Location = new System.Drawing.Point(346, 257);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(54, 23);
             this.button1.TabIndex = 0;
@@ -92,15 +93,6 @@ namespace ASCOM.Simulator
             this.textBox1.Size = new System.Drawing.Size(30, 13);
             this.textBox1.TabIndex = 3;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.pictureBox1.Location = new System.Drawing.Point(275, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(51, 58);
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
             // 
             // textBox2
             // 
@@ -154,7 +146,7 @@ namespace ASCOM.Simulator
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(184, 232);
+            this.label1.Location = new System.Drawing.Point(184, 222);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 13);
             this.label1.TabIndex = 11;
@@ -165,7 +157,7 @@ namespace ASCOM.Simulator
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(236, 122);
+            this.label2.Location = new System.Drawing.Point(263, 214);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 24);
             this.label2.TabIndex = 12;
@@ -176,11 +168,38 @@ namespace ASCOM.Simulator
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(19, 267);
+            this.label3.Location = new System.Drawing.Point(17, 267);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 13;
             this.label3.Text = "label3";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
+            this.pictureBox1.Location = new System.Drawing.Point(349, 15);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(51, 58);
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            // 
+            // aMeter1
+            // 
+            this.aMeter1.BackColor = System.Drawing.Color.Transparent;
+            this.aMeter1.DialColor = System.Drawing.Color.Crimson;
+            this.aMeter1.DialText = "Setting";
+            this.aMeter1.ForeColor = System.Drawing.Color.White;
+            this.aMeter1.Glossiness = 30F;
+            this.aMeter1.Location = new System.Drawing.Point(187, 12);
+            this.aMeter1.MaxValue = 100F;
+            this.aMeter1.MinValue = 0F;
+            this.aMeter1.Name = "aMeter1";
+            this.aMeter1.NoOfSubDivisions = 2;
+            this.aMeter1.RecommendedValue = 0F;
+            this.aMeter1.Size = new System.Drawing.Size(136, 136);
+            this.aMeter1.TabIndex = 15;
+            this.aMeter1.ThresholdPercent = 40F;
+            this.aMeter1.Value = 0F;
             // 
             // vuMeter3
             // 
@@ -193,18 +212,18 @@ namespace ASCOM.Simulator
             this.vuMeter3.DialTextZero = System.Drawing.Color.DarkGreen;
             this.vuMeter3.Led1ColorOff = System.Drawing.Color.DarkGreen;
             this.vuMeter3.Led1ColorOn = System.Drawing.Color.LimeGreen;
-            this.vuMeter3.Led1Count = 6;
+            this.vuMeter3.Led1Count = 5;
             this.vuMeter3.Led2ColorOff = System.Drawing.Color.Olive;
             this.vuMeter3.Led2ColorOn = System.Drawing.Color.Yellow;
-            this.vuMeter3.Led2Count = 6;
+            this.vuMeter3.Led2Count = 5;
             this.vuMeter3.Led3ColorOff = System.Drawing.Color.Maroon;
             this.vuMeter3.Led3ColorOn = System.Drawing.Color.Red;
-            this.vuMeter3.Led3Count = 4;
+            this.vuMeter3.Led3Count = 2;
             this.vuMeter3.LedSize = new System.Drawing.Size(6, 10);
             this.vuMeter3.LedSpace = 3;
             this.vuMeter3.Level = 0;
             this.vuMeter3.LevelMax = 100;
-            this.vuMeter3.Location = new System.Drawing.Point(208, 10);
+            this.vuMeter3.Location = new System.Drawing.Point(196, 192);
             this.vuMeter3.MeterScale = ASCOM.Controls.MeterScale.Log10;
             this.vuMeter3.Name = "vuMeter3";
             this.vuMeter3.NeedleColor = System.Drawing.Color.Black;
@@ -214,7 +233,7 @@ namespace ASCOM.Simulator
             this.vuMeter3.ShowDialOnly = false;
             this.vuMeter3.ShowLedPeak = true;
             this.vuMeter3.ShowTextInDial = true;
-            this.vuMeter3.Size = new System.Drawing.Size(12, 211);
+            this.vuMeter3.Size = new System.Drawing.Size(111, 16);
             this.vuMeter3.TabIndex = 10;
             this.vuMeter3.TextInDial = new string[] {
         "0",
@@ -224,13 +243,13 @@ namespace ASCOM.Simulator
         "80",
         "100"};
             this.vuMeter3.UseLedLight = true;
-            this.vuMeter3.VerticalBar = true;
+            this.vuMeter3.VerticalBar = false;
             this.vuMeter3.VuText = "Local Temp";
             // 
             // vuMeter2
             // 
             this.vuMeter2.AnalogMeter = true;
-            this.vuMeter2.BackColor = System.Drawing.Color.Black;
+            this.vuMeter2.BackColor = System.Drawing.Color.Transparent;
             this.vuMeter2.BorderColor = System.Drawing.Color.DimGray;
             this.vuMeter2.DialBackground = System.Drawing.Color.WhiteSmoke;
             this.vuMeter2.DialTextNegative = System.Drawing.Color.Red;
@@ -254,7 +273,7 @@ namespace ASCOM.Simulator
             this.vuMeter2.Name = "vuMeter2";
             this.vuMeter2.NeedleColor = System.Drawing.Color.Black;
             this.vuMeter2.PeakHold = true;
-            this.vuMeter2.Peakms = 10000;
+            this.vuMeter2.Peakms = 100;
             this.vuMeter2.PeakNeedleColor = System.Drawing.Color.Red;
             this.vuMeter2.ShowDialOnly = false;
             this.vuMeter2.ShowLedPeak = true;
@@ -315,14 +334,15 @@ namespace ASCOM.Simulator
         "100"};
             this.vuMeter1.UseLedLight = true;
             this.vuMeter1.VerticalBar = false;
-            this.vuMeter1.VuText = "Heater";
+            this.vuMeter1.VuText = "1";
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(345, 298);
+            this.ClientSize = new System.Drawing.Size(416, 295);
+            this.Controls.Add(this.aMeter1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
@@ -345,8 +365,8 @@ namespace ASCOM.Simulator
             this.Text = "ASCOM Rheostat Switch";
             this.TransparencyKey = System.Drawing.Color.Gray;
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -371,5 +391,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private readonly ISwitchV2 Switches = new RheostatSwitch();
+        private Controls.AMeter aMeter1;
     }
 }
