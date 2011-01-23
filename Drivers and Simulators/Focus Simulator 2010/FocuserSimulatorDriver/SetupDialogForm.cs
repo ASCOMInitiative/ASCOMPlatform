@@ -5,11 +5,14 @@ namespace ASCOM.Simulator
 {
     public partial class SetupDialogForm : Form
     {
-        private readonly Focuser _focuser = new Focuser();
-        private double _tempFlux;
+        //private readonly Focuser _focuser = new Focuser();
         private static readonly Random RandomSeed = new Random();
         private const int positionClick = 250;
         static readonly Timer MyTimer = new Timer();
+        private const int timerInterval = 100; //Update the display every 100ms i.e. 10 times per second
+        private Focuser _focuser;
+        private int lastPosition;
+        private double lastTemperature;
         
         /// <summary>
         /// This is the method to run when the class is constructed
@@ -17,28 +20,21 @@ namespace ASCOM.Simulator
         public SetupDialogForm()
         {
             InitializeComponent();
-            UpdatePosition(0);
-            UpdateTempature(0);
+        }
 
-            if (_focuser.TempCompAvailable)
-            {
-                checkBox1.Enabled = true;
-                checkBox1.Checked = _focuser.TempComp;
-            }
-
-            if (checkBox1.Checked)
-            {MyTimer.Start();}
-            else
-            {
-                MyTimer.Stop();
-            }
-
-            /* Adds the event and the event handler for the method that will 
-          process the timer event to the timer. */
-            MyTimer.Tick += TimerEventProcessor;
-
-            // Sets the timer interval to 1 seconds.
-            MyTimer.Interval = _focuser.TempPeriod * 1000;
+        /// <summary>
+        /// Constructir used to initialise class and pass in the Focuser device that is currently running
+        /// </summary>
+        /// <param name="CallingFocuser">Focuser device calling this setup dialogue</param>
+        public SetupDialogForm(Focuser CallingFocuser)
+        {
+            InitializeComponent();
+            _focuser = CallingFocuser;
+            MyTimer.Interval = timerInterval;
+            MyTimer.Tick += new EventHandler(TimerEventProcessor);
+            MyTimer.Start();
+            UpdatePosition();
+            UpdateTempature();
         }
 
         /// <summary>
@@ -46,69 +42,45 @@ namespace ASCOM.Simulator
         /// </summary>
         private void TimerEventProcessor(Object myObject, EventArgs myEventArgs)
         {
-            MyTimer.Enabled = true;
-
-            _tempFlux  = GenerateFakeTempature();
-
-            if (RandomBool())
-            {
-                UpdateTempature(_tempFlux);
-                if (_focuser.Temperature > _focuser.TempMax)
-                    _focuser.Temperature = _focuser.TempMax;
-                UpdatePosition((int)(Math.Round((-_tempFlux * _focuser.StepSize), 0)));
-            }
-            else
-            {
-                UpdateTempature(-_tempFlux);
-                if (_focuser.Temperature < _focuser.TempMin)
-                    _focuser.Temperature = _focuser.TempMin;
-                UpdatePosition((int)(Math.Round((-_tempFlux * _focuser.StepSize), 0)));
-            }
-        }
-
-        /// <summary>
-        /// Returns a random boolean value
-        /// </summary>
-        /// <returns>Random boolean value</returns>
-        public static bool RandomBool()
-        {
-            return (RandomSeed.NextDouble() > 0.5);
+            
+                UpdateTempature();
+                UpdatePosition();    
         }
 
         /// <summary>
         /// This is the method to run when the tempature needs updated, also updates the screen
         /// </summary>
-        private void UpdateTempature(double offSet)
+        private void UpdateTempature()
         {
-            _focuser.Temperature = Math.Round(_focuser.Temperature + offSet,2);
-            label4.Text = _focuser.TempProbe ? _focuser.Temperature.ToString() : 0.ToString();
-        }
-
-        /// <summary>
-        /// This is the method to run when you need to generate a tempature change
-        /// </summary>
-        private static double GenerateFakeTempature()
-        {
-            var random = new Random();
-            return random.NextDouble();
+            try
+            {
+                double currentTemperature = _focuser.Temperature; 
+                if (currentTemperature != lastTemperature)
+                {
+                    label4.Text = currentTemperature.ToString(); 
+                    lastTemperature = currentTemperature;
+                }
+            }
+            catch (NotConnectedException ex)
+            { string msg = ex.Message; }
         }
 
         /// <summary>
         /// This is the method to run when the position needs updated, also updates the screen
         /// </summary>
-        private void UpdatePosition(int offSet )
+        private void UpdatePosition()
         {
-            if (offSet != 0)
+            try
             {
-                if (_focuser.Absolute)
-                    _focuser.target = _focuser.position + offSet;
-                else
+                int currentPosition = _focuser.Position;
+                if (currentPosition != lastPosition)
                 {
-                    _focuser.position = offSet;
-                    _focuser.target = 0;
+                    label2.Text = currentPosition.ToString();
+                    lastPosition = currentPosition;
                 }
             }
-            label2.Text = _focuser.position.ToString();
+            catch (NotConnectedException ex)
+            { string msg = ex.Message; }
         }
 
         /// <summary>
@@ -116,7 +88,9 @@ namespace ASCOM.Simulator
         /// </summary>
         private void Button1Click(object sender, EventArgs e)
         {
-            UpdatePosition(-positionClick);
+            //UpdatePosition(-positionClick);
+            _focuser.Position -= positionClick;
+            UpdatePosition();
         }
 
         /// <summary>
@@ -124,7 +98,9 @@ namespace ASCOM.Simulator
         /// </summary>
         private void Button2Click(object sender, EventArgs e)
         {
-            UpdatePosition(positionClick);
+            //UpdatePosition(positionClick);
+            _focuser.Position += positionClick;
+            UpdatePosition();
         }
 
         /// <summary>
@@ -142,7 +118,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+   /*         if (checkBox1.Checked)
             {
                 button1.Enabled = false;
                 button2.Enabled = false;
@@ -156,7 +132,7 @@ namespace ASCOM.Simulator
                 _focuser.TempComp = false;
                 MyTimer.Stop();
             }
-            _focuser.SaveProfileSetting("TempComp", _focuser.TempComp.ToString());
+            _focuser.SaveProfileSetting("TempComp", _focuser.TempComp.ToString()); */
         }
     }
 }

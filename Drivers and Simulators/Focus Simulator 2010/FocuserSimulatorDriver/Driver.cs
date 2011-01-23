@@ -24,6 +24,9 @@ namespace ASCOM.Simulator
     [ComVisible(true)]
     public class Focuser : IFocuserV2, IDisposable
     {
+        private System.Windows.Forms.Form HandBox;
+        private int MoveTimerTickCount;
+
         #region Constants
 
         /// <summary>
@@ -80,9 +83,7 @@ namespace ASCOM.Simulator
 
         #endregion
 
-
-        #region Public Focuser ASCOM Members
-
+        #region Constructor and destructor
         /// <summary>
         /// Initializes a new instance of the <see cref="Focuser"/> class.
         /// Must be public for COM registration.
@@ -105,11 +106,25 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Focuser: " + ex.ToString());
+                EventLogCode.LogEvent("ASCOM.Focuser.Simulator", "Initialisation exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.FocusSimulatorNew, ex.ToString());
+                System.Windows.Forms.MessageBox.Show("Focuser New: " + ex.ToString());
             }
         }
 
-        /// <summary>
+        ~Focuser()
+        {
+            try
+            {
+                HandBox.Dispose();
+                HandBox = null;
+            }
+            catch 
+            {}
+        }
+        #endregion
+
+        #region Public Focuser ASCOM Members
+       /// <summary>
         /// True if the focuser is capable of absolute position; 
         /// that is, being commanded to a specific step location.
         /// </summary>
@@ -128,18 +143,24 @@ namespace ASCOM.Simulator
                     return;
                 if (value)
                 {
-                    if (moveTimer == null)
-                        moveTimer = new Timer();
+                    if (moveTimer == null) moveTimer = new Timer();
                     moveTimer.Tick += new Timer.TickEventHandler(moveTimer_Tick);
                     moveTimer.Interval = 100;
                     moveTimer.Enabled = true;
+                    this.isConnected = true;
+                    HandBox = new SetupDialogForm(this);
+                    HandBox.Show();
                 }
                 else
                 {
                     moveTimer.Enabled = false;
                     moveTimer.Tick -= moveTimer_Tick;
-                }
-                this.isConnected = value;
+                    HandBox.Hide();
+                    HandBox.Close();
+                    HandBox.Dispose();
+                    HandBox = null;
+                    this.isConnected = false;
+              }
             }
         }
 
@@ -411,8 +432,7 @@ namespace ASCOM.Simulator
         private void StartSimulation()
         {
             // start a timer that monitors and moves the focuser
-            if (moveTimer == null)
-                moveTimer = new Timer();
+            if (moveTimer == null) moveTimer = new Timer();
             moveTimer.Tick += new Timer.TickEventHandler(moveTimer_Tick);
             moveTimer.Interval = 100;
             moveTimer.Enabled = true;
@@ -438,6 +458,10 @@ namespace ASCOM.Simulator
                 }
             }
 
+            MoveTimerTickCount += 1;
+            if ((MoveTimerTickCount % 100) == 0) // Only do this every 100 ticks, i.e. 10 seconds as temperature only changes slowly
+            {
+            
             // apply a random change to the temperature
             Random r = new Random();
             double tempOffset = (r.NextDouble() - 0.5) / 10.0;
@@ -452,6 +476,7 @@ namespace ASCOM.Simulator
                     this.target += dt;
                     lastTemp = Temperature;
                 }
+            }
             }
         }
 
