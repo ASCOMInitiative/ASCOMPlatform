@@ -10,7 +10,7 @@ namespace ASCOM.Simulator
         private ArrayList _switches;
         private readonly int _min;
         private const int max = 100;
-        private readonly IRheostat _s1;
+        private IRheostat _s1;
         private readonly IRheostat _s2;
 
 
@@ -28,6 +28,7 @@ namespace ASCOM.Simulator
             vuMeter1.LevelMax = Convert.ToInt32(_s1.State[1]);
             trackBar1.Value = Convert.ToInt32(_s1.State[2]);
             vuMeter1.Level = Convert.ToInt32(_s1.State[2]);
+            aMeter1.Value = Convert.ToInt32(_s1.State[2]);
 
             _s2 = (IRheostat) _switches[1];
             vuMeter2.VuText = _s2.Name;
@@ -55,6 +56,8 @@ namespace ASCOM.Simulator
         {
             Switches.SetSwitch(_s1.Name, new[] {_min.ToString(), max.ToString(), vuMeter1.Level.ToString()});
             _switches = Switches.Switches;
+            _s1 = (IRheostat) Switches.GetSwitch(_s1.Name);
+            aMeter1.Value = Convert.ToInt32(_s1.State[2]);
         }
 
         private void SetSwitch2(object sender, EventArgs e)

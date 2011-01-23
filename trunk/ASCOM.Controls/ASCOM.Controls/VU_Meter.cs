@@ -933,12 +933,12 @@ namespace ASCOM.Controls
             if (meterFontSize < 4) meterFontSize = 4;
             if (meterFontSize > 72) meterFontSize = 72;
             var meterFont = new Font(Font.FontFamily, meterFontSize);
-            g.DrawString(_meterText, meterFont, new SolidBrush(ForeColor), Width/2, Height*0.43f, format);
+            g.DrawString(_meterText, meterFont, new SolidBrush(_dialTextHigh), Width / 2, Height * 0.43f, format);
 
             var textRadiusStart = (int) (Width*0.64);
             if (_showDialText)
             {
-                double dialTextStep = (degHigh - degLow)/(_dialText.Length - 1);
+                var dialTextStep = (degHigh - degLow)/(_dialText.Length - 1);
                 int dt = 0;
                 meterFontSize = meterFontSize*0.6f;
                 for (i = degHigh; i > degLow - dialTextStep/2; i = i - dialTextStep)
