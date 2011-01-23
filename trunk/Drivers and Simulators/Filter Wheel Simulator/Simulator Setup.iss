@@ -4,8 +4,8 @@
 ;
 [Setup]
 AppName=ASCOM Simulator FilterWheel Driver
-AppVerName=ASCOM Simulator FilterWheel Driver 5.0.1
-AppVersion=5.0.1
+AppVerName=ASCOM Simulator FilterWheel Driver 5.0.2
+AppVersion=5.0.2
 AppPublisher=Mark Crossley <public@wilmslowastro.com>
 AppPublisherURL=mailto:public@wilmslowastro.com
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -15,12 +15,12 @@ DefaultDirName="{cf}\ASCOM\FilterWheel"
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="."
-OutputBaseFilename="FilterWheelSimulator(5.0.1)Setup"
+OutputBaseFilename="FilterWheelSimulator(5.0.2)Setup"
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
-WizardImageFile="C:\Program Files\ASCOM\InstallGen\Resources\WizardImage.bmp"
-LicenseFile="C:\Program Files\ASCOM\InstallGen\Resources\CreativeCommons.txt"
+WizardImageFile="compiler:..\ASCOM\InstallGen\Resources\WizardImage.bmp"
+LicenseFile="compiler:..\ASCOM\InstallGen\Resources\CreativeCommons.txt"
 ; {cf}\ASCOM\Uninstall\FilterWheel folder created by Platform, always
 UninstallFilesDir="{cf}\ASCOM\Uninstall\FilterWheel\Simulator"
 
@@ -37,6 +37,7 @@ Name: source; Description: Install the Source files; Flags: unchecked
 
 [Files]
 Source: "FilterWheelSim.exe"; DestDir: "{app}" ;AfterInstall: RegASCOM()
+Source: "ComDlg32.ocx"; DestDir: "{sys}"; Flags: restartreplace sharedfile regserver
 ; Require a read-me HTML to appear after installation, maybe driver's Help doc
 ;;;;Source: "ReadMe.txt"; DestDir: "{app}"; Flags: isreadme
 ; Optional source files (COM and .NET aware)
@@ -80,17 +81,38 @@ function InitializeSetup(): Boolean;
 var
    H : Variant;
    H2 : Variant;
+   PlatVerString : String;
+   PlatVer : Variant;
+   DoubleValue : Variant;
+   DoubleValueString : String;
+   Separator : String;
 begin
-   Result := FALSE;  // Assume failure
    try               // Will catch all errors including missing reg data
       H := CreateOLEObject('DriverHelper.Util');  // Assure both are available
       H2 := CreateOleObject('DriverHelper2.Util');
-      if ((H2.PlatformVersion >= 5.0) and (H2.PlatformVersion < 6.0)) then
-         Result := TRUE;
+
+      DoubleValue := 1.0 / 3.0; // Create a real number of value 0.33333
+      DoubleValueString := DoubleValue; // Get the real number as a string including this system's decimal separator
+      Separator := Copy(DoubleValueString,2,1); // Parse out the decimal separator
+
+      PlatVerString := H2.PlatformVersion; // Get the Platform version string (which has "." as its decimal separator)
+      StringChangeEx(PlatVerString, '.', Separator, True); // Change the "." to the current system's decimal separator
+      // MsgBox('DoubleValue: ' + Separator + ' ' + platVerString, mbCriticalError, MB_OK)
+
+      PlatVer := PlatVerString; // Create a variant from the modified string containing this system's decimal separator
+      if (PlatVer < 5.0) then // Check for installed platform below 5
+          begin
+            MsgBox('ASCOM Platform 5 or later is required for this simulator to work correctly. You must update from Platform 4 to Platform 5 before continuing, you can download the update from http:\\www.ascom-standards.org', mbCriticalError, MB_OK)
+          end
+      else if (PlatVer >= 6.0) then // Check for installed platform of 6.0 or above
+              MsgBox('This update is only validated for use on Platform 5.x, you already have the latest simulator in your platform install.', mbCriticalError, MB_OK)
+           else // Platform 5.x is installed so allow the installation to proceed
+              Result:= TRUE;
    except
+      begin
+        MsgBox('ASCOM Platform 5 or later is required for this simulator to work correctly. You must install the ASCOM Platform 5.0b before continuing, you can download the update from http:\\www.ascom-standards.org', mbCriticalError, MB_OK);
+      end;
    end;
-   if(not Result) then
-      MsgBox('The ASCOM Platform 5 is required for this driver.', mbInformation, MB_OK);
 end;
 
 //
