@@ -10,11 +10,6 @@ if Variable CreateLogFile Equals YES
 end
  
 [DEFINE REGION: Application Updates]
-Comment: Check and remove previous versions of ASCOM
-Set Persistent Variable PreviousVersionsInstalled to True
-if Variable PreviousVersionsInstalled Equals True
-  Comment: Run Program $SUPPORTDIR$\MigrateProfile.exe SAVEPLATFORMVERSION CREATEREGISTRYKEY (WAIT)
-end
 Comment: Set this to your local ASCOM trunk path
 Set Persistent Variable ASCOMTrunkPath to c:\ASCOM Trunk
 [END REGION]
@@ -49,8 +44,8 @@ Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
 [compiler if Variable BUILDMODE not Equals PATCH]
 if Variable NEEDSUPGRADE Equals TRUE
-  Set Variable PREREQ to TRUE
-  Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Uninstallation
+  Comment: Set Variable PREREQ to TRUE
+  Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Uninstallation
 end
 Include Script: checkmsi31
 [compiler end]
@@ -85,24 +80,6 @@ if Variable PREREQ not Equals FALSE
   end
   Display Dialog: progressprereq, use as progress dialog (non-modal)
   [compiler if Variable BUILDMODE not Equals PATCH]
-  if Variable NEEDSUPGRADE Equals TRUE
-    Set Variable REMOVEOLD to 
-    Set Variable ERROROLD to 
-    Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
-    if Variable REMOVEOLD Equals ERROR
-      MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
-      Terminate Installation
-    end
-    if Variable REMOVEOLD Equals REBOOT
-      MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
-      if Variable REBOOTNOW Equals OK
-        Reboot Computer and Resume Setup
-      else
-        Terminate Installation
-      end
-    end
-    Set Variable MAINTENANCE to FALSE
-  end
   [DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
   Include Script: setupmsi31
   [compiler end]
@@ -149,6 +126,10 @@ Display Dialog: welcome, wait for dialog to return (modal)
 if Variable WIZARD Equals CANCEL
   GoTo Label: Main Install
 end
+if Variable WIZARD Equals BTNREADME
+  Display Dialog: readme, wait for dialog to return (modal)
+  GoTo Label: Welcome Dialog
+end
 [compiler if Variable BUILDMODE not Equals PATCH]
 label: License Check
 Comment: Display Dialog: licensecheck, wait for dialog to return (modal)
@@ -160,7 +141,7 @@ else
   end
 end
 label: ReadMe Information
-Display Dialog: readme, wait for dialog to return (modal)
+Comment: Display Dialog: readme, wait for dialog to return (modal)
 if Variable WIZARD Equals BACK
   GoTo Label: License Check
 else
@@ -235,10 +216,11 @@ end
  
 label: Maintenance
 Comment: Maintenance Install/Uninstall
+Set Variable REPAIR to True
 wizard loop
 Display Dialog: maintenance, wait for dialog to return (modal)
 Comment: Display Dialog: componentstree (if variable MODIFY is TRUE), wait for dialog to return (modal)
-Display Dialog: startinstallation, wait for dialog to return (modal)
+Comment: Display Dialog: startinstallation, wait for dialog to return (modal)
 end
 [END REGION]
  
@@ -257,6 +239,26 @@ if Variable ALLUSERS Equals TRUE
   Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$\$STARTMENU$
 else
   Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$\$STARTMENU$
+end
+if Variable NEEDSUPGRADE Equals TRUE
+  MessageBalloon: ASCOM Platform Maintenance, Uninstalling previous Platform 6 version...
+  Set Variable REMOVEOLD to 
+  Set Variable ERROROLD to 
+  Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
+  if Variable REMOVEOLD Equals ERROR
+    MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
+    Terminate Installation
+  end
+  if Variable REMOVEOLD Equals REBOOT
+    MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+    if Variable REBOOTNOW Equals OK
+      Reboot Computer and Resume Setup
+    else
+      Terminate Installation
+    end
+  end
+  Set Variable MAINTENANCE to FALSE
+  MessageBalloon: ASCOM Platform Maintenance, Completed old version uninstallation.
 end
 Display Dialog: progress, use as progress dialog (non-modal)
  
