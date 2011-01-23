@@ -5,8 +5,6 @@ destination.dfm
 destination.dfm.miaf
 finish.dfm
 finish.dfm.miaf
-licensecheck.dfm
-licensecheck.dfm.miaf
 maintenance.dfm
 maintenance.dfm.miaf
 prereq.dfm
@@ -17,8 +15,6 @@ progressprereq.dfm
 progressprereq.dfm.miaf
 readme.dfm
 readme.dfm.miaf
-registration.dfm
-registration.dfm.miaf
 registrationwithserial.dfm
 registrationwithserial.dfm.miaf
 setuptype.dfm
@@ -199,6 +195,7 @@ $
 
 
 
+B
 
 
 
@@ -298,6 +295,7 @@ $
 
 
 
+B
 
 
 
@@ -787,29 +785,34 @@ $
 
 
 $
+NEEDSUPGRADE
+WIZARD
+REPAIR
+UNINSTALL
+REMOVE
 $
 1
 4
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Alpha 9
+ASCOM Platform 6 Alpha 10
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0.0.0
 English
-ASCOM Platform 6 Alpha 9
+ASCOM Platform 6 Alpha 10
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{44963B93-89F6-4241-8D02-A798A7CD4720}
+{8B4A6325-C82C-42D0-B0D4-6F5035DECC85}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Alpha9
+ASCOMPlatform6Alpha10
 TRUE
 FALSE
 
