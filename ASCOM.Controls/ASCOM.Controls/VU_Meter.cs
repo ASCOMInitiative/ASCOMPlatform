@@ -73,7 +73,7 @@ namespace ASCOM.Controls
         #region Constructors
 
         ///<summary>
-        /// constructor method for a meter
+        /// constructor
         ///</summary>
         public VuMeter()
         {

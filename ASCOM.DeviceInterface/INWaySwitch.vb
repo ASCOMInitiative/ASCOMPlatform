@@ -3,11 +3,11 @@
 ' <summary>Defines the IRheostat Interface</summary>
 '-----------------------------------------------------------------------
 ''' <summary>
-''' The Rheostat switch is used to create a switch with an upper and lower limit int and it's current int setting.  
+''' The NwaySwitch switch is used to create a switch with an upper and lower limits and a current int setting.  
 ''' Used with the switch object it will return in an arraylist as a collection of switches
 ''' </summary>
-<ComVisible(True), Guid("9DD2CBDB-D114-4576-8072-4ED79CD3571A"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
-Public Interface IRheostat
+<ComVisible(True), Guid("B826412C-B56B-439D-86F9-D116E6EB052C"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
+Public Interface INWaySwitch
     ''' <summary>
     ''' String representing the type of switch
     ''' </summary>

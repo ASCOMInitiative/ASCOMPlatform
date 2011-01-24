@@ -189,6 +189,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AGauge.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AGauge.Designer.cs">
+      <DependentUpon>AGauge.cs</DependentUpon>
+    </Compile>
     <Compile Include="A_Meter.cs">
       <SubType>UserControl</SubType>
     </Compile>

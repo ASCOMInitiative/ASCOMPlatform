@@ -201,6 +201,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsExtras", "Driver In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RheostatSimulatorDriver", "Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\RheostatSimulatorDriver.csproj", "{40ECD28D-E48E-4D44-A0C8-D55B5E475DFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NWaySwitchSimulatorDriver", "Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\NWaySwitchSimulatorDriver.csproj", "{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -819,6 +821,18 @@ Global
 		{40ECD28D-E48E-4D44-A0C8-D55B5E475DFC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{40ECD28D-E48E-4D44-A0C8-D55B5E475DFC}.Release|x86.ActiveCfg = Release|x86
 		{40ECD28D-E48E-4D44-A0C8-D55B5E475DFC}.Release|x86.Build.0 = Release|x86
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Debug|x86.ActiveCfg = Debug|x86
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Peter|Any CPU.ActiveCfg = Release|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Peter|Any CPU.Build.0 = Release|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Peter|x86.ActiveCfg = Release|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -871,6 +885,7 @@ Global
 		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
 		{C423D505-B4E4-4116-8560-8D9ADFCBD838} = {52217DE4-DFAA-468E-B1A0-A79243708790}
 		{40ECD28D-E48E-4D44-A0C8-D55B5E475DFC} = {52217DE4-DFAA-468E-B1A0-A79243708790}
+		{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA} = {52217DE4-DFAA-468E-B1A0-A79243708790}
 		{D202E935-5ADA-4769-A4D8-4A915B4267FA} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{7814C016-C363-4A04-B095-27A5B33AA783} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{74D351E3-1E5A-451D-AA70-D3FA28CF1F54} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
@@ -883,13 +898,13 @@ Global
 		{81091BA8-725D-465D-AC6B-A36912B73AA7} = {F0B54D82-741C-4EC1-A620-E5DEA1038EAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal
