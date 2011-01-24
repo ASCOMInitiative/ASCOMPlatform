@@ -34,23 +34,19 @@ namespace ASCOM.Simulator
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.aMeter1 = new ASCOM.Controls.AMeter();
-            this.vuMeter3 = new ASCOM.Controls.VuMeter();
-            this.vuMeter2 = new ASCOM.Controls.VuMeter();
-            this.vuMeter1 = new ASCOM.Controls.VuMeter();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.aGauge2 = new ASCOM.Controls.AGauge();
+            this.aGauge1 = new ASCOM.Controls.AGauge();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -64,111 +60,18 @@ namespace ASCOM.Simulator
             this.button1.BackColor = System.Drawing.Color.Transparent;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(346, 257);
+            this.button1.Location = new System.Drawing.Point(506, 110);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(54, 23);
+            this.button1.Size = new System.Drawing.Size(51, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = false;
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.BackColor = System.Drawing.Color.Silver;
-            this.trackBar1.Location = new System.Drawing.Point(20, 95);
-            this.trackBar1.Maximum = 100;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(147, 45);
-            this.trackBar1.TabIndex = 2;
-            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar1.ValueChanged += new System.EventHandler(this.SetSwitch1);
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.Color.Silver;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.ForeColor = System.Drawing.Color.Black;
-            this.textBox1.Location = new System.Drawing.Point(25, 81);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(30, 13);
-            this.textBox1.TabIndex = 3;
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBox2
-            // 
-            this.textBox2.BackColor = System.Drawing.Color.Silver;
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.ForeColor = System.Drawing.Color.Black;
-            this.textBox2.Location = new System.Drawing.Point(135, 82);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(30, 13);
-            this.textBox2.TabIndex = 5;
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBox3
-            // 
-            this.textBox3.BackColor = System.Drawing.Color.Black;
-            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox3.ForeColor = System.Drawing.Color.White;
-            this.textBox3.Location = new System.Drawing.Point(20, 213);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(30, 13);
-            this.textBox3.TabIndex = 9;
-            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBox4
-            // 
-            this.textBox4.BackColor = System.Drawing.Color.Black;
-            this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox4.ForeColor = System.Drawing.Color.White;
-            this.textBox4.Location = new System.Drawing.Point(132, 213);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(30, 13);
-            this.textBox4.TabIndex = 8;
-            this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // trackBar2
-            // 
-            this.trackBar2.AutoSize = false;
-            this.trackBar2.BackColor = System.Drawing.Color.Black;
-            this.trackBar2.Location = new System.Drawing.Point(22, 232);
-            this.trackBar2.Maximum = 100;
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(142, 25);
-            this.trackBar2.TabIndex = 7;
-            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBar2.ValueChanged += new System.EventHandler(this.SetSwitch2);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(184, 222);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Temperature";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(263, 214);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 24);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "label2";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(17, 267);
+            this.label3.Location = new System.Drawing.Point(12, 220);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 13;
@@ -177,186 +80,311 @@ namespace ASCOM.Simulator
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.pictureBox1.Location = new System.Drawing.Point(349, 15);
+            this.pictureBox1.Location = new System.Drawing.Point(506, 28);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(51, 58);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
-            // aMeter1
+            // trackBar1
             // 
-            this.aMeter1.BackColor = System.Drawing.Color.Transparent;
-            this.aMeter1.DialColor = System.Drawing.Color.Crimson;
-            this.aMeter1.DialText = "Setting";
-            this.aMeter1.ForeColor = System.Drawing.Color.White;
-            this.aMeter1.Glossiness = 30F;
-            this.aMeter1.Location = new System.Drawing.Point(187, 12);
-            this.aMeter1.MaxValue = 100F;
-            this.aMeter1.MinValue = 0F;
-            this.aMeter1.Name = "aMeter1";
-            this.aMeter1.NoOfSubDivisions = 2;
-            this.aMeter1.RecommendedValue = 0F;
-            this.aMeter1.Size = new System.Drawing.Size(136, 136);
-            this.aMeter1.TabIndex = 15;
-            this.aMeter1.ThresholdPercent = 40F;
-            this.aMeter1.Value = 0F;
+            this.trackBar1.LargeChange = 10;
+            this.trackBar1.Location = new System.Drawing.Point(20, 185);
+            this.trackBar1.Maximum = 100;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(221, 45);
+            this.trackBar1.TabIndex = 10;
+            this.trackBar1.TickFrequency = 10;
+            this.trackBar1.Value = 1;
+            this.trackBar1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Guage1MouseUp);
             // 
-            // vuMeter3
+            // label1
             // 
-            this.vuMeter3.AnalogMeter = false;
-            this.vuMeter3.BackColor = System.Drawing.Color.Black;
-            this.vuMeter3.BorderColor = System.Drawing.Color.DimGray;
-            this.vuMeter3.DialBackground = System.Drawing.Color.WhiteSmoke;
-            this.vuMeter3.DialTextNegative = System.Drawing.Color.Red;
-            this.vuMeter3.DialTextPositive = System.Drawing.Color.Black;
-            this.vuMeter3.DialTextZero = System.Drawing.Color.DarkGreen;
-            this.vuMeter3.Led1ColorOff = System.Drawing.Color.DarkGreen;
-            this.vuMeter3.Led1ColorOn = System.Drawing.Color.LimeGreen;
-            this.vuMeter3.Led1Count = 5;
-            this.vuMeter3.Led2ColorOff = System.Drawing.Color.Olive;
-            this.vuMeter3.Led2ColorOn = System.Drawing.Color.Yellow;
-            this.vuMeter3.Led2Count = 5;
-            this.vuMeter3.Led3ColorOff = System.Drawing.Color.Maroon;
-            this.vuMeter3.Led3ColorOn = System.Drawing.Color.Red;
-            this.vuMeter3.Led3Count = 2;
-            this.vuMeter3.LedSize = new System.Drawing.Size(6, 10);
-            this.vuMeter3.LedSpace = 3;
-            this.vuMeter3.Level = 0;
-            this.vuMeter3.LevelMax = 100;
-            this.vuMeter3.Location = new System.Drawing.Point(196, 192);
-            this.vuMeter3.MeterScale = ASCOM.Controls.MeterScale.Log10;
-            this.vuMeter3.Name = "vuMeter3";
-            this.vuMeter3.NeedleColor = System.Drawing.Color.Black;
-            this.vuMeter3.PeakHold = true;
-            this.vuMeter3.Peakms = 1000;
-            this.vuMeter3.PeakNeedleColor = System.Drawing.Color.Red;
-            this.vuMeter3.ShowDialOnly = false;
-            this.vuMeter3.ShowLedPeak = true;
-            this.vuMeter3.ShowTextInDial = true;
-            this.vuMeter3.Size = new System.Drawing.Size(111, 16);
-            this.vuMeter3.TabIndex = 10;
-            this.vuMeter3.TextInDial = new string[] {
-        "0",
-        "20",
-        "40",
-        "60",
-        "80",
-        "100"};
-            this.vuMeter3.UseLedLight = true;
-            this.vuMeter3.VerticalBar = false;
-            this.vuMeter3.VuText = "Local Temp";
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(23, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "label1";
             // 
-            // vuMeter2
+            // label2
             // 
-            this.vuMeter2.AnalogMeter = true;
-            this.vuMeter2.BackColor = System.Drawing.Color.Transparent;
-            this.vuMeter2.BorderColor = System.Drawing.Color.DimGray;
-            this.vuMeter2.DialBackground = System.Drawing.Color.WhiteSmoke;
-            this.vuMeter2.DialTextNegative = System.Drawing.Color.Red;
-            this.vuMeter2.DialTextPositive = System.Drawing.Color.Black;
-            this.vuMeter2.DialTextZero = System.Drawing.Color.DarkGreen;
-            this.vuMeter2.Led1ColorOff = System.Drawing.Color.DarkGreen;
-            this.vuMeter2.Led1ColorOn = System.Drawing.Color.LimeGreen;
-            this.vuMeter2.Led1Count = 6;
-            this.vuMeter2.Led2ColorOff = System.Drawing.Color.Olive;
-            this.vuMeter2.Led2ColorOn = System.Drawing.Color.Yellow;
-            this.vuMeter2.Led2Count = 6;
-            this.vuMeter2.Led3ColorOff = System.Drawing.Color.Maroon;
-            this.vuMeter2.Led3ColorOn = System.Drawing.Color.Red;
-            this.vuMeter2.Led3Count = 4;
-            this.vuMeter2.LedSize = new System.Drawing.Size(2, 11);
-            this.vuMeter2.LedSpace = 3;
-            this.vuMeter2.Level = 0;
-            this.vuMeter2.LevelMax = 100;
-            this.vuMeter2.Location = new System.Drawing.Point(17, 149);
-            this.vuMeter2.MeterScale = ASCOM.Controls.MeterScale.Analog;
-            this.vuMeter2.Name = "vuMeter2";
-            this.vuMeter2.NeedleColor = System.Drawing.Color.Black;
-            this.vuMeter2.PeakHold = true;
-            this.vuMeter2.Peakms = 100;
-            this.vuMeter2.PeakNeedleColor = System.Drawing.Color.Red;
-            this.vuMeter2.ShowDialOnly = false;
-            this.vuMeter2.ShowLedPeak = true;
-            this.vuMeter2.ShowTextInDial = true;
-            this.vuMeter2.Size = new System.Drawing.Size(147, 117);
-            this.vuMeter2.TabIndex = 6;
-            this.vuMeter2.TextInDial = new string[] {
-        "0",
-        "20",
-        "40",
-        "60",
-        "80",
-        "100"};
-            this.vuMeter2.UseLedLight = true;
-            this.vuMeter2.VerticalBar = false;
-            this.vuMeter2.VuText = "2";
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(273, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "label2";
             // 
-            // vuMeter1
+            // trackBar2
             // 
-            this.vuMeter1.AnalogMeter = true;
-            this.vuMeter1.BackColor = System.Drawing.Color.Silver;
-            this.vuMeter1.BorderColor = System.Drawing.Color.Silver;
-            this.vuMeter1.DialBackground = System.Drawing.Color.WhiteSmoke;
-            this.vuMeter1.DialTextNegative = System.Drawing.Color.Red;
-            this.vuMeter1.DialTextPositive = System.Drawing.Color.Black;
-            this.vuMeter1.DialTextZero = System.Drawing.Color.DarkGreen;
-            this.vuMeter1.Led1ColorOff = System.Drawing.Color.DarkGreen;
-            this.vuMeter1.Led1ColorOn = System.Drawing.Color.LimeGreen;
-            this.vuMeter1.Led1Count = 6;
-            this.vuMeter1.Led2ColorOff = System.Drawing.Color.Olive;
-            this.vuMeter1.Led2ColorOn = System.Drawing.Color.Yellow;
-            this.vuMeter1.Led2Count = 6;
-            this.vuMeter1.Led3ColorOff = System.Drawing.Color.Maroon;
-            this.vuMeter1.Led3ColorOn = System.Drawing.Color.Red;
-            this.vuMeter1.Led3Count = 4;
-            this.vuMeter1.LedSize = new System.Drawing.Size(2, 11);
-            this.vuMeter1.LedSpace = 3;
-            this.vuMeter1.Level = 0;
-            this.vuMeter1.LevelMax = 100;
-            this.vuMeter1.Location = new System.Drawing.Point(20, 15);
-            this.vuMeter1.MeterScale = ASCOM.Controls.MeterScale.Analog;
-            this.vuMeter1.Name = "vuMeter1";
-            this.vuMeter1.NeedleColor = System.Drawing.Color.Black;
-            this.vuMeter1.PeakHold = true;
-            this.vuMeter1.Peakms = 10000;
-            this.vuMeter1.PeakNeedleColor = System.Drawing.Color.Red;
-            this.vuMeter1.ShowDialOnly = false;
-            this.vuMeter1.ShowLedPeak = true;
-            this.vuMeter1.ShowTextInDial = true;
-            this.vuMeter1.Size = new System.Drawing.Size(147, 117);
-            this.vuMeter1.TabIndex = 1;
-            this.vuMeter1.TextInDial = new string[] {
-        "0",
-        "20",
-        "40",
-        "60",
-        "80",
-        "100"};
-            this.vuMeter1.UseLedLight = true;
-            this.vuMeter1.VerticalBar = false;
-            this.vuMeter1.VuText = "1";
+            this.trackBar2.LargeChange = 10;
+            this.trackBar2.Location = new System.Drawing.Point(270, 185);
+            this.trackBar2.Maximum = 100;
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.Size = new System.Drawing.Size(221, 45);
+            this.trackBar2.TabIndex = 20;
+            this.trackBar2.TickFrequency = 10;
+            this.trackBar2.Value = 1;
+            this.trackBar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Guage2MouseUp);
+            // 
+            // aGauge2
+            // 
+            this.aGauge2.BackColor = System.Drawing.Color.Cornsilk;
+            this.aGauge2.BaseArcColor = System.Drawing.Color.Gray;
+            this.aGauge2.BaseArcRadius = 90;
+            this.aGauge2.BaseArcStart = 214;
+            this.aGauge2.BaseArcSweep = 110;
+            this.aGauge2.BaseArcWidth = 2;
+            this.aGauge2.CapColors = new System.Drawing.Color[] {
+        System.Drawing.Color.Black,
+        System.Drawing.Color.Black,
+        System.Drawing.Color.Black,
+        System.Drawing.Color.Black,
+        System.Drawing.Color.Black};
+            this.aGauge2.CapIdx = ((byte)(1));
+            this.aGauge2.CapPosition = new System.Drawing.Point(10, 10);
+            this.aGauge2.CapsPosition = new System.Drawing.Point[] {
+        new System.Drawing.Point(10, 10),
+        new System.Drawing.Point(10, 10),
+        new System.Drawing.Point(10, 10),
+        new System.Drawing.Point(10, 10),
+        new System.Drawing.Point(10, 10)};
+            this.aGauge2.CapsText = new string[] {
+        "",
+        "Volts",
+        "",
+        "",
+        ""};
+            this.aGauge2.CapText = "Volts";
+            this.aGauge2.Center = new System.Drawing.Point(110, 130);
+            this.aGauge2.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.aGauge2.Location = new System.Drawing.Point(270, 28);
+            this.aGauge2.MaxValue = 100F;
+            this.aGauge2.MinValue = 0F;
+            this.aGauge2.Name = "aGauge2";
+            this.aGauge2.NeedleColor1 = ASCOM.Controls.AGauge.NeedleColorEnum.Yellow;
+            this.aGauge2.NeedleColor2 = System.Drawing.Color.DimGray;
+            this.aGauge2.NeedleRadius = 80;
+            this.aGauge2.NeedleType = 0;
+            this.aGauge2.NeedleWidth = 3;
+            this.aGauge2.RangeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.aGauge2.RangeEnabled = true;
+            this.aGauge2.RangeEndValue = 101F;
+            this.aGauge2.RangeIdx = ((byte)(1));
+            this.aGauge2.RangeInnerRadius = 10;
+            this.aGauge2.RangeOuterRadius = 90;
+            this.aGauge2.RangesColor = new System.Drawing.Color[] {
+        System.Drawing.Color.LightGreen,
+        System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))),
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.aGauge2.RangesEnabled = new bool[] {
+        false,
+        true,
+        false,
+        false,
+        false};
+            this.aGauge2.RangesEndValue = new float[] {
+        300F,
+        101F,
+        0F,
+        0F,
+        0F};
+            this.aGauge2.RangesInnerRadius = new int[] {
+        70,
+        10,
+        70,
+        70,
+        70};
+            this.aGauge2.RangesOuterRadius = new int[] {
+        80,
+        90,
+        80,
+        80,
+        80};
+            this.aGauge2.RangesStartValue = new float[] {
+        -100F,
+        90F,
+        0F,
+        0F,
+        0F};
+            this.aGauge2.RangeStartValue = 90F;
+            this.aGauge2.ScaleLinesInterColor = System.Drawing.Color.Red;
+            this.aGauge2.ScaleLinesInterInnerRadius = 90;
+            this.aGauge2.ScaleLinesInterOuterRadius = 97;
+            this.aGauge2.ScaleLinesInterWidth = 2;
+            this.aGauge2.ScaleLinesMajorColor = System.Drawing.Color.Black;
+            this.aGauge2.ScaleLinesMajorInnerRadius = 90;
+            this.aGauge2.ScaleLinesMajorOuterRadius = 100;
+            this.aGauge2.ScaleLinesMajorStepValue = 10F;
+            this.aGauge2.ScaleLinesMajorWidth = 2;
+            this.aGauge2.ScaleLinesMinorColor = System.Drawing.Color.Gray;
+            this.aGauge2.ScaleLinesMinorInnerRadius = 90;
+            this.aGauge2.ScaleLinesMinorNumOf = 5;
+            this.aGauge2.ScaleLinesMinorOuterRadius = 95;
+            this.aGauge2.ScaleLinesMinorWidth = 1;
+            this.aGauge2.ScaleNumbersColor = System.Drawing.Color.Black;
+            this.aGauge2.ScaleNumbersFormat = "";
+            this.aGauge2.ScaleNumbersRadius = 110;
+            this.aGauge2.ScaleNumbersRotation = 90;
+            this.aGauge2.ScaleNumbersStartScaleLine = 1;
+            this.aGauge2.ScaleNumbersStepScaleLines = 2;
+            this.aGauge2.Size = new System.Drawing.Size(221, 151);
+            this.aGauge2.TabIndex = 19;
+            this.aGauge2.Text = "aGauge2";
+            this.aGauge2.Value = 0F;
+            // 
+            // aGauge1
+            // 
+            this.aGauge1.BackColor = System.Drawing.Color.Cornsilk;
+            this.aGauge1.BaseArcColor = System.Drawing.Color.Gray;
+            this.aGauge1.BaseArcRadius = 90;
+            this.aGauge1.BaseArcStart = 214;
+            this.aGauge1.BaseArcSweep = 110;
+            this.aGauge1.BaseArcWidth = 2;
+            this.aGauge1.CapColors = new System.Drawing.Color[] {
+        System.Drawing.Color.Black,
+        System.Drawing.Color.Black,
+        System.Drawing.Color.Black,
+        System.Drawing.Color.Black,
+        System.Drawing.Color.Black};
+            this.aGauge1.CapIdx = ((byte)(1));
+            this.aGauge1.CapPosition = new System.Drawing.Point(10, 10);
+            this.aGauge1.CapsPosition = new System.Drawing.Point[] {
+        new System.Drawing.Point(10, 10),
+        new System.Drawing.Point(10, 10),
+        new System.Drawing.Point(10, 10),
+        new System.Drawing.Point(10, 10),
+        new System.Drawing.Point(10, 10)};
+            this.aGauge1.CapsText = new string[] {
+        "",
+        "Volts",
+        "",
+        "",
+        ""};
+            this.aGauge1.CapText = "Volts";
+            this.aGauge1.Center = new System.Drawing.Point(110, 130);
+            this.aGauge1.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.aGauge1.Location = new System.Drawing.Point(20, 28);
+            this.aGauge1.MaxValue = 100F;
+            this.aGauge1.MinValue = 0F;
+            this.aGauge1.Name = "aGauge1";
+            this.aGauge1.NeedleColor1 = ASCOM.Controls.AGauge.NeedleColorEnum.Yellow;
+            this.aGauge1.NeedleColor2 = System.Drawing.Color.DimGray;
+            this.aGauge1.NeedleRadius = 80;
+            this.aGauge1.NeedleType = 0;
+            this.aGauge1.NeedleWidth = 3;
+            this.aGauge1.RangeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.aGauge1.RangeEnabled = true;
+            this.aGauge1.RangeEndValue = 101F;
+            this.aGauge1.RangeIdx = ((byte)(1));
+            this.aGauge1.RangeInnerRadius = 10;
+            this.aGauge1.RangeOuterRadius = 90;
+            this.aGauge1.RangesColor = new System.Drawing.Color[] {
+        System.Drawing.Color.LightGreen,
+        System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))),
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.aGauge1.RangesEnabled = new bool[] {
+        false,
+        true,
+        false,
+        false,
+        false};
+            this.aGauge1.RangesEndValue = new float[] {
+        300F,
+        101F,
+        0F,
+        0F,
+        0F};
+            this.aGauge1.RangesInnerRadius = new int[] {
+        70,
+        10,
+        70,
+        70,
+        70};
+            this.aGauge1.RangesOuterRadius = new int[] {
+        80,
+        90,
+        80,
+        80,
+        80};
+            this.aGauge1.RangesStartValue = new float[] {
+        -100F,
+        90F,
+        0F,
+        0F,
+        0F};
+            this.aGauge1.RangeStartValue = 90F;
+            this.aGauge1.ScaleLinesInterColor = System.Drawing.Color.Red;
+            this.aGauge1.ScaleLinesInterInnerRadius = 90;
+            this.aGauge1.ScaleLinesInterOuterRadius = 97;
+            this.aGauge1.ScaleLinesInterWidth = 2;
+            this.aGauge1.ScaleLinesMajorColor = System.Drawing.Color.Black;
+            this.aGauge1.ScaleLinesMajorInnerRadius = 90;
+            this.aGauge1.ScaleLinesMajorOuterRadius = 100;
+            this.aGauge1.ScaleLinesMajorStepValue = 10F;
+            this.aGauge1.ScaleLinesMajorWidth = 2;
+            this.aGauge1.ScaleLinesMinorColor = System.Drawing.Color.Gray;
+            this.aGauge1.ScaleLinesMinorInnerRadius = 90;
+            this.aGauge1.ScaleLinesMinorNumOf = 5;
+            this.aGauge1.ScaleLinesMinorOuterRadius = 95;
+            this.aGauge1.ScaleLinesMinorWidth = 1;
+            this.aGauge1.ScaleNumbersColor = System.Drawing.Color.Black;
+            this.aGauge1.ScaleNumbersFormat = "";
+            this.aGauge1.ScaleNumbersRadius = 110;
+            this.aGauge1.ScaleNumbersRotation = 90;
+            this.aGauge1.ScaleNumbersStartScaleLine = 1;
+            this.aGauge1.ScaleNumbersStepScaleLines = 2;
+            this.aGauge1.Size = new System.Drawing.Size(221, 151);
+            this.aGauge1.TabIndex = 14;
+            this.aGauge1.Text = "aGauge1";
+            this.aGauge1.Value = 0F;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Cornsilk;
+            this.label4.ForeColor = System.Drawing.Color.Black;
+            this.label4.Location = new System.Drawing.Point(202, 159);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "label4";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Cornsilk;
+            this.label5.ForeColor = System.Drawing.Color.Black;
+            this.label5.Location = new System.Drawing.Point(453, 159);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "label5";
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(416, 295);
-            this.Controls.Add(this.aMeter1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label2);
+            this.ClientSize = new System.Drawing.Size(568, 236);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.trackBar2);
+            this.Controls.Add(this.aGauge2);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.aGauge1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.vuMeter3);
-            this.Controls.Add(this.vuMeter2);
-            this.Controls.Add(this.vuMeter1);
             this.ForeColor = System.Drawing.Color.Transparent;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -364,9 +392,9 @@ namespace ASCOM.Simulator
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ASCOM Rheostat Switch";
             this.TransparencyKey = System.Drawing.Color.Gray;
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,20 +405,16 @@ namespace ASCOM.Simulator
 
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button button1;
-        private Controls.VuMeter vuMeter1;
-        private System.Windows.Forms.TrackBar trackBar1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TrackBar trackBar2;
-        private Controls.VuMeter vuMeter2;
-        private Controls.VuMeter vuMeter3;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         public readonly ISwitchV2 Switches = new RheostatSwitch();
-        private Controls.AMeter aMeter1;
+        private Controls.AGauge aGauge1;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private Controls.AGauge aGauge2;
+        private System.Windows.Forms.TrackBar trackBar2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }

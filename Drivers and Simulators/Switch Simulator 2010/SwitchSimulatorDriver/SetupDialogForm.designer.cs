@@ -93,8 +93,8 @@ namespace ASCOM.Simulator
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picASCOM.TabIndex = 3;
             this.picASCOM.TabStop = false;
-            this.picASCOM.DoubleClick += new System.EventHandler(BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(BrowseToAscom);
+            this.picASCOM.DoubleClick += new System.EventHandler(BrowseToAscom);
             // 
             // textBox1
             // 
@@ -299,12 +299,11 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.lb_DriverVersion);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Switch Simulator Setup";
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.groupBox1.ResumeLayout(false);

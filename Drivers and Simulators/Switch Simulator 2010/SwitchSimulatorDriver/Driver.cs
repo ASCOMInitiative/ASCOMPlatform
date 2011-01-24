@@ -3,7 +3,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using ASCOM.DriverAccess;
 using ASCOM.Utilities;
@@ -145,7 +144,7 @@ namespace ASCOM.Simulator
         public void SetupDialog()
         {
             var f = new SetupDialogForm();
-            DialogResult dialogResult = f.ShowDialog();
+            f.ShowDialog();
         }
 
         /// <summary>
@@ -307,9 +306,10 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void LoadSwitchDevices()
         {
-            foreach (string deviceName in DeviceNames)
+            SwitchList.Clear();
+            foreach (var deviceName in DeviceNames)
             {
-                string v = Profile.GetValue(sCsDriverId, deviceName, "Switches");
+                var v = Profile.GetValue(sCsDriverId, deviceName, "Switches");
                 if ((v != "On") && (v != "Off"))
                 {
                     v = "Off";
@@ -320,7 +320,7 @@ namespace ASCOM.Simulator
                                            DeviceType = switchType,
                                            State = new[] {v}
                                        };
-                int add = SwitchList.Add(toggleSwitch);
+                var add = SwitchList.Add(toggleSwitch);
             }
         }
 

@@ -195,13 +195,7 @@
     <Compile Include="AGauge.Designer.cs">
       <DependentUpon>AGauge.cs</DependentUpon>
     </Compile>
-    <Compile Include="A_Meter.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="TrafficLights.cs" />
-    <Compile Include="VU_Meter.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <None Include="..\..\ASCOM.snk">
       <Link>ASCOM.snk</Link>
     </None>
