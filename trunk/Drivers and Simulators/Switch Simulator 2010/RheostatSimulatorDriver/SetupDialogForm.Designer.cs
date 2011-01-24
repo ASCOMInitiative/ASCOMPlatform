@@ -390,7 +390,7 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private readonly ISwitchV2 Switches = new RheostatSwitch();
+        public readonly ISwitchV2 Switches = new RheostatSwitch();
         private Controls.AMeter aMeter1;
     }
 }

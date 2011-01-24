@@ -93,9 +93,8 @@ namespace ASCOM.DriverAccess
     #endregion
 
     /// <summary>
-    /// The toggle switch is used to create a single on/off switch.
+    /// The Toggle switch is used to create a single on/off switch.
     /// </summary>
-
     public class ToggleSwitch : IToggleSwitch
     {
 
@@ -120,9 +119,8 @@ namespace ASCOM.DriverAccess
     }
 
     /// <summary>
-    /// The Rheostat switch
+    /// The Rheostat switch is use with lower/upper limits with a setting
     /// </summary>
-
     public class Rheostat : IRheostat
     {
 
@@ -142,6 +140,35 @@ namespace ASCOM.DriverAccess
 
         /// <summary>
         /// The type of device is a Rheostat
+        /// </summary>
+        public string DeviceType { get; set; }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// The NWay Switch is use with lower/upper limits with a position setting
+    /// </summary>
+    public class NWaySwitch : INWaySwitch
+    {
+
+        #region NWaySwitch Members
+
+        /// <summary>
+        /// Name of the NWaySwitch
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// String array representing the state of the switch
+        /// First parameter is the min setting 
+        /// Second Parameter is the max limit
+        /// Third is the position between Min and Max 
+        /// </summary>
+        public string[] State { get; set; }
+
+        /// <summary>
+        /// The type of device is a NWaySwitch
         /// </summary>
         public string DeviceType { get; set; }
 

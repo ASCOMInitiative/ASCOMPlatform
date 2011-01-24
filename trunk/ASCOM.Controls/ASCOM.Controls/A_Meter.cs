@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace ASCOM.Controls
 {
     /// <summary>
-    ///   Aqua Gauge Control - A Windows User Control.
+    ///   Gauge Control - A Windows User Control.
     ///   Author  : Ambalavanar Thirugnanam
     ///   Date    : 24th August 2007
     ///   email   : ambalavanar.thiru@gmail.com

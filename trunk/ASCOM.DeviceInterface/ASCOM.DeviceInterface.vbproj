@@ -102,6 +102,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="INWaySwitch.vb" />
     <Compile Include="IRheostat.vb" />
     <Compile Include="IToggleSwitch.vb" />
     <Compile Include="Enumerations.vb" />
