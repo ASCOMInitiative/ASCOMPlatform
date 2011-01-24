@@ -20,9 +20,9 @@ Public Interface IRheostat
 
     ''' <summary>
     ''' String array representing the state of the switch
-    ''' First parameter is the current min 
-    ''' Second Parameter is the max
-    ''' Third Parameter is the level set (must be between min and max)
+    ''' (Double) First parameter is the current min 
+    ''' (Double) Second Parameter is the max
+    ''' (Double) Third Parameter is the level set (must be between min and max)
     ''' </summary>
     ReadOnly Property State() As String()
 

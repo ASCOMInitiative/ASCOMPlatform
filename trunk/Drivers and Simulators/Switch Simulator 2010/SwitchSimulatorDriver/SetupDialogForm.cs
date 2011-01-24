@@ -26,7 +26,7 @@ namespace ASCOM.Simulator
             InitializeComponent();
 
             //get the driver version number
-            lb_DriverVersion.Text = @"v" + SwitchA.DriverVersion;
+            lb_DriverVersion.Text = SwitchA.Name + @" v" + SwitchA.DriverVersion;
 
             LoadImagesFromResources();
             DisplaySwitchSettings();

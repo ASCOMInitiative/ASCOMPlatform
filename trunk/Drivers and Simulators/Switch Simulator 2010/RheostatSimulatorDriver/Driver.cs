@@ -3,7 +3,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using ASCOM.DriverAccess;
 using ASCOM.Utilities;
@@ -78,7 +77,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Backing store for the private switch collection.
         /// </summary>
-        private static ArrayList _switchList = new ArrayList();
+        private static readonly ArrayList SwitchList = new ArrayList();
 
         /// <summary>
         /// Sets up the permenant store for saved settings
@@ -88,7 +87,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Sets up the permenant store for device names
         /// </summary>
-        private static readonly string[] DeviceNames = {"Heater 1", "Heater 2"};
+        private static readonly string[] DeviceNames = {"Dew Heater 1", "Dew Heater 2"};
 
         #endregion
 
@@ -131,7 +130,7 @@ namespace ASCOM.Simulator
         public void SetupDialog()
         {
             var f = new SetupDialogForm();
-            DialogResult dialogResult = f.ShowDialog();
+            f.ShowDialog();
         }
 
         /// <summary>
@@ -191,7 +190,7 @@ namespace ASCOM.Simulator
         /// <value></value>
         public ArrayList Switches
         {
-            get { return _switchList; }
+            get { return SwitchList; }
         }
 
         void ISwitchV2.Dispose()
@@ -206,7 +205,7 @@ namespace ASCOM.Simulator
         public object GetSwitch(string switchName)
         {
             if (switchName == null) throw new ArgumentNullException("switchName");
-            return _switchList.Cast<Rheostat>().FirstOrDefault(t => t.Name == switchName);
+            return SwitchList.Cast<Rheostat>().FirstOrDefault(t => t.Name == switchName);
         }
 
         /// <summary>
@@ -216,7 +215,7 @@ namespace ASCOM.Simulator
         public void SetSwitch(string switchName, string[] state)
         {
             if (switchName == null) throw new ArgumentNullException("switchName");
-            foreach (var t in from Rheostat t in _switchList where t.Name == switchName select t)
+            foreach (var t in from Rheostat t in SwitchList where t.Name == switchName select t)
             {
                 t.State = state;
             }
@@ -293,13 +292,13 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void LoadSwitchDevices()
         {
-            _switchList.Clear();
-            foreach (string deviceName in DeviceNames)
+            SwitchList.Clear();
+            foreach (var deviceName in DeviceNames)
             {
-                var s = Profile.GetValue(sCsDriverId, deviceName, "Switches") ?? "0,100,10";
+                var s = Profile.GetValue(sCsDriverId, deviceName, "Switches") ?? "0,100,40";
                 if (s.Length < 6)
                 {
-                    s = "0,100,10";
+                    s = "0,100,50";
                 }
 
                 var rheostat = new Rheostat
@@ -308,7 +307,7 @@ namespace ASCOM.Simulator
                                        DeviceType = switchType,
                                        State = s.Split(',')
                                    };
-                _switchList.Add(rheostat);
+                SwitchList.Add(rheostat);
             }
         }
 
@@ -317,8 +316,8 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void SaveProfileSettings()
         {
-            if (_switchList != null)
-                foreach (Rheostat t in _switchList)
+            if (SwitchList != null)
+                foreach (Rheostat t in SwitchList)
                 {
                     var s = t.State[0] + "," + t.State[1] + "," + t.State[2];
                     if (Profile != null) Profile.WriteValue(sCsDriverId, t.Name, s, "Switches");

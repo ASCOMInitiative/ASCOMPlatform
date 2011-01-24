@@ -20,9 +20,9 @@ Public Interface INWaySwitch
 
     ''' <summary>
     ''' String array representing the state of the switch
-    ''' First parameter is the current min 
-    ''' Second Parameter is the max
-    ''' Third Parameter is the level set (must be between min and max)
+    ''' (int) First parameter is the current min 
+    ''' (int) Second Parameter is the max
+    ''' (Int) Third Parameter is the level set (must be between min and max)
     ''' </summary>
     ReadOnly Property State() As String()
 
