@@ -283,6 +283,8 @@ namespace ASCOM.Simulator
 
         #endregion
 
+        #region Private Members
+
         private static void Dispose()
         {
         }
@@ -323,6 +325,8 @@ namespace ASCOM.Simulator
                     if (Profile != null) Profile.WriteValue(sCsDriverId, t.Name, s, "Switches");
                 }
         }
+
+        #endregion
 
         #region ASCOM Registration
 

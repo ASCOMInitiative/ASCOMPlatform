@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 
@@ -7,9 +9,15 @@ namespace ASCOM.Simulator
 {
     public partial class SetupDialogForm : Form
     {
+        #region Constants
+
         private readonly ArrayList _switches;
         private INWaySwitch _s1;
         private INWaySwitch _s2;
+
+        #endregion
+
+        #region Constructor
 
         public SetupDialogForm()
         {
@@ -28,6 +36,10 @@ namespace ASCOM.Simulator
             aGauge2.MaxValue = Convert.ToSingle(_s2.State[1]);
         }
 
+        #endregion
+
+        #region Private Members
+
         private void SetGuage1(int value)
         {
             _s1.State[2] = value.ToString();
@@ -42,11 +54,6 @@ namespace ASCOM.Simulator
             Switches.SetSwitch(_s2.Name, _s2.State);
             _s2 = (INWaySwitch)Switches.GetSwitch(_s2.Name);
             aGauge2.Value = Convert.ToSingle(_s2.State[2]);
-        }
-
-        private void But0Click(object sender, EventArgs e)
-        {
-            SetGuage1(Convert.ToInt16(but0.Text));
         }
 
         private void But1Click(object sender, EventArgs e)
@@ -79,11 +86,6 @@ namespace ASCOM.Simulator
             SetGuage1(Convert.ToInt16(but6.Text));
         }
 
-        private void Button1Click(object sender, EventArgs e)
-        {
-            SetGuage2(Convert.ToInt16(button1.Text));
-        }
-
         private void Button7Click(object sender, EventArgs e)
         {
             SetGuage2(Convert.ToInt16(button7.Text));
@@ -113,5 +115,25 @@ namespace ASCOM.Simulator
         {
             SetGuage2(Convert.ToInt16(button2.Text));
         }
+
+        private static void BrowseToAscom(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Process.Start("http://ascom-standards.org/");
+            }
+            catch (Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                    MessageBox.Show(noBrowser.Message);
+            }
+            catch (Exception other)
+            {
+                MessageBox.Show(other.Message);
+            }
+        }
+
+        #endregion
+
     }
 }
