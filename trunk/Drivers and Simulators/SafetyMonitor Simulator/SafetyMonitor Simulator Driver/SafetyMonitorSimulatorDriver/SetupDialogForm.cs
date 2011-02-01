@@ -77,5 +77,6 @@ namespace ASCOM.Simulator
                 ChangeImageState(pictureBox2, SafetyMonitor.IsSafe);
             }
         }
+
     }
 }

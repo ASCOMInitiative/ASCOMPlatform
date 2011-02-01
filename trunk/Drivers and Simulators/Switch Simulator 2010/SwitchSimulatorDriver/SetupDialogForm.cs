@@ -12,12 +12,17 @@ namespace ASCOM.Simulator
 {
     public partial class SetupDialogForm : Form
     {
+        #region Constants
+
         private static readonly ISwitchV2 SwitchA = new Switch();
         private Assembly _assembly;
         private Stream _greenLed;
         private Stream _redLed;
         private ArrayList _switches = SwitchA.Switches;
 
+        #endregion
+
+        #region Constructor
         /// <summary>
         /// Initialize the setup form 
         /// </summary>
@@ -31,6 +36,10 @@ namespace ASCOM.Simulator
             LoadImagesFromResources();
             DisplaySwitchSettings();
         }
+
+        #endregion
+
+        #region Private Members
 
         /// <summary>
         /// Click the ok button, save, and quit
@@ -178,5 +187,7 @@ namespace ASCOM.Simulator
         {
             ChangeDisplay(pictureBox8, 8);
         }
+
+        #endregion
     }
 }

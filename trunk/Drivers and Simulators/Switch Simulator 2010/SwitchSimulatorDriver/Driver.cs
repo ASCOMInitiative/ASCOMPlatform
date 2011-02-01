@@ -297,6 +297,8 @@ namespace ASCOM.Simulator
 
         #endregion
 
+        #region Private Members
+
         private static void Dispose()
         {
         }
@@ -329,11 +331,13 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void SaveProfileSettings()
         {
-            foreach (ToggleSwitch t in SwitchList)
+            foreach (ToggleSwitch t in from ToggleSwitch t in SwitchList where Profile != null select t)
             {
-                if (Profile != null) Profile.WriteValue(sCsDriverId, t.Name, t.State[0], "Switches");
+                Profile.WriteValue(sCsDriverId, t.Name, t.State[0], "Switches");
             }
         }
+
+        #endregion
 
         #region ASCOM Registration
 

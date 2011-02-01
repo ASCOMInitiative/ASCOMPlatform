@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using System.Collections;
@@ -7,9 +9,15 @@ namespace ASCOM.Simulator
 {
     public partial class SetupDialogForm : Form
     {
+        #region Constants
+
         private readonly ArrayList _switches;
         private IRheostat _s1;
         private IRheostat _s2;
+
+        #endregion
+
+        #region Constructor
 
         public SetupDialogForm()
         {
@@ -31,8 +39,11 @@ namespace ASCOM.Simulator
             label2.Text = _s2.Name;
             
             label3.Text = Switches.Name + @" v" + Switches.DriverVersion;
-
         }
+
+        #endregion
+
+        #region Private Members
 
         private void Timer1Tick(object sender, EventArgs e)
         {
@@ -58,5 +69,24 @@ namespace ASCOM.Simulator
             _s2 = (IRheostat)Switches.GetSwitch(_s2.Name);
             aGauge2.Value = Convert.ToSingle(_s2.State[2]);
         }
+  
+        private static void BrowseToAscom(object sender, MouseEventArgs e)
+        {
+                        try
+            {
+                Process.Start("http://ascom-standards.org/");
+            }
+            catch (Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                    MessageBox.Show(noBrowser.Message);
+            }
+            catch (Exception other)
+            {
+                MessageBox.Show(other.Message);
+            }
+        }
+
+    #endregion
     }
 }

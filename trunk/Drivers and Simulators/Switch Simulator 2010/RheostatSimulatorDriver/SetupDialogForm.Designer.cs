@@ -85,6 +85,7 @@ namespace ASCOM.Simulator
             this.pictureBox1.Size = new System.Drawing.Size(51, 58);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(BrowseToAscom);
             // 
             // trackBar1
             // 
