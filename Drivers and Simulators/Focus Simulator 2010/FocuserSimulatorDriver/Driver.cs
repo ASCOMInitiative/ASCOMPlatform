@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using ASCOM.Utilities;
-using ASCOM.DeviceInterface;
 using System.Collections;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using ASCOM.DeviceInterface;
+using ASCOM.Utilities;
+using Timer = ASCOM.Utilities.Timer;
 
 namespace ASCOM.Simulator
 {
@@ -24,9 +27,6 @@ namespace ASCOM.Simulator
     [ComVisible(true)]
     public class Focuser : IFocuserV2, IDisposable
     {
-        private System.Windows.Forms.Form HandBox;
-        private int MoveTimerTickCount;
-
         #region Constants
 
         /// <summary>
@@ -73,17 +73,18 @@ namespace ASCOM.Simulator
         #endregion
 
         #region local parameters
-        private bool isConnected;
 
-        internal int position;
-        internal int target;
-        private int roc = 100;       // rate of change in steps per 1/10 sec
-
-        private Timer moveTimer;    // drives the position and temperature changers
+        private bool _isConnected;
+        private Timer _moveTimer; // drives the position and temperature changers
+        private int _position;
+        private const int roc = 100; // rate of change in steps per 1/10 sec
+        internal int Target;
+        private double _lastTemp;
 
         #endregion
 
-        #region Constructor and destructor
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Focuser"/> class.
         /// Must be public for COM registration.
@@ -106,25 +107,37 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                EventLogCode.LogEvent("ASCOM.Focuser.Simulator", "Initialisation exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.FocusSimulatorNew, ex.ToString());
-                System.Windows.Forms.MessageBox.Show("Focuser New: " + ex.ToString());
+                MessageBox.Show(@"Focuser: " + ex);
             }
         }
 
-        ~Focuser()
-        {
-            try
-            {
-                HandBox.Dispose();
-                HandBox = null;
-            }
-            catch 
-            {}
-        }
         #endregion
 
-        #region Public Focuser ASCOM Members
-       /// <summary>
+        #region public properties
+
+        public bool CanHalt { get; set; }
+        public bool TempProbe { get; set; }
+        public bool Synchronus { get; set; }
+        public bool CanStepSize { get; set; }
+        public int TempMax { get; set; }
+        public int TempMin { get; set; }
+        public int TempPeriod { get; set; }
+        public int TempSteps { get; set; }
+
+        #endregion
+
+        #region IDisposable Members
+
+        void IDisposable.Dispose()
+        {
+            Dispose();
+        }
+
+        #endregion
+
+        #region IFocuserV2 Members
+
+        /// <summary>
         /// True if the focuser is capable of absolute position; 
         /// that is, being commanded to a specific step location.
         /// </summary>
@@ -136,31 +149,25 @@ namespace ASCOM.Simulator
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         public bool Connected
         {
-            get { return this.isConnected; }
+            get { return _isConnected; }
             set
             {
-                if (isConnected == value)
+                if (_isConnected == value)
                     return;
                 if (value)
                 {
-                    if (moveTimer == null) moveTimer = new Timer();
-                    moveTimer.Tick += new Timer.TickEventHandler(moveTimer_Tick);
-                    moveTimer.Interval = 100;
-                    moveTimer.Enabled = true;
-                    this.isConnected = true;
-                    HandBox = new SetupDialogForm(this);
-                    HandBox.Show();
+                    if (_moveTimer == null)
+                        _moveTimer = new Timer();
+                    _moveTimer.Tick += MoveTimerTick;
+                    _moveTimer.Interval = 100;
+                    _moveTimer.Enabled = true;
                 }
                 else
                 {
-                    moveTimer.Enabled = false;
-                    moveTimer.Tick -= moveTimer_Tick;
-                    HandBox.Hide();
-                    HandBox.Close();
-                    HandBox.Dispose();
-                    HandBox = null;
-                    this.isConnected = false;
-              }
+                    _moveTimer.Enabled = false;
+                    _moveTimer.Tick -= MoveTimerTick;
+                }
+                _isConnected = value;
             }
         }
 
@@ -188,10 +195,7 @@ namespace ASCOM.Simulator
         /// <value>The driver version.</value>
         public string DriverVersion
         {
-            get
-            {
-                return driverVersion;
-            }
+            get { return driverVersion; }
         }
 
         /// <summary>
@@ -209,7 +213,7 @@ namespace ASCOM.Simulator
         /// <value><c>true</c> if moving; otherwise, <c>false</c>.</value>
         public bool IsMoving
         {
-            get { return (this.position != this.target);} 
+            get { return (_position != Target); }
         }
 
         /// <summary>
@@ -220,9 +224,9 @@ namespace ASCOM.Simulator
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         public bool Link
-        { 
-            get { return this.Connected; }
-            set { this.Connected = value; }
+        {
+            get { return Connected; }
+            set { Connected = value; }
         }
 
         /// <summary>
@@ -258,16 +262,13 @@ namespace ASCOM.Simulator
         {
             get
             {
-                CheckConnected("get Position");
-                if (!this.Absolute)
-                    throw new PropertyNotImplementedException("Position", false);
-                return this.position;
+                return _position;
             }
-            internal set
+            set
             {
-                this.position = value;
-                this.target = value;
-            } 
+                _position = value;
+                Target = value;
+            }
         }
 
         /// <summary>
@@ -282,7 +283,11 @@ namespace ASCOM.Simulator
         public ArrayList SupportedActions
         {
             // no supported actions, return empty array
-            get { ArrayList sa = new ArrayList(); return sa; }
+            get
+            {
+                var sa = new ArrayList();
+                return sa;
+            }
             //get { throw new MethodNotImplementedException("SupportedActions"); }
         }
 
@@ -313,17 +318,6 @@ namespace ASCOM.Simulator
         public double Temperature { get; internal set; }
 
         /// <summary>
-        /// Dispose the late-bound interface, if needed. Will release it 
-        /// via COM if it is a COM object, else if native .NET will just 
-        /// dereference it for GC
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        private static void Dispose()
-        {
-            throw new System.NotImplementedException();
-        }
-        
-        /// <summary>
         /// Immediately stop any focuser motion due to a previous Move() 
         /// method call. Some focusers may not support this function, in 
         /// which case an exception will be raised. Recommendation: Host 
@@ -336,7 +330,7 @@ namespace ASCOM.Simulator
                 throw new MethodNotImplementedException("Halt");
 
             CheckConnected("Halt");
-            target = position;
+            Target = _position;
         }
 
         /// <summary>
@@ -346,14 +340,14 @@ namespace ASCOM.Simulator
         public void Move(int val)
         {
             CheckConnected("Move");
-            if (this.TempComp)
+            if (TempComp)
                 throw new InvalidOperationException("Move not allowed when temperature compensation is active");
-            if (this.Absolute)
-                this.target = this.Truncate(0, val, MaxStep);
+            if (Absolute)
+                Target = Truncate(0, val, MaxStep);
             else
             {
-                this.target = 0;
-                this.position = this.Truncate(-MaxStep, val, MaxStep);
+                Target = 0;
+                _position = Truncate(-MaxStep, val, MaxStep);
             }
         }
 
@@ -364,7 +358,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public void SetupDialog()
         {
-            var f = new SettingsForm();
+            var f = new SetupDialogForm();
             f.ShowDialog();
         }
 
@@ -411,78 +405,70 @@ namespace ASCOM.Simulator
             throw new MethodNotImplementedException("CommandString");
         }
 
-        #endregion
-
-        #region explicit Members
-
         void IFocuserV2.Dispose()
         {
             Dispose();
         }
 
-        void IDisposable.Dispose()
-        {
-            Dispose();
-        }
-
         #endregion
 
-        #region Focuser Private Members
+        #region Private Members
+
+        /// <summary>
+        /// Dispose the late-bound interface, if needed. Will release it 
+        /// via COM if it is a COM object, else if native .NET will just 
+        /// dereference it for GC
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private static void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
 
         private void StartSimulation()
         {
             // start a timer that monitors and moves the focuser
-            if (moveTimer == null) moveTimer = new Timer();
-            moveTimer.Tick += new Timer.TickEventHandler(moveTimer_Tick);
-            moveTimer.Interval = 100;
-            moveTimer.Enabled = true;
-            lastTemp = Temperature;
+            if (_moveTimer == null)
+                _moveTimer = new Timer();
+            _moveTimer.Tick += MoveTimerTick;
+            _moveTimer.Interval = 100;
+            _moveTimer.Enabled = true;
+            _lastTemp = Temperature;
         }
-
-        double lastTemp;
 
         /// <summary>
         /// Ticks 10 times a second, updating the focuser position and IsMoving properties
         /// </summary>
-        private void moveTimer_Tick()
+        private void MoveTimerTick()
         {
-            if (this.position != this.target)
+            if (_position != Target)
             {
-                if (Math.Abs(this.position - this.target) < this.roc)
+                if (Math.Abs(_position - Target) < roc)
                 {
-                    this.position = this.target;
+                    _position = Target;
                 }
                 else
                 {
-                    this.position += (this.position > this.target) ? -this.roc : this.roc;
+                    _position += (_position > Target) ? -roc : roc;
                 }
             }
 
-            MoveTimerTickCount += 1;
-            if ((MoveTimerTickCount % 100) == 0) // Only do this every 100 ticks, i.e. 10 seconds as temperature only changes slowly
-            {
-            
             // apply a random change to the temperature
-            Random r = new Random();
-            double tempOffset = (r.NextDouble() - 0.5) / 10.0;
-            this.Temperature = Math.Round(this.Temperature + tempOffset, 2);
+            var r = new Random();
+            var tempOffset = (r.NextDouble() - 0.5) / 10.0;
+            Temperature = Math.Round(Temperature + tempOffset, 2);
 
             // move the focuser to track the temperature if required
-            if (this.TempComp)
-            {
-                int dt = (int)((Temperature - lastTemp) * TempSteps);
-                if (dt != 0)
-                {
-                    this.target += dt;
-                    lastTemp = Temperature;
-                }
-            }
-            }
+            if (!TempComp) return;
+            var dt = (int)((Temperature - _lastTemp) * TempSteps);
+            if (dt == 0) return;
+            Target += dt;
+            _lastTemp = Temperature;
         }
 
         private void CheckConnected(string property)
         {
-            if (!this.isConnected)
+            if (!_isConnected)
                 throw new NotConnectedException(property);
         }
 
@@ -493,7 +479,7 @@ namespace ASCOM.Simulator
         /// <param name="val"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        private int Truncate(int min, int val, int max)
+        private static int Truncate(int min, int val, int max)
         {
             return Math.Max(Math.Min(max, val), min);
         }
@@ -509,7 +495,7 @@ namespace ASCOM.Simulator
                 //check profile if the driver id is registered
                 return Profile.IsRegistered(sCsDriverId);
             }
-            catch (System.IO.DirectoryNotFoundException)
+            catch (DirectoryNotFoundException)
             {
                 return false;
             }
@@ -528,7 +514,8 @@ namespace ASCOM.Simulator
             StepSize = Convert.ToDouble(Profile.GetValue(sCsDriverId, "StepSize", string.Empty, "20"));
             Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature", string.Empty, "5"));
             TempComp = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempComp", string.Empty, "false"));
-            TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable", string.Empty, "true"));
+            TempCompAvailable =
+                Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable", string.Empty, "true"));
         }
 
         /// <summary>
@@ -561,17 +548,50 @@ namespace ASCOM.Simulator
             return;
         }
 
+        //used to extend the functionallity beyound the ascom interfaces
+
         /// <summary>
-        /// Delete all settings io the profile for this driver ID
+        /// Save profile values
         /// </summary>
-        private static void DeleteProfileSettings()
+        public void SaveProfileSettings()
         {
-            Profile.DeleteSubKey(sCsDriverId, "Focuser");
+            if (Temperature > TempMax)
+            {
+                Temperature = TempMax;
+            }
+            if (Temperature < TempMin)
+            {
+                Temperature = TempMin;
+            }
+
+            if (_position > MaxStep)
+            {
+                _position = MaxStep;
+            }
+
+            //ascom items
+            Profile.WriteValue(sCsDriverId, "MaxStep", MaxStep.ToString());
+            Profile.WriteValue(sCsDriverId, "StepSize", StepSize.ToString());
+            Profile.WriteValue(sCsDriverId, "Absolute", Absolute.ToString());
+            Profile.WriteValue(sCsDriverId, "MaxIncrement", MaxIncrement.ToString());
+            Profile.WriteValue(sCsDriverId, "Position", _position.ToString());
+            Profile.WriteValue(sCsDriverId, "Temperature", Temperature.ToString());
+            Profile.WriteValue(sCsDriverId, "TempComp", TempComp.ToString());
+            Profile.WriteValue(sCsDriverId, "TempCompAvailable", TempCompAvailable.ToString());
+        }
+
+        /// <summary>
+        /// Saves specific state setting to the profile a switchdevice
+        /// </summary>
+        public static void SaveProfileSetting(string keyName, string value)
+        {
+            Profile.WriteValue(sCsDriverId, keyName, value);
         }
 
         #endregion
 
         #region ASCOM Registration
+
         //
         // Register or unregister driver for ASCOM. This is harmless if already
         // registered or unregistered. 
@@ -643,98 +663,6 @@ namespace ASCOM.Simulator
         {
             Trace.WriteLine("Unregistering -> {0} with ASCOM Profile", sCsDriverId);
             RegUnregASCOM(false);
-        }
-        #endregion
-
-        #region Public Focuser Extended Members
-        //used to extend the functionallity beyound the ascom interfaces
-
-        public bool CanHalt { get; set; }
-        public bool TempProbe { get; set; }
-        public bool Synchronus { get; set; }
-        public bool CanStepSize { get; set; }
-        public int TempMax { get; set; }
-        public int TempMin { get; set; }
-        public int TempPeriod { get; set; }
-        public int TempSteps { get; set; }
-
-        /// <summary>
-        /// Save profile values
-        /// </summary>
-        public void SaveProfileSettings()
-        {
-
-            if (Temperature > TempMax)
-            {Temperature = TempMax;}
-            if (Temperature < TempMin)
-            { Temperature = TempMin; }
-
-            if (position > MaxStep)
-            { position = MaxStep;}
-
-            //ascom items
-            Profile.WriteValue(sCsDriverId,"MaxStep", MaxStep.ToString()) ;
-            Profile.WriteValue(sCsDriverId, "StepSize", StepSize.ToString());
-            Profile.WriteValue(sCsDriverId, "Absolute", Absolute.ToString());
-            Profile.WriteValue(sCsDriverId, "MaxIncrement", MaxIncrement.ToString());
-            Profile.WriteValue(sCsDriverId, "Position", position.ToString());
-            Profile.WriteValue(sCsDriverId, "Temperature", Temperature.ToString());
-            Profile.WriteValue(sCsDriverId, "TempComp", TempComp.ToString());
-            Profile.WriteValue(sCsDriverId, "TempCompAvailable", TempCompAvailable.ToString());
-        }
-
-        /// <summary>
-        /// Save profile values
-        /// </summary>
-        public void SaveStaticProfileSettings()
-        {
-
-            if (TempMin > TempMax)
-            { TempMin = TempMax; }
-            if (TempMax < TempMin)
-            { TempMax = TempMin; }
-
-            //extended items
-            Profile.WriteValue(sCsDriverId, "CanHalt", CanHalt.ToString());
-            Profile.WriteValue(sCsDriverId, "TempProbe", TempProbe.ToString());
-            Profile.WriteValue(sCsDriverId, "Synchronus", Synchronus.ToString());
-            Profile.WriteValue(sCsDriverId, "CanStepSize", CanStepSize.ToString());
-            Profile.WriteValue(sCsDriverId, "TempMax", TempMax.ToString());
-            Profile.WriteValue(sCsDriverId, "TempMin", TempMin.ToString());
-            Profile.WriteValue(sCsDriverId, "TempPeriod", TempPeriod.ToString());
-            Profile.WriteValue(sCsDriverId, "TempSteps", TempSteps.ToString());
-        }
-
-        /// <summary>
-        /// Saves specific state setting to the profile a switchdevice
-        /// </summary>
-        public void SaveProfileSetting(string keyName, string value)
-        {
-            Profile.WriteValue(sCsDriverId, keyName, value);
-        }
-
-        /// <summary>
-        /// Default values for the profile
-        /// </summary>
-        public void SetDefaultProfileSettings()
-        {
-            Profile.WriteValue(sCsDriverId, "Absolute", "True");
-            Profile.WriteValue(sCsDriverId, "MaxIncrement", "50000");
-            Profile.WriteValue(sCsDriverId, "MaxStep", "50000");
-            Profile.WriteValue(sCsDriverId, "Position", "25000");
-            Profile.WriteValue(sCsDriverId, "StepSize", "20");
-            Profile.WriteValue(sCsDriverId, "Temperature", "4.96");
-            Profile.WriteValue(sCsDriverId, "TempComp", "False");
-            Profile.WriteValue(sCsDriverId, "TempCompAvailable", "True");
-            Profile.WriteValue(sCsDriverId, "CanHalt", "True");
-            Profile.WriteValue(sCsDriverId, "TempProbe", "True");
-            Profile.WriteValue(sCsDriverId, "Synchronus", "True");
-            Profile.WriteValue(sCsDriverId, "CanStepSize", "True");
-            Profile.WriteValue(sCsDriverId, "TempMax", "5");
-            Profile.WriteValue(sCsDriverId, "TempMin", "-5");
-            Profile.WriteValue(sCsDriverId, "TempPeriod", "3");
-            Profile.WriteValue(sCsDriverId, "TempSteps", "10");
-
         }
 
         #endregion
