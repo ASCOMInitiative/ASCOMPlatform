@@ -40,16 +40,6 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// This is the method to run when you want the form reset with the defaults
-        /// </summary>
-        private void Button1Click(object sender, EventArgs e)
-        {
-            //_focuser.SetDefaultProfileSettings();
-            //_focuser.SaveStaticProfileSettings();
-            Dispose();
-        }
-
-        /// <summary>
         /// This is the method to run when you want save the contents of the form to the profile
         /// </summary>
         private void Button2Click(object sender, EventArgs e)
@@ -77,6 +67,7 @@ namespace ASCOM.Simulator
             _focuser.SaveProfileSettings();
             Hide();
             Dispose();
+            _focuser.SetupDialog();
         }
 
         /// <summary>
