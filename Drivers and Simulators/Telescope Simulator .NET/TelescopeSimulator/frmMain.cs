@@ -15,7 +15,7 @@ namespace ASCOM.Simulator
         private Utilities.Util m_Util = new ASCOM.Utilities.Util();
         public FrmMain()
         {
-            InitializeComponent();
+            InitializeComponent(); 
             this.BringToFront();
             //this.BackColor = Color.Brown;
 
@@ -67,7 +67,7 @@ namespace ASCOM.Simulator
                 setupForm.Latitude = TelescopeHardware.Latitude;
                 setupForm.Longitude = TelescopeHardware.Longitude;
                 setupForm.MaximumSlewRate = TelescopeHardware.MaximumSlewRate;
-
+                this.BringToFront();
                 DialogResult ans = setupForm.ShowDialog(this);
 
                 if (ans == DialogResult.OK)

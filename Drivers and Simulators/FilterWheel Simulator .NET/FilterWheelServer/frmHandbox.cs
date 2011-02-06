@@ -24,6 +24,7 @@ namespace ASCOM.Simulator
         public frmHandbox()
         {
             InitializeComponent();
+            this.BringToFront();
             
             ToolTip aTooltip = new ToolTip();
             aTooltip.SetToolTip(picASCOM, "Visit the ASCOM website");

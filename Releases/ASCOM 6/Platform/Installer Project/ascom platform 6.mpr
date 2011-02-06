@@ -62,6 +62,17 @@ swoosh.avi
 UninstallAscom.exe
 UninstallAscom.pdb
 $
+B
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -296,6 +307,141 @@ B
 
 
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -796,30 +942,30 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Alpha 10
+ASCOM Platform 6 Alpha 11
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0.0.0
 English
-ASCOM Platform 6 Alpha 10
+ASCOM Platform 6 Alpha 11
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{8B4A6325-C82C-42D0-B0D4-6F5035DECC85}
+{D60E6927-CF23-4792-B11F-5E118B7A2F06}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Alpha10
+ASCOMPlatform6Alpha11
 TRUE
 FALSE
 
 
 http://timestamp.verisign.com/scripts/timstamp.dll
 http://ascom-standards.org/
-UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,LANGUAGE=English,"TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00,LANGUAGE=English,CACHESOURCES=TRUE,LANGUAGE=English
+UPDATE_SERVER=http://www.mywebsite.com/updates.ini,UAC=requireAdministrator,BUILDMODE=SFX,LANGUAGE=English,"TITLE=Ascom Platform 6",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~2,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\platform\INSTAL~1,IAVER=10.00,LANGUAGE=English,CACHESOURCES=TRUE,LANGUAGE=English,"LANGUAGE=English"
 $
 $
 
@@ -842,7 +988,7 @@ setupmsi31.mia
 $
 FALSE
 
-TRUE
-TRUE
+FALSE
+FALSE
 TRUE
 FALSE

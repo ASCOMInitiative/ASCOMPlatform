@@ -31,6 +31,8 @@ namespace ASCOM.Simulator
 			setupForm.Reverse = RotatorHardware.Reverse;
 			setupForm.RotationRate = RotatorHardware.RotationRate;
 			setupForm.UpdateInterval = m_iUpdateInterval;
+            this.BringToFront();
+            this.TopMost = true;
 
 			DialogResult ans = setupForm.ShowDialog(this);
 

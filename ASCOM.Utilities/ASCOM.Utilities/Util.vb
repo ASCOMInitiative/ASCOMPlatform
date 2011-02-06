@@ -33,6 +33,7 @@ Public Class Util
 
     Private m_StopWatch As Stopwatch = New Stopwatch 'Create a high resolution timing device
     Private m_SerTraceFile As String = SERIAL_DEFAULT_FILENAME 'Set the default trace file name
+    Private TL As TraceLogger
 
     Private myProfile As RegistryAccess 'Hold the access object for the ASCOM profile store
 
@@ -43,6 +44,9 @@ Public Class Util
         MyBase.New()
         myProfile = New RegistryAccess
         WaitForMilliseconds(1) 'Fire off the first instance which always takes longer than the others!
+        TL = New TraceLogger("", "Util")
+        TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT) 'Get enabled / disabled state from the user registry
+        TL.LogMessage("New", "Trace logger created OK")
     End Sub
 
     ' IDisposable
@@ -799,6 +803,8 @@ Public Class Util
     Public ReadOnly Property PlatformVersion() As String Implements IUtil.PlatformVersion
         Get
             PlatformVersion = myProfile.GetProfile("", "PlatformVersion")
+            PlatformVersion = AscomSharedCode.ConditionPlatformVersion(PlatformVersion, myProfile, TL) ' Check for Forced Platform versions
+            TL.LogMessage("PlatformVersion Get", PlatformVersion)
         End Get
     End Property
 

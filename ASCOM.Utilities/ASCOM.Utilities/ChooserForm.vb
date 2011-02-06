@@ -105,6 +105,7 @@ Friend Class ChooserForm
 
             'Set Profile trace checked state on menu item 
             MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+            MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
 
             MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
@@ -150,6 +151,7 @@ Friend Class ChooserForm
         Dim cb As System.Windows.Forms.ComboBox
         Dim bConnected As Boolean
         Dim sProgID As String = ""
+        Dim ProgIdType As Type
 
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         cb = Me.cbDriverSelector ' Convenient shortcut
@@ -159,7 +161,10 @@ Friend Class ChooserForm
             If LCase(de.Value.ToString) = LCase(cb.SelectedItem.ToString) Then sProgID = de.Key.ToString
         Next
         Try
-            oDrv = CreateObject(sProgID)
+            'oDrv = CreateObject(sProgID) ' Rob suggests that Activator.CreateInstance gives better error diagnostics
+            ProgIdType = Type.GetTypeFromProgID(sProgID)
+            oDrv = Activator.CreateInstance(ProgIdType)
+
             ' Here we try to see if a device is already connected. If so, alert and just turn on the OK button.
             bConnected = False
             Try
@@ -170,14 +175,12 @@ Friend Class ChooserForm
             If bConnected Then
                 MsgBox("The device is already connected. Just click OK.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Information + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
             Else
-                'Me.BringToFront()
                 Try
                     oDrv.SetupDialog()
                 Catch ex As Exception
-                    MsgBox("Driver setup method failed: """ & sProgID & """ " & Err.Description, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+                    MsgBox("Driver setup method failed: """ & sProgID & """ " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
                     LogEvent("ChooserForm", "Driver setup method failed for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, ex.ToString)
                 End Try
-                'Me.BringToFront()
             End If
             ProfileStore.WriteProfile("Chooser", sProgID & " Init", "True") ' Remember it has been initialized
             Me.cmdOK.Enabled = True
@@ -357,12 +360,16 @@ Friend Class ChooserForm
         SetName(TRACE_PROFILE, MenuProfileTraceEnabled.Checked.ToString)
     End Sub
 
+    Private Sub MenuUtilTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUtilTraceEnabled.Click
+        MenuUtilTraceEnabled.Checked = Not MenuUtilTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_UTIL, MenuUtilTraceEnabled.Checked.ToString)
+    End Sub
+
     Private Sub MenuTransformTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTransformTraceEnabled.Click
         MenuTransformTraceEnabled.Checked = Not MenuTransformTraceEnabled.Checked 'Invert the selection
         SetName(TRACE_TRANSFORM, MenuTransformTraceEnabled.Checked.ToString)
     End Sub
 
-   
     Private Sub MenuIncludeSerialTraceDebugInformation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuIncludeSerialTraceDebugInformation.Click
         MenuIncludeSerialTraceDebugInformation.Checked = Not MenuIncludeSerialTraceDebugInformation.Checked 'Invert selection
         SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)

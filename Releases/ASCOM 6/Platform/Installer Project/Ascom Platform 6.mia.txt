@@ -1,12 +1,23 @@
+Comment: Set Variable NATIVE_ENGINE to TRUE
+Comment: Set Variable DELAYUNTIL_APPLYCHANGES to FALSE
+Comment: Set Variable LOGGED to C:\ASCOMInstallLog.txt
+Comment: Set Variable NATIVE_LOGGING to TRUE
+Set Variable WIN64MODE to 
+Get System Setting Windows in 64 bit Mode into WIN64MODE
+Comment: MessageBalloon: Win 64Mode, Win64Mode is $WIN64MODE$
 Comment: Prompts the user if they want to create an install log
-Get System Setting Processor Architecture into PROCESSOR
-Comment: MessageBalloon: Processor, Processor is $PROCESSOR$
-Comment: Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-Set Variable CreateLogFile to No
+Set Variable CreateLogFile to NO
 Comment: MessageBox: Create Install Log File, Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
 if Variable CreateLogFile Equals YES
   Run Program $EXEFILE$ /l="C:\ASCOMInstall.txt"
   GoTo Label: Finish
+end
+ 
+Set Variable COMMONFILES64 to 
+if Variable WIN64MODE Equals TRUE
+  Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  Get Common Folder Location System->Program Files Directory into COMMONFILES64
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
 end
  
 [DEFINE REGION: Application Updates]
@@ -240,8 +251,9 @@ if Variable ALLUSERS Equals TRUE
 else
   Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$\$STARTMENU$
 end
+Comment: Remove previous version (MSI install)
 if Variable NEEDSUPGRADE Equals TRUE
-  MessageBalloon: ASCOM Platform Maintenance, Uninstalling previous Platform 6 version...
+  MessageBalloon: ASCOM Platform Maintenance, MSI engine is uninstalling previous Platform 6 version...
   Set Variable REMOVEOLD to 
   Set Variable ERROROLD to 
   Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
@@ -260,6 +272,54 @@ if Variable NEEDSUPGRADE Equals TRUE
   Set Variable MAINTENANCE to FALSE
   MessageBalloon: ASCOM Platform Maintenance, Completed old version uninstallation.
 end
+Comment: Remove previous version (Native install)
+if Variable RECOMMENDEDUPGRADE Equals TRUE
+  MessageBalloon: ASCOM Platform Maintenance, Native engine is uninstalling previous Platform 6 version...
+  Comment: Bind to external setup log
+  Set Variable NATIVE_LOGGING to $NATIVE_OLDLOG$
+  Set Variable NATIVE_ENGINE_MODE to $NATIVE_ENGINE$
+  Set Variable NATIVE_ENGINE to TRUE
+  Apply Uninstall (get result into variable NATIVE_UNINSTALL)
+  Set Variable NATIVE_ENGINE to $NATIVE_ENGINE_MODE$
+  if Variable NATIVE_UNINSTALL Equals REBOOT
+    MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+    if Variable REBOOTNOW Equals OK
+      Reboot Computer and Resume Setup
+    else
+      Terminate Installation
+    end
+  else
+    if Variable NATIVE_UNINSTALL not Equals COMPLETE
+      MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. It is strongly recommended that you uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$LASTERROR$$NEWLINE$$NEWLINE$Click OK to quit $TITLE$ Setup.$NEWLINE$$NEWLINE$Click Cancel to continue $TITLE$ Setup anyways (not recommended).
+      if Variable NATIVE_ERROR Equals OK
+        Terminate Installation
+      end
+    end
+    MessageBalloon: ASCOM Platform Maintenance, Completed old version uninstallation.
+  end
+  Comment: Bind to internal setup log
+  Set Variable NATIVE_LOGGING to 
+end
+Comment: if Variable RECOMMENDEDUPGRADE Equals TRUE
+Comment: MessageBalloon: ASCOM Platform Maintenance, Native engine is uninstalling previous Platform 6 version...
+Comment: Set Variable REMOVEOLD to 
+Comment: Set Variable ERROROLD to 
+Comment: Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
+Comment: if Variable REMOVEOLD Equals ERROR
+Comment: MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
+Comment: Terminate Installation
+Comment: end
+Comment: if Variable REMOVEOLD Equals REBOOT
+Comment: MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+Comment: if Variable REBOOTNOW Equals OK
+Comment: Reboot Computer and Resume Setup
+Comment: else
+Comment: Terminate Installation
+Comment: end
+Comment: end
+Comment: Set Variable MAINTENANCE to FALSE
+Comment: MessageBalloon: ASCOM Platform Maintenance, Completed old version uninstallation.
+Comment: end
 Display Dialog: progress, use as progress dialog (non-modal)
  
 Comment: Modify Target System
@@ -388,8 +448,18 @@ else
     Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
     Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
     Comment: Copy Utilities and DriverAccess to .Net directory to ensure Inno installers that test for this run OK
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
+    Comment: The ASCOM.Utilities.dll file MUST be the original from Platform 5.5 because at least 1 installer checks the file version of the installed file!
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
     Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
+    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES$\ASCOM\.net
+    Comment: Install additional files to make sure old 64bit mode driver installers continue to work
+    if Variable WIN64MODE Equals TRUE
+      Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+      Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES64$ASCOM\.net
+      Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES64$ASCOM\.net
+      Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES64$ASCOM\.net
+      Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+    end
     [END REGION]
     [DEFINE REGION: Platform 6 files]
     Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
@@ -470,6 +540,12 @@ else
     Comment: Switch simulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch
     Install Files c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch
+    Comment: N Way Switch simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.Simulator.NWaySwitchDriver.dll to $COMMONFILES$\ASCOM\Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.Simulator.NWaySwitchDriver.pdb to $COMMONFILES$\ASCOM\Switch
+    Comment: Rheostat simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.Simulator.RheostatSwitch.dll to $COMMONFILES$\ASCOM\Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.Simulator.RheostatSwitch.pdb to $COMMONFILES$\ASCOM\Switch
     Comment: Telescope simulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
@@ -550,6 +626,61 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LittleFootClassic(1.0.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LXPTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeClassic(5.0.3)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeLX200GPS(5.0.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Optec IFW(1.1.0.1) Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.2)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.3)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LittleFootClassic(1.0.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LXPTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeClassic(5.0.3)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeLX200GPS(5.0.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Optec IFW(1.1.0.1) Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.2)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.3)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.4)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
     [END REGION]
     [DEFINE REGION: Additional clean-up when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
@@ -562,6 +693,7 @@ else
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL
+        Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
         [DEFINE REGION: COM registrations]
         Comment: Register Platform 5 components
         Set Variable PROGRESS to 0
@@ -578,7 +710,7 @@ else
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT)
         Set Variable PROGRESS to 30
         Comment: Register Platform 5 Simulators
-        Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT)
+        Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
         Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT)
         Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT)
         Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT)
@@ -627,6 +759,8 @@ else
         Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.NWaySwitchDriver.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.RheostatSwitch.dll, set the code base in the registry
         Comment: Register these LocalServer drivers using the -register option
         Set Variable PROGRESS to 80
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT)
@@ -634,7 +768,7 @@ else
         Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT)
         Set Variable PROGRESS to 90
         Comment: Extra registration of 64bit components if on 64bit system
-        if Variable PROCESSOR Equals AMD64
+        if Variable WIN64MODE Equals TRUE
           Comment: Initialise variables
           Set Variable RC1 to 1000
           Set Variable RC2 to 1000
@@ -643,6 +777,8 @@ else
           Set Variable RC5 to 1000
           Set Variable RC6 to 1000
           Set Variable RC7 to 1000
+          Set Variable RC8 to 1000
+          Set Variable RC9 to 1000
           Set Variable REGASM64 to $WINDIR$\Microsoft.NET\Framework64\v2.0.50727\regasm.exe
           Comment: Register core components
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
@@ -654,27 +790,37 @@ else
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll" /codebase (WAIT, get result into variable RC6)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll" /codebase (WAIT, get result into variable RC7)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.NWaySwitchDriver.dll" /codebase (WAIT, get result into variable RC8)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.RheostatSwitch.dll" /codebase (WAIT, get result into variable RC9)
           Set Variable PROGRESS to 100
           if Variable RC1 not Equals 0
-            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
           else
             if Variable RC2 not Equals 0
-              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
             else
               if Variable RC3 not Equals 0
-                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
               else
                 if Variable RC4 not Equals 0
-                  MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                  MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
                 else
                   if Variable RC5 not Equals 0
-                    MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                    MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
                   else
                     if Variable RC6 not Equals 0
-                      MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                      MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
                     else
                       if Variable RC7 not Equals 0
-                        MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$
+                        MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                      else
+                        if Variable RC8 not Equals 0
+                          MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                        else
+                          if Variable RC9 not Equals 0
+                            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                          end
+                        end
                       end
                     end
                   end

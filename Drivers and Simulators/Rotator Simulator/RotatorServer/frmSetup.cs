@@ -16,6 +16,7 @@ namespace ASCOM.Simulator
 		public frmSetup()
 		{
 			InitializeComponent();
+            this.BringToFront();
 		}
 
 		public bool CanReverse 

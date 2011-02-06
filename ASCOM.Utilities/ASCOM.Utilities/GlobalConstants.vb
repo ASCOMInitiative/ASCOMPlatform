@@ -13,6 +13,7 @@ Module GlobalConstants
     'Utilities configuration constants
     Friend Const TRACE_XMLACCESS As String = "Trace XMLAccess", TRACE_XMLACCESS_DEFAULT As Boolean = False
     Friend Const TRACE_PROFILE As String = "Trace Profile", TRACE_PROFILE_DEFAULT As Boolean = False
+    Friend Const TRACE_UTIL As String = "Trace Util", TRACE_UTIL_DEFAULT As Boolean = False
     Friend Const SERIAL_TRACE_DEBUG As String = "Serial Trace Debug", SERIAL_TRACE_DEBUG_DEFAULT As Boolean = False
 
     Friend Const PROFILE_MUTEX_NAME As String = "ASCOMProfileMutex" 'Name and timout value for the Profile mutex than ensures only one profile action happens at a time
@@ -29,7 +30,7 @@ Module GlobalConstants
     'RegistryAccess constants
     Friend Const REGISTRY_ROOT_KEY_NAME As String = "SOFTWARE\ASCOM" 'Location of ASCOM profile in HKLM registry hive
     Friend Const REGISTRY_BACKUP_SUBKEY As String = "Platform5Original" 'Location that the original Plartform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
-
+    Friend Const PLATFORM_VERSION_NAME As String = "PlatformVersion"
     'XML constants used by XMLAccess and RegistryAccess classes
     Friend Const COLLECTION_DEFAULT_VALUE_NAME As String = "***** DefaultValueName *****" 'Name identifier label
     Friend Const COLLECTION_DEFAULT_UNSET_VALUE As String = "===== ***** UnsetValue ***** =====" 'Value identifier label
@@ -54,12 +55,14 @@ Module GlobalConstants
     Public Const XML_VALUE_ELEMENTNAME As String = "Value"
     Public Const XML_VALUES_ELEMENTNAME As String = "Values"
 
-    'Location of the lists of 32bit and 64bit only drivers
+    'Location of the lists of 32bit and 64bit only drivers and PlatformVersion exception lists
     Public Const DRIVERS_32BIT As String = "Drivers Not Compatible With 64bit Applications" ' 32bit only registry location
     Public Const DRIVERS_64BIT As String = "Drivers Not Compatible With 32bit Applications" ' 64bit only registry location
+    Friend Const PLATFORM_VERSION_EXCEPTIONS As String = "ForcePlatformVersion"
+    Friend Const PLATFORM_VERSION_SEPARATOR_EXCEPTIONS As String = "ForcePlatformVersionSeparator"
 
     'Installer Variables
-    Public Const PLATFORM_INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}"
+    Public Const PLATFORM_INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}" '{8961E141-B307-4882-ABAD-77A3E76A40C1}
     Public Const DEVELOPER_INSTALLER_PROPDUCT_CODE As String = "{4A195DC6-7DF9-459E-8F93-60B61EB45288}"
 
     Friend Enum EventLogErrors As Integer
@@ -81,5 +84,7 @@ Module GlobalConstants
         FocusSimulatorSetup = 15
         TelescopeSimulatorNew = 16
         TelescopeSimulatorSetup = 17
+        VB6HelperProfileException = 18
+        DiagnosticsLoadException = 19
     End Enum
 End Module

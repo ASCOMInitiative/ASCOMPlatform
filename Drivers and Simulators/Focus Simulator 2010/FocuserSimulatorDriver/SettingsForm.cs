@@ -37,6 +37,7 @@ namespace ASCOM.Simulator
 
             radioButton1.Checked = _focuser.Absolute;
             radioButton2.Checked = !radioButton1.Checked;
+            this.BringToFront();
         }
 
         /// <summary>

@@ -422,6 +422,9 @@ namespace ASCOM.Simulator
             else
                 LogTraffic("  (setup Cancel)");
 
+            SetupDialog.Close();
+            SetupDialog.Dispose();
+            
             // Show the main handbox form
             FilterWheelSim.m_MainForm.Show();
 
