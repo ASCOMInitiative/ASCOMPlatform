@@ -150,6 +150,7 @@ Friend Class ChooserForm
         Dim cb As System.Windows.Forms.ComboBox
         Dim bConnected As Boolean
         Dim sProgID As String = ""
+        Dim DriverType As Type
 
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         cb = Me.cbDriverSelector ' Convenient shortcut
@@ -159,7 +160,9 @@ Friend Class ChooserForm
             If LCase(de.Value.ToString) = LCase(cb.SelectedItem.ToString) Then sProgID = de.Key.ToString
         Next
         Try
-            oDrv = CreateObject(sProgID)
+            'oDrv = CreateObject(sProgID)
+            DriverType = Type.GetTypeFromProgID(sProgID)
+            oDrv = Activator.CreateInstance(DriverType)
             ' Here we try to see if a device is already connected. If so, alert and just turn on the OK button.
             bConnected = False
             Try

@@ -3,6 +3,8 @@
 Imports Microsoft.Win32
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports System.IO
+Imports System.Globalization
 
 #Region "Registry Utility Code"
 Module RegistryCommonCode
@@ -177,6 +179,16 @@ Module VersionCode
 
         'Get Operating system information
         Dim OS As System.OperatingSystem = System.Environment.OSVersion
+
+        Try
+            TL.LogMessage("Versions", "Main Process: " & Process.GetCurrentProcess().MainModule.FileName) 'Get the name of the executable without path or file extension
+            Dim FV As FileVersionInfo
+            FV = Process.GetCurrentProcess().MainModule.FileVersionInfo 'Get the name of the executable without path or file extension
+            TL.LogMessageCrLf("Versions", "File Version: " & FV.ToString())
+            TL.BlankLine()
+        Catch ex As Exception
+            TL.LogMessage("Versions", "Exception EX0: " & ex.ToString)
+        End Try
 
         Try 'Make sure this code never throws an exception back to the caller
             TL.LogMessage("Versions", "OS Version: " & OS.Platform & ", Service Pack: " & OS.ServicePack & ", Full: " & OS.VersionString)
@@ -403,5 +415,77 @@ Module VersionCode
               ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
     End Function
 
+End Module
+#End Region
+
+#Region "Force Platform version code"
+Module AscomSharedCode
+    Friend Function ConditionPlatformVersion(ByVal PlatformVersion As String, ByVal Profile As RegistryAccess, ByVal TL As TraceLogger) As String
+        Dim ModuleFileName, ForcedFileNameKey, ForcedSeparatorKey As String, ForcedFileNames, ForcedSeparators As Generic.SortedList(Of String, String)
+
+        ConditionPlatformVersion = PlatformVersion ' Set default action to return the supplied vaue
+        Try
+            ModuleFileName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) 'Get the name of the executable without path or file extension
+            If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ModuleFileName: """ & ModuleFileName & """ """ & _
+                                                    Process.GetCurrentProcess().MainModule.FileName & """")
+
+            'Force any particular platform version numnber this application requires
+            ForcedFileNames = Profile.EnumProfile(PLATFORM_VERSION_EXCEPTIONS) 'Get the list of filenames requiring specific versions
+
+            For Each ForcedFileName As Generic.KeyValuePair(Of String, String) In ForcedFileNames ' Check each forced file in turn 
+                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedFileName.Key & """ """ & _
+                                                        ForcedFileName.Value & """ """ & _
+                                                        UCase(Path.GetFileNameWithoutExtension(ForcedFileName.Key)) & """ """ & _
+                                                        UCase(Path.GetFileName(ForcedFileName.Key)) & """ """ & _
+                                                        UCase(ForcedFileName.Key) & """ """ & _
+                                                        ForcedFileName.Key & """ """ & _
+                                                        UCase(ModuleFileName) & """")
+                If ForcedFileName.Key.Contains(".") Then
+                    ForcedFileNameKey = Path.GetFileNameWithoutExtension(ForcedFileName.Key)
+                Else
+                    ForcedFileNameKey = ForcedFileName.Key
+                End If
+
+                If UCase(ForcedFileNameKey) = UCase(ModuleFileName) Then ' If the current file matches a forced file name then return the required Platform version
+                    ConditionPlatformVersion = ForcedFileName.Value
+                    If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Matched file: """ & ModuleFileName & """ """ & ForcedFileNameKey & """")
+                End If
+            Next
+
+            ForcedSeparators = Profile.EnumProfile(PLATFORM_VERSION_SEPARATOR_EXCEPTIONS) 'Get the list of filenames requiring specific versions
+
+            For Each ForcedSeparator As Generic.KeyValuePair(Of String, String) In ForcedSeparators ' Check each forced file in turn 
+                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedSeparator.Key & """ """ & _
+                                                        ForcedSeparator.Value & """ """ & _
+                                                        UCase(Path.GetFileNameWithoutExtension(ForcedSeparator.Key)) & """ """ & _
+                                                        UCase(Path.GetFileName(ForcedSeparator.Key)) & """ """ & _
+                                                        UCase(ForcedSeparator.Key) & """ """ & _
+                                                        ForcedSeparator.Key & """ """ & _
+                                                        UCase(ModuleFileName) & """")
+                If ForcedSeparator.Key.Contains(".") Then
+                    ForcedSeparatorKey = Path.GetFileNameWithoutExtension(ForcedSeparator.Key)
+                Else
+                    ForcedSeparatorKey = ForcedSeparator.Key
+                End If
+
+                If UCase(Path.GetFileNameWithoutExtension(ForcedSeparator.Key)) = UCase(ModuleFileName) Then ' If the current file matches a forced file name then return the required Platform version
+                    If String.IsNullOrEmpty(ForcedSeparator.Value) Then ' Replace with the current locale decimal separator
+                        ConditionPlatformVersion = ConditionPlatformVersion.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator())
+                        If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  String IsNullOrEmpty: """ & ConditionPlatformVersion & """")
+                    Else 'Replace with the fixed value provided
+                        ConditionPlatformVersion = ConditionPlatformVersion.Replace(".", ForcedSeparator.Value)
+                        If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  String Is: """ & ForcedSeparator.Value & """ """ & ConditionPlatformVersion & """")
+                    End If
+
+                    If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Matched file: """ & ModuleFileName & """ """ & ForcedSeparator.Key & """")
+                End If
+            Next
+
+        Catch ex As Exception
+            If Not TL Is Nothing Then TL.LogMessageCrLf("ConditionPlatformVersion", "Exception: " & ex.ToString)
+            LogEvent("ConditionPlatformVersion", "Exception: ", EventLogEntryType.Error, EventLogErrors.VB6HelperProfileException, ex.ToString)
+        End Try
+        If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Returning: """ & ConditionPlatformVersion & """")
+    End Function
 End Module
 #End Region

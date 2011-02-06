@@ -21,6 +21,10 @@ Imports ASCOM.DeviceInterface
 
 Public Class DiagnosticsForm
 
+    Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
+    Private Const DISPLAY_NAME As String = "DisplayName"
+    Private Const DISPLAY_VERSION As String = "DisplayVersion"
+
     Private Const COMPONENT_CATEGORIES = "Component Categories"
     Private Const ASCOM_ROOT_KEY As String = " (ASCOM Root Key)"
     Private Const TestTelescopeDescription As String = "This is a test telescope"
@@ -181,9 +185,11 @@ Public Class DiagnosticsForm
 
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Initialise form
-        Dim MyVersion As Version
+        Dim MyVersion As Version, TraceFileName As String
+        Dim ProfileStore As RegistryAccess
+
         MyVersion = Assembly.GetExecutingAssembly.GetName.Version
-        lblTitle.Text = InstallerName() & " - Diagnostics " & " " & MyVersion.ToString
+        lblTitle.Text = InstallerName.Item(DISPLAY_NAME) & " - " & InstallerName.Item(DISPLAY_VERSION)
         lblResult.Text = ""
         lblAction.Text = ""
 
@@ -192,6 +198,45 @@ Public Class DiagnosticsForm
 
         btnLastLog.Enabled = False 'Disable last log button
         sw = New Stopwatch
+
+        Try
+            ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
+            TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
+            Select Case TraceFileName
+                Case "" 'Trace is disabled
+                    MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
+                    MenuUseTraceAutoFilenames.Checked = False
+                    MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
+                    MenuUseTraceManualFilename.Checked = False
+                    MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
+                    MenuSerialTraceEnabled.Enabled = True
+                Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
+                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
+                    MenuUseTraceAutoFilenames.Checked = True
+                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
+                    MenuUseTraceManualFilename.Checked = False
+                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                    MenuSerialTraceEnabled.Enabled = True
+                Case Else 'Tracing using some other fixed filename
+                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
+                    MenuUseTraceAutoFilenames.Checked = False
+                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
+                    MenuUseTraceManualFilename.Checked = True
+                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                    MenuSerialTraceEnabled.Enabled = True
+            End Select
+
+            'Set Profile trace checked state on menu item 
+            MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+            MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+            MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+
+            MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+        Catch ex As Exception
+            EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
+        End Try
+
+
         Me.BringToFront()
     End Sub
 
@@ -280,6 +325,8 @@ Public Class DiagnosticsForm
 
                 ScanASCOMDrivers() : Action("") 'Report installed driver versions
 
+                ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
+
                 ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
 
                 ScanProfile() : Action("") 'Report profile information
@@ -367,6 +414,29 @@ Public Class DiagnosticsForm
         End Try
         btnExit.Enabled = True ' Enable buttons during run
         btnCOM.Enabled = True
+    End Sub
+
+    Private Sub ScanDriverExceptions()
+        ListDrivers(PLATFORM_VERSION_EXCEPTIONS, "ForcedPlatformVersion")
+        ListDrivers(PLATFORM_VERSION_SEPARATOR_EXCEPTIONS, "ForcedPlatformSeparator")
+        ListDrivers(DRIVERS_32BIT, "Non64BitDrivers")
+        ListDrivers(DRIVERS_64BIT, "Non32BitDrivers")
+        TL.BlankLine()
+    End Sub
+
+    Private Sub ListDrivers(ByVal DriverCategory As String, ByVal Description As String)
+        Dim Prof As RegistryAccess, Contents As Generic.SortedList(Of String, String)
+
+        Try
+            Prof = New RegistryAccess()
+            Contents = Prof.EnumProfile(DriverCategory)
+            For Each ContentItem As Generic.KeyValuePair(Of String, String) In Contents
+                TL.LogMessage(Description, ContentItem.Key & " """ & ContentItem.Value & """")
+            Next
+            TL.BlankLine()
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub SimulatorTests()
@@ -510,7 +580,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub TestSimulator(ByVal Sim As SimulatorDescriptor)
-        Dim RetValString As String, DeviceAxisRates As Object, ct As Integer
+        Dim RetValString As String, DeviceAxisRates As Object, ct As Integer, DeviceType As Type
         Status(Sim.Description)
 
         If (ApplicationBits() = Bitness.Bits64) And (Not Sim.SixtyFourBit) Then ' We are on a 64 bit OS and are testing a 32bit only app - so skip the test!
@@ -518,7 +588,9 @@ Public Class DiagnosticsForm
         Else
             Try
                 TL.LogMessage("TestSimulator", "CreateObject for Device: " & Sim.ProgID & " " & Sim.Description)
-                DeviceObject = CreateObject(Sim.ProgID)
+                'DeviceObject = CreateObject(Sim.ProgID)
+                DeviceType = Type.GetTypeFromProgID(Sim.ProgID)
+                DeviceObject = Activator.CreateInstance(DeviceType)
                 Select Case Sim.DeviceType
                     Case "Focuser"
                         Try
@@ -647,93 +719,6 @@ Public Class DiagnosticsForm
                         DeviceObject.Connected = True : NMatches += 1
                 End Select
                 TL.LogMessage("TestSimulator", "Completed Device: " & Sim.ProgID & " OK")
-                Try : DeviceObject.Dispose() : Catch : End Try
-                Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try
-                DeviceObject = Nothing
-            Catch ex As Exception
-                LogException("TestSimulator", "Exception: " & ex.ToString)
-            End Try
-        End If
-        Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try 'Always try and make sure we are properly tidied up!
-        TL.BlankLine()
-    End Sub
-
-
-    Private Sub TestSimulatorXX(ByVal ProgID As String, ByVal SixtyFourBit As Boolean, ByVal IsPlatform5 As Boolean, ByVal Description As String, ByVal DeviceType As String, ByVal InterfaceVersion As Integer, ByVal DriverVersion As String, ByVal Name As String, ByVal AxisRates(,) As Double)
-        Dim RetValString As String, DeviceAxisRates As Object, ct As Integer
-        Status(Description)
-
-        If (ApplicationBits() = Bitness.Bits64) And (Not SixtyFourBit) Then ' We are on a 64 bit OS and are testing a 32bit only app - so skip the test!
-            TL.LogMessage("TestSimulator", ProgID & " " & Description & " - Skipping test as this driver is not 64bit compatible")
-        Else
-            Try
-                TL.LogMessage("TestSimulator", "CreateObject Device: " & ProgID & " " & Description)
-                DeviceObject = CreateObject(ProgID)
-                Select Case DeviceType
-                    Case "Focuser"
-                        Try
-                            DeviceObject.Connected = True
-                            NMatches += 1
-                        Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
-                            TL.LogMessage("TestSimulator", "Focuser Connected member missing, using Link instead")
-                            DeviceObject.Link = True ' Try Link, if it fails the outer try will catch the exception
-                            NMatches += 1
-                        End Try
-
-                    Case Else ' Everything else should be Connected 
-                        DeviceObject.Connected = True : NMatches += 1
-                End Select
-                Try
-                    RetValString = DeviceObject.Description
-                    NMatches += 1
-                Catch ex1 As MissingMemberException
-                    TL.LogMessage("TestSimulator", "Description member is missing")
-                End Try
-                Try : RetValString = DeviceObject.DriverInfo : NMatches += 1 : Catch : End Try
-                Try : Compare("TestSimulator", DeviceType & " " & "Name", DeviceObject.Name, Name) : Catch : End Try
-                Try : Compare("TestSimulator", DeviceType & " " & "InterfaceVersion", DeviceObject.Interfaceversion, InterfaceVersion) : Catch : End Try
-                Try : Compare("TestSimulator", DeviceType & " " & "DriverVersion", DeviceObject.DriverVersion, DriverVersion) : Catch : End Try
-                Select Case DeviceType
-                    Case "Telescope"
-                        DeviceTest("Telescope", "UnPark")
-                        DeviceTest("Telescope", "TrackingTrue")
-                        DeviceTest("Telescope", "SiderealTime")
-                        DeviceTest("Telescope", "RightAscension")
-                        DeviceTest("Telescope", "TargetRightDeclination")
-                        DeviceTest("Telescope", "TargetRightAscension")
-                        DeviceTest("Telescope", "Slew")
-                        DeviceTest("Telescope", "TrackingRates")
-                        DeviceAxisRates = DeviceTest("Telescope", "AxisRates")
-                        ct = 0
-                        For Each AxRte As Object In DeviceAxisRates
-                            CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, AxisRates(0, ct), 0.000001)
-                            CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, AxisRates(1, ct), 0.000001)
-                            ct += 1
-                        Next
-                    Case "Camera"
-                        DeviceTest("Camera", "StartExposure")
-                    Case "FilterWheel"
-
-                    Case "Focuser"
-                    Case Else
-                        LogException("TestSimulator", "Unknown device type: " & DeviceType)
-                End Select
-
-                Select Case DeviceType
-                    Case "Focuser"
-                        Try
-                            DeviceObject.Connected = False
-                            NMatches += 1
-                        Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
-                            TL.LogMessage("TestSimulator", "Focuser Connected member missing, using Link instead")
-                            DeviceObject.Link = False ' Try Link, if it fails the outer try will catch the exception
-                            NMatches += 1
-                        End Try
-
-                    Case Else ' Everything else should be Connected 
-                        DeviceObject.Connected = True : NMatches += 1
-                End Select
-                TL.LogMessage("TestSimulator", "CreateObject Device: " & ProgID & " OK")
                 Try : DeviceObject.Dispose() : Catch : End Try
                 Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try
                 DeviceObject = Nothing
@@ -2942,23 +2927,30 @@ Public Class DiagnosticsForm
     Sub UtilTests()
         Dim t As Double
         Dim ts As String
+        Dim HelperType As Type
+        Dim i As Integer, Is64Bit As Boolean
+
         Const TestDate As Date = #6/1/2010 4:37:00 PM#
         Const TestJulianDate As Double = 2455551.0
-        Dim i As Integer, Is64Bit As Boolean
+
         Try
             Is64Bit = (IntPtr.Size = 8) 'Create a simple variable to record whether or not we are 64bit
-            Status("Running Utilities funcitonal tests")
+            Status("Running Utilities functional tests")
             TL.LogMessage("UtilTests", "Creating ASCOM.Utilities.Util")
             sw.Reset() : sw.Start()
             AscomUtil = New ASCOM.Utilities.Util
             TL.LogMessage("UtilTests", "ASCOM.Utilities.Util Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
             If Not Is64Bit Then
                 TL.LogMessage("UtilTests", "Creating DriverHelper.Util")
-                DrvHlpUtil = CreateObject("DriverHelper.Util")
+                'DrvHlpUtil = CreateObject("DriverHelper.Util")
+                HelperType = Type.GetTypeFromProgID("DriverHelper.Util")
+                DrvHlpUtil = Activator.CreateInstance(HelperType)
                 TL.LogMessage("UtilTests", "DriverHelper.Util Created OK")
 
                 TL.LogMessage("UtilTests", "Creating DriverHelper2.Util")
-                g_Util2 = CreateObject("DriverHelper2.Util")
+                'g_Util2 = CreateObject("DriverHelper2.Util")
+                HelperType = Type.GetTypeFromProgID("DriverHelper2.Util")
+                g_Util2 = Activator.CreateInstance(HelperType)
                 TL.LogMessage("UtilTests", "DriverHelper2.Util Created OK")
             Else
                 TL.LogMessage("UtilTests", "Running 64bit so avoiding use of 32bit DriverHelper components")
@@ -4046,10 +4038,12 @@ Public Class DiagnosticsForm
 
     Private Sub ChooserToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserToolStripMenuItem1.Click
         Dim Chooser As Object, Chosen As String
-
+        Dim ChooserType As Type
 
         If ApplicationBits() = Bitness.Bits32 Then
-            Chooser = CreateObject("DriverHelper.Chooser")
+            'Chooser = CreateObject("DriverHelper.Chooser")
+            ChooserType = Type.GetTypeFromProgID("DriverHelper.Chooser")
+            Chooser = Activator.CreateInstance(ChooserType)
             Chooser.DeviceType = "Telescope"
             Chosen = Chooser.Choose("ScopeSim.Telescope")
         Else
@@ -4259,11 +4253,11 @@ Public Class DiagnosticsForm
         Try ' Platform 6 installer GUID, should always be present in Platform 6
             RegKey = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
 
-            TL.LogMessage(Name, RegKey.GetValue("DisplayName", "##### Missing"))
-            TL.LogMessage(Name, "Version - " & RegKey.GetValue("DisplayVersion", "##### Missing"))
-            TL.LogMessage(Name, "Install Date - " & RegKey.GetValue("InstallDate", "##### Missing"))
+            TL.LogMessage(Name, RegKey.GetValue(DISPLAY_NAME, "##### Missing"))
+            TL.LogMessage(Name, "Version - " & RegKey.GetValue(DISPLAY_VERSION, "##### Missing"))
+            'TL.LogMessage(Name, "Install Date - " & RegKey.GetValue("InstallDate", "##### Missing"))
             TL.LogMessage(Name, "Install Location - " & RegKey.GetValue("InstallLocation", "##### Missing"))
-            TL.LogMessage(Name, "Install Source - " & RegKey.GetValue("InstallSource", "##### Missing"))
+            'TL.LogMessage(Name, "Install Source - " & RegKey.GetValue("InstallSource", "##### Missing"))
             RegKey.Close()
             NMatches += 1
         Catch ex As ProfilePersistenceException
@@ -4283,23 +4277,28 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Private Function InstallerName() As String
-        Dim RegKey As RegistryKey, DisplayName As String
-
+    Private Function InstallerName() As Generic.SortedList(Of String, String)
+        Dim RegKey As RegistryKey
+        Dim RetVal As New Generic.SortedList(Of String, String)
         Try ' Platform 6 installer GUID, should always be present in Platform 6
             If ApplicationBits() = Bitness.Bits32 Then '32bit OS
                 RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
+                'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ASCOM_PLATFORM_NAME, False)
             Else '64bit OS
                 RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
+                'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & ASCOM_PLATFORM_NAME, False)
             End If
 
-            DisplayName = RegKey.GetValue("DisplayName")
+            'DisplayName = RegKey.GetValue("DisplayName")
+            RetVal.Add(DISPLAY_NAME, RegKey.GetValue(DISPLAY_NAME))
+            RetVal.Add(DISPLAY_VERSION, RegKey.GetValue(DISPLAY_VERSION))
             RegKey.Close()
         Catch ex As Exception
-            DisplayName = ""
+            If Not RetVal.ContainsKey(DISPLAY_NAME) Then RetVal.Add(DISPLAY_NAME, "Unknown Name")
+            If Not RetVal.ContainsKey(DISPLAY_VERSION) Then RetVal.Add(DISPLAY_VERSION, "Unknown Version")
         End Try
 
-        Return DisplayName
+        Return RetVal
     End Function
 
     Sub ScanASCOMDrivers()
@@ -4385,6 +4384,68 @@ Public Class DiagnosticsForm
         Catch ex As Exception
             LogException("RecurseASCOMDrivers 2", "Exception: " & ex.ToString)
         End Try
+    End Sub
+
+    Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
+        Dim ProfileStore As RegistryAccess
+
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        If MenuSerialTraceEnabled.Checked Then
+            MenuSerialTraceEnabled.Checked = False 'Uncheck the enabled flag, make it inaccessible and clear the trace file name
+            ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, "")
+
+            'Enable the set trace options
+            MenuUseTraceManualFilename.Enabled = True
+            MenuUseTraceManualFilename.Checked = False
+            MenuUseTraceAutoFilenames.Enabled = True
+            MenuUseTraceAutoFilenames.Checked = False
+        Else
+            MenuSerialTraceEnabled.Checked = True 'Enable the trace enabled flag
+            ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
+
+            MenuUseTraceAutoFilenames.Enabled = False
+            MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
+            MenuUseTraceManualFilename.Checked = False 'Unset the manual file flag
+            MenuUseTraceManualFilename.Enabled = False
+        End If
+        ProfileStore.Dispose()
+        ProfileStore = Nothing
+    End Sub
+
+    Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceAutoFilenames.Click
+        Dim ProfileStore As RegistryAccess
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+        'Auto filenames currently disabled, so enable them
+        MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
+        MenuUseTraceAutoFilenames.Enabled = False
+        MenuUseTraceManualFilename.Checked = False 'Unset the manual file flag
+        MenuUseTraceManualFilename.Enabled = False
+        MenuSerialTraceEnabled.Enabled = True 'Set the trace enabled flag
+        MenuSerialTraceEnabled.Checked = True 'Enable the trace enabled flag
+        ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
+        ProfileStore.Dispose()
+        ProfileStore = Nothing
+    End Sub
+
+    Private Sub MenuProfileTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuProfileTraceEnabled.Click
+        MenuProfileTraceEnabled.Checked = Not MenuProfileTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_XMLACCESS, MenuProfileTraceEnabled.Checked.ToString)
+        SetName(TRACE_PROFILE, MenuProfileTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuUtilTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUtilTraceEnabled.Click
+        MenuUtilTraceEnabled.Checked = Not MenuUtilTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_UTIL, MenuUtilTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuTransformTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTransformTraceEnabled.Click
+        MenuTransformTraceEnabled.Checked = Not MenuTransformTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_TRANSFORM, MenuTransformTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuIncludeSerialTraceDebugInformation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuIncludeSerialTraceDebugInformation.Click
+        MenuIncludeSerialTraceDebugInformation.Checked = Not MenuIncludeSerialTraceDebugInformation.Checked 'Invert selection
+        SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)
     End Sub
 
 End Class

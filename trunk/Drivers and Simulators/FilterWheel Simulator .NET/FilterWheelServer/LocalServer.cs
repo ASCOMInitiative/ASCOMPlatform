@@ -591,9 +591,11 @@ namespace ASCOM.Simulator
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             m_MainForm = new frmHandbox();
+            m_MainForm.Show();
             // if (m_bComStart) m_MainForm.WindowState = FormWindowState.Minimized;
             // if (m_bComStart) m_MainForm.Visible = false;
-            
+             m_MainForm.Visible = true;
+           
             // Initialize hardware layer
             SimulatedHardware.Initialize();
 

@@ -48,6 +48,7 @@
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.MenuUtilTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -156,7 +157,7 @@
         '
         'MenuTrace
         '
-        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuTransformTraceEnabled})
+        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTransformTraceEnabled})
         Me.MenuTrace.Name = "MenuTrace"
         Me.MenuTrace.Size = New System.Drawing.Size(48, 20)
         Me.MenuTrace.Text = "Trace"
@@ -217,6 +218,12 @@
         Me.ToolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning
         Me.ToolTip1.ToolTipTitle = "Incompatible Driver"
         '
+        'MenuUtilTraceEnabled
+        '
+        Me.MenuUtilTraceEnabled.Name = "MenuUtilTraceEnabled"
+        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuUtilTraceEnabled.Text = "Util Trace Enabled"
+        '
         'ChooserForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -261,5 +268,6 @@
     Friend WithEvents MenuTransformTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuIncludeSerialTraceDebugInformation As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
+    Friend WithEvents MenuUtilTraceEnabled As System.Windows.Forms.ToolStripMenuItem
 #End Region
 End Class

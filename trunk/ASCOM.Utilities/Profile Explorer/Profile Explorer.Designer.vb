@@ -22,29 +22,37 @@ Partial Class frmProfileExplorer
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle
+        Me.components = New System.ComponentModel.Container()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmProfileExplorer))
-        Me.KeyTree = New System.Windows.Forms.TreeView
-        Me.KeyValues = New System.Windows.Forms.DataGridView
-        Me.Value = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.Data = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.mnuCtx = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.mnuNewKey = New System.Windows.Forms.ToolStripMenuItem
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
-        Me.mnuDelete = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuRename = New System.Windows.Forms.ToolStripMenuItem
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip
-        Me.mnuFile = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuExit = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuOptions = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuRootEdit = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuHelp = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnuAbout = New System.Windows.Forms.ToolStripMenuItem
+        Me.KeyTree = New System.Windows.Forms.TreeView()
+        Me.KeyValues = New System.Windows.Forms.DataGridView()
+        Me.Value = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Data = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.mnuCtxKeys = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.mnuNewKey = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.mnuDeleteKey = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuRenameKey = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.mnuFile = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuExit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuOptions = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuRootEdit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuHelp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuAbout = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuCtxValues = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.mnuEditData = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuClearData = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuRenameValue = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuValueSeparator = New System.Windows.Forms.ToolStripSeparator()
+        Me.mnuNewValue = New System.Windows.Forms.ToolStripMenuItem()
+        Me.mnuDeleteValue = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.KeyValues, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.mnuCtx.SuspendLayout()
+        Me.mnuCtxKeys.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        Me.mnuCtxValues.SuspendLayout()
         Me.SuspendLayout()
         '
         'KeyTree
@@ -85,41 +93,41 @@ Partial Class frmProfileExplorer
         Me.Data.HeaderText = "Data"
         Me.Data.Name = "Data"
         '
-        'mnuCtx
+        'mnuCtxKeys
         '
-        Me.mnuCtx.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuNewKey, Me.ToolStripSeparator1, Me.mnuDelete, Me.mnuRename})
-        Me.mnuCtx.Name = "mnuCtx"
-        Me.mnuCtx.Size = New System.Drawing.Size(165, 76)
+        Me.mnuCtxKeys.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuNewKey, Me.ToolStripSeparator1, Me.mnuDeleteKey, Me.mnuRenameKey})
+        Me.mnuCtxKeys.Name = "mnuCtx"
+        Me.mnuCtxKeys.Size = New System.Drawing.Size(159, 76)
         '
         'mnuNewKey
         '
         Me.mnuNewKey.Name = "mnuNewKey"
         Me.mnuNewKey.ShortcutKeyDisplayString = "Ins"
-        Me.mnuNewKey.Size = New System.Drawing.Size(164, 22)
+        Me.mnuNewKey.Size = New System.Drawing.Size(158, 22)
         Me.mnuNewKey.Text = "New Key"
         Me.mnuNewKey.ToolTipText = "Create a new key"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(161, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(155, 6)
         '
-        'mnuDelete
+        'mnuDeleteKey
         '
-        Me.mnuDelete.Name = "mnuDelete"
-        Me.mnuDelete.ShortcutKeyDisplayString = "Del"
-        Me.mnuDelete.Size = New System.Drawing.Size(164, 22)
-        Me.mnuDelete.Text = "Delete Key"
-        Me.mnuDelete.ToolTipText = "Delete a key"
+        Me.mnuDeleteKey.Name = "mnuDeleteKey"
+        Me.mnuDeleteKey.ShortcutKeyDisplayString = "Del"
+        Me.mnuDeleteKey.Size = New System.Drawing.Size(158, 22)
+        Me.mnuDeleteKey.Text = "Delete Key"
+        Me.mnuDeleteKey.ToolTipText = "Delete a key"
         '
-        'mnuRename
+        'mnuRenameKey
         '
-        Me.mnuRename.Name = "mnuRename"
-        Me.mnuRename.ShortcutKeyDisplayString = "F2"
-        Me.mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2
-        Me.mnuRename.Size = New System.Drawing.Size(164, 22)
-        Me.mnuRename.Text = "Rename Key"
-        Me.mnuRename.ToolTipText = "Rename a key"
+        Me.mnuRenameKey.Name = "mnuRenameKey"
+        Me.mnuRenameKey.ShortcutKeyDisplayString = "F2"
+        Me.mnuRenameKey.ShortcutKeys = System.Windows.Forms.Keys.F2
+        Me.mnuRenameKey.Size = New System.Drawing.Size(158, 22)
+        Me.mnuRenameKey.Text = "Rename Key"
+        Me.mnuRenameKey.ToolTipText = "Rename a key"
         '
         'MenuStrip1
         '
@@ -134,40 +142,81 @@ Partial Class frmProfileExplorer
         '
         Me.mnuFile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuExit})
         Me.mnuFile.Name = "mnuFile"
-        Me.mnuFile.Size = New System.Drawing.Size(35, 20)
+        Me.mnuFile.Size = New System.Drawing.Size(37, 20)
         Me.mnuFile.Text = "File"
         '
         'mnuExit
         '
         Me.mnuExit.Name = "mnuExit"
-        Me.mnuExit.Size = New System.Drawing.Size(103, 22)
+        Me.mnuExit.Size = New System.Drawing.Size(92, 22)
         Me.mnuExit.Text = "Exit"
         '
         'mnuOptions
         '
         Me.mnuOptions.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuRootEdit})
         Me.mnuOptions.Name = "mnuOptions"
-        Me.mnuOptions.Size = New System.Drawing.Size(56, 20)
+        Me.mnuOptions.Size = New System.Drawing.Size(61, 20)
         Me.mnuOptions.Text = "Options"
         '
         'mnuRootEdit
         '
         Me.mnuRootEdit.Name = "mnuRootEdit"
-        Me.mnuRootEdit.Size = New System.Drawing.Size(164, 22)
+        Me.mnuRootEdit.Size = New System.Drawing.Size(160, 22)
         Me.mnuRootEdit.Text = "Enable Root Edit"
         '
         'mnuHelp
         '
         Me.mnuHelp.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuAbout})
         Me.mnuHelp.Name = "mnuHelp"
-        Me.mnuHelp.Size = New System.Drawing.Size(40, 20)
+        Me.mnuHelp.Size = New System.Drawing.Size(44, 20)
         Me.mnuHelp.Text = "Help"
         '
         'mnuAbout
         '
         Me.mnuAbout.Name = "mnuAbout"
-        Me.mnuAbout.Size = New System.Drawing.Size(114, 22)
+        Me.mnuAbout.Size = New System.Drawing.Size(152, 22)
         Me.mnuAbout.Text = "About"
+        '
+        'mnuCtxValues
+        '
+        Me.mnuCtxValues.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuEditData, Me.mnuClearData, Me.mnuRenameValue, Me.mnuValueSeparator, Me.mnuNewValue, Me.mnuDeleteValue})
+        Me.mnuCtxValues.Name = "mnuCtxValues"
+        Me.mnuCtxValues.Size = New System.Drawing.Size(153, 142)
+        '
+        'mnuEditData
+        '
+        Me.mnuEditData.Name = "mnuEditData"
+        Me.mnuEditData.Size = New System.Drawing.Size(152, 22)
+        Me.mnuEditData.Text = "Edit Data"
+        '
+        'mnuClearData
+        '
+        Me.mnuClearData.Name = "mnuClearData"
+        Me.mnuClearData.Size = New System.Drawing.Size(152, 22)
+        Me.mnuClearData.Text = "Clear Data"
+        '
+        'mnuRenameValue
+        '
+        Me.mnuRenameValue.Name = "mnuRenameValue"
+        Me.mnuRenameValue.Size = New System.Drawing.Size(152, 22)
+        Me.mnuRenameValue.Text = "Rename Value"
+        '
+        'mnuValueSeparator
+        '
+        Me.mnuValueSeparator.Name = "mnuValueSeparator"
+        Me.mnuValueSeparator.Size = New System.Drawing.Size(149, 6)
+        '
+        'mnuNewValue
+        '
+        Me.mnuNewValue.Name = "mnuNewValue"
+        Me.mnuNewValue.Size = New System.Drawing.Size(152, 22)
+        Me.mnuNewValue.Text = "New Value"
+        '
+        'mnuDeleteValue
+        '
+        Me.mnuDeleteValue.Name = "mnuDeleteValue"
+        Me.mnuDeleteValue.Size = New System.Drawing.Size(152, 22)
+        Me.mnuDeleteValue.Text = "Delete Value"
         '
         'frmProfileExplorer
         '
@@ -182,9 +231,10 @@ Partial Class frmProfileExplorer
         Me.Name = "frmProfileExplorer"
         Me.Text = "Profile Explorer"
         CType(Me.KeyValues, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.mnuCtx.ResumeLayout(False)
+        Me.mnuCtxKeys.ResumeLayout(False)
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.mnuCtxValues.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -193,10 +243,10 @@ Partial Class frmProfileExplorer
     Friend WithEvents KeyValues As System.Windows.Forms.DataGridView
     Friend WithEvents Value As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Data As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents mnuCtx As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents mnuCtxKeys As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents mnuNewKey As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents mnuDelete As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents mnuRename As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuDeleteKey As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuRenameKey As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents mnuFile As System.Windows.Forms.ToolStripMenuItem
@@ -205,5 +255,12 @@ Partial Class frmProfileExplorer
     Friend WithEvents mnuRootEdit As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnuHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnuAbout As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuCtxValues As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents mnuNewValue As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuEditData As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuDeleteValue As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuRenameValue As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents mnuValueSeparator As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents mnuClearData As System.Windows.Forms.ToolStripMenuItem
 
 End Class

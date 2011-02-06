@@ -8,6 +8,7 @@ Imports System.Runtime.InteropServices
 Imports System.Collections
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Interfaces
+Imports System.IO
 
 Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities namespace
 
@@ -145,8 +146,12 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
         Public Function GetProfile(ByVal p_SubKeyName As String, ByVal p_ValueName As String, ByVal CName As String) As String Implements IProfileAccess.GetProfile
             'Get a single profile value
             Dim Ret As String
+
             Ret = Profile.GetProfile(p_SubKeyName, p_ValueName)
             TL.LogMessage("GetProfile", "SubKey: """ & p_SubKeyName & """ Value: """ & p_ValueName & """ Data: """ & Ret & """")
+
+            If p_ValueName = PLATFORM_VERSION_NAME Then Ret = AscomSharedCode.ConditionPlatformVersion(Ret, Profile, TL) ' Check for forced version if we are looking for PlatformVersion
+
             Return Ret
         End Function
 

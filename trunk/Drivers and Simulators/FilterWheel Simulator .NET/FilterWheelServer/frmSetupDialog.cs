@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
 namespace ASCOM.Simulator
 {
+    [ComVisible(false)]					// Form not registered for COM!
     public partial class frmSetupDialog : Form
     {
 

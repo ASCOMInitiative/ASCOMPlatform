@@ -1,4 +1,8 @@
 Comment: ASCOM Platform 6 Developer Components Setup Project
+Comment: Set Variable NATIVE_ENGINE to TRUE
+Comment: Set Variable DELAYUNTIL_APPLYCHANGES to FALSE
+Comment: Set Variable LOGGED to C:\ASCOMInstallLog.txt
+Comment: Set Variable NATIVE_LOGGING to TRUE
  
 [DEFINE REGION: Check Application Requirements]
 [END REGION]
@@ -20,8 +24,14 @@ Comment: Check that Platform 6 is already installed
 Set Variable PLATFORM6OK to FALSE
 Get Installed State for {8961E141-B307-4882-ABAD-77A3E76A40C1} into Variable PLATFORM6OK
 if Variable PLATFORM6OK Equals FALSE
-  Set Variable PREREQ to TRUE
-  Set Variable PRELIST to $PRELIST$$NEWLINE$ASCOM Platform 6
+  if Variable MAINTENANCE Equals FALSE
+    Comment: No Platform 6 and we are installing so we have a problem and must signal it
+    Set Variable PREREQ to TRUE
+    Set Variable PRELIST to $PRELIST$$NEWLINE$ASCOM Platform 6
+  else
+    Comment: No Platform 6 but we are already installed so allow this install to be maintained and uninstalled.
+    Set Variable PLATFORM6OK to TRUE
+  end
 end
  
 [DEFINE REGION: Install Application Pre-Requisites]
@@ -268,6 +278,14 @@ else
   Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Windows Scripting Host to $TARGETDIR$\Docs\wsh-56.chm
   Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Driver Install Script Generator to $TARGETDIR$\Installer Generator\InstallerGen.exe
   Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
+  Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
+  Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
+  Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform55\
+  Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform55\
+  Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform55\
+  Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform55\
+  Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform5
+  Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
   [DEFINE WEB MEDIA ASCOM Platform 6 Developer Components]
   Get Component ASCOM Platform 6 Developer Components Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
@@ -279,6 +297,7 @@ else
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
+    Create Folder $TARGETDIR$\Components\Platform5
     Apply Install (get result into variable SUCCESS)
   end
   [compiler end]

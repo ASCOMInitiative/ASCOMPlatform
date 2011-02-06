@@ -71,6 +71,8 @@ Public Class ConnectForm
     End Sub
 
     Private Sub btnConnect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConnect.Click
+        Dim TypeCurrentDevice As Type
+
         If CurrentDevice <> "" Then
             If Connected Then ' Disconnect
                 Try
@@ -99,7 +101,9 @@ Public Class ConnectForm
                 Try
                     txtStatus.Text = "Connecting..."
                     Application.DoEvents()
-                    Device = CreateObject(CurrentDevice)
+                    'Device = CreateObject(CurrentDevice)
+                    TypeCurrentDevice = Type.GetTypeFromProgID(CurrentDevice) 'Try Activator approach as this may give more meaningful eror messages
+                    Device = Activator.CreateInstance(TypeCurrentDevice)
                     Select Case CurrentDeviceType
                         Case "Focuser"
                             Device.Link = True
@@ -124,7 +128,11 @@ Public Class ConnectForm
     End Sub
 
     Private Sub btnProperties_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnProperties.Click
-        Device = CreateObject(CurrentDevice)
+        Dim DeviceType As Type
+
+        'Device = CreateObject(CurrentDevice)
+        DeviceType = Type.GetTypeFromProgID(CurrentDevice)
+        Device = Activator.CreateInstance(DeviceType)
         Device.SetupDialog()
         Try : Marshal.ReleaseComObject(Device) : Catch : End Try
         Device = Nothing
@@ -155,6 +163,8 @@ Public Class ConnectForm
 
     Sub ExecuteCommand(ByVal Command As String)
         Dim sw As New Stopwatch, StartTime As Date, Result As String = ""
+        Dim DeviceType As Type
+
         Try
             StartTime = Now
             sw.Start()
@@ -162,7 +172,9 @@ Public Class ConnectForm
 
             Select Case Command
                 Case "CreateObject"
-                    DeviceObject = CreateObject(CurrentDevice)
+                    'DeviceObject = CreateObject(CurrentDevice)
+                    DeviceType = Type.GetTypeFromProgID(CurrentDevice)
+                    DeviceObject = Activator.CreateInstance(DeviceType)
                 Case "Connect"
                     DeviceObject.Connected = True
                 Case "DriverInfo"
