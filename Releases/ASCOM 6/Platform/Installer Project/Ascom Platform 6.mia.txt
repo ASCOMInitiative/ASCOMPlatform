@@ -6,18 +6,29 @@ Set Variable WIN64MODE to
 Get System Setting Windows in 64 bit Mode into WIN64MODE
 Comment: MessageBalloon: Win 64Mode, Win64Mode is $WIN64MODE$
 Comment: Prompts the user if they want to create an install log
-Set Variable CreateLogFile to NO
+Set Variable CreateLogFile to YES
 Comment: MessageBox: Create Install Log File, Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
-if Variable CreateLogFile Equals YES
+if Variable CreateLogFile Equals NO
   Run Program $EXEFILE$ /l="C:\ASCOMInstall.txt"
   GoTo Label: Finish
 end
  
+Comment: Set up the log file 
+Get Folder Location My->My Documents into MYDOCUMENTS
+Comment: Set Variable LOGGED to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install.txt
+ 
+Comment: Set up values for a 64bit OS
+Set Variable PROGRAMFILES64 to 
 Set Variable COMMONFILES64 to 
+Comment: Initialise to a null value that will access the correct portion of the registry on a 32bit OS
+Set Variable WOW6432NODE to 
 if Variable WIN64MODE Equals TRUE
   Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  Get Folder Location System->Program Files Directory into PROGRAMFILES64
   Get Common Folder Location System->Program Files Directory into COMMONFILES64
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+  Comment: Set to a value that will access the 32bit portion of the registry on a 64bit OS
+  Set Variable WOW6432NODE to WOW6432NODE\
 end
  
 [DEFINE REGION: Application Updates]
@@ -596,91 +607,91 @@ else
     [END REGION]
     [DEFINE REGION: Registry Keys]
     Comment: Create registry keys
-    Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, 6.0 (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 32bit Applications\, List of drivers that are not compatible with 32bit applications
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\, List of drivers that are not compatible with 64bit applications
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, This is a 32bit in-process driver and cannot run within a 64bit application
-    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LittleFootClassic(1.0.0)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LXPTelescope(5.0.1)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeClassic(5.0.3)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeLX200GPS(5.0.0)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Optec IFW(1.1.0.1) Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.1)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.2)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.3)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LittleFootClassic(1.0.0)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LXPTelescope(5.0.1)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeClassic(5.0.3)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeLX200GPS(5.0.0)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Optec IFW(1.1.0.1) Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.1)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.2)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.3)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.4)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
-    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\PlatformVersion, 6.0 (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Chooser\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Camera Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 32bit Applications\, List of drivers that are not compatible with 32bit applications
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\, List of drivers that are not compatible with 64bit applications
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, This is a 32bit in-process driver and cannot run within a 64bit application
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\FilterWheel Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Rotator Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\SafetyMonitor Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Switch Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\LittleFootClassic(1.0.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\LXPTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\MeadeClassic(5.0.3)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\MeadeLX200GPS(5.0.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\Optec IFW(1.1.0.1) Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.2)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.3)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\LittleFootClassic(1.0.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\LXPTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\MeadeClassic(5.0.3)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\MeadeLX200GPS(5.0.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\Optec IFW(1.1.0.1) Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.2)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.3)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.4)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
     [END REGION]
     [DEFINE REGION: Additional clean-up when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
@@ -690,6 +701,10 @@ else
     Delete Files $COMMONFILES$\ASCOM\Camera\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\.net\GACInstall.exe (when installing)
     [END REGION]
+    Comment: Install in 64bit mode if we are running on a 64bit OS
+    if Variable WIN64MODE Equals TRUE
+      Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+    end
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL

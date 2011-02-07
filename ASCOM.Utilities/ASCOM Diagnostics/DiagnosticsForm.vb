@@ -186,10 +186,11 @@ Public Class DiagnosticsForm
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Initialise form
         Dim MyVersion As Version, TraceFileName As String
-        Dim ProfileStore As RegistryAccess
+        Dim ProfileStore As RegistryAccess, InstallInformation As Generic.SortedList(Of String, String)
 
         MyVersion = Assembly.GetExecutingAssembly.GetName.Version
-        lblTitle.Text = InstallerName.Item(DISPLAY_NAME) & " - " & InstallerName.Item(DISPLAY_VERSION)
+        InstallInformation = GetInstallInformation() 'Retrieve the current install information
+        lblTitle.Text = InstallInformation.Item(DISPLAY_NAME) & " - " & InstallInformation.Item(DISPLAY_VERSION)
         lblResult.Text = ""
         lblAction.Text = ""
 
@@ -4224,7 +4225,7 @@ Public Class DiagnosticsForm
     Private Sub ScanInstalledPlatform()
         Dim RegKey As RegistryKey
 
-        GetInstalledComponent("Platform 5", "{14C10725-0018-4534-AE5E-547C08B737B7}", False)
+        GetInstalledComponent("Platform 5", "{14C10725-0018-4534-AE5E-547C08B737B7}", False, True)
 
         Try ' Platform 5.5 Inno installer setup, should always be absent in Platform 6!
             RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
@@ -4242,26 +4243,40 @@ Public Class DiagnosticsForm
         End Try
         TL.BlankLine()
 
-        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True)
-        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False)
+        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False)
+        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, False)
 
         TL.BlankLine()
     End Sub
 
-    Private Sub GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean)
+    Private Sub GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean)
         Dim RegKey As RegistryKey
         Try ' Platform 6 installer GUID, should always be present in Platform 6
-            RegKey = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+            If Force32 Then 'Ensure we always go to the 32bit registry portion even on a 64bit OS
+                RegKey = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+            Else
+                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode,False)
+            End If
 
             TL.LogMessage(Name, RegKey.GetValue(DISPLAY_NAME, "##### Missing"))
             TL.LogMessage(Name, "Version - " & RegKey.GetValue(DISPLAY_VERSION, "##### Missing"))
-            'TL.LogMessage(Name, "Install Date - " & RegKey.GetValue("InstallDate", "##### Missing"))
+            TL.LogMessage(Name, "Install Date - " & RegKey.GetValue("InstallDate", "##### Missing"))
             TL.LogMessage(Name, "Install Location - " & RegKey.GetValue("InstallLocation", "##### Missing"))
-            'TL.LogMessage(Name, "Install Source - " & RegKey.GetValue("InstallSource", "##### Missing"))
+            TL.LogMessage(Name, "Install Source - " & RegKey.GetValue("InstallSource", "##### Missing"))
             RegKey.Close()
             NMatches += 1
         Catch ex As ProfilePersistenceException
             If ex.Message.Contains("as it does not exist") Then
+                If Required Then ' Must be present so log an error if its not
+                    LogException(Name, "Exception: " & ex.Message)
+                Else ' Optional so just record absence
+                    TL.LogMessage(Name, "Not installed")
+                End If
+            Else
+                LogException(Name, "Exception: " & ex.ToString)
+            End If
+        Catch ex As NullReferenceException
+            If ex.Message.Contains("not set to an instance") Then
                 If Required Then ' Must be present so log an error if its not
                     LogException(Name, "Exception: " & ex.Message)
                 Else ' Optional so just record absence
@@ -4277,17 +4292,17 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Private Function InstallerName() As Generic.SortedList(Of String, String)
+    Private Function GetInstallInformation() As Generic.SortedList(Of String, String)
         Dim RegKey As RegistryKey
         Dim RetVal As New Generic.SortedList(Of String, String)
         Try ' Platform 6 installer GUID, should always be present in Platform 6
-            If ApplicationBits() = Bitness.Bits32 Then '32bit OS
-                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
-                'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ASCOM_PLATFORM_NAME, False)
-            Else '64bit OS
-                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
-                'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & ASCOM_PLATFORM_NAME, False)
-            End If
+            RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
+            'If ApplicationBits() = Bitness.Bits32 Then '32bit OS
+            'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ASCOM_PLATFORM_NAME, False)
+            'Else '64bit OS
+            'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
+            'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & ASCOM_PLATFORM_NAME, False)
+            'End If
 
             'DisplayName = RegKey.GetValue("DisplayName")
             RetVal.Add(DISPLAY_NAME, RegKey.GetValue(DISPLAY_NAME))
