@@ -31,28 +31,12 @@ namespace ASCOM.Simulator
 
             UpdateGuage1();
             UpdateGuage2();
-            label1.Text = Switches.Name + @" v" + Switches.DriverVersion;
+            label1.Text = Switches.Name  + @" v" + Switches.DriverVersion;
         }
 
         #endregion
 
         #region Private Members
-
-        private void SetGuage1(int value)
-        {
-            _s1.State[2] = value.ToString();
-            Switches.SetSwitch(_s1.Name, _s1.State);
-            _s1 = (INWaySwitch)Switches.GetSwitch(_s1.Name);
-            UpdateGuage1();
-        }
-
-        private void SetGuage2(int value)
-        {
-            _s2.State[2] = value.ToString();
-            Switches.SetSwitch(_s2.Name, _s2.State);
-            _s2 = (INWaySwitch)Switches.GetSwitch(_s2.Name);
-            UpdateGuage2();
-        }
 
         private void UpdateGuage1()
         {
@@ -92,7 +76,7 @@ namespace ASCOM.Simulator
             comboBox4.Text = guage2Max.ToString();
         }
 
-        private void BrowseToAscom(object sender, MouseEventArgs e)
+        private static void BrowseToAscom(object sender, MouseEventArgs e)
         {
             try
             {
