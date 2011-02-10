@@ -37,7 +37,6 @@ namespace ASCOM.Simulator
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -64,7 +63,7 @@ namespace ASCOM.Simulator
             // 
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonOK.Location = new System.Drawing.Point(331, 244);
+            this.buttonOK.Location = new System.Drawing.Point(305, 409);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(50, 23);
             this.buttonOK.TabIndex = 0;
@@ -76,7 +75,7 @@ namespace ASCOM.Simulator
             this.pictureBox1.ErrorImage = global::ASCOM.Simulator.Properties.Resources.ASCOM;
             this.pictureBox1.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
             this.pictureBox1.InitialImage = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.pictureBox1.Location = new System.Drawing.Point(331, 165);
+            this.pictureBox1.Location = new System.Drawing.Point(305, 9);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(50, 60);
             this.pictureBox1.TabIndex = 8;
@@ -114,15 +113,6 @@ namespace ASCOM.Simulator
             this.label3.Size = new System.Drawing.Size(15, 16);
             this.label3.TabIndex = 16;
             this.label3.Text = "2";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 414);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
-            this.label4.TabIndex = 24;
-            this.label4.Text = "label4";
             // 
             // comboBox1
             // 
@@ -529,7 +519,7 @@ namespace ASCOM.Simulator
             // SetupDialogForm
             // 
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(394, 445);
+            this.ClientSize = new System.Drawing.Size(367, 445);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
@@ -544,7 +534,6 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -574,7 +563,6 @@ namespace ASCOM.Simulator
         private AGauge aGauge1;
         private AGauge aGauge2;
         private readonly ISwitchV2 Switches = new NWaySwitchDriver();
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Button button1;
