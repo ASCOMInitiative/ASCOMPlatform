@@ -250,27 +250,33 @@ Friend Class ChooserForm
                 If LCase(de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
             Next
 
-            If (ApplicationBits() = Bitness.Bits64) And (Drivers32Bit.ContainsKey(sProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
-                Me.cmdProperties.Enabled = False ' So prevent access!
-                Me.cmdOK.Enabled = False
-                ToolTip1.Show("This 32bit driver is not compatible with your 64bit application." & vbCrLf & _
-                              "Please contact the driver author to see if there is a 64bit compatible version.", cbDriverSelector, 50, -87)
-            Else
-                If (ApplicationBits() = Bitness.Bits32) And (Drivers64Bit.ContainsKey(sProgID)) Then 'This is a 64bit driver being accessed by a 32bit application
+            ' Try to create the driver, if we can it's OK
+            Try
+                Activator.CreateInstance(Type.GetTypeFromProgID(sProgID))
+            Catch
+                ' something went wrong; ignore what it was and check for the bitness data
+                If (ApplicationBits() = Bitness.Bits64) And (Drivers32Bit.ContainsKey(sProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
                     Me.cmdProperties.Enabled = False ' So prevent access!
                     Me.cmdOK.Enabled = False
-                    ToolTip1.Show("This 64bit driver is not compatible with your 32bit application." & vbCrLf & _
-                                  "Please contact the driver author to see if there is a 32bit compatible version.", cbDriverSelector, 50, -87)
-                Else ' Good to go!
-                    ToolTip1.Hide(cbDriverSelector)
-                    buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
-                    If LCase(buf) = "true" Then
-                        Me.cmdOK.Enabled = True ' This device has been initialized
-                    Else
-                        Me.cmdOK.Enabled = False ' Never been initialized
+                    ToolTip1.Show("This 32bit driver is not compatible with your 64bit application." & vbCrLf & _
+                                  "Please contact the driver author to see if there is a 64bit compatible version.", cbDriverSelector, 50, -87)
+                Else
+                    If (ApplicationBits() = Bitness.Bits32) And (Drivers64Bit.ContainsKey(sProgID)) Then 'This is a 64bit driver being accessed by a 32bit application
+                        Me.cmdProperties.Enabled = False ' So prevent access!
+                        Me.cmdOK.Enabled = False
+                        ToolTip1.Show("This 64bit driver is not compatible with your 32bit application." & vbCrLf & _
+                                      "Please contact the driver author to see if there is a 32bit compatible version.", cbDriverSelector, 50, -87)
+                    Else ' Good to go!
+                        ToolTip1.Hide(cbDriverSelector)
+                        buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
+                        If LCase(buf) = "true" Then
+                            Me.cmdOK.Enabled = True ' This device has been initialized
+                        Else
+                            Me.cmdOK.Enabled = False ' Never been initialized
+                        End If
                     End If
                 End If
-            End If
+            End Try
         Else
             Me.cmdProperties.Enabled = False
             Me.cmdOK.Enabled = False
