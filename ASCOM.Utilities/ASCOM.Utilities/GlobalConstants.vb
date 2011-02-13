@@ -65,6 +65,10 @@ Module GlobalConstants
     Public Const PLATFORM_INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}" '{8961E141-B307-4882-ABAD-77A3E76A40C1}
     Public Const DEVELOPER_INSTALLER_PROPDUCT_CODE As String = "{4A195DC6-7DF9-459E-8F93-60B61EB45288}"
 
+    'Contact driver author message
+    Friend Const DRIVER_AUTHOR_MESSAGE_DRIVER As String = "Please contact the driver author and request an updated driver."
+    Friend Const DRIVER_AUTHOR_MESSAGE_INSTALLER As String = "Please contact the driver author and request an updated installer."
+
     Friend Enum EventLogErrors As Integer
         EventLogCreated = 0
         ChooserFormLoad = 1
@@ -86,5 +90,6 @@ Module GlobalConstants
         TelescopeSimulatorSetup = 17
         VB6HelperProfileException = 18
         DiagnosticsLoadException = 19
+        DriverCompatibilityException = 20
     End Enum
 End Module

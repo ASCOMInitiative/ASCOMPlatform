@@ -15,6 +15,7 @@ Friend Class ChooserForm
 
     Private m_sDeviceType, m_sResult, m_sStartSel As String
     Private m_Drivers As Generic.SortedList(Of String, String)
+    Private ToolTipMsg As ToolTip
 
     Private Sub ChooserForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim ProfileStore As RegistryAccess
@@ -217,71 +218,58 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub cbDriverSelector_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cbDriverSelector.SelectedIndexChanged
-        Dim ProfileStore As RegistryAccess
-        Dim sProgID As String = ""
-        Dim buf As String
-        Dim Drivers32Bit, Drivers64Bit As Generic.SortedList(Of String, String)
-
+        Dim sProgID As String = "", DriverIsCompatible As String
+        Dim buf As String, ProfileStore As RegistryAccess
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
-        Try 'Get the list of 32bit only drivers
-            Drivers32bit = ProfileStore.EnumProfile(DRIVERS_32BIT)
-        Catch ex1 As Exception
-            'Ignore any exceptions from this call e.g. if there are no 32bit only devices installed
-            'Just create an empty list
-            Drivers32bit = New Generic.SortedList(Of String, String)
-            LogEvent("ChooserForm", "Exception creating SortedList of 32bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser32BitOnlyException, ex1.ToString)
-        End Try
-
-        Try 'Get the list of 64bit only drivers
-            Drivers64Bit = ProfileStore.EnumProfile(DRIVERS_64BIT)
-        Catch ex1 As Exception
-            'Ignore any exceptions from this call e.g. if there are no 64bit only devices installed
-            'Just create an empty list
-            Drivers64Bit = New Generic.SortedList(Of String, String)
-            LogEvent("ChooserForm", "Exception creating SortedList of 64bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser64BitOnlyException, ex1.ToString)
-        End Try
-
-
         If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
-            Me.cmdProperties.Enabled = True ' Turn on Properties
             'Find ProgID corresponding to description
             For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
                 If LCase(de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
             Next
 
-            ' Try to create the driver, if we can it's OK
-            Try
-                Activator.CreateInstance(Type.GetTypeFromProgID(sProgID))
-            Catch
-                ' something went wrong; ignore what it was and check for the bitness data
-                If (ApplicationBits() = Bitness.Bits64) And (Drivers32Bit.ContainsKey(sProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
-                    Me.cmdProperties.Enabled = False ' So prevent access!
-                    Me.cmdOK.Enabled = False
-                    ToolTip1.Show("This 32bit driver is not compatible with your 64bit application." & vbCrLf & _
-                                  "Please contact the driver author to see if there is a 64bit compatible version.", cbDriverSelector, 50, -87)
-                Else
-                    If (ApplicationBits() = Bitness.Bits32) And (Drivers64Bit.ContainsKey(sProgID)) Then 'This is a 64bit driver being accessed by a 32bit application
-                        Me.cmdProperties.Enabled = False ' So prevent access!
-                        Me.cmdOK.Enabled = False
-                        ToolTip1.Show("This 64bit driver is not compatible with your 32bit application." & vbCrLf & _
-                                      "Please contact the driver author to see if there is a 32bit compatible version.", cbDriverSelector, 50, -87)
-                    Else ' Good to go!
-                        ToolTip1.Hide(cbDriverSelector)
-                        buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
-                        If LCase(buf) = "true" Then
-                            Me.cmdOK.Enabled = True ' This device has been initialized
-                        Else
-                            Me.cmdOK.Enabled = False ' Never been initialized
-                        End If
-                    End If
+            DriverIsCompatible = VersionCode.DriverCompatibilityMessage(sProgID, ApplicationBits)
+            If DriverIsCompatible <> "" Then 'This is a 32bit driver being accessed by a 64bit application
+                Me.cmdProperties.Enabled = False ' So prevent access!
+                Me.cmdOK.Enabled = False
+                If Not ToolTipMsg Is Nothing Then
+                    ToolTipMsg.Hide(cbDriverSelector)
+                    ToolTipMsg.Dispose()
+                    ToolTipMsg = Nothing
+
                 End If
-            End Try
-        Else
-            Me.cmdProperties.Enabled = False
-            Me.cmdOK.Enabled = False
+                ToolTipMsg = New ToolTip(Me.components)
+                ToolTipMsg.ToolTipIcon = ToolTipIcon.Warning
+                ToolTipMsg.AutoPopDelay = 5000
+                ToolTipMsg.InitialDelay = 0
+                ToolTipMsg.IsBalloon = True
+                ToolTipMsg.ReshowDelay = 100
+                ToolTipMsg.ToolTipTitle = "Incompatible Driver"
+
+                ToolTipMsg.Show(DriverIsCompatible, cbDriverSelector, 50, -87)
+                'ToolTip1.Show(DriverIsCompatible, cbDriverSelector, 50, -87)
+            Else
+                If Not ToolTipMsg Is Nothing Then
+                    ToolTipMsg.Hide(Me)
+                    ToolTipMsg.Dispose()
+                    ToolTipMsg = Nothing
+                End If
+
+                'ToolTip1.Hide(cbDriverSelector)
+                Me.cmdProperties.Enabled = True ' Turn on Properties
+                buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
+                If LCase(buf) = "true" Then
+                    Me.cmdOK.Enabled = True ' This device has been initialized
+                Else
+                    Me.cmdOK.Enabled = False ' Never been initialized
+                End If
+                End If
+        Else ' Nothing has been selected
+                Me.cmdProperties.Enabled = False
+                Me.cmdOK.Enabled = False
         End If
-        ProfileStore.Dispose()
+
+        ProfileStore.Dispose() 'Clean up profile store
         ProfileStore = Nothing
     End Sub
 

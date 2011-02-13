@@ -54,7 +54,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Absolute
         {
-            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Absolute", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Absolute", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool IsMoving
         {
-            get { return Convert.ToBoolean(memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "IsMoving", new Type[] { }, new object[] { })); }
         }
         /// <summary>
         /// State of the connection to the focuser.
@@ -83,7 +83,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool Link
         {
-            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { })); }
             set { memberFactory.CallMember(2, "Link", new Type[] { }, new object[] { value }); }
         }
 
@@ -95,7 +95,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int MaxIncrement
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxIncrement", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxIncrement", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int MaxStep
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxStep", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "MaxStep", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int Position
         {
-            get { return Convert.ToInt32(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToInt32(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double StepSize
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "StepSize", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "StepSize", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool TempComp
         {
-            get { return Convert.ToBoolean(memberFactory.CallMember(1, "TempComp", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "TempComp", new Type[] { }, new object[] { })); }
             set { memberFactory.CallMember(2, "TempComp", new Type[] { }, new object[] { value }); }
         }
 
@@ -159,7 +159,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public bool TempCompAvailable
         {
-            get { return Convert.ToBoolean(memberFactory.CallMember(1, "TempCompAvailable", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToBoolean(memberFactory.CallMember(1, "TempCompAvailable", new Type[] { }, new object[] { })); }
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public double Temperature
         {
-            get { return Convert.ToDouble(memberFactory.CallMember(1, "Temperature", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "Temperature", new Type[] { }, new object[] { })); }
         }
 
         #endregion

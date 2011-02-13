@@ -1,25 +1,15 @@
-Comment: Set Variable NATIVE_ENGINE to TRUE
-Comment: Set Variable DELAYUNTIL_APPLYCHANGES to FALSE
-Comment: Set Variable LOGGED to C:\ASCOMInstallLog.txt
-Comment: Set Variable NATIVE_LOGGING to TRUE
-Set Variable WIN64MODE to 
-Get System Setting Windows in 64 bit Mode into WIN64MODE
-Comment: MessageBalloon: Win 64Mode, Win64Mode is $WIN64MODE$
-Comment: Prompts the user if they want to create an install log
-Set Variable CreateLogFile to YES
-Comment: MessageBox: Create Install Log File, Would you like to create a installation log file for troubleshooting purposes?$NEWLINE$ $NEWLINE$C:\ASCOMInstall.txt$NEWLINE$$NEWLINE$If you select 'Yes' the installer will take more time.
-if Variable CreateLogFile Equals NO
-  Run Program $EXEFILE$ /l="C:\ASCOMInstall.txt"
-  GoTo Label: Finish
-end
  
 Comment: Set up the log file 
 Get Folder Location My->My Documents into MYDOCUMENTS
-Comment: Set Variable LOGGED to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install.txt
+Get Free Space on C: into variable DISKSPACE
+Comment: Set Variable LOGGED to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
  
 Comment: Set up values for a 64bit OS
 Set Variable PROGRAMFILES64 to 
 Set Variable COMMONFILES64 to 
+Set Variable WIN64MODE to 
+Get System Setting Windows in 64 bit Mode into WIN64MODE
+Comment: MessageBalloon: Win 64Mode, Win64Mode is $WIN64MODE$
 Comment: Initialise to a null value that will access the correct portion of the registry on a 32bit OS
 Set Variable WOW6432NODE to 
 if Variable WIN64MODE Equals TRUE
@@ -267,7 +257,13 @@ if Variable NEEDSUPGRADE Equals TRUE
   MessageBalloon: ASCOM Platform Maintenance, MSI engine is uninstalling previous Platform 6 version...
   Set Variable REMOVEOLD to 
   Set Variable ERROROLD to 
+  if Variable WIN64MODE Equals TRUE
+    Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+  end
+  Comment: Remove previous version and remove old assembly versions
   Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
+  Remove Unpinned Assemblies
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   if Variable REMOVEOLD Equals ERROR
     MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
     Terminate Installation
@@ -284,6 +280,7 @@ if Variable NEEDSUPGRADE Equals TRUE
   MessageBalloon: ASCOM Platform Maintenance, Completed old version uninstallation.
 end
 Comment: Remove previous version (Native install)
+[DEFINE REGION: Native Install]
 if Variable RECOMMENDEDUPGRADE Equals TRUE
   MessageBalloon: ASCOM Platform Maintenance, Native engine is uninstalling previous Platform 6 version...
   Comment: Bind to external setup log
@@ -311,26 +308,7 @@ if Variable RECOMMENDEDUPGRADE Equals TRUE
   Comment: Bind to internal setup log
   Set Variable NATIVE_LOGGING to 
 end
-Comment: if Variable RECOMMENDEDUPGRADE Equals TRUE
-Comment: MessageBalloon: ASCOM Platform Maintenance, Native engine is uninstalling previous Platform 6 version...
-Comment: Set Variable REMOVEOLD to 
-Comment: Set Variable ERROROLD to 
-Comment: Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
-Comment: if Variable REMOVEOLD Equals ERROR
-Comment: MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
-Comment: Terminate Installation
-Comment: end
-Comment: if Variable REMOVEOLD Equals REBOOT
-Comment: MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
-Comment: if Variable REBOOTNOW Equals OK
-Comment: Reboot Computer and Resume Setup
-Comment: else
-Comment: Terminate Installation
-Comment: end
-Comment: end
-Comment: Set Variable MAINTENANCE to FALSE
-Comment: MessageBalloon: ASCOM Platform Maintenance, Completed old version uninstallation.
-Comment: end
+[END REGION]
 Display Dialog: progress, use as progress dialog (non-modal)
  
 Comment: Modify Target System
@@ -348,11 +326,6 @@ if Variable REMOVE Equals TRUE
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
   end
-  Comment: Unregister assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll
-  Comment: Unregister assembly $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim.exe
-  Comment: Unregister assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll
-  Comment: Unregister assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll
-  Comment: Unregister assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll
   Unregister assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -362,10 +335,14 @@ if Variable REMOVE Equals TRUE
   Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Run Program %SystemRoot%\Microsoft.NET\Framework64\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework64\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll
-  Run Program %SystemRoot%\Microsoft.NET\Framework64\v2.0.50727\regasm.exe /u $COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u $COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb (WAIT)
+   
+  if Variable WIN64MODE Equals TRUE
+    Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+    Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
+    Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
+    Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
+  end
   Apply Uninstall (get result into variable SUCCESS)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
@@ -617,9 +594,22 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 32bit Applications\, List of drivers that are not compatible with 32bit applications
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\, List of drivers that are not compatible with 64bit applications
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, This is a 32bit in-process driver and cannot run within a 64bit application
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 32bit Applications\, List of drivers that are not compatible with 32bit applications (permanent)
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\, List of drivers that are not compatible with 64bit applications (permanent)
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ACL.Telescope, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.Atik.Camera, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.CCDQHY8.Camera, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.CCDQHY9.Camera, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.LittleFootClassic.telescope, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.StarlightXpress.FilterWheel, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, 1.0.0.0
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\JMISmartFocus.Focuser, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\LXP.Telescope, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\RoboFocus.Focuser, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ServoCAT.Telescope, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\Sphinx.telescope, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\SS2K.Telescope, 
+    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\TheSky.Telescope, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\FilterWheel Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\,  (permanent)
@@ -642,6 +632,7 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\Celestron(5.0.10)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
@@ -656,6 +647,8 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\QHY8ASCOMSetup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\QHY9ASCOMSetup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
@@ -668,6 +661,7 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.10)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
@@ -682,6 +676,8 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\QHY8ASCOMSetup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\QHY9ASCOMSetup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
@@ -701,10 +697,10 @@ else
     Delete Files $COMMONFILES$\ASCOM\Camera\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\.net\GACInstall.exe (when installing)
     [END REGION]
-    Comment: Install in 64bit mode if we are running on a 64bit OS
     if Variable WIN64MODE Equals TRUE
       Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
     end
+    Comment: Install in 64bit mode if we are running on a 64bit OS
     Apply Install (get result into variable SUCCESS)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL

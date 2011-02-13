@@ -3618,32 +3618,51 @@ Public Class DiagnosticsForm
             GetCOMRegistration("ASCOM.Astrometry.Transform.Transform")
 
             'New Platform 6 Simulators 
-            GetCOMRegistration("ASCOM.Simulator.Camera") 'If it exists
-            GetCOMRegistration("ASCOM.Simulator.FilterWheel")
-            GetCOMRegistration("ASCOM.Simulator.Focuser")
-            GetCOMRegistration("ASCOM.Simulator.Rotator")
-            GetCOMRegistration("ASCOM.Simulator.SafetyMonitor")
-            GetCOMRegistration("ASCOM.Simulator.SetupDialogForm")
-            GetCOMRegistration("ASCOM.Simulator.Switch")
-            GetCOMRegistration("ASCOM.Simulator.Telescope")
+            'GetCOMRegistration("ASCOM.Simulator.Camera") 'If it exists
+            'GetCOMRegistration("ASCOM.Simulator.FilterWheel")
+            'GetCOMRegistration("ASCOM.Simulator.Focuser")
+            'GetCOMRegistration("ASCOM.Simulator.Rotator")
+            'GetCOMRegistration("ASCOM.Simulator.SafetyMonitor")
+            'GetCOMRegistration("ASCOM.Simulator.SetupDialogForm")
+            'GetCOMRegistration("ASCOM.Simulator.Switch")
+            'GetCOMRegistration("ASCOM.Simulator.Telescope")
 
             'Original Platform 5 simulators if present
-            GetCOMRegistration("ScopeSim.Telescope")
-            GetCOMRegistration("FocusSim.Focuser")
-            GetCOMRegistration("CCDSimulator.Camera")
-            GetCOMRegistration("DomeSim.Dome")
-            GetCOMRegistration("ASCOMDome.Dome")
-            GetCOMRegistration("ASCOMDome.Rate")
-            GetCOMRegistration("ASCOMDome.Telescope")
-            GetCOMRegistration("POTH.Telescope")
-            GetCOMRegistration("POTH.Dome")
-            GetCOMRegistration("POTH.Focuser")
-            GetCOMRegistration("Pipe.Telescope")
-            GetCOMRegistration("Pipe.Dome")
-            GetCOMRegistration("Pipe.Focuser")
-            GetCOMRegistration("Hub.Telescope")
-            GetCOMRegistration("Hub.Dome")
-            GetCOMRegistration("Hub.Focuser")
+            'GetCOMRegistration("ScopeSim.Telescope")
+            'GetCOMRegistration("FocusSim.Focuser")
+            'GetCOMRegistration("CCDSimulator.Camera")
+            'GetCOMRegistration("DomeSim.Dome")
+            'GetCOMRegistration("ASCOMDome.Dome")
+            'GetCOMRegistration("ASCOMDome.Rate")
+            'GetCOMRegistration("ASCOMDome.Telescope")
+            'GetCOMRegistration("POTH.Telescope")
+            'GetCOMRegistration("POTH.Dome")
+            'GetCOMRegistration("POTH.Focuser")
+            'GetCOMRegistration("Pipe.Telescope")
+            'GetCOMRegistration("Pipe.Dome")
+            'GetCOMRegistration("Pipe.Focuser")
+            'GetCOMRegistration("Hub.Telescope")
+            'GetCOMRegistration("Hub.Dome")
+            'GetCOMRegistration("Hub.Focuser")
+
+            'Get COm registration for all registered devices 
+            Dim PR As New Profile
+            Dim DeviceTypes() As String, Devices As ArrayList
+            DeviceTypes = PR.RegisteredDeviceTypes
+            TL.LogMessage("DriverCOMRegistration", "Start of process")
+
+            For Each DeviceType As String In DeviceTypes
+                TL.LogMessage("DriverCOMRegistration", "Starting " & DeviceType & " device type")
+                Devices = PR.RegisteredDevices(DeviceType)
+                For Each Device As ASCOM.Utilities.KeyValuePair In Devices
+                    GetCOMRegistration(Device.Key)
+                Next
+                TL.BlankLine()
+
+            Next
+            TL.LogMessage("DriverCOMRegistration", "Completed process")
+            PR.Dispose()
+            PR = Nothing
 
             'Exceptions
             GetCOMRegistration("ASCOM.DriverException")
@@ -3846,7 +3865,7 @@ Public Class DiagnosticsForm
         Dim Att As FileAttributes, FVInfo As FileVersionInfo, FInfo As FileInfo
         Dim Ass As Assembly, AssVer As String = "", CompareName As String
         Dim ReflectionAssemblies() As Assembly = Nothing
-        Dim Framework As String = ""
+        Dim Framework As String = "", PE As PEReader
 
         Try
             FullPath = FPath & FName 'Create full filename from path and simple filename
@@ -3898,6 +3917,15 @@ Public Class DiagnosticsForm
 
                 Att = File.GetAttributes(FullPath)
                 TL.LogMessage("FileDetails", "   Attributes:         " & Att.ToString())
+                Try
+                    PE = New PEReader(FullPath)
+                    TL.LogMessage("FileDetails", "   .NET Assembly:      " & PE.IsDotNetAssembly)
+                    TL.LogMessage("FileDetails", "   Bitness:            " & PE.BitNess.ToString)
+                    PE.Dispose()
+                    PE = Nothing
+                Catch ex As ASCOM.InvalidOperationException
+                    TL.LogMessage("FileDetails", "   .NET Assembly:      Not a valid PE executable")
+                End Try
                 NMatches += 1
             Else
                 TL.LogMessage("FileDetails", "   ### Unable to find file: " & FullPath)
@@ -3934,7 +3962,7 @@ Public Class DiagnosticsForm
 
     Sub ProcessSubKey(ByVal p_Key As RegistryKey, ByVal p_Depth As Integer, ByVal p_Container As String)
         Dim ValueNames(), SubKeys() As String
-        Dim RKey As RegistryKey
+        Dim RKey As RegistryKey, ValueKind As RegistryValueKind
         Dim Container As String
         'TL.LogMessage("Start of ProcessSubKey", p_Container & " " & p_Depth)
 
@@ -3945,6 +3973,7 @@ Public Class DiagnosticsForm
                 ValueNames = p_Key.GetValueNames
                 'TL.LogMessage("Start of ProcessSubKey", "Found " & ValueNames.Length & " values")
                 For Each ValueName As String In ValueNames
+                    ValueKind = p_Key.GetValueKind(ValueName)
                     Select Case ValueName.ToUpper
                         Case ""
                             TL.LogMessage("KeyValue", Space(p_Depth * Indent) & "*** Default *** = " & p_Key.GetValue(ValueName))
@@ -3952,41 +3981,52 @@ Public Class DiagnosticsForm
                             p_Container = "AppId"
                             TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
                         Case Else
-                            TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
+                            Select Case ValueKind
+                                Case RegistryValueKind.String, RegistryValueKind.ExpandString
+                                    TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
+                                Case RegistryValueKind.MultiString
+                                    TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName)(0))
+                                Case RegistryValueKind.DWord
+                                    TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName).ToString)
+                                Case Else
+                                    TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
+                            End Select
                     End Select
-                    If Microsoft.VisualBasic.Left(p_Key.GetValue(ValueName), 1) = "{" Then
-                        'TL.LogMessage("ClassExpand", "Expanding " & p_Key.GetValue(ValueName))
-                        Select Case p_Container.ToUpper
-                            Case "CLSID"
-                                RKey = Registry.ClassesRoot.OpenSubKey("CLSID").OpenSubKey(p_Key.GetValue(ValueName))
-                                If RKey Is Nothing Then 'Check in 32 bit registry on a 64bit system
-                                    RKey = Registry.ClassesRoot.OpenSubKey("Wow6432Node\CLSID").OpenSubKey(p_Key.GetValue(ValueName))
-                                    If Not (RKey Is Nothing) Then TL.LogMessage("NewSubKey", Space(p_Depth * Indent) & "Found under Wow6432Node")
-                                End If
-                            Case "TYPELIB"
-                                RKey = Registry.ClassesRoot.OpenSubKey("TypeLib").OpenSubKey(p_Key.GetValue(ValueName))
-                                If RKey Is Nothing Then
-                                    RKey = Registry.ClassesRoot.OpenSubKey("Wow6432Node\TypeLib").OpenSubKey(p_Key.GetValue(ValueName))
-                                End If
-                            Case "APPID"
-                                RKey = Registry.ClassesRoot.OpenSubKey("AppId").OpenSubKey(p_Key.GetValue(ValueName))
-                                If RKey Is Nothing Then
-                                    RKey = Registry.ClassesRoot.OpenSubKey("Wow6432Node\AppId").OpenSubKey(p_Key.GetValue(ValueName))
-                                End If
-                            Case Else
-                                RKey = p_Key.OpenSubKey(p_Key.GetValue(ValueName))
-                        End Select
+                    If ValueKind <> RegistryValueKind.MultiString Then 'Don't try and process these, they don't lead anywhere anyway!
+                        If Microsoft.VisualBasic.Left(p_Key.GetValue(ValueName), 1) = "{" Then
+                            'TL.LogMessage("ClassExpand", "Expanding " & p_Key.GetValue(ValueName))
+                            Select Case p_Container.ToUpper
+                                Case "CLSID"
+                                    RKey = Registry.ClassesRoot.OpenSubKey("CLSID").OpenSubKey(p_Key.GetValue(ValueName))
+                                    If RKey Is Nothing Then 'Check in 32 bit registry on a 64bit system
+                                        RKey = Registry.ClassesRoot.OpenSubKey("Wow6432Node\CLSID").OpenSubKey(p_Key.GetValue(ValueName))
+                                        If Not (RKey Is Nothing) Then TL.LogMessage("NewSubKey", Space(p_Depth * Indent) & "Found under Wow6432Node")
+                                    End If
+                                Case "TYPELIB"
+                                    RKey = Registry.ClassesRoot.OpenSubKey("TypeLib").OpenSubKey(p_Key.GetValue(ValueName))
+                                    If RKey Is Nothing Then
+                                        RKey = Registry.ClassesRoot.OpenSubKey("Wow6432Node\TypeLib").OpenSubKey(p_Key.GetValue(ValueName))
+                                    End If
+                                Case "APPID"
+                                    RKey = Registry.ClassesRoot.OpenSubKey("AppId").OpenSubKey(p_Key.GetValue(ValueName))
+                                    If RKey Is Nothing Then
+                                        RKey = Registry.ClassesRoot.OpenSubKey("Wow6432Node\AppId").OpenSubKey(p_Key.GetValue(ValueName))
+                                    End If
+                                Case Else
+                                    RKey = p_Key.OpenSubKey(p_Key.GetValue(ValueName))
+                            End Select
 
-                        If Not RKey Is Nothing Then
-                            If RKey.Name <> p_Key.Name Then 'We are in an infinite loop so kill it by settig rkey = Nothing
-                                TL.LogMessage("NewSubKey", Space((p_Depth + 1) * Indent) & p_Container & "\" & p_Key.GetValue(ValueName))
-                                ProcessSubKey(RKey, p_Depth + 1, "None")
-                                RKey.Close()
+                            If Not RKey Is Nothing Then
+                                If RKey.Name <> p_Key.Name Then 'We are in an infinite loop so kill it by settig rkey = Nothing
+                                    TL.LogMessage("NewSubKey", Space((p_Depth + 1) * Indent) & p_Container & "\" & p_Key.GetValue(ValueName))
+                                    ProcessSubKey(RKey, p_Depth + 1, "None")
+                                    RKey.Close()
+                                Else
+                                    TL.LogMessage("IgnoreKey", Space((p_Depth + 1) * Indent) & p_Container & "\" & p_Key.GetValue(ValueName))
+                                End If
                             Else
-                                TL.LogMessage("IgnoreKey", Space((p_Depth + 1) * Indent) & p_Container & "\" & p_Key.GetValue(ValueName))
+                                TL.LogMessage("KeyValue", "### Unable to open subkey: " & ValueName & "\" & p_Key.GetValue(ValueName) & " in container: " & p_Container)
                             End If
-                        Else
-                            TL.LogMessage("KeyValue", "### Unable to open subkey: " & ValueName & "\" & p_Key.GetValue(ValueName) & " in container: " & p_Container)
                         End If
                     End If
                 Next
@@ -4112,9 +4152,8 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub ScanProfile()
-
         Dim ASCOMProfile As Utilities.Profile, DeviceTypes() As String, Devices As ArrayList
-
+        Dim CompatibiityMessage32Bit, CompatibiityMessage64Bit As String
         Try
             ASCOMProfile = New Utilities.Profile
             RecursionLevel = -1 'Initialise recursion level so the first increment makes this zero
@@ -4127,6 +4166,16 @@ Public Class DiagnosticsForm
                 TL.LogMessage("Registered Device Type", DeviceType)
                 For Each Device As KeyValuePair In Devices
                     TL.LogMessage("Registered Devices", "   " & Device.Key & " - " & Device.Value)
+                    CompatibiityMessage32Bit = DriverCompatibilityMessage(Device.Key, Bitness.Bits32)
+                    If CompatibiityMessage32Bit = "" Then CompatibiityMessage32Bit = "OK for 32bit applications"
+                    TL.LogMessage("Registered Devices", "     " & CompatibiityMessage32Bit)
+
+                    If ApplicationBits() = Bitness.Bits64 Then 'We are on a 64bit system so test this
+                        CompatibiityMessage64Bit = DriverCompatibilityMessage(Device.Key, Bitness.Bits64)
+                        If CompatibiityMessage64Bit = "" Then CompatibiityMessage64Bit = "OK for 64bit applications"
+                        TL.LogMessage("Registered Devices", "     " & CompatibiityMessage64Bit)
+                    End If
+
                 Next
             Next
             TL.BlankLine()
@@ -4244,7 +4293,7 @@ Public Class DiagnosticsForm
         TL.BlankLine()
 
         GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False)
-        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, False)
+        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True)
 
         TL.BlankLine()
     End Sub
@@ -4276,14 +4325,10 @@ Public Class DiagnosticsForm
                 LogException(Name, "Exception: " & ex.ToString)
             End If
         Catch ex As NullReferenceException
-            If ex.Message.Contains("not set to an instance") Then
-                If Required Then ' Must be present so log an error if its not
-                    LogException(Name, "Exception: " & ex.Message)
-                Else ' Optional so just record absence
-                    TL.LogMessage(Name, "Not installed")
-                End If
-            Else
-                LogException(Name, "Exception: " & ex.ToString)
+            If Required Then ' Must be present so log an error if its not
+                LogException(Name, "Exception: " & ex.Message)
+            Else ' Optional so just record absence
+                TL.LogMessage(Name, "Not installed")
             End If
         Catch ex As Exception
             LogException(Name, "Exception: " & ex.ToString)

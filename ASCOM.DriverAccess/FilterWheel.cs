@@ -95,8 +95,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public short Position
         {
-            get { return Convert.ToInt16(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture); }
-            set { memberFactory.CallMember(2, "Position", new Type[] { }, new object[] { value }, CultureInfo.InvariantCulture); }
+            get { return Convert.ToInt16(memberFactory.CallMember(1, "Position", new Type[] { }, new object[] { })); }
+            set { memberFactory.CallMember(2, "Position", new Type[] { typeof(Int16) }, new object[] { value }); }
         }
 
         #endregion
