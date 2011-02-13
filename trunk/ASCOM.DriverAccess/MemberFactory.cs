@@ -30,6 +30,10 @@ namespace ASCOM.DriverAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
         internal MemberFactory(string progId)
         {
+            _tl = new TraceLogger("", "MemberFactory");
+            _tl.Enabled = true;
+            _tl.LogMessage("ProgID", progId);
+
             _strProgId = progId;
             GetInterfaces = new List<Type>();
 
@@ -42,11 +46,10 @@ namespace ASCOM.DriverAccess
                 //no type information found throw error
                 throw new  ASCOM.Utilities.Exceptions.HelperException("Check Driver: cannot create object type of progID: " + _strProgId);
             }
-            _tl = new TraceLogger("", "MemberFactory");
-            _tl.Enabled = true;
 
             //setup the property
             IsComObject = GetObjType.IsCOMObject;
+            _tl.LogMessage("IsComObject", GetObjType.IsCOMObject.ToString());
 
             // Create an instance of the object
             GetLateBoundObject = Activator.CreateInstance(GetObjType);
@@ -234,7 +237,7 @@ namespace ASCOM.DriverAccess
                         }
                         catch (Exception e)
                         {
-                            _tl.LogMessage("PropertySetEx1", e.ToString());
+                            _tl.LogMessageCrLf("PropertySetEx1", e.ToString());
                             throw;
                         }
                     }
@@ -259,7 +262,7 @@ namespace ASCOM.DriverAccess
                         }
                         catch (Exception e)
                         {
-                            _tl.LogMessage("PropertySetEx4", e.ToString());
+                            _tl.LogMessageCrLf("PropertySetEx4", e.ToString());
                             throw e.InnerException;
                         }
                     }
