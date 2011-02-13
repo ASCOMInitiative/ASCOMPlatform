@@ -1,0 +1,32 @@
+[OPTIONS]
+Auto Index=Yes
+Compatibility=1.1 or later
+Compiled file=Telescope.chm
+Contents file=Telescope.hhc
+Default Window=main
+Default topic=TelescopeHOME.htm
+Display compile progress=No
+Full text search stop list file=Telescope.stp
+Full-text search=Yes
+Index file=Telescope.hhk
+Language=0x409 English (United States)
+Title=Telescope Object Programmer's Reference
+
+[WINDOWS]
+main="Telescope Object Programmer's Reference","Telescope.hhc","Telescope.hhk","TelescopeHOME.htm","TelescopeHOME.htm",,,,,0x23520,,0x384e,[10,10,630,470],0xb0000,,,,,,0
+
+
+[FILES]
+TelescopeHOME.htm
+images\important2.gif
+images\ro.gif
+images\rw.gif
+images\reach.gif
+dc3_hh.css
+TelescopeRELNOTES.htm
+TelescopeERRORS.htm
+images\const-flasher-anim.gif
+TelescopeCLASSTelescope.htm
+
+[INFOTYPES]
+

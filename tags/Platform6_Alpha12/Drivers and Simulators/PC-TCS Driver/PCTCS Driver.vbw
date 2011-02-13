@@ -1,0 +1,8 @@
+Telescope = 88, 88, 665, 639, 
+ErrorConstants = 22, 22, 599, 573, C
+AstronomyFuncs = 0, 0, 577, 551, C
+frmSetup = 264, 264, 841, 815, , 242, 242, 819, 793, C
+MNCP = 44, 44, 621, 595, C
+Common = 66, 66, 630, 679, 
+Focuser = 198, 198, 805, 691, 
+Dome = 22, 22, 629, 515, 

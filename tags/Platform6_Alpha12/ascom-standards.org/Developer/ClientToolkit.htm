@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>
+Client Toolkit
+</title>
+<style type="text/css">
+<!--
+.code {font-family: "Lucida Console", "Courier New", Courier, monospace}
+-->
+</style>
+<!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>.NET Client Toolkit (recommended) </h3>
+	<p class="note">NOTICE - The latest Client Toolkit is included in the ASCOM Platform 5.5 update. Make sure you start with at least Platform 5.5 installed!</p>
+	<p>The ASCOM Platform includes a .NET assembly that provides high-level simplified access to ASCOM drivers. Astronomy software developers wishing to use ASCOM drivers from .NET applications are encouraged to use this library, as it provides not only simplified access to drivers, but also automatic switching between the preferred early-binding interfaces and, for older drivers that don't support it, late-binding. If late binding is needed, the Client Toolkit hides all of the ugly details of calling a driver via its late-bound interface. Your code will always use native .NET class/object syntax.</p>
+	<h4>Background</h4>
+	<p>The Client Toolkit is an assembly that is <i>always</i> installed into the .NET Global Assembly Cache. Thus, everyone who installs the ASCOM Platform 5 will have the Client Toolkit installed. You do not need to include the Client Toolkit assembly in your software's distribution, and you <span class="underline">must not do so</span>. </p>
+	<p>However, in order to get the IntelliSense documentation for the Client Toolkit, your .NET software project must reference the copy of the Client Toolkit that is optionally installed in <span class="code">C:\Program Files\Common Files\ASCOM\.net</span>. When you install Platform 5, you will see a wizard panel with checkboxes for installing optional developer components. Make sure you select the Client Toolkit for developer installation. This will cause a copy of the assembly and its XML IntelliSense documentation to be put into the above folder. Your program then must reference that copy of the assembly and not the one in the GAC. See the next section for particulars.</p>
+	<h4>Using the Client Toolkit  </h4>
+	<p><b>Platform 5</b></p>
+	<p>Assuming you installed the Client Toolkit via the Platform's optional developer items, as described above, set a reference to it in your .NET project. To do this, you must use the Browse tab in the Add References window, then browse to<span class="code"> C:\Program Files\Common Files\ASCOM\.net\ASCOM.DriverAccess.dll</span>. After setting your reference, double check that this copy of the assembly is referenced and not the one in the GAC. You must also set references to the ASCOM Master Interfaces for .NET and COM and the ASCOM Helper Interfaces for .NET. These will be found under the COM tab of the Add References window. When you are finished, <span class="underline">make sure that you can see references to ASCOM.DriverAccess, ASCOM.Interfaces, and ASCOM.Helper in your list of references</span>.</p>
+	<p><b>Platform 5.5</b></p>
+	<p>Under Platform 5.5 the client toolkit will automatically appear in the list of available .NET references and you do not need to browse to the dll as was the case on Platform 5. Instead, add the Client Access Toolkit reference found on the .NET tab of the Add references dialogue. The reference to ASCOM Master Interfaces should also be added as for Platform 5.</p>
+	<p>Under Platform 5.5, the Helper reference is replaced by the ASCOM Utilities reference found on the .NET references tab.</p>
+	<h4>Import and using</h4>
+	<p>For convenience you may wish to add the following Imports or using statements so that you do not need to include full namespaces when referencing ASCOM components.</p>
+	<p><b>Platform 5</b></p>
+	<pre>// C#
+using ASCOM.Interface;
+using ASCOM.Helper;
+using ASCOM.DriverAccess;
+
+
+' VB.NET
+Imports ASCOM.Interface
+Imports ASCOM.Helper
+Imports ASCOM.DriverAccess</pre>
+	<p><b>Platform 5.5</b></p>
+	<pre>// C#
+using ASCOM.Interface;
+using ASCOM.Utilities;
+using ASCOM.DriverAccess;
+
+
+' VB.NET
+Imports ASCOM.Interface
+Imports ASCOM.Utilities
+Imports ASCOM.DriverAccess</pre>
+	<h5>Simplified Driver Choosing</h5>
+	<p>The Client Toolkit provides a simplified way to display the Chooser and get the driver's &quot;progID&quot; back. The details of creating the chooser, setting its device type, etc. are handled by the Client Toolkit. A one-line call is all that's needed. The following examples are for Telescope drivers. Substitute Focuser, Dome, etc., to choose other types of drivers. </p>
+	<pre>// C#
+string progID = Telescope.Choose(&quot;&quot;);
+
+' VB.NET
+Dim progID As String = Telescope.Choose(&quot;&quot;)</pre>
+	<p>If you want to pre-select a particular (Telescope) driver when displaying the chooser (e.g. one that was previously chosen by your user), substitute its progID for the &quot;&quot; in the above calls. It's up to you to save the previously chosen driver's progID somewhere (persistently).</p>
+	<h5>Creating the Driver</h5>
+	<p>Once you have the progID of the chosen (or remembered) driver, it's a one-line call to create the driver itself. Again, using Telescope  as an example:</p>
+	<pre>// C#
+Telescope T = new Telescope(progID);
+
+' VB.NET
+Dim T As Telescope = New Telescope(progID)</pre>
+	<p>At this point T is a handle to the driver and may be used to access any of the standard properties and methods (members) of the driver. Upon typing <span class="code">T.</span> you should see IntelliSense popups to guide you in using the standard members. If not, go back and check that you added the reference to ASCOM.DriverAccess.dll from the Platform .net folder and not from the GAC. </p>
+	<h5>Using the Driver </h5>
+	<p>Once you have chosen and created the driver, and have a handle to it, you can use the normal object member calling syntax of your .NET language to access its members and you should see IntelliSense documentation to guide you. The applicable driver standard document (also available as a developer option during Platform installation) will be a great help as well!</p>
+	<p class="note">Before diving into full-blown application  development, it is suggested that you create a simple Console program that walks through the process of choosing, creating, and using a driver. You can use Console.WriteLine() to write to the console window and Console.ReadLine() to read input from you. At the end of the program, put a Console.ReadLine() call to keep the console window open until you've looked at the things you're interested in. Play with it until you're really comfortable with both the process of choosing and creating the driver, and also the techniques for making the driver do what you want for the device. Choose the simulator for your device type and exercise it from the console program. </p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2010, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>

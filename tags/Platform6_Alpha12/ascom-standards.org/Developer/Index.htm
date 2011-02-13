@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>Resources and Principles</title>
+<!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>Developer Components in the Platform</h3>
+	<p class="note">Before embarking on driver development, you should have the ASCOM Platform developer components installed on your system. When installing the Platform, be sure to enable the Developer Components checkboxes. If you didn't install them when you originally installed the Platform, you can install them by uninstalling the Platform then reinstalling, this time enabling the Developer Components. This will not back-rev any updates to the Platform you may have applied.</p>
+	<h3>Role of Simulators</h3>
+	<p>The ASCOM Platform includes <i>simulators </i> for each of the devices covered by an ASCOM standard. These simulators provide a convenient tool for application software developers to test their programs with known good drivers under controlled conditions. The simulators also serve driver developers as <i>reference implementations </i> of the driver standards. If there is a question about the behavior of a property or method, the behavior of the appropriate simulator serves as the reference. </p>
+	
+	<h3>Application Developer Resources</h3>
+	<p>If you're new to ASCOM, and you're an application developer (as opposed to a driver developer), check out the <a href="AppStart.htm">Getting Started</a> information. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">.NET Client Toolkit</a>.</p>
+	
+	
+	<h3>Driver Developer Resources</h3>
+	<p class="note">NOTE: An update to the .NET driver templates, with a correction for 64-bit systems, is available in the <a href="../Downloads/PlatformUpdates.htm">Platform Updates</a> section of the download center.</p>
+	<p>Most of the driver developer tools are contained within the ASCOM Platform 2008 as optionally installed components or as Developer Downloads in the <a href="../Downloads/Index.htm">Download Center</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. The Platform contains templates for all driver types in both C# and VB.NET. </p>
+	<h4>Conformance Checker</h4>
+	<p>See <a href="Conformance.htm">Conformance Testing</a>. Once you have your driver working, it's very important to test it with the <a href="../Downloads/DevTools.htm">Driver Conformance Checker tool</a>. This tool will exercise your driver and the device it handles, checking for common programming errors. </p>
+	<h3>Driver Design Principles</h3>
+	
+	<p>The interface specifications aren't the full story! There are some design principles that, if adhered-to, will maximize the chances that your driver will operate properly with a variety of client software. <span class="underline">The links on the left lead to information on each of these design principles</span>. </p>
+	</div>
+&nbsp;<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2010, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>
