@@ -566,6 +566,30 @@ Public Class DiagnosticsForm
         Sim = Nothing
 
         Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.NWaySwitchDriver"
+        Sim.Description = "ASCOM Simulator NWaySwitch Driver"
+        Sim.DeviceType = "Switch"
+        Sim.Name = "ASCOM.Simulator.NWaySwitchDriver"
+        Sim.DriverVersion = "6.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.RheostatSwitch"
+        Sim.Description = "ASCOM Simulator Rheostat Driver"
+        Sim.DeviceType = "Switch"
+        Sim.Name = "ASCOM.Simulator.RheostatSwitch"
+        Sim.DriverVersion = "6.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
         Sim.ProgID = "SwitchSim.Switch"
         Sim.Description = "Platform 5 Switch Simulator"
         Sim.DeviceType = "Switch"
@@ -717,7 +741,8 @@ Public Class DiagnosticsForm
                         End Try
 
                     Case Else ' Everything else should be Connected 
-                        DeviceObject.Connected = True : NMatches += 1
+                        DeviceObject.Connected = False
+                        NMatches += 1
                 End Select
                 TL.LogMessage("TestSimulator", "Completed Device: " & Sim.ProgID & " OK")
                 Try : DeviceObject.Dispose() : Catch : End Try
