@@ -6,28 +6,40 @@
     	<title>Key Changes in 6.0</title>
       	<content>
       		<list class="bullet">
+      			<listItem>Driver installers that did not run in locale's where "." is not the decimal separator will now run.</listItem>
+      			<listItem>Incorrectly registered drivers are now identified by the Chooser and report why rather than 
+      			generating difficult to assess exception messages.</listItem>
+      			<listItem>32bit only drivers will now be identified by the Chooser if selected by a 64bit application and an appropriate
+      			message will be given.</listItem>
       			<listItem>Flexibility - Capability for driver authors to implement their own commands (Action and SupportedActions methods)</listItem>
       			<listItem>Supported Device Types
   					<list class="bullet">
-  						<listItem>New Switch device definition</listItem>
+  						<listItem>New Switch device definition including: 
+  							<list class="bullet">
+		  						<listItem>On/Off switch</listItem>
+		  						<listItem>N-way switch</listItem>
+		  						<listItem>Rheostat device</listItem>
+		  						<listItem>Simulators for above switch types.</listItem>
+		  					</list>
+  						</listItem>
   						<listItem>New SafetyDevice device definition</listItem>
   						<listItem>New CameraV2 device definition</listItem>
   						<listItem>All device types now support a common set of core capabilities
-  						<list class="bullet">
-  						</list>
-	  						<listItem>Action - Execute a device specific capability defined by the driver author</listItem>
-	  						<listItem>CommandBlind - Send a device specific control code to a device expecting no response</listItem>
-	  						<listItem>CommandBool - Send a device specific control code to a device expecting a boolean response</listItem>
-	  						<listItem>CommandString - Send a device specific control code to a device expecting a string response</listItem>
-	  						<listItem>Connected - connects and disconnects the controlled device</listItem>
-	  						<listItem>Description - Long description of the device being controlled</listItem>	  						
-	  						<listItem>Dispose - Clean up and release any driver resources prior to driver shutdown</listItem>
-	  						<listItem>DriverInfo - Long description of the driver controlling the device</listItem>
-	  						<listItem>DriverVersion - m.n format driver version number</listItem>
-	  						<listItem>InterfaceVersion - Version number of the ASCOM interface that the driver supports</listItem>
-	  						<listItem>Name - Short display name of the driver</listItem>
-	  						<listItem>SetupDialog - DIsplays the driver / device configuration screen</listItem>
-	  						<listItem>SupportedActions - List of actions supported by this device</listItem>
+	  						<list class="bullet">
+		  						<listItem>Action - Execute a device specific capability defined by the driver author</listItem>
+		  						<listItem>CommandBlind - Send a device specific control code to a device expecting no response</listItem>
+		  						<listItem>CommandBool - Send a device specific control code to a device expecting a boolean response</listItem>
+		  						<listItem>CommandString - Send a device specific control code to a device expecting a string response</listItem>
+		  						<listItem>Connected - connects and disconnects the controlled device</listItem>
+		  						<listItem>Description - Long description of the device being controlled</listItem>	  						
+		  						<listItem>Dispose - Clean up and release any driver resources prior to driver shutdown</listItem>
+		  						<listItem>DriverInfo - Long description of the driver controlling the device</listItem>
+		  						<listItem>DriverVersion - m.n format driver version number</listItem>
+		  						<listItem>InterfaceVersion - Version number of the ASCOM interface that the driver supports</listItem>
+		  						<listItem>Name - Short display name of the driver</listItem>
+		  						<listItem>SetupDialog - DIsplays the driver / device configuration screen</listItem>
+		  						<listItem>SupportedActions - List of actions supported by this device</listItem>
+		  					</list>
 	  					</listItem>
   					</list>
   				</listItem>
