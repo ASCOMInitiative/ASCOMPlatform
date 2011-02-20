@@ -17,10 +17,12 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class AscomDriver: IDisposable
     {
+        private int interfaceVersion;
         #region AscomDriver Constructors and Dispose
 
         MemberFactory memberFactory;
         private bool disposedValue = false;        // To detect redundant calls
+        private string deviceType;
 
         /// <summary>
         /// Creates a new instance of the <see cref="AscomDriver"/> class.
@@ -29,6 +31,8 @@ namespace ASCOM.DriverAccess
         public AscomDriver(string deviceProgId)
         {
             memberFactory = new MemberFactory(deviceProgId);
+            interfaceVersion = this.InterfaceVersion;
+            deviceType = deviceProgId.Substring(deviceProgId.LastIndexOf(".") + 1).ToUpper();
         }
 
         /// <summary>
@@ -81,8 +85,28 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
         public bool Connected
         {
-            get { return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); }
-            set { memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value }); }
+            get 
+            { 
+                if ((deviceType=="FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
+                {
+                    return (bool)memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { }); 
+                }
+                else //Everything else uses Connected!
+                {
+                    return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); 
+                }
+            }
+            set 
+            { 
+                if ((deviceType == "FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
+                {
+                    memberFactory.CallMember(2, "Link", new Type[] { }, new object[] { value });
+                }
+                else //Everything else uses Connected!
+                {
+                    memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value });
+                }
+            }
         }
 
         /// <summary>
@@ -94,7 +118,32 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
         public string Description
         {
-            get { return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { }); }
+            get 
+            {
+                try
+                {
+                    return (string)memberFactory.CallMember(1, "Description", new Type[] { typeof(string) }, new object[] { });
+                }
+                catch (Exception ex)
+                {
+                    if (interfaceVersion == 1)
+                    {
+                        switch (deviceType)
+                        {
+                            case "FILTERWHEEL":
+                            case "FOCUSER":
+                                return "Description not implemented by interface version " + interfaceVersion.ToString();
+                            default:
+                                throw ex;
+                        }
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+
+                }
+            }
         }
 
         /// <summary>
@@ -106,7 +155,32 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverInfo
         {
-            get { return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { }); }
+            get 
+            { 
+                try
+                {
+                    return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { });
+                }
+                catch (Exception ex)
+                {
+                    if (interfaceVersion == 1)
+                    {
+                        switch (deviceType)
+                        {
+                            case "FILTERWHEEL":
+                            case "FOCUSER":
+                                return "DriverInfo is not implemented by interface version " + interfaceVersion.ToString();
+                            default:
+                                throw ex;
+                        }
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+
+                }
+            }
         }
 
         /// <summary>
@@ -116,7 +190,34 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverVersion
         {
-            get { return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { }); }
+            get 
+            { 
+                try
+                {
+                    return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { });
+                }
+                catch (Exception ex)
+                {
+                    if (interfaceVersion == 1)
+                    {
+                        switch (deviceType)
+                        {
+                            case "FILTERWHEEL":
+                            case "FOCUSER":
+                            case "CAMERA":
+                            case "DOME":
+                                return "DriverVersion is not implemented by interface version " + interfaceVersion.ToString();
+                            default:
+                                throw ex;
+                        }
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+
+                }
+            }
         }
 
         /// <summary>
@@ -145,7 +246,32 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Name
         {
-            get { return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { }); }
+            get 
+            { 
+                try
+                {
+                    return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { });
+                }
+                catch (Exception ex)
+                {
+                    if (interfaceVersion == 1)
+                    {
+                        switch (deviceType)
+                        {
+                            case "FILTERWHEEL":
+                            case "FOCUSER":
+                                return "Name is not implemented by interface version " + interfaceVersion.ToString();
+                            default:
+                                throw ex;
+                        }
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+
+                }
+            }
         }
 
         /// <summary>

@@ -238,7 +238,7 @@ namespace ASCOM.DriverAccess
         /// <param name="Altitude">Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith)</param>
         public void SlewToAltitude(double Altitude)
         {
-            memberFactory.CallMember(3, "SlewToAltitude", new Type[] { }, new object[] { });
+            memberFactory.CallMember(3, "SlewToAltitude", new Type[] { typeof(double) }, new object[] { Altitude });
         }
 
         /// <summary>

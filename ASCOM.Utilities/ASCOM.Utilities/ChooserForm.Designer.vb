@@ -27,7 +27,6 @@
     'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ChooserForm))
         Me.picASCOM = New System.Windows.Forms.PictureBox()
         Me.cmdCancel = New System.Windows.Forms.Button()
@@ -45,10 +44,9 @@
         Me.MenuSerialTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuIncludeSerialTraceDebugInformation = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuProfileTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuUtilTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.MenuUtilTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -203,26 +201,17 @@
         Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
-        'MenuTransformTraceEnabled
-        '
-        Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
-        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(280, 22)
-        Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
-        '
-        'ToolTip1
-        '
-        Me.ToolTip1.AutoPopDelay = 5000
-        Me.ToolTip1.InitialDelay = 0
-        Me.ToolTip1.IsBalloon = True
-        Me.ToolTip1.ReshowDelay = 100
-        Me.ToolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning
-        Me.ToolTip1.ToolTipTitle = "Incompatible Driver"
-        '
         'MenuUtilTraceEnabled
         '
         Me.MenuUtilTraceEnabled.Name = "MenuUtilTraceEnabled"
         Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuUtilTraceEnabled.Text = "Util Trace Enabled"
+        '
+        'MenuTransformTraceEnabled
+        '
+        Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
         '
         'ChooserForm
         '
@@ -267,7 +256,6 @@
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents MenuTransformTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuIncludeSerialTraceDebugInformation As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents MenuUtilTraceEnabled As System.Windows.Forms.ToolStripMenuItem
 #End Region
 End Class

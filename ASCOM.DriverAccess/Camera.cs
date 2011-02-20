@@ -567,10 +567,9 @@ namespace ASCOM.DriverAccess
         /// Stops the current exposure, if any.  If an exposure is in progress, the readout
         /// process is initiated.  Ignored if readout is already in process.
         /// </summary>
-        /// <exception cref=" System.Exception">Must throw an exception if CanStopExposure is False</exception>
-        /// <exception cref=" System.Exception">Must throw an exception if no exposure is in progress</exception>
-        /// <exception cref=" System.Exception">Must throw an exception if the camera or link has an error condition</exception>
-        /// <exception cref=" System.Exception">Must throw an exception if for any reason no image readout will be available.</exception>
+        /// <exception cref="ASCOM.PropertyNotImplementedException">Must throw an exception if CanStopExposure is False</exception>
+        /// <exception cref="ASCOM.NotConnectedException">Must throw an exception if the camera or link has an error condition</exception>
+        /// <exception cref="ASCOM.DriverException">Must throw an exception if for any reason no image readout will be available.</exception>
         public void StopExposure()
         {
             _memberFactory.CallMember(3, "StopExposure", new Type[] { }, new object[] { });

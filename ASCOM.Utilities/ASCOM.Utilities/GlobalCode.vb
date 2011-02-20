@@ -436,28 +436,10 @@ Module VersionCode
 
         DriverCompatibilityMessage = "" 'Set default return value as OK
 
-        'Try 'Get the list of 32bit only drivers
-        'Drivers32Bit = ProfileStore.EnumProfile(DRIVERS_32BIT)
-        'Catch ex1 As Exception
-        'Ignore any exceptions from this call e.g. if there are no 32bit only devices installed
-        'Just create an empty list
-        'Drivers32Bit = New Generic.SortedList(Of String, String)
-        'LogEvent("ChooserForm", "Exception creating SortedList of 32bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser32BitOnlyException, ex1.ToString)
-        'End Try
-
-        'Try 'Get the list of 64bit only drivers
-        'Drivers64Bit = ProfileStore.EnumProfile(DRIVERS_64BIT)
-        'Catch ex1 As Exception
-        'Ignore any exceptions from this call e.g. if there are no 64bit only devices installed
-        'Just create an empty list
-        'Drivers64Bit = New Generic.SortedList(Of String, String)
-        'LogEvent("ChooserForm", "Exception creating SortedList of 64bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser64BitOnlyException, ex1.ToString)
-        'End Try
-
         'Parse the COM registry section to determine whether this ProgID is an in-process DLL server.
         'If it is then parse the executable to determine whether it is a 32bit only driver and gie a suitable message if it is
         'Picks up some COM registration issues as well as a by-product.
-        If ApplicationBits() = Bitness.Bits64 Then 'We have a 64bit application so check to see whether this is a 32bit only driver
+        If RequiredBitness = Bitness.Bits64 Then 'We have a 64bit application so check to see whether this is a 32bit only driver
             RK = Registry.ClassesRoot.OpenSubKey(ProgID & "\CLSID", False) 'Look in the 64bit section first
             If Not RK Is Nothing Then ' ProgID is registered and has a CLSID!
                 CLSID = RK.GetValue("").ToString 'Get the CLSID for this ProgID
@@ -526,6 +508,9 @@ Module VersionCode
                 RK.Close()
 
                 RK = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID) ' Check the 32bit registry section for this CLSID
+                If RK Is Nothing And ApplicationBits() = Bitness.Bits64 Then 'check the 32bit registry sectionon a 64bit machine
+                    RK = Registry.ClassesRoot.OpenSubKey("Wow6432Node\CLSID\" & CLSID) ' Check the 32bit registry section for this CLSID
+                End If
                 If Not RK Is Nothing Then 'We have a CLSID entry so process it
                     RKInprocServer32 = RK.OpenSubKey("InprocServer32")
                     RK.Close()
@@ -574,6 +559,24 @@ End Module
 #End Region
 
 #Region "Old Code"
+'Try 'Get the list of 32bit only drivers
+'Drivers32Bit = ProfileStore.EnumProfile(DRIVERS_32BIT)
+'Catch ex1 As Exception
+'Ignore any exceptions from this call e.g. if there are no 32bit only devices installed
+'Just create an empty list
+'Drivers32Bit = New Generic.SortedList(Of String, String)
+'LogEvent("ChooserForm", "Exception creating SortedList of 32bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser32BitOnlyException, ex1.ToString)
+'End Try
+
+'Try 'Get the list of 64bit only drivers
+'Drivers64Bit = ProfileStore.EnumProfile(DRIVERS_64BIT)
+'Catch ex1 As Exception
+'Ignore any exceptions from this call e.g. if there are no 64bit only devices installed
+'Just create an empty list
+'Drivers64Bit = New Generic.SortedList(Of String, String)
+'LogEvent("ChooserForm", "Exception creating SortedList of 64bit only applications", EventLogEntryType.Error, EventLogErrors.Chooser64BitOnlyException, ex1.ToString)
+'End Try
+
 'If (ApplicationBits() = Bitness.Bits64) And (Drivers32Bit.ContainsKey(ProgID)) Then 'This is a 32bit driver being accessed by a 64bit application
 ' DriverCompatibilityMessage = "This 32bit driver is not compatible with your 64bit application." & vbCrLf & _
 '               "Please contact the driver author to see if there is a 64bit compatible version."
