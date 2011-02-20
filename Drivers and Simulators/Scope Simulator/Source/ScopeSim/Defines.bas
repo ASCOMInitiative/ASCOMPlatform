@@ -45,9 +45,7 @@ Public Const INSTRUMENT_APERTURE As Double = 0.2            ' 8 inch = 20 cm
 Public Const INSTRUMENT_APERTURE_AREA As Double = 0.0269    ' 3 inch obstruction
 Public Const INSTRUMENT_FOCAL_LENGTH As Double = 1.26       ' f/6.3 instrument
 Public Const INSTRUMENT_NAME As String = "Simulator"        ' Our name
-Public Const INSTRUMENT_DESCRIPTION As String = _
-    "Software Telescope Simulator for ASCOM" & vbCrLf & _
-    "Copyright © 2001-2002, SPACE.com"
+Public Const INSTRUMENT_DESCRIPTION As String = "ASCOM Platform 5 Telescope Simulator"
 Public Const INVALID_COORDINATE As Double = 100000#
 '
 ' Timer interval (sec.)
