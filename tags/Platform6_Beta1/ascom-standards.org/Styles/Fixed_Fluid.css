@@ -1,0 +1,10 @@
+﻿@import url('Style.css');
+@import url('CommonElements.css');
+
+
+/* This style sheet only has attributes that would normally override CommonElements.css */
+
+#centercontent {
+	margin-left: 218px;
+	margin-right: 10px;
+}
