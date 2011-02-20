@@ -525,7 +525,6 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' process is initiated.  Ignored if readout is already in process.
     ''' </summary>
     ''' <exception cref="ASCOM.PropertyNotImplementedException">Must throw an exception if CanStopExposure is False</exception>
-    ''' <exception cref="ASCOM.InvalidOperationException">Must throw an exception if no exposure is in progress</exception>
     ''' <exception cref="ASCOM.NotConnectedException">Must throw an exception if the camera or link has an error condition</exception>
     ''' <exception cref="ASCOM.DriverException">Must throw an exception if for any reason no image readout will be available.</exception>
     Sub StopExposure()
