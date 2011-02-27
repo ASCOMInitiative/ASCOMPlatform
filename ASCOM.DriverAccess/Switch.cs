@@ -58,7 +58,7 @@ namespace ASCOM.DriverAccess
         /// <param name="parameters">On or Off</param> 
         public void SetSwitch(string name, string[] parameters)
         {
-            _memberFactory.CallMember(3, "SetSwitch", new[] { typeof(string), typeof(string[]) }, new object[] { name, parameters }, CultureInfo.InvariantCulture);
+            _memberFactory.CallMember(3, "SetSwitch", new[] { typeof(string), typeof(string[]) }, new object[] { name, parameters });
         }
 
         /// <summary>
