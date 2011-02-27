@@ -72,8 +72,9 @@ namespace ASCOM.DriverAccess
                     foreach (ParameterInfo pi in ((MethodInfo) mi).GetParameters())
                     {
                         _tl.LogMessage("Parameter",
-                                       "  " + pi.Name + " " + pi.ParameterType.Name + " " +
-                                       pi.ParameterType.AssemblyQualifiedName);
+                                       " " + pi.Name + 
+                                       " " + pi.ParameterType.Name + 
+                                       " " + pi.ParameterType.AssemblyQualifiedName);
                     }
                 }
             }
@@ -117,11 +118,18 @@ namespace ASCOM.DriverAccess
         /// <returns>nothing</returns>
         public void Dispose()
         {
-            if (GetLateBoundObject == null) return;
-            var releaseComObject = Marshal.ReleaseComObject(GetLateBoundObject);
-            if (releaseComObject == 0 )GetLateBoundObject = null;
-            if (_tl != null)
-                _tl.Dispose();
+            if (GetLateBoundObject != null)
+            {
+                try
+                {
+                    var releaseComObject = Marshal.ReleaseComObject(GetLateBoundObject);
+                    if (releaseComObject == 0) GetLateBoundObject = null;
+                }
+                catch { } // Ignore any errors here as we are disposing
+
+
+                if (_tl != null) _tl.Dispose();
+            }
         }
 
         /// <summary>
@@ -186,8 +194,12 @@ namespace ASCOM.DriverAccess
                         {
                             //run the COM object property
                             return
-                                (GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.GetProperty,
-                                                       null, GetLateBoundObject, new object[] { }, CultureInfo.InvariantCulture));
+                                (GetObjType.InvokeMember(memberName, 
+                                                         BindingFlags.Default | BindingFlags.GetProperty,
+                                                         null, 
+                                                         GetLateBoundObject, 
+                                                         new object[] { }, 
+                                                         CultureInfo.InvariantCulture));
                         }
                         catch (COMException e)
                         {
@@ -249,8 +261,12 @@ namespace ASCOM.DriverAccess
                         try
                         {
                             //run the COM object property
-                            GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.SetProperty, null,
-                                                  GetLateBoundObject, parms, CultureInfo.InvariantCulture);
+                            GetObjType.InvokeMember(memberName, 
+                                                    BindingFlags.Default | BindingFlags.SetProperty, 
+                                                    null,
+                                                    GetLateBoundObject, 
+                                                    parms, 
+                                                    CultureInfo.InvariantCulture);
                             return null;
                         }
                         catch (COMException e)
@@ -286,10 +302,8 @@ namespace ASCOM.DriverAccess
                         foreach (ParameterInfo p in pars)
                         {
                             _tl.LogMessage(memberName, "  Parameter: " + p.ParameterType);
-                            _tl.LogMessage(memberName,
-                                          "    AssemblyQualifiedName: " + p.ParameterType.AssemblyQualifiedName);
-                            _tl.LogMessage(memberName,
-                                          "    AssemblyQualifiedName: " + parameterTypes[0].AssemblyQualifiedName);
+                            _tl.LogMessage(memberName, "    AssemblyQualifiedName: " + p.ParameterType.AssemblyQualifiedName);
+                            _tl.LogMessage(memberName, "    AssemblyQualifiedName: " + parameterTypes[0].AssemblyQualifiedName);
                             _tl.LogMessage(memberName, "    FullName: " + p.ParameterType.FullName);
                             _tl.LogMessage(memberName, "    FullName: " + parameterTypes[0].FullName);
                             _tl.LogMessage(memberName, "    AssemblyFullName: " + p.ParameterType.Assembly.FullName);
@@ -298,14 +312,9 @@ namespace ASCOM.DriverAccess
                             _tl.LogMessage(memberName, "    AssemblyCodeBase: " + parameterTypes[0].Assembly.CodeBase);
                             _tl.LogMessage(memberName, "    AssemblyLocation: " + p.ParameterType.Assembly.Location);
                             _tl.LogMessage(memberName, "    AssemblyLocation: " + parameterTypes[0].Assembly.Location);
-                            _tl.LogMessage(memberName,
-                                          "    AssemblyGlobalAssemblyCache: " +
-                                          p.ParameterType.Assembly.GlobalAssemblyCache);
-                            _tl.LogMessage(memberName,
-                                          "    AssemblyGlobalAssemblyCache: " +
-                                          parameterTypes[0].Assembly.GlobalAssemblyCache);
+                            _tl.LogMessage(memberName, "    AssemblyGlobalAssemblyCache: " + p.ParameterType.Assembly.GlobalAssemblyCache);
+                            _tl.LogMessage(memberName, "    AssemblyGlobalAssemblyCache: " + parameterTypes[0].Assembly.GlobalAssemblyCache);
                         }
-
 
                         try
                         {
@@ -320,8 +329,7 @@ namespace ASCOM.DriverAccess
                             {
                                 throw e.InnerException;
                             }
-                            throw new MethodNotImplementedException(_strProgId + " " + memberName,
-                                                                    e.InnerException);
+                            throw new MethodNotImplementedException(_strProgId + " " + memberName, e.InnerException);
                         }
                         catch (Exception e)
                         {
@@ -337,8 +345,12 @@ namespace ASCOM.DriverAccess
                         try
                         {
                             //run the COM object method
-                            return GetObjType.InvokeMember(memberName, BindingFlags.Default | BindingFlags.InvokeMethod,
-                                                         null, GetLateBoundObject, parms, CultureInfo.InvariantCulture);
+                            return GetObjType.InvokeMember(memberName, 
+                                                           BindingFlags.Default | BindingFlags.InvokeMethod,
+                                                           null, 
+                                                           GetLateBoundObject, 
+                                                           parms, 
+                                                           CultureInfo.InvariantCulture);
                         }
                         catch (COMException e)
                         {

@@ -232,7 +232,7 @@ namespace ASCOM.DriverAccess
             {
                 try // Return the interface version or return 1 if property is not implemented
                 {
-                    return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { }), CultureInfo.InvariantCulture);
+                    return Convert.ToInt16(memberFactory.CallMember(1, "InterfaceVersion", new Type[] { }, new object[] { }));
                 }
                 catch (PropertyNotImplementedException)
                 {
