@@ -17,7 +17,7 @@ if Variable WIN64MODE Equals TRUE
   Get Folder Location System->Program Files Directory into PROGRAMFILES64
   Get Common Folder Location System->Program Files Directory into COMMONFILES64
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
-  Comment: Set to a value that will access the 32bit portion of the registry on a 64bit OS
+  Comment: Comment: Set to a value that will access the 32bit portion of the registry on a 64bit OS
   Set Variable WOW6432NODE to WOW6432NODE\
 end
  
@@ -242,6 +242,7 @@ Comment: Exit Setup if Wizard Loop cancelled
 if Variable WIZARD Equals CANCEL
   Terminate Installation
 end
+Display Dialog: progress, use as progress dialog (non-modal)
  
 Comment: Prepare to install
 Set Variable PROGRESSTEXT to Installing $TITLE$
@@ -257,13 +258,11 @@ if Variable NEEDSUPGRADE Equals TRUE
   MessageBalloon: ASCOM Platform Maintenance, MSI engine is uninstalling previous Platform 6 version...
   Set Variable REMOVEOLD to 
   Set Variable ERROROLD to 
-  if Variable WIN64MODE Equals TRUE
-    Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-  end
-  Comment: Remove previous version and remove old assembly versions
-  Install/Remove MSI Package $PRODUCTCODE$[REMOVE=ALL] (get result into variable REMOVEOLD)
-  Remove Unpinned Assemblies
-  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+   
+  Comment: Find location of our uninstaller and run it
+  Set Variable UNINSTALLER to 
+  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}\UninstallString into UNINSTALLER
+  Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
   if Variable REMOVEOLD Equals ERROR
     MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
     Terminate Installation
@@ -277,39 +276,8 @@ if Variable NEEDSUPGRADE Equals TRUE
     end
   end
   Set Variable MAINTENANCE to FALSE
-  MessageBalloon: ASCOM Platform Maintenance, Completed old version uninstallation.
+  MessageBalloon: ASCOM Platform Maintenance, Completed previous version uninstallation.
 end
-Comment: Remove previous version (Native install)
-[DEFINE REGION: Native Install]
-if Variable RECOMMENDEDUPGRADE Equals TRUE
-  MessageBalloon: ASCOM Platform Maintenance, Native engine is uninstalling previous Platform 6 version...
-  Comment: Bind to external setup log
-  Set Variable NATIVE_LOGGING to $NATIVE_OLDLOG$
-  Set Variable NATIVE_ENGINE_MODE to $NATIVE_ENGINE$
-  Set Variable NATIVE_ENGINE to TRUE
-  Apply Uninstall (get result into variable NATIVE_UNINSTALL)
-  Set Variable NATIVE_ENGINE to $NATIVE_ENGINE_MODE$
-  if Variable NATIVE_UNINSTALL Equals REBOOT
-    MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
-    if Variable REBOOTNOW Equals OK
-      Reboot Computer and Resume Setup
-    else
-      Terminate Installation
-    end
-  else
-    if Variable NATIVE_UNINSTALL not Equals COMPLETE
-      MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. It is strongly recommended that you uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$LASTERROR$$NEWLINE$$NEWLINE$Click OK to quit $TITLE$ Setup.$NEWLINE$$NEWLINE$Click Cancel to continue $TITLE$ Setup anyways (not recommended).
-      if Variable NATIVE_ERROR Equals OK
-        Terminate Installation
-      end
-    end
-    MessageBalloon: ASCOM Platform Maintenance, Completed old version uninstallation.
-  end
-  Comment: Bind to internal setup log
-  Set Variable NATIVE_LOGGING to 
-end
-[END REGION]
-Display Dialog: progress, use as progress dialog (non-modal)
  
 Comment: Modify Target System
 [DEFINE REGION: Perform Uninstallation]
@@ -343,6 +311,7 @@ if Variable REMOVE Equals TRUE
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
   end
+  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   Apply Uninstall (get result into variable SUCCESS)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
@@ -697,11 +666,12 @@ else
     Delete Files $COMMONFILES$\ASCOM\Camera\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\.net\GACInstall.exe (when installing)
     [END REGION]
+    Comment: Install in 64bit mode if we are running on a 64bit OS
     if Variable WIN64MODE Equals TRUE
       Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
     end
-    Comment: Install in 64bit mode if we are running on a 64bit OS
     Apply Install (get result into variable SUCCESS)
+    MessageBalloon: , 
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL
         Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
