@@ -466,19 +466,19 @@ Module VersionCode
                                 InprocServerBitness = InProcServer.BitNess
                                 If InprocServerBitness = Bitness.Bits32 Then '32bit driver executable
                                     If Registered64Bit Then '32bit driver executable registered in 64bit COM
-                                        DriverCompatibilityMessage = "This driver is a 32bit executable but is registered as a 64bit COM application." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
+                                        DriverCompatibilityMessage = "This 32bit only driver won't work in a 64bit application even though it is registered as a 64bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
                                     Else '32bit driver executable registered in 32bit COM
-                                        DriverCompatibilityMessage = "This driver is a 32bit executable and is only registered as a 32bit COM application." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
+                                        DriverCompatibilityMessage = "This 32bit only driver won't work in a 64bit application even though it is correctly registered as a 32bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
                                     End If
                                 Else '64bit driver
                                     If Registered64Bit Then '64bit driver executable registered in 64bit COM section
                                         'This is the only OK combination, no message for this!
                                     Else '64bit driver executable registered in 32bit COM
-                                        DriverCompatibilityMessage = "This driver is a 64bit executable but is only registered as a 32bit COM application." & vbCrLf & DRIVER_AUTHOR_MESSAGE_INSTALLER
+                                        DriverCompatibilityMessage = "This 64bit capable driver is only registered as a 32bit COM driver." & vbCrLf & DRIVER_AUTHOR_MESSAGE_INSTALLER
                                     End If
                                 End If
                             Catch ex As System.IO.FileNotFoundException 'Cannot open the file
-                                DriverCompatibilityMessage = ProgID & " - Cannot find the driver: """ & vbCrLf & InprocFilePath & """"
+                                DriverCompatibilityMessage = "Cannot find the driver executable: " & vbCrLf & """" & InprocFilePath & """"
                             Catch ex As Exception 'Some other exception so log it
                                 LogEvent("DriverCompatibilityMessage", "Exception parsing " & ProgID & ", """ & InprocFilePath & """", EventLogEntryType.Error, EventLogErrors.DriverCompatibilityException, ex.ToString)
                                 DriverCompatibilityMessage = "PEReader Exception, please check ASCOM application Event Log for details"
@@ -496,10 +496,10 @@ Module VersionCode
                         'Please leave this empty clause here so the logic is clear!
                     End If
                 Else 'Cannot find a CLSID entry
-                    DriverCompatibilityMessage = "Unable to find a CLSID entry for this driver (ProgID: " & ProgID & "), please re-install."
+                    DriverCompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
                 End If
             Else 'No COM ProgID registry entry
-                DriverCompatibilityMessage = "This driver (ProgID: " & ProgID & ") does not appear to be registered for COM, please re-install."
+                DriverCompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
             End If
         Else 'We are a 32bit application so make sure the executable is not 64bit only
             RK = Registry.ClassesRoot.OpenSubKey(ProgID & "\CLSID", False) 'Look in the 32bit registry
@@ -523,10 +523,10 @@ Module VersionCode
                             Try
                                 InProcServer = New PEReader(InprocFilePath) 'Get hold of the executable so we can determine its characteristics
                                 If InProcServer.BitNess = Bitness.Bits64 Then '64bit only driver executable
-                                    DriverCompatibilityMessage = "This driver is a 64bit executable and is not compatible with this 32bit application." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
+                                    DriverCompatibilityMessage = "This is a 64bit only driver and is not compatible with this 32bit application." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
                                 End If
                             Catch ex As System.IO.FileNotFoundException 'Cannot open the file
-                                DriverCompatibilityMessage = ProgID & " - Cannot find the driver: """ & InprocFilePath & """"
+                                DriverCompatibilityMessage = "Cannot find the driver executable: " & vbCrLf & """" & InprocFilePath & """"
                             Catch ex As Exception 'Some other exception so log it
                                 LogEvent("DriverCompatibilityMessage", "Exception parsing " & ProgID & ", """ & InprocFilePath & """", EventLogEntryType.Error, EventLogErrors.DriverCompatibilityException, ex.ToString)
                                 DriverCompatibilityMessage = "PEReader Exception, please check ASCOM application Event Log for details"
@@ -544,10 +544,10 @@ Module VersionCode
                         'Please leave this empty clause here so the logic is clear!
                     End If
                 Else 'Cannot find a CLSID entry
-                    DriverCompatibilityMessage = "Unable to find a CLSID entry for this driver (ProgID: " & ProgID & "), please re-install."
+                    DriverCompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
                 End If
             Else 'No COM ProgID registry entry
-                DriverCompatibilityMessage = "This driver (ProgID: " & ProgID & ") does not appear to be registered for COM, please re-install."
+                DriverCompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
             End If
 
         End If
@@ -686,6 +686,25 @@ Friend Class PEReader
         CLR_FLAGS_STRONGNAMESIGNED = &H8
         CLR_FLAGS_NATIVE_ENTRYPOINT = &H10
         CLR_FLAGS_TRACKDEBUGDATA = &H10000
+    End Enum
+
+    Friend Enum SubSystemType
+        NATIVE = 1 'The binary doesn't need a subsystem. This is used for drivers.
+        WINDOWS_GUI = 2 'The image is a Win32 graphical binary. (It can still open a console with AllocConsole() but won't get one automatically at startup.)
+        WINDOWS_CUI = 3 'The binary is a Win32 console binary. (It will get a console per default at startup, or inherit the parent's console.)
+        UNKNOWN_4 = 4 'Unknown allocation
+        OS2_CUI = 5 'The binary is a OS/2 console binary. (OS/2 binaries will be in OS/2 format, so this value will seldom be used in a PE file.)
+        UNKNOWN_6 = 6 'Unknown allocation
+        POSIX_CUI = 7 'The binary uses the POSIX console subsystem.
+        NATIVE_WINDOWS = 8
+        WINDOWS_CE_GUI = 9
+        EFI_APPLICATION = 10 'Extensible Firmware Interface (EFI) application.
+        EFI_BOOT_SERVICE_DRIVER = 11 'EFI driver with boot services.
+        EFI_RUNTIME_DRIVER = 12 'EFI driver with run-time services.
+        EFI_ROM = 13 'EFI ROM image.
+        XBOX = 14 'Xbox sy stem.
+        UNKNOWN_15 = 15 'Unknown allocation
+        WINDOWS_BOOT_APPLICATION = 16 'Boot application.
     End Enum
 #End Region
 
@@ -865,6 +884,7 @@ Friend Class PEReader
     Friend Sub New(ByVal FileName As String)
         If Left(FileName, 5).ToUpper = "FILE:" Then FileName = New Uri(FileName).LocalPath 'Convert uri to local path if required, uri paths are not supported by FileStream
 
+        If Not File.Exists(FileName) Then Throw New FileNotFoundException("PEReader - File not found: " & FileName)
         stream = New FileStream(FileName, FileMode.Open, FileAccess.Read)
         reader = New BinaryReader(stream)
 
@@ -986,6 +1006,14 @@ Friend Class PEReader
         handle.Free()
 
         Return theStructure
+    End Function
+
+    Friend Function SubSystem() As SubSystemType
+        If Is32bitCode() Then
+            Return CType(_ntHeaders.OptionalHeader32.Subsystem, SubSystemType) 'Return the 32bit header field
+        Else
+            Return CType(_ntHeaders.OptionalHeader64.Subsystem, SubSystemType) 'Return the 64bit field
+        End If
     End Function
 
 #Region "IDisposable Support"

@@ -230,6 +230,7 @@ Public Class DiagnosticsForm
             'Set Profile trace checked state on menu item 
             MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
             MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+            MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
 
             MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
@@ -2478,7 +2479,7 @@ Public Class DiagnosticsForm
         Catch ex As Exception
             LogException("TimerTests Exception", ex.ToString)
         Finally
-            ASCOMTimer.Enabled = False
+            Try : ASCOMTimer.Enabled = False : Catch : End Try
         End Try
 
         TL.LogMessage("TimerTests", "Finished")
@@ -3946,6 +3947,7 @@ Public Class DiagnosticsForm
                     PE = New PEReader(FullPath)
                     TL.LogMessage("FileDetails", "   .NET Assembly:      " & PE.IsDotNetAssembly)
                     TL.LogMessage("FileDetails", "   Bitness:            " & PE.BitNess.ToString)
+                    TL.LogMessage("FileDetails", "   Subsystem:          " & PE.SubSystem.ToString)
                     PE.Dispose()
                     PE = Nothing
                 Catch ex As ASCOM.InvalidOperationException
@@ -4521,6 +4523,11 @@ Public Class DiagnosticsForm
     Private Sub MenuUtilTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUtilTraceEnabled.Click
         MenuUtilTraceEnabled.Checked = Not MenuUtilTraceEnabled.Checked 'Invert the selection
         SetName(TRACE_UTIL, MenuUtilTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuTimerTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTimerTraceEnabled.Click
+        MenuTimerTraceEnabled.Checked = Not MenuTimerTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_TIMER, MenuTimerTraceEnabled.Checked.ToString)
     End Sub
 
     Private Sub MenuTransformTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTransformTraceEnabled.Click
