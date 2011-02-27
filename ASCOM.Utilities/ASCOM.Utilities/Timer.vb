@@ -37,7 +37,12 @@ Public Class [Timer]
 
     'Set up a timer to create the tick events. Use a FORMS timer so that it will fire on the current owner's thread
     'If you use a system timer it will  fire on its own thread and this will be invisble to the application!
-    Private WithEvents m_Timer As System.Windows.Forms.Timer
+    'Private WithEvents m_Timer As System.Windows.Forms.Timer
+    Private WithEvents FormTimer As Windows.Forms.Timer
+    Private WithEvents TimersTimer As System.Timers.Timer
+
+    Private IsForm, TraceEnabled As Boolean
+    Private TL As TraceLogger
 
     ''' <summary>
     ''' Timer tick event handler
@@ -58,9 +63,46 @@ Public Class [Timer]
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub New()
-        m_Timer = New System.Windows.Forms.Timer ' Create a form timer
-        m_Timer.Enabled = False ' Default settings
-        m_Timer.Interval = 1000 ' Inital period - 1 second
+        TL = New TraceLogger("", "Timer")
+        TraceEnabled = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
+        TL.Enabled = TraceEnabled
+
+        TL.LogMessage("New", "Started on thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+        FormTimer = New Windows.Forms.Timer
+        TL.LogMessage("New", "Created FormTimer")
+        FormTimer.Enabled = False ' Default settings
+        FormTimer.Interval = 1000 ' Inital period - 1 second
+        TL.LogMessage("New", "Set FormTimer interval")
+
+        TimersTimer = New System.Timers.Timer
+        TL.LogMessage("New", "Created TimersTimer")
+
+        TimersTimer.Enabled = False ' Default settings
+        TimersTimer.Interval = 1000 ' Inital period - 1 second
+        TL.LogMessage("New", "Set TimersTimer interval")
+
+        Try
+            TL.LogMessage("New", "Process FileName " & """" & Process.GetCurrentProcess().MainModule.FileName & """")
+            Dim PE As New PEReader(Process.GetCurrentProcess().MainModule.FileName)
+            TL.LogMessage("New", "SubSystem " & PE.SubSystem.ToString)
+            Select Case PE.SubSystem
+                Case PEReader.SubSystemType.WINDOWS_GUI ' Windows GUI app
+                    IsForm = True
+                Case PEReader.SubSystemType.WINDOWS_CUI 'Windows Console app
+                    IsForm = False
+                Case Else 'Unknown app type
+                    IsForm = False
+
+            End Select
+            If Process.GetCurrentProcess.MainModule.FileName.ToUpper.Contains("WSCRIPT.EXE") Then 'WScript is an exception that is marked GUI but behaves like console!
+                TL.LogMessage("New", "WScript.Exe found - Overriding IsForm to: False")
+                IsForm = False
+            End If
+            TL.LogMessage("New", "IsForm: " & IsForm)
+        Catch ex As Exception
+            TL.LogMessageCrLf("New Exception", ex.ToString) 'Log error and record in the event log
+            LogEvent("Timer:New", "Exception", EventLogEntryType.Error, EventLogErrors.TimerSetupException, ex.ToString)
+        End Try
     End Sub
 
 
@@ -75,12 +117,15 @@ Public Class [Timer]
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
             If disposing Then
+                TL.Enabled = False
+                TL.Dispose()
             End If
-            If Not (m_Timer Is Nothing) Then
-                m_Timer.Enabled = False
-                m_Timer.Dispose()
-                m_Timer = Nothing
+            If Not (FormTimer Is Nothing) Then
+                If Not FormTimer Is Nothing Then FormTimer.Enabled = False
+                FormTimer.Dispose()
+                FormTimer = Nothing
             End If
+
         End If
         Me.disposedValue = True
     End Sub
@@ -114,13 +159,29 @@ Public Class [Timer]
     Public Property Interval() As Integer Implements ITimer.Interval
         'Get and set the timer period
         Get
-            Return m_Timer.Interval
+            If IsForm Then
+                TL.LogMessage("Interval FormTimer Get", FormTimer.Interval.ToString & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+                Return FormTimer.Interval
+            Else
+                TL.LogMessage("Interval TimersTimer Get", TimersTimer.Interval.ToString & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+                Return FormTimer.Interval
+            End If
         End Get
         Set(ByVal Value As Integer)
-            If Value > 0 Then
-                m_Timer.Interval = Value
+            If IsForm Then
+                TL.LogMessage("Interval FormTimer Set", Value.ToString & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+                If Value > 0 Then
+                    FormTimer.Interval = Value
+                Else
+                    FormTimer.Enabled = False
+                End If
             Else
-                m_Timer.Enabled = False
+                TL.LogMessage("Interval TimersTimer Set", Value.ToString & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+                If Value > 0 Then
+                    TimersTimer.Interval = Value
+                Else
+                    TimersTimer.Enabled = False
+                End If
             End If
         End Set
     End Property
@@ -134,10 +195,22 @@ Public Class [Timer]
     Public Property Enabled() As Boolean Implements ITimer.Enabled
         'Enable and disable the timer
         Get
-            Return m_Timer.Enabled
+            If IsForm Then
+                TL.LogMessage("Enabled FormTimer Get", FormTimer.Enabled.ToString & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+                Return FormTimer.Enabled
+            Else
+                TL.LogMessage("Enabled TimersTimer Get", TimersTimer.Enabled.ToString & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+                Return TimersTimer.Enabled
+            End If
         End Get
         Set(ByVal Value As Boolean)
-            m_Timer.Enabled = Value
+            If IsForm Then
+                TL.LogMessage("Enabled FormTimer Set", Value.ToString & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+                FormTimer.Enabled = Value
+            Else
+                TL.LogMessage("Enabled TimersTimer Set", Value.ToString & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString)
+                TimersTimer.Enabled = Value
+            End If
         End Set
     End Property
 #End Region
@@ -147,11 +220,20 @@ Public Class [Timer]
     ''' <summary>
     ''' Timer event handler
     ''' </summary>
-    ''' <param name="source">Source object</param>
-    ''' <param name="e">Parameter object</param>
     ''' <remarks>Raises the Tick event</remarks>
-    Private Sub OnTimedEvent(ByVal source As Object, ByVal e As Object) Handles m_Timer.Tick
+    Private Sub OnTimedEvent(ByVal sender As Object, ByVal e As Object) Handles FormTimer.Tick, TimersTimer.Elapsed
+        If IsForm Then
+            Dim ec As System.EventArgs
+            ec = CType(e, System.EventArgs)
+        Else
+            Dim ec As System.Timers.ElapsedEventArgs
+            ec = CType(e, System.Timers.ElapsedEventArgs)
+            TL.LogMessage("OnTimedEvent", "SignalTime: " & ec.SignalTime.ToString)
+
+        End If
+        If TraceEnabled Then TL.LogMessage("OnTimedEvent", "Raising Tick" & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString) 'Ensure minimum hit on timing under normal, non-trace conditions
         RaiseEvent Tick()
+        If TraceEnabled Then TL.LogMessage("OnTimedEvent", "Raised Tick" & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString) 'Ensure minimum hit on timing under normal, non-trace, conditions
     End Sub
 #End Region
 

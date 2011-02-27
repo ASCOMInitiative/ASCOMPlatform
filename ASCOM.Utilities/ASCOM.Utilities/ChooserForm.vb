@@ -3,6 +3,8 @@ Option Explicit On
 Imports System.Collections
 Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities.Interfaces
+Imports System.Drawing
+Imports System.Drawing.Drawing2D
 
 Friend Class ChooserForm
     Inherits System.Windows.Forms.Form
@@ -13,9 +15,10 @@ Friend Class ChooserForm
 
     Private Const ALERT_TITLE As String = "ASCOM Chooser"
 
-    Private m_sDeviceType, m_sResult, m_sStartSel As String
+    Private m_sDeviceType, m_sResult, m_sStartSel, sProgID As String
     Private m_Drivers As Generic.SortedList(Of String, String)
     Private WithEvents ToolTipMsg As ToolTip
+    Private DriverIsCompatible As String = ""
 
     Private Sub ChooserForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim ProfileStore As RegistryAccess
@@ -23,19 +26,27 @@ Friend Class ChooserForm
         Dim sDescription As String = ""
         Dim TraceFileName As String
         Dim Description As String
-        '
-        ' Enumerate the available ASCOM scope drivers, and
-        ' load their descriptions and ProgIDs into the
-        ' list box. Key is ProgID, value is friendly name.
-        '
-        'MsgBox("ChooserformLoad Start")
+
         Try
+            'Configure the tooltip warning for driver compatibility messages
+            ToolTipMsg = New ToolTip()
+            ToolTipMsg.UseAnimation = True
+            ToolTipMsg.UseFading = False
+            ToolTipMsg.ToolTipIcon = ToolTipIcon.Warning
+            ToolTipMsg.AutoPopDelay = 5000
+            ToolTipMsg.InitialDelay = 0
+            ToolTipMsg.IsBalloon = False
+            ToolTipMsg.ReshowDelay = 0
+            ToolTipMsg.OwnerDraw = False
+
+            ' Enumerate the available ASCOM scope drivers, and
+            ' load their descriptions and ProgIDs into the
+            ' list box. Key is ProgID, value is friendly name.
             ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
             Try 'Get the list of drivers of this device type
                 m_Drivers = ProfileStore.EnumKeys(m_sDeviceType & " Drivers") ' Get Key-Class pairs
             Catch ex1 As Exception
-                'Ignore any exceptions from this call e.g. if there are no devices of that type installed
-                'Just create an empty list
+                'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
                 m_Drivers = New Generic.SortedList(Of String, String)
             End Try
 
@@ -55,10 +66,7 @@ Friend Class ChooserForm
             Me.lblTitle.Text = "Select the type of " & LCase(m_sDeviceType) & " you have, then be " & "sure to click the Properties... button to configure the driver for your " & LCase(m_sDeviceType) & "."
             m_sResult = ""
 
-            '
-            ' Now items in list are sorted. Preselect.
-            '
-            'Find the description corresponding to the set progid
+            ' Now items in list are sorted. Preselect and find the description corresponding to the set progid
             For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
                 If LCase(m_sStartSel) = LCase(de.Key.ToString) Then sDescription = de.Value.ToString
             Next
@@ -109,9 +117,6 @@ Friend Class ChooserForm
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
 
             MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
-
-            ' Assure window pops up on top of others.
-            'Me.BringToFront()
 
             ProfileStore.Dispose() 'Close down the profile store
             ProfileStore = Nothing
@@ -217,48 +222,24 @@ Friend Class ChooserForm
     End Sub
 
     Private Sub cbDriverSelector_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cbDriverSelector.SelectionChangeCommitted
-        Dim sProgID As String = "", DriverIsCompatible As String
         Dim buf As String, ProfileStore As RegistryAccess
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
 
         If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
+
             'Find ProgID corresponding to description
             For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
                 If LCase(de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
             Next
 
-            DriverIsCompatible = VersionCode.DriverCompatibilityMessage(sProgID, ApplicationBits)
-            If DriverIsCompatible <> "" Then 'This is a 32bit driver being accessed by a 64bit application
+            DriverIsCompatible = VersionCode.DriverCompatibilityMessage(sProgID, ApplicationBits) 'Get compatibility warning message, if any
+
+            If DriverIsCompatible <> "" Then 'This is an incompatible driver
                 Me.cmdProperties.Enabled = False ' So prevent access!
                 Me.cmdOK.Enabled = False
-                'If we don't have focus then the baloon arrow has a habit of pointing away from the combo box so only display when we do have focus
-                'Likewise if we don't create the tooltip new each time it points upwards after the first use.
-                If Me.ContainsFocus Then 'The mouse is within the Chooser form so the baloon arrow will point downwards towards the combo box
-                    If Not ToolTipMsg Is Nothing Then
-                        ToolTipMsg.Hide(cbDriverSelector)
-                        ToolTipMsg.Dispose()
-                        ToolTipMsg = Nothing
-                    End If
-                    ToolTipMsg = New ToolTip()
-                    ToolTipMsg.ToolTipIcon = ToolTipIcon.Warning 'Set tooltip properties
-                    ToolTipMsg.AutoPopDelay = 5000
-                    ToolTipMsg.InitialDelay = 0
-                    ToolTipMsg.IsBalloon = True
-                    ToolTipMsg.ReshowDelay = 100
-                    ToolTipMsg.ToolTipTitle = "Incompatible Driver"
-                    If DriverIsCompatible.Contains(vbCrLf) Then
-                        ToolTipMsg.Show(DriverIsCompatible, cbDriverSelector, 50, -87) 'Position for a two line message
-                    Else
-                        ToolTipMsg.Show(DriverIsCompatible, cbDriverSelector, 50, -70) 'Position for a one line message
-                    End If
-                End If
+                WarningMessageShow()
             Else
-                If Not ToolTipMsg Is Nothing Then
-                    ToolTipMsg.Hide(Me)
-                    ToolTipMsg.Dispose()
-                    ToolTipMsg = Nothing
-                End If
-
+                WarningMessageHide() 'Hide any previous message
                 Me.cmdProperties.Enabled = True ' Turn on Properties
                 buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
                 If LCase(buf) = "true" Then
@@ -267,13 +248,40 @@ Friend Class ChooserForm
                     Me.cmdOK.Enabled = False ' Never been initialized
                 End If
             End If
-            Else ' Nothing has been selected
-                Me.cmdProperties.Enabled = False
-                Me.cmdOK.Enabled = False
-            End If
+        Else ' Nothing has been selected
+            Me.cmdProperties.Enabled = False
+            Me.cmdOK.Enabled = False
+        End If
 
-            ProfileStore.Dispose() 'Clean up profile store
-            ProfileStore = Nothing
+        ProfileStore.Dispose() 'Clean up profile store
+        ProfileStore = Nothing
+    End Sub
+
+    Sub WarningMessageShow()
+        If DriverIsCompatible <> "" Then
+            ToolTipMsg.ToolTipTitle = "Incompatible Driver (" & sProgID & ")" 'Set warning message tooltip title
+            If DriverIsCompatible.Contains(vbCrLf) Then
+                ToolTipMsg.Show(DriverIsCompatible, Me, 18, 35) 'Display at position for a two line message
+            Else
+                ToolTipMsg.Show(DriverIsCompatible, Me, 18, 50) 'Display at position for a one line message
+            End If
+        End If
+    End Sub
+
+    Sub WarningMessageHide()
+        ToolTipMsg.RemoveAll()
+    End Sub
+
+    Sub ChooserForm_ShowMove(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown, Me.Move
+        WarningMessageShow()
+    End Sub
+
+    Private Sub ChooserForm_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
+        Dim SolidBrush As New SolidBrush(Color.Black), LinePen As Pen
+
+        'Routine to draw horizontal line on the ASCOM Chooser form
+        LinePen = New Pen(SolidBrush, 1)
+        e.Graphics.DrawLine(LinePen, 14, 103, Me.Width - 20, 103)
     End Sub
 
     Private Sub picASCOM_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles picASCOM.Click
@@ -282,16 +290,6 @@ Friend Class ChooserForm
         Catch ex As Exception
             MsgBox("Unable to display ASCOM-Standards web site in your browser: " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
         End Try
-    End Sub
-
-    Private Sub ChooserForm_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
-        'Routine to draw horizontal line on the ASCOM Chooser form
-        'Fired from the chooserform.paint event
-
-        Dim SolidBrush As New SolidBrush(Color.Black)
-        Dim LinePen As Pen
-        LinePen = New Pen(SolidBrush, 1)
-        e.Graphics.DrawLine(LinePen, 14, 103, Me.Width - 20, 103)
     End Sub
 
     Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceAutoFilenames.Click
@@ -372,13 +370,4 @@ Friend Class ChooserForm
         SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)
     End Sub
 
-    'This routine fires the driver compatibility test when the mouse enters the chooser for the first time.
-    'This ensures that drivers that are pre-selected but are not compatible display a compatibility message if appropriate
-    Private Sub ChooserForm_MouseEnter(ByVal e As Object, ByVal sender As EventArgs) Handles Me.MouseEnter
-        Static DoneOnce As Boolean = False 'Static variable to last lifetime of the app
-        'Only do this once to avoid excessive resource use
-        If Not DoneOnce Then cbDriverSelector_SelectedIndexChanged(cbDriverSelector, New System.EventArgs()) ' Also dims OK
-        DoneOnce = True 'Set flag to ensure only done once
-
-    End Sub
 End Class
