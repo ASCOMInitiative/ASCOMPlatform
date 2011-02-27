@@ -911,36 +911,6 @@ B
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 $
 NEEDSUPGRADE
 WIZARD
@@ -953,23 +923,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Beta 1
+ASCOM Platform 6 Alpha 16
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0.0.0
 English
-ASCOM Platform 6 Beta 1
+ASCOM Platform 6 Alpha 16
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{41276B1D-AEBD-40C1-937E-3ED3F44B71E0}
+{5D175D7B-CA29-4663-B9B9-80AE7F936EC3}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Beta1
+ASCOMPlatform6Alpha16
 TRUE
 FALSE
 
@@ -999,7 +969,7 @@ setupmsi31.mia
 $
 FALSE
 
-TRUE
-TRUE
+FALSE
+FALSE
 TRUE
 FALSE
