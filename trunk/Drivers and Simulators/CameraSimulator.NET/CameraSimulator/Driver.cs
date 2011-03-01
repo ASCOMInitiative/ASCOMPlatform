@@ -23,13 +23,14 @@
 //
 
 using System;
+using System.Collections;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Timers;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using System.Collections;
 
 [assembly:CLSCompliant(false)]
 
@@ -43,7 +44,6 @@ namespace ASCOM.Simulator
     /// </summary>
 	[Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None),ComVisible(true)]
     public class Camera : ICameraV2
-
     {
         #region profile string constants
         private const string STR_InterfaceVersion = "InterfaceVersion";
@@ -170,8 +170,8 @@ namespace ASCOM.Simulator
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         private string lastError = string.Empty;
 
-        private ASCOM.Utilities.Timer exposureTimer;
-        private ASCOM.Utilities.Timer coolerTimer;
+        private System.Timers.Timer exposureTimer;
+        private System.Timers.Timer coolerTimer;
 
         #endregion
 
@@ -583,8 +583,8 @@ namespace ASCOM.Simulator
                     // implement CCD temperature control
                     if (this.coolerTimer == null)
                     {
-                        coolerTimer = new ASCOM.Utilities.Timer();
-                        coolerTimer.Tick += new ASCOM.Utilities.Timer.TickEventHandler(coolerTimer_Tick);
+                        coolerTimer = new System.Timers.Timer();
+                        coolerTimer.Elapsed += new ElapsedEventHandler(coolerTimer_Elapsed);
                         coolerTimer.Interval = 1000;
                         coolerTimer.Enabled = true;
                     }
@@ -595,7 +595,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Adjust the ccd temperature and power once a second
         /// </summary>
-        private void  coolerTimer_Tick()
+        private void coolerTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (this.coolerOn && this.canSetCcdTemperature)
             {
@@ -603,7 +603,7 @@ namespace ASCOM.Simulator
                 this.ccdTemperature -= (this.coolerPower / 50);     // reduce temperature by up to 2 deg per sec.
             }
             // increase temperature by 2 deg per sec at a differential of 40
-            this.ccdTemperature += (this.heatSinkTemperature - this.ccdTemperature)/20.0;
+            this.ccdTemperature += (this.heatSinkTemperature - this.ccdTemperature) / 20.0;
         }
         
         /// <summary>
@@ -1171,8 +1171,8 @@ namespace ASCOM.Simulator
 
             if (this.exposureTimer == null)
             {
-                this.exposureTimer = new ASCOM.Utilities.Timer();
-                this.exposureTimer.Tick += exposureTimer_Tick;
+                this.exposureTimer = new System.Timers.Timer();
+                this.exposureTimer.Elapsed += exposureTimer_Elapsed;
             }
             this.exposureTimer.Interval = (int)(Duration * 1000);
             this.cameraState = CameraStates.cameraExposing;
@@ -1181,7 +1181,7 @@ namespace ASCOM.Simulator
             this.exposureTimer.Enabled = true;
 		}
 
-        private void  exposureTimer_Tick()
+        private void  exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             this.exposureTimer.Enabled = false;
             this.lastExposureDuration = (DateTime.Now - this.exposureStartTime).TotalSeconds;
@@ -1693,7 +1693,7 @@ namespace ASCOM.Simulator
                 this.maxBinY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_MaxBinY, string.Empty, "4"), CultureInfo.InvariantCulture);
                 this.hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
                 this.sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
-                this.sensorType = (ASCOM.DeviceInterface.SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
+                this.sensorType = (SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
 
                 this.bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
                 this.bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
@@ -2117,21 +2117,5 @@ namespace ASCOM.Simulator
 
         #endregion
 
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
 }
