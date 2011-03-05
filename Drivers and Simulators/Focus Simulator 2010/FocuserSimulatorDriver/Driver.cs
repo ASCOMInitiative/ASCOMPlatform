@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using Timer = ASCOM.Utilities.Timer;
 
 namespace ASCOM.Simulator
 {
@@ -75,7 +74,7 @@ namespace ASCOM.Simulator
         #region local parameters
 
         private bool _isConnected;
-        private Timer _moveTimer; // drives the position and temperature changers
+        private System.Timers.Timer _moveTimer; // drives the position and temperature changers
         private int _position;
         private const int roc = 100; // rate of change in steps per 1/10 sec
         internal int Target;
@@ -157,15 +156,15 @@ namespace ASCOM.Simulator
                 if (value)
                 {
                     if (_moveTimer == null)
-                        _moveTimer = new Timer();
-                    _moveTimer.Tick += MoveTimerTick;
+                        _moveTimer = new System.Timers.Timer();
+                    _moveTimer.Elapsed += new System.Timers.ElapsedEventHandler(MoveTimerTick);
                     _moveTimer.Interval = 100;
                     _moveTimer.Enabled = true;
                 }
                 else
                 {
                     _moveTimer.Enabled = false;
-                    _moveTimer.Tick -= MoveTimerTick;
+                    _moveTimer.Elapsed -= MoveTimerTick;
                 }
                 _isConnected = value;
             }
@@ -429,8 +428,8 @@ namespace ASCOM.Simulator
         {
             // start a timer that monitors and moves the focuser
             if (_moveTimer == null)
-                _moveTimer = new Timer();
-            _moveTimer.Tick += MoveTimerTick;
+                _moveTimer = new System.Timers.Timer();
+            _moveTimer.Elapsed += new System.Timers.ElapsedEventHandler(MoveTimerTick);
             _moveTimer.Interval = 100;
             _moveTimer.Enabled = true;
             _lastTemp = Temperature;
@@ -439,7 +438,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Ticks 10 times a second, updating the focuser position and IsMoving properties
         /// </summary>
-        private void MoveTimerTick()
+        private void MoveTimerTick(object source, System.Timers.ElapsedEventArgs e)
         {
             if (_position != Target)
             {

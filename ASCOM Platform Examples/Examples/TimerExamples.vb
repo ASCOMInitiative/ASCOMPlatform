@@ -1,4 +1,11 @@
 ﻿Public Class TimerExamples
+    ' PLATFORM 6 Warning
+
+    ' The ASCOM.Utilities.Timer class is now considered obsolete for use within .NET environments
+    ' Please use System.Timers.Timer in your projects rather than ASCOM.Utilities.Timer or
+    ' System.Forms.Timer which have issues when running in some non-windowed, console or scripting
+    ' applications.
+
     'Set variable type to ITimer
     Private WithEvents ASCOMTimer As ASCOM.Utilities.Timer
 

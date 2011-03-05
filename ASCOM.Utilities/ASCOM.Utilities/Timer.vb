@@ -17,7 +17,8 @@ Imports System.Runtime.InteropServices
 <Guid("64FEE414-176D-44d0-99DF-47621D9C377F"), _
 ComVisible(True), _
 ComSourceInterfaces(GetType(ITimerEvent)), _
-ClassInterface(ClassInterfaceType.None)> _
+ClassInterface(ClassInterfaceType.None), _
+Obsolete("Please replace it with Systems.Timers.Timer, which is reliable in all console and non-windowed applications.", False)> _
 Public Class [Timer]
     Implements ITimer, IDisposable
     '   =========
@@ -94,10 +95,15 @@ Public Class [Timer]
                     IsForm = False
 
             End Select
-            If Process.GetCurrentProcess.MainModule.FileName.ToUpper.Contains("WSCRIPT.EXE") Then 'WScript is an exception that is marked GUI but behaves like console!
-                TL.LogMessage("New", "WScript.Exe found - Overriding IsForm to: False")
-                IsForm = False
-            End If
+            ' If Process.GetCurrentProcess.MainModule.FileName.ToUpper.Contains("WSCRIPT.EXE") Then 'WScript is an exception that is marked GUI but behaves like console!
+            ' TL.LogMessage("New", "WScript.Exe found - Overriding IsForm to: False")
+            ' IsForm = False
+            ' End If
+            'If Process.GetCurrentProcess.MainModule.FileName.ToUpper.Contains("ASTROART.EXE") Then 'WScript is an exception that is marked GUI but behaves like console!
+            ' TL.LogMessage("New", "AstroArt.Exe found - Overriding IsForm to: False")
+            ' IsForm = False
+            ' End If
+            IsForm = Not ForceTimer(IsForm) 'Override the value of isform if required
             TL.LogMessage("New", "IsForm: " & IsForm)
         Catch ex As Exception
             TL.LogMessageCrLf("New Exception", ex.ToString) 'Log error and record in the event log
@@ -105,6 +111,37 @@ Public Class [Timer]
         End Try
     End Sub
 
+    Private Function ForceTimer(ByVal CurrentIsForm As Boolean) As Boolean
+        Dim Profile As New RegistryAccess, ForcedSystemTimers As Generic.SortedList(Of String, String)
+        Dim ProcessFileName As String, ForceSystemTimer, MatchedName As Boolean
+
+        ForceTimer = Not CurrentIsForm 'Set up default return value to supplied value. ForceTimer is opposite logic to IsForm, hence use of Not
+        TL.LogMessage("ForceTimer", "Current IsForm: " & CurrentIsForm.ToString & ", this makes the default ForceTimer value: " & ForceTimer)
+
+        ProcessFileName = Process.GetCurrentProcess.MainModule.FileName.ToUpper 'Get the current process processname
+        TL.LogMessage("ForceTimer", "Main process file name: " & ProcessFileName)
+
+        MatchedName = False
+        ForcedSystemTimers = Profile.EnumProfile(FORCE_SYSTEM_TIMER) 'Get the list of applications requiring special timer handling
+        For Each ForcedFileName As Generic.KeyValuePair(Of String, String) In ForcedSystemTimers ' Check each forced file in turn 
+            If ProcessFileName.Contains(Trim(ForcedFileName.Key.ToUpper)) Then ' We have matched the filename
+                TL.LogMessage("ForceTimer", "  Found: """ & ForcedFileName.Key & """ = """ & ForcedFileName.Value & """")
+                MatchedName = True
+                If Boolean.TryParse(ForcedFileName.Value, ForceSystemTimer) Then
+                    ForceTimer = ForceSystemTimer
+                    TL.LogMessage("ForceTimer", "    Parsed OK: " & ForceTimer.ToString & ", ForceTimer set to: " & ForceTimer)
+                Else
+                    TL.LogMessage("ForceTimer", "    ***** Error - Value is not boolean!")
+                End If
+            Else
+                TL.LogMessage("ForceTimer", "  Tried: """ & ForcedFileName.Key & """ = """ & ForcedFileName.Value & """")
+            End If
+        Next
+        If Not MatchedName Then TL.LogMessage("ForceTimer", "  Didn't match any force timer application names")
+
+        TL.LogMessage("ForceTimer", "Returning: " & ForceTimer.ToString)
+        Return ForceTimer
+    End Function
 
     Private disposedValue As Boolean = False        ' To detect redundant calls
 
@@ -228,7 +265,7 @@ Public Class [Timer]
         Else
             Dim ec As System.Timers.ElapsedEventArgs
             ec = CType(e, System.Timers.ElapsedEventArgs)
-            TL.LogMessage("OnTimedEvent", "SignalTime: " & ec.SignalTime.ToString)
+            If TraceEnabled Then TL.LogMessage("OnTimedEvent", "SignalTime: " & ec.SignalTime.ToString)
 
         End If
         If TraceEnabled Then TL.LogMessage("OnTimedEvent", "Raising Tick" & ", Thread: " & Threading.Thread.CurrentThread.ManagedThreadId.ToString) 'Ensure minimum hit on timing under normal, non-trace conditions
