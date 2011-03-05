@@ -199,28 +199,28 @@ Public Enum PierSide ' ECD99531-A2CF-4b9f-91A0-35FE5D12B043
 End Enum
 
 ''' <summary>
-''' ASCOM Camera ShutterState status values.
+''' ASCOM Dome ShutterState status values.
 ''' </summary>
 <Guid("DA182F18-4133-4d6f-A533-67306F48AC5C"), ComVisible(True)> _
 Public Enum ShutterState ' 8915DF3D-B055-4195-8D23-AAD7F58FDF3B
     ''' <summary>
-    ''' Camera shutter status open
+    ''' Dome shutter status open
     ''' </summary>
     shutterOpen = 0
     ''' <summary>
-    ''' Camera shutter status closed
+    ''' Dome shutter status closed
     ''' </summary>
     shutterClosed = 1
     ''' <summary>
-    ''' Camera shutter status opening
+    ''' Dome shutter status opening
     ''' </summary>
     shutterOpening = 2
     ''' <summary>
-    ''' Camera shutter status closing
+    ''' Dome shutter status closing
     ''' </summary>
     shutterClosing = 3
     ''' <summary>
-    ''' Camera shutter status error
+    ''' Dome shutter status error
     ''' </summary>
     shutterError = 4
 End Enum
