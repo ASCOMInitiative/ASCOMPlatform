@@ -23,7 +23,7 @@
 '                   instead of requiring position to be exactly the set pos.
 ' 23-Jun-09 rbt     Port to Visual Basic .NET
 ' -----------------------------------------------------------------------------
-Imports ASCOM.Interface
+Imports ASCOM.DeviceInterface
 
 Module Hardware
     Public Enum Going
@@ -79,9 +79,9 @@ Module Hardware
 
     Public Sub HW_CloseShutter()
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_CloseShutter")
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_CloseShutter")
         End If
 
         If g_eShutterState = ShutterState.shutterClosed Then _
@@ -105,9 +105,9 @@ Module Hardware
 
     Public Sub HW_FindHome()
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_FindHome")
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_FindHome")
         End If
 
         g_bAtHome = False
@@ -120,9 +120,9 @@ Module Hardware
 
     Public Sub HW_Halt()
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_Halt")
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_Halt")
         End If
 
         g_dTargetAlt = g_dDomeAlt
@@ -144,9 +144,9 @@ Module Hardware
 
     Public Sub HW_Move(ByVal Az As Double)
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_Move: " & Format$(Az, "000.0"))
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_Move: " & Format$(Az, "000.0"))
         End If
 
         g_bAtHome = False
@@ -159,9 +159,9 @@ Module Hardware
 
     Public Sub HW_MoveShutter(ByVal Alt As Double)
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_MoveShutter: " & Format$(Alt, "00.0"))
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_MoveShutter: " & Format$(Alt, "00.0"))
         End If
 
         ' If the shutter is opening or closing, then cause it to jam
@@ -176,9 +176,9 @@ Module Hardware
 
     Public Sub HW_OpenShutter()
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_OpenShutter")
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_OpenShutter")
         End If
 
         ' Ensure that the Alt stays in bounds
@@ -205,9 +205,9 @@ Module Hardware
 
     Public Sub HW_Park()
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_Park")
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_Park")
         End If
 
         g_bAtHome = False
@@ -220,9 +220,9 @@ Module Hardware
 
     Public Sub HW_Run(ByVal Dir As Boolean)
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_Run: " & Dir)
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_Run: " & Dir)
         End If
 
         g_bAtHome = False
@@ -234,9 +234,9 @@ Module Hardware
 
     Public Sub HW_Sync(ByVal Az As Double)
 
-        If Not g_show Is Nothing Then
-            If g_show.chkHW.Checked Then _
-                g_show.TrafficLine("HW_Sync: " & Format$(Az, "000.0"))
+        If Not g_TrafficForm Is Nothing Then
+            If g_TrafficForm.chkHW.Checked Then _
+                g_TrafficForm.TrafficLine("HW_Sync: " & Format$(Az, "000.0"))
         End If
 
         g_eSlewing = Going.slewNowhere

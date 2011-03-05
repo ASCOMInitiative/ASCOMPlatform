@@ -6,6 +6,10 @@ Public Class ConnectForm
 
     Private CurrentDevice, CurrentDeviceType As String, Connected As Boolean, Device As Object, Util As ASCOM.Utilities.Util
 
+    'API's for auto drop down combo
+    Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    Private Const CB_SHOWDROPDOWN = &H14F
+
     Private Sub ConnectForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim DeviceTypes() As String, Profile As New ASCOM.Utilities.Profile
 
@@ -87,6 +91,7 @@ Public Class ConnectForm
                     End Select
                     Connected = False
                     txtStatus.Text = "Disconnected OK"
+                    Try : Device.Dispose() : Catch : End Try
                     Try : Marshal.ReleaseComObject(Device) : Catch : End Try
                     Device = Nothing
                     btnConnect.Text = "Connect"
@@ -221,4 +226,12 @@ Public Class ConnectForm
         TL.Dispose()
 
     End Sub
+
+
+    Sub cmbDeviceType_Click() Handles cmbDeviceType.MouseClick
+        'If Not cmbDeviceType.DroppedDown Then cmbDeviceType.
+        SendMessage(cmbDeviceType.Handle, CB_SHOWDROPDOWN, 1, 0)
+        cmbDeviceType.Cursor = Cursors.Arrow
+    End Sub
+
 End Class

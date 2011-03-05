@@ -162,7 +162,7 @@ namespace ASCOM.DriverAccess
                         }
                         catch (TargetInvocationException e)
                         {
-                            _tl.LogMessage("PropertyGetEx1", e.ToString());
+                            _tl.LogMessageCrLf("PropertyGetEx1", e.ToString());
                             if (e.InnerException.GetType() == typeof (PropertyNotImplementedException))
                             {
                                 throw new PropertyNotImplementedException(
@@ -180,7 +180,7 @@ namespace ASCOM.DriverAccess
                         }
                         catch (Exception e)
                         {
-                            _tl.LogMessage("PropertyGetEx2", e.ToString());
+                            _tl.LogMessageCrLf("PropertyGetEx2", e.ToString());
                             throw;
                         }
                     }
@@ -203,14 +203,14 @@ namespace ASCOM.DriverAccess
                         }
                         catch (COMException e)
                         {
-                            _tl.LogMessage("PropertyGetEx3", e.ToString());
+                            _tl.LogMessageCrLf("PropertyGetEx3", e.ToString());
                             if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
                                 throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
                             throw;
                         }
                         catch (Exception e)
                         {
-                            _tl.LogMessage("PropertyGetEx4", e.ToString());
+                            _tl.LogMessageCrLf("PropertyGetEx4", e.ToString());
 
                             throw e.InnerException;
                         }
@@ -231,7 +231,7 @@ namespace ASCOM.DriverAccess
                         }
                         catch (TargetInvocationException e)
                         {
-                            _tl.LogMessage("PropertySetEx1", e.ToString());
+                            _tl.LogMessageCrLf("PropertySetEx1", e.ToString());
                             if (e.InnerException.GetType() == typeof (PropertyNotImplementedException))
                             {
                                 throw new PropertyNotImplementedException(
@@ -271,7 +271,7 @@ namespace ASCOM.DriverAccess
                         }
                         catch (COMException e)
                         {
-                            _tl.LogMessage("PropertySetEx3", e.ToString());
+                            _tl.LogMessageCrLf("PropertySetEx3", e.ToString());
                             if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
                                 throw new PropertyNotImplementedException(_strProgId + " " + memberName, true);
                             throw;
@@ -324,7 +324,7 @@ namespace ASCOM.DriverAccess
                         }
                         catch (TargetInvocationException e)
                         {
-                            _tl.LogMessage(memberName, "  ***** TargetInvocationException: " + e);
+                            _tl.LogMessageCrLf(memberName, "  ***** TargetInvocationException: " + e);
                             if (e.InnerException is DriverException)
                             {
                                 throw e.InnerException;
@@ -333,7 +333,7 @@ namespace ASCOM.DriverAccess
                         }
                         catch (Exception e)
                         {
-                            _tl.LogMessage(memberName, "  ***** Exception: " + e);
+                            _tl.LogMessageCrLf(memberName, "  ***** Exception: " + e);
                             throw;
                         }
                     }

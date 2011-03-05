@@ -386,7 +386,7 @@ Partial Class HandboxForm
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "HandboxForm"
-        Me.Text = "Dome Simulator"
+        Me.Text = "Dome Simulator .NET"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.TableLayoutPanel2.ResumeLayout(False)

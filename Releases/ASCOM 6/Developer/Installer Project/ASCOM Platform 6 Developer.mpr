@@ -365,6 +365,59 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
 PLATFORM6OK
 PREREQ
@@ -376,30 +429,30 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Developer Components Alpha 16
+ASCOM Platform 6 Developer Components Alpha 17
 {4A195DC6-7DF9-459E-8F93-60B61EB45288}
 {DAF6A65F-A20B-4FB8-859C-1F82F1D1AEF5}
 6.0.0.0
 English
-ASCOM Platform 6 Developer Components - Alpha 16
+ASCOM Platform 6 Developer Components - Alpha 17
 ASCOM Platform 6 Developer Components Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{638CB1E9-83D1-424E-8F9A-B5F366423F98}
+{0D312063-9DBD-46D4-A06E-994627C2C2F3}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6DeveloperAlpha16
+ASCOMPlatform6DeveloperAlpha17
 TRUE
 FALSE
 
 
 http://timestamp.verisign.com/scripts/timstamp.dll
 
-UAC=requireAdministrator,CACHESOURCES=TRUE
+UAC=requireAdministrator,CACHESOURCES=TRUE,BUILDMODE=SFX,LANGUAGE=English,"TITLE=ASCOM Platform 6 Developer Components Alpha 16",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~1,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\DEVELO~1\INSTAL~1,IAVER=10.00,LANGUAGE=English,"LANGUAGE=English"
 $
 $
 
