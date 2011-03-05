@@ -1,16 +1,4 @@
 ﻿'---------------------------------------------------------------------
-' Copyright © 2000-2002 SPACE.com Inc., New York, NY
-'
-' Permission is hereby granted to use this Software for any purpose
-' including combining with commercial products, creating derivative
-' works, and redistribution of source or binary code, without
-' limitation or consideration. Any redistributed copies of this
-' Software must include the above Copyright Notice.
-'
-' THIS SOFTWARE IS PROVIDED "AS IS". SPACE.COM, INC. MAKES NO
-' WARRANTIES REGARDING THIS SOFTWARE, EXPRESS OR IMPLIED, AS TO ITS
-' SUITABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-'---------------------------------------------------------------------
 '   ==============
 '   HandboxForm.vb
 '   ==============
@@ -34,7 +22,7 @@
 ' -----------------------------------------------------------------------------
 
 Imports System.Windows.Forms
-Imports ASCOM.Interface
+Imports ASCOM.DeviceInterface
 Imports System.Globalization
 
 <ComVisible(False)> _
@@ -228,13 +216,14 @@ Public Class HandboxForm
 
     End Sub
 #End Region
+
 #Region "Event Handlers"
     Private Sub HandboxForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
     End Sub
-    Private Sub HandboxForm_Unload() Handles MyBase.Disposed
-        If Not g_trafficDialog Is Nothing Then _
-            g_trafficDialog.Close()
+
+    Private Sub HandboxForm_Unload() Handles Me.FormClosing
+        If Not g_TrafficForm Is Nothing Then g_TrafficForm.Close()
         g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
         g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
     End Sub
@@ -257,11 +246,10 @@ Public Class HandboxForm
     End Sub
 
     Private Sub ButtonTraffic_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonTraffic.Click
-        If g_show Is Nothing Then _
-           g_show = New ShowTrafficForm
+        If g_TrafficForm Is Nothing Then g_TrafficForm = New ShowTrafficForm
 
-        g_show.Text = "Dome Simulator ASCOM Traffic"
-        g_show.Show()
+        g_TrafficForm.Text = "Dome Simulator ASCOM Traffic"
+        g_TrafficForm.Show()
     End Sub
 
     Private Sub ButtonPark_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonPark.Click
@@ -287,8 +275,7 @@ Public Class HandboxForm
             Exit Sub
         End If
 
-        If g_bCanFindHome Then _
-            HW_FindHome()
+        If g_bCanFindHome Then HW_FindHome()
     End Sub
     <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")>
     Private Sub ButtonGoto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonGoto.Click
@@ -301,7 +288,6 @@ Public Class HandboxForm
 
         End Try
 
-
         If Az < -360 Or Az > 360 Then
             MessageBox.Show("Input value must be between" & _
                 vbCrLf & "+/- 360")
@@ -309,8 +295,6 @@ Public Class HandboxForm
         End If
 
         Az = AzScale(Az)
-
-
         HW_Move(Az)
 
     End Sub
@@ -331,50 +315,39 @@ Public Class HandboxForm
     End Sub
     Private Sub ButtonOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonOpen.Click
         If g_eShutterState = ShutterState.shutterError Then
-
             MessageBox.Show("Shutter must be Closed to clear the error.")
             Return
-
         End If
-
         ButtonState = 7
     End Sub
 
     Private Sub ButtonSlewAltitudeUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSlewAltitudeUp.Click
         If g_eShutterState = ShutterState.shutterError Then
-
             MessageBox.Show("Shutter must be Closed to clear the error.")
             Return
-
         End If
 
         If g_eShutterState = ShutterState.shutterClosed Then
             MessageBox.Show("Shutter must be open first.")
             Return
         End If
-
         ButtonState = 5
     End Sub
 
     Private Sub ButtonSlewAltitudeDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSlewAltitudeDown.Click
         If g_eShutterState = ShutterState.shutterError Then
-
             MessageBox.Show("Shutter must be Closed to clear the error.")
             Return
-
         End If
 
         If g_eShutterState = ShutterState.shutterClosed Then
             MessageBox.Show("Shutter must be open first.")
             Return
         End If
-
         ButtonState = 6
     End Sub
 
     Private Sub ButtonClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonClose.Click
-
-
         ButtonState = 8
     End Sub
 
@@ -398,9 +371,5 @@ Public Class HandboxForm
         ButtonState = 4
     End Sub
 #End Region
-
-
-
-
 
 End Class

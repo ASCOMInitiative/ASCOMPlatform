@@ -1,16 +1,4 @@
 ﻿'---------------------------------------------------------------------
-' Copyright © 2000-2002 SPACE.com Inc., New York, NY
-'
-' Permission is hereby granted to use this Software for any purpose
-' including combining with commercial products, creating derivative
-' works, and redistribution of source or binary code, without
-' limitation or consideration. Any redistributed copies of this
-' Software must include the above Copyright Notice.
-'
-' THIS SOFTWARE IS PROVIDED "AS IS". SPACE.COM, INC. MAKES NO
-' WARRANTIES REGARDING THIS SOFTWARE, EXPRESS OR IMPLIED, AS TO ITS
-' SUITABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-'---------------------------------------------------------------------
 '   ============
 '   GlobalVariables.vb
 '   ============
@@ -51,11 +39,11 @@
 ' 23-Jun-09 rbt     Ported Startub.BAS into Visual Basic .NET
 ' -----------------------------------------------------------------------------
 
-Imports ASCOM.Interface
+Imports ASCOM.DeviceInterface
 
 Module GlobalVariables
 #Region "Error Constants"
-    Public Const ERR_SOURCE As String = "ASCOM Dome Simulator"
+    Public Const ERR_SOURCE As String = "ASCOM Dome Simulator .NET"
 
     Public Const SCODE_NOT_IMPLEMENTED As Long = vbObjectError + &H400
     Public Const MSG_NOT_IMPLEMENTED As String = _
@@ -85,37 +73,23 @@ Module GlobalVariables
         "Failed: Attempt to create Dome during manual startup"
 #End Region
 
-
 #Region "Variables"
-    '----------
     ' Constants
-    '----------
-
-    Public Const ALERT_TITLE As String = "ASCOM Dome Simulator"
+    Public Const ALERT_TITLE As String = "ASCOM Dome Simulator .NET"
     Public Const INSTRUMENT_NAME As String = "Simulator"
-    Public Const INSTRUMENT_DESCRIPTION As String = "ASCOM Dome Simulator"
+    Public Const INSTRUMENT_DESCRIPTION As String = "ASCOM Dome Simulator .NET"
 
     Public Const INVALID_COORDINATE As Double = -100000.0#
 
-    '
-    ' Timer interval (sec.)
-    '
     Public Const TIMER_INTERVAL = 0.25        ' seconds per tick
-    '
-    ' Tolerance on Park and Home positions
-    '
     Public Const PARK_HOME_TOL = 1.0#           ' Tolerance (deg) for Park/Home position
-    '
+
     ' ASCOM Identifiers
-    '
-    Public Const ID As String = "ASCOM.DomeSimulator.Dome"
-    Private Const DESC As String = "Dome Simulator"
+    Public Const ID As String = "ASCOM.Simulator.Dome"
+    Private Const DESC As String = "Dome Simulator .NET"
     Private Const RegVer As String = "1.0"
 
-
-    ' ---------------
     ' State Variables
-    ' ---------------
     Public g_dAltRate As Double                 ' degrees per sec
     Public g_dAzRate As Double                  ' degrees per sec
     Public g_dStepSize As Double                ' degrees per GUI step
@@ -123,6 +97,7 @@ Module GlobalVariables
     Public g_dDomeAz As Double                  ' Current Az for Dome
     Public g_dMinAlt As Double                  ' degrees altitude limit
     Public g_dMaxAlt As Double                  ' degrees altitude limit
+
     ' Non-standard behaviors
     Public g_bStartShutterError As Boolean      ' Start up in "shutter error" condition
     Public g_bStandardAtHome As Boolean         ' False (non-std) means AtHome true whenever az = home
@@ -139,12 +114,10 @@ Module GlobalVariables
     Public g_bConnected As Boolean              ' Whether dome is connected
     Public g_bAtHome As Boolean                 ' Home state
     Public g_bAtPark As Boolean                 ' Park state
-    Public g_eShutterState As ShutterState      ' shutter status
+    Public g_eShutterState As DeviceInterface.ShutterState      ' shutter status
     Public g_eSlewing As Going                  ' Move in progress
 
-    '
     ' Dome Capabilities
-    '
     Public g_bCanFindHome As Boolean
     Public g_bCanPark As Boolean
     Public g_bCanSetAltitude As Boolean
@@ -153,26 +126,15 @@ Module GlobalVariables
     Public g_bCanSetShutter As Boolean
     Public g_bCanSyncAzimuth As Boolean
 
-
-    ' ---------
     ' Variables
-    ' ---------
     Public g_Profile As Utilities.Profile
-    Public g_trafficDialog As ShowTrafficForm           ' Traffic window
+    Public WithEvents g_timer As Timers.Timer
+    Public g_handBox As HandboxForm             ' Hand box
+    Public g_TrafficForm As ShowTrafficForm            ' Traffic window
 
-    Public WithEvents g_timer As New Utilities.Timer
-    ' ----------------------------------------------------------
     ' Driver ID and descriptive string that shows in the Chooser
-    ' ----------------------------------------------------------
-    Public g_csDriverID As String = "ASCOM.DomeSimulator.Dome"
-    Public g_csDriverDescription As String = "Dome Simulator"
-
-    ' ----------------------
-    ' Other global variables
-    ' ----------------------
-
-    Public g_handBox As HandboxForm              ' Hand box
-    Public g_show As ShowTrafficForm                   ' Traffic window
+    Public g_csDriverID As String = "ASCOM.Simulator.Dome"
+    Public g_csDriverDescription As String = "Dome Simulator .NET"
 
 #End Region
     ' ---------
@@ -192,15 +154,12 @@ Module GlobalVariables
 
     End Function
 
-    Private Sub Timer_Tick() Handles g_timer.Tick
+    Private Sub Timer_Tick(ByVal sender As Object, ByVal e As Timers.ElapsedEventArgs) Handles g_timer.Elapsed
 
         Dim slew As Double
         Dim distance As Double
 
-        '
         ' Handle hand-box state first
-        '
-
         If g_handBox.ButtonState <> 0 Then
             Select Case (g_handBox.ButtonState)
                 Case 1 ' Go clockwise
@@ -212,18 +171,13 @@ Module GlobalVariables
                 Case 4 ' step counter clockwise
                     HW_Move(AzScale(g_dDomeAz - g_dStepSize))
                 Case 5 ' shutter up
-                    If g_eShutterState = ShutterState.shutterOpen Then _
-                        HW_MoveShutter(g_dMaxAlt)
+                    If g_eShutterState = ShutterState.shutterOpen Then HW_MoveShutter(g_dMaxAlt)
                 Case 6 ' shutter down
-                    If g_eShutterState = ShutterState.shutterOpen Then _
-                        HW_MoveShutter(g_dMinAlt)
+                    If g_eShutterState = ShutterState.shutterOpen Then HW_MoveShutter(g_dMinAlt)
                 Case 7 ' shutter open
-                    If g_eShutterState = ShutterState.shutterClosed Then _
-                        HW_OpenShutter()
+                    If g_eShutterState = ShutterState.shutterClosed Then HW_OpenShutter()
                 Case 8 ' shutter close
-                    If g_eShutterState = ShutterState.shutterOpen Or _
-                            g_eShutterState = ShutterState.shutterError Then _
-                        HW_CloseShutter()
+                    If (g_eShutterState = ShutterState.shutterOpen) Or (g_eShutterState = ShutterState.shutterError) Then HW_CloseShutter()
                 Case Else ' other - halt
                     HW_Halt()
             End Select
@@ -250,9 +204,9 @@ Module GlobalVariables
             ' Are we there yet ?
             If System.Math.Abs(distance) < System.Math.Abs(slew) Then
                 g_dDomeAz = g_dTargetAz
-                If Not g_show Is Nothing Then
-                    If g_show.chkSlew.Checked Then _
-                        g_show.TrafficLine("(Slew complete)")
+                If Not g_TrafficForm Is Nothing Then
+                    If g_TrafficForm.chkSlew.Checked Then _
+                        g_TrafficForm.TrafficLine("(Slew complete)")
                 End If
 
                 ' Handle standard (fragile) and non-standard park/home changes
@@ -284,9 +238,9 @@ Module GlobalVariables
             ' Are we there yet ?
             If System.Math.Abs(distance) < System.Math.Abs(slew) Then
                 g_dDomeAlt = g_dTargetAlt
-                If Not g_show Is Nothing Then
-                    If g_show.chkShutter.Checked Then _
-                        g_show.TrafficLine("(Shutter complete)")
+                If Not g_TrafficForm Is Nothing Then
+                    If g_TrafficForm.chkShutter.Checked Then _
+                        g_TrafficForm.TrafficLine("(Shutter complete)")
                 End If
             Else
                 g_dDomeAlt = g_dDomeAlt + slew
@@ -302,9 +256,9 @@ Module GlobalVariables
                 Else
                     g_eShutterState = ShutterState.shutterClosed
                 End If
-                If Not g_show Is Nothing Then
-                    If g_show.chkShutter.Checked Then _
-                        g_show.TrafficLine("(Shutter complete)")
+                If Not g_TrafficForm Is Nothing Then
+                    If g_TrafficForm.chkShutter.Checked Then _
+                        g_TrafficForm.TrafficLine("(Shutter complete)")
                 End If
             End If
         End If

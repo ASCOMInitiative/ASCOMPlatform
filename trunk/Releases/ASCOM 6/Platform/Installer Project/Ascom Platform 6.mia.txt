@@ -19,6 +19,8 @@ if Variable WIN64MODE Equals TRUE
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   Comment: Comment: Set to a value that will access the 32bit portion of the registry on a 64bit OS
   Set Variable WOW6432NODE to WOW6432NODE\
+  Set Variable REGASM64 to $WINDIR$\Microsoft.NET\Framework64\v2.0.50727\regasm.exe
+  Set Variable NGEN64 to $WINDIR$\Microsoft.NET\Framework64\v2.0.50727\ngen.exe
 end
  
 [DEFINE REGION: Application Updates]
@@ -343,6 +345,30 @@ else
   [DEFINE WEB MEDIA Platform 6]
   if Variable SELECTED Equals TRUE
   end
+  [DEFINE WEB MEDIA Visual Studio Driver Templates]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Driver installer generator for Inno]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Driver installer generator for Inno]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Driver installer generator for Inno]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Developer documentation]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Visual Studio project templates]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Support for adding references to ASCOM components in Visual Studio]
+  if Variable SELECTED Equals TRUE
+  end
+  [DEFINE WEB MEDIA Support for adding ASCOM component references in Visual Studio]
+  if Variable SELECTED Equals TRUE
+  end
   [DEFINE WEB MEDIA Ascom Platform 6, Exclude from Build]
   if Variable SELECTED Equals TRUE
   end
@@ -513,6 +539,9 @@ else
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Comment: Dome simulator
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome
     [END REGION]
     [DEFINE REGION: Platform 6 Content]
     Comment: Platform 6 Documents
@@ -563,22 +592,6 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 32bit Applications\, List of drivers that are not compatible with 32bit applications (permanent)
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\, List of drivers that are not compatible with 64bit applications (permanent)
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ACL.Telescope, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.Atik.Camera, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.CCDQHY8.Camera, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.CCDQHY9.Camera, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.LittleFootClassic.telescope, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ASCOM.StarlightXpress.FilterWheel, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\CCDSimulator.Camera, 1.0.0.0
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\JMISmartFocus.Focuser, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\LXP.Telescope, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\RoboFocus.Focuser, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\ServoCAT.Telescope, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\Sphinx.telescope, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\SS2K.Telescope, 
-    Comment: Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Drivers Not Compatible With 64bit Applications\TheSky.Telescope, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\FilterWheel Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\,  (permanent)
@@ -657,6 +670,8 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\WScript.Exe, True
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\Astroart.Exe, True
     [END REGION]
     [DEFINE REGION: Additional clean-up when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
@@ -680,28 +695,28 @@ else
         Set Variable PROGRESS to 0
         Register assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Set Variable PROGRESS to 10
+        Set Variable PROGRESS to 5
         Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register the Platform 5 type libraries
-        Set Variable PROGRESS to 20
+        Set Variable PROGRESS to 10
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper2.tlb" (WAIT)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT)
-        Set Variable PROGRESS to 30
+        Set Variable PROGRESS to 15
         Comment: Register Platform 5 Simulators
         Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
         Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT)
         Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT)
         Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT)
-        Set Variable PROGRESS to 40
+        Set Variable PROGRESS to 20
         Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT)
         Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT)
         Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT)
         Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT)
         Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT)
-        Set Variable PROGRESS to 50
+        Set Variable PROGRESS to 25
         Comment: Register Platform 5.5 components
         Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -713,7 +728,7 @@ else
         else
           MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
         end
-        Set Variable PROGRESS to 60
+        Set Variable PROGRESS to 30
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
         if Variable GACINSTALLRC Equals 0
           Comment: MessageBalloon: GACInstall, DriverAccess policy installed OK
@@ -730,7 +745,7 @@ else
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT)
-        Set Variable PROGRESS to 70
+        Set Variable PROGRESS to 35
         Comment: Register Platform 6 components
         Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -742,12 +757,13 @@ else
         Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.NWaySwitchDriver.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.RheostatSwitch.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
         Comment: Register these LocalServer drivers using the -register option
-        Set Variable PROGRESS to 80
+        Set Variable PROGRESS to 40
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT)
         Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT)
         Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT)
-        Set Variable PROGRESS to 90
+        Set Variable PROGRESS to 45
         Comment: Extra registration of 64bit components if on 64bit system
         if Variable WIN64MODE Equals TRUE
           Comment: Initialise variables
@@ -760,12 +776,12 @@ else
           Set Variable RC7 to 1000
           Set Variable RC8 to 1000
           Set Variable RC9 to 1000
-          Set Variable REGASM64 to $WINDIR$\Microsoft.NET\Framework64\v2.0.50727\regasm.exe
+          Set Variable RC10 to 1000
           Comment: Register core components
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
-          Set Variable PROGRESS to 95
+          Set Variable PROGRESS to 50
           Comment: Register simulators
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
@@ -773,33 +789,38 @@ else
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll" /codebase (WAIT, get result into variable RC7)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.NWaySwitchDriver.dll" /codebase (WAIT, get result into variable RC8)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.RheostatSwitch.dll" /codebase (WAIT, get result into variable RC9)
-          Set Variable PROGRESS to 100
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC10)
+          Set Variable PROGRESS to 60
           if Variable RC1 not Equals 0
-            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
           else
             if Variable RC2 not Equals 0
-              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
             else
               if Variable RC3 not Equals 0
-                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
               else
                 if Variable RC4 not Equals 0
-                  MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                  MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
                 else
                   if Variable RC5 not Equals 0
-                    MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                    MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
                   else
                     if Variable RC6 not Equals 0
-                      MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                      MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
                     else
                       if Variable RC7 not Equals 0
-                        MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                        MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
                       else
                         if Variable RC8 not Equals 0
-                          MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                          MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
                         else
                           if Variable RC9 not Equals 0
-                            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$
+                            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                          else
+                            if Variable RC10 not Equals 0
+                              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                            end
                           end
                         end
                       end
@@ -810,11 +831,32 @@ else
             end
           end
           Comment: Remove tlb files left over by RegAsm
+          MessageBalloon: Native Images, Creating 32bit native images
+          Generate Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+          Generate Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+          Generate Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+          Set Variable PROGRESS to 65
+          Generate Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+          Set Variable PROGRESS to 75
+          Generate Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+          Set Variable PROGRESS to 80
+          Generate Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+          if Variable WIN64MODE Equals TRUE
+            MessageBalloon: Native Images, Creating 64bit native images
+            Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+            Set Variable PROGRESS to 85
+            Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+            Set Variable PROGRESS to 90
+            Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+            Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+            Set Variable PROGRESS to 95
+          end
+          MessageBalloon: , 
         end
         [END REGION]
         Comment: Tidy up COM registration (add AppID for DCOM etc.)
-        Set Variable PROGRESS to 100
         Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT)
+        Set Variable PROGRESS to 100
       end
     end
   end

@@ -8,7 +8,7 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Dome Simulator")> 
+<Assembly: AssemblyTitle("Dome Simulator .NET")> 
 <Assembly: AssemblyDescription("ASCOM Dome Simulator Driver")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
 <Assembly: AssemblyProduct("")> 
