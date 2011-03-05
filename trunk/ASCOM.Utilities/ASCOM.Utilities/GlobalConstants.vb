@@ -62,6 +62,8 @@ Module GlobalConstants
     Friend Const PLATFORM_VERSION_EXCEPTIONS As String = "ForcePlatformVersion"
     Friend Const PLATFORM_VERSION_SEPARATOR_EXCEPTIONS As String = "ForcePlatformVersionSeparator"
 
+    Friend Const FORCE_SYSTEM_TIMER As String = "ForceSystemTimer" 'Location of executables for which we must force system timer rather than forms timer
+
     'Installer Variables
     Public Const PLATFORM_INSTALLER_PROPDUCT_CODE As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}" '{8961E141-B307-4882-ABAD-77A3E76A40C1}
     Public Const DEVELOPER_INSTALLER_PROPDUCT_CODE As String = "{4A195DC6-7DF9-459E-8F93-60B61EB45288}"
