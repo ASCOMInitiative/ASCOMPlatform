@@ -28,6 +28,7 @@ Imports System.Globalization
 <ComVisible(False)> _
 Public Class HandboxForm
     Public ButtonState As Integer                         'Controls the dome slewing buttons
+
 #Region "Public Properties and Methods"
 
     Public Shared Sub UpdateConfig()
@@ -217,15 +218,20 @@ Public Class HandboxForm
     End Sub
 #End Region
 
-#Region "Event Handlers"
-    Private Sub HandboxForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-    End Sub
+
+#Region "Event Handlers"
 
     Private Sub HandboxForm_Unload() Handles Me.FormClosing
-        If Not g_TrafficForm Is Nothing Then g_TrafficForm.Close()
-        g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
-        g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
+        If Not g_TrafficForm Is Nothing Then
+            g_TrafficForm.Close()
+            g_TrafficForm.Dispose()
+            g_TrafficForm = Nothing
+        End If
+        If Not g_Profile Is Nothing Then
+            g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
+            g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
+        End If
     End Sub
 
     <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")>

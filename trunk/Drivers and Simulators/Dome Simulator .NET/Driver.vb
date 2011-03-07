@@ -41,7 +41,7 @@ Public Class Dome
 
         Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
 
-        If g_timer Is Nothing Then g_timer = New Timers.Timer
+        If g_timer Is Nothing Then g_timer = New Windows.Forms.Timer
         If g_handBox Is Nothing Then g_handBox = New HandboxForm
         If g_Profile Is Nothing Then g_Profile = New Utilities.Profile
         g_Profile.DeviceType = "Dome"            ' Dome device type
@@ -169,20 +169,17 @@ Public Class Dome
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
             If disposing Then
+                If Not g_TrafficForm Is Nothing Then
+                    Try : g_TrafficForm.Close() : Catch : End Try
+                    Try : g_TrafficForm.Dispose() : Catch : End Try
+                    g_TrafficForm = Nothing
+                End If
                 If Not g_handBox Is Nothing Then
-                    Try : g_handBox.Close() : Catch : End Try
-                    Try : g_handBox.Dispose() : Catch : End Try
+                    g_handBox.BeginInvoke(New Action(AddressOf g_handBox.Close))
+                    g_handBox.BeginInvoke(New Action(AddressOf g_handBox.Dispose))
+                    'Try : g_handBox.Close() : Catch : End Try
+                    'Try : g_handBox.Dispose() : Catch : End Try
                     g_handBox = Nothing
-                End If
-                If Not g_TrafficForm Is Nothing Then
-                    Try : g_TrafficForm.Close() : Catch : End Try
-                    Try : g_TrafficForm.Dispose() : Catch : End Try
-                    g_TrafficForm = Nothing
-                End If
-                If Not g_TrafficForm Is Nothing Then
-                    Try : g_TrafficForm.Close() : Catch : End Try
-                    Try : g_TrafficForm.Dispose() : Catch : End Try
-                    g_TrafficForm = Nothing
                 End If
                 If Not g_timer Is Nothing Then
                     Try : g_timer.Enabled = False : Catch : End Try
@@ -561,7 +558,7 @@ Public Class Dome
 
     Public ReadOnly Property InterfaceVersion() As Short Implements IDomeV2.InterfaceVersion
         Get
-            InterfaceVersion = 1
+            InterfaceVersion = 2
 
             If Not g_TrafficForm Is Nothing Then
                 If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficLine("InterfaceVersion: " & InterfaceVersion)

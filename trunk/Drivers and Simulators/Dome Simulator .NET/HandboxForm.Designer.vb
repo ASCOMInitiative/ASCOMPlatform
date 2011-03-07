@@ -22,33 +22,33 @@ Partial Class HandboxForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.txtDomeAz = New System.Windows.Forms.Label
-        Me.LabelShutter = New System.Windows.Forms.Label
-        Me.LabelAzimuth = New System.Windows.Forms.Label
-        Me.txtShutter = New System.Windows.Forms.Label
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel
-        Me.lblPARK = New System.Windows.Forms.Label
-        Me.lblHOME = New System.Windows.Forms.Label
-        Me.lblSlew = New System.Windows.Forms.Label
-        Me.ButtonGoto = New System.Windows.Forms.Button
-        Me.ButtonSync = New System.Windows.Forms.Button
-        Me.txtNewAz = New System.Windows.Forms.TextBox
-        Me.ButtonOpen = New System.Windows.Forms.Button
-        Me.ButtonClose = New System.Windows.Forms.Button
-        Me.ButtonSlewAltitudeUp = New System.Windows.Forms.Button
-        Me.ButtonSlewStop = New System.Windows.Forms.Button
-        Me.ButtonSlewAltitudeDown = New System.Windows.Forms.Button
-        Me.ButtonClockwise = New System.Windows.Forms.Button
-        Me.ButtonCounterClockwise = New System.Windows.Forms.Button
-        Me.ButtonStepClockwise = New System.Windows.Forms.Button
-        Me.ButtonStepCounterClockwise = New System.Windows.Forms.Button
-        Me.ButtonPark = New System.Windows.Forms.Button
-        Me.ButtonHome = New System.Windows.Forms.Button
-        Me.ButtonSetup = New System.Windows.Forms.Button
-        Me.ButtonTraffic = New System.Windows.Forms.Button
-        Me.picASCOM = New System.Windows.Forms.PictureBox
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.txtDomeAz = New System.Windows.Forms.Label()
+        Me.LabelShutter = New System.Windows.Forms.Label()
+        Me.LabelAzimuth = New System.Windows.Forms.Label()
+        Me.txtShutter = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.lblPARK = New System.Windows.Forms.Label()
+        Me.lblHOME = New System.Windows.Forms.Label()
+        Me.lblSlew = New System.Windows.Forms.Label()
+        Me.ButtonGoto = New System.Windows.Forms.Button()
+        Me.ButtonSync = New System.Windows.Forms.Button()
+        Me.txtNewAz = New System.Windows.Forms.TextBox()
+        Me.ButtonOpen = New System.Windows.Forms.Button()
+        Me.ButtonClose = New System.Windows.Forms.Button()
+        Me.ButtonSlewAltitudeUp = New System.Windows.Forms.Button()
+        Me.ButtonSlewStop = New System.Windows.Forms.Button()
+        Me.ButtonSlewAltitudeDown = New System.Windows.Forms.Button()
+        Me.ButtonClockwise = New System.Windows.Forms.Button()
+        Me.ButtonCounterClockwise = New System.Windows.Forms.Button()
+        Me.ButtonStepClockwise = New System.Windows.Forms.Button()
+        Me.ButtonStepCounterClockwise = New System.Windows.Forms.Button()
+        Me.ButtonPark = New System.Windows.Forms.Button()
+        Me.ButtonHome = New System.Windows.Forms.Button()
+        Me.ButtonSetup = New System.Windows.Forms.Button()
+        Me.ButtonTraffic = New System.Windows.Forms.Button()
+        Me.picASCOM = New System.Windows.Forms.PictureBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
