@@ -192,11 +192,9 @@ Module Hardware
             g_dDomeAlt = g_dMaxAlt
         End If
 
-        If g_eShutterState = ShutterState.shutterOpen Then _
-            Exit Sub
+        If g_eShutterState = ShutterState.shutterOpen Then Exit Sub
 
-        If g_eShutterState = ShutterState.shutterError Then _
-            Exit Sub
+        If g_eShutterState = ShutterState.shutterError Then Exit Sub
 
         g_dOCProgress = g_dOCDelay
         g_eShutterState = ShutterState.shutterOpening

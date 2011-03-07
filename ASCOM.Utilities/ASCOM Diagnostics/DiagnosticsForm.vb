@@ -602,159 +602,194 @@ Public Class DiagnosticsForm
         TestSimulator(Sim)
         Sim = Nothing
 
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "DomeSim.Dome"
+        Sim.Description = "Dome Simulator"
+        Sim.DeviceType = "Dome"
+        Sim.Name = "Simulator"
+        Sim.DriverVersion = "5.0"
+        Sim.InterfaceVersion = 1
+        Sim.IsPlatform5 = True
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.Dome"
+        Sim.Description = "Platform 6 Dome Simulator"
+        Sim.DeviceType = "Dome"
+        Sim.Name = "Simulator"
+        Sim.DriverVersion = "6.0"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
         TL.BlankLine()
     End Sub
 
     Private Sub TestSimulator(ByVal Sim As SimulatorDescriptor)
         Dim RetValString As String, DeviceAxisRates As Object, ct As Integer, DeviceType As Type
-        Status(Sim.Description)
+        Try
+            Status(Sim.Description)
 
-        If (ApplicationBits() = Bitness.Bits64) And (Not Sim.SixtyFourBit) Then ' We are on a 64 bit OS and are testing a 32bit only app - so skip the test!
-            TL.LogMessage("TestSimulator", Sim.ProgID & " " & Sim.Description & " - Skipping test as this driver is not 64bit compatible")
-        Else
-            Try
-                TL.LogMessage("TestSimulator", "CreateObject for Device: " & Sim.ProgID & " " & Sim.Description)
-                'DeviceObject = CreateObject(Sim.ProgID)
-                DeviceType = Type.GetTypeFromProgID(Sim.ProgID)
-                DeviceObject = Activator.CreateInstance(DeviceType)
-                Select Case Sim.DeviceType
-                    Case "Focuser"
-                        Try
+            If (ApplicationBits() = Bitness.Bits64) And (Not Sim.SixtyFourBit) Then ' We are on a 64 bit OS and are testing a 32bit only app - so skip the test!
+                TL.LogMessage("TestSimulator", Sim.ProgID & " " & Sim.Description & " - Skipping test as this driver is not 64bit compatible")
+            Else
+                Try
+                    TL.LogMessage("TestSimulator", "CreateObject for Device: " & Sim.ProgID & " " & Sim.Description)
+                    'DeviceObject = CreateObject(Sim.ProgID)
+                    DeviceType = Type.GetTypeFromProgID(Sim.ProgID)
+                    DeviceObject = Activator.CreateInstance(DeviceType)
+                    Select Case Sim.DeviceType
+                        Case "Focuser"
+                            Try
+                                DeviceObject.Connected = True
+                                Compare("TestSimulator", "Connected OK", "True", "True")
+                            Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
+                                DeviceObject.Link = True ' Try Link, if it fails the outer try will catch the exception
+                                Compare("TestSimulator", "Linked OK", "True", "True")
+                            End Try
+
+                        Case Else ' Everything else should be Connected 
                             DeviceObject.Connected = True
                             Compare("TestSimulator", "Connected OK", "True", "True")
-                        Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
-                            DeviceObject.Link = True ' Try Link, if it fails the outer try will catch the exception
-                            Compare("TestSimulator", "Linked OK", "True", "True")
-                        End Try
-
-                    Case Else ' Everything else should be Connected 
-                        DeviceObject.Connected = True
-                        Compare("TestSimulator", "Connected OK", "True", "True")
-                End Select
-                Try
-                    RetValString = DeviceObject.Description
-                    Compare("TestSimulator", "Description member is present in Platform 6 Simulator", "True", "True")
-                    NMatches += 1
-                Catch ex1 As MissingMemberException
-                    If Sim.IsPlatform5 Then
-                        Compare("TestSimulator", "Description member is not present in Platform 5 Simulator", "True", "True")
-                    Else
-                        LogException("TestSimulator", "Description Exception: " & ex1.ToString)
-                    End If
-                Catch ex1 As Exception
-                    LogException("TestSimulator", "Description Exception: " & ex1.ToString)
-                End Try
-
-                Try
-                    RetValString = DeviceObject.DriverInfo
-                    Compare("TestSimulator", "DriverInfo member is present in Platform 6 Simulator", "True", "True")
-                Catch ex1 As MissingMemberException
-                    If Sim.IsPlatform5 Then
-                        Compare("TestSimulator", "DriverInfo member is not present in Platform 5 Simulator", "True", "True")
-                    Else
-                        LogException("TestSimulator", "DriverInfo Exception: " & ex1.ToString)
-                    End If
-                Catch ex1 As Exception
-                    LogException("TestSimulator", "DriverInfo Exception: " & ex1.ToString)
-                End Try
-
-                Try
-                    Compare("TestSimulator", Sim.DeviceType & " " & "Name", DeviceObject.Name, Sim.Name)
-                Catch ex1 As MissingMemberException
-                    If Sim.IsPlatform5 Then
-                        Compare("TestSimulator", "Name member is not present in Platform 5 Simulator", "True", "True")
-                    Else
-                        LogException("TestSimulator", "Name Exception: " & ex1.ToString)
-                    End If
-                Catch ex1 As Exception
-                    LogException("TestSimulator", "Name Exception: " & ex1.ToString)
-                End Try
-
-                Try
-                    Compare("TestSimulator", Sim.DeviceType & " " & "InterfaceVersion", DeviceObject.Interfaceversion, Sim.InterfaceVersion)
-                Catch ex1 As MissingMemberException
-                    If Sim.IsPlatform5 Then
-                        Compare("TestSimulator", "Interfaceversion member is not present in Platform 5 Simulator", "True", "True")
-                    Else
-                        LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
-                    End If
-                Catch ex1 As Exception
-                    LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
-                End Try
-
-                Try
-                    Compare("TestSimulator", Sim.DeviceType & " " & "DriverVersion", DeviceObject.DriverVersion, Sim.DriverVersion)
-                Catch ex1 As MissingMemberException
-                    If Sim.IsPlatform5 Then
-                        Compare("TestSimulator", "DriverVersion member is not present in Platform 5 Simulator", "True", "True")
-                    Else
-                        LogException("TestSimulator", "DriverVersion Exception: " & ex1.ToString)
-                    End If
-                Catch ex1 As Exception
-                    LogException("TestSimulator", "DriverVersion Exception: " & ex1.ToString)
-                End Try
-
-                Select Case Sim.DeviceType
-                    Case "Telescope"
-                        DeviceTest("Telescope", "UnPark")
-                        DeviceTest("Telescope", "TrackingTrue")
-                        DeviceTest("Telescope", "SiderealTime")
-                        DeviceTest("Telescope", "RightAscension")
-                        DeviceTest("Telescope", "TargetRightDeclination")
-                        DeviceTest("Telescope", "TargetRightAscension")
-                        DeviceTest("Telescope", "Slew")
-                        DeviceTest("Telescope", "TrackingRates")
-                        DeviceAxisRates = DeviceTest("Telescope", "AxisRates")
-                        ct = 0
-                        For Each AxRte As Object In DeviceAxisRates
-                            CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct), 0.000001)
-                            CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct), 0.000001)
-                            ct += 1
-                        Next
-                    Case "Camera"
-                        DeviceTest("Camera", "StartExposure")
-                    Case "FilterWheel"
-                        DeviceTest("FilterWheel", "Position")
-                    Case "Focuser"
-                        DeviceTest("Focuser", "Move")
-                    Case "SafetyMonitor"
-                        DeviceTest("SafetyMonitor", "IsSafe")
-                    Case "Switch"
+                    End Select
+                    Try
+                        RetValString = DeviceObject.Description
+                        Compare("TestSimulator", "Description member is present in Platform 6 Simulator", "True", "True")
+                        NMatches += 1
+                    Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
-                            DeviceTest("Switch", "GetSwitch")
-                            DeviceTest("Switch", "GetSwitchName")
+                            Compare("TestSimulator", "Description member is not present in Platform 5 Simulator", "True", "True")
                         Else
-                            DeviceTest("Switch", "Switches")
+                            LogException("TestSimulator", "Description Exception: " & ex1.ToString)
                         End If
-                    Case Else
-                        LogException("TestSimulator", "Unknown device type: " & Sim.DeviceType)
-                End Select
+                    Catch ex1 As Exception
+                        LogException("TestSimulator", "Description Exception: " & ex1.ToString)
+                    End Try
 
-                Select Case Sim.DeviceType
-                    Case "Focuser"
-                        Try
+                    Try
+                        RetValString = DeviceObject.DriverInfo
+                        Compare("TestSimulator", "DriverInfo member is present in Platform 6 Simulator", "True", "True")
+                    Catch ex1 As MissingMemberException
+                        If Sim.IsPlatform5 Then
+                            Compare("TestSimulator", "DriverInfo member is not present in Platform 5 Simulator", "True", "True")
+                        Else
+                            LogException("TestSimulator", "DriverInfo Exception: " & ex1.ToString)
+                        End If
+                    Catch ex1 As Exception
+                        LogException("TestSimulator", "DriverInfo Exception: " & ex1.ToString)
+                    End Try
+
+                    Try
+                        Compare("TestSimulator", Sim.DeviceType & " " & "Name", DeviceObject.Name, Sim.Name)
+                    Catch ex1 As MissingMemberException
+                        If Sim.IsPlatform5 Then
+                            Compare("TestSimulator", "Name member is not present in Platform 5 Simulator", "True", "True")
+                        Else
+                            LogException("TestSimulator", "Name Exception: " & ex1.ToString)
+                        End If
+                    Catch ex1 As Exception
+                        LogException("TestSimulator", "Name Exception: " & ex1.ToString)
+                    End Try
+
+                    Try
+                        Compare("TestSimulator", Sim.DeviceType & " " & "InterfaceVersion", DeviceObject.Interfaceversion, Sim.InterfaceVersion)
+                    Catch ex1 As MissingMemberException
+                        If Sim.IsPlatform5 Then
+                            Compare("TestSimulator", "Interfaceversion member is not present in Platform 5 Simulator", "True", "True")
+                        Else
+                            LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
+                        End If
+                    Catch ex1 As Exception
+                        LogException("TestSimulator", "Interfaceversion Exception: " & ex1.ToString)
+                    End Try
+
+                    Try
+                        Compare("TestSimulator", Sim.DeviceType & " " & "DriverVersion", DeviceObject.DriverVersion, Sim.DriverVersion)
+                    Catch ex1 As MissingMemberException
+                        If Sim.IsPlatform5 Then
+                            Compare("TestSimulator", "DriverVersion member is not present in Platform 5 Simulator", "True", "True")
+                        Else
+                            LogException("TestSimulator", "DriverVersion Exception: " & ex1.ToString)
+                        End If
+                    Catch ex1 As Exception
+                        LogException("TestSimulator", "DriverVersion Exception: " & ex1.ToString)
+                    End Try
+
+                    Select Case Sim.DeviceType
+                        Case "Telescope"
+                            DeviceTest("Telescope", "UnPark")
+                            DeviceTest("Telescope", "TrackingTrue")
+                            DeviceTest("Telescope", "SiderealTime")
+                            DeviceTest("Telescope", "RightAscension")
+                            DeviceTest("Telescope", "TargetRightDeclination")
+                            DeviceTest("Telescope", "TargetRightAscension")
+                            DeviceTest("Telescope", "Slew")
+                            DeviceTest("Telescope", "TrackingRates")
+                            DeviceAxisRates = DeviceTest("Telescope", "AxisRates")
+                            ct = 0
+                            For Each AxRte As Object In DeviceAxisRates
+                                CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct), 0.000001)
+                                CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct), 0.000001)
+                                ct += 1
+                            Next
+                        Case "Camera"
+                            DeviceTest("Camera", "StartExposure")
+                        Case "FilterWheel"
+                            DeviceTest("FilterWheel", "Position")
+                        Case "Focuser"
+                            DeviceTest("Focuser", "Move")
+                        Case "SafetyMonitor"
+                            DeviceTest("SafetyMonitor", "IsSafe")
+                        Case "Switch"
+                            If Sim.IsPlatform5 Then
+                                DeviceTest("Switch", "GetSwitch")
+                                DeviceTest("Switch", "GetSwitchName")
+                            Else
+                                DeviceTest("Switch", "Switches")
+                            End If
+                        Case "Dome"
+                            DeviceTest("Dome", "OpenShutter")
+                            DeviceTest("Dome", "Slewing")
+                            DeviceTest("Dome", "ShutterStatus")
+                            DeviceTest("Dome", "SlewToAltitude")
+                            DeviceTest("Dome", "SlewToAzimuth")
+                            DeviceTest("Dome", "CloseShutter")
+                        Case Else
+                            LogException("TestSimulator", "Unknown device type: " & Sim.DeviceType)
+                    End Select
+
+                    Select Case Sim.DeviceType
+                        Case "Focuser"
+                            Try
+                                DeviceObject.Connected = False
+                                NMatches += 1
+                            Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
+                                TL.LogMessage("TestSimulator", "Focuser Connected member missing, using Link instead")
+                                DeviceObject.Link = False ' Try Link, if it fails the outer try will catch the exception
+                                NMatches += 1
+                            End Try
+
+                        Case Else ' Everything else should be Connected 
                             DeviceObject.Connected = False
                             NMatches += 1
-                        Catch ex1 As MissingMemberException ' Could be a Platform 5 driver that uses "Link" instead of "Connected"
-                            TL.LogMessage("TestSimulator", "Focuser Connected member missing, using Link instead")
-                            DeviceObject.Link = False ' Try Link, if it fails the outer try will catch the exception
-                            NMatches += 1
-                        End Try
-
-                    Case Else ' Everything else should be Connected 
-                        DeviceObject.Connected = False
-                        NMatches += 1
-                End Select
-                TL.LogMessage("TestSimulator", "Completed Device: " & Sim.ProgID & " OK")
-                Try : DeviceObject.Dispose() : Catch : End Try
-                Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try
-                DeviceObject = Nothing
-            Catch ex As Exception
-                LogException("TestSimulator", "Exception: " & ex.ToString)
-            End Try
-        End If
-        Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try 'Always try and make sure we are properly tidied up!
-        TL.BlankLine()
+                    End Select
+                    TL.LogMessage("TestSimulator", "Completed Device: " & Sim.ProgID & " OK")
+                    Try : DeviceObject.Dispose() : Catch : End Try
+                    Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try
+                    DeviceObject = Nothing
+                Catch ex As Exception
+                    LogException("TestSimulator", "Exception: " & ex.ToString)
+                End Try
+            End If
+            Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try 'Always try and make sure we are properly tidied up!
+            TL.BlankLine()
+        Catch ex1 As Exception
+            LogException("TestSimulator", "Overall Exception: " & ex1.ToString)
+        End Try
     End Sub
 
     Private Function DeviceTest(ByVal Device As String, ByVal Test As String) As Object
@@ -879,6 +914,48 @@ Public Class DiagnosticsForm
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
+                Case "Dome"
+                    Select Case Test
+                        Case "OpenShutter"
+                            DeviceObject.OpenShutter()
+                            Do While Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                            Loop
+                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
+                        Case "ShutterStatus"
+                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), 0)
+                        Case "Slewing"
+                            Compare(Device, Test, DeviceObject.Slewing.ToString, "False")
+                        Case "CloseShutter"
+                            DeviceObject.CloseShutter()
+                            Do While Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                            Loop
+                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
+                        Case "SlewToAltitude"
+                            StartTime = Now
+                            DeviceObject.SlewToAltitude(45.0)
+                            Do
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
+                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > 5.0)
+                            CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, 0.00001)
+                        Case "SlewToAzimuth"
+                            StartTime = Now
+                            DeviceObject.SlewToAzimuth(225.0)
+                            Do
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
+                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > 5.0)
+                            CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, 0.00001)
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
+
                 Case Else
                     LogException("DeviceTest", "Unknown Device: " & Device)
             End Select
@@ -2159,43 +2236,46 @@ Public Class DiagnosticsForm
         Dim rc As Short
         Dim location As New SiteInfo
 
-        'RA and DEC
-        AstroRA = Util.HMSToHours(AstroRAString)
-        AstroDEC = Util.DMSToDegrees(AstroDECString)
+        Try
+            'RA and DEC
+            AstroRA = Util.HMSToHours(AstroRAString)
+            AstroDEC = Util.DMSToDegrees(AstroDECString)
 
+            'Site parameters
+            SiteElev = 80.0
+            SiteLat = 51.0 + (4.0 / 60.0) + (43.0 / 3600.0)
+            SiteLong = 0.0 - (17.0 / 60.0) - (40.0 / 3600.0)
 
-        'Site parameters
-        SiteElev = 80.0
-        SiteLat = 51.0 + (4.0 / 60.0) + (43.0 / 3600.0)
-        SiteLong = 0.0 - (17.0 / 60.0) - (40.0 / 3600.0)
+            'Set up Transform component
+            T.SiteElevation = 80.0
+            T.SiteLatitude = SiteLat
+            T.SiteLongitude = SiteLong
+            T.SiteTemperature = 10.0
+            T.Refraction = False
 
-        'Set up Transform component
-        T.SiteElevation = 80.0
-        T.SiteLatitude = SiteLat
-        T.SiteLongitude = SiteLong
-        T.SiteTemperature = 10.0
-        T.Refraction = False
+            'Set up NOVAS parameters
+            tjd = Util.JulianDate
+            Earth.Name = "Earth"
+            Earth.Number = Body.Earth
+            Earth.Type = BodyType.MajorPlanet
+            star.RA = AstroRA
+            star.Dec = AstroDEC
+            location.Height = SiteElev
+            location.Latitude = SiteLat
+            location.Longitude = SiteLong
+            location.Pressure = 1000
+            location.Temperature = 10
 
-        'Set up NOVAS parameters
-        tjd = Util.JulianDate
-        Earth.Name = "Earth"
-        Earth.Number = Body.Earth
-        Earth.Type = BodyType.MajorPlanet
-        star.RA = AstroRA
-        star.Dec = AstroDEC
-        location.Height = SiteElev
-        location.Latitude = SiteLat
-        location.Longitude = SiteLong
-        location.Pressure = 1000
-        location.Temperature = 10
+            T.SetJ2000(AstroRA, AstroDEC)
+            rc = NOVAS.NOVAS2.TopoStar(tjd, Earth, 0, star, location, RA, DEC) ' Compare to the NOVAS 2 prediction
+            TL.LogMessage("TransformTest", Name & ": Astrometric(" & Util.HoursToHMS(AstroRA, ":", ":", "", 3) & ", " & Util.DegreesToDMS(AstroDEC, ":", ":", "", 2) & _
+                                                     ") Topocentric(" & Util.HoursToHMS(RA, ":", ":", "", 3) & " DEC: " & Util.DegreesToDMS(DEC, ":", ":", "", 2) & ")")
 
-        T.SetJ2000(AstroRA, AstroDEC)
-        rc = NOVAS.NOVAS2.TopoStar(tjd, Earth, 0, star, location, RA, DEC) ' Compare to the NOVAS 2 prediction
-        TL.LogMessage("TransformTest", Name & ": Astrometric(" & Util.HoursToHMS(AstroRA, ":", ":", "", 3) & ", " & Util.DegreesToDMS(AstroDEC, ":", ":", "", 2) & _
-                                                 ") Topocentric(" & Util.HoursToHMS(RA, ":", ":", "", 3) & " DEC: " & Util.DegreesToDMS(DEC, ":", ":", "", 2) & ")")
-
-        CompareDouble("TransformTest", Name & " Topocentric RA", T.RATopocentric, RA, Tolerance)
-        CompareDouble("TransformTest", Name & " Topocentric Dec", T.DECTopocentric, DEC, Tolerance)
+            CompareDouble("TransformTest", Name & " Topocentric RA", T.RATopocentric, RA, Tolerance)
+            CompareDouble("TransformTest", Name & " Topocentric Dec", T.DECTopocentric, DEC, Tolerance)
+        Catch ex As Exception
+            LogException("TransformTest2000 Exception", ex.ToString)
+        End Try
 
     End Sub
 
@@ -2428,7 +2508,7 @@ Public Class DiagnosticsForm
                                                  {0.335104649167322, 0.0711444942030144, 0.00326561005720837, -0.0109228475729584, 0.0251353246085599, 0.0145593566074213}}
         Status("Kepler Tests")
         JD = TestJulianDate()
-        KeplerTest("Mercury", Body.Mercury, JD, MercuryPosVecs, ToleranceE10) 'Test Mercury position vectors
+        KeplerTest("Mercury", Body.Mercury, JD, MercuryPosVecs, ToleranceE9) 'Test Mercury position vectors
         TL.BlankLine()
     End Sub
 
@@ -3755,7 +3835,7 @@ Public Class DiagnosticsForm
     Sub ScanDeveloperFiles()
         Dim ASCOMPath As String = "C:\Program Files\ASCOM\Platform 6 Developer Components\" ' Default location
         Dim PathShell As New System.Text.StringBuilder(260)
-        Dim ASCOMPathComponents, ASCOMPathDocs, ASCOMPathInstallerGenerator, ASCOMPathResources As String
+        Dim ASCOMPathComponents5, ASCOMPathComponents55, ASCOMPathComponents6, ASCOMPathDocs, ASCOMPathInstallerGenerator, ASCOMPathResources As String
 
         Try
             Status("Scanning Developer Files")
@@ -3779,20 +3859,28 @@ Public Class DiagnosticsForm
         Try
 
             If Directory.Exists(ASCOMPath) Then
-                ASCOMPathComponents = ASCOMPath & "Components\"
+                ASCOMPathComponents5 = ASCOMPath & "Components\Platform5\"
+                ASCOMPathComponents55 = ASCOMPath & "Components\Platform55\"
+                ASCOMPathComponents6 = ASCOMPath & "Components\Platform6\"
                 ASCOMPathDocs = ASCOMPath & "Docs\"
                 ASCOMPathInstallerGenerator = ASCOMPath & "Installer Generator\"
                 ASCOMPathResources = ASCOMPath & "Installer Generator\Resources\"
                 TL.LogMessage("Developer Files", "Start of scan")
-                FileDetails(ASCOMPathComponents, "ASCOM.Astrometry.dll")
-                FileDetails(ASCOMPathComponents, "ASCOM.Attributes.dll")
-                FileDetails(ASCOMPathComponents, "ASCOM.Controls.dll")
-                FileDetails(ASCOMPathComponents, "ASCOM.DeviceInterfaces.dll")
-                FileDetails(ASCOMPathComponents, "ASCOM.DriverAccess.dll")
-                FileDetails(ASCOMPathComponents, "ASCOM.Exceptions.dll")
-                FileDetails(ASCOMPathComponents, "ASCOM.Internal.Extensions.dll")
-                FileDetails(ASCOMPathComponents, "ASCOM.SettingsProvider.dll")
-                FileDetails(ASCOMPathComponents, "ASCOM.Utilities.dll")
+                FileDetails(ASCOMPathComponents5, "ASCOM.Exceptions.dll")
+                FileDetails(ASCOMPathComponents55, "ASCOM.Astrometry.dll")
+                FileDetails(ASCOMPathComponents55, "ASCOM.Attributes.dll")
+                FileDetails(ASCOMPathComponents55, "ASCOM.DriverAccess.dll")
+                FileDetails(ASCOMPathComponents55, "ASCOM.Exceptions.dll")
+                FileDetails(ASCOMPathComponents55, "ASCOM.Utilities.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.Astrometry.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.Attributes.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.Controls.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.DeviceInterfaces.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.DriverAccess.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.Exceptions.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.Internal.Extensions.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.SettingsProvider.dll")
+                FileDetails(ASCOMPathComponents6, "ASCOM.Utilities.dll")
                 FileDetails(ASCOMPathDocs, "Algorithms.pdf")
                 FileDetails(ASCOMPathDocs, "Bug72T-sm.jpg")
                 FileDetails(ASCOMPathDocs, "DriverInstallers.html")
@@ -3801,7 +3889,7 @@ Public Class DiagnosticsForm
                 FileDetails(ASCOMPathDocs, "Platform 6.0.pdf")
                 FileDetails(ASCOMPathDocs, "PlatformDeveloperHelp.chm")
                 FileDetails(ASCOMPathDocs, "Script56.chm")
-                FileDetails(ASCOMPathDocs, "Templates.html")
+                If File.Exists(ASCOMPathDocs & "Templates.html") Then FileDetails(ASCOMPathDocs, "Templates.html")
                 FileDetails(ASCOMPathDocs, "tip.gif")
                 FileDetails(ASCOMPathDocs, "wsh-56.chm")
                 FileDetails(ASCOMPathInstallerGenerator, "InstallerGen.exe")

@@ -257,7 +257,7 @@ else
 end
 Comment: Remove previous version (MSI install)
 if Variable NEEDSUPGRADE Equals TRUE
-  MessageBalloon: ASCOM Platform Maintenance, MSI engine is uninstalling previous Platform 6 version...
+  MessageBalloon: ASCOM Platform Maintenance, Uninstalling previous Platform version...
   Set Variable REMOVEOLD to 
   Set Variable ERROROLD to 
    
@@ -278,12 +278,13 @@ if Variable NEEDSUPGRADE Equals TRUE
     end
   end
   Set Variable MAINTENANCE to FALSE
-  MessageBalloon: ASCOM Platform Maintenance, Completed previous version uninstallation.
+  MessageBalloon: ASCOM Platform Maintenance, Installing new Platform version
 end
  
 Comment: Modify Target System
 [DEFINE REGION: Perform Uninstallation]
 if Variable REMOVE Equals TRUE
+  Set Variable PROGRESS to 0
   Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Utilities, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$ $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
@@ -296,24 +297,49 @@ if Variable REMOVE Equals TRUE
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
   end
+  Set Variable PROGRESS to 40
   Unregister assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESS to 45
   Unregister assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u $COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb (WAIT)
+  Set Variable PROGRESS to 50
    
+  Comment: Remove 32bit native images
+  Set Variable PROGRESS to 60
+  MessageBalloon: Native Images, Removing 32bit native images
+  Delete Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Delete Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Delete Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESS to 65
+  Delete Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESS to 75
+  Delete Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESS to 80
+  Delete Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Comment: Remove 64bit native images if necessary and remove 64bit component COM registration
   if Variable WIN64MODE Equals TRUE
+    MessageBalloon: Native Images, Removing 64bit native images
     Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+    Run Program $NGEN64$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+    Set Variable PROGRESS to 85
+    Run Program $NGEN64$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+    Set Variable PROGRESS to 90
+    Run Program $NGEN64$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+    Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+    Set Variable PROGRESS to 95
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
+    Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   end
-  Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+  MessageBalloon: , 
   Apply Uninstall (get result into variable SUCCESS)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
@@ -330,48 +356,6 @@ else
     Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT)
   end
   [OFFLINE CONTENT]
-  [DEFINE WEB MEDIA Platform 5]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Platform 5.5]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Platform 5.5]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Platform 6]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Platform 6]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Visual Studio Driver Templates]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Driver installer generator for Inno]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Driver installer generator for Inno]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Driver installer generator for Inno]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Developer documentation]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Visual Studio project templates]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Support for adding references to ASCOM components in Visual Studio]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Support for adding ASCOM component references in Visual Studio]
-  if Variable SELECTED Equals TRUE
-  end
-  [DEFINE WEB MEDIA Ascom Platform 6, Exclude from Build]
-  if Variable SELECTED Equals TRUE
-  end
   Comment: TO-DO: Insert any additional install commands here
   [compiler if Variable BUILDMODE Equals PATCH]
   Apply Patch (get result into variable SUCCESS)
@@ -830,29 +814,35 @@ else
               end
             end
           end
-          Comment: Remove tlb files left over by RegAsm
-          MessageBalloon: Native Images, Creating 32bit native images
-          Generate Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-          Generate Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-          Generate Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-          Set Variable PROGRESS to 65
-          Generate Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-          Set Variable PROGRESS to 75
-          Generate Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-          Set Variable PROGRESS to 80
-          Generate Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-          if Variable WIN64MODE Equals TRUE
-            MessageBalloon: Native Images, Creating 64bit native images
-            Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
-            Set Variable PROGRESS to 85
-            Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
-            Set Variable PROGRESS to 90
-            Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
-            Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
-            Set Variable PROGRESS to 95
-          end
-          MessageBalloon: , 
         end
+        Comment: Install native images
+        MessageBalloon: Native Images, Creating 32bit native images
+        Generate Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Generate Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Generate Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESS to 65
+        Generate Native Images for assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Generate Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESS to 75
+        Generate Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESS to 80
+        Generate Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Generate Native Images for assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        if Variable WIN64MODE Equals TRUE
+          MessageBalloon: Native Images, Creating 64bit native images
+          Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+          Set Variable PROGRESS to 85
+          Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+          Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+          Set Variable PROGRESS to 88
+          Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+          Set Variable PROGRESS to 90
+          Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+          Set Variable PROGRESS to 93
+          Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT)
+          Set Variable PROGRESS to 95
+        end
+        MessageBalloon: , 
         [END REGION]
         Comment: Tidy up COM registration (add AppID for DCOM etc.)
         Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT)

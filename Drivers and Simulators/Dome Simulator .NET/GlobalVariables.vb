@@ -128,7 +128,7 @@ Module GlobalVariables
 
     ' Variables
     Public g_Profile As Utilities.Profile
-    Public WithEvents g_timer As Timers.Timer
+    Public WithEvents g_timer As Windows.Forms.Timer
     Public g_handBox As HandboxForm             ' Hand box
     Public g_TrafficForm As ShowTrafficForm            ' Traffic window
 
@@ -154,7 +154,7 @@ Module GlobalVariables
 
     End Function
 
-    Private Sub Timer_Tick(ByVal sender As Object, ByVal e As Timers.ElapsedEventArgs) Handles g_timer.Elapsed
+    Private Sub Timer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles g_timer.Tick
 
         Dim slew As Double
         Dim distance As Double
