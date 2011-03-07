@@ -1,0 +1,80 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Telescope 2.0 Release Notes</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="TelescopeRELNOTES"></a>Release Notes<br>
+ASCOM Telescope V2.0</h1>
+
+<p>This is the 2.0 version of the ASCOM Telescope Interface. The new properties, methods, and classes added in V2.0 are listed below, with hyperlinks to their descriptive pages in this document.</p>
+
+<p>In addition to these new features, the specification has been clarified in numerous areas. These changes appear with <span class="v2new">this background color</span> when they apply to existing V1 properties and methods. New properties and methods in V2.0 are not marked with the change color.</p>
+
+<div class="v2new"><div align="center"><img src="images/important2.gif" width="135" height="27" alt="" border="0"></div>
+There are a few minor incompatibilities with the V1 spec.
+
+<ul>
+    <li>In V2, setting the <a href="TelescopeTelescopePROPConnected.htm">Connected</a> property to True does not automatically unpark the telescope, nor does it explicitly turn on tracking. This may affect clients that use the V1 interface.</li>
+    <li>The enumerated constants for the <a href="TelescopeTelescopePROPAlignmentMode.htm">AlignmentMode</a> property have been renamed, They now start with 'alg' instead of 'tele'. Most V1 drivers already use the 'alg'  names.</li>
+</ul>
+</div>
+<p>For more information see the <a href="http://ASCOM-Standards.org/">ASCOM Initiative web site</a>.</p> 
+
+<h2>New Properties in 2.0</h2>
+
+<ul>
+	<li><a href="TelescopeTelescopePROPApertureArea.htm">ApertureArea</a></li>
+	<li><a href="TelescopeTelescopePROPAtHome.htm">AtHome</a></li>
+	<li><a href="TelescopeTelescopePROPAtPark.htm">AtPark</a></li>
+	<li><a href="TelescopeTelescopePROPCanSetDeclinationRate.htm">CanSetDeclinationRate</a></li>
+	<li><a href="TelescopeTelescopePROPCanSetGuideRates.htm">CanSetGuideRates</a></li>
+	<li><a href="TelescopeTelescopePROPCanSetPierSide.htm">CanSetPierSide</a></li>
+	<li><a href="TelescopeTelescopePROPCanSetRightAscensionRate.htm">CanSetRightAscensionRate</a></li>
+    <li><a href="TelescopeTelescopePROPCanSlewAltAz.htm">CanSlewAltAz</a></li>
+	<li><a href="TelescopeTelescopePROPCanSlewAltAzAsync.htm">CanSlewAltAzAsync</a></li>
+	<li><a href="TelescopeTelescopePROPCanSyncAltAz.htm">CanSyncAltAz</a></li>
+	<li><a href="TelescopeTelescopePROPDoesRefraction.htm">DoesRefraction</a></li>
+	<li><a href="TelescopeTelescopePROPDriverVersion.htm">DriverVersion</a></li>
+	<li><a href="TelescopeTelescopePROPEquatorialSystem.htm">EquatorialSystem</a></li>
+	<li><a href="TelescopeTelescopePROPGuideRateDeclination.htm">GuideRateDeclination</a></li>
+	<li><a href="TelescopeTelescopePROPGuideRateRightAscension.htm">GuideRateRightAscension</a></li>
+	<li><a href="TelescopeTelescopePROPInterfaceVersion.htm">InterfaceVersion</a></li>
+	<li><a href="TelescopeTelescopePROPIsPulseGuiding.htm">IsPulseGuiding</a></li>
+	<li><a href="TelescopeTelescopePROPSideOfPier.htm">SideOfPier</a></li>
+	<li><a href="TelescopeTelescopePROPTrackingRate.htm">TrackingRate</a></li>
+	<li><a href="TelescopeTelescopePROPTrackingRates.htm">TrackingRates</a></li>
+</ul>
+
+<h2>New Methods in 2.0</h2>
+
+<ul>
+	<li><a href="TelescopeTelescopeMETHAxisRates.htm">AxisRates()</a></li>
+	<li><a href="TelescopeTelescopeMETHCanMoveAxis.htm">CanMoveAxis()</a></li>
+	<li><a href="TelescopeTelescopeMETHDestinationSideOfPier.htm">DestinationSideOfPier()</a></li>	
+    <li><a href="TelescopeTelescopeMETHMoveAxis.htm">MoveAxis()</a></li>
+   	<li><a href="TelescopeTelescopeMETHSlewToAltAz.htm">SlewToAltAz()</a></li>
+	<li><a href="TelescopeTelescopeMETHSlewToAltAzAsync.htm">SlewToAltAzAsync()</a></li>
+	<li><a href="TelescopeTelescopeMETHSyncToAltAz.htm">SyncToAltAz()</a></li>
+
+</ul>
+
+<h2>New Classes in 2.0</h2>
+
+<ul>
+	<li><a href="TelescopeCLASSRate.htm">Rate</a></li>
+</ul>
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2008, The ASCOM Initiative</div>
+
+</body>
+</html>
