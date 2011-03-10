@@ -52,13 +52,13 @@ Public Class TEMPLATEDEVICECLASS
 
     Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
 
-        Dim P As New Profile() With {.DeviceType = "TEMPLATEDEVICECLASS"}
-        If bRegister Then
-            P.Register(s_csDriverID, s_csDriverDescription)
-        Else
-            P.Unregister(s_csDriverID)
-        End If
-        P = Nothing
+        Using P As New Profile() With {.DeviceType = "TEMPLATEDEVICECLASS"}
+            If bRegister Then
+                P.Register(s_csDriverID, s_csDriverDescription)
+            Else
+                P.Unregister(s_csDriverID)
+            End If
+        End Using
 
     End Sub
 
@@ -81,8 +81,9 @@ Public Class TEMPLATEDEVICECLASS
     ' PUBLIC COM INTERFACE ITEMPLATEDEVICECLASS IMPLEMENTATION
     '
     Public Sub SetupDialog() Implements ITEMPLATEDEVICECLASS.SetupDialog
-        Dim F As SetupDialogForm = New SetupDialogForm()
-        F.ShowDialog()
+        Using F As SetupDialogForm = New SetupDialogForm()
+            F.ShowDialog()
+        End Using
     End Sub
 End Class
 
