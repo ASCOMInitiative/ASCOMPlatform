@@ -129,6 +129,9 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\CLSCompliant.vb">
+      <Link>CLSCompliant.vb</Link>
+    </Compile>
     <Compile Include="AllUsersFileSystemProvider.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\AssemblyVersionInfo.vb">

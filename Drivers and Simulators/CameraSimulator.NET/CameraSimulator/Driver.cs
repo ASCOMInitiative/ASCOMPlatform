@@ -32,8 +32,6 @@ using System.Timers;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 
-[assembly:CLSCompliant(false)]
-
 namespace ASCOM.Simulator
 {
     /// <summary>

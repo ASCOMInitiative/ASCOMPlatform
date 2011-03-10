@@ -6,8 +6,6 @@ using ASCOM.Conform;
 using System.Collections;
 using System.Globalization;
 
-[assembly: System.CLSCompliant(false)] //Mark DriverAccess.dll assembly as not CLS compliant
-
 namespace ASCOM.DriverAccess
     
 {

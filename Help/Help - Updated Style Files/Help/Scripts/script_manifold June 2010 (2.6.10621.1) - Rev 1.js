@@ -10,19 +10,6 @@ var protectedMembers;
 var netcfMembersOnly;
 var netXnaMembersOnly;
 
-
-// CHM: Persistence support - Sandcastle already as the necessary tags in place
-// see: http://www.helpware.net/FAR/far_faq.htm
-// see: http://msdn.microsoft.com/en-us/library/ms533007.aspx
-// see: http://msdn.microsoft.com/en-us/library/ms644690.aspx
-var curLoc = document.location + ".";
-if (curLoc.indexOf("mk:@MSITStore") == 0)
-{
-    curLoc = "ms-its:" + curLoc.substring(14, curLoc.length - 1);
-    document.location.replace(curLoc);
-}
-
-
 // Initialize array of section states
 
 var sectionStates = new Array();
@@ -927,14 +914,6 @@ function GetGlobals()
 	try { if (tmp == null) tmp = window.external.GetObject("DTE", "").Globals; }
 	catch (e) { tmp = null; }
 	
-    // CHM: Persistence support - Sandcastle already as the necessary tags in place
-	isChmGlobals = false;
-	if (tmp == null)
-	{
-	    tmp = ChmGlobals;
-	    isChmGlobals = true;
-	}
-	
 	return tmp;
 }
 
@@ -942,14 +921,7 @@ function Load(key)
 {
 	try 
 	{
-	    if (isChmGlobals)
-	    {
-	        return globals.Load(key);
-	    }
-	    else
-	    {	    
-		    return globals.VariableExists(key) ? globals.VariableValue(key) : null;
-	    }
+		return globals.VariableExists(key) ? globals.VariableValue(key) : null;
 	}
 	catch (e)
 	{
@@ -961,71 +933,13 @@ function Save(key, value)
 {
 	try
 	{
-	    if (isChmGlobals)
-	    {
-	        globals.Save(key, value);
-	    }
-	    else
-	    {	    
-		    globals.VariableValue(key) = value;
-		    globals.VariablePersists(key) = true;
-	    }
+		globals.VariableValue(key) = value;
+		globals.VariablePersists(key) = true;
 	}
 	catch (e)
 	{
 	}
 }
-
-// CHM: Persistence support - Sandcastle already has the necessary tags in place
-var isChmGlobals;
-var ChmGlobals =
-{
-    UserDataCache: function()
-    {     
-        // The hidden element is defined by the Sandcastle...
-        // <input type="hidden" id="userDataCache" class="userDataStyle" />
-        var userData = document.getElementById("userDataCache");
-        
-        return userData;
-    },                    
-    
-    // CheckboxMenu will require this...
-    VariableExists: function(key)
-    {    
-        var userData = this.UserDataCache();
-        userData.load("userDataSettings");
-        
-        var value = userData.getAttribute(key);
-        
-        return (value != null);
-    },
-    
-    // CheckboxMenu will require this...
-    VariableValue: function(key)
-    {
-        var userData = this.UserDataCache();
-        userData.load("userDataSettings");
-        var value = userData.getAttribute(key);
-        
-        return value;
-    },
-
-    Load: function(key)
-    {
-        var userData = this.UserDataCache();
-        userData.load("userDataSettings");
-        var value = userData.getAttribute(key);
-        
-        return value;
-    },
-
-    Save: function(key, value)
-    {
-        var userData = this.UserDataCache();
-        userData.setAttribute(key, value);
-        userData.save("userDataSettings");
-    }
-};
 
 /*	
 **********

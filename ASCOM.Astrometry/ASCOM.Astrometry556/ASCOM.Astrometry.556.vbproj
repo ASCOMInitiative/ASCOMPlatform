@@ -114,6 +114,9 @@
     <Compile Include="..\..\ASCOM.Utilities\ASCOM.Utilities.556\SharedConstantsAndCode.vb">
       <Link>SharedConstantsAndCode.vb</Link>
     </Compile>
+    <Compile Include="..\..\CLSCompliant.vb">
+      <Link>CLSCompliant.vb</Link>
+    </Compile>
     <Compile Include="AstrometryExceptions.vb" />
     <Compile Include="GlobalItems.vb" />
     <Compile Include="Interfaces.vb" />
