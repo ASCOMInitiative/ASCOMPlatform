@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1B078E7972F142A2AC77146A81FC8FC7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2D31755C8EC8358D05D6EC2C0E196CE9"
         "OwnerKey" = "8:_4EB11D9BBB944EF78D0DBA2DC8E5594B"
         "MsmSig" = "8:_UNDEFINED"
@@ -59,6 +65,18 @@
         {
         "MsmKey" = "8:_2D31755C8EC8358D05D6EC2C0E196CE9"
         "OwnerKey" = "8:_AC4AF62754E395496FBB6316672EABF5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_389BFB6DE1EF789B226ECECC214F8058"
+        "OwnerKey" = "8:_AC4AF62754E395496FBB6316672EABF5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_389BFB6DE1EF789B226ECECC214F8058"
+        "OwnerKey" = "8:_C861CE124D94412B908DE3FC555C8E32"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -123,18 +141,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C47F17CFD1CC9136C23D7493CE158284"
-        "OwnerKey" = "8:_AC4AF62754E395496FBB6316672EABF5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C47F17CFD1CC9136C23D7493CE158284"
-        "OwnerKey" = "8:_C861CE124D94412B908DE3FC555C8E32"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C861CE124D94412B908DE3FC555C8E32"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -167,12 +173,6 @@
         {
         "MsmKey" = "8:_F8696657F86A501CC84327B09609CA14"
         "OwnerKey" = "8:_4EB11D9BBB944EF78D0DBA2DC8E5594B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FB9F6AEA0997090ECBA51B596845DE17"
-        "OwnerKey" = "8:_F8696657F86A501CC84327B09609CA14"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -317,7 +317,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\PyxisLE_Setup_x86.msi"
+        "OutputFilename" = "8:Release\\PyxisLE_Setup_x86(1.0.6).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -365,6 +365,20 @@
             "EntryPoint" = "8:"
             "Sequence" = "3:2"
             "Identifier" = "8:_7E335CE2_F035_488C_84CB_535F3123E046"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_50865CE86987489B8B5F9013B6B8442F"
+            {
+            "Name" = "8:Primary output from PyxisLE_Control (Active)"
+            "Condition" = "8:INSTALL_CONTROL"
+            "Object" = "8:_62D8F051E14C43FEB70110405FA7BCB0"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_7F8FA38E_02DA_43A7_8040_0E6387E77C82"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -423,7 +437,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=1.0.5.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=1.0.6.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_072B8E60E425BFB98327D59AD8A88B9C"
@@ -448,6 +462,26 @@
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1B078E7972F142A2AC77146A81FC8FC7"
+            {
+            "SourcePath" = "8:..\\RevisionHistory.txt"
+            "TargetName" = "8:RevisionHistory.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_576EB03080834A46BB8670633D9F1713"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2D31755C8EC8358D05D6EC2C0E196CE9"
@@ -477,6 +511,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_389BFB6DE1EF789B226ECECC214F8058"
+            {
+            "SourcePath" = "8:OptecHIDTools.tlb"
+            "TargetName" = "8:OptecHIDTools.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -550,26 +604,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C47F17CFD1CC9136C23D7493CE158284"
-            {
-            "SourcePath" = "8:OptecHIDTools.tlb"
-            "TargetName" = "8:OptecHIDTools.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DC2F4508A7431DD54D8206E359A2663D"
@@ -651,26 +685,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB9F6AEA0997090ECBA51B596845DE17"
-            {
-            "SourcePath" = "8:ASCOM.Utilities.tlb"
-            "TargetName" = "8:ASCOM.Utilities.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_FDD1E0F5F4F647B8A6C48AD8E8CC0225"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -797,7 +811,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec Pyxis LE Programs (x86)"
         "ProductCode" = "8:{95828218-9FCD-44C0-92CF-6BB8D8B008FD}"
-        "PackageCode" = "8:{D24E24D3-D901-42D7-87FA-ED0828DB09BE}"
+        "PackageCode" = "8:{432060DD-9A78-4D14-BA72-A5A7B49DA0BB}"
         "UpgradeCode" = "8:{76DEDA9D-2B4C-4821-AF37-968A7E0C7FA1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

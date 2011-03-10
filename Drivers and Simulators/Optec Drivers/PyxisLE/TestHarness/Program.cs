@@ -19,17 +19,16 @@ namespace TestHarness
                 var thing = driver.CanReverse;					// Just to give a place to set a breakpoint.
                 //driver.SetupDialog();
                 driver.Connected = true;
-                for (int i = 0; i < 10000; i++)
+                driver.Move(100);
+                
+                Console.WriteLine("IsMoving = " + driver.IsMoving.ToString());
+                while (driver.IsMoving)
                 {
-                    driver.Move((float).05);
-                   // System.Threading.Thread.Sleep(250);
-                    double j = (double)i/(double)20;
-                    Console.WriteLine(j.ToString() + " degrees");
-
-
-
-
-               }
+                    Console.WriteLine("IsMoving = " + driver.IsMoving.ToString());
+                    Console.WriteLine("TargetPosition = " + driver.TargetPosition.ToString());
+                    Console.WriteLine("CurrentPosition = " + driver.Position.ToString());
+                    System.Threading.Thread.Sleep(100);
+                }
                 Console.WriteLine("Press any key to exit");
                 Console.ReadLine();
             }

@@ -126,6 +126,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -153,6 +154,12 @@
     </Compile>
     <Compile Include="AdvancedForm.Designer.cs">
       <DependentUpon>AdvancedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InstallerCustomActions.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="InstallerCustomActions.Designer.cs">
+      <DependentUpon>InstallerCustomActions.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

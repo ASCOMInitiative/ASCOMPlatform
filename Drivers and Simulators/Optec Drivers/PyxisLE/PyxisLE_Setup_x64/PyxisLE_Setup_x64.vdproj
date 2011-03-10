@@ -75,6 +75,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7CB7ED1CC0AD48F0929C2DBB3E0DDC04"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7EA61CACBA654016A025A4BB6B870C09"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -119,12 +125,6 @@
         {
         "MsmKey" = "8:_B427FDCDE3854E2CA8D78761784293F1"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C0C6544131CEBCACEBB68D82892EAC29"
-        "OwnerKey" = "8:_6CCBA2DFE86E37494C37CB6D4C58B9C7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -280,7 +280,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\PyxisLE_Setup_x64.msi"
+        "OutputFilename" = "8:Release\\PyxisLE_Setup_x64(1.0.6).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -356,6 +356,20 @@
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
             "Identifier" = "8:_557EE280_A2EB_475C_9C77_4E59BD0B6D08"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_F9E560D69E3344A981680CA769CB4749"
+            {
+            "Name" = "8:Primary output from PyxisLE_Control (Active)"
+            "Condition" = "8:INSTALL_CONTROL"
+            "Object" = "8:_B427FDCDE3854E2CA8D78761784293F1"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_6B4F3A27_8758_4EB2_98FB_6E61AC7EA036"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -484,6 +498,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7CB7ED1CC0AD48F0929C2DBB3E0DDC04"
+            {
+            "SourcePath" = "8:..\\RevisionHistory.txt"
+            "TargetName" = "8:RevisionHistory.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_3500759701DE456C8B05ED983E3DC9F2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8778EB9599A90C97080A11A9CA1450A3"
             {
             "AssemblyRegister" = "3:1"
@@ -512,26 +546,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C0C6544131CEBCACEBB68D82892EAC29"
-            {
-            "SourcePath" = "8:ASCOM.Utilities.tlb"
-            "TargetName" = "8:ASCOM.Utilities.tlb"
-            "Tag" = "8:"
-            "Folder" = "8:_C2A36562BE7D429180062A6F324DAAB9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:2"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -610,7 +624,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=1.0.5.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:PyxisLE_API, Version=1.0.6.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_E111344ACAF9F1C0155B84BB3F8BD022"
@@ -738,7 +752,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec Pyxis LE Programs (x64)"
         "ProductCode" = "8:{22B49CED-E13C-4281-9912-8FDE4CB51360}"
-        "PackageCode" = "8:{D81A5E7E-BD01-4B07-9C3C-B006C74B7C13}"
+        "PackageCode" = "8:{8922A8EF-5051-46DA-B6F0-1C90235592DB}"
         "UpgradeCode" = "8:{48E51D1A-9601-4DE2-932B-32BD5815EF51}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
