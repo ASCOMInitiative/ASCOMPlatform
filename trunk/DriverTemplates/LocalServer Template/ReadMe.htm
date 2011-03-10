@@ -104,12 +104,10 @@ pre {
       		<li> If you are writing a hub and don't need the serial port, in SharedResources.cs you can remove the public static SharedSerial property, the m_SharedSerial member in the private data region, and the line in main that initializes it. If you don't need any other shared resources for your hub, then you can remove the SharedResources.cs file completely. </li>
       		<li>If you modified the LocalServer in (6) or (7), build it again now. This will refresh the stuff that's visible to the driver skeletons.</li>
       		<li>Build the driver skeletons to verify that you got all of the namespace and other variable changes in (5a).</li>
-      		<li>The local server dynamically loads the driver assemblies from a subdirectory called <em>localservername</em>ServedClasses (e.g. SuperScopeServedClasses) which must be a sub-folder of the local server executable. <br>
+      		<li>The local server dynamically loads the driver assemblies from the same folder as the local server executable, this should be a sub folder of the primary driver type (e.g. .\ASCOM\Camera\SuperCam). <br>
       			<br>
-      			The local server is smart enough to detect that it is running in the Visual Studio IDE and look for this folder just below its <em>solution</em> folder in that case. It is assumed that the local server project and each served driver assembly project, are in subfolders below the solution folder. <br>
-      			<br>
-      			Once deployed, the subfolder will need to be just under the local server executable. At any rate, during development, you'll need to add a post-build task to each your driver assembly projects which puts a copy of the driver assembly into that subfolder. Here is an example:<br>
-      		<pre>    copy &quot;$(TargetPath)&quot; &quot;..\..\..\$safeprojectname$ServedClasses\$(TargetName).dll&quot;</pre>
+      			Once deployed, the driver dlls will need to be in the same folder as the local server executable. During development, you'll need to add a post-build task to each your driver assembly projects which puts a copy of the driver assembly into that subfolder. Here is an example:<br>
+      		<pre>    copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)$safeprojectname$\$(OutDir)\$(TargetFileName)&quot;</pre>
 			Note the quotes for possible path elements with spaces in them.</li>
       		<li><span class="hilite">IMPORTANT:</span> With a local server based driver (or hub) it is possible for multiple clients to control the device(s). It is up to you to safeguard against abuse. </li>
       		<li>You may want to add controls and/or status information to the main form frmMain of the local server. Please resist the temptation to turn the local server's main form into a graphical device control panel. Instead, make a separate application that uses the served driver(s). <span class="underline">A driver is not a program!</span></li>
