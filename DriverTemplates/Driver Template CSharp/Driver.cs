@@ -79,23 +79,18 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		/// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
 		private static void RegUnregASCOM(bool bRegister)
 		{
-			var P = new ASCOM.Utilities.Profile();
-			P.DeviceType = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS";
-			if (bRegister)
-			{
-				P.Register(s_csDriverID, s_csDriverDescription);
-			}
-			else
-			{
-				P.Unregister(s_csDriverID);
-			}
-			// Utilities.Profile is native .NET so no COM interfaces are involved.
-			//try										// In case Helper becomes native .NET
-			//{
-			//    Marshal.ReleaseComObject(P);
-			//}
-			//catch (Exception) { }
-			P = null;
+            using (var P = new ASCOM.Utilities.Profile())
+            {
+                P.DeviceType = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS";
+                if (bRegister)
+                {
+                    P.Register(s_csDriverID, s_csDriverDescription);
+                }
+                else
+                {
+                    P.Unregister(s_csDriverID);
+                }
+            }
 		}
 
 		/// <summary>
@@ -156,14 +151,16 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		/// </summary>
 		public void SetupDialog()
 		{
-			SetupDialogForm F = new SetupDialogForm();
-			var result = F.ShowDialog();
-			if (result == System.Windows.Forms.DialogResult.OK)
-			{
-				Properties.Settings.Default.Save();
-				return;
-			}
-			Properties.Settings.Default.Reload();
+            using (SetupDialogForm F = new SetupDialogForm())
+            {
+                var result = F.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    Properties.Settings.Default.Save();
+                    return;
+                }
+                Properties.Settings.Default.Reload();
+            }
 		}
 	}
 }
