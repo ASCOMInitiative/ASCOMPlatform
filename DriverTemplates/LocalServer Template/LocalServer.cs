@@ -222,10 +222,10 @@ namespace TEMPLATENAMESPACE
 			m_ComObjectAssys = new ArrayList();
 			m_ComObjectTypes = new ArrayList();
 
-			string assyPath = Assembly.GetEntryAssembly().Location;
-			int i = assyPath.LastIndexOf(@"\TEMPLATEDEVICENAME\bin\");						// Look for us running in IDE
-			if (i == -1) i = assyPath.LastIndexOf('\\');
-			assyPath = String.Format("{0}\\TEMPLATEDEVICENAMEServedClasses", assyPath.Remove(i, assyPath.Length - i));
+            // put everything into one folder, the same as the server.
+            string assyPath = Assembly.GetEntryAssembly().Location;
+            int i = assyPath.LastIndexOf('\\');
+            assyPath = assyPath.Remove(i, assyPath.Length - i);
 
 			DirectoryInfo d = new DirectoryInfo(assyPath);
 			foreach (FileInfo fi in d.GetFiles("*.dll"))
@@ -313,9 +313,9 @@ namespace TEMPLATENAMESPACE
 		//
 		private static void RegisterObjects()
 		{
-			RegistryKey key = null;
-			RegistryKey key2 = null;
-			RegistryKey key3 = null;
+            //RegistryKey key = null;
+            //RegistryKey key2 = null;
+            //RegistryKey key3 = null;
 
             if (!IsAdministrator)
             {
@@ -339,20 +339,22 @@ namespace TEMPLATENAMESPACE
 				//
 				// HKCR\APPID\appid
 				//
-				key = Registry.ClassesRoot.CreateSubKey("APPID\\" + m_sAppId);
-				key.SetValue(null, assyDescription);
-				key.SetValue("AppID", m_sAppId);
-				key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
-				key.Close();
-				key = null;
+                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" + m_sAppId))
+                {
+                    key.SetValue(null, assyDescription);
+                    key.SetValue("AppID", m_sAppId);
+                    key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                    key.Close();
+                }
 				//
 				// HKCR\APPID\exename.ext
 				//
-				key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
-							Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1));
-				key.SetValue("AppID", m_sAppId);
-				key.Close();
-				key = null;
+                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
+                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)))
+                {
+                    key.SetValue("AppID", m_sAppId);
+                    key.Close();
+                }
 			}
 			catch (Exception ex)
 			{
@@ -362,7 +364,7 @@ namespace TEMPLATENAMESPACE
 			}
 			finally
 			{
-				if (key != null) key.Close();
+                //if (key != null) key.Close();
 			}
 
 			//
@@ -378,39 +380,47 @@ namespace TEMPLATENAMESPACE
 					//
 					string clsid = Marshal.GenerateGuidForType(type).ToString("B");
 					string progid = Marshal.GenerateProgIdForType(type);
-					key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
-					key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
-					key.SetValue("AppId", m_sAppId);
-					key2 = key.CreateSubKey("Implemented Categories");
-					key3 = key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
-					key3.Close();
-					key3 = null;
-					key2.Close();
-					key2 = null;
-					key2 = key.CreateSubKey("ProgId");
-					key2.SetValue(null, progid);
-					key2.Close();
-					key2 = null;
-					key2 = key.CreateSubKey("Programmable");
-					key2.Close();
-					key2 = null;
-					key2 = key.CreateSubKey("LocalServer32");
-					key2.SetValue(null, Application.ExecutablePath);
-					key2.Close();
-					key2 = null;
-					key.Close();
-					key = null;
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid))
+                    {
+                        key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
+                        key.SetValue("AppId", m_sAppId);
+                        using (RegistryKey key2 = key.CreateSubKey("Implemented Categories"))
+                        {
+                            using (RegistryKey key3 = key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}"))
+                            {
+                                key3.Close();
+                            }
+                            key2.Close();
+                        }
+                        using (RegistryKey key2 = key.CreateSubKey("ProgId"))
+                        {
+                            key2.SetValue(null, progid);
+                            key2.Close();
+                        }
+                        using (RegistryKey key2 = key.CreateSubKey("Programmable"))
+                        {
+                            key2.Close();
+                        }
+                        using (RegistryKey key2 = key.CreateSubKey("LocalServer32"))
+                        {
+                            key2.SetValue(null, Application.ExecutablePath);
+                            key2.Close();
+                        }
+                        key.Close();
+                    }
 					//
 					// HKCR\CLSID\progid
 					//
-					key = Registry.ClassesRoot.CreateSubKey(progid);
-					key.SetValue(null, assyTitle);
-					key2 = key.CreateSubKey("CLSID");
-					key2.SetValue(null, clsid);
-					key2.Close();
-					key2 = null;
-					key.Close();
-					key = null;
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progid))
+                    {
+                        key.SetValue(null, assyTitle);
+                        using (RegistryKey key2 = key.CreateSubKey("CLSID"))
+                        {
+                            key2.SetValue(null, clsid);
+                            key2.Close();
+                        }
+                        key.Close();
+                    }
 					//
 					// ASCOM 
 					//
@@ -424,14 +434,6 @@ namespace TEMPLATENAMESPACE
 					using (var P = new ASCOM.Utilities.Profile { DeviceType = GetDeviceClass(progid) })
 					{
 						P.Register(progid, chooserName);
-						try
-						{
-							// In case Helper becomes native .NET
-							Marshal.ReleaseComObject(P);
-						}
-						catch (Exception)
-						{
-						}
 					}
 				}
 				catch (Exception ex)
@@ -442,9 +444,9 @@ namespace TEMPLATENAMESPACE
 				}
 				finally
 				{
-					if (key != null) key.Close();
-					if (key2 != null) key2.Close();
-					if (key3 != null) key3.Close();
+                    //if (key != null) key.Close();
+                    //if (key2 != null) key2.Close();
+                    //if (key3 != null) key3.Close();
 				}
 				if (bFail) break;
 			}
@@ -502,14 +504,6 @@ namespace TEMPLATENAMESPACE
 					using (var P = new ASCOM.Utilities.Profile { DeviceType = GetDeviceClass(progid) })
 					{
 						P.Unregister(progid);
-						try
-						{
-							// In case Helper becomes native .NET
-							Marshal.ReleaseComObject(P);
-						}
-						catch (Exception)
-						{
-						}
 					}
 				}
 				catch (Exception) { }
