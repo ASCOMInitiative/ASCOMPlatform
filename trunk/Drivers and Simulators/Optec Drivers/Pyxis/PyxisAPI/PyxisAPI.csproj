@@ -65,6 +65,7 @@
     <Compile Include="PyxisSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Optec.snk" />
   </ItemGroup>
   <ItemGroup>

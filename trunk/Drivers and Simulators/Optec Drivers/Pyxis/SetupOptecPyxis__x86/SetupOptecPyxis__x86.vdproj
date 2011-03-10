@@ -45,6 +45,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_368777AB7FC94590B2251D2D110A795D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_79147A0A1B8DE816EDC604034744E66A"
         "OwnerKey" = "8:_072C5871F3714691910BC89641D0DC37"
         "MsmSig" = "8:_UNDEFINED"
@@ -53,12 +59,6 @@
         {
         "MsmKey" = "8:_79147A0A1B8DE816EDC604034744E66A"
         "OwnerKey" = "8:_14DFC826A7564FDFB502E3AA504B08B7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B8A6E381BD183AED7438D92333CFFCB"
-        "OwnerKey" = "8:_037254A15F6AE299992E1C45659B6BCD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -196,7 +196,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\OptecPyxisSetup_x86(2.0.1).msi"
+        "OutputFilename" = "8:Release\\OptecPyxisSetup_x86(2.0.2).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -349,23 +349,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_79147A0A1B8DE816EDC604034744E66A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_368777AB7FC94590B2251D2D110A795D"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PyxisAPI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_79147A0A1B8DE816EDC604034744E66A"
-                    {
-                    "Name" = "8:PyxisAPI.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:PyxisAPI.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\Installer Files\\RevisionHistory.txt"
+            "TargetName" = "8:RevisionHistory.txt"
             "Tag" = "8:"
-            "Folder" = "8:_4D024A415C0F4021BFC083625A6898A5"
+            "Folder" = "8:_4BC43124AE954256BB5B3D91567419C0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -376,14 +365,25 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8B8A6E381BD183AED7438D92333CFFCB"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_79147A0A1B8DE816EDC604034744E66A"
             {
-            "SourcePath" = "8:ASCOM.Utilities.tlb"
-            "TargetName" = "8:ASCOM.Utilities.tlb"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:PyxisAPI, Version=2.0.2.0, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_79147A0A1B8DE816EDC604034744E66A"
+                    {
+                    "Name" = "8:PyxisAPI.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:PyxisAPI.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4D024A415C0F4021BFC083625A6898A5"
             "Condition" = "8:"
@@ -608,15 +608,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Optec Pyxis Programs (x86)"
-        "ProductCode" = "8:{EC0A73AD-330D-4726-B67E-87FFF90C8F8F}"
-        "PackageCode" = "8:{310EB547-F725-4E85-B618-1C3C090B975F}"
+        "ProductCode" = "8:{5AC84136-E0BD-4CF0-A8C8-40A36513AA50}"
+        "PackageCode" = "8:{987E8C4E-BAAB-492C-85F9-AAE2910D5381}"
         "UpgradeCode" = "8:{8A6AD612-6349-45F2-8017-160E9CACBAEA}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.0.1"
+        "ProductVersion" = "8:2.0.2"
         "Manufacturer" = "8:Optec Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
