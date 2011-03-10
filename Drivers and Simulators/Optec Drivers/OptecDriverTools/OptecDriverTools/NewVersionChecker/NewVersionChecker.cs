@@ -85,7 +85,7 @@ namespace Optec
                 XElement v = xdoc.Descendants("versionGetter").Descendants(productName).Descendants().Single(i => i.Name == "version");
                 XElement u = xdoc.Descendants("versionGetter").Descendants(productName).Descendants().Single(i => i.Name == "url");
                 latestVersionNumber = new Version(v.Value);
-                url = u.Value;
+                url = u.Value;  // Fixed this to use the correct property!
                 return true;
             }
             catch 
