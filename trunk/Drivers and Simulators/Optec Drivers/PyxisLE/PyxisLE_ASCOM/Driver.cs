@@ -203,10 +203,10 @@ namespace ASCOM.PyxisLE_ASCOM
                 if (NewPosition > 360) NewPosition = NewPosition - 360;
                 else if (NewPosition < 0) NewPosition = NewPosition + 360;
                 myRotator.CurrentSkyPA = NewPosition;
-                //System.Threading.Thread.Sleep(500);
-                EventLogger.LogMessage("Move Started at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
-                while (this.IsMoving) { System.Threading.Thread.Sleep(50); System.Windows.Forms.Application.DoEvents(); }
-                EventLogger.LogMessage("Returning from move method at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
+                System.Threading.Thread.Sleep(50);
+                EventLogger.LogMessage("Move Started at " + DateTime.Now.ToLongTimeString(), TraceLevel.Verbose);
+                //while (this.IsMoving) { System.Threading.Thread.Sleep(50); System.Windows.Forms.Application.DoEvents(); }
+                //EventLogger.LogMessage("Returning from move method at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
             }
             catch (Exception ex)
             {
@@ -224,13 +224,13 @@ namespace ASCOM.PyxisLE_ASCOM
                 if (Position > 360) throw new ASCOM.InvalidOperationException("Cannot move to position greater than 360°");
                 else if (Position < 0) throw new ASCOM.InvalidOperationException("Cannot move to position less than 0°");
                 EventLogger.LogMessage("Starting Move at " + DateTime.Now.ToLongTimeString(), TraceLevel.Info);
-                myRotator.CurrentSkyPA = (double)Position;    
-                
+                myRotator.CurrentSkyPA = (double)Position;
+                System.Threading.Thread.Sleep(50);
                 //DateTime start = DateTime.Now;
                 //while (myRotator.CurrentSkyPA != Position) { System.Windows.Forms.Application.DoEvents(); }
-                 while (myRotator.IsMoving || myRotator.CurrentSkyPA != Position) { System.Windows.Forms.Application.DoEvents(); }
-                EventLogger.LogMessage("Returning from move method at " + DateTime.Now.ToLongTimeString() + 
-                    ", Current Sky PA = " + myRotator.CurrentSkyPA.ToString(), TraceLevel.Info);
+                // while (myRotator.IsMoving || myRotator.CurrentSkyPA != Position) { System.Windows.Forms.Application.DoEvents(); }
+               // EventLogger.LogMessage("Returning from move method at " + DateTime.Now.ToLongTimeString() + 
+                 //   ", Current Sky PA = " + myRotator.CurrentSkyPA.ToString(), TraceLevel.Info);
             }
             catch (Exception ex) 
             {

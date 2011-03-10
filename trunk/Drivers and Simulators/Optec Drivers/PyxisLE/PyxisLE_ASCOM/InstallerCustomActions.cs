@@ -23,7 +23,7 @@ namespace ASCOM.PyxisLE_ASCOM
         public override void Install(System.Collections.IDictionary stateSaver)
         {
             string msg = "Install custom action - Starting registration for COM Interop";
-            EventLogger.LogMessage(msg, TraceLevel.Warning);
+            EventLogger.LogMessage(msg, TraceLevel.Error);  // This makes sure the log gets created during installer.
 #if DEBUG
             MessageBox.Show("Attach debugger to this process now, if required", "Custom Action Debug", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 #endif
