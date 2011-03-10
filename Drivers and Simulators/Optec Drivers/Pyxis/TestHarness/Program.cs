@@ -17,12 +17,12 @@ namespace TestHarness
             driver.Connected = true;
             Console.WriteLine("Connected to Rotator Driver");
 
-            //driver.Move(5);
-            //while (driver.IsMoving)
-            //{
-            //    Console.WriteLine("Moving...");
-            //}
-            //Console.WriteLine("Moved 5 degrees Relative");
+            driver.Move(5);
+            while (driver.IsMoving)
+            {
+                Console.WriteLine("Moving...");
+            }
+            Console.WriteLine("Moved 5 degrees Relative");
 
             //driver.Move(5);
             //while (driver.IsMoving)

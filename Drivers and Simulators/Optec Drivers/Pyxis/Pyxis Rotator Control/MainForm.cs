@@ -1058,7 +1058,7 @@ namespace Pyxis_Rotator_Control
             {
                 try { CheckIfConnected(); }
                 catch { return; }
-                myPyxis.HomeOnStart = value;
+                myPyxis.SetHomeOnStart(value);
             }
         }
 

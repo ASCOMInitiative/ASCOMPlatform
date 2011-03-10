@@ -7,8 +7,11 @@ following url: http://www.optecinc.com/astronomy/report_software_issues.htm
 Revision History
 
 *****************************************************************************************************
+2.0.2	Mar-2010-JTS  Fixed HomeOnStart bug so that the value gets pushed to the device.
 
-2.0	Nov-2010-JTS		Rewrote ASCOM Driver using C#.NET
+2.0.1	
+
+2.0.0	Nov-2010-JTS		Rewrote ASCOM Driver using C#.NET
 				Rewrote Windows Control Program using C#.NET
 				Combined installer for ASCOM driver and Control Program
 				Updated programs for the ablilty to Halt devices with supporting firmware

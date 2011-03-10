@@ -525,7 +525,7 @@ namespace PyxisAPI
         /// Send the CJxxxx command to the device to set the HomeOnStart property in the firmware.
         /// </summary>
         /// <param name="homeOnStart"></param>
-        private void setHomeOnStart(bool homeOnStart)
+        public void SetHomeOnStart(bool homeOnStart)
         {
             // 1. Make sure the device is connected...
             if (CurrentDeviceState != DeviceStates.Connected)
