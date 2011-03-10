@@ -142,12 +142,14 @@
     <Import Include="System.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\CLSCompliant.vb">
+      <Link>CLSCompliant.vb</Link>
+    </Compile>
     <Compile Include="MigrateProfile.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\AssemblyVersionInfo.vb">
       <Link>My Project\AssemblyVersionInfo.cs</Link>
     </Compile>
-
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>

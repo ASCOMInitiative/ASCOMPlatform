@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		AssemblyVersionInfo.cs = AssemblyVersionInfo.cs
 		AssemblyVersionInfo.vb = AssemblyVersionInfo.vb
 		BUILD NOTES.txt = BUILD NOTES.txt
+		CLSCompliant.cs = CLSCompliant.cs
+		CLSCompliant.vb = CLSCompliant.vb
 		CustomDictionary.xml = CustomDictionary.xml
 		External Dependencies\StyleCop\v4.3\Settings.StyleCop = External Dependencies\StyleCop\v4.3\Settings.StyleCop
 		SolutionInfo.cs = SolutionInfo.cs
@@ -951,13 +953,13 @@ Global
 		{8D8F18F1-5298-49CC-9579-6C04568D9771} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal

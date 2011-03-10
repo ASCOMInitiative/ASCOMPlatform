@@ -9,13 +9,13 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("ASCOM Device Interfaces")> 
-<Assembly: AssemblyDescription("ASCOM Interfaces for Platform 6")> 
+<Assembly: AssemblyDescription("ASCOM Device Interfaces for Platform 6")> 
 <Assembly: AssemblyCompany("ASCOM")> 
-<Assembly: AssemblyProduct("ASCOM.InterfacesP6")> 
+<Assembly: AssemblyProduct("ASCOM.DeviceInterfaces.Platform6")> 
 <Assembly: AssemblyCopyright("Copyright © ASCOM 2010")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(True)> 
+<Assembly: ComVisible(False)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("5849AF17-3590-42ff-900E-7544D45C9825")> 

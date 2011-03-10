@@ -199,6 +199,9 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\CLSCompliant.vb">
+      <Link>CLSCompliant.vb</Link>
+    </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="ConnectForm.Designer.vb">
       <DependentUpon>ConnectForm.vb</DependentUpon>

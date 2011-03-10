@@ -132,6 +132,9 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\CLSCompliant.vb">
+      <Link>CLSCompliant.vb</Link>
+    </Compile>
     <Compile Include="ChooserExamples.vb" />
     <Compile Include="EnvironmentExamples.vb" />
     <Compile Include="Form1.vb">
@@ -144,7 +147,8 @@
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\AssemblyVersionInfo.vb">
       <Link>My Project\AssemblyVersionInfo.cs</Link>
-    </Compile>    <Compile Include="My Project\Application.Designer.vb">
+    </Compile>
+    <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>

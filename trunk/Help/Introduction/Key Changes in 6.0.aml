@@ -46,9 +46,10 @@
   				<listItem>New simulators authored in .NET, compatible with 32 and 64bit operating systems.</listItem>
   				<listItem>Tool to tell you when updated components are available</listItem>  	
   				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
+  				<listItem>New full implementation of the USNO NOVAS3 library.</listItem>
   				<listItem>NOVAS2 and NOVAS3 components now have DeltaT methods valid for the year 1650 to 2050.</listItem>
   				<listItem>Improved recognition of serial ports.</listItem>
-  				<listItem>Device Interface version numbers hav been increased by 1 to reflect introduction of the common core capabilities</listItem>
+  				<listItem>Device Interface version numbers have been increased by 1 to reflect introduction of the common core capabilities</listItem>
   				<listItem>Separate developer tool installer, that can be updated independently of the core platform, allowing development tools 
   				to be continuously improved without requiring platform users to install updated platform versions.</listItem>
   			</list>

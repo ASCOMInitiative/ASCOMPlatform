@@ -9,6 +9,48 @@
       	to the information available. It also provides new flexibility for client and driver authors to innovate and add 
       	their own driver commands without having to release new versions of the device interfaces.</para>
       	
+      	<para>Platform 6 aims for <legacyBold>100% backward compatibility</legacyBold> with current drivers and applications, providing an easy upgrade path 
+      	and new capabilities that developers and enthusiasts can exploit.</para>
+      	
+      	<para>Significant reliability and compatibility improvements have also been made in Platform 6:
+			<list class="bullet">
+			  	<listItem>
+			  		<para>Inno based driver installers that failed in locale's where "point" is not the decimal separator now receive the
+			  		PlatformVersion string in the format that they expect allowing them to run to completion.</para>
+			  	</listItem>
+			  	<listItem>
+			  		<para>Inno based driver installers that are targetted specifically at Platform 5 are detected and provided with a 
+			  		PlatformVersion number that allows them to install on Platform 6, thus maintaining the current range of available 
+			  		drivers.</para>
+			  	</listItem>
+			  	<listItem>
+			  		<para>Checks for correct installation are now made when drivers are selected through Chooser. COM 
+			  		registration is checked and if issues are found, these are flagged and it is not possible to select that driver. 
+			  		This improves on previous experience where a difficult to decipher error message would appear when an attempt to 
+			  		start the driver was made by an application.</para>
+			  	</listItem>
+			  	<listItem>
+			  		<para>The 32/64bit compatibility of in-process COM servers is now checked by the Chooser and invalid combinations e.g. 
+			  		a 32bit only driver being selected by a 64bit application are flagged to the user, again preventing difficult
+			  		to decipher error messages from appearing when the driver was started.</para>
+			  	</listItem>
+			  	<listItem>
+			  		<para>The timer has improved compatibility with console applications and scripting languages.</para>
+			  	</listItem>
+			  	<listItem>
+			  		<para>The serial component will now detect a wider variety of serial ports.</para>
+			  	</listItem>
+			  	<listItem>
+			  		<para>The ASCOM Profile store has been moved back into the registry for improved performance, reliability and
+			  		compatibiity with drivers that bypass the ASCOM Profile functions and directly manipulate the registry.</para>
+			  	</listItem>
+			</list>
+		</para>
+		<para>The Platform has been split into two installers: the main Platform and the Developer Components. This gives a more focused 
+		installation for the majority of ASCOM users, who are not developers, and allows us to make more frequent updates to the developer
+		components, which we know from experience are enhanced more frequently.</para>
+		<para>The Diagnostics tool has been considerably enhanced to provide a wide ranging report on the installed Platform and 
+		incorporates a comprehensive test suite that excercises every aspect of Platform functionality.</para>
       	<para>The following section describes changes introduced in Platform 5.5</para>
 		</content>
     </section>
