@@ -914,6 +914,11 @@ namespace Pyxis_Rotator_Control
 
         #endregion
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
         
 
     }
