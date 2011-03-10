@@ -142,17 +142,17 @@ begin
    Result := FALSE;  // Assume failure
    // check that the DriverHelper and Utilities objects exist, report errors if they don't
    try
-      H := CreateObject('DriverHelper.Util');
+      H := CreateOLEObject('DriverHelper.Util');
    except
-      MsgBox('The ASCOM DriverHelper object has failed to load, this indicates a seerious problem with the ASCOM installation');
+      MsgBox('The ASCOM DriverHelper object has failed to load, this indicates a serious problem with the ASCOM installation', mbInformation, MB_OK);
    end;
    try
       U := CreateOLEObject('ASCOM.Utilities.Util');
    except
-      MsgBox('The ASCOM Platform 5 Utilities object has failed to load, this indicates that Platform 5.5 has not been installed correctly');
+      MsgBox('The ASCOM Utilities object has failed to load, this indicates that the ASCOM Platform has not been installed correctly', mbInformation, MB_OK);
    end;
    try
-      if (U.IsMinimumRequiredVersion(5,5) then	// this will work in all locales
+      if (U.IsMinimumRequiredVersion(5,5)) then	// this will work in all locales
          Result := TRUE;
    except
    end;
