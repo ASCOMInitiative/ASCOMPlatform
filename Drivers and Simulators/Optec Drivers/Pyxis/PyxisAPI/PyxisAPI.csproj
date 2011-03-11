@@ -37,10 +37,6 @@
     <AssemblyOriginatorKeyFile>Optec.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OptecDriverTools, Version=1.0.0.1, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\OptecDriverTools\OptecDriverTools\bin\Release\OptecDriverTools.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -72,6 +68,12 @@
     <EmbeddedResource Include="InstanceSetupForm.resx">
       <DependentUpon>InstanceSetupForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\OptecDriverTools\OptecDriverTools\OptecDriverTools.csproj">
+      <Project>{C4D5897A-B2BC-478F-8F00-7C9C69202E65}</Project>
+      <Name>OptecDriverTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

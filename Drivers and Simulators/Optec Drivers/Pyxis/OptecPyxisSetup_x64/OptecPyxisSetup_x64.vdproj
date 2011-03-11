@@ -33,25 +33,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
+        "MsmKey" = "8:_4FAFAB47F1D381F782F42CB2E7CD8C5F"
         "OwnerKey" = "8:_737B560F219443A5B87E7DB3E1E42952"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
+        "MsmKey" = "8:_4FAFAB47F1D381F782F42CB2E7CD8C5F"
         "OwnerKey" = "8:_D71177780A074DCCBE7A84FB78DEFAB4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
+        "MsmKey" = "8:_4FAFAB47F1D381F782F42CB2E7CD8C5F"
         "OwnerKey" = "8:_D492278EE3194EC5B692DD0FEECDDE3E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
+        "MsmKey" = "8:_4FAFAB47F1D381F782F42CB2E7CD8C5F"
         "OwnerKey" = "8:_27666730AA8697E507A55DCB56EDCAE9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -81,7 +81,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A7FBB8494A634357AC24CFBD1B978C31"
+        "MsmKey" = "8:_AA76418721334137B2DD5CD89709C443"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -112,7 +112,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A7FBB8494A634357AC24CFBD1B978C31"
+        "OwnerKey" = "8:_AA76418721334137B2DD5CD89709C443"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -136,6 +136,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4FAFAB47F1D381F782F42CB2E7CD8C5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_81E1EF46A2CBBD4EBE88EF095A81C1D7"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -143,12 +149,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_6E771F34E52C218B2AB0C3708DF24009"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_46E18D6E1486637C39EB84325B4B0B31"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -233,20 +233,6 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_0BADC35AB5C34BD78F3FD1A98EEAD2D0"
-            {
-            "Name" = "8:OptecDriverTools.dll"
-            "Condition" = "8:ASCOM OR CONTROL"
-            "Object" = "8:_A7FBB8494A634357AC24CFBD1B978C31"
-            "FileType" = "3:1"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_E0EC7496_BB6D_4E21_8185_E70A5BF67153"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_25136F2C8DEC4BFC86A3B757383D448D"
             {
             "Name" = "8:Primary output from Pyxis ASCOM Driver (Active)"
@@ -256,8 +242,22 @@
             "InstallAction" = "3:1"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
-            "Sequence" = "3:2"
+            "Sequence" = "3:1"
             "Identifier" = "8:_27D6FE07_AB5E_4879_B644_86A53CACDB52"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B669001CE98749EEB53E6FA7AAC16BEB"
+            {
+            "Name" = "8:Primary output from OptecDriverTools (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_AA76418721334137B2DD5CD89709C443"
+            "FileType" = "3:1"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_680F0E5F_C033_44A7_B80F_AE226DBD4D9D"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
@@ -349,14 +349,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_46E18D6E1486637C39EB84325B4B0B31"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4FAFAB47F1D381F782F42CB2E7CD8C5F"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:OptecDriverTools, Version=1.0.0.1, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:OptecDriverTools, Version=1.0.0.2, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_46E18D6E1486637C39EB84325B4B0B31"
+                    "_4FAFAB47F1D381F782F42CB2E7CD8C5F"
                     {
                     "Name" = "8:OptecDriverTools.dll"
                     "Attributes" = "3:512"
@@ -440,37 +440,6 @@
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A7FBB8494A634357AC24CFBD1B978C31"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:OptecDriverTools, Version=1.0.0.1, Culture=neutral, PublicKeyToken=44aa7042cfa351f3, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_A7FBB8494A634357AC24CFBD1B978C31"
-                    {
-                    "Name" = "8:OptecDriverTools.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\OptecDriverTools\\OptecDriverTools\\bin\\Release\\OptecDriverTools.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
-            "Condition" = "8:ASCOM OR CONTROL"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DDD92072D89541299BD930390F7B7211"
@@ -1400,6 +1369,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{857FEA7F-0647-45CA-A47E-77ABA3B07B3B}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_AA76418721334137B2DD5CD89709C443"
+            {
+            "SourcePath" = "8:..\\Dependencies\\OptecDriverTools\\OptecDriverTools\\obj\\Release\\OptecDriverTools.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3381C5FD49B94103AFBCA4C6CDBC29DB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{C4D5897A-B2BC-478F-8F00-7C9C69202E65}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
