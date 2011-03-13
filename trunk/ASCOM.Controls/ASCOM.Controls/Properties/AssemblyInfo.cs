@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -6,13 +7,14 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
+
 [assembly: AssemblyTitle("ASCOM.Controls")]
 [assembly: AssemblyDescription("Windows Forms controls for ASCOM clients and drivers")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCopyright("Copyright © 2004-9 Timothy P. Long and TiGra Astronomy")]
-
-[assembly: ComVisibleAttribute(false)]
+[assembly: ComVisible(false)]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.0.0.0")]
 
+[assembly: AssemblyVersion("6.0.0.0")]
+[assembly: CLSCompliant(true)]
