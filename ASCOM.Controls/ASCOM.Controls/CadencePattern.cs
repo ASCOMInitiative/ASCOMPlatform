@@ -13,7 +13,7 @@ namespace ASCOM.Controls
 	/// Cadences are based on 32-bit unsigned integers, such that the ordinal value
 	/// of each item represents a bit mask that can be used directly in an update routine.
 	/// </summary>
-	public enum CadencePattern : uint
+	public enum CadencePattern : long
 	{
 		/// <summary>
 		/// Permanently off, 
