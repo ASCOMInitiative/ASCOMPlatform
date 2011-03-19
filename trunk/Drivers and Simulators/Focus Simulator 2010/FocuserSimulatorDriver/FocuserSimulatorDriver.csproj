@@ -74,7 +74,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -101,18 +101,18 @@
     <Compile Include="..\..\..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Driver.cs" />
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="FocuerDriver.cs" />
+    <Compile Include="FocuserSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
+    <Compile Include="FocuserSettingsForm.Designer.cs">
+      <DependentUpon>FocuserSettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SetupDialogForm.cs">
+    <Compile Include="FocuserHandboxForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SetupDialogForm.Designer.cs">
-      <DependentUpon>SetupDialogForm.cs</DependentUpon>
+    <Compile Include="FocuserHandboxForm.Designer.cs">
+      <DependentUpon>FocuserHandboxForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -125,11 +125,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
+    <EmbeddedResource Include="FocuserSettingsForm.resx">
+      <DependentUpon>FocuserSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SetupDialogForm.resx">
-      <DependentUpon>SetupDialogForm.cs</DependentUpon>
+    <EmbeddedResource Include="FocuserHandboxForm.resx">
+      <DependentUpon>FocuserHandboxForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="..\..\..\ASCOM.snk">
       <Link>ASCOM.snk</Link>

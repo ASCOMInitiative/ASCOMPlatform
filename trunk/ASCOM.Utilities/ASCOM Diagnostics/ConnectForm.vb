@@ -55,7 +55,15 @@ Public Class ConnectForm
         CurrentDeviceType = cmbDeviceType.SelectedItem
         Chooser = New ASCOM.Utilities.Chooser
         Chooser.DeviceType = CurrentDeviceType
-        If CurrentDevice = "" Then CurrentDevice = "SCOPESIM.TELESCOPE"
+        If CurrentDevice = "" Then
+            Select Case CurrentDeviceType
+                Case "Telescope"
+                    CurrentDevice = "SCOPESIM.TELESCOPE"
+                Case "Focuser"
+                    CurrentDevice = "ASCOM.SIMULATOR.FOCUSER"
+
+            End Select
+        End If
         NewDevice = Chooser.Choose(CurrentDevice)
         If NewDevice <> "" Then CurrentDevice = NewDevice
 
