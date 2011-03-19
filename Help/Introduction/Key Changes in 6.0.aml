@@ -47,7 +47,8 @@
   				<listItem>Tool to tell you when updated components are available</listItem>  	
   				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
   				<listItem>New full implementation of the USNO NOVAS3 library.</listItem>
-  				<listItem>NOVAS2 and NOVAS3 components now have DeltaT methods valid for the year 1650 to 2050.</listItem>
+  				<listItem>NOVAS2 and NOVAS3 components now have DeltaT methods valid for the year 1650 to 2050 together with the most recent 
+  				JPL DE421 planet ephemeris data, the full list of NOVAS CIO RAs and the AE98 readeph routine to parse locally held minor planet ephemeris files.</listItem>
   				<listItem>Improved recognition of serial ports.</listItem>
   				<listItem>Device Interface version numbers have been increased by 1 to reflect introduction of the common core capabilities</listItem>
   				<listItem>Separate developer tool installer, that can be updated independently of the core platform, allowing development tools 

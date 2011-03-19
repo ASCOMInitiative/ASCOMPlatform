@@ -3,33 +3,96 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
         	
     	<section address="Changes">
-      		<title>Changes</title>
+    		<title>Key Changes in 6.0 - For Everyone</title>
       		<content>
 				<list class="bullet">
- 		 			<listItem>Diagnostics - Now has a menu option to list available COM ports.</listItem>
- 		 			<listItem>Diagnostics - Now includes a comprehensive test suite and creates a more detailed report</listItem>
- 		 			<listItem>TraceLogger - Has a new menu option to return the full path name of the log file being created.</listItem>
- 		 			<listItem>TraceLogger - New LogMessageCrLf method that respects carriage returns and line feeds in 
- 		 			messages and doesn't translate these to hex display characters.</listItem>>
- 		 			<listItem>ASCOM.Astrometry - Now includes a full presentation of the NOVAS3 library including:
- 		 				<list class="bullet">
-		 		 			<listItem>the the most recent JPL DE421 planet ephemeris data.</listItem>>
-		 		 			<listItem>the full table of CIO RAs</listItem>>
-		 		 			<listItem>the AE98 readeph routine to parse locally held minor planet ephemeris files</listItem>
-		 		 		</list>
-		 		 	</listItem>
- 		 			<listItem>Profile - Improved resilience to tranient operational issues</listItem>>
- 		 			<listItem>Profile - Improved recovery from profile file corruption</listItem>>
- 		 			<listItem>Utilities - ASCOM event log introduced to record serious Platform code failures,
- 		 			improving fault diagnosis, leading to better Platform stability.</listItem>
- 		 			<listItem>Profile - Implemented four new methods to retrieve and set all values in a device
- 		 			profile in one operation. GetProfileXML and SetProfileXML work with an XML encoding of the profile
- 		 			while GetProfile and SetProfile work with the new ASCOMProfile object that contains all 
- 		 			entries in the profile and provides simple methods to read and set values.</listItem>
+	     			<listItem>Driver installers that did not run in locale's where "." is not the decimal separator will now run.</listItem>
+	      			<listItem>Incorrectly registered drivers are now identified by the Chooser and report why rather than 
+	      			generating difficult to assess exception messages.</listItem>
+	      			<listItem>32bit only drivers will now be identified by the Chooser if selected by a 64bit application and an appropriate
+	      			message will be given.</listItem>
+	      			<listItem>Flexibility - Capability for driver authors to implement their own commands (Action and SupportedActions methods)</listItem>
+	      			<listItem>Supported Device Types
+	  					<list class="bullet">
+	  						<listItem>New Switch device definition including: 
+	  							<list class="bullet">
+			  						<listItem>On/Off switch</listItem>
+			  						<listItem>N-way switch</listItem>
+			  						<listItem>Rheostat device</listItem>
+			  						<listItem>Simulators for above switch types.</listItem>
+			  					</list>
+	  						</listItem>
+	  						<listItem>New SafetyDevice device definition</listItem>
+	  						<listItem>New CameraV2 device definition</listItem>
+	  						<listItem>All device types now support a common set of core capabilities
+		  						<list class="bullet">
+			  						<listItem>Action - Execute a device specific capability defined by the driver author</listItem>
+			  						<listItem>CommandBlind - Send a device specific control code to a device expecting no response</listItem>
+			  						<listItem>CommandBool - Send a device specific control code to a device expecting a boolean response</listItem>
+			  						<listItem>CommandString - Send a device specific control code to a device expecting a string response</listItem>
+			  						<listItem>Connected - connects and disconnects the controlled device</listItem>
+			  						<listItem>Description - Long description of the device being controlled</listItem>	  						
+			  						<listItem>Dispose - Clean up and release any driver resources prior to driver shutdown</listItem>
+			  						<listItem>DriverInfo - Long description of the driver controlling the device</listItem>
+			  						<listItem>DriverVersion - m.n format driver version number</listItem>
+			  						<listItem>InterfaceVersion - Version number of the ASCOM interface that the driver supports</listItem>
+			  						<listItem>Name - Short display name of the driver</listItem>
+			  						<listItem>SetupDialog - DIsplays the driver / device configuration screen</listItem>
+			  						<listItem>SupportedActions - List of actions supported by this device</listItem>
+			  					</list>
+		  					</listItem>
+	  					</list>
+	  				</listItem>
+	  				<listItem>New simulators authored in .NET, compatible with 32 and 64bit operating systems.</listItem>
+	  				<listItem>Tool to tell you when updated components are available</listItem>  	
+	  				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
+	  				<listItem>New full implementation of the USNO NOVAS3 library.</listItem>
+	  				<listItem>Improved recognition of serial ports.</listItem>
+	  				<listItem>Device Interface version numbers have been increased by 1 to reflect introduction of the common core capabilities</listItem>
+	  				<listItem>Separate developer tool installer, that can be updated independently of the core platform, allowing development tools 
+	  				to be continuously improved without requiring platform users to install updated platform versions.</listItem>
 	  			</list>
             </content>
 		</section>
           			
+    	<section address="KeyChangesin6.0Dev">
+	     	<title>Key Changes in 6.0 - For Developers</title>
+	      	<content>
+	      		<list class="bullet">
+	     			<listItem>New Driver Templates</listItem>
+	     			<listItem>Settings Provider component</listItem>
+	     			<listItem>Full .NET implementation of NOVAS3
+	  					<list class="bullet">
+	  						<listItem>A DeltaT method valid for the years 1650 to 2050</listItem>
+	  						<listItem>JPL DE421 planet ephemeris data</listItem>
+	  						<listItem>List of NOVAS CIO RAs </listItem>
+	  						<listItem>the AE98 readeph routine to parse locally held minor planet ephemeris files.</listItem>
+	  					</list>
+	  				</listItem>
+	  				<listItem>ASCOM Controls - reusable components that can be embedded in forms to easedevelopment of common tasks
+	  					<list class="bullet">
+	  						<listItem>Chooser</listItem>
+	  						<listItem>LED Indicator - a simple red / green indicator supporting various blink cadences</listItem>
+	  						<listItem>Annunciator - Displays status with a standard look and feel</listItem>
+	  					</list>
+	  				</listItem>
+	     			<listItem>Separate developer support install</listItem>
+	     			<listItem>Support for early COM binding, introduced in Platform 5 removed to ease on-going platform development</listItem>
+	     			<listItem>Enhanced Client Toolkit that can handle Platform 5 and Platform 6 conformant drivers.</listItem>     			
+	     			<listItem>Enhanced version of Conform to confirm adherence to the new Platform 6 interfaces</listItem>
+	     			<listItem>TraceLogger - Has a new menu option to return the full path name of the log file being created.</listItem>
+	 		 		<listItem>TraceLogger - New LogMessageCrLf method that respects carriage returns and line feeds in 
+	 		 		messages and doesn't translate these to hex display characters.</listItem>>
+	 	 			<listItem>Profile - Implemented four new methods to retrieve and set all values in a device
+	 		 		profile in one operation. GetProfileXML and SetProfileXML work with an XML encoding of the profile
+	 		 		while GetProfile and SetProfile work with the new ASCOMProfile object that contains all 
+	 		 		entries in the profile and provides simple methods to read and set values.</listItem>	
+	     			<listItem>Enhanced DriverAccess Toolkit that transparently deals with driver differences between interface versions,
+	     			providing a consistent interface for .NET application developers.</listItem>
+	     			<listItem></listItem>     			
+  				</list>
+      		</content>
+   		</section>
         <section address="IssuesFixed">
            	<title>Issues Fixed</title>
             <content>
@@ -44,12 +107,14 @@
 					<listItem>TraceLogger - Fixed exception thrown if object was disposed while writing</listItem>
 					<listItem>TraceLogger - Fixed low probability IOException thrown when creating the object
 					if multiple traceloggers were created simulateously in multi-threaded applications.</listItem>
+ 		 			<listItem>Profile - Improved resilience to tranient operational issues</listItem>>
+ 		 			<listItem>Profile - Improved recovery from profile file corruption</listItem>>
 				</list>
    			</content>
    		</section>
 
         <section address="BreakingChanges">
-           	<title>Breaking Changes</title>
+           	<title>Breaking Changes (for developers)</title>
             <content>
       			<list class="bullet">
  		 			<listItem>RegisteredDevices(ByVal DeviceType As String) has been changed from a property to a method to maximise 

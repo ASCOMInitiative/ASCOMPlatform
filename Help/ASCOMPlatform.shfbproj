@@ -122,7 +122,7 @@
     <FrameworkVersion>.NET 3.5</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <MSHelpViewerSdkLinkType>None</MSHelpViewerSdkLinkType>
-    <SyntaxFilters>CSharp, VisualBasic, VisualBasicUsage, CPlusPlus, FSharp, JSharp, JScript</SyntaxFilters>
+    <SyntaxFilters>CSharp, VisualBasic, VisualBasicUsage, CPlusPlus</SyntaxFilters>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

@@ -19,15 +19,15 @@
 			  		PlatformVersion string in the format that they expect allowing them to run to completion.</para>
 			  	</listItem>
 			  	<listItem>
-			  		<para>Inno based driver installers that are targetted specifically at Platform 5 are detected and provided with a 
+			  		<para>Inno based driver installers that are targeted specifically at Platform 5 are detected and provided with a 
 			  		PlatformVersion number that allows them to install on Platform 6, thus maintaining the current range of available 
 			  		drivers.</para>
 			  	</listItem>
 			  	<listItem>
 			  		<para>Checks for correct installation are now made when drivers are selected through Chooser. COM 
 			  		registration is checked and if issues are found, these are flagged and it is not possible to select that driver. 
-			  		This improves on previous experience where a difficult to decipher error message would appear when an attempt to 
-			  		start the driver was made by an application.</para>
+			  		This improves on previous experience where a difficult to decipher error message would appear when an application
+			  		attempted to start the driver</para>
 			  	</listItem>
 			  	<listItem>
 			  		<para>The 32/64bit compatibility of in-process COM servers is now checked by the Chooser and invalid combinations e.g. 
@@ -42,15 +42,24 @@
 			  	</listItem>
 			  	<listItem>
 			  		<para>The ASCOM Profile store has been moved back into the registry for improved performance, reliability and
-			  		compatibiity with drivers that bypass the ASCOM Profile functions and directly manipulate the registry.</para>
+			  		compatibility with drivers that bypass the ASCOM Profile functions and directly manipulate the registry.</para>
 			  	</listItem>
+			  	<listItem>
+			  		<para>An ASCOM Windows event log has been introduced to record serious Platform code failures, improving fault 
+			  		diagnosis, leading to better Platform stability.</para>
+ 		 		</listItem>
+ 	 		 	<listItem>
+ 	 		 		<para>Diagnostics now includes a comprehensive test suite and detailed report providing greater confidence that the 
+ 	 		 		Platform is properly installed.</para>
+ 	 		 	</listItem>
+
 			</list>
 		</para>
 		<para>The Platform has been split into two installers: the main Platform and the Developer Components. This gives a more focused 
 		installation for the majority of ASCOM users, who are not developers, and allows us to make more frequent updates to the developer
 		components, which we know from experience are enhanced more frequently.</para>
 		<para>The Diagnostics tool has been considerably enhanced to provide a wide ranging report on the installed Platform and 
-		incorporates a comprehensive test suite that excercises every aspect of Platform functionality.</para>
+		incorporates a comprehensive test suite that exercises every aspect of Platform functionality.</para>
       	<para>The following section describes changes introduced in Platform 5.5</para>
 		</content>
     </section>
