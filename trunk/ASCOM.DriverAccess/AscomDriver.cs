@@ -130,7 +130,8 @@ namespace ASCOM.DriverAccess
                         {
                             case "FILTERWHEEL":
                             case "FOCUSER":
-                                return "Description not implemented by interface version " + interfaceVersion.ToString();
+                            case "ROTATOR":
+                                return "Description is not implemented by interface version 1";
                             default:
                                 throw ex;
                         }
@@ -165,9 +166,11 @@ namespace ASCOM.DriverAccess
                     {
                         switch (deviceType)
                         {
+                            case "CAMERA":
                             case "FILTERWHEEL":
                             case "FOCUSER":
-                                return "DriverInfo is not implemented by interface version " + interfaceVersion.ToString();
+                            case "ROTATOR": 
+                                return "DriverInfo is not implemented by interface version 1";
                             default:
                                 throw ex;
                         }
@@ -200,11 +203,12 @@ namespace ASCOM.DriverAccess
                     {
                         switch (deviceType)
                         {
-                            case "FILTERWHEEL":
-                            case "FOCUSER":
                             case "CAMERA":
                             case "DOME":
-                                return "DriverVersion is not implemented by interface version " + interfaceVersion.ToString();
+                            case "FILTERWHEEL":
+                            case "FOCUSER":
+                            case "ROTATOR": 
+                                return "DriverVersion is not implemented by interface version 1";
                             default:
                                 throw ex;
                         }
@@ -256,9 +260,11 @@ namespace ASCOM.DriverAccess
                     {
                         switch (deviceType)
                         {
+                            case "CAMERA":
                             case "FILTERWHEEL":
                             case "FOCUSER":
-                                return "Name is not implemented by interface version " + interfaceVersion.ToString();
+                            case "ROTATOR": 
+                                return "Name is not implemented by interface version 1";
                             default:
                                 throw ex;
                         }

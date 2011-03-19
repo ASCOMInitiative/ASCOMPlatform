@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     	
     	<section address="Changes">
-      		<title>Changes</title>
+    	<title>Key Changes in 5.5.1 - For Everyone</title>
       		<content>
 				<list class="bullet">
  		 			<listItem>Diagnostics now also collects information on serial ports, installed Framework versions,

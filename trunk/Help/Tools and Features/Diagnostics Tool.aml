@@ -24,6 +24,7 @@
 		    <listItem>Version information for key ASCOM GAC files</listItem>
 		    <listItem>Contents of ASCOM releated Inno installer setup logs (from Temp directory)</listItem>
 		    <listItem>Results of several hundred application functionality tests</listItem>
+		    <listItem>List of Platform errors from the Windows ASCOM error log</listItem>
 		 </list>
 		 <para>When the "Run Diagnostics" button is pressed, the information above is collected into a log file
 		 titled ASCOM.Diagnostics.hhmmssssss.txt that will be found in "My Documents\ASCOM\Logs yyyy-mm-dd".
@@ -35,7 +36,7 @@
 			<alert class="note">
   				<para>No personal information or passwords are recorded in the diagnostics file with the exception of 
   				machine name, username and domain name. If you do not wish to reveal this information, 
-  				please delete relevant lines in the diagnostic log.
+  				please delete these three lines in the diagnostic log.
   				</para>
 			</alert>
 		 </para>
