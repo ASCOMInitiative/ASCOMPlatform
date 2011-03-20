@@ -38,6 +38,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' See the Description property for descriptive info on the telescope itself.
     ''' To get the driver version in a parseable string, use the DriverVersion property.
     ''' </summary>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     ReadOnly Property DriverInfo() As String
 
     ''' <summary>
@@ -45,6 +46,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' This must be in the form "n.n".
     ''' Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
     ''' </summary>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     ReadOnly Property DriverVersion() As String
 
     ''' <summary>
@@ -59,6 +61,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' The short name of the driver, for display purposes.
     ''' This is only available for the Camera Interface Version 2
     ''' </summary>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     ReadOnly Property Name() As String
 
     ''' <summary>
@@ -72,7 +75,6 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
 
     ''' <summary>
     ''' Invokes the specified device-specific action.
-    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <param name="ActionName">
     ''' A well known name agreed by interested parties that represents the action
@@ -86,31 +88,31 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' List of required parameters or <see cref="String.Empty"/>  if none are required.
     ''' </param>
     ''' <returns>A string response if successful or an exception if not.</returns>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String
 
     ''' <summary>
     ''' Gets the supported actions.
-    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <value>The supported actions.</value>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     ReadOnly Property SupportedActions() As ArrayList
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and does not wait for a response.
     ''' Optionally, protocol framing characters may be added to the string before transmission.
-    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <param name="Command">The literal command string to be transmitted.</param>
     ''' <param name="Raw">
     ''' if set to <c>true</c> the string is transmitted 'as-is'.
     ''' If set to <c>false</c> then protocol framing characters may be added prior to transmission.
     ''' </param>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False)
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and waits for a boolean response.
     ''' Optionally, protocol framing characters may be added to the string before transmission.
-    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <param name="Command">The literal command string to be transmitted.</param>
     ''' <param name="Raw">
@@ -120,12 +122,12 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <returns>
     ''' Returns the interpreted boolean response received from the device.
     ''' </returns>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and waits for a string response.
     ''' Optionally, protocol framing characters may be added to the string before transmission.
-    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <param name="Command">The literal command string to be transmitted.</param>
     ''' <param name="Raw">
@@ -135,14 +137,15 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <returns>
     ''' Returns the string response received from the device.
     ''' </returns>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String
 
     ''' <summary>
     ''' Dispose the late-bound interface, if needed. Will release it via COM
     ''' if it is a COM object, else if native .NET will just dereference it
     ''' for GC.
-    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
+    ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
     Sub Dispose()
 
 #End Region
