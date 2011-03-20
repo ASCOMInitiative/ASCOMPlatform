@@ -34,7 +34,6 @@ Public Class DiagnosticsForm
     Private Const ToleranceE7 As Double = 0.0000001 ' Used in evaluating precision match of double values
     Private Const ToleranceE8 As Double = 0.00000001 ' Used in evaluating precision match of double values
     Private Const ToleranceE9 As Double = 0.000000001
-    Private Const ToleranceE10 As Double = 0.0000000001
 
     'Astrometry test data for planets obtained from the original 32bit  components
     'The data is for the arbitary test date Thursday, 30 December 2010 09:00:00" 
@@ -1850,46 +1849,46 @@ Public Class DiagnosticsForm
 
         NOVAS.NOVAS2.StarVectors(StarStruct, POS, VEL)
         NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
-        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, ToleranceE10)
-        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, ToleranceE10)
+        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, ToleranceE9)
+        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, ToleranceE9)
 
         NOVAS.NOVAS2.Precession(J2000, POS, u.JulianDate, POSNow)
         NOVAS.NOVAS2.Vector2RADec(POSNow, RANow, DECNow)
         RC = NOVAS.NOVAS2.TopoStar(JD, EarthBody, 0, StarStruct, LocationStruct, RANow, DECNow)
         Compare("Novas2Tests", "TopoStar RC", RC, 0)
-        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, ToleranceE10)
-        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, ToleranceE10)
+        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, ToleranceE9)
+        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, ToleranceE9)
 
         NOVAS.NOVAS2.RADec2Vector(StarRAJ2000, StarDecJ2000, 10000000000.0, POS)
         NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
-        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, ToleranceE10)
-        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, ToleranceE10)
+        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, ToleranceE9)
+        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, ToleranceE9)
 
-        CompareDouble("Novas2Tests", "JulianDate", NOVAS.NOVAS2.JulianDate(2010, 12, 30, 9.0), TestJulianDate, ToleranceE10)
+        CompareDouble("Novas2Tests", "JulianDate", NOVAS.NOVAS2.JulianDate(2010, 12, 30, 9.0), TestJulianDate, ToleranceE9)
 
         RC = NOVAS.NOVAS2.AstroPlanet(JD, SunBody, EarthBody, RATarget, DECTarget, Distance)
         Compare("Novas2Tests", "AstroPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, ToleranceE10)
-        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, ToleranceE10)
-        CompareDouble("Novas2Tests", "AstroPlanet Dist", Distance, 0.983376046291495, ToleranceE10)
+        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, ToleranceE9)
+        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, ToleranceE9)
+        CompareDouble("Novas2Tests", "AstroPlanet Dist", Distance, 0.983376046291495, ToleranceE9)
 
         RC = NOVAS.NOVAS2.VirtualPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "VirtualPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, ToleranceE10)
-        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, ToleranceE10)
-        CompareDouble("Novas2Tests", "VirtualPlanet Dist", Distance, 0.983376046291495, ToleranceE10)
+        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, ToleranceE9)
+        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, ToleranceE9)
+        CompareDouble("Novas2Tests", "VirtualPlanet Dist", Distance, 0.983376046291495, ToleranceE9)
 
         RC = NOVAS.NOVAS2.AppPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "AppPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, ToleranceE10)
-        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, ToleranceE10)
-        CompareDouble("Novas2Tests", "AppPlanet Dist", Distance, 0.983376046291495, ToleranceE10)
+        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, ToleranceE9)
+        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, ToleranceE9)
+        CompareDouble("Novas2Tests", "AppPlanet Dist", Distance, 0.983376046291495, ToleranceE9)
 
         RC = NOVAS.NOVAS2.TopoPlanet(JD, SunBody, EarthBody, 0.0, LocationStruct, RANow, DECNow, Distance)
         Compare("Novas2Tests", "TopoPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, ToleranceE10)
-        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, ToleranceE10)
-        CompareDouble("Novas2Tests", "TopoPlanet Dist", Distance, 0.983371860482251, ToleranceE10)
+        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, ToleranceE9)
+        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, ToleranceE9)
+        CompareDouble("Novas2Tests", "TopoPlanet Dist", Distance, 0.983371860482251, ToleranceE9)
         TL.BlankLine()
 
         NOVAS.NOVAS2.Equ2Hor(JD, 0.0, 0.0, 0.0, LocationStruct, StarRAJ2000, StarDecJ2000, RefractionOption.LocationRefraction, ZenithDistance, Azimuth, RANow, DECNow)
@@ -2219,9 +2218,9 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub TransformTest()
-        TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", ToleranceE10)
-        TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", ToleranceE10)
-        TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", ToleranceE10)
+        TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", ToleranceE9)
+        TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", ToleranceE9)
+        TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", ToleranceE9)
         TL.BlankLine()
     End Sub
 
@@ -2343,7 +2342,7 @@ Public Class DiagnosticsForm
             'Create the Julian date corresponding to the arbitary test date
             JD = TestJulianDate()
             TL.LogMessage("NovasCom Tests", "Julian Date = " & JD & " = " & TestDate)
-            CompareDouble("NovasCom", "JulianDate", JD, 2455560.875, ToleranceE10)
+            CompareDouble("NovasCom", "JulianDate", JD, 2455560.875, ToleranceE9)
 
             Dim s As New NOVASCOM.Site
             s.Height = 80.0
@@ -2353,10 +2352,10 @@ Public Class DiagnosticsForm
             s.Temperature = 10.0
             Dim pv As New NOVASCOM.PositionVector
             pv.SetFromSite(s, 11.0)
-            CompareDouble("NovasCom", "SetFromSite X", pv.x, -0.0000259698466733494, ToleranceE10)
-            CompareDouble("NovasCom", "SetFromSite Y", pv.y, 0.00000695859944368407, ToleranceE10)
-            CompareDouble("NovasCom", "SetFromSite Z", pv.z, 0.0000329791401243054, ToleranceE10)
-            CompareDouble("NovasCom", "SetFromSite LightTime", pv.LightTime, 0.000000245746690359414, ToleranceE10)
+            CompareDouble("NovasCom", "SetFromSite X", pv.x, -0.0000259698466733494, ToleranceE9)
+            CompareDouble("NovasCom", "SetFromSite Y", pv.y, 0.00000695859944368407, ToleranceE9)
+            CompareDouble("NovasCom", "SetFromSite Z", pv.z, 0.0000329791401243054, ToleranceE9)
+            CompareDouble("NovasCom", "SetFromSite LightTime", pv.LightTime, 0.000000245746690359414, ToleranceE9)
 
             Dim st As New NOVASCOM.Star
             st.Set(9.0, 25.0, 0.0, 0.0, 0.0, 0.0)
@@ -2365,18 +2364,18 @@ Public Class DiagnosticsForm
             pv = st.GetAstrometricPosition(JD)
             Dim AstroResults() As Double = New Double() {9.0, 25.0, 2062648062470.13, 0.0, 11912861640.6606, -1321861174769.38, 1321861174768.63, 871712738743.913, _
                                                     9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
-            ComparePosVec("NovasCom Astrometric", st, pv, AstroResults, False, ToleranceE10)
+            ComparePosVec("NovasCom Astrometric", st, pv, AstroResults, False, ToleranceE9)
 
             Dim TopoNoReractResults() As Double = New Double() {9.01140781883559, 24.9535152700125, 2062648062470.13, 14.2403113213804, 11912861640.6606, -1326304233902.68, 1318405625773.8, 870195790998.564, _
                                         9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
             pv = st.GetTopocentricPosition(JD, s, False)
-            ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, True, ToleranceE10)
+            ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, True, ToleranceE9)
             pv = st.GetTopocentricPosition(JD, s, True)
 
             Dim TopoReractResults() As Double = New Double() {9.01438008140491, 25.0016930437008, 2062648062470.13, 14.3031953401364, 11912861640.6606, -1326809918883.5, 1316857267239.29, 871767977436.204, _
                                                               9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 
-            ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, True, ToleranceE10)
+            ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, True, ToleranceE9)
 
             NovasComTest("Mercury", Body.Mercury, JD, Mercury, ToleranceE6) 'Test Neptune prediction
             NovasComTest("Venus", Body.Venus, JD, Venus, ToleranceE7) 'Test Neptune prediction
@@ -2384,29 +2383,29 @@ Public Class DiagnosticsForm
             NovasComTest("Jupiter", Body.Jupiter, JD, Jupiter, ToleranceE8) 'Test Neptune prediction
             NovasComTest("Saturn", Body.Saturn, JD, Saturn, ToleranceE9) 'Test Neptune prediction
             NovasComTest("Uranus", Body.Uranus, JD, Uranus, ToleranceE9) ' Test Uranus prediction
-            NovasComTest("Neptune", Body.Neptune, JD, Neptune, ToleranceE10) 'Test Neptune prediction
-            NovasComTest("Pluto", Body.Pluto, JD, Pluto, ToleranceE10) 'Test Pluto Prediction
+            NovasComTest("Neptune", Body.Neptune, JD, Neptune, ToleranceE9) 'Test Neptune prediction
+            NovasComTest("Pluto", Body.Pluto, JD, Pluto, ToleranceE9) 'Test Pluto Prediction
 
             Action("Earth")
             EA.SetForTime(JD) ' Test earth properties
-            CompareDouble("NovasCom", "Earth BaryPos x", EA.BarycentricPosition.x, Earth(0), ToleranceE10)
-            CompareDouble("NovasCom", "Earth BaryPos y", EA.BarycentricPosition.y, Earth(1), ToleranceE10)
-            CompareDouble("NovasCom", "Earth BaryPos z", EA.BarycentricPosition.z, Earth(2), ToleranceE10)
-            CompareDouble("NovasCom", "Earth BaryVel x", EA.BarycentricVelocity.x, Earth(3), ToleranceE10)
-            CompareDouble("NovasCom", "Earth BaryVel y", EA.BarycentricVelocity.y, Earth(4), ToleranceE10)
-            CompareDouble("NovasCom", "Earth BaryVel z", EA.BarycentricVelocity.z, Earth(5), ToleranceE10)
-            CompareDouble("NovasCom", "Earth HeliPos x", EA.HeliocentricPosition.x, Earth(6), ToleranceE10)
-            CompareDouble("NovasCom", "Earth HeliPos y", EA.HeliocentricPosition.y, Earth(7), ToleranceE10)
-            CompareDouble("NovasCom", "Earth HeliPos z", EA.HeliocentricPosition.z, Earth(8), ToleranceE10)
-            CompareDouble("NovasCom", "Earth HeliVel x", EA.HeliocentricVelocity.x, Earth(9), ToleranceE10)
-            CompareDouble("NovasCom", "Earth HeliVel y", EA.HeliocentricVelocity.y, Earth(10), ToleranceE10)
-            CompareDouble("NovasCom", "Earth HeliVel z", EA.HeliocentricVelocity.z, Earth(11), ToleranceE10)
-            CompareDouble("NovasCom", "Barycentric Time", EA.BarycentricTime, Earth(12), ToleranceE10)
-            CompareDouble("NovasCom", "Equation Of Equinoxes", EA.EquationOfEquinoxes, Earth(13), ToleranceE10)
-            CompareDouble("NovasCom", "Mean Obliquity", EA.MeanObliquity, Earth(14), ToleranceE10)
-            CompareDouble("NovasCom", "Nutation in Longitude", EA.NutationInLongitude, Earth(15), ToleranceE10)
-            CompareDouble("NovasCom", "Nutation in Obliquity", EA.NutationInObliquity, Earth(16), ToleranceE10)
-            CompareDouble("NovasCom", "True Obliquity", EA.TrueObliquity, Earth(17), ToleranceE10)
+            CompareDouble("NovasCom", "Earth BaryPos x", EA.BarycentricPosition.x, Earth(0), ToleranceE9)
+            CompareDouble("NovasCom", "Earth BaryPos y", EA.BarycentricPosition.y, Earth(1), ToleranceE9)
+            CompareDouble("NovasCom", "Earth BaryPos z", EA.BarycentricPosition.z, Earth(2), ToleranceE9)
+            CompareDouble("NovasCom", "Earth BaryVel x", EA.BarycentricVelocity.x, Earth(3), ToleranceE9)
+            CompareDouble("NovasCom", "Earth BaryVel y", EA.BarycentricVelocity.y, Earth(4), ToleranceE9)
+            CompareDouble("NovasCom", "Earth BaryVel z", EA.BarycentricVelocity.z, Earth(5), ToleranceE9)
+            CompareDouble("NovasCom", "Earth HeliPos x", EA.HeliocentricPosition.x, Earth(6), ToleranceE9)
+            CompareDouble("NovasCom", "Earth HeliPos y", EA.HeliocentricPosition.y, Earth(7), ToleranceE9)
+            CompareDouble("NovasCom", "Earth HeliPos z", EA.HeliocentricPosition.z, Earth(8), ToleranceE9)
+            CompareDouble("NovasCom", "Earth HeliVel x", EA.HeliocentricVelocity.x, Earth(9), ToleranceE9)
+            CompareDouble("NovasCom", "Earth HeliVel y", EA.HeliocentricVelocity.y, Earth(10), ToleranceE9)
+            CompareDouble("NovasCom", "Earth HeliVel z", EA.HeliocentricVelocity.z, Earth(11), ToleranceE9)
+            CompareDouble("NovasCom", "Barycentric Time", EA.BarycentricTime, Earth(12), ToleranceE9)
+            CompareDouble("NovasCom", "Equation Of Equinoxes", EA.EquationOfEquinoxes, Earth(13), ToleranceE9)
+            CompareDouble("NovasCom", "Mean Obliquity", EA.MeanObliquity, Earth(14), ToleranceE9)
+            CompareDouble("NovasCom", "Nutation in Longitude", EA.NutationInLongitude, Earth(15), ToleranceE9)
+            CompareDouble("NovasCom", "Nutation in Obliquity", EA.NutationInObliquity, Earth(16), ToleranceE9)
+            CompareDouble("NovasCom", "True Obliquity", EA.TrueObliquity, Earth(17), ToleranceE9)
 
             TL.BlankLine()
         Catch ex As Exception
@@ -2724,14 +2723,17 @@ Public Class DiagnosticsForm
             Try
                 DevTypes = AscomUtlProf.RegisteredDeviceTypes
                 TL.LogMessage("ProfileTest", "DeviceTypes - found " & DevTypes.Length & " device types")
-                Compare("ProfileTest", "DeviceTypes", DevTypes(0), "Camera")
-                Compare("ProfileTest", "DeviceTypes", DevTypes(1), "Dome")
-                Compare("ProfileTest", "DeviceTypes", DevTypes(2), "FilterWheel")
-                Compare("ProfileTest", "DeviceTypes", DevTypes(3), "Focuser")
-                Compare("ProfileTest", "DeviceTypes", DevTypes(4), "Rotator")
-                Compare("ProfileTest", "DeviceTypes", DevTypes(5), "SafetyMonitor")
-                Compare("ProfileTest", "DeviceTypes", DevTypes(6), "Switch")
-                Compare("ProfileTest", "DeviceTypes", DevTypes(7), "Telescope")
+                For Each DeviceType As String In DevTypes
+                    TL.LogMessage("ProfileTest", "DeviceTypes - " & DeviceType)
+                Next
+                Compare("ProfileTest", "DeviceTypes Camera", DevTypes.Contains("Camera").ToString, "True")
+                Compare("ProfileTest", "DeviceTypes Dome", DevTypes.Contains("Dome").ToString, "True")
+                Compare("ProfileTest", "DeviceTypes FilterWheel", DevTypes.Contains("FilterWheel").ToString, "True")
+                Compare("ProfileTest", "DeviceTypes Focuser", DevTypes.Contains("Focuser").ToString, "True")
+                Compare("ProfileTest", "DeviceTypes Rotator", DevTypes.Contains("Rotator").ToString, "True")
+                Compare("ProfileTest", "DeviceTypes SafetyMonitor", DevTypes.Contains("SafetyMonitor").ToString, "True")
+                Compare("ProfileTest", "DeviceTypes Switch", DevTypes.Contains("Switch").ToString, "True")
+                Compare("ProfileTest", "DeviceTypes Telescope", DevTypes.Contains("Telescope").ToString, "True")
                 TL.BlankLine()
             Catch ex As Exception
                 LogException("RegisteredDeviceTypes", ex.ToString)
