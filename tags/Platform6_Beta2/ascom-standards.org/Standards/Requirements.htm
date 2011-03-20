@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>ASCOM General Requirements</title><!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>ASCOM General Requirements</h3>
+
+	<p><i>Revised 15-Dec-2009</i></p>
+
+	<p>In order to be called "ASCOM compliant", a driver, component, or application scripting interface must meet <i>all</i> of the <i>applicable</i> guidelines in this document. Only then may a driver, interface, or a component's packaging and user interface, carry the ASCOM logo.</p>
+	<h2>Please Note: </h2>
+	<ul>
+		<li>The technical details of some of the requirements here are automatically taken care of if you are developing in .NET and use the driver templates or the client toolkit, both of which are provided with the ASCOM Platform.</li>
+		<li>The Platform includes a free tool for making driver installers which use the free Inno Setup package. </li>
+	</ul>
+	<h2>Drivers</h2>
+	<ol>
+		<li>The driver <i>must</i> install and run on on Microsoft Windows 7, Vista, and XP with the latest service packs at the time of driver release. It <i>should</i> work on both 32- and 64-bit systems.
+	Support for Windows 2000 is deprecated and will go away in Platform 6.</li>
+		<li>The driver <i>must</i> implement the <a href="Index.htm">published standard interface</a> for the device type via a <b>scriptable dispatch</b> (&quot;Automation&quot;) interface per the Microsoft Component Object Model (COM). Drivers <i>should</i> also implement &quot;dual&quot; interfaces which have both dispatch and early/VTBL binding (using the appropriate <span class="underline">abstract standard interface</span> that is part of the ASCOM Platform). See <a href="../Developer/DriverImpl.htm">Driver Development Notes</a>.</li>
+		<li>The driver <i>must never</i> &quot;extend&quot; the standard interface (add private members - properties and/or methods). If private members are desired, they <i>must</i> be exposed through a separate non-standard interface.</li>
+		<li>The driver <i>must never</i> display a modal window which requires user interaction to dismiss. All errors must be raised/thrown back to the client.</li>
+		<li>The driver <i>must</i> use the Helper component's  Profile.Register() method for ASCOM registration. It is recommended that drivers also use the Helper's Profile object for storage of their persistent configuration, state data, etc., as well as the Helper's Serial object serial port I/O. for The Helper components are part of the ASCOM Platform and serve to isolate drivers from changes in Platform architecture. They also make develpment easier by providing high level functionality commonly needed by drivers.</li>
+		<li>Prior to release, the driver <i>must</i> pass the Conform tests using the current/latest version of the <a href="../Developer/Conformance.htm">Conformance Checker</a> test tool. </li>
+		<li>The driver <i>must</i> be delivered as a self-contained installer. It is unacceptable to ask users to copy files, edit the registry, run BAT files, etc. See <a href="../Developer/DriverDist.htm">Creating a Driver Installer</a>.</li>
+	</ol>
+	<h2>Scriptable Components and Programs (Component Object Servers)</h2>
+	<ol>
+	<li>The product must run (at a minimum) on Microsoft Windows 7, Vista, and XP with the latest service packs at the time of driver release.
+	 It <i>should</i> work on both 32- and 64-bit systems. Support for Windows 2000 is deprecated and will go away in Platform 6.</li><li>The name ASCOM and/or the ASCOM logo must <i>never</i> be displayed for products which are in experimental, beta, preview, or any other such state. Only production products which are available and supported by the vendor or author are eligible.
+	</li><li>Property and method names should be user friendly (e.g., SlewToCurrentObject instead of slw_curob). Use of so-called "Hungarian" notation is specifically discouraged. These interfaces may be used by scripters and should be user-friendly.
+	</li><li>Wherever practical, property and method names should be consistent with existing ASCOM standard interfaces. For example, a property that implements equatorial right ascension should be called RightAscension, as used in the Telescope standard interface.</li>
+
+	<li>The product <i>must</i> implement <b>scriptable dispatch</b> ("Automation") interface(s) via the Microsoft Component Object Model (COM), and use only automation-compatible data types (see the data type requirements below). </li><li>Errors within your product <i>must</i> raise Automation exceptions (via IErrorInfo). The error info <i>must</i> contain both an error number that is based on FACILITY_ITF and an informative error message in English and optionally other languages. Optionally, methods which do not return values should return VARIANT_BOOL indicating success or failure. This allows clients to determine status while ignoring exceptions (e.g. On Error Resume Next and try/catch). IErrorInfo support is essential to providing client writers with the behavior they rely on. Very few of these people manually test return values for errors with 'if' logic. They depend on their client environment to pop a meaningful alert box (or catch an exception with try/catch) when things go wrong.
+	</li><li>Components must be 100% usable from an automation client without user interaction. For example, it is not permitted to require a user to dismiss an error alert window when the program is being controlled through a component automation interface. On the other hand, it is permitted to require the user to use a program's configuration features to set preferences. Another example of non-compliant behavior is a component server whose behavior changes or stops depending on whether it is a foreground or background window. The point of this requirement is to assure that, when used from a script, the program will never hang awaiting some user action such as a window shuffle, or clearing an error message box or selector dialog. Raise an exception and return to the client for handling the error or establishing the selection.
+	</li>
+	<li>The product must be delivered as a self-contained installer. It is unacceptable to ask users to copy files, edit the registry, etc. See <a href="../Developer/DriverDist.htm">Creating a Driver Installer</a>.</li>
+	<li><span class="underline">Executable</span> components must self-register when first started, and must support the command line options /REGSERVER and /UNREGSERVER to manually register and unregister them. Invocation with either of these options must immediately exit and must not start the program. </li><li>Any executable component must start automatically if one of the objects it serves is created by a client. Furthermore, it must exit automatically when the last reference to any object it is serving is deleted. Unless there is a good reason to do otherwise, an executable component <i>should</i> start in a minimized window. This is not a hard requirement as a component may benefit from displaying information as it operates. Unless this is the case, though, the component should remain out of sight (minimized) unless manually made visible by the user.
+	</li></ol>
+
+	<h2>Scripting Interface Requirements</h2>
+Besides the compatibility requirements described above, ASCOM interfaces must comply with the following. Remember that a major goal of ASCOM is to make programming with scripts straightforward, consistent, and non-intimidating for "ordinary people":
+
+	<ol>
+
+	<li>Property and method names must be user friendly (e.g., SlewToCurrentObject instead of slw_curob). Use of so-called "Hungarian" notation is specifically discouraged. These interfaces are for the use of ordinary people.
+	</li><li>Wherever practical, property and method names should be consistent with existing ASCOM standard interfaces. For example, a property that implements equatorial right ascension should be called RightAscension, as used in the Telescope standard interface.</li>
+
+	<li>Methods must not be used to implement what are really properties. For example, a pair of methods called SetSpeed(newSpeed) and GetSpeed() are really a property Speed.
+	</li><li>Interfaces for drivers must contain at least a Connected property and a SetupDialog() method. The Connected property establishes or breaks the physical link between the object and the device under control. The SetupDialog() method causes a modal dialog to appear which is used to configure the object for use with the device. Any settings that must persist must be the responsibility of the object itself, clients must not be required to persist object state.</li>
+
+	<li>The interface <i>must</i> be a <b>scriptable dispatch</b> ("Automation") interface per the Microsoft Component Object Model (COM), and use only automation-compatible data types (see the data type requirements below). It is not permitted to require the use of VTBL binding (via  standard abstract interfaces). While a "dual" interface is permitted, ASCOM core functionality demands the use of IDispatch and "loose binding". It must be possible to use the interface from scripting languages which support only dispatch binding, and it must be possible to implement the interface with a Windows Script Component ("scriptlet"), which cannot expose a VTBL.
+	</li><li>All properties, method parameters, and method return values must be Automation-compatible types such as INT, LONG, DOUBLE, SINGLE, BSTR, DATE, VARIANT_BOOL, and VARIANT/VT_DISPATCH. Any arrays produced and consumed by your product must be SAFEARRAY of VARIANT. In short, all data items must be 100% compatible with Automation, and specifically with ActiveX Scripting engines including both VBScript V5 and JScript V5 (or later) and with Visual Basic for Applications V5 (or later).
+	</li><li>Method parameters must be passed only by value, as required by some ActiveX Scripting engines (notably JScript). Consider passing object references (VT_DISPATCH) by value as a way to have methods work on arbitrary (non-Automation) data owned by the client.
+	</li></ol>
+
+	<h2>Client Programs</h2>
+	<ol>
+	<li>The product must run (at a minimum) on Microsoft Windows 7, Vista, and XP with the latest service packs at the time of driver release.
+	 It <i>should</i> work on both 32- and 64-bit systems. Support for Windows 2000 is deprecated and will go away in Platform 6.</li>
+	<li>The product must be capable of using <b>scriptable dispatch</b> ("automation") interface(s) via the Microsoft Component Object Model (COM). The the client <i>must</i> be able to call via IDispatch. Beginning with Platform 2008, drivers may choose to support <i>early binding </i> by implementing the standard interface. In this case, clients may choose to reference the interface by calling QueryInterface on the instance of the driver. 
+	</li><li>Error exceptions (raised in a component via IErrorInfo) must be caught and handled by the program in a way that gives the user the error message that came from the component. It is not permitted to display a "friendly", "generic", or otherwise mangled version of an error message in the exception. 
+	</li></ol>
+	
+	<h2>Logo Usage</h2>
+
+<p>If you have a driver or an astronomy product that conforms to these requirements, feel free to use the logo on your web site and product packaging, as long as you do the following:</p>
+
+	<ol>
+	<li>If you use the logo on a web site, please link it back to this site <a href="http://ascom-standards.org/">http://ascom-standards.org/</a>
+
+	</li>
+	<li>Post a note to ASCOM-Talk indicating your product, company, and URL. The moderator or other responsible person will add you to the partners page and link to your web site. </li></ol>
+
+Please  This is on the honor system, there are no contracts or other covenants required. Please don't undermine this effort by ASCOM-labeling software that doesn't meet the above requirements. Make the effort and your software will be better for it!
+
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2010, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>

@@ -1,0 +1,217 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Telescope.SideOfPier Property</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<div class="req">Optional</div>
+
+<h1><a name="TelescopeTelescopePROPSideOfPier"></a>Telescope.SideOfPier Property</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeTelescopePROPSideOfPierC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeTelescopePROPSideOfPierX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- parent class -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink">
+<param name="Text" value="Text:Telescope object">
+<param name="Flags" value=",,1">
+<param name="Item1" value="">
+<param name="Item2" value="TelescopeCLASSTelescopeO">
+</object>
+</p>
+
+<p class=desc>
+<img src="images/rw.gif" width=18 height=13
+align=absmiddle>&nbsp;<b>Telescope.SideOfPier</b>&nbsp;&nbsp;(read-write, <a href="#PierSide">PierSide</a>)<br>
+&nbsp;<br>
+Indicates the pointing state of the mount. See Remarks.</p>
+
+<h2>Syntax</h2>
+
+<p class=indent><code>
+Telescope.<b>SideOfPier</b>&nbsp;[=&nbsp;<i><a href="#PierSide">PierSide</a></i>]</code></p>
+
+<p>
+The property syntax has these parts:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Part</th>
+  <th>Description</th>
+ </tr>
+
+ <tr>
+  <td>Value&nbsp;(<a href="#PierSide">PierSide</a>)</td>
+  <td>Indicates the pointing state of the mount. See Remarks.</td>
+ </tr>
+</table></div><br>
+
+<h2>Remarks</h2>
+
+<div class="v2rev"><p>For historical reasons, this property's name does not reflect its true meaning.
+The name will not be changed (so as to preserve compatibility), but the meaning
+has since become clear. In a future version of the standard, a synonym for this
+property will be added which better describes its meaning.</p>
+
+<p>All conventional mounts have two pointing states for a given equatorial (sky)
+position. Mechanical limitations often make it impossible for the mount to
+position the optics at given HA/Dec in one of the two pointing states, but there
+are places where the same point can be reached in both pointing states (e.g.,
+near the pole). In order to understand these pointing states, consider the
+following (thanks to Patrick Wallace for this info):</p>
+
+<ul>
+<li>All conventional telescope mounts have two axes nominally
+  at right angles.  For an equatorial, the longitude axis is
+  mechanical hour angle and the latitude axis is mechanical
+  declination.</li>
+
+<li>Sky coordinates and mechanical coordinates are two
+  completely separate arenas.  This becomes rather more
+  obvious if your mount is an altaz, but it's still true for
+  an equatorial.</li>
+
+<li>Both mount axes can in principle move over a range of
+  360 deg.  This is distinct from sky HA/Dec, where Dec is
+  limited to a 180 deg range (+90 to -90).</li>
+
+<li>Apart from practical limitations, any point in the sky can
+  be seen in two mechanical orientations.  To get from one to
+  the other the HA axis is moved 180 deg and the Dec axis is
+  moved through the pole a distance twice the sky codeclination
+  (90 - sky declination).</li>
+
+<li>Mechanical zero HA/Dec is one of the two ways of pointing at the
+  intersection of the celestial equator and the local meridian.
+  Choose one, and once you're there, consider the two mechanical
+  encoders zeroed.</li>
+
+<li>The two states are, then, (a) "normal", where the mechanical Dec
+  is in the range ± 90 deg, and (b) "beyond the pole", where the
+  mechanical Dec is outside that range.</li>
+
+<li>"Side of pier" is a *consequence* of the former definition,
+  not something fundamental.  Apart from mechanical
+  interference, the telescope can move from one side of the
+  pier to the other without the mechanical Dec having changed:
+  you could track Polaris forever with the telescope moving
+  from west of pier to east of pier or vice versa every 12h.
+  Thus, SideOfPier is, in general, not a useful term (except
+  perhaps in a loose, descriptive, explanatory sense).</li>
+
+<li>All this applies to a fork mount just as much as to a GEM,
+  and it would be wrong to make the "beyond pole" state
+  illegal for the former.  You may not be able to get there
+  if your camera hits the fork, but it's possible on some
+  mounts.  Whether this is useful depends on whether you're
+  in Hawaii or Finland.</li>
+</ul>
+
+<p>To first order, the relationship between sky and mechanical HA/Dec is as follows:</p>
+  <dl>
+  <dt>Normal state:</dt>
+     <dd>
+     <pre>HA_sky  = HA_mech
+Dec_sky = Dec_mech</pre></dd>
+
+  <dt>Beyond the pole</dt>
+     <dd>
+     <pre>HA_sky  = HA_mech + 12h, expressed in range ± 12h
+Dec_sky = 180d - Dec_mech, expressed in range ± 90d</pre>
+     </dd>
+  </dl>
+
+		<p>Astronomy software often needs to know which "side of the pier" (which pointing
+state) the mount is in. Examples include setting guiding polarities and
+calculating dome opening azimuth/altitude.</p>
+
+<p><strong>The meaning of SideOfPier, then is:</strong></p>
+
+<strong>pierEast</strong>     - Normal pointing state
+
+<br>
+<strong>pierWest</strong>     - Beyond the pole pointing state
+
+<p>If the mount hardware reports neither the true pointing state (or equivalent)
+nor the mechanical declination axis position (which varies from -180 to +180), a
+driver cannot calculate the pointing state, and *must not* implement SideOfPier.</p>
+
+<p>If the mount hardware reports only the mechanical declination axis position
+(-180 to +180) then a driver can calculate SideOfPier as follows:</p>
+
+<strong>pierEast</strong>     = abs(mechanical dec) <= 90 deg
+
+<br>
+<strong>pierWest</strong>     = abs(mechanical Dec) > 90 deg
+
+<p>It is allowed (though not required) that this property may be written to force the mount to flip. Doing so, however, <i>may</i> change the right ascension of the telescope. During flipping, <a href="TelescopeTelescopePROPSlewing.htm">Telescope.Slewing</a> must return True. </p></div>
+
+<h2>Symbolic Constants</h2>
+
+<p>
+<a name="PierSide"></a>The (symbolic) values for <b>PierSide</b> are:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Constant</th>
+  <th>Value</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><b>pierEast</b></td>
+  <td>0</td>
+  <td>Mount on East side of pier (looking West)</td>
+ </tr>
+ <tr>
+  <td><b>pierWest</b></td>
+  <td>1</td>
+  <td>Mount on West side of pier (looking East)</td>
+ </tr>
+
+</table></div>
+
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2008, The ASCOM Initiative</div>
+
+<Object type="application/x-oleobject"classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+    <param name="ALink Name" value="TelescopeTelescopeMETHDestinationSideOfPierC">
+</OBJECT>
+
+
+<object type="application/x-oleobject"
+ 	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="TelescopeCLASSTelescopeP">
+</object>
+
+</body>
+</html>
+

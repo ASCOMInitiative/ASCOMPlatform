@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>Scriptable Components</title><!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>Scriptable Components</h3>
+		
+		<div class="download">
+		<h5>Fast Scriptable Access to MPCORB Database V5.0.5 (~400KB)</h5> 
+		<a href="http://download.ascom-standards.org/components/MPCORB(5.0.5)Setup.exe">
+		<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
+		Tools for making and scripting a fast MS Access database that contains orbital elements from the MPCORB.DAT catalog from the Minor Planet Center. 32-bit applications only. <b>MS ACCESS/OFFICE IS NOT REQUIRED ON YOUR SYSTEM!</b>. Three small tools that were made with Notepad create the database, provide scripts with object-oriented access to it, and test &amp; demonstrate the scripted object use.The downloaded file is a self-installer. Installed to C:\Program Files\Common Files\ASCOM\MPCORB\. <strong>Read the readme.txt file there!</strong> <i>Update 5.0.5 adds instructions for making the catalog on 64-bit systems.</i> </div>
+		
+		<div class="download">
+		<a name="MSCat"></a>
+		<h5>MiniSAC 1.3 Deep Sky Object Database (~950KB)</h5> 
+		<p><a href="http://download.ascom-standards.org/components/MiniSAC(1.3)Setup.exe">
+			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
+			Lightweight server for the Saguaro Astronomy Club (SAC) 7.9 catalog, the Third Catalog of Bright Galaxies (RC3) which contains, among 
+			many others, the entire PGC catalog, the Sharpless second catalog,  the Arp Peculiar Galaxies, and a number of Henden and Landolt standard photometry fields. The latter four sets of objects, along with corrected coordinates for M 67, were provided thanks to Dick Berg.</p>
+		<p>MiniSAC contains only the J2000 
+			equatorial coordinates for over 70,000 listings (some refer to the same 
+			object). Intended to be used for automated observing, this component 
+			gives you a lightweight and fast way to get coordinates given the 
+			catalog name. 1.2 contains the recently updated SAC (version 7.9) 
+			catalog and many more mojects from the RC3/PGC catalog, and has 
+			corrections to object names, separating the catalog name from the ID. For tools to add your own objects and catalogs, see the <a href="#MSKit">MiniSAC Catalog Maintenance Kit</a> below. </p>
+		</div>
+		
+		<div class="download">
+		<h5>NOVAS-COM Vector Astrometry Engine V2.1.1 (~283KB)</h5> 
+		<a href="http://download.ascom-standards.org/components/NOVAS(2.1.1)Setup.exe">
+		<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
+		This is the USNO NOVAS Vector Astrometry Library wrapped in a COM 
+		object. This component provides many scriptable tools for positional astronomy including conversion from J2000 to local topocentric coordinates. NOVAS-COM uses the most rigorous and precise algorithms available, <a href="http://aa.usno.navy.mil/software/novas/novas_info.php" target="aux">NOVAS</a>, as developed and tested by the <a href="http://aa.usno.navy.mil/index.php" target="aux">Astronomical Applications Dept. of the US Naval Observatory</a> for their use. Note that the <span class="underline">Kepler Orbit Engine</span> (also available here) is designed to &quot;plug into&quot; NOVAS-COM. The combination provides a robust and accurate ephemeris system with local topo outputs. Included is a sample script that shows how to use NOVAS and Kepler together. The downloaded file is a self-installer. V2.1.1 (Jan 2009) extends the Delta-T tables through 2011 using actual and predicted values from USNO. </div>
+		
+		<div class="download">
+		<h5>Kepler Orbit Engine V1.0.1 (~300KB)</h5> 
+		<a href="http://download.ascom-standards.org/components/Kepler(1.0.1)Setup.exe">
+		<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
+		Ephemeris generator designed to be used separately or as a as a plug-in to <span class="underline">NOVAS-COM 
+		V2.0</span> for planetary reductions. Very closely approximates the accuracy of 
+		JPL DE-404 and produces heliocentric position and velocity of major 
+		planets, and with input of MPC orbital elements, minor planets and comets.
+		The downloaded file is a self-installer.</div>
+		
+		<div class="download">
+		<h5>FITS Access Object (external link)</h5>
+		<a href="http://www.easysky.de/ASCOM/Image/FITS.htm">
+		<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
+		The FITS driver can be used from scripts or other clients to read 
+		and write astronomical FITS images. It provides access to many of the 
+		keywords of the FITS header via properties. It is written in C++ and 
+		makes use of the cfitsio library. Matthias Busch&#39;s page says this is 
+		beta, but users&#39; experience is that it works well.</div>
+
+		<div class="download">
+		<a name="MSKit"></a>
+		<h5>MiniSAC Catalog Maintenance Kit 1.3 (~1 MB)</h5> 
+		<a href="http://download.ascom-standards.org/components/CatalogAdditionKit(1.3).zip">
+		<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Tools for adding objects and catalogs to the <a href="#MSCat">MiniSAC 1.3 Deep Sky Object Database</a>. With this kit, you can add your own objects to the database and make corrections to data already in the database.</div>
+
+	</div>
+<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2010, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>
