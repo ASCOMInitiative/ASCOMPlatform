@@ -27,7 +27,7 @@
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b ASCOM Initiative 2010</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b ASCOM Initiative 2011</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
         <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
@@ -77,30 +77,49 @@
           <logoFile filename="..\..\ASCOMLogo64.png" height="0" width="0" altText="" placement="left" alignment="left" />
         </component>
       </ComponentConfig>
-<ComponentConfig id="Cached MSDN URL References" enabled="True"><component id="Cached MSDN URL References" type="SandcastleBuilder.Components.CachedResolveReferenceLinksComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll" locale="{@Locale}" linkTarget="{@SdkLinkTarget}">
-<helpOutput format="HtmlHelp1">
-  <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
-  <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@HtmlSdkLinkType}" />
-  <targets files="reflection.xml" type="Local" />
-</helpOutput>
-<helpOutput format="MSHelp2">
-  <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
-  <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@MSHelp2SdkLinkType}" />
-  <targets files="reflection.xml" type="Index" />
-</helpOutput>
-<helpOutput format="MSHelpViewer">
-  <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
-  <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@MSHelpViewerSdkLinkType}" />
-  <targets files="reflection.xml" type="Id" />
-</helpOutput>
-<helpOutput format="Website">
-  <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
-  <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@WebsiteSdkLinkType}" />
-  <targets files="reflection.xml" type="Local" />
-</helpOutput>
-</component></ComponentConfig>
-<ComponentConfig id="Cached Reflection Index Data" enabled="True"><component id="Cached Reflection Index Data" type="SandcastleBuilder.Components.CachedCopyFromIndexComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll"><index name="reflection" value="/reflection/apis/api" key="@id" cache="10"><cache base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" cacheFile="{@LocalDataFolder}Cache\Reflection.cache" /><data files="reflection.xml" /></index><copy name="reflection" source="*" target="/document/reference" /></component></ComponentConfig>
-<ComponentConfig id="Code Block Component" enabled="True"><component id="Code Block Component" type="SandcastleBuilder.Components.CodeBlockComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll"><basePath value="{@ProjectFolder}" /><languageFilter value="true" /><allowMissingSource value="false" /><removeRegionMarkers value="false" /><colorizer syntaxFile="{@SHFBFolder}Colorizer\highlight.xml" styleFile="{@SHFBFolder}Colorizer\highlight.xsl" copyImageUrl="../icons/CopyCode.gif" language="vbnet" tabSize="0" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" /></component></ComponentConfig></ComponentConfigurations>
+      <ComponentConfig id="Cached MSDN URL References" enabled="True">
+        <component id="Cached MSDN URL References" type="SandcastleBuilder.Components.CachedResolveReferenceLinksComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll" locale="{@Locale}" linkTarget="{@SdkLinkTarget}">
+          <helpOutput format="HtmlHelp1">
+            <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
+            <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@HtmlSdkLinkType}" />
+            <targets files="reflection.xml" type="Local" />
+          </helpOutput>
+          <helpOutput format="MSHelp2">
+            <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
+            <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@MSHelp2SdkLinkType}" />
+            <targets files="reflection.xml" type="Index" />
+          </helpOutput>
+          <helpOutput format="MSHelpViewer">
+            <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
+            <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@MSHelpViewerSdkLinkType}" />
+            <targets files="reflection.xml" type="Id" />
+          </helpOutput>
+          <helpOutput format="Website">
+            <cache filename="{@LocalDataFolder}Cache\MsdnUrl.cache" />
+            <targets base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" type="{@WebsiteSdkLinkType}" />
+            <targets files="reflection.xml" type="Local" />
+          </helpOutput>
+        </component>
+      </ComponentConfig>
+      <ComponentConfig id="Cached Reflection Index Data" enabled="True">
+        <component id="Cached Reflection Index Data" type="SandcastleBuilder.Components.CachedCopyFromIndexComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
+          <index name="reflection" value="/reflection/apis/api" key="@id" cache="10">
+            <cache base="{@SandcastlePath}Data\Reflection" recurse="true" files="*.xml" cacheFile="{@LocalDataFolder}Cache\Reflection.cache" />
+            <data files="reflection.xml" />
+          </index>
+          <copy name="reflection" source="*" target="/document/reference" />
+        </component>
+      </ComponentConfig>
+      <ComponentConfig id="Code Block Component" enabled="True">
+        <component id="Code Block Component" type="SandcastleBuilder.Components.CodeBlockComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
+          <basePath value="{@ProjectFolder}" />
+          <languageFilter value="true" />
+          <allowMissingSource value="false" />
+          <removeRegionMarkers value="false" />
+          <colorizer syntaxFile="{@SHFBFolder}Colorizer\highlight.xml" styleFile="{@SHFBFolder}Colorizer\highlight.xsl" copyImageUrl="../icons/CopyCode.gif" language="vbnet" tabSize="0" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" />
+        </component>
+      </ComponentConfig>
+    </ComponentConfigurations>
     <ProjectSummary>ProjectSummary root namespaces summary by Peter</ProjectSummary>
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
@@ -121,6 +140,7 @@
     <SdkLinkType>Msdn</SdkLinkType>
     <FrameworkVersion>.NET 3.5</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
+    <SyntaxFilters>CSharp, VisualBasic, VisualBasicUsage, CPlusPlus</SyntaxFilters>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

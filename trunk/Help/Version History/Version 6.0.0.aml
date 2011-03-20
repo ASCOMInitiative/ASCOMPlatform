@@ -6,6 +6,7 @@
     		<title>Key Changes in 6.0 - For Everyone</title>
       		<content>
 				<list class="bullet">
+	  				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
 	     			<listItem>Driver installers that did not run in locale's where "." is not the decimal separator will now run.</listItem>
 	      			<listItem>Incorrectly registered drivers are now identified by the Chooser and report why rather than 
 	      			generating difficult to assess exception messages.</listItem>
@@ -44,8 +45,8 @@
 	  					</list>
 	  				</listItem>
 	  				<listItem>New simulators authored in .NET, compatible with 32 and 64bit operating systems.</listItem>
-	  				<listItem>Tool to tell you when updated components are available</listItem>  	
-	  				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
+	  				<listItem>Enhanced Profile Explorer with right click features in both left and right hand panes</listItem>
+	  				<listItem>Tool to tell you when updated components are available (Not in current build)</listItem>  	
 	  				<listItem>New full implementation of the USNO NOVAS3 library.</listItem>
 	  				<listItem>Improved recognition of serial ports.</listItem>
 	  				<listItem>Device Interface version numbers have been increased by 1 to reflect introduction of the common core capabilities</listItem>
@@ -59,40 +60,45 @@
 	     	<title>Key Changes in 6.0 - For Developers</title>
 	      	<content>
 	      		<list class="bullet">
+	     			<listItem>Enhanced Client Toolkit that transparently handles Platform 5 and Platform 6 conformant drivers
+	     			providing a consistent interface for .NET application developers.</listItem>
+	     			<listItem>Enhanced version of Conform to confirm adherence to the new Platform 6 interfaces</listItem>
 	     			<listItem>New Driver Templates</listItem>
 	     			<listItem>Settings Provider component</listItem>
-	     			<listItem>Full .NET implementation of NOVAS3
+	     			<listItem>Full implementation of NOVAS3 including:
 	  					<list class="bullet">
 	  						<listItem>A DeltaT method valid for the years 1650 to 2050</listItem>
-	  						<listItem>JPL DE421 planet ephemeris data</listItem>
-	  						<listItem>List of NOVAS CIO RAs </listItem>
-	  						<listItem>the AE98 readeph routine to parse locally held minor planet ephemeris files.</listItem>
+	  						<listItem>The
+	  							<externalLink>
+									<linkText>JPL DE421 Planetary and Lunar Ephemeris</linkText>
+									<linkAlternateText>JPL DE421 Planetary and Lunar Ephemeris</linkAlternateText>
+									<linkUri>http://ipnpr.jpl.nasa.gov/progress_report/42-178/178C.pdf</linkUri>
+									<linkTarget>_blank</linkTarget>
+								</externalLink>
+							 (William M. Folkner, James G. Williams and Dale H. Boggs - IPN Progress Report 42-178 • August 15, 2009.)</listItem>
+	  						<listItem>Compensation for movement of the CIO in RA using supplied NOVAS data</listItem>
+	  						<listItem>The AE98 readeph routine to parse locally held minor planet ephemeris files.</listItem>
 	  					</list>
 	  				</listItem>
-	  				<listItem>ASCOM Controls - reusable components that can be embedded in forms to easedevelopment of common tasks
+	  				<listItem>ASCOM Controls - reusable components that can be embedded in forms to ease development of common tasks
 	  					<list class="bullet">
-	  						<listItem>Chooser</listItem>
 	  						<listItem>LED Indicator - a simple red / green indicator supporting various blink cadences</listItem>
 	  						<listItem>Annunciator - Displays status with a standard look and feel</listItem>
 	  					</list>
 	  				</listItem>
-	     			<listItem>Separate developer support install</listItem>
-	     			<listItem>Support for early COM binding, introduced in Platform 5 removed to ease on-going platform development</listItem>
-	     			<listItem>Enhanced Client Toolkit that can handle Platform 5 and Platform 6 conformant drivers.</listItem>     			
-	     			<listItem>Enhanced version of Conform to confirm adherence to the new Platform 6 interfaces</listItem>
+	     			<listItem>Separate developer components installer</listItem>
 	     			<listItem>TraceLogger - Has a new menu option to return the full path name of the log file being created.</listItem>
 	 		 		<listItem>TraceLogger - New LogMessageCrLf method that respects carriage returns and line feeds in 
 	 		 		messages and doesn't translate these to hex display characters.</listItem>>
-	 	 			<listItem>Profile - Implemented four new methods to retrieve and set all values in a device
+	 	 			<listItem>Profile - Has four new methods to retrieve and set all values in a device
 	 		 		profile in one operation. GetProfileXML and SetProfileXML work with an XML encoding of the profile
-	 		 		while GetProfile and SetProfile work with the new ASCOMProfile object that contains all 
-	 		 		entries in the profile and provides simple methods to read and set values.</listItem>	
-	     			<listItem>Enhanced DriverAccess Toolkit that transparently deals with driver differences between interface versions,
-	     			providing a consistent interface for .NET application developers.</listItem>
-	     			<listItem></listItem>     			
+	 		 		while GetProfile and SetProfile work with a new ASCOMProfile object that contains all 
+	 		 		entries in the profile and provides simple methods to read and set values.</listItem>
+	 		 		Additional logging for serial component accesed through DriverHelper.Serial
   				</list>
       		</content>
    		</section>
+   		
         <section address="IssuesFixed">
            	<title>Issues Fixed</title>
             <content>
@@ -106,19 +112,23 @@
 					for early adopters whose profile was migrated by an early "HelperNET" install.</listItem>
 					<listItem>TraceLogger - Fixed exception thrown if object was disposed while writing</listItem>
 					<listItem>TraceLogger - Fixed low probability IOException thrown when creating the object
-					if multiple traceloggers were created simulateously in multi-threaded applications.</listItem>
- 		 			<listItem>Profile - Improved resilience to tranient operational issues</listItem>>
+					if multiple traceloggers were created simultaneously in multi-threaded applications.</listItem>
+ 		 			<listItem>Profile - Improved resilience to transient operational issues</listItem>>
  		 			<listItem>Profile - Improved recovery from profile file corruption</listItem>>
+ 		 			<listItem>Profile - Fixed exception thrown when a calling application has no version number of any kind</listItem>
+ 		 			<listItem>ShowPlatformVersion - Fixed failure when run on a 64bit OS</listItem>>
+ 		 			<listItem>Timer - Now works consistently in console environments as well as windowed environments.</listItem>>
 				</list>
    			</content>
    		</section>
 
         <section address="BreakingChanges">
-           	<title>Breaking Changes (for developers)</title>
+           	<title>Breaking Changes (For Developers)</title>
             <content>
       			<list class="bullet">
  		 			<listItem>RegisteredDevices(ByVal DeviceType As String) has been changed from a property to a method to maximise 
  		 			compatibility between .NET programming languages.</listItem>
+ 		 			<listItem>Support for early COM binding, introduced in Platform 5 removed to ease on-going platform development</listItem>
 				</list>
    			</content>
    		</section>

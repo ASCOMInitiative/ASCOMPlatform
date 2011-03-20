@@ -33,7 +33,7 @@
 			    <entry>ASCOM Utilities</entry>
 			    <entry>This is one component, refactored from the original driver helpers,that provides a range of helpful
 			    support functions. A fewfunctions have been omitted as almost all programming languages provide these and 
-			    it has been extended in a variaty of ways, see: <link xlink:href="661ad380-12b9-4a1f-b79c-5dde4f5e781b" /></entry>
+			    it has been extended in a variaty of ways, see: <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /></entry>
 			  </row>
 			  <row>
 			    <entry>ASCOM IConform</entry>

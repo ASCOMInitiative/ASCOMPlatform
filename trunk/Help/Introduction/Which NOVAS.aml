@@ -52,6 +52,21 @@
 	      	</para>
       	</content>
     </section>
+
+  <section address="NOVAS2">
+		<title>NOVAS3</title>
+   		<content>
+      		<para>This component is a shell for the NOVAS 3 library released in December 2009 for demanding applications that require access to the fundamental routines
+      		in the NOVAS3 library, the latest JPL DE421 planetary and lunar ephemerises or to calculations 
+      		based on the IAU 2000 reference systems resolution. It contains a range of supervisory routines that provide access to high
+      		level functions and an extensive range of intermediate and basic level routines dedicated to lower level
+      		astrometric functions.
+	      	</para>
+	      	<para>The calling interface is close to the original C interface and most calculated values are 
+	      	passed back through reference parameters.
+	      	</para>
+      	</content>
+    </section>
   
   </developerConceptualDocument>
 </topic>
