@@ -56,7 +56,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ReadOnly Property InterfaceVersion() As Short
 
     ''' <summary>
-    ''' The short name of the driver, for display purposes
+    ''' The short name of the driver, for display purposes.
+    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ReadOnly Property Name() As String
 
@@ -71,6 +72,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
 
     ''' <summary>
     ''' Invokes the specified device-specific action.
+    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <param name="ActionName">
     ''' A well known name agreed by interested parties that represents the action
@@ -88,6 +90,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
 
     ''' <summary>
     ''' Gets the supported actions.
+    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <value>The supported actions.</value>
     ReadOnly Property SupportedActions() As ArrayList
@@ -95,6 +98,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <summary>
     ''' Transmits an arbitrary string to the device and does not wait for a response.
     ''' Optionally, protocol framing characters may be added to the string before transmission.
+    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <param name="Command">The literal command string to be transmitted.</param>
     ''' <param name="Raw">
@@ -106,6 +110,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <summary>
     ''' Transmits an arbitrary string to the device and waits for a boolean response.
     ''' Optionally, protocol framing characters may be added to the string before transmission.
+    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <param name="Command">The literal command string to be transmitted.</param>
     ''' <param name="Raw">
@@ -120,6 +125,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <summary>
     ''' Transmits an arbitrary string to the device and waits for a string response.
     ''' Optionally, protocol framing characters may be added to the string before transmission.
+    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     ''' <param name="Command">The literal command string to be transmitted.</param>
     ''' <param name="Raw">
@@ -135,6 +141,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' Dispose the late-bound interface, if needed. Will release it via COM
     ''' if it is a COM object, else if native .NET will just dereference it
     ''' for GC.
+    ''' This is only available for the Camera Interface Version 2
     ''' </summary>
     Sub Dispose()
 
@@ -536,13 +543,15 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <summary>
     ''' Bayer X offset index
     ''' </summary>
-    ''' <returns>The Bayer colour matrix X offset.</returns>
+    ''' <returns>The Bayer colour matrix X offset, as defined in Camera.SensorType.</returns>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active connection in order to retrieve necessary information from the camera.)</exception>
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
     ''' <remarks>Returns the X offset of the Bayer matrix, as defined in Camera.SensorType. Value returned must be in the range 0 to M-1, 
     ''' where M is the width of the Bayer matrix. The offset is relative to the 0,0 pixel in the sensor array, and does not change to 
-    ''' reflect subframe settings.</remarks>
+    ''' reflect subframe settings.
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property BayerOffsetX As Short
 
     ''' <summary>
@@ -554,7 +563,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
     ''' <remarks>The offset is relative to the 0,0 pixel in the sensor array, and does not change to reflect subframe settings. 
     ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
-    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
+    ''' that the driver is aware of the capabilities of the specific camera model.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property BayerOffsetY As Short
 
     ''' <summary>
@@ -564,7 +575,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' active connection in order to retrieve necessary information from the camera.)</exception>
     ''' <returns>True when the camera supports a fast readout mode</returns>
     ''' <remarks>It is recommended that this function be called only after a connection is established with the camera hardware, to 
-    ''' ensure that the driver is aware of the capabilities of the specific camera model.</remarks>
+    ''' ensure that the driver is aware of the capabilities of the specific camera model.
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property CanFastReadout As Boolean
 
     ''' <summary>
@@ -576,7 +589,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
     ''' <remarks>It is recommended that this function be called only after 
     ''' a connection is established with the camera hardware, to ensure that the driver is aware of the capabilities of the 
-    ''' specific camera model.</remarks>
+    ''' specific camera model.
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property ExposureMax As Double
 
     ''' <summary>
@@ -590,7 +605,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <para>Please note that for bias frame acquisition an even shorter exposure may be possible; please see Camera.StartExposure 
     ''' for more information.</para>
     ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
-    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
+    ''' that the driver is aware of the capabilities of the specific camera model.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property ExposureMin As Double
 
     ''' <summary>
@@ -605,7 +622,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' the driver should choose the closest available value. Also in some cases the resolution may not be constant over the full range 
     ''' of exposure times; in this case the smallest increment would be appropriate. </para>
     ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
-    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
+    ''' that the driver is aware of the capabilities of the specific camera model.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property ExposureResolution As Double
 
     ''' <summary>
@@ -623,7 +642,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <para>Please note that this function may in some cases interact with Camera.ReadoutModes; for example, there may be modes where 
     ''' the Fast/Normal switch is meaningless. In this case, it may be preferable to use the Camera.ReadoutModes function to control 
     ''' fast/normal switching.</para>
-    ''' <para>If this feature is not available, then Camera.CanFastReadout must return False.</para></remarks>
+    ''' <para>If this feature is not available, then Camera.CanFastReadout must return False.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     Property FastReadout As Boolean
 
     ''' <summary>
@@ -645,7 +666,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' </ul>
     '''<para>The driver must default Camera.Gain to a valid value. </para>
     '''<para>Please note that Camera.ReadoutMode may in some cases affect the gain of the camera; if so the driver must be written such 
-    ''' that the two properties do not conflict if both are used.</para></remarks>
+    ''' that the two properties do not conflict if both are used.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     Property Gain As Short
 
     ''' <summary>
@@ -661,7 +684,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <para>Camera.GainMax shall be greater than Camera.GainMin. If either is available, then both must be available.</para>
     ''' <para>Please see Camera.Gain for more information.</para>
     ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
-    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
+    ''' that the driver is aware of the capabilities of the specific camera model.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property GainMax As Short
 
     ''' <summary>
@@ -676,8 +701,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <para>Camera.GainMax shall be greater than Camera.GainMin. If either is available, then both must be available.</para>
     ''' <para>Please see Camera.Gain for more information.</para>
     ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, to ensure 
-    ''' that the driver is aware of the capabilities of the specific camera model.</para></remarks>
-
+    ''' that the driver is aware of the capabilities of the specific camera model.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property GainMin As Short
 
     ''' <summary>
@@ -693,7 +719,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <para>The Gain setting may alternatively be specified using integer values; if this mode is used then Gains is invalid 
     ''' and must throw an exception. Please see Camera.GainMax and Camera.GainMin for more information.</para>
     ''' <para>It is recommended that this function be called only after a connection is established with the camera hardware, 
-    ''' to ensure that the driver is aware of the capabilities of the specific camera model.</para></remarks>
+    ''' to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property Gains As String()
 
     ''' <summary>
@@ -710,6 +738,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <para>Typically the application user interface will show a progress bar based on the Camera.PercentCompleted value.</para>
     ''' <para>Please note that client applications are not required to use this value, and in some cases may display status 
     ''' information based on other information, such as time elapsed.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
     ''' </remarks>
     ReadOnly Property PercentCompleted As Short
 
@@ -726,7 +755,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' Defaults to 0 if not set.  Throws an exception if the selected mode is not available.
     ''' <para>It is strongly recommended, but not required, that driver authors make the 0-index mode suitable for standard imaging operations, 
     ''' since it is the default.</para>
-    ''' <para>Please see <see cref="ReadoutModes">Camera.ReadoutModes</see> for additional information.</para></remarks>
+    ''' <para>Please see <see cref="ReadoutModes">Camera.ReadoutModes</see> for additional information.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property ReadoutMode As Short
 
     ''' <summary>
@@ -751,7 +782,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' features work together consistently. If there are modes that are inconsistent having a separate fast/normal switch, then it 
     ''' may be better to simply list Fast as one of the ReadoutModes.</para><para>It is recommended that this function be called 
     ''' only after a connection is established with the camera hardware, to ensure that the driver is aware of the capabilities 
-    ''' of the specific camera model.</para></remarks>
+    ''' of the specific camera model.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' </remarks>
     ReadOnly Property ReadoutModes As String()
 
     ''' <summary>
@@ -774,6 +807,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' the Bayer matrix of one-shot color sensors.  Application authors should assume that an appropriate IR cutoff filter is 
     ''' in place for color sensors.</para><para>It is recommended that this function be called only after a connection is established with 
     ''' the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
+    ''' <para>This is only available for the Camera Interface Version 2</para>
     ''' </remarks>
     ReadOnly Property SensorName As String
 
@@ -785,7 +819,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active connection in order to retrieve necessary information from the camera.)</exception>
     ''' <remarks>
-    ''' SensorType returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes.  The following values are defined:
+    ''' <para>This is only available for the Camera Interface Version 2</para>
+    ''' <para>SensorType returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes.  The following values are defined:</para>
     ''' <para>
     ''' <table style="width:76.24%;" cellspacing="0" width="76.24%">
     ''' <col style="width: 11.701%;"></col>
