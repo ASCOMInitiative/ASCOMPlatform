@@ -30,7 +30,8 @@ namespace ASCOM.DriverAccess
         {
             memberFactory = new MemberFactory(deviceProgId);
             interfaceVersion = this.InterfaceVersion;
-            deviceType = deviceProgId.Substring(deviceProgId.LastIndexOf(".") + 1).ToUpper();
+            //deviceType = deviceProgId.Substring(deviceProgId.LastIndexOf(".") + 1).ToUpper();
+            deviceType = this.GetType().Name.ToUpper();
         }
 
         /// <summary>
