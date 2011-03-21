@@ -5,15 +5,15 @@ namespace ASCOM.Simulator
 {
     public partial class FocuserSettingsForm : Form
     {
-        private readonly Focuser _focuser; // = new Focuser();
+        private Focuser _focuser; // = new Focuser();
 
         /// <summary>
         /// This is the method to run when the class is constructe
         /// </summary>
         public FocuserSettingsForm(Focuser MyFocuser)
         {
-            _focuser.TL.LogMessage("FocusSettingsForm", "New");
             _focuser = MyFocuser;
+            _focuser.TL.LogMessage("FocusSettingsForm", "New");
             _focuser.TL.LogMessage("FocusSettingsForm", "Initialising component");
             InitializeComponent();
             _focuser.TL.LogMessage("FocusSettingsForm", "initialised OK");

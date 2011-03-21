@@ -70,8 +70,8 @@ namespace ASCOM.Simulator
         private static readonly Profile Profile = new Profile();
 
         #endregion
-
-        internal readonly TraceLogger TL ;// Shared tracelogger between this instances classes
+         
+        internal TraceLogger TL ;// Shared tracelogger between this instances classes
 
         #region local parameters
 
