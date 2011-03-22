@@ -49,7 +49,9 @@ namespace ASCOM.GeminiTelescope
 
             if (s == String.Empty) return;
 
-            string url = "http://" + GeminiHardware.EthernetIP + "/ser.cgx?SE=" + s;
+            string url = GeminiHardware.UseDHCP?
+                "http://" + GeminiHardware.GeminiDHCPName + "/ser.cgx?SE=" + s :
+                "http://" + GeminiHardware.EthernetIP + "/ser.cgx?SE=" + s;
 
             url = url.Replace("#", "%23");
 

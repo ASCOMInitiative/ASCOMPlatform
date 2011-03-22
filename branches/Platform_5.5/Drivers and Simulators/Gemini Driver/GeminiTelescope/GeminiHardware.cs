@@ -437,6 +437,31 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private static bool m_UseDHCP = true;
+
+        public static bool UseDHCP
+        {
+            get { return GeminiHardware.m_UseDHCP; }
+            set { 
+                GeminiHardware.m_UseDHCP = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseDHCP", value.ToString());
+            }
+        }
+
+        private static string m_GeminiDHCPName = "gemini";
+
+        public static string GeminiDHCPName
+        {
+            get { return GeminiHardware.m_GeminiDHCPName; }
+            set { 
+                GeminiHardware.m_GeminiDHCPName = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiDHCPName", value);
+            }
+        }
+
+
         private static bool m_BypassProxy = true;
 
         public static bool BypassProxy
@@ -450,7 +475,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        private static string m_EthernetIP = "192.168.0.100";
+        private static string m_EthernetIP = "192.168.0.111";
 
         public static string EthernetIP
         {
@@ -1066,10 +1091,17 @@ namespace ASCOM.GeminiTelescope
             m_EthernetPassword = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "EthernetPassword", "");
 
             m_EthernetIP = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "EthernetIP", "");
-            if (m_EthernetIP == "") m_EthernetIP = "192.168.0.100";
+            if (m_EthernetIP == "") m_EthernetIP = "192.168.0.111";
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "BypassProxy", ""), out m_BypassProxy))
                 m_BypassProxy = true;
+
+            if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseDHCP", ""), out m_UseDHCP))
+                m_UseDHCP = true;
+
+            m_GeminiDHCPName = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiDHCPName", "");
+
+            if (m_GeminiDHCPName == "") m_GeminiDHCPName = "gemini";
 
             m_GpsComPort = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", "");
             if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsBaudRate", ""), out m_GpsBaudRate))
@@ -3915,6 +3947,31 @@ namespace ASCOM.GeminiTelescope
             return ra_clusters - west_limit;
         }
 
+        /// <summary>
+        ///  Custom command implementation, used in L4 only, to return number of seconds to Western safety limit
+        ///  this is command "<226" and is implemented in L5 firmware
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public static string TimeToLimitL4(string cmd, int timeout)
+        {
+            object clusters = ClustersFromSafetyLimit();
+            if (clusters == null) throw new TimeoutException("Time to limit L4");
+
+            double rate = SharedResources.EARTH_ANG_ROT_DEG_MIN / 60.0; //sidereal rate per second
+
+            double distance = (double)clusters;
+
+            if (distance <= 0)
+            {
+                return "0";
+            }
+            else
+            {
+                int seconds = (int) (distance / rate);
+                return seconds.ToString();
+            }
+        }
 
         static void DoNudgeFromSafety()
         {

@@ -8,7 +8,9 @@ namespace ASCOM.GeminiTelescope
     /// <summary>
     /// A single command description for the table of exception commands
     /// </summary>
-    
+  
+    public delegate string CustomCommand(string cmd, int timeout);
+
     internal class GeminiCommand
     {
         /// <summary>
@@ -21,7 +23,8 @@ namespace ASCOM.GeminiTelescope
             ZeroOrHash,     // character '0' (zero) or a hash ('#') terminated string
             OneOrHash,      // character '1' (one) or a hash ('#') terminated string
             NumberofChars,   // specific number of characters
-            ZeroOrTwoHash // :SC command
+            ZeroOrTwoHash,   // :SC command
+            Custom           // custom implementation of a command
         }
 
         internal GeminiCommand(ResultType type, int chars) : this(type, chars, false)
@@ -35,10 +38,17 @@ namespace ASCOM.GeminiTelescope
             UpdateStatus = bUpdateStatus;
         }
 
+        internal GeminiCommand(ResultType type, int chars, bool bUpdateStatus, CustomCommand cmdDelegate) : 
+          this(type, chars, bUpdateStatus)
+        {
+            CustomDelegate = cmdDelegate;
+        }
 
         public ResultType Type; // expected return type
         public int Chars;   // expected number of characters if Type=NumberofChars
         public bool UpdateStatus; // this command changes mount status, and an update to polled variables should follow immediately
+
+        public CustomCommand CustomDelegate;
     }
 
     /// <summary>
@@ -212,6 +222,17 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(">222:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">411:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">412:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+            Commands.Add(">226:", new GeminiCommand(GeminiCommand.ResultType.Custom, 0, false, new CustomCommand(GeminiHardware.TimeToLimitL4))); 
+        }
+
+        /// <summary>
+        /// this adds commands present in Gemini II (Level 5)
+        /// This is only called if L5 is detected
+        /// </summary>
+        public static void GeminiCommandsL5()
+        {
+            Commands.Add(">97", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 6));
+            Commands.Remove("<226");    //delete custom implementation used for L4 mounts, this is implemented in firmware in L5
         }
 
     }

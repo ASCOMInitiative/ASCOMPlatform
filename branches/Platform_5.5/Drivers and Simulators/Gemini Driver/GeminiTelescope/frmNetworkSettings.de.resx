@@ -118,14 +118,26 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="chkDHCP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>108, 13</value>
+  </data>
+  <data name="chkDHCP.Text" xml:space="preserve">
+    <value>DHCP</value>
+  </data>
+  <data name="chkNoProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>108, 136</value>
+  </data>
   <data name="chkNoProxy.Size" type="System.Drawing.Size, System.Drawing">
     <value>110, 17</value>
   </data>
   <data name="chkNoProxy.Text" xml:space="preserve">
     <value>Kein Proxy-Server</value>
   </data>
+  <data name="txtPassword.Location" type="System.Drawing.Point, System.Drawing">
+    <value>108, 95</value>
+  </data>
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>49, 77</value>
+    <value>49, 95</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 13</value>
@@ -133,8 +145,11 @@
   <data name="label3.Text" xml:space="preserve">
     <value>Passwort:</value>
   </data>
+  <data name="txtUser.Location" type="System.Drawing.Point, System.Drawing">
+    <value>108, 69</value>
+  </data>
   <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>24, 51</value>
+    <value>24, 69</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 13</value>
@@ -142,11 +157,29 @@
   <data name="label2.Text" xml:space="preserve">
     <value>Benutzername:</value>
   </data>
+  <data name="txtIP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>108, 39</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 43</value>
+  </data>
   <data name="label1.Text" xml:space="preserve">
     <value>Gemini IP-Adresse:</value>
   </data>
+  <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>154, 172</value>
+  </data>
   <data name="btnCancel.Text" xml:space="preserve">
     <value>Abbruch</value>
+  </data>
+  <data name="btnOK.Location" type="System.Drawing.Point, System.Drawing">
+    <value>54, 172</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>274, 204</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>299, 228</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
