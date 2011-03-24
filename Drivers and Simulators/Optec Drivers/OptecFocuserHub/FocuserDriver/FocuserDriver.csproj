@@ -105,6 +105,10 @@
   <ItemGroup>
     <Content Include="ASCOM.png" />
     <Content Include="ReadMe.htm" />
+    <None Include="Resources\gear_16.png" />
+    <None Include="Resources\Tools.png" />
+    <None Include="Resources\RedLight.png" />
+    <None Include="Resources\GreyLight.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

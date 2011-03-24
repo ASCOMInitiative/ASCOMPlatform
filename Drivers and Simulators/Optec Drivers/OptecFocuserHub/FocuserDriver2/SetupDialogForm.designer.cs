@@ -75,8 +75,8 @@ namespace ASCOM.OptecFocuserHub2
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picASCOM.TabIndex = 3;
             this.picASCOM.TabStop = false;
-            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
+            this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
             // SetupDialogForm
             // 
@@ -92,7 +92,7 @@ namespace ASCOM.OptecFocuserHub2
             this.MinimizeBox = false;
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "OptecFocuserHub Setup";
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);

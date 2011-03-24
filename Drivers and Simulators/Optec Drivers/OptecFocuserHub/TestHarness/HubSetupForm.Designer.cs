@@ -1,8 +1,6 @@
-using System;
-
-namespace ASCOM.OptecFocuserHub
+﻿namespace TestHarness
 {
-    partial class frmMain
+    partial class HubSetupForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,34 +28,33 @@ namespace ASCOM.OptecFocuserHub
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.SuspendLayout();
             // 
-            // label1
+            // propertyGrid1
             // 
-            this.label1.Location = new System.Drawing.Point(12, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(199, 33);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "This is an ASCOM driver, not a program for you to use.";
+            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(249, 429);
+            this.propertyGrid1.TabIndex = 0;
             // 
-            // frmMain
+            // HubSetupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(647, 323);
-            this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "frmMain";
-            this.Text = "OptecFocuserHub Driver Server";
+            this.ClientSize = new System.Drawing.Size(249, 429);
+            this.Controls.Add(this.propertyGrid1);
+            this.Name = "HubSetupForm";
+            this.Text = "Hub Settings";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.HubSetupForm_FormClosing);
+            this.Load += new System.EventHandler(this.HubSetupForm_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-
+        private System.Windows.Forms.PropertyGrid propertyGrid1;
     }
 }
-

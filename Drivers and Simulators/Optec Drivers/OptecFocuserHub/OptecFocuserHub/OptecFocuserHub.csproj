@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassFactory.cs" />
+    <Compile Include="FocuserCommunicator.cs" />
     <Compile Include="FocuserManager.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
@@ -67,6 +68,7 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="GarbageCollection.cs" />
+    <Compile Include="HubFocuser.cs" />
     <Compile Include="LocalServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmMain.resx">

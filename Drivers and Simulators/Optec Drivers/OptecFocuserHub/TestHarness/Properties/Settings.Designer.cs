@@ -25,25 +25,81 @@ namespace TestHarness.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ProgID1 {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SwitchF1F2 {
             get {
-                return ((string)(this["ProgID1"]));
+                return ((bool)(this["SwitchF1F2"]));
             }
             set {
-                this["ProgID1"] = value;
+                this["SwitchF1F2"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ProgID2 {
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Offset1,100</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection F1FocusOffsets {
             get {
-                return ((string)(this["ProgID2"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["F1FocusOffsets"]));
             }
             set {
-                this["ProgID2"] = value;
+                this["F1FocusOffsets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Preset1,1000</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection F2FocusPresets {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["F2FocusPresets"]));
+            }
+            set {
+                this["F2FocusPresets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Offset1,100</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection F2FocusOffsets {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["F2FocusOffsets"]));
+            }
+            set {
+                this["F2FocusOffsets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Preset1,1000</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection F1FocusPresets {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["F1FocusPresets"]));
+            }
+            set {
+                this["F1FocusPresets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Focuser2Disabled {
+            get {
+                return ((bool)(this["Focuser2Disabled"]));
+            }
+            set {
+                this["Focuser2Disabled"] = value;
             }
         }
     }

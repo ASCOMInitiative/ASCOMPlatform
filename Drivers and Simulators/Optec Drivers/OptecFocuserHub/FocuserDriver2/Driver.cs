@@ -43,14 +43,14 @@ namespace ASCOM.OptecFocuserHub2
     public class Focuser : ASCOM.OptecFocuserHub.ReferenceCountedObjectBase, IFocuser
     {
         FocuserManager myFocuserManager;
-        HubFocuser myFocuser;
+     
         //
         // Constructor - Must be public for COM registration!
         //
         public Focuser()
         {
             myFocuserManager = OptecFocuserHub.SharedResources.SharedFocuserManager;
-            myFocuser = ASCOM.OptecFocuserHub.SharedResources.SharedFocuserManager.Focuser2;
+        
         }
 
         //
@@ -74,7 +74,7 @@ namespace ASCOM.OptecFocuserHub2
         public bool IsMoving
         {
             // TODO Replace this with your implementation
-            get { return myFocuser.IsMoving || myFocuser.IsHoming; }
+            get { return myFocuserManager.Focuser2.IsMoving || myFocuserManager.Focuser2.IsHoming; }
         }
 
   
@@ -94,19 +94,19 @@ namespace ASCOM.OptecFocuserHub2
         public int MaxStep
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("MaxStep", false); }
+            get { return myFocuserManager.Focuser2.MaxPosition; }
         }
 
         public void Move(int val)
         {
             // TODO Replace this with your implementation
-            myFocuser.MoveAbsolute(val);
+            myFocuserManager.Focuser2.MoveAbsolute(val);
         }
 
         public int Position
         {
             // TODO Replace this with your implementation
-            get { return myFocuser.CurrentPositionSteps; }
+            get { return myFocuserManager.Focuser2.CurrentPositionSteps; }
         }
 
         public void SetupDialog()
@@ -137,10 +137,7 @@ namespace ASCOM.OptecFocuserHub2
         public double Temperature
         {
             // TODO Replace this with your implementation
-            get
-            {
-                myFocuser.RefreshStatus();
-                return myFocuser.CurrentTempC; }
+            get { return myFocuserManager.Focuser2.CurrentTempC; }
         }
 
         #endregion
