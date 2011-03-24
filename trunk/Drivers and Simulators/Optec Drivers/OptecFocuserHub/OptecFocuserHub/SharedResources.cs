@@ -24,14 +24,15 @@ namespace ASCOM.OptecFocuserHub
     {
         private static FocuserManager myFocuserManager;
 
-        private static int s_z;
+        //private static int s_z;
 
         private SharedResources() { }							// Prevent creation of instances
 
         static SharedResources()								// Static initialization
         {
+            //System.Windows.Forms.MessageBox.Show("Creating Shared Resources");
             myFocuserManager = FocuserManager.GetInstance();
-            s_z = 0;
+            //s_z = 0;
             //Focusers.
         }
 
@@ -40,8 +41,9 @@ namespace ASCOM.OptecFocuserHub
         //
 
         // Shared serial port 
+
         public static FocuserManager SharedFocuserManager { get { return myFocuserManager; } }
         
-        public static int z { get { return s_z++; } }
+        //public static int z { get { return s_z++; } }
     }
 }

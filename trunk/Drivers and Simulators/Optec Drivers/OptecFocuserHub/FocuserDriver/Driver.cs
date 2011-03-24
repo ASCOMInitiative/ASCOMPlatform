@@ -44,14 +44,13 @@ namespace ASCOM.OptecFocuserHub
     public class Focuser : ReferenceCountedObjectBase, ASCOM.Interface.IFocuser
     {
         private FocuserManager myFocuserManager;
-        private HubFocuser myFocuser;
+       
         //
         // Constructor - Must be public for COM registration!
         //
         public Focuser()
         {
             myFocuserManager = ASCOM.OptecFocuserHub.SharedResources.SharedFocuserManager;
-            myFocuser = SharedResources.SharedFocuserManager.Focuser1;
         }
 
 
@@ -77,10 +76,9 @@ namespace ASCOM.OptecFocuserHub
         public bool IsMoving
         {
             // TODO Replace this with your implementation
-            get { return myFocuser.IsMoving || myFocuser.IsHoming; }
+            get { return myFocuserManager.Focuser1.IsMoving || myFocuserManager.Focuser1.IsHoming; }
         }
 
-       
         public bool Link
         {
             // TODO Replace this with your implementation
@@ -98,19 +96,19 @@ namespace ASCOM.OptecFocuserHub
         public int MaxStep
         {
             // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("MaxStep", false); }
+            get { return myFocuserManager.Focuser1.MaxPosition; }
         }
 
         public void Move(int val)
         {
             // TODO Replace this with your implementation
-            myFocuser.MoveAbsolute(val);
+            myFocuserManager.Focuser1.MoveAbsolute(val);
         }
 
         public int Position
         {
             // TODO Replace this with your implementation
-            get { return myFocuser.CurrentPositionSteps; }
+            get { return myFocuserManager.Focuser1.CurrentPositionSteps; }
         }
 
         public void SetupDialog()
@@ -143,8 +141,8 @@ namespace ASCOM.OptecFocuserHub
             // TODO Replace this with your implementation
             get
             {
-                myFocuser.RefreshStatus();
-                return myFocuser.CurrentTempC; }
+                return myFocuserManager.Focuser1.CurrentTempC;
+            }
         }
 
         #endregion
