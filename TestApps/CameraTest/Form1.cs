@@ -291,7 +291,7 @@ namespace CameraTest
 
         private void numBinX_ValueChanged(object sender, EventArgs e)
         {
-            if (!oCamera.CanAsymmetricBin)
+            if (!oCamera.CanAsymmetricBin || checkBoxSameBins.Checked)
                 numBinY.Value=numBinX.Value;
 
             numNumX.Maximum = numStartX.Maximum = oCamera.CameraXSize / numBinX.Value;
@@ -313,11 +313,11 @@ namespace CameraTest
                     oCamera.NumX = (int)numNumX.Value;
                     oCamera.NumY = (int)numNumY.Value;
                     oCamera.BinX = (short)numBinX.Value;
-                    oCamera.BinY = (short)numBinY.Value;
+                    oCamera.BinY = (short)(checkBoxSameBins.Checked ? numBinX.Value: numBinY.Value);
                     bool light = (oCamera.HasShutter) ? !checkBoxDarkFrame.Checked : true;
                     oCamera.StartExposure((double)numExposure.Value, light);
                     ExposureTimer.Enabled = true;
-                    imageControl.Change+=new ImageControl.ChangeHandler(imageControl_Change);
+                    imageControl.Change += new ImageControl.ChangeHandler(imageControl_Change);
                 }
                 catch (Exception ex)
                 {
@@ -791,6 +791,9 @@ namespace CameraTest
 
         private void numBinY_ValueChanged(object sender, EventArgs e)
         {
+            if (!oCamera.CanAsymmetricBin || checkBoxSameBins.Checked)
+                numBinX.Value = numBinY.Value;
+
             numNumY.Maximum = numStartY.Maximum = oCamera.CameraYSize / numBinY.Value;
             //numNumY.Increment = numStartY.Increment = numBinY.Value;
             numNumY.Value = numY / numBinY.Value;
@@ -825,6 +828,7 @@ namespace CameraTest
             this.Size = Settings.Default.WindowSize;
             splitContainer1.SplitterDistance = Settings.Default.Dividerleft;
             LastExposure = numExposure.Value;
+            checkBoxSameBins.Checked = Settings.Default.SameBins;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -837,6 +841,7 @@ namespace CameraTest
             Settings.Default.Location=this.Location;
             Settings.Default.Dividerleft = splitContainer1.SplitterDistance;
             Settings.Default.WindowSize = this.Size;
+            Settings.Default.SameBins = checkBoxSameBins.Checked;
             Settings.Default.Save();
         }
 
@@ -1097,6 +1102,12 @@ namespace CameraTest
                 if (fs != null)
                     fs.Dispose();
             }
+        }
+
+        private void checkBoxSameBins_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxSameBins.Checked)
+                numBinY.Value = numBinX.Value;
         }
 
         //private enum SensorType

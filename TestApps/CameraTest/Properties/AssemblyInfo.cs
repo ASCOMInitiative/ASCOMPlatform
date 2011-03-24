@@ -9,7 +9,7 @@ using System.Resources;
 [assembly: AssemblyTitle("CameraTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Chris Rowland")]
 [assembly: AssemblyProduct("CameraTest")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]

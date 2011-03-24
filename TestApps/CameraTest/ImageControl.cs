@@ -22,6 +22,8 @@ namespace CameraTest
             ToolTip.SetToolTip(this.pnlSlider, "Left: adjust black level, Middle: move scale, Right; Adjust White level");
             ToolTip.SetToolTip(this.Gamma, "Set Gamma");
             ToolTip.SetToolTip(pnlHistogram, "Histogram Display");
+            ctrlIncrement = 5;
+            shiftIncrement = 50;
         }
         #endregion
 
@@ -97,17 +99,16 @@ namespace CameraTest
             set { numMaximum.DecimalPlaces = numMinimum.DecimalPlaces = value; }
         }
 
-        private decimal increment = 1;
         /// <summary>
         /// Increment
         /// </summary>
         public decimal Increment
         {
-            get { return increment; }
-            set { numMinimum.Increment = numMaximum.Increment = increment = value; }
+            get { return numMinimum.Increment; }
+            set { numMinimum.Increment = numMaximum.Increment = value; }
         }
 
-        private decimal shiftIncrement = 10;
+        private decimal shiftIncrement;
         /// <summary>
         /// Increment used when the shift key is down
         /// </summary>
@@ -117,7 +118,7 @@ namespace CameraTest
             set { shiftIncrement = value; }
         }
 
-        private decimal ctrlIncrement = 5;
+        private decimal ctrlIncrement;
         /// <summary>
         /// Increment used when the control key is down
         /// </summary>
@@ -316,8 +317,11 @@ namespace CameraTest
 
         private void numMinimum_ValueChanged(object sender, EventArgs e)
         {
-            pnlSlider.Left = (int)(this.Width * numMinimum.Value / (numMaximum.Maximum - numMinimum.Minimum));
-            pnlSlider.Width = (int)(this.Width * (numMaximum.Value - numMinimum.Value) / (numMaximum.Maximum - numMinimum.Minimum));
+            if (numMaximum.Maximum > numMinimum.Minimum)
+            {
+                pnlSlider.Left = (int)(this.Width * numMinimum.Value / (numMaximum.Maximum - numMinimum.Minimum));
+                pnlSlider.Width = (int)(this.Width * (numMaximum.Value - numMinimum.Value) / (numMaximum.Maximum - numMinimum.Minimum));
+            }
             //Change(this, e);
         }
 
@@ -339,9 +343,6 @@ namespace CameraTest
                     break;
                 case Keys.Shift:
                     nud.Increment = shiftIncrement;
-                    break;
-                default:
-                    nud.Increment = increment;
                     break;
 	        }
         }

@@ -47,6 +47,7 @@ namespace CameraTest
             this.lblCCDTemp = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxSameBins = new System.Windows.Forms.CheckBox();
             this.checkBoxFastReadout = new System.Windows.Forms.CheckBox();
             this.checkBoxDarkFrame = new System.Windows.Forms.CheckBox();
             this.chkVariant = new System.Windows.Forms.CheckBox();
@@ -260,6 +261,7 @@ namespace CameraTest
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxSameBins);
             this.groupBox3.Controls.Add(this.checkBoxFastReadout);
             this.groupBox3.Controls.Add(this.checkBoxDarkFrame);
             this.groupBox3.Controls.Add(this.chkVariant);
@@ -287,6 +289,19 @@ namespace CameraTest
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Exposure";
             // 
+            // checkBoxSameBins
+            // 
+            this.checkBoxSameBins.Checked = true;
+            this.checkBoxSameBins.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxSameBins.Location = new System.Drawing.Point(86, 80);
+            this.checkBoxSameBins.Margin = new System.Windows.Forms.Padding(0);
+            this.checkBoxSameBins.Name = "checkBoxSameBins";
+            this.checkBoxSameBins.Size = new System.Drawing.Size(16, 20);
+            this.checkBoxSameBins.TabIndex = 22;
+            this.ToolTip.SetToolTip(this.checkBoxSameBins, "Set the same bin for X  and Y");
+            this.checkBoxSameBins.UseVisualStyleBackColor = true;
+            this.checkBoxSameBins.CheckedChanged += new System.EventHandler(this.checkBoxSameBins_CheckedChanged);
+            // 
             // checkBoxFastReadout
             // 
             this.checkBoxFastReadout.AutoSize = true;
@@ -310,7 +325,7 @@ namespace CameraTest
             // chkVariant
             // 
             this.chkVariant.AutoSize = true;
-            this.chkVariant.Location = new System.Drawing.Point(84, 109);
+            this.chkVariant.Location = new System.Drawing.Point(81, 109);
             this.chkVariant.Name = "chkVariant";
             this.chkVariant.Size = new System.Drawing.Size(81, 17);
             this.chkVariant.TabIndex = 19;
@@ -394,7 +409,7 @@ namespace CameraTest
             // 
             // numBinY
             // 
-            this.numBinY.Location = new System.Drawing.Point(101, 79);
+            this.numBinY.Location = new System.Drawing.Point(101, 80);
             this.numBinY.Minimum = new decimal(new int[] {
             1,
             0,
@@ -1317,6 +1332,7 @@ namespace CameraTest
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private ImageControl imageControl;
+        private System.Windows.Forms.CheckBox checkBoxSameBins;
     }
 }
 

@@ -94,5 +94,17 @@ namespace CameraTest.Properties {
                 this["Exposure"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SameBins {
+            get {
+                return ((bool)(this["SameBins"]));
+            }
+            set {
+                this["SameBins"] = value;
+            }
+        }
     }
 }
