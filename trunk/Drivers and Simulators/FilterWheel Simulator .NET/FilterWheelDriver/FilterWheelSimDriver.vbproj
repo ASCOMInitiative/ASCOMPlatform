@@ -250,6 +250,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(ProjectDir)..\FilterWheelServer\bin\$(ConfigurationName)\ServedClasses\" /C /I /Y</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelServer\$(OutDir)$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

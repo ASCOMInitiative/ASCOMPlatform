@@ -22,6 +22,8 @@ using Microsoft.Win32;
 using System.Text;
 using System.Threading;
 using System.Globalization;
+using System.Security.Principal;
+using System.Diagnostics;
 
 namespace ASCOM.Simulator
 {
@@ -247,15 +249,23 @@ namespace ASCOM.Simulator
                 // the class and the class facctory. If this doesn't work ????
                 try
                 {
-                    Assembly so = Assembly.LoadFrom(aPath); //[TPL] Potential malicious code injection vector, consider using ReflectionOnlyLoad.
+                    Assembly so = Assembly.LoadFrom(aPath);
+                    //[TPL] Potential malicious code injection vector, consider using ReflectionOnlyLoad.
 
-                    // Only use assemblies that are decorated with the [ServedClassName] Attribute
-                    var attributes = so.GetCustomAttributes(typeof(ASCOM.ServedClassNameAttribute), false);
-                    if (attributes.Length > 0)
+                    //PWGS Get the types in the assembly
+                    Type[] types = so.GetTypes();
+                    foreach (Type type in types)
                     {
-                        m_ComObjectTypes.Add(so.GetType(fqClassName, true));
-                        m_ComObjectAssys.Add(so);
-                        TL.LogMessage("  AddedOK", so.FullName.ToString());
+                        // PWGS Now checks the type rather than the assembly
+                        // Check to see if the type has the ServedClassName attribute, only use it if it does.
+                        MemberInfo info = type;// typeof(MyClass);
+
+                        object[] attrbutes = info.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
+                        if (attrbutes.Length > 0)
+                        {
+                            m_ComObjectTypes.Add(type); //PWGS - much simpler
+                            m_ComObjectAssys.Add(so);
+                        }
                     }
                 }
                 catch (BadImageFormatException)
@@ -281,6 +291,42 @@ namespace ASCOM.Simulator
 
         #region COM Registration and Unregistration
         //
+        // Test if running elevated
+        //
+        private static bool IsAdministrator
+        {
+            get
+            {
+                WindowsIdentity i = WindowsIdentity.GetCurrent();
+                WindowsPrincipal p = new WindowsPrincipal(i);
+                return p.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
+
+        //
+        // Elevate by re-running ourselves with elevation dialog
+        //
+        private static void ElevateSelf(string arg)
+        {
+            ProcessStartInfo si = new ProcessStartInfo();
+            si.Arguments = arg;
+            si.WorkingDirectory = Environment.CurrentDirectory;
+            si.FileName = Application.ExecutablePath;
+            si.Verb = "runas";
+            try { Process p = Process.Start(si); }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("The RotatorSimulator was not " + (arg == "/register" ? "registered" : "unregistered") +
+                    " because you did not allow it.", "RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            return;
+        }
+
+        //
         // Do everything to register this for COM. Never use REGASM on
         // this exe assembly! It would create InProcServer32 entries 
         // which would prevent proper activation!
@@ -293,9 +339,17 @@ namespace ASCOM.Simulator
         //
         private static void RegisterObjects()
         {
-            RegistryKey key = null;
-            RegistryKey key2 = null;
-            RegistryKey key3 = null;
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/register");
+                return;
+            }
+            //
+            // If reached here, we're running elevated
+            //
+            //RegistryKey key = null;
+            //RegistryKey key2 = null;
+            //RegistryKey key3 = null;
 
             Assembly assy = Assembly.GetExecutingAssembly();
             Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
@@ -311,20 +365,20 @@ namespace ASCOM.Simulator
                 //
                 // HKCR\APPID\appid
                 //
-                key = Registry.ClassesRoot.CreateSubKey("APPID\\" + m_sAppId);
-                key.SetValue(null, assyDescription);
-                key.SetValue("AppID", m_sAppId);
-                key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
-                key.Close();
-                key = null;
+                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" + m_sAppId))
+                {
+                    key.SetValue(null, assyDescription);
+                    key.SetValue("AppID", m_sAppId);
+                    key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                }
                 //
                 // HKCR\APPID\exename.ext
                 //
-                key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
-                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1));
-                key.SetValue("AppID", m_sAppId);
-                key.Close();
-                key = null;
+                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
+                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)))
+                {
+                    key.SetValue("AppID", m_sAppId);
+                }
             }
             catch (Exception ex)
             {
@@ -334,7 +388,6 @@ namespace ASCOM.Simulator
             }
             finally
             {
-                if (key != null) key.Close();
             }
 
             //
@@ -354,41 +407,38 @@ namespace ASCOM.Simulator
                         //
                         string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                         string progid = Marshal.GenerateProgIdForType(type);
+                        string deviceType = type.Name;
                         TL.LogMessage("Register", progid + " " + clsid);
 
-                        key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
-                        key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
-                        key.SetValue("AppId", m_sAppId);
-                        key2 = key.CreateSubKey("Implemented Categories");
-                        key3 = key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
-                        key3.Close();
-                        key3 = null;
-                        key2.Close();
-                        key2 = null;
-                        key2 = key.CreateSubKey("ProgId");
-                        key2.SetValue(null, progid);
-                        key2.Close();
-                        key2 = null;
-                        key2 = key.CreateSubKey("Programmable");
-                        key2.Close();
-                        key2 = null;
-                        key2 = key.CreateSubKey("LocalServer32");
-                        key2.SetValue(null, Application.ExecutablePath);
-                        key2.Close();
-                        key2 = null;
-                        key.Close();
-                        key = null;
+                        using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid))
+                        {
+                            key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
+                            key.SetValue("AppId", m_sAppId);
+                            using (RegistryKey key2 = key.CreateSubKey("Implemented Categories"))
+                            {
+                                key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
+                            }
+                            using (RegistryKey key2 = key.CreateSubKey("ProgId"))
+                            {
+                                key2.SetValue(null, progid);
+                            }
+                            key.CreateSubKey("Programmable");
+                            using (RegistryKey key2 = key.CreateSubKey("LocalServer32"))
+                            {
+                                key2.SetValue(null, Application.ExecutablePath);
+                            }
+                        }
                         //
                         // HKCR\CLSID\progid
                         //
-                        key = Registry.ClassesRoot.CreateSubKey(progid);
-                        key.SetValue(null, assyTitle);
-                        key2 = key.CreateSubKey("CLSID");
-                        key2.SetValue(null, clsid);
-                        key2.Close();
-                        key2 = null;
-                        key.Close();
-                        key = null;
+                        using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progid))
+                        {
+                            key.SetValue(null, assyTitle);
+                            using (RegistryKey key2 = key.CreateSubKey("CLSID"))
+                            {
+                                key2.SetValue(null, clsid);
+                            }
+                        }
                         //
                         // ASCOM 
                         //
@@ -397,18 +447,13 @@ namespace ASCOM.Simulator
                         //string chooserName = ((AssemblyProductAttribute)attr).Product;
 
                         //Modified to pull from the custom Attribute ServedClassName
-                        attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
-                        string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName;
+                        attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute));
+                        string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName ?? "telescope Simulator";
 
                         using (var P = new ASCOM.Utilities.Profile())
                         {
-                            P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);
+                            P.DeviceType = deviceType;
                             P.Register(progid, chooserName);
-                            //try										// In case Helper becomes native .NET
-                            //{
-                            //    Marshal.ReleaseComObject(P);
-                            //}
-                            //catch (Exception) { }
                         }
                     }
                     catch (Exception ex)
@@ -419,9 +464,6 @@ namespace ASCOM.Simulator
                     }
                     finally
                     {
-                        if (key != null) key.Close();
-                        if (key2 != null) key2.Close();
-                        if (key3 != null) key3.Close();
                     }
                     if (bFail) break;
                 }

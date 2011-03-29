@@ -34,15 +34,24 @@ namespace ASCOM.Simulator
 	// _Rotator from being created and used as the [default] interface
 	//
     [Guid("347B5004-3662-42C0-96B8-3F8F6F0467D2")]
+    [ServedClassName("Rotator Simulator .NET")]
+    [ProgId("ASCOM.Simulator.Rotator")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)] 
 	public class Rotator : ReferenceCountedObjectBase, IRotatorV2
 	{
+        /// <summary>
+        /// Driver ID - ClassID and used in the profile
+        /// </summary>
+        private string driverID = "ASCOM.Simulator.Rotator";
 
 		//
 		// Constructor - Must be public for COM registration!
 		//
-		public Rotator() { }
+		public Rotator()
+        {
+            driverID = Marshal.GenerateProgIdForType(this.GetType());
+        }
 
 		//
 		// PUBLIC COM INTERFACE IRotator IMPLEMENTATION
@@ -84,18 +93,9 @@ namespace ASCOM.Simulator
         {
             // no supported actions, return empty array
             get { ArrayList sa = new ArrayList(); return sa; }
-            //get { throw new MethodNotImplementedException("SupportedActions"); }
         }
 
-        
-        
-        
-        
-        
         #endregion
-
-
-        
         
         #region IRotator Members
         public bool Connected

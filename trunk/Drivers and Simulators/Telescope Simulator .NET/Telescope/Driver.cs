@@ -36,7 +36,10 @@ namespace ASCOM.Simulator
     // _Telescope from being created and used as the [default] interface
     //
 
-    [Guid("86931eac-1f52-4918-b6aa-7e9b0ff361bd"), ClassInterface(ClassInterfaceType.None)]
+    [Guid("86931eac-1f52-4918-b6aa-7e9b0ff361bd")]
+    [ServedClassName("Telescope Simulator for .NET")]
+    [ProgId("ASCOM.Simulator.Telescope")]
+    [ClassInterface(ClassInterfaceType.None)]
     public class Telescope : ReferenceCountedObjectBase, ITelescopeV3
     {
         //
@@ -46,6 +49,7 @@ namespace ASCOM.Simulator
         private TrackingRates m_TrackingRates;
         private TrackingRatesSimple m_TrackingRatesSimple;
         private ASCOM.Utilities.Util m_Util;
+        private string driverID;
 
         const string SlewToHA = "SlewToHA"; const string SlewToHAUpper = "SLEWTOHA";
         const string AssemblyVersionNumber = "AssemblyVersionNumber"; const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
@@ -57,6 +61,7 @@ namespace ASCOM.Simulator
         {
             try
             {
+                driverID = Marshal.GenerateProgIdForType(this.GetType());
                 m_AxisRates = new AxisRates[3];
                 m_AxisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
                 m_AxisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);

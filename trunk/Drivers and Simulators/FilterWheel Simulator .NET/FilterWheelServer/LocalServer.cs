@@ -22,6 +22,9 @@ using Microsoft.Win32;
 using System.Text;
 using System.Threading;
 using Helper = ASCOM.Utilities;
+using System.Security.Principal;
+using System.Diagnostics;
+using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
@@ -226,20 +229,17 @@ namespace ASCOM.Simulator
             TL.Enabled = true;
             TL.LogMessage("Assembly", assy);
             TL.LogMessage("AssemblyPath", assyPath);
-			//int i = assyPath.LastIndexOf(@"\FilterWheelServer\bin\");						// Look for us running in IDE
-			//if (i == -1) i = assyPath.LastIndexOf('\\');
-			//assyPath = assyPath.Remove(i, assyPath.Length - i) + "\\FilterWheelSimServedClasses";
 
 			//[TPL] Always look for served classes in the ServedClasses folder in the same folder as the executable.
-			string servedClassesPath = Path.Combine(assyPath, "ServedClasses");
-            TL.LogMessage("ServedClassesPath",servedClassesPath);
-			DirectoryInfo d = new DirectoryInfo(servedClassesPath);
+			//string servedClassesPath = Path.Combine(assyPath, "ServedClasses");
+            //TL.LogMessage("ServedClassesPath",servedClassesPath);
+            //DirectoryInfo d = new DirectoryInfo(servedClassesPath);
+			DirectoryInfo d = new DirectoryInfo(assyPath);
             foreach (FileInfo fi in d.GetFiles("*.dll"))
             {
                 string aPath = fi.FullName;
-                string fqClassName = fi.Name.Replace(fi.Extension, "");						// COM class FQN
+
                 TL.LogMessage("FilePath", aPath);
-                TL.LogMessage("ClassName", fqClassName);
                 //
                 // First try to load the assembly and get the types for
                 // the class and the class facctory. If this doesn't work ????
@@ -247,14 +247,25 @@ namespace ASCOM.Simulator
 				try
 				{
 					Assembly so = Assembly.LoadFrom(aPath);
-					object[] attributes = so.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
-					if (attributes.Length > 0)
-					{
-						m_ComObjectTypes.Add(so.GetType(fqClassName, true));
-						m_ComObjectAssys.Add(so);
-                        TL.LogMessage("  AddedOK", so.FullName.ToString());
+                    //PWGS Get the types in the assembly
+                    Type[] types = so.GetTypes();
+                    foreach (Type type in types)
+                    {
+                        // PWGS Now checks the type rather than the assembly
+                        // Check to see if the type has the ServedClassName attribute, only use it if it does.
+                        MemberInfo info = type;
+
+                        object[] attrbutes = info.GetCustomAttributes(typeof(ServedClassNameAttribute), false);
+                        if (attrbutes.Length > 0)
+                        {
+                            //MessageBox.Show("Adding Type: " + type.Name + " " + type.FullName);
+                            //s_ComObjectTypes.Add(so.GetType(fqClassName, true)); //PWGS - Now too complicated!
+                            m_ComObjectTypes.Add(type); //PWGS - much simpler
+                            m_ComObjectAssys.Add(so);
+                        }
+
                     }
-				}
+                }
 				catch (Exception e)
 				{
 					MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
@@ -273,6 +284,42 @@ namespace ASCOM.Simulator
 
         #region COM Registration and Unregistration
         //
+        // Test if running elevated
+        //
+        private static bool IsAdministrator
+        {
+            get
+            {
+                WindowsIdentity i = WindowsIdentity.GetCurrent();
+                WindowsPrincipal p = new WindowsPrincipal(i);
+                return p.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
+
+        //
+        // Elevate by re-running ourselves with elevation dialog
+        //
+        private static void ElevateSelf(string arg)
+        {
+            ProcessStartInfo si = new ProcessStartInfo();
+            si.Arguments = arg;
+            si.WorkingDirectory = Environment.CurrentDirectory;
+            si.FileName = Application.ExecutablePath;
+            si.Verb = "runas";
+            try { Process p = Process.Start(si); }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("The Atik was not " + (arg == "/register" ? "registered" : "unregistered") +
+                    " because you did not allow it.", "Atik", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Atik", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            return;
+        }
+
+        //
         // Do everything to register this for COM. Never use REGASM on
         // this exe assembly! It would create InProcServer32 entries 
         // which would prevent proper activation!
@@ -285,9 +332,17 @@ namespace ASCOM.Simulator
         //
         private static void RegisterObjects()
         {
-            RegistryKey key = null;
-            RegistryKey key2 = null;
-            RegistryKey key3 = null;
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/register");
+                return;
+            }
+            //
+            // If reached here, we're running elevated
+            //
+            //RegistryKey key = null;
+            //RegistryKey key2 = null;
+            //RegistryKey key3 = null;
 
             Assembly assy = Assembly.GetExecutingAssembly();
             Attribute attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyTitleAttribute));
@@ -303,20 +358,20 @@ namespace ASCOM.Simulator
                 //
                 // HKCR\APPID\appid
                 //
-                key = Registry.ClassesRoot.CreateSubKey("APPID\\" + m_sAppId);
-                key.SetValue(null, assyDescription);
-                key.SetValue("AppID", m_sAppId);
-                key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
-                key.Close();
-                key = null;
-                //
-                // HKCR\APPID\exename.ext
-                //
-                key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
-                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1));
-                key.SetValue("AppID", m_sAppId);
-                key.Close();
-                key = null;
+                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" + m_sAppId))
+                {
+                    key.SetValue(null, assyDescription);
+                    key.SetValue("AppID", m_sAppId);
+                    key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                }
+                    //
+                    // HKCR\APPID\exename.ext
+                    //
+                using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("APPID\\" +
+                            Application.ExecutablePath.Substring(Application.ExecutablePath.LastIndexOf('\\') + 1)))
+                {
+                    key.SetValue("AppID", m_sAppId);
+                }
             }
             catch (Exception ex)
             {
@@ -326,7 +381,6 @@ namespace ASCOM.Simulator
             }
             finally
             {
-                if (key != null) key.Close();
             }
 
             //
@@ -345,59 +399,52 @@ namespace ASCOM.Simulator
                     //
                     string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                     string progid = Marshal.GenerateProgIdForType(type);
+
+                    //PWGS Generate device type from the Class name
+                    string deviceType = type.Name;
+
                     TL.LogMessage("Register", progid + " " + clsid);
-                    key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid);
-                    key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
-                    key.SetValue("AppId", m_sAppId);
-                    key2 = key.CreateSubKey("Implemented Categories");
-                    key3 = key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
-                    key3.Close();
-                    key3 = null;
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("ProgId");
-                    key2.SetValue(null, progid);
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("Programmable");
-                    key2.Close();
-                    key2 = null;
-                    key2 = key.CreateSubKey("LocalServer32");
-                    key2.SetValue(null, Application.ExecutablePath);
-                    key2.Close();
-                    key2 = null;
-                    key.Close();
-                    key = null;
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid))
+                    {
+                        key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
+                        key.SetValue("AppId", m_sAppId);
+                        using (RegistryKey key2 = key.CreateSubKey("Implemented Categories"))
+                        {
+                            key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
+                        }
+                        using (RegistryKey key2 = key.CreateSubKey("ProgId"))
+                        {
+                            key2.SetValue(null, progid);
+                        }
+                        key.CreateSubKey("Programmable");
+                        using (RegistryKey key2 = key.CreateSubKey("LocalServer32"))
+                        {
+                            key2.SetValue(null, Application.ExecutablePath);
+                        }
+                    }
                     //
                     // HKCR\CLSID\progid
                     //
-                    key = Registry.ClassesRoot.CreateSubKey(progid);
-                    key.SetValue(null, assyTitle);
-                    key2 = key.CreateSubKey("CLSID");
-                    key2.SetValue(null, clsid);
-                    key2.Close();
-                    key2 = null;
-                    key.Close();
-                    key = null;
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progid))
+                    {
+                        key.SetValue(null, assyTitle);
+                        using (RegistryKey key2 = key.CreateSubKey("CLSID"))
+                        {
+                            key2.SetValue(null, clsid);
+                        }
+                    }
                     //
                     // ASCOM 
                     //
                     assy = type.Assembly;
-					attr = Attribute.GetCustomAttribute(assy, typeof(ServedClassNameAttribute));
-					string chooserName = ((ServedClassNameAttribute)attr).DisplayName;
-					using (var P = new Helper.Profile { DeviceType = progid.Substring(progid.LastIndexOf('.') + 1) })
-					{
-						P.Register(progid, chooserName);
-						try
-						{
-                            P.Dispose();
-							// In case Helper becomes native .NET
-							Marshal.ReleaseComObject(P);
-						}
-						catch (Exception)
-						{
-						}
-					}
+                    // Pull the display name from the ServedClassName attribute.
+                    attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute)); //PWGS Changed to search type for attribute rather than assembly
+                    string chooserName = ((ServedClassNameAttribute)attr).DisplayName ?? "MultiServer";
+                    using (Profile P = new Profile())
+                    {
+                        P.DeviceType = deviceType;
+                        P.Register(progid, chooserName);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -407,9 +454,6 @@ namespace ASCOM.Simulator
                 }
                 finally
                 {
-                    if (key != null) key.Close();
-                    if (key2 != null) key2.Close();
-                    if (key3 != null) key3.Close();
                 }
                 if (bFail) break;
             }
@@ -426,6 +470,11 @@ namespace ASCOM.Simulator
         //
         private static void UnregisterObjects()
         {
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/unregister");
+                return;
+            }
             //
             // Local server's DCOM/AppID information
             //
@@ -440,6 +489,7 @@ namespace ASCOM.Simulator
             {
                 string clsid = Marshal.GenerateGuidForType(type).ToString("B");
                 string progid = Marshal.GenerateProgIdForType(type);
+                string devicetype = type.Name;
                 //
                 // Best efforts
                 //
@@ -462,15 +512,11 @@ namespace ASCOM.Simulator
                     //
                     // ASCOM
                     //
-                    Helper.Profile P = new Helper.Profile();
-                    P.DeviceType = progid.Substring(progid.LastIndexOf('.') + 1);	//  Requires Helper 5.0.3 or later
-                    P.Unregister(progid);
-                    try										// In case Helper becomes native .NET
+                    using (Profile P = new Profile())
                     {
-                        Marshal.ReleaseComObject(P);
+                        P.DeviceType = devicetype;
+                        P.Unregister(progid);
                     }
-                    catch (Exception) { }
-                    P = null;
                 }
                 catch (Exception) { }
             }
@@ -578,6 +624,7 @@ namespace ASCOM.Simulator
         [STAThread]
         static void Main(string[] args)
         {
+            //MessageBox.Show("wait");
             if (!LoadComObjectAssemblies()) return;						// Load served COM class assemblies, get types
 
             if (!ProcessArguments(args)) return;						// Register/Unregister
