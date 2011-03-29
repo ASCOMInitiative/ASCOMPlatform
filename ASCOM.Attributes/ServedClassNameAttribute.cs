@@ -6,13 +6,13 @@ using System.Text;
 namespace ASCOM
 {
 	/// <summary>
-	/// An attribute that confers a 'friendly name' on an assembly and marks it as loadable by LocalServer.
+	/// An attribute that confers a 'friendly name' on a class and marks it as loadable by LocalServer.
 	/// The 'friendly name' is used by the ASCOM LocalServer to register the class with the ASCOM Chooser.
 	/// The 'friendly name' is what gets displayed to the user in the driver selection combo box.
 	/// This attribute is also used by the LocalServer to filter the assemblies that it will
-	/// attempt to load at runtime. LocalServer will only load assemblies bearing this attribute.
+	/// attempt to load at runtime. LocalServer will only load classes bearing this attribute.
 	/// </summary>
-	[global::System.AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
+	[global::System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 	public sealed class ServedClassNameAttribute : Attribute
 	{
 		/// <summary>

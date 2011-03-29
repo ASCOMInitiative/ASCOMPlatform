@@ -18,15 +18,18 @@
 ' 06-Jun-2009	mpc	1.0.0	Initial edit, from FilterWheel template
 ' --------------------------------------------------------------------------------
 '
-' Your driver's ID is ASCOM.FilterWheelSim.FilterWheel
+' Your driver's ID is ASCOM.FilterWheelSim.FilterWheel  ???
 '
 ' The Guid attribute sets the CLSID for ASCOM.FilterWheelSim.FilterWheel
 ' The ClassInterface/None addribute prevents an empty interface called
 ' _FilterWheel from being created and used as the [default] interface
 '
-<Assembly: ServedClassName("Filter Wheel Simulator [.Net]")>     '[TPL] Mark this assembly as something that LocalServer should be interested in.
 
-<Guid("F9043C88-F6F2-101A-A3C9-08002B2F49FC"), ComVisible(True), ClassInterface(ClassInterfaceType.None)> Public Class FilterWheel
+<Guid("F9043C88-F6F2-101A-A3C9-08002B2F49FC")>
+<ServedClassName("Filter Wheel Simulator [.Net]")>
+<ProgId("ASCOM.Simulator.FilterWheel")>
+<ComVisible(True), ClassInterface(ClassInterfaceType.None)>
+Public Class FilterWheel
     '	==========
     Inherits ReferenceCountedObjectBase
     Implements IFilterWheelV2 ' Early-bind interface implemented by this driver
@@ -35,10 +38,13 @@
     Private Const SCODE_NOT_CONNECTED As Integer = vbObjectError + &H402
     Private Const MSG_NOT_CONNECTED As String = "The filter wheel is not connected"
 
+    Private driverId As String = "ASCOM.Simulator.FilterWheel"
+
     '
     ' Constructor - Must be public for COM registration!
     '
     Public Sub New()
+        driverId = Marshal.GenerateProgIdForType(Me.GetType())
 
         ' Plug in the hardware
 
