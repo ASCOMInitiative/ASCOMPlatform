@@ -10,6 +10,11 @@ namespace ASCOM
 	/// exception as well as any derived exceptions. Note that the Message property is 
 	/// a member of ApplicationException, the base class of DriverException. The HResult
 	/// property of ApplicationException is simply renamed to Number.
+    /// <para>This exception should only be thrown if there is no other more appropriate exception already defined, e.g. PropertyNotImplemented,
+    /// InvalidOperationException, InvalidValueException, NotConnectedException etc. These specific exceptions should be thrown where appropriate
+    /// rather than using the more generic DriverException. Conform will not accept DriverExceptions where more appropriate exceptions 
+    /// are already defined.</para>
+    /// <para>As good programming practice, the Message property should not be empty, so that users understand why the exception was thrown.</para>
 	/// </summary>
     [Serializable]
 	public class DriverException : System.InvalidOperationException
