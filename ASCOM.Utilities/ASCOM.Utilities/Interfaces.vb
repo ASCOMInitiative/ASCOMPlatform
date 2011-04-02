@@ -1332,6 +1332,13 @@ Namespace Interfaces
         ''' <para>This function exists in the COM component but is not documented in the help file.</para>
         ''' </remarks>
     <DispId(22)> Function ReceiveTerminatedBinary(ByVal TerminatorBytes() As Byte) As Byte()
+        ''' <summary>
+        ''' Gets or sets the state of the RTS line
+        ''' </summary>
+        ''' <value>The state of the RTS line, default is enabled</value>
+        ''' <returns>Boolean true/false indicating enabled/disabled</returns>
+        ''' <remarks></remarks>
+        <DispId(23)> Property RTSEnable() As Boolean
     End Interface  'Interface to Utilities.Serial
 
 #End Region
