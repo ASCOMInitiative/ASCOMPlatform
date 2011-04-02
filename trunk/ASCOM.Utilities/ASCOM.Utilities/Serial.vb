@@ -168,6 +168,7 @@ Public Class Serial
     Private m_Connected As Boolean
     Private m_DataBits As Integer
     Private m_DTREnable As Boolean
+    Private m_RTSEnable As Boolean
     Private m_Handshake As SerialHandshake
     Private m_Parity As SerialParity
     Private m_StopBits As SerialStopBits
@@ -220,6 +221,7 @@ Public Class Serial
         m_Speed = SERIALPORT_DEFAULT_SPEED
         m_DataBits = SERIALPORT_DEFAULT_DATABITS
         m_DTREnable = SERIALPORT_DEFAULT_DTRENABLE
+        m_RTSEnable = True
         m_Handshake = SERIALPORT_DEFAULT_HANDSHAKE
         m_Parity = SERIALPORT_DEFAULT_PARITY
         m_StopBits = SERIALPORT_DEFAULT_STOPBITS
@@ -328,6 +330,22 @@ Public Class Serial
     End Property
 
     ''' <summary>
+    ''' Gets or sets the state of the RTS line
+    ''' </summary>
+    ''' <value>The state of the RTS line, default is enabled</value>
+    ''' <returns>Boolean true/false indicating enabled/disabled</returns>
+    ''' <remarks></remarks>
+    Public Property RTSEnable() As Boolean Implements ISerial.RTSEnable
+        Get
+            Return m_RTSEnable
+        End Get
+        Set(ByVal Enabled As Boolean)
+            m_RTSEnable = Enabled
+            Logger.LogMessage("RTSEnable", "Set to: " & Enabled.ToString)
+        End Set
+    End Property
+
+    ''' <summary>
     ''' Gets or sets the type of serial handshake used on the serial link
     ''' </summary>
     ''' <value>The type of flow control handshake used on the serial line, default is none</value>
@@ -397,6 +415,7 @@ Public Class Serial
                                       " Baud rate: " & m_Speed.ToString & _
                                       " Timeout: " & m_ReceiveTimeout.ToString & _
                                       " DTR: " & m_DTREnable.ToString & _
+                                      " RTS: " & m_RTSEnable.ToString & _
                                       " Handshake: " & m_Handshake.ToString & _
                                       " Encoding: " & SERIALPORT_ENCODING.ToString)
                     Logger.LogMessage("Set Connected", "Transmission format - Bits: " & m_DataBits & _
@@ -444,6 +463,7 @@ Public Class Serial
 
                     'Set handshaking and control signals
                     m_Port.DtrEnable = m_DTREnable
+                    m_Port.RtsEnable = m_RTSEnable
                     m_Port.Handshake = CType(m_Handshake, System.IO.Ports.Handshake)
 
                     'Set transmission format
