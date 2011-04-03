@@ -52,6 +52,13 @@
  	 		 		<para>Diagnostics now includes a comprehensive test suite and detailed report providing greater confidence that the 
  	 		 		Platform is properly installed.</para>
  	 		 	</listItem>
+ 	 		 	<listItem>
+ 	 		 		<para>Diagnostics checks for correct COM registration of Platform 6 helper components and restores proper function if 
+ 	 		 		drivers or applications distribute and register earlier versions of these components.</para>
+ 	 		 	</listItem>
+				<listItem>
+ 	 		 		<para>The serial component is now compatible with devices that require the RTS line to be enabled.</para>
+ 	 		 	</listItem>
 
 			</list>
 		</para>

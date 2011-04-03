@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOM.Simulator</RootNamespace>
-    <AssemblyName>SafetyMonitorSimulatorDriver</AssemblyName>
+    <AssemblyName>ASCOM.Simulator.SafetyMonitor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

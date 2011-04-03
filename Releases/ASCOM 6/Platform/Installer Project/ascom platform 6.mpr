@@ -943,6 +943,9 @@ B
 
 
 
+
+
+
 $
 NEEDSUPGRADE
 WIZARD
@@ -955,23 +958,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Beta 2
+ASCOM Platform 6 Beta 3
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0.0.0
 English
-ASCOM Platform 6 Beta 2
+ASCOM Platform 6 Beta 3
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{9DA89D03-AFF9-4A80-A731-50EB9BD2D0F4}
+{C0BE0B06-208E-4116-9C41-1EDACB8C4D2B}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Beta2
+ASCOMPlatform6Beta3
 TRUE
 FALSE
 
