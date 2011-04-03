@@ -491,28 +491,28 @@ else
     Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Tools
     Comment: Platform 6 Simulators
     Comment: Camera simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
     Comment: FilterWheel simulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
     Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ServedClasses
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
     Comment: Focuser simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
+    Install Files c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
     Comment: SafetyMonitor simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.dll to $COMMONFILES$\ASCOM\SafetyMonitor
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\SafetyMonitorSimulatorDriver.pdb to $COMMONFILES$\ASCOM\SafetyMonitor
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
     Comment: Switch simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
+    Install Files c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
     Comment: N Way Switch simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.Simulator.NWaySwitchDriver.dll to $COMMONFILES$\ASCOM\Switch
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.Simulator.NWaySwitchDriver.pdb to $COMMONFILES$\ASCOM\Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
     Comment: Rheostat simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.Simulator.RheostatSwitch.dll to $COMMONFILES$\ASCOM\Switch
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.Simulator.RheostatSwitch.pdb to $COMMONFILES$\ASCOM\Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
     Comment: Telescope simulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
@@ -524,8 +524,8 @@ else
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     Comment: Dome simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
+    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
     [END REGION]
     [DEFINE REGION: Platform 6 Content]
     Comment: Platform 6 Documents
@@ -568,9 +568,9 @@ else
     Comment: Create registry keys
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\PlatformVersion, 6.0 (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Chooser\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Camera Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Chooser\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
@@ -583,18 +583,8 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Rotator Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\SafetyMonitor Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Switch Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
@@ -624,6 +614,7 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
@@ -654,8 +645,20 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\WScript.Exe, True
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\Astroart.Exe, True
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Rotator Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\SafetyMonitor Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Switch Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
     [END REGION]
     [DEFINE REGION: Additional clean-up when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
@@ -735,13 +738,13 @@ else
         Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register in-process simulator DLL files with Codebase option
-        Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.NWaySwitchDriver.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.RheostatSwitch.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch\ASCOM.Simulator.Switch.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch\ASCOM.NWaySimulator.Switch.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
         Comment: Register these LocalServer drivers using the -register option
         Set Variable PROGRESS to 40
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT)
@@ -767,13 +770,13 @@ else
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
           Set Variable PROGRESS to 50
           Comment: Register simulators
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\SafetyMonitorSimulatorDriver.dll" /codebase (WAIT, get result into variable RC6)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch.dll" /codebase (WAIT, get result into variable RC7)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.NWaySwitchDriver.dll" /codebase (WAIT, get result into variable RC8)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.RheostatSwitch.dll" /codebase (WAIT, get result into variable RC9)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC10)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC6)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch\ASCOM.Simulator.Switch.dll" /codebase (WAIT, get result into variable RC7)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch\ASCOM.NWaySimulator.Switch.dll" /codebase (WAIT, get result into variable RC8)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll" /codebase (WAIT, get result into variable RC9)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC10)
           Set Variable PROGRESS to 60
           if Variable RC1 not Equals 0
             MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$

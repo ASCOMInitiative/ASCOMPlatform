@@ -6,7 +6,7 @@ Public Class SerialForm
         SerPort.Dispose()
         SerPort = Nothing
         For Each Port As String In Ports
-            lstSerialASCOM.Items.Add(Port)
+            lstSerialASCOM.Items.Add(IIf(String.IsNullOrEmpty(Port), "Bad value - Null or empty COM port name!", Port))
         Next
 
     End Sub

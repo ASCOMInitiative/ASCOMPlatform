@@ -183,8 +183,8 @@ Public Class Serial
     Private m_SerTraceFile As String = SERIAL_DEFAULT_FILENAME 'Set the default trace file name
 
     Private SerialProfile As registryAccess = Nothing
-    Private ForcedCOMPorts As Generic.List(Of String)
-    Private IgnoredCOMPorts As Generic.List(Of String)
+    Private ForcedCOMPorts As Generic.SortedList(Of String, String)
+    Private IgnoredCOMPorts As Generic.SortedList(Of String, String)
 
     Private SerSemaphore As System.Threading.Semaphore
     Private SerPortInUse As Boolean = False
@@ -203,6 +203,7 @@ Public Class Serial
     Private Const SERIALPORT_DEFAULT_SPEED As SerialSpeed = SerialSpeed.ps9600
     Private Const SERIALPORT_DEFAULT_DATABITS As Integer = 8
     Private Const SERIALPORT_DEFAULT_DTRENABLE As Boolean = True
+    Private Const SERIALPORT_DEFAULT_RTSENABLE As Boolean = False
     Private Const SERIALPORT_DEFAULT_HANDSHAKE As SerialHandshake = SerialHandshake.None
     Private Const SERIALPORT_DEFAULT_PARITY As SerialParity = SerialParity.None
     Private Const SERIALPORT_DEFAULT_STOPBITS As SerialStopBits = SerialStopBits.One
@@ -221,7 +222,7 @@ Public Class Serial
         m_Speed = SERIALPORT_DEFAULT_SPEED
         m_DataBits = SERIALPORT_DEFAULT_DATABITS
         m_DTREnable = SERIALPORT_DEFAULT_DTRENABLE
-        m_RTSEnable = True
+        m_RTSEnable = SERIALPORT_DEFAULT_RTSENABLE
         m_Handshake = SERIALPORT_DEFAULT_HANDSHAKE
         m_Parity = SERIALPORT_DEFAULT_PARITY
         m_StopBits = SERIALPORT_DEFAULT_STOPBITS
@@ -330,11 +331,12 @@ Public Class Serial
     End Property
 
     ''' <summary>
-    ''' Gets or sets the state of the RTS line
+    ''' Gets or sets use of the RTS handshake control line
     ''' </summary>
-    ''' <value>The state of the RTS line, default is enabled</value>
-    ''' <returns>Boolean true/false indicating enabled/disabled</returns>
-    ''' <remarks></remarks>
+    ''' <value>The state of RTS line use, default is disabled (false)</value>
+    ''' <returns>Boolean true/false indicating RTS line use enabled/disabled</returns>
+    ''' <remarks>By default the serial component will not drive the RTS line. If RTSEnable is true, the RTS line will be raised before
+    ''' characters are sent. Please also see the associated <see cref="Handshake"/> property.</remarks>
     Public Property RTSEnable() As Boolean Implements ISerial.RTSEnable
         Get
             Return m_RTSEnable
@@ -350,7 +352,7 @@ Public Class Serial
     ''' </summary>
     ''' <value>The type of flow control handshake used on the serial line, default is none</value>
     ''' <returns>One of the SerialHandshake enumeration values</returns>
-    ''' <remarks></remarks>
+    ''' <remarks>Use of the RTS line can additionally be controlled by the <see cref="RTSEnable"/> property.</remarks>
     Public Property Handshake() As SerialHandshake Implements ISerial.Handshake
         Get
             Return m_Handshake
@@ -1420,10 +1422,13 @@ Public Class Serial
     ''' </summary>
     ''' <value>String array of available serial ports</value>
     ''' <returns>A string array of available serial ports</returns>
-    ''' <remarks><b>Update in platform 5.5.2.</b> This call uses the .NET Framework to retrieve available 
+    ''' <remarks><b>Update in platform 6.0.0.0</b> This call uses the .NET Framework to retrieve available 
     ''' COM ports and this has been found not to return names of some USB serial adapters. Additional 
-    ''' code has now been added to attempt to open all COM ports up to COM32. Any ports that can be 
-    ''' successfully opened are now returned alongside the ports returned by the .NET call.</remarks>
+    ''' code has been added to attempt to open all COM ports up to COM32. Any ports that can be 
+    ''' successfully opened are now returned alongside the ports returned by the .NET call.
+    ''' <para>If this new approach still does not detect a COM port it can be forced to appear in the list by adding its name
+    ''' as a string entry in the ForceCOMPorts key of the ASCOM Profile. In the event that this scanning causes issues, a COM port can be 
+    ''' omitted from the scan by adding its name as a string entry in the IgnoreCOMPorts key of the ASCOM Profile.</para></remarks>
     Public ReadOnly Property AvailableCOMPorts() As String() Implements ISerial.AvailableComPorts
         'Returns a list of all available COM ports sorted into ascending COM port number order
         Get
@@ -1433,18 +1438,16 @@ Public Class Serial
 
             Try
                 'Get the current lists of forced and ignored COM ports
-                ForcedCOMPorts = New Generic.List(Of String)(SerialProfile.GetProfile("", SERIAL_FORCED_COMPORTS_VARNAME).Split(CChar(", ")))
-                If (ForcedCOMPorts.Count = 1) And String.IsNullOrEmpty(ForcedCOMPorts(0)) Then ForcedCOMPorts.Clear()
-                For i As Integer = 0 To ForcedCOMPorts.Count - 1
-                    ForcedCOMPorts(i) = Trim(ForcedCOMPorts(i))
-                    Logger.LogMessage("AvailableCOMPorts", "Forcing COM port " & ForcedCOMPorts(i) & " to appear")
+                ForcedCOMPorts = SerialProfile.EnumProfile(SERIAL_FORCED_COMPORTS_VARNAME)
+                Try : ForcedCOMPorts.Remove("") : Catch : End Try 'Remove the default value
+                For Each kvp As Generic.KeyValuePair(Of String, String) In ForcedCOMPorts
+                    Logger.LogMessage("AvailableCOMPorts", "Forcing COM port " & kvp.Key & " " & kvp.Value & " to appear")
                 Next
 
-                IgnoredCOMPorts = New Generic.List(Of String)(SerialProfile.GetProfile("", SERIAL_IGNORED_COMPORTS_VARNAME).Split(CChar(",")))
-                If (IgnoredCOMPorts.Count = 1) And String.IsNullOrEmpty(IgnoredCOMPorts(0)) Then IgnoredCOMPorts.Clear()
-                For i As Integer = 0 To IgnoredCOMPorts.Count - 1
-                    IgnoredCOMPorts(i) = Trim(IgnoredCOMPorts(i))
-                    Logger.LogMessage("AvailableCOMPorts", "Ignoring COM port " & IgnoredCOMPorts(i))
+                IgnoredCOMPorts = SerialProfile.EnumProfile(SERIAL_IGNORE_COMPORTS_VARNAME)
+                Try : IgnoredCOMPorts.Remove("") : Catch : End Try 'Remove the default value
+                For Each kvp As Generic.KeyValuePair(Of String, String) In IgnoredCOMPorts
+                    Logger.LogMessage("AvailableCOMPorts", "Ignoring COM port " & kvp.Key & " " & kvp.Value)
                 Next
             Catch ex As Exception
                 Logger.LogMessage("AvailableCOMPorts Profile", ex.ToString)
@@ -1456,16 +1459,16 @@ Public Class Serial
             If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Retrieved port names using SerialPort.GetPortNames")
 
             'Add any forced ports that aren't already in the list
-            For Each PortName As String In ForcedCOMPorts
-                If Not PortNames.Contains(PortName) Then
-                    PortNames.Add(PortName)
+            For Each PortName As Generic.KeyValuePair(Of String, String) In ForcedCOMPorts
+                If Not PortNames.Contains(Trim(PortName.Key)) Then
+                    PortNames.Add(Trim(PortName.Key))
                 End If
             Next
 
             'Add any ignored ports that aren't already in the list so that these are not scanned
-            For Each PortName As String In IgnoredCOMPorts
-                If Not PortNames.Contains(PortName) Then
-                    PortNames.Add(PortName)
+            For Each PortName As Generic.KeyValuePair(Of String, String) In IgnoredCOMPorts
+                If Not PortNames.Contains(Trim(PortName.Key)) Then
+                    PortNames.Add(Trim(PortName.Key))
                 End If
             Next
 
@@ -1486,8 +1489,8 @@ Public Class Serial
             End Try
 
             'Now remove the ports that are to be ignored and log the rest
-            For Each PortName As String In IgnoredCOMPorts
-                If PortNames.Contains(PortName) Then PortNames.Remove(PortName)
+            For Each PortName As Generic.KeyValuePair(Of String, String) In IgnoredCOMPorts
+                If PortNames.Contains(Trim(PortName.Key)) Then PortNames.Remove(Trim(PortName.Key))
             Next
 
             PortNames.Sort(myPortNameComparer) 'Use specialised comparer to get the sort order right

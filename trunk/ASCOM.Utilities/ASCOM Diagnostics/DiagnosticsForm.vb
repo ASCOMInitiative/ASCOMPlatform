@@ -6,18 +6,19 @@
 ' Added drive scan, reporting available space
 ' Version 1.0.2.0 - Released 15/10/09 Peter Simpson
 
+Imports ASCOM.Astrometry
+Imports ASCOM.DeviceInterface
 Imports ASCOM.Internal
 Imports ASCOM.Utilities.Exceptions
-Imports ASCOM.Astrometry
 Imports Microsoft.Win32
+Imports System
+Imports System.Globalization
 Imports System.IO
-Imports System.Runtime.InteropServices
 Imports System.Reflection
+Imports System.Runtime.InteropServices
 Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
-Imports System.Globalization
-Imports ASCOM.DeviceInterface
 
 Public Class DiagnosticsForm
 
@@ -44,6 +45,8 @@ Public Class DiagnosticsForm
     Private Const CSIDL_PROGRAM_FILESX86 As Integer = 42 '0x002a,
     Private Const CSIDL_WINDOWS As Integer = 36 ' 0x0024,
     Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
+    Private Const CSIDL_SYSTEM As Integer = 37 ' 0x0025,
+    Private Const CSIDL_SYSTEMX86 As Integer = 41 ' 0x0029,
 
     Private NMatches, NNonMatches, NExceptions As Integer
     Private ErrorList As New Generic.List(Of String)
@@ -338,14 +341,11 @@ Public Class DiagnosticsForm
 
                 ScanCOMRegistration() 'Report Com Registration
 
+                ScanForHelperHijacking()
+
                 'Scan files on 32 and 64bit systems
                 TL.LogMessage("Platform Files", "")
-                If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 32bit locations for files
-                    SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES_COMMONX86, False)
-                    ASCOMPath = PathShell.ToString & "\ASCOM\"
-                Else 'we are on a 32bit OS so look in the standard position
-                    ASCOMPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM\"
-                End If
+                ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
                 Call ScanPlatformFiles(ASCOMPath) : Action("")
 
                 ScanDeveloperFiles()
@@ -361,6 +361,9 @@ Public Class DiagnosticsForm
 
                 'Scan event log messages
                 ScanEventLog()
+
+                'Scan for ASCOM Applications
+                ScanApplications()
 
                 TL.BlankLine()
                 TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
@@ -416,6 +419,193 @@ Public Class DiagnosticsForm
         btnExit.Enabled = True ' Enable buttons during run
         btnCOM.Enabled = True
     End Sub
+
+    Private Enum ApplicationList
+        ACPApplication
+        ACPFiles
+        Alcyone
+        CCDWare
+        DiffractionLtd
+        FocusMax
+        GeminiControlCenter
+        MaximDL
+        Pinpoint
+        StarryNight
+        SWBisque
+        TheSkyX
+    End Enum
+
+    Private Sub ScanApplications()
+        Status("Scanning Applications")
+        TL.LogMessage("ScanApplications", "Starting scan")
+        For Each App As ApplicationList In System.Enum.GetValues(GetType(ApplicationList))
+            ScanApplication(App)
+        Next
+        TL.BlankLine()
+        TL.BlankLine()
+        Status("")
+        Action("")
+    End Sub
+
+    Private Sub ScanApplication(ByVal Application As ApplicationList)
+        Action(Application.ToString)
+        Select Case Application
+            Case ApplicationList.ACPApplication
+                GetApplicationViaAppid(Application, "acp.exe")
+            Case ApplicationList.ACPFiles
+                GetApplicationViaDirectory(Application, "ACP Obs Control")
+            Case ApplicationList.Alcyone
+                GetApplicationViaDirectory(Application, "Alcyone")
+            Case ApplicationList.CCDWare
+                GetApplicationViaDirectory(Application, "CCDWare")
+            Case ApplicationList.DiffractionLtd
+                GetApplicationViaDirectory(Application, "Diffraction Limited")
+            Case ApplicationList.FocusMax
+                GetApplicationViaDirectory(Application, "FocusMax")
+            Case ApplicationList.GeminiControlCenter
+                GetApplicationViaDirectory(Application, "Gemini Control Center")
+            Case ApplicationList.MaximDL
+                GetApplicationViaProgID(Application, "Maxim.Application")
+            Case ApplicationList.Pinpoint
+                GetApplicationViaDirectory(Application, "Pinpoint")
+            Case ApplicationList.StarryNight
+                GetApplicationViaSubDirectories(Application, "*Starry Night*")
+            Case ApplicationList.TheSkyX
+                GetApplicationViaProgID(Application, "TheSkyXAdaptor.TheSky")
+            Case ApplicationList.SWBisque
+                GetApplicationViaDirectory(Application, "Software Bisque")
+            Case Else
+                LogError("ScanApplication", "Unimplemented application test for: " & Application.ToString)
+        End Select
+    End Sub
+
+    Private Sub GetApplicationViaSubDirectories(ByVal Application As ApplicationList, ByVal AppDirectory As String)
+        Dim PathShell As New System.Text.StringBuilder(260), Directories As Generic.List(Of String)
+        If ApplicationBits() = Bitness.Bits64 Then
+            'Find the programfiles (x86) path
+            SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILESX86, False)
+        Else '32bits
+            SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES, False)
+        End If
+        Try
+            Directories = Directory.GetDirectories(PathShell.ToString, AppDirectory, IO.SearchOption.TopDirectoryOnly).ToList
+            For Each Dir As String In Directories
+                GetApplicationViaDirectory(Application, Path.GetFileName(Dir))
+            Next
+        Catch ex As DirectoryNotFoundException
+            TL.LogMessage("ScanApplication", "Application " & Application.ToString & " not installed in " & PathShell.ToString & "\" & AppDirectory)
+        Catch ex As Exception
+            LogError("GetApplicationViaSubDirectories", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub GetApplicationViaDirectory(ByVal Application As ApplicationList, ByVal AppDirectory As String)
+        Dim PathShell As New System.Text.StringBuilder(260), AppPath As String, Executables As Generic.List(Of String)
+        If ApplicationBits() = Bitness.Bits64 Then
+            'Find the programfiles (x86) path
+            SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILESX86, False)
+        Else '32bits
+            SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES, False)
+        End If
+        AppPath = PathShell.ToString & "\" & AppDirectory
+        Try
+            Executables = Directory.GetFiles(AppPath, "*.exe", IO.SearchOption.AllDirectories).ToList
+            Executables.AddRange(Directory.GetFiles(AppPath, "*.dll", IO.SearchOption.AllDirectories).ToList)
+            If Executables.Count = 0 Then 'No executables found
+                TL.LogMessage("ScanApplication", "Application " & Application.ToString & " not found in " & AppPath)
+            Else ' Some exectables were found
+                TL.LogMessage("ScanApplication", "Found " & Application.ToString)
+
+                For Each Executable As String In Executables
+                    FileDetails(Path.GetDirectoryName(Executable) & "\", Path.GetFileName(Executable))
+                Next
+            End If
+        Catch ex As DirectoryNotFoundException
+            TL.LogMessage("ScanApplication", "Application " & Application.ToString & " not installed in " & AppPath)
+        Catch ex As Exception
+            LogError("GetApplicationViaDirectory", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub GetApplicationViaProgID(ByVal Application As ApplicationList, ByVal ProgID As String)
+        Dim Reg As RegistryAccess, AppKey As RegistryKey, CLSIDString As String, FileName As String
+        Reg = New RegistryAccess
+
+        Try
+            AppKey = Reg.OpenSubKey(Registry.ClassesRoot, ProgID & "\CLSID", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+            CLSIDString = AppKey.GetValue("", "")
+            AppKey.Close()
+            If Not String.IsNullOrEmpty(CLSIDString) Then 'Got a GUID value so try and process it
+                AppKey = Reg.OpenSubKey(Registry.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                FileName = AppKey.GetValue("", "")
+                FileName = FileName.Trim(New Char() {""""}) 'TrimChars)
+                If Not String.IsNullOrEmpty(FileName) Then 'We have a file name so see if it exists
+
+                    If File.Exists(FileName) Then 'Get details
+                        TL.LogMessage("ScanApplication", "Found " & Application.ToString)
+                        FileDetails(Path.GetDirectoryName(FileName) & "\", Path.GetFileName(FileName))
+                    Else
+                        TL.LogMessage("ScanApplication", "Cannot find executable: " & FileName & " " & Application.ToString & " not found")
+                    End If
+
+                Else
+                    TL.LogMessage("ScanApplication", "CLSID entry found but this has no file name value " & Application.ToString & " not found")
+                End If
+            Else 'No valid value so assume not installed
+                TL.LogMessage("ScanApplication", "AppID entry found but this has no AppID value " & Application.ToString & " not found")
+            End If
+        Catch ex As ProfilePersistenceException 'Key does not exist
+            TL.LogMessage("ScanApplication", "Application " & Application.ToString & " not found")
+        End Try
+
+    End Sub
+
+
+    Private Sub GetApplicationViaAppid(ByVal Application As ApplicationList, ByVal Executable As String)
+        Dim Reg As RegistryAccess, AppKey As RegistryKey, CLSIDString As String, FileName As String
+        Reg = New RegistryAccess
+
+        AppKey = Registry.ClassesRoot.OpenSubKey("AppId\" & Executable, False)
+        If Not AppKey Is Nothing Then
+            CLSIDString = AppKey.GetValue("AppID", "")
+            AppKey.Close()
+            If Not String.IsNullOrEmpty(CLSIDString) Then 'Got a GUID value so try and process it
+                Try
+                    AppKey = Reg.OpenSubKey(Registry.ClassesRoot, "CLSID\" & CLSIDString & "\LocalServer32", False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                    FileName = AppKey.GetValue("", "")
+                    If Not String.IsNullOrEmpty(FileName) Then 'We have a file name so see if it exists
+                        If File.Exists(FileName) Then 'Get details
+                            TL.LogMessage("ScanApplication", "Found " & Application.ToString)
+                            FileDetails(Path.GetDirectoryName(FileName) & "\", Path.GetFileName(FileName))
+                        Else
+                            TL.LogMessage("ScanApplication", "Cannot find executable: " & FileName & " " & Application.ToString & " not found")
+                        End If
+
+                    Else
+                        TL.LogMessage("ScanApplication", "CLSID entry found but this has no file name value " & Application.ToString & " not found")
+                    End If
+                Catch ex As ProfilePersistenceException 'Key does not exist
+                    TL.LogMessage("ScanApplication", "Application " & Application.ToString & " not found")
+                End Try
+            Else 'No valid value so assume not installed
+                TL.LogMessage("ScanApplication", "AppID entry found but this has no AppID value " & Application.ToString & " not found")
+            End If
+        Else
+            TL.LogMessage("ScanApplication", "Application " & Application.ToString & " not found")
+        End If
+    End Sub
+
+    Private Function GetASCOMPath() As String
+        Dim PathShell As New System.Text.StringBuilder(260), ASCOMPath As String
+
+        If System.IntPtr.Size = 8 Then 'We are on a 64bit OS so look in the 32bit locations for files
+            SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_PROGRAM_FILES_COMMONX86, False)
+            ASCOMPath = PathShell.ToString & "\ASCOM\"
+        Else 'we are on a 32bit OS so look in the standard position
+            ASCOMPath = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM\"
+        End If
+        Return ASCOMPath
+    End Function
 
     Private Sub ScanDriverExceptions()
         ListDrivers(PLATFORM_VERSION_EXCEPTIONS, "ForcedPlatformVersion")
@@ -3725,35 +3915,7 @@ Public Class DiagnosticsForm
             GetCOMRegistration("ASCOM.Astrometry.NOVASCOM.VelocityVector")
             GetCOMRegistration("ASCOM.Astrometry.Transform.Transform")
 
-            'New Platform 6 Simulators 
-            'GetCOMRegistration("ASCOM.Simulator.Camera") 'If it exists
-            'GetCOMRegistration("ASCOM.Simulator.FilterWheel")
-            'GetCOMRegistration("ASCOM.Simulator.Focuser")
-            'GetCOMRegistration("ASCOM.Simulator.Rotator")
-            'GetCOMRegistration("ASCOM.Simulator.SafetyMonitor")
-            'GetCOMRegistration("ASCOM.Simulator.SetupDialogForm")
-            'GetCOMRegistration("ASCOM.Simulator.Switch")
-            'GetCOMRegistration("ASCOM.Simulator.Telescope")
-
-            'Original Platform 5 simulators if present
-            'GetCOMRegistration("ScopeSim.Telescope")
-            'GetCOMRegistration("FocusSim.Focuser")
-            'GetCOMRegistration("CCDSimulator.Camera")
-            'GetCOMRegistration("DomeSim.Dome")
-            'GetCOMRegistration("ASCOMDome.Dome")
-            'GetCOMRegistration("ASCOMDome.Rate")
-            'GetCOMRegistration("ASCOMDome.Telescope")
-            'GetCOMRegistration("POTH.Telescope")
-            'GetCOMRegistration("POTH.Dome")
-            'GetCOMRegistration("POTH.Focuser")
-            'GetCOMRegistration("Pipe.Telescope")
-            'GetCOMRegistration("Pipe.Dome")
-            'GetCOMRegistration("Pipe.Focuser")
-            'GetCOMRegistration("Hub.Telescope")
-            'GetCOMRegistration("Hub.Dome")
-            'GetCOMRegistration("Hub.Focuser")
-
-            'Get COm registration for all registered devices 
+            'Get COM registration for all registered devices 
             Dim PR As New Profile
             Dim DeviceTypes() As String, Devices As ArrayList
             DeviceTypes = PR.RegisteredDeviceTypes
@@ -3788,6 +3950,129 @@ Public Class DiagnosticsForm
         Catch ex As Exception
             LogException("ScanCOMRegistration", "Exception: " & ex.ToString)
         End Try
+    End Sub
+
+    Private Sub ScanForHelperHijacking()
+        'Scan files on 32 and 64bit systems
+        TL.LogMessage("HelperHijacking", "")
+        CheckCOMRegistration("DriverHelper.Chooser", "Helper.dll", Bitness.Bits32)
+        CheckCOMRegistration("DriverHelper.Profile", "Helper.dll", Bitness.Bits32)
+        CheckCOMRegistration("DriverHelper.Serial", "Helper.dll", Bitness.Bits32)
+        CheckCOMRegistration("DriverHelper.Timer", "Helper.dll", Bitness.Bits32)
+        CheckCOMRegistration("DriverHelper.Util", "Helper.dll", Bitness.Bits32)
+        CheckCOMRegistration("DriverHelper2.Util", "Helper2.dll", Bitness.Bits32)
+        TL.BlankLine()
+        TL.BlankLine()
+    End Sub
+
+    Private Sub CheckCOMRegistration(ByVal ProgID As String, ByVal COMFile As String, ByVal Bitness As Bitness)
+        Dim RKeyProgID, RKeyCLSIDValue, RKeyCLSID, RKeyInprocServer32 As RegistryKey, CLSID, InprocServer32, ASCOMPath As String
+        Dim RegAccess As New RegistryAccess
+        Dim PathShell As New System.Text.StringBuilder(260), RegSvr32Path As String
+        Dim P As Process, Info As ProcessStartInfo
+        Dim Result As MsgBoxResult
+
+        Try
+            RKeyProgID = Registry.ClassesRoot.OpenSubKey(ProgID)
+            If Not RKeyProgID Is Nothing Then ' Found ProgId
+                RKeyCLSIDValue = RKeyProgID.OpenSubKey("CLSID")
+                If Not RKeyCLSIDValue Is Nothing Then 'Found CLSID Key
+                    CLSID = RKeyCLSIDValue.GetValue("").ToString 'Get the CLSID
+
+                    Select Case (ApplicationBits())
+                        Case VersionCode.Bitness.Bits32 ' We are a 32bit application so look in the default registry position
+                            RKeyCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID, False)
+                        Case VersionCode.Bitness.Bits64 ' We are a 64bit application so look in the 32bit registry section
+                            Select Case Bitness
+                                Case VersionCode.Bitness.Bits32 ' Open the 32bit registry
+                                    RKeyCLSID = RegAccess.OpenSubKey(Registry.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                                Case VersionCode.Bitness.Bits64 'Open the 64bit registry
+                                    RKeyCLSID = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID, False)
+                                Case Else
+                                    RKeyCLSID = Nothing
+                                    Compare("HelperHijacking", "Requested Bitness", ApplicationBits.ToString, Bitness.Bits64.ToString)
+                            End Select
+                        Case Else
+                            Compare("HelperHijacking", "Requested Bitness", ApplicationBits.ToString, Bitness.Bits64.ToString)
+                            RKeyCLSID = Nothing
+                    End Select
+                    If Not RKeyCLSID Is Nothing Then ' CLSID value does exist
+                        RKeyInprocServer32 = RKeyCLSID.OpenSubKey("InprocServer32", False)
+                        If Not RKeyInprocServer32 Is Nothing Then
+                            InprocServer32 = RKeyInprocServer32.GetValue("", False)
+                            ASCOMPath = GetASCOMPath() & COMFile
+                            If ASCOMPath <> InprocServer32 Then ' We have a hijacked COM registration so offer to re-register the correct file
+
+                                LogEvent("Diagnostics:HelperHijacking", "Hijacked COM Setting for: " & ProgID & ", Actual Path: " & InprocServer32 & ", Expected Path: " & ASCOMPath, EventLogEntryType.Error, EventLogErrors.DiagnosticsHijackedCOMRegistration, "")
+                                TL.LogMessage("HelperHijacking", "ISSUE, " & ProgID & " has been hijacked")
+                                TL.LogMessage("HelperHijacking", "  Actual Path: " & InprocServer32 & ", Expected Path: " & ASCOMPath)
+                                Result = MsgBox("The COM component """ & ProgID & """ is not properly registered. Would you like to fix this? (Strongly recommend Yes!)", MsgBoxStyle.YesNo Or MsgBoxStyle.Critical, "COM Registration Issue Detected")
+
+                                If Result = MsgBoxResult.Yes Then
+                                    TL.LogMessage("HelperHijacking", "  Fixing COM Registration")
+                                    If OSBits() = VersionCode.Bitness.Bits64 Then ' We are running on a 64bit OS
+                                        Select Case Bitness
+                                            Case VersionCode.Bitness.Bits32 ' Run the 32bit Regedit
+                                                SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEMX86, False) ' Get the 32bit system directory
+                                            Case VersionCode.Bitness.Bits64 ' Run the 64bit Regedit
+                                                SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEM, False) ' Get the 64bit system directory
+                                        End Select
+                                    Else ' We are running on a 32bit OS
+                                        SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEM, False) ' Get the system directory
+                                    End If
+                                    RegSvr32Path = PathShell.ToString & "\RegSvr32.exe" 'Construct the full path to RegSvr32.exe
+                                    Info = New ProcessStartInfo
+                                    Info.FileName = RegSvr32Path 'Populate the ProcessStartInfo with the full path to RegSvr32.exe 
+                                    Info.Arguments = """" & ASCOMPath & """" ' And the start parameter specifying the file to COM register
+                                    TL.LogMessage("HelperHijacking", "  RegSvr32 Path: """ & RegSvr32Path & """, COM Path: """ & ASCOMPath & """")
+
+                                    P = New Process ' Create the process
+                                    P.StartInfo = Info ' Set the start inof
+                                    P.Start() 'Start the process and wait for it to finish
+                                    TL.LogMessage("HelperHijacking", "  Started registration")
+                                    P.WaitForExit()
+                                    TL.LogMessage("HelperHijacking", "  Finished registration")
+                                    P.Dispose()
+
+                                    'Reread the COM information to check whether it is now fixed
+                                    InprocServer32 = RKeyInprocServer32.GetValue("", False)
+                                    ASCOMPath = GetASCOMPath() & COMFile
+                                    If ASCOMPath <> InprocServer32 Then ' We have a hijacked COM registration so offer to re-register the correct file
+                                        MsgBox("Diagnostics was NOT able to fix the issue. Please report this on ASCOM-Talk", MsgBoxStyle.Exclamation, "Issue Remains")
+                                        LogError("HelperHijacking", "  Unable to fix " & ProgID & " registration")
+                                    Else
+                                        MsgBox("Diagnostics successfully FIXED the issue", MsgBoxStyle.Information, "Issue Fixed")
+                                        TL.LogMessage("HelperHijacking", "  Successfully fixed " & ProgID & " registration")
+                                        NMatches += 1
+                                    End If
+                                Else
+                                    TL.LogMessage("HelperHijacking", "  Not fixing COM registration, no action taken")
+                                End If
+                            Else ' Matches expected value so has not been hijacked
+                                TL.LogMessage("HelperHijacking", "OK, " & ProgID & " has not been hijacked")
+                            End If
+                        Else
+                            LogError("HelperHijacking", "Unable to find registrered CLSID\InprocServer32: " + CLSID & "InprocServer32")
+                        End If
+                    Else 'CLSID value dfoes not exist
+                        LogError("HelperHijacking", "Unable to find registered CLSID: " + CLSID)
+                    End If
+                Else 'CLSID is missing
+                    LogError("HelperHijacking", "Unable to find ProgID\CLSID: " + ProgID & "\CLSID")
+                End If
+            Else ' Cannot find ProgID so gve error message
+                LogError("HelperHijacking", "Unable to find registrered ProgID: " + ProgID)
+            End If
+        Catch ex As Exception
+            LogException("HelperHijacking", "Exception: " & ex.ToString)
+        End Try
+
+    End Sub
+
+    Private Sub LogError(ByVal Section As String, ByVal Message As String)
+        NNonMatches += 1
+        ErrorList.Add(Section & " - " & Message)
+        TL.LogMessage(Section, Message)
     End Sub
 
     Sub ScanGac()
@@ -4008,7 +4293,7 @@ Public Class DiagnosticsForm
                         LogException("FileDetails", "FileLoadException: " & ex.ToString)
                     End If
                 Catch ex As BadImageFormatException
-                    AssVer = "Not an assembly - Bad Image"
+                    AssVer = "Not an assembly"
                 Catch ex As Exception
                     LogException("FileDetails", "Exception: " & ex.ToString)
                     AssVer = "Not an assembly: " & ex.ToString
@@ -4421,7 +4706,7 @@ Public Class DiagnosticsForm
             If Force32 Then 'Ensure we always go to the 32bit registry portion even on a 64bit OS
                 RegKey = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
             Else
-                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode,False)
+                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False)
             End If
 
             TL.LogMessage(Name, RegKey.GetValue(DISPLAY_NAME, "##### Missing"))

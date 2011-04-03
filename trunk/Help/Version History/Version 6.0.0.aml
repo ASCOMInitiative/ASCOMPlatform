@@ -48,7 +48,7 @@
 	  				<listItem>Enhanced Profile Explorer with right click features in both left and right hand panes</listItem>
 	  				<listItem>Tool to tell you when updated components are available (Not in current build)</listItem>  	
 	  				<listItem>New full implementation of the USNO NOVAS3 library.</listItem>
-	  				<listItem>Improved recognition of serial ports.</listItem>
+	  				<listItem>Improved recognition of serial ports and the ability to hide specific ports from the available list if required.</listItem>
 	  				<listItem>Device Interface version numbers have been increased by 1 to reflect introduction of the common core capabilities</listItem>
 	  				<listItem>Separate developer tool installer, that can be updated independently of the core platform, allowing development tools 
 	  				to be continuously improved without requiring platform users to install updated platform versions.</listItem>
@@ -94,7 +94,9 @@
 	 		 		profile in one operation. GetProfileXML and SetProfileXML work with an XML encoding of the profile
 	 		 		while GetProfile and SetProfile work with a new ASCOMProfile object that contains all 
 	 		 		entries in the profile and provides simple methods to read and set values.</listItem>
-	 		 		Additional logging for serial component accesed through DriverHelper.Serial
+	 		 		<listItem>Additional logging for serial component accesed through DriverHelper.Serial.</listItem>
+	 		 		<listItem>Serial - Now has an RTSEnable property to control whether RTS is asserted when using 
+	 		 		RTS/CTS hardware handshaking.</listItem>
   				</list>
       		</content>
    		</section>
@@ -103,7 +105,7 @@
            	<title>Issues Fixed</title>
             <content>
       			<list class="bullet">
- 		 			<listItem>ASCOM.Utilities.Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
+ 		 			<listItem>Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
  		 			improved to actively test for COM ports rather than simply relying on the list of ports returned by the .NET Framework.</listItem>
 					<listItem>MigrateProfile - Now applies the "Full Control" security attribute to the entire ASCOM shared
 					file area where the Profile is stored to remove access control issues seen by some people.</listItem>
@@ -118,6 +120,7 @@
  		 			<listItem>Profile - Fixed exception thrown when a calling application has no version number of any kind</listItem>
  		 			<listItem>ShowPlatformVersion - Fixed failure when run on a 64bit OS</listItem>>
  		 			<listItem>Timer - Now works consistently in console environments as well as windowed environments.</listItem>>
+ 		 			<listItem>NOVAS2 - sun_eph is now accesible.</listItem>>
 				</list>
    			</content>
    		</section>

@@ -1175,8 +1175,14 @@ Namespace Interfaces
         ''' </summary>
         ''' <value>String array of available serial ports</value>
         ''' <returns>A string array of available serial ports</returns>
-        ''' <remarks></remarks>
-    <DispId(1)> ReadOnly Property AvailableComPorts() As String()
+        ''' <remarks><b>Update in platform 6.0.0.0</b> This call uses the .NET Framework to retrieve available 
+        ''' COM ports and this has been found not to return names of some USB serial adapters. Additional 
+        ''' code has been added to attempt to open all COM ports up to COM32. Any ports that can be 
+        ''' successfully opened are now returned alongside the ports returned by the .NET call.
+        ''' <para>If this new approach still does not detect a COM port it can be forced to appear in the list by adding its name
+        ''' as a string entry in the ForceCOMPorts key of the ASCOM Profile. In the event that this scanning causes issues, a COM port can be 
+        ''' omitted from the scan by adding its name as a string entry in the IgnoreCOMPorts key of the ASCOM Profile.</para></remarks>
+        <DispId(1)> ReadOnly Property AvailableComPorts() As String()
         ''' <summary>
         ''' Gets or sets the number of data bits in each byte
         ''' </summary>
@@ -1211,7 +1217,7 @@ Namespace Interfaces
         ''' </summary>
         ''' <value>The type of handshake used on the serial line, default is none</value>
         ''' <returns>One of the Ports.Handshake enumeration values</returns>
-        ''' <remarks></remarks>
+        ''' <remarks>Use of the RTS line can additionally be controlled by the <see cref="Handshake"/> property.</remarks>
         <DispId(6)> Property Handshake() As SerialHandshake
         ''' <summary>
         ''' Gets or sets the connected state of the ASCOM serial port.
@@ -1268,13 +1274,13 @@ Namespace Interfaces
         ''' </summary>
         ''' <param name="Data">String to transmit</param>
         ''' <remarks></remarks>
-    <DispId(14)> Sub Transmit(ByVal Data As String)
+        <DispId(14)> Sub Transmit(ByVal Data As String)
         ''' <summary>
         ''' Transmit an array of binary bytes through the ASCOM serial port 
         ''' </summary>
         ''' <param name="Data">Byte array to transmit</param>
         ''' <remarks></remarks>
-    <DispId(15)> Sub TransmitBinary(ByVal Data As Byte())
+        <DispId(15)> Sub TransmitBinary(ByVal Data As Byte())
         ''' <summary>
         ''' Adds a message to the ASCOM serial trace file
         ''' </summary>
@@ -1283,7 +1289,7 @@ Namespace Interfaces
         ''' <remarks>
         ''' <para>This can be called regardless of whether logging is enabled</para>
         ''' </remarks>
-    <DispId(16)> Sub LogMessage(ByVal Caller As String, ByVal Message As String)
+        <DispId(16)> Sub LogMessage(ByVal Caller As String, ByVal Message As String)
         ''' <summary>
         ''' Receive at least one text character from the ASCOM serial port
         ''' </summary>
@@ -1291,20 +1297,20 @@ Namespace Interfaces
         ''' <remarks>This method reads all of the characters currently in the serial receive buffer. It will not return 
         ''' unless it reads at least one character. A timeout will cause a TimeoutException to be raised. Use this for 
         ''' text data, as it returns a String. </remarks>
-    <DispId(17)> Function Receive() As String
+        <DispId(17)> Function Receive() As String
         ''' <summary>
         ''' Receive one binary byte from the ASCOM serial port
         ''' </summary>
         ''' <returns>The received byte</returns>
         ''' <remarks>Use this for 8-bit (binary data). If a timeout occurs, a TimeoutException is raised. </remarks>
-    <DispId(18)> Function ReceiveByte() As Byte
+        <DispId(18)> Function ReceiveByte() As Byte
         ''' <summary>
         ''' Receive exactly the given number of characters from the ASCOM serial port and return as a string
         ''' </summary>
         ''' <param name="Count">The number of characters to return</param>
         ''' <returns>String of length "Count" characters</returns>
         ''' <remarks>If a timeout occurs a TimeoutException is raised.</remarks>
-    <DispId(19)> Function ReceiveCounted(ByVal Count As Integer) As String
+        <DispId(19)> Function ReceiveCounted(ByVal Count As Integer) As String
         ''' <summary>
         ''' Receive exactly the given number of characters from the ASCOM serial port and return as a byte array
         ''' </summary>
@@ -1314,14 +1320,14 @@ Namespace Interfaces
         ''' <para>If a timeout occurs, a TimeoutException is raised. </para>
         ''' <para>This function exists in the COM component but is not documented in the help file.</para>
         ''' </remarks>
-    <DispId(20)> Function ReceiveCountedBinary(ByVal Count As Integer) As Byte()
+        <DispId(20)> Function ReceiveCountedBinary(ByVal Count As Integer) As Byte()
         ''' <summary>
         ''' Receive characters from the ASCOM serial port until the given terminator string is seen
         ''' </summary>
         ''' <param name="Terminator">The character string that indicates end of message</param>
         ''' <returns>Received characters including the terminator string</returns>
         ''' <remarks>If a timeout occurs, a TimeoutException is raised.</remarks>
-    <DispId(21)> Function ReceiveTerminated(ByVal Terminator As String) As String
+        <DispId(21)> Function ReceiveTerminated(ByVal Terminator As String) As String
         ''' <summary>
         ''' Receive characters from the ASCOM serial port until the given terminator bytes are seen, return as a byte array
         ''' </summary>
@@ -1331,13 +1337,14 @@ Namespace Interfaces
         ''' <para>If a timeout occurs, a TimeoutException is raised.</para>
         ''' <para>This function exists in the COM component but is not documented in the help file.</para>
         ''' </remarks>
-    <DispId(22)> Function ReceiveTerminatedBinary(ByVal TerminatorBytes() As Byte) As Byte()
+        <DispId(22)> Function ReceiveTerminatedBinary(ByVal TerminatorBytes() As Byte) As Byte()
         ''' <summary>
-        ''' Gets or sets the state of the RTS line
+        ''' Gets or sets use of the RTS handshake control line
         ''' </summary>
-        ''' <value>The state of the RTS line, default is enabled</value>
-        ''' <returns>Boolean true/false indicating enabled/disabled</returns>
-        ''' <remarks></remarks>
+        ''' <value>The state of RTS line use, default is disabled (false)</value>
+        ''' <returns>Boolean true/false indicating RTS line use enabled/disabled</returns>
+        ''' <remarks>By default the serial component will not drive the RTS line. If RTSEnable is true, the RTS line will be raised before
+        ''' characters are sent. Please also see the associated <see cref="Handshake"/> property.</remarks>
         <DispId(23)> Property RTSEnable() As Boolean
     End Interface  'Interface to Utilities.Serial
 

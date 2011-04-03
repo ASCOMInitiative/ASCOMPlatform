@@ -254,7 +254,9 @@ Public Class frmProfileExplorer
         End Try
         DoRefresh = True
         Try
-            If (CurrentRow >= Values.Count) And (CurrentCell = 0) Then DoRefresh = False
+            If (CurrentRow >= Values.Count) And (CurrentCell = 0) Then
+                If KeyValues.IsCurrentCellDirty Then DoRefresh = False
+            End If
         Catch ex As Exception
 
         End Try
