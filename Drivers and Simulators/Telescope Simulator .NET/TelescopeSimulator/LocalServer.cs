@@ -274,6 +274,20 @@ namespace ASCOM.Simulator
                     // Just swallow the exception and continue to the next item.
                     continue;
                 }
+                catch (ReflectionTypeLoadException e)
+                {
+                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.ToString(),
+                        "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    Exception[] exs = e.LoaderExceptions;
+                    foreach (Exception ex in exs)
+                    {
+                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + ex.ToString(),
+                        "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    }
+
+                    return false;
+                }
+
                 catch (Exception e)
                 {
                     MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
