@@ -365,178 +365,178 @@ else
   else
     [DEFINE REGION: Platform 5 files]
     Comment: Type libraries
-    Install Files C:\ASCOM Trunk\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
-    Install Files C:\ASCOM Trunk\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCOM\Interface
-    Install Files C:\ASCOM Trunk\Interfaces\HelperPIAs\Helper2.tlb to $COMMONFILES$\ASCOM\Interface
-    Install Files C:\ASCOM Trunk\Interfaces\IObjectSafety.tlb to $COMMONFILES$\ASCOM\Interface
+    Install Files ..\..\..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
+    Install Files ..\..\..\..\Interfaces\HelperPIAs\Helper.tlb to $COMMONFILES$\ASCOM\Interface
+    Install Files ..\..\..\..\Interfaces\HelperPIAs\Helper2.tlb to $COMMONFILES$\ASCOM\Interface
+    Install Files ..\..\..\..\Interfaces\IObjectSafety.tlb to $COMMONFILES$\ASCOM\Interface
     Comment: Type library installer
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\RegTlb.exe to $COMMONFILES$\ASCOM\Platform\Internal
     Comment: Redistributable support files
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\mscomctl.OCX to $WINSYSDIR$ (Never Overwrite)
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\MSComm32.Ocx to $WINSYSDIR$ (Never Overwrite)
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\msvbvm60.dll to $WINSYSDIR$ (Never Overwrite)
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\comdlg32.ocx to $WINSYSDIR$ (Never Overwrite)
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\mscomctl.OCX to $WINSYSDIR$ (Never Overwrite)
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\MSComm32.Ocx to $WINSYSDIR$ (Never Overwrite)
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\msvbvm60.dll to $WINSYSDIR$ (Never Overwrite)
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\comdlg32.ocx to $WINSYSDIR$ (Never Overwrite)
     Comment: Platform 5 assemblies
     Comment: ASCOM.DriverAccess 1.0.5 is not copied because it is replaced with 1.0.6 in Platform 6
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Assembly C:\ASCOM Trunk\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
-    Install Assembly C:\ASCOM Trunk\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Assembly ..\..\..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
+    Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to Global Assembly Cache
+    Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
+    Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
     Comment: Platform 5 simulators
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt to $COMMONFILES$\ASCOM\Camera
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll to $COMMONFILES$\ASCOM\Camera
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator\DomeSim.exe to $COMMONFILES$\ASCOM\Dome
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\ASCOMDome\ASCOMDome.exe to $COMMONFILES$\ASCOM\Dome
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Dome
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator\FocusSim.exe to $COMMONFILES$\ASCOM\Focuser
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator\SwitchSim.exe to $COMMONFILES$\ASCOM\Switch
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\Scope Simulator\ScopeSim.exe to $COMMONFILES$\ASCOM\Telescope
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm to $COMMONFILES$\ASCOM\Telescope
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Telescope
-    Install Files C:\ASCOM Trunk\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
-    Install Files C:\ASCOM Trunk\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
-    Install Files C:\ASCOM Trunk\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
-    Install Files C:\ASCOM Trunk\POTH\Source505\POTH.exe to $COMMONFILES$\ASCOM\Telescope
-    Install Files C:\ASCOM Trunk\POTH\Source505\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\CCDSimulator.dll to $COMMONFILES$\ASCOM\Camera
+    Install Files ..\..\..\..\Drivers and Simulators\CCD Simulator\UNURANReadMe.txt to $COMMONFILES$\ASCOM\Camera
+    Install Files ..\..\..\..\Drivers and Simulators\CCD Simulator\unuran-0.6.0.dll to $COMMONFILES$\ASCOM\Camera
+    Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator\DomeSim.exe to $COMMONFILES$\ASCOM\Dome
+    Install Files ..\..\..\..\Drivers and Simulators\ASCOMDome\ASCOMDome.exe to $COMMONFILES$\ASCOM\Dome
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Dome
+    Install Files ..\..\..\..\Drivers and Simulators\Filter Wheel Simulator\FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel
+    Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator\FocusSim.exe to $COMMONFILES$\ASCOM\Focuser
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator\SwitchSim.exe to $COMMONFILES$\ASCOM\Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSim.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\Drivers and Simulators\Scope Simulator\ScopeSimHelp.htm to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Astro32.dll to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\POTH\Source505\POTH.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\POTH\Source505\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
     [END REGION]
     [DEFINE REGION: Platform 5.5 files]
     Comment: Updated helpers that use Platform 5.5 support
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
+    Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
+    Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper2\Helper2.dll to $COMMONFILES$\ASCOM
     Comment: New files in Platform 5.5
-    Install Assembly C:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINDIR$\Symbols\dll
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Assembly ..\..\..\..\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.IConform\ASCOM.IConform\bin\Release\ASCOM.IConform.pdb to $WINDIR$\Symbols\dll
+    Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
     Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
-    Install Assembly C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
+    Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
     Comment: Copy Utilities and DriverAccess to .Net directory to ensure Inno installers that test for this run OK
     Comment: The ASCOM.Utilities.dll file MUST be the original from Platform 5.5 because at least 1 installer checks the file version of the installed file!
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES$\ASCOM\.net
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
+    Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES$\ASCOM\.net
     Comment: Install additional files to make sure old 64bit mode driver installers continue to work
     if Variable WIN64MODE Equals TRUE
       Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-      Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES64$ASCOM\.net
-      Install Files C:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES64$ASCOM\.net
-      Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES64$ASCOM\.net
+      Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES64$ASCOM\.net
+      Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES64$ASCOM\.net
+      Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES64$ASCOM\.net
       Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
     end
     [END REGION]
     [DEFINE REGION: Platform 6 files]
     Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
-    Install Assembly C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\policy.5.5.ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\Publisher Policy 5.5.6\UtilitiesPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
     Comment: Updated driver access v1.0.6 to improve compatibility with Platform 5 drivers
-    Install Assembly c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Assembly ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
     Comment: Platform 6 core components
-    Install Assembly c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
-    Install Assembly c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
-    Install Assembly c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
-    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
-    Install Files c:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
-    Install Assembly c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Assembly ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
+    Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
+    Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
+    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.pdb to $WINDIR$\Symbols\dll
+    Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.pdb to $WINDIR$\Symbols\dll
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
     Comment: Tim Long Platform 6 components
-    Install Assembly c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
-    Install Assembly C:\ASCOM Trunk\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to Global Assembly Cache
-    Install Files C:\ASCOM Trunk\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb to $WINDIR$\Symbols\dll
-    Install Assembly c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
+    Install Assembly ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.pdb to $WINDIR$\Symbols\dll
+    Install Assembly ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.pdb to $WINDIR$\Symbols\dll
+    Install Assembly ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.pdb to $WINDIR$\Symbols\dll
     Comment: Platform 6 Astrometry
-    Install Assembly c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
-    Install Assembly C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\AstrometryPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Assembly ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.pdb to $WINDIR$\Symbols\dll
+    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Assembly ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\policy.5.5.ASCOM.Astrometry.dll to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\Platform 5.5 Redirection Policy\AstrometryPolicy.xml to $COMMONFILES$\ASCOM\Platform\v5.5
+    Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
     Comment: Platform 6 Internal
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
-    Install Files c:\ASCOM Trunk\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
-    Install Assembly c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
+    Install Files ..\..\..\..\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
+    Install Assembly ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
     Comment: Platform 6 Tools
-    Install Files C:\ASCOM Trunk\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Tools
+    Install Files ..\..\..\..\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.exe to $TARGETDIR$\Tools
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
+    Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
+    Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
+    Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools
+    Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.xml to $TARGETDIR$\Tools
     Comment: Platform 6 Simulators
     Comment: Camera simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+    Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.dll to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+    Install Files ..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\bin\Release\ASCOM.Simulator.Camera.pdb to $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
     Comment: FilterWheel simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.exe to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.FilterWheelSim.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.dll to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
+    Install Files ..\..\..\..\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\bin\Release\ASCOM.Simulator.FilterWheel.pdb to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim
     Comment: Focuser simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
+    Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
+    Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
     Comment: SafetyMonitor simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+    Install Files ..\..\..\..\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+    Install Files ..\..\..\..\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
     Comment: Switch simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
-    Install Files c:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
     Comment: N Way Switch simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
     Comment: Rheostat simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
     Comment: Telescope simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.dll to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
+    Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.Simulator.Telescope.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Comment: Rotator simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.exe to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.RotatorSimulator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.dll to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
+    Install Files ..\..\..\..\Drivers and Simulators\Rotator Simulator\RotatorServer\bin\Release\ASCOM.Simulator.Rotator.pdb to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator
     Comment: Dome simulator
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
-    Install Files C:\ASCOM Trunk\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
+    Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
+    Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
     [END REGION]
     [DEFINE REGION: Platform 6 Content]
     Comment: Platform 6 Documents
-    Install Files c:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
-    Install Files C:\ASCOM Trunk\Help\Help\PlatformHelp.chm to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Help\Help\PlatformHelp.chm to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
     [END REGION]
     [DEFINE REGION: Create shortcuts]
     Comment: Menu shortcuts

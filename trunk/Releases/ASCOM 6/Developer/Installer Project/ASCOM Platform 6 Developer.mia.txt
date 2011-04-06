@@ -258,39 +258,39 @@ else
   Get Component Developer Components Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     [DEFINE REGION: Visual Studio references]
-    Install Files C:\ASCOM Trunk\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform6
-    Install Files C:\ASCOM Trunk\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform6
-    Install Files C:\ASCOM Trunk\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $TARGETDIR$\Components\Platform6
-    Install Files C:\ASCOM Trunk\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Components\Platform6
     Set Variable PROGRESS to 40
-    Install Files C:\ASCOM Trunk\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform6
-    Install Files C:\ASCOM Trunk\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $TARGETDIR$\Components\Platform6
-    Install Files C:\ASCOM Trunk\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $TARGETDIR$\Components\Platform6
-    Install Files C:\ASCOM Trunk\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform6
-    Install Files C:\ASCOM Trunk\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform6
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform55\
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform55\
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform55\
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform55\
-    Install Files C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform5
+    Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform5
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 6\, $TARGETDIR$\Components\Platform6
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
     [END REGION]
     Set Variable PROGRESS to 50
     [DEFINE REGION: Developer Documentation]
-    Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Docs
-    Install Files c:\ASCOM Trunk\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Docs
-    Install Files C:\ASCOM Trunk\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Docs
-    Install Files C:\ASCOM Trunk\NOVAS\Algorithms.pdf to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\NOVAS\Algorithms.pdf to $TARGETDIR$\Docs
     Set Variable PROGRESS to 60
-    Install Files C:\ASCOM Trunk\Doc\tip.gif to $TARGETDIR$\Docs
-    Install Files C:\ASCOM Trunk\Doc\Bug72T-sm.jpg to $TARGETDIR$\Docs
-    Install Files C:\ASCOM Trunk\HTML Help\Script56.chm to $TARGETDIR$\Docs
-    Install Files C:\ASCOM Trunk\HTML Help\wsh-56.chm to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Doc\tip.gif to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\HTML Help\Script56.chm to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\HTML Help\wsh-56.chm to $TARGETDIR$\Docs
     Set Variable PROGRESS to 70
-    Install Files C:\ASCOM Trunk\Help\Help\PlatformDeveloperHelp.chm to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Help\Help\PlatformDeveloperHelp.chm to $TARGETDIR$\Docs
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Active scripting help to $TARGETDIR$\Docs\Script56.chm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Creating Driver Installers with Inno to $TARGETDIR$\Docs\DriverInstallers.html
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Developer Help to $TARGETDIR$\Docs\PlatformDeveloperHelp.chm
@@ -301,16 +301,16 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Windows Scripting Host to $TARGETDIR$\Docs\wsh-56.chm
     [END REGION]
     [DEFINE REGION: Driver installer]
-    Install Files C:\ASCOM Trunk\Doc\DriverInstallers.html to $TARGETDIR$\Docs
-    Install Files C:\ASCOM Trunk\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $TARGETDIR$\Installer Generator
-    Install Files C:\ASCOM Trunk\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $TARGETDIR$\Installer Generator
-    Install Files C:\ASCOM Trunk\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $TARGETDIR$\Installer Generator
-    Install Files C:\ASCOM Trunk\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb to $TARGETDIR$\Installer Generator
+    Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $TARGETDIR$\Installer Generator
+    Install Files ..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $TARGETDIR$\Installer Generator
+    Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $TARGETDIR$\Installer Generator
+    Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb to $TARGETDIR$\Installer Generator
     Set Variable PROGRESS to 80
-    Install Files C:\ASCOM Trunk\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt to $TARGETDIR$\Installer Generator
-    Install Files C:\ASCOM Trunk\Driver Inst\InstallerGen\License\CreativeCommons.txt to $TARGETDIR$\Installer Generator\Resources
-    Install Files C:\ASCOM Trunk\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $TARGETDIR$\Installer Generator\Resources
-    Install Files C:\ASCOM Trunk\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $TARGETDIR$\Installer Generator\Resources
+    Install Files ..\..\..\..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt to $TARGETDIR$\Installer Generator
+    Install Files ..\..\..\..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $TARGETDIR$\Installer Generator\Resources
+    Install Files ..\..\..\..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $TARGETDIR$\Installer Generator\Resources
+    Install Files ..\..\..\..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $TARGETDIR$\Installer Generator\Resources
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Driver Install Script Generator to $TARGETDIR$\Installer Generator\InstallerGen.exe
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
     [END REGION]
@@ -319,9 +319,9 @@ else
   [DEFINE REGION: Visual Studio Driver Templates]
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
-    Install Files C:\ASCOM Trunk\Doc\Templates.html to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Docs
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Visual Studio Templates Readme to $TARGETDIR$\Docs\Templates.html
-    Install Files C:\ASCOM Trunk\DriverTemplates\ASCOM 6 Driver Templates.vsi to $TARGETDIR$\Templates
+    Install Files ..\..\..\..\DriverTemplates\ASCOM 6 Driver Templates.vsi to $TARGETDIR$\Templates
   end
   [END REGION]
   [DEFINE WEB MEDIA ASCOM Platform 6 Developer Components]
