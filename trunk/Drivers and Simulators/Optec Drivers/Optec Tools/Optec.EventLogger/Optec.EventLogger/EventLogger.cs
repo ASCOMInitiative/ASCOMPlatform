@@ -37,13 +37,14 @@ namespace Optec
             {
                 EventLog.CreateEventSource(eventLogSource, eventLogName);
             }
+            else EventLog.Delete(eventLogSource);
             myEventLog = new EventLog(); 
             myEventLog.Source = eventLogSource;
-            myEventLogTraceListener = new EventLogTraceListener(myEventLog);
             if (myEventLog.OverflowAction != OverflowAction.OverwriteAsNeeded)
             {
                 myEventLog.ModifyOverflowPolicy(OverflowAction.OverwriteAsNeeded, 1);
             }
+            myEventLogTraceListener = new EventLogTraceListener(myEventLog);
             Trace.Listeners.Add(myEventLogTraceListener);
         }
 
