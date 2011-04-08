@@ -1,14 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using ASCOM.DriverAccess;
-using ASCOM.DeviceInterface;
 using CameraTest.Properties;
 using nom.tam.fits;
 using nom.tam.util;
