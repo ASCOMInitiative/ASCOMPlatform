@@ -31,6 +31,7 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System.Collections.Specialized;
 
 namespace ASCOM.Simulator
 {
@@ -75,6 +76,8 @@ namespace ASCOM.Simulator
         #endregion
 
         #region internal properties
+
+        internal TraceLogger log;
 
         //Interface version
         internal short interfaceVersion;
@@ -171,6 +174,13 @@ namespace ASCOM.Simulator
         private System.Timers.Timer exposureTimer;
         private System.Timers.Timer coolerTimer;
 
+        // supported actions
+        // should really use consts for the action names, 
+        private ArrayList supportedActions = new ArrayList{ "SetFanSpeed", "GetFanSpeed" };
+
+        // SetFanSpeed, GetFanSpeed. These commands control a hypothetical CCD camera heat sink fan, range 0 (off) to 3 (full speed) 
+        private int fanMode;
+
         #endregion
 
 		#region Camera Constructor
@@ -188,6 +198,9 @@ namespace ASCOM.Simulator
 		{
 			// TODO Implement your additional construction here
             InitialiseSimulator();
+            log = new TraceLogger(null, "Camera Simulator");
+            log.Enabled = false;
+            log.LogMessage("Constructor", "Done");
 		}
 
 		#endregion
@@ -242,12 +255,23 @@ namespace ASCOM.Simulator
         #region Common Methods
 
         /// <summary>
-        /// 
+        /// the following additional Actions are available:
+        ///  "SetFanSpeed" sets the fan speed as required, parameters are:
+        ///    "0" - Off
+        ///    "1" - Slow speed
+        ///    "2" - medium speed
+        ///    "3" - high speed
+        ///    An empty string is returned
+        ///  "GetFanSpeed gets the current fan speed, returns "0" to "3"
+        ///    as defined above.
         /// </summary>
         public ArrayList SupportedActions
         {
-            // no supported actions, return empty array
-            get { ArrayList sa = new ArrayList(); return sa; }
+            // return the Supported Actions
+            get
+            {
+                return this.supportedActions; 
+            }
         }
 
         public string CommandString(string Command, bool Raw)
@@ -267,7 +291,30 @@ namespace ASCOM.Simulator
 
         public string Action(string ActionName, string ActionParameters)
         {
-            throw new MethodNotImplementedException("Action");
+            if (this.supportedActions.Contains(ActionName))
+            {
+                switch (ActionName)
+	            {
+                    case "SetFanSpeed":
+                        int fanMode;
+                        if (int.TryParse(ActionParameters, out fanMode))
+                        {
+                            if (fanMode >= 0 && fanMode <=3)
+                            {
+                                this.fanMode = fanMode;
+                                return string.Empty;
+                            }
+                        }
+                        // value not in range
+                        throw new InvalidValueException("Action-SetFanMode", ActionParameters, "0 to 3");
+                    case "GetFanSpeed":
+                        return this.fanMode.ToString();
+                    default:
+                        break;
+	            }
+            }
+            // failed to find this supported action
+            throw new MethodNotImplementedException("Action-" + ActionName);
         }
 
         #endregion
@@ -289,6 +336,8 @@ namespace ASCOM.Simulator
                 throw new NotConnectedException("Can't abort exposure when not connected");
             if (!this.canAbortExposure)
                 throw new ASCOM.MethodNotImplementedException("AbortExposure");
+
+            log.LogMessage("AbortExposure", "");
             switch (this.cameraState)
             {
                 case CameraStates.cameraWaiting:
@@ -412,6 +461,7 @@ namespace ASCOM.Simulator
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read the camera state when not connected");
+                log.LogMessage("CameraState", this.cameraState.ToString());
                 return this.cameraState;
             }
 		}
@@ -721,6 +771,7 @@ namespace ASCOM.Simulator
 		{
 			get 
             {
+                log.LogMessage("ImageArray", "get");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ImageArray when not connected");
                 if (!this.imageReady)
@@ -799,6 +850,7 @@ namespace ASCOM.Simulator
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ImageReady when not connected");
+                log.LogMessage("ImageReady", this.imageReady.ToString());
                 return this.imageReady;
             }
         }
@@ -1154,6 +1206,8 @@ namespace ASCOM.Simulator
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}",cameraYSize/this.binY));
             }
 
+            log.LogStart("StartExposure", "Duration " + Duration.ToString("F3"));
+
             // set up the things to do at the start of the exposure
             this.imageReady = false;
             if (this.HasShutter)
@@ -1177,6 +1231,7 @@ namespace ASCOM.Simulator
             this.exposureStartTime = DateTime.Now;
             this.exposureDuration = Duration;
             this.exposureTimer.Enabled = true;
+            log.LogFinish(" started");
 		}
 
         private void  exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -1187,6 +1242,7 @@ namespace ASCOM.Simulator
             this.FillImageArray();
             this.imageReady = true;
             this.cameraState = CameraStates.cameraIdle;
+            log.LogMessage("ExposureTimer_Elapsed", "done");
         }
 
 		/// <summary>
@@ -1243,6 +1299,7 @@ namespace ASCOM.Simulator
                 throw new NotConnectedException("Can't stop exposure when not connected");
             if (!this.canStopExposure)
                 throw new ASCOM.MethodNotImplementedException("StopExposure");
+            log.LogMessage("StopExposure", "");
             switch (this.cameraState)
             {
                 case CameraStates.cameraWaiting:
