@@ -160,7 +160,7 @@ else
   end
 end
 label: Destination Directory
-Display Dialog: destination, wait for dialog to return (modal)
+Comment: Display Dialog: destination, wait for dialog to return (modal)
 if Variable WIZARD Equals BACK
   GoTo Label: Custom Setup
 else
@@ -179,7 +179,7 @@ else
 end
 [compiler end]
 label: Start Installation
-Display Dialog: startinstallation, wait for dialog to return (modal)
+Comment: Display Dialog: startinstallation, wait for dialog to return (modal)
 if Variable WIZARD Equals BACK
   [compiler if Variable BUILDMODE not Equals PATCH]
   GoTo Label: Start Menu
@@ -195,7 +195,7 @@ Comment: Maintenance Install/Uninstall
 wizard loop
 Display Dialog: maintenance, wait for dialog to return (modal)
 Display Dialog: componentstree (if variable MODIFY is TRUE), wait for dialog to return (modal)
-Display Dialog: startinstallation, wait for dialog to return (modal)
+Comment: Display Dialog: startinstallation, wait for dialog to return (modal)
 end
 [END REGION]
  
@@ -228,7 +228,7 @@ if Variable NEEDSUPGRADE Equals TRUE
     end
   end
   Set Variable MAINTENANCE to FALSE
-  MessageBalloon: ASCOM DeveloperTools Maintenance, Completed previous version uninstallation.
+  MessageBalloon: ASCOM DeveloperTools Maintenance, Installing new Developer Tools version
 end
  
 Comment: Prepare to install
@@ -287,18 +287,18 @@ else
     Set Variable PROGRESS to 60
     Install Files ..\..\..\..\Doc\tip.gif to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\HTML Help\Script56.chm to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\HTML Help\wsh-56.chm to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Docs
     Set Variable PROGRESS to 70
     Install Files ..\..\..\..\Help\Help\PlatformDeveloperHelp.chm to $TARGETDIR$\Docs
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Active scripting help to $TARGETDIR$\Docs\Script56.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Active Scripting Help to $TARGETDIR$\Docs\Script56.chm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Creating Driver Installers with Inno to $TARGETDIR$\Docs\DriverInstallers.html
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Developer Help to $TARGETDIR$\Docs\PlatformDeveloperHelp.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\ASCOM Developer Help to $TARGETDIR$\Docs\PlatformDeveloperHelp.chm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Fundamental Astrometry Theory Paper to $TARGETDIR$\Docs\Algorithms.pdf
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\NOVAS 3 Users Guide to $TARGETDIR$\Docs\NOVAS_C3.0_Guide.pdf
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Docs\Platform 6.0.pdf
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Windows Scripting Host to $TARGETDIR$\Docs\wsh-56.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Windows Scripting Host Help to $TARGETDIR$\Docs\wsh-56.chm
     [END REGION]
     [DEFINE REGION: Driver installer]
     Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Docs
