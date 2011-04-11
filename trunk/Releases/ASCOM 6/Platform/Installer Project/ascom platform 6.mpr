@@ -50,6 +50,8 @@ ASCOM.Exceptions.dll
 ASCOM.Exceptions.pdb
 FinaliseInstall.exe
 FinaliseInstall.pdb
+Helper.dll
+Helper2.dll
 icon.ico
 Index.htm
 license.rtf
@@ -946,6 +948,8 @@ B
 
 
 
+
+
 $
 NEEDSUPGRADE
 WIZARD
@@ -958,23 +962,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Alpha 23
+ASCOM Platform 6 Alpha 24
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {398F9FC0-D482-4D82-B187-8351842DBD78}
 6.0.0.0
 English
-ASCOM Platform 6 Alpha 23
+ASCOM Platform 6 Alpha 24
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{98E94961-B86D-4836-92B2-D5EF8EE7CF62}
+{FE809387-D2CE-459A-8871-FEED39705679}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Alpha23
+ASCOMPlatform6Alpha24
 TRUE
 FALSE
 

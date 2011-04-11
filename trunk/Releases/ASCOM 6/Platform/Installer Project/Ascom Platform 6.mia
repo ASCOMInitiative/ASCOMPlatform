@@ -353,7 +353,9 @@ Code Folding Region
 Comment
 Comment
 If
+MessageBalloon
 Run Program
+MessageBalloon
 End
 Web Media Block
 Comment
@@ -1238,7 +1240,9 @@ $
 {7258D062-9008-44B2-99FA-4BFD71A66352}
 {F032DCA9-FB78-4EA7-B89A-151B01BAC5CC}
 {D62504A2-BBB5-4FE2-94AD-2F8BF845FC9D}
+{1934153C-8343-4057-9AF2-723B8289E298}
 {E5374516-1A18-4C6E-BFFA-4F50D7FD88AC}
+{01D0B137-5D41-4438-9CC6-1EFE564F2F08}
 {35117A92-C478-427B-9E80-89E2C3D5C620}
 {BEE709E4-16FE-4E1E-8FB4-96459FB4665B}
 {687C8818-2968-4292-9CE1-555D931D65AE}
@@ -4703,7 +4707,7 @@ $SHORTCUTFILES$\ASCOM Platform 6
 ASCOM User Guide
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {16721220-CDA8-4752-8AB6-205E494DF1C9}
@@ -4723,7 +4727,7 @@ $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Internet.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Internet.ico
 |
 0|
 {70014C61-5B61-443D-AFC4-9D25DC3F53A8}
@@ -4733,7 +4737,7 @@ $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Internet.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Internet.ico
 |
 0|
 {32B52772-6F8B-41ED-801F-0C3D0EE71F4C}
@@ -4753,7 +4757,7 @@ $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Internet.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Internet.ico
 |
 0|
 {1673755E-1783-4E0D-98AC-DAD23C6362A8}
@@ -4763,7 +4767,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {D4D27B6C-EEA0-49FB-B66F-73530A1BFF6D}
@@ -4773,7 +4777,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {FA5E33F6-7600-4B28-B8ED-4700084C066A}
@@ -4783,7 +4787,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {8D3A8ED4-9846-46F9-A575-DDA411B280DC}
@@ -4793,7 +4797,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {429A8D11-5F70-4ACC-84C7-141ECC5BC4B6}
@@ -4803,7 +4807,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {7D11414D-E84D-4374-B5BE-4F83C69521D5}
@@ -4813,7 +4817,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {E20A02BA-690F-4545-8F4C-0F0ADCE7526C}
@@ -4823,7 +4827,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {ACF90CDA-CF50-436B-8BB2-2C330F791044}
@@ -4833,7 +4837,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {A2F27E7F-4A1C-4C50-BA92-9FDD2553A09C}
@@ -4843,7 +4847,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {46A0AFDA-49F3-4A95-A464-5F55334BDED6}
@@ -4853,7 +4857,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Help.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Help.ico
 |
 0|
 {DCE9302E-F313-4E3F-A320-4E65ED97D6C0}
@@ -4863,7 +4867,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {7B44D2AC-9670-40EC-9441-8DA2AD537566}
@@ -4873,7 +4877,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Help.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Help.ico
 |
 0|
 {FF97D7E6-03A5-40ED-9C6A-7FFA19782A34}
@@ -4883,7 +4887,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {10113E59-0BE1-4294-8742-E47414A2995C}
@@ -6119,6 +6123,16 @@ Removing 32bit native images
 
 0
 5
+{1934153C-8343-4057-9AF2-723B8289E298}
+Platform Maintenance
+Uninstalling previous Platform version
+0
+10
+{01D0B137-5D41-4438-9CC6-1EFE564F2F08}
+Platform Maintenance
+Installing new Platform version
+0
+10
 {BE7FF055-D9EB-4981-8704-156D0A22800C}
 FALSE
 FALSE
@@ -6233,7 +6247,7 @@ C
 
 
 
-
+C
 
 
 
@@ -6406,6 +6420,16 @@ C
 
 
 
+C
+
+
+
+
+
+
+
+
+C
 
 
 
@@ -6431,18 +6455,10 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
 C
 C
+
+
 
 
 
@@ -7091,6 +7107,8 @@ C
 
 
 $
+
+
 
 
 

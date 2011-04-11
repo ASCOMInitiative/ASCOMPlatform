@@ -25,7 +25,7 @@ end
  
 [DEFINE REGION: Application Updates]
 Comment: Set this to your local ASCOM trunk path
-Set Persistent Variable ASCOMTrunkPath to c:\ASCOM Trunk
+Comment: Set Persistent Variable ASCOMTrunkPath to c:\ASCOM Trunk
 [END REGION]
  
 [DEFINE REGION: Check Application Requirements]
@@ -198,7 +198,7 @@ else
   end
 end
 label: Destination Directory
-Display Dialog: destination, wait for dialog to return (modal)
+Comment: Display Dialog: destination, wait for dialog to return (modal)
 if Variable WIZARD Equals BACK
   GoTo Label: Custom Setup
 else
@@ -217,7 +217,7 @@ else
 end
 [compiler end]
 label: Start Installation
-Display Dialog: startinstallation, wait for dialog to return (modal)
+Comment: Display Dialog: startinstallation, wait for dialog to return (modal)
 if Variable WIZARD Equals BACK
   [compiler if Variable BUILDMODE not Equals PATCH]
   GoTo Label: Start Menu
@@ -353,7 +353,9 @@ else
   Comment: Install/Re-Install product
   Comment: Only run old system uninstall on first install and not on maintenance option
   if Variable MAINTENANCE not Equals TRUE
+    MessageBalloon: Platform Maintenance, Uninstalling previous Platform version
     Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT)
+    MessageBalloon: Platform Maintenance, Installing new Platform version
   end
   [OFFLINE CONTENT]
   Comment: TO-DO: Insert any additional install commands here

@@ -1667,7 +1667,7 @@ FALSE
 FALSE
 FALSE
 {A84B19CE-78A5-477B-B079-78504FB4DF09}
-..\..\..\..\HTML Help\Script56.chm
+..\..\..\..\Help\Script Help Files\Script56.chm
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -1680,7 +1680,7 @@ FALSE
 FALSE
 FALSE
 {3A4184F7-264B-448A-86A1-FB36583A1A8E}
-..\..\..\..\HTML Help\wsh-56.chm
+..\..\..\..\Help\Script Help Files\wsh-56.chm
 FALSE|
 $TARGETDIR$\Docs
 FALSE
@@ -1924,7 +1924,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Files\Internet.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Files\Internet.ico
 |
 0|
 {C52F6281-EE66-4105-8B78-93DBF10410B9}
@@ -1934,7 +1934,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {84B03C40-6099-4728-97B9-02168416C613}
@@ -1944,17 +1944,17 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {B36D7EB8-A369-410D-A6A9-16913BEEAC41}
 $TARGETDIR$\Docs\wsh-56.chm
-Windows Scripting Host
+Windows Scripting Host Help
 $SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+
 |
 0|
 {221A8A01-69CB-4B44-81CB-611CBF4BC171}
@@ -1999,7 +1999,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 0|
 {11B8EC8C-9945-4F88-A911-0190DBAB19D2}
 $TARGETDIR$\Docs\PlatformDeveloperHelp.chm
-Developer Help
+ASCOM Developer Help
 $SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
@@ -2014,17 +2014,17 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {FDB09EE3-104F-4E47-8659-646104AD4CDA}
 $TARGETDIR$\Docs\Script56.chm
-Active scripting help
+Active Scripting Help
 $SHORTCUTFILES$\ASCOM Platform 6\Docs
 
 
 
-..\..\..\..\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
+
 |
 0|
 {7ACC35BC-33FF-4405-BD90-66F5431AAA91}
@@ -2228,7 +2228,7 @@ FALSE
 
 {55943E2E-7AAB-431A-8D7A-EC009D905240}
 ASCOM DeveloperTools Maintenance
-Completed previous version uninstallation.
+Installing new Developer Tools version
 0
 1
 {FE2D5CCA-83DF-4BAE-98A0-BC851F8CE41D}
@@ -2409,6 +2409,16 @@ C
 
 
 
+C
+
+
+
+
+
+
+
+
+C
 
 
 
@@ -2434,17 +2444,7 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+C
 
 
 
