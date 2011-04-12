@@ -67,8 +67,7 @@ namespace ASCOM.OptecFocuserHub2
 
         public void Halt()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Halt");
+            myFocuserManager.Focuser2.Halt();
         }
 
         public bool IsMoving
@@ -76,8 +75,7 @@ namespace ASCOM.OptecFocuserHub2
             // TODO Replace this with your implementation
             get { return myFocuserManager.Focuser2.IsMoving || myFocuserManager.Focuser2.IsHoming; }
         }
-
-  
+ 
         public bool Link
         {
             // TODO Replace this with your implementation
@@ -99,13 +97,11 @@ namespace ASCOM.OptecFocuserHub2
 
         public void Move(int val)
         {
-            // TODO Replace this with your implementation
             myFocuserManager.Focuser2.MoveAbsolute(val);
         }
 
         public int Position
         {
-            // TODO Replace this with your implementation
             get { return myFocuserManager.Focuser2.CurrentPositionSteps; }
         }
 
@@ -123,20 +119,20 @@ namespace ASCOM.OptecFocuserHub2
 
         public bool TempComp
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TempComp", false); }
-            set { throw new PropertyNotImplementedException("TempComp", true); }
+            get { return myFocuserManager.Focuser2.TempCompEnabled; }
+            set {
+                if (!myFocuserManager.Focuser2.TempProbeAttached)
+                    throw new ApplicationException("Cannot enable Temp Comp when probe is not attached.");
+                myFocuserManager.Focuser2.TempCompEnabled = value; }
         }
 
         public bool TempCompAvailable
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TempCompAvailable", false); }
+            get { return myFocuserManager.Focuser2.TempProbeAttached; }
         }
 
         public double Temperature
         {
-            // TODO Replace this with your implementation
             get { return myFocuserManager.Focuser2.CurrentTempC; }
         }
 

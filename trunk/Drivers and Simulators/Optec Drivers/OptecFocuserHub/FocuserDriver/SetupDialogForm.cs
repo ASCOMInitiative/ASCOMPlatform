@@ -131,6 +131,7 @@ namespace ASCOM.OptecFocuserHub
         private void NicknameTB_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Don't allow < or > in name
+            if (e.KeyChar == (char)Keys.Back) return;
             if (e.KeyChar == '<' || e.KeyChar == '>') e.Handled = true;
             // Don't allow more than 16 characters
             if (((TextBox)(sender)).Text.Length == 16) e.Handled = true;
@@ -191,16 +192,17 @@ namespace ASCOM.OptecFocuserHub
         private void connectionStateChanged()
         {
             if (LastConnectedState == false)
-            {
+            {   // Connection terminated
                 ConnectBTN.Enabled = true;
                 DisconnectBTN.Enabled = false;
                 NicknameTB.Text = "";
                 PowerLight.Image = Properties.Resources.GreyLight;
                 ConnectionSetupGB.Enabled = true;
                 FocuserTypeCB.Text = "";
+                groupBox2.Enabled = false;
             }
             else
-            {
+            {   // Connection Established
                 ConnectBTN.Enabled = false;
                 DisconnectBTN.Enabled = true;
                 NicknameTB.Text = SharedResources.SharedFocuserManager.Focuser1.Nickname;
@@ -210,6 +212,8 @@ namespace ASCOM.OptecFocuserHub
                 LEDTrackbar.Value = SharedResources.SharedFocuserManager.Focuser1.LEDBrightness;
                 BacklashCompCB.Checked = SharedResources.SharedFocuserManager.Focuser1.BacklashCompEnabled;
                 BacklashCompStepsNUD.Value = (decimal)SharedResources.SharedFocuserManager.Focuser1.BacklashCompSteps;
+              
+                groupBox2.Enabled = true;
             }
         }
 
@@ -255,6 +259,7 @@ namespace ASCOM.OptecFocuserHub
                 editingDeviceType = true;
                 MessageBox.Show("Warning: Selecting a wrong focuser type for an attached focuser could cause damage to the device." + 
                     " Also, the focuser hub will automatically perform a reset after the device type has been changed.", "Warning");
+                ChangeFocuserTypeBTN.BackColor = Color.LightGreen;
                 ChangeNicknameBTN.Enabled = false;
                 
                 cmdCancel.Enabled = false;
@@ -290,6 +295,7 @@ namespace ASCOM.OptecFocuserHub
                 OkBTN.Enabled = true;
                 DisconnectBTN.Enabled = true;
                 FocuserTypeCB.Enabled = false;
+                ChangeFocuserTypeBTN.BackColor = System.Drawing.SystemColors.Control;
             }
             
         }
@@ -317,6 +323,26 @@ namespace ASCOM.OptecFocuserHub
         {
             SharedResources.SharedFocuserManager.Focuser1.BacklashCompSteps = (int)BacklashCompStepsNUD.Value;
         }
+
+        private void SetupTempCompBtn_Click(object sender, EventArgs e)
+        {
+            TempCompSetupForm tcsform = new TempCompSetupForm();
+            tcsform.ShowDialog();
+        }
+
+        private void HomeBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SharedResources.SharedFocuserManager.Focuser1.Home();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+       
 
         
         

@@ -31,6 +31,9 @@
             this.components = new System.ComponentModel.Container();
             this.statusUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.F1In_BTN = new System.Windows.Forms.Button();
             this.StepSize_LBL = new System.Windows.Forms.Label();
@@ -44,15 +47,14 @@
             this.PowerLight = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.Temp_LBL = new System.Windows.Forms.Label();
-            this.Pos_LBL = new System.Windows.Forms.Label();
+            this.f1Halt = new System.Windows.Forms.Button();
+            this.f1NicknameLBL = new System.Windows.Forms.Label();
             this.F1TempDRO = new System.Windows.Forms.Label();
             this.F1PosDRO = new System.Windows.Forms.Label();
+            this.Temp_LBL = new System.Windows.Forms.Label();
+            this.Pos_LBL = new System.Windows.Forms.Label();
             this.F1AbsolutePresetPanel = new System.Windows.Forms.Panel();
             this.F1FocusOffsetPanel = new System.Windows.Forms.Panel();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.F1AbsoluteMovePanel = new System.Windows.Forms.Panel();
             this.F1AbsPosTB = new System.Windows.Forms.MaskedTextBox();
             this.F1Center_Btn = new System.Windows.Forms.Button();
@@ -69,10 +71,23 @@
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupFocuser2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.positionAndTemperatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.relativeFocusAdjustToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.temperatureCompensationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.absoluteFocusAdjustToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.relativeFocusOffsetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.absoluteFocusPresetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.alwaysOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.F2In_BTN = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -84,20 +99,20 @@
             this.F2TempModeON_RB = new System.Windows.Forms.RadioButton();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.f2Halt = new System.Windows.Forms.Button();
             this.F2TempDRO = new System.Windows.Forms.Label();
             this.F2PosDRO = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.F2AbsolutePresetPanel = new System.Windows.Forms.Panel();
             this.F2FocusOffsetPanel = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.F2AbsoluteMovePanel = new System.Windows.Forms.Panel();
             this.F2AbsPosTB = new System.Windows.Forms.MaskedTextBox();
             this.F2CenterBtn = new System.Windows.Forms.Button();
             this.F2GoToBtn = new System.Windows.Forms.Button();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.F1StepSize_NUD)).BeginInit();
@@ -127,15 +142,15 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.label10, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label11, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.label9, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.panel5, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.F1TempCompPanel, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.panel4, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.F1AbsolutePresetPanel, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.F1FocusOffsetPanel, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.label9, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.label10, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label11, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.F1AbsoluteMovePanel, 0, 5);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 27);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -153,6 +168,33 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(243, 530);
             this.tableLayoutPanel1.TabIndex = 31;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(3, 348);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(117, 13);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "Relative Focus Offsets:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(3, 439);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(121, 13);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "Absolute Focus Presets:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(3, 282);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(115, 13);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "Absolute Focus Adjust:";
             // 
             // panel5
             // 
@@ -187,6 +229,7 @@
             // 
             // F1StepSize_NUD
             // 
+            this.F1StepSize_NUD.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TestHarness.Properties.Settings.Default, "LastF1Increment", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.F1StepSize_NUD.Location = new System.Drawing.Point(85, 27);
             this.F1StepSize_NUD.Maximum = new decimal(new int[] {
             10000,
@@ -201,11 +244,8 @@
             this.F1StepSize_NUD.Name = "F1StepSize_NUD";
             this.F1StepSize_NUD.Size = new System.Drawing.Size(66, 20);
             this.F1StepSize_NUD.TabIndex = 14;
-            this.F1StepSize_NUD.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
+            this.F1StepSize_NUD.Value = global::TestHarness.Properties.Settings.Default.LastF1Increment;
+            this.F1StepSize_NUD.ValueChanged += new System.EventHandler(this.F1StepSize_NUD_ValueChanged);
             // 
             // F1OUT_Btn
             // 
@@ -249,6 +289,7 @@
             this.F1TempModeOFF_RB.Tag = "False";
             this.F1TempModeOFF_RB.Text = "Off";
             this.F1TempModeOFF_RB.UseVisualStyleBackColor = true;
+            this.F1TempModeOFF_RB.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TempComp_Click);
             // 
             // F1TempModeON_RB
             // 
@@ -260,6 +301,7 @@
             this.F1TempModeON_RB.Tag = "True";
             this.F1TempModeON_RB.Text = "On";
             this.F1TempModeON_RB.UseVisualStyleBackColor = true;
+            this.F1TempModeON_RB.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TempComp_Click);
             // 
             // panel4
             // 
@@ -299,38 +341,36 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.Temp_LBL);
-            this.panel3.Controls.Add(this.Pos_LBL);
+            this.panel3.Controls.Add(this.f1Halt);
+            this.panel3.Controls.Add(this.f1NicknameLBL);
             this.panel3.Controls.Add(this.F1TempDRO);
             this.panel3.Controls.Add(this.F1PosDRO);
+            this.panel3.Controls.Add(this.Temp_LBL);
+            this.panel3.Controls.Add(this.Pos_LBL);
             this.panel3.Location = new System.Drawing.Point(3, 45);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(237, 124);
             this.panel3.TabIndex = 1;
             // 
-            // Temp_LBL
+            // f1Halt
             // 
-            this.Temp_LBL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.Temp_LBL.AutoSize = true;
-            this.Temp_LBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Temp_LBL.Location = new System.Drawing.Point(75, 102);
-            this.Temp_LBL.Name = "Temp_LBL";
-            this.Temp_LBL.Size = new System.Drawing.Size(86, 16);
-            this.Temp_LBL.TabIndex = 8;
-            this.Temp_LBL.Text = "Temperature";
+            this.f1Halt.Enabled = false;
+            this.f1Halt.Location = new System.Drawing.Point(2, 44);
+            this.f1Halt.Name = "f1Halt";
+            this.f1Halt.Size = new System.Drawing.Size(38, 36);
+            this.f1Halt.TabIndex = 30;
+            this.f1Halt.Text = "Halt";
+            this.f1Halt.UseVisualStyleBackColor = true;
+            this.f1Halt.Click += new System.EventHandler(this.f1Halt_Click);
             // 
-            // Pos_LBL
+            // f1NicknameLBL
             // 
-            this.Pos_LBL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.Pos_LBL.AutoSize = true;
-            this.Pos_LBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Pos_LBL.Location = new System.Drawing.Point(75, 45);
-            this.Pos_LBL.Name = "Pos_LBL";
-            this.Pos_LBL.Size = new System.Drawing.Size(56, 16);
-            this.Pos_LBL.TabIndex = 7;
-            this.Pos_LBL.Text = "Position";
+            this.f1NicknameLBL.AutoSize = true;
+            this.f1NicknameLBL.Location = new System.Drawing.Point(35, 4);
+            this.f1NicknameLBL.Name = "f1NicknameLBL";
+            this.f1NicknameLBL.Size = new System.Drawing.Size(35, 13);
+            this.f1NicknameLBL.TabIndex = 29;
+            this.f1NicknameLBL.Text = "label5";
             // 
             // F1TempDRO
             // 
@@ -341,9 +381,9 @@
             this.F1TempDRO.Cursor = System.Windows.Forms.Cursors.Hand;
             this.F1TempDRO.Font = new System.Drawing.Font("Nina", 18F);
             this.F1TempDRO.ForeColor = System.Drawing.Color.Red;
-            this.F1TempDRO.Location = new System.Drawing.Point(35, 66);
+            this.F1TempDRO.Location = new System.Drawing.Point(47, 71);
             this.F1TempDRO.Name = "F1TempDRO";
-            this.F1TempDRO.Size = new System.Drawing.Size(167, 36);
+            this.F1TempDRO.Size = new System.Drawing.Size(142, 36);
             this.F1TempDRO.TabIndex = 27;
             this.F1TempDRO.Text = "------";
             this.F1TempDRO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -357,12 +397,36 @@
             this.F1PosDRO.Cursor = System.Windows.Forms.Cursors.Hand;
             this.F1PosDRO.Font = new System.Drawing.Font("Nina", 18F);
             this.F1PosDRO.ForeColor = System.Drawing.Color.Red;
-            this.F1PosDRO.Location = new System.Drawing.Point(35, 10);
+            this.F1PosDRO.Location = new System.Drawing.Point(47, 20);
             this.F1PosDRO.Name = "F1PosDRO";
-            this.F1PosDRO.Size = new System.Drawing.Size(165, 36);
+            this.F1PosDRO.Size = new System.Drawing.Size(142, 36);
             this.F1PosDRO.TabIndex = 28;
             this.F1PosDRO.Text = "------";
             this.F1PosDRO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // Temp_LBL
+            // 
+            this.Temp_LBL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.Temp_LBL.AutoSize = true;
+            this.Temp_LBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Temp_LBL.Location = new System.Drawing.Point(75, 107);
+            this.Temp_LBL.Name = "Temp_LBL";
+            this.Temp_LBL.Size = new System.Drawing.Size(86, 16);
+            this.Temp_LBL.TabIndex = 8;
+            this.Temp_LBL.Text = "Temperature";
+            // 
+            // Pos_LBL
+            // 
+            this.Pos_LBL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.Pos_LBL.AutoSize = true;
+            this.Pos_LBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Pos_LBL.Location = new System.Drawing.Point(75, 56);
+            this.Pos_LBL.Name = "Pos_LBL";
+            this.Pos_LBL.Size = new System.Drawing.Size(56, 16);
+            this.Pos_LBL.TabIndex = 7;
+            this.Pos_LBL.Text = "Position";
             // 
             // F1AbsolutePresetPanel
             // 
@@ -386,33 +450,6 @@
             this.F1FocusOffsetPanel.Padding = new System.Windows.Forms.Padding(5);
             this.F1FocusOffsetPanel.Size = new System.Drawing.Size(237, 69);
             this.F1FocusOffsetPanel.TabIndex = 33;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 282);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(115, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "Absolute Focus Adjust:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 348);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(117, 13);
-            this.label10.TabIndex = 1;
-            this.label10.Text = "Relative Focus Offsets:";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(3, 439);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(121, 13);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "Absolute Focus Presets:";
             // 
             // F1AbsoluteMovePanel
             // 
@@ -485,6 +522,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // hubToolStripMenuItem
             // 
@@ -549,12 +587,104 @@
             // 
             // viewToolStripMenuItem
             // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAllToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.positionAndTemperatureToolStripMenuItem,
+            this.relativeFocusAdjustToolStripMenuItem,
+            this.temperatureCompensationToolStripMenuItem,
+            this.absoluteFocusAdjustToolStripMenuItem,
+            this.relativeFocusOffsetsToolStripMenuItem,
+            this.absoluteFocusPresetsToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.alwaysOnTopToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
             // 
+            // showAllToolStripMenuItem
+            // 
+            this.showAllToolStripMenuItem.Name = "showAllToolStripMenuItem";
+            this.showAllToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.showAllToolStripMenuItem.Text = "Show All";
+            this.showAllToolStripMenuItem.Click += new System.EventHandler(this.showAllToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(220, 6);
+            // 
+            // positionAndTemperatureToolStripMenuItem
+            // 
+            this.positionAndTemperatureToolStripMenuItem.Checked = true;
+            this.positionAndTemperatureToolStripMenuItem.CheckOnClick = true;
+            this.positionAndTemperatureToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.positionAndTemperatureToolStripMenuItem.Name = "positionAndTemperatureToolStripMenuItem";
+            this.positionAndTemperatureToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.positionAndTemperatureToolStripMenuItem.Text = "Position and Temperature";
+            // 
+            // relativeFocusAdjustToolStripMenuItem
+            // 
+            this.relativeFocusAdjustToolStripMenuItem.Checked = true;
+            this.relativeFocusAdjustToolStripMenuItem.CheckOnClick = true;
+            this.relativeFocusAdjustToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.relativeFocusAdjustToolStripMenuItem.Name = "relativeFocusAdjustToolStripMenuItem";
+            this.relativeFocusAdjustToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.relativeFocusAdjustToolStripMenuItem.Text = "Relative Focus Adjust";
+            // 
+            // temperatureCompensationToolStripMenuItem
+            // 
+            this.temperatureCompensationToolStripMenuItem.Checked = true;
+            this.temperatureCompensationToolStripMenuItem.CheckOnClick = true;
+            this.temperatureCompensationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.temperatureCompensationToolStripMenuItem.Name = "temperatureCompensationToolStripMenuItem";
+            this.temperatureCompensationToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.temperatureCompensationToolStripMenuItem.Text = "Temperature Compensation";
+            // 
+            // absoluteFocusAdjustToolStripMenuItem
+            // 
+            this.absoluteFocusAdjustToolStripMenuItem.Checked = true;
+            this.absoluteFocusAdjustToolStripMenuItem.CheckOnClick = true;
+            this.absoluteFocusAdjustToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.absoluteFocusAdjustToolStripMenuItem.Name = "absoluteFocusAdjustToolStripMenuItem";
+            this.absoluteFocusAdjustToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.absoluteFocusAdjustToolStripMenuItem.Text = "Absolute Focus Adjust";
+            // 
+            // relativeFocusOffsetsToolStripMenuItem
+            // 
+            this.relativeFocusOffsetsToolStripMenuItem.Checked = true;
+            this.relativeFocusOffsetsToolStripMenuItem.CheckOnClick = true;
+            this.relativeFocusOffsetsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.relativeFocusOffsetsToolStripMenuItem.Name = "relativeFocusOffsetsToolStripMenuItem";
+            this.relativeFocusOffsetsToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.relativeFocusOffsetsToolStripMenuItem.Text = "Relative Focus Offsets";
+            // 
+            // absoluteFocusPresetsToolStripMenuItem
+            // 
+            this.absoluteFocusPresetsToolStripMenuItem.Checked = true;
+            this.absoluteFocusPresetsToolStripMenuItem.CheckOnClick = true;
+            this.absoluteFocusPresetsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.absoluteFocusPresetsToolStripMenuItem.Name = "absoluteFocusPresetsToolStripMenuItem";
+            this.absoluteFocusPresetsToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.absoluteFocusPresetsToolStripMenuItem.Text = "Absolute Focus Presets";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(220, 6);
+            // 
+            // alwaysOnTopToolStripMenuItem
+            // 
+            this.alwaysOnTopToolStripMenuItem.CheckOnClick = true;
+            this.alwaysOnTopToolStripMenuItem.Name = "alwaysOnTopToolStripMenuItem";
+            this.alwaysOnTopToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.alwaysOnTopToolStripMenuItem.Text = "Always On Top";
+            // 
             // helpToolStripMenuItem
             // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem,
+            this.documentationToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
@@ -572,22 +702,22 @@
             // StatusLabel
             // 
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(118, 17);
-            this.StatusLabel.Text = "toolStripStatusLabel1";
+            this.StatusLabel.Size = new System.Drawing.Size(114, 17);
+            this.StatusLabel.Text = "Hub Not Connected";
             // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.label8, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.label12, 0, 8);
+            this.tableLayoutPanel2.Controls.Add(this.label7, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.panel1, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.panel2, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.panel6, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.panel7, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.F2AbsolutePresetPanel, 0, 9);
             this.tableLayoutPanel2.Controls.Add(this.F2FocusOffsetPanel, 0, 7);
-            this.tableLayoutPanel2.Controls.Add(this.label7, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.label8, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.label12, 0, 8);
             this.tableLayoutPanel2.Controls.Add(this.F2AbsoluteMovePanel, 0, 5);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(263, 27);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -605,6 +735,33 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(243, 530);
             this.tableLayoutPanel2.TabIndex = 31;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 348);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(117, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Relative Focus Offsets:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(3, 439);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(121, 13);
+            this.label12.TabIndex = 2;
+            this.label12.Text = "Absolute Focus Presets:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 282);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(115, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Absolute Focus Adjust:";
             // 
             // panel1
             // 
@@ -639,6 +796,7 @@
             // 
             // F2StepSize_NUD
             // 
+            this.F2StepSize_NUD.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::TestHarness.Properties.Settings.Default, "LastF2Increment", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.F2StepSize_NUD.Location = new System.Drawing.Point(85, 27);
             this.F2StepSize_NUD.Maximum = new decimal(new int[] {
             10000,
@@ -653,11 +811,8 @@
             this.F2StepSize_NUD.Name = "F2StepSize_NUD";
             this.F2StepSize_NUD.Size = new System.Drawing.Size(66, 20);
             this.F2StepSize_NUD.TabIndex = 14;
-            this.F2StepSize_NUD.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
+            this.F2StepSize_NUD.Value = global::TestHarness.Properties.Settings.Default.LastF2Increment;
+            this.F2StepSize_NUD.ValueChanged += new System.EventHandler(this.F2StepSize_NUD_ValueChanged);
             // 
             // F2OUT_Btn
             // 
@@ -701,6 +856,7 @@
             this.F2TempModeOFF_RB.Tag = "False";
             this.F2TempModeOFF_RB.Text = "Off";
             this.F2TempModeOFF_RB.UseVisualStyleBackColor = true;
+            this.F2TempModeOFF_RB.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TempComp_Click);
             // 
             // F2TempModeON_RB
             // 
@@ -712,6 +868,7 @@
             this.F2TempModeON_RB.Tag = "True";
             this.F2TempModeON_RB.Text = "On";
             this.F2TempModeON_RB.UseVisualStyleBackColor = true;
+            this.F2TempModeON_RB.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TempComp_Click);
             // 
             // panel6
             // 
@@ -723,38 +880,26 @@
             // 
             // panel7
             // 
-            this.panel7.Controls.Add(this.label3);
-            this.panel7.Controls.Add(this.label4);
+            this.panel7.Controls.Add(this.f2Halt);
             this.panel7.Controls.Add(this.F2TempDRO);
             this.panel7.Controls.Add(this.F2PosDRO);
+            this.panel7.Controls.Add(this.label3);
+            this.panel7.Controls.Add(this.label4);
             this.panel7.Location = new System.Drawing.Point(3, 45);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(237, 124);
             this.panel7.TabIndex = 1;
             // 
-            // label3
+            // f2Halt
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(75, 103);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(86, 16);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Temperature";
-            // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(75, 45);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(56, 16);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Position";
+            this.f2Halt.Enabled = false;
+            this.f2Halt.Location = new System.Drawing.Point(1, 44);
+            this.f2Halt.Name = "f2Halt";
+            this.f2Halt.Size = new System.Drawing.Size(38, 36);
+            this.f2Halt.TabIndex = 30;
+            this.f2Halt.Text = "Halt";
+            this.f2Halt.UseVisualStyleBackColor = true;
+            this.f2Halt.Click += new System.EventHandler(this.f2Halt_Click);
             // 
             // F2TempDRO
             // 
@@ -765,9 +910,9 @@
             this.F2TempDRO.Cursor = System.Windows.Forms.Cursors.Hand;
             this.F2TempDRO.Font = new System.Drawing.Font("Nina", 18F);
             this.F2TempDRO.ForeColor = System.Drawing.Color.Red;
-            this.F2TempDRO.Location = new System.Drawing.Point(37, 66);
+            this.F2TempDRO.Location = new System.Drawing.Point(47, 71);
             this.F2TempDRO.Name = "F2TempDRO";
-            this.F2TempDRO.Size = new System.Drawing.Size(167, 36);
+            this.F2TempDRO.Size = new System.Drawing.Size(142, 36);
             this.F2TempDRO.TabIndex = 27;
             this.F2TempDRO.Text = "------";
             this.F2TempDRO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -781,12 +926,36 @@
             this.F2PosDRO.Cursor = System.Windows.Forms.Cursors.Hand;
             this.F2PosDRO.Font = new System.Drawing.Font("Nina", 18F);
             this.F2PosDRO.ForeColor = System.Drawing.Color.Red;
-            this.F2PosDRO.Location = new System.Drawing.Point(37, 10);
+            this.F2PosDRO.Location = new System.Drawing.Point(47, 20);
             this.F2PosDRO.Name = "F2PosDRO";
-            this.F2PosDRO.Size = new System.Drawing.Size(165, 36);
+            this.F2PosDRO.Size = new System.Drawing.Size(142, 36);
             this.F2PosDRO.TabIndex = 28;
             this.F2PosDRO.Text = "------";
             this.F2PosDRO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(75, 107);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(86, 16);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Temperature";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(75, 56);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(56, 16);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Position";
             // 
             // F2AbsolutePresetPanel
             // 
@@ -810,33 +979,6 @@
             this.F2FocusOffsetPanel.Padding = new System.Windows.Forms.Padding(5);
             this.F2FocusOffsetPanel.Size = new System.Drawing.Size(237, 69);
             this.F2FocusOffsetPanel.TabIndex = 33;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 282);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(115, 13);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Absolute Focus Adjust:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 348);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(117, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Relative Focus Offsets:";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(3, 439);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(121, 13);
-            this.label12.TabIndex = 2;
-            this.label12.Text = "Absolute Focus Presets:";
             // 
             // F2AbsoluteMovePanel
             // 
@@ -895,6 +1037,18 @@
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox4.TabIndex = 22;
             this.pictureBox4.TabStop = false;
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.aboutToolStripMenuItem.Text = "About...";
+            // 
+            // documentationToolStripMenuItem
+            // 
+            this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.documentationToolStripMenuItem.Text = "Documentation";
             // 
             // Form1
             // 
@@ -1017,6 +1171,21 @@
         private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterExitSleepModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setupFocuser2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem positionAndTemperatureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem relativeFocusAdjustToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem temperatureCompensationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem absoluteFocusAdjustToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem relativeFocusOffsetsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem absoluteFocusPresetsToolStripMenuItem;
+        private System.Windows.Forms.Label f1NicknameLBL;
+        private System.Windows.Forms.ToolStripMenuItem showAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem alwaysOnTopToolStripMenuItem;
+        private System.Windows.Forms.Button f1Halt;
+        private System.Windows.Forms.Button f2Halt;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
     }
 }
 

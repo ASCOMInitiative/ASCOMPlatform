@@ -215,6 +215,9 @@ namespace ASCOM.OptecFocuserHub
         //
         private static bool LoadComObjectAssemblies()
         {
+#if DEBUG
+            MessageBox.Show("loading");
+#endif
             m_ComObjectAssys = new ArrayList();
             m_ComObjectTypes = new ArrayList();
 
@@ -237,8 +240,8 @@ namespace ASCOM.OptecFocuserHub
                     Assembly so = Assembly.LoadFrom(aPath);
                     Type t = so.GetType(fqClassName, true);
                     m_ComObjectTypes.Add(t);
-                    //m_ComObjectTypes.Add(so.GetType("ASCOM.OptecFocuserHub.Focuser", true));
                     m_ComObjectAssys.Add(so);
+                   
                 }
                 catch (Exception e)
                 {

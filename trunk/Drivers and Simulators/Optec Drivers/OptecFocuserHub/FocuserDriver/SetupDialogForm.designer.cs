@@ -43,37 +43,42 @@ namespace ASCOM.OptecFocuserHub
             this.TcpipPortNumberTB = new System.Windows.Forms.TextBox();
             this.ConnectionSetupGB = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Home_BTN = new System.Windows.Forms.Button();
+            this.TempCompDescLabel = new System.Windows.Forms.Label();
+            this.tempCompModeLabel = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.BacklashCompStepsNUD = new System.Windows.Forms.NumericUpDown();
+            this.BacklashCompCB = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.FocuserTypeCB = new System.Windows.Forms.ComboBox();
             this.NicknameTB = new System.Windows.Forms.TextBox();
+            this.SetupTempCompBtn = new System.Windows.Forms.Button();
             this.ChangeFocuserTypeBTN = new System.Windows.Forms.Button();
             this.ChangeNicknameBTN = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.LEDTrackbar = new System.Windows.Forms.TrackBar();
             this.ConnectBTN = new System.Windows.Forms.Button();
             this.DisconnectBTN = new System.Windows.Forms.Button();
             this.ConnectionMonitor = new System.Windows.Forms.Timer(this.components);
             this.OkBTN = new System.Windows.Forms.Button();
             this.PowerLight = new System.Windows.Forms.PictureBox();
             this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.LEDTrackbar = new System.Windows.Forms.TrackBar();
-            this.label7 = new System.Windows.Forms.Label();
-            this.BacklashCompCB = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.BacklashCompStepsNUD = new System.Windows.Forms.NumericUpDown();
             this.panel1.SuspendLayout();
             this.ConnectionSetupGB.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BacklashCompStepsNUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LEDTrackbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PowerLight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LEDTrackbar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BacklashCompStepsNUD)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdCancel
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(214, 496);
+            this.cmdCancel.Location = new System.Drawing.Point(140, 498);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -197,7 +202,7 @@ namespace ASCOM.OptecFocuserHub
             this.ConnectionSetupGB.Controls.Add(this.PortNumTB);
             this.ConnectionSetupGB.Controls.Add(this.ComPortNameCB);
             this.ConnectionSetupGB.Controls.Add(this.label4);
-            this.ConnectionSetupGB.Location = new System.Drawing.Point(15, 90);
+            this.ConnectionSetupGB.Location = new System.Drawing.Point(15, 74);
             this.ConnectionSetupGB.Name = "ConnectionSetupGB";
             this.ConnectionSetupGB.Size = new System.Drawing.Size(258, 144);
             this.ConnectionSetupGB.TabIndex = 12;
@@ -206,29 +211,127 @@ namespace ASCOM.OptecFocuserHub
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.Home_BTN);
+            this.groupBox2.Controls.Add(this.TempCompDescLabel);
+            this.groupBox2.Controls.Add(this.tempCompModeLabel);
+            this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.BacklashCompStepsNUD);
             this.groupBox2.Controls.Add(this.BacklashCompCB);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.FocuserTypeCB);
             this.groupBox2.Controls.Add(this.NicknameTB);
+            this.groupBox2.Controls.Add(this.SetupTempCompBtn);
             this.groupBox2.Controls.Add(this.ChangeFocuserTypeBTN);
             this.groupBox2.Controls.Add(this.ChangeNicknameBTN);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.LEDTrackbar);
-            this.groupBox2.Location = new System.Drawing.Point(15, 264);
+            this.groupBox2.Location = new System.Drawing.Point(15, 255);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(258, 199);
+            this.groupBox2.Size = new System.Drawing.Size(258, 237);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Focuser Settings:";
+            // 
+            // Home_BTN
+            // 
+            this.Home_BTN.Location = new System.Drawing.Point(9, 206);
+            this.Home_BTN.Name = "Home_BTN";
+            this.Home_BTN.Size = new System.Drawing.Size(87, 23);
+            this.Home_BTN.TabIndex = 11;
+            this.Home_BTN.Text = "Home Device";
+            this.Home_BTN.UseVisualStyleBackColor = true;
+            this.Home_BTN.Click += new System.EventHandler(this.HomeBtn_Click);
+            // 
+            // TempCompDescLabel
+            // 
+            this.TempCompDescLabel.AutoSize = true;
+            this.TempCompDescLabel.Location = new System.Drawing.Point(82, 89);
+            this.TempCompDescLabel.Name = "TempCompDescLabel";
+            this.TempCompDescLabel.Size = new System.Drawing.Size(100, 13);
+            this.TempCompDescLabel.TabIndex = 10;
+            this.TempCompDescLabel.Text = "Mode A Description";
+            // 
+            // tempCompModeLabel
+            // 
+            this.tempCompModeLabel.AutoSize = true;
+            this.tempCompModeLabel.Location = new System.Drawing.Point(82, 74);
+            this.tempCompModeLabel.Name = "tempCompModeLabel";
+            this.tempCompModeLabel.Size = new System.Drawing.Size(14, 13);
+            this.tempCompModeLabel.TabIndex = 9;
+            this.tempCompModeLabel.Text = "A";
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(4, 74);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(75, 33);
+            this.label9.TabIndex = 8;
+            this.label9.Text = "Temp. Comp. Mode:";
+            // 
+            // BacklashCompStepsNUD
+            // 
+            this.BacklashCompStepsNUD.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.BacklashCompStepsNUD.Location = new System.Drawing.Point(129, 145);
+            this.BacklashCompStepsNUD.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.BacklashCompStepsNUD.Minimum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            -2147483648});
+            this.BacklashCompStepsNUD.Name = "BacklashCompStepsNUD";
+            this.BacklashCompStepsNUD.Size = new System.Drawing.Size(81, 20);
+            this.BacklashCompStepsNUD.TabIndex = 7;
+            this.BacklashCompStepsNUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.BacklashCompStepsNUD.ValueChanged += new System.EventHandler(this.BacklashCompStepsNUD_ValueChanged);
+            // 
+            // BacklashCompCB
+            // 
+            this.BacklashCompCB.AutoSize = true;
+            this.BacklashCompCB.Location = new System.Drawing.Point(7, 118);
+            this.BacklashCompCB.Name = "BacklashCompCB";
+            this.BacklashCompCB.Size = new System.Drawing.Size(182, 17);
+            this.BacklashCompCB.TabIndex = 6;
+            this.BacklashCompCB.Text = "Backlash Compensation Enabled";
+            this.BacklashCompCB.UseVisualStyleBackColor = true;
+            this.BacklashCompCB.CheckedChanged += new System.EventHandler(this.BacklashCompCB_CheckedChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 146);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(117, 13);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Backlash Comp. Steps:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 171);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(83, 13);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "LED Brightness:";
             // 
             // FocuserTypeCB
             // 
             this.FocuserTypeCB.Enabled = false;
             this.FocuserTypeCB.FormattingEnabled = true;
-            this.FocuserTypeCB.Location = new System.Drawing.Point(98, 47);
+            this.FocuserTypeCB.Location = new System.Drawing.Point(100, 44);
             this.FocuserTypeCB.Name = "FocuserTypeCB";
             this.FocuserTypeCB.Size = new System.Drawing.Size(110, 21);
             this.FocuserTypeCB.TabIndex = 3;
@@ -243,10 +346,20 @@ namespace ASCOM.OptecFocuserHub
             this.NicknameTB.TabIndex = 2;
             this.NicknameTB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NicknameTB_KeyPress);
             // 
+            // SetupTempCompBtn
+            // 
+            this.SetupTempCompBtn.Image = global::ASCOM.OptecFocuserHub.Properties.Resources.gear_16;
+            this.SetupTempCompBtn.Location = new System.Drawing.Point(216, 68);
+            this.SetupTempCompBtn.Name = "SetupTempCompBtn";
+            this.SetupTempCompBtn.Size = new System.Drawing.Size(36, 25);
+            this.SetupTempCompBtn.TabIndex = 1;
+            this.SetupTempCompBtn.UseVisualStyleBackColor = true;
+            this.SetupTempCompBtn.Click += new System.EventHandler(this.SetupTempCompBtn_Click);
+            // 
             // ChangeFocuserTypeBTN
             // 
             this.ChangeFocuserTypeBTN.Image = global::ASCOM.OptecFocuserHub.Properties.Resources.gear_16;
-            this.ChangeFocuserTypeBTN.Location = new System.Drawing.Point(216, 44);
+            this.ChangeFocuserTypeBTN.Location = new System.Drawing.Point(216, 41);
             this.ChangeFocuserTypeBTN.Name = "ChangeFocuserTypeBTN";
             this.ChangeFocuserTypeBTN.Size = new System.Drawing.Size(36, 25);
             this.ChangeFocuserTypeBTN.TabIndex = 1;
@@ -266,7 +379,7 @@ namespace ASCOM.OptecFocuserHub
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(4, 50);
+            this.label6.Location = new System.Drawing.Point(4, 47);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(75, 13);
             this.label6.TabIndex = 0;
@@ -281,9 +394,19 @@ namespace ASCOM.OptecFocuserHub
             this.label5.TabIndex = 0;
             this.label5.Text = "Nickname:";
             // 
+            // LEDTrackbar
+            // 
+            this.LEDTrackbar.Location = new System.Drawing.Point(100, 171);
+            this.LEDTrackbar.Maximum = 100;
+            this.LEDTrackbar.Name = "LEDTrackbar";
+            this.LEDTrackbar.Size = new System.Drawing.Size(130, 45);
+            this.LEDTrackbar.TabIndex = 4;
+            this.LEDTrackbar.TickFrequency = 10;
+            this.LEDTrackbar.Scroll += new System.EventHandler(this.LEDTrackbar_Scroll);
+            // 
             // ConnectBTN
             // 
-            this.ConnectBTN.Location = new System.Drawing.Point(59, 236);
+            this.ConnectBTN.Location = new System.Drawing.Point(59, 225);
             this.ConnectBTN.Name = "ConnectBTN";
             this.ConnectBTN.Size = new System.Drawing.Size(75, 23);
             this.ConnectBTN.TabIndex = 12;
@@ -293,7 +416,7 @@ namespace ASCOM.OptecFocuserHub
             // 
             // DisconnectBTN
             // 
-            this.DisconnectBTN.Location = new System.Drawing.Point(148, 236);
+            this.DisconnectBTN.Location = new System.Drawing.Point(148, 225);
             this.DisconnectBTN.Name = "DisconnectBTN";
             this.DisconnectBTN.Size = new System.Drawing.Size(75, 23);
             this.DisconnectBTN.TabIndex = 12;
@@ -311,7 +434,7 @@ namespace ASCOM.OptecFocuserHub
             // 
             this.OkBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.OkBTN.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.OkBTN.Location = new System.Drawing.Point(214, 469);
+            this.OkBTN.Location = new System.Drawing.Point(214, 498);
             this.OkBTN.Name = "OkBTN";
             this.OkBTN.Size = new System.Drawing.Size(59, 25);
             this.OkBTN.TabIndex = 1;
@@ -323,7 +446,7 @@ namespace ASCOM.OptecFocuserHub
             // 
             this.PowerLight.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PowerLight.Image = global::ASCOM.OptecFocuserHub.Properties.Resources.GreyLight;
-            this.PowerLight.Location = new System.Drawing.Point(15, 237);
+            this.PowerLight.Location = new System.Drawing.Point(15, 226);
             this.PowerLight.MaximumSize = new System.Drawing.Size(22, 22);
             this.PowerLight.Name = "PowerLight";
             this.PowerLight.Size = new System.Drawing.Size(22, 22);
@@ -345,73 +468,6 @@ namespace ASCOM.OptecFocuserHub
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
-            // LEDTrackbar
-            // 
-            this.LEDTrackbar.Location = new System.Drawing.Point(98, 74);
-            this.LEDTrackbar.Maximum = 100;
-            this.LEDTrackbar.Name = "LEDTrackbar";
-            this.LEDTrackbar.Size = new System.Drawing.Size(112, 45);
-            this.LEDTrackbar.TabIndex = 4;
-            this.LEDTrackbar.TickFrequency = 10;
-            this.LEDTrackbar.Scroll += new System.EventHandler(this.LEDTrackbar_Scroll);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(4, 80);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(83, 13);
-            this.label7.TabIndex = 5;
-            this.label7.Text = "LED Brightness:";
-            // 
-            // BacklashCompCB
-            // 
-            this.BacklashCompCB.AutoSize = true;
-            this.BacklashCompCB.Location = new System.Drawing.Point(8, 112);
-            this.BacklashCompCB.Name = "BacklashCompCB";
-            this.BacklashCompCB.Size = new System.Drawing.Size(182, 17);
-            this.BacklashCompCB.TabIndex = 6;
-            this.BacklashCompCB.Text = "Backlash Compensation Enabled";
-            this.BacklashCompCB.UseVisualStyleBackColor = true;
-            this.BacklashCompCB.CheckedChanged += new System.EventHandler(this.BacklashCompCB_CheckedChanged);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 140);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(117, 13);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "Backlash Comp. Steps:";
-            // 
-            // BacklashCompStepsNUD
-            // 
-            this.BacklashCompStepsNUD.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.BacklashCompStepsNUD.Location = new System.Drawing.Point(129, 138);
-            this.BacklashCompStepsNUD.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.BacklashCompStepsNUD.Minimum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            -2147483648});
-            this.BacklashCompStepsNUD.Name = "BacklashCompStepsNUD";
-            this.BacklashCompStepsNUD.Size = new System.Drawing.Size(79, 20);
-            this.BacklashCompStepsNUD.TabIndex = 7;
-            this.BacklashCompStepsNUD.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.BacklashCompStepsNUD.ValueChanged += new System.EventHandler(this.BacklashCompStepsNUD_ValueChanged);
-            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -432,7 +488,7 @@ namespace ASCOM.OptecFocuserHub
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Optec Focuser Hub Setup - Focuser 1";
+            this.Text = "Focuser Hub Setup - Focuser 1";
             this.Load += new System.EventHandler(this.SetupDialogForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -440,10 +496,10 @@ namespace ASCOM.OptecFocuserHub
             this.ConnectionSetupGB.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BacklashCompStepsNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LEDTrackbar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PowerLight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LEDTrackbar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.BacklashCompStepsNUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -482,5 +538,10 @@ namespace ASCOM.OptecFocuserHub
         private System.Windows.Forms.CheckBox BacklashCompCB;
         private System.Windows.Forms.NumericUpDown BacklashCompStepsNUD;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label tempCompModeLabel;
+        private System.Windows.Forms.Button SetupTempCompBtn;
+        private System.Windows.Forms.Label TempCompDescLabel;
+        private System.Windows.Forms.Button Home_BTN;
     }
 }
