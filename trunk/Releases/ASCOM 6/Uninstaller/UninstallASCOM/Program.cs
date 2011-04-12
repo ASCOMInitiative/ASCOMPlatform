@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Comment to force recompilation
+using System;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -14,8 +15,10 @@ namespace UninstallAscom
 {
     class Program
     {
-        const string platform532 ="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{14C10725-0018-4534-AE5E-547C08B737B7}";
-        const string platform564 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{14C10725-0018-4534-AE5E-547C08B737B7}";
+        const string platform532a = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{075F543B-97C5-4118-9D54-93910DE03FE9}";
+        const string platform564a = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{075F543B-97C5-4118-9D54-93910DE03FE9}";
+        const string platform532b ="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{14C10725-0018-4534-AE5E-547C08B737B7}";
+        const string platform564b = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{14C10725-0018-4534-AE5E-547C08B737B7}";
         const string platform5532 = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ASCOM.Platform.NET.Components_is1";
         const string platform5564 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ASCOM.Platform.NET.Components_is1";
         const string uninstallString = "UninstallString";
@@ -55,14 +58,36 @@ namespace UninstallAscom
             bool is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
             LogMessage("Cleanup", "OS is 64bit: " + is64BitOperatingSystem.ToString() + ", Process is 64bit: " + is64BitProcess.ToString());
 
+            string platform564aKeyValue = null; 
+            string platform564bKeyValue = null;
             string platform564KeyValue = null;
             string platform5564KeyValue = null;
+
             bool found = false;
 
             if (is64BitOperatingSystem) // Is a 64bit OS
             {
-                platform5564KeyValue = Read(uninstallString, platform5564);
-                platform564KeyValue = Read(uninstallString, platform564);
+                platform5564KeyValue = Read(uninstallString, platform5564); // Read the 5.5 uninstall string
+                platform564aKeyValue = Read(uninstallString, platform564a); // Read the 5.0A uninstall string 
+                platform564bKeyValue = Read(uninstallString, platform564b); // Read the 5.0B uninstall string
+
+                if (platform564bKeyValue != null) // We have a 5.0B value so go with this
+                { 
+                    platform564KeyValue = platform564bKeyValue;
+                    LogMessage("Cleanup", "Found 64bit Platform 5.0B");
+                }
+                else if (platform564aKeyValue != null) // No 5.0B value so go  with 5.0A if it is present
+                {
+                    platform564KeyValue = platform564aKeyValue;
+                    LogMessage("Cleanup", "Found 64bit Platform 5.0A");
+                    //Now have to fix a missing registry key that fouls up the uninstaller - this was fixed in 5B but prevents 5A from uninstalling on 64bit systems
+                    RegistryKey RKey = Registry.ClassesRoot.CreateSubKey(@"AppID\{DF2EB077-4D59-4231-9CB4-C61AD4ECB874}");
+                    RKey.SetValue("","Fixed registry key value");
+                    RKey.Close();
+                    RKey=null;
+                    LogMessage("Cleanup", @"Successfully set AppID\{DF2EB077-4D59-4231-9CB4-C61AD4ECB874}");
+                }
+
                 StringBuilder Path = new StringBuilder(260);
                 int rc = SHGetSpecialFolderPath(IntPtr.Zero,Path,CSIDL_PROGRAM_FILES_COMMONX86,0);
                 AscomDirectory = Path.ToString() + @"\ASCOM";
@@ -75,7 +100,20 @@ namespace UninstallAscom
             }
 
             string platform5532KeyValue = Read(uninstallString, platform5532);
-            string platform532KeyValue = Read(uninstallString, platform532);
+            string platform532aKeyValue = Read(uninstallString, platform532a); 
+            string platform532bKeyValue = Read(uninstallString, platform532b);
+            string platform532KeyValue = null;
+
+            if (platform532bKeyValue != null) // We have a 5.0B value so go with this
+            {
+                platform532KeyValue = platform532bKeyValue;
+                LogMessage("Cleanup", "Found 32bit Platform 5,0B");
+            }
+            else if (platform532aKeyValue != null) // No 5.0B value so go  with 5.0A if it is present
+            {
+                platform532KeyValue = platform532aKeyValue;
+                LogMessage("Cleanup", "Found 32bit Platform 5,0A");
+            }
 
             // Migrate the profile based on the latest platform installed
             if ((platform5564KeyValue != null) | (platform5532KeyValue != null)) MigrateProfile("5.5");
@@ -225,7 +263,7 @@ namespace UninstallAscom
             {
                 LogMessage("MigrateProfile", "Creating profile object");
                 Profile Prof = new Profile(true);
-                LogMessage("MigrateProfile", "Migrating Profile"); 
+                LogMessage("MigrateProfile", "Migrating Profile from Platform: \"" + platformVersion + "\""); 
                 Prof.MigrateProfile(platformVersion);
                 LogMessage("MigrateProfile", "Successfully completed migration, disposing of profile object");
                 Prof.Dispose();

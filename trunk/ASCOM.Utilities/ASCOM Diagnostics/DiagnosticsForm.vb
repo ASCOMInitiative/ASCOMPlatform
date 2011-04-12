@@ -23,8 +23,11 @@ Imports System.Threading
 Public Class DiagnosticsForm
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
-    Private Const DISPLAY_NAME As String = "DisplayName"
-    Private Const DISPLAY_VERSION As String = "DisplayVersion"
+    Private Const INST_DISPLAY_NAME As String = "DisplayName"
+    Private Const INST_DISPLAY_VERSION As String = "DisplayVersion"
+    Private Const INST_INSTALL_DATE As String = "InstallDate"
+    Private Const INST_INSTALL_LOCATION As String = "InstallLocation"
+    Private Const INST_INSTALL_SOURCE As String = "InstallSource"
 
     Private Const COMPONENT_CATEGORIES = "Component Categories"
     Private Const ASCOM_ROOT_KEY As String = " (ASCOM Root Key)"
@@ -190,58 +193,62 @@ Public Class DiagnosticsForm
         Dim MyVersion As Version, TraceFileName As String
         Dim ProfileStore As RegistryAccess, InstallInformation As Generic.SortedList(Of String, String)
 
-        MyVersion = Assembly.GetExecutingAssembly.GetName.Version
-        InstallInformation = GetInstallInformation() 'Retrieve the current install information
-        lblTitle.Text = InstallInformation.Item(DISPLAY_NAME) & " - " & InstallInformation.Item(DISPLAY_VERSION)
-        lblResult.Text = ""
-        lblAction.Text = ""
-
-        lblMessage.Text = "Your diagnostic log will be created in:" & vbCrLf & vbCrLf & _
-        System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
-
-        btnLastLog.Enabled = False 'Disable last log button
-        sw = New Stopwatch
-
         Try
-            ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
-            TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
-            Select Case TraceFileName
-                Case "" 'Trace is disabled
-                    MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
-                    MenuUseTraceAutoFilenames.Checked = False
-                    MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
-                    MenuUseTraceManualFilename.Checked = False
-                    MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
-                    MenuSerialTraceEnabled.Enabled = True
-                Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
-                    MenuUseTraceAutoFilenames.Checked = True
-                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
-                    MenuUseTraceManualFilename.Checked = False
-                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                    MenuSerialTraceEnabled.Enabled = True
-                Case Else 'Tracing using some other fixed filename
-                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
-                    MenuUseTraceAutoFilenames.Checked = False
-                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
-                    MenuUseTraceManualFilename.Checked = True
-                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                    MenuSerialTraceEnabled.Enabled = True
-            End Select
+            MyVersion = Assembly.GetExecutingAssembly.GetName.Version
+            InstallInformation = GetInstallInformation(PLATFORM_INSTALLER_PROPDUCT_CODE, False, True, False) 'Retrieve the current install information
+            lblTitle.Text = InstallInformation.Item(INST_DISPLAY_NAME) & " - " & InstallInformation.Item(INST_DISPLAY_VERSION)
+            lblResult.Text = ""
+            lblAction.Text = ""
 
-            'Set Profile trace checked state on menu item 
-            MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
-            MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
-            MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
-            MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+            lblMessage.Text = "Your diagnostic log will be created in:" & vbCrLf & vbCrLf & _
+            System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
 
-            MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+            btnLastLog.Enabled = False 'Disable last log button
+            sw = New Stopwatch
+
+            Try
+                ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
+                TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
+                Select Case TraceFileName
+                    Case "" 'Trace is disabled
+                        MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
+                        MenuUseTraceAutoFilenames.Checked = False
+                        MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
+                        MenuUseTraceManualFilename.Checked = False
+                        MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
+                        MenuSerialTraceEnabled.Enabled = True
+                    Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
+                        MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
+                        MenuUseTraceAutoFilenames.Checked = True
+                        MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
+                        MenuUseTraceManualFilename.Checked = False
+                        MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                        MenuSerialTraceEnabled.Enabled = True
+                    Case Else 'Tracing using some other fixed filename
+                        MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
+                        MenuUseTraceAutoFilenames.Checked = False
+                        MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
+                        MenuUseTraceManualFilename.Checked = True
+                        MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                        MenuSerialTraceEnabled.Enabled = True
+                End Select
+
+                'Set Profile trace checked state on menu item 
+                MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+                MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+                MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
+                MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+
+                MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+            Catch ex As Exception
+                EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
+            End Try
+
+
+            Me.BringToFront()
         Catch ex As Exception
-            EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
+            MsgBox(ex.ToString)
         End Try
-
-
-        Me.BringToFront()
     End Sub
 
     Sub Status(ByVal Msg As String)
@@ -441,8 +448,6 @@ Public Class DiagnosticsForm
         For Each App As ApplicationList In System.Enum.GetValues(GetType(ApplicationList))
             ScanApplication(App)
         Next
-        TL.BlankLine()
-        TL.BlankLine()
         Status("")
         Action("")
     End Sub
@@ -559,7 +564,6 @@ Public Class DiagnosticsForm
         End Try
 
     End Sub
-
 
     Private Sub GetApplicationViaAppid(ByVal Application As ApplicationList, ByVal Executable As String)
         Dim Reg As RegistryAccess, AppKey As RegistryKey, CLSIDString As String, FileName As String
@@ -3473,27 +3477,39 @@ Public Class DiagnosticsForm
         Dim ELog As EventLog
         Dim Entries As EventLogEntryCollection
         Dim EventLogs() As EventLog
+        Dim Found As Boolean
         Try
             TL.LogMessage("ScanEventLog", "Start")
             EventLogs = EventLog.GetEventLogs()
+            Found = False
             For Each EventLog As EventLog In EventLogs
-                Try : TL.LogMessage("ScanEventLog", "Found log: " & EventLog.LogDisplayName) : Catch : End Try
+                Try
+                    TL.LogMessage("ScanEventLog", "Found log: " & EventLog.LogDisplayName)
+                    If EventLog.LogDisplayName.ToUpper = "ASCOM" Then Found = True
+                Catch
+                End Try
             Next
             TL.BlankLine()
 
             TL.LogMessage("ScanEventLog", "ASCOM Log entries")
-            ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE)
-            Entries = ELog.Entries
-            For Each Entry As EventLogEntry In Entries
-                TL.LogMessageCrLf("ScanEventLog", Entry.TimeGenerated & " " & _
-                                                  Entry.Source & " " & _
-                                                  Entry.EntryType.ToString & " " & _
-                                                  Entry.UserName & " " & _
-                                                  Entry.InstanceId & " " & _
-                                                  Entry.Message)
-            Next
-            TL.LogMessage("ScanEventLog", "ASCOM Log entries complete")
-            TL.BlankLine()
+            If Found Then
+                ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE)
+                Entries = ELog.Entries
+                For Each Entry As EventLogEntry In Entries
+                    TL.LogMessageCrLf("ScanEventLog", Entry.TimeGenerated & " " & _
+                                                      Entry.Source & " " & _
+                                                      Entry.EntryType.ToString & " " & _
+                                                      Entry.UserName & " " & _
+                                                      Entry.InstanceId & " " & _
+                                                      Entry.Message.Trim(New Char() {Chr(10), Chr(13)}))
+                Next
+                TL.LogMessage("ScanEventLog", "ASCOM Log entries complete")
+                TL.BlankLine()
+            Else
+                TL.LogMessage("ScanEventLog", "ASCOM event log not yet created")
+                TL.BlankLine()
+            End If
+
         Catch ex As Exception
             LogException("ScanEventLog", "Exception: " & ex.ToString)
         End Try
@@ -3818,7 +3834,9 @@ Public Class DiagnosticsForm
     Sub ScanLogs()
         Const NumLine As Integer = 30 'Number of lines to read from file to see if it is an ASCOM log
 
-        Dim TempFiles(NumLine + 1) As String
+        Dim TempFiles() As String
+        Dim SetupFiles(), UninstallFiles() As String
+        Dim TempFilesList As New List(Of String)
         Dim SR As StreamReader = Nothing
         Dim Lines(30) As String, LineCount As Integer = 0
         Dim ASCOMFile As Boolean
@@ -3826,8 +3844,13 @@ Public Class DiagnosticsForm
         Try
             Status("Scanning setup logs")
             TL.LogMessage("SetupFile", "Starting scan")
-            'Get an array of setup filenames from the Temp directory
-            TempFiles = Directory.GetFiles(Path.GetFullPath(Environment.GetEnvironmentVariable("Temp")), "Setup Log*.txt", SearchOption.TopDirectoryOnly)
+            'Get an array of setup and uninstall filenames from the Temp directory
+            SetupFiles = Directory.GetFiles(Path.GetFullPath(Environment.GetEnvironmentVariable("Temp")), "Setup Log*.txt", SearchOption.TopDirectoryOnly)
+            UninstallFiles = Directory.GetFiles(Path.GetFullPath(Environment.GetEnvironmentVariable("Temp")), "Uninstall Log*.txt", SearchOption.TopDirectoryOnly)
+            TempFilesList.AddRange(SetupFiles)
+            TempFilesList.AddRange(UninstallFiles)
+            TempFiles = TempFilesList.ToArray
+
             For Each TempFile As String In TempFiles 'Iterate over results
                 Try
                     TL.LogMessage("SetupFile", TempFile)
@@ -4023,15 +4046,15 @@ Public Class DiagnosticsForm
                                     RegSvr32Path = PathShell.ToString & "\RegSvr32.exe" 'Construct the full path to RegSvr32.exe
                                     Info = New ProcessStartInfo
                                     Info.FileName = RegSvr32Path 'Populate the ProcessStartInfo with the full path to RegSvr32.exe 
-                                    Info.Arguments = """" & ASCOMPath & """" ' And the start parameter specifying the file to COM register
+                                    Info.Arguments = "/s """ & ASCOMPath & """" ' And the start parameter specifying the file to COM register
                                     TL.LogMessage("HelperHijacking", "  RegSvr32 Path: """ & RegSvr32Path & """, COM Path: """ & ASCOMPath & """")
 
                                     P = New Process ' Create the process
-                                    P.StartInfo = Info ' Set the start inof
+                                    P.StartInfo = Info ' Set the start info
                                     P.Start() 'Start the process and wait for it to finish
                                     TL.LogMessage("HelperHijacking", "  Started registration")
                                     P.WaitForExit()
-                                    TL.LogMessage("HelperHijacking", "  Finished registration")
+                                    TL.LogMessage("HelperHijacking", "  Finished registration, Return code: " + P.ExitCode)
                                     P.Dispose()
 
                                     'Reread the COM information to check whether it is now fixed
@@ -4093,6 +4116,16 @@ Public Class DiagnosticsForm
                         TL.LogMessage("Assemblies", name.Name)
                         ass = Assembly.Load(name.FullName)
                         AssemblyInfo(TL, name.Name, ass) ' Get file version and other information
+
+                        Try
+                            Dim U As New Uri(ass.GetName.CodeBase)
+                            Dim LocalPath As String = U.LocalPath
+                            FileDetails(Path.GetDirectoryName(LocalPath) & "\", Path.GetFileName(LocalPath))
+                        Catch ex As Exception
+
+                        End Try
+
+
                     Else
                         TL.LogMessage("Assemblies", name.FullName)
                     End If
@@ -4676,7 +4709,8 @@ Public Class DiagnosticsForm
     Private Sub ScanInstalledPlatform()
         Dim RegKey As RegistryKey
 
-        GetInstalledComponent("Platform 5", "{14C10725-0018-4534-AE5E-547C08B737B7}", False, True)
+        GetInstalledComponent("Platform 5A", "{075F543B-97C5-4118-9D54-93910DE03FE9}", False, True, True)
+        GetInstalledComponent("Platform 5B", "{14C10725-0018-4534-AE5E-547C08B737B7}", False, True, True)
 
         Try ' Platform 5.5 Inno installer setup, should always be absent in Platform 6!
             RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\microsoft\Windows\Currentversion\uninstall\ASCOM.platform.NET.Components_is1", False)
@@ -4694,70 +4728,146 @@ Public Class DiagnosticsForm
         End Try
         TL.BlankLine()
 
-        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, False)
-        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True)
+        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, True, False)
+        GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
 
         TL.BlankLine()
     End Sub
 
-    Private Sub GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean)
-        Dim RegKey As RegistryKey
+    ''' <summary>
+    ''' Report details of an installed product
+    ''' </summary>
+    ''' <param name="Name">Presentation name of product</param>
+    ''' <param name="ProductCode">Installer GUID uniquely identifying the product</param>
+    ''' <param name="Required">Flag determining whether to report an error or return a status message if the product isn't installed</param>
+    ''' <param name="Force32">Flag forcing use of 32bit registry on a 64bit OS</param>
+    ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an Installaware Native installer</param>
+    ''' <remarks></remarks>
+    Private Sub GetInstalledComponent(ByVal Name As String, ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean)
+        Dim InstallInfo As Generic.SortedList(Of String, String)
         Try ' Platform 6 installer GUID, should always be present in Platform 6
-            If Force32 Then 'Ensure we always go to the 32bit registry portion even on a 64bit OS
-                RegKey = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+            InstallInfo = GetInstallInformation(ProductCode, Required, Force32, MSIInstaller)
+            If InstallInfo.Count > 0 Then
+                TL.LogMessage(Name, InstallInfo(INST_DISPLAY_NAME))
+                TL.LogMessage(Name, "Version - " & InstallInfo(INST_DISPLAY_VERSION))
+                TL.LogMessage(Name, "Install Date - " & InstallInfo(INST_INSTALL_DATE))
+                TL.LogMessage(Name, "Install Location - " & InstallInfo(INST_INSTALL_LOCATION))
+                'TL.LogMessage(Name, "Install Source - " & InstallInfo(INST_INSTALL_SOURCE))
+                NMatches += 1
             Else
-                RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False)
-            End If
-
-            TL.LogMessage(Name, RegKey.GetValue(DISPLAY_NAME, "##### Missing"))
-            TL.LogMessage(Name, "Version - " & RegKey.GetValue(DISPLAY_VERSION, "##### Missing"))
-            TL.LogMessage(Name, "Install Date - " & RegKey.GetValue("InstallDate", "##### Missing"))
-            TL.LogMessage(Name, "Install Location - " & RegKey.GetValue("InstallLocation", "##### Missing"))
-            TL.LogMessage(Name, "Install Source - " & RegKey.GetValue("InstallSource", "##### Missing"))
-            RegKey.Close()
-            NMatches += 1
-        Catch ex As ProfilePersistenceException
-            If ex.Message.Contains("as it does not exist") Then
-                If Required Then ' Must be present so log an error if its not
-                    LogException(Name, "Exception: " & ex.Message)
-                Else ' Optional so just record absence
-                    TL.LogMessage(Name, "Not installed")
-                End If
-            Else
-                LogException(Name, "Exception: " & ex.ToString)
-            End If
-        Catch ex As NullReferenceException
-            If Required Then ' Must be present so log an error if its not
-                LogException(Name, "Exception: " & ex.Message)
-            Else ' Optional so just record absence
                 TL.LogMessage(Name, "Not installed")
             End If
+
+            'Catch ex As ProfilePersistenceException
+            '    If ex.Message.Contains("as it does not exist") Then
+            ' If Required Then ' Must be present so log an error if its not
+            ' LogException(Name, "Exception: " & ex.Message)
+            ' Else ' Optional so just record absence
+            ' End If
+            ' Else
+            ' LogException(Name, "Exception: " & ex.ToString)
+            ' End If
+            'Catch ex As NullReferenceException
+            '    If Required Then ' Must be present so log an error if its not
+            ' LogException(Name, "Exception: " & ex.Message)
+            ' Else ' Optional so just record absence
+            ' TL.LogMessage(Name, "Not installed")
+            ' End If
         Catch ex As Exception
             LogException(Name, "Exception: " & ex.ToString)
         End Try
         TL.BlankLine()
 
     End Sub
-
-    Private Function GetInstallInformation() As Generic.SortedList(Of String, String)
+    Private Const INST_UNINSTALL_STRING As String = "UninstallString"
+    Private Const INST_DISPLAY_ICON As String = "DisplayIcon"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="ProductCode">Installer GUID uniquely identifying the product</param>
+    ''' <param name="Required">Flag determining whether to report an error or return a status message if the product isn't installed</param>
+    ''' <param name="Force32">Flag forcing use of 32bit registry on a 64bit OS</param>
+    ''' <param name="MSIInstaller">True if the installer is an MSI based installer, False if an Installaware Native installer</param>
+    ''' <returns>Generic Sorted List of key value pairs. If not found retruns an empty list</returns>
+    ''' <remarks></remarks>
+    Private Function GetInstallInformation(ByVal ProductCode As String, ByVal Required As Boolean, ByVal Force32 As Boolean, ByVal MSIInstaller As Boolean) As Generic.SortedList(Of String, String)
         Dim RegKey As RegistryKey
         Dim RetVal As New Generic.SortedList(Of String, String)
-        Try ' Platform 6 installer GUID, should always be present in Platform 6
-            RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
-            'If ApplicationBits() = Bitness.Bits32 Then '32bit OS
-            'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ASCOM_PLATFORM_NAME, False)
-            'Else '64bit OS
-            'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
-            'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & ASCOM_PLATFORM_NAME, False)
-            'End If
+        Dim UninstallString As String
+        Dim UninstallKey As RegistryKey, UninstallSubKeyNames() As String
+        Dim PlatformName As String = ""
 
-            'DisplayName = RegKey.GetValue("DisplayName")
-            RetVal.Add(DISPLAY_NAME, RegKey.GetValue(DISPLAY_NAME))
-            RetVal.Add(DISPLAY_VERSION, RegKey.GetValue(DISPLAY_VERSION))
-            RegKey.Close()
+        Const DebugTRace As Boolean = False ' Set to true to debug this code, otherwise leave false!
+
+        If DebugTRace Then TL.LogMessage("GetInstallInformation", "Product: " & ProductCode & ", Required: " & Required & ", Forece32: " & Force32 & ", MSIInstaller: " & MSIInstaller)
+        Try
+            If MSIInstaller Then
+                'RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & PLATFORM_INSTALLER_PROPDUCT_CODE, False)
+                If (ApplicationBits() = Bitness.Bits32) Or (ApplicationBits() = Bitness.Bits64 And Not Force32) Then 'use 32bit access on 32bit and 64nit access on 64bit
+                    RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False)
+                Else '64bit OS but requires 32bit registry
+                    RegKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" & ProductCode, False)
+                End If
+                If DebugTRace Then
+                    If Not RegKey Is Nothing Then
+                        TL.LogMessage("GetInstallInformation", "  MSI Installer: found Reg Key: " & RegKey.Name)
+                    Else
+                        TL.LogMessage("GetInstallInformation", "  MSI Installer: Regkey is nothing!!")
+                    End If
+                End If
+
+            Else
+                If (ApplicationBits() = Bitness.Bits32) Or (ApplicationBits() = Bitness.Bits64 And Not Force32) Then 'use 32bit access on 32bit and 64nit access on 64bit
+                    UninstallKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\", False)
+                    RegKey = UninstallKey.OpenSubKey(ProductCode, False)
+                Else '64bit OS but requires 32bit registry
+                    UninstallKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\", False)
+                    RegKey = UninstallKey.OpenSubKey(ProductCode, False)
+                End If
+                If DebugTRace Then
+                    If Not UninstallKey Is Nothing Then
+                        TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall Key: " & UninstallKey.Name)
+                    Else
+                        TL.LogMessage("GetInstallInformation", "  Uninstall is nothing!!")
+                    End If
+
+                    If Not RegKey Is Nothing Then
+                        TL.LogMessage("GetInstallInformation", "  Native Installer: found Reg Key: " & RegKey.Name)
+                    Else
+                        TL.LogMessage("GetInstallInformation", "  Native Installer: Regkey is nothing!!")
+                    End If
+                End If
+                'Get the uninstall string associated with this GUID
+                UninstallString = RegKey.GetValue(INST_UNINSTALL_STRING, "")
+                RegKey.Close()
+                RegKey = Nothing
+                If DebugTRace Then TL.LogMessage("GetInstallInformation", "  Native Installer: found Uninstall String: " & UninstallString)
+
+                UninstallSubKeyNames = UninstallKey.GetSubKeyNames
+                For Each SubKey As String In UninstallSubKeyNames
+                    If DebugTRace Then TL.LogMessage("GetInstallInformation", "  Native Installer: searching subkey : " & SubKey)
+                    If UninstallKey.OpenSubKey(SubKey).GetValue(INST_DISPLAY_ICON, "") = UninstallString Then
+                        RegKey = UninstallKey.OpenSubKey(SubKey)
+                        If DebugTRace Then TL.LogMessage("GetInstallInformation", "    Native Installer Found: " & RegKey.Name)
+                        Exit For
+                    End If
+                Next
+                End If
+
+            RetVal.Add(INST_DISPLAY_NAME, RegKey.GetValue(INST_DISPLAY_NAME, "Not known"))
+            RetVal.Add(INST_DISPLAY_VERSION, RegKey.GetValue(INST_DISPLAY_VERSION, "Not known"))
+            RetVal.Add(INST_INSTALL_DATE, RegKey.GetValue(INST_INSTALL_DATE, "Not known"))
+            RetVal.Add(INST_INSTALL_SOURCE, RegKey.GetValue(INST_INSTALL_SOURCE, "Not known"))
+            RetVal.Add(INST_INSTALL_LOCATION, RegKey.GetValue(INST_INSTALL_LOCATION, "Not known"))
+
+                RegKey.Close()
         Catch ex As Exception
-            If Not RetVal.ContainsKey(DISPLAY_NAME) Then RetVal.Add(DISPLAY_NAME, "Unknown Name")
-            If Not RetVal.ContainsKey(DISPLAY_VERSION) Then RetVal.Add(DISPLAY_VERSION, "Unknown Version")
+            If DebugTRace Then TL.LogMessageCrLf("Exception", ex.ToString)
+            'If Not RetVal.ContainsKey(INST_DISPLAY_NAME) Then RetVal.Add(INST_DISPLAY_NAME, "Unknown name")
+            'If Not RetVal.ContainsKey(INST_DISPLAY_VERSION) Then RetVal.Add(INST_DISPLAY_VERSION, "Unknown version")
+            'If Not RetVal.ContainsKey(INST_INSTALL_DATE) Then RetVal.Add(INST_INSTALL_DATE, "Unknown install date")
+            'If Not RetVal.ContainsKey(INST_INSTALL_LOCATION) Then RetVal.Add(INST_INSTALL_LOCATION, "Unknown install location")
+            'If Not RetVal.ContainsKey(INST_INSTALL_SOURCE) Then RetVal.Add(INST_INSTALL_SOURCE, "Unknown install source")
         End Try
 
         Return RetVal
