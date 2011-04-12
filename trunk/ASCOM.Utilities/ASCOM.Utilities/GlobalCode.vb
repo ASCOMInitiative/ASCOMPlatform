@@ -414,7 +414,7 @@ Module VersionCode
     ''' error information, call GetLastError.</returns>
     ''' <remarks></remarks>
     <DllImport("Kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)> _
-        Private Function IsWow64Process( _
+    Private Function IsWow64Process( _
               ByVal hProcess As System.IntPtr, _
               ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
     End Function
