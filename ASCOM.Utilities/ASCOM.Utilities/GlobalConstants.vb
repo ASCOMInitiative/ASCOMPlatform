@@ -96,5 +96,7 @@ Module GlobalConstants
         DriverCompatibilityException = 20
         TimerSetupException = 21
         DiagnosticsHijackedCOMRegistration = 22
+        UninstallASCOMInfo = 23
+        UninstallASCOMError = 24
     End Enum
 End Module
