@@ -22,8 +22,9 @@ Comment: end
 [END REGION]
 Comment: Check that Platform 6 is already installed
 Set Variable PLATFORM6OK to FALSE
-Get Installed State for {8961E141-B307-4882-ABAD-77A3E76A40C1} into Variable PLATFORM6OK
-if Variable PLATFORM6OK Equals FALSE
+Comment: Get Installed State for {8961E141-B307-4882-ABAD-77A3E76A40C1} into Variable PLATFORM6OK
+Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}\UninstallString into PLATFORM6OK
+if Variable PLATFORM6OK Equals 
   if Variable MAINTENANCE Equals FALSE
     Comment: No Platform 6 and we are installing so we have a problem and must signal it
     Set Variable PREREQ to TRUE
