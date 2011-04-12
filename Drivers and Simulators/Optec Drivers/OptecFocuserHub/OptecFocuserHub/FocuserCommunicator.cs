@@ -141,16 +141,36 @@ namespace ASCOM.OptecFocuserHubTools
                 if (MySocket == null) return false;
                 if (MySocket.Connected) return true;
                 else return false;
-
             }
             set
             {
                 if (value)
                 {
+                    //System.Windows.Forms.MessageBox.Show("Opening Connection");
                     lock (Locker_low)
                     {
                         if (MySocket == null) MySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                        MySocket.Connect(MyEndPoint);
+                      
+                        MySocket.Blocking = false;
+                        try
+                        {
+                            MySocket.Connect(MyEndPoint);
+                        }
+                        catch { }
+                        DateTime startTime = DateTime.Now;
+                        while (DateTime.Now.Subtract(startTime).TotalSeconds < 1.5)
+                        {
+                            if (MySocket.Connected)
+                                break;
+                            System.Windows.Forms.Application.DoEvents();
+                        }
+                        if (!MySocket.Connected)
+                        {
+                            MySocket.Close();
+                            throw new ApplicationException("Unable to connect to Focuser Hub. Are you certain the cables are connected and that you have selected the correct " + 
+                            "IP address and Port number?");
+                        }
+                        else MySocket.Blocking = true;
                     }
                 }
                 else
@@ -214,6 +234,7 @@ namespace ASCOM.OptecFocuserHubTools
             {
                 do
                 {
+                    MySocket.ReceiveTimeout = timeout_ms;
                     if (Environment.TickCount > startTickCount + timeout_ms)
                         throw new Exception("Timeout.");
                     try
@@ -233,7 +254,11 @@ namespace ASCOM.OptecFocuserHubTools
                             Thread.Sleep(30);
                         }
                         else
+                        {
+                            MySocket.Close();
+                            MySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                             throw ex;  // any serious error occurr
+                        }
                     }
                 } while (!newlineReceived);
 
@@ -289,8 +314,9 @@ namespace ASCOM.OptecFocuserHubTools
             lock (Locker_low)
             {
                 if (MySocket == null) return;
-                if (MySocket.Connected)
-                    MySocket.Disconnect(false);
+                MySocket.Close();
+                //MyEndPoint = null;
+                MySocket = null;
             }
         }
 

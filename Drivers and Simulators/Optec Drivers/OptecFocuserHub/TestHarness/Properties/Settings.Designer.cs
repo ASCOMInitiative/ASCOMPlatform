@@ -102,5 +102,113 @@ namespace TestHarness.Properties {
                 this["Focuser2Disabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayPositionAndTemperature {
+            get {
+                return ((bool)(this["DisplayPositionAndTemperature"]));
+            }
+            set {
+                this["DisplayPositionAndTemperature"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayRelativeFocusAdjust {
+            get {
+                return ((bool)(this["DisplayRelativeFocusAdjust"]));
+            }
+            set {
+                this["DisplayRelativeFocusAdjust"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayTempComp {
+            get {
+                return ((bool)(this["DisplayTempComp"]));
+            }
+            set {
+                this["DisplayTempComp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayAbsoluteFocusAdjust {
+            get {
+                return ((bool)(this["DisplayAbsoluteFocusAdjust"]));
+            }
+            set {
+                this["DisplayAbsoluteFocusAdjust"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayRelativeFocusOffsets {
+            get {
+                return ((bool)(this["DisplayRelativeFocusOffsets"]));
+            }
+            set {
+                this["DisplayRelativeFocusOffsets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayAbsoluteFocusPresets {
+            get {
+                return ((bool)(this["DisplayAbsoluteFocusPresets"]));
+            }
+            set {
+                this["DisplayAbsoluteFocusPresets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public decimal LastF1Increment {
+            get {
+                return ((decimal)(this["LastF1Increment"]));
+            }
+            set {
+                this["LastF1Increment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public decimal LastF2Increment {
+            get {
+                return ((decimal)(this["LastF2Increment"]));
+            }
+            set {
+                this["LastF2Increment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlwaysOnTop {
+            get {
+                return ((bool)(this["AlwaysOnTop"]));
+            }
+            set {
+                this["AlwaysOnTop"] = value;
+            }
+        }
     }
 }

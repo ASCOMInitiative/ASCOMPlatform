@@ -136,12 +136,6 @@
   <ItemGroup>
     <None Include="Resources\Optec Logo-medium png.png" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OptecFocuserHub\OptecFocuserHub.csproj">
-      <Project>{8F1CF868-0F6D-4B44-A0D8-974C4CE74283}</Project>
-      <Name>OptecFocuserHub</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

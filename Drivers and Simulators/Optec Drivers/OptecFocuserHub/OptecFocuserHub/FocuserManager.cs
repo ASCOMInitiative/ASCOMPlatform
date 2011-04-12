@@ -129,7 +129,15 @@ namespace ASCOM.OptecFocuserHubTools
         {
             get
             {
-                if (connectionState == CONNECTION_STATES.LINK_VERIFIED) return true;
+                if (connectionState == CONNECTION_STATES.LINK_VERIFIED)
+                {
+                    if (focuserCommunicator.ConnectionOpen) return true;
+                    else
+                    {
+                        connectionState = CONNECTION_STATES.DISCONNECTED;
+                        return false;
+                    }
+                }
                 else return false;
             }
             set

@@ -12,11 +12,10 @@ namespace ASCOM.OptecFocuserHubTools
     {
         //public delegate void FocuserEventHandler(object sender, FocuserEventArgs e); 
 
-        public event EventHandler StatusChanged;
-        public event EventHandler ConfigurationChanged;
-        private FocuserCommunicator focuserCommunicator;
+        private static FocuserCommunicator focuserCommunicator;     // Static because both of the focusers share the same device.
         private DateTime lastStatusUpdateTime = new DateTime(1, 1, 1);
         private DateTime lastConfigUpdateTime = new DateTime(1, 1, 1);
+
 
         #region Constructors / Destructors **************************************************************************************************
 
@@ -24,8 +23,13 @@ namespace ASCOM.OptecFocuserHubTools
         {
             //this.connectionState = CONNECTION_STATES.DISCONNECTED;
             Debug.Print("Creating Hub Focuser");
-            this.focuserCommunicator = focComm;
+            focuserCommunicator = focComm;
             this.focuserNumber = n;
+        }
+
+        internal void SetFocuserCommunicator(FocuserCommunicator newFc)
+        {
+            focuserCommunicator = newFc;
         }
 
         #endregion
@@ -57,8 +61,6 @@ namespace ASCOM.OptecFocuserHubTools
         private bool tempProbeAttached = false;
         private bool remoteInOutAttached = false;
         private bool handControlAttached = false;
-        private bool hasBacklashComp = false;
-
 
         #endregion
 
@@ -136,70 +138,78 @@ namespace ASCOM.OptecFocuserHubTools
 
         public int BacklashCompSteps { get { getConfig(); return backlashCompSteps; } set { setBacklashCompSteps(value); } }
 
+        public bool TempCompEnabled { get { getConfig(); return tempCompEnabled; } set { setTempCompEnabled(value); } }
+
+        public bool TempProbeAttached { get { getStatus(); return tempProbeAttached; } }
+
         #endregion
 
         #region Private Methods of Focuser ************************************************************************************************
 
         internal void getConfig()
         {
-            // 1. Make sure the connection state is correct
-            /*
-            if (connectionState == CONNECTION_STATES.DISCONNECTED)
-            {
-                throw new ApplicationException("Attempted to get config info before connecting to device.");
-            }
-             * */
 
-            // Make sure there has been some delay since the last check...
-            if (DateTime.Now.Subtract(lastConfigUpdateTime).TotalMilliseconds < 1000)
+#if DEBUG
+            Debug.Print("Getting Config");
+#endif
+
+            // 1. Make sure there has been some delay since the last check...
+            if (DateTime.Now.Subtract(lastConfigUpdateTime).TotalMilliseconds < 300)
                 return;
-            else lastStatusUpdateTime = DateTime.Now;
+            else lastConfigUpdateTime = DateTime.Now;
 
             // 2. Format the command string
             string cmd = (this.focuserNumber == FOCUSER_NUMBER.ONE) ? "<F1GETCONFIG>" : "<F2GETCONFIG>";
 
-            // 3. Send the command string
-                //focuserCommunicator.SendString(cmd, 1000);
-            // 4. Receive the bang
-           // if (focuserCommunicator.SendStringReadLine(cmd, 2000) != "!")
-            //    throw new ApplicationException("Did not receive \"!\" in response to sent command \"" + cmd + "\"");
-            //
-            /*
-            // 5. Receive the config data (or error text if there was a problem)
-            string resp = focuserCommunicator.ReadLine(2000);
-            List<string> ConfigData = new List<string>();
-            if (resp.Contains("CONFIG"))
-            {
-                string r = " ";
-                while (true)
-                {
-                    r = focuserCommunicator.ReadLine(2000);
-                    if (r.Contains("END")) break;
-                    else ConfigData.Add(r);
-                }
-            }
-            else if (resp.Contains("ER=")) throw new ApplicationException("The device return the error \"" + resp + "\" from command \"" + cmd + "\".");
-            */
-            // 5, Receive the config data
-            List<string> ConfigData = focuserCommunicator.SendStringReadLines(cmd, "END", 1000);
-            if (ConfigData[0] == "!") ConfigData.RemoveAt(0);
-            if (ConfigData[0] == "CONFIG") ConfigData.RemoveAt(0);
             
-
-            // 6. Parse the Config data
+            List<string> ConfigData = new List<string>();
             try
             {
-                parseConfigData(ConfigData);
+                // 3. Send the command string and get response
+                ConfigData = focuserCommunicator.SendStringReadLines(cmd, "END", 1000);
+                ClearTimeoutCount();        // Because the operation did not time out
             }
-            catch(Exception ex)
+            catch
             {
-                Debug.Print(ex.Message);
+                HandleTimeoutEvent();
             }
+
+            try
+            {
+                // 4. Try to verify good response data...
+                if (ConfigData[0] == "!")
+                    ConfigData.RemoveAt(0);
+                else
+                    throw new ApplicationException();
+                if (ConfigData[0] == "CONFIG")
+                    ConfigData.RemoveAt(0);
+                else
+                    throw new ApplicationException();
+
+                // 5. Parse the Config data
+                parseConfigData(ConfigData);
+
+                // 6. Clear the bad response count because we interpreted good data
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+                return;
+            }
+          
+#if DEBUG
+            Debug.Print("Finished getting Config");
+#endif
 
         }
 
         private void parseConfigData(List<string> data)
         {
+            //
+            // Parse the received configuration string
+            // No Try/Catch block because we want exceptions to be handled by the caller.
+            //
             int start = 11;
 
             // 1. Get the device Nickname
@@ -234,23 +244,13 @@ namespace ASCOM.OptecFocuserHubTools
             this.ledBrightness = int.Parse(data[14].Substring(start));
             // 16. Get the SleepMode designator
             this.isInSleepMode = (data[15].Substring(start) == "1") ? true : false;
-
-
         }
 
         internal void getStatus()
         {
-
-            // 1. Make sure the connection state is correct
-            /*
-            if (connectionState == CONNECTION_STATES.DISCONNECTED)
-            {
-                throw new ApplicationException("Attempted to get status info before connecting to device.");
-            }
-             */
-
-            // Make sure there has been some delay since the last check...
-            if (DateTime.Now.Subtract(lastStatusUpdateTime).TotalMilliseconds < 250)
+            Debug.Print("Getting Status"); 
+            // 1. Make sure there has been some delay since the last check...
+            if (DateTime.Now.Subtract(lastStatusUpdateTime).TotalMilliseconds < 300)
             {
                 Debug.Print("not enough time - Satus" + " - Focuser: " + focuserNumber.ToString());
                 return;
@@ -263,64 +263,57 @@ namespace ASCOM.OptecFocuserHubTools
 
             // 2. Format the command string
             string cmd = (this.focuserNumber == FOCUSER_NUMBER.ONE) ? "<F1GETSTATUS>" : "<F2GETSTATUS>";
-
+            List<string> StatusData = new List<string>();
             try
             {
-                // 3. Send the command string
-                //focuserCommunicator.SendString(cmd, 1000);
-
-                // 4. Receive the bang
-                /*
-                if (focuserCommunicator.SendStringReadLine(cmd, 2000) != "!")
-                    throw new ApplicationException("Did not receive \"!\" in response to sent command \"" + cmd + "\"");
-
-                // 5. Receive the status data (or error text if there was a problem)
-                string resp = focuserCommunicator.ReadLine(2000);
-                List<string> StatusData = new List<string>();
-                if (resp.Contains("STATUS"))
-                {
-            
-                    string r = " ";
-                    while (true)
-                    {
-                        r = focuserCommunicator.ReadLine(2000);
-                        if (r.Contains("END")) break;
-                        else StatusData.Add(r);
-                    }
-                }
-                else if (resp.Contains("ER=")) throw new ApplicationException("The device return the error \"" + resp + "\" from command \"" + cmd + "\".");
-                */
-                List<string> StatusData = focuserCommunicator.SendStringReadLines(cmd, "END", 1000);
-                if (StatusData[0] == "!") StatusData.RemoveAt(0);
-                else 
-                    throw new ApplicationException();
-                if (StatusData[0] == "STATUS") StatusData.RemoveAt(0);
-                else 
-                    throw new ApplicationException();
-
-                // 6. Parse the Status data
-                parseStatusData(StatusData);
+                // 3. Send the command string and get responses
+                StatusData = focuserCommunicator.SendStringReadLines(cmd, "END", 1000);
+                ClearTimeoutCount();    // Because the communication did not time out.
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.Print(ex.Message);
+                HandleTimeoutEvent();
+                return;
             }
-
-
-            
            
-           
+            try
+            {
+                // 4. Verify correct responses
+                if (StatusData[0] == "!")
+                    StatusData.RemoveAt(0);
+                else
+                {
+                    HandleBadResponse();
+                    return;
+                }
+                if (StatusData[0] == "STATUS")
+                    StatusData.RemoveAt(0);
+                else
+                {
+                    HandleBadResponse();
+                    return;
+                }
+                // 5. Parse the Status data
+                parseStatusData(StatusData);
 
-            // 7. Trigger the event if something was different
-            /*
-            if (!StatusData.Equals(lastStatus))
-                TriggerAnEvent(StatusChanged);
-             * */
+                // 6. Clear the bad response count since the data was good.
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+                return;
+            }
+            Debug.Print("Finished getting Status");
 
         }
 
         private void parseStatusData(List<string> data)
         {
+            //
+            // Parse the received status strings
+            // No Try/Catch block because we want exceptions to be handled by the caller.
+            //   
             int start = 11;
             int i = 0;
             NumberFormatInfo nfi = new NumberFormatInfo();
@@ -360,13 +353,32 @@ namespace ASCOM.OptecFocuserHubTools
                 throw new ApplicationException("Nickname cannot conatin the characters '<' or '>'.");
             string cmd = (focuserNumber == FOCUSER_NUMBER.ONE) ? ("<F1SCNN") : ("<F2SCNN");
             cmd += newName + ">";
-            List<string> resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+            List<string> resp = new List<string>();
+            try
+            {
+                resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();
+            }
+            catch
+            {
+                HandleTimeoutEvent();
+                return;
+            }
             // Check for the bang
-            if (resp[0] != "!")
-                throw new ApplicationException("Did not receive ! in response to setting device Nickname. Response = " + resp[0]);
-            // Check for "SET"
-            if (resp[1] != "SET")
-                throw new ApplicationException("Did not receive SET in response to setting device Nickname. Response = " + resp[1]);
+            try
+            {
+                if (resp[0] != "!")
+                    throw new ApplicationException("Did not receive ! in response to setting device Nickname. Response = " + resp[0]);
+                // Check for "SET"
+                if (resp[1] != "SET")
+                    throw new ApplicationException("Did not receive SET in response to setting device Nickname. Response = " + resp[1]);
+                // Clear bad response count because we got good data
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+            }
         }
 
         private void setDeviceType(char newType)
@@ -377,18 +389,37 @@ namespace ASCOM.OptecFocuserHubTools
                 throw new ApplicationException("New device type must be 'A' through 'G'");
             string cmd = (focuserNumber == FOCUSER_NUMBER.ONE) ? ("<F1SCDT") : ("<F2SCDT");
             cmd += newType + ">";
-            List<string> resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
-            // Check for the bang
-            if (resp[0] != "!")
-                throw new ApplicationException("Did not receive ! in response to setting device type. Response = " + resp[0]);
-            // Check for "SET"
-            if (resp[1] != "SET")
-                throw new ApplicationException("Did not receive SET in response to setting device type. Response = " + resp[1]);
-
-            // The device will automatically reset now... Try to disconnect and then reconnect
-            focuserCommunicator.ConnectionOpen = false;
-            System.Threading.Thread.Sleep(1500);
-            focuserCommunicator.ConnectionOpen = true;
+            List<string> resp = new List<string>();
+            try
+            {
+                resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();    // Because it didn't timeout
+            }
+            catch
+            {
+                HandleTimeoutEvent();
+            }
+            try
+            {
+                // Check for the bang
+                if (resp[0] != "!")
+                    throw new ApplicationException("Did not receive ! in response to setting device type. Response = " + resp[0]);
+                // Check for "SET"
+                if (resp[1] != "SET")
+                    throw new ApplicationException("Did not receive SET in response to setting device type. Response = " + resp[1]);
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+            }
+            try
+            {
+                // The device will automatically reset now... Disconnect from the device. The user will have to reconnect.
+                focuserCommunicator.ConnectionOpen = false;
+            }
+            catch { }
+            
         }
 
         private void setLEDBrightness(int newVal)
@@ -402,16 +433,35 @@ namespace ASCOM.OptecFocuserHubTools
             {
                 throw new ApplicationException("LED Brightness must be less than or equal to 100");
             }
-            if (newVal == ledBrightness) return;
-            // Set the new value
+            if (newVal == ledBrightness) 
+                return;
+
             string cmd = "<F1SCLB" + newVal.ToString("000") + ">";
-            List<string> resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
-            // Check for the bang
-            if (resp[0] != "!")
-                throw new ApplicationException("Did not receive ! in response to setting device LED Brightness. Response = " + resp[0]);
-            // Check for "SET"
-            if (resp[1] != "SET")
-                throw new ApplicationException("Did not receive SET in response to setting device LED Brightness. Response = " + resp[1]);
+            List<string> resp = new List<string>();
+            try
+            {
+                // Set the new value
+                resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();
+            }
+            catch
+            {
+                HandleTimeoutEvent();
+            }
+            try
+            {
+                // Check for the bang
+                if (resp[0] != "!")
+                    throw new ApplicationException("Did not receive ! in response to setting device LED Brightness. Response = " + resp[0]);
+                // Check for "SET"
+                if (resp[1] != "SET")
+                    throw new ApplicationException("Did not receive SET in response to setting device LED Brightness. Response = " + resp[1]);
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+            }
         }
 
         private void setBacklashCompEnabled(bool enable)
@@ -421,13 +471,30 @@ namespace ASCOM.OptecFocuserHubTools
             string cmd = (focuserNumber == FOCUSER_NUMBER.ONE) ? ("<F1SCBE") : ("<F2SCBE");
             if (enable) cmd += "1>";
             else cmd += "0>";
-            List<string> resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
-            // Check for the bang
-            if (resp[0] != "!")
-                throw new ApplicationException("Did not receive ! in response to setting backlash compensation. Response = " + resp[0]);
-            // Check for "SET"
-            if (resp[1] != "SET")
-                throw new ApplicationException("Did not receive SET in response to setting device backlash compensation. Response = " + resp[1]);
+            List<string> resp = new List<string>();
+            try
+            {
+                resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();
+            }
+            catch
+            {
+                HandleTimeoutEvent();
+            }
+            try
+            {
+                // Check for the bang
+                if (resp[0] != "!")
+                    throw new ApplicationException("Did not receive ! in response to setting backlash compensation. Response = " + resp[0]);
+                // Check for "SET"
+                if (resp[1] != "SET")
+                    throw new ApplicationException("Did not receive SET in response to setting device backlash compensation. Response = " + resp[1]);
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+            }
         }
 
         private void setBacklashCompSteps(int newValue)
@@ -440,13 +507,65 @@ namespace ASCOM.OptecFocuserHubTools
             if (newValue >= 0) cmd += "+";
             else cmd += "-";
             cmd += newValue.ToString("00") + ">";
-            List<string> resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
-            // Check for the bang
-            if (resp[0] != "!")
-                throw new ApplicationException("Did not receive ! in response to setting backlash compensation steps. Response = " + resp[0]);
-            // Check for "SET"
-            if (resp[1] != "SET")
-                throw new ApplicationException("Did not receive SET in response to setting device backlash compensation steps. Response = " + resp[1]);
+            List<string> resp = new List<string>();
+            try
+            {
+                resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();
+            }
+            catch
+            {
+                HandleTimeoutEvent();
+            }
+
+            try
+            {
+                // Check for the bang
+                if (resp[0] != "!")
+                    throw new ApplicationException("Did not receive ! in response to setting backlash compensation steps. Response = " + resp[0]);
+                // Check for "SET"
+                if (resp[1] != "SET")
+                    throw new ApplicationException("Did not receive SET in response to setting device backlash compensation steps. Response = " + resp[1]);
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+            }
+        }
+
+        private void setTempCompEnabled(bool enabled)
+        {
+            // Prepare the command to enable/disable temp comp
+            string cmd = (focuserNumber == FOCUSER_NUMBER.ONE) ? "<F1SCTE" : "<F2SCTE";
+            if (enabled) cmd += "1>";
+            else cmd += "0>";
+            // Send the command and get response
+            List<string> resp = new List<string>();
+            try
+            {
+                resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();
+            }
+            catch
+            {
+                HandleTimeoutEvent();
+            }
+
+            try
+            {
+                // Verify success
+                if (resp[0] != "!")
+                    throw new ApplicationException("Did not receive ! in response to setting temp comp enabled flag. Response = " + resp[0]);
+                if (resp[1] != "SET")
+                    throw new ApplicationException("Did not receive SET in response to setting device backlash compensation steps. Response = " + resp[1]);
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+            }
+
         }
 
         private void TriggerAnEvent(EventHandler EH)
@@ -492,13 +611,30 @@ namespace ASCOM.OptecFocuserHubTools
             string cmd = (this.focuserNumber == FOCUSER_NUMBER.ONE) ? "<F1MA" : "<F2MA";
             cmd += (newPos.ToString().PadLeft(5, '0') + ">");
             // 3. Send the command and get responses
-            List<string> respToMoveCmd = focuserCommunicator.SendStringReadLines(cmd,2,1000);
-            // 4. Check for the bang
-            if ( respToMoveCmd[0]!= "!")
-                throw new ApplicationException("Did not receive \"!\" in response to sent command \"" + cmd + "\"");
-            // 5. Check for the acknowledgment (or error text if there was a problem)
-            if ( respToMoveCmd[1]!= "M")
-                throw new ApplicationException("The device return the error \"" + respToMoveCmd[1] + "\" from command \"" + cmd + "\".");
+            List<string> respToMoveCmd = new List<string>();
+            try
+            {
+                respToMoveCmd = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();
+            }
+            catch
+            {
+                HandleTimeoutEvent();
+            }
+            try
+            {
+                // 4. Check for the bang
+                if (respToMoveCmd[0] != "!")
+                    throw new ApplicationException("Did not receive \"!\" in response to sent command \"" + cmd + "\"");
+                // 5. Check for the acknowledgment (or error text if there was a problem)
+                if (respToMoveCmd[1] != "M")
+                    throw new ApplicationException("The device return the error \"" + respToMoveCmd[1] + "\" from command \"" + cmd + "\".");
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+            }
         }
 
         public void Home()
@@ -506,21 +642,121 @@ namespace ASCOM.OptecFocuserHubTools
             // 1. create the command string
             string cmd = (this.focuserNumber == FOCUSER_NUMBER.ONE) ? "<F1HOME>" : "<F2HOME>";
             // 2. send the command and get responses
-            List<string> respToHomeCmd = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
-            // 3. Check for the bang
-            if(respToHomeCmd[0] != "!")
-                throw new ApplicationException("Did not receive \"!\" in response to sent command \"" + cmd + "\"");
-            // 4. Check the acknowledgment (or error text if there was a problem)
-            if(respToHomeCmd[1] != "H")
-                throw new ApplicationException("The device return the error \"" + respToHomeCmd[1] + "\" from command \"" + cmd + "\".");
+            List<string> respToHomeCmd = new List<string>();
+            try
+            {
+                respToHomeCmd = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();
+            }
+            catch 
+            {
+                HandleTimeoutEvent();
+            }
+            try
+            {
+                // 3. Check for the bang
+                if (respToHomeCmd[0] != "!")
+                    throw new ApplicationException("Did not receive \"!\" in response to sent command \"" + cmd + "\"");
+                // 4. Check the acknowledgment (or error text if there was a problem)
+                if (respToHomeCmd[1] != "H")
+                    throw new ApplicationException("The device return the error \"" + respToHomeCmd[1] + "\" from command \"" + cmd + "\".");
+                // 5. Clear crap
+                ClearBadResponseCount();
+            }
+            catch 
+            {
+                HandleBadResponse();
+            }
         }
 
-        internal void SetFocuserCommunicator(FocuserCommunicator newFc)
+        public void Halt() // This should send the halt command to the focuser regardless of whether the focuser is actually moving or not.
         {
-            focuserCommunicator = newFc;
+            // Prepare the command to send
+            string cmd = (focuserNumber == FOCUSER_NUMBER.ONE) ? "<F1HALT>" : "<F2HALT>";
+            // Send the command
+            List<string> resp = new List<string>();
+            try
+            {
+                resp = focuserCommunicator.SendStringReadLines(cmd, 2, 1000);
+                ClearTimeoutCount();
+            }
+            catch
+            {
+                HandleTimeoutEvent();
+                throw;
+            }
+
+            try
+            {
+                // Check for acknowledgment of response
+                if (resp[0] != "!")
+                    throw new ApplicationException("Did not receive \"!\" in response to sent command \"" + cmd + "\"");
+                if (resp[1] != "HALTED")
+                    throw new ApplicationException("The device returned the error \"" + resp[1] + "\" from command \"" + cmd + "\".");
+                ClearBadResponseCount();
+            }
+            catch
+            {
+                HandleBadResponse();
+            }
+
         }
 
         #endregion
+
+        private static int timeoutCounter = 0;
+
+        private static int badResponseCounter = 0;
+
+        private static void HandleTimeoutEvent()
+        {
+            //
+            // A timeout could occur as a fluke because the firmware was busy
+            // This method keeps track of consecutive timeout events. If the event count gets too high 
+            // this method will throw an exception.
+            //
+            const int MaxTimeouts = 5;
+            if (timeoutCounter++ >= MaxTimeouts)
+            {
+                // Set the focuserCommunicator disconnected
+                focuserCommunicator.ConnectionOpen = false;
+                string msg = "It seems as though communication with the device has been broken. The device has exceeded the maximum " +
+                    "number of allowed consecutive timeouts. Please check your cables to ensure a good clean connection. If the problem " +
+                    "continues please contact Optec Technical Support.";
+                throw new ApplicationException(msg);
+            }
+            
+        }
+
+        private static void HandleBadResponse()
+        {
+            //
+            // A bad response received could occur because of noise in the data lines.
+            // This method keeps track of consecutive timeout events. If the event count gets too high 
+            // this method will throw an exception.
+            //
+            const int MaxBadResponses = 5;
+            if (badResponseCounter++ >= MaxBadResponses)
+            {
+                // Set the focuserCommunicator disconnected
+                focuserCommunicator.ConnectionOpen = false;
+                string msg = "The application is having trouble reading proper data from the device. The device has exceeded the maximum " +
+                    "number of allowed consecutive incorrect responses. Please check your cables to ensure a good clean connection. If the problem " +
+                    "continues please contact Optec Technical Support.";
+                throw new ApplicationException(msg);
+            }  
+        }
+
+        private static void ClearBadResponseCount()
+        {
+            badResponseCounter = 0;
+        }
+
+        private static void ClearTimeoutCount()
+        {
+            timeoutCounter = 0;
+        }
+
 
     }
 }

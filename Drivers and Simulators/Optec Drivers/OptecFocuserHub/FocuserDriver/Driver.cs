@@ -69,8 +69,7 @@ namespace ASCOM.OptecFocuserHub
 
         public void Halt()
         {
-            // TODO Replace this with your implementation
-            throw new MethodNotImplementedException("Halt");
+            myFocuserManager.Focuser1.Halt();
         }
 
         public bool IsMoving
@@ -125,15 +124,18 @@ namespace ASCOM.OptecFocuserHub
 
         public bool TempComp
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TempComp", false); }
-            set { throw new PropertyNotImplementedException("TempComp", true); }
+            get { return myFocuserManager.Focuser1.TempCompEnabled; }
+            set 
+            {
+                if (!myFocuserManager.Focuser1.TempProbeAttached)
+                    throw new ApplicationException("Cannot enable Temp Comp when probe is not attached.");
+                myFocuserManager.Focuser1.TempCompEnabled = value; 
+            }
         }
 
         public bool TempCompAvailable
         {
-            // TODO Replace this with your implementation
-            get { throw new PropertyNotImplementedException("TempCompAvailable", false); }
+            get { return myFocuserManager.Focuser1.TempProbeAttached; }
         }
 
         public double Temperature
