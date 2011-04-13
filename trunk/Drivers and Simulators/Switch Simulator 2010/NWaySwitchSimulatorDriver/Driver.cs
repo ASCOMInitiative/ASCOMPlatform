@@ -373,7 +373,6 @@ namespace ASCOM.Simulator
         [ComRegisterFunction]
         public static void RegisterASCOM(Type t)
         {
-            Trace.WriteLine("Registering -> {0} with ASCOM Profile", sCsDriverId);
             RegUnregASCOM(true);
         }
 
@@ -397,7 +396,6 @@ namespace ASCOM.Simulator
         [ComUnregisterFunction]
         public static void UnregisterASCOM(Type t)
         {
-            Trace.WriteLine("Unregistering -> {0} with ASCOM Profile", sCsDriverId);
             RegUnregASCOM(false);
         }
 
