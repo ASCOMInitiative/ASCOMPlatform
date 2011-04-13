@@ -98,5 +98,6 @@ Module GlobalConstants
         DiagnosticsHijackedCOMRegistration = 22
         UninstallASCOMInfo = 23
         UninstallASCOMError = 24
+        ProfileExplorerException = 25
     End Enum
 End Module

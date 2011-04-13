@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("ASCOM Profile Store Visualiser")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
 <Assembly: AssemblyProduct("Profile Explorer")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2010")> 
+<Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2011")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
