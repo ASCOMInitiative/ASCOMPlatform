@@ -153,10 +153,33 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ReadOnly Property Altitude() As Double
 
     ''' <summary>
-    ''' True if the dome is in the Home position.
-    ''' Set only following a Dome.FindHome operation and reset with any azimuth slew operation.
-    ''' Raises an error if not supported. 
+    '''   Indicates whether the dome is in the home position.
+    '''   Raises an error if not supported. 
+    ''' <para>
+    '''   This is normally used following a Dome.FindHome operation. The value is reset with any azimuth
+    '''   slew operation that moves the dome away from the home position.
+    ''' </para>
+    ''' <para>
+    '''   Dome.AtHome may also become true durng normal slew operations, if the dome passes through the home position
+    '''   and the dome controller hardware is capable of detecting that; or at the end of a slew operation if the dome
+    '''   comes to rest at the home position.
+    ''' </para>
     ''' </summary>
+    ''' <remarks>
+    '''   <para>
+    '''     The home position is normally defined by a hardware sensor positioned around the dome circumference
+    '''     and represents a fixed, known azimuth reference.
+    '''   </para>
+    '''   <para>
+    '''     For some devices, the home position may represent a small range of azimuth values, rather than a discrete
+    '''     value, since dome inertia, the resolution of the home position sensor and/or the azimuth encoder may be
+    '''     insufficient to return the exact same azimuth value on each occasion. Some dome controllers, on the other
+    '''     hand, will always force the azimuth reading to a fixed value whenever the home position sensor is active.
+    '''     Because of these potential differences in behaviour, applications should not rely on the reported azimuth
+    '''     position being identical each time AtHome is set <c>true</c>.
+    '''   </para>
+    ''' </remarks>
+    ''' [ASCOM-135] TPL - Updated documentation
     ReadOnly Property AtHome() As Boolean
 
     ''' <summary>

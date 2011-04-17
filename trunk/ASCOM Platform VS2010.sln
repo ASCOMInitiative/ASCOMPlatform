@@ -56,11 +56,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Dependencies", "External Dependencies", "{351942DD-A33B-40F1-B71F-224E7D5B4E7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Moq", "Moq", "{D202E935-5ADA-4769-A4D8-4A915B4267FA}"
-	ProjectSection(SolutionItems) = preProject
-		External Dependencies\Moq\Moq.chm = External Dependencies\Moq\Moq.chm
-		External Dependencies\Moq\Moq.dll = External Dependencies\Moq\Moq.dll
-		External Dependencies\Moq\Moq.xml = External Dependencies\Moq\Moq.xml
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StyleCop", "StyleCop", "{7814C016-C363-4A04-B095-27A5B33AA783}"
 	ProjectSection(SolutionItems) = preProject
@@ -88,26 +83,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Patterns and Practices", "P
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xUnit", "xUnit", "{74D351E3-1E5A-451D-AA70-D3FA28CF1F54}"
-	ProjectSection(SolutionItems) = preProject
-		External Dependencies\xUnit\HTML.xslt = External Dependencies\xUnit\HTML.xslt
-		External Dependencies\xUnit\NUnitXml.xslt = External Dependencies\xUnit\NUnitXml.xslt
-		External Dependencies\xUnit\xunit.console.exe = External Dependencies\xUnit\xunit.console.exe
-		External Dependencies\xUnit\xunit.console.exe.config = External Dependencies\xUnit\xunit.console.exe.config
-		External Dependencies\xUnit\xunit.console.x86.exe = External Dependencies\xUnit\xunit.console.x86.exe
-		External Dependencies\xUnit\xunit.console.x86.exe.config = External Dependencies\xUnit\xunit.console.x86.exe.config
-		External Dependencies\xUnit\xunit.dll = External Dependencies\xUnit\xunit.dll
-		External Dependencies\xUnit\xunit.dll.tdnet = External Dependencies\xUnit\xunit.dll.tdnet
-		External Dependencies\xUnit\xunit.extensions.dll = External Dependencies\xUnit\xunit.extensions.dll
-		External Dependencies\xUnit\xunit.extensions.xml = External Dependencies\xUnit\xunit.extensions.xml
-		External Dependencies\xUnit\xunit.gui.exe = External Dependencies\xUnit\xunit.gui.exe
-		External Dependencies\xUnit\xunit.gui.x86.exe = External Dependencies\xUnit\xunit.gui.x86.exe
-		External Dependencies\xUnit\xunit.installer.exe = External Dependencies\xUnit\xunit.installer.exe
-		External Dependencies\xUnit\xunit.runner.msbuild.dll = External Dependencies\xUnit\xunit.runner.msbuild.dll
-		External Dependencies\xUnit\xunit.runner.tdnet.dll = External Dependencies\xUnit\xunit.runner.tdnet.dll
-		External Dependencies\xUnit\xunit.runner.utility.dll = External Dependencies\xUnit\xunit.runner.utility.dll
-		External Dependencies\xUnit\xunit.runner.utility.xml = External Dependencies\xUnit\xunit.runner.utility.xml
-		External Dependencies\xUnit\xunit.xml = External Dependencies\xUnit\xunit.xml
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomActions", "CustomActions\CustomActions.csproj", "{C9BD6FCB-97C7-4096-B917-6E59B6E2C684}"
 EndProject
@@ -186,12 +161,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Platform.UnitTest", "ASCOM.Platform.UnitTest\ASCOM.Platform.UnitTest.csproj", "{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSpec", "MSpec", "{EDBA5DAC-173D-4247-8A68-45E23ED4EA1F}"
-	ProjectSection(SolutionItems) = preProject
-		External Dependencies\MSpec\CommandLine.dll = External Dependencies\MSpec\CommandLine.dll
-		External Dependencies\MSpec\Machine.Specifications.dll = External Dependencies\MSpec\Machine.Specifications.dll
-		External Dependencies\MSpec\Machine.Specifications.Reporting.dll = External Dependencies\MSpec\Machine.Specifications.Reporting.dll
-		External Dependencies\MSpec\mspec.exe = External Dependencies\MSpec\mspec.exe
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator Testing Project", "Drivers and Simulators\SimulatorTestingProject\Simulator Testing Project\Simulator Testing Project.csproj", "{342EC739-BA3D-48BF-B007-BBDDEA9E882A}"
 EndProject
@@ -963,13 +932,13 @@ Global
 		{8D8F18F1-5298-49CC-9579-6C04568D9771} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal
