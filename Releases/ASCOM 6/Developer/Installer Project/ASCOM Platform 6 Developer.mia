@@ -285,13 +285,17 @@ Install Files
 Install Files
 Install Files
 Install Files
-Set Variable
-Install Files
-Install Files
 Install Files
 Install Files
 Set Variable
 Install Files
+Install Files
+Install Files
+Install Files
+Set Variable
+Install Files
+Create Shortcut
+Create Shortcut
 Create Shortcut
 Create Shortcut
 Create Shortcut
@@ -666,6 +670,8 @@ $
 {1DC07DA9-1EEC-4170-8AB4-1E7E5C6B2D8D}
 {AF656437-F350-48A3-9158-A2BBD33BB0EC}
 {3271FA9C-AB3C-47AD-87CF-42F84355CD5F}
+{371E786E-2B25-4957-9BD2-FF05346AE7E8}
+{4418C2EF-7588-4FD8-BDD6-24D17ECE81BF}
 {87194CFA-DC3C-4C51-8C4D-B2B579C11E06}
 {18326B2E-366B-42A6-9660-36F9D9E4767D}
 {D0C956D0-8E39-4162-BE07-5705D724A3CF}
@@ -676,9 +682,11 @@ $
 {B8873485-E285-417C-9580-D02DE360A1DC}
 {55908527-B59D-42B1-9D10-42D039566565}
 {FDB09EE3-104F-4E47-8659-646104AD4CDA}
+{09767C29-1AFC-47DF-BEC0-E81EC22B075B}
 {68D285BA-CAF3-4BF5-9E23-59C7C08920D6}
-{11B8EC8C-9945-4F88-A911-0190DBAB19D2}
 {AADE4209-5063-4EEE-9F91-A5922F3D1FCA}
+{ADD53AAB-8DB2-492F-8649-6C2DC33DAC6F}
+{6164BBCC-8F3C-4A2D-9975-22D1625D32A2}
 {E4908A1B-BF68-4E04-9935-C889916AC793}
 {ACBBA184-E349-40FD-A1BE-4AE88D234DB4}
 {221A8A01-69CB-4B44-81CB-611CBF4BC171}
@@ -1567,7 +1575,7 @@ FALSE
 {18326B2E-366B-42A6-9660-36F9D9E4767D}
 ..\..\..\..\NOVAS\Algorithms.pdf
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1580,7 +1588,7 @@ FALSE
 {87194CFA-DC3C-4C51-8C4D-B2B579C11E06}
 ..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1593,7 +1601,7 @@ FALSE
 {3271FA9C-AB3C-47AD-87CF-42F84355CD5F}
 ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1606,7 +1614,7 @@ FALSE
 {AF656437-F350-48A3-9158-A2BBD33BB0EC}
 ..\..\..\..\Help\Platform Supporting Documents\Platform 6.0.pdf
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1619,7 +1627,7 @@ FALSE
 {058FDC86-0730-4598-A8BB-9DF13D550474}
 ..\..\..\..\Doc\tip.gif
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1632,7 +1640,7 @@ FALSE
 {9357557A-0E04-452E-8CD2-73D4A5CF698A}
 ..\..\..\..\Doc\Bug72T-sm.jpg
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1671,7 +1679,7 @@ FALSE
 {A84B19CE-78A5-477B-B079-78504FB4DF09}
 ..\..\..\..\Help\Script Help Files\Script56.chm
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1684,7 +1692,7 @@ FALSE
 {3A4184F7-264B-448A-86A1-FB36583A1A8E}
 ..\..\..\..\Help\Script Help Files\wsh-56.chm
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1736,7 +1744,7 @@ FALSE
 {55908527-B59D-42B1-9D10-42D039566565}
 ..\..\..\..\Help\Help\PlatformDeveloperHelp.chm
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1788,7 +1796,7 @@ FALSE
 {AF5ED094-3A84-465A-9907-D892C2D78EB4}
 ..\..\..\..\Doc\DriverInstallers.html
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1879,7 +1887,7 @@ FALSE
 {2481BBD9-6FCE-47E2-9952-DD8776769777}
 ..\..\..\..\Doc\Templates.html
 FALSE|
-$TARGETDIR$\Docs
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1893,6 +1901,32 @@ FALSE
 ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.dll
 FALSE|
 $TARGETDIR$\Components\Platform55\
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{371E786E-2B25-4957-9BD2-FF05346AE7E8}
+..\..\..\..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf
+FALSE|
+$TARGETDIR$\Developer Documentation
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{4418C2EF-7588-4FD8-BDD6-24D17ECE81BF}
+..\..\..\..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf
+FALSE|
+$TARGETDIR$\Developer Documentation
 FALSE
 FALSE
 FALSE
@@ -1940,7 +1974,7 @@ C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {84B03C40-6099-4728-97B9-02168416C613}
-$TARGETDIR$\Docs\Templates.html
+$TARGETDIR$\Developer Documentation\Templates.html
 Visual Studio Templates Readme
 $SHORTCUTFILES$\ASCOM Platform 6\Docs
 
@@ -1950,9 +1984,9 @@ C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {B36D7EB8-A369-410D-A6A9-16913BEEAC41}
-$TARGETDIR$\Docs\wsh-56.chm
+$TARGETDIR$\Developer Documentation\wsh-56.chm
 Windows Scripting Host Help
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
 
@@ -1960,9 +1994,9 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 |
 0|
 {221A8A01-69CB-4B44-81CB-611CBF4BC171}
-$TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
+$TARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
 Platform 6 Client-Driver Interaction V2
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
 
@@ -1970,9 +2004,9 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 |
 0|
 {ACBBA184-E349-40FD-A1BE-4AE88D234DB4}
-$TARGETDIR$\Docs\Platform 6.0.pdf
+$TARGETDIR$\Developer Documentation\Platform 6.0.pdf
 Platform 6.0
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
 
@@ -1980,9 +2014,9 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 |
 0|
 {E4908A1B-BF68-4E04-9935-C889916AC793}
-$TARGETDIR$\Docs\NOVAS_C3.0_Guide.pdf
+$TARGETDIR$\Developer Documentation\NOVAS_C3.0_Guide.pdf
 NOVAS 3 Users Guide
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
 
@@ -1990,19 +2024,9 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 |
 0|
 {AADE4209-5063-4EEE-9F91-A5922F3D1FCA}
-$TARGETDIR$\Docs\Algorithms.pdf
+$TARGETDIR$\Developer Documentation\Algorithms.pdf
 Fundamental Astrometry Theory Paper
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
-
-
-
-
-|
-0|
-{11B8EC8C-9945-4F88-A911-0190DBAB19D2}
-$TARGETDIR$\Docs\PlatformDeveloperHelp.chm
-ASCOM Developer Help
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
 
@@ -2010,9 +2034,9 @@ $SHORTCUTFILES$\ASCOM Platform 6\Docs
 |
 0|
 {68D285BA-CAF3-4BF5-9E23-59C7C08920D6}
-$TARGETDIR$\Docs\DriverInstallers.html
+$TARGETDIR$\Developer Documentation\DriverInstallers.html
 Creating Driver Installers with Inno
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
 
@@ -2020,9 +2044,39 @@ C:\ASCOM Trunk\Releases\ASCOM 6\Platform\Installer Project\ASCOM.ico
 |
 0|
 {FDB09EE3-104F-4E47-8659-646104AD4CDA}
-$TARGETDIR$\Docs\Script56.chm
+$TARGETDIR$\Developer Documentation\Script56.chm
 Active Scripting Help
-$SHORTCUTFILES$\ASCOM Platform 6\Docs
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{09767C29-1AFC-47DF-BEC0-E81EC22B075B}
+$TARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
+ASCOM Developer Help
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{6164BBCC-8F3C-4A2D-9975-22D1625D32A2}
+$TARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
+How to create multiple versions of a driver
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{ADD53AAB-8DB2-492F-8649-6C2DC33DAC6F}
+$TARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
+How to create a local server  based driver
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
 
@@ -2636,7 +2690,15 @@ C
 
 
 
+
+
+
+
 $
+
+
+
+
 
 
 

@@ -10,6 +10,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.GAC;
 using System.Text;
+using System.Collections.Generic;
 
 namespace UninstallAscom
 {
@@ -45,139 +46,171 @@ namespace UninstallAscom
                                                  [In] int nFolder, 
                                                  [In] int fCreate);
 
-        static TraceLogger TL = new TraceLogger("","UninstallASCOM"); // Create a tracelogger so we can log what happens
+        static TraceLogger TL;
+        static RegistryAccess RegAccess; 
         static string AscomDirectory;
- 
-        static void Main()
+        static int ReturnCode = 0;
+
+        static int Main()
         {
-            TL.Enabled = true; 
-            LogMessage("Cleanup","Removing previous versions of ASCOM....");
-            
-            //Initial setup
-            bool is64BitProcess = (IntPtr.Size == 8);
-            bool is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
-            LogMessage("Cleanup", "OS is 64bit: " + is64BitOperatingSystem.ToString() + ", Process is 64bit: " + is64BitProcess.ToString());
-
-            string platform564aKeyValue = null; 
-            string platform564bKeyValue = null;
-            string platform564KeyValue = null;
-            string platform5564KeyValue = null;
-
-            bool found = false;
-
-            if (is64BitOperatingSystem) // Is a 64bit OS
+            try
             {
-                platform5564KeyValue = Read(uninstallString, platform5564); // Read the 5.5 uninstall string
-                platform564aKeyValue = Read(uninstallString, platform564a); // Read the 5.0A uninstall string 
-                platform564bKeyValue = Read(uninstallString, platform564b); // Read the 5.0B uninstall string
+                TL = new TraceLogger("","UninstallASCOM"); // Create a tracelogger so we can log what happens
+                TL.Enabled = true;
 
-                if (platform564bKeyValue != null) // We have a 5.0B value so go with this
-                { 
-                    platform564KeyValue = platform564bKeyValue;
-                    LogMessage("Cleanup", "Found 64bit Platform 5.0B");
-                }
-                else if (platform564aKeyValue != null) // No 5.0B value so go  with 5.0A if it is present
+                LogMessage("Uninstall", "Creating RegistryAccess object");
+                RegAccess = new RegistryAccess(true);
+
+                LogMessage("Uninstall", "Removing previous versions of ASCOM....");
+
+                //Initial setup
+                bool is64BitProcess = (IntPtr.Size == 8);
+                bool is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
+                LogMessage("Uninstall", "OS is 64bit: " + is64BitOperatingSystem.ToString() + ", Process is 64bit: " + is64BitProcess.ToString());
+
+                string platform564aKeyValue = null;
+                string platform564bKeyValue = null;
+                string platform564KeyValue = null;
+                string platform5564KeyValue = null;
+
+                bool found = false;
+
+                if (is64BitOperatingSystem) // Is a 64bit OS
                 {
-                    platform564KeyValue = platform564aKeyValue;
-                    LogMessage("Cleanup", "Found 64bit Platform 5.0A");
-                    //Now have to fix a missing registry key that fouls up the uninstaller - this was fixed in 5B but prevents 5A from uninstalling on 64bit systems
-                    RegistryKey RKey = Registry.ClassesRoot.CreateSubKey(@"AppID\{DF2EB077-4D59-4231-9CB4-C61AD4ECB874}");
-                    RKey.SetValue("","Fixed registry key value");
-                    RKey.Close();
-                    RKey=null;
-                    LogMessage("Cleanup", @"Successfully set AppID\{DF2EB077-4D59-4231-9CB4-C61AD4ECB874}");
+                    platform5564KeyValue = Read(uninstallString, platform5564); // Read the 5.5 uninstall string
+                    platform564aKeyValue = Read(uninstallString, platform564a); // Read the 5.0A uninstall string 
+                    platform564bKeyValue = Read(uninstallString, platform564b); // Read the 5.0B uninstall string
+
+                    if (platform564bKeyValue != null) // We have a 5.0B value so go with this
+                    {
+                        platform564KeyValue = platform564bKeyValue;
+                        LogMessage("Uninstall", "Found 64bit Platform 5.0B");
+                    }
+                    else if (platform564aKeyValue != null) // No 5.0B value so go  with 5.0A if it is present
+                    {
+                        platform564KeyValue = platform564aKeyValue;
+                        LogMessage("Uninstall", "Found 64bit Platform 5.0A");
+                        //Now have to fix a missing registry key that fouls up the uninstaller - this was fixed in 5B but prevents 5A from uninstalling on 64bit systems
+                        RegistryKey RKey = Registry.ClassesRoot.CreateSubKey(@"AppID\{DF2EB077-4D59-4231-9CB4-C61AD4ECB874}");
+                        RKey.SetValue("", "Fixed registry key value");
+                        RKey.Close();
+                        RKey = null;
+                        LogMessage("Uninstall", @"Successfully set AppID\{DF2EB077-4D59-4231-9CB4-C61AD4ECB874}");
+                    }
+
+                    StringBuilder Path = new StringBuilder(260);
+                    int rc = SHGetSpecialFolderPath(IntPtr.Zero, Path, CSIDL_PROGRAM_FILES_COMMONX86, 0);
+                    AscomDirectory = Path.ToString() + @"\ASCOM";
+                    LogMessage("Uninstall", "64bit Common Files Path: " + AscomDirectory);
+                }
+                else //32 bit OS
+                {
+                    AscomDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) + @"\ASCOM";
+                    LogMessage("Uninstall", "32bit Common Files Path: " + AscomDirectory);
                 }
 
-                StringBuilder Path = new StringBuilder(260);
-                int rc = SHGetSpecialFolderPath(IntPtr.Zero,Path,CSIDL_PROGRAM_FILES_COMMONX86,0);
-                AscomDirectory = Path.ToString() + @"\ASCOM";
-                LogMessage("Cleanup", "64bit Common Files Path: " + AscomDirectory);
-            }
-            else //32 bit OS
-            {
-                AscomDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) + @"\ASCOM";
-                LogMessage("Cleanup", "32bit Common Files Path: " + AscomDirectory);
-            }
+                string platform5532KeyValue = Read(uninstallString, platform5532);
+                string platform532aKeyValue = Read(uninstallString, platform532a);
+                string platform532bKeyValue = Read(uninstallString, platform532b);
+                string platform532KeyValue = null;
 
-            string platform5532KeyValue = Read(uninstallString, platform5532);
-            string platform532aKeyValue = Read(uninstallString, platform532a); 
-            string platform532bKeyValue = Read(uninstallString, platform532b);
-            string platform532KeyValue = null;
-
-            if (platform532bKeyValue != null) // We have a 5.0B value so go with this
-            {
-                platform532KeyValue = platform532bKeyValue;
-                LogMessage("Cleanup", "Found 32bit Platform 5,0B");
-            }
-            else if (platform532aKeyValue != null) // No 5.0B value so go  with 5.0A if it is present
-            {
-                platform532KeyValue = platform532aKeyValue;
-                LogMessage("Cleanup", "Found 32bit Platform 5,0A");
-            }
-
-            // Migrate the profile based on the latest platform installed
-            if ((platform5564KeyValue != null) | (platform5532KeyValue != null)) MigrateProfile("5.5");
-            else if ((platform564KeyValue != null) | (platform532KeyValue != null)) MigrateProfile("5");
-            else MigrateProfile("");
-            
-            //remove 5.5
-            if (platform5564KeyValue != null)
-            {
-                LogMessage("Uninstall 5.5", "64 Removing ASCOM 5.5...");
-                LogMessage("Uninstall 5.5",platform5564KeyValue);
-                found = true;
-                RunProcess(platform5564KeyValue, " /VERYSILENT /NORESTART /LOG");
-                RemoveAssembly("policy.1.0.ASCOM.DriverAccess"); // Remove left over policy file
-            }
-            else
-            {
-                if (platform5532KeyValue != null)
+                if (platform532bKeyValue != null) // We have a 5.0B value so go with this
                 {
-                    LogMessage("Uninstall 5.5", "32 Removing ASCOM 5.5...");
-                    LogMessage("Uninstall 5.5", platform5532KeyValue);
+                    platform532KeyValue = platform532bKeyValue;
+                    LogMessage("Uninstall", "Found 32bit Platform 5,0B");
+                }
+                else if (platform532aKeyValue != null) // No 5.0B value so go  with 5.0A if it is present
+                {
+                    platform532KeyValue = platform532aKeyValue;
+                    LogMessage("Uninstall", "Found 32bit Platform 5,0A");
+                }
+
+                // Backup the profile based on the latest platform installed
+                if ((platform5564KeyValue != null) | (platform5532KeyValue != null)) RegAccess.BackupProfile("5.5");
+                else if ((platform564KeyValue != null) | (platform532KeyValue != null)) RegAccess.BackupProfile("5");
+                else RegAccess.BackupProfile("");
+
+                //remove 5.5
+                if (platform5564KeyValue != null)
+                {
+                    LogMessage("Uninstall", "64 Removing ASCOM 5.5... " + platform5564KeyValue);
                     found = true;
-                    RunProcess(platform5532KeyValue, " /VERYSILENT /NORESTART /LOG");
+                    RunProcess(platform5564KeyValue, " /VERYSILENT /NORESTART /LOG");
                     RemoveAssembly("policy.1.0.ASCOM.DriverAccess"); // Remove left over policy file
                 }
-            }
-
-            //remove 5.0
-            if (platform564KeyValue != null)
-            {
-                FixHelper("Helper.dll", 5, 0);// Original helpers should be in place at this point, check and fix if not to prevent Platform 5 uninstaller from failing
-                FixHelper("Helper2.dll", 4, 0);
-                LogMessage("Uninstall 5.0", "64 Removing ASCOM 5...");
-                LogMessage("Uninstall 5.0", platform564KeyValue);
-                found = true;
-                RunProcess("MsiExec.exe", SplitKey(platform564KeyValue));
-            }
-            else
-            {
-                if (platform532KeyValue != null)
+                else
                 {
-                    FixHelper("Helper.dll", 5, 0);
-                    FixHelper("Helper2.dll", 4, 0);
-                    LogMessage("Uninstall 5.0", "32 Removing ASCOM 5...");
-                    LogMessage("Uninstall 5.0", platform532KeyValue);
-                    found = true;
-                    RunProcess("MsiExec.exe", SplitKey(platform532KeyValue));
+                    if (platform5532KeyValue != null)
+                    {
+                        LogMessage("Uninstall", "32 Removing ASCOM 5.5... " + platform5532KeyValue);
+                        found = true;
+                        RunProcess(platform5532KeyValue, " /VERYSILENT /NORESTART /LOG");
+                        RemoveAssembly("policy.1.0.ASCOM.DriverAccess"); // Remove left over policy file
+                    }
                 }
+
+                //remove 5.0
+                if (platform564KeyValue != null)
+                {
+                    FixHelper("Helper.dll", 5, 0);// Original helpers should be in place at this point, check and fix if not to prevent Platform 5 uninstaller from failing
+                    FixHelper("Helper2.dll", 4, 0);
+                    LogMessage("Uninstall", "64 Removing ASCOM 5... " + platform564KeyValue);
+                    found = true;
+                    RunProcess("MsiExec.exe", SplitKey(platform564KeyValue));
+                }
+                else
+                {
+                    if (platform532KeyValue != null)
+                    {
+                        FixHelper("Helper.dll", 5, 0);
+                        FixHelper("Helper2.dll", 4, 0);
+                        LogMessage("Uninstall", "32 Removing ASCOM 5... " + platform532KeyValue);
+                        found = true;
+                        RunProcess("MsiExec.exe", SplitKey(platform532KeyValue));
+                    }
+                }
+
+                if (found == true)
+                {
+                    CleanUp55();
+                    CleanUp5();
+                }
+                else
+                {
+                    LogMessage("Uninstall", "No previous platforms found");
+                }
+
+                LogMessage("Uninstall", "Setting Profile registry ACL");
+                RegAccess.SetRegistryACL();
+
+                // Restore the relevant the profile based on the latest platform installed
+                if ((platform5564KeyValue != null) | (platform5532KeyValue != null))
+                {
+                    LogMessage("Uninstall", "Restoring Platform 5.5 Profile");
+                    RegAccess.RestoreProfile("5.5");
+                }
+                else if ((platform564KeyValue != null) | (platform532KeyValue != null))
+                {
+                    LogMessage("Uninstall", "Restoring Platform 5 Profile"); 
+                    RegAccess.RestoreProfile("5");
+                }
+
+                LogMessage("Uninstall", "Disposing of registry access object");
+                RegAccess.Dispose();
+                RegAccess = null;
+                LogMessage("Uninstall", "Completed uninstall process"); 
             }
-            if (found == true)
+            catch (Exception ex)
             {
-                CleanUp55();
-                CleanUp5();
+                LogError("Uninstall", ex.ToString());
+                ReturnCode = 1;
             }
-            else
-            {
-                LogMessage("Cleanup", "No previous platforms found");
-            }
-           
             TL.Enabled = false; // Clean up tracelogger
             TL.Dispose();
             TL = null;
 
             Pic();
+            return ReturnCode;
         }
 
         public static void FixHelper( string HelperName, int MajorVersion, int MinorVersion)
@@ -249,34 +282,7 @@ namespace UninstallAscom
                 LogError("FixHelper", "FixHelper exception: " + ex.ToString());
             }
         }
-
-        public static void MigrateProfile(string platformVersion)
-        {
-            // All previous Platforms are now unistalled but any previous ASCOM profile remains either in the registry from 
-            // Platforms 4 and 5 or in the filestore from Platform 5.5. If this is a fresh install we need to create the new profile root key and
-            // under all circulstances we need to set the appropriate security access ACL on the registry key. 
-
-            // Additionally the any 5.5 Profile needs to be migrated back to the registry. All of this is acccomplished through the hidden 
-            // Profile.Migrate method which takes a parameter indicating the type of Profile previously in use, if any.
-
-            try
-            {
-                LogMessage("MigrateProfile", "Creating profile object");
-                Profile Prof = new Profile(true);
-                LogMessage("MigrateProfile", "Migrating Profile from Platform: \"" + platformVersion + "\""); 
-                Prof.MigrateProfile(platformVersion);
-                LogMessage("MigrateProfile", "Successfully completed migration, disposing of profile object");
-                Prof.Dispose();
-                Prof = null;
-            }
-            catch (Exception ex)
-            {
-                // Catch any migration exceptions and log them
-                LogMessage("MigrationException", "The following unexpected exception occured during profile migration, please report this on the ASCOM Talk Yahoo Group");
-                LogError("MigrationException", ex.ToString());
-            }
-        }
-
+   
         //log messages and send to screen when appropriate
         public static void LogMessage(string section, string logMessage)
         {
@@ -312,6 +318,7 @@ namespace UninstallAscom
                 var myProcess = Process.Start(startInfo);
                 myProcess.WaitForExit();
                 LogMessage("RunProcess", "  Exit code: " + myProcess.ExitCode);
+                if (ReturnCode == 0) ReturnCode = myProcess.ExitCode; //Update return code if it doesn't already contain an error
                 myProcess.Close();
                 myProcess.Dispose();
                 myProcess = null;
@@ -375,11 +382,13 @@ namespace UninstallAscom
             //start menu
             var startMenuDir = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
             var shortcut = Path.Combine(startMenuDir, @"Programs\ASCOM Platform");
+            LogMessage("CleanUp5", "Start Menu Path: " + shortcut);
             if (Directory.Exists(shortcut))
                 DeleteDirectory(shortcut);
 
             //clea up prog files
             const string ascomDir = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ASCOM Platform";
+            LogMessage("CleanUp5", "ProgramData Path: " + ascomDir);
             if (Directory.Exists(ascomDir))
                 DeleteDirectory(ascomDir);
 
@@ -474,61 +483,6 @@ namespace UninstallAscom
             //Console.Read();
         }
 
-        protected static void SetRegistryACL()
-        {
-            //Subroutine to control the migration of a Platform 5.5 profile to Platform 6
-            Stopwatch swLocal = null;
-
-            swLocal = Stopwatch.StartNew();
-            LogMessage("", "");
-            LogMessage("SetRegistryACL", @"Creating root key ""\""");
-            RegistryKey Key = Registry.LocalMachine.CreateSubKey(REGISTRY_ROOT_KEY_NAME);
-
-            //Set a security ACL on the ASCOM Profile key giving the Users group Full Control of the key
-            LogMessage("SetRegistryACL", "Creating security identifier");
-            SecurityIdentifier DomainSid = new SecurityIdentifier("S-1-0-0"); //Create a starting point domain SID
-            SecurityIdentifier Ident = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid); //Create a security Identifier for the BuiltinUsers Group to be passed to the new accessrule
-
-            LogMessage("SetRegistryACL", "Creating new ACL rule");
-            RegistryAccessRule RegAccessRule = new RegistryAccessRule(Ident, 
-                                                                      RegistryRights.FullControl, 
-                                                                      InheritanceFlags.ContainerInherit, 
-                                                                      PropagationFlags.None, 
-                                                                      AccessControlType.Allow); // Create the new access permission rule
-
-            LogMessage("SetRegistryACL", "Retrieving current ACL rule");
-            RegistrySecurity KeySec = Key.GetAccessControl(); // Get existing ACL rules on the key 
-
-            AuthorizationRuleCollection Rules = KeySec.GetAccessRules(true, true, typeof(NTAccount)); //typeof(System.Security.Principal.SecurityIdentifier));
-
-            foreach (RegistryAccessRule RegRule in Rules)
-            {
-
-
-                LogMessage("RegistryRule", RegRule.AccessControlType.ToString() + " " +
-                                              RegRule.IdentityReference.ToString() + " " +
-                                              RegRule.RegistryRights.ToString() + " " +
-                                              RegRule.IsInherited.ToString() + " " +
-                                              RegRule.InheritanceFlags.ToString() + " " +
-                                              RegRule.PropagationFlags.ToString());
-            }
-
-
-            LogMessage("SetRegistryACL", "Adding new ACL rule");
-            KeySec.AddAccessRule(RegAccessRule); //Add the new rule to the existing rules
-            LogMessage("SetRegistryACL", "Setting new ACL rule");
-            Key.SetAccessControl(KeySec); //Apply the new rules to the Profile 
-            LogMessage("SetRegistryACL", "Flushing key");
-            Key.Flush(); //Flush the key to make sure the permission is committed
-            LogMessage("SetRegistryACL", "Closing key");
-            Key.Close(); //Close the key after migration
-
-            swLocal.Stop();
-            LogMessage("SetRegistryACL", "ElapsedTime " + swLocal.ElapsedMilliseconds + " milliseconds");
-            LogMessage("","");
-            swLocal = null;
-        }
-
         protected static void RemoveAssembly(string AssemblyName)
         {
             LogMessage("RemoveAssembly", "Uninstalling: " + AssemblyName); 
@@ -537,11 +491,10 @@ namespace UninstallAscom
             IAssemblyCache pCache = AssemblyCache.CreateAssemblyCache();
 
             IASSEMBLYCACHE_UNINSTALL_DISPOSITION puldisposition = IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_UNKNOWN; // Initialise variable
-            //Next line changed so that no install reference is provided which allows easy uninstall from Assembly explorer display
-            //int result = pCache.UninstallAssembly(0, filename, installReference, out puldisposition);
+
             int result = pCache.UninstallAssembly(0, AssemblyName, null, out puldisposition);
-            if (result == 0) Console.WriteLine("Uninstalled with no error!");
-            else Console.WriteLine("Uninstall returned error code: " + result);
+            if (result == 0) LogMessage("RemoveAssembly", "Uninstalled without error!");
+            else LogMessage("RemoveAssembly", "Uninstall returned status code: " + result);
 
             switch (puldisposition)
             {

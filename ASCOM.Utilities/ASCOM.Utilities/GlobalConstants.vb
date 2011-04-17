@@ -30,7 +30,8 @@ Module GlobalConstants
 
     'RegistryAccess constants
     Friend Const REGISTRY_ROOT_KEY_NAME As String = "SOFTWARE\ASCOM" 'Location of ASCOM profile in HKLM registry hive
-    Friend Const REGISTRY_BACKUP_SUBKEY As String = "Platform5Original" 'Location that the original Plartform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
+    Friend Const REGISTRY_5_BACKUP_SUBKEY As String = "Platform5Original" 'Location that the original Plartform 5 Profile will be copied to before migrating the 5.5 Profile back to the registry
+    Friend Const REGISTRY_55_BACKUP_SUBKEY As String = "Platform55Original" 'Location that the original Plartform 5.5 Profile will be copied to before removing Platform 5 and 5.5
     Friend Const PLATFORM_VERSION_NAME As String = "PlatformVersion"
     'XML constants used by XMLAccess and RegistryAccess classes
     Friend Const COLLECTION_DEFAULT_VALUE_NAME As String = "***** DefaultValueName *****" 'Name identifier label

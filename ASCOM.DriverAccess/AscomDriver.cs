@@ -132,7 +132,7 @@ namespace ASCOM.DriverAccess
                             case "FILTERWHEEL":
                             case "FOCUSER":
                             case "ROTATOR":
-                                return "Description is not implemented by interface version 1";
+                                return "";
                             default:
                                 throw ex;
                         }
@@ -171,7 +171,7 @@ namespace ASCOM.DriverAccess
                             case "FILTERWHEEL":
                             case "FOCUSER":
                             case "ROTATOR": 
-                                return "DriverInfo is not implemented by interface version 1";
+                                return "";
                             default:
                                 throw ex;
                         }
@@ -209,7 +209,7 @@ namespace ASCOM.DriverAccess
                             case "FILTERWHEEL":
                             case "FOCUSER":
                             case "ROTATOR": 
-                                return "DriverVersion is not implemented by interface version 1";
+                                return "0.0";
                             default:
                                 throw ex;
                         }
@@ -265,7 +265,7 @@ namespace ASCOM.DriverAccess
                             case "FILTERWHEEL":
                             case "FOCUSER":
                             case "ROTATOR": 
-                                return "Name is not implemented by interface version 1";
+                                return "";
                             default:
                                 throw ex;
                         }
@@ -317,7 +317,25 @@ namespace ASCOM.DriverAccess
         /// <value>The supported actions.</value>
         public ArrayList SupportedActions
         {
-            get { return (ArrayList)memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { }); }
+            get 
+            { 
+                try
+                {
+                    return (ArrayList)memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { });
+                }
+                catch (Exception ex)
+                {
+                //No interface version 1 drivers or TelescopeV2 have SupportedActions so just return an empty arraylist for these
+                    if ((interfaceVersion == 1) | ((deviceType == "TELESCOPE") & (interfaceVersion == 2)))  
+                    {
+                        return new ArrayList();
+                    }
+                    else //All later device interfaces should have returned an arraylist but we have received an exception, so pass it on!
+                    {
+                        throw ex;
+                    }
+                }
+            }
         }
 
         /// <summary>
