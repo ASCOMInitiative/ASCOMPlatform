@@ -58,9 +58,9 @@ Public Class ConnectForm
         If CurrentDevice = "" Then
             Select Case CurrentDeviceType
                 Case "Telescope"
-                    CurrentDevice = "SCOPESIM.TELESCOPE"
+                    CurrentDevice = "ScopeSim.Telescope"
                 Case "Focuser"
-                    CurrentDevice = "ASCOM.SIMULATOR.FOCUSER"
+                    CurrentDevice = "ASCOM.Simulator.Focuser"
 
             End Select
         End If

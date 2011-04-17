@@ -259,7 +259,7 @@ Public Class Dome
 
     Public ReadOnly Property SupportedActions As ArrayList Implements IDomeV2.SupportedActions
         Get
-            Throw New PropertyNotImplementedException("SupportedActions", False)
+            Return New ArrayList()
         End Get
     End Property
 

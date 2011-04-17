@@ -51,7 +51,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>ASCOM.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL">
@@ -116,6 +116,9 @@
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\XMLAccess.vb">
       <Link>XMLAccess.vb</Link>
     </Compile>
+    <Compile Include="..\..\..\..\CLSCompliant.vb">
+      <Link>CLSCompliant.vb</Link>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\..\..\AssemblyVersionInfo.vb">
       <Link>My Project\AssemblyVersionInfo.cs</Link>
@@ -144,7 +147,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ASCOM.snk" />
+    <None Include="..\..\..\..\ASCOM.snk" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

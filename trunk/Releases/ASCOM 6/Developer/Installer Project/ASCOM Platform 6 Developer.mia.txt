@@ -281,28 +281,32 @@ else
     [END REGION]
     Set Variable PROGRESS to 50
     [DEFINE REGION: Developer Documentation]
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\NOVAS\Algorithms.pdf to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6.0.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\NOVAS\Algorithms.pdf to $TARGETDIR$\Developer Documentation
     Set Variable PROGRESS to 60
-    Install Files ..\..\..\..\Doc\tip.gif to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Doc\tip.gif to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Developer Documentation
     Set Variable PROGRESS to 70
-    Install Files ..\..\..\..\Help\Help\PlatformDeveloperHelp.chm to $TARGETDIR$\Docs
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Active Scripting Help to $TARGETDIR$\Docs\Script56.chm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Creating Driver Installers with Inno to $TARGETDIR$\Docs\DriverInstallers.html
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\ASCOM Developer Help to $TARGETDIR$\Docs\PlatformDeveloperHelp.chm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Fundamental Astrometry Theory Paper to $TARGETDIR$\Docs\Algorithms.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\NOVAS 3 Users Guide to $TARGETDIR$\Docs\NOVAS_C3.0_Guide.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6.0 to $TARGETDIR$\Docs\Platform 6.0.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Docs\Platform 6 Client-Driver Interaction V2.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Windows Scripting Host Help to $TARGETDIR$\Docs\wsh-56.chm
+    Install Files ..\..\..\..\Help\Help\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Active Scripting Help to $TARGETDIR$\Developer Documentation\Script56.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\ASCOM Developer Help to $TARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Creating Driver Installers with Inno to $TARGETDIR$\Developer Documentation\DriverInstallers.html
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Fundamental Astrometry Theory Paper to $TARGETDIR$\Developer Documentation\Algorithms.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to create a local server  based driver to $TARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to create multiple versions of a driver to $TARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\NOVAS 3 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.0_Guide.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Platform 6.0 to $TARGETDIR$\Developer Documentation\Platform 6.0.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Windows Scripting Host Help to $TARGETDIR$\Developer Documentation\wsh-56.chm
     [END REGION]
     [DEFINE REGION: Driver installer]
-    Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.exe to $TARGETDIR$\Installer Generator
     Install Files ..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $TARGETDIR$\Installer Generator
     Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $TARGETDIR$\Installer Generator
@@ -320,8 +324,8 @@ else
   [DEFINE REGION: Visual Studio Driver Templates]
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
-    Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Docs
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Visual Studio Templates Readme to $TARGETDIR$\Docs\Templates.html
+    Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Docs\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
     Install Files ..\..\..\..\DriverTemplates\ASCOM 6 Driver Templates.vsi to $TARGETDIR$\Templates
   end
   [END REGION]

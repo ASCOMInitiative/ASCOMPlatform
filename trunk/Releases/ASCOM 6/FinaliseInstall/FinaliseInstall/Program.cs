@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Windows.Forms;
+using ASCOM.Utilities;
 
 namespace ConsoleApplication1
 {
@@ -20,16 +21,24 @@ namespace ConsoleApplication1
 
         static private Type tProfile;												// Late bound Helper.Profile
         static private object oProfile;
+        static TraceLogger TL;
         private const string sMsgTitle = "ASCOM Platform 6 Install Finaliser";
+        static int ReturnCode = 0;
 
-        static void Main(string[] args)
+        static int  Main(string[] args)
         {
+            TL = new TraceLogger("", "FinaliseInstall"); // Create a tracelogger so we can log what happens
+            TL.Enabled = true;
+
+            LogMessage("FinaliseInstall", "Starting finalise process");
+            
             tProfile = Type.GetTypeFromProgID("DriverHelper.Profile");					// Late bound Helper.Profile
             oProfile = Activator.CreateInstance(tProfile);
 
             //
             // Force TypeLib linkages to PIAs (bug on repair & upgrades).
             //
+            LogMessage("FinaliseInstall", "Fixing PIA Linkages");
             FixPiaLinkage("{12DC26BD-E8F7-4328-8A8B-B16C6D87A077}", "ASCOM.Helper");
             FixPiaLinkage("{55B16037-26C0-4F1E-A6DC-4C0E702D9FBE}", "ASCOM.Helper2");
             FixPiaLinkage("{76618F90-032F-4424-A680-802467A55742}", "ASCOM.Interfaces");
@@ -37,12 +46,11 @@ namespace ConsoleApplication1
             //
             // Remove Platform 4.1 installer entry in Add/Remove Programs (TESTED)
             //
+            LogMessage("FinaliseInstall", "Removing Platform 4.1 installer entries");
             RegistryKey rkAddRem = null;
             try
             {
-                rkAddRem = Registry.LocalMachine.OpenSubKey(
-                            "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
-                            RegistryKeyPermissionCheck.ReadWriteSubTree);
+                rkAddRem = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall", RegistryKeyPermissionCheck.ReadWriteSubTree);
 
                 rkAddRem.DeleteSubKeyTree("ASCOM Platform 4.1");
                 rkAddRem.DeleteSubKeyTree("ASCOM Platform 4.0");
@@ -54,6 +62,7 @@ namespace ConsoleApplication1
             // Attempt to remove some old Platform Start Menu items
             // No special folder for all users start menu?
             //
+            LogMessage("FinaliseInstall", "Cleaning old start menu items");
             string startPath = "C:\\Documents and Settings\\All Users\\Start Menu\\Programs\\ASCOM Platform";
             try
             {
@@ -79,6 +88,7 @@ namespace ConsoleApplication1
             // Remove old Wise uninstaller and install log. It's weird, but this
             // stuff was installed in the Telescope subfolder. Always in program
             // files, common files, ASCOM\Telescope. 
+            LogMessage("FinaliseInstall", "Removing old Wise installer debris");
             try
             {
                 File.Delete(ascomPath + "\\Telescope\\INSTALL.LOG");
@@ -108,6 +118,7 @@ namespace ConsoleApplication1
             //
             // MIRROR CALLS IN UNINSTALL!
             //
+            LogMessage("FinaliseInstall", "Adding Appid information for EXE simulators");
             AddAppID("ScopeSim.Telescope", "ScopeSim.exe", "{4597A685-11FD-47ae-A5D2-A8DC54C90CDC}");
             AddAppID("FocusSim.Focuser", "FocusSim.exe", "{289BFF60-3B9E-417c-8DA1-F96773679342}");
             AddAppID("DomeSim.Dome", "DomeSim.exe", "{C47DAA29-5788-464e-BBA7-9711FBC7A01F}");
@@ -123,36 +134,42 @@ namespace ConsoleApplication1
             AddAppID("ASCOMDome.Telescope", "ASCOMDome.exe", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
             AddAppID("ASCOMDome.Dome", "", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
 
+            // New Platform 6 simulator exes - add Appid information
+            AddAppID("ASCOM.Simulator.FilterWheel", "ASCOM.FilterWheelSim.exe", "{AE139A96-FF4D-4F22-A44C-141A9873E823}");
+            AddAppID("ASCOM.Simulator.Rotator", "ASCOM.RotatorSimulator.exe", "{5D4BBF44-2573-401A-AEE1-F9716D0BAEC3}");
+            AddAppID("ASCOM.Simulator.Telescope", "ASCOM.TelescopeSimulator.exe", "{1620DCB8-0352-4717-A966-B174AC868FA0}");
+
             //
             // Register VB6 simulators for ASCOM. I set these friendly names.
             //
-/*            RegAscom("ScopeSim.Telescope", "Simulator");
-            RegAscom("FocusSim.Focuser", "Simulator");
-            RegAscom("DomeSim.Dome", "Simulator");
-            RegAscom("CCDSimulator.Camera", "Simulator");
-            RegAscom("POTH.Telescope", "POTH Hub");
-            RegAscom("POTH.Dome", "POTH Hub");
-            RegAscom("POTH.Focuser", "POTH Hub");
-            RegAscom("Pipe.Telescope", "Pipe diagnostic tool");
-            RegAscom("Pipe.Focuser", "Pipe diagnostic tool");
-            RegAscom("Pipe.Dome", "Pipe diagnostic tool");
-            RegAscom("Hub.Telescope", "Generic Hub");
-            RegAscom("Hub.Focuser", "Generic Hub");
-            RegAscom("Hub.Dome", "Generic Hub");
+            LogMessage("FinaliseInstall", "Registering ASCOMDome");
             RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
             RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
-            */
+
+            LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
+
+            return ReturnCode;
         }
 
         //
-            // Add AppId stuff for the given ProgID
-            // http://go.microsoft.com/fwlink/?linkid=32831
-            //
+        // Set the return code to the first error that occurs
+        //
+        static void SetReturnCode(int RC)
+        {
+            if (ReturnCode == 0) ReturnCode = RC;
+        }
+
+        //
+        // Add AppId stuff for the given ProgID
+        // http://go.microsoft.com/fwlink/?linkid=32831
+        //
         static private void AddAppID(string progID, string exeName, string sAPPID)
         {
+            LogMessage("AddAppID", "ProgID: " + progID + ", ExeName: " + exeName + ", Appid: " + sAPPID);
             Guid gCLSID;
             int hr = CLSIDFromProgID(progID, out gCLSID);
             string sCLSID = "{" + new GuidConverter().ConvertToString(gCLSID) + "}";
+            LogMessage("AddAppID", "  CLSID: " + sCLSID);
 
             RegistryKey rkCLSID = null;
             RegistryKey rkAPPID = null;
@@ -178,13 +195,12 @@ namespace ConsoleApplication1
                     rkAPPIDExe.SetValue("", rkCLSID.GetValue(""));		// Same description as class
                     rkAPPIDExe.SetValue("AppId", sAPPID);
                 }
+                LogMessage("AddAppID", "  OK - Completed");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to add AppID info for " + progID + ": " + ex.Message,
-                    sMsgTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                SetReturnCode(1);
+                LogError("AddAppID", "Failed to add AppID info for " + progID + ": " + ex.ToString());
             }
             finally
             {
@@ -277,23 +293,24 @@ namespace ConsoleApplication1
         static private void RegAscom(string ProgID, string Desc)
         {
             string sType = ProgID.Substring(ProgID.IndexOf('.') + 1);
+            LogMessage("RegAscom", "ProgID: " + ProgID + ", Description: " + Desc + ", DeviceType: " + sType);
 
             try
             {
+                LogMessage("RegAscom", "  Setting device type");
                 tProfile.InvokeMember("DeviceType",
                     BindingFlags.Default | BindingFlags.SetProperty,
                     null, oProfile, new object[] { sType });
 
+                LogMessage("RegAscom", "  Registering device");
                 tProfile.InvokeMember("Register",
                     BindingFlags.Default | BindingFlags.InvokeMethod,
                     null, oProfile, new object[] { ProgID, Desc });
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to register " + ProgID + "  for ASCOM: " + ex.Message,
-                    sMsgTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                SetReturnCode(2);
+                LogError("RegAscom", "Failed to register " + ProgID + "  for ASCOM: " + ex.ToString());
             }
         }
 
@@ -322,6 +339,8 @@ namespace ConsoleApplication1
 
         static private void FixPiaLinkage(string LibID, string AssyClass)
         {
+            LogMessage("FixPiaLinkage", "LibID: " + LibID + ", AssyClass: " + AssyClass);
+
             RegistryKey rkTLIB = null;
             try
             {
@@ -330,13 +349,12 @@ namespace ConsoleApplication1
                                 RegistryKeyPermissionCheck.ReadWriteSubTree);
                 rkTLIB.SetValue("PrimaryInteropAssemblyName",
                                 AssyClass + ", Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                LogMessage("FixPiaLinkage", "  Fixed OK");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to fix up TypeLib for " + AssyClass + ": " + ex.Message,
-                    sMsgTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                SetReturnCode(3);
+                LogError("RegAscom", "Failed to fix up TypeLib for " + AssyClass + ": " + ex.ToString());
             }
             finally
             {
@@ -344,5 +362,20 @@ namespace ConsoleApplication1
             }
         }
 
+        //log messages and send to screen when appropriate
+        public static void LogMessage(string section, string logMessage)
+        {
+            Console.WriteLine(logMessage);
+            TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
+            EventLogCode.LogEvent("FinaliseInstall", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.UninstallASCOMInfo, "");
+        }
+
+        //log error messages and send to screen when appropriate
+        public static void LogError(string section, string logMessage)
+        {
+            Console.WriteLine(logMessage);
+            TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
+            EventLogCode.LogEvent("FinaliseInstall", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
+        }
     }
 }

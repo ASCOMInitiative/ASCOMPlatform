@@ -34,16 +34,20 @@ Public Class DiagnosticsForm
     Private Const TestTelescopeDescription As String = "This is a test telescope"
     Private Const RevisedTestTelescopeDescription As String = "Updated description for test telescope!!!"
     Private Const NewTestTelescopeDescription As String = "New description for test telescope!!!"
-    Private Const ToleranceE6 As Double = 0.000001 ' Used in evaluating precision match of double values
-    Private Const ToleranceE7 As Double = 0.0000001 ' Used in evaluating precision match of double values
-    Private Const ToleranceE8 As Double = 0.00000001 ' Used in evaluating precision match of double values
-    Private Const ToleranceE9 As Double = 0.000000001
+    Private Const TOLERANCE_E6 As Double = 0.000001 ' Used in evaluating precision match of double values
+    Private Const TOLERANCE_E7 As Double = 0.0000001 ' Used in evaluating precision match of double values
+    Private Const TOLERANCE_E8 As Double = 0.00000001 ' Used in evaluating precision match of double values
+    Private Const TOLERANCE_E9 As Double = 0.000000001
+    Private Const DOME_SLEW_TIMEOUT As Integer = 240
+    Private Const INST_UNINSTALL_STRING As String = "UninstallString"
+    Private Const INST_DISPLAY_ICON As String = "DisplayIcon"
 
     'Astrometry test data for planets obtained from the original 32bit  components
     'The data is for the arbitary test date Thursday, 30 December 2010 09:00:00" 
-    Private Const TestDate As String = "Thursday, 30 December 2010 09:00:00" ' Arbitary test date used to generate data above, it must conform to the "F" date format for the invariant culture
+    Private Const TEST_DATE As String = "Thursday, 30 December 2010 09:00:00" ' Arbitary test date used to generate data above, it must conform to the "F" date format for the invariant culture
     Private Const J2000 As Double = 2451545.0 'Julian day for J2000 epoch
-    Private Const Indent As Integer = 3 ' Display indent for recursive loop output
+    Private Const INDENT As Integer = 3 ' Display indent for recursive loop output
+
     Private Const CSIDL_PROGRAM_FILES As Integer = 38 '0x0026
     Private Const CSIDL_PROGRAM_FILESX86 As Integer = 42 '0x002a,
     Private Const CSIDL_WINDOWS As Integer = 36 ' 0x0024,
@@ -206,47 +210,43 @@ Public Class DiagnosticsForm
             btnLastLog.Enabled = False 'Disable last log button
             sw = New Stopwatch
 
-            Try
-                ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
-                TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
-                Select Case TraceFileName
-                    Case "" 'Trace is disabled
-                        MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
-                        MenuUseTraceAutoFilenames.Checked = False
-                        MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
-                        MenuUseTraceManualFilename.Checked = False
-                        MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
-                        MenuSerialTraceEnabled.Enabled = True
-                    Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                        MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
-                        MenuUseTraceAutoFilenames.Checked = True
-                        MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
-                        MenuUseTraceManualFilename.Checked = False
-                        MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                        MenuSerialTraceEnabled.Enabled = True
-                    Case Else 'Tracing using some other fixed filename
-                        MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
-                        MenuUseTraceAutoFilenames.Checked = False
-                        MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
-                        MenuUseTraceManualFilename.Checked = True
-                        MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                        MenuSerialTraceEnabled.Enabled = True
-                End Select
+            ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
+            TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
+            Select Case TraceFileName
+                Case "" 'Trace is disabled
+                    MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
+                    MenuUseTraceAutoFilenames.Checked = False
+                    MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
+                    MenuUseTraceManualFilename.Checked = False
+                    MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
+                    MenuSerialTraceEnabled.Enabled = True
+                Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
+                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
+                    MenuUseTraceAutoFilenames.Checked = True
+                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
+                    MenuUseTraceManualFilename.Checked = False
+                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                    MenuSerialTraceEnabled.Enabled = True
+                Case Else 'Tracing using some other fixed filename
+                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
+                    MenuUseTraceAutoFilenames.Checked = False
+                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
+                    MenuUseTraceManualFilename.Checked = True
+                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                    MenuSerialTraceEnabled.Enabled = True
+            End Select
 
-                'Set Profile trace checked state on menu item 
-                MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
-                MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
-                MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
-                MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+            'Set Profile trace checked state on menu item 
+            MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+            MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+            MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
+            MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
 
-                MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
-            Catch ex As Exception
-                EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
-            End Try
-
+            MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
 
             Me.BringToFront()
         Catch ex As Exception
+            EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
             MsgBox(ex.ToString)
         End Try
     End Sub
@@ -362,6 +362,9 @@ Public Class DiagnosticsForm
 
                 'List setup files
                 ScanLogs()
+
+                'List Platform 6 install logs
+                ScanPlatform6Logs()
 
                 'Scan registry security rights
                 ScanRegistrySecurity()
@@ -1110,22 +1113,28 @@ Public Class DiagnosticsForm
                 Case "Dome"
                     Select Case Test
                         Case "OpenShutter"
+                            StartTime = Now
                             DeviceObject.OpenShutter()
-                            Do While Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)
+                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
                                 Thread.Sleep(100)
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
                                 Application.DoEvents()
                             Loop
+                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
                             Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
                         Case "ShutterStatus"
                             Compare(Device, Test, CInt(DeviceObject.ShutterStatus), 0)
                         Case "Slewing"
                             Compare(Device, Test, DeviceObject.Slewing.ToString, "False")
                         Case "CloseShutter"
+                            StartTime = Now
                             DeviceObject.CloseShutter()
-                            Do While Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)
+                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
                                 Thread.Sleep(100)
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
                                 Application.DoEvents()
                             Loop
+                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
                             Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
                         Case "SlewToAltitude"
                             StartTime = Now
@@ -1133,8 +1142,9 @@ Public Class DiagnosticsForm
                             Do
                                 Thread.Sleep(100)
                                 Application.DoEvents()
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
-                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > 5.0)
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
                             CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, 0.00001)
                         Case "SlewToAzimuth"
                             StartTime = Now
@@ -1142,8 +1152,9 @@ Public Class DiagnosticsForm
                             Do
                                 Thread.Sleep(100)
                                 Application.DoEvents()
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds")
-                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > 5.0)
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
                             CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, 0.00001)
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
@@ -1836,7 +1847,7 @@ Public Class DiagnosticsForm
                     NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
                     NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
                     rc = Nov3.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
-                    LogRCDouble(TestFunction, "GAST Equinox          ", rc, GST, GST2, ToleranceE6)
+                    LogRCDouble(TestFunction, "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E6)
                 Case NOVAS3Functions.Spin
                     rc = 0
                     Nov3.Spin(20.0, Pos1, Pos2)
@@ -2043,46 +2054,46 @@ Public Class DiagnosticsForm
 
         NOVAS.NOVAS2.StarVectors(StarStruct, POS, VEL)
         NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
-        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, ToleranceE9)
-        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, ToleranceE9)
+        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, TOLERANCE_E9)
 
         NOVAS.NOVAS2.Precession(J2000, POS, u.JulianDate, POSNow)
         NOVAS.NOVAS2.Vector2RADec(POSNow, RANow, DECNow)
         RC = NOVAS.NOVAS2.TopoStar(JD, EarthBody, 0, StarStruct, LocationStruct, RANow, DECNow)
         Compare("Novas2Tests", "TopoStar RC", RC, 0)
-        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, ToleranceE9)
-        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, ToleranceE9)
+        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, TOLERANCE_E9)
 
         NOVAS.NOVAS2.RADec2Vector(StarRAJ2000, StarDecJ2000, 10000000000.0, POS)
         NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
-        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, ToleranceE9)
-        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, ToleranceE9)
+        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, TOLERANCE_E9)
 
-        CompareDouble("Novas2Tests", "JulianDate", NOVAS.NOVAS2.JulianDate(2010, 12, 30, 9.0), TestJulianDate, ToleranceE9)
+        CompareDouble("Novas2Tests", "JulianDate", NOVAS.NOVAS2.JulianDate(2010, 12, 30, 9.0), TestJulianDate, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.AstroPlanet(JD, SunBody, EarthBody, RATarget, DECTarget, Distance)
         Compare("Novas2Tests", "AstroPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, ToleranceE9)
-        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, ToleranceE9)
-        CompareDouble("Novas2Tests", "AstroPlanet Dist", Distance, 0.983376046291495, ToleranceE9)
+        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "AstroPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.VirtualPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "VirtualPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, ToleranceE9)
-        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, ToleranceE9)
-        CompareDouble("Novas2Tests", "VirtualPlanet Dist", Distance, 0.983376046291495, ToleranceE9)
+        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "VirtualPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.AppPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "AppPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, ToleranceE9)
-        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, ToleranceE9)
-        CompareDouble("Novas2Tests", "AppPlanet Dist", Distance, 0.983376046291495, ToleranceE9)
+        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "AppPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.TopoPlanet(JD, SunBody, EarthBody, 0.0, LocationStruct, RANow, DECNow, Distance)
         Compare("Novas2Tests", "TopoPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, ToleranceE9)
-        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, ToleranceE9)
-        CompareDouble("Novas2Tests", "TopoPlanet Dist", Distance, 0.983371860482251, ToleranceE9)
+        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "TopoPlanet Dist", Distance, 0.983371860482251, TOLERANCE_E9)
         TL.BlankLine()
 
         NOVAS.NOVAS2.Equ2Hor(JD, 0.0, 0.0, 0.0, LocationStruct, StarRAJ2000, StarDecJ2000, RefractionOption.LocationRefraction, ZenithDistance, Azimuth, RANow, DECNow)
@@ -2412,9 +2423,9 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub TransformTest()
-        TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", ToleranceE9)
-        TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", ToleranceE9)
-        TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", ToleranceE9)
+        TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E9)
+        TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E9)
+        TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E9)
         TL.BlankLine()
     End Sub
 
@@ -2535,8 +2546,8 @@ Public Class DiagnosticsForm
             Status("NovasCom Tests")
             'Create the Julian date corresponding to the arbitary test date
             JD = TestJulianDate()
-            TL.LogMessage("NovasCom Tests", "Julian Date = " & JD & " = " & TestDate)
-            CompareDouble("NovasCom", "JulianDate", JD, 2455560.875, ToleranceE9)
+            TL.LogMessage("NovasCom Tests", "Julian Date = " & JD & " = " & TEST_DATE)
+            CompareDouble("NovasCom", "JulianDate", JD, 2455560.875, TOLERANCE_E9)
 
             Dim s As New NOVASCOM.Site
             s.Height = 80.0
@@ -2546,10 +2557,10 @@ Public Class DiagnosticsForm
             s.Temperature = 10.0
             Dim pv As New NOVASCOM.PositionVector
             pv.SetFromSite(s, 11.0)
-            CompareDouble("NovasCom", "SetFromSite X", pv.x, -0.0000259698466733494, ToleranceE9)
-            CompareDouble("NovasCom", "SetFromSite Y", pv.y, 0.00000695859944368407, ToleranceE9)
-            CompareDouble("NovasCom", "SetFromSite Z", pv.z, 0.0000329791401243054, ToleranceE9)
-            CompareDouble("NovasCom", "SetFromSite LightTime", pv.LightTime, 0.000000245746690359414, ToleranceE9)
+            CompareDouble("NovasCom", "SetFromSite X", pv.x, -0.0000259698466733494, TOLERANCE_E9)
+            CompareDouble("NovasCom", "SetFromSite Y", pv.y, 0.00000695859944368407, TOLERANCE_E9)
+            CompareDouble("NovasCom", "SetFromSite Z", pv.z, 0.0000329791401243054, TOLERANCE_E9)
+            CompareDouble("NovasCom", "SetFromSite LightTime", pv.LightTime, 0.000000245746690359414, TOLERANCE_E9)
 
             Dim st As New NOVASCOM.Star
             st.Set(9.0, 25.0, 0.0, 0.0, 0.0, 0.0)
@@ -2558,48 +2569,48 @@ Public Class DiagnosticsForm
             pv = st.GetAstrometricPosition(JD)
             Dim AstroResults() As Double = New Double() {9.0, 25.0, 2062648062470.13, 0.0, 11912861640.6606, -1321861174769.38, 1321861174768.63, 871712738743.913, _
                                                     9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
-            ComparePosVec("NovasCom Astrometric", st, pv, AstroResults, False, ToleranceE9)
+            ComparePosVec("NovasCom Astrometric", st, pv, AstroResults, False, TOLERANCE_E9)
 
             Dim TopoNoReractResults() As Double = New Double() {9.01140781883559, 24.9535152700125, 2062648062470.13, 14.2403113213804, 11912861640.6606, -1326304233902.68, 1318405625773.8, 870195790998.564, _
                                         9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
             pv = st.GetTopocentricPosition(JD, s, False)
-            ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, True, ToleranceE9)
+            ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, True, TOLERANCE_E9)
             pv = st.GetTopocentricPosition(JD, s, True)
 
             Dim TopoReractResults() As Double = New Double() {9.01438008140491, 25.0016930437008, 2062648062470.13, 14.3031953401364, 11912861640.6606, -1326809918883.5, 1316857267239.29, 871767977436.204, _
                                                               9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 
-            ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, True, ToleranceE9)
+            ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, True, TOLERANCE_E9)
 
-            NovasComTest("Mercury", Body.Mercury, JD, Mercury, ToleranceE6) 'Test Neptune prediction
-            NovasComTest("Venus", Body.Venus, JD, Venus, ToleranceE7) 'Test Neptune prediction
-            NovasComTest("Mars", Body.Mars, JD, Mars, ToleranceE8) 'Test Neptune prediction
-            NovasComTest("Jupiter", Body.Jupiter, JD, Jupiter, ToleranceE8) 'Test Neptune prediction
-            NovasComTest("Saturn", Body.Saturn, JD, Saturn, ToleranceE9) 'Test Neptune prediction
-            NovasComTest("Uranus", Body.Uranus, JD, Uranus, ToleranceE9) ' Test Uranus prediction
-            NovasComTest("Neptune", Body.Neptune, JD, Neptune, ToleranceE9) 'Test Neptune prediction
-            NovasComTest("Pluto", Body.Pluto, JD, Pluto, ToleranceE9) 'Test Pluto Prediction
+            NovasComTest("Mercury", Body.Mercury, JD, Mercury, TOLERANCE_E6) 'Test Neptune prediction
+            NovasComTest("Venus", Body.Venus, JD, Venus, TOLERANCE_E7) 'Test Neptune prediction
+            NovasComTest("Mars", Body.Mars, JD, Mars, TOLERANCE_E8) 'Test Neptune prediction
+            NovasComTest("Jupiter", Body.Jupiter, JD, Jupiter, TOLERANCE_E8) 'Test Neptune prediction
+            NovasComTest("Saturn", Body.Saturn, JD, Saturn, TOLERANCE_E9) 'Test Neptune prediction
+            NovasComTest("Uranus", Body.Uranus, JD, Uranus, TOLERANCE_E9) ' Test Uranus prediction
+            NovasComTest("Neptune", Body.Neptune, JD, Neptune, TOLERANCE_E9) 'Test Neptune prediction
+            NovasComTest("Pluto", Body.Pluto, JD, Pluto, TOLERANCE_E9) 'Test Pluto Prediction
 
             Action("Earth")
             EA.SetForTime(JD) ' Test earth properties
-            CompareDouble("NovasCom", "Earth BaryPos x", EA.BarycentricPosition.x, Earth(0), ToleranceE9)
-            CompareDouble("NovasCom", "Earth BaryPos y", EA.BarycentricPosition.y, Earth(1), ToleranceE9)
-            CompareDouble("NovasCom", "Earth BaryPos z", EA.BarycentricPosition.z, Earth(2), ToleranceE9)
-            CompareDouble("NovasCom", "Earth BaryVel x", EA.BarycentricVelocity.x, Earth(3), ToleranceE9)
-            CompareDouble("NovasCom", "Earth BaryVel y", EA.BarycentricVelocity.y, Earth(4), ToleranceE9)
-            CompareDouble("NovasCom", "Earth BaryVel z", EA.BarycentricVelocity.z, Earth(5), ToleranceE9)
-            CompareDouble("NovasCom", "Earth HeliPos x", EA.HeliocentricPosition.x, Earth(6), ToleranceE9)
-            CompareDouble("NovasCom", "Earth HeliPos y", EA.HeliocentricPosition.y, Earth(7), ToleranceE9)
-            CompareDouble("NovasCom", "Earth HeliPos z", EA.HeliocentricPosition.z, Earth(8), ToleranceE9)
-            CompareDouble("NovasCom", "Earth HeliVel x", EA.HeliocentricVelocity.x, Earth(9), ToleranceE9)
-            CompareDouble("NovasCom", "Earth HeliVel y", EA.HeliocentricVelocity.y, Earth(10), ToleranceE9)
-            CompareDouble("NovasCom", "Earth HeliVel z", EA.HeliocentricVelocity.z, Earth(11), ToleranceE9)
-            CompareDouble("NovasCom", "Barycentric Time", EA.BarycentricTime, Earth(12), ToleranceE9)
-            CompareDouble("NovasCom", "Equation Of Equinoxes", EA.EquationOfEquinoxes, Earth(13), ToleranceE9)
-            CompareDouble("NovasCom", "Mean Obliquity", EA.MeanObliquity, Earth(14), ToleranceE9)
-            CompareDouble("NovasCom", "Nutation in Longitude", EA.NutationInLongitude, Earth(15), ToleranceE9)
-            CompareDouble("NovasCom", "Nutation in Obliquity", EA.NutationInObliquity, Earth(16), ToleranceE9)
-            CompareDouble("NovasCom", "True Obliquity", EA.TrueObliquity, Earth(17), ToleranceE9)
+            CompareDouble("NovasCom", "Earth BaryPos x", EA.BarycentricPosition.x, Earth(0), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth BaryPos y", EA.BarycentricPosition.y, Earth(1), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth BaryPos z", EA.BarycentricPosition.z, Earth(2), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth BaryVel x", EA.BarycentricVelocity.x, Earth(3), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth BaryVel y", EA.BarycentricVelocity.y, Earth(4), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth BaryVel z", EA.BarycentricVelocity.z, Earth(5), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth HeliPos x", EA.HeliocentricPosition.x, Earth(6), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth HeliPos y", EA.HeliocentricPosition.y, Earth(7), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth HeliPos z", EA.HeliocentricPosition.z, Earth(8), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth HeliVel x", EA.HeliocentricVelocity.x, Earth(9), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth HeliVel y", EA.HeliocentricVelocity.y, Earth(10), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Earth HeliVel z", EA.HeliocentricVelocity.z, Earth(11), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Barycentric Time", EA.BarycentricTime, Earth(12), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Equation Of Equinoxes", EA.EquationOfEquinoxes, Earth(13), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Mean Obliquity", EA.MeanObliquity, Earth(14), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Nutation in Longitude", EA.NutationInLongitude, Earth(15), TOLERANCE_E9)
+            CompareDouble("NovasCom", "Nutation in Obliquity", EA.NutationInObliquity, Earth(16), TOLERANCE_E9)
+            CompareDouble("NovasCom", "True Obliquity", EA.TrueObliquity, Earth(17), TOLERANCE_E9)
 
             TL.BlankLine()
         Catch ex As Exception
@@ -2632,7 +2643,7 @@ Public Class DiagnosticsForm
         'Create the Julian date corresponding to the arbitary test date
         Dim Util As New ASCOM.Utilities.Util
         Dim JD As Double
-        JD = Util.DateUTCToJulian(Date.ParseExact(TestDate, "F", System.Globalization.CultureInfo.InvariantCulture))
+        JD = Util.DateUTCToJulian(Date.ParseExact(TEST_DATE, "F", System.Globalization.CultureInfo.InvariantCulture))
         Util.Dispose()
         Util = Nothing
         Return JD
@@ -2701,7 +2712,7 @@ Public Class DiagnosticsForm
                                                  {0.335104649167322, 0.0711444942030144, 0.00326561005720837, -0.0109228475729584, 0.0251353246085599, 0.0145593566074213}}
         Status("Kepler Tests")
         JD = TestJulianDate()
-        KeplerTest("Mercury", Body.Mercury, JD, MercuryPosVecs, ToleranceE9) 'Test Mercury position vectors
+        KeplerTest("Mercury", Body.Mercury, JD, MercuryPosVecs, TOLERANCE_E9) 'Test Mercury position vectors
         TL.BlankLine()
     End Sub
 
@@ -3298,13 +3309,13 @@ Public Class DiagnosticsForm
                 Compare("UtilTests", "DateUTCToLocal", Format(AscomUtil.DateUTCToLocal(TestDate.Subtract(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "dd MMM yyyy hh:mm:ss.ffff"), "01 " & AbbreviatedMonthNames(5) & " 2010 04:37:00.0000")
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t), "43" & Chr(&HB0) & " 07'")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t), "43° 07'")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-"), "43-07'")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";"), "43-07;")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";", 3), "43-07" & DecimalSeparator & "434;")
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t), "43" & Chr(&HB0) & " 07' 26""")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t), "43° 07' 26""")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-"), "43-07' 26""")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";"), "43-07;26""")
                 t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#"), "43-07;26#")
@@ -3523,18 +3534,18 @@ Public Class DiagnosticsForm
             'Dim RA As New ASCOM.Utilities.RegistryAccess
             'ReadRegistryRights(RA.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, ASCOM.Utilities.RegistryAccess.RegWow64Options.KEY_WOW64_32KEY), ASCOM_ROOT_KEY)
 
-            ReadRegistryRights(Registry.CurrentUser, "")
-            ReadRegistryRights(Registry.CurrentUser, "SOFTWARE\ASCOM")
-            ReadRegistryRights(Registry.ClassesRoot, "")
-            ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util")
+            ReadRegistryRights(Registry.CurrentUser, "", False)
+            ReadRegistryRights(Registry.CurrentUser, "SOFTWARE\ASCOM", False)
+            ReadRegistryRights(Registry.ClassesRoot, "", False)
+            ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util", False)
 
-            ReadRegistryRights(Registry.LocalMachine, "")
-            ReadRegistryRights(Registry.LocalMachine, "SOFTWARE")
+            ReadRegistryRights(Registry.LocalMachine, "", False)
+            ReadRegistryRights(Registry.LocalMachine, "SOFTWARE", False)
 
             If IntPtr.Size = 8 Then '64bit OS so look in Wow64node
-                ReadRegistryRights(Registry.LocalMachine, "SOFTWARE\Wow6432Node\ASCOM")
+                ReadRegistryRights(Registry.LocalMachine, "SOFTWARE\Wow6432Node\ASCOM", True)
             Else '32 bit OS
-                ReadRegistryRights(Registry.LocalMachine, "SOFTWARE\ASCOM")
+                ReadRegistryRights(Registry.LocalMachine, "SOFTWARE\ASCOM", True)
             End If
 
             TL.BlankLine()
@@ -3543,9 +3554,10 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Private Sub ReadRegistryRights(ByVal key As RegistryKey, ByVal SubKey As String)
+    Private Sub ReadRegistryRights(ByVal key As RegistryKey, ByVal SubKey As String, ByVal ConfirmFullAccess As Boolean)
         Dim sec As System.Security.AccessControl.RegistrySecurity
         Dim SKey As RegistryKey
+        Dim FoundFullAccess As Boolean = False
 
         Try
             TL.LogMessage("RegistrySecurity", IIf(SubKey = "", key.Name.ToString, key.Name.ToString & "\" & SubKey))
@@ -3564,7 +3576,20 @@ Public Class DiagnosticsForm
                                                   IIf(RegRule.IsInherited.ToString(), "Inherited", "NotInherited") & " / " & _
                                                   RegRule.InheritanceFlags.ToString() & " / " & _
                                                   RegRule.PropagationFlags.ToString())
+                If (RegRule.IdentityReference.ToString.ToUpper = "BUILTIN\USERS") And (RegRule.RegistryRights = RegistryRights.FullControl) Then
+                    FoundFullAccess = True
+                End If
             Next
+
+            If ConfirmFullAccess Then 'Check whether full access is availble if required
+                If FoundFullAccess Then
+                    NMatches += 1
+                    TL.BlankLine()
+                    TL.LogMessage("RegistrySecurity", "OK - SubKey " & SubKey & " does have full registry access rights for BUILTIN\Users")
+                Else
+                    LogError("RegistrySecurity", "Subkey " & SubKey & " does not have full access rights for BUILTIN\Users!")
+                End If
+            End If
         Catch ex As NullReferenceException
             LogException("ReadRegistryRights", "The subkey: " & key.Name & "\" & SubKey & " does not exist.")
         Catch ex As Exception
@@ -3828,6 +3853,77 @@ Public Class DiagnosticsForm
             TL.BlankLine()
         Catch ex As Exception
             LogException("Frameworks", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Sub ScanPlatform6Logs()
+
+        Dim SetupFiles() As String
+        Dim SR As StreamReader = Nothing
+
+        Try
+            Status("Scanning Platform 6 install logs")
+            TL.LogMessage("ScanPlatform6Logs", "Starting scan")
+            'Get an array of setup and uninstall filenames from the Temp directory
+            SetupFiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6Install*.txt", SearchOption.TopDirectoryOnly)
+
+            For Each TempFile As String In SetupFiles 'Iterate over results
+                Try
+                    TL.LogMessage("InstallLog Found", TempFile)
+                    SR = File.OpenText(TempFile)
+
+                    Do Until SR.EndOfStream 'include the file
+                        TL.LogMessage("InstallLog", SR.ReadLine())
+                    Loop
+
+                    TL.LogMessage("", "")
+                    SR.Close()
+                    SR.Dispose()
+                    SR = Nothing
+                Catch ex1 As Exception
+                    LogException("ScanPlatform6Logs", "Exception 1: " & ex1.ToString)
+                    If Not (SR Is Nothing) Then 'Clean up streamreader
+                        SR.Close()
+                        SR.Dispose()
+                        SR = Nothing
+                    End If
+                End Try
+            Next
+            TL.BlankLine()
+
+            Status("Scanning Migration logs")
+            TL.LogMessage("ScanMigrationLogs", "Starting scan")
+            'Get an array of setup and uninstall filenames from the Temp directory
+            SetupFiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.ProfileMigrationLog*.txt", SearchOption.TopDirectoryOnly)
+
+            For Each TempFile As String In SetupFiles 'Iterate over results
+                Try
+                    TL.LogMessage("MigrationLog Found", TempFile)
+                    SR = File.OpenText(TempFile)
+
+                    Do Until SR.EndOfStream 'include the file
+                        TL.LogMessage("MigrationLog", SR.ReadLine())
+                    Loop
+
+                    TL.LogMessage("", "")
+                    SR.Close()
+                    SR.Dispose()
+                    SR = Nothing
+                Catch ex2 As Exception
+                    LogException("ScanPlatform6Logs", "Exception 2: " & ex2.ToString)
+                    If Not (SR Is Nothing) Then 'Clean up streamreader
+                        SR.Close()
+                        SR.Dispose()
+                        SR = Nothing
+                    End If
+                End Try
+            Next
+
+            TL.LogMessage("ScanPlatform6Logs", "Completed scan")
+            TL.BlankLine()
+            TL.BlankLine()
+        Catch ex As Exception
+            LogException("ScanPlatform6Logs", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -4411,20 +4507,20 @@ Public Class DiagnosticsForm
                     ValueKind = p_Key.GetValueKind(ValueName)
                     Select Case ValueName.ToUpper
                         Case ""
-                            TL.LogMessage("KeyValue", Space(p_Depth * Indent) & "*** Default *** = " & p_Key.GetValue(ValueName))
+                            TL.LogMessage("KeyValue", Space(p_Depth * INDENT) & "*** Default *** = " & p_Key.GetValue(ValueName))
                         Case "APPID"
                             p_Container = "AppId"
-                            TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
+                            TL.LogMessage("KeyValue", Space(p_Depth * INDENT) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
                         Case Else
                             Select Case ValueKind
                                 Case RegistryValueKind.String, RegistryValueKind.ExpandString
-                                    TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
+                                    TL.LogMessage("KeyValue", Space(p_Depth * INDENT) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
                                 Case RegistryValueKind.MultiString
-                                    TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName)(0))
+                                    TL.LogMessage("KeyValue", Space(p_Depth * INDENT) & ValueName.ToString & " = " & p_Key.GetValue(ValueName)(0))
                                 Case RegistryValueKind.DWord
-                                    TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName).ToString)
+                                    TL.LogMessage("KeyValue", Space(p_Depth * INDENT) & ValueName.ToString & " = " & p_Key.GetValue(ValueName).ToString)
                                 Case Else
-                                    TL.LogMessage("KeyValue", Space(p_Depth * Indent) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
+                                    TL.LogMessage("KeyValue", Space(p_Depth * INDENT) & ValueName.ToString & " = " & p_Key.GetValue(ValueName))
                             End Select
                     End Select
                     If ValueKind <> RegistryValueKind.MultiString Then 'Don't try and process these, they don't lead anywhere anyway!
@@ -4435,7 +4531,7 @@ Public Class DiagnosticsForm
                                     RKey = Registry.ClassesRoot.OpenSubKey("CLSID").OpenSubKey(p_Key.GetValue(ValueName))
                                     If RKey Is Nothing Then 'Check in 32 bit registry on a 64bit system
                                         RKey = Registry.ClassesRoot.OpenSubKey("Wow6432Node\CLSID").OpenSubKey(p_Key.GetValue(ValueName))
-                                        If Not (RKey Is Nothing) Then TL.LogMessage("NewSubKey", Space(p_Depth * Indent) & "Found under Wow6432Node")
+                                        If Not (RKey Is Nothing) Then TL.LogMessage("NewSubKey", Space(p_Depth * INDENT) & "Found under Wow6432Node")
                                     End If
                                 Case "TYPELIB"
                                     RKey = Registry.ClassesRoot.OpenSubKey("TypeLib").OpenSubKey(p_Key.GetValue(ValueName))
@@ -4453,11 +4549,11 @@ Public Class DiagnosticsForm
 
                             If Not RKey Is Nothing Then
                                 If RKey.Name <> p_Key.Name Then 'We are in an infinite loop so kill it by settig rkey = Nothing
-                                    TL.LogMessage("NewSubKey", Space((p_Depth + 1) * Indent) & p_Container & "\" & p_Key.GetValue(ValueName))
+                                    TL.LogMessage("NewSubKey", Space((p_Depth + 1) * INDENT) & p_Container & "\" & p_Key.GetValue(ValueName))
                                     ProcessSubKey(RKey, p_Depth + 1, "None")
                                     RKey.Close()
                                 Else
-                                    TL.LogMessage("IgnoreKey", Space((p_Depth + 1) * Indent) & p_Container & "\" & p_Key.GetValue(ValueName))
+                                    TL.LogMessage("IgnoreKey", Space((p_Depth + 1) * INDENT) & p_Container & "\" & p_Key.GetValue(ValueName))
                                 End If
                             Else
                                 TL.LogMessage("KeyValue", "### Unable to open subkey: " & ValueName & "\" & p_Key.GetValue(ValueName) & " in container: " & p_Container)
@@ -4471,7 +4567,7 @@ Public Class DiagnosticsForm
             Try
                 SubKeys = p_Key.GetSubKeyNames
                 For Each SubKey In SubKeys
-                    TL.LogMessage("ProcessSubKey", Space(p_Depth * Indent) & SubKey)
+                    TL.LogMessage("ProcessSubKey", Space(p_Depth * INDENT) & SubKey)
                     RKey = p_Key.OpenSubKey(SubKey)
                     Select Case SubKey.ToUpper
                         Case "TYPELIB"
@@ -4779,10 +4875,9 @@ Public Class DiagnosticsForm
         TL.BlankLine()
 
     End Sub
-    Private Const INST_UNINSTALL_STRING As String = "UninstallString"
-    Private Const INST_DISPLAY_ICON As String = "DisplayIcon"
+
     ''' <summary>
-    ''' 
+    ''' Gets installation informaiton about a product identified by its product GUID
     ''' </summary>
     ''' <param name="ProductCode">Installer GUID uniquely identifying the product</param>
     ''' <param name="Required">Flag determining whether to report an error or return a status message if the product isn't installed</param>

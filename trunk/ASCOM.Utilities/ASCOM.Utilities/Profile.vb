@@ -531,7 +531,7 @@ Public Class Profile
     <EditorBrowsable(EditorBrowsableState.Never), _
     ComVisible(False)> _
     Public Sub MigrateProfile(ByVal CurrentPlatformVersion As String) Implements IProfileExtra.MigrateProfile
-        ProfileStore.MigrateProfile(CurrentPlatformVersion)
+        ProfileStore.BackupProfile(CurrentPlatformVersion)
     End Sub
 
     ''' <summary>

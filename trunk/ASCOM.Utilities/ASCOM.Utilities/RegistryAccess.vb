@@ -9,6 +9,7 @@ Imports System.IO
 Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.Text
+Imports System.Environment
 
 Friend Class RegistryAccess
     Implements IAccess, IDisposable
@@ -34,9 +35,29 @@ Friend Class RegistryAccess
 
     Sub New(ByVal p_IgnoreChecks As Boolean)
         Dim PlatformVersion As String
+        Dim LogFilePath, FileNameBase, LogFileActualName As String
+        Dim FileNameSuffix As Integer = 0
 
-        TL = New TraceLogger("", "RegistryAccess") 'Create a new trace logger
-        TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
+        If Not p_IgnoreChecks Then ' Normal operation
+
+            TL = New TraceLogger("", "RegistryAccess") 'Create a new trace logger
+            TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
+        Else 'Migrating the profile so create a special log of this
+            LogFilePath = Environment.GetFolderPath(SpecialFolder.MyDocuments) & "\ASCOM"
+
+            Directory.CreateDirectory(LogFilePath) 'Create the directory if it doesn't exist
+            FileNameBase = LogFilePath & "\ASCOM.ProfileMigrationLog"
+
+            'Create a unique log file name
+            Do
+                LogFileActualName = FileNameBase & FileNameSuffix.ToString
+                FileNameSuffix += 1 'Increment counter that ensures that no logfile can have the same name as any other
+            Loop Until (Not File.Exists(LogFileActualName & ".txt"))
+
+            TL = New TraceLogger(LogFileActualName, "")
+            TL.Enabled = True 'Force logging on for migration
+        End If
+
         RunningVersions(TL) ' Include version information
 
         sw = New Stopwatch 'Create the stowatch instances
@@ -297,53 +318,70 @@ Friend Class RegistryAccess
         End Try
     End Sub
 
-    Friend Sub MigrateProfile(ByVal CurrentPlatformVersion As String) Implements IAccess.MigrateProfile
-        Dim Prof55 As XMLAccess
-        Dim Key As RegistryKey
+    Friend Sub BackupProfile(ByVal CurrentPlatformVersion As String) Implements IAccess.MigrateProfile
 
         Try
-            GetProfileMutex("MigrateProfile", "")
+            GetProfileMutex("BackupProfile", "")
             sw.Reset() : sw.Start() 'Start timing this call
-            LogEvent("MigrateProfile", "Current Platform Version: " & CurrentPlatformVersion, EventLogEntryType.Information, EventLogErrors.MigrateProfileVersions, Nothing)
-            'Force logging to be enabled for this...
-            TL.Enabled = True
-            RunningVersions(TL) 'Capture debug date in case logging wasn't initially enabled
 
-            TL.LogMessage("MigrateProfile", "From platform: " & CurrentPlatformVersion & ", OS: " & [Enum].GetName(GetType(Bitness), OSBits()))
-            Call SetRegistryACL() ' Always set the registry ACL, even if it is already set, this will also print out the current ACLs for information
+            LogMessage("BackupProfile", "From platform: " & CurrentPlatformVersion & ", OS: " & [Enum].GetName(GetType(Bitness), OSBits()))
 
             Select Case CurrentPlatformVersion
                 Case "" 'New installation
-                    TL.LogMessage("MigrateProfile", "New installation so nothing to migrate")
+                    LogMessage("BackupProfile", "New installation so nothing to migrate")
                 Case "4", "5" 'Currently on Platform 4 or 5 so Profile is in 32bit registry
-                    'Profile is already in correct place so leave as is and just set the security ACL
-                    TL.LogMessage("MigrateProfile", "The Profile is already in the correct place from Platform " & CurrentPlatformVersion)
-                Case "5.5" 'Currently on Platform 5.5 so migrate Profile is in file system
+                    'Profile just needs to be backed up 
+                    LogMessage("BackupProfile", "Backing up Platform 5 Profile" & CurrentPlatformVersion)
+                    Call Backup50() ' Take a backup copy to retore later
+                Case "5.5" 'Currently on Platform 5.5 so Profile is in file system and there is some profile in the registry too
                     'Backup old 5.0 Profile and Copy 5.5 Profile to registry
                     Call Backup50()
-                    TL.LogMessage("MigrateProfile", "Creating Profile 5.5 XMLAccess object")
-                    Prof55 = New XMLAccess()
-                    TL.LogMessage("MigrateProfile", "Opening " & REGISTRY_ROOT_KEY_NAME & " Registry Key")
-                    'Key = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True) - This line replaced with next to ensure we work on the 32bit registry on a 64bit machine
-                    Key = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, ASCOM.Utilities.RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
-                    TL.LogMessage("MigrateProfile", "Copying Profile 5.5 to Profile 6")
-                    Copy55To60("", Prof55, Key)
-                    TL.LogMessage("MigrateProfile", "Completed copying the Profile")
+                    Call Backup55()
                 Case Else '6.0 or above, leave as is!
                     'Do nothing as Profile is already in the Registry
-                    TL.LogMessage("MigrateProfile", "Profile reports previous Platform as " & CurrentPlatformVersion & " - no migration required")
+                    LogMessage("BackupProfile", "Profile reports previous Platform as " & CurrentPlatformVersion & " - no migration required")
+            End Select
+
+            sw.Stop() : LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+        Catch ex As Exception
+            LogError("BackupProfile", "Exception: " & ex.ToString)
+            Throw New ProfilePersistenceException("RegistryAccess.BackupProfile exception", ex)
+        Finally
+            ProfileMutex.ReleaseMutex()
+        End Try
+    End Sub
+
+    Friend Sub RestoreProfile(ByVal CurrentPlatformVersion As String)
+
+        Try
+            GetProfileMutex("RestoreProfile", "")
+            sw.Reset() : sw.Start() 'Start timing this call
+
+            LogMessage("RestoreProfile", "From platform: " & CurrentPlatformVersion & ", OS: " & [Enum].GetName(GetType(Bitness), OSBits()))
+
+            Select Case CurrentPlatformVersion
+                Case "" 'New installation
+                    LogMessage("RestoreProfile", "New installation so nothing to migrate")
+                Case "4", "5" 'Currently on Platform 4 or 5 so Profile is in 32bit registry
+                    'Profile just needs to be backed up 
+                    LogMessage("RestoreProfile", "Restoring Platform 5 Profile" & CurrentPlatformVersion)
+                    Call Restore50() ' Take a backup copy to retore later
+                Case "5.5" 'Currently on Platform 5.5 so Profile is in file system and there is some profile in the registry too
+                    'Backup old 5.0 Profile and Copy 5.5 Profile to registry
+                    Call Restore55()
+                Case Else '6.0 or above, leave as is!
+                    'Do nothing as Profile is already in the Registry
+                    LogMessage("RestoreProfile", "Profile reports previous Platform as " & CurrentPlatformVersion & " - no migration required")
             End Select
 
             'Make sure we have a valid key now that we have migrated the profile to the registry
             ProfileRegKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
 
-            'Restore original logging state
-            sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
+            sw.Stop() : LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Catch ex As Exception
-            TL.LogMessageCrLf("MigrateProfile", "Exception: " & ex.ToString)
-            Throw New ProfilePersistenceException("RegistryAccess.MigrateProfile exception", ex)
+            LogError("RestoreProfile", "Exception: " & ex.ToString)
+            Throw New ProfilePersistenceException("RegistryAccess.BackupProfile exception", ex)
         Finally
-            TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Restore enabled / disabled trace state from the user registry
             ProfileMutex.ReleaseMutex()
         End Try
     End Sub
@@ -414,6 +452,18 @@ Friend Class RegistryAccess
 
 #Region "Support Functions"
 
+    'log messages and send to screen when appropriate
+    Private Sub LogMessage(ByVal section As String, ByVal logMessage As String)
+        TL.LogMessageCrLf(section, logMessage) ' The CrLf version is used in order properly to format exception messages
+        EventLogCode.LogEvent(section, logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.MigrateProfileRegistryKey, "")
+    End Sub
+
+    'log error messages and send to screen when appropriate
+    Private Sub LogError(ByVal section As String, ByVal logMessage As String)
+        TL.LogMessageCrLf(section, logMessage) ' The CrLf version is used in order properly to format exception messages
+        EventLogCode.LogEvent(section, "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.MigrateProfileRegistryKey, logMessage)
+    End Sub
+
     Private Sub GetSubKey(ByVal BaseSubKey As String, ByVal SubKeyOffset As String, ByRef ProfileContents As ASCOMProfile)
         Dim RetVal As New ASCOMProfile
         Dim ValueNames(), SubKeyNames(), Value As String
@@ -460,6 +510,41 @@ Friend Class RegistryAccess
         Return SubKey
     End Function
 
+    Private Sub CopyRegistry(ByVal FromKey As RegistryKey, ByVal ToKey As RegistryKey)
+        'Subroutine used to recursively copy copy a registry Profile from one place to another
+        Dim Value, ValueNames(), SubKeys() As String
+        'Dim swLocal As Stopwatch
+        Dim NewFromKey, NewToKey As RegistryKey
+        Static RecurseDepth As Integer
+
+        RecurseDepth += 1 'Increment the recursion depth indicator
+
+        'swLocal = Stopwatch.StartNew
+        LogMessage("CopyRegistry " & RecurseDepth.ToString, "Copy from: " & FromKey.Name & " to: " & ToKey.Name & " Number of values: " & FromKey.ValueCount.ToString & ", number of subkeys: " & FromKey.SubKeyCount.ToString)
+
+        'First copy values from the from key to the to key
+        ValueNames = FromKey.GetValueNames()
+        For Each ValueName As String In ValueNames
+            Value = FromKey.GetValue(ValueName, "").ToString
+            ToKey.SetValue(ValueName, Value)
+            LogMessage("CopyRegistry", ToKey.Name & " - """ & ValueName & """  """ & Value & """")
+        Next
+
+        'Now process the keys
+        SubKeys = FromKey.GetSubKeyNames
+        For Each SubKey As String In SubKeys
+            Value = FromKey.OpenSubKey(SubKey).GetValue("", "").ToString
+            'LogMessage("  CopyRegistry", "  Processing subkey: " & SubKey & " " & Value)
+            NewFromKey = FromKey.OpenSubKey(SubKey) 'Create the new subkey and get a handle to it
+            NewToKey = ToKey.CreateSubKey(SubKey) 'Create the new subkey and get a handle to it
+            If Not Value = "" Then NewToKey.SetValue("", Value) 'Set the default value if present
+            CopyRegistry(NewFromKey, NewToKey) 'Recursively process each key
+        Next
+        'swLocal.Stop() : LogMessage("  CopyRegistry", "  Completed subkey: " & FromKey.Name & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
+        RecurseDepth -= 1 'Decrement the recursion depth counter
+        'swLocal = Nothing
+    End Sub
+
     Private Sub Backup50()
         Dim FromKey, ToKey As RegistryKey
         Dim swLocal As Stopwatch
@@ -469,62 +554,23 @@ Friend Class RegistryAccess
 
         'FromKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME, True)
         FromKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegWow64Options.KEY_WOW64_32KEY)
-        ToKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_BACKUP_SUBKEY)
+        ToKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_5_BACKUP_SUBKEY)
         PlatformVersion = ToKey.GetValue("PlatformVersion", "").ToString ' Test whether we have already backed up the profile
         If String.IsNullOrEmpty(PlatformVersion) Then
-            TL.LogMessage("Backup50", "Backup PlatformVersion not found, backing up Profile 5 to " & REGISTRY_BACKUP_SUBKEY)
-            Copy50(FromKey, ToKey)
+            LogMessage("Backup50", "Backup PlatformVersion not found, backing up Profile 5 to " & REGISTRY_5_BACKUP_SUBKEY)
+            CopyRegistry(FromKey, ToKey)
         Else
-            TL.LogMessage("Backup50", "Platform 5 backup found at HKCU\" & REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_BACKUP_SUBKEY & ", no further action taken.")
+            LogMessage("Backup50", "Platform 5 backup found at HKCU\" & REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_5_BACKUP_SUBKEY & ", no further action taken.")
         End If
 
         FromKey.Close() 'Close the key after migration
         ToKey.Close()
 
-        swLocal.Stop() : TL.LogMessage("Backup50", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
+        swLocal.Stop() : LogMessage("Backup50", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
         swLocal = Nothing
     End Sub
 
-    Private Sub Copy50(ByVal FromKey As RegistryKey, ByVal ToKey As RegistryKey)
-        'Subroutine used to recursively copy copy the 5.0 registry Profile from one place to another
-        Dim Value, ValueNames(), SubKeys() As String
-        Dim swLocal As Stopwatch
-        Dim NewFromKey, NewToKey As RegistryKey
-        Static RecurseDepth As Integer
-
-        RecurseDepth += 1 'Increment the recursion depth indicator
-
-        swLocal = Stopwatch.StartNew
-        TL.LogMessage("Copy50 " & RecurseDepth.ToString, "Copy from: " & FromKey.Name & " to: " & ToKey.Name)
-        TL.LogMessage("Copy501", "Number of values: " & FromKey.ValueCount.ToString & ", number of subkeys: " & FromKey.SubKeyCount.ToString)
-        'First copy values from the from key to the to key
-        ValueNames = FromKey.GetValueNames()
-        For Each ValueName As String In ValueNames
-            Value = FromKey.GetValue(ValueName, "").ToString
-            ToKey.SetValue(ValueName, Value)
-            TL.LogMessage("  CopyValue", "  FromKey: " & FromKey.Name & " - """ & ValueName & """  """ & Value & """")
-        Next
-
-        'Now process the keys
-        SubKeys = FromKey.GetSubKeyNames
-        For Each SubKey As String In SubKeys
-            If SubKey <> REGISTRY_BACKUP_SUBKEY Then 'Copy all keys except the backup key itself! Without this we would have infinite recursion...
-                Value = FromKey.OpenSubKey(SubKey).GetValue("", "").ToString
-                TL.LogMessage("  CopyKey", "  Processing subkey: " & SubKey & " " & Value)
-                NewFromKey = FromKey.OpenSubKey(SubKey) 'Create the new subkey and get a handle to it
-                NewToKey = ToKey.CreateSubKey(SubKey) 'Create the new subkey and get a handle to it
-                If Not Value = "" Then NewToKey.SetValue("", Value) 'Set the default value if present
-                Copy50(NewFromKey, NewToKey) 'Recursively process each key
-            Else
-                TL.LogMessage("  CopyKey", "  Skipping subkey: " & SubKey)
-            End If
-        Next
-        swLocal.Stop() : TL.LogMessage("  Copy50", "  Completed subkey: " & FromKey.Name & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
-        RecurseDepth -= 1 'Decrement the recursion depth counter
-        swLocal = Nothing
-    End Sub
-
-    Private Sub SetRegistryACL() 'ByVal CurrentPlatformVersion As String)
+    Friend Sub SetRegistryACL() 'ByVal CurrentPlatformVersion As String)
         'Subroutine to control the migration of a Platform 5.5 profile to Platform 6
         Dim Values As New Generic.SortedList(Of String, String)
         Dim swLocal As Stopwatch
@@ -534,30 +580,30 @@ Friend Class RegistryAccess
 
         swLocal = Stopwatch.StartNew
 
-        TL.LogMessage("SetRegistryACL", "Creating root key ""\""")
+        LogMessage("SetRegistryACL", "Creating root key ""\""")
         'Key = Registry.LocalMachine.CreateSubKey(REGISTRY_ROOT_KEY_NAME)
         Key = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
 
         'Set a security ACL on the ASCOM Profile key giving the Users group Full Control of the key
-        TL.LogMessage("SetRegistryACL", "Creating security identifier")
+        LogMessage("SetRegistryACL", "Creating security identifier")
         DomainSid = New SecurityIdentifier("S-1-0-0") 'Create a starting point domain SID
         Ident = New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid) 'Create a security Identifier for the BuiltinUsers Group to be passed to the new accessrule
 
-        TL.LogMessage("SetRegistryACL", "Creating new ACL rule")
+        LogMessage("SetRegistryACL", "Creating new ACL rule")
         RegAccessRule = New RegistryAccessRule(Ident, _
                                                RegistryRights.FullControl, _
                                                InheritanceFlags.ContainerInherit, _
                                                PropagationFlags.None, _
                                                AccessControlType.Allow) ' Create the new access permission rule
 
-        TL.LogMessage("SetRegistryACL", "Retrieving current ACL rule")
+        LogMessage("SetRegistryACL", "Retrieving current ACL rule")
         TL.BlankLine()
         KeySec = Key.GetAccessControl() ' Get existing ACL rules on the key 
 
         RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules
 
         For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
-            TL.LogMessage("SecurityACL Before", RegRule.AccessControlType.ToString() & " " & _
+            LogMessage("SecurityACL Before", RegRule.AccessControlType.ToString() & " " & _
                                                 RegRule.IdentityReference.ToString() & " " & _
                                                 RegRule.RegistryRights.ToString() & " " & _
                                                 RegRule.IsInherited.ToString() & " " & _
@@ -565,14 +611,14 @@ Friend Class RegistryAccess
                                                 RegRule.PropagationFlags.ToString())
         Next
 
-        TL.LogMessage("SetRegistryACL", "Adding new ACL rule")
+        LogMessage("SetRegistryACL", "Adding new ACL rule")
         TL.BlankLine()
         KeySec.AddAccessRule(RegAccessRule) 'Add the new rule to the existing rules
 
         RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules after adding the new one
 
         For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
-            TL.LogMessage("SecurityACL After", RegRule.AccessControlType.ToString() & " " & _
+            LogMessage("SecurityACL After", RegRule.AccessControlType.ToString() & " " & _
                                                RegRule.IdentityReference.ToString() & " " & _
                                                RegRule.RegistryRights.ToString() & " " & _
                                                RegRule.IsInherited.ToString() & " " & _
@@ -580,19 +626,43 @@ Friend Class RegistryAccess
                                                RegRule.PropagationFlags.ToString())
         Next
 
-        TL.LogMessage("SetRegistryACL", "Setting new ACL rule")
+        LogMessage("SetRegistryACL", "Setting new ACL rule")
         Key.SetAccessControl(KeySec) 'Apply the new rules to the Profile key
 
-        TL.LogMessage("SetRegistryACL", "Flushing key")
+        LogMessage("SetRegistryACL", "Flushing key")
         Key.Flush() 'Flush the key to make sure the permission is committed
-        TL.LogMessage("SetRegistryACL", "Closing key")
+        LogMessage("SetRegistryACL", "Closing key")
         Key.Close() 'Close the key after migration
 
-        swLocal.Stop() : TL.LogMessage("SetRegistryACL", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
+        swLocal.Stop() : LogMessage("SetRegistryACL", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
         swLocal = Nothing
     End Sub
 
-    Private Sub Copy55To60(ByVal CurrentSubKey As String, ByVal Prof55 As XMLAccess, ByVal Prof6 As RegistryKey)
+    Private Sub Backup55()
+        Dim Prof55 As XMLAccess
+        Dim Key As RegistryKey
+
+        LogMessage("Backup55", "Creating Profile 5.5 XMLAccess object")
+        Prof55 = New XMLAccess()
+
+        LogMessage("Backup55", "Opening " & REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_55_BACKUP_SUBKEY & " Registry Key")
+        Key = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_55_BACKUP_SUBKEY)
+
+        LogMessage("Backup55", "Backing up Platform 5.5 Profile")
+        Copy55("", Prof55, Key)
+
+        'Clean up objects
+        Key.Flush()
+        Key.Close()
+        Key = Nothing
+        Prof55.Dispose()
+        Prof55 = Nothing
+
+        LogMessage("Backup55", "Completed copying the Profile")
+
+    End Sub
+
+    Private Sub Copy55(ByVal CurrentSubKey As String, ByVal Prof55 As XMLAccess, ByVal RegistryTarget As RegistryKey)
         'Subroutine used to recursively copy copy the 5.5 XML profile to new 64bit registry profile
         Dim Values, SubKeys As Generic.SortedList(Of String, String)
         Dim swLocal As Stopwatch
@@ -601,26 +671,64 @@ Friend Class RegistryAccess
         RecurseDepth += 1 'Increment the recursion depth indicator
 
         swLocal = Stopwatch.StartNew
-        TL.LogMessage("Copy55To60 " & RecurseDepth.ToString, "Starting key: " & CurrentSubKey)
+        LogMessage("Copy55ToRegistry " & RecurseDepth.ToString, "Starting key: " & CurrentSubKey)
 
         'First copy values from the from key to the to key
         Values = Prof55.EnumProfile(CurrentSubKey)
         For Each Value As Generic.KeyValuePair(Of String, String) In Values
-            Prof6.SetValue(Value.Key, Value.Value)
-            TL.LogMessage("  Copy55To60", "  Key: " & CurrentSubKey & " - """ & Value.Key & """  """ & Value.Value & """")
+            RegistryTarget.SetValue(Value.Key, Value.Value)
+            LogMessage("  Copy55ToRegistry", "  Key: " & CurrentSubKey & " - """ & Value.Key & """  """ & Value.Value & """")
         Next
+        RegistryTarget.Flush()
 
         'Now process the keys
         SubKeys = Prof55.EnumKeys(CurrentSubKey)
         Dim NewKey As RegistryKey
         For Each SubKey As Generic.KeyValuePair(Of String, String) In SubKeys
-            TL.LogMessage("  Copy55To60", "  Processing subkey: " & SubKey.Key & " " & SubKey.Value)
-            NewKey = Prof6.CreateSubKey(SubKey.Key) 'Create the new subkey and get a handle to it
+            LogMessage("  Copy55ToRegistry", "  Processing subkey: " & SubKey.Key & " " & SubKey.Value)
+            NewKey = RegistryTarget.CreateSubKey(SubKey.Key) 'Create the new subkey and get a handle to it
             If Not SubKey.Value = "" Then NewKey.SetValue("", SubKey.Value) 'Set the default value if present
-            Copy55To60(CurrentSubKey & "\" & SubKey.Key, Prof55, NewKey) 'Recursively process each key
+            Copy55(CurrentSubKey & "\" & SubKey.Key, Prof55, NewKey) 'Recursively process each key
+            NewKey.Flush()
+            NewKey.Close()
+            NewKey = Nothing
         Next
-        swLocal.Stop() : TL.LogMessage("  Copy55To60", "  Completed subkey: " & CurrentSubKey & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
+        swLocal.Stop() : LogMessage("  Copy55ToRegistry", "  Completed subkey: " & CurrentSubKey & " " & RecurseDepth.ToString & ",  Elapsed time: " & swLocal.ElapsedMilliseconds & " milliseconds")
         RecurseDepth -= 1 'Decrement the recursion depth counter
+        swLocal = Nothing
+    End Sub
+
+    Private Sub Restore50()
+        Dim FromKey, ToKey As RegistryKey
+        Dim swLocal As Stopwatch
+
+        swLocal = Stopwatch.StartNew
+
+        FromKey = Registry.CurrentUser.CreateSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_5_BACKUP_SUBKEY)
+        ToKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+        LogMessage("Restore50", "Restoring Profile 5 to " & ToKey.Name)
+        CopyRegistry(FromKey, ToKey)
+        FromKey.Close() 'Close the key after migration
+        ToKey.Close()
+
+        swLocal.Stop() : LogMessage("Restore50", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
+        swLocal = Nothing
+    End Sub
+
+    Private Sub Restore55()
+        Dim FromKey, ToKey As RegistryKey
+        Dim swLocal As Stopwatch
+
+        swLocal = Stopwatch.StartNew
+
+        FromKey = Registry.CurrentUser.OpenSubKey(REGISTRY_ROOT_KEY_NAME & "\" & REGISTRY_55_BACKUP_SUBKEY)
+        ToKey = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
+        LogMessage("Restore55", "Restoring Profile 5.5 to " & ToKey.Name)
+        CopyRegistry(FromKey, ToKey)
+        FromKey.Close() 'Close the key after migration
+        ToKey.Close()
+
+        swLocal.Stop() : LogMessage("Restore55", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
         swLocal = Nothing
     End Sub
 
@@ -737,6 +845,7 @@ Friend Class RegistryAccess
                                                                      ByVal lpdwDisposition As System.Int32) As System.Int32
 
 #End Region
+
 #End Region
 
 End Class

@@ -419,6 +419,10 @@ $
 
 
 
+
+
+
+
 $
 PLATFORM6OK
 PREREQ
@@ -430,23 +434,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Developer Components Alpha 25
+ASCOM Platform 6 Developer Components Alpha 26
 {4A195DC6-7DF9-459E-8F93-60B61EB45288}
 {DAF6A65F-A20B-4FB8-859C-1F82F1D1AEF5}
 6.0.0.0
 English
-ASCOM Platform 6 Developer Components - Alpha 25
+ASCOM Platform 6 Developer Components - Alpha 26
 ASCOM Platform 6 Developer Components Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{8E8E7018-FCC9-436F-8ECF-D17975B1BF2F}
+{9371A560-92ED-4F2A-8B5A-78EA24DDEAFE}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6DeveloperAlpha25
+ASCOMPlatform6DeveloperAlpha26
 TRUE
 FALSE
 
