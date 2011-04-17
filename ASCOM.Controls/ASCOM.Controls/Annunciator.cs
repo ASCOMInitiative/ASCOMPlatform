@@ -68,7 +68,7 @@ namespace ASCOM.Controls
             if (Parent != null)
                 BackColor = Parent.BackColor; // Inherit background colour from parent.
 
-            ParentChanged += AnunciatorParentChanged;
+            ParentChanged += AnnunciatorParentChanged;
 
             lastState = ((uint) Cadence).Bit(CadenceManager.CadenceBitPosition);
             ForeColor = lastState ? ActiveColor : InactiveColor;
@@ -174,6 +174,7 @@ namespace ASCOM.Controls
                 if (value)
                 {
                     StopCadenceUpdates();
+                    CadenceUpdate(false);   // [ASCOM-145] Ensure the control displays in its inactive state
                 }
                 else
                 {
@@ -224,7 +225,8 @@ namespace ASCOM.Controls
                 disposed = true;
             }
             base.Dispose(disposing);        // Let the underlying control class clean itself up.
-        }        #endregion
+        }
+        #endregion
 
         #region ICadencedControl Members
 
@@ -271,16 +273,9 @@ namespace ASCOM.Controls
         /// </summary>
         /// <param name = "sender">The source of the event.</param>
         /// <param name = "e">The <see cref = "System.EventArgs" /> instance containing the event data.</param>
-        private void AnunciatorParentChanged(object sender, EventArgs e)
+        private void AnnunciatorParentChanged(object sender, EventArgs e)
         {
-            if (Parent != null)
-            {
-                BackColor = Parent.BackColor;
-            }
-            else
-            {
-                BackColor = Color.FromArgb(64, 0, 0);
-            }
+            BackColor = Parent != null ? Parent.BackColor : Color.FromArgb(64, 0, 0);
         }
 
         #region Nested type: CadenceUpdateDelegate
