@@ -35,27 +35,13 @@ Friend Class RegistryAccess
 
     Sub New(ByVal p_IgnoreChecks As Boolean)
         Dim PlatformVersion As String
-        Dim LogFilePath, FileNameBase, LogFileActualName As String
-        Dim FileNameSuffix As Integer = 0
 
-        If Not p_IgnoreChecks Then ' Normal operation
-
+        If p_IgnoreChecks Then ' We are backing up or migrating or copying the Profile
+            TL = New TraceLogger("", "ProfileMigration") 'Create a new trace logger
+            TL.Enabled = True 'Force logging on for these calls
+        Else 'Normal operation so resepct the user's setting
             TL = New TraceLogger("", "RegistryAccess") 'Create a new trace logger
             TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
-        Else 'Migrating the profile so create a special log of this
-            LogFilePath = Environment.GetFolderPath(SpecialFolder.MyDocuments) & "\ASCOM"
-
-            Directory.CreateDirectory(LogFilePath) 'Create the directory if it doesn't exist
-            FileNameBase = LogFilePath & "\ASCOM.ProfileMigrationLog"
-
-            'Create a unique log file name
-            Do
-                LogFileActualName = FileNameBase & FileNameSuffix.ToString
-                FileNameSuffix += 1 'Increment counter that ensures that no logfile can have the same name as any other
-            Loop Until (Not File.Exists(LogFileActualName & ".txt"))
-
-            TL = New TraceLogger(LogFileActualName, "")
-            TL.Enabled = True 'Force logging on for migration
         End If
 
         RunningVersions(TL) ' Include version information
