@@ -4278,7 +4278,7 @@ Public Class DiagnosticsForm
                 ASCOMPathComponents5 = ASCOMPath & "Components\Platform5\"
                 ASCOMPathComponents55 = ASCOMPath & "Components\Platform55\"
                 ASCOMPathComponents6 = ASCOMPath & "Components\Platform6\"
-                ASCOMPathDocs = ASCOMPath & "Docs\"
+                ASCOMPathDocs = ASCOMPath & "Developer Documentation\"
                 ASCOMPathInstallerGenerator = ASCOMPath & "Installer Generator\"
                 ASCOMPathResources = ASCOMPath & "Installer Generator\Resources\"
                 TL.LogMessage("Developer Files", "Start of scan")
