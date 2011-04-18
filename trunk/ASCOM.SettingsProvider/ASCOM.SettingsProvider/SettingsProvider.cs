@@ -78,7 +78,7 @@ namespace ASCOM
 		/// </summary>
 		public SettingsProvider()
 			{
-                ascomProfile = new Profile(false);   // Ignores 'Profile not found' exceptions. Changed from true because this option is intended only for migration tasks where a missing PlatformVersion string could be legitimate
+                ascomProfile = new Profile(true);   // Ignores 'Profile not found' exceptions.
 			}
 
 		/// <summary>

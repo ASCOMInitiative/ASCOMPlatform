@@ -1730,7 +1730,7 @@ namespace ASCOM.Simulator
 
         private void ReadFromProfile()
         {
-            using (Profile profile = new Profile(false)) //Changed from true because this option is intended only for migration tasks where a missing PlatformVersion string could be legitimate
+            using (Profile profile = new Profile(true))
             {
                 profile.DeviceType = "Camera";
                 // read properties from profile
@@ -1813,7 +1813,7 @@ namespace ASCOM.Simulator
                 gMax = "0";
             }
 
-            using (Profile profile = new Profile(false)) //Changed from true because this option is intended only for migration tasks where a missing PlatformVersion string could be legitimate
+            using (Profile profile = new Profile(true))
             {
                 profile.DeviceType = "Camera";
 
