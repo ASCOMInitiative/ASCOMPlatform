@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>
+Errors and Retries
+
+</title><!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>Errors and Retries</h3>
+
+	<p>A "golden rule" in a driver/client architecture is</p> 
+
+	<div class="note">Do it or return an error if you can't.</div>
+
+	<p>When a piece of hardware needs retries, <span class="underline">it is the <i>driver's</i> responsibility to do those retries</span>, if appropriate, and hide this from the clients. Only the driver knows the behaviour of that particular piece of hardware and when retries are appropriate or not.</p> 
+
+	<p>It is <span class="underline">wrong to expect client applications to provide retries</span> because this would force client authors to include device dependent logic to test possibly invisible conditions and make decisions as to the safety and efficacy of retrying a driver call. It breaks the driver/client layering, forcing client authors to independently guess and implement recovery code with less-than-sufficient knowledge of the inner workings of the device. This is an extension of <a href="Principles.htm">The General Principle</a>.</p> 
+	</div>
+
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2010, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>
