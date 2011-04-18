@@ -30,19 +30,36 @@ Friend Class RegistryAccess
     End Sub
 
     Sub New(ByVal p_CallingComponent As String)
-        Me.New(False)
+        If p_CallingComponent.ToUpper = "UNINSTALLASCOM" Then 'Special handling for migration application
+            TL = New TraceLogger("", "ProfileMigration") 'Create a new trace logger
+            TL.Enabled = True 'Force logging on for these calls
+
+            RunningVersions(TL)
+
+            sw = New Stopwatch 'Create the stowatch instances
+            swSupport = New Stopwatch
+            ProfileMutex = New System.Threading.Mutex(False, PROFILE_MUTEX_NAME)
+
+            ProfileRegKey = Nothing
+        Else
+            NewCode(False) 'Normal behaviour so call common code respecting exceptions
+        End If
     End Sub
 
     Sub New(ByVal p_IgnoreChecks As Boolean)
+        NewCode(p_IgnoreChecks) 'Call the common code with the appropriate ignore flag
+    End Sub
+
+    ''' <summary>
+    ''' Common code for the new method
+    ''' </summary>
+    ''' <param name="p_IgnoreChecks">If true, suppresses the exception normally thrown if a valid profile is not present</param>
+    ''' <remarks></remarks>
+    Sub NewCode(ByVal p_IgnoreChecks As Boolean)
         Dim PlatformVersion As String
 
-        If p_IgnoreChecks Then ' We are backing up or migrating or copying the Profile
-            TL = New TraceLogger("", "ProfileMigration") 'Create a new trace logger
-            TL.Enabled = True 'Force logging on for these calls
-        Else 'Normal operation so resepct the user's setting
-            TL = New TraceLogger("", "RegistryAccess") 'Create a new trace logger
-            TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
-        End If
+        TL = New TraceLogger("", "RegistryAccess") 'Create a new trace logger
+        TL.Enabled = GetBool(TRACE_XMLACCESS, TRACE_XMLACCESS_DEFAULT) 'Get enabled / disabled state from the user registry
 
         RunningVersions(TL) ' Include version information
 

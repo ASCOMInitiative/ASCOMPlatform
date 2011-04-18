@@ -59,7 +59,7 @@ namespace UninstallAscom
                 TL.Enabled = true;
 
                 LogMessage("Uninstall", "Creating RegistryAccess object");
-                RegAccess = new RegistryAccess(true);
+                RegAccess = new RegistryAccess("UninstallASCOM"); //Create a RegistryAccess object triggering the special behaviour that creates a log with a special name
 
                 LogMessage("Uninstall", "Removing previous versions of ASCOM....");
 
