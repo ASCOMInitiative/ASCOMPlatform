@@ -2,10 +2,9 @@
 #define _X2Rotator_H_
 
 #include "../../licensedinterfaces/rotatordriverinterface.h"
-#include "../../licensedinterfaces/serialportparams2interface.h"
 #include "../../licensedinterfaces/modalsettingsdialoginterface.h"
 
-#define PLUGIN_DISPLAY_NAME "X2 Rotator" 
+#define PLUGIN_DISPLAY_NAME "ASCOM Rotator";
 
 class SerXInterface;
 class TheSkyXFacadeForDriversInterface;
@@ -16,14 +15,10 @@ class MutexInterface;
 class SyncMountInterface;
 class TickCountInterface;
 
-/*!
-\brief The X2Rotator example.
-
-\ingroup Example
-
-Use this example to write an X2Rotator driver.
-*/
-class X2Rotator : public RotatorDriverInterface , public SerialPortParams2Interface, public ModalSettingsDialogInterface
+//
+// ASCOM Rotator plugin
+//
+class X2Rotator : public RotatorDriverInterface , public ModalSettingsDialogInterface
 {
 // Construction
 public:
@@ -31,13 +26,13 @@ public:
 	/*!Standard X2 constructor*/
 	X2Rotator(const char* pszDriverSelection,
 				const int& nInstanceIndex,
-						SerXInterface					* pSerX, 
+						SerXInterface						* pSerX, 
 						TheSkyXFacadeForDriversInterface	* pTheSkyX, 
 						SleeperInterface					* pSleeper,
-						BasicIniUtilInterface			* pIniUtil,
-						LoggerInterface					* pLogger,
-						MutexInterface					* pIOMutex,
-						TickCountInterface				* pTickCount);
+						BasicIniUtilInterface				* pIniUtil,
+						LoggerInterface						* pLogger,
+						MutexInterface						* pIOMutex,
+						TickCountInterface					* pTickCount);
 
 	virtual ~X2Rotator();  
 
@@ -94,20 +89,6 @@ public:
 /*****************************************************************************************/
 // Implementation
 
-	//SerialPortParams2Interface
-	virtual void			portName(BasicStringInterface& str) const			;
-	virtual void			setPortName(const char* szPort)						;
-
-	virtual unsigned int	baudRate() const			{return 9600;};
-	virtual void			setBaudRate(unsigned int)	{};
-	virtual bool			isBaudRateFixed() const		{return true;}
-
-	virtual SerXInterface::Parity	parity() const				{return SerXInterface::B_NOPARITY;}
-	virtual void					setParity(const SerXInterface::Parity& parity){parity;};
-	virtual bool					isParityFixed() const		{return true;}
-
-	//Use default impl of SerialPortParams2Interface for rest
-
 	//
 	/*!\name ModalSettingsDialogInterface Implementation
 	See ModalSettingsDialogInterface.*/
@@ -120,7 +101,7 @@ private:
 	SerXInterface*							m_pSerX;		
 	TheSkyXFacadeForDriversInterface* 		m_pTheSkyXForMounts;
 	SleeperInterface*						m_pSleeper;
-	BasicIniUtilInterface*				m_pIniUtil;
+	BasicIniUtilInterface*					m_pIniUtil;
 	LoggerInterface*						m_pLogger;
 	MutexInterface*							m_pIOMutex;
 	TickCountInterface*						m_pTickCount;
@@ -133,21 +114,7 @@ private:
 	MutexInterface							*GetMutex()  {return m_pIOMutex;}
 	TickCountInterface						*GetTickCountInterface() {return m_pTickCount;}
 
-	bool m_bLinked;
 	int m_nInstanceIndex;
-	double m_dPosition;
-	bool m_bDoingGoto;
-	double m_dTargetPosition;
-	int m_nGotoStartStamp;
-
-	void portNameOnToCharPtr(char* pszPort, const int& nMaxSize) const;
-
-
-	//Samples for Tom doing IO with SerXInteface and Optec TCFS
-	int tcfsGetSerialConnection();
-	int tcfsTest();
-	int tcfsSendFMMODE();
-	int tcfsPositionCore(int* plPos);
 };
 
 

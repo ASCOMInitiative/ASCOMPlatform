@@ -233,35 +233,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\licensedinterfaces\loggerinterface.h"
-				>
-			</File>
-			<File
 				RelativePath="main.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\licensedinterfaces\mutexinterface.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\licensedinterfaces\sberrorx.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\licensedinterfaces\serxinterface.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\licensedinterfaces\sleeperinterface.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\licensedinterfaces\theskyxfacadefordriversinterface.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\licensedinterfaces\tickcountinterface.h"
 				>
 			</File>
 		</Filter>
