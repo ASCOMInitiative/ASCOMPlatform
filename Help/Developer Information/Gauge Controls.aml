@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8b66e53e-707a-4fcc-b101-c25ffe766c7e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>AGauge Controls provide a fast convient way to display counter information graphically.</para>
+    </introduction>
+
+    <section address="Section1">
+      <title>Gauge Controls</title>
+      <content>
+         <para>ASCOM.Controls.Agauge is a fast and performing window customizable control with GDI+ that creates multiple types of gauges. 
+         AGuage let you simulate real hardware controls in Winform applications. The components can be simply drag-dropped onto a WinForm.</para>
+         
+         <para>It contains properties to create meters, gauges, switches, and an odometer for .NET application development.
+         This component has been adapted to the ASCOM platform 6 and is used by the Switch drivers but was originally created in 2007 by A.J.Bauer.  An example 
+         project can be found at
+         
+         <externalLink>
+		 	<linkText>AGauge Code Project Website</linkText>
+		 	<linkAlternateText>http://www.codeproject.com/KB/miscctrl/A_Gauge.aspx</linkAlternateText>
+		 	<linkUri>http://www.codeproject.com/KB/miscctrl/A_Gauge.aspx</linkUri>
+		 	<linkTarget>_blank</linkTarget>
+		 </externalLink>
+         
+         </para>
+ 		 <para>
+			
+			<!-- Caption before, centered image -->
+			<mediaLink>
+				<image placement="center" xlink:href="Gauges"/>
+			</mediaLink>
+			
+		</para>
+       </content>
+   </section>
+   <section address="Section1">
+      <title>AGauge zlib/libpng Distribution License</title>
+      <content>
+		<para>This license has been copied from the AGuage web site in April 2011.</para>
+
+		<para>This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages 
+		arising from the use of this software.</para>
+ 
+		<para>Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it
+		freely, subject to the following restrictions:</para>
+ 
+		<para>
+		<list class="ordered">
+  			<listItem><para>The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software
+  			in a product, an acknowledgment in the product documentation would be appreciated but is not required.</para></listItem>
+  			<listItem><para>Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.</para></listItem>
+  			<listItem><para>This notice may not be removed or altered from any source distribution.</para></listItem>
+		</list>
+		</para>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>
