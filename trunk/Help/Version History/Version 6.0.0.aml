@@ -63,8 +63,16 @@
 	     			<listItem>Enhanced Client Toolkit that transparently handles Platform 5 and Platform 6 conformant drivers
 	     			providing a consistent interface for .NET application developers.</listItem>
 	     			<listItem>Enhanced version of Conform to confirm adherence to the new Platform 6 interfaces</listItem>
-	     			<listItem>New Driver Templates</listItem>
+	     			<listItem>Driver Templates - New templates updated for Platform 6 and creating multi-instance drivers</listItem>>
 	     			<listItem>Settings Provider component</listItem>
+	     			<listItem>Developer Documentation</listItem>
+	  					<list class="bullet">
+	  						<listItem>Architecture diagram</listItem>
+	  						<listItem>How to create a local server driver</listItem>
+	  						<listItem>How to create a multi-instance driver</listItem>
+	  						<listItem>NOVAS 3 Guide</listItem>
+	  						<listItem>Scripting documentation</listItem>
+	  					</list>
 	     			<listItem>Full implementation of NOVAS3 including:
 	  					<list class="bullet">
 	  						<listItem>A DeltaT method valid for the years 1650 to 2050</listItem>
@@ -84,6 +92,7 @@
 	  					<list class="bullet">
 	  						<listItem>LED Indicator - a simple red / green indicator supporting various blink cadences</listItem>
 	  						<listItem>Annunciator - Displays status with a standard look and feel</listItem>
+	  						<listItem>Gauges - A wide variety of graphical meter displays to enhance a user interface.</listItem>
 	  					</list>
 	  				</listItem>
 	     			<listItem>Separate developer components installer</listItem>
@@ -97,6 +106,7 @@
 	 		 		<listItem>Additional logging for serial component accesed through DriverHelper.Serial.</listItem>
 	 		 		<listItem>Serial - Now has an RTSEnable property to control whether RTS is asserted when using 
 	 		 		RTS/CTS hardware handshaking.</listItem>
+
   				</list>
       		</content>
    		</section>
@@ -105,22 +115,22 @@
            	<title>Issues Fixed</title>
             <content>
       			<list class="bullet">
- 		 			<listItem>Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
- 		 			improved to actively test for COM ports rather than simply relying on the list of ports returned by the .NET Framework.</listItem>
-					<listItem>MigrateProfile - Now applies the "Full Control" security attribute to the entire ASCOM shared
-					file area where the Profile is stored to remove access control issues seen by some people.</listItem>
 					<listItem>Installer - Now applies required security attributes every time the installer is run,
 					regardless of whether the profile is already migrated. This ensures correct attributes are applied
 					for early adopters whose profile was migrated by an early "HelperNET" install.</listItem>
-					<listItem>TraceLogger - Fixed exception thrown if object was disposed while writing</listItem>
-					<listItem>TraceLogger - Fixed low probability IOException thrown when creating the object
-					if multiple traceloggers were created simultaneously in multi-threaded applications.</listItem>
+					<listItem>MigrateProfile - Now applies the "Full Control" security attribute to the entire ASCOM shared
+					file area where the Profile is stored to remove access control issues seen by some people.</listItem>
+ 		 			<listItem>NOVAS2 - sun_eph is now accesible.</listItem>>
  		 			<listItem>Profile - Improved resilience to transient operational issues</listItem>>
  		 			<listItem>Profile - Improved recovery from profile file corruption</listItem>>
  		 			<listItem>Profile - Fixed exception thrown when a calling application has no version number of any kind</listItem>
+ 		 			<listItem>Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
+ 		 			improved to actively test for COM ports rather than simply relying on the list of ports returned by the .NET Framework.</listItem>
  		 			<listItem>ShowPlatformVersion - Fixed failure when run on a 64bit OS</listItem>>
  		 			<listItem>Timer - Now works consistently in console environments as well as windowed environments.</listItem>>
- 		 			<listItem>NOVAS2 - sun_eph is now accesible.</listItem>>
+					<listItem>TraceLogger - Fixed exception thrown if object was disposed while writing</listItem>
+					<listItem>TraceLogger - Fixed low probability IOException thrown when creating the object
+					if multiple traceloggers were created simultaneously in multi-threaded applications.</listItem>
 				</list>
    			</content>
    		</section>

@@ -130,7 +130,7 @@
       </PlugInConfig>
     </PlugInConfigurations>
     <FeedbackEMailAddress>Ascom.Feedback%40yahoo.co.uk</FeedbackEMailAddress>
-    <FeedbackEMailLinkText>Send feedback to Peter Simpson</FeedbackEMailLinkText>
+    <FeedbackEMailLinkText>Send feedback to ASCOM</FeedbackEMailLinkText>
     <HeaderText>
     </HeaderText>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
@@ -160,7 +160,14 @@
       <CopyToMedia>False</CopyToMedia>
       <ImageId>ManufLogos</ImageId>
     </Image>
+    <Image Include="Developer Information\Gauges.png">
+      <ImageId>Gauges</ImageId>
+      <AlternateText>Gauges</AlternateText>
+    </Image>
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Developer Information\Gauge Controls.aml" />
+    <None Include="Developer Information\Gauges.aml" />
+    <None Include="Developer Information\Gauges.aml" />
     <None Include="Introduction\Introduction - Developer.aml" />
     <None Include="Introduction\Key Changes in 6.0.aml" />
     <None Include="Examples\ProfileWhole.aml" />
