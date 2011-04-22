@@ -11,11 +11,14 @@ using System.Security.Principal;
 using System.GAC;
 using System.Text;
 using System.Collections.Generic;
+using System.Management;
 
 namespace UninstallAscom
 {
     class Program
     {
+        const string platform4132 = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ASCOM Platform 4.1";
+        const string platform4164 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ASCOM Platform 4.1";
         const string platform532a = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{075F543B-97C5-4118-9D54-93910DE03FE9}";
         const string platform564a = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{075F543B-97C5-4118-9D54-93910DE03FE9}";
         const string platform532b ="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{14C10725-0018-4534-AE5E-547C08B737B7}";
@@ -61,6 +64,9 @@ namespace UninstallAscom
                 LogMessage("Uninstall", "Creating RegistryAccess object");
                 RegAccess = new RegistryAccess("UninstallASCOM"); //Create a RegistryAccess object triggering the special behaviour that creates a log with a special name
 
+                CreateRestorePoint();
+                
+                
                 LogMessage("Uninstall", "Removing previous versions of ASCOM....");
 
                 //Initial setup
@@ -68,6 +74,7 @@ namespace UninstallAscom
                 bool is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
                 LogMessage("Uninstall", "OS is 64bit: " + is64BitOperatingSystem.ToString() + ", Process is 64bit: " + is64BitProcess.ToString());
 
+                string platform4164KeyValue = null; 
                 string platform564aKeyValue = null;
                 string platform564bKeyValue = null;
                 string platform564KeyValue = null;
@@ -77,6 +84,7 @@ namespace UninstallAscom
 
                 if (is64BitOperatingSystem) // Is a 64bit OS
                 {
+                    platform4164KeyValue = Read(uninstallString, platform4164); // Read the 4.1 uninstall string
                     platform5564KeyValue = Read(uninstallString, platform5564); // Read the 5.5 uninstall string
                     platform564aKeyValue = Read(uninstallString, platform564a); // Read the 5.0A uninstall string 
                     platform564bKeyValue = Read(uninstallString, platform564b); // Read the 5.0B uninstall string
@@ -109,6 +117,7 @@ namespace UninstallAscom
                     LogMessage("Uninstall", "32bit Common Files Path: " + AscomDirectory);
                 }
 
+                string platform4132KeyValue = Read(uninstallString, platform4132);
                 string platform5532KeyValue = Read(uninstallString, platform5532);
                 string platform532aKeyValue = Read(uninstallString, platform532a);
                 string platform532bKeyValue = Read(uninstallString, platform532b);
@@ -169,6 +178,35 @@ namespace UninstallAscom
                         RunProcess("MsiExec.exe", SplitKey(platform532KeyValue));
                     }
                 }
+
+                //Remove 4.1
+                //remove 5.0
+                if (platform4164KeyValue != null)
+                {
+                    LogMessage("Uninstall", "64 Removing ASCOM 4.1... " + platform4164KeyValue);
+                    found = true;
+
+                    string[] vals = platform4164KeyValue.Split(new string[] {" "},System.StringSplitOptions.RemoveEmptyEntries);
+                    LogMessage("Uninstall", @"Found uninstall values: """ + vals[0] + @""", """ + vals[1] + @"""");
+
+                    RunProcess(vals[0], @"/S /Z " + vals[1]);
+                    CleanUp4();
+                }
+                else
+                {
+                    if (platform4132KeyValue != null)
+                    {
+                        LogMessage("Uninstall", "32 Removing ASCOM 4.1... " + platform4132KeyValue);
+                        found = true;
+
+                        string[] vals = platform4132KeyValue.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries);
+                        LogMessage("Uninstall", @"Found uninstall values: """ + vals[0] + @""", """ + vals[1] + @"""");
+
+                        RunProcess(vals[0], @"/S /Z " + vals[1]);
+                        CleanUp4();
+                    }
+                }
+
 
                 if (found == true)
                 {
@@ -376,6 +414,29 @@ namespace UninstallAscom
             return false;
         }
 
+        
+        // Clean up debris left over from 4
+        protected static void CleanUp4()
+        {
+            RegistryAccess RA = new RegistryAccess();
+            RegistryKey RK = RA.OpenSubKey(Registry.LocalMachine, @"SOFTWARE\ASCOM", true, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY);
+            try
+            {
+                RK.DeleteSubKeyTree(@"Telescope Drivers\SS2K.Telescope");
+                LogMessage("CleanUp4", @"Deleted Registry: Telescope Drivers\SS2K.Telescope");
+            }
+            catch {}
+
+            try
+            {
+                RK.DeleteSubKeyTree(@"Focuser Drivers\PCFocus.Focuser");
+                LogMessage("CleanUp4", @"Deleted Registry: Focuser Drivers\PCFocus.Focuser");
+            }
+            catch { }
+            RK.Close();
+            RA.Dispose();
+        }
+
         //clean up any left over files from 5.0
         protected static void CleanUp5()
         {
@@ -512,6 +573,31 @@ namespace UninstallAscom
                     LogMessage("RemoveAssembly","Outcome: Assembly uninstalled"); break;
                 default:
                     LogMessage("RemoveAssembly","Unknown uninstall outcome code: " + puldisposition); break;
+            }
+
+        }
+
+        protected static void CreateRestorePoint()
+        {
+            try
+            {
+                LogMessage("CreateRestorePoint", "Creating Restore Point");
+                ManagementScope oScope = new ManagementScope("\\\\localhost\\root\\default");
+                ManagementPath oPath = new ManagementPath("SystemRestore");
+                ObjectGetOptions oGetOp = new ObjectGetOptions();
+                ManagementClass oProcess = new ManagementClass(oScope, oPath, oGetOp);
+
+                ManagementBaseObject oInParams = oProcess.GetMethodParameters("CreateRestorePoint");
+                oInParams["Description"] = "ASCOM Platform 6";
+                oInParams["RestorePointType"] = 0;
+                oInParams["EventType"] = 100;
+
+                ManagementBaseObject oOutParams = oProcess.InvokeMethod("CreateRestorePoint", oInParams, null);
+                LogMessage("CreateRestorePoint", "Returned from CreateRestorePoint method" );
+            }
+            catch (Exception ex)
+            {
+                LogError("CreateRestorePoint", ex.ToString());
             }
 
         }

@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Windows.Forms;
 using ASCOM.Utilities;
+using System.Management;
 
 namespace ConsoleApplication1
 {
@@ -145,6 +146,8 @@ namespace ConsoleApplication1
             LogMessage("FinaliseInstall", "Registering ASCOMDome");
             RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
             RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
+
+            FinaliseRestorePoint();
 
             LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
 
@@ -377,5 +380,31 @@ namespace ConsoleApplication1
             TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
             EventLogCode.LogEvent("FinaliseInstall", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
         }
+
+        protected static void FinaliseRestorePoint()
+        {
+            try
+            {
+                LogMessage("FinaliseRestorePoint", "Creating Restore Point");
+                ManagementScope oScope = new ManagementScope("\\\\localhost\\root\\default");
+                ManagementPath oPath = new ManagementPath("SystemRestore");
+                ObjectGetOptions oGetOp = new ObjectGetOptions();
+                ManagementClass oProcess = new ManagementClass(oScope, oPath, oGetOp);
+
+                ManagementBaseObject oInParams = oProcess.GetMethodParameters("CreateRestorePoint");
+                oInParams["Description"] = "ASCOM Platform 6";
+                oInParams["RestorePointType"] = 0;
+                oInParams["EventType"] = 101;
+
+                ManagementBaseObject oOutParams = oProcess.InvokeMethod("CreateRestorePoint", oInParams, null);
+                LogMessage("FinaliseRestorePoint", "Returned from FinaliseRestorePoint method");
+            }
+            catch (Exception ex)
+            {
+                LogError("FinaliseRestorePoint", ex.ToString());
+            }
+
+        }
+
     }
 }

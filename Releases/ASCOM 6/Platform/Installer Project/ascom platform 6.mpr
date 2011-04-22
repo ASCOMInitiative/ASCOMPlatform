@@ -44,6 +44,7 @@ MigrationSupport.dll
 MigrationSupport.pdb
 MigrationSupport.xml
 moon.bmp
+readme.rtf
 swoosh.avi
 UninstallAscom.exe
 UninstallAscom.pdb
@@ -1090,6 +1091,27 @@ B
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
 $
 1
@@ -1097,23 +1119,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Beta 3
+ASCOM Platform 6 Beta 3A Sys Restore Test
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
 6.0.0.0
 English
-ASCOM Platform 6 Beta 3
+ASCOM Platform 6 Beta 3A Sys Restore Test
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{A09ECC5B-CF6C-4D23-B6ED-772398886330}
+{7A3DB9E6-EE20-4373-80D8-277744DA3844}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Beta3
+ASCOMPlatform6Beta3A
 TRUE
 FALSE
 
