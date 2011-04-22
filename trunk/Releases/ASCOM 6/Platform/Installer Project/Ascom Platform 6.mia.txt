@@ -157,6 +157,10 @@ label: Welcome Dialog
 Display Dialog: welcome, wait for dialog to return (modal)
 if Variable WIZARD Equals CANCEL
   GoTo Label: Main Install
+else
+  if Variable WIZARD Equals NEXT
+    GoTo Label: Main Install
+  end
 end
 [compiler if Variable BUILDMODE not Equals PATCH]
 label: License Check
@@ -169,9 +173,9 @@ else
   end
 end
 label: ReadMe Information
-Comment: Display Dialog: readme, wait for dialog to return (modal)
+Display Dialog: readme, wait for dialog to return (modal)
 if Variable WIZARD Equals BACK
-  GoTo Label: License Check
+  GoTo Label: Welcome Dialog
 else
   if Variable WIZARD Equals CANCEL
     GoTo Label: Main Install
@@ -428,7 +432,16 @@ else
   if Variable MAINTENANCE not Equals TRUE
     Comment: Only try and remove Platform 5 if we are not upgrading a previous Platform 6 install
     if Variable REQUIRESUPGRADE Equals FALSE
-      Write into Text File $SETUPLOG$ from Value Straight forward install - removing old Platform 5 (at end of file)
+      Write into Text File $SETUPLOG$ from Value Straight forward install - removing old Platform if it exists (at end of file)
+      Comment: Check for Platform 4.1
+      Set Variable UNINSTALLER41 to 
+      Set Variable PLATFORM4FOUND to FALSE
+      Comment: Check for Platform 4.1
+      Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ASCOM Platform 4.1\UninstallString into UNINSTALLER41
+      if Variable UNINSTALLER41 not Equals 
+        Set Variable PLATFORM4FOUND to TRUE
+      end
+      Write into Text File $SETUPLOG$ from Value Platform 4.1 - $UNINSTALLER41$ (at end of file)
       Comment: Check whether Platform 5 is actually installed, only try and uninstall if present! Test is presence of Platform 5 Uninstall string in registry
       Set Variable UNINSTALLER5A to 
       Set Variable PLATFORM5FOUND to FALSE
@@ -454,12 +467,20 @@ else
         Write into Text File $SETUPLOG$ from Value RC: $RC$ UninstallASCOM  (at end of file)
         MessageBalloon: ASCOM Platform Maintenance, Installing Platform 6...
       else
-        Comment: UninstallASCOM must run in order to set the correct security ACL on the ASCOM registry profile store
-        MessageBalloon: ASCOM Platform Maintenance, Preparing ASCOM Profile Store...
-        Write into Text File $SETUPLOG$ from Value First time install, preparing ASCOM Profile Store (at end of file)
-        Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ UninstallASCOM (at end of file)
-        MessageBalloon: ASCOM Platform Maintenance, First time install - Installing Platform 6...
+        if Variable PLATFORM4FOUND Equals TRUE
+          MessageBalloon: ASCOM Platform Maintenance, Removing Platform 4...
+          Write into Text File $SETUPLOG$ from Value Uninstalling Platform 4... (at end of file)
+          Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
+          Write into Text File $SETUPLOG$ from Value RC: $RC$ UninstallASCOM  (at end of file)
+          MessageBalloon: ASCOM Platform Maintenance, Installing Platform 6...
+        else
+          Comment: UninstallASCOM must run in order to set the correct security ACL on the ASCOM registry profile store
+          MessageBalloon: ASCOM Platform Maintenance, Preparing ASCOM Profile Store...
+          Write into Text File $SETUPLOG$ from Value First time install, preparing ASCOM Profile Store (at end of file)
+          Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
+          Write into Text File $SETUPLOG$ from Value RC: $RC$ UninstallASCOM (at end of file)
+          MessageBalloon: ASCOM Platform Maintenance, First time install - Installing Platform 6...
+        end
       end
       if Variable RC not Equals 0
         MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
