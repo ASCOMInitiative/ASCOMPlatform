@@ -96,6 +96,7 @@ Get Folder Location
 Get Folder Location
 Get Folder Location
 Get Folder Location
+Get Folder Location
 Code Folding Region
 Comment
 Code Folding Region
@@ -353,6 +354,11 @@ If
 Comment
 Read Registry
 If
+Comment
+Run Program
+If
+MessageBox
+End
 Run Program
 If
 MessageBox
@@ -486,6 +492,7 @@ $
 {DB8C83E5-7793-49D6-8392-E9A6BDBD193C}
 {4CCA6403-8EAA-4A90-9D66-74D8A0330FBA}
 {D222A92F-4633-450A-A4A4-7DCDE08E601D}
+{DB83C05F-AFBF-49D4-BD00-7053E9638ADD}
 {E65E4C77-66A6-401F-B95A-75D3C3108CA0}
 {805EACD9-499C-4680-A5BF-50B23DAA6167}
 {0E62115A-EDD1-4C8F-B27B-3E23C2FFB5B8}
@@ -743,6 +750,11 @@ $
 {23EC8A97-D013-416C-8529-4720BF4F22FB}
 {DF3D0667-A79B-4A99-AC0A-C2B4AD37F1CF}
 {1B71CABE-C17F-4BD2-AC2F-FC644BF5B2DC}
+{671BE941-DCFA-4F83-B030-22BD98DAA5D8}
+{4BD15AF0-8985-41AA-AFCA-D1D32EBD578F}
+{2598C20D-7501-43AD-9C23-99C104046F40}
+{78E48656-9E8E-4F2C-9595-DA933B2ABA1C}
+{A14DD671-0E65-4616-A559-3DC3591BCC88}
 {F26D7990-7248-42E8-983D-ED40A4ABF441}
 {EA50AD56-C887-4A01-929D-5594E2837601}
 {14CFE70C-0ADE-403E-9BC6-E25752C70E51}
@@ -860,6 +872,8 @@ Test whether VS is installed by seeing whether the >VSI extention is mapped to t
 Run the VsiInstaller to install the templates, provided that it is present on the system.
 {BFC987E2-B8EE-45EF-8F90-22068F4D3883}
 
+{671BE941-DCFA-4F83-B030-22BD98DAA5D8}
+Erase existing templates to avoid confirmation dialogs in VSI installer
 {3188C79A-1A28-4C92-84A6-B3C5A6485BF8}
 PREREQ
 FALSE
@@ -1246,6 +1260,11 @@ VSIENTRY
 0
 
 FALSE
+{2598C20D-7501-43AD-9C23-99C104046F40}
+RC
+0
+0
+TRUE
 {485F537B-92DD-408E-BFC3-098ACA3F0AC8}
 $TITLE$ Setup
 Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
@@ -1272,8 +1291,8 @@ Unable to uninstall old version of $TITLE$. Please uninstall it yourself using C
 
 {14CFE70C-0ADE-403E-9BC6-E25752C70E51}
 VS Templates
-RC: $SUCCESS$
-0
+The Visual Studio content installer indicated that it failed in some way: $NEWLINE$$NEWLINE$Return Code: $RC$$NEWLINE$$NEWLINE$Please report this on ASCOM-Talk.
+2
 1
 
 {780DC690-5E5F-4A40-9A7A-D30DFC4043C5}
@@ -1286,6 +1305,12 @@ Remove: $REMOVE$ Success: $SUCCESS$
 Maint Exit
 Repair: .$REPAIR$. Modify: .$MODIFY$. Remove: .$REMOVE$.
 0
+1
+
+{78E48656-9E8E-4F2C-9595-DA933B2ABA1C}
+Profile Migration
+An error has occured during pre-installation template removal. $NEWLINE$This is not a serious issue but you may now see some dialogs in the template $NEWLINE$installer requesting confirmation to delete older template files.$NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
+2
 1
 
 {77A53C9F-DCBA-402B-ADBA-F3D3B08E983F}
@@ -1472,6 +1497,10 @@ FALSE
 {D222A92F-4633-450A-A4A4-7DCDE08E601D}
 WWWROOTDIR
 27
+FALSE
+{DB83C05F-AFBF-49D4-BD00-7053E9638ADD}
+USERPROFILE
+19
 FALSE
 {453B1E22-7B83-4520-AD85-81C5DEFFC482}
 ISNT
@@ -1963,6 +1992,12 @@ FALSE
 
 TRUE
 RC
+{4BD15AF0-8985-41AA-AFCA-D1D32EBD578F}
+$SUPPORTDIR$\EraseTemplates.exe
+TRUE
+
+TRUE
+RC
 {8A35DAD0-2538-477A-97B5-A33E8CBF85DB}
 $UNINSTALLER$
 
@@ -2447,14 +2482,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
 
 C
 
@@ -2483,6 +2510,15 @@ C
 
 
 
+C
+
+
+
+
+
+
+
+
 
 
 
@@ -2530,6 +2566,11 @@ C
 C
 
 C
+
+
+
+
+
 
 
 
@@ -2719,6 +2760,12 @@ C
 
 
 $
+
+
+
+
+
+
 
 
 

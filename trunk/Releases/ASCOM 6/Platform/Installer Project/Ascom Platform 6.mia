@@ -1,5 +1,6 @@
 Comment
 Set Variable
+Set Variable
 Comment
 Code Folding Region
 Get System Settings
@@ -124,6 +125,9 @@ Get Folder Location
 Get Folder Location
 Read Registry
 Set Variable
+Comment
+Set Variable
+Read Registry
 Code Folding Region
 Create Folder
 Comment
@@ -1053,7 +1057,11 @@ If
 If
 If
 If
+If
 Run Program
+Else
+MessageBox
+End
 End
 End
 End
@@ -1064,6 +1072,7 @@ Comment
 $
 {2C258FB8-307E-4B84-B6A6-DBE7FC8A79FE}
 {1B5C94AA-A18D-4C26-95A0-8BC5781F4686}
+{12F96767-F1D8-47EB-B0F5-7EB994DC6902}
 {CA36D3E0-9E30-4A6B-90F9-C3ED75F09EA7}
 {5177FF3C-C42D-4163-ACD1-BAF4DBE0F1C2}
 {C9443FD6-BD33-4DB2-A2CF-B196916CA184}
@@ -1188,6 +1197,9 @@ $
 {F389B2C5-4DF9-4C71-BAB5-7761ECEEB198}
 {3B1E2BB5-391A-47E8-8128-A9856C0D9CC0}
 {F1BC1B97-C86F-44A1-BE5A-BBDC8771B89D}
+{FE112823-2E0D-4F8F-AEC9-7C936E649A0A}
+{B8648F6D-8A39-49F4-A7C6-BCE61FF703AB}
+{B6098CA8-AA41-414A-BE61-8C02B0CD406E}
 {AB277D12-13AE-46F2-B4E2-12C520DC6EA8}
 {BA2BD709-00C4-4216-9AD0-2481F59D6D3E}
 {14873095-E766-46A8-8530-FAD0678B9D29}
@@ -2117,7 +2129,11 @@ $
 {A3BD10E7-6594-4A85-8EB8-F4D70379D91A}
 {3C71A05E-877A-45F9-852F-263F83C37EB0}
 {BE488EE1-4EBC-4DB7-AD20-BC9739B237EC}
+{0F027466-940D-42A3-978E-7237659DC66F}
 {896A998D-4AB3-47A3-A84B-12582DEF1485}
+{07B385B5-D119-4E90-B56C-D8C96F851AD3}
+{A46F6427-2781-413B-9681-A5ADE5549A55}
+{A9D762FC-FEFC-415B-847B-AEFECAB7491A}
 {EA8B679A-2E1E-4CD5-97EA-3B8D1D1B73C8}
 {9DF3358A-CC68-4FA3-9735-422100AF86B6}
 {CE34B4E6-8153-46C4-8C8C-54B2F6847D3A}
@@ -2127,7 +2143,7 @@ $
 {525171E8-86AD-42F6-ACFF-6697D98D41F3}
 $
 {2C258FB8-307E-4B84-B6A6-DBE7FC8A79FE}
-Native Code Setup Engine 32 bit-64 bit Installer Project
+Native Code Setup Engine 32 bit-64 bit Installer Project, overwrite newer files automatically
 {11F568DA-28EF-43FD-B05A-5CAFC3064A0D}
 
 {1079FA5E-C7C3-4468-889C-09182FEB6F96}
@@ -2360,6 +2376,8 @@ UninstallASCOM must run in order to set the correct security ACL on the ASCOM re
 Check for Platform 4.1
 {9C6E5C70-EC95-4A37-A682-F595E0F5977A}
 Check for Platform 4.1
+{FE112823-2E0D-4F8F-AEC9-7C936E649A0A}
+Determine if Acrobat is installed
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -2633,6 +2651,12 @@ FALSE
 {D30567F0-3DD5-4E33-A867-4EBB0F8108D6}
 UNINSTALLER41$MYAH$MYAH$FALSE
 
+{B8648F6D-8A39-49F4-A7C6-BCE61FF703AB}
+ACROBATKEY$MYAH$MYAH$FALSE
+
+{12F96767-F1D8-47EB-B0F5-7EB994DC6902}
+NATIVE_OVERWRITE$MYAH$MYAH$FALSE
+TRUE
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -3118,6 +3142,11 @@ PLATFORM4FOUND
 0
 TRUE
 FALSE
+{0F027466-940D-42A3-978E-7237659DC66F}
+ACROBATKEY
+0
+
+TRUE
 {90829DD8-0835-4E22-9C27-A67324C55271}
 $TITLE$ Setup Error
 This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -3176,6 +3205,12 @@ An error has occured during Profile migration, please save all logs in My Docume
 Finalise Setup
 An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
 3
+1
+
+{A46F6427-2781-413B-9681-A5ADE5549A55}
+User Guide
+Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
+0
 1
 
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
@@ -5507,6 +5542,11 @@ UNINSTALLER41
 2
 SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ASCOM Platform 4.1
 UninstallString
+{B6098CA8-AA41-414A-BE61-8C02B0CD406E}
+ACROBATKEY
+0
+.pdf
+
 {7653D287-A413-450E-A782-DF14170DA6EE}
 10
 2
@@ -7298,11 +7338,6 @@ $
 
 
 
-C
-C
-
-
-
 
 C
 C
@@ -7310,58 +7345,7 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+C
 C
 
 
@@ -7419,108 +7403,6 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
 C
 
 
@@ -7596,6 +7478,168 @@ C
 
 
 
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8081,6 +8125,10 @@ C
 
 
 C
+
+
+
+
 
 
 
@@ -8332,6 +8380,14 @@ C
 
 
 $
+
+
+
+
+
+
+
+
 
 
 

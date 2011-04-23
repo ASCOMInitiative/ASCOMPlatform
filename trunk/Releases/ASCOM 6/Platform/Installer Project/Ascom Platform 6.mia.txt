@@ -1,5 +1,6 @@
-Comment: Native Code Setup Engine 32 bit-64 bit Installer Project
+Comment: Native Code Setup Engine 32 bit-64 bit Installer Project, overwrite newer files automatically
 Set Variable NATIVE_ENGINE to TRUE
+Set Variable NATIVE_OVERWRITE to TRUE
  
 [DEFINE REGION: Check Application Requirements]
 Get System Setting Administrator Rights into CHECKSYSTEM
@@ -124,6 +125,9 @@ Get Folder Location Taskbar->Quick Launch Directory into QUICKLAUNCHDIR
 Get Folder Location WWW->WWWRoot into WWWROOTDIR
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
 Set Variable REGASM to $FRAMEWORKROOT$v2.0.50727\RegAsm.exe
+Comment: Determine if Acrobat is installed
+Set Variable ACROBATKEY to 
+Read Registry Key HKCR\.pdf\ into ACROBATKEY
 [END REGION]
 Create Folder $MYDOCUMENTS$\ASCOM
  
@@ -1053,7 +1057,11 @@ if Variable SILENT Equals FALSE
     if Variable REMOVE Equals FALSE
       if Variable SUCCESS Equals COMPLETE
         if Variable REPAIR not Equals TRUE
-          Run Program $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf 
+          if Variable ACROBATKEY not Equals 
+            Run Program $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf 
+          else
+            MessageBox: User Guide, Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
+          end
         end
       end
     end
