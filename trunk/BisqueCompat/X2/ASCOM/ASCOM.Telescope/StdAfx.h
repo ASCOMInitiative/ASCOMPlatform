@@ -29,6 +29,7 @@
 #include <initguid.h>
 #include <stdlib.h>
 #include <string.h>
+#include "main.h"
 #include "ASCOM.Telescope.h"
 
 // TODO: reference additional headers your program requires here

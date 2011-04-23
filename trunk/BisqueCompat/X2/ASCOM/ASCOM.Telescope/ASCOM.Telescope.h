@@ -1,8 +1,18 @@
 
 #pragma once
+#include "../../licensedinterfaces/sberrorx.h"
+#include "../../licensedinterfaces/basicstringinterface.h"
+#include "../../licensedinterfaces/driverinfointerface.h"
+#include "../../licensedinterfaces/deviceinfointerface.h"
 #include "../../licensedinterfaces/mountdriverinterface.h"
+#include "../../licensedinterfaces/modalsettingsdialoginterface.h"
+#include "../../licensedinterfaces/theskyxfacadefordriversinterface.h"
+#include "../../licensedinterfaces/sleeperinterface.h"
+#include "../../licensedinterfaces/parkinterface.h"
+#include "../../licensedinterfaces/unparkinterface.h"
 #include "../../licensedinterfaces/mount/slewtointerface.h"
 #include "../../licensedinterfaces/mount/syncmountinterface.h"
+#include "../../licensedinterfaces/mount/needsrefractioninterface.h"
 #include "../../licensedinterfaces/mount/trackingratesinterface.h"
 
 // Forward declare the interfaces that the this driver is "given" by TheSkyX
@@ -23,9 +33,15 @@ class TickCountInterface;
 Use this example to write an X2Mount driver.
 */
 class X2Mount : public MountDriverInterface,
+						//public HardwareInfoInterface,
+						//public DriverInfoInterface,
+						//public NeedsRefractionInterface,
+						public ModalSettingsDialogInterface,
 						public SyncMountInterface,
 						public SlewToInterface,
-						public TrackingRatesInterface 
+						public TrackingRatesInterface,
+						public ParkInterface,
+						public UnparkInterface
 {
 public:
 	/*!Standard X2 constructor*/
@@ -44,43 +60,29 @@ public:
 // Operations
 public:
 
-	/*!\name DriverRootInterface Implementation
-	See DriverRootInterface.*/
-	//@{ 
+	//DriverRootInterface
 	virtual DeviceType							deviceType(void) { return DriverRootInterface::DT_MOUNT; }
 	virtual int									queryAbstraction(const char* pszName, void** ppVal);
-	//@} 
 
-	/*!\name LinkInterface Implementation
-	See LinkInterface.*/
-	//@{ 
+	//LinkInterface
 	virtual int									establishLink(void);
 	virtual int									terminateLink(void);
 	virtual bool								isLinked(void) const;
 	virtual bool								isEstablishLinkAbortable(void) const;
-	//@} 
 
-	/*!\name DriverInfoInterface Implementation
-	See DriverInfoInterface.*/
-	//@{ 
+	//DriverInfoInterface
 	virtual void								driverInfoDetailedInfo(BasicStringInterface& str) const;
 	virtual double								driverInfoVersion(void) const;
-	//@} 
 
-	/*!\name HardwareInfoInterface Implementation
-	See HardwareInfoInterface.*/
-	//@{ 
+	//HardwareInfoInterface
 	virtual void								deviceInfoNameShort(BasicStringInterface& str) const;
 	virtual void								deviceInfoNameLong(BasicStringInterface& str) const;
 	virtual void								deviceInfoDetailedDescription(BasicStringInterface& str) const;
 	virtual void								deviceInfoFirmwareVersion(BasicStringInterface& str);
 	virtual void								deviceInfoModel(BasicStringInterface& str);
-	//@} 
 
 	virtual int									raDec(double& ra, double& dec, const bool& bCached = false);
 	virtual int									abort(void);
-
-	//Optional interfaces, uncomment and implement as required.
 
 	//SyncMountInterface
 	virtual int									syncMount(const double& ra, const double& dec);
@@ -92,42 +94,59 @@ public:
 	virtual int									endSlewTo(void);
 	
 	//NeedsRefractionInterface
-	//virtual bool							needsRefactionAdjustments(void);
+	virtual bool								needsRefactionAdjustments(void);
 
 	//TrackingRatesInterface 
 	virtual int setTrackingRates( const bool& bTrackingOn, const bool& bIgnoreRates, const double& dRaRateArcSecPerSec, const double& dDecRateArcSecPerSec);
 	virtual int trackingRates( bool& bTrackingOn, double& dRaRateArcSecPerSec, double& dDecRateArcSecPerSec);
 
+	//ParkInterface
+	virtual bool								isParked(void);
+	virtual int									startPark(const double& dAz, const double& dAlt);
+	virtual int									isCompletePark(bool& bComplete) const;
+	virtual int									endPark(void);
+
+	//UnparkInterface
+	virtual int									startUnpark(void);
+	virtual int									isCompleteUnpark(bool& bComplete) const;
+	virtual int									endUnpark(void);
+
+	//ModalSettingsDialogInterface
+	virtual int									initModalSettingsDialog(void){return 0;}
+	virtual int									execModalSettingsDialog(void);
+
 // Implementation
 private:	
 
-	SerXInterface 								*GetSerX() {return m_pSerX; }		
-	TheSkyXFacadeForDriversInterface			*GetTheSkyXFacadeForMounts() {return m_pTheSkyXForMounts;}
-	SleeperInterface							*GetSleeper() {return m_pSleeper; }
-	BasicIniUtilInterface						*GetSimpleIniUtil() {return m_pIniUtil; }
-	LoggerInterface								*GetLogger() {return m_pLogger; }
-	MutexInterface								*GetMutex()  {return m_pIOMutex;}
-	TickCountInterface							*GetTickCountInterface() {return m_pTickCount;}
-	
-
-	int m_nPrivateMultiInstanceIndex;
 	SerXInterface*								m_pSerX;		
-	TheSkyXFacadeForDriversInterface* 			m_pTheSkyXForMounts;
+	TheSkyXFacadeForDriversInterface* 			m_pTheSkyXForDrivers;
 	SleeperInterface*							m_pSleeper;
 	BasicIniUtilInterface*						m_pIniUtil;
 	LoggerInterface*							m_pLogger;
 	MutexInterface*								m_pIOMutex;
 	TickCountInterface*							m_pTickCount;
+
+	SerXInterface 								*GetSerX() {return m_pSerX; }		
+	TheSkyXFacadeForDriversInterface			*GetTheSkyXFacadeForDrivers() {return m_pTheSkyXForDrivers;}
+	SleeperInterface							*GetSleeper() {return m_pSleeper; }
+	BasicIniUtilInterface						*GetSimpleIniUtil() {return m_pIniUtil; }
+	LoggerInterface								*GetLogger() {return m_pLogger; }
+	MutexInterface								*GetMutex()  {return m_pIOMutex;}
+	TickCountInterface							*GetTickCountInterface() {return m_pTickCount;}
+
+	int m_nPrivateMultiInstanceIndex;
+
+	char *m_pszDriverInfoDetailedInfo;
+	char *m_pszDeviceInfoNameShort;
+	char *m_pszDeviceInfoNameLong;
+	char *m_pszDeviceInfoDetailedDescription;
+	char *m_pszDeviceInfoFirmwareVersion;
+	char *m_pszDeviceInfoModel;
+
+	HWND _hWndMain;
 };
 
-
-#define PI 3.14159265359
-#define DEG_PER_RAD 57.2957795131
-#define HR_PER_RAD (DEG_PER_RAD / 15.0)
-#define RAD_PER_DEG 0.0174532925199
-#define RAD_PER_HR (RAD_PER_DEG * 15.0)
-#define M_PER_AU 1.4959787066E11
-
+#define SIDRATE 0.9972695677								// UTC seconds per sidereal second
 #define EXCEP_ABORT 0xE100000F
 #define ABORT RaiseException(EXCEP_ABORT, 0, NULL, NULL)
 #define EXCEP_NOTIMPL 0x80040400							// Drivers must raise this code!
@@ -144,8 +163,16 @@ extern char *_szScopeName;
 extern bool _bScopeHasEqu;
 extern bool _bScopeCanSlew;
 extern bool _bScopeCanSlewAsync;
+extern bool _bScopeCanSlewAltAz;
 extern bool _bScopeCanSync;
 extern bool _bScopeIsGEM;
+extern bool _bScopeCanSetTracking;
+extern bool _bScopeCanSetTrackRates;
+extern bool _bScopeCanPark;
+extern bool _bScopeCanUnpark;
+extern bool _bScopeCanSetPark;
+extern bool _bScopeDoesRefraction;
+
 extern bool InitDrivers(void);
 extern short InitScope(void);
 extern void TermScope(bool);
@@ -154,21 +181,32 @@ extern int GetAlignmentMode(void);
 extern bool GetCanSlew(void);
 extern bool GetCanSlewAsync(void);
 extern bool GetCanSync(void);
+extern bool GetCanPark(void);
+extern bool GetCanUnpark(void);
+extern bool GetAtPark(void);
 extern double GetRightAscension(void);
+extern double GetRightAscensionRate(void);
 extern double GetDeclination(void);
+extern double GetDeclinationRate(void);
 extern double GetAzimuth();
 extern double GetAltitude();
 extern double GetLatitude(void);
 extern double GetLongitude(void);
 extern double GetJulianDate(void);
+extern bool GetTracking(void);
+extern void SetTracking(bool state);
 extern void SetLatitude(double lat);
 extern void SetLongitude(double lng);
+extern void SetRightAscensionRate(double rate);
+extern void SetDeclinationRate(double rate);
 extern char *GetName(void);
 extern bool IsSlewing(void);
 extern short SlewScope(double dRA, double dDec);
 extern void AbortSlew(void);
 extern short SyncScope(double dRA, double dDec);
+extern void ParkScope(void);
 extern void UnparkScope(void);
+extern void SetParkScope(void);
 
 // -------------
 // Utilities.cpp

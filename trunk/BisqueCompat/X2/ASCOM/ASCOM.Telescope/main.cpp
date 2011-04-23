@@ -1,18 +1,23 @@
 #include "StdAfx.h"
-#include "main.h"
-#include "../../licensedinterfaces/basicstringinterface.h"
 
 const char *_szAlertTitle = "ASCOM Standard Telescope";
 
 //
 // Mount characteristics
 //
-bool _bScopeCanSlew = false;                    // This is true if mount can slew at all
-bool _bScopeCanSlewAsync = false;               // This is true if mount can slew asynchronously
-bool _bScopeCanSync = false;                    // This is true if mount can be sync'ed
-bool _bScopeHasEqu = false;                     // This is true if mount provides RA/Dec
-bool _bScopeIsGEM = false;						// True if driver reports that mount is GEM
 char *_szScopeName = NULL;                      // Name for crosshair labeling (delete[])
+bool _bScopeCanSlew = false;                    // Capabilites of this scope
+bool _bScopeCanSlewAsync = false;
+bool _bScopeCanSlewAltAz = false;				
+bool _bScopeCanSync = false;
+bool _bScopeHasEqu = false;
+bool _bScopeIsGEM = false;
+bool _bScopeCanSetTracking = false;
+bool _bScopeCanSetTrackRates = false;
+bool _bScopeCanPark = false;
+bool _bScopeCanUnpark = false;
+bool _bScopeCanSetPark = false;
+bool _bScopeDoesRefraction = false;
 
 //
 // State variables
