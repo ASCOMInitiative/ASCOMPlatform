@@ -100,5 +100,7 @@ Module GlobalConstants
         UninstallASCOMInfo = 23
         UninstallASCOMError = 24
         ProfileExplorerException = 25
+        EraseTemplatesInfo = 26
+        EraseTemplatesError = 27
     End Enum
 End Module

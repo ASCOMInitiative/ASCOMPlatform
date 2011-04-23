@@ -96,6 +96,7 @@ Get Folder Location System->Windows Directory into WINDIR
 Get Folder Location System->System Directory into WINSYSDIR
 Get Folder Location Taskbar->Quick Launch Directory into QUICKLAUNCHDIR
 Get Folder Location WWW->WWWRoot into WWWROOTDIR
+Get Folder Location System->Profiles Directory into USERPROFILE
 [END REGION]
  
 [DEFINE REGION: Setup User Interview]
@@ -353,9 +354,14 @@ else
     Comment: Test whether VS is installed by seeing whether the >VSI extention is mapped to the content installer. If not then ignore!
     Read Registry Key HKCR\.vsi\ into VSIENTRY
     if Variable VSIENTRY not Equals 
+      Comment: Erase existing templates to avoid confirmation dialogs in VSI installer
+      Run Program $SUPPORTDIR$\EraseTemplates.exe  (WAIT, get result into variable RC)
+      if Variable RC not Equals 0
+        MessageBox: Profile Migration, An error has occured during pre-installation template removal. $NEWLINE$This is not a serious issue but you may now see some dialogs in the template $NEWLINE$installer requesting confirmation to delete older template files.$NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
+      end
       Run Program $TARGETDIR$\Templates\ASCOM 6 Driver Templates.vsi  (WAIT, get result into variable RC)
       if Variable RC not Equals 0
-        MessageBox: VS Templates, RC: $SUCCESS$
+        MessageBox: VS Templates, The Visual Studio content installer indicated that it failed in some way: $NEWLINE$$NEWLINE$Return Code: $RC$$NEWLINE$$NEWLINE$Please report this on ASCOM-Talk.
       end
     else
       MessageBalloon: Driver Templates, Visual Studio content installer is not installed, driver templates are located in the $TARGETDIR$\Templates folder.

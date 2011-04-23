@@ -32,11 +32,23 @@ welcome.dfm.miaf
 wizard.dfm
 wizard.dfm.miaf
 $
+ASCOM.Exceptions.dll
+ASCOM.Exceptions.pdb
+EraseTemplates.exe
+EraseTemplates.pdb
 icon.ico
 Index.htm
+MigrationSupport.dll
+MigrationSupport.pdb
 moon.bmp
 swoosh.avi
 $
+
+
+
+
+
+
 
 
 
@@ -437,23 +449,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Developer Components Beta 4
+ASCOM Platform 6 Developer Components Beta 3B
 {4A195DC6-7DF9-459E-8F93-60B61EB45288}
 {DAF6A65F-A20B-4FB8-859C-1F82F1D1AEF5}
 6.0.0.0
 English
-ASCOM Platform 6 Developer Components - Beta 4
+ASCOM Platform 6 Developer Components - Beta 3B
 ASCOM Platform 6 Developer Components Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{D7E48643-3412-4489-95E8-474FE8C7F23C}
+{0D3BACCA-BAD8-4210-B1EC-DAAA8D6A3BDA}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6DeveloperBeta4
+ASCOMPlatform6DeveloperBeta3B
 TRUE
 FALSE
 
