@@ -1662,7 +1662,7 @@ FALSE
 FALSE
 FALSE
 {AF656437-F350-48A3-9158-A2BBD33BB0EC}
-..\..\..\..\Help\Platform Supporting Documents\Platform 6.0.pdf
+..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE
@@ -2060,8 +2060,8 @@ $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 |
 0|
 {ACBBA184-E349-40FD-A1BE-4AE88D234DB4}
-$TARGETDIR$\Developer Documentation\Platform 6.0.pdf
-Platform 6.0
+$TARGETDIR$\Developer Documentation\Platform Evolution.pdf
+Platform Evolution
 $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
