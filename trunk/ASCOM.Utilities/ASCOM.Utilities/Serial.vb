@@ -208,6 +208,8 @@ Public Class Serial
     Private Const SERIALPORT_DEFAULT_PARITY As SerialParity = SerialParity.None
     Private Const SERIALPORT_DEFAULT_STOPBITS As SerialStopBits = SerialStopBits.One
 
+    Private Const SERIALPORT_COM_PORT_SETTINGS As String = "COMPortSettings\"
+
 
 #Region "New and IDisposable Support"
     Sub New()
@@ -410,6 +412,18 @@ Public Class Serial
         Set(ByVal Connecting As Boolean)
             Dim TData As New ThreadData
             Dim SerPorts As String()
+            ' set the RTSEnable and DTREnable states from the registry,
+            ' NOTE this overrides any other settings, but only if it's set.
+            Dim buf As String
+            Dim b As Boolean
+            buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & m_PortName, "RTSEnable")
+            If Boolean.TryParse(buf, b) Then
+                m_RTSEnable = b
+            End If
+            buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & m_PortName, "DTREnable")
+            If Boolean.TryParse(buf, b) Then
+                m_DTREnable = b
+            End If
             Try
                 Logger.LogMessage("Set Connected To", Connecting.ToString)
                 If Connecting Then 'Log port parameters only if we are connecting
