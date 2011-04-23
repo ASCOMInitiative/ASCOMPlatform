@@ -2,7 +2,7 @@
 //
 // TITLE:		DriverInterface.cpp
 //
-// FACILITY:	Telescope API for TheSky 5/6/X
+// FACILITY:	X2 Plugin for TheSky X and ASCOM drivers
 //
 // ABSTRACT:	Provides COM calls to the Telescope driver, and various COM
 //				related functions. This is "ATL-free" for lightness of
@@ -12,8 +12,8 @@
 // USING:		Global Interface Table to marshal driver interface across 
 //				threads. See http://msdn.microsoft.com/en-us/library/ms678517
 //
-// ENVIRONMENT:	Microsoft Windows Windows 95/98/NT/2000
-//				Developed under Microsoft Visual C++ Version 6.0
+// ENVIRONMENT:	Microsoft Windows XP/Vista/7
+//				Developed under Microsoft Visual C++ 9 (VS2008)
 //
 // AUTHOR:		Robert B. Denny
 //
@@ -21,53 +21,8 @@
 //
 // When			Who		What
 //----------	---		--------------------------------------------------
-// 26-Jul-00	rbd		Initial edit
-// 24-Aug-00	rbd		Scope Chooser, new InitDrivers() and ConfigScope()
-// 28-Aug-00	rbd		Refined Chooser, now takes current driver sel
-//						and better handles modality via pass-in of our
-//						hWnd.
-// 20-Sep-00	rbd		Initialize buffers for RegQueryKeyEx!
-// 12-Nov-00	rbd		Support both sync and async slewing. Allow 
-//						Lat, Long, and Date to be optional and not
-//						alert if not supported.
-// 13-Nov-00	rbd		Major overhaul of exception handling, provision
-//						for unimplemented functions. Much cleaner now!
-//						Allow driver to provide either equatorial or 
-//						alt/az coordinates. Add settable Lat and Long.
-// 11-Dec-00	rbd		Add IsSlewing(), logic to test whether scope 
-//						is slewing, whether it supports sync or async
-//						slewing.
-// 26-Jan-01	rbd		Add calls to new capability (CanXXX) properties,
-//						simplify "can slew async" logic using capability.
-//						Some variable name changes for consistency.
-// 28-Jan-01	rbd		Add AbortSlew() method call.
-// 21-Aug-03	rbd		Disconnect before releasing the driver.
-// 25-Nov-04	rbd		4.0.1 Unpark and turn on tracking (if supported) 
-//						when connecting to the scope.
-// 04-Jun-10	rbd		5.0.1 - For TheSky X, need to remarshal the 
-//						interface to the scope between threads. When 
-//						disconnecting the scope, the call to AbortSlew()
-//						comes in on the main thread, while other calls 
-//						come in on a worker thread. 
-// 10-Jun-10	rbd		5.0.2 - Can't get the driver to release! Switch
-//						to using the Global Interface Table as a cleaner
-//						way to marshal across threads. Prevent recursive
-//						errors in TermScope() which is called by drvFail().
-// 23-Aug-10	rbd		5.0.3 - Add GetAlignmentMode and integer COM support.
-//						Add support for registry value that tells TheSky
-//						whether the mount is a GEM or not (used by TPOINT).
-// 11-Jan-11	rbd		5.0.4 - Publishing the changes from December for
-//						conditional compilation of the cross-threading
-//						support. It did not work to have the cross-thread
-//						support disabled, in the end the calls from X are
-//						still coming in on multiple threads. If Bisque 
-//						does change it to be compatible with TheSky 6 (all
-//						calls on a single thread) then the cross thread 
-//						logic can be disabled, allowing exe/LocalServer 
-//						COM servers to be released successfully.
+// 22-Apr-11	rbd		Initial edit, taken from TeleAPI/ASCOM plugin
 //========================================================================
-
-/* #include "AscomScope.h" */
 
 #include "StdAfx.h"
 
@@ -85,6 +40,7 @@ static void set_bool(OLECHAR *name, bool val);
 static void switchThreadIf();
 
 static IDispatch *_p_DrvDisp = NULL;							// [sentinel] Pointer to driver interface
+
 #ifdef CROSS_THREAD
 static IGlobalInterfaceTable *_p_GIT;							// Pointer to Global Interface Table interface
 static DWORD dwIntfcCookie;										// Driver interface cookie for GIT
@@ -142,8 +98,6 @@ bool InitDrivers(void)
 short InitScope(void)
 {
 	CLSID CLSID_driver;
-	OLECHAR *name = L"Connected";
-	DISPID didPut = DISPID_PROPERTYPUT;
 	short iRes = 0;				// Assume success (our retval)
 	HKEY hKey;
 	DWORD dwSize;
@@ -237,7 +191,15 @@ short InitScope(void)
 		_bScopeCanSync = GetCanSync();							// Can it sync?
 		_bScopeCanSlew = GetCanSlew();							// Can it slew at all?	
 		_bScopeCanSlewAsync = GetCanSlewAsync();				// Can it slew asynchronously?
+		_bScopeCanSlewAltAz = get_bool(L"CanSlewAltAz");
 		_bScopeIsGEM = (GetAlignmentMode() == 2);				// Is it a GEM?
+		_bScopeCanSetTracking = get_bool(L"CanSetTracking");	// Can we control its tracking?
+		_bScopeCanSetTrackRates = get_bool(L"CanSetRightAscensionRate") &&
+							get_bool(L"CanSetDeclinationRate");	// Too bad for mounts that can't do both
+		_bScopeCanPark = get_bool(L"CanPark");
+		_bScopeCanUnpark = get_bool(L"CanUnpark");
+		_bScopeCanSetPark = get_bool(L"CanSetPark");
+		_bScopeDoesRefraction = get_bool(L"DoesRefraction");
 
 		//
 		// Now we verify that there is a scope out there. We first try to
@@ -277,19 +239,24 @@ short InitScope(void)
 			}
 		}
 		//
-		// If the scope can be unparked, do it. The version of TeleAPI
-		// that I have doesn't have unpark support, and without it the scope 
-		// could be wedged at this point.
+		// If the scope can be unparked, do it. 
 		//
-		if(get_bool(L"CanUnpark"))
+		if(_bScopeCanUnpark)
 			UnparkScope();
 		//
-		// Finally, if the scope's tracking can be turned on and off, 
-		// turn it on. Again, this version of TeleAPI doesn't appear
-		// to support tracking control.
+		// If the scope's tracking can be turned on and off, 
+		// turn it on. 
 		//
-		if(get_bool(L"CanSetTracking"))
+		if(_bScopeCanSetTracking)
 			set_bool(L"Tracking", true);
+		//
+		// If the scope has tracking rates, turn them off
+		//
+		if(_bScopeCanSetTrackRates)
+		{
+			set_double(L"RightAscensionRate", 0.0);
+			set_double(L"DeclinationRate", 0.0);
+		}
 		//
 		// Done!
 		//
@@ -317,7 +284,6 @@ void TermScope(bool fatal)
 	VARIANTARG rgvarg[1];
 	EXCEPINFO excep;
 	VARIANT vRes;
-	short iRes = 0;												// Assume success (our retval)
 	HRESULT hr;
 
 	if(_p_DrvDisp != NULL)										// Just in case! (see termPlugin())
@@ -400,6 +366,42 @@ bool GetCanSync(void)
 	return(get_bool(L"CanSync"));
 }
 
+// ---------------------------
+// GetCanSetRightAscensionRate
+// ---------------------------
+//
+bool GetCanSetRightAscensionRate(void)
+{
+	return(get_bool(L"CanSetRightAscensionRate"));
+}
+
+// ------------------------
+// GetCanSetDeclinationRate
+// ------------------------
+//
+bool GetCanSetDeclinationRate(void)
+{
+	return(get_bool(L"CanSetDeclinationRate"));
+}
+
+// ----------
+// GetCanPark
+// ----------
+//
+bool GetCanPark(void)
+{
+	return(get_bool(L"CanPark"));
+}
+
+// ------------
+// GetCanUnpark
+// ------------
+//
+bool GetCanUnpark(void)
+{
+	return(get_bool(L"CanUnpark"));
+}
+
 // ------------------
 // GetAlignmentMode()
 // ------------------
@@ -418,6 +420,15 @@ double GetRightAscension(void)
 	return(get_double(L"RightAscension"));
 }
 
+// ---------------------
+// GetRightAscensionRate
+// ---------------------
+//
+double GetRightAscensionRate(void)
+{
+	return(get_double(L"RightAscensionRate"));
+}
+
 // --------------
 // GetDeclination
 // --------------
@@ -425,6 +436,15 @@ double GetRightAscension(void)
 double GetDeclination(void)
 {
 	return(get_double(L"Declination"));
+}
+
+// ------------------
+// GetDeclinationRate
+// ------------------
+//
+double GetDeclinationRate(void)
+{
+	return(get_double(L"DeclinationRate"));
 }
 
 // ----------
@@ -473,6 +493,49 @@ double GetLongitude(void)
 double GetJulianDate(void)
 {
 	return(get_double(L"UTCDate") + 2415018.5);
+}
+
+// ---------
+// GetAtPark
+// ---------
+//
+bool GetAtPark(void)
+{
+	return(get_bool(L"AtPark"));
+}
+
+// -----------
+// GetTracking
+// -----------
+bool GetTracking(void)
+{
+	return(get_bool(L"Tracking"));
+}
+
+// -----------
+// SetTracking
+// -----------
+void SetTracking(bool state)
+{
+	set_bool(L"Tracking", state);
+}
+
+// ---------------------
+// SetRightAscensionRate
+// ---------------------
+//
+void SetRightAscensionRate(double rate)
+{
+	set_double(L"RightAscensionRate", rate);
+}
+
+// ------------------
+// SetDeclinationRate
+// ------------------
+//
+void SetDeclinationRate(double rate)
+{
+	set_double(L"DeclinationRate", rate);
 }
 
 // -----------
@@ -825,9 +888,60 @@ short SyncScope(double dRA, double dDec)
 	return(iRes);
 }	
 
-// ------
-// Unpark
-// ------
+// ---------
+// ParkScope
+// ---------
+//
+void ParkScope(void)
+{
+	OLECHAR *name = L"Park";
+	DISPID dispid;
+	DISPPARAMS dispparms;
+	EXCEPINFO excep;
+	VARIANT vRes;
+
+#ifdef CROSS_THREAD
+	switchThreadIf();
+#endif
+
+	//
+	// Get our dispatch ID
+	//
+	if(FAILED(_p_DrvDisp->GetIDsOfNames(
+		IID_NULL, 
+		&name,
+		1, 
+		LOCALE_USER_DEFAULT,
+		&dispid)))
+		drvFail(
+			"The ASCOM scope driver is missing the Park method.",
+			NULL, true);
+
+	//
+	// No dispatch parameters for propget
+	//
+	dispparms.cArgs = 0;
+	dispparms.rgvarg = NULL;
+	dispparms.cNamedArgs = 0;
+	dispparms.rgdispidNamedArgs = NULL;
+	//
+	// Invoke the method
+	//
+	if(FAILED(_p_DrvDisp->Invoke(dispid, 
+				     IID_NULL, 
+				     LOCALE_USER_DEFAULT, 
+				     DISPATCH_METHOD,
+				     &dispparms, 
+				     &vRes, 
+				     &excep, 
+				     NULL)))
+		drvFail("Park failed internally.", &excep, true);
+		
+}
+
+// -----------
+// UnparkScope
+// -----------
 //
 void UnparkScope(void)
 {
@@ -873,6 +987,57 @@ void UnparkScope(void)
 				     &excep, 
 				     NULL)))
 		drvFail("Unpark failed internally.", &excep, true);
+		
+}
+
+// ------------
+// SetParkScope
+// ------------
+//
+void SetParkScope(void)
+{
+	OLECHAR *name = L"SetPark";
+	DISPID dispid;
+	DISPPARAMS dispparms;
+	EXCEPINFO excep;
+	VARIANT vRes;
+
+#ifdef CROSS_THREAD
+	switchThreadIf();
+#endif
+
+	//
+	// Get our dispatch ID
+	//
+	if(FAILED(_p_DrvDisp->GetIDsOfNames(
+		IID_NULL, 
+		&name,
+		1, 
+		LOCALE_USER_DEFAULT,
+		&dispid)))
+		drvFail(
+			"The ASCOM scope driver is missing the SetPark method.",
+			NULL, true);
+
+	//
+	// No dispatch parameters for propget
+	//
+	dispparms.cArgs = 0;
+	dispparms.rgvarg = NULL;
+	dispparms.cNamedArgs = 0;
+	dispparms.rgdispidNamedArgs = NULL;
+	//
+	// Invoke the method
+	//
+	if(FAILED(_p_DrvDisp->Invoke(dispid, 
+				     IID_NULL, 
+				     LOCALE_USER_DEFAULT, 
+				     DISPATCH_METHOD,
+				     &dispparms, 
+				     &vRes, 
+				     &excep, 
+				     NULL)))
+		drvFail("SetPark failed internally.", &excep, true);
 		
 }
 
