@@ -4,6 +4,7 @@
 '-----------------------------------------------------------------------
 ''' <summary>
 ''' Determine the rates at which the telescope may be moved about the specified axis by the MoveAxis() method.
+''' This is only used if the telescope interface version is 2 or 3
 ''' </summary>
 ''' <remarks><para>See the description of MoveAxis() for more information.</para>
 ''' <para>This method must return an empty collection if MoveAxis is not supported.</para></remarks>

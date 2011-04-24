@@ -41,11 +41,14 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' A string containing only the major and minor version of the driver.
     ''' This must be in the form "n.n".
     ''' Not to be confused with the InterfaceVersion property, which is the version of the ASCOM specification supported by the driver.
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property DriverVersion() As String
 
     ''' <summary>
     ''' The ASCOM device interface version that this driver supports.
+    ''' This is not implemented in Telescope Interface version 1, these will raise an error,
+    ''' this should be interpreted as InterfaceVersion 1
     ''' </summary>
     ReadOnly Property InterfaceVersion() As Short
 
@@ -63,6 +66,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
 
     ''' <summary>
     ''' Invokes the specified device-specific action.
+    ''' This is only available for telescope InterfaceVersion 3
     ''' </summary>
     ''' <param name="ActionName">
     ''' A well known name agreed by interested parties that represents the action to be carried out. 
@@ -79,6 +83,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
 
     ''' <summary>
     ''' Gets a list of supported actions.
+    ''' This is only available for telescope InterfaceVersion 3
     ''' </summary>
     ''' <value>A collection of string values, the supported action names.</value>
     ''' <remarks>This is a mandatory parameter and cannot return a PropertyNotImplemented exception. If your driver does not support any 
@@ -151,6 +156,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
 
     ''' <summary>
     ''' The alignment mode of the mount.
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property AlignmentMode() As AlignmentModes
 
@@ -161,28 +167,34 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
 
     ''' <summary>
     ''' The area of the telescope's aperture, taking into account any obstructions (square meters)
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property ApertureArea() As Double
 
     ''' <summary>
     ''' The telescope's effective aperture diameter (meters)
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property ApertureDiameter() As Double
 
     ''' <summary>
-    ''' True if the telescope is stopped in the Home position. Set only following a FindHome() operation, and reset with any slew operation. This property must be False if the telescope does not support homing. 
+    ''' True if the telescope is stopped in the Home position. Set only following a FindHome() operation,
+    '''  and reset with any slew operation. This property must be False if the telescope does not support homing. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property AtHome() As Boolean
 
     ''' <summary>
     ''' True if the telescope has been put into the parked state by the Park() method. Set False by calling the Unpark() method.
     ''' AtPark is True when the telescope is in the parked state. This is achieved by calling the Park method. When AtPark is true, the telescope movement is stopped (or restricted to a small safe range of movement) and all calls that would cause telescope movement (e.g. slewing, changing Tracking state) must not do so, and must raise an error. The telescope is taken out of parked state by calling the Unpark() method. If the telescope cannot be parked, then AtPark must always return False. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property AtPark() As Boolean
 
     ''' <summary>
     ''' Determine the rates at which the telescope may be moved about the specified axis by the MoveAxis() method.
     ''' See the description of MoveAxis() for more information. This method must return an empty collection if MoveAxis is not supported. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ''' <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
     ''' <returns>Collection of Axis Rates</returns>
@@ -196,11 +208,13 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' True if this telescope is capable of programmed finding its home position (FindHome() method).
     ''' May raise an error if the telescope is not connected. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property CanFindHome() As Boolean
 
     ''' <summary>
     ''' True if this telescope can move the requested axis
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ''' <param name="Axis">Primary, Secondary or Tertiary axis</param>
     ''' <returns>Boolean indicating can or can not move the requested axis</returns>
@@ -209,6 +223,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' True if this telescope is capable of programmed parking (Park() method)
     ''' May raise an error if the telescope is not connected. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property CanPark() As Boolean
 
@@ -227,12 +242,14 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' True if the guide rate properties used for PulseGuide() can ba adjusted.
     ''' May raise an error if the telescope is not connected. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property CanSetGuideRates() As Boolean
 
     ''' <summary>
     ''' True if this telescope is capable of programmed setting of its park position (SetPark() method)
     ''' May raise an error if the telescope is not connected. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property CanSetPark() As Boolean
 
@@ -240,6 +257,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if the SideOfPier property can be set, meaning that the mount can be forced to flip.
     ''' This will always return False for mounts (non-German-equatorial) that do not have to be flipped. 
     ''' May raise an error if the telescope is not connected. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property CanSetPierSide() As Boolean
 
@@ -303,6 +321,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed unparking (Unpark() method).
     ''' If this is true, then CanPark will also be true. May raise an error if the telescope is not connected.
     ''' May raise an error if the telescope is not connected. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property CanUnpark() As Boolean
 
@@ -334,6 +353,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
 
     ''' <summary>
     ''' Predict side of pier for German equatorial mounts
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ''' <param name="RightAscension">The destination right ascension (hours).</param>
     ''' <param name="Declination">The destination declination (degrees, positive North).</param>
@@ -343,6 +363,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' True if the telescope or driver applies atmospheric refraction to coordinates.
     ''' If this property is True, the coordinates sent to, and retrieved from, the telescope are unrefracted. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' NOTES:
     ''' If the driver does not know whether the attached telescope does its own refraction,
     ''' and if the driver does not itself calculate refraction, this property (if implemented) must raise an error when read. 
@@ -369,6 +390,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' These instruments apply corrections for precession,
     ''' nutation, abberration, etc. to adjust the coordinates from the standard system
     ''' to the pointing direction for the time and location of "here and now". 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property EquatorialSystem() As EquatorialCoordinateType
 
@@ -378,18 +400,21 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' At this point the AtHome property will be True.
     ''' Raises an error if there is a problem. 
     ''' Raises an error if AtPark is true. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     Sub FindHome()
 
     ''' <summary>
     ''' The telescope's focal length, meters
     ''' This property may be used by clients to calculate telescope field of view and plate scale when combined with detector pixel size and geometry. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property FocalLength() As Double
 
     ''' <summary>
     ''' The current Declination movement rate offset for telescope guiding (degrees/sec)
     ''' This is the rate for both hardware/relay guiding and the PulseGuide() method. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' NOTES: 
     ''' To discover whether this feature is supported, test the CanSetGuideRates property. 
     ''' The supported range of this property is telescope specific, however,
@@ -406,6 +431,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The current Right Ascension movement rate offset for telescope guiding (degrees/sec)
     ''' This is the rate for both hardware/relay guiding and the PulseGuide() method. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' NOTES:
     ''' To discover whether this feature is supported, test the CanSetGuideRates property. 
     ''' The supported range of this property is telescope specific, however, if this feature is supported, 
@@ -435,6 +461,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Tracking motion (if enabled, see note below) is suspended during this mode of operation. 
     ''' Raises an error if AtPark is true. 
     ''' This must be implemented for the if the CanMoveAxis property returns True for the given axis. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' Notes: 
     ''' The movement rate must be within the value(s) obtained from a Rate object in the the AxisRates collection.
     ''' An out of range exception is raised the rate is out of range. 
@@ -537,6 +564,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Telescope.Slewing must return True. 
     ''' If the telescope is not a German equatorial mount
     ''' (Telescope.AlignmentMode is not algGermanPolar), this method will raise an error. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     Property SideOfPier() As PierSide
 
@@ -553,6 +581,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' The elevation above mean sea level (meters) of the site at which the telescope is located
     ''' Setting this property will raise an error if the given value is outside the range -300 through +10000 metres.
     ''' Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     Property SiteElevation() As Double
 
@@ -560,6 +589,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' The geodetic(map) latitude (degrees, positive North, WGS84) of the site at which the telescope is located.
     ''' Setting this property will raise an error if the given value is outside the range -90 to +90 degrees.
     ''' Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     Property SiteLatitude() As Double
 
@@ -568,6 +598,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Setting this property will raise an error if the given value is outside the range -180 to +180 degrees.
     ''' Reading the property will raise an error if the value has never been set or is otherwise unavailable.
     ''' Note that West is negative! 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     Property SiteLongitude() As Double
 
@@ -602,6 +633,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' building or dome enclosure restrictions, etc. 
     ''' The TargetRightAscension and TargetDeclination properties are not changed by this method. 
     ''' Raises an error if AtPark is True, or if Tracking is True. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ''' <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
     ''' <param name="Altitude">Target altitude (degrees, positive up)</param>
@@ -619,6 +651,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' building or dome enclosure restrictions, etc. 
     ''' The TargetRightAscension and TargetDeclination properties are not changed by this method. 
     ''' Raises an error if AtPark is True, or if Tracking is True. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ''' <param name="Azimuth">Azimuth to which to move</param>
     ''' <param name="Altitude">Altitude to which to move to</param>
@@ -684,6 +717,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
     ''' This must be implemented if the CanSyncAltAz property is True. Raises an error if matching fails. 
     ''' Raises an error if AtPark is True, or if Tracking is True. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ''' <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
     ''' <param name="Altitude">Target altitude (degrees, positive up)</param>
@@ -740,6 +774,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' it is a write-only property of the mount's protocol), 
     ''' it is permitted for the driver to force and report a default rate on connect.
     ''' In this case, the preferred default is Sidereal rate. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     Property TrackingRate() As DriveRates
 
@@ -747,6 +782,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Returns a collection of supported DriveRate values that describe the permissible
     ''' values of the TrackingRate property for this telescope type.
     ''' At a minimum, this must contain an item for driveSidereal. 
+    ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </summary>
     ReadOnly Property TrackingRates() As ITrackingRates
 

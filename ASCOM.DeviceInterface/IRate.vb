@@ -6,7 +6,8 @@
 ''' Describes a range of rates supported by the MoveAxis() method (degrees/per second)
 ''' These are contained within the AxisRates collection. They serve to describe one or more supported ranges of rates of motion about a mechanical axis. 
 ''' It is possible that the Rate.Maximum and Rate.Minimum properties will be equal. In this case, the Rate object expresses a single discrete rate. 
-''' Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second. 
+''' Both the Rate.Maximum and Rate.Minimum properties are always expressed in units of degrees per second.
+''' This is only using for Telescope InterfaceVersions 2 and 3
 ''' </summary>
 <ComVisible(True), Guid("2E7CEEE4-B5C6-4e9a-87F4-80445700D123"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface IRate '221C0BC0-110B-4129-85A0-18BB28579290
