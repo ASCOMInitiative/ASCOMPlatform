@@ -579,7 +579,7 @@ namespace ASCOM.DriverAccess
 
         #region ICameraV2 members
         /// <summary>
-        /// Bayer X offset index
+        /// Bayer X offset index, Interface Version 2 only
         /// </summary>
         public short BayerOffsetX 
         {
@@ -587,7 +587,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Bayer Y offset index
+        /// Bayer Y offset index, Interface Version 2 only
         /// </summary>
         public short BayerOffsetY 
         {
@@ -595,7 +595,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Camera has a fast readout mode
+        /// Camera has a fast readout mode, Interface Version 2 only
         /// </summary>
         public bool CanFastReadout 
         {
@@ -610,7 +610,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Maximum exposure time
+        /// Maximum exposure time, Interface Version 2 only
         /// </summary>
         public double ExposureMax 
         {
@@ -618,7 +618,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Minimium exposure time
+        /// Minimium exposure time, Interface Version 2 only
         /// </summary>
         public double ExposureMin 
         {
@@ -626,7 +626,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Exposure resolution
+        /// Exposure resolution, Interface Version 2 only
         /// </summary>
         public double ExposureResolution 
         {
@@ -634,7 +634,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Fast readout mode
+        /// Fast readout mode, Interface Version 2 only
         /// </summary>
         public bool FastReadout 
         {
@@ -643,7 +643,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Gain - Needs explanation!!
+        /// Gain - Needs explanation!!, Interface Version 2 only
         /// </summary>
         public short Gain 
         {
@@ -652,7 +652,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Maximum value of gain
+        /// Maximum value of gain, Interface Version 2 only
         /// </summary>
         public short GainMax 
         {
@@ -660,7 +660,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Minimum value of gain
+        /// Minimum value of gain, Interface Version 2 only
         /// </summary>
         public short GainMin 
         {
@@ -668,7 +668,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Gains supported by the camera
+        /// Gains supported by the camera, Interface Version 2 only
         /// </summary>
         public string[] Gains 
         {
@@ -676,7 +676,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Percent conpleted
+        /// Percent conpleted, Interface Version 2 only
         /// </summary>
         public short PercentCompleted 
         {
