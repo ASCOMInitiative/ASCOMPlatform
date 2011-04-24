@@ -70,7 +70,7 @@ End Enum
 <Guid("3FA761EC-12F4-4757-8637-F0ABE5ECB9F7"), ComVisible(True)> _
 Public Enum DriveRates ' D9998808-2DF0-4ca1-ADD6-CE592026C663
     ''' <summary>
-    ''' Sidereal tracking rate (15.0 arcseconds per second).
+    ''' Sidereal tracking rate (15.0 arcseconds per sidereal second).
     ''' </summary>
     driveSidereal
 
@@ -92,6 +92,7 @@ End Enum
 
 ''' <summary>
 ''' Equatorial coordinate systems used by telescopes.
+''' Only used with telescope interface versions 2 and 3
 ''' </summary>
 <Guid("46AB7149-B2AF-4160-A2FD-17B8923CBADE"), ComVisible(True)> _
 Public Enum EquatorialCoordinateType ' 135265BA-25AC-4f43-95E5-80D0171E48FA
@@ -149,6 +150,7 @@ End Enum
 
 ''' <summary>
 ''' The telescope axes
+''' Only used with if the telescope interface version is 2 or 3
 ''' </summary>
 <Guid("26F6BD6C-5289-4aa1-B270-F3EA0EBEAFD7"), ComVisible(True)> _
 Public Enum TelescopeAxes ' BCB5C21D-B0EA-40d1-B36C-272456F44D01
@@ -170,6 +172,7 @@ End Enum
 
 ''' <summary>
 ''' The side of the pier on which the optical tube assembly is located.
+''' Only used with telescope interface versions 2 or 3
 ''' </summary>
 ''' <remarks>
 '''		<alert class="caution">
