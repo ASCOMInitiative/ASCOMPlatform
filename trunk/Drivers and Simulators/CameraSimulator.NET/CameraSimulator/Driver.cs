@@ -31,7 +31,6 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using System.Collections.Specialized;
 
 namespace ASCOM.Simulator
 {
@@ -176,7 +175,7 @@ namespace ASCOM.Simulator
 
         // supported actions
         // should really use consts for the action names, 
-        private ArrayList supportedActions = new ArrayList{ "SetFanSpeed", "GetFanSpeed" };
+        private ArrayList supportedActions = new ArrayList { "SetFanSpeed", "GetFanSpeed" };
 
         // SetFanSpeed, GetFanSpeed. These commands control a hypothetical CCD camera heat sink fan, range 0 (off) to 3 (full speed) 
         private int fanMode;
@@ -267,11 +266,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public ArrayList SupportedActions
         {
-            // return the Supported Actions
-            get
-            {
-                return this.supportedActions; 
-            }
+            get { return this.supportedActions; }
         }
 
         public string CommandString(string Command, bool Raw)
