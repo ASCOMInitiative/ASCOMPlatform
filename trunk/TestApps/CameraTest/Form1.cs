@@ -8,6 +8,7 @@ using CameraTest.Properties;
 using nom.tam.fits;
 using nom.tam.util;
 using System.Globalization;
+using System.Collections;
 
 //[assembly: CLSCompliant(true)]
 namespace CameraTest
@@ -185,6 +186,20 @@ namespace CameraTest
                 {
                     checkBoxFastReadout.Checked = oCamera.FastReadout;
                 }
+
+                // Check for Supported Actions
+                ArrayList supportedActions = oCamera.SupportedActions;
+                if (supportedActions.Count > 0)
+                {
+                    groupBoxSupportedActions.Visible = true;
+                    comboBoxSupportedActions.Items.Clear();
+                    foreach (var item in supportedActions)
+                    {
+                        comboBoxSupportedActions.Items.Add(item);
+                    }
+                }
+                else
+                    groupBoxSupportedActions.Visible = false;
             }
             else
             {
@@ -1103,6 +1118,15 @@ namespace CameraTest
         {
             if (checkBoxSameBins.Checked)
                 numBinY.Value = numBinX.Value;
+        }
+
+        private void buttonAction_Click(object sender, EventArgs e)
+        {
+            if (oCamera != null && oCamera.InterfaceVersion >= 2 && comboBoxSupportedActions.Items.Count > 0)
+            {
+                string ret = oCamera.Action(comboBoxSupportedActions.Text, textBoxActionParameters.Text);
+                textBoxActionParameters.Text = ret;
+            }
         }
 
         //private enum SensorType

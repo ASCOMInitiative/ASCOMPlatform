@@ -131,6 +131,10 @@ namespace CameraTest
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.imageControl = new CameraTest.ImageControl();
+            this.groupBoxSupportedActions = new System.Windows.Forms.GroupBox();
+            this.buttonAction = new System.Windows.Forms.Button();
+            this.textBoxActionParameters = new System.Windows.Forms.TextBox();
+            this.comboBoxSupportedActions = new System.Windows.Forms.ComboBox();
             this.groupBoxCoolerControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSetCCDTemperature)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -152,6 +156,7 @@ namespace CameraTest
             this.groupBoxCameraParameters.SuspendLayout();
             this.gbCamera.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBoxSupportedActions.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxCoolerControl
@@ -535,6 +540,49 @@ namespace CameraTest
             this.groupBoxImageDisplay.TabStop = false;
             this.groupBoxImageDisplay.Text = "Image";
             // 
+            // imageControl
+            // 
+            this.imageControl.CtrlIncrement = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.imageControl.DecimalPlaces = 0;
+            this.imageControl.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.imageControl.Location = new System.Drawing.Point(3, 19);
+            this.imageControl.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.imageControl.MaxValue = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.imageControl.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.imageControl.MinValue = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.imageControl.Name = "imageControl";
+            this.imageControl.ShiftIncrement = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.imageControl.Size = new System.Drawing.Size(162, 89);
+            this.imageControl.TabIndex = 11;
+            // 
             // btnSave
             // 
             this.btnSave.Location = new System.Drawing.Point(52, 180);
@@ -595,7 +643,7 @@ namespace CameraTest
             this.tsError,
             this.toolStripProgressBar,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 620);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 486);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(752, 22);
             this.statusStrip1.TabIndex = 6;
@@ -646,7 +694,7 @@ namespace CameraTest
             this.splitContainer1.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel2_Paint);
             this.splitContainer1.Panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.splitContainer1_Panel2_MouseDown);
             this.splitContainer1.Panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.splitContainer1_Panel2_MouseUp);
-            this.splitContainer1.Size = new System.Drawing.Size(752, 620);
+            this.splitContainer1.Size = new System.Drawing.Size(752, 486);
             this.splitContainer1.SplitterDistance = 183;
             this.splitContainer1.TabIndex = 8;
             // 
@@ -1120,6 +1168,7 @@ namespace CameraTest
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBoxSupportedActions);
             this.tabPage2.Controls.Add(this.buttonSetup);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBoxImageDisplay);
@@ -1147,54 +1196,48 @@ namespace CameraTest
             this.saveFileDialog.Filter = "Fits File|*.fit";
             this.saveFileDialog.Title = "Save as FITS";
             // 
-            // imageControl
+            // groupBoxSupportedActions
             // 
-            this.imageControl.CtrlIncrement = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.imageControl.DecimalPlaces = 0;
-            this.imageControl.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.imageControl.Location = new System.Drawing.Point(3, 19);
-            this.imageControl.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.imageControl.MaxValue = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            this.imageControl.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.imageControl.MinValue = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.imageControl.Name = "imageControl";
-            this.imageControl.ShiftIncrement = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.imageControl.Size = new System.Drawing.Size(162, 89);
-            this.imageControl.TabIndex = 11;
+            this.groupBoxSupportedActions.Controls.Add(this.buttonAction);
+            this.groupBoxSupportedActions.Controls.Add(this.textBoxActionParameters);
+            this.groupBoxSupportedActions.Controls.Add(this.comboBoxSupportedActions);
+            this.groupBoxSupportedActions.Location = new System.Drawing.Point(0, 484);
+            this.groupBoxSupportedActions.Name = "groupBoxSupportedActions";
+            this.groupBoxSupportedActions.Size = new System.Drawing.Size(165, 104);
+            this.groupBoxSupportedActions.TabIndex = 7;
+            this.groupBoxSupportedActions.TabStop = false;
+            this.groupBoxSupportedActions.Text = "Supported Actions";
+            // 
+            // buttonAction
+            // 
+            this.buttonAction.Location = new System.Drawing.Point(26, 72);
+            this.buttonAction.Name = "buttonAction";
+            this.buttonAction.Size = new System.Drawing.Size(83, 22);
+            this.buttonAction.TabIndex = 12;
+            this.buttonAction.Text = "Do Action";
+            this.buttonAction.UseVisualStyleBackColor = true;
+            this.buttonAction.Click += new System.EventHandler(this.buttonAction_Click);
+            // 
+            // textBoxActionParameters
+            // 
+            this.textBoxActionParameters.Location = new System.Drawing.Point(20, 46);
+            this.textBoxActionParameters.Name = "textBoxActionParameters";
+            this.textBoxActionParameters.Size = new System.Drawing.Size(125, 20);
+            this.textBoxActionParameters.TabIndex = 11;
+            // 
+            // comboBoxSupportedActions
+            // 
+            this.comboBoxSupportedActions.FormattingEnabled = true;
+            this.comboBoxSupportedActions.Location = new System.Drawing.Point(20, 19);
+            this.comboBoxSupportedActions.Name = "comboBoxSupportedActions";
+            this.comboBoxSupportedActions.Size = new System.Drawing.Size(125, 21);
+            this.comboBoxSupportedActions.TabIndex = 10;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(752, 642);
+            this.ClientSize = new System.Drawing.Size(752, 508);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::CameraTest.Properties.Settings.Default, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -1231,6 +1274,8 @@ namespace CameraTest
             this.gbCamera.ResumeLayout(false);
             this.gbCamera.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.groupBoxSupportedActions.ResumeLayout(false);
+            this.groupBoxSupportedActions.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1333,6 +1378,10 @@ namespace CameraTest
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private ImageControl imageControl;
         private System.Windows.Forms.CheckBox checkBoxSameBins;
+        private System.Windows.Forms.GroupBox groupBoxSupportedActions;
+        private System.Windows.Forms.Button buttonAction;
+        private System.Windows.Forms.TextBox textBoxActionParameters;
+        private System.Windows.Forms.ComboBox comboBoxSupportedActions;
     }
 }
 
