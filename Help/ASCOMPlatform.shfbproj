@@ -140,7 +140,28 @@
       <CopyToMedia>False</CopyToMedia>
       <ImageId>ManufLogos</ImageId>
     </Image>
+    <Image Include="Introduction\logo_resharper.png">
+      <ImageId>logo_resharper</ImageId>
+      <AlternateText>logo resharper</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\COMPortSettings.png">
+      <ImageId>COMPortSettings</ImageId>
+      <AlternateText>COMPort Settings</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\COMPortCreateKey.png">
+      <ImageId>COMPortCreateKey</ImageId>
+      <AlternateText>COMPort Create Key</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\IgnoreCOMPort.png">
+      <ImageId>IgnoreCOMPort</ImageId>
+      <AlternateText>IgnoreCOMPort</AlternateText>
+    </Image>
+    <Image Include="Tools and Features\ForceCOMPort.png">
+      <ImageId>ForceCOMPort</ImageId>
+      <AlternateText>ForceCOMPort</AlternateText>
+    </Image>
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Tools and Features\Serial Port Configuration.aml" />
     <None Include="Tools and Features\Gauges.aml" />
     <None Include="Introduction\Key Changes in 6.0 Developer.aml" />
     <None Include="Introduction\Key Changes in 6.0.aml" />

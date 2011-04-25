@@ -5,7 +5,7 @@
     	<title>Acknowledgements</title>
       	<content>
       		<para>I would like to gratefully acknowledge Tim Long, Chris Rowland, Chris Norman, Rob Morgan and Bob Denny for constructive 
-      		discussions, knowledge transfer, help in design and for testing alpha versions of Platform 6.0.</para>
+      		discussions, knowledge transfer, help in design and for testing development versions of Platform 6.0.</para>
       		<para>Thanks all!</para>
       		<para>Peter Simpson</para>
       		
@@ -47,6 +47,12 @@
 			    <entry>http://www.jetbrains.com</entry>
 			  </row>
 			  <row>
+			    <entry>ReSharper</entry>
+			    <entry>JetBrains</entry>
+			    <entry>Code analysis and quality monitoring with refactoring capability</entry>
+			    <entry>http://www.jetbrains.com</entry>
+			  </row>
+			  <row>
 			    <entry>Jira Server</entry>
 			    <entry>Altassian</entry>
 			    <entry>Issue tracking and release management</entry>
@@ -55,21 +61,20 @@
 
 			</table>
 			</para>
+						
 			<para>
-			
-			<!-- Caption before, centered image -->
-			<mediaLink>
-				<image placement="center" xlink:href="ManufLogos"/>
-			</mediaLink>
-			
+				<mediaLink>
+					<image placement="center" xlink:href="ManufLogos"/>
+				</mediaLink>
 			</para>
 			
-			
+			<para>
+				<mediaLink>
+					<image placement="center" xlink:href="logo_resharper"/>
+				</mediaLink>
+			</para>
+						
       	</content>
     </section>
-
-
-
-
   </developerConceptualDocument>
 </topic>

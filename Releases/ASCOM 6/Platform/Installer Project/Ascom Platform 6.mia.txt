@@ -710,6 +710,9 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Camera Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Chooser\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\COMPortSettings\, List of COM ports requiring specific states for DTREnable and RTSEnable (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\COMPortSettings\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\COMPortSettings\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
@@ -722,7 +725,6 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
@@ -787,7 +789,6 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\WScript.Exe, True
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\Astroart.Exe, True
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Rotator Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\SafetyMonitor Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Switch Drivers\,  (permanent)
@@ -1030,6 +1031,9 @@ else
         if Variable RC not Equals 0
           MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
         end
+        Comment: Remove unwanted registry key from previous beta installers - This can be removed for the release candidate installers
+        Delete Registry KEY HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceCOMPorts\*.*
+        Delete Registry KEY HKLM\SOFTWARE\$WOW6432NODE$ASCOM\IgnoreCOMPorts\*.*
         MessageBalloon: , 
       end
     end

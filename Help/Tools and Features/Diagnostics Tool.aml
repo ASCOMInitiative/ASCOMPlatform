@@ -13,6 +13,7 @@
          </para>
   		 <list class="bullet">
 		    <listItem>Operating system name and version including 32/64bit</listItem>
+		    <listItem>Installed Platform version</listItem>
 		    <listItem>Memory size</listItem>
 		    <listItem>Common Language Runtime version </listItem>
 		    <listItem>Key directory locations</listItem>
@@ -22,8 +23,10 @@
 		    <listItem>COM Registration entries from the registry</listItem>
 		    <listItem>Version information for key ASCOM files</listItem>
 		    <listItem>Version information for key ASCOM GAC files</listItem>
-		    <listItem>Contents of ASCOM releated Inno installer setup logs (from Temp directory)</listItem>
-		    <listItem>Results of several hundred application functionality tests</listItem>
+		    <listItem>Version information for some installed applications that use ASCOM drivers</listItem>
+		    <listItem>List of driver registration and compatibility messages. On a 64bit OS a driver's suitability for running in a 64bit application is also reported.</listItem>
+		    <listItem>Contents of ASCOM releated installer setup logs</listItem>
+		    <listItem>Results of several hundred application functionality tests on Platform components and Simulators</listItem>
 		    <listItem>List of Platform errors from the Windows ASCOM error log</listItem>
 		 </list>
 		 <para>When the "Run Diagnostics" button is pressed, the information above is collected into a log file

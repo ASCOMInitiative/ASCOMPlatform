@@ -106,7 +106,9 @@
 	 		 		<listItem>Additional logging for serial component accesed through DriverHelper.Serial.</listItem>
 	 		 		<listItem>Serial - Now has an RTSEnable property to control whether RTS is asserted when using 
 	 		 		RTS/CTS hardware handshaking.</listItem>
-
+	 		 		<listItem>Conform - An updated version that supports both Platform 5 and Platfom 6 drivers is available as a 
+	 		 		separate download. Conform is no longer distributed through the Platform itself so that it can be updated 
+	 		 		regularly without requiring a full Platform update</listItem>
   				</list>
       		</content>
    		</section>
