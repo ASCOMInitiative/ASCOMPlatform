@@ -435,7 +435,8 @@ Public Class TraceLogger
             End If
             g_LogFile.Flush()
         Catch ex As Exception
-            MsgBox("LogMsgFormatter exception: " & Len(l_Msg) & " *" & l_Msg & "* " & ex.ToString, MsgBoxStyle.Critical)
+            LogEvent("", "Exception", EventLogEntryType.Error, EventLogErrors.TraceLoggerException, ex.ToString)
+            'MsgBox("LogMsgFormatter exception: " & Len(l_Msg) & " *" & l_Msg & "* " & ex.ToString, MsgBoxStyle.Critical)
         End Try
     End Sub
 

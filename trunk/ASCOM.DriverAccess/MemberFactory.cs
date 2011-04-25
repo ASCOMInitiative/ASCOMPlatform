@@ -124,8 +124,17 @@ namespace ASCOM.DriverAccess
                 {
                     var releaseComObject = Marshal.ReleaseComObject(GetLateBoundObject);
                     if (releaseComObject == 0) GetLateBoundObject = null;
+                    _tl.LogMessageCrLf("Dispose", "Object Count is now: " + releaseComObject);
                 }
-                catch { } // Ignore any errors here as we are disposing
+                catch (Exception ex)
+                
+                {
+                    try
+                    {
+                        _tl.LogMessageCrLf("Dispose", "Exception " + ex.ToString());
+                    }
+                    catch { }
+                } // Ignore any errors here as we are disposing
 
 
                 if (_tl != null) _tl.Dispose();
@@ -149,12 +158,12 @@ namespace ASCOM.DriverAccess
             switch (memberCode)
             {
                 case 1:
-                    _tl.LogMessage("PropertyGet", memberName);
+                    _tl.LogMessage("PropertyGet", "GET " + memberName);
 
                     PropertyInfo propertyGetInfo = GetObjType.GetProperty(memberName);
                     if (propertyGetInfo != null)
                     {
-                        _tl.LogMessage("PropertyGet", "propertyGetInfo is not null");
+                        _tl.LogMessage("PropertyGet", "  propertyGetInfo is not null");
                         try
                         {
                             //run the .net object
@@ -184,11 +193,11 @@ namespace ASCOM.DriverAccess
                             throw;
                         }
                     }
-                    _tl.LogMessage("PropertyGet", "propertyGetInfo is null");
+                    _tl.LogMessage("PropertyGet", "  propertyGetInfo is null");
                     //check the type to see if it's a COM object
                     if (IsComObject)
                     {
-                        _tl.LogMessage("PropertyGet", "propertyGetInfo is COM Object");
+                        _tl.LogMessage("PropertyGet", "  propertyGetInfo is COM Object");
 
                         try
                         {
@@ -216,14 +225,14 @@ namespace ASCOM.DriverAccess
                         }
                     }
                     //evertyhing failed so throw an exception
-                    _tl.LogMessage("PropertyGet", "propertyGetInfo is .NET object");
+                    _tl.LogMessage("PropertyGet", "  propertyGetInfo is .NET object");
                     throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
                 case 2:
-                    _tl.LogMessage("PropertySet", memberName);
+                    _tl.LogMessage("PropertySet", "SET " + memberName);
                     PropertyInfo propertySetInfo = GetObjType.GetProperty(memberName);
                     if (propertySetInfo != null)
                     {
-                        _tl.LogMessage("PropertySet", "propertyGetInfo is not null");
+                        _tl.LogMessage("PropertySet", "  propertySetInfo is not null");
                         try
                         {
                             propertySetInfo.SetValue(GetLateBoundObject, parms[0], null);
@@ -253,11 +262,11 @@ namespace ASCOM.DriverAccess
                             throw;
                         }
                     }
-                    _tl.LogMessage("PropertySet", "propertyGetInfo is null");
+                    _tl.LogMessage("PropertySet", "  propertySetInfo is null");
                     //check the type to see if it's a COM object
                     if (IsComObject)
                     {
-                        _tl.LogMessage("PropertySet", "propertyGetInfo is COM Object");
+                        _tl.LogMessage("PropertySet", "  propertySetInfo is COM Object");
                         try
                         {
                             //run the COM object property
@@ -282,7 +291,7 @@ namespace ASCOM.DriverAccess
                             throw e.InnerException;
                         }
                     }
-                    _tl.LogMessage("PropertySet", "propertyGetInfo is .NET object");
+                    _tl.LogMessage("PropertySet", "  propertyGetInfo is .NET object");
                     throw new PropertyNotImplementedException(_strProgId + " " + memberName, true);
                 case 3:
                     _tl.LogMessage(memberName, "Start");
