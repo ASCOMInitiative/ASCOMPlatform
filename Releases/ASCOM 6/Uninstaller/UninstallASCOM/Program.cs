@@ -64,9 +64,10 @@ namespace UninstallAscom
                 LogMessage("Uninstall", "Creating RegistryAccess object");
                 RegAccess = new RegistryAccess("UninstallASCOM"); //Create a RegistryAccess object triggering the special behaviour that creates a log with a special name
 
-                CreateRestorePoint();
-                
-                
+                // This has been removed because it destroys the ability to remove 5.5 after use and does NOT restore all the 
+                // Platform 5 files resulting in an unexpected automatic repair. Its left here just in case, Please DO NOT RE-ENABLE THIS FEATURE unless have a way round the resulting issues
+                // CreateRestorePoint(); 
+                            
                 LogMessage("Uninstall", "Removing previous versions of ASCOM....");
 
                 //Initial setup

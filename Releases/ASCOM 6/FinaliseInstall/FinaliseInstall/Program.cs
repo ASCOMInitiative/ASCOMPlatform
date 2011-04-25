@@ -147,7 +147,9 @@ namespace ConsoleApplication1
             RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
             RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
 
-            FinaliseRestorePoint();
+            // This has been removed because it destroys the ability to remove 5.5 after use and does NOT restore all the 
+            // Platform 5 files resulting in an unexpected automatic repair. Its left here just in case, Please DO NOT RE-ENABLE THIS FEATURE unless have a way round the resulting issues
+            //FinaliseRestorePoint();
 
             LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
 

@@ -103,5 +103,6 @@ Module GlobalConstants
         ProfileExplorerException = 25
         EraseTemplatesInfo = 26
         EraseTemplatesError = 27
+        TraceLoggerException = 28
     End Enum
 End Module

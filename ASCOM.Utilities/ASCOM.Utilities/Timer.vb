@@ -13,6 +13,14 @@ Imports System.Runtime.InteropServices
 ''' method to create your own solution.</para>
 ''' <para>You can create multiple instances of this object. When enabled, the Timer delivers Tick events periodically 
 ''' (determined by setting the Interval property).</para>
+''' <para>This component is now considered <b>obsolete</b> for use in .NET clients and drivers. It is reliable under almost 
+''' all circumstances but there are some environments, noteably console and some scripted applications, where it fails to fire.
+''' The Platform 6 component improves performance over the Platform 5 component in this respect and can be further tuned 
+''' for particular applications by placing an entry in the ForceSystemTimer Profile key.</para>
+''' <para>For .NET applications, use of System.Timers.Timer is recommended but atention must be paid to getting threading correct
+''' when using this control. The Windows.Forms.Timer control is not an improvement over the ASCOM timer which is based upon it.</para>
+''' <para>Developers using non .NET languages are advised to use timers provided as part of their development environment, only falling 
+''' back to the ASCOM Timer if no viable alternative can be found.</para>
 ''' </remarks>
 <Guid("64FEE414-176D-44d0-99DF-47621D9C377F"), _
 ComVisible(True), _

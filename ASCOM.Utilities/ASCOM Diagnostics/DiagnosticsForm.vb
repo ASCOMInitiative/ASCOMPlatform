@@ -3291,8 +3291,6 @@ Public Class DiagnosticsForm
                 TL.BlankLine()
 
                 Compare("UtilTests", "Platform Version", AscomUtil.PlatformVersion.ToString, ASCOMRegistryAccess.GetProfile("", "PlatformVersion"))
-                Compare("UtilTests", "SerialTrace", AscomUtil.SerialTrace, (ASCOMRegistryAccess.GetProfile("", "SerTraceFile", "") <> ""))
-                Compare("UtilTests", "Trace File", AscomUtil.SerialTraceFile, IIf(ASCOMRegistryAccess.GetProfile("", "SerTraceFile") = "", "C:\SerialTrace.txt", ASCOMRegistryAccess.GetProfile("", "SerTraceFile")))
                 TL.BlankLine()
 
                 Compare("UtilTests", "TimeZoneName", AscomUtil.TimeZoneName.ToString, GetTimeZoneName)
@@ -4302,7 +4300,7 @@ Public Class DiagnosticsForm
                 FileDetails(ASCOMPathDocs, "DriverInstallers.html")
                 FileDetails(ASCOMPathDocs, "NOVAS_C3.0_Guide.pdf")
                 FileDetails(ASCOMPathDocs, "Platform 6 Client-Driver Interaction V2.pdf")
-                FileDetails(ASCOMPathDocs, "Platform 6.0.pdf")
+                FileDetails(ASCOMPathDocs, "Platform Evolution.pdf")
                 FileDetails(ASCOMPathDocs, "PlatformDeveloperHelp.chm")
                 FileDetails(ASCOMPathDocs, "Script56.chm")
                 If File.Exists(ASCOMPathDocs & "Templates.html") Then FileDetails(ASCOMPathDocs, "Templates.html")
