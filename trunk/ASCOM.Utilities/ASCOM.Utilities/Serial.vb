@@ -147,7 +147,12 @@ End Enum
 ''' </summary>
 ''' <remarks>This object provides an easy to use interface to a serial (COM) port. 
 ''' It provides ASCII and binary I/O with controllable timeout.
-''' The interface is callable from any .NET client.</remarks>
+''' The interface is callable from any .NET client.
+''' <para>The platform allows you to control use of the DTR and RTS/CTS lines for a particular 
+''' COM port and to remove or force listing of individual COM ports in the AvailableComPorts 
+''' list through configuration in the ASCOM Profile.
+''' Please see the Tools and Features section of this help file for further details.</para> 
+''' </remarks>
 ''' <example>
 ''' Example of how to create and use an ASCOM serial port.
 ''' <code lang="vbnet" title="ASCOM Serial Port Example" 
@@ -207,9 +212,6 @@ Public Class Serial
     Private Const SERIALPORT_DEFAULT_HANDSHAKE As SerialHandshake = SerialHandshake.None
     Private Const SERIALPORT_DEFAULT_PARITY As SerialParity = SerialParity.None
     Private Const SERIALPORT_DEFAULT_STOPBITS As SerialStopBits = SerialStopBits.One
-
-    Private Const SERIALPORT_COM_PORT_SETTINGS As String = "COMPortSettings\"
-
 
 #Region "New and IDisposable Support"
     Sub New()
@@ -415,15 +417,22 @@ Public Class Serial
             ' set the RTSEnable and DTREnable states from the registry,
             ' NOTE this overrides any other settings, but only if it's set.
             Dim buf As String
-            Dim b As Boolean
+            Dim b, ForcedRTS, ForcedDTR As Boolean
+
+            'Foorce RTS if required
             buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & m_PortName, "RTSEnable")
             If Boolean.TryParse(buf, b) Then
                 m_RTSEnable = b
+                ForcedRTS = True
             End If
+
+            'Force DTR if required
             buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & m_PortName, "DTREnable")
             If Boolean.TryParse(buf, b) Then
                 m_DTREnable = b
+                ForcedDTR = True
             End If
+
             Try
                 Logger.LogMessage("Set Connected To", Connecting.ToString)
                 If Connecting Then 'Log port parameters only if we are connecting
@@ -431,7 +440,9 @@ Public Class Serial
                                       " Baud rate: " & m_Speed.ToString & _
                                       " Timeout: " & m_ReceiveTimeout.ToString & _
                                       " DTR: " & m_DTREnable.ToString & _
+                                      " ForcedDTR: " & ForcedDTR.ToString & _
                                       " RTS: " & m_RTSEnable.ToString & _
+                                      " ForcedRTS: " & ForcedRTS.ToString & _
                                       " Handshake: " & m_Handshake.ToString & _
                                       " Encoding: " & SERIALPORT_ENCODING.ToString)
                     Logger.LogMessage("Set Connected", "Transmission format - Bits: " & m_DataBits & _

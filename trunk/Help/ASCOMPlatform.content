@@ -8,9 +8,10 @@
     <Topic id="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" visible="True" title="Version 5.5" />
   </Topic>
   <Topic id="d1a0b173-b4be-49b5-a979-cfafcd963ddb" visible="True" noFile="true" title="Tools and Features">
-    <Topic id="5a679e99-87d5-4b72-a86e-88cbf10c52be" visible="True" />
-    <Topic id="62da8408-c4ed-45d8-9398-9990dcbe8cbd" visible="True" />
-    <Topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" visible="True" />
     <Topic id="0a23ff52-a935-4cd7-a693-9e3b90f7df29" visible="True" />
+    <Topic id="62da8408-c4ed-45d8-9398-9990dcbe8cbd" visible="True" />
+    <Topic id="f52483b9-e922-4079-afa9-5e6f1a3ab5a5" visible="True" />
+    <Topic id="5a679e99-87d5-4b72-a86e-88cbf10c52be" visible="True" />
+    <Topic id="f2211b59-6f8c-46fb-b47e-2afb569f3133" visible="True" />
   </Topic>
 </Topics>
