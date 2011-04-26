@@ -545,6 +545,26 @@ Namespace Interfaces
         ''' </code></remarks>
         <DispId(24)> Function IsMinimumRequiredVersion(ByVal RequiredMajorVersion As Integer, ByVal RequiredMinorVersion As Integer) As Boolean
 
+        ''' <summary>
+        ''' Converts a safearray of strings to a collection that can be used in scripting.
+        ''' This is required to do things such as handling the array of names returned by the FilterWheel.Names property.
+        ''' This string array won't work in scripting languages.
+        ''' </summary>
+        ''' <param name="stringArray">array of strings</param>
+        ''' <returns>Collection of strings</returns>
+        ''' <remarks></remarks>
+        <DispId(25)> Function ToStringCollection(ByVal stringArray As String()) As ArrayList
+
+        ''' <summary>
+        ''' Converts a safearray of integers to a collection that can be used in scripting languages.
+        ''' This is required to handle properties that are returned as safearrays of integers, for  example FilterWheel.FocusOffsets
+        ''' SafeArrays don't work in scripting languages.
+        ''' </summary>
+        ''' <param name="integerArray">array of integers</param>
+        ''' <returns>Collection of Integers</returns>
+        ''' <remarks></remarks>
+        <DispId(26)> Function ToIntegerCollection(ByVal integerArray As Integer()) As ArrayList
+
     End Interface 'Interface to Utilities.Util
 
     ''' <summary>

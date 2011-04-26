@@ -986,6 +986,35 @@ Public Class Util
     Public Function DateLocalToUTC(ByVal LocalDate As Date) As Date Implements IUtil.DateLocalToUTC
         Return CvtUTC(LocalDate)
     End Function
+
+    ''' <summary>
+    ''' Convert a string safearray to an ArrayList that can be used
+    ''' in scripting languages
+    ''' </summary>
+    ''' <param name="stringArray"> array of strings</param>
+    ''' <returns>collection of integers</returns>
+    ''' <remarks></remarks>
+    Public Function ToStringCollection(ByVal stringArray As String()) As ArrayList Implements IUtil.ToStringCollection
+        ToStringCollection = New ArrayList()
+        For Each item As String In stringArray
+            ToStringCollection.Add(item)
+        Next
+    End Function
+
+    ''' <summary>
+    ''' Convers an integer safearray to and ArrayList collection that can be used
+    ''' in scripting languages
+    ''' </summary>
+    ''' <param name="integerArray">safearray of integers</param>
+    ''' <returns>colection of integers</returns>
+    ''' <remarks></remarks>
+    Public Function ToIntegerCollection(ByVal integerArray As Integer()) As ArrayList Implements IUtil.ToIntegerCollection
+        ToIntegerCollection = New ArrayList()
+        For Each item As Integer In integerArray
+            ToIntegerCollection.Add(item)
+        Next
+    End Function
+
 #End Region
 
 #Region "Time Support Functions"
