@@ -1,17 +1,5 @@
 Attribute VB_Name = "WindowsAPI"
 '---------------------------------------------------------------------
-' Copyright © 2000-2002 SPACE.com Inc., New York, NY
-'
-' Permission is hereby granted to use this Software for any purpose
-' including combining with commercial products, creating derivative
-' works, and redistribution of source or binary code, without
-' limitation or consideration. Any redistributed copies of this
-' Software must include the above Copyright Notice.
-'
-' THIS SOFTWARE IS PROVIDED "AS IS". SPACE.COM, INC. MAKES NO
-' WARRANTIES REGARDING THIS SOFTWARE, EXPRESS OR IMPLIED, AS TO ITS
-' SUITABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-'---------------------------------------------------------------------
 '   =============
 '   WINDOWS32.BAS
 '   =============
@@ -43,7 +31,7 @@ Public Type RECT
       Right  As Long
       Bottom As Long
 End Type
-Public Declare Function GetWindowRect Lib "user32" (ByVal hwnd As Long, _
+Public Declare Function GetWindowRect Lib "user32" (ByVal hWnd As Long, _
                ByRef lpRect As RECT) As Long
 
 '
@@ -70,7 +58,7 @@ Private Const SWP_DEFERERASE = &H2000
 Private Const SWP_ASYNCWINDOWPOS = &H4000
 
 Public Declare Function SetWindowPos Lib "user32" ( _
-                ByVal hwnd As Long, _
+                ByVal hWnd As Long, _
                 ByVal hWndInsertAfter As Long, _
                 ByVal X As Long, _
                 ByVal Y As Long, _
@@ -87,7 +75,7 @@ Private Declare Function LoadLibrary Lib "kernel32" _
 Private Const SW_SHOWNORMAL As Long = 1
 
 Private Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" _
-   (ByVal hwnd As Long, _
+   (ByVal hWnd As Long, _
     ByVal lpOperation As String, _
     ByVal lpFile As String, _
     ByVal lpParameters As String, _
@@ -99,7 +87,7 @@ Private Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" _
 '
 ' Convert window to floating palette
 '---------------------------------------------------------------------
-Public Sub FloatWindow(ByVal hwnd As Long, float As Boolean)
+Public Sub FloatWindow(ByVal hWnd As Long, float As Boolean)
     Dim z As Integer
     
     If float Then
@@ -107,7 +95,7 @@ Public Sub FloatWindow(ByVal hwnd As Long, float As Boolean)
     Else
         z = HWND_NOTOPMOST
     End If
-    SetWindowPos hwnd, z, 0, 0, 0, 0, (SWP_NOMOVE + SWP_NOSIZE)
+    SetWindowPos hWnd, z, 0, 0, 0, 0, (SWP_NOMOVE + SWP_NOSIZE)
 
 End Sub
 
