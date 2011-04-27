@@ -10,7 +10,6 @@ bool _bScopeCanSlew = false;                    // Capabilites of this scope
 bool _bScopeCanSlewAsync = false;
 bool _bScopeCanSlewAltAz = false;				
 bool _bScopeCanSync = false;
-bool _bScopeHasEqu = false;
 bool _bScopeIsGEM = false;
 bool _bScopeCanSetTracking = false;
 bool _bScopeCanSetTrackRates = false;
@@ -18,6 +17,7 @@ bool _bScopeCanPark = false;
 bool _bScopeCanUnpark = false;
 bool _bScopeCanSetPark = false;
 bool _bScopeDoesRefraction = false;
+bool _bScopeCanSideOfPier = false;
 
 //
 // State variables

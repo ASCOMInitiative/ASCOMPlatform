@@ -188,11 +188,11 @@ short InitScope(void)
 		// grab the capabilities we need (these also MUST be supported).
 		//
 		_szScopeName = GetName();								// Indicator label/name
-		_bScopeCanSync = GetCanSync();							// Can it sync?
-		_bScopeCanSlew = GetCanSlew();							// Can it slew at all?	
-		_bScopeCanSlewAsync = GetCanSlewAsync();				// Can it slew asynchronously?
+		_bScopeCanSync = get_bool(L"CanSync");					// Can it sync?
+		_bScopeCanSlew = get_bool(L"CanSlew");					// Can it slew at all?	
+		_bScopeCanSlewAsync = get_bool(L"CanSlewAsync");		// Can it slew asynchronously?
 		_bScopeCanSlewAltAz = get_bool(L"CanSlewAltAz");
-		_bScopeIsGEM = (GetAlignmentMode() == 2);				// Is it a GEM?
+		_bScopeIsGEM = (get_integer(L"AlignmentMode") == 2);	// Is it a GEM?
 		_bScopeCanSetTracking = get_bool(L"CanSetTracking");	// Can we control its tracking?
 		_bScopeCanSetTrackRates = get_bool(L"CanSetRightAscensionRate") &&
 							get_bool(L"CanSetDeclinationRate");	// Too bad for mounts that can't do both
@@ -202,41 +202,22 @@ short InitScope(void)
 		_bScopeDoesRefraction = get_bool(L"DoesRefraction");
 
 		//
-		// Now we verify that there is a scope out there. We first try to
-		// get RA, and if that's not implemented, try to get Az. If THAT's 
-		// not implemented, we've had it. If either fail for other reasons,
-		// we've also had it. We also use this to set a flag so that later
-		// we don't unnecessarily call GetRA/Dec if the scope doesn't 
-		// support it. 
+		// Now we verify that there is a scope out there. We try to get
+		// RA, and if there's a problem, we've had it.
 		//
 		__try {
-			_bScopeHasEqu = false;								// Assume we cannot get RA/Dec
 			GetRightAscension();
-			_bScopeHasEqu = true;								// We can get RA/Dec
+		} __except(EXCEPTION_EXECUTE_HANDLER) {
+			ABORT;												// Some real error, has been alerted
 		}
-		__except(EXCEPTION_EXECUTE_HANDLER)
-		{
-			if(GetExceptionCode() != EXCEP_NOTIMPL)
-				ABORT;											// Some real error, has been alerted
-		}
-		if(!_bScopeHasEqu)										// If we don't have Equatorial
-		{
-			__try {
-				GetAzimuth();									// Then we must have Alt/Az!
-			}
-			__except(EXCEPTION_EXECUTE_HANDLER)
-			{
-				if(GetExceptionCode() == EXCEP_NOTIMPL)
-					//
-					// Neither RA/Dec nor Alt/Az implemented!
-					//
-					MessageBox(NULL,
-						   "The selected telescope does not support either RA/Dec or Alt/Az readout. Cannot continue.",
-						   _szAlertTitle,  (MB_OK | MB_ICONSTOP | MB_SETFOREGROUND));
-
-				ABORT;											// We've had it in any case
-
-			}
+		//
+		// Determine if it reports SOP (pointing state)
+		//
+		__try {
+			get_integer(L"SideOfPier");
+			_bScopeCanSideOfPier = true;
+		} __except(EXCEPTION_EXECUTE_HANDLER) {
+			_bScopeCanSideOfPier = false;
 		}
 		//
 		// If the scope can be unparked, do it. 
@@ -323,7 +304,7 @@ void TermScope(bool fatal)
 			&dispParms, 
 			&vRes,
 			&excep, NULL)))
-			drvFail("the Connected = False failed internally.", &excep, !fatal);
+			drvFail("the Connected = False failed internally.", &excep, true);	// Don't call us back!
 
 #ifdef CROSS_THREAD
 		_p_GIT->RevokeInterfaceFromGlobal(dwIntfcCookie);		// We're done with this driver/object
@@ -339,76 +320,13 @@ void TermScope(bool fatal)
 
 }
 
-// ------------
-// GetCanSlew()
-// ------------
+// --------------
+// GetCanPierSide
+// --------------
 //
-bool GetCanSlew(void)
+bool GetCanPierSide(void)
 {
-	return(get_bool(L"CanSlew"));
-}
-
-// -----------------
-// GetCanSlewAsync()
-// -----------------
-//
-bool GetCanSlewAsync(void)
-{
-	return(get_bool(L"CanSlewAsync"));
-}
-
-// ------------
-// GetCanSlew()
-// ------------
-//
-bool GetCanSync(void)
-{
-	return(get_bool(L"CanSync"));
-}
-
-// ---------------------------
-// GetCanSetRightAscensionRate
-// ---------------------------
-//
-bool GetCanSetRightAscensionRate(void)
-{
-	return(get_bool(L"CanSetRightAscensionRate"));
-}
-
-// ------------------------
-// GetCanSetDeclinationRate
-// ------------------------
-//
-bool GetCanSetDeclinationRate(void)
-{
-	return(get_bool(L"CanSetDeclinationRate"));
-}
-
-// ----------
-// GetCanPark
-// ----------
-//
-bool GetCanPark(void)
-{
-	return(get_bool(L"CanPark"));
-}
-
-// ------------
-// GetCanUnpark
-// ------------
-//
-bool GetCanUnpark(void)
-{
-	return(get_bool(L"CanUnpark"));
-}
-
-// ------------------
-// GetAlignmentMode()
-// ------------------
-//
-int GetAlignmentMode(void)
-{
-	return(get_integer(L"AlignmentMode"));
+	return (_bScopeIsGEM && _bScopeCanSideOfPier);
 }
 
 // -----------------
@@ -445,54 +363,6 @@ double GetDeclination(void)
 double GetDeclinationRate(void)
 {
 	return(get_double(L"DeclinationRate"));
-}
-
-// ----------
-// GetAzimuth
-// ----------
-//
-double GetAzimuth(void)
-{
-	return(get_double(L"Azimuth"));
-}
-
-// -----------
-// GetAltitude
-// -----------
-//
-double GetAltitude(void)
-{
-	return(get_double(L"Altitude"));
-}
-
-// -----------
-// GetLatitude
-// -----------
-//
-double GetLatitude(void)
-{
-	return(get_double(L"SiteLatitude"));
-}
-
-// ------------
-// GetLongitude
-// ------------
-//
-double GetLongitude(void)
-{
-	return(get_double(L"SiteLongitude"));
-}
-
-// -------------
-// GetJulianDate
-// -------------
-//
-// The "Date" epoch is Julian date 2415021.5. At least I THOUGHT 
-// so... it seems not to be... ?????
-//
-double GetJulianDate(void)
-{
-	return(get_double(L"UTCDate") + 2415018.5);
 }
 
 // ---------
@@ -554,6 +424,16 @@ void SetLatitude(double lat)
 void SetLongitude(double lng)
 {
 	set_double(L"SiteLongitude", lng);
+}
+
+// ----------
+// IsPierWest
+// ----------
+//
+bool IsPierWest(void)
+{
+	int sp = get_integer(L"SideOfPier");
+	return(sp == 1);
 }
 
 // -------
@@ -1211,7 +1091,7 @@ short ConfigScope(void)
 // get_integer()
 // -------------
 //
-// Get a named double property. If the property is not supported
+// Get a named integer property. If the property is not supported
 // then this raises a NOTIMPL exception and lets upstream code
 // decide what to do.
 //

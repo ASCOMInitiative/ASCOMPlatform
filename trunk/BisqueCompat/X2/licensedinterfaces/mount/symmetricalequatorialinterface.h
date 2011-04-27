@@ -1,7 +1,9 @@
 #ifndef _SymmetricalEquatorialInterface_H
 #define _SymmetricalEquatorialInterface_H
-
-#include "abstractmounttype.h"
+// 
+// Bob Denny - Modified 26-Apr-2011 for changes to kit, H files. Maybe not needed.
+//
+#include "mounttypeinterface.h"
 
 #define SymmetricalEquatorialInterface_Name "com.bisque.TheSkyX.SymmetricalEquatorialInterface/1.0"
 
@@ -21,7 +23,7 @@ public:
 	virtual ~SymmetricalEquatorialInterface(){}
 
 	/*!The default implemtnation returns the appropriate type of mount.*/
-	AbstractMountType::Type mountType(){return AbstractMountType::Symmetrical_Equatorial;}
+	MountTypeInterface::Type mountType(){return MountTypeInterface::Symmetrical_Equatorial;}
 
 };
 
