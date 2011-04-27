@@ -1,4 +1,27 @@
+//========================================================================
+//
+// TITLE:		ASCOM.Telescope.cpp
+//
+// FACILITY:	X2 Plugin for TheSky X and ASCOM drivers
+//
+// ABSTRACT:	Implementation of the interfaces needed for the Bisque X2
+//				mount plugin API.
+//
+// ENVIRONMENT:	Microsoft Windows XP/Vista/7
+//				Developed under Microsoft Visual C++ 9 (VS2008)
+//
+// AUTHOR:		Robert B. Denny
+//
+// Edit Log:
+//
+// When			Who		What
+//----------	---		--------------------------------------------------
+// 22-Apr-11	rbd		Initial edit
+// 27-Apr-11	rbd		Many changes over the last few days, still fluid.
+//========================================================================
+
 #include "StdAfx.h"
+
 
 X2Mount::X2Mount(const char* pszDriverSelection,
 				const int& nInstanceIndex,
@@ -19,18 +42,24 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 	m_pIOMutex						= pIOMutex;
 	m_pTickCount					= pTickCount;
 
+	m_szIniKey  = "ASCOM_MOUNT";
 	m_pszDriverInfoDetailedInfo		= "ASCOM driver adapter for X2";
-	m_pszDeviceInfoNameShort		= "ASCOM_Mount";
-	m_pszDeviceInfoNameLong			= "Any ASCOM-compliant mount";
-	m_pszDeviceInfoDetailedDescription = "Supports any mount which has an ASCOM driver.";
+	m_dDriverInfoVersion			= 1.0;
+
+	m_pIniUtil->readString(m_szIniKey, "DeviceInfoNameShort", 
+						"ASCOM_Mount", 
+						m_pszDeviceInfoNameShort, 255);
+	m_pIniUtil->readString(m_szIniKey, "DeviceInfoNameLong", 
+						"Any ASCOM-compliant mount", 
+						m_pszDeviceInfoNameLong, 255);
+	m_pIniUtil->readString(m_szIniKey, "DeviceInfoDetailedDescription", 
+						"Supports any mount which has an ASCOM driver.", 
+						m_pszDeviceInfoDetailedDescription, 255);
+
 	m_pszDeviceInfoFirmwareVersion	= "n/a";
 	m_pszDeviceInfoModel			= "Not available";
 
-	char m_pszDriverSelection[DRIVER_MAX_STRING];
-	sprintf(m_pszDriverSelection, pszDriverSelection);
-
-	InitDrivers();
-
+	InitDrivers();												// Initialize COM/ASCOM
 }
 
 //
@@ -63,10 +92,11 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 	//
 	// TODO - This does get called after establishLink() but the additional
 	// abstractions that I return once I know the scope aren't reflected
-	// in UI changes in THeSKy. THe abstractions must be returned when the
-	// plugin is first initialized or they never show.
+	// in UI changes in THeSky. THe abstractions must be returned when the
+	// plugin is first initialized or they never show. Hance the elaborate
+	// 'ini' storage and connect-after-config junk here. I hope this can be
+	// eliminated some day.
 	//
-	//if (!_bScopeActive) return SB_OK;								// No extras till scope is live
 	if (!strcmp(pszName, SyncMountInterface_Name)/* && _bScopeCanSync*/)
 		*ppVal = dynamic_cast<SyncMountInterface*>(this);
 	else if (!strcmp(pszName, SlewToInterface_Name)/* && (_bScopeCanSlew || _bScopeCanSlewAsync)*/)
@@ -77,7 +107,7 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 		*ppVal = dynamic_cast<TrackingRatesInterface*>(this);
 	else if (!strcmp(pszName, ModalSettingsDialogInterface_Name))
 		*ppVal = dynamic_cast<ModalSettingsDialogInterface*>(this);
-	else if (!strcmp(pszName, AsymmetricalEquatorialInterface_Name))
+	else if (!strcmp(pszName, AsymmetricalEquatorialInterface_Name)/* && _bScopeIsGEM*/)
 		*ppVal = dynamic_cast<AsymmetricalEquatorialInterface*>(this);
 	else if (!strcmp(pszName, ParkInterface_Name)/* && _bScopeCanPark*/)
 		*ppVal = dynamic_cast<ParkInterface*>(this);
@@ -91,7 +121,59 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 
 int X2Mount::execModalSettingsDialog(void)
 {
-	return ConfigScope();
+	char prev_driver[256];
+
+	strcpy (prev_driver, _szDriverID);
+	if (ConfigScope() == SB_OK)
+	{
+		if (_stricmp(prev_driver, _szDriverID) == 0)
+			return SB_OK;
+		//
+		// TheSky/X2 does not dynamically adjust itself in response to changes
+		// in names and mount capabilities after the mount connects. So we need
+		// to cache this stuff in X2 "ini" storage then grab it back next time
+		// so at least afger the first change the data is right. I hope this
+		// changes and we can eliminate this kludge.
+		//
+		_hWndMain = GetActiveWindow();
+		int ans = MessageBox(_hWndMain, 
+"In order to complete the change, we must connect to your mount now. Make sure your mount is connected and powered up.", 
+			"Get Mount Info", (MB_OKCANCEL + MB_ICONINFORMATION));
+		//
+		// If user decided not to do this, restore previous driver
+		// (before the Chooser was used)
+		//
+		if(ans == IDCANCEL)
+		{
+			SaveDriverID(prev_driver);
+			MessageBox(_hWndMain, "Canceled - The ASCOM driver selection has not changed", 
+				"Get Mount Info", (MB_OK + MB_ICONEXCLAMATION));
+			return SB_OK;
+		}
+		//
+		// If failed to connect, we can't get info, so restore previous driver
+		// (before the Chooser was used)
+		//
+		if (InitScope() == -1)
+		{
+			SaveDriverID(prev_driver);
+			MessageBox(_hWndMain, "Failed to connect to mount - The ASCOM driver selection has not changed", 
+				"Get Mount Info", (MB_OK + MB_ICONEXCLAMATION));
+			return SB_OK;
+		}
+		//
+		// OK now copy the info into the 'ini' area for later
+		//
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoNameShort", _szDriverID);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoNameLong", _szScopeName);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoDetailedDescription", _szDriverID);
+
+		TermScope(false);
+		
+		MessageBox(_hWndMain, "The Hardware and Driver information will not reflect this change until TheSky X is restarted.", 
+			"Get Mount Info", (MB_OK + MB_ICONINFORMATION));
+	}
+	return SB_OK;
 }
 
 //LinkInterface
@@ -100,7 +182,9 @@ int	X2Mount::establishLink(void)
 {
 	int iRes = (int)InitScope();
 	if (iRes == SB_OK)
-		m_pszDeviceInfoNameShort = _szScopeName;
+	{
+		strcpy(m_pszDeviceInfoNameLong, _szScopeName);
+	}
 	return iRes;
 }
 
@@ -126,10 +210,11 @@ void	X2Mount::driverInfoDetailedInfo(BasicStringInterface& str) const
 
 double	X2Mount::driverInfoVersion(void) const				
 {
-	return 1.0;
+	return m_dDriverInfoVersion;
 }
 
 //HardwareInfoInterface
+// Retrieved when the Telescope Setup window opens, and after changing X2 drivers.
 
 void X2Mount::deviceInfoNameShort(BasicStringInterface& str) const				
 {
@@ -455,7 +540,14 @@ int X2Mount::isCompleteUnpark(bool& bComplete) const
 /*!Called once the unpark is complete.  This is called once for every corresponding startUnpark() allowing software implementations of unpark.*/
 int X2Mount::endUnpark(void)
 {
-	return SB_OK;
+	//
+	// For some reason this is absolutely required for mounts that have 
+	// tracking control. Without it, X2 gets stuck in Unparking.
+	//
+	if (_bScopeCanSetTracking)
+		return setTrackingRates(true, true, 0.0, 0.0);
+	else
+		return SB_OK;
 }
 
 //NeedsRefractionInterface
