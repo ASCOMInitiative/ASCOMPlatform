@@ -494,6 +494,11 @@ namespace ASCOM.Simulator
         //
         private static void UnregisterObjects()
         {
+            if (!IsAdministrator)
+            {
+                ElevateSelf("/unregister");
+                return;
+            }
             //
             // Local server's DCOM/AppID information
             //
