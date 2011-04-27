@@ -33,8 +33,13 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 
 }
 
+//
+// Cannot call TermScope here because TheSky has already wound
+// way too far down, the GIT is gone, we can't make COM calls.
+//
 X2Mount::~X2Mount()
 {
+	// I doubt that these are needed for the same reason as above
 	//if (GetSerX())
 	//	delete GetSerX();
 	//if (GetTheSkyXFacadeForDrivers())
@@ -66,10 +71,14 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 		*ppVal = dynamic_cast<SyncMountInterface*>(this);
 	else if (!strcmp(pszName, SlewToInterface_Name)/* && (_bScopeCanSlew || _bScopeCanSlewAsync)*/)
 		*ppVal = dynamic_cast<SlewToInterface*>(this);
+	else if (!strcmp(pszName, NeedsRefractionInterface_Name))
+		*ppVal = dynamic_cast<NeedsRefractionInterface*>(this);
 	else if (!strcmp(pszName, TrackingRatesInterface_Name)/* && _bScopeCanSetTracking*/)
 		*ppVal = dynamic_cast<TrackingRatesInterface*>(this);
 	else if (!strcmp(pszName, ModalSettingsDialogInterface_Name))
 		*ppVal = dynamic_cast<ModalSettingsDialogInterface*>(this);
+	else if (!strcmp(pszName, AsymmetricalEquatorialInterface_Name))
+		*ppVal = dynamic_cast<AsymmetricalEquatorialInterface*>(this);
 	else if (!strcmp(pszName, ParkInterface_Name)/* && _bScopeCanPark*/)
 		*ppVal = dynamic_cast<ParkInterface*>(this);
 	else if (!strcmp(pszName, UnparkInterface_Name)/* && _bScopeCanUnpark*/)
@@ -454,4 +463,53 @@ int X2Mount::endUnpark(void)
 bool X2Mount::needsRefactionAdjustments(void)
 {
 	return !_bScopeDoesRefraction;
+}
+
+//AsymmetricalMountInterface
+
+/*!
+If knowsBeyondThePole() returns false, the mount
+cannot distinguish unambiguosly if the OTA end of the declination axis 
+is either east or west of the pier. This somewhat restricts use of the 
+mount with TPoint - the mount must always have the OTA end of the declination 
+axis higher than the counterweights. In other words, the mount should not slew past the meridian.
+*/
+bool X2Mount::knowsBeyondThePole()
+{
+	return (GetCanPierSide());
+}
+
+/*!
+If knowsBeyondThePole() returns true,
+then beyondThePole() tells TheSkyX unambiguously 
+if the OTA end of the declination axis 
+is either east (0) or west of the pier (1).
+Note, the return value must be correct even
+for cases where the OTA end of the Dec axis 
+is lower than the counterweights.
+*/
+int X2Mount::beyondThePole(bool& bYes)
+{
+	if (!GetCanPierSide())
+		return(ERR_NOT_IMPL);						// Safety valve, should not happen
+
+	bYes = (IsPierWest());
+	return 0;
+}
+
+/*!
+Return the hour angle at which the mount automatically flips.
+*/
+double X2Mount::flipHourAngle()
+{
+	return 0;
+}
+
+/*!
+Return the east and west hour angle limits.
+*/
+int X2Mount::gemLimits(double& dHoursEast, double& dHoursWest)
+{
+	dHoursEast = dHoursWest = 0;
+	return 0;
 }

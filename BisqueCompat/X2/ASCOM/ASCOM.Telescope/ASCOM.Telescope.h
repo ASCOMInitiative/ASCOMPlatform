@@ -14,6 +14,7 @@
 #include "../../licensedinterfaces/mount/syncmountinterface.h"
 #include "../../licensedinterfaces/mount/needsrefractioninterface.h"
 #include "../../licensedinterfaces/mount/trackingratesinterface.h"
+#include "../../licensedinterfaces/mount/AsymmetricalEquatorialInterface.h"
 
 // Forward declare the interfaces that the this driver is "given" by TheSkyX
 class SerXInterface;
@@ -33,10 +34,12 @@ class TickCountInterface;
 Use this example to write an X2Mount driver.
 */
 class X2Mount : public MountDriverInterface,
+						//These belong to MountDriverInterface
 						//public HardwareInfoInterface,
 						//public DriverInfoInterface,
 						//public NeedsRefractionInterface,
 						public ModalSettingsDialogInterface,
+						public AsymmetricalEquatorialInterface,
 						public SyncMountInterface,
 						public SlewToInterface,
 						public TrackingRatesInterface,
@@ -87,6 +90,12 @@ public:
 	//SyncMountInterface
 	virtual int									syncMount(const double& ra, const double& dec);
 	virtual bool								isSynced();
+
+	//AsymmetricalMountInterface
+	virtual bool								X2Mount::knowsBeyondThePole();
+	virtual int									X2Mount::beyondThePole(bool& bYes);
+	virtual double								X2Mount::flipHourAngle();
+	virtual int									X2Mount::gemLimits(double& dHoursEast, double& dHoursWest);
 
 	//SlewToInterface
 	virtual int									startSlewTo(const double& dRa, const double& dDec);
@@ -166,39 +175,32 @@ extern bool _bScopeCanSlewAsync;
 extern bool _bScopeCanSlewAltAz;
 extern bool _bScopeCanSync;
 extern bool _bScopeIsGEM;
+extern bool _bScopeCanSideOfPier;
 extern bool _bScopeCanSetTracking;
 extern bool _bScopeCanSetTrackRates;
 extern bool _bScopeCanPark;
 extern bool _bScopeCanUnpark;
 extern bool _bScopeCanSetPark;
 extern bool _bScopeDoesRefraction;
+extern bool _bScopeCanSideOfPier;
 
 extern bool InitDrivers(void);
 extern short InitScope(void);
 extern void TermScope(bool);
 extern short ConfigScope(void);
-extern int GetAlignmentMode(void);
-extern bool GetCanSlew(void);
-extern bool GetCanSlewAsync(void);
-extern bool GetCanSync(void);
-extern bool GetCanPark(void);
-extern bool GetCanUnpark(void);
+extern bool GetCanPierSide(void);
 extern bool GetAtPark(void);
 extern double GetRightAscension(void);
 extern double GetRightAscensionRate(void);
 extern double GetDeclination(void);
 extern double GetDeclinationRate(void);
-extern double GetAzimuth();
-extern double GetAltitude();
-extern double GetLatitude(void);
-extern double GetLongitude(void);
-extern double GetJulianDate(void);
 extern bool GetTracking(void);
 extern void SetTracking(bool state);
 extern void SetLatitude(double lat);
 extern void SetLongitude(double lng);
 extern void SetRightAscensionRate(double rate);
 extern void SetDeclinationRate(double rate);
+extern bool IsPierWest(void);
 extern char *GetName(void);
 extern bool IsSlewing(void);
 extern short SlewScope(double dRA, double dDec);
