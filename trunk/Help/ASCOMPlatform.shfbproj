@@ -110,7 +110,7 @@
         </configuration>
       </PlugInConfig>
     </PlugInConfigurations>
-    <FeedbackEMailAddress>Ascom.Feedback%40yahoo.co.uk</FeedbackEMailAddress>
+    <FeedbackEMailAddress>feedback%40ascom-standards.org</FeedbackEMailAddress>
     <FeedbackEMailLinkText>Send feedback to ASCOM</FeedbackEMailLinkText>
     <HeaderText>
     </HeaderText>

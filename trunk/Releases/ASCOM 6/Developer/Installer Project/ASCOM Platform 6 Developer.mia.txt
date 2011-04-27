@@ -322,6 +322,7 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
     [END REGION]
   end
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
   Set Variable PROGRESS to 90
   [DEFINE REGION: Visual Studio Driver Templates]
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED

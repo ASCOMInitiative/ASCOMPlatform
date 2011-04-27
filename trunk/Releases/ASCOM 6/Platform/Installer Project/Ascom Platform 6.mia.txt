@@ -684,6 +684,7 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Check for Updates to $TARGETDIR$\Tools\ProfileExplorer.exe
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\How to get support to http://ascom-standards.org/Support/index.htm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
@@ -710,7 +711,7 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Camera Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Chooser\,  (permanent)
-    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\COMPortSettings\, List of COM ports requiring specific states for DTREnable and RTSEnable (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\COMPortSettings\, Configuration for COM ports that require special handling (see Platform Help file for instructions)  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\COMPortSettings\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\COMPortSettings\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Dome Drivers\,  (permanent)
@@ -789,6 +790,8 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\WScript.Exe, True
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\Astroart.Exe, True
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Version, $VERSION$
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Rotator Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\SafetyMonitor Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Switch Drivers\,  (permanent)
