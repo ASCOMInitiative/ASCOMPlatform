@@ -2,6 +2,7 @@
 #pragma once
 #include "../../licensedinterfaces/sberrorx.h"
 #include "../../licensedinterfaces/basicstringinterface.h"
+#include "../../licensedinterfaces/basiciniutilinterface.h"
 #include "../../licensedinterfaces/driverinfointerface.h"
 #include "../../licensedinterfaces/deviceinfointerface.h"
 #include "../../licensedinterfaces/mountdriverinterface.h"
@@ -144,12 +145,16 @@ private:
 	TickCountInterface							*GetTickCountInterface() {return m_pTickCount;}
 
 	int m_nPrivateMultiInstanceIndex;
+	char *m_szIniKey;
 
 	char *m_pszDriverInfoDetailedInfo;
-	char *m_pszDeviceInfoNameShort;
-	char *m_pszDeviceInfoNameLong;
-	char *m_pszDeviceInfoDetailedDescription;
-	char *m_pszDeviceInfoFirmwareVersion;
+	double m_dDriverInfoVersion;
+
+	char m_pszDeviceInfoNameShort[256];			// Dynamic values
+	char m_pszDeviceInfoNameLong[256];
+	char m_pszDeviceInfoDetailedDescription[256];
+
+	char *m_pszDeviceInfoFirmwareVersion;		// Static (n/a etc.)
 	char *m_pszDeviceInfoModel;
 
 	HWND _hWndMain;
@@ -169,6 +174,7 @@ extern bool _bScopeActive;
 extern const char *_szAlertTitle;
 extern HWND _hWndMain;
 extern char *_szScopeName;
+extern char _szDriverID[256];
 extern bool _bScopeHasEqu;
 extern bool _bScopeCanSlew;
 extern bool _bScopeCanSlewAsync;
@@ -187,7 +193,7 @@ extern bool _bScopeCanSideOfPier;
 extern bool InitDrivers(void);
 extern short InitScope(void);
 extern void TermScope(bool);
-extern short ConfigScope(void);
+extern short ConfigScope();
 extern bool GetCanPierSide(void);
 extern bool GetAtPark(void);
 extern double GetRightAscension(void);
@@ -209,6 +215,7 @@ extern short SyncScope(double dRA, double dDec);
 extern void ParkScope(void);
 extern void UnparkScope(void);
 extern void SetParkScope(void);
+extern void SaveDriverID(char *id);
 
 // -------------
 // Utilities.cpp

@@ -32,12 +32,41 @@
 #define OUR_REGISTRY_AREA "Software\\ASCOM\\TheSky X2\\Mount"
 #define OUR_DRIVER_SEL "Current Driver ID"
 
+const char *_szAlertTitle = "ASCOM Standard Telescope";
+
+//
+// Mount characteristics
+//
+char *_szScopeName = NULL;										// Name for crosshair labeling (delete[])
+char _szDriverID[256];
+bool _bScopeCanSlew = false;									// Capabilites of this scope
+bool _bScopeCanSlewAsync = false;
+bool _bScopeCanSlewAltAz = false;				
+bool _bScopeCanSync = false;
+bool _bScopeIsGEM = false;
+bool _bScopeCanSetTracking = false;
+bool _bScopeCanSetTrackRates = false;
+bool _bScopeCanPark = false;
+bool _bScopeCanUnpark = false;
+bool _bScopeCanSetPark = false;
+bool _bScopeDoesRefraction = false;
+bool _bScopeCanSideOfPier = false;
+
+//
+// State variables
+//
+bool _bScopeActive = false;										// This is true if mount is active
+
+
 static int get_integer(OLECHAR *name);
 static double get_double(OLECHAR *name);
 static void set_double(OLECHAR *name, double val);
 static bool get_bool(OLECHAR *name);
 static void set_bool(OLECHAR *name, bool val);
+static char *get_string(OLECHAR *name);
 static void switchThreadIf();
+static void get_driverid(char *id, bool forConfig);
+static void save_driverid(char *id);
 
 static IDispatch *_p_DrvDisp = NULL;							// [sentinel] Pointer to driver interface
 
@@ -79,6 +108,8 @@ bool InitDrivers(void)
 				drvFail("Failed to connect to Global Interface Table", NULL, true);
 #endif
 			bInitDone = true;
+			get_driverid(_szDriverID, true);						// Get any saved ProgID or ""
+
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER)
 		{
@@ -99,11 +130,7 @@ short InitScope(void)
 {
 	CLSID CLSID_driver;
 	short iRes = 0;				// Assume success (our retval)
-	HKEY hKey;
-	DWORD dwSize;
-	char szProgID[256];
 	OLECHAR *ocProgID = NULL;
-	DWORD dwType;
 
 	__try {
 		_bScopeActive = false;									// Assume failure
@@ -112,31 +139,8 @@ short InitScope(void)
 		// Retrieve the ProgID of the driver we're to use. Get it into 
 		// OLESTR format.
 		//
-		if(RegOpenKeyEx(OUR_REGISTRY_BASE, 
-				OUR_REGISTRY_AREA,
-				0,
-				KEY_READ,
-				&hKey) != ERROR_SUCCESS)
-			drvFail(
-				"You have not yet configured your telescope type and settings.",
-				NULL, true);
-
-		dwSize = 256;
-		if(RegQueryValueEx(hKey, 
-				   OUR_DRIVER_SEL,
-				   NULL,
-				   &dwType,
-				   (BYTE *)szProgID,
-				   &dwSize) != ERROR_SUCCESS)
-		{
-			RegCloseKey(hKey);
-			drvFail(
-				"Failed to read the driver ID from the registry.",
-				NULL, true);
-		}
-		RegCloseKey(hKey);
-
-		ocProgID = ansi_to_uni(szProgID);
+		get_driverid(_szDriverID, false);						// false -> must have an ID saved
+		ocProgID = ansi_to_uni(_szDriverID);
 
 		//
 		// Create an instance of our ASCOM driver.
@@ -145,7 +149,7 @@ short InitScope(void)
 		{
 			char buf[256];
 
-			wsprintf(buf, "Failed to find scope driver %s.", szProgID);
+			wsprintf(buf, "Failed to find scope driver %s.", _szDriverID);
 			free(ocProgID);
 			drvFail(buf, NULL, true);
 		}
@@ -160,7 +164,7 @@ short InitScope(void)
 		{
 			char buf[256];
 
-			wsprintf(buf, "Failed to create an instance of the scope driver %s.", szProgID);
+			wsprintf(buf, "Failed to create an instance of the scope driver %s.", _szDriverID);
 			drvFail(buf, NULL, true);
 		}
 
@@ -222,13 +226,15 @@ short InitScope(void)
 		//
 		// If the scope can be unparked, do it. 
 		//
-		if(_bScopeCanUnpark)
-			UnparkScope();
+		//if(_bScopeCanUnpark)
+		//	UnparkScope();
 		//
-		// If the scope's tracking can be turned on and off, 
-		// turn it on. 
+		// In order for TheSky X to complete startup and change status
+		// from Connecting... tracking must be on or it must be parked.
 		//
-		if(_bScopeCanSetTracking)
+		if(_bScopeCanSetTracking && 
+					(!_bScopeCanPark || !get_bool(L"AtPark")) && 
+					!get_bool(L"Tracking"))
 			set_bool(L"Tracking", true);
 		//
 		// If the scope has tracking rates, turn them off
@@ -440,54 +446,11 @@ bool IsPierWest(void)
 // GetName
 // -------
 //
-// Retrns -> to new[]'ed string. Caller must release.
+// Returns -> to new[]'ed string. Caller must release.
 //
 char *GetName(void)
 {
-	OLECHAR *name = L"Name";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
-
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the Name property.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_PROPERTYGET,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("Internal error getting Name property.", &excep, true);
-		
-	return(uni_to_ansi(vRes.bstrVal));
+	return get_string(L"Name");
 }
 
 // ---------
@@ -496,57 +459,7 @@ char *GetName(void)
 //
 bool IsSlewing(void)
 {
-	OLECHAR *name = L"Slewing";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
-
-	if(!_bScopeActive)											// If scope not even active
-		return(false);											// Can't be slewing
-
-	if(!_bScopeCanSlewAsync)									// If can't do async slew, or never slewed
-		return(bSyncSlewing);									// Use our sync slewing flag (never slewed = false)
-
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// We can do async slews, assume driver supports Slewing.
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the Slewing property.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_PROPERTYGET,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("Internal error getting Slewing property.", &excep, true);
-		
-	return((vRes.boolVal != VARIANT_FALSE) ? true : false);
+	return get_bool(L"Slewing");
 }
 
 //
@@ -929,7 +842,7 @@ void SetParkScope(void)
 // The ProgID is stored in the registry and used by InitScope().
 // The Chooser also provides a config button for the scope itself.
 //
-short ConfigScope(void)
+short ConfigScope()
 {
 	CLSID CLSID_chooser;
 	OLECHAR *name = L"Choose";
@@ -939,16 +852,22 @@ short ConfigScope(void)
 	VARIANTARG rgvarg[1];										// Chooser.Choose(ProgID)
 	VARIANT vRes;
 	HRESULT hr;
-	DWORD dwDisp, dwType, dwSize;
-	char szProgID[256];
 	short iRes = 0;												// Assume success (our retval)
 	IDispatch *pChsrDsp = NULL;									// [sentinel]
 	char *cp = NULL;											// [sentinel]
-	HKEY hKey = (HKEY)INVALID_HANDLE_VALUE;						// [sentinel]
 	BSTR bsProgID = NULL;										// [sentinel]
-
+	
 	__try {
 		
+		_szDriverID[0] = '\0';									// Assume no current ProgID
+		bsProgID = SysAllocString(L"");
+		get_driverid(_szDriverID, true);						// Get any saved ProgID or ""
+		if (_szDriverID[0] != '\0')								// If we have a saved ID
+		{
+			SysFreeString(bsProgID);
+			bsProgID = ansi_to_bstr(_szDriverID);				// Use it for the Chooser
+		}
+
 		//
 		// Create an instance of the ASCOM Scope Chooser.
 		//
@@ -983,35 +902,8 @@ short ConfigScope(void)
 				NULL, true);
 
 		//
-		// Retrieve the ProgID of the driver that is currently selected.
-		// If there, call the chooser to start with that driver initially
-		// selected in its list.
+		// Call the Choose() method with our ProgID string
 		//
-		bsProgID = SysAllocString(L"");							// Assume no current ProgID
-		if(RegOpenKeyEx(OUR_REGISTRY_BASE, 
-				OUR_REGISTRY_AREA,
-				0,
-				KEY_READ,
-				&hKey) == ERROR_SUCCESS)
-		{
-			dwSize = 255;
-			if(RegQueryValueEx(hKey, 
-					   OUR_DRIVER_SEL,
-					   NULL,
-					   &dwType,
-					   (BYTE *)szProgID,
-					   &dwSize) == ERROR_SUCCESS)
-			{
-				SysFreeString(bsProgID);
-				bsProgID = ansi_to_bstr(szProgID);
-			}
-			RegCloseKey(hKey);
-		}
-		hKey = (HKEY)INVALID_HANDLE_VALUE;						// [sentinel]
-
-			//
-			// Call the Choose() method with our ProgID string
-			//
 		rgvarg[0].vt = VT_BSTR;
 		rgvarg[0].bstrVal = bsProgID;
 		dispParms.cArgs = 1;
@@ -1028,11 +920,11 @@ short ConfigScope(void)
 			&excep, NULL)))
 			drvFail("The Choose() method failed internally.", &excep, true);
 
-			//
-			// At this point, the variant vRes contains a BSTR with the 
-			// ProgID of the selected driver, or an empty BSTR. Fail if 
-			// the method returned something other than a bstr!
-			//
+		//
+		// At this point, the variant vRes contains a BSTR with the 
+		// ProgID of the selected driver, or an empty BSTR. Fail if 
+		// the method returned something other than a bstr!
+		//
 		if(vRes.vt != VT_BSTR)
 			drvFail("The Chooser returned something other than a string.",
 				NULL, true);
@@ -1044,29 +936,12 @@ short ConfigScope(void)
 		if(SysStringLen(vRes.bstrVal) > 0)						// Chooser dialog not cancelled
 		{
 			cp = uni_to_ansi(vRes.bstrVal);						// Get ProgID in ANSI
+			strcpy(_szDriverID, cp);
+			delete[] cp;
 
-			if(RegCreateKeyEx(OUR_REGISTRY_BASE, 
-					  OUR_REGISTRY_AREA,
-					  NULL, NULL, 0,
-					  KEY_WRITE,
-					  NULL,
-					  &hKey,
-					  &dwDisp) != ERROR_SUCCESS)
-				drvFail("Failed to create or open the plug-in's registry area.",
-					NULL, true);
-
-			if(RegSetValueEx(hKey, 
-					 OUR_DRIVER_SEL, 
-					 0,
-					 REG_SZ, 
-					 (BYTE *)cp, 
-					 (strlen(cp) + 1)) != ERROR_SUCCESS)
-				drvFail("Failed to store the driver name into the registry.",
-					NULL, true);
+			save_driverid(_szDriverID);
 
 			pChsrDsp->Release();
-			delete[] cp;
-			RegCloseKey(hKey);
 			SysFreeString(bsProgID);
 		}
 	}
@@ -1074,18 +949,112 @@ short ConfigScope(void)
 		{
 			if(pChsrDsp != NULL) pChsrDsp->Release();
 			if(cp != NULL) delete[] cp;
-			if(hKey != (HKEY)INVALID_HANDLE_VALUE) RegCloseKey(hKey);
 			iRes = -1;
 		}
 
 	return(iRes);
 }
 
+//
+// Dang it, an afterthought.
+//
+void SaveDriverID(char *id)
+{
+	save_driverid(id);
+}
+
+
 // ===============
 // LOCAL UTILITIES
 // ===============
 
-// BADLY NEEDS REFACTORING!
+// --------------
+// get_driverid()
+// --------------
+//
+// Retrieve the saved ASCOM driver ID from the registry. If there is no saved
+// driver ID, the results differ based on the forConfig parameter. If it is false
+// (trying to connect to the telescope/mount), then it is an error condition. 
+// If forConfig is true (just getting this for Chooser initialization), just
+// return an empty string if there is no saved ProgID.
+//
+static void get_driverid(char *id, bool forConfig)
+{
+	HKEY hKey;
+	DWORD dwType;
+	DWORD dwSize;
+
+	//
+	// Retrieve the ProgID of the driver we're to use.
+	//
+	if(RegOpenKeyEx(OUR_REGISTRY_BASE, 
+			OUR_REGISTRY_AREA,
+			0,
+			KEY_READ,
+			&hKey) != ERROR_SUCCESS)
+	{
+		if (forConfig)
+		{
+			id[0] = '\0';
+			return;												// RETURN with empty ID
+		}
+		else
+			drvFail(
+				"You have not yet configured your telescope type and settings.",
+				NULL, true);
+	}
+
+	dwSize = 256;
+	if(RegQueryValueEx(hKey, 
+			   OUR_DRIVER_SEL,
+			   NULL,
+			   &dwType,
+			   (BYTE *)id,
+			   &dwSize) != ERROR_SUCCESS)
+	{
+		if (forConfig)
+		{
+			id[0] = '\0';
+		}
+		else
+		{
+			RegCloseKey(hKey);
+			drvFail(
+				"Failed to read the driver ID from the registry.",
+				NULL, true);
+		}
+	}
+	RegCloseKey(hKey);
+}
+
+//
+//
+//
+static void save_driverid(char *id)
+{
+	HKEY hKey;
+	DWORD dwDisp;
+
+	if(RegCreateKeyEx(OUR_REGISTRY_BASE, 
+			  OUR_REGISTRY_AREA,
+			  NULL, NULL, 0,
+			  KEY_WRITE,
+			  NULL,
+			  &hKey,
+			  &dwDisp) != ERROR_SUCCESS)
+		drvFail("Failed to create or open the plug-in's registry area.",
+			NULL, true);
+
+	if(RegSetValueEx(hKey, 
+			 OUR_DRIVER_SEL, 
+			 0,
+			 REG_SZ, 
+			 (BYTE *)id, 
+			 (strlen(id) + 1)) != ERROR_SUCCESS)
+		drvFail("Failed to store the driver name into the registry.",
+			NULL, true);
+
+}
 
 // -------------
 // get_integer()
@@ -1450,6 +1419,77 @@ static void set_bool(OLECHAR *name, bool val)
 
 }
 
+// ------------
+// get_string()
+// ------------
+//
+// Returns -> to new[]'ed string. Caller must release.
+//
+static char *get_string(OLECHAR *name )
+{
+	DISPID dispid;
+	DISPPARAMS dispparms;
+	EXCEPINFO excep;
+	VARIANT vRes;
+	char *cp;
+	char buf[256];
+
+#ifdef CROSS_THREAD
+	switchThreadIf();
+#endif
+
+	//
+	// Get our dispatch ID
+	//
+	if(FAILED(_p_DrvDisp->GetIDsOfNames(
+		IID_NULL, 
+		&name,
+		1, 
+		LOCALE_USER_DEFAULT,
+		&dispid)))
+	{
+		cp = uni_to_ansi(name);
+		wsprintf(buf, 
+			 "The selected telescope driver is missing the %s property.", cp);
+		delete[] cp;
+		drvFail(buf, &excep, true);
+	}
+
+	//
+	// No dispatch parameters for propget
+	//
+	dispparms.cArgs = 0;
+	dispparms.rgvarg = NULL;
+	dispparms.cNamedArgs = 0;
+	dispparms.rgdispidNamedArgs = NULL;
+	//
+	// Invoke the method
+	//
+	if(FAILED(_p_DrvDisp->Invoke(dispid, 
+				     IID_NULL, 
+				     LOCALE_USER_DEFAULT, 
+				     DISPATCH_PROPERTYGET,
+				     &dispparms, 
+				     &vRes, 
+				     &excep, 
+				     NULL)))
+	{
+		if(excep.scode == EXCEP_NOTIMPL)						// Optional
+			NOTIMPL;											// Resignal silently
+		else
+		{
+			cp = uni_to_ansi(name);
+			wsprintf(buf, 
+				 "Internal error reading from the %s property.", cp);
+			delete[] cp;
+			drvFail(buf, &excep, true);
+		}
+	}
+		
+	return(uni_to_ansi(vRes.bstrVal));
+}
+
+
 #ifdef CROSS_THREAD
 //
 // Gets the IDispatch interface on a new thread from a previously obtained
@@ -1469,7 +1509,6 @@ static void switchThreadIf()
 						IID_IDispatch, 
 						(void **)&pTemp)))
 			drvFail("Failed to get interface from GIT in new thread", NULL, true);
-		//_p_DrvDisp->Release();									// Required to prevent refcount buildup
 		_p_DrvDisp = pTemp;
 	}
 }

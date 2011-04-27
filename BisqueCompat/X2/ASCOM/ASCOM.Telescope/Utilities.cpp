@@ -2,14 +2,14 @@
 //
 // TITLE:		UTILITIES.CPP
 //
-// FACILITY:	TheSky TeleAPI DLL ASCOM Telescope Control
+// FACILITY:	X2 Plugin for TheSky X and ASCOM drivers
 //
 // ABSTRACT:	
 //
 // USING:		
 //
-// ENVIRONMENT:	Microsoft Windows Windows 95/98/NT/2000
-//				Developed under Microsoft Visual C++ Version 6.0
+// ENVIRONMENT:	Microsoft Windows XP/Vista/7
+//				Developed under Microsoft Visual C++ 9 (VS2008)
 //
 // AUTHOR:		Robert B. Denny
 //
@@ -17,8 +17,7 @@
 //
 // When			Who		What
 //----------	---		--------------------------------------------------
-// 25-Jun-02	rbd		Initial edit (from StarryNight ASCOM plugin)
-// 23-Aug-10	rbd		5.0.3 - Registry functions
+// 22-Apr-11	rbd		Initial edit, taken from TeleAPI/ASCOM plugin
 //========================================================================
 #include "StdAfx.h"
 
@@ -67,7 +66,7 @@ OLECHAR *ansi_to_uni(char *s)
 
 	if (0 == MultiByteToWideChar(CP_ACP, 0, s, -1, os, ol))
 	{
-		DWORD dwRes = GetLastError();	// Wiped out by ->Free()
+		//DWORD dwRes = GetLastError();	// Wiped out by ->Free()
 		free(os);
 		drvFail("Unicode conversion failed.", NULL, true);
 		return NULL;
