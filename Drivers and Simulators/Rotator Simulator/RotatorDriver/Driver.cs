@@ -129,11 +129,6 @@ namespace ASCOM.Simulator
             get { return RotatorHardware.RotatorName; }
         }
 
-        ArrayList IRotatorV2.SupportedActions
-	    {
-            get { return new ArrayList(); }
-	    }
-
 	    public bool CanReverse
 		{
 			get { return RotatorHardware.CanReverse; }
@@ -179,11 +174,6 @@ namespace ASCOM.Simulator
 
 			//RotatorSimulator.m_MainForm.DoSetupDialog();			// Kinda sleazy
 		}
-
-	    string IRotatorV2.Action(string actionName, string actionParameters)
-	    {
-	        throw new System.NotImplementedException();
-	    }
 
 	    public float StepSize
 		{
