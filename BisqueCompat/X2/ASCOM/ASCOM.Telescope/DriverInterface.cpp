@@ -22,6 +22,7 @@
 // When			Who		What
 //----------	---		--------------------------------------------------
 // 22-Apr-11	rbd		Initial edit, taken from TeleAPI/ASCOM plugin
+// 27-Apr-11	rbd		Much work, refactoring. Work in progress
 //========================================================================
 
 #include "StdAfx.h"
@@ -38,6 +39,9 @@ const char *_szAlertTitle = "ASCOM Standard Telescope";
 // Mount characteristics
 //
 char *_szScopeName = NULL;										// Name for crosshair labeling (delete[])
+char *_szScopeDescription = NULL;
+char *_szScopeDriverInfo = NULL;
+char *_szScopeDriverVersion = NULL;
 char _szDriverID[256];
 bool _bScopeCanSlew = false;									// Capabilites of this scope
 bool _bScopeCanSlewAsync = false;
@@ -57,7 +61,6 @@ bool _bScopeCanSideOfPier = false;
 //
 bool _bScopeActive = false;										// This is true if mount is active
 
-
 static int get_integer(OLECHAR *name);
 static double get_double(OLECHAR *name);
 static void set_double(OLECHAR *name, double val);
@@ -76,6 +79,7 @@ static DWORD dwIntfcCookie;										// Driver interface cookie for GIT
 static DWORD dCurrIntfcThreadId;								// ID of thread on which the interface is currently marshalled
 #endif
 static bool bSyncSlewing = false;								// True if scope is doing a sync slew
+static LoggerInterface *pLog;
 
 // -------------
 // InitDrivers()
@@ -83,12 +87,13 @@ static bool bSyncSlewing = false;								// True if scope is doing a sync slew
 //
 // Really just starts OLE
 //
-bool InitDrivers(void)
+bool InitDrivers(LoggerInterface *pLogger)
 {
 	DWORD dwVer;
 	bool bResult = true;
 	static bool bInitDone = false;								// Exec this only once
 
+	pLog = pLogger;
 	if(!bInitDone)
 	{
 		__try
@@ -109,7 +114,8 @@ bool InitDrivers(void)
 #endif
 			bInitDone = true;
 			get_driverid(_szDriverID, true);						// Get any saved ProgID or ""
-
+//pLog->out("Get RA");
+//pLog->packetsRetriesFailuresChanged(0, 0, 0);
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER)
 		{
@@ -191,7 +197,10 @@ short InitScope(void)
 		// We call GetName, because the driver MUST support that, then
 		// grab the capabilities we need (these also MUST be supported).
 		//
-		_szScopeName = GetName();								// Indicator label/name
+		_szScopeName = get_string(L"Name");						// Indicator label/name
+		_szScopeDescription = get_string(L"Description");
+		_szScopeDriverInfo = get_string(L"DriverInfo");
+		_szScopeDriverVersion = get_string(L"DriverVersion");
 		_bScopeCanSync = get_bool(L"CanSync");					// Can it sync?
 		_bScopeCanSlew = get_bool(L"CanSlew");					// Can it slew at all?	
 		_bScopeCanSlewAsync = get_bool(L"CanSlewAsync");		// Can it slew asynchronously?
@@ -322,6 +331,17 @@ void TermScope(bool fatal)
 	if(_szScopeName != NULL)
 		delete[] _szScopeName;									// Free this string
 	_szScopeName = NULL;										// [sentinel]
+	if(_szScopeDescription != NULL)
+		delete[] _szScopeDescription;
+	_szScopeDescription = NULL;
+	if(_szScopeDriverInfo != NULL)
+		delete[] _szScopeDriverInfo;
+	_szScopeDriverInfo = NULL;
+	if(_szScopeDriverVersion != NULL)
+		delete[] _szScopeDriverVersion;
+	_szScopeDriverVersion = NULL;
+
+
 	_bScopeActive = false;
 
 }
@@ -440,17 +460,6 @@ bool IsPierWest(void)
 {
 	int sp = get_integer(L"SideOfPier");
 	return(sp == 1);
-}
-
-// -------
-// GetName
-// -------
-//
-// Returns -> to new[]'ed string. Caller must release.
-//
-char *GetName(void)
-{
-	return get_string(L"Name");
 }
 
 // ---------

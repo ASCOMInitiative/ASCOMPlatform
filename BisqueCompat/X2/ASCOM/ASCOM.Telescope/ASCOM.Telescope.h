@@ -6,6 +6,7 @@
 #include "../../licensedinterfaces/driverinfointerface.h"
 #include "../../licensedinterfaces/deviceinfointerface.h"
 #include "../../licensedinterfaces/mountdriverinterface.h"
+#include "../../licensedinterfaces/loggerinterface.h"
 #include "../../licensedinterfaces/modalsettingsdialoginterface.h"
 #include "../../licensedinterfaces/theskyxfacadefordriversinterface.h"
 #include "../../licensedinterfaces/sleeperinterface.h"
@@ -16,6 +17,7 @@
 #include "../../licensedinterfaces/mount/needsrefractioninterface.h"
 #include "../../licensedinterfaces/mount/trackingratesinterface.h"
 #include "../../licensedinterfaces/mount/AsymmetricalEquatorialInterface.h"
+#include "../../licensedinterfaces/mount/linkfromuithreadinterface.h"
 
 // Forward declare the interfaces that the this driver is "given" by TheSkyX
 class SerXInterface;
@@ -93,10 +95,10 @@ public:
 	virtual bool								isSynced();
 
 	//AsymmetricalMountInterface
-	virtual bool								X2Mount::knowsBeyondThePole();
-	virtual int									X2Mount::beyondThePole(bool& bYes);
-	virtual double								X2Mount::flipHourAngle();
-	virtual int									X2Mount::gemLimits(double& dHoursEast, double& dHoursWest);
+	virtual bool								knowsBeyondThePole();
+	virtual int									beyondThePole(bool& bYes);
+	virtual double								flipHourAngle();
+	virtual int									gemLimits(double& dHoursEast, double& dHoursWest);
 
 	//SlewToInterface
 	virtual int									startSlewTo(const double& dRa, const double& dDec);
@@ -147,15 +149,14 @@ private:
 	int m_nPrivateMultiInstanceIndex;
 	char *m_szIniKey;
 
-	char *m_pszDriverInfoDetailedInfo;
+	char *m_pszDriverInfoDetailedInfo;			// About THIS (X2) driver
 	double m_dDriverInfoVersion;
 
 	char m_pszDeviceInfoNameShort[256];			// Dynamic values
 	char m_pszDeviceInfoNameLong[256];
 	char m_pszDeviceInfoDetailedDescription[256];
-
-	char *m_pszDeviceInfoFirmwareVersion;		// Static (n/a etc.)
-	char *m_pszDeviceInfoModel;
+	char m_pszDeviceInfoFirmwareVersion[256];
+	char m_pszDeviceInfoModel[256];
 
 	HWND _hWndMain;
 };
@@ -173,7 +174,10 @@ private:
 extern bool _bScopeActive;
 extern const char *_szAlertTitle;
 extern HWND _hWndMain;
-extern char *_szScopeName;
+extern char *_szScopeName;									// These need to be delete[]ed
+extern char *_szScopeDescription;
+extern char *_szScopeDriverInfo;
+extern char *_szScopeDriverVersion;
 extern char _szDriverID[256];
 extern bool _bScopeHasEqu;
 extern bool _bScopeCanSlew;
@@ -190,7 +194,7 @@ extern bool _bScopeCanSetPark;
 extern bool _bScopeDoesRefraction;
 extern bool _bScopeCanSideOfPier;
 
-extern bool InitDrivers(void);
+extern bool InitDrivers(LoggerInterface *pLogger);
 extern short InitScope(void);
 extern void TermScope(bool);
 extern short ConfigScope();
@@ -207,7 +211,6 @@ extern void SetLongitude(double lng);
 extern void SetRightAscensionRate(double rate);
 extern void SetDeclinationRate(double rate);
 extern bool IsPierWest(void);
-extern char *GetName(void);
 extern bool IsSlewing(void);
 extern short SlewScope(double dRA, double dDec);
 extern void AbortSlew(void);
