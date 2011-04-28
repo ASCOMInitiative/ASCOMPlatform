@@ -22,6 +22,11 @@
 
 #include "StdAfx.h"
 
+// TODO - How to get Communications Log item to show in Telescope/Tools menu?
+//        When this is solved, log ASCOM calls.
+// TODO - Why doesn't LinkFromUIThreadInterface remove the need for the 
+//        CROSS_THREAD code?
+
 
 X2Mount::X2Mount(const char* pszDriverSelection,
 				const int& nInstanceIndex,
@@ -46,6 +51,13 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 	m_pszDriverInfoDetailedInfo		= "ASCOM driver adapter for X2";
 	m_dDriverInfoVersion			= 1.0;
 
+	//
+	// Because TheSky doesn't honor changes to X2 driver info and abstractions
+	// after its initial call, we cache this stuff and read it out from the
+	// 'ini' store here, on first call. This is not optimal because the info
+	// is not correct immediately after a change to the selected ASCOM driver.
+	// Maybe this will change in the future and we can remove this clap-trap.
+	//
 	m_pIniUtil->readString(m_szIniKey, "DeviceInfoNameShort", 
 						"ASCOM_Mount", 
 						m_pszDeviceInfoNameShort, 255);
@@ -55,11 +67,24 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 	m_pIniUtil->readString(m_szIniKey, "DeviceInfoDetailedDescription", 
 						"Supports any mount which has an ASCOM driver.", 
 						m_pszDeviceInfoDetailedDescription, 255);
+	m_pIniUtil->readString(m_szIniKey, "DeviceInfoFirmwareVersion", 
+						"n/a", 
+						m_pszDeviceInfoFirmwareVersion, 255);
+	m_pIniUtil->readString(m_szIniKey, "DeviceInfoModel", 
+						"n/a", 
+						m_pszDeviceInfoModel, 255);
+	//
+	// Now the mount capabilities, which we also need before connecting
+	// in order to return the appropriate set of abscraction interfaces.
+	//
+	_bScopeCanSync = (m_pIniUtil->readInt(m_szIniKey, "MountCanSync", 0) == 1);
+	_bScopeIsGEM = (m_pIniUtil->readInt(m_szIniKey, "MountIsAsymEqu", 0) == 1);
+	_bScopeCanSetTracking = (m_pIniUtil->readInt(m_szIniKey, "MountCanTrackRates", 0) == 1);
+	_bScopeCanPark = (m_pIniUtil->readInt(m_szIniKey, "MountCanPark", 0) == 1);
+	_bScopeCanUnpark = (m_pIniUtil->readInt(m_szIniKey, "MountCanUnpark", 0) == 1);
 
-	m_pszDeviceInfoFirmwareVersion	= "n/a";
-	m_pszDeviceInfoModel			= "Not available";
 
-	InitDrivers();												// Initialize COM/ASCOM
+	InitDrivers(m_pLogger);									// Initialize COM/ASCOM
 }
 
 //
@@ -97,22 +122,25 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 	// 'ini' storage and connect-after-config junk here. I hope this can be
 	// eliminated some day.
 	//
-	if (!strcmp(pszName, SyncMountInterface_Name)/* && _bScopeCanSync*/)
+	if (!strcmp(pszName, SyncMountInterface_Name) && _bScopeCanSync)
 		*ppVal = dynamic_cast<SyncMountInterface*>(this);
-	else if (!strcmp(pszName, SlewToInterface_Name)/* && (_bScopeCanSlew || _bScopeCanSlewAsync)*/)
+	else if (!strcmp(pszName, SlewToInterface_Name))
 		*ppVal = dynamic_cast<SlewToInterface*>(this);
 	else if (!strcmp(pszName, NeedsRefractionInterface_Name))
 		*ppVal = dynamic_cast<NeedsRefractionInterface*>(this);
-	else if (!strcmp(pszName, TrackingRatesInterface_Name)/* && _bScopeCanSetTracking*/)
+	else if (!strcmp(pszName, TrackingRatesInterface_Name) && _bScopeCanSetTracking)
 		*ppVal = dynamic_cast<TrackingRatesInterface*>(this);
 	else if (!strcmp(pszName, ModalSettingsDialogInterface_Name))
 		*ppVal = dynamic_cast<ModalSettingsDialogInterface*>(this);
-	else if (!strcmp(pszName, AsymmetricalEquatorialInterface_Name)/* && _bScopeIsGEM*/)
+	else if (!strcmp(pszName, AsymmetricalEquatorialInterface_Name) && _bScopeIsGEM)
 		*ppVal = dynamic_cast<AsymmetricalEquatorialInterface*>(this);
-	else if (!strcmp(pszName, ParkInterface_Name)/* && _bScopeCanPark*/)
+	else if (!strcmp(pszName, ParkInterface_Name) && _bScopeCanPark)
 		*ppVal = dynamic_cast<ParkInterface*>(this);
-	else if (!strcmp(pszName, UnparkInterface_Name)/* && _bScopeCanUnpark*/)
+	else if (!strcmp(pszName, UnparkInterface_Name) && _bScopeCanUnpark)
 		*ppVal = dynamic_cast<UnparkInterface*>(this);
+	//Does not work as advertised
+	//else if (!strcmp(pszName, LinkFromUIThreadInterface_Name))
+	//	*ppVal = dynamic_cast<LinkFromUIThreadInterface*>(this);
 
 	return SB_OK;
 }
@@ -122,6 +150,7 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 int X2Mount::execModalSettingsDialog(void)
 {
 	char prev_driver[256];
+	char buf[256];
 
 	strcpy (prev_driver, _szDriverID);
 	if (ConfigScope() == SB_OK)
@@ -164,13 +193,21 @@ int X2Mount::execModalSettingsDialog(void)
 		//
 		// OK now copy the info into the 'ini' area for later
 		//
-		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoNameShort", _szDriverID);
-		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoNameLong", _szScopeName);
-		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoDetailedDescription", _szDriverID);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoNameShort", _szScopeName);
+		sprintf(buf, "ASCOM %s", _szScopeName);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoNameLong", buf);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoDetailedDescription", _szScopeDriverInfo);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoModel", _szScopeDescription);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoFirmwareVersion", _szScopeDriverVersion);
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanSync", (_bScopeCanSync ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountIsAsymEqu", (_bScopeIsGEM ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanTrackRates", (_bScopeCanSetTracking ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanPark", (_bScopeCanPark ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanUnpark", (_bScopeCanUnpark ? 1 : 0));
 
 		TermScope(false);
 		
-		MessageBox(_hWndMain, "The Hardware and Driver information will not reflect this change until TheSky X is restarted.", 
+		MessageBox(_hWndMain, "The Hardware and Driver information, as well as available mount controls, will not reflect this change until TheSky X is restarted.", 
 			"Get Mount Info", (MB_OK + MB_ICONINFORMATION));
 	}
 	return SB_OK;
@@ -180,10 +217,34 @@ int X2Mount::execModalSettingsDialog(void)
 
 int	X2Mount::establishLink(void)					
 {
+	char buf[256];
+
 	int iRes = (int)InitScope();
 	if (iRes == SB_OK)
 	{
-		strcpy(m_pszDeviceInfoNameLong, _szScopeName);
+		//
+		// Now that we're connected, refresh all of the descriptive info
+		// and re-save to the INI store. This will catch changes in the 
+		// ASCOM driver info without having to re-select it in the
+		// execModelSettingsDialog() method above.
+		//
+		strcpy(m_pszDeviceInfoNameShort, _szScopeName);
+		sprintf(buf, "ASCOM %s", _szScopeName);
+		strcpy(m_pszDeviceInfoNameLong, buf);
+		strcpy(m_pszDeviceInfoDetailedDescription, _szScopeDriverInfo);
+		strcpy(m_pszDeviceInfoModel, _szScopeDescription);
+		strcpy(m_pszDeviceInfoFirmwareVersion, _szScopeDriverVersion);
+
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoNameShort", m_pszDeviceInfoNameShort);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoNameLong", m_pszDeviceInfoNameLong);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoDetailedDescription", m_pszDeviceInfoDetailedDescription);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoModel", m_pszDeviceInfoModel);
+		m_pIniUtil->writeString(m_szIniKey,"DeviceInfoFirmwareVersion", m_pszDeviceInfoFirmwareVersion);
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanSync", (_bScopeCanSync ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountIsAsymEqu", (_bScopeIsGEM ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanTrackRates", (_bScopeCanSetTracking ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanPark", (_bScopeCanPark ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanUnpark", (_bScopeCanUnpark ? 1 : 0));
 	}
 	return iRes;
 }

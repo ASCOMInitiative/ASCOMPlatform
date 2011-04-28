@@ -223,6 +223,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Resources.rc"
+				>
+			</File>
+			<File
 				RelativePath=".\StdAfx.cpp"
 				>
 			</File>
@@ -242,6 +246,10 @@
 			</File>
 			<File
 				RelativePath=".\main.h"
+				>
+			</File>
+			<File
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
