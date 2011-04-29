@@ -265,7 +265,7 @@ namespace ASCOM.Simulator
         /// return a specific switch
         /// </summary>
         /// <value>name of the switch</value>
-        public object GetSwitch(string switchName)
+        public object GetControl(string switchName)
         {
             if (switchName == null) throw new ASCOM.InvalidValueException("switchName");
             return SwitchList.Cast<ToggleSwitch>().FirstOrDefault(t => t.Name == switchName);
@@ -276,12 +276,12 @@ namespace ASCOM.Simulator
         /// </summary>
         /// <param name="controllerName">Name of the ControllerDevice</param>
         /// <param name="State">Boolean True to turn on or False to turn off</param>
-        public void SetSwitch(string controllerName, bool State)
+        public void SetControl(string controllerName, double State)
         {
             if (controllerName == null) throw new ASCOM.InvalidValueException("switchName");
             foreach (ToggleSwitch t in from ToggleSwitch t in SwitchList where t.Name == controllerName select t)
             {
-                t.On = State;
+                t.SetValue(State);
             }
             SaveProfileSettings();
         }

@@ -50,13 +50,13 @@ namespace ASCOM.Simulator
             get { return DeviceName; }
         }
 
-        public System.Collections.ArrayList NamedDeviceStates
+        public ArrayList NamedDeviceStates
         {
             get 
             {
                 ArrayList DeviceStates = new ArrayList();
-                DeviceStates.Add(new DeviceState(0.0, 0.0, "Off"));
-                DeviceStates.Add(new DeviceState(1.0, 1.0, "On"));
+                DeviceStates.Add(new ControllerDeviceState(0.0, 0.0, "Off"));
+                DeviceStates.Add(new ControllerDeviceState(1.0, 1.0, "On"));
                 return DeviceStates; 
             }
         }
@@ -96,7 +96,7 @@ namespace ASCOM.Simulator
             {
                 string NamedState = "Unknown"; // Initialise the value
 
-                foreach (DeviceState State in NamedDeviceStates) // Check each named state and save the namecorresponding to the current StartValue
+                foreach (ControllerDeviceState State in NamedDeviceStates) // Check each named state and save the namecorresponding to the current StartValue
                 {
                     if (State.StartValue == CurrentState) NamedState = State.Name;
                 }

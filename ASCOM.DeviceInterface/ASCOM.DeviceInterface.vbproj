@@ -107,7 +107,8 @@
       <Link>CLSCompliant.vb</Link>
     </Compile>
     <Compile Include="IController.vb" />
-    <Compile Include="INWaySwitch.vb" />
+    <Compile Include="IControllerDevice.vb" />
+    <Compile Include="IControllerDeviceState.vb" />
     <Compile Include="IRheostat.vb" />
     <Compile Include="Enumerations.vb" />
     <Compile Include="IAxisRates.vb" />
