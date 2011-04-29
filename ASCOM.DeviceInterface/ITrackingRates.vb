@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports ASCOM.DeviceInterface
 
 ''' <summary>
 ''' Returns a collection of supported DriveRate values that describe the permissible values of the TrackingRate property for this telescope type.
@@ -12,7 +13,7 @@ Public Interface ITrackingRates ' DC98F1DF-315A-43ef-81F6-23F3DD461F58 ', Interf
     ''' <value>A collection of supported DriveRate values that describe the permissible values of the TrackingRate property for this telescope type.</value>
     ''' <returns>Returns a collection of supported DriveRate values</returns>
     ''' <remarks>This is only used by telescope interface versions 2 and 3</remarks>
-    Default ReadOnly Property Item(ByVal index As Integer) As ASCOM.DeviceInterface.DriveRates
+    Default ReadOnly Property Item(ByVal index As Integer) As DriveRates
     ''' <summary>
     ''' Number of DriveRates supported by the Telescope
     ''' </summary>

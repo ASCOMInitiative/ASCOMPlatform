@@ -16,7 +16,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' You can also read the property to check whether the device is connected.
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-    ''' <exception cref=" ASCOM.DriverException">Must throw exception if unsuccessful.</exception>
+    ''' <exception cref="DriverException">Must throw exception if unsuccessful.</exception>
     Property Connected() As Boolean
 
     ''' <summary>
@@ -25,7 +25,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' characters (for compatibility with FITS headers).
     ''' </summary>
     ''' <value>The description.</value>
-    ''' <exception cref=" ASCOM.DriverException">Must throw an exception if description unavailable</exception>
+    ''' <exception cref="DriverException">Must throw an exception if description unavailable</exception>
     ReadOnly Property Description() As String
 
     ''' <summary>
@@ -61,7 +61,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Launches a configuration dialog box for the driver.  The call will not return
     ''' until the user clicks OK or cancel manually.
     ''' </summary>
-    ''' <exception cref="ASCOM.MethodNotImplementedException">Must throw an exception if Setup dialog is unavailable.</exception>
+    ''' <exception cref="MethodNotImplementedException">Must throw an exception if Setup dialog is unavailable.</exception>
     Sub SetupDialog()
 
     ''' <summary>

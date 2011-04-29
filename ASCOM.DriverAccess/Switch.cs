@@ -93,32 +93,6 @@ namespace ASCOM.DriverAccess
     #endregion
 
     /// <summary>
-    /// The Toggle switch is used to create a single on/off switch.
-    /// </summary>
-    public class ToggleSwitch : IToggleSwitch
-    {
-
-        #region IToggleSwitch Members
-
-        /// <summary>
-        /// Name of the toggleswitch
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// State of the toggleswitch On/Off
-        /// </summary>
-        public string[] State { get; set; }
-
-        /// <summary>
-        /// The type of device is a ToggleSwitch
-        /// </summary>
-        public string DeviceType { get; set; }
-
-        #endregion
-    }
-
-    /// <summary>
     /// The Rheostat switch is use with lower/upper limits with a setting
     /// </summary>
     public class Rheostat : IRheostat

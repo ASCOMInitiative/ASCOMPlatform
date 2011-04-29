@@ -168,7 +168,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' upon StartExposure.
     ''' </summary>
     ''' <value>BinX sets/gets the X binning value</value>
-    ''' <exception cref="ASCOM.InvalidValueException">Must throw an exception for illegal binning values</exception>
+    ''' <exception cref="InvalidValueException">Must throw an exception for illegal binning values</exception>
     Property BinX() As Short
 
     ''' <summary>
@@ -178,7 +178,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' upon StartExposure.
     ''' </summary>
     ''' <value>The bin Y.</value>
-    ''' <exception cref="ASCOM.InvalidValueException">Must throw an exception for illegal binning values</exception>
+    ''' <exception cref="InvalidValueException">Must throw an exception for illegal binning values</exception>
     Property BinY() As Short
 
     ''' <summary>
@@ -210,21 +210,21 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' 	</list>
     ''' </summary>
     ''' <value>The state of the camera.</value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must return an exception if the camera status is unavailable.</exception>
+    ''' <exception cref="NotConnectedException">Must return an exception if the camera status is unavailable.</exception>
     ReadOnly Property CameraState() As CameraStates
 
     ''' <summary>
     ''' Returns the width of the CCD camera chip in unbinned pixels.
     ''' </summary>
     ''' <value>The size of the camera X.</value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if the value is not known</exception>
+    ''' <exception cref="NotConnectedException">Must throw exception if the value is not known</exception>
     ReadOnly Property CameraXSize() As Integer
 
     ''' <summary>
     ''' Returns the height of the CCD camera chip in unbinned pixels.
     ''' </summary>
     ''' <value>The size of the camera Y.</value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if the value is not known</exception>
+    ''' <exception cref="NotConnectedException">Must throw exception if the value is not known</exception>
     ReadOnly Property CameraYSize() As Integer
 
     ''' <summary>
@@ -243,7 +243,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance can asymmetric bin; otherwise, <c>false</c>.
     ''' </value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if the value is not known (n.b. normally only
+    ''' <exception cref="NotConnectedException">Must throw exception if the value is not known (n.b. normally only
     ''' occurs if no link established and camera must be queried)</exception>
     ReadOnly Property CanAsymmetricBin() As Boolean
 
@@ -283,8 +283,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if the camera can stop the exposure; otherwise, <c>false</c>.
     ''' </value>
-    ''' <exception cref=" ASCOM.PropertyNotImplementedException">not supported</exception>
-    ''' <exception cref=" ASCOM.NotConnectedException">an error condition such as link failure is present</exception>
+    ''' <exception cref=" PropertyNotImplementedException">not supported</exception>
+    ''' <exception cref=" NotConnectedException">an error condition such as link failure is present</exception>
     ReadOnly Property CanStopExposure() As Boolean
 
     ''' <summary>
@@ -292,7 +292,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' CanControlTemperature is True.
     ''' </summary>
     ''' <value>The CCD temperature.</value>
-    ''' <exception cref="ASCOM.InvalidValueException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="InvalidValueException">Must throw exception if data unavailable.</exception>
     ReadOnly Property CCDTemperature() As Double
 
     ''' <summary>
@@ -303,8 +303,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' documentation supplied with the camera for further information.
     ''' </summary>
     ''' <value><c>true</c> if [cooler on]; otherwise, <c>false</c>.</value>
-    ''' <exception cref=" ASCOM.PropertyNotImplementedException">not supported</exception>
-    ''' <exception cref=" ASCOM.NotConnectedException">an error condition such as link failure is present</exception>
+    ''' <exception cref=" PropertyNotImplementedException">not supported</exception>
+    ''' <exception cref=" NotConnectedException">an error condition such as link failure is present</exception>
     Property CoolerOn() As Boolean
 
     ''' <summary>
@@ -312,8 +312,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' False.
     ''' </summary>
     ''' <value>The cooler power.</value>
-    ''' <exception cref=" ASCOM.PropertyNotImplementedException">not supported</exception>
-    ''' <exception cref=" ASCOM.NotConnectedException">an error condition such as link failure is present</exception>
+    ''' <exception cref=" PropertyNotImplementedException">not supported</exception>
+    ''' <exception cref=" NotConnectedException">an error condition such as link failure is present</exception>
     ReadOnly Property CoolerPower() As Double
 
     ''' <summary>
@@ -322,7 +322,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' static during a session.)
     ''' </summary>
     ''' <value>The electrons per ADU.</value>
-    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property ElectronsPerADU() As Double
 
     ''' <summary>
@@ -330,7 +330,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' settings (binning, SetupDialog settings, etc.)
     ''' </summary>
     ''' <value>The full well capacity.</value>
-    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property FullWellCapacity() As Double
 
     ''' <summary>
@@ -348,7 +348,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
     ''' </summary>
     ''' <value>The heat sink temperature.</value>
-    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property HeatSinkTemperature() As Double
 
     ''' <summary>
@@ -363,7 +363,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' just the first plane.
     ''' </summary>
     ''' <value>The image array.</value>
-    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property ImageArray() As Object
 
     ''' <summary>
@@ -379,7 +379,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' just the first plane.
     ''' </summary>
     ''' <value>The image array variant.</value>
-    ''' <exception cref=" ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref=" NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property ImageArrayVariant() As Object
 
     ''' <summary>
@@ -388,7 +388,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' exception.
     ''' </summary>
     ''' <value><c>true</c> if [image ready]; otherwise, <c>false</c>.</value>
-    ''' <exception cref=" ASCOM.NotConnectedException">hardware or communications link error has occurred.</exception>
+    ''' <exception cref=" NotConnectedException">hardware or communications link error has occurred.</exception>
     ReadOnly Property ImageReady() As Boolean
 
     ''' <summary>
@@ -398,7 +398,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance is pulse guiding; otherwise, <c>false</c>.
     ''' </value>
-    ''' <exception cref=" ASCOM.NotConnectedException">hardware or communications link error has occurred.</exception>
+    ''' <exception cref=" NotConnectedException">hardware or communications link error has occurred.</exception>
     ReadOnly Property IsPulseGuiding() As Boolean
 
     ''' <summary>
@@ -407,8 +407,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' precision, etc.
     ''' </summary>
     ''' <value>The last duration of the exposure.</value>
-    ''' <exception cref="ASCOM.PropertyNotImplementedException">Must throw an exception if not supported</exception>
-    ''' <exception cref="ASCOM.InvalidOperationException">If called before any exposure has been taken</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported</exception>
+    ''' <exception cref="InvalidOperationException">If called before any exposure has been taken</exception>
     ReadOnly Property LastExposureDuration() As Double
 
     ''' <summary>
@@ -416,15 +416,15 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' CCYY-MM-DDThh:mm:ss[.sss...] format.
     ''' </summary>
     ''' <value>The last exposure start time.</value>
-    ''' <exception cref="ASCOM.PropertyNotImplementedException">Must throw an exception if not supported</exception>
-    ''' <exception cref="ASCOM.InvalidOperationException">If called before any exposure has been taken</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported</exception>
+    ''' <exception cref="InvalidOperationException">If called before any exposure has been taken</exception>
     ReadOnly Property LastExposureStartTime() As String
 
     ''' <summary>
     ''' Reports the maximum ADU value the camera can produce.
     ''' </summary>
     ''' <value>The max ADU.</value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property MaxADU() As Integer
 
     ''' <summary>
@@ -433,7 +433,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' axis.
     ''' </summary>
     ''' <value>The max bin X.</value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property MaxBinX() As Short
 
     ''' <summary>
@@ -441,7 +441,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' returns the maximum allowed binning factor for the Y axis.
     ''' </summary>
     ''' <value>The max bin Y.</value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property MaxBinY() As Short
 
     ''' <summary>
@@ -465,7 +465,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' driver.
     ''' </summary>
     ''' <value>The pixel size X.</value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property PixelSizeX() As Double
 
     ''' <summary>
@@ -473,7 +473,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' driver.
     ''' </summary>
     ''' <value>The pixel size Y.</value>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property PixelSizeY() As Double
 
     ''' <summary>
@@ -491,8 +491,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' </summary>
     ''' <param name="Direction">The direction.</param>
     ''' <param name="Duration">The duration.</param>
-    ''' <exception cref="ascom.MethodNotImplementedException">PulseGuide command is unsupported</exception>
-    ''' <exception cref=" ASCOM.DriverException">PulseGuide command is unsuccessful</exception>
+    ''' <exception cref="MethodNotImplementedException">PulseGuide command is unsupported</exception>
+    ''' <exception cref=" DriverException">PulseGuide command is unsuccessful</exception>
     Sub PulseGuide(ByVal Direction As GuideDirections, ByVal Duration As Integer)
 
     ''' <summary>
@@ -502,8 +502,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' thermal shock and potential damage to the CCD array or cooler stack.
     ''' </summary>
     ''' <value>The set CCD temperature.</value>
-    ''' <exception cref="ASCOM.DriverException">Must throw exception if command not successful.</exception>
-    ''' <exception cref="ascom.PropertyNotImplementedException">Must throw exception if CanSetCCDTemperature is False.</exception>
+    ''' <exception cref="DriverException">Must throw exception if command not successful.</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw exception if CanSetCCDTemperature is False.</exception>
     Property SetCCDTemperature() As Double
 
     ''' <summary>
@@ -511,9 +511,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' </summary>
     ''' <param name="Duration">Duration of exposure in seconds</param>
     ''' <param name="Light">True for light frame, False for dark frame (ignored if no shutter)</param>
-    ''' <exception cref=" ASCOM.InvalidValueException">NumX, NumY, XBin, YBin, StartX, StartY, or Duration parameters are invalid.</exception>
-    ''' <exception cref=" ASCOM.InvalidOperationException">CanAsymmetricBin is False and BinX != BinY</exception>
-    ''' <exception cref="ASCOM.NotConnectedException">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
+    ''' <exception cref=" InvalidValueException">NumX, NumY, XBin, YBin, StartX, StartY, or Duration parameters are invalid.</exception>
+    ''' <exception cref=" InvalidOperationException">CanAsymmetricBin is False and BinX != BinY</exception>
+    ''' <exception cref="NotConnectedException">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
     Sub StartExposure(ByVal Duration As Double, ByVal Light As Boolean)
 
     ''' <summary>
@@ -534,9 +534,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' Stops the current exposure, if any.  If an exposure is in progress, the readout
     ''' process is initiated.  Ignored if readout is already in process.
     ''' </summary>
-    ''' <exception cref="ASCOM.PropertyNotImplementedException">Must throw an exception if CanStopExposure is False</exception>
-    ''' <exception cref="ASCOM.NotConnectedException">Must throw an exception if the camera or link has an error condition</exception>
-    ''' <exception cref="ASCOM.DriverException">Must throw an exception if for any reason no image readout will be available.</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if CanStopExposure is False</exception>
+    ''' <exception cref="NotConnectedException">Must throw an exception if the camera or link has an error condition</exception>
+    ''' <exception cref="DriverException">Must throw an exception if for any reason no image readout will be available.</exception>
     Sub StopExposure()
 #End Region
 

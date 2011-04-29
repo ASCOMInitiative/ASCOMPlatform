@@ -14,11 +14,11 @@ namespace ASCOM.Simulator
     {
         #region Constants
 
-        private static readonly ISwitchV2 SwitchA = new Switch();
+        private static readonly IController ControllerA = new Controller();
         private Assembly _assembly;
         private Stream _greenLed;
         private Stream _redLed;
-        private ArrayList _switches = SwitchA.Switches;
+        private ArrayList _switches = ControllerA.ControllerDevices;
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace ASCOM.Simulator
             InitializeComponent();
 
             //get the driver version number
-            lb_DriverVersion.Text = SwitchA.Name + @" v" + SwitchA.DriverVersion;
+            lb_DriverVersion.Text = ControllerA.Name + @" v" + ControllerA.DriverVersion;
 
             LoadImagesFromResources();
             DisplaySwitchSettings();
@@ -87,7 +87,7 @@ namespace ASCOM.Simulator
         {
             int i = 1;
             //loop the switch devices
-            foreach (IToggleSwitch t in _switches)
+            foreach (IControllerDevice t in _switches)
             {
                 //loop group one of text boxes
                 foreach (Control gbChild in groupBox1.Controls)
@@ -103,7 +103,7 @@ namespace ASCOM.Simulator
                     if (pbChild.Name == String.Format("pictureBox{0}", i))
                     {
                         var pb = (PictureBox) pbChild;
-                        ChangeImageState(pb, t.State[0] == "On");
+                        ChangeImageState(pb, t.On == true);
                     }
                 }
                 i++;
@@ -115,17 +115,17 @@ namespace ASCOM.Simulator
         /// </summary>
         private bool ChangeSwitchState(int i)
         {
-            var t = (IToggleSwitch) _switches[i];
+            var t = (IControllerDevice)_switches[i];
 
-            switch (t.State[0])
+            switch (t.On)
             {
-                case "On":
-                    SwitchA.SetSwitch(t.Name, new[] {"Off"});
-                    _switches = SwitchA.Switches;
+                case true:
+                    ControllerA.SetSwitch(t.Name, false);
+                    _switches = ControllerA.ControllerDevices;
                     return false;
                 default:
-                    SwitchA.SetSwitch(t.Name, new[] {"On"});
-                    _switches = SwitchA.Switches;
+                    ControllerA.SetSwitch(t.Name, true);
+                    _switches = ControllerA.ControllerDevices;
                     return true;
             }
         }
