@@ -21,37 +21,36 @@ namespace ASCOM.Simulator
     /// ASCOM NWaySwitch Driver for a conceptual switch (proof of concept).
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-    [Guid("12730163-A85C-44CA-95AB-9E92FD9B8364")]
-    [ClassInterface(ClassInterfaceType.None)]
-    [ComVisible(true)]
-    public class NWaySwitchDriver : ISwitchV2, IDisposable
+    [Guid("12730163-A85C-44CA-95AB-9E92FD9B8364"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
+    [ProgId(name)] //Force the ProgID we want to have
+    public class NWaySwitchController : IController, IDisposable
     {
         #region Constants
 
         /// <summary>
         /// Name of the Driver
         /// </summary>
-        private const string name = "ASCOM.Simulator.NWaySwitchDriver";
+        private const string name = "ASCOM.NWaySwitchSimulator.Controller";
 
         /// <summary>
         /// Description of the driver
         /// </summary>
-        private const string description = "ASCOM NWaySwitch Simulator Driver";
+        private const string description = "ASCOM NWay Switch Simulator Driver";
 
         /// <summary>
         /// Driver information
         /// </summary>
-        private const string driverInfo = "NWaySwitch Simulator Driver and collection of NWaySwitch devices";
+        private const string driverInfo = "NWay Switch Simulator Driver and collection of NWaySwitch devices";
 
         /// <summary>
         /// Device type
         /// </summary>
-        private const string deviceType = "Switch";
+        private const string deviceType = "Controller";
 
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 2;
+        private const short interfaceVersion = 1;
 
         /// <summary>
         /// Driver version number
@@ -62,22 +61,17 @@ namespace ASCOM.Simulator
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
-        private const string sCsDriverId = "ASCOM.Simulator.NWaySwitchDriver";
+        private const string sCsDriverId = "ASCOM.NWaySwitchSimulator.Controller";
 
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
-        private const string sCsDriverDescription = "ASCOM Simulator NWaySwitch Driver";
-
-        /// <summary>
-        /// Type of switches for this driver
-        /// </summary>
-        private const string switchType = "NWaySwitch";
+        private const string sCsDriverDescription = "ASCOM NWay Switch Simulator";
 
         /// <summary>
         /// Backing store for the private switch collection.
         /// </summary>
-        private static readonly ArrayList SwitchList = new ArrayList();
+        private static readonly ArrayList ControllerDeviceList = new ArrayList();
 
         /// <summary>
         /// Sets up the permenant store for saved settings
@@ -87,7 +81,7 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Sets up the permenant store for device names
         /// </summary>
-        private static readonly string[] DeviceNames = { "Dew Heater 1", "Dew Heater 2" };
+        private static readonly string[] DeviceNames = { "Dew Heater", "Mount Power" };
 
         #endregion
 
@@ -98,10 +92,10 @@ namespace ASCOM.Simulator
         //
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NWaySwitchDriver"/> class.
+        /// Initializes a new instance of the <see cref="NWaySwitchController"/> class.
         /// Must be public for COM registration.
         /// </summary>
-        public NWaySwitchDriver()
+        public NWaySwitchController()
         {
             //new instance so load switches
             Profile.DeviceType = deviceType;
@@ -120,7 +114,7 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region ISwitchV2 Members
+        #region Common Members
 
         /// <summary>
         /// Displays the Setup Dialog form.
@@ -184,42 +178,9 @@ namespace ASCOM.Simulator
             get { return name; }
         }
 
-        /// <summary>
-        /// Yields a collection of string[] objects.
-        /// </summary>
-        /// <value></value>
-        public ArrayList Switches
-        {
-            get { return SwitchList; }
-        }
-
-        void ISwitchV2.Dispose()
+        void IController.Dispose()
         {
             Dispose();
-        }
-
-        /// <summary>
-        /// return a specific switch
-        /// </summary>
-        /// <value>name of the switch</value>
-        public object GetSwitch(string switchName)
-        {
-            if (switchName == null) throw new ArgumentNullException("switchName");
-            return SwitchList.Cast<NWaySwitch>().FirstOrDefault(t => t.Name == switchName);
-        }
-
-        /// <summary>
-        /// Flips a switch on or off
-        /// </summary>
-        /// <value>name of the switch</value>
-        public void SetSwitch(string switchName, string[] state)
-        {
-            if (switchName == null) throw new ArgumentNullException("switchName");
-            foreach (var t in from NWaySwitch t in SwitchList where t.Name == switchName select t)
-            {
-                t.State = state;
-            }
-            SaveProfileSettings();
         }
 
         /// <summary>
@@ -271,15 +232,43 @@ namespace ASCOM.Simulator
                 return sa;
             }
         }
+    
+        #endregion
+
+        #region Device members
+        /// <summary>
+        /// return a specific switch
+        /// </summary>
+        /// <value>name of the switch</value>
+        public object GetControl(string switchName)
+        {
+            if (switchName == null) throw new ArgumentNullException("switchName");
+            return ControllerDeviceList.Cast<NWaySwitch>().FirstOrDefault(t => t.Name == switchName);
+        }
 
         /// <summary>
-        /// Gets the driver version.
+        /// Flips a switch on or off
         /// </summary>
-        /// <value>The driver version.</value>
-        public string SwitchType
+        /// <value>name of the switch</value>
+        public void SetControl(string switchName, double state)
         {
-            get { return switchType; }
+            if (switchName == null) throw new ArgumentNullException("switchName");
+            foreach (var t in from NWaySwitch t in ControllerDeviceList where t.Name == switchName select t)
+            {
+                t.SetValue(state);
+            }
+            SaveProfileSettings();
         }
+
+        /// <summary>
+        /// Yields a collection of string[] objects.
+        /// </summary>
+        /// <value></value>
+        public ArrayList ControllerDevices
+        {
+            get { return ControllerDeviceList; }
+        }
+
 
         #endregion
 
@@ -292,25 +281,36 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Simulate reading the hardware devices
         /// </summary>
-        private static void LoadSwitchDevices()
+        internal static void LoadSwitchDevices()
         {
-            SwitchList.Clear();
-            foreach (var deviceName in DeviceNames)
-            {
-                var s = Profile.GetValue(sCsDriverId, deviceName, "Switches") ?? "0,6,3";
-                if (s.Length < 5)
-                {
-                    s = "0,6,1";
-                }
+            NWaySwitch nWaySwitch;
+            string s;
+            string[] values;
 
-                var nWaySwitch = new NWaySwitch
-                                            {
-                                                Name = deviceName,
-                                                DeviceType = switchType,
-                                                State = s.Split(',')
-                                            };
-                SwitchList.Add(nWaySwitch);
+            ControllerDeviceList.Clear();
+            //foreach (var deviceName in DeviceNames)
+            //{
+            s = Profile.GetValue(sCsDriverId, DeviceNames[0], "Switches") ?? "0,6,3";
+            if (s.Length < 5)
+            {
+                s = "0,6,3";
             }
+            values = s.Split(',');
+            nWaySwitch = new NWaySwitch(DeviceNames[0], double.Parse(values[0]), double.Parse(values[1]), double.Parse(values[2]));
+
+            ControllerDeviceList.Add(nWaySwitch);
+
+            s = Profile.GetValue(sCsDriverId, DeviceNames[1], "Switches", "0,20,12.5") ?? "0,20,12.5";
+            if (s.Length < 5)
+            {
+                s = "0,20,12.5";
+            }
+            values = s.Split(',');
+            nWaySwitch = new NWaySwitch(DeviceNames[1], double.Parse(values[0]), double.Parse(values[1]), double.Parse(values[2]));
+
+            ControllerDeviceList.Add(nWaySwitch);
+
+            //}
         }
 
         /// <summary>
@@ -318,10 +318,10 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void SaveProfileSettings()
         {
-            if (SwitchList != null)
-                foreach (NWaySwitch t in SwitchList)
+            if (ControllerDeviceList != null)
+                foreach (NWaySwitch t in ControllerDeviceList)
                 {
-                    var s = t.State[0] + "," + t.State[1] + "," + t.State[2];
+                    var s = t.Minimum.ToString() + "," + t.Maximim.ToString() + "," + t.PresentValue.ToString();
                     if (Profile != null) Profile.WriteValue(sCsDriverId, t.Name, s, "Switches");
                 }
         }
@@ -341,7 +341,7 @@ namespace ASCOM.Simulator
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            var p = new Profile { DeviceType = "Switch" };
+            var p = new Profile { DeviceType = deviceType };
             if (bRegister)
             {
                 p.Register(sCsDriverId, sCsDriverDescription);

@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOM.Simulator</RootNamespace>
-    <AssemblyName>ASCOM.Simulator.Switch</AssemblyName>
+    <AssemblyName>ASCOM.ToggleSwitchSimulator.Controller</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -98,7 +98,7 @@
     <Compile Include="..\..\..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="DeviceState.cs" />
+    <Compile Include="ControllerDeviceState.cs" />
     <Compile Include="Driver.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>

@@ -120,11 +120,11 @@ namespace ASCOM.Simulator
             switch (t.On)
             {
                 case true:
-                    ControllerA.SetSwitch(t.Name, false);
+                    ControllerA.SetControl(t.Name, 0);
                     _switches = ControllerA.ControllerDevices;
                     return false;
                 default:
-                    ControllerA.SetSwitch(t.Name, true);
+                    ControllerA.SetControl(t.Name, 1);
                     _switches = ControllerA.ControllerDevices;
                     return true;
             }
