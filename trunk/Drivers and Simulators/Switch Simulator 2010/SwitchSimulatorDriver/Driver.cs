@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
-using ASCOM.DriverAccess;
 using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
@@ -21,37 +20,36 @@ namespace ASCOM.Simulator
     /// ASCOM Switch Driver for a conceptual switch (proof of concept).
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
-    [Guid("1F07419A-0C9E-4B90-8B62-FC8053E89EE2")]
-    [ClassInterface(ClassInterfaceType.None)]
-    [ComVisible(true)]
-    public class Switch : ISwitchV2, IDisposable
+    [Guid("1F07419A-0C9E-4B90-8B62-FC8053E89EE2"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
+    [ProgId(name)] //Force the ProgID we want to have
+    public class Controller : IController, IDisposable
     {
         #region Constants
 
         /// <summary>
         /// Name of the Driver
         /// </summary>
-        private const string name = "ASCOM.Simulator.Switch";
+        private const string name = "ASCOM.ToggleSwitchSimulator.Controller";
 
         /// <summary>
         /// Description of the driver
         /// </summary>
-        private const string description = "ASCOM Switch Simulator Driver";
+        private const string description = "ASCOM ToggleSwitch Simulator Driver";
 
         /// <summary>
         /// Device type
         /// </summary>
-        private const string deviceType = "Switch";
+        private const string deviceType = "Controller";
         
         /// <summary>
         /// Driver information
         /// </summary>
-        private const string driverInfo = "Switch Simulator Driver and collection of Switch devices";
+        private const string driverInfo = "Toggle switch simulator driver and collection of toggle switch controllers devices";
 
         /// <summary>
         /// Driver interface version
         /// </summary>
-        private const short interfaceVersion = 2;
+        private const short interfaceVersion = 1;
 
         /// <summary>
         /// Driver version number
@@ -59,20 +57,15 @@ namespace ASCOM.Simulator
         private const string driverVersion = "6.0";
 
         /// <summary>
-        /// Gets the last result.
-        /// </summary>
-        private const string lastResult = "False";
-
-        /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
-        private const string sCsDriverId = "ASCOM.Simulator.Switch";
+        private const string sCsDriverId = "ASCOM.ToggleSwitchSimulator.Controller";
 
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
-        private const string sCsDriverDescription = "ASCOM Simulator Switch Driver";
+        private const string sCsDriverDescription = "ASCOM Toggle Switch Simulator";
 
         /// <summary>
         /// The number of physical switches that this device has.
@@ -112,10 +105,10 @@ namespace ASCOM.Simulator
         //
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Switch"/> class.
+        /// Initializes a new instance of the <see cref="Controller"/> class.
         /// Must be public for COM registration.
         /// </summary>
-        public Switch()
+        public Controller()
         {
             //new instance so load switches
             Profile.DeviceType = deviceType;
@@ -134,7 +127,7 @@ namespace ASCOM.Simulator
 
         #endregion
 
-        #region ISwitchV2 Members
+        #region Common Members
 
         /// <summary>
         /// Displays the Setup Dialog form.
@@ -148,7 +141,7 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Switch"/> is connected.
+        /// Gets or sets a value indicating whether this <see cref="Controller"/> is connected.
         /// </summary>
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         public bool Connected { get; set; }
@@ -198,43 +191,11 @@ namespace ASCOM.Simulator
             get { return name; }
         }
 
-        /// <summary>
-        /// Yields a collection of string[] objects.
-        /// </summary>
-        /// <value></value>
-        public ArrayList Switches
-        {
-            get { return SwitchList; }
-        }
-
-        void ISwitchV2.Dispose()
+        void IController.Dispose()
         {
             Dispose();
         }
 
-        /// <summary>
-        /// return a specific switch
-        /// </summary>
-        /// <value>name of the switch</value>
-        public object GetSwitch(string switchName)
-        {
-            if (switchName == null) throw new ArgumentNullException("switchName");
-            return SwitchList.Cast<ToggleSwitch>().FirstOrDefault(t => t.Name == switchName);
-        }
-
-        /// <summary>
-        /// Flips a switch on or off
-        /// </summary>
-        /// <value>name of the switch</value>
-        public void SetSwitch(string switchName, string[] state)
-        {
-            if (switchName == null) throw new ArgumentNullException("switchName");
-            foreach (ToggleSwitch t in from ToggleSwitch t in SwitchList where t.Name == switchName select t)
-            {
-                t.State = state;
-            }
-            SaveProfileSettings();
-        }
 
         /// <summary>
         /// Gets the supported actions.
@@ -286,13 +247,43 @@ namespace ASCOM.Simulator
             }
         }
 
+        #endregion
+
+        #region Controller Members
         /// <summary>
-        /// Gets the driver version.
+        /// Returns an <c>Arraylist</c> of ToggleSwitch ControllerDevices
         /// </summary>
-        /// <value>The driver version.</value>
-        public string SwitchType
+        public ArrayList ControllerDevices
         {
-            get { return switchType; }
+            get
+            {
+              return SwitchList;
+            }
+        }
+
+        /// <summary>
+        /// return a specific switch
+        /// </summary>
+        /// <value>name of the switch</value>
+        public object GetSwitch(string switchName)
+        {
+            if (switchName == null) throw new ASCOM.InvalidValueException("switchName");
+            return SwitchList.Cast<ToggleSwitch>().FirstOrDefault(t => t.Name == switchName);
+        }
+
+        /// <summary>
+        ///  Sets a ControllerDevice On or Off
+        /// </summary>
+        /// <param name="controllerName">Name of the ControllerDevice</param>
+        /// <param name="State">Boolean True to turn on or False to turn off</param>
+        public void SetSwitch(string controllerName, bool State)
+        {
+            if (controllerName == null) throw new ASCOM.InvalidValueException("switchName");
+            foreach (ToggleSwitch t in from ToggleSwitch t in SwitchList where t.Name == controllerName select t)
+            {
+                t.On = State;
+            }
+            SaveProfileSettings();
         }
 
         #endregion
@@ -308,20 +299,18 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void LoadSwitchDevices()
         {
+            bool state;
             SwitchList.Clear();
+
             foreach (var deviceName in DeviceNames)
             {
                 var v = Profile.GetValue(sCsDriverId, deviceName, "Switches");
-                if ((v != "On") && (v != "Off"))
+                if (! bool.TryParse(v, out state))
                 {
-                    v = "Off";
+                    state = false;
                 }
-                var toggleSwitch = new ToggleSwitch
-                                       {
-                                           Name = deviceName,
-                                           DeviceType = switchType,
-                                           State = new[] {v}
-                                       };
+                var toggleSwitch = new ToggleSwitch (deviceName);
+                toggleSwitch.On = state;
                 var add = SwitchList.Add(toggleSwitch);
             }
         }
@@ -331,9 +320,9 @@ namespace ASCOM.Simulator
         /// </summary>
         private static void SaveProfileSettings()
         {
-            foreach (ToggleSwitch t in from ToggleSwitch t in SwitchList where Profile != null select t)
+            foreach (ToggleSwitch t in SwitchList)
             {
-                Profile.WriteValue(sCsDriverId, t.Name, t.State[0], "Switches");
+                Profile.WriteValue(sCsDriverId, t.Name, t.On.ToString(), "Switches");
             }
         }
 
@@ -352,7 +341,7 @@ namespace ASCOM.Simulator
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            var p = new Profile {DeviceType = "Switch"};
+            var p = new Profile {DeviceType = deviceType};
             if (bRegister)
             {
                 p.Register(sCsDriverId, sCsDriverDescription);

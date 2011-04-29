@@ -93,6 +93,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Import Include="ASCOM" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
@@ -105,9 +106,9 @@
     <Compile Include="..\CLSCompliant.vb">
       <Link>CLSCompliant.vb</Link>
     </Compile>
+    <Compile Include="IController.vb" />
     <Compile Include="INWaySwitch.vb" />
     <Compile Include="IRheostat.vb" />
-    <Compile Include="IToggleSwitch.vb" />
     <Compile Include="Enumerations.vb" />
     <Compile Include="IAxisRates.vb" />
     <Compile Include="ICameraV2.vb" />
