@@ -13,23 +13,32 @@
 // order that one would install the components. Thus you can't install the later ones
 // until you get the earlier ones installed. Platform first, etc.
 //
-// Sorry I could not figure out how to get to Platform with the new Profile
-//
 // Author: Bob Denny <rdenny@dc3.com>
 //
 // Edits:
 // ---------    ---     ---------------------------------------------------------------------------
 // 28-Apr-11    rbd     Initial edit
+// 29-Apr-11    rbd     Add logic to try to get various versions of MS XMLHTTP component, newest 
+//                      to oldest order. Find the ASCOM registry data on both 32- and 64-bit
+//                      systems. Make it obvious that you can come back here to go to the d/l
+//                      page for the first of any remaining available updates.
 // ------------------------------------------------------------------------------------------------
 
 var POPTITLE = "Check ASCOM Updates";
 var REMWEB = "http://download.ascom-standards.org/ver/";
-var REGROOT = "HKLM\\Software\\ASCOM\\Platform\\";
+var REGROOT64 = "HKLM\\Software\\Wow6432Node\\ASCOM\\Platform\\";
+var REGROOT32 = "HKLM\\Software\\ASCOM\\Platform\\";
 
 var PLATPAGE = "http://ascom-standards.org/Downloads/PlatformUpdates.htm";
 var DEVPAGE = "http://ascom-standards.org/Downloads/PlatToolUpdates.htm";
 var CONFPAGE = "http://ascom-standards.org/Downloads/DevTools.htm";
 
+var SH = new ActiveXObject("WScript.Shell");
+
+//
+// Compare "n.n.n.n" versions (strings), return true if second parameter
+// string represents a newer version.
+//
 function isRemoteNewer(local, remote)
 {
     var lbits = local.split(".");
@@ -41,25 +50,65 @@ function isRemoteNewer(local, remote)
     return false;  
 }
 
-var SH = new ActiveXObject("WScript.Shell");
-var pd = SH.RegRead(REGROOT);                                   // Platform description
-var cv = SH.RegRead(REGROOT + "Conform Version");
-var dv = SH.RegRead(REGROOT + "Developer Tools Version");
-var pv = SH.RegRead(REGROOT + "Platform Version");
+//
+// Valiantly try to get an XMLHTTPRequest object.
+//
+function getXmlHttp()
+{
+    //WScript.Echo("**try XMLHTTP.6.0");
+    try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); }
+    catch (e) {}
+    
+    //WScript.Echo("**try XMLHTTP.5.0");
+    try { return new ActiveXObject("Msxml2.XMLHTTP.5.0"); }
+    catch (e) {}
+    
+    //WScript.Echo("**try XMLHTTP.4.0");
+    try { return new ActiveXObject("Msxml2.XMLHTTP.4.0"); }
+    catch (e) {}
+    
+    //WScript.Echo("**try XMLHTTP.3.0");
+    try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); }
+    catch (e) {}
 
+    //WScript.Echo("**try XMLHTTP");
+    try { return new ActiveXObject("Msxml2.XMLHTTP"); }
+    catch (e)
+    {
+        SN.Popup("Missing or damaged web component. Cannot check for updates.",
+                10, POPTITLE, 16);
+        WScript.Quit();
+    }
+}
+
+//
+// Get local versions
+//
+var regRoot;
+try { SH.RegRead(REGROOT64); regRoot = REGROOT64; }
+catch(e) { regRoot = REGROOT32;}
+//WScript.Echo("**using " + regRoot);
+var pd = SH.RegRead(regRoot);                                   // Platform description
+var cv = SH.RegRead(regRoot + "Conform Version");
+var dv = SH.RegRead(regRoot + "Developer Tools Version");
+var pv = SH.RegRead(regRoot + "Platform Version");
+
+//
+// Get remote versions. XMLHTTP will automatically use default proxy if any.
+//
 try
 {
-    var http = new ActiveXObject("Msxml2.XMLHTTP");
+    var http = getXmlHttp();
     http.open("GET", REMWEB + "cv.txt", false);
     http.send();
     var rcv = http.responseText;
     http.open("GET", REMWEB + "dv.txt", false);
     http.send();
     var rdv = http.responseText;
-    var http = new ActiveXObject("Msxml2.XMLHTTP");
     http.open("GET", REMWEB + "pv.txt", false);
     http.send();
     var rpv = http.responseText;
+    http = null;
 }
 catch(ex)
 {
@@ -68,28 +117,47 @@ catch(ex)
     WScript.Quit();
 }
 
-if (isRemoteNewer(pv, rpv))
+var np = isRemoteNewer(pv, rpv);
+var nd = (dv !== "") && isRemoteNewer(dv, rdv);
+var nc = (cv !== "") && isRemoteNewer(cv, rcv);
+
+if (!np && !nd && !nc)
 {
-    var ans = SH.Popup("There is a newer version (" + rpv + ") of the ASCOM Platform. Would you like to download it?",
-                        0, POPTITLE, 36);
-    if (ans == 6) 
-        SH.Run(PLATPAGE);
+    SH.Popup("Everything is up to date.", 10, POPTITLE, 64);
     WScript.Quit();
 }
 
-if (dv !== "" && isRemoteNewer(dv, rdv))
+var i = 0;
+var msg = "Updates are available for the following ASCOM components:\r\n";
+
+if (np) { msg += "* ASCOM Platform (" + rpv + ")\r\n"; i += 1; }
+if (nd) { msg += "* Developer Kit (" + rdv + ")\r\n"; i += 1; }
+if (nc) { msg += "* Driver Conformance Checker (" + rcv + ")\r\n"; i += 1; }
+
+if (i > 1) {
+    msg += "After downloading and installing the first one, re-run the checker " +
+           "to be taken to the download page for the next new component. Would you " + 
+           "like to go to the download page for the first new component?"
+} else {
+    msg += "Would you like to go to the download page for the new component?";
+}
+
+var ans = SH.Popup(msg, 0, POPTITLE, 36);
+if (ans == 7) WScript.Quit();
+
+if (np)
 {
-    var ans = SH.Popup("There is a newer version (" + rdv + ") of the ASCOM Software Developer's Kit. Would you like to download it?",
-                        0, POPTITLE, 36);
-    if (ans == 6) 
-        SH.Run(DEVPAGE);
+    SH.Run(PLATPAGE);
     WScript.Quit();
 }
 
-if (cv !== "" && isRemoteNewer(cv, rcv))
+if (nd)
 {
-    var ans = SH.Popup("There is a newer version (" + rcv + ") of the ASCOM Conformance Checker. Would you like to download it?",
-                        0, POPTITLE, 36);
-    if (ans == 6) 
-        SH.Run(CONFPAGE);
+    SH.Run(DEVPAGE);
+    WScript.Quit();
+}
+
+if (nc)
+{
+    SH.Run(CONFPAGE);
 }
