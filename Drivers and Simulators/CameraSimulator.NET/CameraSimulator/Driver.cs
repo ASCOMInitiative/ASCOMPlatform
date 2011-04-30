@@ -118,7 +118,7 @@ namespace ASCOM.Simulator
         internal double setCcdTemperature;
 
         // Gain
-        internal string[] gains;
+        internal ArrayList gains;
         internal short gainMin;
         internal short gainMax;
         private short gain;
@@ -140,7 +140,7 @@ namespace ASCOM.Simulator
         internal bool canFastReadout;
         private bool fastReadout;
         private short readoutMode;
-        internal string[] readoutModes;
+        internal ArrayList readoutModes;
 
         // guiding
         internal bool canPulseGuide;
@@ -1535,7 +1535,7 @@ namespace ASCOM.Simulator
                     throw new NotConnectedException("Can't get GainMax when not connected");
                 if (this.gainMax <= this.gainMin)
                     throw new ASCOM.PropertyNotImplementedException("GainMax", false);
-                if (this.gains != null && this.gains.Length > 0)
+                if (this.gains != null && this.gains.Count > 0)
                     throw new ASCOM.InvalidOperationException("GainMax cannot be read if there is an array of Gains in use");
                 return this.gainMax;
             }
@@ -1556,7 +1556,7 @@ namespace ASCOM.Simulator
                     throw new NotConnectedException("Can't get GainMin when not connected");
                 if (this.gainMax <= this.gainMin)
                     throw new ASCOM.PropertyNotImplementedException("GainMin", false);
-                if (this.gains != null && this.gains.Length > 0)
+                if (this.gains != null && this.gains.Count > 0)
                     throw new ASCOM.InvalidOperationException("GainMin cannot be read if there is an array of Gains in use");
                 return this.gainMin;
             }
@@ -1567,7 +1567,7 @@ namespace ASCOM.Simulator
         /// The Gain, Gains, GainMin and GainMax operation is complex adjust this at your peril!
         /// </summary>
         /// <value>The gains.</value>
-        public string[] Gains
+        public ArrayList Gains
         {
             get
             {
@@ -1575,7 +1575,7 @@ namespace ASCOM.Simulator
                     throw new System.InvalidOperationException("Not if interfaceVersion is 1");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get Gains when not connected");
-                if (this.Gains == null || this.gains.Length == 0)
+                if (this.Gains == null || this.gains.Count == 0)
                     throw new ASCOM.PropertyNotImplementedException("Gains", false);
                 return this.gains;
             }
@@ -1646,7 +1646,7 @@ namespace ASCOM.Simulator
                     throw new System.InvalidOperationException("Not if interfaceVersion is 1");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutMode when not connected");
-                if (this.readoutModes == null || this.readoutModes.Length < 1)
+                if (this.readoutModes == null || this.readoutModes.Count  < 1)
                     throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
                 return this.readoutMode;
             }
@@ -1656,10 +1656,10 @@ namespace ASCOM.Simulator
                     throw new System.InvalidOperationException("Not if interfaceVersion is 1");
                 if (!this.connected)
                     throw new NotConnectedException("Can't set ReadoutMode when not connected");
-                if (this.readoutModes == null || this.readoutModes.Length < 1)
+                if (this.readoutModes == null || this.readoutModes.Count < 1)
                     throw new ASCOM.PropertyNotImplementedException("ReadoutMode", true);
-                if (value < this.readoutModes.GetLowerBound(0) || value > this.readoutModes.GetUpperBound(0))
-                    throw new ASCOM.InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", this.readoutModes.GetLowerBound(0), this.readoutModes.GetUpperBound(0)));
+                if (value < 0 || value > this.readoutModes.Count - 1)
+                    throw new ASCOM.InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", 0, this.readoutModes.Count - 1));
                 this.readoutMode = value;
             }
         }
@@ -1670,7 +1670,7 @@ namespace ASCOM.Simulator
         /// of the camera. 
         /// </summary>
         /// <value>The readout modes.</value>
-        public string[] ReadoutModes
+        public ArrayList ReadoutModes
         {
             get
             {
@@ -1678,7 +1678,7 @@ namespace ASCOM.Simulator
                     throw new System.InvalidOperationException("Not if interfaceVersion is 1");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutModes when not connected");
-                if (this.readoutModes == null || this.readoutModes.Length < 1)
+                if (this.readoutModes == null || this.readoutModes.Count < 1)
                     throw new ASCOM.PropertyNotImplementedException("ReadoutModes", false);
                 return this.readoutModes;
             }
@@ -1786,12 +1786,12 @@ namespace ASCOM.Simulator
             // if this is in the using section we get warning CA2000
             string gs, gMin, gMax;
 
-            if (this.gains != null && this.gains.Length > 0)
+            if (this.gains != null && this.gains.Count > 0)
             {
                 // gain control using Gains string array
-                gs = this.gains.Length.ToString(CultureInfo.InvariantCulture);
-                gMin = this.gains.GetLowerBound(0).ToString(CultureInfo.InvariantCulture);
-                gMax = this.gains.GetUpperBound(0).ToString(CultureInfo.InvariantCulture);
+                gs = this.gains.Count.ToString(CultureInfo.InvariantCulture);
+                gMin = Convert.ToString(this.gains[0], CultureInfo.InvariantCulture);
+                gMax = Convert.ToString(this.gains[gains.Count - 1], CultureInfo.InvariantCulture);
             }
             else if (this.gainMax > this.gainMin)
             {
