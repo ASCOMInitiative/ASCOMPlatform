@@ -43,7 +43,7 @@ namespace ASCOM.Simulator
         {
             label2.Text = NWaySWitch1.Name;
             var guage1Min = Convert.ToSingle(NWaySWitch1.Minimum);
-            var guage1Max = Convert.ToSingle(NWaySWitch1.Maximim);
+            var guage1Max = Convert.ToSingle(NWaySWitch1.Maximum);
             var guage1Value = Convert.ToInt16(NWaySWitch1.PresentValue);
 
             aGauge1.MinValue = guage1Min - 1;
@@ -62,7 +62,7 @@ namespace ASCOM.Simulator
         {
             label3.Text = NWaySwitch2.Name;
             var guage2Min = Convert.ToSingle(NWaySwitch2.Minimum);
-            var guage2Max = Convert.ToSingle(NWaySwitch2.Maximim);
+            var guage2Max = Convert.ToSingle(NWaySwitch2.Maximum);
             var guage2Value = Convert.ToInt16(NWaySwitch2.PresentValue);
 
             aGauge3.MinValue = guage2Min; // -1;

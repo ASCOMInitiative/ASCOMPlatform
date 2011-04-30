@@ -321,7 +321,7 @@ namespace ASCOM.Simulator
             if (ControllerDeviceList != null)
                 foreach (NWaySwitch t in ControllerDeviceList)
                 {
-                    var s = t.Minimum.ToString() + "," + t.Maximim.ToString() + "," + t.PresentValue.ToString();
+                    var s = t.Minimum.ToString() + "," + t.Maximum.ToString() + "," + t.PresentValue.ToString();
                     if (Profile != null) Profile.WriteValue(sCsDriverId, t.Name, s, "Switches");
                 }
         }
