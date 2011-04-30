@@ -751,36 +751,24 @@ Public Class DiagnosticsForm
         Sim = Nothing
 
         Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.Switch"
+        Sim.ProgID = "ASCOM.ToggleSwitchSimulator.Controller"
         Sim.Description = "Platform 6 Switch Simulator"
         Sim.DeviceType = "Switch"
-        Sim.Name = "ASCOM.Simulator.Switch"
+        Sim.Name = "ASCOM.ToggleSwitchSimulator.Controller"
         Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 2
+        Sim.InterfaceVersion = 1
         Sim.IsPlatform5 = False
         Sim.SixtyFourBit = True
         TestSimulator(Sim)
         Sim = Nothing
 
         Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.NWaySwitchDriver"
-        Sim.Description = "ASCOM Simulator NWaySwitch Driver"
+        Sim.ProgID = "ASCOM.MultiDeviceSimulator.Controller"
+        Sim.Description = "ASCOM Multi Device Simulator Controller"
         Sim.DeviceType = "Switch"
-        Sim.Name = "ASCOM.Simulator.NWaySwitchDriver"
+        Sim.Name = "ASCOM.MultiDeviceSimulator.Controller"
         Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 2
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
-
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.RheostatSwitch"
-        Sim.Description = "ASCOM Simulator Rheostat Driver"
-        Sim.DeviceType = "Switch"
-        Sim.Name = "ASCOM.Simulator.RheostatSwitch"
-        Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 2
+        Sim.InterfaceVersion = 1
         Sim.IsPlatform5 = False
         Sim.SixtyFourBit = True
         TestSimulator(Sim)
@@ -945,7 +933,7 @@ Public Class DiagnosticsForm
                                 DeviceTest("Switch", "GetSwitch")
                                 DeviceTest("Switch", "GetSwitchName")
                             Else
-                                DeviceTest("Switch", "Switches")
+                                DeviceTest("Switch", "ControllerDevices")
                             End If
                         Case "Dome"
                             DeviceTest("Dome", "OpenShutter")
@@ -1007,8 +995,8 @@ Public Class DiagnosticsForm
 
                 Case "Switch"
                     Select Case Test
-                        Case "Switches"
-                            RetVal = DeviceObject.Switches
+                        Case "ControllerDevices"
+                            RetVal = DeviceObject.ControllerDevices
                             Compare("DeviceTest", "Switches read OK", True, True)
                         Case "GetSwitch"
                             Compare("DeviceTest", Test, DeviceObject.GetSwitch(1), "True")
@@ -2950,6 +2938,9 @@ Public Class DiagnosticsForm
                 keys = AscomUtlProf.RegisteredDevices("Camera")
                 CheckSimulator(keys, "Camera", "ASCOM.Simulator.Camera")
                 CheckSimulator(keys, "Camera", "CCDSimulator.Camera")
+                keys = AscomUtlProf.RegisteredDevices("Controller")
+                CheckSimulator(keys, "Switch", "ASCOM.ToggleSwitchSimulator.Controller")
+                CheckSimulator(keys, "Switch", "ASCOM.MultiDeviceSimulator.Controller")
                 keys = AscomUtlProf.RegisteredDevices("Dome")
                 CheckSimulator(keys, "Dome", "DomeSim.Dome")
                 CheckSimulator(keys, "Dome", "Hub.Dome")
@@ -2968,7 +2959,6 @@ Public Class DiagnosticsForm
                 keys = AscomUtlProf.RegisteredDevices("SafetyMonitor")
                 CheckSimulator(keys, "SafetyMonitor", "ASCOM.Simulator.SafetyMonitor")
                 keys = AscomUtlProf.RegisteredDevices("Switch")
-                CheckSimulator(keys, "Switch", "ASCOM.Simulator.Switch")
                 CheckSimulator(keys, "Switch", "SwitchSim.Switch")
                 keys = AscomUtlProf.RegisteredDevices("Telescope")
                 CheckSimulator(keys, "Telescope", "ASCOM.Simulator.Telescope")
