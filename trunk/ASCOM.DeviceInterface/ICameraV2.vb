@@ -712,7 +712,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <summary>
     ''' Gains supported by the camera
     ''' </summary>
-    ''' <returns>String array of gain names </returns>
+    ''' <returns>An ArrayList of gain names </returns>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active connection in order to retrieve necessary information from the camera.)</exception>
     ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
@@ -725,7 +725,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' to ensure that the driver is aware of the capabilities of the specific camera model.</para>
     ''' <para>This is only available for the Camera Interface Version 2</para>
     ''' </remarks>
-    ReadOnly Property Gains As String()
+    ReadOnly Property Gains As ArrayList
 
     ''' <summary>
     ''' Percent conpleted
@@ -766,7 +766,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <summary>
     ''' List of available readout modes
     ''' </summary>
-    ''' <returns>A string array of readout mode names</returns>
+    ''' <returns>An ArrayList of readout mode names</returns>
     ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active connection in order to retrieve necessary information from the camera.)</exception>
@@ -788,7 +788,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' of the specific camera model.</para>
     ''' <para>This is only available for the Camera Interface Version 2</para>
     ''' </remarks>
-    ReadOnly Property ReadoutModes As String()
+    ReadOnly Property ReadoutModes As ArrayList
 
     ''' <summary>
     ''' Sensor name

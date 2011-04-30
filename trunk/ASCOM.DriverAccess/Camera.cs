@@ -8,6 +8,7 @@
 // 29-May-10  	rem     6.0.0 - Added memberFactory.
 
 using System;
+using System.Collections;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 //using ASCOM.Conform;
@@ -670,9 +671,9 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Gains supported by the camera, Interface Version 2 only
         /// </summary>
-        public string[] Gains 
+        public ArrayList Gains 
         {
-            get { return (string[])_memberFactory.CallMember(1, "Gains", new Type[] { }, new object[] { }); } 
+            get { return (ArrayList)_memberFactory.CallMember(1, "Gains", new Type[] { }, new object[] { }); } 
         }
 
         /// <summary>
@@ -694,9 +695,9 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// List of available readout modes
         /// </summary>
-        public string[] ReadoutModes
+        public ArrayList ReadoutModes
         {
-            get { return (string[])_memberFactory.CallMember(1, "ReadoutModes", new Type[] { }, new object[] { }); }
+            get { return (ArrayList)_memberFactory.CallMember(1, "ReadoutModes", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>

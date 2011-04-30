@@ -1,6 +1,7 @@
 Option Strict On
 Option Explicit On
 Imports ASCOM.Utilities.Interfaces
+Imports System.Collections
 Imports System.Runtime.InteropServices
 Imports System.ComponentModel
 Imports System.IO
@@ -137,17 +138,18 @@ Public Class Profile
     ''' List the device types registered in the Profile store
     ''' </summary>
     ''' <value>List of registered device types</value>
-    ''' <returns>A sorted string array of device types</returns>
+    ''' <returns>A sorted arraylist of device type strings</returns>
     ''' <remarks>Use this to find the types of device that are registered in the Profile store.
     ''' <para>Device types are returned without the suffix " Devices" that is used in key names within the 
     ''' profile store; this allows direct use of returned device types inside For Each loops as shown in 
     ''' the Profile code example.</para>
     ''' </remarks>
-    Public ReadOnly Property RegisteredDeviceTypes() As String() Implements IProfile.RegisteredDeviceTypes
+    Public ReadOnly Property RegisteredDeviceTypes() As ArrayList Implements IProfile.RegisteredDeviceTypes
         Get
             Dim RootKeys As Generic.SortedList(Of String, String)
-            Dim RegDevs As New Generic.List(Of String), DType As String
-            Dim RetVal() As String
+            'Dim RegDevs As New Generic.List(Of String), 
+            Dim DType As String
+            Dim RetVal As New ArrayList
 
             RootKeys = ProfileStore.EnumKeys("") ' Get root Keys
             TL.LogMessage("RegisteredDeviceTypes", "Found " & RootKeys.Count & " values")
@@ -156,14 +158,15 @@ Public Class Profile
                 If Right(kvp.Key, 8) = " Drivers" Then
                     DType = Left(kvp.Key, Len(kvp.Key) - 8)
                     TL.LogMessage("RegisteredDeviceTypes", "    Adding: " & DType)
-                    RegDevs.Add(DType) 'Only add keys that contain drivers
+                    'RegDevs.Add(DType) 'Only add keys that contain drivers
+                    RetVal.Add(DType)
                 End If
             Next
-            RegDevs.Sort() 'Sort the list into alphabetical order
-            ReDim RetVal(RegDevs.Count - 1)
-            RegDevs.CopyTo(RetVal) 'Copy values to array
-
-            Return RetVal
+            'RegDevs.Sort() 'Sort the list into alphabetical order
+            'ReDim RetVal(RegDevs.Count - 1)
+            'RegDevs.CopyTo(RetVal) 'Copy values to array
+            RetVal.Sort()
+            Return (RetVal)
 
         End Get
     End Property
