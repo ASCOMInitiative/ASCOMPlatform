@@ -87,37 +87,8 @@ namespace ASCOM.DriverAccess
             get { return (String)_memberFactory.CallMember(1, "SwitchType", new Type[] { }, new object[] { }); }
         }
 
-
         #endregion
     }
     #endregion
-
-    /// <summary>
-    /// The Rheostat switch is use with lower/upper limits with a setting
-    /// </summary>
-    public class Rheostat : IRheostat
-    {
-
-        #region IRheostat Members
-
-        /// <summary>
-        /// Name of the Rheostat
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// String array representing the state of the switch
-        /// First parameter is the current int setting 
-        /// Second Parameter is the upper int limit 
-        /// </summary>
-        public string[] State { get; set; }
-
-        /// <summary>
-        /// The type of device is a Rheostat
-        /// </summary>
-        public string DeviceType { get; set; }
-
-        #endregion
-    }
 
 }       
