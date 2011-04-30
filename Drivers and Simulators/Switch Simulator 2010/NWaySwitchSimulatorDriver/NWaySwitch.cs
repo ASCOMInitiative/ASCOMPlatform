@@ -6,9 +6,10 @@ using System.Text;
 using ASCOM.DeviceInterface;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.Simulator
+namespace ASCOM.NWaySwitchSimulator
 {
     [Guid("33A846B1-63EE-44B3-937C-5678E0F5B295"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
+    [ProgId("ASCOM.NWaySwitchSimulator.NWaySwitch")] //Force the ProgID we want to have
     class NWaySwitch : IControllerDevice
    {
         private string DeviceName;

@@ -7,7 +7,7 @@ using ASCOM.DeviceInterface;
 using ASCOM.DriverAccess;
 using ASCOM.Utilities;
 
-namespace ASCOM.Simulator
+namespace ASCOM.NWaySwitchSimulator
 {
     //
     // Your driver's DeviceID is ASCOM.Simulator.NWaySwitch
@@ -22,8 +22,8 @@ namespace ASCOM.Simulator
     /// This class is the implementation of the public ASCOM interface.
     /// </summary>
     [Guid("12730163-A85C-44CA-95AB-9E92FD9B8364"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    [ProgId(name)] //Force the ProgID we want to have
-    public class NWaySwitchController : IController, IDisposable
+    [ProgId("ASCOM.NWaySwitchSimulator.Controller")] //Force the ProgID we want to have
+    public class Controller : IController, IDisposable
     {
         #region Constants
 
@@ -92,10 +92,10 @@ namespace ASCOM.Simulator
         //
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NWaySwitchController"/> class.
+        /// Initializes a new instance of the <see cref="Controller"/> class.
         /// Must be public for COM registration.
         /// </summary>
-        public NWaySwitchController()
+        public Controller()
         {
             //new instance so load switches
             Profile.DeviceType = deviceType;
