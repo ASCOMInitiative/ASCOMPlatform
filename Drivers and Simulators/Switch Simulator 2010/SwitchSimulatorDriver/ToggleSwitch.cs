@@ -35,7 +35,7 @@ namespace ASCOM.Simulator
             get { return true; }
         }
 
-        public double Maximim
+        public double Maximum
         {
             get { return 1.0; }
         }

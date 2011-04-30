@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace ASCOM.Simulator
 {
     [Guid("33A846B1-63EE-44B3-937C-5678E0F5B295"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    class NWaySwitch
+    class NWaySwitch : IControllerDevice
    {
         private string DeviceName;
         private double CurrentValue = 0.0;
@@ -43,7 +43,7 @@ namespace ASCOM.Simulator
             get { return true; }
         }
 
-        public double Maximim
+        public double Maximum
         {
             get { return MaximumValue; }
         }
