@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
-
+using System.Collections;
 
 namespace ASCOM.Simulator
 {
@@ -83,7 +83,7 @@ namespace ASCOM.Simulator
             this.textBoxMinExposure.Text = theCamera.exposureMin.ToString(CultureInfo.InvariantCulture);
             //this.textboxExposureResolution.Text = camera.exposureResolution.ToString();
 
-            if (theCamera.gains != null && theCamera.gains.Length > 0)
+            if (theCamera.gains != null && theCamera.gains.Count > 0)
             {
                 radioButtonUseGains.Checked = true;
             }
@@ -143,9 +143,9 @@ namespace ASCOM.Simulator
             }
             else if (this.radioButtonUseGains.Checked)
             {
-                camera.gains= new string[]{ "ISO 100", "ISO 200", "ISO 400", "ISO 800", "ISO 1600"};
-                camera.gainMin = (short)camera.gains.GetLowerBound(0);
-                camera.gainMax = (short)(camera.gains.GetUpperBound(0));
+                camera.gains= new ArrayList{ "ISO 100", "ISO 200", "ISO 400", "ISO 800", "ISO 1600"};
+                camera.gainMin = (short) 100.0; // camera.gains.GetLowerBound(0); Chris, I've just hacked some values in here as I'm not sure what you intended to do, Peter
+                camera.gainMax = (short) 1600.0; // (camera.gains.GetUpperBound(0));
             }
             if (this.radioButtonUseMinAndMax.Checked)
             {
