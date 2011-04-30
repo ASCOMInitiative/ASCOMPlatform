@@ -6,11 +6,14 @@ using System.Text;
 using ASCOM.DeviceInterface;
 using System.Runtime.InteropServices;
 
-namespace ASCOM.NWaySwitchSimulator
+namespace ASCOM.MultiDeviceSimulator
 {
+    /// <summary>
+    /// Class to rspresent a controlled device
+    /// </summary>
     [Guid("33A846B1-63EE-44B3-937C-5678E0F5B295"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
-    [ProgId("ASCOM.NWaySwitchSimulator.NWaySwitch")] //Force the ProgID we want to have
-    class NWaySwitch : IControllerDevice
+    [ProgId("ASCOM.NWaySwitchSimulator.Device")] //Force the ProgID we want to have
+    public class Device : IControllerDevice
    {
         private string DeviceName;
         private double CurrentValue = 0.0;
@@ -18,12 +21,15 @@ namespace ASCOM.NWaySwitchSimulator
         private double MaximumValue = 10.0;
         private ArrayList DeviceStates = new ArrayList();
 
-        public NWaySwitch()
+        /// <summary>
+        /// Initialiser for the class
+        /// </summary>
+        public Device()
         {
             SetRangeValues();
         }
 
-        internal NWaySwitch(string Name, double Minimum, double Maximum, double Current)
+        internal Device(string Name, double Minimum, double Maximum, double Current)
         {
             DeviceName = Name; // Set the device name as supplied
             CurrentValue = Current; // Default the current state to off
@@ -34,31 +40,49 @@ namespace ASCOM.NWaySwitchSimulator
 
         #region IControllerDevice Members
 
+        /// <summary>
+        /// Flag indicating whether this class can return state
+        /// </summary>
         public bool CanReturnState
         {
             get { return true; }
         }
 
+        /// <summary>
+        /// Flag indicating that the state can be set on this device
+        /// </summary>
         public bool CanSetState
         {
             get { return true; }
         }
 
+        /// <summary>
+        /// Maximum value to which this device can be set
+        /// </summary>
         public double Maximum
         {
             get { return MaximumValue; }
         }
 
+        /// <summary>
+        /// Minimum value to which this device can be set
+        /// </summary>
         public double Minimum
         {
             get { return MinimumValue; }
         }
 
+       /// <summary>
+       /// Name of this device
+       /// </summary>
         public string Name
         {
             get { return DeviceName; }
         }
 
+        /// <summary>
+        /// Collection of device state objects describing the sates that this device can have
+        /// </summary>
         public ArrayList NamedDeviceStates
         {
             get 
@@ -67,6 +91,9 @@ namespace ASCOM.NWaySwitchSimulator
             }
         }
 
+        /// <summary>
+        /// Simple boolean on/off method for this device
+        /// </summary>
         public bool On
         {
             get
@@ -80,22 +107,36 @@ namespace ASCOM.NWaySwitchSimulator
             }
         }
 
+        /// <summary>
+        /// Required value for this device as last set
+        /// </summary>
         public double PresentSetPoint
         {
             get { return CurrentValue; }
         }
 
+        /// <summary>
+        /// Actual value of this device right now
+        /// </summary>
         public double PresentValue
         {
             get { return CurrentValue; }
         }
 
+       /// <summary>
+       /// Set the required value for this device
+       /// </summary>
+       /// <param name="NewValue"></param>
+       /// <returns></returns>
         public bool SetValue(double NewValue)
         {
             CurrentValue = NewValue ;
             return true; // OUr change is instantaneous so return true
         }
 
+        /// <summary>
+        /// Name of the current state for this device
+        /// </summary>
         public string StateName
         {
             get 
@@ -110,6 +151,9 @@ namespace ASCOM.NWaySwitchSimulator
             }
         }
 
+        /// <summary>
+        /// Size of the steps supported by this device
+        /// </summary>
         public double StepSize
         {
             get { return 1.0; }
@@ -143,5 +187,16 @@ namespace ASCOM.NWaySwitchSimulator
         }
 
        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Cleans up this object prior to disposal
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
+        #endregion
    }
 }

@@ -5,27 +5,33 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 
-namespace ASCOM.NWaySwitchSimulator
+namespace ASCOM.MultiDeviceSimulator
 {
+    /// <summary>
+    /// NWaySwitch setup form
+    /// </summary>
     public partial class SetupDialogForm : Form
     {
         #region Local Variables
 
         private IController NWaySwitchController = new Controller();
         private ArrayList ControllerDevices;
-        private NWaySwitch NWaySWitch1;
-        private NWaySwitch NWaySwitch2;
+        private Device NWaySWitch1;
+        private Device NWaySwitch2;
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initialiser for form
+        /// </summary>
         public SetupDialogForm()
         {
             InitializeComponent();
             ControllerDevices = NWaySwitchController.ControllerDevices;
-            NWaySWitch1 = (NWaySwitch)ControllerDevices[0];
-            NWaySwitch2 = (NWaySwitch)ControllerDevices[1];
+            NWaySWitch1 = (Device)ControllerDevices[0];
+            NWaySwitch2 = (Device)ControllerDevices[1];
 
             label5.Text = null;
             label10.Text = null;
@@ -125,7 +131,7 @@ namespace ASCOM.NWaySwitchSimulator
             if (Convert.ToInt16(comboBox1.Text) < Convert.ToInt16(comboBox2.Text))
             {
                 NWaySwitchController.SetControl(NWaySWitch1.Name, NWaySWitch1.PresentValue);
-                NWaySWitch1 = (NWaySwitch)NWaySwitchController.GetControl(NWaySWitch1.Name);
+                NWaySWitch1 = (Device)NWaySwitchController.GetControl(NWaySWitch1.Name);
                 UpdateGuage1();
                 label5.Text = @"Switch settings saved";
             }
@@ -151,7 +157,7 @@ namespace ASCOM.NWaySwitchSimulator
                 if (Convert.ToInt16(comboBox3.Text) < Convert.ToInt16(comboBox4.Text))
                 {
                     NWaySwitchController.SetControl(NWaySwitch2.Name, Val);
-                    NWaySwitch2 = (NWaySwitch)NWaySwitchController.GetControl(NWaySwitch2.Name);
+                    NWaySwitch2 = (Device)NWaySwitchController.GetControl(NWaySwitch2.Name);
                     UpdateGuage2();
                     label10.Text = @"Switch settings saved";
                 }
@@ -182,7 +188,7 @@ namespace ASCOM.NWaySwitchSimulator
         {
             label5.Text = null;
             NWaySwitchController.SetControl(NWaySWitch1.Name, NWaySWitch1.PresentValue);
-            NWaySWitch1 = (NWaySwitch)NWaySwitchController.GetControl(NWaySWitch1.Name);
+            NWaySWitch1 = (Device)NWaySwitchController.GetControl(NWaySWitch1.Name);
             UpdateGuage1();
         }
 
@@ -190,7 +196,7 @@ namespace ASCOM.NWaySwitchSimulator
         {
             label10.Text = null;
             NWaySwitchController.SetControl(NWaySwitch2.Name, NWaySwitch2.PresentValue);
-            NWaySwitch2 = (NWaySwitch)NWaySwitchController.GetControl(NWaySwitch2.Name);
+            NWaySwitch2 = (Device)NWaySwitchController.GetControl(NWaySwitch2.Name);
             UpdateGuage2();
         }
 

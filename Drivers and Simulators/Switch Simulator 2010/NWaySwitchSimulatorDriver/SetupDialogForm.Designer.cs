@@ -1,7 +1,7 @@
 ﻿using ASCOM.Controls;
 using ASCOM.DeviceInterface;
 
-namespace ASCOM.NWaySwitchSimulator
+namespace ASCOM.MultiDeviceSimulator
 {
     partial class SetupDialogForm
     {
@@ -73,9 +73,9 @@ namespace ASCOM.NWaySwitchSimulator
             // 
             // pictureBox1
             // 
-            this.pictureBox1.ErrorImage = global::ASCOM.NWaySwitchSimulator.Properties.Resources.ASCOM;
-            this.pictureBox1.Image = global::ASCOM.NWaySwitchSimulator.Properties.Resources.ASCOM;
-            this.pictureBox1.InitialImage = global::ASCOM.NWaySwitchSimulator.Properties.Resources.ASCOM;
+            this.pictureBox1.ErrorImage = global::ASCOM.MultiDeviceSimulator.Properties.Resources.ASCOM;
+            this.pictureBox1.Image = global::ASCOM.MultiDeviceSimulator.Properties.Resources.ASCOM;
+            this.pictureBox1.InitialImage = global::ASCOM.MultiDeviceSimulator.Properties.Resources.ASCOM;
             this.pictureBox1.Location = new System.Drawing.Point(443, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(50, 60);
@@ -553,7 +553,7 @@ namespace ASCOM.NWaySwitchSimulator
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "SetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "ASCOM NWaySwitch Simulator";
+            this.Text = "ASCOM Multi Device Simulator";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
