@@ -102,7 +102,7 @@ namespace ASCOM.NWaySwitchSimulator
             {
                 string NamedState = "Unknown"; // Initialise the value
 
-                foreach (ControllerDeviceState State in NamedDeviceStates) // Check each named state and save the namecorresponding to the current StartValue
+                foreach (ASCOM.Simulator.ControllerDeviceState State in NamedDeviceStates) // Check each named state and save the namecorresponding to the current StartValue
                 {
                     if ((CurrentValue >= State.StartValue) & (CurrentValue <= State.EndValue)) NamedState = State.Name;
                 }
@@ -136,10 +136,10 @@ namespace ASCOM.NWaySwitchSimulator
         private void SetRangeValues()
         {
             DeviceStates.Clear();
-            DeviceStates.Add(new ControllerDeviceState(MinimumValue, MinimumValue + 0.5 * (MaximumValue - MinimumValue), "LOW!"));
-            DeviceStates.Add(new ControllerDeviceState(MinimumValue + 0.5 * (MaximumValue - MinimumValue), MinimumValue + 0.7 * (MaximumValue - MinimumValue), "Normal")); 
-            DeviceStates.Add(new ControllerDeviceState(MinimumValue + 0.7 * (MaximumValue - MinimumValue), MinimumValue + 0.85 * (MaximumValue - MinimumValue), "High"));
-            DeviceStates.Add(new ControllerDeviceState(MinimumValue + 0.85 * (MaximumValue - MinimumValue), MaximumValue, "WARNING!"));
+            DeviceStates.Add(new ASCOM.Simulator.ControllerDeviceState(MinimumValue, MinimumValue + 0.5 * (MaximumValue - MinimumValue), "LOW!"));
+            DeviceStates.Add(new ASCOM.Simulator.ControllerDeviceState(MinimumValue + 0.5 * (MaximumValue - MinimumValue), MinimumValue + 0.7 * (MaximumValue - MinimumValue), "Normal"));
+            DeviceStates.Add(new ASCOM.Simulator.ControllerDeviceState(MinimumValue + 0.7 * (MaximumValue - MinimumValue), MinimumValue + 0.85 * (MaximumValue - MinimumValue), "High"));
+            DeviceStates.Add(new ASCOM.Simulator.ControllerDeviceState(MinimumValue + 0.85 * (MaximumValue - MinimumValue), MaximumValue, "WARNING!"));
         }
 
        #endregion
