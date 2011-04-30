@@ -140,7 +140,7 @@
     <SdkLinkType>Msdn</SdkLinkType>
     <FrameworkVersion>.NET 3.5</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
-    <SyntaxFilters>CSharp, VisualBasic, VisualBasicUsage, CPlusPlus</SyntaxFilters>
+    <SyntaxFilters>Standard</SyntaxFilters>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
@@ -185,6 +185,8 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Examples\DriverAccess.aml" />
+    <None Include="Examples\DriverAccess.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
     <None Include="Developer Information\Gauge Controls.aml" />

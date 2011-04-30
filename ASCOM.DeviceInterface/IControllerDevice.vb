@@ -41,7 +41,7 @@ Public Interface IControllerDevice
     ''' minimum value of "1" or "100" for a "full on" power controller.
     ''' If CanReturnState is TRUE then get is MANDATORY, otherwise OPTIONAL
     ''' </summary>
-    ReadOnly Property Maximim() As Double
+    ReadOnly Property Maximum() As Double
 
     ''' <summary>
     ''' MANDATORY - Readonly Flag indicating whether this controller has a continuous range i.e. is analogue in nature or whether it
