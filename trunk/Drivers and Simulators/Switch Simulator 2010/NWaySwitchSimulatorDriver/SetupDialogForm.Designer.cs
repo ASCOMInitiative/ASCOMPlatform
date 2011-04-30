@@ -1,7 +1,7 @@
 ﻿using ASCOM.Controls;
 using ASCOM.DeviceInterface;
 
-namespace ASCOM.Simulator
+namespace ASCOM.NWaySwitchSimulator
 {
     partial class SetupDialogForm
     {
@@ -73,9 +73,9 @@ namespace ASCOM.Simulator
             // 
             // pictureBox1
             // 
-            this.pictureBox1.ErrorImage = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.pictureBox1.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.pictureBox1.InitialImage = global::ASCOM.Simulator.Properties.Resources.ASCOM;
+            this.pictureBox1.ErrorImage = global::ASCOM.NWaySwitchSimulator.Properties.Resources.ASCOM;
+            this.pictureBox1.Image = global::ASCOM.NWaySwitchSimulator.Properties.Resources.ASCOM;
+            this.pictureBox1.InitialImage = global::ASCOM.NWaySwitchSimulator.Properties.Resources.ASCOM;
             this.pictureBox1.Location = new System.Drawing.Point(443, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(50, 60);
@@ -346,6 +346,7 @@ namespace ASCOM.Simulator
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(221, 45);
             this.trackBar2.TabIndex = 41;
+            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TrackBar2MouseUp);
             // 
             // button8

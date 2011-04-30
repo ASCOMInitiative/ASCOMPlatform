@@ -8,7 +8,7 @@
     <ProjectGuid>{F5A9727B-B55C-46FC-A4DC-C7AA55B20BFA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ASCOM.Simulator</RootNamespace>
+    <RootNamespace>ASCOM.NWaySwitchSimulator</RootNamespace>
     <AssemblyName>ASCOM.NWaySwitchSimulator.Controller</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

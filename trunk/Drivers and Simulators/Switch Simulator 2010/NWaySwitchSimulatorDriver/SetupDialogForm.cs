@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 
-namespace ASCOM.Simulator
+namespace ASCOM.NWaySwitchSimulator
 {
     public partial class SetupDialogForm : Form
     {
         #region Local Variables
 
-        private IController NWaySwitchController = new NWaySwitchController();
+        private IController NWaySwitchController = new Controller();
         private ArrayList ControllerDevices;
         private NWaySwitch NWaySWitch1;
         private NWaySwitch NWaySwitch2;
@@ -83,9 +83,9 @@ namespace ASCOM.Simulator
             aGauge3.RangeStartValue = (guage2Max * 9) / 10;
             aGauge3.RangeEndValue = guage2Max * 201 / 200;
 
-            trackBar2.Minimum = Convert.ToInt16(guage2Min);
-            trackBar2.Maximum = Convert.ToInt16(guage2Max);
-            trackBar2.Value = guage2Value;
+            trackBar2.Minimum = Convert.ToInt16(guage2Min * Convert.ToSingle(10.0));
+            trackBar2.Maximum = Convert.ToInt16(guage2Max * Convert.ToSingle(10.0));
+            trackBar2.Value =  Convert.ToInt16(guage2Value * Convert.ToSingle(10.0));
 
             comboBox3.Text = guage2Min.ToString();
             comboBox4.Text = guage2Max.ToString();
@@ -173,8 +173,8 @@ namespace ASCOM.Simulator
             NWaySWitch1.SetValue(Convert.ToDouble(trackBar1.Value));
             aGauge1.Value = trackBar1.Value;
 
-            NWaySwitch2.SetValue( Convert.ToDouble(trackBar2.Value));
-            aGauge3.Value = trackBar2.Value;
+            NWaySwitch2.SetValue(Convert.ToDouble(trackBar2.Value) / 10.0);
+            aGauge3.Value = trackBar2.Value / Convert.ToSingle(10.0);
             txtPowerWarning.Text = NWaySwitch2.StateName;
         }
 
