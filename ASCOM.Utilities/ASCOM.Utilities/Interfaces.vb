@@ -922,9 +922,9 @@ Namespace Interfaces
         ''' List the device types registered in the Profile store
         ''' </summary>
         ''' <value>List of registered device types</value>
-        ''' <returns>A sorted string array of device types</returns>
+        ''' <returns>An ArrayList of device types</returns>
         ''' <remarks>Use this to find which types of device are registered in the Profile store.</remarks>
-        <DispId(2)> ReadOnly Property RegisteredDeviceTypes() As String()
+        <DispId(2)> ReadOnly Property RegisteredDeviceTypes() As ArrayList
 
         ''' <summary>
         ''' List the devices of a given device type that are registered in the Profile store

@@ -11,7 +11,7 @@ Public Class ConnectForm
     Private Const CB_SHOWDROPDOWN = &H14F
 
     Private Sub ConnectForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim DeviceTypes() As String, Profile As New ASCOM.Utilities.Profile
+        Dim DeviceTypes As ArrayList, Profile As New ASCOM.Utilities.Profile
 
         AddHandler cmbDeviceType.SelectedIndexChanged, AddressOf DevicetypeChangedhandler
         Try

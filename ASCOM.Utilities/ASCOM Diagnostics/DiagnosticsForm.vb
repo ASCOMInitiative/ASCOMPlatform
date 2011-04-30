@@ -2912,10 +2912,10 @@ Public Class DiagnosticsForm
             End Try
 
             'Registered device types test
-            Dim DevTypes As String()
+            Dim DevTypes As ArrayList
             Try
                 DevTypes = AscomUtlProf.RegisteredDeviceTypes
-                TL.LogMessage("ProfileTest", "DeviceTypes - found " & DevTypes.Length & " device types")
+                TL.LogMessage("ProfileTest", "DeviceTypes - found " & DevTypes.Count & " device types")
                 For Each DeviceType As String In DevTypes
                     TL.LogMessage("ProfileTest", "DeviceTypes - " & DeviceType)
                 Next
@@ -4024,7 +4024,7 @@ Public Class DiagnosticsForm
 
             'Get COM registration for all registered devices 
             Dim PR As New Profile
-            Dim DeviceTypes() As String, Devices As ArrayList
+            Dim DeviceTypes As ArrayList, Devices As ArrayList
             DeviceTypes = PR.RegisteredDeviceTypes
             TL.LogMessage("DriverCOMRegistration", "Start of process")
 
@@ -4671,7 +4671,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub ScanProfile()
-        Dim ASCOMProfile As Utilities.Profile, DeviceTypes() As String, Devices As ArrayList
+        Dim ASCOMProfile As Utilities.Profile, DeviceTypes As ArrayList, Devices As ArrayList
         Dim CompatibiityMessage32Bit, CompatibiityMessage64Bit As String
         Try
             ASCOMProfile = New Utilities.Profile
