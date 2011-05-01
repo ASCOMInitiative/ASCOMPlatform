@@ -104,8 +104,8 @@
             this.cmbTime.Name = "cmbTime";
             this.cmbTime.Size = new System.Drawing.Size(43, 21);
             this.cmbTime.TabIndex = 1;
-            this.cmbTime.Validating += new System.ComponentModel.CancelEventHandler(this.cmbTime_Validating);
             this.cmbTime.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbTime_KeyPress);
+            this.cmbTime.Validating += new System.ComponentModel.CancelEventHandler(this.cmbTime_Validating);
             // 
             // cmbSlots
             // 
@@ -125,9 +125,9 @@
             this.cmbSlots.Name = "cmbSlots";
             this.cmbSlots.Size = new System.Drawing.Size(44, 21);
             this.cmbSlots.TabIndex = 0;
-            this.cmbSlots.Validating += new System.ComponentModel.CancelEventHandler(this.cmbSlots_Validating);
-            this.cmbSlots.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbSlots_KeyPress);
             this.cmbSlots.SelectedValueChanged += new System.EventHandler(this.cmbSlots_SelectedValueChanged);
+            this.cmbSlots.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbSlots_KeyPress);
+            this.cmbSlots.Validating += new System.ComponentModel.CancelEventHandler(this.cmbSlots_Validating);
             // 
             // picASCOM
             // 

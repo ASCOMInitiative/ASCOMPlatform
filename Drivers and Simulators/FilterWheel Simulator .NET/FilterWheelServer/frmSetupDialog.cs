@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -67,7 +68,10 @@ namespace ASCOM.Simulator
             }
 
             // Give 'em a bit of info...
-            lblDriverInfo.Text = ProductName + " Version " + ProductVersion;
+            var appName = Assembly.GetAssembly(this.GetType()).Location;
+            var assemblyName = AssemblyName.GetAssemblyName(appName);
+
+            lblDriverInfo.Text = ProductName + " Version " + assemblyName.Version;
 
             EnableDisableControls();
 
