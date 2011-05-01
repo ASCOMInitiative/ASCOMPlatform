@@ -13,7 +13,7 @@ namespace ASCOM
     [Serializable]
     public class MethodNotImplementedException : NotImplementedException
     {
-        [NonSerialized] const string csMessage = "Method {0}";
+        [NonSerialized] const string csMessage = "Method {0} is not implemented in this driver";
         [NonSerialized] readonly string method = "Unknown";
 
         /// <summary>

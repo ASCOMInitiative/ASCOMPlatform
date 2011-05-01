@@ -357,6 +357,7 @@ if Variable REMOVE Equals TRUE
   Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Comment: Unregister assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u $COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value RC: $RC$ Unregister ASCOMMasterInterfaces typelib (at end of file)
   Set Variable PROGRESS to 50
@@ -394,6 +395,8 @@ if Variable REMOVE Equals TRUE
     Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Exceptions (at end of file)
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Utilities (at end of file)
+    Comment: Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.DeviceInterfaces.dll" (WAIT, get result into variable RC)
+    Comment: Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister DeviceInterfaces (at end of file)
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   end
    
@@ -578,6 +581,7 @@ else
     Install Assembly ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to Global Assembly Cache
     Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.pdb to $WINDIR$\Symbols\dll
     Install Assembly ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to Global Assembly Cache
+    Comment: Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6
     Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.pdb to $WINDIR$\Symbols\dll
     Install Assembly ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to Global Assembly Cache
     Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6
@@ -642,14 +646,14 @@ else
     Install Files ..\..\..\..\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
     Install Files ..\..\..\..\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
     Comment: Switch simulator
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.dll to $COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.pdb to $COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
     Comment: N Way Switch simulator
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySwitchSimulator.Controller.dll to $COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller
+    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySwitchSimulator.Controller.pdb to $COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller
     Comment: Rheostat simulator
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
+    Comment: Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
+    Comment: Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
     Comment: Telescope simulator
     Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
@@ -663,6 +667,8 @@ else
     Comment: Dome simulator
     Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.dll to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
     Install Files ..\..\..\..\Drivers and Simulators\Dome Simulator .NET\bin\Release\ASCOM.Simulator.Dome.pdb to $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome
+    Comment: Platform Update Checker
+    Install Files ..\..\..\..\CheckForUpdates.js to $TARGETDIR$\Tools
     [END REGION]
     [DEFINE REGION: Platform 6 Content]
     Comment: Platform 6 Documents
@@ -684,7 +690,7 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Check for Updates to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\How to get support to http://ascom-standards.org/Support/index.htm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
@@ -897,13 +903,14 @@ else
         Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register in-process simulator DLL files with Codebase option
         Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch\ASCOM.Simulator.Switch.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch\ASCOM.NWaySimulator.Switch.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller\ASCOM.ToggleSwitchSimulator.Controller.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller\ASCOM.NWaySwitchSimulator.Controller.dll, set the code base in the registry
+        Comment: Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
         Comment: Register these LocalServer drivers using the -register option
         Set Variable PROGRESS to 40
@@ -920,6 +927,7 @@ else
           Set Variable RC1 to 1000
           Set Variable RC2 to 1000
           Set Variable RC3 to 1000
+          Set Variable RC3A to 1000
           Set Variable RC4 to 1000
           Set Variable RC5 to 1000
           Set Variable RC6 to 1000
@@ -934,20 +942,22 @@ else
           Write into Text File $SETUPLOG$ from Value RC: $RC2$ RegAsm64 - Exceptions (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
           Write into Text File $SETUPLOG$ from Value RC: $RC3$ RegAsm64 - Utilities (at end of file)
+          Comment: Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.DeviceInterfaces.dll" (WAIT, get result into variable RC3A)
+          Comment: Write into Text File $SETUPLOG$ from Value RC: $RC3A$ RegAsm64 - DeviceInterfaces (at end of file)
           Set Variable PROGRESS to 50
           Comment: Register simulators
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
-          Write into Text File $SETUPLOG$ from Value RC: $RC4$ RegAsm64 - CAmera Simualotr 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value RC: $RC4$ RegAsm64 - Camera Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
           Write into Text File $SETUPLOG$ from Value RC: $RC5$ RegAsm64 - Focus Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC6)
           Write into Text File $SETUPLOG$ from Value RC: $RC6$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch\ASCOM.Simulator.Switch.dll" /codebase (WAIT, get result into variable RC7)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller\ASCOM.ToggleSwitchSimulator.Controller.dll" /codebase (WAIT, get result into variable RC7)
           Write into Text File $SETUPLOG$ from Value RC: $RC7$ RegAsm64 - Switch Simulator 6 (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch\ASCOM.NWaySimulator.Switch.dll" /codebase (WAIT, get result into variable RC8)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller\ASCOM.NWaySwitchSimulator.Controller.dll" /codebase (WAIT, get result into variable RC8)
           Write into Text File $SETUPLOG$ from Value RC: $RC8$ RegAsm64 - NWay Switch Simulator (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll" /codebase (WAIT, get result into variable RC9)
-          Write into Text File $SETUPLOG$ from Value RC: $RC9$ RegAsm64 - Rheostat Simulator 6 (at end of file)
+          Comment: Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll" /codebase (WAIT, get result into variable RC9)
+          Comment: Write into Text File $SETUPLOG$ from Value RC: $RC9$ RegAsm64 - Rheostat Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC10)
           Write into Text File $SETUPLOG$ from Value RC: $RC10$ RegAsm64 - Dome Simulator 6 (at end of file)
           Set Variable PROGRESS to 60
