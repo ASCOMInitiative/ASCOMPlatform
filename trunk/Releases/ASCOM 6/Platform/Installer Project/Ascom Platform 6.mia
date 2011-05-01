@@ -357,6 +357,7 @@ Register Assembly
 Register Assembly
 Register Assembly
 Register Assembly
+Register Assembly
 Run Program
 Write to Text File
 Set Variable
@@ -388,6 +389,8 @@ Write to Text File
 Run Program
 Write to Text File
 Set Variable
+Run Program
+Write to Text File
 Run Program
 Write to Text File
 Run Program
@@ -579,26 +582,27 @@ Install Assembly
 Install Files
 Install Assembly
 Install Files
-Install Assembly
 Install Files
-Install Files
-Install Assembly
-Install Files
-Install Files
-Comment
-Install Assembly
-Install Files
-Install Assembly
-Install Files
-Install Assembly
-Install Files
-Comment
 Install Assembly
 Install Files
 Install Files
 Install Assembly
 Install Files
 Install Files
+Comment
+Install Assembly
+Install Files
+Install Assembly
+Install Files
+Install Assembly
+Install Files
+Comment
+Install Assembly
+Install Files
+Install Files
+Install Assembly
+Install Files
+Install Files
 Install Files
 Install Files
 Install Files
@@ -662,6 +666,8 @@ Install Files
 Install Files
 Comment
 Install Files
+Install Files
+Comment
 Install Files
 Code Folding Region
 Code Folding Region
@@ -897,6 +903,7 @@ Comment
 Register Assembly
 Register Assembly
 Register Assembly
+Register Assembly
 Comment
 Register Assembly
 Register Assembly
@@ -927,7 +934,10 @@ Set Variable
 Set Variable
 Set Variable
 Set Variable
+Set Variable
 Comment
+Run Program
+Write to Text File
 Run Program
 Write to Text File
 Run Program
@@ -1436,6 +1446,7 @@ $
 {27AE1D34-A6C7-4184-AA6D-7D85A2E621E9}
 {22C21972-97F6-4F02-974F-1473497CE0AA}
 {AC68CB62-E23B-49FE-ABF1-57FC53E74CD0}
+{B048D634-63BA-4CEB-B437-44B3C8025644}
 {BF164208-5DCC-44E8-BF70-A15EC9C00CCE}
 {BCC8D060-3EAE-4F5B-8178-E23B9B3A201D}
 {F297A69F-0084-4814-BC25-4EBFB42E8CF1}
@@ -1473,6 +1484,8 @@ $
 {678E6BC9-3E74-4137-A75E-C52FAA42D2E0}
 {48D62BC5-881F-41FB-9CCC-CAD3988BA77C}
 {63AB4068-E50C-44C8-9D3C-3E582D39E573}
+{B83931F2-0688-4B16-B9A9-D91E57BBDE67}
+{4CB745B6-BE0C-4A42-B985-DAC7D4066C58}
 {5AD3CD1B-F827-4E23-8E1C-EE59902C3A28}
 {8054FC18-E111-4EAF-A863-D5BB7F422B2D}
 {66801B8B-C0D8-48C6-A12B-4748463B05E8}
@@ -1657,6 +1670,7 @@ $
 {BEE12C15-363C-46CF-92A0-8892203E4E35}
 {C18CB2B5-2084-43A1-81B3-442AC1BE435A}
 {1F7F0B19-8C68-4676-8D62-2733FBD50DD8}
+{2E058EE3-6E21-466C-90E1-EB7F757D2D2B}
 {946608CD-9B20-4CA9-AF26-4BE80484BEF9}
 {9D6171F5-D1AF-4295-936D-1D9FF8E5AB1F}
 {0808F9DA-4556-4B78-8A2F-902825998095}
@@ -1742,6 +1756,8 @@ $
 {E4BD3BAD-742E-4FA3-9897-33D89C733B63}
 {8A0D9007-00C8-4439-A840-D4992663DF79}
 {0EE29C13-31FA-4268-A37F-108FB5DEC408}
+{1153B0BF-76A4-400E-8E7D-955C4522B9E6}
+{E8E2B0EC-A116-4D7B-A19A-8FBE37DC02C3}
 {8E533E94-64B1-4FB0-83CD-4BB04897DC11}
 {CD7873F1-AC8F-4CCF-8011-27292C19C5C7}
 {97E1885F-326F-49A8-96A2-DECDAB7F74A1}
@@ -1976,6 +1992,7 @@ $
 {EA6F7500-BB6F-4DDC-9472-DE5FB1943EFF}
 {2C58F602-87BF-4B13-A035-83A3F6060D94}
 {206E1B18-A161-498F-9968-B748D3DDC934}
+{CF180575-7DFC-42AC-A95C-2AC503F1D898}
 {469D4C55-3205-41C3-ADE4-C470DFA5C5C8}
 {3469CD81-C205-492B-8892-D6E39D4264D7}
 {D4A4E267-98B9-4301-A1FD-51707C471B6B}
@@ -1999,6 +2016,7 @@ $
 {FDE8FC4A-EE31-4D9E-89BE-C86AB7D9A184}
 {EC9F8C58-A8A2-410E-A25D-BA182C0E64CE}
 {3166B7DF-E407-40EB-B57F-E85BED12806C}
+{CB51391B-411D-40A7-9B8D-2858B0A9D503}
 {553A1261-720E-4D06-91CD-A7C8D1C62FDB}
 {E592FF0A-5A19-423B-A68C-B871CCCAC30C}
 {7F4DB837-7227-4CCC-A030-29AEDC014926}
@@ -2013,6 +2031,8 @@ $
 {7F29EACF-AA44-40BA-81B1-D53BD4741CB6}
 {96AC015B-4E15-4DF0-88FC-D2AF2AB99F98}
 {AC1CD61E-6A40-4628-A66D-3F852A048B96}
+{DDAB4CB9-F497-4FF1-A98E-39FD07A4FD1B}
+{77E3CE4E-6F49-455F-A17C-CFC3933EAEEE}
 {90F0721B-B7B6-4004-895F-492E839BB859}
 {A4EFFAB3-AE40-4408-806C-0FE2C996D250}
 {64978E4D-6D08-4CC9-8D00-4EC967F0D3C5}
@@ -2394,6 +2414,8 @@ Check for Platform 4.1
 Determine if Acrobat is installed
 {AB9DB5B7-F760-45E0-9BA5-3A3631CB70E8}
 Remove unwanted registry key from previous beta installers - This can be removed for the release candidate installers
+{1153B0BF-76A4-400E-8E7D-955C4522B9E6}
+Platform Update Checker
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -2673,6 +2695,9 @@ ACROBATKEY$MYAH$MYAH$FALSE
 {12F96767-F1D8-47EB-B0F5-7EB994DC6902}
 NATIVE_OVERWRITE$MYAH$MYAH$FALSE
 TRUE
+{CB51391B-411D-40A7-9B8D-2858B0A9D503}
+RC3A$MYAH$MYAH$FALSE
+1000
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -3689,9 +3714,9 @@ FALSE
 FALSE
 FALSE
 {9F3AA306-A5BE-4F19-900F-BD07FF37958B}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.pdb
+..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySwitchSimulator.Controller.pdb
 FALSE|
-$COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
+$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller
 FALSE
 FALSE
 FALSE
@@ -3702,9 +3727,9 @@ FALSE
 FALSE
 FALSE
 {C9C1BCC8-5A5E-4EB6-A491-F8CEC916C032}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySimulator.Switch.dll
+..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySwitchSimulator.Controller.dll
 FALSE|
-$COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
+$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller
 FALSE
 FALSE
 FALSE
@@ -3715,9 +3740,9 @@ FALSE
 FALSE
 FALSE
 {BEE82166-7FA2-4954-9886-6E30FE50389F}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.pdb
+..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.pdb
 FALSE|
-$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
+$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
 FALSE
 FALSE
 FALSE
@@ -3728,9 +3753,9 @@ FALSE
 FALSE
 FALSE
 {B2033235-4A1F-48E2-AE6F-8DFDF6C076D2}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.Simulator.Switch.dll
+..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.dll
 FALSE|
-$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
+$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
 FALSE
 FALSE
 FALSE
@@ -4923,6 +4948,32 @@ FALSE
 FALSE
 FALSE
 FALSE
+{E8E2B0EC-A116-4D7B-A19A-8FBE37DC02C3}
+..\..\..\..\CheckForUpdates.js
+FALSE|
+$TARGETDIR$\Tools
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{2E058EE3-6E21-466C-90E1-EB7F757D2D2B}
+..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll
+FALSE|
+$COMMONFILES$\ASCOM\Platform\v6
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {48D62BC5-881F-41FB-9CCC-CAD3988BA77C}
 $REGASM64$
 TRUE
@@ -5028,13 +5079,13 @@ RC9
 {8C2CFC94-254E-4792-8CB8-6B1760713479}
 $REGASM64$
 TRUE
-"$COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch\ASCOM.NWaySimulator.Switch.dll" /codebase
+"$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller\ASCOM.NWaySwitchSimulator.Controller.dll" /codebase
 TRUE
 RC8
 {D28BD31C-D1AE-4DF0-B271-379055D41520}
 $REGASM64$
 TRUE
-"$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch\ASCOM.Simulator.Switch.dll" /codebase
+"$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller\ASCOM.ToggleSwitchSimulator.Controller.dll" /codebase
 TRUE
 RC7
 {C103EE64-B2A4-4148-A891-FD3FC92A59C5}
@@ -5191,6 +5242,18 @@ RC
 $SUPPORTDIR$\UninstallAscom.exe
 TRUE
 
+TRUE
+RC
+{DDAB4CB9-F497-4FF1-A98E-39FD07A4FD1B}
+$REGASM64$
+TRUE
+"$COMMONFILES$\ASCOM\Platform\v6\ASCOM.DeviceInterfaces.dll"
+TRUE
+RC3A
+{B83931F2-0688-4B16-B9A9-D91E57BBDE67}
+$REGASM64$
+TRUE
+/unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.DeviceInterfaces.dll"
 TRUE
 RC
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
@@ -5534,7 +5597,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 |
 0|
 {A00B40A9-560A-4850-81C1-02FD19E0B8FD}
-$TARGETDIR$\Tools\ProfileExplorer.exe
+$TARGETDIR$\Tools\CheckForUpdates.js
 Check for Updates
 $SHORTCUTFILES$\ASCOM Platform 6
 
@@ -6653,7 +6716,7 @@ FALSE
 TRUE
 {80DED6DD-FB95-42B1-BEA2-8D00BD222BC9}
 $SETUPLOG$
-RC: $RC4$ RegAsm64 - CAmera Simualotr 6
+RC: $RC4$ RegAsm64 - Camera Simulator 6
 FALSE
 TRUE
 {44D7980A-2783-44B7-9782-46FC2F31A6BC}
@@ -6844,6 +6907,16 @@ TRUE
 {FDE62906-2A35-40E9-A9EF-95EDF8D7221A}
 $SETUPLOG$
 Uninstalling Platform 4...
+FALSE
+TRUE
+{77E3CE4E-6F49-455F-A17C-CFC3933EAEEE}
+$SETUPLOG$
+RC: $RC3A$ RegAsm64 - DeviceInterfaces
+FALSE
+TRUE
+{4CB745B6-BE0C-4A42-B985-DAC7D4066C58}
+$SETUPLOG$
+RC: $RC$ RegAsm Unregister DeviceInterfaces
 FALSE
 TRUE
 {E42FC0DC-6FA0-4ACD-867C-2F3AEF24B539}
@@ -7336,9 +7409,9 @@ $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll|TRUE|TRUE
 {0A6B8DA2-9660-41B5-8427-A704F23D5907}
 $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll|TRUE|TRUE
 {360640D9-B0CF-4F98-B661-AA775D20A2F1}
-$COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch\ASCOM.NWaySimulator.Switch.dll|TRUE|TRUE
+$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller\ASCOM.NWaySwitchSimulator.Controller.dll|TRUE|TRUE
 {AD8018E1-0ED4-4DAC-B5EF-99BE95283BA1}
-$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch\ASCOM.Simulator.Switch.dll|TRUE|TRUE
+$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller\ASCOM.ToggleSwitchSimulator.Controller.dll|TRUE|TRUE
 {080711C2-108F-4E3E-A141-96499A39A7A8}
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll|TRUE|TRUE
 {D4A4E267-98B9-4301-A1FD-51707C471B6B}
@@ -7367,6 +7440,10 @@ ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946f
 ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {9DE41C41-0C0E-4505-BF24-588600BFBEF8}
 ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
+{CF180575-7DFC-42AC-A95C-2AC503F1D898}
+ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
+{B048D634-63BA-4CEB-B437-44B3C8025644}
+ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE|FALSE
 $
 
 
@@ -7727,6 +7804,7 @@ C
 
 
 
+C
 
 
 
@@ -7764,246 +7842,8 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+C
+C
 
 
 
@@ -8259,6 +8099,8 @@ C
 
 
 
+C
+C
 
 
 
@@ -8318,6 +8160,251 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
 
 
 
@@ -8447,6 +8534,16 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -14,7 +14,7 @@ namespace ASCOM
     [Serializable]
     public class PropertyNotImplementedException : NotImplementedException
     {
-        [NonSerialized] const string csMessage = "Property {0} {1}";
+        [NonSerialized] const string csMessage = "Property {0} {1} is not implemented in this driver";
         [NonSerialized] readonly bool accessorSet;
         [NonSerialized] readonly string property = "Unknown"; // Should not need initialization (typ.)
 
