@@ -86,6 +86,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xUnit", "xUnit", "{74D351E3-1E5A-451D-AA70-D3FA28CF1F54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomActions", "CustomActions\CustomActions.csproj", "{C9BD6FCB-97C7-4096-B917-6E59B6E2C684}"
+	ProjectSection(ProjectDependencies) = postProject
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4} = {84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls", "ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj", "{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}"
 EndProject
@@ -192,6 +195,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EraseTemplates", "Releases\ASCOM 6\EraseTemplates\EraseTemplates\EraseTemplates.csproj", "{779D544E-9B02-4D78-8AD8-F53C05975D6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientToolkitSampleCSharp", "ASCOM Platform Examples\ASCOM.DriverAccess Example\ClientToolkitSampleCSharp.csproj", "{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallAwareHack", "InstallAwareHack\InstallAwareHack.csproj", "{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1246,6 +1251,26 @@ Global
 		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{87939133-B6B9-4677-9CB3-5EFBC6EF5A2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug Quick|Mixed Platforms.Build.0 = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Peter|Any CPU.ActiveCfg = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Peter|Any CPU.Build.0 = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Peter|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Peter|Mixed Platforms.Build.0 = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Peter|x86.ActiveCfg = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1286,6 +1311,7 @@ Global
 		{C9BD6FCB-97C7-4096-B917-6E59B6E2C684} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{9EE7C0D0-D2D7-496B-8989-C44ECD53A45A} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{D360F204-4C59-4AE9-B39A-14E08568F8CC} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
+		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 		{62A5D47B-BF6E-4799-9629-14E81DEFE794} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 		{4FFFD202-81D4-4549-880B-09B640D72C1D} = {6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6}
@@ -1317,13 +1343,13 @@ Global
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal
