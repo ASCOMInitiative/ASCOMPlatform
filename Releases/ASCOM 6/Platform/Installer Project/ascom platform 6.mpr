@@ -1184,9 +1184,9 @@ FALSE
 
 checkmsi31.mia
 setupmsi31.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet351.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet2sp2.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet3sp2.mia
+checknet2sp2.mia
+checknet3sp2.mia
+..\..\..\..\..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet351.mia
 $
 FALSE
 
