@@ -22,6 +22,7 @@
 //                      to oldest order. Find the ASCOM registry data on both 32- and 64-bit
 //                      systems. Make it obvious that you can come back here to go to the d/l
 //                      page for the first of any remaining available updates.
+// 02-May-11    rbd     Fix case where conform and/or dev content not installed
 // ------------------------------------------------------------------------------------------------
 
 var POPTITLE = "Check ASCOM Updates";
@@ -84,14 +85,20 @@ function getXmlHttp()
 //
 // Get local versions
 //
-var regRoot;
+var regRoot, pd, cv, dv, pv;
 try { SH.RegRead(REGROOT64); regRoot = REGROOT64; }
 catch(e) { regRoot = REGROOT32;}
 //WScript.Echo("**using " + regRoot);
-var pd = SH.RegRead(regRoot);                                   // Platform description
-var cv = SH.RegRead(regRoot + "Conform Version");
-var dv = SH.RegRead(regRoot + "Developer Tools Version");
-var pv = SH.RegRead(regRoot + "Platform Version");
+
+try { pd = SH.RegRead(regRoot); }                       // If this or next not here, major trouble!
+catch(e) { SH.Popup("Fatal installer error, sorry.", 10, POPTITLE, 16); }
+try { pv = SH.RegRead(regRoot + "Platform Version"); }  // (should "never happen")
+catch(e) { SH.Popup("Fatal installer error, sorry.", 10, POPTITLE, 16); }
+
+try { cv = SH.RegRead(regRoot + "Conform Version"); }   // Next 2 default to ""
+catch(e) { cv = ""; }
+try { dv = SH.RegRead(regRoot + "Developer Tools Version"); }
+catch(e) { dv = ""; }
 
 //
 // Get remote versions. XMLHTTP will automatically use default proxy if any.
@@ -118,8 +125,8 @@ catch(ex)
 }
 
 var np = isRemoteNewer(pv, rpv);
-var nd = (dv !== "") && isRemoteNewer(dv, rdv);
-var nc = (cv !== "") && isRemoteNewer(cv, rcv);
+var nd = (dv !== "") && isRemoteNewer(dv, rdv);         // "" means not installed
+var nc = (cv !== "") && isRemoteNewer(cv, rcv);         // (see above)
 
 if (!np && !nd && !nc)
 {
