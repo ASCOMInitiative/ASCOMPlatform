@@ -90,8 +90,24 @@
         </Context>
         <Categories />
         <Variables>
-          <Variable name="Destructor" expression="" initialRange="0" />
+          <Variable name="Destructor" expression="typeName()" initialRange="-1" />
         </Variables>
+        <CustomProperties />
+      </Template>
+      <Template uid="f2d9997b-a6e0-47d3-919b-04646a852927" shortcut="DisposeBase" description="IDisposable implementation for a base class" text="#Region &quot;IDisposable pattern for a base class.&quot;&#xA;&#xA;Private disposed As Boolean&#xA;&#xA;''' &lt;summary&gt;&#xA;'''   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.&#xA;'''   Implements &lt;see cref = &quot;IDisposable&quot; /&gt;.&#xA;''' &lt;/summary&gt;&#xA;Public Sub Dispose()&#xA;	Dispose(True)&#xA;	GC.SuppressFinalize(Me)&#xA;End Sub&#xA;&#xA;Protected Overridable Sub Dispose(disposing As Boolean)&#xA;	If Not disposed Then&#xA;				' Free other state (managed objects).&#xA;		If disposing Then&#xA;		End If&#xA;		' Free own state (unmanaged objects).&#xA;		' Set large fields to null.&#xA;		disposed = True&#xA;	End If&#xA;End Sub&#xA;&#xA;' Use C# destructor syntax for finalization code.&#xA;Protected Overrides Sub Finalize()&#xA;	Try&#xA;		Dispose(False)&#xA;	Finally&#xA;		MyBase.Finalize()&#xA;	End Try&#xA;End Sub&#xA;&#xA;#End Region&#xD;&#xA;" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <VBContext context="TypeMember" />
+        </Context>
+        <Categories />
+        <Variables />
+        <CustomProperties />
+      </Template>
+      <Template uid="cf1fd4a9-1a7d-4346-bf66-8b7645b9eeb1" shortcut="DisposeDerived" description="IDisposable implementation for a derived class" text="#Region &quot;IDisposable pattern for a subclass.&quot;&#xA;&#xA;Private disposed As Boolean&#xA;&#xA;''' &lt;summary&gt;&#xA;'''   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.&#xA;'''   Implements &lt;see cref = &quot;IDisposable&quot; /&gt;.&#xA;''' &lt;/summary&gt;&#xA;Public Sub Dispose()&#xA;	Dispose(True)&#xA;	GC.SuppressFinalize(Me)&#xA;End Sub&#xA;&#xA;Protected Overrides Sub Dispose(disposing As Boolean)&#xA;	If Not disposed Then&#xA;				' Free other state (managed objects).&#xA;		If disposing Then&#xA;		End If&#xA;		' Free own state (unmanaged objects).&#xA;		' Set large fields to null.&#xA;		disposed = True&#xA;	End If&#xA;	MyBase.Dispose(disposing)&#xA;End Sub&#xA;&#xA;' The derived class does not have a Finalize method&#xA;' or a Dispose method without parameters because it inherits&#xA;' them from the base class.&#xA;&#xA;#End Region&#xA;" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <VBContext context="TypeMember" />
+        </Context>
+        <Categories />
+        <Variables />
         <CustomProperties />
       </Template>
     </LiveTemplates>
