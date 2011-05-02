@@ -1137,6 +1137,23 @@ B
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
 $
 1
@@ -1144,23 +1161,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Beta 3E
+ASCOM Platform 6 Beta 3F
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
 6.0.0.0
 English
-ASCOM Platform 6 Beta 3E
+ASCOM Platform 6 Beta 3F
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{C46A30FE-8FC7-431D-B42C-C4AAA2E5033D}
+{B8F28232-1456-41DF-9EE7-1F3E71612B2B}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Beta3E
+ASCOMPlatform6Beta3F
 TRUE
 FALSE
 
@@ -1186,7 +1203,7 @@ checkmsi31.mia
 setupmsi31.mia
 checknet2sp2.mia
 checknet3sp2.mia
-..\..\..\..\..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet351.mia
+..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet351.mia
 $
 FALSE
 

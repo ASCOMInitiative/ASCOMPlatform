@@ -135,6 +135,12 @@ Comment
 Write to Text File
 Write to Text File
 Write to Text File
+If
+Write to Text File
+Else
+Write to Text File
+End
+Write to Text File
 Write to Text File
 Write to Text File
 Write to Text File
@@ -407,10 +413,13 @@ Delete Files Recursive
 Delete Files Recursive
 Delete Files Recursive
 Delete Files Recursive
+MessageBalloon
 Apply Changes
+Write to Text File
 If
 If
 Remove Assemblies
+Write to Text File
 End
 End
 Set Variable
@@ -436,6 +445,7 @@ End
 End
 Comment
 Comment
+Write to Text File
 If
 Comment
 If
@@ -685,129 +695,136 @@ Install Files
 Code Folding Region
 Code Folding Region
 Comment
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
+Write Registry
 Code Folding Region
 Code Folding Region
 Comment
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
-Write Registry
+Comment
+Write to Text File
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Write to Text File
 Code Folding Region
 Code Folding Region
 Comment
@@ -1224,6 +1241,12 @@ $
 {BDF36361-992B-4F67-B771-7F323A060213}
 {81D4F714-F031-4D54-8B0E-7EA386E20E75}
 {0C7E3735-B788-4B41-B837-637CF908DB8A}
+{D737C87C-AF0C-4634-A500-A1B6D7FEB88C}
+{3B8870DA-FC9E-4113-810E-A082190E79F7}
+{144193B6-CE89-4531-95AF-F6B79A782BAD}
+{8FF5B37F-5AC3-4D0B-ADBC-4C493DAC7C11}
+{1635A265-6079-4293-8AF8-7F6585B6B8D6}
+{C9907B22-B80D-48C7-826E-7BA63F5BE793}
 {18630770-FB36-45B0-9202-124149059034}
 {6DCC3BAD-22E8-436D-B22C-7C99D4A9502B}
 {91FB1AB9-5720-449B-B191-505ED3E24638}
@@ -1496,10 +1519,13 @@ $
 {7FA2ED9C-6A5D-4DA1-89F2-E55B6DADB009}
 {447DC3ED-B58C-4959-85DE-66BD23F0A325}
 {59A8841A-2E31-40F1-8206-697DE44E1C3E}
-{14526782-1447-443E-9FE9-18A20ABA4A38}
+{3A8EE8FE-7527-46CA-B2F2-1EA633568A26}
+{0EC33107-3DF5-43C3-83BB-FDADE6B5EF50}
+{241BC69A-964A-4EEF-8FAF-6AAFF94589AE}
 {4C1FC37D-EDF5-491E-A6B1-5F98C0EE74AF}
 {425FE3C8-211F-4256-850A-BAEA084953A3}
 {6261CE6D-F203-4FCD-840E-00ECB56337A6}
+{8EDF61B9-C40E-4590-ACAE-45921F4319F8}
 {9A5129B2-F8FF-4DFB-86F1-256E6CCDCF2C}
 {6EC8BFC8-352F-42E0-848F-295C8B89BAC2}
 {ACA726D6-5C19-4268-8395-86F72A3A7A17}
@@ -1525,6 +1551,7 @@ $
 {55EF38E0-34DB-457A-9A51-95680FFBF64C}
 {3467A547-2976-429A-A9A1-A7C020B46B31}
 {CFB8909B-8F03-4CF3-8F60-1E31EE6499BC}
+{A42CF1A6-F51A-480B-AB0D-51177D576F83}
 {E6E97DFE-EBFE-42E2-9ACE-BF3F7891B369}
 {6AA43DB8-748C-489F-92EB-5226B7711316}
 {5559CD3F-962C-4641-979C-489DF5A39A10}
@@ -1772,33 +1799,6 @@ $
 {2C643623-35C4-4B6D-9075-95134D7D6DE8}
 {47BB85A9-6089-40A2-BB7A-A752AA6AB942}
 {63A1CB4C-FDC9-4825-86A7-11EBF1709C1F}
-{B4A827CE-8E03-435F-91BB-19738E634EAA}
-{AECD24EA-18E5-493D-B5E0-BBA1A2E547EA}
-{4EE4CCA4-A941-4452-9F9D-8BC3BF5DA93C}
-{D4B48972-F948-437C-B3FD-AE1D70B262DE}
-{A4C6DEFF-A268-44CF-BF3A-5C0B3C79BCBE}
-{D62479DF-014C-402B-9FBE-7AAA7D18419D}
-{E71EAAA7-D212-44FB-BFDC-4B42314D9820}
-{A00B40A9-560A-4850-81C1-02FD19E0B8FD}
-{3AFD8622-4EBC-4381-8334-AA9261721FC7}
-{19BD207B-3C31-4D77-876E-62945B949AED}
-{745B61A2-C273-464A-9CC6-E533FAFAC2E7}
-{9FCDA0D5-A706-4725-88CC-93DD07ED9124}
-{923EDBA1-42B1-4D7B-B672-C61CA14CBEE6}
-{F8D81638-4D0D-4E72-B41E-AFD7C8761842}
-{ADE477A6-6CDF-43AA-9774-2E19BA21C82D}
-{441EEEDB-F4D8-4451-933A-431D5E1D1EC2}
-{4E772BBE-ECBC-47D6-8573-B201DD2C2517}
-{0F94679B-D91B-42C0-8B7E-0D96AAF6C70C}
-{45054592-F0E7-4930-89EB-94C8BA2BAF1B}
-{20248839-E14C-4F5D-826F-43B47EC1DDF4}
-{5675434D-C7AC-4207-8175-74B79BBBC027}
-{F4A594F4-5EA5-4825-829B-B178B62F21AF}
-{15BD470F-ED6D-47DE-B8A6-B2F2234F3138}
-{52984EFB-923B-4484-B20F-7E17B1F15E98}
-{D53131D5-871F-4E13-A381-7F7E51A71473}
-{BAFA70EE-0160-47A5-AAB2-86A862BC4CD4}
-{F835C735-6E57-4DBC-A732-6BC06CB607B8}
 {604D2240-9E41-4A66-AF59-6978AD88110D}
 {FF37FEA3-3A9E-4EF1-AA83-98F386BB554A}
 {C79AABBA-45EF-4517-8FD9-7368CE67B3AE}
@@ -1886,7 +1886,11 @@ $
 {1DDCD4CB-4D72-4E5E-ACC1-65E7C3B23C28}
 {BD13406C-6E56-4A1D-A0D0-90F9750A9E16}
 {DE5AD0F2-57D5-4F8D-AD86-7BFE3BFD964D}
-{932BE122-68DD-400B-890E-E4F6BC954C51}
+{4B82FF86-08DB-4357-B3C9-ACEEA4760E95}
+{D005D94D-E773-462D-A222-095E4B185C7E}
+{32CEBC0B-E0E2-419A-A1D2-6252FF92610F}
+{20815A18-B1A4-4449-BA9C-2049DFA6B96F}
+{3AF61A6E-0425-43F2-9731-96BD7FBE2AA9}
 {95073C37-B561-4AFF-9F2F-BF7851C372F6}
 {4AFE8A99-1E2B-4E82-9759-065F4EDBF74F}
 {DB53B35F-416E-48BA-A7E2-C8157B4030D0}
@@ -1898,6 +1902,36 @@ $
 {0853E1B0-5515-4717-88E0-8A2977882E45}
 {7653D287-A413-450E-A782-DF14170DA6EE}
 {76115F24-8808-44EC-AEB6-F08A4E07EDFC}
+{C18794F7-E254-4834-A656-4C9D6693BF3F}
+{977AC1B0-F1BE-4842-90CD-8F7AE059AC61}
+{4AAF024B-1F71-4C2F-BC33-675E20C04034}
+{BE447C96-7DE1-4A72-AD92-CB4C56D3A26B}
+{F408B452-6A27-4915-A049-D21E2138FC23}
+{9469E59E-A8EF-4649-BA92-8396F0CC1A61}
+{70870DF3-F798-40B3-9E5F-15C080A938E5}
+{042045AC-127D-4E9F-A10A-EC38A24C312B}
+{F396F4E5-6EFC-4CE7-A8EA-AF048686E6CC}
+{B4A18B28-7A3F-4D5E-8B41-03E57412D959}
+{D1DCD5D1-7B82-4D54-8848-383E7E83E045}
+{B20408C8-EC3B-446B-A3B3-124C62434784}
+{D1D78677-32AF-4E85-B43E-53C57B29FFCB}
+{71C0904E-9B76-49AE-95C0-3EEB72119C98}
+{49C8A4F0-B891-4903-994B-EBEA249248D9}
+{10F7703F-F195-4D6D-B8B4-765F9230CB72}
+{3FB6086A-E1B3-466A-86AA-49027E1CBA47}
+{1E6AE9D2-6353-4E6F-AB69-568D125ECF5B}
+{1DC33AC4-B7FF-46AC-9EB3-19F7AB204528}
+{32722E76-A1CD-49AD-9970-9F5CD57EEC8A}
+{B2DD97BA-AF71-4E57-BF52-5C923CAF7886}
+{F6F288FC-EC44-43FA-B8A7-423917595944}
+{21A81DD1-0D42-46F4-95F3-723A228A7022}
+{78C884B0-AD58-4354-AD72-9D7643279653}
+{494D0686-431B-442B-B3C5-5EE7B90CAFF0}
+{A228BF9E-0DEF-47CB-B26F-87EE4A84FB85}
+{89AD8832-8907-4C06-84E6-CA1C868F2471}
+{0340B240-2C74-444A-A521-34C6C4F341EF}
+{1937E33B-4B56-4399-B8F6-6AD18C88D6B5}
+{5D237D3B-5CFE-4064-86D3-664EFF08501D}
 {61F26F95-F38F-47DE-B264-711D7373BB84}
 {A9FAC6E7-A7B1-450B-BB7C-970CD4BE8494}
 {84D7BDB2-1906-470A-B9BC-948F23D84057}
@@ -2290,8 +2324,6 @@ Install in 64bit mode if we are running on a 64bit OS
 Remove TLB files created by RegAsm when application is uninstalled
 {FF37FEA3-3A9E-4EF1-AA83-98F386BB554A}
 Create registry keys
-{AECD24EA-18E5-493D-B5E0-BBA1A2E547EA}
-Menu shortcuts
 {97E1885F-326F-49A8-96A2-DECDAB7F74A1}
 Platform 6 Documents
 {E4BD3BAD-742E-4FA3-9897-33D89C733B63}
@@ -2416,6 +2448,10 @@ Determine if Acrobat is installed
 Remove unwanted registry key from previous beta installers - This can be removed for the release candidate installers
 {1153B0BF-76A4-400E-8E7D-955C4522B9E6}
 Platform Update Checker
+{4AAF024B-1F71-4C2F-BC33-675E20C04034}
+Install after main MSI install has run so we pick up correct icons from applicaitons
+{977AC1B0-F1BE-4842-90CD-8F7AE059AC61}
+Menu shortcuts
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -3188,6 +3224,11 @@ ACROBATKEY
 0
 
 TRUE
+{D737C87C-AF0C-4634-A500-A1B6D7FEB88C}
+NATIVE_ENGINE
+0
+TRUE
+FALSE
 {90829DD8-0835-4E22-9C27-A67324C55271}
 $TITLE$ Setup Error
 This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -3385,7 +3426,7 @@ progress
 SUCCESS
 TRUE
 FALSE
-{14526782-1447-443E-9FE9-18A20ABA4A38}
+{0EC33107-3DF5-43C3-83BB-FDADE6B5EF50}
 progress
 SUCCESS
 FALSE
@@ -3545,7 +3586,7 @@ FALSE
 FALSE
 FALSE
 {24933A7F-0F7D-40F2-94FF-39A254A77098}
-..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico
+..\Files\ASCOM.ico
 FALSE|
 $COMMONFILES$\ASCOM\Platform
 FALSE
@@ -5019,7 +5060,7 @@ RC
 {BF164208-5DCC-44E8-BF70-A15EC9C00CCE}
 $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe
 TRUE
--u $COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb
+-u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb"
 TRUE
 RC
 {8AABAE28-A63B-495F-A464-9B611C394E07}
@@ -5366,137 +5407,137 @@ policy.5.5.ASCOM.Utilities.dll
 GACINSTALLRC
 TRUE
 
-{BAFA70EE-0160-47A5-AAB2-86A862BC4CD4}
+{0340B240-2C74-444A-A521-34C6C4F341EF}
 $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
 ASCOM Dome Control
 $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{D53131D5-871F-4E13-A381-7F7E51A71473}
+{89AD8832-8907-4C06-84E6-CA1C868F2471}
 $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
 POTH Help
 $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-$COMMONFILES$\ASCOM\Platform\Help.ico
+C:\InstallAware-ASCOM-Build\Help.ico
 |
 0|
-{52984EFB-923B-4484-B20F-7E17B1F15E98}
+{A228BF9E-0DEF-47CB-B26F-87EE4A84FB85}
 $COMMONFILES$\ASCOM\Telescope\POTH.exe
 POTH Scope-Dome Hub
 $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{15BD470F-ED6D-47DE-B8A6-B2F2234F3138}
+{494D0686-431B-442B-B3C5-5EE7B90CAFF0}
 $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
 Pipe Help
 $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
-$COMMONFILES$\ASCOM\Platform\Help.ico
+C:\InstallAware-ASCOM-Build\Help.ico
 |
 0|
-{F4A594F4-5EA5-4825-829B-B178B62F21AF}
+{78C884B0-AD58-4354-AD72-9D7643279653}
 $COMMONFILES$\ASCOM\Telescope\Pipe.exe
 Pipe Connection Monitor
 $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{5675434D-C7AC-4207-8175-74B79BBBC027}
+{21A81DD1-0D42-46F4-95F3-723A228A7022}
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
 Telescope Simulator .NET
 $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{20248839-E14C-4F5D-826F-43B47EC1DDF4}
+{F6F288FC-EC44-43FA-B8A7-423917595944}
 $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
 Telescope Simulator
 $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{45054592-F0E7-4930-89EB-94C8BA2BAF1B}
+{B2DD97BA-AF71-4E57-BF52-5C923CAF7886}
 $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
 Switch Simulator
 $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{0F94679B-D91B-42C0-8B7E-0D96AAF6C70C}
+{32722E76-A1CD-49AD-9970-9F5CD57EEC8A}
 $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
 Rotator Simulator .NET
 $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{4E772BBE-ECBC-47D6-8573-B201DD2C2517}
+{1DC33AC4-B7FF-46AC-9EB3-19F7AB204528}
 $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
 Focus Simulator
 $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{441EEEDB-F4D8-4451-933A-431D5E1D1EC2}
+{1E6AE9D2-6353-4E6F-AB69-568D125ECF5B}
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
 FilterWheel Simulator .NET
 $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{ADE477A6-6CDF-43AA-9774-2E19BA21C82D}
+{3FB6086A-E1B3-466A-86AA-49027E1CBA47}
 $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
 FilterWheel Simulator
 $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{F8D81638-4D0D-4E72-B41E-AFD7C8761842}
+{10F7703F-F195-4D6D-B8B4-765F9230CB72}
 $COMMONFILES$\ASCOM\Dome\DomeSim.exe
 Dome Simulator
 $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{923EDBA1-42B1-4D7B-B672-C61CA14CBEE6}
+{49C8A4F0-B891-4903-994B-EBEA249248D9}
 $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 ASCOM Diagnostics
 $SHORTCUTFILES$\ASCOM Platform 6\Tools
@@ -5506,7 +5547,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 |
 0|
-{9FCDA0D5-A706-4725-88CC-93DD07ED9124}
+{71C0904E-9B76-49AE-95C0-3EEB72119C98}
 $TARGETDIR$\Tools\ProfileExplorer.exe
 Profile Explorer
 $SHORTCUTFILES$\ASCOM Platform 6\Tools
@@ -5516,27 +5557,27 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 |
 0|
-{745B61A2-C273-464A-9CC6-E533FAFAC2E7}
+{D1D78677-32AF-4E85-B43E-53C57B29FFCB}
 $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
 Show Platform Version
 $SHORTCUTFILES$\ASCOM Platform 6
 Display the ASCOM Platform version
 
 
-
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{19BD207B-3C31-4D77-876E-62945B949AED}
+{B20408C8-EC3B-446B-A3B3-124C62434784}
 http://ascom-standards.org/Support/index.htm
 How to get support
 $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-$COMMONFILES$\ASCOM\Platform\Internet.ico
+C:\InstallAware-ASCOM-Build\Internet.ico
 |
 0|
-{3AFD8622-4EBC-4381-8334-AA9261721FC7}
+{D1DCD5D1-7B82-4D54-8848-383E7E83E045}
 $TARGETDIR$\Docs\PlatformHelp.chm
 Help and Device Interface Standards
 $SHORTCUTFILES$\ASCOM Platform 6
@@ -5546,37 +5587,47 @@ $SHORTCUTFILES$\ASCOM Platform 6
 
 |
 0|
-{E71EAAA7-D212-44FB-BFDC-4B42314D9820}
+{B4A18B28-7A3F-4D5E-8B41-03E57412D959}
+$TARGETDIR$\Tools\CheckForUpdates.js
+Check for Updates
+$SHORTCUTFILES$\ASCOM Platform 6
+
+
+
+C:\InstallAware-ASCOM-Build\Internet.ico
+|
+0|
+{F396F4E5-6EFC-4CE7-A8EA-AF048686E6CC}
 $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
 ASCOM User Guide
 $SHORTCUTFILES$\ASCOM Platform 6
 ASCOM User Guide
 
 
-$COMMONFILES$\ASCOM\Platform\ASCOM.ico
+C:\InstallAware-ASCOM-Build\ASCOM.ico
 |
 0|
-{D62479DF-014C-402B-9FBE-7AAA7D18419D}
+{042045AC-127D-4E9F-A10A-EC38A24C312B}
 http://www.ascom-standards.org/Downloads/Index.htm
 ASCOM Drivers and Downloads
 $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-$COMMONFILES$\ASCOM\Platform\Internet.ico
+C:\InstallAware-ASCOM-Build\Internet.ico
 |
 0|
-{A4C6DEFF-A268-44CF-BF3A-5C0B3C79BCBE}
+{70870DF3-F798-40B3-9E5F-15C080A938E5}
 http://ascom-standards.org/Community/Partners.htm
 ASCOM Compatible Software
 $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-$COMMONFILES$\ASCOM\Platform\Internet.ico
+C:\InstallAware-ASCOM-Build\Internet.ico
 |
 0|
-{D4B48972-F948-437C-B3FD-AE1D70B262DE}
+{9469E59E-A8EF-4649-BA92-8396F0CC1A61}
 $TARGETDIR$\Tools\ProfileExplorer.exe
 ProfileExplorer
 $DESKTOPDIR$
@@ -5586,7 +5637,7 @@ $DESKTOPDIR$
 
 |
 0|
-{4EE4CCA4-A941-4452-9F9D-8BC3BF5DA93C}
+{F408B452-6A27-4915-A049-D21E2138FC23}
 $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 ASCOM Diagnostics
 $DESKTOPDIR$
@@ -5594,16 +5645,6 @@ $DESKTOPDIR$
 
 $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
-|
-0|
-{A00B40A9-560A-4850-81C1-02FD19E0B8FD}
-$TARGETDIR$\Tools\CheckForUpdates.js
-Check for Updates
-$SHORTCUTFILES$\ASCOM Platform 6
-
-
-
-$COMMONFILES$\ASCOM\Platform\Internet.ico
 |
 0|
 {3B1E2BB5-391A-47E8-8128-A9856C0D9CC0}
@@ -6396,7 +6437,39 @@ SOFTWARE\$WOW6432NODE$ASCOM\Platform
 Description of installed ASCOM Platform
 TRUE
 FALSE
-{932BE122-68DD-400B-890E-E4F6BC954C51}
+{D005D94D-E773-462D-A222-095E4B185C7E}
+0
+2
+SOFTWARE\$WOW6432NODE$ASCOM\Platform
+Platform Name
+$TITLE$
+TRUE
+FALSE
+{20815A18-B1A4-4449-BA9C-2049DFA6B96F}
+0
+2
+SOFTWARE\$WOW6432NODE$ASCOM\Platform
+Platform Revision Code
+$REVISIONCODE$
+TRUE
+FALSE
+{32CEBC0B-E0E2-419A-A1D2-6252FF92610F}
+0
+2
+SOFTWARE\$WOW6432NODE$ASCOM\Platform
+Platform Product Code
+$PRODUCTCODE$
+TRUE
+FALSE
+{4B82FF86-08DB-4357-B3C9-ACEEA4760E95}
+0
+2
+SOFTWARE\$WOW6432NODE$ASCOM\Platform
+Platform Installation Date
+$DATE$ $TIME$
+TRUE
+FALSE
+{3AF61A6E-0425-43F2-9731-96BD7FBE2AA9}
 0
 2
 SOFTWARE\$WOW6432NODE$ASCOM\Platform
@@ -6831,7 +6904,7 @@ FALSE
 TRUE
 {8DDF0592-A0B9-49FF-BBE0-412A87520791}
 $SETUPLOG$
-RecommendedUpgrade $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$
+Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$
 FALSE
 TRUE
 {BB73ACBB-49B8-4599-9EE8-7C47E4767929}
@@ -6846,7 +6919,7 @@ FALSE
 TRUE
 {BCC8D060-3EAE-4F5B-8178-E23B9B3A201D}
 $SETUPLOG$
-RC: $RC$ Unregister ASCOMMasterInterfaces typelib
+RC: $RC$ Unregister ASCOM Master Interfaces typelib
 FALSE
 TRUE
 {FCA8F504-34F0-483E-9F76-14113051E265}
@@ -6917,6 +6990,46 @@ TRUE
 {4CB745B6-BE0C-4A42-B985-DAC7D4066C58}
 $SETUPLOG$
 RC: $RC$ RegAsm Unregister DeviceInterfaces
+FALSE
+TRUE
+{8EDF61B9-C40E-4590-ACAE-45921F4319F8}
+$SETUPLOG$
+Removing unpinned assemblies
+FALSE
+TRUE
+{3B8870DA-FC9E-4113-810E-A082190E79F7}
+$SETUPLOG$
+Installer mode: Native Engine
+FALSE
+TRUE
+{C9907B22-B80D-48C7-826E-7BA63F5BE793}
+$SETUPLOG$
+
+FALSE
+TRUE
+{8FF5B37F-5AC3-4D0B-ADBC-4C493DAC7C11}
+$SETUPLOG$
+Installer mode: MSI Engine
+FALSE
+TRUE
+{A42CF1A6-F51A-480B-AB0D-51177D576F83}
+$SETUPLOG$
+Native Engine Mode is: $NATIVE_ENGINE$
+FALSE
+TRUE
+{241BC69A-964A-4EEF-8FAF-6AAFF94589AE}
+$SETUPLOG$
+Uninstall return code: $SUCCESS$
+FALSE
+TRUE
+{1937E33B-4B56-4399-B8F6-6AD18C88D6B5}
+$SETUPLOG$
+Completed shortcuts
+FALSE
+TRUE
+{BE447C96-7DE1-4A72-AD92-CB4C56D3A26B}
+$SETUPLOG$
+Creating shortcuts
 FALSE
 TRUE
 {E42FC0DC-6FA0-4ACD-867C-2F3AEF24B539}
@@ -7113,12 +7226,6 @@ Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of
 {604D2240-9E41-4A66-AF59-6978AD88110D}
 TRUE
 Registry Keys
-{F835C735-6E57-4DBC-A732-6BC06CB607B8}
-FALSE
-Copy of Copy of Copy of Copy of Copy of 
-{B4A827CE-8E03-435F-91BB-19738E634EAA}
-TRUE
-Create shortcuts
 {63A1CB4C-FDC9-4825-86A7-11EBF1709C1F}
 FALSE
 Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
@@ -7143,6 +7250,12 @@ Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {758AAC2D-3459-407F-8191-92E679FD1E67}
 TRUE
 Platform 5 files
+{5D237D3B-5CFE-4064-86D3-664EFF08501D}
+FALSE
+Copy of Copy of Copy of Copy of Copy of 
+{C18794F7-E254-4834-A656-4C9D6693BF3F}
+TRUE
+Create shortcuts
 {81E456DE-9615-4118-B11E-BBDB1B7F7C21}
 DISKSPACE
 C:
@@ -7174,11 +7287,11 @@ $COMMONFILES$\ASCOM\ASCOM.Simulator.Camera.tlb
 {2CD25337-6EB1-45DC-9ECD-7ECD82B37AEB}
 $COMMONFILES$\ASCOM\ASCOM.Simulator.SafetyMonitor.tlb
 {7FA2ED9C-6A5D-4DA1-89F2-E55B6DADB009}
-$COMMONFILES$\ASCOM\ASCOM.NWaySimulator.Switch.tlb
+$COMMONFILES$\ASCOM\ASCOM.NWaySwitchSimulator.Controller.tlb
 {447DC3ED-B58C-4959-85DE-66BD23F0A325}
 $COMMONFILES$\ASCOM\ASCOM.RheostatSimulator.Switch.tlb
 {59A8841A-2E31-40F1-8206-697DE44E1C3E}
-$COMMONFILES$\ASCOM\ASCOM.Simulator.Switch.tlb
+$COMMONFILES$\ASCOM\ASCOM.ToggleSwitchSimulator.Controller.tlb
 {E183A086-9B33-4451-91C8-077FCF6B8BBC}
 ASCOM Platform Maintenance
 Upgrading Platform 6 - Installing new version...
@@ -7354,6 +7467,11 @@ ASCOM Platform Maintenance
 Removing Platform 4...
 0
 10
+{3A8EE8FE-7527-46CA-B2F2-1EA633568A26}
+ASCOM Platform Maintenance
+Removing ASCOM Platform
+0
+5
 {5AD3CD1B-F827-4E23-8E1C-EE59902C3A28}
 TRUE
 FALSE
@@ -7446,8 +7564,8 @@ ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de79
 ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE|FALSE
 $
 
-
-
+C
+C
 
 
 
@@ -7615,18 +7733,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -7637,12 +7743,6 @@ C
 
 
 
-
-
-
-
-
-C
 
 
 
@@ -7675,6 +7775,30 @@ C
 
 
 
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
 C
 
 
@@ -7703,230 +7827,6 @@ C
 
 C
 C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -8066,6 +7966,234 @@ C
 
 
 
+C
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8101,6 +8229,13 @@ C
 
 C
 C
+
+
+
+
+
+
+
 
 
 
@@ -8534,6 +8669,23 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

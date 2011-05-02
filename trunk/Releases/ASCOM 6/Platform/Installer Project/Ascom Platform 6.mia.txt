@@ -1,6 +1,6 @@
 Comment: Native Code Setup Engine 32 bit-64 bit Installer Project, overwrite newer files automatically
-Set Variable NATIVE_ENGINE to TRUE
-Set Variable NATIVE_OVERWRITE to TRUE
+Comment: Set Variable NATIVE_ENGINE to TRUE
+Comment: Set Variable NATIVE_OVERWRITE to TRUE
  
 [DEFINE REGION: Check Application Requirements]
 Get System Setting Administrator Rights into CHECKSYSTEM
@@ -135,13 +135,19 @@ Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TITLE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Installed $DATE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
+if Variable NATIVE_ENGINE Equals TRUE
+  Write into Text File $SETUPLOG$ from Value Installer mode: Native Engine (at end of file)
+else
+  Write into Text File $SETUPLOG$ from Value Installer mode: MSI Engine (at end of file)
+end
+Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value Win64Mode: $WIN64MODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value RegAsm: $REGASM$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ReggAsm64: $REGASM64$ (at end of file)
 Write into Text File $SETUPLOG$ from Value NGen64: $NGEN64$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ProgramFiles: $PROGRAMFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value CommonFiles: $COMMONFILES$ (at end of file)
-Write into Text File $SETUPLOG$ from Value RecommendedUpgrade $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
 [DEFINE REGION: Setup User Interview]
@@ -358,8 +364,8 @@ if Variable REMOVE Equals TRUE
   Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Comment: Unregister assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u $COMMONFILES$\ASCOM\Platform\AscomMasterInterfaces.tlb (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value RC: $RC$ Unregister ASCOMMasterInterfaces typelib (at end of file)
+  Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value RC: $RC$ Unregister ASCOM Master Interfaces typelib (at end of file)
   Set Variable PROGRESS to 50
    
   Comment: Remove 32bit native images
@@ -404,13 +410,16 @@ if Variable REMOVE Equals TRUE
   Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.Simulator.Camera.tlb
   Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.Simulator.Focuser.tlb
   Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.Simulator.SafetyMonitor.tlb
-  Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.NWaySimulator.Switch.tlb
-  Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.RheostatSimulator.Switch.tlb
-  Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.Simulator.Switch.tlb
+  Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.NWaySwitchSimulator.Controller.tlb
+  Comment: Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.RheostatSimulator.Switch.tlb
+  Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.ToggleSwitchSimulator.Controller.tlb
+  MessageBalloon: ASCOM Platform Maintenance, Removing ASCOM Platform
   Apply Uninstall (get result into variable SUCCESS)
+  Write into Text File $SETUPLOG$ from Value Uninstall return code: $SUCCESS$ (at end of file)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
       Remove Unpinned Assemblies
+      Write into Text File $SETUPLOG$ from Value Removing unpinned assemblies (at end of file)
     end
   end
   Set Variable PROGRESS to 100
@@ -430,12 +439,13 @@ else
       end
       if Variable REPAIR Equals TRUE
         Comment: Prevent rollback when repairing existing installation
-        Set Variable NATIVE_ROLLBACK to FALSE
+        Comment: Set Variable NATIVE_ROLLBACK to FALSE
       end
     end
   end
   Comment: Install/Re-Install product
   Comment: Only try and remove Platform 5 and 5.5 if we are in initial install mode and not Repair or Maintain or Remove
+  Write into Text File $SETUPLOG$ from Value Native Engine Mode is: $NATIVE_ENGINE$ (at end of file)
   if Variable MAINTENANCE not Equals TRUE
     Comment: Only try and remove Platform 5 if we are not upgrading a previous Platform 6 install
     if Variable REQUIRESUPGRADE Equals FALSE
@@ -674,7 +684,7 @@ else
     Comment: Platform 6 Documents
     Install Files ..\Files\Help.ico to $COMMONFILES$\ASCOM\Platform
     Install Files ..\Files\Internet.ico to $COMMONFILES$\ASCOM\Platform
-    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Resources\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
+    Install Files ..\Files\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Help\Help\PlatformHelp.chm to $TARGETDIR$\Docs
@@ -682,33 +692,6 @@ else
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
-    [END REGION]
-    [DEFINE REGION: Create shortcuts]
-    Comment: Menu shortcuts
-    Create Shortcut $DESKTOPDIR$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $DESKTOPDIR$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\How to get support to http://ascom-standards.org/Support/index.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
     [END REGION]
     [DEFINE REGION: Registry Keys]
     Comment: Create registry keys
@@ -797,6 +780,10 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\WScript.Exe, True
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\Astroart.Exe, True
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Name, $TITLE$
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Product Code, $PRODUCTCODE$
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Revision Code, $REVISIONCODE$
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Version, $VERSION$
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Rotator Drivers\,  (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\SafetyMonitor Drivers\,  (permanent)
@@ -808,6 +795,36 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
+    [END REGION]
+    [DEFINE REGION: Create shortcuts]
+    Comment: Menu shortcuts
+    Comment: Install after main MSI install has run so we pick up correct icons from applicaitons
+    Write into Text File $SETUPLOG$ from Value Creating shortcuts (at end of file)
+    Create Shortcut $DESKTOPDIR$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $DESKTOPDIR$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\How to get support to http://ascom-standards.org/Support/index.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
+    Write into Text File $SETUPLOG$ from Value Completed shortcuts (at end of file)
     [END REGION]
     [DEFINE REGION: Additional clean-up when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
