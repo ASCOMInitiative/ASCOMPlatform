@@ -1764,50 +1764,28 @@ namespace ASCOM.Simulator
 
                 this.canPulseGuide = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_CanPulseGuide, string.Empty, "false"), CultureInfo.InvariantCulture);
 
-                // default to min = max && gains = null - no gain control
-                this.gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
-                this.gainMax = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMax", string.Empty, "0"), CultureInfo.InvariantCulture);
-                this.gains = null;
-                // check the length of the gains string, non zero and we set Gains strings
-                // TODO sort this, it affects the code analysis
-                //if (Convert.ToInt16(profile.GetValue(s_csDriverID, "Gains", string.Empty, "0"), CultureInfo.InvariantCulture) > 0)
-                //{
-                //    this.gains = new string[] { "ISO 100", "ISO 200", "ISO 400", "ISO 800", "ISO 1600" };
-                //    this.gainMin = (short)this.gains.GetLowerBound(0);
-                //    this.gainMax = (short)this.gains.GetUpperBound(0);
-                //}
-                // and if the Gains parameter is zero we just use the min and max.
+                string gs = profile.GetValue(s_csDriverID, "Gains");
+                if (string.IsNullOrEmpty(gs))
+                {
+                    this.gainMin = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMin", string.Empty, "0"), CultureInfo.InvariantCulture);
+                    this.gainMax = Convert.ToInt16(profile.GetValue(s_csDriverID, "GainMax", string.Empty, "0"), CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    string[] gsa = gs.Split(',');
+                    this.gains = new ArrayList();
+                    foreach (var item in gsa)
+                    {
+                        this.gains.Add(item);
+                    }
+                    this.gainMin = 0;
+                    this.gainMax = (short)(this.gains.Count - 1);
+                }
             }
         }
 
         private void SaveToProfile()
         {
-            // this seems to be required to keep FxCop happy,
-            // if this is in the using section we get warning CA2000
-            string gs, gMin, gMax;
-
-            if (this.gains != null && this.gains.Count > 0)
-            {
-                // gain control using Gains string array
-                gs = this.gains.Count.ToString(CultureInfo.InvariantCulture);
-                gMin = Convert.ToString(this.gains[0], CultureInfo.InvariantCulture);
-                gMax = Convert.ToString(this.gains[gains.Count - 1], CultureInfo.InvariantCulture);
-            }
-            else if (this.gainMax > this.gainMin)
-            {
-                // gain control using min and max
-                gs = "0";
-                gMin = this.gainMin.ToString(CultureInfo.InvariantCulture);
-                gMax = this.gainMax.ToString(CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                // no gain control
-                gs = "0";
-                gMin = "0";
-                gMax = "0";
-            }
-
             using (Profile profile = new Profile(true))
             {
                 profile.DeviceType = "Camera";
@@ -1845,14 +1823,34 @@ namespace ASCOM.Simulator
 
                 profile.WriteValue(s_csDriverID, STR_CanPulseGuide, this.canPulseGuide.ToString(CultureInfo.InvariantCulture));
 
-                // entertaining setting the gain options.
-                // TODO review this, it may not be correct.
-                profile.WriteValue(s_csDriverID, "GainMin", this.gainMin.ToString(CultureInfo.InvariantCulture));
-                profile.WriteValue(s_csDriverID, "GainMax", this.gainMax.ToString(CultureInfo.InvariantCulture));
-
-                profile.WriteValue(s_csDriverID, "Gains", gs);
-                profile.WriteValue(s_csDriverID, "GainMin", gMin);
-                profile.WriteValue(s_csDriverID, "GainMax", gMax);
+                if (this.gains != null && this.gains.Count > 0)
+                {
+                    // gain control using Gains string array
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    foreach (var item in this.gains)
+                    {
+                        if (sb.Length > 0)
+                            sb.Append(",");
+                        sb.Append(item.ToString());
+                    }
+                    profile.WriteValue(s_csDriverID, "Gains", sb.ToString());
+                    profile.WriteValue(s_csDriverID, "GainMin", "0");
+                    profile.WriteValue(s_csDriverID, "GainMax", Convert.ToString(gains.Count - 1, CultureInfo.InvariantCulture));
+                }
+                else if (this.gainMax > this.gainMin)
+                {
+                    // gain control using min and max
+                    profile.DeleteValue(s_csDriverID, "Gains");
+                    profile.WriteValue(s_csDriverID, "GainMin", this.gainMin.ToString(CultureInfo.InvariantCulture));
+                    profile.WriteValue(s_csDriverID, "GainMax", this.gainMax.ToString(CultureInfo.InvariantCulture));
+                }
+                else
+                {
+                    // no gain control
+                    profile.DeleteValue(s_csDriverID, "Gains");
+                    profile.DeleteValue(s_csDriverID, "GainMin");
+                    profile.DeleteValue(s_csDriverID, "GainMax");
+                }
             }
         }
 
