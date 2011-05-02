@@ -22,9 +22,10 @@ Comment: end
 [END REGION]
 Comment: Check that Platform 6 is already installed
 Set Variable PLATFORM6OK to FALSE
+Set Variable PLATFORMNAME to 
 Comment: Get Installed State for {8961E141-B307-4882-ABAD-77A3E76A40C1} into Variable PLATFORM6OK
-Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}\UninstallString into PLATFORM6OK
-if Variable PLATFORM6OK Equals 
+Read Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name into PLATFORMNAME
+if Variable PLATFORMNAME Equals 
   if Variable MAINTENANCE Equals FALSE
     Comment: No Platform 6 and we are installing so we have a problem and must signal it
     Set Variable PREREQ to TRUE
@@ -322,6 +323,10 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
     [END REGION]
   end
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Installation Date, $DATE$ $TIME$
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Name, $TITLE$
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $PRODUCTCODE$
+  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
   Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
   Set Variable PROGRESS to 90
   [DEFINE REGION: Visual Studio Driver Templates]
