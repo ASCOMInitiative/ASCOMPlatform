@@ -18,6 +18,7 @@
 //----------	---		--------------------------------------------------
 // 22-Apr-11	rbd		Initial edit
 // 27-Apr-11	rbd		Many changes over the last few days, still fluid.
+// 03-May-11	rbd		Fix m_pszDriverInfoDetailedInfo
 //========================================================================
 
 #include "StdAfx.h"
@@ -48,7 +49,7 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 	m_pTickCount					= pTickCount;
 
 	m_szIniKey  = "ASCOM_MOUNT";
-	m_pszDriverInfoDetailedInfo		= "ASCOM driver adapter for X2";
+	m_pszDriverInfoDetailedInfo		= "ASCOM telescope driver adapter for X2";
 	m_dDriverInfoVersion			= 1.0;
 
 	//
