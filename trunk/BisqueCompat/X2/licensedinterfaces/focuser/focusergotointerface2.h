@@ -1,8 +1,6 @@
 #ifndef _FocuserGotoInterface2_H
 #define _FocuserGotoInterface2_H
 
-#include "components/basicstring/basicstringinterface.h"
-
 #define FocuserGotoInterface2_Name "com.bisque.TheSkyX.FocuserGotoInterface2/1.0"
 
 /*!
@@ -52,7 +50,7 @@ public:
 	virtual int	amountIndexFocGoto(void)						=0;
 
 	/*! Coming soon to TheSkyX, a mount having an embedded focuser, via x2. */
-	virtual void								embeddedFocuserInit(const char* psFilterWheelSelection){psFilterWheelSelection;}
+	virtual void embeddedFocuserInit(const char* psFilterWheelSelection){psFilterWheelSelection;}
 
 };
 
