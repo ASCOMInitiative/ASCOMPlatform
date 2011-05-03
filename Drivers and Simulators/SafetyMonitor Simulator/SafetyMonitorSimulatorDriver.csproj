@@ -68,14 +68,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\AssemblyVersionInfo.cs">
-      <Link>AssemblyVersionInfo.cs</Link>
+    <Compile Include="..\..\AssemblyVersionInfo.cs">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\CLSCompliant.cs">
-      <Link>CLSCompliant.cs</Link>
+    <Compile Include="..\..\CLSCompliant.cs">
+      <Link>Properties\CLSCompliant.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\SolutionInfo.cs">
-      <Link>SolutionInfo.cs</Link>
+    <Compile Include="..\..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Driver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,15 +92,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
+    <ProjectReference Include="..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
       <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
       <Name>ASCOM.DeviceInterface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+    <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
     </ProjectReference>

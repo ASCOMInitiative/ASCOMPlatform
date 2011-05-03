@@ -134,9 +134,10 @@ $
 
 
 
-
-
 B
+
+
+
 
 
 
@@ -1170,7 +1171,7 @@ ASCOM Platform 6 Beta 3F
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{B8F28232-1456-41DF-9EE7-1F3E71612B2B}
+{AC093415-4BA8-4B71-AD4E-CBE86EBE0838}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
@@ -1199,11 +1200,11 @@ FALSE
 FALSE
 FALSE
 
-checkmsi31.mia
-setupmsi31.mia
 checknet2sp2.mia
 checknet3sp2.mia
-..\..\..\..\..\Program Files (x86)\InstallAware\InstallAware 10\runtimes\checknet351.mia
+checknet351.mia
+checkmsi31.mia
+setupmsi31.mia
 $
 FALSE
 
