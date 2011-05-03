@@ -22,6 +22,7 @@ Partial Class HandboxForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(HandboxForm))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.txtDomeAz = New System.Windows.Forms.Label()
         Me.LabelShutter = New System.Windows.Forms.Label()
@@ -47,12 +48,12 @@ Partial Class HandboxForm
         Me.ButtonHome = New System.Windows.Forms.Button()
         Me.ButtonSetup = New System.Windows.Forms.Button()
         Me.ButtonTraffic = New System.Windows.Forms.Button()
-        Me.picASCOM = New System.Windows.Forms.PictureBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.picASCOM = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
-        CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -218,56 +219,56 @@ Partial Class HandboxForm
         'ButtonSlewAltitudeUp
         '
         Me.ButtonSlewAltitudeUp.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ButtonSlewAltitudeUp.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.ButtonSlewAltitudeUp.BackgroundImage = CType(resources.GetObject("ButtonSlewAltitudeUp.BackgroundImage"), System.Drawing.Image)
+        Me.ButtonSlewAltitudeUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.ButtonSlewAltitudeUp.Location = New System.Drawing.Point(67, 240)
         Me.ButtonSlewAltitudeUp.Name = "ButtonSlewAltitudeUp"
         Me.ButtonSlewAltitudeUp.Size = New System.Drawing.Size(34, 46)
         Me.ButtonSlewAltitudeUp.TabIndex = 10
-        Me.ButtonSlewAltitudeUp.Text = "£"
         Me.ButtonSlewAltitudeUp.UseVisualStyleBackColor = False
         '
         'ButtonSlewStop
         '
         Me.ButtonSlewStop.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ButtonSlewStop.Font = New System.Drawing.Font("Wingdings 2", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.ButtonSlewStop.BackgroundImage = CType(resources.GetObject("ButtonSlewStop.BackgroundImage"), System.Drawing.Image)
+        Me.ButtonSlewStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.ButtonSlewStop.Location = New System.Drawing.Point(67, 292)
         Me.ButtonSlewStop.Name = "ButtonSlewStop"
         Me.ButtonSlewStop.Size = New System.Drawing.Size(34, 46)
         Me.ButtonSlewStop.TabIndex = 11
-        Me.ButtonSlewStop.Text = "Ä"
         Me.ButtonSlewStop.UseVisualStyleBackColor = False
         '
         'ButtonSlewAltitudeDown
         '
         Me.ButtonSlewAltitudeDown.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ButtonSlewAltitudeDown.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.ButtonSlewAltitudeDown.BackgroundImage = Global.ASCOM.Simulator.My.Resources.Resources.doen
+        Me.ButtonSlewAltitudeDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.ButtonSlewAltitudeDown.Location = New System.Drawing.Point(67, 344)
         Me.ButtonSlewAltitudeDown.Name = "ButtonSlewAltitudeDown"
         Me.ButtonSlewAltitudeDown.Size = New System.Drawing.Size(34, 46)
         Me.ButtonSlewAltitudeDown.TabIndex = 12
-        Me.ButtonSlewAltitudeDown.Text = "¤"
         Me.ButtonSlewAltitudeDown.UseVisualStyleBackColor = False
         '
         'ButtonClockwise
         '
         Me.ButtonClockwise.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ButtonClockwise.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.ButtonClockwise.BackgroundImage = CType(resources.GetObject("ButtonClockwise.BackgroundImage"), System.Drawing.Image)
+        Me.ButtonClockwise.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.ButtonClockwise.Location = New System.Drawing.Point(4, 292)
         Me.ButtonClockwise.Name = "ButtonClockwise"
         Me.ButtonClockwise.Size = New System.Drawing.Size(57, 46)
         Me.ButtonClockwise.TabIndex = 13
-        Me.ButtonClockwise.Text = "P"
         Me.ButtonClockwise.UseVisualStyleBackColor = False
         '
         'ButtonCounterClockwise
         '
         Me.ButtonCounterClockwise.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ButtonCounterClockwise.Font = New System.Drawing.Font("Wingdings 3", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.ButtonCounterClockwise.BackgroundImage = CType(resources.GetObject("ButtonCounterClockwise.BackgroundImage"), System.Drawing.Image)
+        Me.ButtonCounterClockwise.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.ButtonCounterClockwise.Location = New System.Drawing.Point(107, 292)
         Me.ButtonCounterClockwise.Name = "ButtonCounterClockwise"
         Me.ButtonCounterClockwise.Size = New System.Drawing.Size(57, 46)
         Me.ButtonCounterClockwise.TabIndex = 14
-        Me.ButtonCounterClockwise.Text = "Q"
         Me.ButtonCounterClockwise.UseVisualStyleBackColor = False
         '
         'ButtonStepClockwise
@@ -330,19 +331,6 @@ Partial Class HandboxForm
         Me.ButtonTraffic.Text = "Traffic"
         Me.ButtonTraffic.UseVisualStyleBackColor = False
         '
-        'picASCOM
-        '
-        Me.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.picASCOM.ErrorImage = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
-        Me.picASCOM.Image = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
-        Me.picASCOM.InitialImage = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
-        Me.picASCOM.Location = New System.Drawing.Point(106, 12)
-        Me.picASCOM.Name = "picASCOM"
-        Me.picASCOM.Size = New System.Drawing.Size(48, 56)
-        Me.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.picASCOM.TabIndex = 2
-        Me.picASCOM.TabStop = False
-        '
         'PictureBox1
         '
         Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
@@ -355,6 +343,19 @@ Partial Class HandboxForm
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.PictureBox1.TabIndex = 21
         Me.PictureBox1.TabStop = False
+        '
+        'picASCOM
+        '
+        Me.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.picASCOM.ErrorImage = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
+        Me.picASCOM.Image = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
+        Me.picASCOM.InitialImage = Global.ASCOM.Simulator.My.Resources.Resources.ASCOM
+        Me.picASCOM.Location = New System.Drawing.Point(106, 12)
+        Me.picASCOM.Name = "picASCOM"
+        Me.picASCOM.Size = New System.Drawing.Size(48, 56)
+        Me.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.picASCOM.TabIndex = 2
+        Me.picASCOM.TabStop = False
         '
         'HandboxForm
         '
@@ -386,13 +387,14 @@ Partial Class HandboxForm
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "HandboxForm"
+        Me.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Text = "Dome Simulator .NET"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
-        CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

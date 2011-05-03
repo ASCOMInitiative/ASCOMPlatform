@@ -190,6 +190,11 @@
     <None Include="vbdomesimulator.snk" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\up.jpg" />
+    <None Include="Resources\center.jpg" />
+    <None Include="Resources\doen.jpg" />
+    <None Include="Resources\left.jpg" />
+    <None Include="Resources\right.jpg" />
     <Content Include="Test.vbs" />
   </ItemGroup>
   <ItemGroup>
