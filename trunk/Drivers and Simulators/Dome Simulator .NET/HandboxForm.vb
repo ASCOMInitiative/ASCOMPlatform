@@ -112,6 +112,7 @@ Public Class HandboxForm
                     g_bCanSetPark = (.chkCanSetPark.Checked)
                     g_bCanSyncAzimuth = (.chkCanSyncAzimuth.Checked)
                 End With
+                
 
                 UpdateConfig()
             End If
