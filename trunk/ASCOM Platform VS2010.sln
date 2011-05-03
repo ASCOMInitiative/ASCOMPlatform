@@ -156,7 +156,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchSimulatorDriver", "Dr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SafetyMonitor", "SafetyMonitor", "{1276545E-B141-48D8-AA99-3E169CF840FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafetyMonitorSimulatorDriver", "Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\SafetyMonitorSimulatorDriver.csproj", "{6D940101-25F1-45F1-8356-3E4D1CD1385D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafetyMonitorSimulatorDriver", "Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitorSimulatorDriver.csproj", "{6D940101-25F1-45F1-8356-3E4D1CD1385D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Focuser", "Focuser", "{F0B54D82-741C-4EC1-A620-E5DEA1038EAA}"
 EndProject
@@ -1343,13 +1343,13 @@ Global
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal

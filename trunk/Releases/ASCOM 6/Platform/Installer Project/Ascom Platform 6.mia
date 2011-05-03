@@ -70,8 +70,6 @@ End
 End
 Display Dialog
 Compiler Variable If
-Web Media Block
-Include Script
 Compiler Variable End
 Hide Dialog
 End
@@ -304,6 +302,8 @@ Comment
 If
 Set Variable
 End
+Web Media Block
+Include Script
 If
 MessageBalloon
 Set Variable
@@ -653,8 +653,6 @@ Comment
 Install Files
 Install Files
 Comment
-Install Files
-Install Files
 Comment
 Install Files
 Install Files
@@ -840,6 +838,9 @@ Comment
 If
 Set 64 Bit Mode
 End
+Create Folder
+Install Files
+Install Files
 Apply Changes
 MessageBalloon
 Write to Text File
@@ -1138,7 +1139,7 @@ $
 {1AF27C09-F382-4198-B833-7EB5EE85E251}
 {FBD89BB3-9A9B-4780-A751-93CBE80D82F5}
 {28654AA0-00FB-42CC-8ED6-6195FC99F43B}
-{363CD943-826C-4CEE-B9CE-F33C2683AE52}
+{5E4F8920-23F9-41FA-9089-4980ED961786}
 {BAC7C1AB-2792-4CFA-94FA-FD3295B7646B}
 {07B0FC31-3827-48DC-9FC8-845282D86948}
 {A635FADA-E34B-486E-B85F-2FB81214B2EF}
@@ -1176,8 +1177,6 @@ $
 {2BE4F970-32B0-4151-85C1-7D5F91D4A8A5}
 {1E1B96AD-4E7F-4C28-9606-C6C1B08EE558}
 {0DC0BACD-A2C2-4FA7-A233-97A3000516AA}
-{BBCB50B8-AC9F-4A8C-A210-D1BAAAEC5440}
-{7CEC354D-2A66-4F45-8BA5-0ADB16D4A80E}
 {4C24E47D-F5E8-47A3-A50F-C1C83624C48A}
 {57F4F553-9CC2-4564-9A14-40AF14145FFA}
 {3CC7E0BD-B9AC-4758-A810-E3A501D75842}
@@ -1410,6 +1409,8 @@ $
 {F5F9E662-F0A3-4E50-B1D0-3C88E283F399}
 {35CE9C92-EE89-4D23-B77F-29B3C1D84931}
 {C41BD311-75D5-4103-A059-065B6A712EA1}
+{F0461318-3FD8-43E6-9406-1072929A444A}
+{15F37B1B-42F0-48FD-80BD-F6A01E995E9D}
 {F67083EE-A30B-4D5F-8775-7C547F7D0DD1}
 {4E871789-6F5E-4F4C-9BAF-CB23F1602DA7}
 {529D3F04-3FE5-40A6-B031-3C046F408560}
@@ -1759,8 +1760,6 @@ $
 {1CA81DB6-CCE6-443F-A0AD-F741546DD0F9}
 {D9E3123E-E8D9-4C07-B73F-49EE87C7DE79}
 {7C137DA3-83AE-4725-A0D3-E796C08C3802}
-{C82F0F22-CB9E-4CC5-948C-E0FB706779E0}
-{1861E82B-F356-4D84-ABC2-21EC7CC54ADD}
 {E83BBDAC-52CF-493E-A946-4657C7BC8F82}
 {B2033235-4A1F-48E2-AE6F-8DFDF6C076D2}
 {BEE82166-7FA2-4954-9886-6E30FE50389F}
@@ -1946,6 +1945,9 @@ $
 {0FA7681D-0626-46E4-BFC6-96950046D663}
 {9352FDFA-AEB2-4A78-A066-2845E6DE2306}
 {B208C7F3-216B-4DF1-8D25-2B578E2B7A75}
+{61D052EA-719F-4ABB-B687-54B5238B5779}
+{AC388B9C-A2EA-4190-9662-D2B0AB291FDE}
+{B9708450-6643-4A11-9DCD-CDA1CB68E5C6}
 {DE3DE4D7-4B3C-42F6-8FE1-8C9D1581E066}
 {04CDD4EC-6913-4AC5-9FD6-348722984CE0}
 {89C79388-96FA-4912-B021-63E5273C33AA}
@@ -3411,6 +3413,8 @@ FALSE
 $COMMONFILES$\ASCOM
 {BA2BD709-00C4-4216-9AD0-2481F59D6D3E}
 $MYDOCUMENTS$\ASCOM
+{61D052EA-719F-4ABB-B687-54B5238B5779}
+$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 {78E159FA-12F3-4C8B-83CD-71DA32EEDEAF}
 progress
 SUCCESS
@@ -3797,32 +3801,6 @@ FALSE
 ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.dll
 FALSE|
 $COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{1861E82B-F356-4D84-ABC2-21EC7CC54ADD}
-..\..\..\..\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.pdb
-FALSE|
-$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{C82F0F22-CB9E-4CC5-948C-E0FB706779E0}
-..\..\..\..\Drivers and Simulators\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\bin\Release\ASCOM.Simulator.SafetyMonitor.dll
-FALSE|
-$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 FALSE
 FALSE
 FALSE
@@ -5015,6 +4993,32 @@ FALSE
 FALSE
 FALSE
 FALSE
+{AC388B9C-A2EA-4190-9662-D2B0AB291FDE}
+..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll
+FALSE|
+$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{B9708450-6643-4A11-9DCD-CDA1CB68E5C6}
+..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb
+FALSE|
+$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {48D62BC5-881F-41FB-9CCC-CAD3988BA77C}
 $REGASM64$
 TRUE
@@ -5414,7 +5418,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {89AD8832-8907-4C06-84E6-CA1C868F2471}
@@ -5424,7 +5428,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-C:\InstallAware-ASCOM-Build\Help.ico
+c:\installaware-ascom-build\Help.ico
 |
 0|
 {A228BF9E-0DEF-47CB-B26F-87EE4A84FB85}
@@ -5434,7 +5438,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {494D0686-431B-442B-B3C5-5EE7B90CAFF0}
@@ -5444,7 +5448,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
-C:\InstallAware-ASCOM-Build\Help.ico
+c:\installaware-ascom-build\Help.ico
 |
 0|
 {78C884B0-AD58-4354-AD72-9D7643279653}
@@ -5454,7 +5458,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {21A81DD1-0D42-46F4-95F3-723A228A7022}
@@ -5464,7 +5468,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {F6F288FC-EC44-43FA-B8A7-423917595944}
@@ -5474,7 +5478,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {B2DD97BA-AF71-4E57-BF52-5C923CAF7886}
@@ -5484,7 +5488,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {32722E76-A1CD-49AD-9970-9F5CD57EEC8A}
@@ -5494,7 +5498,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {1DC33AC4-B7FF-46AC-9EB3-19F7AB204528}
@@ -5504,7 +5508,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {1E6AE9D2-6353-4E6F-AB69-568D125ECF5B}
@@ -5514,7 +5518,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {3FB6086A-E1B3-466A-86AA-49027E1CBA47}
@@ -5524,7 +5528,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {10F7703F-F195-4D6D-B8B4-765F9230CB72}
@@ -5534,7 +5538,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Simulators
 
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {49C8A4F0-B891-4903-994B-EBEA249248D9}
@@ -5564,17 +5568,17 @@ $SHORTCUTFILES$\ASCOM Platform 6
 Display the ASCOM Platform version
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {B20408C8-EC3B-446B-A3B3-124C62434784}
-http://ascom-standards.org/Support/index.htm
+http://ascom-standards.org/support/index.htm
 How to get support
 $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-C:\InstallAware-ASCOM-Build\Internet.ico
+c:\installaware-ascom-build\Internet.ico
 |
 0|
 {D1DCD5D1-7B82-4D54-8848-383E7E83E045}
@@ -5594,7 +5598,7 @@ $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-C:\InstallAware-ASCOM-Build\Internet.ico
+c:\installaware-ascom-build\Internet.ico
 |
 0|
 {F396F4E5-6EFC-4CE7-A8EA-AF048686E6CC}
@@ -5604,27 +5608,27 @@ $SHORTCUTFILES$\ASCOM Platform 6
 ASCOM User Guide
 
 
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+c:\installaware-ascom-build\ASCOM.ico
 |
 0|
 {042045AC-127D-4E9F-A10A-EC38A24C312B}
-http://www.ascom-standards.org/Downloads/Index.htm
+http://www.ascom-standards.org/downloads/Index.htm
 ASCOM Drivers and Downloads
 $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-C:\InstallAware-ASCOM-Build\Internet.ico
+c:\installaware-ascom-build\Internet.ico
 |
 0|
 {70870DF3-F798-40B3-9E5F-15C080A938E5}
-http://ascom-standards.org/Community/Partners.htm
+http://ascom-standards.org/community/Partners.htm
 ASCOM Compatible Software
 $SHORTCUTFILES$\ASCOM Platform 6
 
 
 
-C:\InstallAware-ASCOM-Build\Internet.ico
+c:\installaware-ascom-build\Internet.ico
 |
 0|
 {9469E59E-A8EF-4649-BA92-8396F0CC1A61}
@@ -6516,9 +6520,9 @@ TRUE
 
 
 FALSE
-{BBCB50B8-AC9F-4A8C-A210-D1BAAAEC5440}
+{F0461318-3FD8-43E6-9406-1072929A444A}
 Microsoft Windows Installer 3.1
-http://ascom-standards.org/Downloads/Index.htmMicrosoft Windows Installer 3.1.7zip
+http://ascom-standards.org/downloads/Index.htmMicrosoft Windows Installer 3.1.7zip
 FALSE
 {AD73B360-A5C7-479E-89C0-181D01948AE8}
 Welcome Dialog
@@ -7261,16 +7265,16 @@ DISKSPACE
 C:
 TRUE
 FALSE
-{363CD943-826C-4CEE-B9CE-F33C2683AE52}
-checkmsi31
-{7CEC354D-2A66-4F45-8BA5-0ADB16D4A80E}
-setupmsi31
 {B621EE56-06D2-4E94-9E2F-D17A484CE577}
 checknet351
 {FE0B6A12-CD80-4EFB-B64F-FB70E4D2640E}
 checknet3sp2
 {78E703E3-454D-429E-819A-B699CE0EB3FA}
 checknet2sp2
+{5E4F8920-23F9-41FA-9089-4980ED961786}
+checkmsi31
+{15F37B1B-42F0-48FD-80BD-F6A01E995E9D}
+setupmsi31
 {BE6F0167-47F0-4C0A-B473-33DB75546DE3}
 SUCCESS
 TRUE
@@ -7656,8 +7660,6 @@ C
 
 
 
-
-
 C
 
 
@@ -7928,52 +7930,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-
-
-
-
-
-
 
 
 C
@@ -8004,6 +7960,17 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+C
 C
 
 
@@ -8013,122 +7980,7 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+C
 
 
 
@@ -8227,8 +8079,161 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
 C
+
+
+
 
 
 
@@ -8669,6 +8674,7 @@ C
 
 
 $
+
 
 
 

@@ -99,7 +99,7 @@
       <Project>{81091BA8-725D-465D-AC6B-A36912B73AA7}</Project>
       <Name>FocuserSimulatorDriver</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SafetyMonitor Simulator\SafetyMonitor Simulator Driver\SafetyMonitorSimulatorDriver\SafetyMonitorSimulatorDriver.csproj">
+    <ProjectReference Include="..\..\SafetyMonitor Simulator\SafetyMonitorSimulatorDriver.csproj">
       <Project>{6D940101-25F1-45F1-8356-3E4D1CD1385D}</Project>
       <Name>SafetyMonitorSimulatorDriver</Name>
     </ProjectReference>
