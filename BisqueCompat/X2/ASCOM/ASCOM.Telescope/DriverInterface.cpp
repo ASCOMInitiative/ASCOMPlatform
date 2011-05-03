@@ -321,6 +321,7 @@ void TermScope(bool fatal)
 			&excep, NULL)))
 			drvFail("the Connected = False failed internally.", &excep, true);	// Don't call us back!
 
+
 #ifdef CROSS_THREAD
 		_p_GIT->RevokeInterfaceFromGlobal(dwIntfcCookie);		// We're done with this driver/object
 #endif
