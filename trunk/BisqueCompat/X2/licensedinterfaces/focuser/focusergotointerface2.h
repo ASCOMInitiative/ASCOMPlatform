@@ -45,7 +45,7 @@ public:
 	/*! Return the number (count) of avaiable focuser gotos.*/
 	virtual int	amountCountFocGoto(void) const					= 0;
 	/*! Return a string along with the amount or size of the corresponding focuser goto.*/
-	virtual int	amountNameFromIndexFocGoto(const int& nZeroBasedIndex, BasicStringInterface& strDisplayName, int& nAmount)=0;
+	virtual int	amountNameFromIndexFocGoto(const int& nZeroBasedIndex, BasicStringInterface& strDisplayName, int& nAmount) = 0;
 	/*! Return the current index of focuser goto selection. */
 	virtual int	amountIndexFocGoto(void)						=0;
 

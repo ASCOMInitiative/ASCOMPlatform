@@ -4,7 +4,7 @@
 //
 // FACILITY:	X2 Plugin for TheSky X and ASCOM drivers
 //
-// ABSTRACT:	Provides COM calls to the Telescope driver, and various COM
+// ABSTRACT:	Provides COM calls to the Focuser driver, and various COM
 //				related functions. This is "ATL-free" for lightness of
 //				weight, so you see "bare-metal COM" here. This was a 
 //				conscious design choice.
@@ -21,8 +21,7 @@
 //
 // When			Who		What
 //----------	---		--------------------------------------------------
-// 22-Apr-11	rbd		Initial edit, taken from TeleAPI/ASCOM plugin
-// 27-Apr-11	rbd		Much work, refactoring. Work in progress
+// 03-May-11	rbd		Initial edit, taken from X2 Mount plugin
 //========================================================================
 
 #include "StdAfx.h"
@@ -30,36 +29,25 @@
 #define CROSS_THREAD
 
 #define OUR_REGISTRY_BASE HKEY_LOCAL_MACHINE
-#define OUR_REGISTRY_AREA "Software\\ASCOM\\TheSky X2\\Mount"
+#define OUR_REGISTRY_AREA "Software\\ASCOM\\TheSky X2\\Focuser"
 #define OUR_DRIVER_SEL "Current Driver ID"
 
-const char *_szAlertTitle = "ASCOM Standard Telescope";
+const char *_szAlertTitle = "ASCOM Standard Focuser";
 
 //
 // Mount characteristics
 //
-char *_szScopeName = NULL;										// Name for crosshair labeling (delete[])
-char *_szScopeDescription = NULL;
-char *_szScopeDriverInfo = NULL;
-char *_szScopeDriverVersion = NULL;
+char *_szFocuserName = NULL;									// Name for crosshair labeling (delete[])
+char *_szFocuserDescription = NULL;
+char *_szFocuserDriverInfo = NULL;
+char *_szFocuserDriverVersion = NULL;
 char _szDriverID[256];
-bool _bScopeCanSlew = false;									// Capabilites of this scope
-bool _bScopeCanSlewAsync = false;
-bool _bScopeCanSlewAltAz = false;				
-bool _bScopeCanSync = false;
-bool _bScopeIsGEM = false;
-bool _bScopeCanSetTracking = false;
-bool _bScopeCanSetTrackRates = false;
-bool _bScopeCanPark = false;
-bool _bScopeCanUnpark = false;
-bool _bScopeCanSetPark = false;
-bool _bScopeDoesRefraction = false;
-bool _bScopeCanSideOfPier = false;
+bool _bAbsolute = false;
 
 //
 // State variables
 //
-bool _bScopeActive = false;										// This is true if mount is active
+bool _bFocuserActive = false;									// This is true if focuser is active
 
 static int get_integer(OLECHAR *name);
 static double get_double(OLECHAR *name);
@@ -126,20 +114,21 @@ bool InitDrivers(LoggerInterface *pLogger)
 	return bResult;
 }
 
-// ---------
-// InitScope
-// ---------
+// -----------
+// InitFocuser
+// -----------
 //
-// Here is where we fire up COM and create an instance of the scope driver.
+// Here is where we fire up COM and create an instance of the Focuser driver.
 //
-short InitScope(void)
+short InitFocuser(void)
 {
 	CLSID CLSID_driver;
 	short iRes = 0;				// Assume success (our retval)
+	int i;
 	OLECHAR *ocProgID = NULL;
 
 	__try {
-		_bScopeActive = false;									// Assume failure
+		_bFocuserActive = false;									// Assume failure
 
 		//
 		// Retrieve the ProgID of the driver we're to use. Get it into 
@@ -155,7 +144,7 @@ short InitScope(void)
 		{
 			char buf[256];
 
-			wsprintf(buf, "Failed to find scope driver %s.", _szDriverID);
+			wsprintf(buf, "Failed to find Focuser driver %s.", _szDriverID);
 			free(ocProgID);
 			drvFail(buf, NULL, true);
 		}
@@ -170,7 +159,7 @@ short InitScope(void)
 		{
 			char buf[256];
 
-			wsprintf(buf, "Failed to create an instance of the scope driver %s.", _szDriverID);
+			wsprintf(buf, "Failed to create an instance of the Focuser driver %s.", _szDriverID);
 			drvFail(buf, NULL, true);
 		}
 
@@ -186,81 +175,55 @@ short InitScope(void)
 			drvFail("Failed to register driver interface in GIT", NULL, true);
 #endif
 		//
-		// We now need to connect the scope. To do this, we set the 
-		// Connected property to TRUE.
+		// We now need to connect the Focuser. To do this, we set the 
+		// Link property to TRUE.
 		//
-		set_bool(L"Connected", true);
+		set_bool(L"Link", true);
 
 		//
-		// At this point we should be able to call into the ASCOM scope
+		// At this point we should be able to call into the ASCOM Focuser
 		// driver through its IDIspatch. Check to see if things are OK. 
 		// We call GetName, because the driver MUST support that, then
 		// grab the capabilities we need (these also MUST be supported).
 		//
-		_szScopeName = get_string(L"Name");						// Indicator label/name
-		_szScopeDescription = get_string(L"Description");
-		_szScopeDriverInfo = get_string(L"DriverInfo");
-		_szScopeDriverVersion = get_string(L"DriverVersion");
-		_bScopeCanSync = get_bool(L"CanSync");					// Can it sync?
-		_bScopeCanSlew = get_bool(L"CanSlew");					// Can it slew at all?	
-		_bScopeCanSlewAsync = get_bool(L"CanSlewAsync");		// Can it slew asynchronously?
-		_bScopeCanSlewAltAz = get_bool(L"CanSlewAltAz");
-		_bScopeIsGEM = (get_integer(L"AlignmentMode") == 2);	// Is it a GEM?
-		_bScopeCanSetTracking = get_bool(L"CanSetTracking");	// Can we control its tracking?
-		_bScopeCanSetTrackRates = get_bool(L"CanSetRightAscensionRate") &&
-							get_bool(L"CanSetDeclinationRate");	// Too bad for mounts that can't do both
-		_bScopeCanPark = get_bool(L"CanPark");
-		_bScopeCanUnpark = get_bool(L"CanUnpark");
-		_bScopeCanSetPark = get_bool(L"CanSetPark");
-		_bScopeDoesRefraction = get_bool(L"DoesRefraction");
+		__try {
+			i = get_integer(L"InterfaceVersion");
+		} __except (EXCEPTION_EXECUTE_HANDLER) {
+			i = 1;
+		}
+		if (i > 1)
+		{
+			_szFocuserName = get_string(L"Name");				// Indicator label/name
+			_szFocuserDescription = get_string(L"Description");
+			_szFocuserDriverInfo = get_string(L"DriverInfo");
+			_szFocuserDriverVersion = get_string(L"DriverVersion");
+		}
+		else
+		{
+			_szFocuserName = uni_to_ansi(L"V1 Focuser");
+			_szFocuserDescription = uni_to_ansi(L"");
+			_szFocuserDriverInfo = uni_to_ansi(L"V1 Focuser Driver");
+			_szFocuserDriverVersion = uni_to_ansi(L"n/a");
+		}
+		_bAbsolute = get_bool(L"Absolute");
 
 		//
-		// Now we verify that there is a scope out there. We try to get
-		// RA, and if there's a problem, we've had it.
+		// Now we verify that there is a Focuser out there. We try to get
+		// Position, and if there's a problem, we've had it.
 		//
 		__try {
-			GetRightAscension();
+			GetPosition();
 		} __except(EXCEPTION_EXECUTE_HANDLER) {
 			ABORT;												// Some real error, has been alerted
 		}
 		//
-		// Determine if it reports SOP (pointing state)
-		//
-		__try {
-			get_integer(L"SideOfPier");
-			_bScopeCanSideOfPier = true;
-		} __except(EXCEPTION_EXECUTE_HANDLER) {
-			_bScopeCanSideOfPier = false;
-		}
-		//
-		// If the scope can be unparked, do it. 
-		//
-		//if(_bScopeCanUnpark)
-		//	UnparkScope();
-		//
-		// In order for TheSky X to complete startup and change status
-		// from Connecting... tracking must be on or it must be parked.
-		//
-		if(_bScopeCanSetTracking && 
-					(!_bScopeCanPark || !get_bool(L"AtPark")) && 
-					!get_bool(L"Tracking"))
-			set_bool(L"Tracking", true);
-		//
-		// If the scope has tracking rates, turn them off
-		//
-		if(_bScopeCanSetTrackRates)
-		{
-			set_double(L"RightAscensionRate", 0.0);
-			set_double(L"DeclinationRate", 0.0);
-		}
-		//
 		// Done!
 		//
-		_bScopeActive = true;									// We're off and running!
+		_bFocuserActive = true;									// We're off and running!
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
-		_bScopeActive = false;
+		_bFocuserActive = false;
 		iRes = -1;			// What are the errors?
 	}
 
@@ -268,12 +231,12 @@ short InitScope(void)
 }
 
 // ---------
-// TermScope
+// TermFocuser
 // ---------
 //
-void TermScope(bool fatal)
+void TermFocuser(bool fatal)
 {
-	OLECHAR *name = L"Connected";
+	OLECHAR *name = L"Link";
 	DISPID dispid;
 	DISPID didPut = DISPID_PROPERTYPUT;
 	DISPPARAMS dispParms;
@@ -289,10 +252,10 @@ void TermScope(bool fatal)
 #endif
 
 		//
-		// We now need to unconnect the scope. To do this, we set the 
+		// We now need to unconnect the Focuser. To do this, we set the 
 		// Connected property to FALSE. THe use of !fatal in the calls
 		// to drvFail assues that drvFail() will not recursively call 
-		// US because its call to TermScope() passses true, while all
+		// US because its call to TermFocuser() passses true, while all
 		// others pass false.
 		//
 		if(FAILED(_p_DrvDisp->GetIDsOfNames(
@@ -302,7 +265,7 @@ void TermScope(bool fatal)
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 			drvFail(
-				"The ASCOM scope driver is missing the Connected property.",
+				"The ASCOM Focuser driver is missing the Connected property.",
 				NULL, !fatal);
 
 		rgvarg[0].vt = VT_BOOL;
@@ -328,159 +291,53 @@ void TermScope(bool fatal)
 		_p_DrvDisp->Release();									// Release instance of the driver
 		_p_DrvDisp = NULL;										// So won't happen again in PROCESS_DETACH
 	}
-	if(_szScopeName != NULL)
-		delete[] _szScopeName;									// Free this string
-	_szScopeName = NULL;										// [sentinel]
-	if(_szScopeDescription != NULL)
-		delete[] _szScopeDescription;
-	_szScopeDescription = NULL;
-	if(_szScopeDriverInfo != NULL)
-		delete[] _szScopeDriverInfo;
-	_szScopeDriverInfo = NULL;
-	if(_szScopeDriverVersion != NULL)
-		delete[] _szScopeDriverVersion;
-	_szScopeDriverVersion = NULL;
+	if(_szFocuserName != NULL)
+		delete[] _szFocuserName;									// Free this string
+	_szFocuserName = NULL;										// [sentinel]
+	if(_szFocuserDescription != NULL)
+		delete[] _szFocuserDescription;
+	_szFocuserDescription = NULL;
+	if(_szFocuserDriverInfo != NULL)
+		delete[] _szFocuserDriverInfo;
+	_szFocuserDriverInfo = NULL;
+	if(_szFocuserDriverVersion != NULL)
+		delete[] _szFocuserDriverVersion;
+	_szFocuserDriverVersion = NULL;
 
 
-	_bScopeActive = false;
+	_bFocuserActive = false;
 
-}
-
-// --------------
-// GetCanPierSide
-// --------------
-//
-bool GetCanPierSide(void)
-{
-	return (_bScopeIsGEM && _bScopeCanSideOfPier);
-}
-
-// -----------------
-// GetRightAscension
-// -----------------
-//
-double GetRightAscension(void)
-{
-	return(get_double(L"RightAscension"));
-}
-
-// ---------------------
-// GetRightAscensionRate
-// ---------------------
-//
-double GetRightAscensionRate(void)
-{
-	return(get_double(L"RightAscensionRate"));
-}
-
-// --------------
-// GetDeclination
-// --------------
-//
-double GetDeclination(void)
-{
-	return(get_double(L"Declination"));
-}
-
-// ------------------
-// GetDeclinationRate
-// ------------------
-//
-double GetDeclinationRate(void)
-{
-	return(get_double(L"DeclinationRate"));
-}
-
-// ---------
-// GetAtPark
-// ---------
-//
-bool GetAtPark(void)
-{
-	return(get_bool(L"AtPark"));
 }
 
 // -----------
-// GetTracking
+// GetPosition
 // -----------
-bool GetTracking(void)
-{
-	return(get_bool(L"Tracking"));
-}
-
-// -----------
-// SetTracking
-// -----------
-void SetTracking(bool state)
-{
-	set_bool(L"Tracking", state);
-}
-
-// ---------------------
-// SetRightAscensionRate
-// ---------------------
 //
-void SetRightAscensionRate(double rate)
+int GetPosition(void)
 {
-	set_double(L"RightAscensionRate", rate);
-}
-
-// ------------------
-// SetDeclinationRate
-// ------------------
-//
-void SetDeclinationRate(double rate)
-{
-	set_double(L"DeclinationRate", rate);
+	return (get_integer(L"Position"));
 }
 
 // -----------
-// SetLatitude
+// GetIsMoving
 // -----------
 //
-void SetLatitude(double lat)
+bool GetIsMoving(void)
 {
-	set_double(L"SiteLatitude", lat);
+	return (get_bool(L"IsMoving"));
 }
 
-// ------------
-// SetLongitude
-// ------------
-//
-void SetLongitude(double lng)
-{
-	set_double(L"SiteLongitude", lng);
-}
-
-// ----------
-// IsPierWest
-// ----------
-//
-bool IsPierWest(void)
-{
-	int sp = get_integer(L"SideOfPier");
-	return(sp == 1);
-}
-
-// ---------
-// IsSlewing
-// ---------
-//
-bool IsSlewing(void)
-{
-	return get_bool(L"Slewing");
-}
 
 //
 //	----
-//	Slew
+//	Move
 //	----
 //
-//	Slew the telescope to a specified RA/Dec position.
+//	Move the focuser (relative or absolute)
 //
-short SlewScope(double dRA, double dDec)
+short Move(double dRA, double dDec)
 {
-	OLECHAR *name;
+	OLECHAR *name = L"Move";
 	DISPID dispid;
 	DISPPARAMS dispParms;
 	VARIANTARG rgvarg[2];
@@ -489,19 +346,11 @@ short SlewScope(double dRA, double dDec)
 	short iRes = 0;												// Assume success (our retval)
 	HRESULT hr;
 
-	if(!_bScopeActive)											// No scope hookup?
+	if(!_bFocuserActive)											// No scope hookup?
 	{
 		bSyncSlewing = false;									// Cannot be sync-slewing!
 		return(-1);												// Forget this
 	}
-
-	//
-	// Fall back to sync slewing if async not supported.
-	//
-	if(_bScopeCanSlewAsync)
-		name = L"SlewToCoordinatesAsync";
-	else
-		name = L"SlewToCoordinates";
 
 	__try
 	{
@@ -536,7 +385,6 @@ short SlewScope(double dRA, double dDec)
 		dispParms.rgvarg = rgvarg;
 		dispParms.cNamedArgs = 0;
 		dispParms.rgdispidNamedArgs =NULL;
-		if(!_bScopeCanSlewAsync) bSyncSlewing = true;			// Internal flag
 		if(FAILED(hr = _p_DrvDisp->Invoke(
 			dispid,
 			IID_NULL, 
@@ -564,13 +412,13 @@ short SlewScope(double dRA, double dDec)
 	return(iRes);
 }
 
-// ---------
-// AbortSlew
-// ---------
+// ----
+// Halt
+// ----
 //
-void AbortSlew(void)
+void Halt(void)
 {
-	OLECHAR *name = L"AbortSlew";
+	OLECHAR *name = L"Halt";
 	DISPID dispid;
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
@@ -590,7 +438,7 @@ void AbortSlew(void)
 		LOCALE_USER_DEFAULT,
 		&dispid)))
 		drvFail(
-			"The ASCOM scope driver is missing the AbortSlew method.",
+			"The ASCOM scope driver is missing the Halt method.",
 			NULL, true);
 
 	//
@@ -611,255 +459,31 @@ void AbortSlew(void)
 				     &vRes, 
 				     &excep, 
 				     NULL)))
-		drvFail("AbortSlew failed internally.", &excep, true);
+		drvFail("Halt failed internally.", &excep, true);
 		
 }
 
-//	---------
-//	SyncScope
-//	---------
+
+// -------------
+// ConfigFocuser
+// -------------
 //
-//	Sync the telescope's position to the given coordinates
-//
-//
-short SyncScope(double dRA, double dDec)
-{
-	OLECHAR *name = L"SyncToCoordinates";
-	DISPID dispid;
-	DISPPARAMS dispParms;
-	VARIANTARG rgvarg[2];
-	EXCEPINFO excep;
-	VARIANT vRes;
-	short iRes = 0;												// Assume success (our retval)
-	HRESULT hr;
-
-	if(!_bScopeActive)											// No scope hookup?
-		return(-1);												// Forget this
-
-	__try
-		{
-#ifdef CROSS_THREAD
-			switchThreadIf();
-#endif
-
-			//
-			// Get our dispatch ID
-			//
-			if(FAILED(_p_DrvDisp->GetIDsOfNames(
-				IID_NULL, 
-				&name, 
-				1, 
-				LOCALE_USER_DEFAULT,
-				&dispid)))
-				drvFail(
-					"The ASCOM scope driver is missing the SyncToCoordinates method.",
-					NULL, true);
-
-			//
-			// Do the sync
-			//
-			rgvarg[0].vt = VT_R8;		// Arg order is R->L
-			rgvarg[0].dblVal = dDec;
-			rgvarg[1].vt = VT_R8;
-			rgvarg[1].dblVal = dRA;
-			dispParms.cArgs = 2;
-			dispParms.rgvarg = rgvarg;
-			dispParms.cNamedArgs = 0;
-			dispParms.rgdispidNamedArgs =NULL;
-			if(FAILED(hr = _p_DrvDisp->Invoke(
-				dispid, 
-				IID_NULL, 
-				LOCALE_USER_DEFAULT, 
-				DISPATCH_METHOD, 
-				&dispParms, 
-				&vRes,
-				&excep, 
-				NULL)))
-			{
-				//
-				// All errors fatal. Should not call this if _bScopeCanSync is false!
-				//
-				drvFail("Sync to coordinates failed internally.", &excep, true);
-			}
-		}
-	__except(EXCEPTION_EXECUTE_HANDLER)
-		{
-			iRes = -1;
-		}
-
-	return(iRes);
-}	
-
-// ---------
-// ParkScope
-// ---------
-//
-void ParkScope(void)
-{
-	OLECHAR *name = L"Park";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
-
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the Park method.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_METHOD,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("Park failed internally.", &excep, true);
-		
-}
-
-// -----------
-// UnparkScope
-// -----------
-//
-void UnparkScope(void)
-{
-	OLECHAR *name = L"Unpark";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
-
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the Unpark method.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_METHOD,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("Unpark failed internally.", &excep, true);
-		
-}
-
-// ------------
-// SetParkScope
-// ------------
-//
-void SetParkScope(void)
-{
-	OLECHAR *name = L"SetPark";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
-
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the SetPark method.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_METHOD,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("SetPark failed internally.", &excep, true);
-		
-}
-
-// -----------
-// ConfigScope
-// -----------
-//
-// Use the ASCOM Scope Chooser to get the ProgID of the driver to use.
+// Use the ASCOM Focuser Chooser to get the ProgID of the driver to use.
 // The ProgID is stored in the registry and used by InitScope().
 // The Chooser also provides a config button for the scope itself.
 //
-short ConfigScope()
+short ConfigFocuser()
 {
 	CLSID CLSID_chooser;
 	OLECHAR *name = L"Choose";
+	OLECHAR *dname = L"DeviceType";
 	DISPID dispid;
+	DISPID ppdispid[1];
 	DISPPARAMS dispParms;
 	EXCEPINFO excep;
 	VARIANTARG rgvarg[1];										// Chooser.Choose(ProgID)
 	VARIANT vRes;
+	VARIANT result;
 	HRESULT hr;
 	short iRes = 0;												// Assume success (our retval)
 	IDispatch *pChsrDsp = NULL;									// [sentinel]
@@ -882,7 +506,7 @@ short ConfigScope()
 		//
 		if(FAILED(CLSIDFromProgID(L"DriverHelper.Chooser", &CLSID_chooser)))
 			drvFail(
-				"Failed to find the ASCOM Scope Chooser component. Is it installed?", 
+				"Failed to find the ASCOM Chooser component. Is it installed?", 
 				NULL, true);
 
 		if(FAILED(CoCreateInstance(
@@ -892,8 +516,53 @@ short ConfigScope()
 			IID_IDispatch,
 			(LPVOID *)&pChsrDsp)))
 			drvFail(
-				"Failed to create an instance of the ASCOM Scope Chooser. Is it installed?", 
+				"Failed to create an instance of the ASCOM Chooser. Is it installed?", 
 				NULL, true);
+
+		//
+		// Set the DeviceType to Focuser
+		//
+		if(FAILED(pChsrDsp->GetIDsOfNames(
+			IID_NULL, 
+			&dname, 
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
+		{
+			drvFail(
+				"The Chooser is missing the DeviceType property.", 
+				NULL, true);
+		}
+
+		//
+		// Special setup for propput (See MSKB Q175618)
+		//
+		rgvarg[0].vt = VT_BSTR;
+		rgvarg[0].bstrVal = SysAllocString(L"Focuser");
+		dispParms.cArgs = 1;
+		dispParms.rgvarg = rgvarg;
+		ppdispid[0] = DISPID_PROPERTYPUT;
+		dispParms.cNamedArgs = 1;
+		dispParms.rgdispidNamedArgs = ppdispid;
+		//
+		// Invoke the method
+		//
+		if(FAILED(pChsrDsp->Invoke(dispid, 
+						 IID_NULL, 
+						 LOCALE_USER_DEFAULT, 
+						 DISPATCH_PROPERTYPUT,
+						 &dispParms, 
+						 &result, 
+						 &excep, 
+						 NULL)))
+		{
+			if(excep.scode == EXCEP_NOTIMPL)						// Optional
+				NOTIMPL;											// Resignal silently
+			else
+			{
+				drvFail("Internal error writing to the DeviceType property.", &excep, true);
+			}
+		}
 
 		//
 		// Now just call the Choose() method. It returns a BSTR 
@@ -907,7 +576,7 @@ short ConfigScope()
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 			drvFail(
-				"The ASCOM Scope Chooser is missing the Choose method.",
+				"The ASCOM Chooser is missing the Choose method.",
 				NULL, true);
 
 		//
@@ -983,7 +652,7 @@ void SaveDriverID(char *id)
 //
 // Retrieve the saved ASCOM driver ID from the registry. If there is no saved
 // driver ID, the results differ based on the forConfig parameter. If it is false
-// (trying to connect to the telescope/mount), then it is an error condition. 
+// (trying to connect to the focuser/mount), then it is an error condition. 
 // If forConfig is true (just getting this for Chooser initialization), just
 // return an empty string if there is no saved ProgID.
 //
@@ -1009,7 +678,7 @@ static void get_driverid(char *id, bool forConfig)
 		}
 		else
 			drvFail(
-				"You have not yet configured your telescope type and settings.",
+				"You have not yet configured your focuser type and settings.",
 				NULL, true);
 	}
 
@@ -1098,7 +767,7 @@ static int get_integer(OLECHAR *name)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "The selected focuser driver is missing the %s property.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1170,7 +839,7 @@ static double get_double(OLECHAR *name)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "The selected focuser driver is missing the %s property.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1244,7 +913,7 @@ static void set_double(OLECHAR *name, double val)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "The selected focuser driver is missing the %s property.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1317,7 +986,7 @@ static bool get_bool(OLECHAR *name)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "The selected focuser driver is missing the %s property.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1393,7 +1062,7 @@ static void set_bool(OLECHAR *name, bool val)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "The selected focuser driver is missing the %s property.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1459,7 +1128,7 @@ static char *get_string(OLECHAR *name )
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "The selected focuser driver is missing the %s property.", cp);
 		delete[] cp;
 		drvFail(buf, &excep, true);
 	}
