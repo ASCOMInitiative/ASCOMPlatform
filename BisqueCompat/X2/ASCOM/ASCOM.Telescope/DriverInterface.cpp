@@ -22,10 +22,14 @@
 // When			Who		What
 //----------	---		--------------------------------------------------
 // 22-Apr-11	rbd		Initial edit, taken from TeleAPI/ASCOM plugin
-// 27-Apr-11	rbd		Much work, refactoring. Work in progress
+// 27-Apr-11	rbd		Much work, refactoring. Work in progress.
+// 03-May-11	rbd		More work refactoring and error handling. Handle
+//						V1 drivers.
 //========================================================================
 
 #include "StdAfx.h"
+
+// ** THIS IS IN BAD NEED OF REFACTORING - STOLEN FROM TELEAPI AND DROPPED IN WITH MODS **
 
 #define CROSS_THREAD
 
@@ -43,6 +47,7 @@ char *_szScopeDescription = NULL;
 char *_szScopeDriverInfo = NULL;
 char *_szScopeDriverVersion = NULL;
 char _szDriverID[256];
+int  _iScopeInterfaceVersion = 1;
 bool _bScopeCanSlew = false;									// Capabilites of this scope
 bool _bScopeCanSlewAsync = false;
 bool _bScopeCanSlewAltAz = false;				
@@ -79,6 +84,7 @@ static DWORD dwIntfcCookie;										// Driver interface cookie for GIT
 static DWORD dCurrIntfcThreadId;								// ID of thread on which the interface is currently marshalled
 #endif
 static bool bSyncSlewing = false;								// True if scope is doing a sync slew
+static bool isParkedForV1 = false;
 static LoggerInterface *pLog;
 
 // -------------
@@ -200,19 +206,29 @@ short InitScope(void)
 		_szScopeName = get_string(L"Name");						// Indicator label/name
 		_szScopeDescription = get_string(L"Description");
 		_szScopeDriverInfo = get_string(L"DriverInfo");
-		_szScopeDriverVersion = get_string(L"DriverVersion");
 		_bScopeCanSync = get_bool(L"CanSync");					// Can it sync?
 		_bScopeCanSlew = get_bool(L"CanSlew");					// Can it slew at all?	
 		_bScopeCanSlewAsync = get_bool(L"CanSlewAsync");		// Can it slew asynchronously?
-		_bScopeCanSlewAltAz = get_bool(L"CanSlewAltAz");
 		_bScopeIsGEM = (get_integer(L"AlignmentMode") == 2);	// Is it a GEM?
 		_bScopeCanSetTracking = get_bool(L"CanSetTracking");	// Can we control its tracking?
-		_bScopeCanSetTrackRates = get_bool(L"CanSetRightAscensionRate") &&
-							get_bool(L"CanSetDeclinationRate");	// Too bad for mounts that can't do both
 		_bScopeCanPark = get_bool(L"CanPark");
 		_bScopeCanUnpark = get_bool(L"CanUnpark");
 		_bScopeCanSetPark = get_bool(L"CanSetPark");
-		_bScopeDoesRefraction = get_bool(L"DoesRefraction");
+		__try {
+			_iScopeInterfaceVersion = get_integer(L"InterfaceVersion");		// If it's there it must be at least 2
+			_szScopeDriverVersion = get_string(L"DriverVersion");
+			_bScopeCanSlewAltAz = get_bool(L"CanSlewAltAz");
+			_bScopeCanSetTrackRates = get_bool(L"CanSetRightAscensionRate") &&
+								get_bool(L"CanSetDeclinationRate");	// Too bad for mounts that can't do both
+			_bScopeDoesRefraction = get_bool(L"DoesRefraction");
+		} __except(EXCEPTION_EXECUTE_HANDLER) {
+			_iScopeInterfaceVersion = 1;
+			_szScopeDriverVersion = uni_to_ansi(L"V1 Interface");
+			_bScopeCanSlewAltAz = false;
+			_bScopeCanSetTrackRates = false;
+			_bScopeDoesRefraction = false;
+			isParkedForV1 = false;
+		}
 
 		//
 		// Now we verify that there is a scope out there. We try to get
@@ -233,16 +249,17 @@ short InitScope(void)
 			_bScopeCanSideOfPier = false;
 		}
 		//
-		// If the scope can be unparked, do it. 
+		// For V1 scopes (for which we do parked tracking here, 
+		// if the scope can be unparked, do it. 
 		//
-		//if(_bScopeCanUnpark)
-		//	UnparkScope();
+		if(_iScopeInterfaceVersion == 1 && _bScopeCanUnpark)
+			UnparkScope();
 		//
 		// In order for TheSky X to complete startup and change status
 		// from Connecting... tracking must be on or it must be parked.
 		//
 		if(_bScopeCanSetTracking && 
-					(!_bScopeCanPark || !get_bool(L"AtPark")) && 
+					(!_bScopeCanPark || !GetAtPark()) &&		// GetAtPark is V1/V2 aware
 					!get_bool(L"Tracking"))
 			set_bool(L"Tracking", true);
 		//
@@ -398,7 +415,10 @@ double GetDeclinationRate(void)
 //
 bool GetAtPark(void)
 {
-	return(get_bool(L"AtPark"));
+	if (_iScopeInterfaceVersion > 1)
+		return(get_bool(L"AtPark"));
+	else
+		return isParkedForV1;
 }
 
 // -----------
@@ -739,7 +759,8 @@ void ParkScope(void)
 				     &excep, 
 				     NULL)))
 		drvFail("Park failed internally.", &excep, true);
-		
+	
+	isParkedForV1 = true;
 }
 
 // -----------
@@ -790,7 +811,8 @@ void UnparkScope(void)
 				     &excep, 
 				     NULL)))
 		drvFail("Unpark failed internally.", &excep, true);
-		
+	
+	isParkedForV1 = false;
 }
 
 // ------------
@@ -1070,9 +1092,9 @@ static void save_driverid(char *id)
 // get_integer()
 // -------------
 //
-// Get a named integer property. If the property is not supported
-// then this raises a NOTIMPL exception and lets upstream code
-// decide what to do.
+// Get a named integer property. The optional argument
+// allows trying silently for a property, only raising
+// an exception.
 //
 static int get_integer(OLECHAR *name)
 {
@@ -1097,11 +1119,12 @@ static int get_integer(OLECHAR *name)
 		LOCALE_USER_DEFAULT,
 		&dispid)))
 	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
-		delete[] cp;
-		drvFail(buf, NULL, true);
+		NOTIMPL;												// Optional, resignal silently
+		//cp = uni_to_ansi(name);
+		//wsprintf(buf, 
+		//	 "The selected telescope driver is missing the %s property.", cp);
+		//delete[] cp;
+		//drvFail(buf, NULL, true);
 	}
 
 	//

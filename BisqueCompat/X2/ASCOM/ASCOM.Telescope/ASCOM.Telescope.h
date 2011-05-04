@@ -179,6 +179,7 @@ extern char *_szScopeDescription;
 extern char *_szScopeDriverInfo;
 extern char *_szScopeDriverVersion;
 extern char _szDriverID[256];
+extern int  _iScopeInterfaceVersion;
 extern bool _bScopeHasEqu;
 extern bool _bScopeCanSlew;
 extern bool _bScopeCanSlewAsync;

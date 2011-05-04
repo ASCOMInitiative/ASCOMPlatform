@@ -18,7 +18,8 @@
 //----------	---		--------------------------------------------------
 // 22-Apr-11	rbd		Initial edit
 // 27-Apr-11	rbd		Many changes over the last few days, still fluid.
-// 03-May-11	rbd		Fix m_pszDriverInfoDetailedInfo
+// 03-May-11	rbd		Fix m_pszDriverInfoDetailedInfo. Add deletion of 
+//						callback interface pointers.
 //========================================================================
 
 #include "StdAfx.h"
@@ -84,7 +85,6 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 	_bScopeCanPark = (m_pIniUtil->readInt(m_szIniKey, "MountCanPark", 0) == 1);
 	_bScopeCanUnpark = (m_pIniUtil->readInt(m_szIniKey, "MountCanUnpark", 0) == 1);
 
-
 	InitDrivers(m_pLogger);									// Initialize COM/ASCOM
 }
 
@@ -94,17 +94,16 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 //
 X2Mount::~X2Mount()
 {
-	// I doubt that these are needed for the same reason as above
 	//if (GetSerX())
 	//	delete GetSerX();
-	//if (GetTheSkyXFacadeForDrivers())
-	//	delete GetTheSkyXFacadeForDrivers();
-	//if (GetSleeper())
-	//	delete GetSleeper();
-	//if (GetSimpleIniUtil())
-	//	delete GetSimpleIniUtil();
-	//if (GetLogger())
-	//	delete GetLogger();
+	if (GetTheSkyXFacadeForDrivers())
+		delete GetTheSkyXFacadeForDrivers();
+	if (GetSleeper())
+		delete GetSleeper();
+	if (GetSimpleIniUtil())
+		delete GetSimpleIniUtil();
+	if (GetLogger())
+		delete GetLogger();
 	//if (GetMutex())
 	//	delete GetMutex();
 	//if (GetTickCountInterface())
