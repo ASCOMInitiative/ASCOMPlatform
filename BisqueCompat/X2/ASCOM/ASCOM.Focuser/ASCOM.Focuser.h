@@ -45,7 +45,7 @@ public:
 public:
 
 	//DriverRootInterface
-	virtual DeviceType							deviceType(void) { return DriverRootInterface::DT_MOUNT; }
+	virtual DeviceType							deviceType(void) { return DriverRootInterface::DT_FOCUSER; }
 	virtual int									queryAbstraction(const char* pszName, void** ppVal);
 
 	//LinkInterface
@@ -89,7 +89,7 @@ public:
 	/*! Return the number (count) of avaiable focuser gotos.*/
 	virtual int									amountCountFocGoto(void) const;
 	/*! Return a string along with the amount or size of the corresponding focuser goto.*/
-	virtual int									amountNameFromIndexFocGoto(const int& nZeroBasedIndex, BasicStringInterface& strDisplayName, int& nAmount)=0;
+	virtual int									amountNameFromIndexFocGoto(const int& nZeroBasedIndex, BasicStringInterface& strDisplayName, int& nAmount);
 	/*! Return the current index of focuser goto selection. */
 	virtual int									amountIndexFocGoto(void);
 
@@ -130,3 +130,42 @@ private:
 	HWND _hWndMain;
 };
 
+#define EXCEP_ABORT 0xE100000F
+#define ABORT RaiseException(EXCEP_ABORT, 0, NULL, NULL)
+#define EXCEP_NOTIMPL 0x80040400							// Drivers must raise this code!
+#define NOTIMPL RaiseException(EXCEP_NOTIMPL, 0, NULL, NULL)
+
+// -------------------
+// DriverInterface.cpp
+// -------------------
+
+extern bool _bFocuserActive;
+extern const char *_szAlertTitle;
+extern HWND _hWndMain;
+extern char *_szFocuserName;									// These need to be delete[]ed
+extern char *_szFocuserDescription;
+extern char *_szFocuserDriverInfo;
+extern char *_szFocuserDriverVersion;
+extern char _szDriverID[256];
+extern bool _bAbsolute;
+
+
+extern bool InitDrivers(LoggerInterface *pLogger);
+extern short InitFocuser(void);
+extern void TermFocuser(bool);
+extern short ConfigFocuser();
+extern int GetPosition(void);
+extern bool GetIsMoving();
+extern void Move(int Value);
+extern void Halt(void);
+extern void SaveDriverID(char *id);
+
+// -------------
+// Utilities.cpp
+// -------------
+
+extern BSTR ansi_to_bstr(char *s);
+extern OLECHAR *ansi_to_uni(char *s);
+extern char *uni_to_ansi(OLECHAR *os);
+extern void drvFail(char *msg, EXCEPINFO *ei, bool bFatal);
+extern int CreateRegKeyStructure(HKEY hKey, const char *sPath);

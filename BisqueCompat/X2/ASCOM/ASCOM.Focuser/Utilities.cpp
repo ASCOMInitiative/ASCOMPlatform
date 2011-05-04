@@ -150,7 +150,7 @@ void drvFail(char *msg, EXCEPINFO *ei, bool bFatal)
 		MessageBox(NULL, msg, _szAlertTitle, (MB_OK & MB_ICONSTOP | MB_SETFOREGROUND));
 
 	if(bFatal)													// If was a fatal error, 
-		TermScope(true);										// shut ourselves down
+		TermFocuser(true);										// shut ourselves down
 
 	ABORT;
 }
