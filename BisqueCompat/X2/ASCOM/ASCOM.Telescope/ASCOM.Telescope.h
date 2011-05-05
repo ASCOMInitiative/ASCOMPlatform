@@ -47,7 +47,8 @@ class X2Mount : public MountDriverInterface,
 						public SlewToInterface,
 						public TrackingRatesInterface,
 						public ParkInterface,
-						public UnparkInterface
+						public UnparkInterface,
+						public LinkFromUIThreadInterface
 {
 public:
 	/*!Standard X2 constructor*/
@@ -196,6 +197,7 @@ extern bool _bScopeDoesRefraction;
 extern bool _bScopeCanSideOfPier;
 
 extern bool InitDrivers(LoggerInterface *pLogger);
+extern void TermDrivers(void);
 extern short InitScope(void);
 extern void TermScope(bool);
 extern short ConfigScope();
@@ -213,9 +215,9 @@ extern void SetRightAscensionRate(double rate);
 extern void SetDeclinationRate(double rate);
 extern bool IsPierWest(void);
 extern bool IsSlewing(void);
-extern short SlewScope(double dRA, double dDec);
+extern void SlewScope(double dRA, double dDec);
 extern void AbortSlew(void);
-extern short SyncScope(double dRA, double dDec);
+extern void SyncScope(double dRA, double dDec);
 extern void ParkScope(void);
 extern void UnparkScope(void);
 extern void SetParkScope(void);

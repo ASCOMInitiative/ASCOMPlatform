@@ -25,11 +25,13 @@
 // 27-Apr-11	rbd		Much work, refactoring. Work in progress.
 // 03-May-11	rbd		More work refactoring and error handling. Handle
 //						V1 drivers.
+// 04-May-11	rbd		More work, try to get to reelease ASCOM driver. 
+//						Now both InitScope() and TermScope() are called
+//						on the main thread. But other thrads are still
+//						used.
 //========================================================================
 
 #include "StdAfx.h"
-
-// ** THIS IS IN BAD NEED OF REFACTORING - STOLEN FROM TELEAPI AND DROPPED IN WITH MODS **
 
 #define CROSS_THREAD
 
@@ -66,7 +68,10 @@ bool _bScopeCanSideOfPier = false;
 //
 bool _bScopeActive = false;										// This is true if mount is active
 
-static int get_integer(OLECHAR *name);
+//
+// Forward declarations
+//
+static int get_integer(OLECHAR *name, bool noAlert);
 static double get_double(OLECHAR *name);
 static void set_double(OLECHAR *name, double val);
 static bool get_bool(OLECHAR *name);
@@ -75,15 +80,18 @@ static char *get_string(OLECHAR *name);
 static void switchThreadIf();
 static void get_driverid(char *id, bool forConfig);
 static void save_driverid(char *id);
+static void call(OLECHAR *name);
+static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec);
 
 static IDispatch *_p_DrvDisp = NULL;							// [sentinel] Pointer to driver interface
 
 #ifdef CROSS_THREAD
-static IGlobalInterfaceTable *_p_GIT;							// Pointer to Global Interface Table interface
+static IDispatch *_p_OrigDrvDisp = NULL;
+static IGlobalInterfaceTable *_p_GIT = NULL;					// Pointer to Global Interface Table interface
 static DWORD dwIntfcCookie;										// Driver interface cookie for GIT
 static DWORD dCurrIntfcThreadId;								// ID of thread on which the interface is currently marshalled
+static DWORD dOrigIntfcThreadId;								// ID ot thread on which the interface was originally registered
 #endif
-static bool bSyncSlewing = false;								// True if scope is doing a sync slew
 static bool isParkedForV1 = false;
 static LoggerInterface *pLog;
 
@@ -95,7 +103,7 @@ static LoggerInterface *pLog;
 //
 bool InitDrivers(LoggerInterface *pLogger)
 {
-	DWORD dwVer;
+	//DWORD dwVer;
 	bool bResult = true;
 	static bool bInitDone = false;								// Exec this only once
 
@@ -104,32 +112,47 @@ bool InitDrivers(LoggerInterface *pLogger)
 	{
 		__try
 		{
-			SetMessageQueue(96);
-			dwVer = CoBuildVersion();
-			if(rmm != HIWORD(dwVer))
-				drvFail("Wrong version of OLE", NULL, true);
-			if(FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
-				drvFail("Failed to start OLE", NULL, true);
+			//SetMessageQueue(96);
+			//dwVer = CoBuildVersion();
+			//if(rmm != HIWORD(dwVer))
+			//	drvFail("Wrong version of OLE", NULL, true);
+//			if(FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
+			//if(FAILED(CoInitializeEx(NULL, COINIT_MULTITHREADED)))
+			//	drvFail("Failed to start OLE", NULL, true);
 #ifdef CROSS_THREAD
 			if(FAILED(CoCreateInstance(CLSID_StdGlobalInterfaceTable,
 						NULL,
 						CLSCTX_INPROC_SERVER,
 						IID_IGlobalInterfaceTable,
 						(void **)&_p_GIT)))
-				drvFail("Failed to connect to Global Interface Table", NULL, true);
+				drvFail("Failed to connect to Global Interface Table", NULL, false);	// Don't close conn, it's not open!
 #endif
 			bInitDone = true;
-			get_driverid(_szDriverID, true);						// Get any saved ProgID or ""
+			get_driverid(_szDriverID, true);					// Get any saved ProgID or ""
 //pLog->out("Get RA");
 //pLog->packetsRetriesFailuresChanged(0, 0, 0);
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER)
 		{
-			bResult = false;	// Failed to initialize
+			bResult = false;
 		}
 	}
 
 	return bResult;
+}
+
+//
+// Clean up for exiting
+//
+void TermDrivers(void)
+{
+#ifdef CROSS_THREAD
+	if (_p_GIT != NULL)
+	{
+		_p_GIT->Release();
+		_p_GIT = NULL;
+	}
+#endif
 }
 
 // ---------
@@ -146,7 +169,6 @@ short InitScope(void)
 
 	__try {
 		_bScopeActive = false;									// Assume failure
-
 		//
 		// Retrieve the ProgID of the driver we're to use. Get it into 
 		// OLESTR format.
@@ -179,12 +201,14 @@ short InitScope(void)
 			wsprintf(buf, "Failed to create an instance of the scope driver %s.", _szDriverID);
 			drvFail(buf, NULL, true);
 		}
-
+		
 #ifdef CROSS_THREAD
+		// We are always on main thread now
+		_p_OrigDrvDisp = _p_DrvDisp;
 		//
 		// Get the marshalled interface pointer for later possible thread switching
 		//
-		dCurrIntfcThreadId = GetCurrentThreadId();
+		dCurrIntfcThreadId = dOrigIntfcThreadId = GetCurrentThreadId();
 		if(FAILED(_p_GIT->RegisterInterfaceInGlobal(
 				_p_DrvDisp,
 				IID_IDispatch,
@@ -209,13 +233,13 @@ short InitScope(void)
 		_bScopeCanSync = get_bool(L"CanSync");					// Can it sync?
 		_bScopeCanSlew = get_bool(L"CanSlew");					// Can it slew at all?	
 		_bScopeCanSlewAsync = get_bool(L"CanSlewAsync");		// Can it slew asynchronously?
-		_bScopeIsGEM = (get_integer(L"AlignmentMode") == 2);	// Is it a GEM?
+		_bScopeIsGEM = (get_integer(L"AlignmentMode", false) == 2);	// Is it a GEM?
 		_bScopeCanSetTracking = get_bool(L"CanSetTracking");	// Can we control its tracking?
 		_bScopeCanPark = get_bool(L"CanPark");
 		_bScopeCanUnpark = get_bool(L"CanUnpark");
 		_bScopeCanSetPark = get_bool(L"CanSetPark");
 		__try {
-			_iScopeInterfaceVersion = get_integer(L"InterfaceVersion");		// If it's there it must be at least 2
+			_iScopeInterfaceVersion = get_integer(L"InterfaceVersion", true);	// *SILENT* If it's there it must be at least 2
 			_szScopeDriverVersion = get_string(L"DriverVersion");
 			_bScopeCanSlewAltAz = get_bool(L"CanSlewAltAz");
 			_bScopeCanSetTrackRates = get_bool(L"CanSetRightAscensionRate") &&
@@ -243,13 +267,13 @@ short InitScope(void)
 		// Determine if it reports SOP (pointing state)
 		//
 		__try {
-			get_integer(L"SideOfPier");
+			get_integer(L"SideOfPier", false);
 			_bScopeCanSideOfPier = true;
 		} __except(EXCEPTION_EXECUTE_HANDLER) {
 			_bScopeCanSideOfPier = false;
 		}
 		//
-		// For V1 scopes (for which we do parked tracking here, 
+		// For V1 scopes (for which we do parked tracking here), 
 		// if the scope can be unparked, do it. 
 		//
 		if(_iScopeInterfaceVersion == 1 && _bScopeCanUnpark)
@@ -288,7 +312,12 @@ short InitScope(void)
 // TermScope
 // ---------
 //
-void TermScope(bool fatal)
+// The 'fatal' argument determines whether this was called as part of
+// a previous exception. If it is true, then do all of this as 
+// "best efforts' and don't pop any more error boxes or raise any
+// more errors.
+//
+void TermScope(bool bestEfforts)
 {
 	OLECHAR *name = L"Connected";
 	DISPID dispid;
@@ -302,7 +331,9 @@ void TermScope(bool fatal)
 	if(_p_DrvDisp != NULL)										// Just in case! (see termPlugin())
 	{
 #ifdef CROSS_THREAD
-		switchThreadIf();
+		//switchThreadIf();
+		//We are always on main thread now
+		_p_DrvDisp = _p_OrigDrvDisp;
 #endif
 
 		//
@@ -312,15 +343,15 @@ void TermScope(bool fatal)
 		// US because its call to TermScope() passses true, while all
 		// others pass false.
 		//
-		if(FAILED(_p_DrvDisp->GetIDsOfNames(
+		if(!bestEfforts && FAILED(_p_DrvDisp->GetIDsOfNames(
 			IID_NULL, 
 			&name, 
 			1, 
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 			drvFail(
-				"The ASCOM scope driver is missing the Connected property.",
-				NULL, !fatal);
+				"Connected = False failed.",
+				NULL, false);
 
 		rgvarg[0].vt = VT_BOOL;
 		rgvarg[0].boolVal = VARIANT_FALSE;
@@ -328,7 +359,7 @@ void TermScope(bool fatal)
 		dispParms.rgvarg = rgvarg;
 		dispParms.cNamedArgs = 1;								// PropPut kludge
 		dispParms.rgdispidNamedArgs = &didPut;
-		if(FAILED(hr = _p_DrvDisp->Invoke(
+		if(!bestEfforts && FAILED(hr = _p_DrvDisp->Invoke(
 			dispid,
 			IID_NULL, 
 			LOCALE_USER_DEFAULT, 
@@ -336,16 +367,27 @@ void TermScope(bool fatal)
 			&dispParms, 
 			&vRes,
 			&excep, NULL)))
-			drvFail("the Connected = False failed internally.", &excep, true);	// Don't call us back!
-
+			drvFail("Connected = False failed.", &excep, true);	// Don't call us back!
 
 #ifdef CROSS_THREAD
 		_p_GIT->RevokeInterfaceFromGlobal(dwIntfcCookie);		// We're done with this driver/object
 #endif
-
 		_p_DrvDisp->Release();									// Release instance of the driver
 		_p_DrvDisp = NULL;										// So won't happen again in PROCESS_DETACH
+
+
 	}
+#ifdef CROSS_THREAD
+	else
+	{
+		//
+		// Even if the driver has been released, make sure the
+		// interface is out of the GIT
+		//
+		_p_GIT->RevokeInterfaceFromGlobal(dwIntfcCookie);		// We're done with this driver/object
+	}
+#endif
+
 	if(_szScopeName != NULL)
 		delete[] _szScopeName;									// Free this string
 	_szScopeName = NULL;										// [sentinel]
@@ -359,9 +401,7 @@ void TermScope(bool fatal)
 		delete[] _szScopeDriverVersion;
 	_szScopeDriverVersion = NULL;
 
-
 	_bScopeActive = false;
-
 }
 
 // --------------
@@ -479,7 +519,7 @@ void SetLongitude(double lng)
 //
 bool IsPierWest(void)
 {
-	int sp = get_integer(L"SideOfPier");
+	int sp = get_integer(L"SideOfPier", false);
 	return(sp == 1);
 }
 
@@ -493,28 +533,18 @@ bool IsSlewing(void)
 }
 
 //
-//	----
-//	Slew
-//	----
+//	-----------
+//	SlewScope()
+//	-----------
 //
 //	Slew the telescope to a specified RA/Dec position.
 //
-short SlewScope(double dRA, double dDec)
+void SlewScope(double dRA, double dDec)
 {
 	OLECHAR *name;
-	DISPID dispid;
-	DISPPARAMS dispParms;
-	VARIANTARG rgvarg[2];
-	EXCEPINFO excep;
-	VARIANT vRes;
-	short iRes = 0;												// Assume success (our retval)
-	HRESULT hr;
 
 	if(!_bScopeActive)											// No scope hookup?
-	{
-		bSyncSlewing = false;									// Cannot be sync-slewing!
-		return(-1);												// Forget this
-	}
+		ABORT;
 
 	//
 	// Fall back to sync slewing if async not supported.
@@ -524,65 +554,7 @@ short SlewScope(double dRA, double dDec)
 	else
 		name = L"SlewToCoordinates";
 
-	__try
-	{
-
-#ifdef CROSS_THREAD
-		switchThreadIf();
-#endif
-
-		//
-		// Get our dispatch ID
-		//
-		if(FAILED(_p_DrvDisp->GetIDsOfNames(
-			IID_NULL, 
-			&name, 
-			1, 
-			LOCALE_USER_DEFAULT,
-			&dispid)))
-		{
-			char buf[256];
-
-			wsprintf(buf, "The ASCOM scope driver is missing the %s method.", name);
-			drvFail(buf, NULL, true);
-		}
-		//
-		// Start the slew.
-		//
-		rgvarg[0].vt = VT_R8;									// Arg order is R->L
-		rgvarg[0].dblVal = dDec;
-		rgvarg[1].vt = VT_R8;
-		rgvarg[1].dblVal = dRA;
-		dispParms.cArgs = 2;
-		dispParms.rgvarg = rgvarg;
-		dispParms.cNamedArgs = 0;
-		dispParms.rgdispidNamedArgs =NULL;
-		if(!_bScopeCanSlewAsync) bSyncSlewing = true;			// Internal flag
-		if(FAILED(hr = _p_DrvDisp->Invoke(
-			dispid,
-			IID_NULL, 
-			LOCALE_USER_DEFAULT, 
-			DISPATCH_METHOD, 
-			&dispParms, 
-			&vRes,
-			&excep, 
-			NULL)))
-		{
-			//
-			// Most slew failures are not fatal (below horizon, etc.)
-			// Report the error and let the driver continue.
-			//
-			drvFail("Slew to object failed internally.", &excep, false);
-		}
-	}
-	__except(EXCEPTION_EXECUTE_HANDLER)
-	{
-		iRes = -1;
-	}
-
-	bSyncSlewing = false;
-
-	return(iRes);
+	call_with_ra_dec(name, dRA, dDec);
 }
 
 // ---------
@@ -591,49 +563,10 @@ short SlewScope(double dRA, double dDec)
 //
 void AbortSlew(void)
 {
-	OLECHAR *name = L"AbortSlew";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
+	if(!_bScopeActive)										// No scope hookup?
+		ABORT;												// Forget this
 
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the AbortSlew method.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_METHOD,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("AbortSlew failed internally.", &excep, true);
-		
+	call(L"AbortSlew");
 }
 
 //	---------
@@ -643,72 +576,13 @@ void AbortSlew(void)
 //	Sync the telescope's position to the given coordinates
 //
 //
-short SyncScope(double dRA, double dDec)
+void SyncScope(double dRA, double dDec)
 {
-	OLECHAR *name = L"SyncToCoordinates";
-	DISPID dispid;
-	DISPPARAMS dispParms;
-	VARIANTARG rgvarg[2];
-	EXCEPINFO excep;
-	VARIANT vRes;
-	short iRes = 0;												// Assume success (our retval)
-	HRESULT hr;
 
-	if(!_bScopeActive)											// No scope hookup?
-		return(-1);												// Forget this
+	if(!_bScopeActive)										// No scope hookup?
+		ABORT;												// Forget this
 
-	__try
-		{
-#ifdef CROSS_THREAD
-			switchThreadIf();
-#endif
-
-			//
-			// Get our dispatch ID
-			//
-			if(FAILED(_p_DrvDisp->GetIDsOfNames(
-				IID_NULL, 
-				&name, 
-				1, 
-				LOCALE_USER_DEFAULT,
-				&dispid)))
-				drvFail(
-					"The ASCOM scope driver is missing the SyncToCoordinates method.",
-					NULL, true);
-
-			//
-			// Do the sync
-			//
-			rgvarg[0].vt = VT_R8;		// Arg order is R->L
-			rgvarg[0].dblVal = dDec;
-			rgvarg[1].vt = VT_R8;
-			rgvarg[1].dblVal = dRA;
-			dispParms.cArgs = 2;
-			dispParms.rgvarg = rgvarg;
-			dispParms.cNamedArgs = 0;
-			dispParms.rgdispidNamedArgs =NULL;
-			if(FAILED(hr = _p_DrvDisp->Invoke(
-				dispid, 
-				IID_NULL, 
-				LOCALE_USER_DEFAULT, 
-				DISPATCH_METHOD, 
-				&dispParms, 
-				&vRes,
-				&excep, 
-				NULL)))
-			{
-				//
-				// All errors fatal. Should not call this if _bScopeCanSync is false!
-				//
-				drvFail("Sync to coordinates failed internally.", &excep, true);
-			}
-		}
-	__except(EXCEPTION_EXECUTE_HANDLER)
-		{
-			iRes = -1;
-		}
-
-	return(iRes);
+	call_with_ra_dec(L"SyncToCoordinates", dRA, dDec);
 }	
 
 // ---------
@@ -717,48 +591,10 @@ short SyncScope(double dRA, double dDec)
 //
 void ParkScope(void)
 {
-	OLECHAR *name = L"Park";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
+	if(!_bScopeActive)										// No scope hookup?
+		ABORT;												// Forget this
 
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the Park method.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_METHOD,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("Park failed internally.", &excep, true);
+	call(L"Park");
 	
 	isParkedForV1 = true;
 }
@@ -769,48 +605,10 @@ void ParkScope(void)
 //
 void UnparkScope(void)
 {
-	OLECHAR *name = L"Unpark";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
+	if(!_bScopeActive)										// No scope hookup?
+		ABORT;												// Forget this
 
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the Unpark method.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_METHOD,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("Unpark failed internally.", &excep, true);
+	call(L"Unpark");
 	
 	isParkedForV1 = false;
 }
@@ -821,49 +619,10 @@ void UnparkScope(void)
 //
 void SetParkScope(void)
 {
-	OLECHAR *name = L"SetPark";
-	DISPID dispid;
-	DISPPARAMS dispparms;
-	EXCEPINFO excep;
-	VARIANT vRes;
+	if(!_bScopeActive)										// No scope hookup?
+		ABORT;												// Forget this
 
-#ifdef CROSS_THREAD
-	switchThreadIf();
-#endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-		drvFail(
-			"The ASCOM scope driver is missing the SetPark method.",
-			NULL, true);
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_METHOD,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-		drvFail("SetPark failed internally.", &excep, true);
-		
+	call(L"SetPark");
 }
 
 // -----------
@@ -1059,8 +818,11 @@ static void get_driverid(char *id, bool forConfig)
 	RegCloseKey(hKey);
 }
 
-//
-//
+// ---------------
+// save_driverid()
+// ---------------
+// 
+// Save the ProgID of the last selected driver. See get_driverid() above.
 //
 static void save_driverid(char *id)
 {
@@ -1096,7 +858,7 @@ static void save_driverid(char *id)
 // allows trying silently for a property, only raising
 // an exception.
 //
-static int get_integer(OLECHAR *name)
+static int get_integer(OLECHAR *name, bool noAlert)
 {
 	DISPID dispid;
 	VARIANT result;
@@ -1119,12 +881,18 @@ static int get_integer(OLECHAR *name)
 		LOCALE_USER_DEFAULT,
 		&dispid)))
 	{
-		NOTIMPL;												// Optional, resignal silently
-		//cp = uni_to_ansi(name);
-		//wsprintf(buf, 
-		//	 "The selected telescope driver is missing the %s property.", cp);
-		//delete[] cp;
-		//drvFail(buf, NULL, true);
+		if (noAlert)
+		{
+			NOTIMPL;												// Optional, resignal silently
+		}
+		else
+		{
+			cp = uni_to_ansi(name);
+			wsprintf(buf, 
+				"[%s] lost link to ASCOM driver.", cp);
+			delete[] cp;
+			drvFail(buf, NULL, true);
+		}
 	}
 
 	//
@@ -1194,7 +962,7 @@ static double get_double(OLECHAR *name)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "[%s] lost link to ASCOM driver.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1268,7 +1036,7 @@ static void set_double(OLECHAR *name, double val)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "[%s] lost link to ASCOM driver.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1341,7 +1109,7 @@ static bool get_bool(OLECHAR *name)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "[%s] lost link to ASCOM driver.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1417,7 +1185,7 @@ static void set_bool(OLECHAR *name, bool val)
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "[%s] lost link to ASCOM driver.", cp);
 		delete[] cp;
 		drvFail(buf, NULL, true);
 	}
@@ -1483,9 +1251,9 @@ static char *get_string(OLECHAR *name )
 	{
 		cp = uni_to_ansi(name);
 		wsprintf(buf, 
-			 "The selected telescope driver is missing the %s property.", cp);
+			 "[%s] lost link to ASCOM driver.", cp);
 		delete[] cp;
-		drvFail(buf, &excep, true);
+		drvFail(buf, NULL, true);
 	}
 
 	//
@@ -1521,6 +1289,133 @@ static char *get_string(OLECHAR *name )
 		
 	return(uni_to_ansi(vRes.bstrVal));
 }
+
+// ------
+// call()
+// ------
+//
+// Call a COM method with no parameters and no return value.
+//
+static void call(OLECHAR *name)
+{
+	DISPID dispid;
+	DISPPARAMS dispparms;
+	EXCEPINFO excep;
+	VARIANT vRes;
+	char *cp;
+	char buf[256];
+
+#ifdef CROSS_THREAD
+	switchThreadIf();
+#endif
+
+	//
+	// Get our dispatch ID
+	//
+	if(FAILED(_p_DrvDisp->GetIDsOfNames(
+		IID_NULL, 
+		&name,
+		1, 
+		LOCALE_USER_DEFAULT,
+		&dispid)))
+	{
+		cp = uni_to_ansi(name);
+		wsprintf(buf, 
+			 "[%s] lost link to ASCOM driver.", cp);
+		delete[] cp;
+		drvFail(buf, NULL, true);
+	}
+
+	dispparms.cArgs = 0;
+	dispparms.rgvarg = NULL;
+	dispparms.cNamedArgs = 0;
+	dispparms.rgdispidNamedArgs = NULL;
+	//
+	// Invoke the method
+	//
+	if(FAILED(_p_DrvDisp->Invoke(dispid, 
+				     IID_NULL, 
+				     LOCALE_USER_DEFAULT, 
+				     DISPATCH_METHOD,
+				     &dispparms, 
+				     &vRes, 
+				     &excep, 
+				     NULL)))
+	{
+		cp = uni_to_ansi(name);
+		wsprintf(buf, 
+			 "%s failed internally.", cp);
+		delete[] cp;
+		drvFail(buf, &excep, true);
+	}		
+}
+
+// ------------------
+// call_with_ra_dec()
+// ------------------
+//
+// Common COM call to method which takes RA/Dec coordinates.
+//
+static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
+{
+	DISPID dispid;
+	DISPPARAMS dispParms;
+	VARIANTARG rgvarg[2];
+	EXCEPINFO excep;
+	VARIANT vRes;
+	HRESULT hr;
+	char *cp;
+	char buf[256];
+
+#ifdef CROSS_THREAD
+	switchThreadIf();
+#endif
+
+	//
+	// Get our dispatch ID
+	//
+	if(FAILED(_p_DrvDisp->GetIDsOfNames(
+		IID_NULL, 
+		&name, 
+		1, 
+		LOCALE_USER_DEFAULT,
+		&dispid)))
+	{
+		cp = uni_to_ansi(name);
+		wsprintf(buf, 
+			 "[%s] lost link to ASCOM driver.", cp);
+		delete[] cp;
+		drvFail(buf, NULL, true);
+	}
+
+	//
+	// Do the sync
+	//
+	rgvarg[0].vt = VT_R8;		// Arg order is R->L
+	rgvarg[0].dblVal = dDec;
+	rgvarg[1].vt = VT_R8;
+	rgvarg[1].dblVal = dRA;
+	dispParms.cArgs = 2;
+	dispParms.rgvarg = rgvarg;
+	dispParms.cNamedArgs = 0;
+	dispParms.rgdispidNamedArgs =NULL;
+	if(FAILED(hr = _p_DrvDisp->Invoke(
+		dispid, 
+		IID_NULL, 
+		LOCALE_USER_DEFAULT, 
+		DISPATCH_METHOD, 
+		&dispParms, 
+		&vRes,
+		&excep, 
+		NULL)))
+	{
+		cp = uni_to_ansi(name);
+		wsprintf(buf, 
+			 "%s failed internally.", cp);
+		delete[] cp;
+		drvFail(buf, &excep, true);
+	}
+}	
 
 
 #ifdef CROSS_THREAD
