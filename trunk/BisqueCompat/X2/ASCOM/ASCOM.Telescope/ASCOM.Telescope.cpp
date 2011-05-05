@@ -94,6 +94,7 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 //
 X2Mount::~X2Mount()
 {
+	TermDrivers();
 	//if (GetSerX())
 	//	delete GetSerX();
 	if (GetTheSkyXFacadeForDrivers())
@@ -138,9 +139,8 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 		*ppVal = dynamic_cast<ParkInterface*>(this);
 	else if (!strcmp(pszName, UnparkInterface_Name) && _bScopeCanUnpark)
 		*ppVal = dynamic_cast<UnparkInterface*>(this);
-	//Does not work as advertised
-	//else if (!strcmp(pszName, LinkFromUIThreadInterface_Name))
-	//	*ppVal = dynamic_cast<LinkFromUIThreadInterface*>(this);
+	else if (!strcmp(pszName, LinkFromUIThreadInterface_Name))
+		*ppVal = dynamic_cast<LinkFromUIThreadInterface*>(this);
 
 	return SB_OK;
 }
@@ -428,18 +428,28 @@ int X2Mount::setTrackingRates( const bool& bTrackingOn, const bool& bIgnoreRates
 	// Assuming that if it can set rates, can turn tracking on and off for sure
 	__try {
 		SetTracking(bTrackingOn);
-		if (!bIgnoreRates)
+		//
+		// This is a hack for TheSky X. If the rates are 0,0 and yet bIgnoreRates
+		// is true, still set the 0,0 rates. We do this because choosing No for 
+		// the set rate doesn't even call us. The only way to get rid of an offset 
+		// is to choose a star and select SetTracking Rates for 0,0 and then click
+		// Yes.
+		//
+		if (!bIgnoreRates || (dRaRateArcSecPerSec == 0.0 && dDecRateArcSecPerSec == 0.0))
 		{
 			if(_bScopeCanSetTrackRates)
 			{
-				SetRightAscensionRate(dRaRateArcSecPerSec * SIDRATE);
+				SetRightAscensionRate((dRaRateArcSecPerSec * SIDRATE) / 15.0);	// Arc sec to time sec
 				SetDeclinationRate(dDecRateArcSecPerSec);
 			}
-			else
+			else if (!bIgnoreRates)
 			{
-				// This is needed because TSX doesn't honor the abstractions it reads
-				// after connection, so we have to leave them all on regardless of the
-				// mount's capabilities. Here' we catch
+				//
+				// This is needed because TSX's TrackingRatesInterface must be implemented just for 
+				// tracking on-off control. Thus, the Set Track Rates button will appear. If the mount 
+				// supports tracking on-off but not offsets, we have to catch clicks on Set Track Rates 
+				// and return the SB ERR_NOT_IMPL error.
+				//
 				iRes = ERR_NOT_IMPL;
 			}
 		}
@@ -484,7 +494,7 @@ int X2Mount::trackingRates( bool& bTrackingOn, double& dRaRateArcSecPerSec, doub
 //WTF Why this and isCompletePark?
 bool X2Mount::isParked(void)
 {
-	if(_bScopeCanPark)
+	if(_bScopeActive && _bScopeCanPark)
 		return GetAtPark();
 	else
 		return false;
@@ -643,8 +653,10 @@ is lower than the counterweights.
 */
 int X2Mount::beyondThePole(bool& bYes)
 {
+	if(!_bScopeActive)									// No scope hookup?
+		return(ERR_COMMNOLINK);							// Forget this
 	if (!GetCanPierSide())
-		return(ERR_NOT_IMPL);						// Safety valve, should not happen
+		return(ERR_NOT_IMPL);							// Safety valve, should not happen
 
 	bYes = (IsPierWest());
 	return 0;

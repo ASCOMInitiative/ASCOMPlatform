@@ -126,7 +126,7 @@ char *uni_to_ansi(OLECHAR *os)
 // description string will be the error message. If not, then the
 // string passed to us by the caller is the error.
 //
-void drvFail(char *msg, EXCEPINFO *ei, bool bFatal)
+void drvFail(char *msg, EXCEPINFO *ei, bool bCloseConn)
 {
 	bool handled = false;
 
@@ -149,8 +149,8 @@ void drvFail(char *msg, EXCEPINFO *ei, bool bFatal)
 	if(!handled)
 		MessageBox(NULL, msg, _szAlertTitle, (MB_OK & MB_ICONSTOP | MB_SETFOREGROUND));
 
-	if(bFatal)													// If was a fatal error, 
-		TermScope(true);										// shut ourselves down
+	if(bCloseConn)												// If was a fatal error, 
+		TermScope(true);										// shut ourselves down best efforts
 
 	ABORT;
 }
