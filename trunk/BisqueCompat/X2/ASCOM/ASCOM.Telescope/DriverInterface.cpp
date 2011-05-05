@@ -29,11 +29,17 @@
 //						Now both InitScope() and TermScope() are called
 //						on the main thread. But other thrads are still
 //						used.
+// 05-May-11	rbd		Abandon GIT thread marshaling and go with CoXxx
+//						calls. I still end up with 2 extra refs but it is
+//						always 2 regardless. WTF? At least now it's 
+//						releasing the driver on disconnect and also when
+//						TheSky is shut down with a connected mount.
 //========================================================================
 
 #include "StdAfx.h"
 
-#define CROSS_THREAD
+#define CROSS_THREAD_GIT_OFF
+#define CROSS_THREAD_CO
 
 #define OUR_REGISTRY_BASE HKEY_LOCAL_MACHINE
 #define OUR_REGISTRY_AREA "Software\\ASCOM\\TheSky X2\\Mount"
@@ -77,7 +83,12 @@ static void set_double(OLECHAR *name, double val);
 static bool get_bool(OLECHAR *name);
 static void set_bool(OLECHAR *name, bool val);
 static char *get_string(OLECHAR *name);
+#ifdef CROSS_THREAD_GIT
 static void switchThreadIf();
+#endif
+#ifdef CROSS_THREAD_CO
+static IDispatch *get_dispatch();
+#endif
 static void get_driverid(char *id, bool forConfig);
 static void save_driverid(char *id);
 static void call(OLECHAR *name);
@@ -85,12 +96,15 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec);
 
 static IDispatch *_p_DrvDisp = NULL;							// [sentinel] Pointer to driver interface
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 static IDispatch *_p_OrigDrvDisp = NULL;
 static IGlobalInterfaceTable *_p_GIT = NULL;					// Pointer to Global Interface Table interface
 static DWORD dwIntfcCookie;										// Driver interface cookie for GIT
 static DWORD dCurrIntfcThreadId;								// ID of thread on which the interface is currently marshalled
 static DWORD dOrigIntfcThreadId;								// ID ot thread on which the interface was originally registered
+#endif
+#ifdef CROSS_THREAD_CO
+static LPSTREAM pMarshalStream = NULL;
 #endif
 static bool isParkedForV1 = false;
 static LoggerInterface *pLog;
@@ -119,7 +133,7 @@ bool InitDrivers(LoggerInterface *pLogger)
 //			if(FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
 			//if(FAILED(CoInitializeEx(NULL, COINIT_MULTITHREADED)))
 			//	drvFail("Failed to start OLE", NULL, true);
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 			if(FAILED(CoCreateInstance(CLSID_StdGlobalInterfaceTable,
 						NULL,
 						CLSCTX_INPROC_SERVER,
@@ -146,7 +160,8 @@ bool InitDrivers(LoggerInterface *pLogger)
 //
 void TermDrivers(void)
 {
-#ifdef CROSS_THREAD
+	TermScope(true);
+#ifdef CROSS_THREAD_GIT
 	if (_p_GIT != NULL)
 	{
 		_p_GIT->Release();
@@ -202,7 +217,7 @@ short InitScope(void)
 			drvFail(buf, NULL, true);
 		}
 		
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 		// We are always on main thread now
 		_p_OrigDrvDisp = _p_DrvDisp;
 		//
@@ -214,6 +229,12 @@ short InitScope(void)
 				IID_IDispatch,
 				&dwIntfcCookie)))
 			drvFail("Failed to register driver interface in GIT", NULL, true);
+#endif
+#ifdef CROSS_THREAD_CO
+		if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, _p_DrvDisp, &pMarshalStream)))
+			drvFail("Failed to set up cross-thread marshaling", NULL, true);
+		_p_DrvDisp->Release();
+		// NOT USED BELOW - EACH COM CALL GETS ITS OWN
 #endif
 		//
 		// We now need to connect the scope. To do this, we set the 
@@ -330,10 +351,13 @@ void TermScope(bool bestEfforts)
 
 	if(_p_DrvDisp != NULL)										// Just in case! (see termPlugin())
 	{
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 		//switchThreadIf();
 		//We are always on main thread now
 		_p_DrvDisp = _p_OrigDrvDisp;
+#endif
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
 #endif
 
 		//
@@ -369,15 +393,29 @@ void TermScope(bool bestEfforts)
 			&excep, NULL)))
 			drvFail("Connected = False failed.", &excep, true);	// Don't call us back!
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 		_p_GIT->RevokeInterfaceFromGlobal(dwIntfcCookie);		// We're done with this driver/object
-#endif
 		_p_DrvDisp->Release();									// Release instance of the driver
 		_p_DrvDisp = NULL;										// So won't happen again in PROCESS_DETACH
+#endif
+#ifdef CROSS_THREAD_CO
+		// Best efforts
+		if(CoGetInterfaceAndReleaseStream(pMarshalStream, IID_IDispatch, (LPVOID *)&_p_DrvDisp) == S_OK)
+		{
+			//** TODO ** WTF? I could never get the refcounts right on the GIT method.
+			// Using these CoXxx() calls, I'm close, but I end up with exactly 2 extra refs
+			// no matter HOW many times I MarshalInStream/GetAndRelease in get_dispatch()
+			// then release at the end of the COM call. Where are the extra refs coming from?
+			_p_DrvDisp->Release();									// Release instance of the driver
+			_p_DrvDisp->Release();
+			_p_DrvDisp->Release();
+			_p_DrvDisp = NULL;
+		}
+#endif
 
 
 	}
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	else
 	{
 		//
@@ -867,10 +905,12 @@ static int get_integer(OLECHAR *name, bool noAlert)
 	char *cp;
 	char buf[256];
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	switchThreadIf();
 #endif
-
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
+#endif
 	//
 	// Get our dispatch ID
 	//
@@ -926,6 +966,10 @@ static int get_integer(OLECHAR *name, bool noAlert)
 		}
 	}
 
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp->Release();
+#endif
+
 	return(result.intVal);										// Return integer result
 }
 
@@ -946,8 +990,11 @@ static double get_double(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	switchThreadIf();
+#endif
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
 #endif
 
 	//
@@ -998,6 +1045,10 @@ static double get_double(OLECHAR *name)
 		}
 	}
 
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp->Release();
+#endif
+
 	return(result.dblVal);										// Return long result
 }
 
@@ -1020,8 +1071,11 @@ static void set_double(OLECHAR *name, double val)
 	char *cp;
 	char buf[256];
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	switchThreadIf();
+#endif
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
 #endif
 
 	//
@@ -1074,6 +1128,10 @@ static void set_double(OLECHAR *name, double val)
 			drvFail(buf, &excep, true);
 		}
 	}
+
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp->Release();
+#endif
 }
 
 // ----------
@@ -1093,8 +1151,11 @@ static bool get_bool(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	switchThreadIf();
+#endif
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
 #endif
 
 	//
@@ -1145,6 +1206,10 @@ static bool get_bool(OLECHAR *name)
 		}
 	}
 
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp->Release();
+#endif
+
 	return(result.boolVal == VARIANT_TRUE);						// Return C++ bool result
 }
 
@@ -1169,8 +1234,11 @@ static void set_bool(OLECHAR *name, bool val)
 	char buf[256];
 	HRESULT hr;
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	switchThreadIf();
+#endif
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
 #endif
 
 	//
@@ -1218,6 +1286,10 @@ static void set_bool(OLECHAR *name, bool val)
 		}
 	}
 
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp->Release();
+#endif
+
 }
 
 // ------------
@@ -1235,8 +1307,11 @@ static char *get_string(OLECHAR *name )
 	char *cp;
 	char buf[256];
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	switchThreadIf();
+#endif
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
 #endif
 
 	//
@@ -1286,6 +1361,10 @@ static char *get_string(OLECHAR *name )
 			drvFail(buf, &excep, true);
 		}
 	}
+
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp->Release();
+#endif
 		
 	return(uni_to_ansi(vRes.bstrVal));
 }
@@ -1305,8 +1384,11 @@ static void call(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	switchThreadIf();
+#endif
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
 #endif
 
 	//
@@ -1348,6 +1430,10 @@ static void call(OLECHAR *name)
 		delete[] cp;
 		drvFail(buf, &excep, true);
 	}		
+
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp->Release();
+#endif
 }
 
 // ------------------
@@ -1367,8 +1453,11 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 	char *cp;
 	char buf[256];
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 	switchThreadIf();
+#endif
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp = get_dispatch();
 #endif
 
 	//
@@ -1415,10 +1504,14 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 		delete[] cp;
 		drvFail(buf, &excep, true);
 	}
+
+#ifdef CROSS_THREAD_CO
+	_p_DrvDisp->Release();
+#endif
 }	
 
 
-#ifdef CROSS_THREAD
+#ifdef CROSS_THREAD_GIT
 //
 // Gets the IDispatch interface on a new thread from a previously obtained
 // marshal stream, then gets a new interface marshaling stream on the new
@@ -1439,5 +1532,19 @@ static void switchThreadIf()
 			drvFail("Failed to get interface from GIT in new thread", NULL, true);
 		_p_DrvDisp = pTemp;
 	}
+}
+#endif
+
+#ifdef CROSS_THREAD_CO
+static IDispatch *get_dispatch(void)
+{
+	IDispatch *pDisp;
+
+	if(FAILED(CoGetInterfaceAndReleaseStream(pMarshalStream, IID_IDispatch, (LPVOID *)&pDisp)))
+		drvFail("Failed to unmarshal dispatch pointer", NULL, true);
+	if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, pDisp, &pMarshalStream)))
+		drvFail("Failed to remarshal dispatch pointer", NULL, true);
+
+	return pDisp;
 }
 #endif
