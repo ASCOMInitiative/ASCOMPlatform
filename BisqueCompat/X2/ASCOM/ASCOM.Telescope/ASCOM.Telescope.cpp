@@ -206,7 +206,7 @@ int X2Mount::execModalSettingsDialog(void)
 		m_pIniUtil->writeInt(m_szIniKey, "MountCanUnpark", (_bScopeCanUnpark ? 1 : 0));
 
 		TermScope(false);
-		
+		//TODO - Remove this when SB fixes the dynamic adaptation
 		MessageBox(_hWndMain, "The Hardware and Driver information, as well as available mount controls, will not reflect this change until TheSky X is restarted.", 
 			"Get Mount Info", (MB_OK + MB_ICONINFORMATION));
 	}
