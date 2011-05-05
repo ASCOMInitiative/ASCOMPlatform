@@ -11,6 +11,12 @@ namespace ASCOM
     [Serializable]
     public class DriverAccessCOMException : COMException
     {
+        /// <summary>
+        /// Creates a new DriverAccessCOException
+        /// </summary>
+        /// <param name="Message">The error message to display</param>
+        /// <param name="ErrorCode">The COM error code to attach to this exception</param>
+        /// <param name="InnerException">Any inner exception that is to be attached to the exception, or null if there is no inner exception</param>
         public DriverAccessCOMException(string Message, int ErrorCode, Exception InnerException)
             : base(Message, InnerException)
         {

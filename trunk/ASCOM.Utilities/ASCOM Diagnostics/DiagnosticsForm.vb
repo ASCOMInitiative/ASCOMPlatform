@@ -1,12 +1,4 @@
-﻿' Initial release
-' Version 1.0.1.0 - Released
-
-' Fixed issue where all setup log files were not recorded
-' Added Conform logs to list of retrieved setup logs
-' Added drive scan, reporting available space
-' Version 1.0.2.0 - Released 15/10/09 Peter Simpson
-
-Imports ASCOM.Astrometry
+﻿Imports ASCOM.Astrometry
 Imports ASCOM.DeviceInterface
 Imports ASCOM.Internal
 Imports ASCOM.Utilities.Exceptions
@@ -22,6 +14,7 @@ Imports System.Threading
 
 Public Class DiagnosticsForm
 
+#Region "Constants and Variables"
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
     Private Const INST_DISPLAY_VERSION As String = "DisplayVersion"
@@ -76,6 +69,7 @@ Public Class DiagnosticsForm
     Private DeviceObject As Object ' Device test object
 
     Private LastLogFile As String ' Name of last diagnostics log file
+#End Region
 
 #Region "XML  test String"
     Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf & _
@@ -751,30 +745,6 @@ Public Class DiagnosticsForm
         Sim = Nothing
 
         Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.ToggleSwitchSimulator.Controller"
-        Sim.Description = "Platform 6 Switch Simulator"
-        Sim.DeviceType = "Switch"
-        Sim.Name = "ASCOM.ToggleSwitchSimulator.Controller"
-        Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 1
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
-
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.MultiDeviceSimulator.Controller"
-        Sim.Description = "ASCOM Multi Device Simulator Controller"
-        Sim.DeviceType = "Switch"
-        Sim.Name = "ASCOM.MultiDeviceSimulator.Controller"
-        Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 1
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
-
-        Sim = New SimulatorDescriptor
         Sim.ProgID = "SwitchSim.Switch"
         Sim.Description = "Platform 5 Switch Simulator"
         Sim.DeviceType = "Switch"
@@ -932,8 +902,6 @@ Public Class DiagnosticsForm
                             If Sim.IsPlatform5 Then
                                 DeviceTest("Switch", "GetSwitch")
                                 DeviceTest("Switch", "GetSwitchName")
-                            Else
-                                DeviceTest("Switch", "ControllerDevices")
                             End If
                         Case "Dome"
                             DeviceTest("Dome", "OpenShutter")
@@ -995,9 +963,6 @@ Public Class DiagnosticsForm
 
                 Case "Switch"
                     Select Case Test
-                        Case "ControllerDevices"
-                            RetVal = DeviceObject.ControllerDevices
-                            Compare("DeviceTest", "Switches read OK", True, True)
                         Case "GetSwitch"
                             Compare("DeviceTest", Test, DeviceObject.GetSwitch(1), "True")
                         Case "GetSwitchName"
@@ -2938,9 +2903,6 @@ Public Class DiagnosticsForm
                 keys = AscomUtlProf.RegisteredDevices("Camera")
                 CheckSimulator(keys, "Camera", "ASCOM.Simulator.Camera")
                 CheckSimulator(keys, "Camera", "CCDSimulator.Camera")
-                keys = AscomUtlProf.RegisteredDevices("Controller")
-                CheckSimulator(keys, "Switch", "ASCOM.ToggleSwitchSimulator.Controller")
-                CheckSimulator(keys, "Switch", "ASCOM.MultiDeviceSimulator.Controller")
                 keys = AscomUtlProf.RegisteredDevices("Dome")
                 CheckSimulator(keys, "Dome", "DomeSim.Dome")
                 CheckSimulator(keys, "Dome", "Hub.Dome")
@@ -3171,7 +3133,7 @@ Public Class DiagnosticsForm
         If Found Then
             Compare("ProfileTest", DeviceType, DeviceName, DeviceName)
         Else
-            Compare("ProfileTest", DeviceType, DeviceName, "")
+            Compare("ProfileTest", DeviceType, "", DeviceName)
         End If
     End Sub
 
@@ -4935,7 +4897,7 @@ Public Class DiagnosticsForm
                         Exit For
                     End If
                 Next
-                End If
+            End If
 
             RetVal.Add(INST_DISPLAY_NAME, RegKey.GetValue(INST_DISPLAY_NAME, "Not known"))
             RetVal.Add(INST_DISPLAY_VERSION, RegKey.GetValue(INST_DISPLAY_VERSION, "Not known"))
@@ -4943,7 +4905,7 @@ Public Class DiagnosticsForm
             RetVal.Add(INST_INSTALL_SOURCE, RegKey.GetValue(INST_INSTALL_SOURCE, "Not known"))
             RetVal.Add(INST_INSTALL_LOCATION, RegKey.GetValue(INST_INSTALL_LOCATION, "Not known"))
 
-                RegKey.Close()
+            RegKey.Close()
         Catch ex As Exception
             If DebugTRace Then TL.LogMessageCrLf("Exception", ex.ToString)
             'If Not RetVal.ContainsKey(INST_DISPLAY_NAME) Then RetVal.Add(INST_DISPLAY_NAME, "Unknown name")
