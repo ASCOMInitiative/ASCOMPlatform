@@ -106,9 +106,6 @@
     <Compile Include="..\CLSCompliant.vb">
       <Link>CLSCompliant.vb</Link>
     </Compile>
-    <Compile Include="IController.vb" />
-    <Compile Include="IControllerDevice.vb" />
-    <Compile Include="IControllerDeviceState.vb" />
     <Compile Include="Enumerations.vb" />
     <Compile Include="IAxisRates.vb" />
     <Compile Include="ICameraV2.vb" />

@@ -410,9 +410,6 @@ if Variable REMOVE Equals TRUE
   Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.Simulator.Camera.tlb
   Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.Simulator.Focuser.tlb
   Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.Simulator.SafetyMonitor.tlb
-  Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.NWaySwitchSimulator.Controller.tlb
-  Comment: Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.RheostatSimulator.Switch.tlb
-  Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.ToggleSwitchSimulator.Controller.tlb
   MessageBalloon: ASCOM Platform Maintenance, Removing ASCOM Platform
   Apply Uninstall (get result into variable SUCCESS)
   Write into Text File $SETUPLOG$ from Value Uninstall return code: $SUCCESS$ (at end of file)
@@ -653,15 +650,8 @@ else
     Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.dll to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
     Install Files ..\..\..\..\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\bin\Release\ASCOM.Simulator.Focuser.pdb to $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser
     Comment: SafetyMonitor simulator
-    Comment: Switch simulator
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.dll to $COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.pdb to $COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
-    Comment: N Way Switch simulator
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySwitchSimulator.Controller.dll to $COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller
-    Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySwitchSimulator.Controller.pdb to $COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller
-    Comment: Rheostat simulator
-    Comment: Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
-    Comment: Install Files ..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
+    Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+    Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
     Comment: Telescope simulator
     Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
     Install Files ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.pdb to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
@@ -829,18 +819,12 @@ else
     Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
-    Delete Files $COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch\*.tlb (when uninstalling)
-    Delete Files $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\*.tlb (when uninstalling)
-    Delete Files $COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\.net\GACInstall.exe (when installing)
     [END REGION]
     Comment: Install in 64bit mode if we are running on a 64bit OS
     if Variable WIN64MODE Equals TRUE
       Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
     end
-    Create Folder $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
-    Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
-    Install Files ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb to $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
     Apply Install (get result into variable SUCCESS)
     Comment: MessageBalloon: , 
     Write into Text File $SETUPLOG$ from Value Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
@@ -926,9 +910,6 @@ else
         Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller\ASCOM.ToggleSwitchSimulator.Controller.dll, set the code base in the registry
-        Register assembly $COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller\ASCOM.NWaySwitchSimulator.Controller.dll, set the code base in the registry
-        Comment: Register assembly $COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
         Comment: Register these LocalServer drivers using the -register option
         Set Variable PROGRESS to 40
@@ -970,12 +951,6 @@ else
           Write into Text File $SETUPLOG$ from Value RC: $RC5$ RegAsm64 - Focus Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC6)
           Write into Text File $SETUPLOG$ from Value RC: $RC6$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller\ASCOM.ToggleSwitchSimulator.Controller.dll" /codebase (WAIT, get result into variable RC7)
-          Write into Text File $SETUPLOG$ from Value RC: $RC7$ RegAsm64 - Switch Simulator 6 (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller\ASCOM.NWaySwitchSimulator.Controller.dll" /codebase (WAIT, get result into variable RC8)
-          Write into Text File $SETUPLOG$ from Value RC: $RC8$ RegAsm64 - NWay Switch Simulator (at end of file)
-          Comment: Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll" /codebase (WAIT, get result into variable RC9)
-          Comment: Write into Text File $SETUPLOG$ from Value RC: $RC9$ RegAsm64 - Rheostat Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC10)
           Write into Text File $SETUPLOG$ from Value RC: $RC10$ RegAsm64 - Dome Simulator 6 (at end of file)
           Set Variable PROGRESS to 60

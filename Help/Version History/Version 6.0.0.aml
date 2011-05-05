@@ -15,14 +15,6 @@
 	      			<listItem>Flexibility - Capability for driver authors to implement their own commands (Action and SupportedActions methods)</listItem>
 	      			<listItem>Supported Device Types
 	  					<list class="bullet">
-	  						<listItem>New Switch device definition including: 
-	  							<list class="bullet">
-			  						<listItem>On/Off switch</listItem>
-			  						<listItem>N-way switch</listItem>
-			  						<listItem>Rheostat device</listItem>
-			  						<listItem>Simulators for above switch types.</listItem>
-			  					</list>
-	  						</listItem>
 	  						<listItem>New SafetyDevice device definition</listItem>
 	  						<listItem>New CameraV2 device definition</listItem>
 	  						<listItem>All device types now support a common set of core capabilities
@@ -92,7 +84,6 @@
 	  					<list class="bullet">
 	  						<listItem>LED Indicator - a simple red / green indicator supporting various blink cadences</listItem>
 	  						<listItem>Annunciator - Displays status with a standard look and feel</listItem>
-	  						<listItem>Gauges - A wide variety of graphical meter displays to enhance a user interface.</listItem>
 	  					</list>
 	  				</listItem>
 	     			<listItem>Separate developer components installer</listItem>

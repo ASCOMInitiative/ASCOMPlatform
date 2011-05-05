@@ -160,10 +160,6 @@
       <CopyToMedia>False</CopyToMedia>
       <ImageId>ManufLogos</ImageId>
     </Image>
-    <Image Include="Developer Information\Gauges.png">
-      <ImageId>Gauges</ImageId>
-      <AlternateText>Gauges</AlternateText>
-    </Image>
     <Image Include="Tools and Features\COMPortSettings.png">
       <ImageId>COMPortSettings</ImageId>
       <AlternateText>COMPort Settings</AlternateText>
@@ -189,8 +185,6 @@
     <None Include="Examples\DriverAccess.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
-    <None Include="Developer Information\Gauge Controls.aml" />
-    <None Include="Developer Information\Gauges.aml" />
     <None Include="Developer Information\Gauges.aml" />
     <None Include="Introduction\Introduction - Developer.aml" />
     <None Include="Introduction\Key Changes in 6.0.aml" />

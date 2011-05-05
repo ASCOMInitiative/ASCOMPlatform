@@ -410,9 +410,6 @@ Comment
 Delete Files Recursive
 Delete Files Recursive
 Delete Files Recursive
-Delete Files Recursive
-Delete Files Recursive
-Delete Files Recursive
 MessageBalloon
 Apply Changes
 Write to Text File
@@ -653,13 +650,6 @@ Comment
 Install Files
 Install Files
 Comment
-Comment
-Install Files
-Install Files
-Comment
-Install Files
-Install Files
-Comment
 Install Files
 Install Files
 Comment
@@ -826,9 +816,6 @@ Write to Text File
 Code Folding Region
 Code Folding Region
 Comment
-Delete Files
-Delete Files
-Delete Files
 Delete Files
 Delete Files
 Delete Files
@@ -838,9 +825,6 @@ Comment
 If
 Set 64 Bit Mode
 End
-Create Folder
-Install Files
-Install Files
 Apply Changes
 MessageBalloon
 Write to Text File
@@ -927,9 +911,6 @@ Register Assembly
 Register Assembly
 Register Assembly
 Register Assembly
-Register Assembly
-Register Assembly
-Register Assembly
 Comment
 Set Variable
 Run Program
@@ -964,12 +945,6 @@ Run Program
 Write to Text File
 Set Variable
 Comment
-Run Program
-Write to Text File
-Run Program
-Write to Text File
-Run Program
-Write to Text File
 Run Program
 Write to Text File
 Run Program
@@ -1517,9 +1492,6 @@ $
 {FB3F7DB3-D2D3-44C1-9E24-0F9907D94BC3}
 {886E3ECE-604D-4066-82F3-5D8B75679979}
 {2CD25337-6EB1-45DC-9ECD-7ECD82B37AEB}
-{7FA2ED9C-6A5D-4DA1-89F2-E55B6DADB009}
-{447DC3ED-B58C-4959-85DE-66BD23F0A325}
-{59A8841A-2E31-40F1-8206-697DE44E1C3E}
 {3A8EE8FE-7527-46CA-B2F2-1EA633568A26}
 {0EC33107-3DF5-43C3-83BB-FDADE6B5EF50}
 {241BC69A-964A-4EEF-8FAF-6AAFF94589AE}
@@ -1760,15 +1732,8 @@ $
 {1CA81DB6-CCE6-443F-A0AD-F741546DD0F9}
 {D9E3123E-E8D9-4C07-B73F-49EE87C7DE79}
 {7C137DA3-83AE-4725-A0D3-E796C08C3802}
-{E83BBDAC-52CF-493E-A946-4657C7BC8F82}
-{B2033235-4A1F-48E2-AE6F-8DFDF6C076D2}
-{BEE82166-7FA2-4954-9886-6E30FE50389F}
-{2438DC27-14D2-41A1-A0EA-1D43A7C8E78B}
-{C9C1BCC8-5A5E-4EB6-A491-F8CEC916C032}
-{9F3AA306-A5BE-4F19-900F-BD07FF37958B}
-{BA0EE565-F586-42C4-B43D-51B0E15AC033}
-{67E8523C-7E40-4632-9E9F-5B36A7EF89C4}
-{EFD449B1-1CA3-4F9D-9080-94BB2874A4E7}
+{207B12ED-9B1F-45AE-9935-26D637448561}
+{D808C08E-2CD9-4122-A69E-0FD541891864}
 {406E1B9B-85DA-4220-A4C9-31EBCF82F85E}
 {D384BBAC-C890-49D3-9ED6-3F4CF457BE49}
 {DF583DE8-D756-465B-A420-9D39B61816F9}
@@ -1936,18 +1901,12 @@ $
 {84D7BDB2-1906-470A-B9BC-948F23D84057}
 {A87E2382-7972-450D-8FD7-CAC68B41E04A}
 {56C7A432-8E98-44FA-8EB2-FE583765F5BA}
-{BF2CB9B4-88D0-4F4B-974D-B1A0AD471A22}
-{9B40F303-F836-4E74-868E-05DCCF5F6A75}
-{C46C2E06-C0B3-4E64-9FA0-56DA6F127A93}
 {8AA36511-3191-491E-876E-DE65536D79FE}
 {2BF46B62-0D12-4625-9C4B-BE0C678F0580}
 {AAAB4549-134F-49C6-AC47-753D5C60AC55}
 {0FA7681D-0626-46E4-BFC6-96950046D663}
 {9352FDFA-AEB2-4A78-A066-2845E6DE2306}
 {B208C7F3-216B-4DF1-8D25-2B578E2B7A75}
-{61D052EA-719F-4ABB-B687-54B5238B5779}
-{AC388B9C-A2EA-4190-9662-D2B0AB291FDE}
-{B9708450-6643-4A11-9DCD-CDA1CB68E5C6}
 {DE3DE4D7-4B3C-42F6-8FE1-8C9D1581E066}
 {04CDD4EC-6913-4AC5-9FD6-348722984CE0}
 {89C79388-96FA-4912-B021-63E5273C33AA}
@@ -2033,9 +1992,6 @@ $
 {3469CD81-C205-492B-8892-D6E39D4264D7}
 {D4A4E267-98B9-4301-A1FD-51707C471B6B}
 {080711C2-108F-4E3E-A141-96499A39A7A8}
-{AD8018E1-0ED4-4DAC-B5EF-99BE95283BA1}
-{360640D9-B0CF-4F98-B661-AA775D20A2F1}
-{0A6B8DA2-9660-41B5-8427-A704F23D5907}
 {C5837AED-FDBB-4EB6-955F-6AA520702E2B}
 {2A82981B-5E91-49ED-BA0F-31D6F8623ACB}
 {3F6BFA92-CB86-4436-A821-C1C827C6A073}
@@ -2077,12 +2033,6 @@ $
 {44D7980A-2783-44B7-9782-46FC2F31A6BC}
 {C103EE64-B2A4-4148-A891-FD3FC92A59C5}
 {35AFA351-5A51-4E34-8054-B192203E96B1}
-{D28BD31C-D1AE-4DF0-B271-379055D41520}
-{05295CFB-E3B5-4948-9110-2FD03BEDEED8}
-{8C2CFC94-254E-4792-8CB8-6B1760713479}
-{56B7F7E1-4371-4B7F-AF0B-4C0CB6F07783}
-{740AB47F-3CB4-400B-9AFF-8F60A71B838B}
-{EA09AA3D-5A10-4AE5-8F75-72B5884C2DA8}
 {B34AB900-9C24-4CEE-8A18-41C98E161128}
 {D2929DDC-50C2-4B36-9C4A-F221335A8CFD}
 {F697AF91-6539-40D1-9251-C2D13AB41371}
@@ -2334,12 +2284,6 @@ Dome simulator
 Rotator simulator
 {406E1B9B-85DA-4220-A4C9-31EBCF82F85E}
 Telescope simulator
-{BA0EE565-F586-42C4-B43D-51B0E15AC033}
-Rheostat simulator
-{2438DC27-14D2-41A1-A0EA-1D43A7C8E78B}
-N Way Switch simulator
-{E83BBDAC-52CF-493E-A946-4657C7BC8F82}
-Switch simulator
 {7C137DA3-83AE-4725-A0D3-E796C08C3802}
 SafetyMonitor simulator
 {B8CD27B3-BEF1-4550-BE31-EB8C84489131}
@@ -3413,8 +3357,6 @@ FALSE
 $COMMONFILES$\ASCOM
 {BA2BD709-00C4-4216-9AD0-2481F59D6D3E}
 $MYDOCUMENTS$\ASCOM
-{61D052EA-719F-4ABB-B687-54B5238B5779}
-$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 {78E159FA-12F3-4C8B-83CD-71DA32EEDEAF}
 progress
 SUCCESS
@@ -3723,84 +3665,6 @@ FALSE
 ..\..\..\..\Drivers and Simulators\Telescope Simulator .NET\TelescopeSimulator\bin\Release\ASCOM.TelescopeSimulator.exe
 FALSE|
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{EFD449B1-1CA3-4F9D-9080-94BB2874A4E7}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.pdb
-FALSE|
-$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{67E8523C-7E40-4632-9E9F-5B36A7EF89C4}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\bin\Release\ASCOM.RheostatSimulator.Switch.dll
-FALSE|
-$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{9F3AA306-A5BE-4F19-900F-BD07FF37958B}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySwitchSimulator.Controller.pdb
-FALSE|
-$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{C9C1BCC8-5A5E-4EB6-A491-F8CEC916C032}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\bin\Release\ASCOM.NWaySwitchSimulator.Controller.dll
-FALSE|
-$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{BEE82166-7FA2-4954-9886-6E30FE50389F}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.pdb
-FALSE|
-$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{B2033235-4A1F-48E2-AE6F-8DFDF6C076D2}
-..\..\..\..\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\bin\Release\ASCOM.ToggleSwitchSimulator.Controller.dll
-FALSE|
-$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller
 FALSE
 FALSE
 FALSE
@@ -4993,8 +4857,8 @@ FALSE
 FALSE
 FALSE
 FALSE
-{AC388B9C-A2EA-4190-9662-D2B0AB291FDE}
-..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll
+{D808C08E-2CD9-4122-A69E-0FD541891864}
+..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb
 FALSE|
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 FALSE
@@ -5006,8 +4870,8 @@ FALSE
 FALSE
 FALSE
 FALSE
-{B9708450-6643-4A11-9DCD-CDA1CB68E5C6}
-..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.pdb
+{207B12ED-9B1F-45AE-9935-26D637448561}
+..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll
 FALSE|
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
 FALSE
@@ -5115,24 +4979,6 @@ TRUE
 "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase
 TRUE
 RC10
-{740AB47F-3CB4-400B-9AFF-8F60A71B838B}
-$REGASM64$
-TRUE
-"$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll" /codebase
-TRUE
-RC9
-{8C2CFC94-254E-4792-8CB8-6B1760713479}
-$REGASM64$
-TRUE
-"$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller\ASCOM.NWaySwitchSimulator.Controller.dll" /codebase
-TRUE
-RC8
-{D28BD31C-D1AE-4DF0-B271-379055D41520}
-$REGASM64$
-TRUE
-"$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller\ASCOM.ToggleSwitchSimulator.Controller.dll" /codebase
-TRUE
-RC7
 {C103EE64-B2A4-4148-A891-FD3FC92A59C5}
 $REGASM64$
 TRUE
@@ -6486,11 +6332,6 @@ $COMMONFILES$\ASCOM\.net
 GACInstall.exe
 TRUE
 FALSE
-{BF2CB9B4-88D0-4F4B-974D-B1A0AD471A22}
-$COMMONFILES$\ASCOM\Switch\ASCOM.NWaySimulator.Switch
-*.tlb
-FALSE
-TRUE
 {84D7BDB2-1906-470A-B9BC-948F23D84057}
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 *.tlb
@@ -6503,16 +6344,6 @@ FALSE
 TRUE
 {56C7A432-8E98-44FA-8EB2-FE583765F5BA}
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
-*.tlb
-FALSE
-TRUE
-{9B40F303-F836-4E74-868E-05DCCF5F6A75}
-$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch
-*.tlb
-FALSE
-TRUE
-{C46C2E06-C0B3-4E64-9FA0-56DA6F127A93}
-$COMMONFILES$\ASCOM\Switch\ASCOM.Simulator.Switch
 *.tlb
 FALSE
 TRUE
@@ -6804,21 +6635,6 @@ TRUE
 {35AFA351-5A51-4E34-8054-B192203E96B1}
 $SETUPLOG$
 RC: $RC6$ RegAsm64 - Safety Monitor Simulator 6
-FALSE
-TRUE
-{05295CFB-E3B5-4948-9110-2FD03BEDEED8}
-$SETUPLOG$
-RC: $RC7$ RegAsm64 - Switch Simulator 6
-FALSE
-TRUE
-{56B7F7E1-4371-4B7F-AF0B-4C0CB6F07783}
-$SETUPLOG$
-RC: $RC8$ RegAsm64 - NWay Switch Simulator
-FALSE
-TRUE
-{EA09AA3D-5A10-4AE5-8F75-72B5884C2DA8}
-$SETUPLOG$
-RC: $RC9$ RegAsm64 - Rheostat Simulator 6
 FALSE
 TRUE
 {D2929DDC-50C2-4B36-9C4A-F221335A8CFD}
@@ -7290,12 +7106,6 @@ $COMMONFILES$\ASCOM\ASCOM.Simulator.Focuser.tlb
 $COMMONFILES$\ASCOM\ASCOM.Simulator.Camera.tlb
 {2CD25337-6EB1-45DC-9ECD-7ECD82B37AEB}
 $COMMONFILES$\ASCOM\ASCOM.Simulator.SafetyMonitor.tlb
-{7FA2ED9C-6A5D-4DA1-89F2-E55B6DADB009}
-$COMMONFILES$\ASCOM\ASCOM.NWaySwitchSimulator.Controller.tlb
-{447DC3ED-B58C-4959-85DE-66BD23F0A325}
-$COMMONFILES$\ASCOM\ASCOM.RheostatSimulator.Switch.tlb
-{59A8841A-2E31-40F1-8206-697DE44E1C3E}
-$COMMONFILES$\ASCOM\ASCOM.ToggleSwitchSimulator.Controller.tlb
 {E183A086-9B33-4451-91C8-077FCF6B8BBC}
 ASCOM Platform Maintenance
 Upgrading Platform 6 - Installing new version...
@@ -7528,12 +7338,6 @@ ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946f
 ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE|FALSE
 {C5837AED-FDBB-4EB6-955F-6AA520702E2B}
 $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll|TRUE|TRUE
-{0A6B8DA2-9660-41B5-8427-A704F23D5907}
-$COMMONFILES$\ASCOM\Switch\ASCOM.RheostatSimulator.Switch\ASCOM.RheostatSimulator.Switch.dll|TRUE|TRUE
-{360640D9-B0CF-4F98-B661-AA775D20A2F1}
-$COMMONFILES$\ASCOM\Controller\ASCOM.NWaySwitchSimulator.Controller\ASCOM.NWaySwitchSimulator.Controller.dll|TRUE|TRUE
-{AD8018E1-0ED4-4DAC-B5EF-99BE95283BA1}
-$COMMONFILES$\ASCOM\Controller\ASCOM.Simulator.Controller\ASCOM.ToggleSwitchSimulator.Controller.dll|TRUE|TRUE
 {080711C2-108F-4E3E-A141-96499A39A7A8}
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll|TRUE|TRUE
 {D4A4E267-98B9-4301-A1FD-51707C471B6B}
@@ -7980,9 +7784,6 @@ C
 
 
 
-C
-
-
 
 
 
@@ -8009,257 +7810,6 @@ C
 
 
 C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -8490,6 +8040,165 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
 
 
@@ -8497,6 +8206,78 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
 
 
@@ -8529,22 +8310,20 @@ C
 
 
 
-C
-C
-
-
-
-
-
-
-
-
 
 
 
 
 C
 C
+
+
+
+
+
+
+
+
 
 
 
@@ -8674,31 +8453,6 @@ C
 
 
 $
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
