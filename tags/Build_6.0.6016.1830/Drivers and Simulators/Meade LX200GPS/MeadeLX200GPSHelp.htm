@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<title>ASCOM Meade Driver</title>
+		<style type="text/css" lang="en">
+			<!--
+			a:link		{ color: Aqua; }
+			a:active	{ color: Aqua; }
+			a:visited	{ color: Aqua; } 
+			a:hover		{ color: Yellow; }
+			body { 
+				background: black;
+				font-size: 80%;
+				font-family: Verdana, Arial, Helvetica, sans-serif; 
+				color: white;
+			} 
+			p {
+				margin-top: 6pt; 
+				margin-bottom: 6pt;
+			} 
+			h1 {
+				font-family: "Arial Narrow", Arial, Helvetica, sans-serif; 
+			    font-size: 200%;
+				line-height: 125%;
+				color : #CCCC00;
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			}
+			h2 {
+				font-family: "Arial Narrow", Arial, Helvetica, sans-serif; 
+				font-size: 160%;
+				color : #CCCC00;
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			} 
+			h3 {
+				font-family: "Arial Narrow", Arial, Helvetica, sans-serif; 
+				font-size: 125%;
+				color : #CCCC00;
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			} 
+			ul, ol {
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			} 
+			li {
+				margin-top: 4pt;
+				color : White;
+			} 
+			i.y {
+				color: yellow;
+			}
+.Underline {
+	text-decoration: underline;
+}
+.style1 {color: yellow}
+			-->
+		</style>
+	</head>
+	<body>
+
+<h1>Meade LX200GPS / R Telescope and Focuser Driver</h1>
+
+<p>The Meade LX200GPS/R ASCOM driver is compatible with the LX200GPS. and LX200R&nbsp; 
+Other ASCOM drivers exist for the other Meade Telescopes.&nbsp; This Meade driver is actually two drivers in one. It contains both a Telescope driver as well as a Focuser driver (since the scope and focuser controls share the same serial port). The telescope driver conforms to the ASCOM Telescope V2 specifications. 
+The focuser driver conforms to the initial (and only release at this time) of 
+the ASCOM focuser specification.&nbsp; For more information about ASCOM, see the <a href="http://ASCOM-Standards.org/" target="aux">ASCOM web site</a>.</p>
+<ul>
+  <li><a href="#Which">Which Meade Driver should I use</a>?</li>
+  <li>Telescope
+      <ul>
+          <li><a href="#T-Setup">Telescope setup</a> </li>
+	        <li><a href="#T-LX200GPS">Using the LX200GPS/R</a></li>
+            <li><a href="#T-Parking">Parking</a></li>
+            <li><a href="#T-API">API notes</a></li>
+        </ul>
+  </li>
+  <li>Focuser<ul>
+    <li><a href="#F-Setup">Setup dialog</a> </li>
+    <li><a href="#F-API">API notes</a></li>
+  </ul>
+  </li>
+</ul>
+
+<hr>
+<h2><a name="Which">Which Meade driver should I use?</a></h2>
+
+<p>There are as many as four Meade type drivers that are being supported at this 
+time:</p>
+<ul style="margin-top: 6pt; margin-bottom: 6pt">
+	<li><font color="#FFFF00">Generic LX200 Type Scopes</font> - not for use on 
+	true Meade scopes.&nbsp; Many other telescopes have used control approaches 
+	based on the Meade protocols.&nbsp; This driver is for them.</li>
+	<li><font color="#FFFF00">Meade RCX-400</font> - this is exclusively for the 
+	Meade RCX400 scopes.</li>
+	<li><font color="#FFFF00">Meade LX200 GPS/R</font> - this is exclusively for 
+	the Autostar II Meade LX200GPS and LX200R scopes.</li>
+	<li><font color="#FFFF00">Meade Classic and Autostar I </font>- this is the 
+	proper driver for most other Meade scopes.&nbsp; (Classic LX200, old style 
+	GEMs, Autostar I).&nbsp; It supports telescope and focuser functionality at 
+	the same time.</li>
+</ul>
+
+<hr>
+<h2><a name="T-Setup"></a>Telescope setup</h2>
+
+<p>The setup window (which is probably open now) allows you to adjust settings 
+for your scope and your needs. There is 
+one mandatory setting:</p>
+
+<ul>
+	<li><span style="color: yellow">COM Port</span> - This must be set to the COM port number on which your scope is connected.</li>
+</ul>
+
+<p>Additional settings:</p>
+
+<ul>
+	<li><span style="color: yellow">Auto Reboot/Init/Unpark</span> - If set, and if no initial response is receives from the scope, the driver will initiate an Autostar II reboot sequence. This will allow a parked (and possibly power-cycled) LX200GPS/R to be  initialized/aligned without touching the handbox. 
+	The reboot sequence can take up to 4 minutes, and will take a minimum of 2 
+	minutes to detect if there is no scope connected at all.<li><span style="color: yellow">Auto Set Time</span> - If set, then the driver will set the scope time to the computer time on connect. Required for hands-off startup of the LX200GPS/R.&nbsp; 
+	Also, if the scope is reboot because of the last checkbox, then time will be 
+	sent no matter what this box is set to.</li>
+	<li><span style="color: yellow">Auto Track On Connect</span> - If set, the 
+	driver will set tracking to true on connect (this is the old V1 behavior, 
+	and is available for backwards compatibility).</li>
+	<li><span style="color: yellow">Beep at slew completion</span> - The computer will beep (as well as the handbox) on completion of a slew.</li>
+	<li><span style="color: yellow">Delay After Sync</span> - The driver will wait for 5 seconds after a SYNC before returning control to the program. This is useful mainly with automation programs such as ACP 
+	Observatory Control Software which do things rapidly. It allows the scope some time to complete the sync and give the correct (after-sync) coordinates back to the program. Leave this off unless your software is having problems immediately after a SYNC.</li>
+	<li><span style="color: yellow">Max Slew Speed</span> - This sets the maximum rate at which your scope will slew. This speed is internally limited by the driver to a setting of 5 for the LX200GPS/R (to protect the scope in automated use). You can set a lower speed if you wish.&nbsp; Putting "A" into the box is supported, and this will cause the driver to automatically set the fastest safe speed. In addition, putting an "N" into the box will completely bypass the slew speed setting in the driver, leaving your handbox setting. <span style="color: black; background: yellow">WARNING! Setting too high a slew speed may result in damage to your scope's nylon gears. It is recommended that you use the speed setting support in the driver!</span></li>
+	<li><span style="color: yellow">Elevation, Aperture diameter, Aperture Area, and Focal length</span> - Some programs use this info to calculate the field of view, exposure time estimates, etc. You should fill these in. <i>Be careful to note the units of measure!</i></li>
+	<li><span style="color: #FFFF00">Parked Behavior</span> - Some SW will 
+	continue to request coordinates after the scope is parked.&nbsp; Since the 
+	LX200GPS/R does not provide coordinates when parked, this driver gives options 
+	for the desired behavior.<ul>
+	<li>No Coordinates - The driver will simply give an error to the controlling 
+	SW for coordinate fetches when parked.&nbsp; This raw behavior is known to 
+	cause <b><i>TheSky</i></b> problems.</li>
+	<li>Report Coordinates As - The 2 fields to the right will be the 
+	coordinates reported.&nbsp; These fields should be manually set to the true 
+	parking coordinates.&nbsp; These fields can not be sent to the scope.&nbsp; 
+	The actual scope park position can only be set at the scope handset.</li>
+	<li>Last Good Position - The driver will continue to report the last 
+	position prior to the park request.</li>
+</ul>
+
+	<p>The last option is the best for most users, but dome users should take 
+	the time to use option 2 and fill out the fields.&nbsp; The 1st option is 
+	for purists who need the raw scope behavior.</li>
+</ul>
+
+<hr>
+<a name="T-LX200GPS"></a><h2>Using the LX200GPS/R</h2>
+
+<p>The LX200GPS/R firmware appears to be in a state of flux, and we're trying our 
+best to keep up. Please use 4.2g or later.</p>
+<p>This driver supports tracking on/off control and hands-off startup of the 
+LX200GPS/R. The latter feature is vital for remote imaging, and very handy for any permanently mounted LX200GPS/R. If you park your scope after each use, you will never have to hand-slew to a star and sync again. Upon connecting from your software, the scope will be aligned and ready for use. <span style="color: yellow">The Auto Reboot/Init option in the driver's setup window must be activated for this feature to work!</span></p>
+<p><b class="Underline">NOTE:</b> If you upgrade from firmware 3.0i to any 4.xx version, you must power-on, align, then park the scope using the handbox one time. This firmware upgrade alters the Smart Drive behavior, and existing PEC data must be converted to the new format. You should see a special "fingerprinting" phase on the handbox during this initial power-up.</p>
+<h3>Portable or casual use</h3>
+
+<p>If you move your scope or disengage the RA or Dec clutches, then you must power up and align your scope with the handbox <i>before</i> connecting from your software. </p> 
+
+<h3>Permanently mounted LX200GPS/R</h3>
+
+<p>If your scope is permanently mounted on a pier, <span class="Underline">and if you never release the RA or Dec clutches</span>, then you can avoid the need for manual alignment and/or hand-syncing. This driver has special features that allow it to initialize a <a href="#T-Parking">parked</a> LX200GPS/R from a cold-start (park, power-cycle, connect) or a warm-restart (park and reconnect without power-down). Again, the scope must be parked for auto-startup to work! In order for this to work, there are a few Autostar II handbox settings that <i>must</i> be made <i>once</i>:</p>
+
+<ol>
+	<li>Enter your Site information (including the <span class="Underline">standard time</span> UTC offset) for your scope's location.</li>
+	<li><span class="Underline">Turn OFF Daylight Savings(!)</span> Your handbox will always show <span class="Underline">standard time<span style="text-decoration: none"> 
+	(defined as no daylight savings)</span></span>. This is essential! </li>
+	<li>Turn OFF the Sun Warning (3.0i firmware only).</li>
+	<li>Under Setup/Telescope select:
+		<ol type="a">
+			<li>Mount: Polar or Alt/Az. Recommended: POLAR (use a wedge for permanent use!) </li>
+			<li>GPS Alignment: OFF</li>
+			<li>If your mount is polar mounted, Home Sensors: OFF </li>
+			<li>Park Position (Default or Current, see Meade Manual). Recommended :DEFAULT </li>
+		</ol>
+	</li>
+</ol>
+
+<p>In addition, <span style="color: yellow">the Auto Reboot/Init option in the driver's setup window must be activated for this feature to work!</span></p>
+
+<p>Once you have done the above, or any time you park the scope, you may power it down or leave it powered up with the "Scope parked..." message showing. In the latter state, all motors are off and the scope will not respond to commands from the handbox or the serial line. Thus you can leave the scope powered up without wear on the motors or the risk of tracking into the pier, cord wrap, etc.</p>
+
+<p style="color: black; background: yellow;">For some versions of the LX200GPS/R firmware, the CCD guider socket is atill active when "Meade PARKed". Any input on that socket when the handbox is displaying "Scope parked... Turn Off scope" causes a FULL SPEED SLEW.&nbsp; 
+Versions after 4.0i are safe with regard to the CCD socket in that state (although there are moments when it is not).</p>
+
+<p>When you want to use the scope again, depending on whether you left it powered up or not, do one of the following:</p>
+
+<ol type="A">
+	<li>Power on the scope and wait until it shows the Daylight Savings prompt, <i>then</i> connect from the software.</li>
+	<li>If the power is on (showing "Scope is parked..." on the handbox), simply connect from the software.</li>
+</ol>
+<hr>
+<h2><a name="T-Parking"></a>Parking</h2>
+
+<p>The purpose of parking a scope is to allow a <i>stationary</i> scope to be 
+powered up at a later time and not have to be synced or otherwise aligned.</p>
+
+<p>For polar aligned scopes there is a default/natural Park Position. Things can 
+change or be enhanced for the LX200GPS/R, so check the documentation and release 
+notes for the firmware you have in your LX200GPS/R.</p>
+<p>You can park the scope from the software or the Autostar II handbox. The park position can be changed using the Autostar II handbox only. It is not necessary to power down the scope after parking; the driver can warm-reboot the Autostar II resulting in a ready-to-use aligned scope.</p>
+<p>The Autostar II can be unparked from software with or without a power cycle.&nbsp; Upon Unpark, the Auto Unpark/Track 
+option controls the initial state of tracking.</p>
+
+<hr>
+<h2><a name="T-API"></a>API notes</h2>
+
+<ul>
+	<li>Unless listed below the Can flags will report True:<ul>
+		<li>CanFindHome will return False</li>
+		<li>CanSetDeclinationRate will return False</li>
+		<li>CanSetPark will return False</li>
+		<li>CanSetPierSide will return False</li>
+		<li>CanSetRightAscensionRate will return False</li>
+		<li>CanSyncAltAz will report False</li>
+	</ul>
+	</li>
+</ul>
+<p>&nbsp;</p>
+<ul>
+	<li>GuideRateDeclination and GuideRateRightAscension are tied together, and 
+	can be no larger than 15.0417 &quot;/sec.<br>&nbsp;</li>
+	<li>CommandBlind(), CommandBool(), CommandString() support an optional &quot;Raw&quot; 
+parameter. If it is not found, or set to False, then these methods will 
+add the Meade prefix (&quot;:&quot;) and postfix (&quot;#&quot;) characters. CommandString will also 
+strip any trailing &quot;#&quot; off the return string unless Raw is set.</li>
+</ul>
+
+<hr>
+<h2>Focuser</h2>
+<p>The focuser will only connect if the LX200GPS/R is not parked or otherwise 
+asleep.&nbsp; Typically, one should connect to the Telescope driver first, then 
+connect to the focuser.</p>
+
+<h3><a name="F-Setup"></a>Setup dialog </h3>
+<p>(to be written)</p>
+
+<h3><a name="F-API"></a>API notes</h3>
+<ul>
+	<li>The Meade focuser is a &quot;relative&quot; focuser, and therefore the Position 
+	Property is not implemented.</li>
+	<li>The StepSize Property is not implemented since the Meade focuser does 
+	not intrinsically know its step size.</li>
+	<li>Temperature is available</li>
+	<li>Temperature compensation is not supported</li>
+</ul>
+
+</body>
+</html>
