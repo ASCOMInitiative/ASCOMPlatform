@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>Projects in Progress</title><!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>Projects in Progress</h3>
+		<h2>ASCOM Platform 6</h2>
+		<p>The next generation of the ASCOM Platform provides compatibility with Windows 7 User Account Control and 64-bit systems, some new device interfaces, and even more support for both drivers and astronomy applications. It contains  new simulators, updated Visual Studio driver templates, and much more. This huge project is nearing completion with several people working on it, and is expected to be available in May 2011. </p>
+		<p>An absolute requirement for Platform 6 is that it be <span class="underline">100% compatible with existing astronomy software and drivers</span>. It is currently being tested by driver and application developerws to make sure this requirement is met. For details on Platform 6 click the link below.</p>
+		<p style="font-size: larger"><a href="http://download.ascom-standards.org/docs/ASCOM6.pdf">Detailed Description of ASCOM Platform 6</a> (April 2011)</p>
+		<h4 style="font-size: larger">Changes Coming in Platform 6 (for Developers)</h4>
+		<ul>
+			<li>Elimination of the requirement for early-binding interfaces in drivers. This will greatly ease the driver development process.</li>
+			<li>Return to registry based storage for Chooser registration and driver data storage. Again this will be transparent to drivers which use the Chooser and Profile objects.</li>
+			<li>Full support for 64-bit drivers, new simulators can run with 64-bit clients.</li>
+		</ul>
+		<h2>Integration with X2 and TheSky X</h2>
+		<p><a href="http://www.bisque.com/" target="_blank">Software Bisque</a> has implemented a <a href="http://www.bisque.com/x2standard/" target="_blank">cross-platform driver architecture called X2</a> that provides interfacing with asronomical devices from <a href="http://www.bisque.com/sc/pages/TheSkyX-Professional-Edition.aspx" target="_blank">TheSky X Pro</a>. The ASCOM X2 Integration project has the goal of developing generic X2 drivers that convert from X2 to ASCOM, allowing TheSky X to take advantage of all existing ASCOM drivers. The new X2 drivers will replace the old <a href="../FAQs/TheSky.htm#teleapi">TeleAPI</a>, FocusAPI, and DomeAPI plugins that are legacy from TheSky 6. The X2 interfaces provide a richer set of capabilities, allowing TheSky X to take advantage of more features of devices via their ASCOM drivers. In development are generic X2 to ASCOM drivers for Mounts, Focusers, Cameras, FilterWheels, Rotators, and Domes. Some of the X2 interfaces themselves are evolving, so we're tracking these developments. Look for the first set of these X2 to ASCOM drivers early Summer 2011.</p>
+		<p>Note that ASCOM is Windows-only, so these X2 to ASCOM drivers will not work with TheSky X Pro running on Mac OS X. </p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2011, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>
