@@ -125,19 +125,19 @@ namespace ASCOM.Simulator
             m_Flags = (uint)REGCLS.REGCLS_MULTIPLEUSE |			// Default
                         (uint)REGCLS.REGCLS_SUSPENDED;
             m_InterfaceTypes = new ArrayList();
-            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("","ClassFactory(Type)");
-            TL.Enabled = true;
-            TL.LogMessage("Type", type.AssemblyQualifiedName.ToString());
-            TL.LogMessage("Guid", m_ClassId.ToString());
+            //ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("","ClassFactory(Type)");
+            //TL.Enabled = true;
+            //TL.LogMessage("Type", type.AssemblyQualifiedName.ToString());
+            //TL.LogMessage("Guid", m_ClassId.ToString());
 
             foreach (Type T in type.GetInterfaces())			// Save all of the implemented interfaces
             {
                 m_InterfaceTypes.Add(T);
-                TL.LogMessage("  Interface", T.AssemblyQualifiedName);
+                //TL.LogMessage("  Interface", T.AssemblyQualifiedName);
             }
-            TL.Enabled = false;
-            TL.Dispose();
-            TL = null;
+            //TL.Enabled = false;
+            //TL.Dispose();
+            //TL = null;
         }
 
         #endregion
@@ -203,19 +203,19 @@ namespace ASCOM.Simulator
             IntPtr nullPtr = new IntPtr(0);
             ppvObject = nullPtr;
 
-            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "IClassFactory(CreateInstance)");
-            TL.Enabled = true;
-            TL.LogMessage("Riid Guid", riid.ToString());
+            //ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "IClassFactory(CreateInstance)");
+            //TL.Enabled = true;
+            //TL.LogMessage("Riid Guid", riid.ToString());
 
             //
             // Handle specific requests for implemented interfaces
             //
             foreach (Type iType in m_InterfaceTypes)
             {
-                TL.LogMessage("  Checking iType", iType.AssemblyQualifiedName);
+                //TL.LogMessage("  Checking iType", iType.AssemblyQualifiedName);
                 if (riid == Marshal.GenerateGuidForType(iType))
                 {
-                    TL.LogMessage("    Found Riid", riid.ToString());
+                    //TL.LogMessage("    Found Riid", riid.ToString());
                     ppvObject = Marshal.GetComInterfaceForObject(Activator.CreateInstance(m_ClassType), iType);
                     return;
                 }
@@ -225,13 +225,13 @@ namespace ASCOM.Simulator
             //
             if (riid == IID_IDispatch)
             {
-                TL.LogMessage("  Found I_Dispatch", riid.ToString());
+                //TL.LogMessage("  Found I_Dispatch", riid.ToString());
                 ppvObject = Marshal.GetIDispatchForObject(Activator.CreateInstance(m_ClassType));
                 return;
             }
             else if (riid == IID_IUnknown)
             {
-                TL.LogMessage("  Found I_Unknown", riid.ToString());
+                //TL.LogMessage("  Found I_Unknown", riid.ToString());
                 ppvObject = Marshal.GetIUnknownForObject(Activator.CreateInstance(m_ClassType));
             }
             else
@@ -241,13 +241,9 @@ namespace ASCOM.Simulator
                 //
                 throw new COMException("No interface", unchecked((int)0x80004002));
             }
-            TL.Enabled = false;
-            TL.Dispose();
-            TL = null;
-
-
-
-
+            //TL.Enabled = false;
+            //TL.Dispose();
+            //TL = null;
         }
 
         void IClassFactory.LockServer(bool bLock)

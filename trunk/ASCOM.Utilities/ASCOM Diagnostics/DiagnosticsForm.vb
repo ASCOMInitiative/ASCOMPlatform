@@ -188,8 +188,8 @@ Public Class DiagnosticsForm
 
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Initialise form
-        Dim MyVersion As Version, TraceFileName As String
-        Dim ProfileStore As RegistryAccess, InstallInformation As Generic.SortedList(Of String, String)
+        Dim MyVersion As Version
+        Dim InstallInformation As Generic.SortedList(Of String, String)
 
         Try
             MyVersion = Assembly.GetExecutingAssembly.GetName.Version
@@ -204,39 +204,7 @@ Public Class DiagnosticsForm
             btnLastLog.Enabled = False 'Disable last log button
             sw = New Stopwatch
 
-            ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
-            TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
-            Select Case TraceFileName
-                Case "" 'Trace is disabled
-                    MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
-                    MenuUseTraceAutoFilenames.Checked = False
-                    MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
-                    MenuUseTraceManualFilename.Checked = False
-                    MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
-                    MenuSerialTraceEnabled.Enabled = True
-                Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
-                    MenuUseTraceAutoFilenames.Checked = True
-                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
-                    MenuUseTraceManualFilename.Checked = False
-                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                    MenuSerialTraceEnabled.Enabled = True
-                Case Else 'Tracing using some other fixed filename
-                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
-                    MenuUseTraceAutoFilenames.Checked = False
-                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
-                    MenuUseTraceManualFilename.Checked = True
-                    MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                    MenuSerialTraceEnabled.Enabled = True
-            End Select
-
-            'Set Profile trace checked state on menu item 
-            MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
-            MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
-            MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
-            MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
-
-            MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+            RefreshTraceItems() ' Get current values for the trace menu settings
 
             Me.BringToFront()
         Catch ex As Exception
@@ -245,13 +213,54 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub Status(ByVal Msg As String)
+    ''' <summary>
+    ''' Refresh the trace menu items based on values stored in the user's registry
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub RefreshTraceItems()
+        Dim ProfileStore As RegistryAccess, TraceFileName As String
+        ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
+        TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
+        Select Case TraceFileName
+            Case "" 'Trace is disabled
+                MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
+                MenuUseTraceAutoFilenames.Checked = False
+                MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
+                MenuUseTraceManualFilename.Checked = False
+                MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
+                MenuSerialTraceEnabled.Enabled = True
+            Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
+                MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
+                MenuUseTraceAutoFilenames.Checked = True
+                MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
+                MenuUseTraceManualFilename.Checked = False
+                MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                MenuSerialTraceEnabled.Enabled = True
+            Case Else 'Tracing using some other fixed filename
+                MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
+                MenuUseTraceAutoFilenames.Checked = False
+                MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
+                MenuUseTraceManualFilename.Checked = True
+                MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                MenuSerialTraceEnabled.Enabled = True
+        End Select
+
+        'Set Profile trace checked state on menu item 
+        MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+        MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+        MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
+        MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+        MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+        MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
+    End Sub
+
+    Private Sub Status(ByVal Msg As String)
         Application.DoEvents()
         lblResult.Text = Msg
         Application.DoEvents()
     End Sub
 
-    Sub Action(ByVal Msg As String)
+    Private Sub Action(ByVal Msg As String)
         Application.DoEvents()
         lblAction.Text = Msg
         Application.DoEvents()
@@ -5070,4 +5079,18 @@ Public Class DiagnosticsForm
         SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)
     End Sub
 
+    Private Sub MenuSimulatorTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSimulatorTraceEnabled.Click
+        MenuSimulatorTraceEnabled.Checked = Not MenuSimulatorTraceEnabled.Checked 'Invert the selection
+        SetName(SIMULATOR_TRACE, MenuSimulatorTraceEnabled.Checked.ToString)
+    End Sub
+
+    ''' <summary>
+    ''' Refresh the trace menu items based on current values stored in the user's registry
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub mnuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuTrace.DropDownOpening
+        RefreshTraceItems()
+    End Sub
 End Class

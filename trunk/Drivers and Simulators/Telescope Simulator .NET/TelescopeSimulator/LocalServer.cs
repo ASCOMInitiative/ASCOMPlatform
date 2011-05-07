@@ -114,7 +114,7 @@ namespace ASCOM.Simulator
         private static int m_iObjsInUse;						        // Keeps a count on the total number of objects alive.
         private static int m_iServerLocks;						        // Keeps a lock count on this application.
         private static bool m_bComStart;						        // True if server started by COM (-embedding)
-        
+
         private static ArrayList m_ComObjectAssys;				        // Dynamically loaded assemblies containing served COM objects
         private static ArrayList m_ComObjectTypes;				        // Served COM object types
         private static ArrayList m_ClassFactories;				        // Served COM object class factories
@@ -225,25 +225,25 @@ namespace ASCOM.Simulator
             string assy = Assembly.GetEntryAssembly().Location;
             string assyPath = Assembly.GetEntryAssembly().Location;
             //int i = assyPath.LastIndexOf(@"\TelescopeSimulator\bin\");						// Look for us running in IDE
-            ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "LoadComObjectAssemblies");
-            TL.Enabled = true;
-            TL.LogMessage("Assembly", assy);
-            TL.LogMessage("AssemblyPath", assyPath);
+            //ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "LoadComObjectAssemblies");
+            //TL.Enabled = true;
+            //TL.LogMessage("Assembly", assy);
+            //TL.LogMessage("AssemblyPath", assyPath);
 
             //[TPL] The ServedClasses folder is always a subfolder of the executable location.
             var executableFolder = Path.GetDirectoryName(assyPath);
             var servedClassesPath = executableFolder;
 
-            TL.LogMessage("ServedClassesPath", servedClassesPath);
+            //TL.LogMessage("ServedClassesPath", servedClassesPath);
 
             DirectoryInfo d = new DirectoryInfo(servedClassesPath);
             var assemblyFiles = d.GetFiles("*.dll");                        // We're only interested in .dll assemblies
-            foreach (FileInfo fi in assemblyFiles)                    
+            foreach (FileInfo fi in assemblyFiles)
             {
                 string aPath = fi.FullName;
                 string fqClassName = fi.Name.Replace(fi.Extension, "");		// The COM class name will be the assembly's file name (minus extension).
-                TL.LogMessage("FilePath", aPath);
-                TL.LogMessage("ClassName", fqClassName);
+                //TL.LogMessage("FilePath", aPath);
+                //TL.LogMessage("ClassName", fqClassName);
 
                 // First try to load the assembly and get the types for
                 // the class and the class facctory. If this doesn't work ????
@@ -281,8 +281,8 @@ namespace ASCOM.Simulator
                     Exception[] exs = e.LoaderExceptions;
                     foreach (Exception ex in exs)
                     {
-                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + ex.ToString(),
-                        "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + ex.ToString(),
+                            "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     }
 
                     return false;
@@ -295,9 +295,9 @@ namespace ASCOM.Simulator
                     return false;
                 }
             }
-            TL.Enabled = false;
-            TL.Dispose();
-            TL = null;
+            //TL.Enabled = false;
+            //TL.Dispose();
+            //TL = null;
 
             return true;
         }
@@ -330,12 +330,12 @@ namespace ASCOM.Simulator
             try { Process p = Process.Start(si); }
             catch (System.ComponentModel.Win32Exception)
             {
-                MessageBox.Show("The RotatorSimulator was not " + (arg == "/register" ? "registered" : "unregistered") +
-                    " because you did not allow it.", "RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("The Telescope Simulator was not " + (arg == "/register" ? "registered" : "unregistered") +
+                    " because you did not allow it.", "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "RotatorSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(ex.ToString(), "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             return;
         }
@@ -407,83 +407,75 @@ namespace ASCOM.Simulator
             //
             // For each of the driver assemblies
             //
-            using (ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "Telescoperegister"))
+            foreach (Type type in m_ComObjectTypes)
             {
-                TL.Enabled = true;
-                TL.LogMessage("Register", "Start");
-                foreach (Type type in m_ComObjectTypes)
+                bool bFail = false;
+                try
                 {
-                    bool bFail = false;
-                    try
+                    //
+                    // HKCR\CLSID\clsid
+                    //
+                    string clsid = Marshal.GenerateGuidForType(type).ToString("B");
+                    string progid = Marshal.GenerateProgIdForType(type);
+                    string deviceType = type.Name;
+
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid))
                     {
-                        //
-                        // HKCR\CLSID\clsid
-                        //
-                        string clsid = Marshal.GenerateGuidForType(type).ToString("B");
-                        string progid = Marshal.GenerateProgIdForType(type);
-                        string deviceType = type.Name;
-                        TL.LogMessage("Register", progid + " " + clsid);
-
-                        using (RegistryKey key = Registry.ClassesRoot.CreateSubKey("CLSID\\" + clsid))
+                        key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
+                        key.SetValue("AppId", m_sAppId);
+                        using (RegistryKey key2 = key.CreateSubKey("Implemented Categories"))
                         {
-                            key.SetValue(null, progid);						// Could be assyTitle/Desc??, but .NET components show ProgId here
-                            key.SetValue("AppId", m_sAppId);
-                            using (RegistryKey key2 = key.CreateSubKey("Implemented Categories"))
-                            {
-                                key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
-                            }
-                            using (RegistryKey key2 = key.CreateSubKey("ProgId"))
-                            {
-                                key2.SetValue(null, progid);
-                            }
-                            key.CreateSubKey("Programmable");
-                            using (RegistryKey key2 = key.CreateSubKey("LocalServer32"))
-                            {
-                                key2.SetValue(null, Application.ExecutablePath);
-                            }
+                            key2.CreateSubKey("{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}");
                         }
-                        //
-                        // HKCR\CLSID\progid
-                        //
-                        using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progid))
+                        using (RegistryKey key2 = key.CreateSubKey("ProgId"))
                         {
-                            key.SetValue(null, assyTitle);
-                            using (RegistryKey key2 = key.CreateSubKey("CLSID"))
-                            {
-                                key2.SetValue(null, clsid);
-                            }
+                            key2.SetValue(null, progid);
                         }
-                        //
-                        // ASCOM 
-                        //
-                        assy = type.Assembly;
-                        //attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
-                        //string chooserName = ((AssemblyProductAttribute)attr).Product;
-
-                        //Modified to pull from the custom Attribute ServedClassName
-                        attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute));
-                        string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName ?? "telescope Simulator";
-
-                        using (var P = new ASCOM.Utilities.Profile())
+                        key.CreateSubKey("Programmable");
+                        using (RegistryKey key2 = key.CreateSubKey("LocalServer32"))
                         {
-                            P.DeviceType = deviceType;
-                            P.Register(progid, chooserName);
+                            key2.SetValue(null, Application.ExecutablePath);
                         }
                     }
-                    catch (Exception ex)
+                    //
+                    // HKCR\CLSID\progid
+                    //
+                    using (RegistryKey key = Registry.ClassesRoot.CreateSubKey(progid))
                     {
-                        MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
-                                "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                        bFail = true;
+                        key.SetValue(null, assyTitle);
+                        using (RegistryKey key2 = key.CreateSubKey("CLSID"))
+                        {
+                            key2.SetValue(null, clsid);
+                        }
                     }
-                    finally
+                    //
+                    // ASCOM 
+                    //
+                    assy = type.Assembly;
+                    //attr = Attribute.GetCustomAttribute(assy, typeof(AssemblyProductAttribute));
+                    //string chooserName = ((AssemblyProductAttribute)attr).Product;
+
+                    //Modified to pull from the custom Attribute ServedClassName
+                    attr = Attribute.GetCustomAttribute(type, typeof(ServedClassNameAttribute));
+                    string chooserName = ((ASCOM.ServedClassNameAttribute)attr).DisplayName ?? "telescope Simulator";
+
+                    using (var P = new ASCOM.Utilities.Profile())
                     {
+                        P.DeviceType = deviceType;
+                        P.Register(progid, chooserName);
                     }
-                    if (bFail) break;
                 }
-                TL.Enabled = false;
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error while registering the server:\n" + ex.ToString(),
+                            "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    bFail = true;
+                }
+                finally
+                {
+                }
+                if (bFail) break;
             }
-
         }
 
         //
@@ -559,25 +551,20 @@ namespace ASCOM.Simulator
         //
         private static bool RegisterClassFactories()
         {
-            using (ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "RegisterClassFactories"))
+            m_ClassFactories = new ArrayList();
+            foreach (Type type in m_ComObjectTypes)
             {
-                TL.Enabled = true;
-                m_ClassFactories = new ArrayList();
-                foreach (Type type in m_ComObjectTypes)
+                ClassFactory factory = new ClassFactory(type);					// Use default context & flags
+                m_ClassFactories.Add(factory);
+                if (!factory.RegisterClassObject())
                 {
-                    TL.LogMessage("New ClassFactory", type.AssemblyQualifiedName);
-                    ClassFactory factory = new ClassFactory(type);					// Use default context & flags
-                    m_ClassFactories.Add(factory);
-                    if (!factory.RegisterClassObject())
-                    {
-                        MessageBox.Show("Failed to register class factory for " + type.Name,
-                            "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                        return false;
-                    }
+                    MessageBox.Show("Failed to register class factory for " + type.Name,
+                        "TelescopeSimulator", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return false;
                 }
-                ClassFactory.ResumeClassObjects();									// Served objects now go live
-                TL.Enabled = false;
             }
+            ClassFactory.ResumeClassObjects();									// Served objects now go live
+
             return true;
         }
 
@@ -598,7 +585,7 @@ namespace ASCOM.Simulator
         private static bool ProcessArguments(string[] args)
         {
             bool bRet = true;
-            
+
             //
             //**TODO** -Embedding is "ActiveX start". Prohibit non_AX starting?
             //

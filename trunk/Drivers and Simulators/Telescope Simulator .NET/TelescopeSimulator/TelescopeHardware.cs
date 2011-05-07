@@ -156,8 +156,8 @@ namespace ASCOM.Simulator
                 deltaRa = 0;
                 deltaDec = 0;
 
-                TL = new ASCOM.Utilities.TraceLogger("", "SimTelescopeHardware");
-                TL.Enabled = true;
+                TL = new ASCOM.Utilities.TraceLogger("", "TelescopeSimHardware");
+                TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
 
                 // check if the profile settings are correct 
                 if (s_Profile.GetValue(SharedResources.PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)

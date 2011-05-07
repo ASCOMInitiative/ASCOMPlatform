@@ -912,7 +912,7 @@ namespace ASCOM.DriverAccess
                 /* if (!memberFactory.IsCOMObject)
                      return memberFactory.TrackingRates;
                  else*/
-                return new LateBoundTrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
+                return new TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
             }
         }
 
@@ -1148,7 +1148,7 @@ namespace ASCOM.DriverAccess
     ///<summary>
     /// Late bound TrackingRates implementation
     ///</summary>
-    public class LateBoundTrackingRates : ITrackingRates, IEnumerable //, IEnumerator
+    public class TrackingRates : ITrackingRates, IEnumerable //, IEnumerator
     {
         Type objTypeTrackingRates;
         object objTrackingRatesLateBound;
@@ -1159,7 +1159,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="objTypeScope">The type of the supplied object</param>
         /// <param name="objScopeLateBound">The object representing the telescope device</param>
-        public LateBoundTrackingRates(Type objTypeScope, object objScopeLateBound)
+        public TrackingRates(Type objTypeScope, object objScopeLateBound)
         {
             objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
                                                                   BindingFlags.Default | BindingFlags.GetProperty,

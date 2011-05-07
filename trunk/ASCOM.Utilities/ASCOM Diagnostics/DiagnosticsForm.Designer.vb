@@ -44,10 +44,11 @@ Partial Class DiagnosticsForm
         Me.MenuIncludeSerialTraceDebugInformation = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuProfileTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuUtilTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuTimerTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblAction = New System.Windows.Forms.Label()
         Me.btnLastLog = New System.Windows.Forms.Button()
-        Me.MenuTimerTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuSimulatorTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -154,7 +155,7 @@ Partial Class DiagnosticsForm
         '
         'mnuTrace
         '
-        Me.mnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeaveUnset, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTimerTraceEnabled, Me.MenuTransformTraceEnabled})
+        Me.mnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeaveUnset, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTimerTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuSimulatorTraceEnabled})
         Me.mnuTrace.Name = "mnuTrace"
         Me.mnuTrace.Size = New System.Drawing.Size(48, 20)
         Me.mnuTrace.Text = "Trace"
@@ -208,6 +209,12 @@ Partial Class DiagnosticsForm
         Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuUtilTraceEnabled.Text = "Util Trace Enabled"
         '
+        'MenuTimerTraceEnabled
+        '
+        Me.MenuTimerTraceEnabled.Name = "MenuTimerTraceEnabled"
+        Me.MenuTimerTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuTimerTraceEnabled.Text = "Timer Timer Enabled"
+        '
         'MenuTransformTraceEnabled
         '
         Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
@@ -236,11 +243,11 @@ Partial Class DiagnosticsForm
         Me.btnLastLog.Text = "View Last Log"
         Me.btnLastLog.UseVisualStyleBackColor = True
         '
-        'MenuTimerTraceEnabled
+        'MenuSimulatorTraceEnabled
         '
-        Me.MenuTimerTraceEnabled.Name = "MenuTimerTraceEnabled"
-        Me.MenuTimerTraceEnabled.Size = New System.Drawing.Size(280, 22)
-        Me.MenuTimerTraceEnabled.Text = "Timer Timer Enabled"
+        Me.MenuSimulatorTraceEnabled.Name = "MenuSimulatorTraceEnabled"
+        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuSimulatorTraceEnabled.Text = "Simulator Trace Enabled"
         '
         'DiagnosticsForm
         '
@@ -292,5 +299,6 @@ Partial Class DiagnosticsForm
     Friend WithEvents MenuTransformTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuUtilTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuTimerTraceEnabled As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuSimulatorTraceEnabled As System.Windows.Forms.ToolStripMenuItem
 
 End Class
