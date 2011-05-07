@@ -24,7 +24,6 @@ Friend Class ChooserForm
         Dim ProfileStore As RegistryAccess
         Dim i, iSel As Integer
         Dim sDescription As String = ""
-        Dim TraceFileName As String
         Dim Description As String
 
         Try
@@ -86,6 +85,22 @@ Friend Class ChooserForm
             End If
             cbDriverSelector_SelectedIndexChanged(cbDriverSelector, New System.EventArgs()) ' Also dims OK
 
+            ProfileStore.Dispose() 'Close down the profile store
+            ProfileStore = Nothing
+
+            RefreshTraceMenu() ' Refresh the trace menu
+
+        Catch ex As Exception
+            MsgBox("ChooserForm Load " & ex.ToString)
+            LogEvent("ChooserForm Load ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub RefreshTraceMenu()
+        Dim TraceFileName As String ', ProfileStore As RegistryAccess
+
+        Using ProfileStore As New RegistryAccess
+
             TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME)
             Select Case TraceFileName
                 Case "" 'Trace is disabled
@@ -115,15 +130,10 @@ Friend Class ChooserForm
             MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
             MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
-
             MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+            MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
 
-            ProfileStore.Dispose() 'Close down the profile store
-            ProfileStore = Nothing
-        Catch ex As Exception
-            MsgBox("ChooserForm Load " & ex.ToString)
-            LogEvent("ChooserForm Load ", ex.ToString, System.Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserFormLoad, ex.ToString)
-        End Try
+        End Using
     End Sub
 
     Public WriteOnly Property DeviceType() As String
@@ -370,4 +380,12 @@ Friend Class ChooserForm
         SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)
     End Sub
 
+    Private Sub MenuSimulatorTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSimulatorTraceEnabled.Click
+        MenuSimulatorTraceEnabled.Checked = Not MenuSimulatorTraceEnabled.Checked 'Invert selection
+        SetName(SIMULATOR_TRACE, MenuSimulatorTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTrace.DropDownOpening
+        RefreshTraceMenu()
+    End Sub
 End Class

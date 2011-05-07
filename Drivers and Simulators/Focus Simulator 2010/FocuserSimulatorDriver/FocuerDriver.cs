@@ -96,8 +96,9 @@ namespace ASCOM.Simulator
             try
             {
                 TL = new TraceLogger("","FocusSimulator");
-                TL.Enabled = true;
+                TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
                 TL.LogMessage("New", "Started");
+
                 //check to see if the profile is ok
                 if (ValidateProfile())
                 {
