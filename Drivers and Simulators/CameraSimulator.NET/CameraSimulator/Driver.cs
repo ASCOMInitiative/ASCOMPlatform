@@ -860,7 +860,7 @@ namespace ASCOM.Simulator
 			get
             {
                 if (!this.canPulseGuide)
-                    throw new ASCOM.PropertyNotImplementedException("The method or operation is not implemented.",false);
+                    throw new ASCOM.PropertyNotImplementedException("IsPulseGuiding", false);
                 return this.isPulseGuidingRa || this.isPulseGuidingDec;
             }
 		}
