@@ -1146,8 +1146,8 @@ namespace ASCOM.Simulator
 		{
             if (!this.connected)
                 throw new NotConnectedException("Can't set StartExposure when not connected");
-            // check the duration
-            if (Duration > this.exposureMax || Duration < this.exposureMin)
+            // check the duration, light frames only
+            if ( ! Light && (Duration > this.exposureMax || Duration < this.exposureMin))
             {
                 this.lastError="Incorrect exposure duration";
                 throw new ASCOM.InvalidValueException("StartExposure Duration",
