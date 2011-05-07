@@ -1129,6 +1129,18 @@ namespace CameraTest
             }
         }
 
+        private void checkBoxDarkFrame_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxDarkFrame.Checked)
+            {
+                numExposure.Minimum = 0M;
+            }
+            else
+            {
+                numExposure.Minimum = (oCamera.InterfaceVersion >= 2) ? (decimal)oCamera.ExposureMin : 0.001M;
+            }
+        }
+
         //private enum SensorType
         //{
         //    Monochrome,
