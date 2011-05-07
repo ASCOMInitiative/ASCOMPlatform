@@ -509,7 +509,13 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <summary>
     ''' Starts an exposure. Use ImageReady to check when the exposure is complete.
     ''' </summary>
-    ''' <param name="Duration">Duration of exposure in seconds</param>
+    ''' <remarks>
+    ''' <para>A dark frame or bias exposure may be shorter than the V2 MinExposure value and for a bias frame can be zero.
+    ''' Check the value of Light and allow exposures down to 0 seconds if Light is False.  If the hardware will not
+    ''' support an exposure duration of zero then, for dark and bias frames, set it to the minimum that is possible.</para>
+    ''' <para>Some applications will set an exposure time of zero for bias frames so it's important that the driver allows this.</para>
+    ''' </remarks>
+    ''' <param name="Duration">Duration of exposure in seconds, can be zero if Light is false</param>
     ''' <param name="Light">True for light frame, False for dark frame (ignored if no shutter)</param>
     ''' <exception cref=" InvalidValueException">NumX, NumY, XBin, YBin, StartX, StartY, or Duration parameters are invalid.</exception>
     ''' <exception cref=" InvalidOperationException">CanAsymmetricBin is False and BinX != BinY</exception>
