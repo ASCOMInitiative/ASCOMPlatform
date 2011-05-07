@@ -127,14 +127,14 @@ namespace CameraTest
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnChoose = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.buttonSetup = new System.Windows.Forms.Button();
-            this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.imageControl = new CameraTest.ImageControl();
             this.groupBoxSupportedActions = new System.Windows.Forms.GroupBox();
             this.buttonAction = new System.Windows.Forms.Button();
             this.textBoxActionParameters = new System.Windows.Forms.TextBox();
             this.comboBoxSupportedActions = new System.Windows.Forms.ComboBox();
+            this.buttonSetup = new System.Windows.Forms.Button();
+            this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxCoolerControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSetCCDTemperature)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -326,6 +326,7 @@ namespace CameraTest
             this.checkBoxDarkFrame.TabIndex = 20;
             this.checkBoxDarkFrame.Text = "Dark Frame";
             this.checkBoxDarkFrame.UseVisualStyleBackColor = true;
+            this.checkBoxDarkFrame.CheckedChanged += new System.EventHandler(this.checkBoxDarkFrame_CheckedChanged);
             // 
             // chkVariant
             // 
@@ -392,11 +393,6 @@ namespace CameraTest
             0,
             0,
             0});
-            this.numExposure.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
             this.numExposure.Name = "numExposure";
             this.numExposure.Size = new System.Drawing.Size(47, 20);
             this.numExposure.TabIndex = 14;
@@ -1180,22 +1176,6 @@ namespace CameraTest
             this.tabPage2.Text = "Imaging";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // buttonSetup
-            // 
-            this.buttonSetup.Location = new System.Drawing.Point(43, 456);
-            this.buttonSetup.Name = "buttonSetup";
-            this.buttonSetup.Size = new System.Drawing.Size(77, 22);
-            this.buttonSetup.TabIndex = 6;
-            this.buttonSetup.Text = "Setup";
-            this.buttonSetup.UseVisualStyleBackColor = true;
-            this.buttonSetup.Click += new System.EventHandler(this.buttonSetup_Click);
-            // 
-            // saveFileDialog
-            // 
-            this.saveFileDialog.DefaultExt = "fit";
-            this.saveFileDialog.Filter = "Fits File|*.fit";
-            this.saveFileDialog.Title = "Save as FITS";
-            // 
             // groupBoxSupportedActions
             // 
             this.groupBoxSupportedActions.Controls.Add(this.buttonAction);
@@ -1232,6 +1212,22 @@ namespace CameraTest
             this.comboBoxSupportedActions.Name = "comboBoxSupportedActions";
             this.comboBoxSupportedActions.Size = new System.Drawing.Size(125, 21);
             this.comboBoxSupportedActions.TabIndex = 10;
+            // 
+            // buttonSetup
+            // 
+            this.buttonSetup.Location = new System.Drawing.Point(43, 456);
+            this.buttonSetup.Name = "buttonSetup";
+            this.buttonSetup.Size = new System.Drawing.Size(77, 22);
+            this.buttonSetup.TabIndex = 6;
+            this.buttonSetup.Text = "Setup";
+            this.buttonSetup.UseVisualStyleBackColor = true;
+            this.buttonSetup.Click += new System.EventHandler(this.buttonSetup_Click);
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.DefaultExt = "fit";
+            this.saveFileDialog.Filter = "Fits File|*.fit";
+            this.saveFileDialog.Title = "Save as FITS";
             // 
             // Form1
             // 
