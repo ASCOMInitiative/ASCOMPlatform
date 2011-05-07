@@ -126,6 +126,7 @@
     <Compile Include="..\..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="ActionNotImplementedException.cs" />
     <Compile Include="DriverAccessCOMException.cs" />
     <Compile Include="InvalidOperationException.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>

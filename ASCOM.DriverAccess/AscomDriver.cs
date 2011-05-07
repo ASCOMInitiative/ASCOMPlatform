@@ -301,30 +301,56 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Invokes the specified device-specific action.
         /// </summary>
-        /// <param name="actionName">
+        /// <param name="ActionName">
         /// A well known name agreed by interested parties that represents the action to be carried out. 
         /// </param>
-        /// <param name="actionParameters">List of required parameters or String.Empty if none are required.
+        /// <param name="ActionParameters">List of required parameters or an <see cref="String.Empty">Empty String</see> if none are required.
         /// </param>
-        /// <returns>A string response and sets the <c>IDeviceControl.LastResult</c> property.</returns>
-        /// <remarks>
+        /// <returns>A string response. The meaning of returned strings is set by the driver author.</returns>
         /// <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could 
         /// be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a 
-        /// formatted list of wheel names and the second taking a wheel name and making the change.
+        /// formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate 
+        /// values to indicate success or failure.
         /// </example>
+        /// <remarks>
+        /// This method is intended for use in all current and future device types and to avoid name clashes, management of action names 
+        /// is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
+        /// <list type="bullet">
+        /// <item><description>DeviceType is the same value as would be used by <see cref="ASCOM.Utilities.Chooser.DeviceType"/> e.g. Telescope, Camera, Switch etc.</description></item>
+        /// <item><description>UniqueActionName is a single word, or multiple words joined by underscore characters, that sensibly describes the action to be performed.</description></item>
+        /// </list>
+        /// <para>
+        /// It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
+        /// Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of 
+        /// “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
+        /// and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
+        /// <para>The names of all supported actions must bre returned in the <see cref="SupportedActions"/> property.</para>
         /// </remarks>
-        /// <exception cref="ASCOM.MethodNotImplementedException">Throws an exception if not implemented.</exception>
-        public string Action(string actionName, string actionParameters)
+        /// <exception cref="ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
+        /// <exception cref="ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients 
+        /// of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to 
+        /// perform an action that it does not support.</exception>
+        public string Action(string ActionName, string ActionParameters)
         {
-            return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { actionName, actionParameters });
+            return (string)memberFactory.CallMember(3, "Action", new Type[] { typeof(string), typeof(string) }, new object[] { ActionName, ActionParameters });
         }
 
         /// <summary>
-        /// Gets an ArrayList (SafeArray Collection) of the supported actions.
+        /// Returns the list of action names supported by this driver.
         /// </summary>
-        /// <value>The supported actions.</value>
-        /// <remarks>This method must return an emtyy arraylist if not actions are supported. Please do not throw a 
-        /// MethodNotImplementedException.</remarks>
+        /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
+        /// <remarks>This method must return an empty arraylist if no actions are supported. Please do not throw a 
+        /// <see cref="ASCOM.MethodNotImplementedException" />.
+        /// <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
+        /// Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
+        /// the <see cref="Action"/> method.</para>
+        ///<para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
+        /// determine whether a particular action is supported. This is easily done through the Contains method. Since the
+        /// collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 
+        /// about hom many members are in the collection. </para>
+        /// <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
+        /// the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+        /// </remarks>
         public ArrayList SupportedActions
         {
             get 
