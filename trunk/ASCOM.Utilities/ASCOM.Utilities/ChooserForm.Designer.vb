@@ -164,61 +164,61 @@
         'NormallyLeaveTheseDisabledToolStripMenuItem
         '
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Name = "NormallyLeaveTheseDisabledToolStripMenuItem"
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(295, 22)
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Text = "Normally leave these disabled"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(277, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(292, 6)
         '
         'MenuUseTraceAutoFilenames
         '
         Me.MenuUseTraceAutoFilenames.Name = "MenuUseTraceAutoFilenames"
-        Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(280, 22)
+        Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(295, 22)
         Me.MenuUseTraceAutoFilenames.Text = "Use Automatic Serial Trace Filenames"
         '
         'MenuUseTraceManualFilename
         '
         Me.MenuUseTraceManualFilename.Name = "MenuUseTraceManualFilename"
-        Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(280, 22)
+        Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(295, 22)
         Me.MenuUseTraceManualFilename.Text = "Use a Manual Serial Trace Filename"
         '
         'MenuSerialTraceEnabled
         '
         Me.MenuSerialTraceEnabled.Name = "MenuSerialTraceEnabled"
-        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(295, 22)
         Me.MenuSerialTraceEnabled.Text = "Serial Trace Enabled"
         '
         'MenuIncludeSerialTraceDebugInformation
         '
         Me.MenuIncludeSerialTraceDebugInformation.Name = "MenuIncludeSerialTraceDebugInformation"
-        Me.MenuIncludeSerialTraceDebugInformation.Size = New System.Drawing.Size(280, 22)
+        Me.MenuIncludeSerialTraceDebugInformation.Size = New System.Drawing.Size(295, 22)
         Me.MenuIncludeSerialTraceDebugInformation.Text = "Include Serial Trace Debug Information"
         '
         'MenuProfileTraceEnabled
         '
         Me.MenuProfileTraceEnabled.Name = "MenuProfileTraceEnabled"
-        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(295, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
         'MenuUtilTraceEnabled
         '
         Me.MenuUtilTraceEnabled.Name = "MenuUtilTraceEnabled"
-        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(295, 22)
         Me.MenuUtilTraceEnabled.Text = "Util Trace Enabled"
         '
         'MenuTransformTraceEnabled
         '
         Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
-        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(295, 22)
         Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
         '
         'MenuSimulatorTraceEnabled
         '
         Me.MenuSimulatorTraceEnabled.Name = "MenuSimulatorTraceEnabled"
-        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(280, 22)
-        Me.MenuSimulatorTraceEnabled.Text = "Simulator Trace Enabled"
+        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(295, 22)
+        Me.MenuSimulatorTraceEnabled.Text = "Simulator and DriverAccess Trace Enabled"
         '
         'ChooserForm
         '

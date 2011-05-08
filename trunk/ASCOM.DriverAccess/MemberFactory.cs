@@ -31,7 +31,7 @@ namespace ASCOM.DriverAccess
         internal MemberFactory(string progId)
         {
             _tl = new TraceLogger("", "MemberFactory");
-            _tl.Enabled = true;
+            _tl.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_DRIVERACCESS_TRACE, GlobalConstants.SIMULATOR_DRIVERACCESS_TRACE_DEFAULT);
             _tl.LogMessage("ProgID", progId);
 
             _strProgId = progId;
@@ -129,7 +129,7 @@ namespace ASCOM.DriverAccess
                         //run the COM object method
                         try
                         {
-                            _tl.LogMessageCrLf("Dispose COM", "This is a COM object so attempting to call its Dispose method");
+                            _tl.LogMessageCrLf("Dispose COM", "This is a COM object, attempting to call its Dispose method");
                             GetObjType.InvokeMember("Dispose",
                                                     BindingFlags.Default | BindingFlags.InvokeMethod,
                                                     null,
@@ -150,7 +150,7 @@ namespace ASCOM.DriverAccess
                     }
                     else // Should be a .NET object so lets dispose of it
                     {
-                        _tl.LogMessageCrLf("Dispose .NET", "This is a .NET object so attempting to call its Dispose method");
+                        _tl.LogMessageCrLf("Dispose .NET", "This is a .NET object, attempting to call its Dispose method");
                         var methodInfo = GetObjType.GetMethod("Dispose");
 
                         if (methodInfo != null)
