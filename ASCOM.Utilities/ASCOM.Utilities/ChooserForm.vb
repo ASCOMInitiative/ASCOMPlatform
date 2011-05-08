@@ -131,7 +131,7 @@ Friend Class ChooserForm
             MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
             MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
-            MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
+            MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_DRIVERACCESS_TRACE, SIMULATOR_DRIVERACCESS_TRACE_DEFAULT)
 
         End Using
     End Sub
@@ -382,7 +382,7 @@ Friend Class ChooserForm
 
     Private Sub MenuSimulatorTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSimulatorTraceEnabled.Click
         MenuSimulatorTraceEnabled.Checked = Not MenuSimulatorTraceEnabled.Checked 'Invert selection
-        SetName(SIMULATOR_TRACE, MenuSimulatorTraceEnabled.Checked.ToString)
+        SetName(SIMULATOR_DRIVERACCESS_TRACE, MenuSimulatorTraceEnabled.Checked.ToString)
     End Sub
 
     Private Sub MenuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTrace.DropDownOpening
