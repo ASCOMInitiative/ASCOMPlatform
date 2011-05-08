@@ -7,13 +7,12 @@ using System.Collections;
 using System.Globalization;
 
 namespace ASCOM.DriverAccess
-    
 {
     /// <summary>
     /// Base class for ASCOM driver access toolkit device classes. This class contains the methods common to all devices
     /// so that they can be maintained in just one place.
     /// </summary>
-    public class AscomDriver: IDisposable
+    public class AscomDriver : IDisposable
     {
         private int interfaceVersion;
         #region AscomDriver Constructors and Dispose
@@ -84,19 +83,19 @@ namespace ASCOM.DriverAccess
         /// <exception cref="ASCOM.DriverException">Must throw an exception if unsuccessful.</exception>
         public bool Connected
         {
-            get 
-            { 
-                if ((deviceType=="FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
+            get
+            {
+                if ((deviceType == "FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
                 {
-                    return (bool)memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { }); 
+                    return (bool)memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { });
                 }
                 else //Everything else uses Connected!
                 {
-                    return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { }); 
+                    return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { });
                 }
             }
-            set 
-            { 
+            set
+            {
                 if ((deviceType == "FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
                 {
                     memberFactory.CallMember(2, "Link", new Type[] { }, new object[] { value });
@@ -117,7 +116,7 @@ namespace ASCOM.DriverAccess
         /// <exception cref=" ASCOM.DriverException">Must throw an exception if description unavailable</exception>
         public string Description
         {
-            get 
+            get
             {
                 try
                 {
@@ -152,13 +151,13 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// This string may contain line endings and may be hundreds to thousands of characters long.
         /// It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-        /// See the Description property for descriptive info on the device itself.
-        /// To get the driver version in a parseable string, use the DriverVersion property.
+        /// See the <see cref="Description" /> property for information on the telescope itself.
+        /// To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
         /// </remarks>
         public string DriverInfo
         {
-            get 
-            { 
+            get
+            {
                 try
                 {
                     return (string)memberFactory.CallMember(1, "DriverInfo", new Type[] { typeof(string) }, new object[] { });
@@ -172,7 +171,7 @@ namespace ASCOM.DriverAccess
                             case "CAMERA":
                             case "FILTERWHEEL":
                             case "FOCUSER":
-                            case "ROTATOR": 
+                            case "ROTATOR":
                                 return "";
                             default:
                                 throw ex;
@@ -189,15 +188,15 @@ namespace ASCOM.DriverAccess
 
         /// <summary>
         /// A string containing only the major and minor version of the driver.
-        /// This must be in the form "n.n".
         /// </summary>
-        /// <remarks>
-        /// Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
+        /// <remarks>This must be in the form "n.n".
+        /// It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the 
+        /// driver.
         /// </remarks>
         public string DriverVersion
         {
-            get 
-            { 
+            get
+            {
                 try
                 {
                     return (string)memberFactory.CallMember(1, "DriverVersion", new Type[] { typeof(string) }, new object[] { });
@@ -212,7 +211,7 @@ namespace ASCOM.DriverAccess
                             case "DOME":
                             case "FILTERWHEEL":
                             case "FOCUSER":
-                            case "ROTATOR": 
+                            case "ROTATOR":
                                 return "0.0";
                             default:
                                 throw ex;
@@ -237,7 +236,7 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public short InterfaceVersion
         {
-            get 
+            get
             {
                 try // Return the interface version or return 1 if property is not implemented
                 {
@@ -255,8 +254,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Name
         {
-            get 
-            { 
+            get
+            {
                 try
                 {
                     return (string)memberFactory.CallMember(1, "Name", new Type[] { typeof(string) }, new object[] { });
@@ -270,7 +269,7 @@ namespace ASCOM.DriverAccess
                             case "CAMERA":
                             case "FILTERWHEEL":
                             case "FOCUSER":
-                            case "ROTATOR": 
+                            case "ROTATOR":
                                 return "";
                             default:
                                 throw ex;
@@ -343,7 +342,7 @@ namespace ASCOM.DriverAccess
         /// <see cref="ASCOM.MethodNotImplementedException" />.
         /// <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
         /// Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
-        /// the <see cref="Action"/> method.</para>
+        /// the <see cref="Action">Action</see> method.</para>
         ///<para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
         /// determine whether a particular action is supported. This is easily done through the Contains method. Since the
         /// collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 
@@ -353,16 +352,16 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public ArrayList SupportedActions
         {
-            get 
-            { 
+            get
+            {
                 try
                 {
                     return (ArrayList)memberFactory.CallMember(1, "SupportedActions", new Type[] { }, new object[] { });
                 }
                 catch (Exception ex)
                 {
-                //No interface version 1 drivers or TelescopeV2 have SupportedActions so just return an empty arraylist for these
-                    if ((interfaceVersion == 1) | ((deviceType == "TELESCOPE") & (interfaceVersion == 2)))  
+                    //No interface version 1 drivers or TelescopeV2 have SupportedActions so just return an empty arraylist for these
+                    if ((interfaceVersion == 1) | ((deviceType == "TELESCOPE") & (interfaceVersion == 2)))
                     {
                         return new ArrayList();
                     }

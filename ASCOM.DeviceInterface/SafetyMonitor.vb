@@ -13,7 +13,7 @@ Public Interface ISafetyMonitor
     'IAscomDriver Methods
 
     ''' <summary>
-    ''' Set True to enable the link. Set False to disable the link.
+    ''' Set True to connect to the device. Set False to disconnect from the device.
     ''' You can also read the property to check whether it is connected.
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
@@ -21,9 +21,7 @@ Public Interface ISafetyMonitor
     Property Connected() As Boolean
 
     ''' <summary>
-    ''' Returns a description of the driver, such as manufacturer and model
-    ''' number. Any ASCII characters may be used. For Camera devices, the string shall not exceed 68
-    ''' characters (for compatibility with FITS headers).
+    ''' Returns a description of the driver, such as manufacturer and modelnumber. Any ASCII characters may be used. 
     ''' </summary>
     ''' <value>The description.</value>
     ''' <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
@@ -31,26 +29,31 @@ Public Interface ISafetyMonitor
 
     ''' <summary>
     ''' Descriptive and version information about this ASCOM driver.
+    ''' </summary>
+    ''' <remarks>
     ''' This string may contain line endings and may be hundreds to thousands of characters long.
     ''' It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-    ''' See the Description property for descriptive info on the telescope itself.
-    ''' To get the driver version in a parseable string, use the DriverVersion property.
-    ''' </summary>
+    ''' See the <see cref="Description" /> property for information on the telescope itself.
+    ''' To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
+    ''' </remarks>
     ReadOnly Property DriverInfo() As String
 
     ''' <summary>
     ''' A string containing only the major and minor version of the driver.
-    ''' This must be in the form "n.n".
-    ''' Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
     ''' </summary>
+    ''' <remarks>This must be in the form "n.n".
+    ''' It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the 
+    ''' driver.
+    ''' </remarks>
     ReadOnly Property DriverVersion() As String
 
     ''' <summary>
-    ''' The version of this interface. Will return 2 for this version.
-    ''' Clients can detect legacy V1 drivers by trying to read ths property.
-    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
-    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+    ''' The interface version number that this device supports. Should return 1 for this interface version.
     ''' </summary>
+    ''' <remarks>Clients can detect legacy V1 drivers by trying to read ths property.
+    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
+    ''' </remarks>
     ReadOnly Property InterfaceVersion() As Short
 
     ''' <summary>
@@ -102,9 +105,21 @@ Public Interface ISafetyMonitor
     Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String
 
     ''' <summary>
-    ''' Gets the supported actions.
+    ''' Returns the list of action names supported by this driver. This is only available for telescope InterfaceVersion 3
     ''' </summary>
-    ''' <value>The supported actions.</value>
+    ''' <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
+    ''' <remarks>This method must return an empty arraylist if no actions are supported. Please do not throw a 
+    ''' <see cref="ASCOM.PropertyNotImplementedException" />.
+    ''' <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
+    ''' Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
+    ''' the <see cref="Action">Action</see> method.</para>
+    '''<para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
+    ''' determine whether a particular action is supported. This is easily done through the Contains method. Since the
+    ''' collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 
+    ''' about hom many members are in the collection. </para>
+    ''' <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
+    ''' the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+    ''' </remarks> 
     ReadOnly Property SupportedActions() As ArrayList
 
     ''' <summary>
@@ -157,8 +172,9 @@ Public Interface ISafetyMonitor
 
 #Region "Device Methods"
     ''' <summary>
-    ''' True if the safety device or monitor is in safe mode
+    ''' Indicates whether the monitored state is safe for use.
     ''' </summary>
+    ''' <value>True if the state is safe, False if it is unsafe.</value>
     ReadOnly Property IsSafe() As Boolean
 #End Region
 
