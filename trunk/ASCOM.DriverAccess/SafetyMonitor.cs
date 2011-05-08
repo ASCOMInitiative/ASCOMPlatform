@@ -50,9 +50,9 @@ namespace ASCOM.DriverAccess
         #region ISafetyMonitor Members
 
         /// <summary>
-        /// Tells is the SafetyMonitor is set to safe
+        /// Indicates whether the monitored state is safe for use.
         /// </summary>
-        /// <value></value>
+        /// <value>True if the state is safe, False if it is unsafe.</value>
         public bool IsSafe
         {
             get { return (bool)_memberFactory.CallMember(1, "IsSafe", new Type[] { }, new object[] { }); }

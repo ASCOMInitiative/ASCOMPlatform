@@ -12,7 +12,7 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     'IAscomDriver Methods
 
     ''' <summary>
-    ''' Set True to enable the link. Set False to disable the link.
+    ''' Set True to connect to the device. Set False to disconnect from the device.
     ''' You can also read the property to check whether it is connected.
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
@@ -20,9 +20,7 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     Property Connected() As Boolean
 
     ''' <summary>
-    ''' Returns a description of the driver, such as manufacturer and model
-    ''' number. Any ASCII characters may be used. For Camera devices, the string shall not exceed 68
-    ''' characters (for compatibility with FITS headers).
+    ''' Returns a description of the driver, such as manufacturer and modelnumber. Any ASCII characters may be used. 
     ''' </summary>
     ''' <value>The description.</value>
     ''' <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
@@ -30,26 +28,31 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
 
     ''' <summary>
     ''' Descriptive and version information about this ASCOM driver.
+    ''' </summary>
+    ''' <remarks>
     ''' This string may contain line endings and may be hundreds to thousands of characters long.
     ''' It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-    ''' See the Description property for descriptive info on the telescope itself.
-    ''' To get the driver version in a parseable string, use the DriverVersion property.
-    ''' </summary>
+    ''' See the <see cref="Description" /> property for information on the telescope itself.
+    ''' To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
+    ''' </remarks>
     ReadOnly Property DriverInfo() As String
 
     ''' <summary>
     ''' A string containing only the major and minor version of the driver.
-    ''' This must be in the form "n.n".
-    ''' Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
     ''' </summary>
+    ''' <remarks>This must be in the form "n.n".
+    ''' It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the 
+    ''' driver.
+    ''' </remarks>
     ReadOnly Property DriverVersion() As String
 
     ''' <summary>
-    ''' The version of this interface. Will return 2 for this version.
-    ''' Clients can detect legacy V1 drivers by trying to read ths property.
-    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
-    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+    ''' The interface version number that this device supports. Should return 2 for this interface version.
     ''' </summary>
+    ''' <remarks>Clients can detect legacy V1 drivers by trying to read ths property.
+    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
+    ''' </remarks>
     ReadOnly Property InterfaceVersion() As Short
 
     ''' <summary>
@@ -108,7 +111,7 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     ''' <see cref="ASCOM.PropertyNotImplementedException" />.
     ''' <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
     ''' Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
-    ''' the <see cref="Action"/> method.</para>
+    ''' the <see cref="Action">Action</see> method.</para>
     '''<para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
     ''' determine whether a particular action is supported. This is easily done through the Contains method. Since the
     ''' collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 
@@ -168,50 +171,84 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
 
 #Region "Device Methods"
     ''' <summary>
-    ''' Returns True if the Rotator supports the Rotator.Reverse() method.
+    ''' Indicates whether the Rotator supports the <see cref="Reverse" /> method.
     ''' </summary>
+    ''' <returns>
+    ''' True if the Rotator supports the <see cref="Reverse" /> method.
+    ''' </returns>
     ReadOnly Property CanReverse() As Boolean
 
     ''' <summary>
-    ''' Immediately stop any Rotator motion due to a previous Move() or MoveAbsolute() method call.
+    ''' Immediately stop any Rotator motion due to a previous <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see> method call.
     ''' </summary>
+    ''' <remarks>This is an optional method. Raises an error if not supported.</remarks>
+    ''' <exception cref="MethodNotImplementedException">Throw a MethodNotImplementedException if the rotator cannot halt.</exception>
     Sub Halt()
 
     ''' <summary>
-    ''' True if the Rotator is currently moving to a new position. False if the Rotator is stationary.
+    ''' Indicates whether the rotator is currently moving
     ''' </summary>
+    ''' <returns>True if the Rotator is moving to a new position. False if the Rotator is stationary.</returns>
+    ''' <remarks>Rotation is asynchronous, that is, when the <see cref="Move">Move</see> method is called, it starts the rotation, then returns 
+    ''' immediately. During rotation, <see cref="IsMoving" /> must be True, else it must be False.</remarks>
     ReadOnly Property IsMoving() As Boolean
 
     ''' <summary>
-    ''' Causes the rotator to move Position degrees relative to the current Position value.
+    ''' Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
     ''' </summary>
-    ''' <param name="Position">Relative position to move in degrees from current Position.</param>
+    ''' <param name="Position">Relative position to move in degrees from current <see cref="Position" />.</param>
+    ''' <remarks>Calling <see cref="Move">Move</see> causes the <see cref="TargetPosition" /> property to change to the sum of the current angular position 
+    ''' and the value of the <see cref="Position" /> parameter (modulo 360 degrees), then starts rotation to <see cref="TargetPosition" />.</remarks>
     Sub Move(ByVal Position As Single)
 
     ''' <summary>
-    ''' Causes the rotator to move the absolute position of Position degrees.
+    ''' Causes the rotator to move the absolute position of <see cref="Position" /> degrees.
     ''' </summary>
-    ''' <param name="Position">absolute position in degrees.</param>
+    ''' <param name="Position">Absolute position in degrees.</param>
+    ''' <remarks>Calling <see cref="MoveAbsolute">MoveAbsolute</see> causes the <see cref="TargetPosition" /> property to change to the value of the
+    ''' <see cref="Position" /> parameter, then starts rotation to <see cref="TargetPosition" />. </remarks>
     Sub MoveAbsolute(ByVal Position As Single)
 
     ''' <summary>
     ''' Current instantaneous Rotator position, in degrees.
     ''' </summary>
+    ''' <remarks>
+    ''' The position is expressed as an angle from 0 up to but not including 360 degrees, counter-clockwise against the 
+    ''' sky. This is the standard definition of Position Angle. However, the rotator does not need to (and in general will not) 
+    ''' report the true Equatorial Position Angle, as the attached imager may not be precisely aligned with the rotator's indexing. 
+    ''' It is up to the client to determine any offset between mechanical rotator position angle and the true Equatorial Position 
+    ''' Angle of the imager, and compensate for any difference. 
+    ''' <para>The optional <see cref="Reverse" /> property is provided in order to manage rotators being used on optics with odd or 
+    ''' even number of reflections. With the Reverse switch in the correct position for the optics, the reported position angle must 
+    ''' be counter-clockwise against the sky.</para>
+    ''' </remarks>
     ReadOnly Property Position() As Single
 
     ''' <summary>
     ''' Sets or Returns the rotator’s Reverse state.
     ''' </summary>
+    ''' <value>True if the rotation and angular direction must be reversed for the optics</value>
+    ''' <remarks>See the definition of <see cref="Position" />. Raises an error if not supported. </remarks>
+    ''' <exception cref="PropertyNotImplementedException">Throw a PropertyNotImplementedException if the rotator cannot reverse.</exception>
     Property Reverse() As Boolean
 
     ''' <summary>
     ''' The minimum StepSize, in degrees.
     ''' </summary>
+    ''' <remarks>
+    ''' Raises an exception if the rotator does not intrinsically know what the step size is.
+    ''' </remarks>
+    ''' <exception cref="PropertyNotImplementedException">Throw a PropertyNotImplementedException if the rotator does not know its step size.</exception>
     ReadOnly Property StepSize() As Single
 
     ''' <summary>
-    ''' Current Rotator target position, in degrees.
+    ''' The destination position angle for Move() and MoveAbsolute().
     ''' </summary>
+    ''' <value>The destination position angle for<see cref="Move">Move</see> and <see cref="MoveAbsolute">MoveAbsolute</see>.</value>
+    ''' <remarks>Upon calling <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see>, this property immediately 
+    ''' changes to the position angle to which the rotator is moving. The value is retained until a subsequent call 
+    ''' to <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see>.
+    ''' </remarks>
     ReadOnly Property TargetPosition() As Single
 #End Region
 

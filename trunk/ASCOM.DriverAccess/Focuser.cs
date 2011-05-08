@@ -11,10 +11,10 @@ using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {
-	#region Focuser wrapper
-	/// <summary>
-	/// Provides universal access to Focuser drivers
-	/// </summary>
+    #region Focuser wrapper
+    /// <summary>
+    /// Provides universal access to Focuser drivers
+    /// </summary>
     public class Focuser : AscomDriver, IFocuserV2
     {
         #region Focuser constructors
@@ -24,10 +24,11 @@ namespace ASCOM.DriverAccess
         /// Creates a focuser object with the given Prog ID
         /// </summary>
         /// <param name="focuserId">ProgID of the focuser device to be accessed.</param>
-        public Focuser(string focuserId) : base(focuserId)
-		{
+        public Focuser(string focuserId)
+            : base(focuserId)
+        {
             memberFactory = base.MemberFactory;
-		}
+        }
         #endregion
 
         #region Convenience Members
@@ -45,7 +46,7 @@ namespace ASCOM.DriverAccess
             }
         }
 
-	    #endregion
+        #endregion
 
         #region IFocuser Members
 
@@ -58,13 +59,14 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Immediately stop any focuser motion due to a previous Move() method call.
+        /// Immediately stop any focuser motion due to a previous <see cref="Move" /> method call.
         /// </summary>
         /// <remarks>
         /// Some focusers may not support this function, in which case an exception will be raised. 
-        /// Recommendation: Host software should call this method upon initialization and,
-        /// if it fails, disable the Halt button in the user interface. 
+        /// <para><b>Recommendation:</b> Host software should call this method upon initialization and,
+        /// if it fails, disable the Halt button in the user interface.</para>
         /// </remarks>
+        /// <exception cref="MethodNotImplementedException">Focuser does not support this method.</exception>
         public void Halt()
         {
             memberFactory.CallMember(3, "Halt", new Type[] { }, new object[] { });
@@ -81,9 +83,13 @@ namespace ASCOM.DriverAccess
         /// State of the connection to the focuser.
         /// </summary>
         /// <remarks>
-        /// Set True to start the link to the focuser; set False to terminate the link. 
-        /// The current link status can also be read back as this property. 
+        /// Set True to start the connection to the focuser; set False to terminate the connection. 
+        /// The current connection status can also be read back through this property. 
         /// An exception will be raised if the link fails to change state for any reason. 
+        /// <para><b>Note</b></para>
+        /// <para>The FocuserV1 interface was the only interface to name its <i>"Connect"</i> method "Link" all others named 
+        /// their <i>"Connect"</i> method as "Connected". All interfaces including Focuser now have a <see cref="AscomDriver.Connected" /> method and this is 
+        /// the recommended method to use to <i>"Connect"</i> to Focusers exposing the V2 and later interfaces.</para>
         /// </remarks>
         public bool Link
         {
@@ -93,10 +99,11 @@ namespace ASCOM.DriverAccess
 
         /// <summary>
         /// Maximum increment size allowed by the focuser; 
+        /// i.e. the maximum number of steps allowed in one move operation.
         /// </summary>
-        /// <remarks>i.e. the maximum number of steps allowed in one move operation.
-        /// For most focusers this is the same as the MaxStep property.
-        /// This is normally used to limit the Increment display in the host software. 
+        /// <remarks>
+        /// For most focusers this is the same as the <see cref="MaxStep" /> property. This is normally used to limit the Increment 
+        /// display in the host software.
         /// </remarks>
         public int MaxIncrement
         {
@@ -106,9 +113,9 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Maximum step position permitted.
         /// </summary>
-        /// <remarks>The focuser can step between 0 and MaxStep. 
-        /// If an attempt is made to move the focuser beyond these limits,
-        /// it will automatically stop at the limit. 
+        /// <remarks>
+        /// The focuser can step between 0 and <see cref="MaxStep" />. If an attempt is made to move the focuser beyond these limits,
+        /// it will automatically stop at the limit.
         /// </remarks>
         public int MaxStep
         {
@@ -116,23 +123,27 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        ///  Moves the focuser by the specified amount or to the specified position depending on the value of the Absolute property.
+        ///  Moves the focuser by the specified amount or to the specified position depending on the value of the <see cref="Absolute" /> property.
         /// </summary>
-        /// <param name="Value">Step distance or absolute position, depending on the value of the Absolute property.</param>
-        /// <remarks>If the Absolute property is True, then this is an absolute positioning focuser. The Move command tells the focuser 
-        /// to move to an exact step position, and the Position parameter of the Move() method is an integer between 0 and MaxStep.
-        /// <para>If the Absolute property is False, then this is a relative positioning focuser. The Move command tells the focuser to move in a relative direction, and the Position parameter of the Move() method (in this case, step distance) is an integer between minus MaxIncrement and plus MaxIncrement.</para>
+        /// <param name="Position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
+        /// <remarks>If the <see cref="Absolute" /> property is True, then this is an absolute positioning focuser. 
+        /// The <see cref="Move">Move</see> command tells the focuser to move to an exact step position, and the Position parameter 
+        /// of the <see cref="Move">Move</see> method is an integer between 0 and <see cref="MaxStep" />.
+        /// <para>If the <see cref="Absolute" /> property is False, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells 
+        /// the focuser to move in a relative direction, and the Position parameter of the <see cref="Move">Move</see> method (in this case, step distance) 
+        /// is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
         ///</remarks>
-        public void Move(int Value)
+        public void Move(int Position)
         {
-            memberFactory.CallMember(3, "Move", new Type[] { typeof(int) }, new object[] { Value });
+            memberFactory.CallMember(3, "Move", new Type[] { typeof(int) }, new object[] { Position });
         }
 
         /// <summary>
         /// Current focuser position, in steps.
         /// </summary>
-        /// <remarks>Valid only for absolute positioning focusers (see the Absolute property).
-        /// An exception will be raised for relative positioning focusers.   
+        /// <remarks>
+        /// Valid only for absolute positioning focusers (see the <see cref="Absolute" /> property).
+        /// An exception will be raised for relative positioning focusers.
         /// </remarks>
         public int Position
         {
@@ -142,7 +153,9 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Step size (microns) for the focuser.
         /// </summary>
-        /// <remarks>Raises an exception if the focuser does not intrinsically know what the step size is. </remarks>
+        /// <remarks>Must throw an exception if the focuser does not intrinsically know what the step size is.</remarks>
+        /// <exception cref="ASCOM.PropertyNotImplementedException">Raises a PropertyNotImplemented if the focuser does not intrinsically 
+        /// know what the step size is.</exception>
         public double StepSize
         {
             get { return Convert.ToDouble(memberFactory.CallMember(1, "StepSize", new Type[] { }, new object[] { })); }
@@ -151,10 +164,12 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// The state of temperature compensation mode (if available), else always False.
         /// </summary>
-        /// <remarks>If the TempCompAvailable property is True, then setting TempComp to True
+        /// <remarks>
+        /// If the <see cref="TempCompAvailable" /> property is True, then setting <see cref="TempComp" /> to True
         /// puts the focuser into temperature tracking mode. While in temperature tracking mode,
-        /// Move commands will be rejected by the focuser. Set to False to turn off temperature tracking.
-        /// An exception will be raised if TempCompAvailable is False and an attempt is made to set TempComp to true. </remarks>
+        /// <see cref="Move">Move</see> commands will be rejected by the focuser. Set to False to turn off temperature tracking.
+        /// An exception will be raised if <see cref="TempCompAvailable" /> is False and an attempt is made to set <see cref="TempComp" /> to true.
+        /// </remarks>
         public bool TempComp
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "TempComp", new Type[] { }, new object[] { })); }
@@ -164,7 +179,9 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// True if focuser has temperature compensation available.
         /// </summary>
-        /// <remarks>Will be True only if the focuser's temperature compensation can be turned on and off via the TempComp property.</remarks>
+        /// <remarks>
+        /// Will be True only if the focuser's temperature compensation can be turned on and off via the <see cref="TempComp" /> property. 
+        /// </remarks>
         public bool TempCompAvailable
         {
             get { return Convert.ToBoolean(memberFactory.CallMember(1, "TempCompAvailable", new Type[] { }, new object[] { })); }
@@ -173,14 +190,15 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Current ambient temperature as measured by the focuser.
         /// </summary>
-        /// <remarks>Raises an exception if ambient temperature is not available.
-        /// Commonly available on focusers with a built-in temperature compensation mode.</remarks>
+        /// <remarks>
+        /// Raises an exception if ambient temperature is not available. Commonly available on focusers with a built-in temperature compensation mode. 
+        /// </remarks>
         public double Temperature
         {
             get { return Convert.ToDouble(memberFactory.CallMember(1, "Temperature", new Type[] { }, new object[] { })); }
         }
 
         #endregion
-	}
-	#endregion
+    }
+    #endregion
 }

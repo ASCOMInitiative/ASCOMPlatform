@@ -20,9 +20,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     Property Connected() As Boolean
 
     ''' <summary>
-    ''' Returns a description of the driver, such as manufacturer and model
-    ''' number. Any ASCII characters may be used. For Camera devices, the string shall not exceed 68
-    ''' characters (for compatibility with FITS headers).
+    ''' Returns a description of the driver, such as manufacturer and modelnumber. Any ASCII characters may be used. 
     ''' </summary>
     ''' <value>The description.</value>
     ''' <exception cref="DriverException">Must throw an exception if description unavailable</exception>
@@ -30,26 +28,32 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
 
     ''' <summary>
     ''' Descriptive and version information about this ASCOM driver.
+    ''' </summary>
+    ''' <remarks>
     ''' This string may contain line endings and may be hundreds to thousands of characters long.
     ''' It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-    ''' See the Description property for descriptive info on the telescope itself.
-    ''' To get the driver version in a parseable string, use the DriverVersion property.
-    ''' </summary>
+    ''' See the <see cref="Description" /> property for information on the telescope itself.
+    ''' To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
+    ''' </remarks>
     ReadOnly Property DriverInfo() As String
 
     ''' <summary>
     ''' A string containing only the major and minor version of the driver.
-    ''' This must be in the form "n.n".
-    ''' Not to be confused with the InterfaceVersion property, which is the version of the ASCOM specification supported by the driver.
-    ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </summary>
+    ''' <remarks>This must be in the form "n.n".
+    ''' It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the 
+    ''' driver.
+    ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
+    ''' </remarks>
     ReadOnly Property DriverVersion() As String
 
     ''' <summary>
-    ''' The ASCOM device interface version that this driver supports.
-    ''' This is not implemented in Telescope Interface version 1, these will raise an error,
-    ''' this should be interpreted as InterfaceVersion 1
+    ''' The interface version number that this device supports. Should return 3 for this interface version.
     ''' </summary>
+    ''' <remarks>Clients can detect legacy V1 drivers by trying to read ths property.
+    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
+    ''' </remarks>
     ReadOnly Property InterfaceVersion() As Short
 
     ''' <summary>
@@ -106,7 +110,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <see cref="ASCOM.PropertyNotImplementedException" />.
     ''' <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
     ''' Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
-    ''' the <see cref="Action"/> method.</para>
+    ''' the <see cref="Action">Action</see> method.</para>
     '''<para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
     ''' determine whether a particular action is supported. This is easily done through the Contains method. Since the
     ''' collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 

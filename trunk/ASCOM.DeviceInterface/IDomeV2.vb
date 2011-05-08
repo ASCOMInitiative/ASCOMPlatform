@@ -12,7 +12,7 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     'IAscomDriver Methods
 
     ''' <summary>
-    ''' Set True to enable the link. Set False to disable the link.
+    ''' Set True to connect to the device. Set False to disconnect from the device.
     ''' You can also read the property to check whether it is connected.
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
@@ -20,9 +20,7 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     Property Connected() As Boolean
 
     ''' <summary>
-    ''' Returns a description of the driver, such as manufacturer and model
-    ''' number. Any ASCII characters may be used. For Camera devices, the string shall not exceed 68
-    ''' characters (for compatibility with FITS headers).
+    ''' Returns a description of the driver, such as manufacturer and modelnumber. Any ASCII characters may be used. 
     ''' </summary>
     ''' <value>The description.</value>
     ''' <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
@@ -30,26 +28,31 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
 
     ''' <summary>
     ''' Descriptive and version information about this ASCOM driver.
+    ''' </summary>
+    ''' <remarks>
     ''' This string may contain line endings and may be hundreds to thousands of characters long.
     ''' It is intended to display detailed information on the ASCOM driver, including version and copyright data.
-    ''' See the Description property for descriptive info on the telescope itself.
-    ''' To get the driver version in a parseable string, use the DriverVersion property.
-    ''' </summary>
+    ''' See the <see cref="Description" /> property for information on the telescope itself.
+    ''' To get the driver version in a parseable string, use the <see cref="DriverVersion" /> property.
+    ''' </remarks>
     ReadOnly Property DriverInfo() As String
 
     ''' <summary>
     ''' A string containing only the major and minor version of the driver.
-    ''' This must be in the form "n.n".
-    ''' Not to be confused with the InterfaceVersion property, which is the version of this specification supported by the driver (currently 2). 
     ''' </summary>
+    ''' <remarks>This must be in the form "n.n".
+    ''' It should not to be confused with the <see cref="InterfaceVersion" /> property, which is the version of this specification supported by the 
+    ''' driver.
+    ''' </remarks>
     ReadOnly Property DriverVersion() As String
 
     ''' <summary>
-    ''' The version of this interface. Will return 2 for this version.
-    ''' Clients can detect legacy V1 drivers by trying to read ths property.
-    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
-    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver. 
+    ''' The interface version number that this device supports. Should return 2 for this interface version.
     ''' </summary>
+    ''' <remarks>Clients can detect legacy V1 drivers by trying to read ths property.
+    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
+    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
+    ''' </remarks>
     ReadOnly Property InterfaceVersion() As Short
 
     ''' <summary>
@@ -108,7 +111,7 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <see cref="ASCOM.PropertyNotImplementedException" />.
     ''' <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
     ''' Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
-    ''' the <see cref="Action"/> method.</para>
+    ''' the <see cref="Action">Action</see> method.</para>
     '''<para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
     ''' determine whether a particular action is supported. This is easily done through the Contains method. Since the
     ''' collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 
@@ -169,27 +172,31 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
 #Region "Device Methods"
     ''' <summary>
     ''' Immediately cancel current dome operation.
-    ''' Calling this method will immediately disable hardware slewing (Dome.Slaved will become False).
-    ''' Raises an error if a communications failure occurs, or if the command is known to have failed. 
     ''' </summary>
+    ''' <remarks>
+    ''' Calling this method will immediately disable hardware slewing (<see cref="Slaved" /> will become False).
+    ''' Raises an error if a communications failure occurs, or if the command is known to have failed. 
+    ''' </remarks>
     Sub AbortSlew()
 
     ''' <summary>
     ''' The dome altitude (degrees, horizon zero and increasing positive to 90 zenith).
+    ''' </summary>
+    ''' <remarks>
     ''' Raises an error only if no altitude control. If actual dome altitude can not be read,
     ''' then reports back the last slew position. 
-    ''' </summary>
+    ''' </remarks>
     ReadOnly Property Altitude() As Double
 
     ''' <summary>
     '''   Indicates whether the dome is in the home position.
     '''   Raises an error if not supported. 
     ''' <para>
-    '''   This is normally used following a Dome.FindHome operation. The value is reset with any azimuth
+    '''   This is normally used following a <see cref="FindHome" /> operation. The value is reset with any azimuth
     '''   slew operation that moves the dome away from the home position.
     ''' </para>
     ''' <para>
-    '''   Dome.AtHome may also become true durng normal slew operations, if the dome passes through the home position
+    '''   <see cref="AtHome" /> may also become true durng normal slew operations, if the dome passes through the home position
     '''   and the dome controller hardware is capable of detecting that; or at the end of a slew operation if the dome
     '''   comes to rest at the home position.
     ''' </para>
@@ -205,7 +212,7 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     '''     insufficient to return the exact same azimuth value on each occasion. Some dome controllers, on the other
     '''     hand, will always force the azimuth reading to a fixed value whenever the home position sensor is active.
     '''     Because of these potential differences in behaviour, applications should not rely on the reported azimuth
-    '''     position being identical each time AtHome is set <c>true</c>.
+    '''     position being identical each time <see cref="AtHome" /> is set <c>true</c>.
     '''   </para>
     ''' </remarks>
     ''' [ASCOM-135] TPL - Updated documentation
@@ -213,14 +220,17 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
 
     ''' <summary>
     ''' True if the dome is in the programmed park position.
-    ''' Set only following a Dome.Park operation and reset with any slew operation.
-    ''' Raises an error if not supported. 
     ''' </summary>
+    ''' <remarks>
+    ''' Set only following a <see cref="Park" /> operation and reset with any slew operation.
+    ''' Raises an error if not supported. 
+    ''' </remarks>
     ReadOnly Property AtPark() As Boolean
 
     ''' <summary>
     ''' The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West)
     ''' </summary>
+    ''' <remarks>Raises an error only if no azimuth control. If actual dome azimuth can not be read, then reports back last slew position</remarks>
     ReadOnly Property Azimuth() As Double
 
     ''' <summary>
@@ -256,10 +266,11 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <summary>
     ''' True if the dome hardware supports slaving to a telescope.
     ''' </summary>
+    ''' <remarks>See the notes for the <see cref="Slaved" /> property.</remarks>
     ReadOnly Property CanSlave() As Boolean
 
     ''' <summary>
-    ''' True if driver is capable of synchronizing the dome azimuth position using the Dome.SyncToAzimuth method.
+    ''' True if driver is capable of synchronizing the dome azimuth position using the <see cref="SyncToAzimuth" /> method.
     ''' </summary>
     ReadOnly Property CanSyncAzimuth() As Boolean
 
@@ -269,73 +280,95 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     Sub CloseShutter()
 
     ''' <summary>
-    ''' Description and version information about this ASCOM dome driver.
+    ''' Start operation to search for the dome home position.
     ''' </summary>
+    ''' <remarks>
+    ''' After Home position is established initializes <see cref="Azimuth" /> to the default value and sets the <see cref="AtHome" /> flag. 
+    ''' Exception if not supported or communications failure. Raises an error if <see cref="Slaved" /> is True.
+    ''' </remarks>
     Sub FindHome()
 
     ''' <summary>
     ''' Open shutter or otherwise expose telescope to the sky.
-    ''' Raises an error if not supported or if a communications failure occurs. 
     ''' </summary>
+    ''' <remarks>
+    ''' Raises an error if not supported or if a communications failure occurs. 
+    ''' </remarks>
     Sub OpenShutter()
 
     ''' <summary>
     ''' Rotate dome in azimuth to park position.
-    ''' After assuming programmed park position, sets Dome.AtPark flag. Raises an error if Dome.Slaved is True,
-    ''' or if not supported, or if a communications failure has occurred. 
     ''' </summary>
+    ''' <remarks>
+    ''' After assuming programmed park position, sets <see cref="AtPark" /> flag. Raises an error if <see cref="Slaved" /> is True,
+    ''' or if not supported, or if a communications failure has occurred. 
+    ''' </remarks>
     Sub Park()
 
     ''' <summary>
     ''' Set the current azimuth, altitude position of dome to be the park position.
-    ''' Raises an error if not supported or if a communications failure occurs. 
     ''' </summary>
+    ''' <remarks>
+    ''' Raises an error if not supported or if a communications failure occurs. 
+    ''' </remarks>
     Sub SetPark()
 
     ''' <summary>
     ''' Status of the dome shutter or roll-off roof.
+    ''' </summary>
+    ''' <remarks>
     ''' Raises an error only if no shutter control.
     ''' If actual shutter status can not be read, 
     ''' then reports back the last shutter state. 
-    ''' </summary>
+    ''' </remarks>
     ReadOnly Property ShutterStatus() As ShutterState
 
     ''' <summary>
     ''' True if the dome is slaved to the telescope in its hardware, else False.
+    ''' </summary>
+    ''' <remarks>
     ''' Set this property to True to enable dome-telescope hardware slaving,
-    ''' if supported (see Dome.CanSlave). Raises an exception on any attempt to set 
+    ''' if supported (see <see cref="CanSlave" />). Raises an exception on any attempt to set 
     ''' this property if hardware slaving is not supported).
     ''' Always returns False if hardware slaving is not supported. 
-    ''' </summary>
+    ''' </remarks>
     Property Slaved() As Boolean
 
     ''' <summary>
     ''' True if any part of the dome is currently moving, False if all dome components are steady.
-    ''' Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
-    ''' or if the dome can not reach indicated azimuth. 
     ''' </summary>
+    ''' <remarks>
+    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs,
+    ''' or if the dome can not reach indicated azimuth. 
+    ''' </remarks>
     ReadOnly Property Slewing() As Boolean
 
     ''' <summary>
     ''' Slew the dome to the given altitude position.
-    ''' Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
-    ''' or if the dome can not reach indicated altitude. 
     ''' </summary>
+    ''' <remarks>
+    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs,
+    ''' or if the dome can not reach indicated altitude. 
+    ''' </remarks>
     ''' <param name="Altitude">Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith)</param>
     Sub SlewToAltitude(ByVal Altitude As Double)
 
     ''' <summary>
     ''' Slew the dome to the given azimuth position.
-    ''' Raises an error if Dome.Slaved is True, if not supported, if a communications failure occurs,
-    ''' or if the dome can not reach indicated azimuth. 
     ''' </summary>
+    ''' <remarks>
+    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs,
+    ''' or if the dome can not reach indicated azimuth. 
+    ''' </remarks>
     ''' <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
     Sub SlewToAzimuth(ByVal Azimuth As Double)
 
     ''' <summary>
     ''' Synchronize the current position of the dome to the given azimuth.
-    ''' Raises an error if not supported or if a communications failure occurs. 
     ''' </summary>
+    ''' <remarks>
+    ''' Raises an error if not supported or if a communications failure occurs. 
+    ''' </remarks>
     ''' <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
     Sub SyncToAzimuth(ByVal Azimuth As Double)
 #End Region
