@@ -44,7 +44,7 @@ namespace ASCOM.DriverAccess
             if (GetObjType == null)
             {
                 //no type information found throw error
-                throw new  ASCOM.Utilities.Exceptions.HelperException("Check Driver: cannot create object type of progID: " + _strProgId);
+                throw new ASCOM.Utilities.Exceptions.HelperException("Check Driver: cannot create object type of progID: " + _strProgId);
             }
 
             //setup the property
@@ -66,14 +66,14 @@ namespace ASCOM.DriverAccess
             MemberInfo[] members = GetObjType.GetMembers();
             foreach (MemberInfo mi in members)
             {
-                _tl.LogMessage("Member", Enum.GetName(typeof (MemberTypes), mi.MemberType) + " " + mi.Name);
+                _tl.LogMessage("Member", Enum.GetName(typeof(MemberTypes), mi.MemberType) + " " + mi.Name);
                 if (mi.MemberType == MemberTypes.Method)
                 {
-                    foreach (ParameterInfo pi in ((MethodInfo) mi).GetParameters())
+                    foreach (ParameterInfo pi in ((MethodInfo)mi).GetParameters())
                     {
                         _tl.LogMessage("Parameter",
-                                       " " + pi.Name + 
-                                       " " + pi.ParameterType.Name + 
+                                       " " + pi.Name +
+                                       " " + pi.ParameterType.Name +
                                        " " + pi.ParameterType.AssemblyQualifiedName);
                     }
                 }
@@ -166,7 +166,6 @@ namespace ASCOM.DriverAccess
                     }
                 }
                 catch (Exception ex)
-                
                 {
                     try
                     {
@@ -230,11 +229,11 @@ namespace ASCOM.DriverAccess
                         {
                             //run the COM object property
                             return
-                                (GetObjType.InvokeMember(memberName, 
+                                (GetObjType.InvokeMember(memberName,
                                                          BindingFlags.Default | BindingFlags.GetProperty,
-                                                         null, 
-                                                         GetLateBoundObject, 
-                                                         new object[] { }, 
+                                                         null,
+                                                         GetLateBoundObject,
+                                                         new object[] { },
                                                          CultureInfo.InvariantCulture));
                         }
                         catch (COMException e)
@@ -243,7 +242,7 @@ namespace ASCOM.DriverAccess
                             if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
                             {
                                 _tl.LogMessageCrLf(memberName + " Get", "  Throwing PropertyNotImplementedException: " + _strProgId + " " + memberName);
-                                throw new PropertyNotImplementedException(_strProgId + " " + memberName, false);
+                                throw new PropertyNotImplementedException(_strProgId + " " + memberName, false, e);
                             }
                             _tl.LogMessageCrLf(memberName + " Get", "Re-throwing exception");
                             throw;
@@ -255,8 +254,17 @@ namespace ASCOM.DriverAccess
                             {
                                 string message = e.InnerException.Message;
                                 int errorcode = ((COMException)e.InnerException).ErrorCode;
-                                _tl.LogMessageCrLf(memberName + " Get", "COM Exception so throwing inner exception: '" + message + "' '" + String.Format("{0:x8}", errorcode) + "'");
-                                throw new DriverAccessCOMException(message, errorcode, e.InnerException);
+                                // Telescope simulator in V1 mode throws not implemented exceptions rather than some kind of missing member exception, so test for this!
+                                if (errorcode == int.Parse("80040400", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
+                                {
+                                    _tl.LogMessageCrLf(memberName + " Get", "  Translating COM not implemented exception to PropertyNotImplementedException: " + _strProgId + " " + memberName);
+                                    throw new PropertyNotImplementedException(_strProgId + " " + memberName, false, e);
+                                }
+                                else // Throw a new COM exception that looks like the original exception, containing the original inner COM exception for reference
+                                {
+                                    _tl.LogMessageCrLf(memberName + " Get", "COM Exception so throwing inner exception: '" + message + "' '" + String.Format("{0:x8}", errorcode) + "'");
+                                    throw new DriverAccessCOMException(message, errorcode, e.InnerException);
+                                }
                             }
 
                             GetTargetInvocationExceptionHandler(memberName, e);
@@ -319,7 +327,7 @@ namespace ASCOM.DriverAccess
                             if (e.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
                             {
                                 _tl.LogMessageCrLf(memberName + " Set", "  Throwing PropertyNotImplementedException: " + _strProgId + " " + memberName);
-                                throw new PropertyNotImplementedException(_strProgId + " " + memberName, true);
+                                throw new PropertyNotImplementedException(_strProgId + " " + memberName, true, e);
                             }
                             _tl.LogMessageCrLf(memberName + " Set", "  Re-throwing exception");
                             throw;
@@ -332,8 +340,17 @@ namespace ASCOM.DriverAccess
                             {
                                 string message = e.InnerException.Message;
                                 int errorcode = ((COMException)e.InnerException).ErrorCode;
-                                _tl.LogMessageCrLf(memberName + " Set", "COM Exception so throwing inner exception: '" + message + "' '" + String.Format("{0:x8}", errorcode) + "'");
-                                throw new DriverAccessCOMException(message, errorcode, e.InnerException);
+                                // Telescope simulator in V1 mode throws not implemented exceptions rather than some kind of missing member exception, so test for this!
+                                if (errorcode == int.Parse("80040400", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
+                                {
+                                    _tl.LogMessageCrLf(memberName + " Set", "  Translating COM not implemented exception to PropertyNotImplementedException: " + _strProgId + " " + memberName);
+                                    throw new PropertyNotImplementedException(_strProgId + " " + memberName, true, e);
+                                }
+                                else // Throw a new COM exception that looks like the original exception, containing the original inner COM exception for reference
+                                {
+                                    _tl.LogMessageCrLf(memberName + " Set", "COM Exception so throwing inner exception: '" + message + "' '" + String.Format("{0:x8}", errorcode) + "'");
+                                    throw new DriverAccessCOMException(message, errorcode, e.InnerException);
+                                }
                             }
 
                             SetTargetInvocationExceptionHandler(memberName, e);
@@ -408,11 +425,11 @@ namespace ASCOM.DriverAccess
                         try
                         {
                             //run the COM object method
-                            return GetObjType.InvokeMember(memberName, 
+                            return GetObjType.InvokeMember(memberName,
                                                            BindingFlags.Default | BindingFlags.InvokeMethod,
-                                                           null, 
-                                                           GetLateBoundObject, 
-                                                           parms, 
+                                                           null,
+                                                           GetLateBoundObject,
+                                                           parms,
                                                            CultureInfo.InvariantCulture);
                         }
                         catch (COMException e)
@@ -433,8 +450,17 @@ namespace ASCOM.DriverAccess
                             {
                                 string message = e.InnerException.Message;
                                 int errorcode = ((COMException)e.InnerException).ErrorCode;
-                                _tl.LogMessageCrLf(memberName, "COM Exception so throwing inner exception: '" + message + "' '" + String.Format("{0:x8}", errorcode) + "'");
-                                throw new DriverAccessCOMException(message, errorcode, e.InnerException); 
+                                // Telescope simulator in V1 mode throws not implemented exceptions rather than some kind of missing member exception, so test for this!
+                                if (errorcode == int.Parse("80040400", NumberStyles.HexNumber, CultureInfo.InvariantCulture))
+                                {
+                                    _tl.LogMessageCrLf(memberName, "  Translating COM not implemented exception to MethodNotImplementedException: " + _strProgId + " " + memberName);
+                                    throw new MethodNotImplementedException(_strProgId + " " + memberName, e);
+                                }
+                                else // Throw a new COM exception that looks like the original exception, containing the original inner COM exception for reference
+                                {
+                                    _tl.LogMessageCrLf(memberName, "  COM Exception so throwing inner exception: '" + message + "' '" + String.Format("{0:x8}", errorcode) + "'");
+                                    throw new DriverAccessCOMException(message, errorcode, e.InnerException);
+                                }
                             }
 
                             MethodTargetInvocationExceptionHandler(memberName, e);
@@ -463,12 +489,12 @@ namespace ASCOM.DriverAccess
         private void CheckDotNetExceptions(string memberName, Exception e)
         {
             //Throw the appropriate exception based on the inner exception of the TargetInvocationException
-            if (e.InnerException is InvalidOperationException) 
+            if (e.InnerException is InvalidOperationException)
             {
                 string message = e.InnerException.Message;
 
                 _tl.LogMessageCrLf(memberName, "  Throwing InvalidOperationException: '" + message + "'");
-                throw new InvalidOperationException(message, e.InnerException); 
+                throw new InvalidOperationException(message, e.InnerException);
             }
 
             if (e.InnerException is InvalidValueException)
@@ -478,14 +504,14 @@ namespace ASCOM.DriverAccess
                 string range = ((InvalidValueException)e.InnerException).Range;
 
                 _tl.LogMessageCrLf(memberName, "  Throwing InvalidValueException: '" + member + "' '" + value + "' '" + range + "'");
-                throw new InvalidValueException(member,value,range,e.InnerException);
+                throw new InvalidValueException(member, value, range, e.InnerException);
             }
-            if (e.InnerException is NotConnectedException) 
+            if (e.InnerException is NotConnectedException)
             {
                 string message = e.InnerException.Message;
 
                 _tl.LogMessageCrLf(memberName, "  Throwing NotConnectedException: '" + message + "'");
-                throw new NotConnectedException(message, e.InnerException); 
+                throw new NotConnectedException(message, e.InnerException);
             }
 
             if (e.InnerException is NotImplementedException)
@@ -496,20 +522,20 @@ namespace ASCOM.DriverAccess
                 throw new NotImplementedException(member, e.InnerException);
             }
 
-            if (e.InnerException is ParkedException) 
+            if (e.InnerException is ParkedException)
             {
                 string message = e.InnerException.Message;
 
                 _tl.LogMessageCrLf(memberName, "  Throwing ParkedException: '" + message + "'");
-                throw new ParkedException(message, e.InnerException); 
+                throw new ParkedException(message, e.InnerException);
             }
 
-            if (e.InnerException is SlavedException) 
+            if (e.InnerException is SlavedException)
             {
                 string message = e.InnerException.Message;
 
                 _tl.LogMessageCrLf(memberName, "  Throwing SlavedException: '" + message + "'");
-                throw new SlavedException(message, e.InnerException); 
+                throw new SlavedException(message, e.InnerException);
             }
 
             if (e.InnerException is ValueNotSetException)
@@ -529,7 +555,7 @@ namespace ASCOM.DriverAccess
             }
 
             // Default behaviour if its not one of the exceptions above
-            string defaultmessage = "CheckDotNetExceptions " +  _strProgId + " " + memberName + " " +e.InnerException.ToString() + " (See Inner Exception for details)";
+            string defaultmessage = "CheckDotNetExceptions " + _strProgId + " " + memberName + " " + e.InnerException.ToString() + " (See Inner Exception for details)";
 
             _tl.LogMessageCrLf(memberName, "  Throwing Default DriverException: '" + defaultmessage + "'");
             throw new DriverException(defaultmessage, e.InnerException);
@@ -550,7 +576,7 @@ namespace ASCOM.DriverAccess
         }
 
         private void GetTargetInvocationExceptionHandler(string memberName, Exception e)
-        {                            
+        {
             // Check unique exceptions for this case
             _tl.LogMessageCrLf("TargetInvocationException", e.ToString());
             if (e.InnerException is PropertyNotImplementedException)
@@ -579,5 +605,5 @@ namespace ASCOM.DriverAccess
 
         #endregion
     }
-    
+
 }
