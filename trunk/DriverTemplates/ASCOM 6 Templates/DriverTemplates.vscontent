@@ -73,18 +73,6 @@
     </Attributes>
   </Content>
   <Content>
-    <FileName>ASCOM Switch Driver Template CS.zip</FileName>
-    <DisplayName>ASCOM Switch Driver Template CS</DisplayName>
-    <Description>Creates a C# skeleton project for an ASCOM Switch driver.</Description>
-    <FileContentType>VSTemplate</FileContentType>
-    <ContentVersion>1.0</ContentVersion>
-    <Attributes>
-      <Attribute name="TemplateType" value="Project"></Attribute>
-      <Attribute name="ProjectType" value="Visual C#"></Attribute>
-      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
-    </Attributes>
-  </Content>
-  <Content>
     <FileName>ASCOM Telescope Driver Template CS.zip</FileName>
     <DisplayName>ASCOM Telescope Driver Template CS</DisplayName>
     <Description>Creates a C# skeleton project for an ASCOM Telescope driver.</Description>
@@ -179,18 +167,6 @@
       <Attribute name="ProjectType" value="Visual Basic"></Attribute>
       <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
     </Attributes>
-  </Content>
-	<Content>
-      <FileName>ASCOM Switch Driver Template VB.zip</FileName>
-      <DisplayName>ASCOM Switch Driver Template VB</DisplayName>
-      <Description>Creates a VB skeleton project for an ASCOM Switch driver.</Description>
-      <FileContentType>VSTemplate</FileContentType>
-      <ContentVersion>1.0</ContentVersion>
-      <Attributes>
-        <Attribute name="TemplateType" value="Project"></Attribute>
-        <Attribute name="ProjectType" value="Visual Basic"></Attribute>
-        <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
-      </Attributes>
   </Content>
   <Content>
     <FileName>ASCOM Telescope Driver Template VB.zip</FileName>
