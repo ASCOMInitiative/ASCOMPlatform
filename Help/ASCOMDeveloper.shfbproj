@@ -149,6 +149,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Scripts\" />
     <Folder Include="Developer Information\" />
     <Folder Include="Tools and Features\" />
     <Folder Include="Examples\" />
@@ -180,6 +181,7 @@
       <ImageId>ForceCOMPort</ImageId>
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
+    <Content Include="Scripts\script_manifold.js" />
     <Content Include="Introduction\Acknowledgements.aml" />
     <None Include="Examples\DriverAccess.aml" />
     <None Include="Examples\DriverAccess.aml" />
