@@ -131,6 +131,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Scripts\" />
     <Folder Include="Tools and Features\" />
     <Folder Include="Version History\" />
     <Folder Include="Introduction\" />
@@ -160,6 +161,7 @@
       <ImageId>ForceCOMPort</ImageId>
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
+    <Content Include="Scripts\script_manifold.js" />
     <Content Include="Introduction\Acknowledgements.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
     <None Include="Tools and Features\Gauges.aml" />
