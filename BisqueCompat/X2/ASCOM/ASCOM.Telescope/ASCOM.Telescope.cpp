@@ -19,7 +19,13 @@
 // 22-Apr-11	rbd		Initial edit
 // 27-Apr-11	rbd		Many changes over the last few days, still fluid.
 // 03-May-11	rbd		Fix m_pszDriverInfoDetailedInfo. Add deletion of 
-//						callback interface pointers.
+//						callback interface pointers. Don't return Asymmetric
+//						abstraction unless all conditions for use are met.
+// 09-May-11	rbd		Persist CanSideOfPier too, also use it for Asym.
+//						mount on/off. In order for tracking on/off to 
+//						be reflected in TheSky X UI, you must return
+//						-1000.0 for Ra and Dec rates in addition to false
+//						for bTracking.
 //========================================================================
 
 #include "StdAfx.h"
@@ -81,6 +87,7 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 	//
 	_bScopeCanSync = (m_pIniUtil->readInt(m_szIniKey, "MountCanSync", 0) == 1);
 	_bScopeIsGEM = (m_pIniUtil->readInt(m_szIniKey, "MountIsAsymEqu", 0) == 1);
+	_bScopeCanSideOfPier = (m_pIniUtil->readInt(m_szIniKey, "MountCanSideOfPier", 0) == 1);
 	_bScopeCanSetTracking = (m_pIniUtil->readInt(m_szIniKey, "MountCanTrackRates", 0) == 1);
 	_bScopeCanPark = (m_pIniUtil->readInt(m_szIniKey, "MountCanPark", 0) == 1);
 	_bScopeCanUnpark = (m_pIniUtil->readInt(m_szIniKey, "MountCanUnpark", 0) == 1);
@@ -133,7 +140,7 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 		*ppVal = dynamic_cast<TrackingRatesInterface*>(this);
 	else if (!strcmp(pszName, ModalSettingsDialogInterface_Name))
 		*ppVal = dynamic_cast<ModalSettingsDialogInterface*>(this);
-	else if (!strcmp(pszName, AsymmetricalEquatorialInterface_Name) && _bScopeIsGEM)
+	else if (!strcmp(pszName, AsymmetricalEquatorialInterface_Name) && _bScopeIsGEM && _bScopeCanSideOfPier)
 		*ppVal = dynamic_cast<AsymmetricalEquatorialInterface*>(this);
 	else if (!strcmp(pszName, ParkInterface_Name) && _bScopeCanPark)
 		*ppVal = dynamic_cast<ParkInterface*>(this);
@@ -204,6 +211,7 @@ int X2Mount::execModalSettingsDialog(void)
 		m_pIniUtil->writeInt(m_szIniKey, "MountCanTrackRates", (_bScopeCanSetTracking ? 1 : 0));
 		m_pIniUtil->writeInt(m_szIniKey, "MountCanPark", (_bScopeCanPark ? 1 : 0));
 		m_pIniUtil->writeInt(m_szIniKey, "MountCanUnpark", (_bScopeCanUnpark ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanSideOfPier", (_bScopeCanSideOfPier ? 1 : 0));
 
 		TermScope(false);
 		//TODO - Remove this when SB fixes the dynamic adaptation
@@ -245,6 +253,7 @@ int	X2Mount::establishLink(void)
 		m_pIniUtil->writeInt(m_szIniKey, "MountCanTrackRates", (_bScopeCanSetTracking ? 1 : 0));
 		m_pIniUtil->writeInt(m_szIniKey, "MountCanPark", (_bScopeCanPark ? 1 : 0));
 		m_pIniUtil->writeInt(m_szIniKey, "MountCanUnpark", (_bScopeCanUnpark ? 1 : 0));
+		m_pIniUtil->writeInt(m_szIniKey, "MountCanSideOfPier", (_bScopeCanSideOfPier ? 1 : 0));
 	}
 	return iRes;
 }
@@ -469,14 +478,14 @@ int X2Mount::trackingRates( bool& bTrackingOn, double& dRaRateArcSecPerSec, doub
 	if(!_bScopeActive)								// No scope hookup?
 		return(ERR_COMMNOLINK);						// Forget this
 
-	bTrackingOn = true;
-	dRaRateArcSecPerSec = dDecRateArcSecPerSec = 0.0;
+	bTrackingOn = false;
+	dRaRateArcSecPerSec = dDecRateArcSecPerSec = -1000.0;
 
 	__try {
 		if(_bScopeCanSetTracking)
 		{
 			bTrackingOn = GetTracking();
-			if(_bScopeCanSetTrackRates)
+			if(bTrackingOn && _bScopeCanSetTrackRates)
 			{
 				dRaRateArcSecPerSec = GetRightAscensionRate() / SIDRATE;	// Convert to SidSec/UTCSec
 				dDecRateArcSecPerSec = GetDeclinationRate();

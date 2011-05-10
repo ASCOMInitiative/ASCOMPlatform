@@ -34,6 +34,10 @@
 //						always 2 regardless. WTF? At least now it's 
 //						releasing the driver on disconnect and also when
 //						TheSky is shut down with a connected mount.
+// 09-May-11	rbd		Do not set ra/dec offsets on init if mount is
+//						parked. Use try/finally to assure release of 
+//						marshalled interface if DrvFail(). Was leaving
+//						references...
 //========================================================================
 
 #include "StdAfx.h"
@@ -288,7 +292,7 @@ short InitScope(void)
 		// Determine if it reports SOP (pointing state)
 		//
 		__try {
-			get_integer(L"SideOfPier", false);
+			get_integer(L"SideOfPier", true);					// *SILENT*
 			_bScopeCanSideOfPier = true;
 		} __except(EXCEPTION_EXECUTE_HANDLER) {
 			_bScopeCanSideOfPier = false;
@@ -298,7 +302,11 @@ short InitScope(void)
 		// if the scope can be unparked, do it. 
 		//
 		if(_iScopeInterfaceVersion == 1 && _bScopeCanUnpark)
-			UnparkScope();
+		{
+			call(L"Unpark");
+			isParkedForV1 = false;
+		}
+
 		//
 		// In order for TheSky X to complete startup and change status
 		// from Connecting... tracking must be on or it must be parked.
@@ -308,9 +316,10 @@ short InitScope(void)
 					!get_bool(L"Tracking"))
 			set_bool(L"Tracking", true);
 		//
-		// If the scope has tracking rates, turn them off
+		// If the scope has tracking rates, turn them off. But don't
+		// do this if parked.
 		//
-		if(_bScopeCanSetTrackRates)
+		if(_bScopeCanSetTrackRates && (!_bScopeCanPark || !GetAtPark()))
 		{
 			set_double(L"RightAscensionRate", 0.0);
 			set_double(L"DeclinationRate", 0.0);
@@ -403,12 +412,11 @@ void TermScope(bool bestEfforts)
 		if(CoGetInterfaceAndReleaseStream(pMarshalStream, IID_IDispatch, (LPVOID *)&_p_DrvDisp) == S_OK)
 		{
 			//** TODO ** WTF? I could never get the refcounts right on the GIT method.
-			// Using these CoXxx() calls, I'm close, but I end up with exactly 2 extra refs
+			// Using these CoXxx() calls, I'm close, but I end up with an extra reference
 			// no matter HOW many times I MarshalInStream/GetAndRelease in get_dispatch()
-			// then release at the end of the COM call. Where are the extra refs coming from?
-			_p_DrvDisp->Release();									// Release instance of the driver
-			_p_DrvDisp->Release();
-			_p_DrvDisp->Release();
+			// then release at the end of the COM call. Where is it coming from?
+			_p_DrvDisp->Release();								// Release instance of the driver
+			_p_DrvDisp->Release();								// WTF?
 			_p_DrvDisp = NULL;
 		}
 #endif
@@ -910,64 +918,68 @@ static int get_integer(OLECHAR *name, bool noAlert)
 #endif
 #ifdef CROSS_THREAD_CO
 	_p_DrvDisp = get_dispatch();
+	__try {
 #endif
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name, 
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-	{
-		if (noAlert)
+		//
+		// Get our dispatch ID
+		//
+		if(FAILED(_p_DrvDisp->GetIDsOfNames(
+			IID_NULL, 
+			&name, 
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
 		{
-			NOTIMPL;												// Optional, resignal silently
+			if (noAlert)
+			{
+				NOTIMPL;												// Optional, resignal silently
+			}
+			else
+			{
+				cp = uni_to_ansi(name);
+				wsprintf(buf, 
+					"[%s] lost link to ASCOM driver.", cp);
+				delete[] cp;
+				drvFail(buf, NULL, true);
+			}
 		}
-		else
-		{
-			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				"[%s] lost link to ASCOM driver.", cp);
-			delete[] cp;
-			drvFail(buf, NULL, true);
-		}
-	}
 
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_PROPERTYGET,
-				     &dispparms, 
-				     &result, 
-				     &excep, 
-				     NULL)))
-	{
-		if(excep.scode == EXCEP_NOTIMPL)						// Optional
-			NOTIMPL;											// Resignal silently
-		else
+		//
+		// No dispatch parameters for propget
+		//
+		dispparms.cArgs = 0;
+		dispparms.rgvarg = NULL;
+		dispparms.cNamedArgs = 0;
+		dispparms.rgdispidNamedArgs = NULL;
+		//
+		// Invoke the method
+		//
+		if(FAILED(_p_DrvDisp->Invoke(dispid, 
+						 IID_NULL, 
+						 LOCALE_USER_DEFAULT, 
+						 DISPATCH_PROPERTYGET,
+						 &dispparms, 
+						 &result, 
+						 &excep, 
+						 NULL)))
 		{
-			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				 "Internal error reading from the %s property.", cp);
-			delete[] cp;
-			drvFail(buf, &excep, true);
+			if(excep.scode == EXCEP_NOTIMPL)						// Optional
+				NOTIMPL;											// Resignal silently
+			else
+			{
+				cp = uni_to_ansi(name);
+				wsprintf(buf, 
+					 "Internal error reading from the %s property.", cp);
+				delete[] cp;
+				drvFail(buf, &excep, true);
+			}
 		}
-	}
-
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp->Release();
+	}
+	__finally
+	{
+		_p_DrvDisp->Release();
+	}
 #endif
 
 	return(result.intVal);										// Return integer result
@@ -995,58 +1007,61 @@ static double get_double(OLECHAR *name)
 #endif
 #ifdef CROSS_THREAD_CO
 	_p_DrvDisp = get_dispatch();
+	__try {
 #endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name, 
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "[%s] lost link to ASCOM driver.", cp);
-		delete[] cp;
-		drvFail(buf, NULL, true);
-	}
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_PROPERTYGET,
-				     &dispparms, 
-				     &result, 
-				     &excep, 
-				     NULL)))
-	{
-		if(excep.scode == EXCEP_NOTIMPL)						// Optional
-			NOTIMPL;											// Resignal silently
-		else
+		//
+		// Get our dispatch ID
+		//
+		if(FAILED(_p_DrvDisp->GetIDsOfNames(
+			IID_NULL, 
+			&name, 
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
 		{
 			cp = uni_to_ansi(name);
 			wsprintf(buf, 
-				 "Internal error reading from the %s property.", cp);
+				 "[%s] lost link to ASCOM driver.", cp);
 			delete[] cp;
-			drvFail(buf, &excep, true);
+			drvFail(buf, NULL, true);
 		}
-	}
 
+		//
+		// No dispatch parameters for propget
+		//
+		dispparms.cArgs = 0;
+		dispparms.rgvarg = NULL;
+		dispparms.cNamedArgs = 0;
+		dispparms.rgdispidNamedArgs = NULL;
+		//
+		// Invoke the method
+		//
+		if(FAILED(_p_DrvDisp->Invoke(dispid, 
+						 IID_NULL, 
+						 LOCALE_USER_DEFAULT, 
+						 DISPATCH_PROPERTYGET,
+						 &dispparms, 
+						 &result, 
+						 &excep, 
+						 NULL)))
+		{
+			if(excep.scode == EXCEP_NOTIMPL)						// Optional
+				NOTIMPL;											// Resignal silently
+			else
+			{
+				cp = uni_to_ansi(name);
+				wsprintf(buf, 
+					 "Internal error reading from the %s property.", cp);
+				delete[] cp;
+				drvFail(buf, &excep, true);
+			}
+		}
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp->Release();
+	}
+	__finally
+	{
+		_p_DrvDisp->Release();
+	}
 #endif
 
 	return(result.dblVal);										// Return long result
@@ -1076,61 +1091,64 @@ static void set_double(OLECHAR *name, double val)
 #endif
 #ifdef CROSS_THREAD_CO
 	_p_DrvDisp = get_dispatch();
+	__try {
 #endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name, 
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "[%s] lost link to ASCOM driver.", cp);
-		delete[] cp;
-		drvFail(buf, NULL, true);
-	}
-
-	//
-	// Special setup for propput (See MSKB Q175618)
-	//
-	rgvarg[0].vt = VT_R8;
-	rgvarg[0].dblVal = val;
-	dispparms.cArgs = 1;
-	dispparms.rgvarg = rgvarg;
-	ppdispid[0] = DISPID_PROPERTYPUT;
-	dispparms.cNamedArgs = 1;
-	dispparms.rgdispidNamedArgs = ppdispid;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_PROPERTYPUT,
-				     &dispparms, 
-				     &result, 
-				     &excep, 
-				     NULL)))
-	{
-		if(excep.scode == EXCEP_NOTIMPL)						// Optional
-			NOTIMPL;											// Resignal silently
-		else
+		//
+		// Get our dispatch ID
+		//
+		if(FAILED(_p_DrvDisp->GetIDsOfNames(
+			IID_NULL, 
+			&name, 
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
 		{
 			cp = uni_to_ansi(name);
 			wsprintf(buf, 
-				 "Internal error writing to the %s property.", cp);
+				 "[%s] lost link to ASCOM driver.", cp);
 			delete[] cp;
-			drvFail(buf, &excep, true);
+			drvFail(buf, NULL, true);
 		}
-	}
 
+		//
+		// Special setup for propput (See MSKB Q175618)
+		//
+		rgvarg[0].vt = VT_R8;
+		rgvarg[0].dblVal = val;
+		dispparms.cArgs = 1;
+		dispparms.rgvarg = rgvarg;
+		ppdispid[0] = DISPID_PROPERTYPUT;
+		dispparms.cNamedArgs = 1;
+		dispparms.rgdispidNamedArgs = ppdispid;
+		//
+		// Invoke the method
+		//
+		if(FAILED(_p_DrvDisp->Invoke(dispid, 
+						 IID_NULL, 
+						 LOCALE_USER_DEFAULT, 
+						 DISPATCH_PROPERTYPUT,
+						 &dispparms, 
+						 &result, 
+						 &excep, 
+						 NULL)))
+		{
+			if(excep.scode == EXCEP_NOTIMPL)						// Optional
+				NOTIMPL;											// Resignal silently
+			else
+			{
+				cp = uni_to_ansi(name);
+				wsprintf(buf, 
+					 "Internal error writing to the %s property.", cp);
+				delete[] cp;
+				drvFail(buf, &excep, true);
+			}
+		}
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp->Release();
+	}
+	__finally
+	{
+		_p_DrvDisp->Release();
+	}
 #endif
 }
 
@@ -1156,58 +1174,61 @@ static bool get_bool(OLECHAR *name)
 #endif
 #ifdef CROSS_THREAD_CO
 	_p_DrvDisp = get_dispatch();
+	__try {
 #endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name, 
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "[%s] lost link to ASCOM driver.", cp);
-		delete[] cp;
-		drvFail(buf, NULL, true);
-	}
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_PROPERTYGET,
-				     &dispparms, 
-				     &result, 
-				     &excep, 
-				     NULL)))
-	{
-		if(excep.scode == EXCEP_NOTIMPL)						// Optional
-			NOTIMPL;											// Resignal silently
-		else
+		//
+		// Get our dispatch ID
+		//
+		if(FAILED(_p_DrvDisp->GetIDsOfNames(
+			IID_NULL, 
+			&name, 
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
 		{
 			cp = uni_to_ansi(name);
 			wsprintf(buf, 
-				 "Internal error reading from the %s property.", cp);
+				 "[%s] lost link to ASCOM driver.", cp);
 			delete[] cp;
-			drvFail(buf, &excep, true);
+			drvFail(buf, NULL, true);
 		}
-	}
 
+		//
+		// No dispatch parameters for propget
+		//
+		dispparms.cArgs = 0;
+		dispparms.rgvarg = NULL;
+		dispparms.cNamedArgs = 0;
+		dispparms.rgdispidNamedArgs = NULL;
+		//
+		// Invoke the method
+		//
+		if(FAILED(_p_DrvDisp->Invoke(dispid, 
+						 IID_NULL, 
+						 LOCALE_USER_DEFAULT, 
+						 DISPATCH_PROPERTYGET,
+						 &dispparms, 
+						 &result, 
+						 &excep, 
+						 NULL)))
+		{
+			if(excep.scode == EXCEP_NOTIMPL)						// Optional
+				NOTIMPL;											// Resignal silently
+			else
+			{
+				cp = uni_to_ansi(name);
+				wsprintf(buf, 
+					 "Internal error reading from the %s property.", cp);
+				delete[] cp;
+				drvFail(buf, &excep, true);
+			}
+		}
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp->Release();
+	}
+	__finally
+	{
+		_p_DrvDisp->Release();
+	}
 #endif
 
 	return(result.boolVal == VARIANT_TRUE);						// Return C++ bool result
@@ -1239,57 +1260,59 @@ static void set_bool(OLECHAR *name, bool val)
 #endif
 #ifdef CROSS_THREAD_CO
 	_p_DrvDisp = get_dispatch();
+	__try {
 #endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(hr = _p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name, 
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "[%s] lost link to ASCOM driver.", cp);
-		delete[] cp;
-		drvFail(buf, NULL, true);
-	}
-
-	rgvarg[0].vt = VT_BOOL;
-	rgvarg[0].boolVal = (val ? VARIANT_TRUE : VARIANT_FALSE);	// Translate to Variant Bool
-	dispparms.cArgs = 1;
-	dispparms.rgvarg = rgvarg;
-	ppdispid[0] = DISPID_PROPERTYPUT;
-	dispparms.cNamedArgs = 1;									// PropPut kludge
-	dispparms.rgdispidNamedArgs = ppdispid;
-	if(FAILED(_p_DrvDisp->Invoke(
-			dispid,
+		//
+		// Get our dispatch ID
+		//
+		if(FAILED(hr = _p_DrvDisp->GetIDsOfNames(
 			IID_NULL, 
-			LOCALE_USER_DEFAULT, 
-			DISPATCH_PROPERTYPUT, 
-			&dispparms, 
-			&result,
-			&excep, NULL)))
-	{
-		if(excep.scode == EXCEP_NOTIMPL)						// Optional
-			NOTIMPL;											// Resignal silently
-		else
+			&name, 
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
 		{
 			cp = uni_to_ansi(name);
 			wsprintf(buf, 
-				 "Internal error writing to the %s property.", cp);
+				 "[%s] lost link to ASCOM driver.", cp);
 			delete[] cp;
-			drvFail(buf, &excep, true);
+			drvFail(buf, NULL, true);
 		}
-	}
 
+		rgvarg[0].vt = VT_BOOL;
+		rgvarg[0].boolVal = (val ? VARIANT_TRUE : VARIANT_FALSE);	// Translate to Variant Bool
+		dispparms.cArgs = 1;
+		dispparms.rgvarg = rgvarg;
+		ppdispid[0] = DISPID_PROPERTYPUT;
+		dispparms.cNamedArgs = 1;									// PropPut kludge
+		dispparms.rgdispidNamedArgs = ppdispid;
+		if(FAILED(_p_DrvDisp->Invoke(
+				dispid,
+				IID_NULL, 
+				LOCALE_USER_DEFAULT, 
+				DISPATCH_PROPERTYPUT, 
+				&dispparms, 
+				&result,
+				&excep, NULL)))
+		{
+			if(excep.scode == EXCEP_NOTIMPL)						// Optional
+				NOTIMPL;											// Resignal silently
+			else
+			{
+				cp = uni_to_ansi(name);
+				wsprintf(buf, 
+					 "Internal error writing to the %s property.", cp);
+				delete[] cp;
+				drvFail(buf, &excep, true);
+			}
+		}
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp->Release();
+	}
+	__finally
+	{
+		_p_DrvDisp->Release();
+	}
 #endif
-
 }
 
 // ------------
@@ -1312,58 +1335,61 @@ static char *get_string(OLECHAR *name )
 #endif
 #ifdef CROSS_THREAD_CO
 	_p_DrvDisp = get_dispatch();
+	__try {
 #endif
-
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "[%s] lost link to ASCOM driver.", cp);
-		delete[] cp;
-		drvFail(buf, NULL, true);
-	}
-
-	//
-	// No dispatch parameters for propget
-	//
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_PROPERTYGET,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-	{
-		if(excep.scode == EXCEP_NOTIMPL)						// Optional
-			NOTIMPL;											// Resignal silently
-		else
+		//
+		// Get our dispatch ID
+		//
+		if(FAILED(_p_DrvDisp->GetIDsOfNames(
+			IID_NULL, 
+			&name,
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
 		{
 			cp = uni_to_ansi(name);
 			wsprintf(buf, 
-				 "Internal error reading from the %s property.", cp);
+				 "[%s] lost link to ASCOM driver.", cp);
 			delete[] cp;
-			drvFail(buf, &excep, true);
+			drvFail(buf, NULL, true);
 		}
-	}
 
+		//
+		// No dispatch parameters for propget
+		//
+		dispparms.cArgs = 0;
+		dispparms.rgvarg = NULL;
+		dispparms.cNamedArgs = 0;
+		dispparms.rgdispidNamedArgs = NULL;
+		//
+		// Invoke the method
+		//
+		if(FAILED(_p_DrvDisp->Invoke(dispid, 
+						 IID_NULL, 
+						 LOCALE_USER_DEFAULT, 
+						 DISPATCH_PROPERTYGET,
+						 &dispparms, 
+						 &vRes, 
+						 &excep, 
+						 NULL)))
+		{
+			if(excep.scode == EXCEP_NOTIMPL)						// Optional
+				NOTIMPL;											// Resignal silently
+			else
+			{
+				cp = uni_to_ansi(name);
+				wsprintf(buf, 
+					 "Internal error reading from the %s property.", cp);
+				delete[] cp;
+				drvFail(buf, &excep, true);
+			}
+		}
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp->Release();
+	}
+	__finally
+	{
+		_p_DrvDisp->Release();
+	}
 #endif
 		
 	return(uni_to_ansi(vRes.bstrVal));
@@ -1389,50 +1415,53 @@ static void call(OLECHAR *name)
 #endif
 #ifdef CROSS_THREAD_CO
 	_p_DrvDisp = get_dispatch();
+	__try {
 #endif
+		//
+		// Get our dispatch ID
+		//
+		if(FAILED(_p_DrvDisp->GetIDsOfNames(
+			IID_NULL, 
+			&name,
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
+		{
+			cp = uni_to_ansi(name);
+			wsprintf(buf, 
+				 "[%s] lost link to ASCOM driver.", cp);
+			delete[] cp;
+			drvFail(buf, NULL, true);
+		}
 
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name,
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "[%s] lost link to ASCOM driver.", cp);
-		delete[] cp;
-		drvFail(buf, NULL, true);
-	}
-
-	dispparms.cArgs = 0;
-	dispparms.rgvarg = NULL;
-	dispparms.cNamedArgs = 0;
-	dispparms.rgdispidNamedArgs = NULL;
-	//
-	// Invoke the method
-	//
-	if(FAILED(_p_DrvDisp->Invoke(dispid, 
-				     IID_NULL, 
-				     LOCALE_USER_DEFAULT, 
-				     DISPATCH_METHOD,
-				     &dispparms, 
-				     &vRes, 
-				     &excep, 
-				     NULL)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "%s failed internally.", cp);
-		delete[] cp;
-		drvFail(buf, &excep, true);
-	}		
-
+		dispparms.cArgs = 0;
+		dispparms.rgvarg = NULL;
+		dispparms.cNamedArgs = 0;
+		dispparms.rgdispidNamedArgs = NULL;
+		//
+		// Invoke the method
+		//
+		if(FAILED(_p_DrvDisp->Invoke(dispid, 
+						 IID_NULL, 
+						 LOCALE_USER_DEFAULT, 
+						 DISPATCH_METHOD,
+						 &dispparms, 
+						 &vRes, 
+						 &excep, 
+						 NULL)))
+		{
+			cp = uni_to_ansi(name);
+			wsprintf(buf, 
+				 "%s failed internally.", cp);
+			delete[] cp;
+			drvFail(buf, &excep, true);
+		}		
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp->Release();
+	}
+	__finally
+	{
+		_p_DrvDisp->Release();
+	}
 #endif
 }
 
@@ -1458,55 +1487,58 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 #endif
 #ifdef CROSS_THREAD_CO
 	_p_DrvDisp = get_dispatch();
+	__try {
 #endif
+		//
+		// Get our dispatch ID
+		//
+		if(FAILED(_p_DrvDisp->GetIDsOfNames(
+			IID_NULL, 
+			&name, 
+			1, 
+			LOCALE_USER_DEFAULT,
+			&dispid)))
+		{
+			cp = uni_to_ansi(name);
+			wsprintf(buf, 
+				 "[%s] lost link to ASCOM driver.", cp);
+			delete[] cp;
+			drvFail(buf, NULL, true);
+		}
 
-	//
-	// Get our dispatch ID
-	//
-	if(FAILED(_p_DrvDisp->GetIDsOfNames(
-		IID_NULL, 
-		&name, 
-		1, 
-		LOCALE_USER_DEFAULT,
-		&dispid)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "[%s] lost link to ASCOM driver.", cp);
-		delete[] cp;
-		drvFail(buf, NULL, true);
-	}
-
-	//
-	// Do the sync
-	//
-	rgvarg[0].vt = VT_R8;		// Arg order is R->L
-	rgvarg[0].dblVal = dDec;
-	rgvarg[1].vt = VT_R8;
-	rgvarg[1].dblVal = dRA;
-	dispParms.cArgs = 2;
-	dispParms.rgvarg = rgvarg;
-	dispParms.cNamedArgs = 0;
-	dispParms.rgdispidNamedArgs =NULL;
-	if(FAILED(hr = _p_DrvDisp->Invoke(
-		dispid, 
-		IID_NULL, 
-		LOCALE_USER_DEFAULT, 
-		DISPATCH_METHOD, 
-		&dispParms, 
-		&vRes,
-		&excep, 
-		NULL)))
-	{
-		cp = uni_to_ansi(name);
-		wsprintf(buf, 
-			 "%s failed internally.", cp);
-		delete[] cp;
-		drvFail(buf, &excep, true);
-	}
-
+		//
+		// Do the sync
+		//
+		rgvarg[0].vt = VT_R8;		// Arg order is R->L
+		rgvarg[0].dblVal = dDec;
+		rgvarg[1].vt = VT_R8;
+		rgvarg[1].dblVal = dRA;
+		dispParms.cArgs = 2;
+		dispParms.rgvarg = rgvarg;
+		dispParms.cNamedArgs = 0;
+		dispParms.rgdispidNamedArgs =NULL;
+		if(FAILED(hr = _p_DrvDisp->Invoke(
+			dispid, 
+			IID_NULL, 
+			LOCALE_USER_DEFAULT, 
+			DISPATCH_METHOD, 
+			&dispParms, 
+			&vRes,
+			&excep, 
+			NULL)))
+		{
+			cp = uni_to_ansi(name);
+			wsprintf(buf, 
+				 "%s failed internally.", cp);
+			delete[] cp;
+			drvFail(buf, &excep, true);
+		}
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp->Release();
+	}
+	__finally
+	{
+		_p_DrvDisp->Release();
+	}
 #endif
 }	
 
