@@ -18,6 +18,7 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Focuser : IFocuser, IDisposable
     {
+        private TraceLogger TL;
         #region IFocuser constructors
 
         private readonly MemberFactory _memberFactory;
@@ -28,7 +29,9 @@ namespace ASCOM.DriverAccess
         /// <param name="focuserId"></param>
         public Focuser(string focuserId)
         {
-            _memberFactory = new MemberFactory(focuserId);
+            TL = new TraceLogger("", "DriverAccessFocuser");
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            _memberFactory = new MemberFactory(focuserId, TL);
         }
 
         /// <summary>
@@ -54,6 +57,8 @@ namespace ASCOM.DriverAccess
         public void Dispose()
         {
             _memberFactory.Dispose();
+            TL.Enabled = false;
+            TL.Dispose();
         }
 
         #endregion

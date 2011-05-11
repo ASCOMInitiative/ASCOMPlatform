@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ASCOM.Conform;
+using ASCOM.Utilities;
 using System.Collections;
 using System.Globalization;
 
@@ -14,23 +15,32 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class AscomDriver : IDisposable
     {
+        internal TraceLogger TL;
         private int interfaceVersion;
-        #region AscomDriver Constructors and Dispose
-
         MemberFactory memberFactory;
         private bool disposedValue = false;        // To detect redundant calls
         private string deviceType;
 
+        #region AscomDriver Constructors and Dispose
         /// <summary>
         /// Creates a new instance of the <see cref="AscomDriver"/> class.
         /// </summary>
         /// <param name="deviceProgId">The prog id. of the device being created.</param>
         public AscomDriver(string deviceProgId)
         {
-            memberFactory = new MemberFactory(deviceProgId);
-            interfaceVersion = this.InterfaceVersion;
+            // Create a new TraceLogger and enable if appropriate
+            TL = new TraceLogger("", "DriverAccess");
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            TL.LogMessage("AscomDriver", "Successfully created TraceLogger");
+            TL.LogMessage("AscomDriver", "Device ProgID: " + deviceProgId);
+
             //deviceType = deviceProgId.Substring(deviceProgId.LastIndexOf(".") + 1).ToUpper();
             deviceType = this.GetType().Name.ToUpper();
+            TL.LogMessage("AscomDriver", "Device type: " + this.GetType().Name);
+
+            memberFactory = new MemberFactory(deviceProgId, TL); // Create a memberfactory object and pass in the TraceLogger
+
+            interfaceVersion = this.InterfaceVersion;
         }
 
         /// <summary>
@@ -57,11 +67,11 @@ namespace ASCOM.DriverAccess
                         memberFactory.Dispose();
                         memberFactory = null;
                     }
+                    if (TL != null) TL.Dispose();
                 }
             }
             this.disposedValue = true;
         }
-
         #endregion
 
         /// <summary>
@@ -87,10 +97,12 @@ namespace ASCOM.DriverAccess
             {
                 if ((deviceType == "FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
                 {
+                    TL.LogMessage("Connected Get", "Device is Focuser and Interfaceverison is 1 so issuing Link command");
                     return (bool)memberFactory.CallMember(1, "Link", new Type[] { }, new object[] { });
                 }
                 else //Everything else uses Connected!
                 {
+                    TL.LogMessage("Connected Get", "Issuing Connected command");
                     return (bool)memberFactory.CallMember(1, "Connected", new Type[] { }, new object[] { });
                 }
             }
@@ -98,10 +110,12 @@ namespace ASCOM.DriverAccess
             {
                 if ((deviceType == "FOCUSER") & (interfaceVersion == 1)) //Focuser interface V1 doesn't use connected, only Link
                 {
+                    TL.LogMessage("Connected Set", "Device is Focuser and Interfaceverison is 1 so issuing Link command: " + value);
                     memberFactory.CallMember(2, "Link", new Type[] { }, new object[] { value });
                 }
                 else //Everything else uses Connected!
                 {
+                    TL.LogMessage("Connected Set", "Issuing Connected command: " + value);
                     memberFactory.CallMember(2, "Connected", new Type[] { }, new object[] { value });
                 }
             }
@@ -131,16 +145,18 @@ namespace ASCOM.DriverAccess
                             case "FILTERWHEEL":
                             case "FOCUSER":
                             case "ROTATOR":
+                                TL.LogMessage("Description Get", "This is " + deviceType + " interface version 1, so returning empty string");
                                 return "";
                             default:
-                                throw ex;
+                                TL.LogMessage("Description Get", "Received exception. Device type is " + deviceType + " and interface version is 1 so throwing received exception: " + ex.Message);
+                                throw;
                         }
                     }
                     else
                     {
-                        throw ex;
+                        TL.LogMessage("Description Get", "Received exception. Device type is " + deviceType + " and interface version is >1 so throwing received exception: " + ex.Message);
+                        throw;
                     }
-
                 }
             }
         }
@@ -172,16 +188,18 @@ namespace ASCOM.DriverAccess
                             case "FILTERWHEEL":
                             case "FOCUSER":
                             case "ROTATOR":
+                                TL.LogMessage("DriverInfo Get", "This is " + deviceType + " interface version 1, so returning empty string");
                                 return "";
                             default:
-                                throw ex;
+                                TL.LogMessage("DriverInfo Get", "Received exception. Device type is " + deviceType + " and interface version is 1 so throwing received exception: " + ex.Message);
+                                throw;
                         }
                     }
                     else
                     {
-                        throw ex;
+                        TL.LogMessage("DriverInfo Get", "Received exception. Device type is " + deviceType + " and interface version is >1 so throwing received exception: " + ex.Message);
+                        throw;
                     }
-
                 }
             }
         }
@@ -212,16 +230,18 @@ namespace ASCOM.DriverAccess
                             case "FILTERWHEEL":
                             case "FOCUSER":
                             case "ROTATOR":
+                                TL.LogMessage("DriverVersion Get", "This is " + deviceType + " interface version 1, so returning empty string");
                                 return "0.0";
                             default:
-                                throw ex;
+                                TL.LogMessage("DriverVersion Get", "Received exception. Device type is " + deviceType + " and interface version is 1 so throwing received exception: " + ex.Message);
+                                throw;
                         }
                     }
                     else
                     {
-                        throw ex;
+                        TL.LogMessage("DriverVersion Get", "Received exception. Device type is " + deviceType + " and interface version is >1 so throwing received exception: " + ex.Message);
+                        throw;
                     }
-
                 }
             }
         }
@@ -244,6 +264,7 @@ namespace ASCOM.DriverAccess
                 }
                 catch (PropertyNotImplementedException)
                 {
+                    TL.LogMessage("InterfaceVersion Get", "Received PropertyNotImplementedException so returning interface version = 1");
                     return 1;
                 }
             }
@@ -270,16 +291,18 @@ namespace ASCOM.DriverAccess
                             case "FILTERWHEEL":
                             case "FOCUSER":
                             case "ROTATOR":
+                                TL.LogMessage("Name Get", "This is " + deviceType + " interface version 1, so returning empty string");
                                 return "";
                             default:
-                                throw ex;
+                                TL.LogMessage("Name Get", "Received exception. Device type is " + deviceType + " and interface version is 1 so throwing received exception: " + ex.Message);
+                                throw;
                         }
                     }
                     else
                     {
-                        throw ex;
+                        TL.LogMessage("Name Get", "Received exception. Device type is " + deviceType + " and interface version is >1 so throwing received exception: " + ex.Message);
+                        throw;
                     }
-
                 }
             }
         }
@@ -363,11 +386,13 @@ namespace ASCOM.DriverAccess
                     //No interface version 1 drivers or TelescopeV2 have SupportedActions so just return an empty arraylist for these
                     if ((interfaceVersion == 1) | ((deviceType == "TELESCOPE") & (interfaceVersion == 2)))
                     {
+                        TL.LogMessage("SupportedActions Get", "SupportedActions is not implmented in " + deviceType + " version " + interfaceVersion + " returning an empty ArrayList");
                         return new ArrayList();
                     }
                     else //All later device interfaces should have returned an arraylist but we have received an exception, so pass it on!
                     {
-                        throw ex;
+                        TL.LogMessage("SupportedActions Get", "Received exception: " + ex.Message);
+                        throw;
                     }
                 }
             }

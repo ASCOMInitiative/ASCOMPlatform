@@ -18,6 +18,7 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class FilterWheel : IFilterWheel, IDisposable
     {
+        TraceLogger TL;
         #region FilterWheel constructors
 
         private readonly MemberFactory _memberFactory;
@@ -28,7 +29,9 @@ namespace ASCOM.DriverAccess
         /// <param name="filterWheelId"></param>
         public FilterWheel(string filterWheelId)
         {
-            _memberFactory = new MemberFactory(filterWheelId);
+            TL = new TraceLogger("", "DriverAccessFilterWheel");
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            _memberFactory = new MemberFactory(filterWheelId, TL);
         }
 
         /// <summary>
@@ -61,6 +64,8 @@ namespace ASCOM.DriverAccess
         public void Dispose()
         {
             _memberFactory.Dispose();
+            TL.Enabled = false;
+            TL.Dispose();
         }
 
         #endregion

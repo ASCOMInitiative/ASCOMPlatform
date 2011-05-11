@@ -18,6 +18,7 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Dome : IDome, IDisposable
     {
+        private TraceLogger TL;
         #region IDome constructors
 
         private readonly MemberFactory _memberFactory;
@@ -28,7 +29,9 @@ namespace ASCOM.DriverAccess
         /// <param name="domeId">The progID of the dome to be instantiated</param>
         public Dome(string domeId)
         {
-            _memberFactory = new MemberFactory(domeId);
+            TL = new TraceLogger("", "DriverAccessDome");
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            _memberFactory = new MemberFactory(domeId, TL);
         }
 
         /// <summary>
@@ -54,6 +57,8 @@ namespace ASCOM.DriverAccess
         public void Dispose()
         {
             _memberFactory.Dispose();
+            TL.Enabled = false;
+            TL.Dispose();
         }
 
         #endregion

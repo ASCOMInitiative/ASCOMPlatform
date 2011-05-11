@@ -18,6 +18,7 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Rotator : IRotator, IDisposable
     {
+        private TraceLogger TL;
         #region IRotator constructors
 
         private readonly MemberFactory _memberFactory;
@@ -28,7 +29,9 @@ namespace ASCOM.DriverAccess
         /// <param name="rotatorId"></param>
         public Rotator(string rotatorId)
         {
-            _memberFactory = new MemberFactory(rotatorId);
+            TL = new TraceLogger("", "DriverAccessRotator");
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            _memberFactory = new MemberFactory(rotatorId, TL);
         }
 
         /// <summary>
@@ -61,6 +64,8 @@ namespace ASCOM.DriverAccess
         public void Dispose()
         {
             _memberFactory.Dispose();
+            TL.Enabled = false;
+            TL.Dispose();
         }
 
         #endregion

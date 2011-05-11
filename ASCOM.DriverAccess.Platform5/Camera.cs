@@ -18,6 +18,7 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Camera : ICamera, IDisposable
     {
+        private TraceLogger TL;
         #region ICamera constructors
 
         private readonly short _driverInterfaceVersion;
@@ -29,7 +30,9 @@ namespace ASCOM.DriverAccess
         /// <param name="cameraId">The ProgID for the camera</param>
         public Camera(string cameraId)
         {
-            _memberFactory = new MemberFactory(cameraId);
+            TL = new TraceLogger("", "DriverAccessCamera");
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            _memberFactory = new MemberFactory(cameraId, TL);
             _driverInterfaceVersion = InterfaceVersion;
         }
 
@@ -903,6 +906,8 @@ namespace ASCOM.DriverAccess
         public void Dispose()
         {
             _memberFactory.Dispose();
+            TL.Enabled=false;
+            TL.Dispose();
         }
 
         #endregion
