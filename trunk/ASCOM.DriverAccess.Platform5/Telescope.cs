@@ -17,6 +17,7 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Telescope : ITelescope, IDisposable 
     {
+        private TraceLogger TL;
         //object objScopeLateBound;
 		//ASCOM.Interface.ITelescope ITelescope;
 		//Type objTypeScope;
@@ -32,7 +33,9 @@ namespace ASCOM.DriverAccess
         /// <param name="telescopeId">The ProgID for the telescope</param>
         public Telescope(string telescopeId)
 		{
-            _memberFactory = new MemberFactory(telescopeId);
+            TL = new TraceLogger("", "DriverAccessTelescope");
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            _memberFactory = new MemberFactory(telescopeId, TL);
 
             foreach (Type objInterface in _memberFactory.GetInterfaces)
             {
@@ -1112,6 +1115,12 @@ namespace ASCOM.DriverAccess
             {
                 _memberFactory.Dispose();
                 _memberFactory = null;
+            }
+            if (TL != null)
+            {
+                TL.Enabled = false;
+                TL.Dispose();
+                TL = null;
             }
         }
 

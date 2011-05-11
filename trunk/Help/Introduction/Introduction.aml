@@ -69,6 +69,7 @@
 		components, which we know from experience are enhanced more frequently.</para>
 		<para>The <link xlink:href="0a23ff52-a935-4cd7-a693-9e3b90f7df29" /> tool has been considerably enhanced to provide a wide ranging report on the installed Platform and 
 		incorporates a comprehensive test suite that exercises every aspect of Platform functionality.</para>
+		<para>We've also included an easy way for you to check for updates to the Platform.</para>
       	<para>The following section describes changes introduced in Platform 5.5</para>
 		</content>
     </section>

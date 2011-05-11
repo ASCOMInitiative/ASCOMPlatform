@@ -32,7 +32,7 @@ Friend Class RegistryAccess
     Sub New(ByVal p_CallingComponent As String)
         If p_CallingComponent.ToUpper = "UNINSTALLASCOM" Then 'Special handling for migration application
             TL = New TraceLogger("", "ProfileMigration") 'Create a new trace logger
-            TL.Enabled = True 'Force logging on for these calls
+            TL.Enabled = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT) 'Get enabled / disabled state from the user registry
 
             RunningVersions(TL)
 

@@ -131,8 +131,8 @@ Friend Class ChooserForm
             MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
             MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
-            MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_DRIVERACCESS_TRACE, SIMULATOR_DRIVERACCESS_TRACE_DEFAULT)
-
+            MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
+            MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
         End Using
     End Sub
 
@@ -167,6 +167,7 @@ Friend Class ChooserForm
         Dim bConnected As Boolean
         Dim sProgID As String = ""
         Dim ProgIdType As Type
+        Dim UseCreateObject As Boolean = False
 
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         cb = Me.cbDriverSelector ' Convenient shortcut
@@ -176,9 +177,16 @@ Friend Class ChooserForm
             If LCase(de.Value.ToString) = LCase(cb.SelectedItem.ToString) Then sProgID = de.Key.ToString
         Next
         Try
-            'oDrv = CreateObject(sProgID) ' Rob suggests that Activator.CreateInstance gives better error diagnostics
-            ProgIdType = Type.GetTypeFromProgID(sProgID)
-            oDrv = Activator.CreateInstance(ProgIdType)
+            ' Mechanic to revert to Platform 5 behaviour in the event that Activator.CreateInstance has unforseen consequqnces
+            Try : UseCreateObject = RegistryCommonCode.GetBool(CHOOSER_USE_CREATEOBJECT, CHOOSER_USE_CREATEOBJECT_DEFAULT) : Catch : End Try
+
+            If UseCreateObject Then ' Platform 5 behaviour
+                LogEvent("ChooserForm", "Using CreateObject for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Information, EventLogErrors.ChooserSetupFailed, "")
+                oDrv = CreateObject(sProgID) ' Rob suggests that Activator.CreateInstance gives better error diagnostics
+            Else ' New Platform 6 behaviour
+                ProgIdType = Type.GetTypeFromProgID(sProgID)
+                oDrv = Activator.CreateInstance(ProgIdType)
+            End If
 
             ' Here we try to see if a device is already connected. If so, alert and just turn on the OK button.
             bConnected = False
@@ -187,6 +195,7 @@ Friend Class ChooserForm
             Catch
                 Try : bConnected = oDrv.Link : Catch : End Try
             End Try
+
             If bConnected Then
                 MsgBox("The device is already connected. Just click OK.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Information + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
             Else
@@ -197,6 +206,7 @@ Friend Class ChooserForm
                     LogEvent("ChooserForm", "Driver setup method failed for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, ex.ToString)
                 End Try
             End If
+
             ProfileStore.WriteProfile("Chooser", sProgID & " Init", "True") ' Remember it has been initialized
             Me.cmdOK.Enabled = True
         Catch ex As Exception
@@ -382,10 +392,15 @@ Friend Class ChooserForm
 
     Private Sub MenuSimulatorTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSimulatorTraceEnabled.Click
         MenuSimulatorTraceEnabled.Checked = Not MenuSimulatorTraceEnabled.Checked 'Invert selection
-        SetName(SIMULATOR_DRIVERACCESS_TRACE, MenuSimulatorTraceEnabled.Checked.ToString)
+        SetName(SIMULATOR_TRACE, MenuSimulatorTraceEnabled.Checked.ToString)
     End Sub
 
     Private Sub MenuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTrace.DropDownOpening
         RefreshTraceMenu()
+    End Sub
+
+    Private Sub MenuDriverAccessTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDriverAccessTraceEnabled.Click
+        MenuDriverAccessTraceEnabled.Checked = Not MenuDriverAccessTraceEnabled.Checked 'Invert selection
+        SetName(DRIVERACCESS_TRACE, MenuDriverAccessTraceEnabled.Checked.ToString)
     End Sub
 End Class

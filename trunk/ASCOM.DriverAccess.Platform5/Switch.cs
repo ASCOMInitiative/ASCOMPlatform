@@ -18,6 +18,7 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Switch //: ISwitch, IDisposable
     {
+        private TraceLogger TL;
         #region Switch constructors
 
         private readonly MemberFactory _memberFactory;
@@ -28,7 +29,9 @@ namespace ASCOM.DriverAccess
         /// <param name = "switchId"></param>
         public Switch(string switchId)
         {
-            _memberFactory = new MemberFactory(switchId);
+            TL = new TraceLogger("", "DriverAccessSwitch");
+            TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.DRIVERACCESS_TRACE, GlobalConstants.DRIVERACCESS_TRACE_DEFAULT);
+            _memberFactory = new MemberFactory(switchId, TL);
         }
 
         #endregion
