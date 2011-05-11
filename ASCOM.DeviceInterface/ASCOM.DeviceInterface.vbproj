@@ -115,7 +115,6 @@
     <Compile Include="IFocuserV2.vb" />
     <Compile Include="IRate.vb" />
     <Compile Include="IRotatorV2.vb" />
-    <Compile Include="ISwitchV2.vb" />
     <Compile Include="ITelescopeV3.vb" />
     <Compile Include="ITrackingRates.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
