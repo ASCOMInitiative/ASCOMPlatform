@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
 <head><!-- #BeginEditable "Title" -->
-<title>Brief History of ASCOM</title><!-- #EndEditable -->
+<title>History of ASCOM</title><!-- #EndEditable -->
 
 <link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
 
@@ -76,7 +76,7 @@
 		<p>In December 2004, the ASCOM Platform 4.0 was released. This Platform contained the new Telescope V2 interface spec, updates for many drivers, and a few new drivers. An update, Platform 4.1 was released about six months later. </p>
 		<h3>Stability and Maturity</h3>
 		<p>The release of Platform 4 marked the beginning of a long period of stability for ASCOM. The Platform 4.1  remained the standard for several years, though individual drivers were updated during this period. by this time, there were nearly a thousand people on the ASCOM Talk group, and over a dozen people had developed drivers and programs that used them. The big issue was the lack of commitment by device manufacturers to provide drivers and support with their devices. </p>
-		<h3>ASCOM Platform 2008 (5.0)  </h3>
+		<h3>ASCOM Platform 5.0  </h3>
 		<p>By mid 2006, it was becoming clear that the ASCOM Initiative needed to address several issues: </p>
 		<ul>
 			<li>Including drivers in the Platform was becoming cumbersome.</li>
@@ -84,7 +84,7 @@
 			<li>Visual Basic 6, the preferred tool for driver development, was being replaced by the Microsoft .NET family of languages and tools.</li>
 			<li>The loose/late binding scheme used for client-driver communication was difficult to use from .NET languages, and imposed an overhead penalty for them.  </li>
 		</ul>
-		<p>These issues led to the following changes for  Platform 2008:</p>
+		<p>These issues led to the following changes for  Platform 5.0 in 2008:</p>
 		<ul>
 			<li>Drivers are no longer be included in the Platform. Instead,  drivers are to be provided by the device manufacturer or via a central download place on the web. </li>
 			<li>Driver authors  need to deliver their drivers   self-installable. To facilitate this, a new tool was developed that generates driver-specific installer scripts for the free InnoSetup system. This eliminates the need for driver authors to spend money for installer tools and minimizes the learning curve.</li>
@@ -92,7 +92,29 @@
 			<li>A set of abstract interfaces are provided for both native COM and via Primary Interop Assemblies, for .NET. These interfaces  allow a driver to expose both late and early binding interfaces. </li>
 			<li>A Visual Studio 2005 client-side driver interface toolkit is provided to allow client astronomy programs to make use of drivers whether or not they exposed the relevant early-binding interface. With the toolkit, IntelliSense for driver members is available at all times, and early binding is automatically used if available from the driver. </li>
 		</ul>
-		<p>ASCOM Platform 2008 was released in February, 2008. There are over 1,700 members on the ASCOM-Talk list! </p>
+		<p>ASCOM Platform 5.0 was released in February, 2008. There are over 1,700 members on the ASCOM-Talk list! </p>
+		<h3>ASCOM Platform 5.5 Update</h3>
+		<p>With the release of Windows Vista came new security features called User Account Control (UAC). Uptake on Vista was slow, but by mid 2008 it became significant. As Vista spread, problems with UAC became an issue for ASCOM drivers and applications. Most people resorted to simply turning UAC off on their systems, as it was a problem for many programs, not just ASCOM drivers. Then WIndosws 7 was released in the Summer of 2009. It had a &quot;smoothed out&quot; UAC and other improvements which resulted in a much faster uptake then Vista. By late 2009 the UAC issue was being aggressively addressed by most software vendors. </p>
+		<p>Another issue that arose following the release of Platform 5 was the disappearance of &quot;real&quot; serial ports, and the use of USB to Serial converters. The serial support library that was included in Platform 5 and before was not well suited to these devices. It was not understood why the Microsoft-supplied library combined with some USB-Serial devices resulted in unstable combination. It became clear that some sort of rewrite/update of the serial support fopr ASCOM drivers was necessary.</p>
+		<p>Meanwhile, several more developers joined the core ASCOM Platform team. One developer in particular, Peter Simpson, produced a driver conformance checker called Conform, which revolutionized driver quality control. Peter also saw the problems with UAC, USB-Serial devices, and other issues that had arisen after Platform 5 release. Peter then undertook development of an update to the Platform, which ultimately became the Platform 5.5 update. It included several new tools including the Profile Explorer, a tool for managing ASCOM driver registrations for the Chooser and driver data storage editing.</p>
+		<p>The Platform 5.5 Update  was released late in 2009. There are over 2,000 members on the ASCOM Talk list.</p>
+		<h3>Open Source and Creative Commons</h3>
+		<p>With the expansion of the core ASCOM development team, and some objections having been raised over the old SPACE.com copyrights on many of the components, it was decided to move the entire platform to Open Source, change licensing to Creative Commons, and put the sources online in a <a href="http://subversion.apache.org/" target="_blank">Subversion</a> repository. This effort was led by Tim Long, who supplied the servers, secured necessary software, and put it all online. The initial repository was populated in late 2009, and has since served the development team well. All previous copyrights on Platform components and sources, as well as original drivers, were vacated and everything was placed under the <span class="underline">Creative Commons Attribution-No Derivative Works 3.0 License</span>. See <a href="Licensing.htm">Who Owns ASCOM?</a></p>
+		<h3>Issue Tracking System</h3>
+		<p>Another discipline brought to the core development team (and ultimately to the entire ASCOM community) is formal issue tracking. Also in late 2009, Tim Long procured a license and set up an <a href="http://www.atlassian.com/software/jira/" target="_blank">Atlassian Jira Issue Tracking System</a>, which his company provides to the community. This system is now the standard way that Platform bugs, wishlist items, etc., are tracked and managed. The <a href="http://teamserver.tigranetworks.co.uk/jira" target="_blank">ASCOM Jira tracking system</a> is available to ASCOM driver developers for managing their projects as long as they make them open source and don't charge separately for their driver(s).</p>
+		<h3>Astro Answers (formerly ASCOM Answers)</h3>
+		<p>In an effort to provide an alternative to the <a href="http://tech.groups.yahoo.com/group/ASCOM-Talk/" target="_blank">ASCOM Talk forum</a> which would better suit people looking for answers to their questions, in early 2010 Tim Long set up a <a href="http://stackexchange.com/about" target="_blank">StackExchange</a> &quot;enhanced FAQ&quot; web service which he called <a href="http://astroanswers.org/" target="_blank">ASCOM Answers</a>. This was promoted within the discussions on ASCOM Talk and gained a fairly decent following. When StackExchange announced that it was going to shut down &quot;insignificant&quot; sites (whatever that meant), Long decided to expand the scope of ASCOM Answers, turning it into a general astronomy FAQ site <a href="http://astroanswers.org/" target="_blank">AstroAnswers</a>.</p>
+		<h3>ASCOM Platform 6</h3>
+		<p>By mid 2010 several issues made it clear that a major revision of the Platform would be a good idea:</p>
+		<ul>
+			<li>The need for two installations (5.0 and 5.5) confused users</li>
+			<li>The Platform 5.5 profile storage change uncovered some software which was wrongly installing old Platform components and breaking the entire ASCOM installation.</li>
+			<li>The issues and solutions relating to Windows User Account Control were better understood, and better profile storage solutions for compatibility were at hand.</li>
+			<li>The early binding support that was added in Platform 5 turned out to be a bad idea. Accommodation for .NET developers took other forms, and early binding was inhibiting interface evolution. </li>
+			<li>The standard interfaces needed some polishing and addition of new members to accommodate evolving needs.</li>
+			<li>Support components could be enhanced to provide better troubleshooting capabilities</li>
+		</ul>
+		<p>These issues led to a 10 month development effort by the now-expanded development team, and using the recently added development and tracking services. The result is the ASCOM Platform 6, which is currently a Release Candidate and is expected to be finalized by June 2011. For details on the changes and features in ASCOM Platform 6, see the <a href="http://download.ascom-standards.org/docs/ASCOM6.pdf" target="_blank">detailed description of ASCOM Platform 6</a>.</p>
 	</div>
 	<!-- #EndEditable --></div>
 <div id="footer">
