@@ -54,15 +54,14 @@ EXE Drivers and TheSky&trade;
 <div id="centercontent">
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
-	<h3>EXE Drivers and TheSky&trade;</h3>
+	<h3>EXE Drivers and TheSky&trade; V6</h3>
 	
 	<h4>Background</h4>
+<p>If your driver is a &quot;local server&quot; executable (EXE), and you wish to have it usable from TheSky 6 (for example, via the TeleAPI adapter plugin), you'll have to do provide some registry info to activate it for Microsoft Distributed COM (DCOM). TheSky uses DCOM. As a result, any outgoing COM connections from TheSky are subject to an additional layer of security in the Windows OS. Since an EXE driver is external to TheSky, this means your EXE driver needs to be known to DCOM and it's security level must be set to allow connections.</p>
 
-<p>If your driver is a &quot;local server&quot; executable (EXE), and you wish to have it usable from TheSky (for example, via the TeleAPI adapter plugin), you'll have to do provide some registry info to activate it for Microsoft Distributed COM (DCOM). TheSky uses DCOM. As a result, any outgoing COM connections from TheSky are subject to an additional layer of security in the Windows OS. Since an EXE driver is external to TheSky, this means your EXE driver needs to be known to DCOM and it's security level must be set to allow connections.</p>
+<p class="note">If you write your LocalServer (EXE) driver in C#.NET or VB.NET, and use the templates included with the Developer Components, this is all handled for you. You need not read any further! </p>
 
-<p class="note">If you write your LocalServer (EXE) driver in C#.NET or VB.NET, and use the templates included with the Platform 2008, this is all handled for you. You need not read any further! </p>
-
-<p class="note">If you use the InnoSetup tools provided with the Platform 2008, this is all handled for you. You need not read any further!</p>
+<p class="note">If you use the InnoSetup tools provided with the Developer Components, this is all handled for you. You need not read any further!</p>
 
 <p>Microsoft's theory on DCOM permissions is (was) that an end user would use the DCOM Config tool to set activation and security for component objects. This tool is, to say the least, user-hostile. Thus, in order for your EXE driver to be user-usable from TheSky, you'll have to create the DCOM activation and security info in the registry as part of your driver's installation process. Don't put this into the driver's code, make it a part of the <a href="DriverDist.htm">installer for your driver</a>. </p>
 

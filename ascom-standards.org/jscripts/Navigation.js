@@ -154,7 +154,7 @@ function writesubmenu() {
 	    SubMenuOutput += "</ul>";
     	SubMenuOutput += "<h3>Developer Downloads</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
-	    SubMenuOutput += "<li><a href=\"PlatToolUpdates.htm\">Platform Tool Updates</a></li>";
+	    SubMenuOutput += "<li><a href=\"PlatDevComponents.htm\">Developer Components</a></li>";
 	    SubMenuOutput += "<li><a href=\"DevTools.htm\">Additional Tools</a></li>";
 	    SubMenuOutput += "<li><a href=\"DevSamples.htm\">Samples &amp; Sources</a></li>";
 	    SubMenuOutput += "</ul>";
