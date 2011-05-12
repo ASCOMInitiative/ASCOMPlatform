@@ -84,7 +84,10 @@ Comment: Set up the log file
 Set Variable SETUPLOG to 
 Get Folder Location My->My Documents into MYDOCUMENTS
 Get Free Space on C: into variable DISKSPACE
+ 
+Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
+Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
  
 Comment: Set up values for a 64bit OS
 Set Variable PROGRAMFILES64 to 
@@ -127,8 +130,6 @@ Comment: Determine if Acrobat is installed
 Set Variable ACROBATKEY to 
 Read Registry Key HKCR\.pdf\ into ACROBATKEY
 [END REGION]
-Create Folder $MYDOCUMENTS$\ASCOM
- 
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TITLE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Installed $DATE$ (at end of file)
