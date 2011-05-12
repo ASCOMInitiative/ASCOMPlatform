@@ -1,0 +1,22 @@
+Installation Instructions:
+
+Unzip to a temporary or permenant location on your hard drive.
+
+Double Click Setup.exe to begin the install process.
+
+
+
+Revision History:
+
+5.3.1.0 - Changed Resolution values from 2 to 2.177 um/step and from 2.5 to 2.54 um/step
+	- Fixed EventLogger so that it automatically overwrites when full...
+
+5.3.0.0 - Major change to the interface and multi-threading technique
+
+5.1.1.0 - Added functionality for the IsMoving flag
+	- Fixed the StepSize property so that it reports the correct stepsize in microns
+	- Fixed a multithreading/serial timeout bug that affected older firmware versions
+	- Changed the Move method to allow requests beyond the focuser limits. The driver will now
+		cause the focuser to move to the limit and stop without throwing an exception.
+
+5.1.0.0 - Initial Release

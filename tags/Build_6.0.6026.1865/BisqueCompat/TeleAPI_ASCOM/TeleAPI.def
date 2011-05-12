@@ -1,0 +1,23 @@
+;
+; Module definition file for TheSky plugin. NOTE: The 
+; ordinals below are as required by TheSky V5.00.0001
+;
+; Bob Denny	23-Dec-98	Initial
+; Bob Denny	17-Jan-98	For TheSky 5.00.0001
+; Bob Denny	29-Jul-02	For ASCOM & TheSky 5.00.0015
+; Bob Denny 20-Oct-09	For VS2008
+;
+LIBRARY      "TELEAPI.DLL"
+
+EXPORTS
+	DllMain 				@19	
+	tapiGetDLLVersion		@20
+	tapiEstablishLink		@21	
+	tapiTerminateLink		@22
+	tapiGetRaDec			@23
+	tapiSetRaDec			@24
+	tapiGotoRaDec			@25
+	tapiIsGotoComplete		@26
+	tapiAbortGoto			@27
+	tapiSettings			@28
+	tapiPulseFocuser		@29		
