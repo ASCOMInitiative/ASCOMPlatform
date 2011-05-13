@@ -53,7 +53,7 @@
 	<div class="article">
 	<h3>ASCOM General Requirements</h3>
 
-	<p><i>Revised 10-May-2011</i></p>
+	<p><i>Revised 13-May-2011</i></p>
 
 	<p>In order to be called "ASCOM compliant", a driver, component, or application scripting interface must meet <i>all</i> of the <i>applicable</i> guidelines in this document. Only then may a driver, interface, or a component's packaging and user interface, carry the ASCOM logo.</p>
 	<h2>Please Note: </h2>
@@ -65,8 +65,8 @@
 	<ol>
 		<li>The driver <i>must</i> install and run on on Microsoft Windows 7, Vista, and XP with the latest service packs at the time of driver release, and with User Account Control enabled at its default/normal setting. It <i>should</i> work on both 32- and 64-bit systems.
 			<span class="underline">Support for Windows 2000 is no longer provided</span>.</li>
-		<li>The driver <i>must</i> implement the <a href="Index.htm">published standard interface</a> for the device type via a <b>scriptable dispatch</b> (&quot;Automation&quot;) interface per the Microsoft Component Object Model (COM). Drivers <i>may</i> also implement &quot;dual&quot; interfaces which have both dispatch and early/VTBL binding (using the appropriate <span class="underline">abstract standard interface</span> that is part of the ASCOM Platform). See <a href="../Developer/DriverImpl.htm">Driver Development Notes</a>.</li>
-		<li>The driver <i>must never</i> &quot;extend&quot; the standard interface (add private members - properties and/or methods). If private members are desired, they <i>must</i> be exposed through a separate non-standard interface.</li>
+		<li>The driver author must implement the published standard   for the device type as a <a href="../Developer/Binding.htm" target="_blank">late-bound COM interface</a>. The published standards are specific about the data types that are used for properties and method parameters. These data types (and COM itself) are what make drivers <a href="../About/CompatLang.htm" target="_blank">cross language compatible</a>. Note that by using a .NET language and the .NET driver templates we provide with the <a href="../Downloads/PlatDevComponents.htm" target="_blank">Platform Developer Components</a>, this is all taken care-of for you. Also see item 6 below.</li>
+		<li>The driver <i>must never</i> &quot;extend&quot; the standard interface (add private members - properties and/or methods). If private members are desired, they <i>must</i> be exposed through a separate non-standard interface. Starting with Platform 6, driver authors can also extend their drivers through the new <tt><span style="color: #CF0">Action</span></tt> and <tt><span style="color: #CF0">SupportedActions</span></tt> members that are now common to all device interface standards.</li>
 		<li>The driver <i>must never</i> display a modal window which requires user interaction to dismiss. All errors must be raised/thrown back to the client.</li>
 		<li>The driver <i>must</i> use the   Profile's Register() method for ASCOM registration. It is recommended that drivers also use the Profile object for storage of their persistent configuration, state data, etc., as well as the  Serial object serial port I/O. for The  components are part of the ASCOM Platform and serve to isolate drivers from changes in Platform architecture. They also make develpment easier by providing high level functionality commonly needed by drivers.</li>
 		<li>Prior to release, the driver <i>must</i> pass the Conform tests using the current/latest version of the <a href="../Developer/Conformance.htm">Conformance Checker</a> test tool. </li>

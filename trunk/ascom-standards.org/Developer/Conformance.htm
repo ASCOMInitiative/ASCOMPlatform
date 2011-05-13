@@ -52,8 +52,75 @@
 	<!-- #BeginEditable "MainContent" -->
 	<div class="article">
 	<h3>Conformance Checking Drivers</h3>
-	<p>During development of your driver, and certainly before releasing it, you should use the <a href="../Downloads/DevTools.htm">Driver Conformance Checker</a> tool to test your driver. This tool performs a comprehensive set of tests on a driver to determine its conformance with the relevant ASCOM interface standard. It also tests some aspects of driver behavior against the reference implementation. Here are the results from checking the Focuser Simulator:</p>
-	<pre style="font-size: 90%; color: ffffcc;">ConformanceCheck ASCOM Device Conformance Checker Version 2.1.1.0<br />ConformanceCheck Running on ASCOM Platform 5<br /> <br />ConformanceCheck Driver ProgID: FocusSim.Focuser<br /> <br />Error numbers <br />Error number for &quot;Not Implemented&quot; is: 80040400<br />Error number for &quot;Invalid Value 1&quot; is: 80040404<br />Error number for &quot;Value Not Set&quot;   is: 80040403<br /> <br />Driver Access Checks <br />09:43:46.975 AccessChecks                  OK       Successfully created driver using late binding<br />09:43:46.991 AccessChecks                  OK       Successfully connected using late binding<br />09:43:46.991 AccessChecks                  INFO     The driver is a COM object<br />09:43:48.444 AccessChecks                  OK       Successfully created driver using early binding to IFocuser interface<br />09:43:48.444 AccessChecks                  OK       Successfully connected using early binding to IFocuser interface<br />09:43:49.459 AccessChecks                  OK       Successfully created driver using driver access toolkit<br />09:43:49.459 AccessChecks                  OK       Successfully connected using driver access toolkit<br /> <br />Conform is using CreateObject to get a Focuser object<br />09:43:50.600 ConformanceCheck              OK       Driver instance created successfully<br />09:43:50.616 ConformanceCheck              OK       Connected OK<br /> <br />Properties <br />09:43:50.647 Absolute                      OK       True<br />09:43:50.662 IsMoving                      OK       False<br />09:43:50.662 MaxStep                       OK       50000<br />09:43:50.678 MaxIncrement                  OK       50000<br />09:43:50.694 Position                      OK       24850<br />09:43:50.694 StepSize                      OK       20<br />09:43:50.694 TempCompAvailable             OK       True<br />09:43:50.694 TempComp Read                 OK       False<br />09:43:50.709 TempComp Write                OK       Successfully turned temperature compensation on<br />09:43:50.709 TempComp Write                OK       Successfully turned temperature compensation off<br />09:43:50.709 Temperature                   OK       -3.44000000000001<br /> <br />Methods <br />09:43:50.756 Halt                          OK       Focuser halted OK<br />09:43:50.756 Move                                   Moving to position: 29850<br />09:43:53.225 Move                          OK       Asynchronous move found<br />09:43:53.256 Move                          OK       Absolute move OK<br /> <br />Conformance test complete <br /> <br />No errors, warnings or issues found: your driver passes ASCOM validation!! <br />
+	<p><span class="underline">During development</span> of your driver, and certainly <span class="underline">before releasing</span> it, you should use the <a href="../Downloads/DevTools.htm">Driver Conformance Checker</a> tool to test your driver. This tool performs a comprehensive set of tests on a driver to determine its conformance with the relevant ASCOM interface standard. It also tests some aspects of driver behavior against the reference implementation. Conform is a really useful tool to use during development as it exercises all driver functionality. This means you don't have to develop your own set of basic test harnesses to test your driver.</p>
+	<p>Here are the results from Conform-checking the Platform 6 .NET Focuser Simulator:</p>
+	<pre style="font-size: 90%; color: ffffcc;">ConformanceCheck ASCOM Device Conformance Checker Version 6.0.0.31
+ConformanceCheck Running on ASCOM Platform 6.0
+ 
+ConformanceCheck Driver ProgID: ASCOM.Simulator.Focuser
+ 
+Error numbers 
+Error number for "Not Implemented" is: 80040400
+Error number for "Invalid Value 1" is: 80040404
+Error number for "Value Not Set"   is: 80040403
+ 
+09:51:29.425 Driver Access Checks          OK       
+09:51:30.042 AccessChecks                  OK       Successfully created driver using late binding
+09:51:30.062 AccessChecks                  OK       Successfully connected using late binding
+09:51:30.065 AccessChecks                  INFO     The driver is a .NET object
+09:51:30.068 AccessChecks                  INFO     The AssemblyQualifiedName is: ASCOM.Simulator.Focuser, ASCOM.Simulator.Focuser, Version=6.0.0.0, Culture=n
+09:51:30.072 AccessChecks                  INFO     The driver implements interface: ASCOM.DeviceInterface.IFocuserV2
+09:51:30.075 AccessChecks                  INFO     The driver implements interface: System.IDisposable
+09:51:30.697 AccessChecks                  INFO     Device does not expose IFocuser interface
+09:51:30.724 AccessChecks                  INFO     Device exposes IFocuserV2 interface
+09:51:30.745 AccessChecks                  OK       Successfully created driver using driver access toolkit
+09:51:30.756 AccessChecks                  OK       Successfully connected using driver access toolkit
+ 
+Conform is using ASCOM.DriverAccess.Focuser to get a Focuser object
+09:51:30.786 ConformanceCheck              OK       Driver instance created successfully
+09:51:30.798 ConformanceCheck              OK       Connected OK
+ 
+Common Driver Methods 
+09:51:30.834 InterfaceVersion              OK       2
+09:51:30.840 Connected                     OK       True
+09:51:30.846 Description                   OK       ASCOM Focuser Simulator Driver
+09:51:30.851 DriverInfo                    OK       Focuser Simulator Driver
+09:51:30.856 DriverVersion                 OK       6.0
+09:51:30.860 Name                          OK       ASCOM.Simulator.Focuser
+09:51:30.866 CommandString                 INFO     Conform cannot test the CommandString method
+09:51:30.870 CommandBlind                  INFO     Conform cannot test the CommandBlind method
+09:51:30.874 CommandBool                   INFO     Conform cannot test the CommandBool method
+09:51:30.878 Action                        INFO     Conform cannot test the Action method
+09:51:30.882 SupportedActions              OK       Driver returned an empty action list
+ 
+Properties 
+09:51:30.906 Absolute                      OK       True
+09:51:30.911 IsMoving                      OK       False
+09:51:30.915 MaxStep                       OK       50000
+09:51:30.920 MaxIncrement                  OK       50000
+09:51:30.924 Position                      OK       25000
+09:51:30.929 StepSize                      OK       20
+09:51:30.934 TempCompAvailable             OK       True
+09:51:30.938 TempComp Read                 OK       False
+09:51:30.942 TempComp Write                OK       Successfully turned temperature compensation on
+09:51:30.947 TempComp Write                OK       Successfully turned temperature compensation off
+09:51:30.952 Temperature                   OK       4.69
+ 
+Methods 
+09:51:30.970 Halt                          OK       Focuser halted OK
+09:51:30.979 Move                                   Moving to position: 30000
+09:51:38.003 Move                          OK       Asynchronous move found
+09:51:38.010 Move                          OK       Absolute move OK
+09:51:45.036 Move                                   Moving to position: 30000
+09:51:45.063 Move - TempComp True          OK       .NET InvalidOperation Exception correctly raised as expected
+ 
+Conformance test complete 
+ 
+No errors, warnings or issues found: your driver passes ASCOM validation!! 
+ 
+Driver Hash Value: A353EA89A605A6A3F27FF72C7981A8AC0A745CF8868080E6F3359451B56E29A9EC58F860BA2261884E5D0BA3ADCFB691D5B05C1E28FD951D3D968FF3AD276A68
+Report Hash Value: 7DE8DA5D641C48876F3451D4D3F98ECFAA296D7DD07D77122F4C6B67117AB6AE1AAE4DA66305CE2D853276F5B4F068128E558D2598A4F3D78C64FE2206C15C0B
+
 	</pre>
 	</div>
 	<!-- #EndEditable --></div>
