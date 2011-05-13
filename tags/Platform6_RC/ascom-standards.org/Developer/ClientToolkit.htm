@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>
+Client Toolkit
+</title>
+<style type="text/css">
+<!--
+.code {font-family: "Lucida Console", "Courier New", Courier, monospace}
+-->
+</style>
+<!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>.NET Client Toolkit (recommended) </h3>
+	<p class="note">NOTICE - The  Client Toolkit is included in the ASCOM Platform. Make sure you start with at least <span class="underline">Platform 6.0</span> installed!</p>
+	<p>The ASCOM Platform includes a .NET assembly that provides high-level simplified access to ASCOM drivers. Astronomy software developers wishing to use ASCOM drivers from .NET applications are encouraged to use this library, as it provides  simplified access to drivers. If needed, the Client Toolkit hides all of the ugly details of calling a driver via its late-bound interface. Your code will always use native .NET class/object syntax.</p>
+	<h4>Background</h4>
+	<p>The Client Toolkit is an assembly that is <i>always</i> installed into the .NET Global Assembly Cache. Thus, everyone who installs the ASCOM Platform will have the Client Toolkit installed. You <span class="underline">do not</span> need to include the Client Toolkit assembly in your software's distribution, and you <span class="underline">must not do so</span>. </p>
+	<p>However, in order to get the IntelliSense documentation for the Client Toolkit, your .NET software project must reference the copy of the Client Toolkit that is optionally installed in <span class="code">{Common Files 32}\ASCOM\.net</span>. Your program then must reference that copy of the assembly and not the one in the GAC. See the next section for particulars.</p>
+	<h4>Using the Client Toolkit  </h4>
+	<p>Details on using the Client Toolkit are in the ASCOM Developer Help document that is installed when you install the <a href="../Downloads/PlatDevComponents.htm" target="_blank">ASCOM Developer Components</a>.</p>
+	<p class="note">Before diving into full-blown application  development, it is suggested that you create a simple Console program that walks through the process of choosing, creating, and using a driver. You can use Console.WriteLine() to write to the console window and Console.ReadLine() to read input from you. At the end of the program, put a Console.ReadLine() call to keep the console window open until you've looked at the things you're interested in. Play with it until you're really comfortable with both the process of choosing and creating the driver, and also the techniques for making the driver do what you want for the device. Choose the simulator for your device type and exercise it from the console program. </p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2011, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>
