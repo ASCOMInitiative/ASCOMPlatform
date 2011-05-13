@@ -23,6 +23,7 @@
 //                      systems. Make it obvious that you can come back here to go to the d/l
 //                      page for the first of any remaining available updates.
 // 02-May-11    rbd     Fix case where conform and/or dev content not installed
+// 13-May-11    rbd     Change paths for final distribution places
 // ------------------------------------------------------------------------------------------------
 
 var POPTITLE = "Check ASCOM Updates";
@@ -30,8 +31,8 @@ var REMWEB = "http://download.ascom-standards.org/ver/";
 var REGROOT64 = "HKLM\\Software\\Wow6432Node\\ASCOM\\Platform\\";
 var REGROOT32 = "HKLM\\Software\\ASCOM\\Platform\\";
 
-var PLATPAGE = "http://ascom-standards.org/Downloads/PlatformUpdates.htm";
-var DEVPAGE = "http://ascom-standards.org/Downloads/PlatToolUpdates.htm";
+var PLATPAGE = "http://ascom-standards.org/Downloads/Index.htm";
+var DEVPAGE = "http://ascom-standards.org/Downloads/PlatDevComponents.htm";
 var CONFPAGE = "http://ascom-standards.org/Downloads/DevTools.htm";
 
 var SH = new ActiveXObject("WScript.Shell");
