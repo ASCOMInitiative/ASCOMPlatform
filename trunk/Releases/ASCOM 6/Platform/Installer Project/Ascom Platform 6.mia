@@ -129,7 +129,10 @@ Set Variable
 Comment
 Set Variable
 Read Registry
+Comment
+Set Variable
 Code Folding Region
+Comment
 Comment
 Write to Text File
 Write to Text File
@@ -139,6 +142,7 @@ Write to Text File
 Else
 Write to Text File
 End
+Write to Text File
 Write to Text File
 Write to Text File
 Write to Text File
@@ -305,6 +309,28 @@ Set Variable
 End
 Web Media Block
 Include Script
+Comment
+Comment
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Delete Registry
+Comment
 If
 MessageBalloon
 Set Variable
@@ -1212,7 +1238,10 @@ $
 {FE112823-2E0D-4F8F-AEC9-7C936E649A0A}
 {B8648F6D-8A39-49F4-A7C6-BCE61FF703AB}
 {B6098CA8-AA41-414A-BE61-8C02B0CD406E}
+{8914A571-DF67-4756-83BF-42D365032E36}
+{11A0A8E5-D768-493B-A700-5867EA3BA535}
 {AB277D12-13AE-46F2-B4E2-12C520DC6EA8}
+{B96BF1FD-FBA4-4D09-8D1B-0AF6F644CB7F}
 {01B1F73B-FD2E-4826-9655-631FBDDFE68F}
 {BDF36361-992B-4F67-B771-7F323A060213}
 {81D4F714-F031-4D54-8B0E-7EA386E20E75}
@@ -1230,6 +1259,7 @@ $
 {44A870A8-5CB5-4BBF-BE82-D6A77EDE93BC}
 {DE5E3E16-C3F1-4C7E-86C7-47A04C08432F}
 {8DDF0592-A0B9-49FF-BBE0-412A87520791}
+{8D0FBB0D-24EF-4CE1-B35E-6DCC061DF57A}
 {EDFEA293-82F9-49C0-BAC4-38E488FB5E46}
 {633CC1A8-4D77-4007-BDB1-C912D57BCB59}
 {FB082F18-9F1E-4721-8794-882E0FCB5658}
@@ -1388,6 +1418,28 @@ $
 {C41BD311-75D5-4103-A059-065B6A712EA1}
 {F0461318-3FD8-43E6-9406-1072929A444A}
 {15F37B1B-42F0-48FD-80BD-F6A01E995E9D}
+{414F47E9-D367-46C4-8613-40DD50B9F468}
+{FAB81313-4C17-4444-BD14-74C0306D794D}
+{8E3C563D-6FBB-40B6-B5E8-8267506A90D7}
+{DCC03E10-CC22-4960-935C-5593A8DFEB34}
+{D1949693-A3EA-40AC-80A4-332F441BF441}
+{AF4129C7-E1A5-49FF-8725-3D6BB871B2EB}
+{AA05D672-AED2-4172-A5E5-AB1B1BD80023}
+{35ACAFCB-4918-4AF8-91CC-621F779CF73A}
+{ADD22A11-0BC8-435E-8542-D5513DE5E7A0}
+{299D1CF2-11C1-4B81-AF42-8D3CCE6E5639}
+{87D671B7-2F51-4AC8-89C0-BBF50BEE932E}
+{9DA8D7CA-661C-4883-B137-94124EEF3E92}
+{DDF55D04-41C8-4A08-AF3F-B7CCE4154CE1}
+{0A64751A-69F3-4273-AFEA-617C010A1049}
+{ADB98449-DA9D-49C4-8E36-76FCFBCD5971}
+{E9FB9D1B-9140-4610-B8E2-53627E355A92}
+{75C776F4-BAAD-421C-92D6-D89E8A72D6E8}
+{0CC74D62-9142-4A49-9E7F-F6C9EC28A47D}
+{9D931087-3993-4ED1-B5FB-88E9E1830717}
+{6A765FBA-8818-4FD4-95F0-D90E4B2C299D}
+{103F7C85-5EAB-413C-B77F-213F9D5B2D8F}
+{F8E4622E-88A8-4D6D-BCF9-6FA845517B91}
 {F67083EE-A30B-4D5F-8775-7C547F7D0DD1}
 {4E871789-6F5E-4F4C-9BAF-CB23F1602DA7}
 {529D3F04-3FE5-40A6-B031-3C046F408560}
@@ -2402,6 +2454,16 @@ Menu shortcuts
 Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 {39F0493F-FF9A-48BC-A1C6-F2A3311B6EBB}
 
+{414F47E9-D367-46C4-8613-40DD50B9F468}
+
+{FAB81313-4C17-4444-BD14-74C0306D794D}
+Clean up unwanted GAC assembly references left by bad native installer used during beta testing
+{F8E4622E-88A8-4D6D-BCF9-6FA845517B91}
+
+{8914A571-DF67-4756-83BF-42D365032E36}
+Create the path to the GAC installer reference list
+{B96BF1FD-FBA4-4D09-8D1B-0AF6F644CB7F}
+
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -2684,6 +2746,9 @@ TRUE
 {CB51391B-411D-40A7-9B8D-2858B0A9D503}
 RC3A$MYAH$MYAH$FALSE
 1000
+{11A0A8E5-D768-493B-A700-5867EA3BA535}
+GACREF$MYAH$MYAH$FALSE
+SOFTWARE\$WOW6432NODE$Microsoft\Fusion\References
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -6860,6 +6925,11 @@ $SETUPLOG$
 Creating shortcuts
 FALSE
 TRUE
+{8D0FBB0D-24EF-4CE1-B35E-6DCC061DF57A}
+$SETUPLOG$
+GAC Assembly Reference Path: $GACREF$
+FALSE
+TRUE
 {E42FC0DC-6FA0-4ACD-867C-2F3AEF24B539}
 2
 SOFTWARE\$WOW6432NODE$ASCOM\ForceCOMPorts
@@ -6868,6 +6938,101 @@ TRUE
 {24AA974F-CB49-456B-84AC-C972A71976B1}
 2
 SOFTWARE\$WOW6432NODE$ASCOM\IgnoreCOMPorts
+
+TRUE
+{D1949693-A3EA-40AC-80A4-332F441BF441}
+2
+$GACREF$\ASCOM.Attributes, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{AF4129C7-E1A5-49FF-8725-3D6BB871B2EB}
+2
+$GACREF$\ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{AA05D672-AED2-4172-A5E5-AB1B1BD80023}
+2
+$GACREF$\ASCOM.Controls, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{8E3C563D-6FBB-40B6-B5E8-8267506A90D7}
+2
+$GACREF$\ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{DCC03E10-CC22-4960-935C-5593A8DFEB34}
+2
+$GACREF$\ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{35ACAFCB-4918-4AF8-91CC-621F779CF73A}
+2
+$GACREF$\ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{ADD22A11-0BC8-435E-8542-D5513DE5E7A0}
+2
+$GACREF$\ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{299D1CF2-11C1-4B81-AF42-8D3CCE6E5639}
+2
+$GACREF$\ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{87D671B7-2F51-4AC8-89C0-BBF50BEE932E}
+2
+$GACREF$\ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{9DA8D7CA-661C-4883-B137-94124EEF3E92}
+2
+$GACREF$\ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{DDF55D04-41C8-4A08-AF3F-B7CCE4154CE1}
+2
+$GACREF$\ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{0A64751A-69F3-4273-AFEA-617C010A1049}
+2
+$GACREF$\ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{ADB98449-DA9D-49C4-8E36-76FCFBCD5971}
+2
+$GACREF$\ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{E9FB9D1B-9140-4610-B8E2-53627E355A92}
+2
+$GACREF$\ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{75C776F4-BAAD-421C-92D6-D89E8A72D6E8}
+2
+$GACREF$\ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{0CC74D62-9142-4A49-9E7F-F6C9EC28A47D}
+2
+$GACREF$\ASCOM.Internal.FusionLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{9D931087-3993-4ED1-B5FB-88E9E1830717}
+2
+$GACREF$\ASCOM.SettingsProvider, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{6A765FBA-8818-4FD4-95F0-D90E4B2C299D}
+2
+$GACREF$\ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
+
+TRUE
+{103F7C85-5EAB-413C-B77F-213F9D5B2D8F}
+2
+$GACREF$\ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL
 
 TRUE
 {14A4D424-B117-4943-8443-B2433541ADE8}
@@ -7554,20 +7719,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -7576,12 +7727,6 @@ C
 
 
 
-
-
-
-
-
-C
 
 
 
@@ -7614,6 +7759,30 @@ C
 
 
 
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
 C
 
 
@@ -7642,6 +7811,28 @@ C
 
 C
 C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8462,6 +8653,32 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

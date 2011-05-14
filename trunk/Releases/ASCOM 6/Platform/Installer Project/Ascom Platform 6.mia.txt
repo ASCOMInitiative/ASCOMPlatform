@@ -129,7 +129,10 @@ Set Variable REGASM to $FRAMEWORKROOT$v2.0.50727\RegAsm.exe
 Comment: Determine if Acrobat is installed
 Set Variable ACROBATKEY to 
 Read Registry Key HKCR\.pdf\ into ACROBATKEY
+Comment: Create the path to the GAC installer reference list
+Set Variable GACREF to SOFTWARE\$WOW6432NODE$Microsoft\Fusion\References
 [END REGION]
+ 
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TITLE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Installed $DATE$ (at end of file)
@@ -147,6 +150,7 @@ Write into Text File $SETUPLOG$ from Value NGen64: $NGEN64$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ProgramFiles: $PROGRAMFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value CommonFiles: $COMMONFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value GAC Assembly Reference Path: $GACREF$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
 [DEFINE REGION: Setup User Interview]
@@ -305,6 +309,28 @@ if Variable NEEDSUPGRADE Equals TRUE
 end
 [DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
 Include Script: setupmsi31
+ 
+Comment: Clean up unwanted GAC assembly references left by bad native installer used during beta testing
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Attributes, Version=5.5.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Controls, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.DriverAccess, Version=1.0.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Internal.FusionLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.SettingsProvider, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+Delete Registry KEY HKLM\$GACREF$\ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
+ 
 if Variable REQUIRESUPGRADE Equals TRUE
   MessageBalloon: ASCOM Platform Maintenance, Upgrading Platform 6 - Removing old version...
   Set Variable REMOVEOLD to 
