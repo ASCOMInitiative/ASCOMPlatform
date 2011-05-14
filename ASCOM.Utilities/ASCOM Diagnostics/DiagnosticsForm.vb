@@ -6,6 +6,7 @@ Imports Microsoft.Win32
 Imports System
 Imports System.Globalization
 Imports System.IO
+Imports System.Management
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Security.AccessControl
@@ -3536,7 +3537,7 @@ Public Class DiagnosticsForm
                                                   IIf(RegRule.IsInherited.ToString(), "Inherited", "NotInherited") & " / " & _
                                                   RegRule.InheritanceFlags.ToString() & " / " & _
                                                   RegRule.PropagationFlags.ToString())
-                If (RegRule.IdentityReference.ToString.ToUpper = "BUILTIN\USERS") And (RegRule.RegistryRights = RegistryRights.FullControl) Then
+                If (RegRule.IdentityReference.ToString.ToUpper = GetBuiltInUsers().ToUpper) And (RegRule.RegistryRights = RegistryRights.FullControl) Then
                     FoundFullAccess = True
                 End If
             Next
@@ -3557,6 +3558,54 @@ Public Class DiagnosticsForm
         End Try
         TL.BlankLine()
     End Sub
+
+    ''' <summary>
+    ''' Returns the localised text name of the BUILTIN\Users group. This varies by locale so has to be derrived on the users system.
+    ''' </summary>
+    ''' <returns>Localised name of the BUILTIN\Users group</returns>
+    ''' <remarks>This uses the WMI features and is pretty obscure - sorry, it was the only way I could find to do this! Peter</remarks>
+    Private Function GetBuiltInUsers() As String
+        Dim Searcher As ManagementObjectSearcher
+        Dim Group As String = "Unknown" ' Initialise to some values
+        Dim Name As String = "Unknown"
+
+        Try
+
+            Searcher = New ManagementObjectSearcher(New ManagementScope("\\localhost\root\cimv2"), _
+                                                    New WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"), _
+                                                    Nothing)
+
+            For Each wmiClass In Searcher.Get
+                Dim p As PropertyDataCollection
+                p = wmiClass.Properties
+                For Each pr In p
+                    If pr.Name = "Name" Then Group = pr.Value
+                Next
+            Next
+            Searcher.Dispose()
+        Catch ex As Exception
+            LogException("GetBuiltInUsers 1", ex.ToString)
+        End Try
+
+        Try
+            Searcher = New ManagementObjectSearcher(New ManagementScope("\\localhost\root\cimv2"), _
+                                                    New WqlObjectQuery("Select * From Win32_Group Where SID = 'S-1-5-32-545'"), _
+                                                    Nothing)
+
+            For Each wmiClass In Searcher.Get
+                Dim p As PropertyDataCollection
+                p = wmiClass.Properties
+                For Each pr In p
+                    If pr.Name = "Name" Then Name = pr.Value
+                Next
+            Next
+            Searcher.Dispose()
+        Catch ex As Exception
+            LogException("GetBuiltInUsers 2", ex.ToString)
+        End Try
+
+        Return Group & "\" & Name
+    End Function
 
     Sub ScanRegistry()
         Dim Key As RegistryKey
@@ -4157,21 +4206,34 @@ Public Class DiagnosticsForm
     Sub ScanGac()
         Dim ae As IAssemblyEnum
         Dim an As IAssemblyName = Nothing
-        Dim name As AssemblyName
         Dim ass As Assembly
+        Dim AssemblyNames As Generic.SortedList(Of String, String)
+        Dim assname As AssemblyName
+
         Try
             Status("Scanning Assemblies")
+            AssemblyNames = New Generic.SortedList(Of String, String)
 
             TL.LogMessage("Assemblies", "Assemblies registered in the GAC")
             ae = AssemblyCache.CreateGACEnum ' Get an enumerator for the GAC assemblies
 
             Do While (AssemblyCache.GetNextAssembly(ae, an) = 0) 'Enumerate the assemblies
                 Try
-                    name = GetAssemblyName(an) 'Convert the fusion representation to a standard AssemblyName
-                    If InStr(name.FullName, "ASCOM") > 0 Then 'Extra information for ASCOM files
-                        TL.LogMessage("Assemblies", name.Name)
-                        ass = Assembly.Load(name.FullName)
-                        AssemblyInfo(TL, name.Name, ass) ' Get file version and other information
+                    assname = GetAssemblyName(an)
+                    AssemblyNames.Add(assname.FullName, assname.Name) 'Convert the fusion representation to a standard AssemblyName and get its full name
+
+                Catch ex As Exception
+                    'Ignore an exceptions here due to duplicate names, these are all MS assemblies
+                End Try
+
+            Loop
+
+            For Each AssemblyName As Generic.KeyValuePair(Of String, String) In AssemblyNames
+                Try
+                    If InStr(AssemblyName.Key, "ASCOM") > 0 Then 'Extra information for ASCOM files
+                        TL.LogMessage("Assemblies", AssemblyName.Value)
+                        ass = Assembly.Load(AssemblyName.Key)
+                        AssemblyInfo(TL, AssemblyName.Value, ass) ' Get file version and other information
 
                         Try
                             Dim U As New Uri(ass.GetName.CodeBase)
@@ -4183,12 +4245,12 @@ Public Class DiagnosticsForm
 
 
                     Else
-                        TL.LogMessage("Assemblies", name.FullName)
+                        TL.LogMessage("Assemblies", AssemblyName.Key)
                     End If
                 Catch ex As Exception
-                    LogException("Assemblies", "Exception: " & ex.ToString)
+                    LogException("Assemblies", "Exception 2: " & ex.ToString)
                 End Try
-            Loop
+            Next
             TL.LogMessage("", "")
         Catch ex As Exception
             LogException("ScanGac", "Exception: " & ex.ToString)

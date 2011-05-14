@@ -157,9 +157,14 @@ Module EventLogCode
     Friend Sub LogEvent(ByVal Caller As String, ByVal Msg As String, ByVal Severity As EventLogEntryType, ByVal Id As EventLogErrors, ByVal Except As String)
         Dim ELog As EventLog, MsgTxt As String
 
-        If Not EventLog.SourceExists(EVENT_SOURCE) Then 'Create the event log of it doesn't exist
+        If Not EventLog.SourceExists(EVENT_SOURCE) Then 'Create the event log if it doesn't exist
             EventLog.CreateEventSource(EVENT_SOURCE, EVENTLOG_NAME)
-            LogEvent("LogEvent", "Event log created", EventLogEntryType.Information, EventLogErrors.EventLogCreated, Nothing) 'Place an initial entry
+            ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE) 'Create a pointer to the event log
+            ELog.ModifyOverflowPolicy(OverflowAction.OverwriteAsNeeded, 0) 'Force the policy to overwrite oldest
+            ELog.MaximumKilobytes = 1024 ' Set the maximum log size to 1024kb, the Win 7 minimum size
+            ELog.WriteEntry("Successfully created event log - Policy: " & ELog.OverflowAction.ToString & ", Size: " & ELog.MaximumKilobytes & "kb", EventLogEntryType.Information, EventLogErrors.EventLogCreated)
+            ELog.Close()
+            ELog.Dispose()
         End If
         ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE) 'Create a pointer to the event log
 
