@@ -862,6 +862,10 @@ Public Class DiagnosticsForm
 
                     Try
                         Compare("TestSimulator", Sim.DeviceType & " " & "InterfaceVersion", DeviceObject.Interfaceversion, Sim.InterfaceVersion)
+                    Catch ex1 As COMException
+                        If ex1.ErrorCode = &H80040400 And Sim.DeviceType = "Telescope" Then
+                            Compare("TestSimulator", "Simulator is in Interface V1 mode", "True", "True")
+                        End If
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "Interfaceversion member is not present in Platform 5 Simulator", "True", "True")
@@ -874,6 +878,10 @@ Public Class DiagnosticsForm
 
                     Try
                         Compare("TestSimulator", Sim.DeviceType & " " & "DriverVersion", DeviceObject.DriverVersion, Sim.DriverVersion)
+                    Catch ex1 As COMException
+                        If ex1.ErrorCode = &H80040400 And Sim.DeviceType = "Telescope" Then
+                            Compare("TestSimulator", "Simulator is in Interface V1 mode", "True", "True")
+                        End If
                     Catch ex1 As MissingMemberException
                         If Sim.IsPlatform5 Then
                             Compare("TestSimulator", "DriverVersion member is not present in Platform 5 Simulator", "True", "True")
@@ -895,12 +903,20 @@ Public Class DiagnosticsForm
                             DeviceTest("Telescope", "Slew")
                             DeviceTest("Telescope", "TrackingRates")
                             DeviceAxisRates = DeviceTest("Telescope", "AxisRates")
-                            ct = 0
-                            For Each AxRte As Object In DeviceAxisRates
-                                CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct), 0.000001)
-                                CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct), 0.000001)
-                                ct += 1
-                            Next
+                            Try
+                                ct = DeviceObject.InterfaceVersion()
+                                ct = 0
+                                For Each AxRte As Object In DeviceAxisRates
+                                    CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct), 0.000001)
+                                    CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct), 0.000001)
+                                    ct += 1
+                                Next
+                            Catch ex1 As COMException
+                                If ex1.ErrorCode = &H80040400 Then
+                                    Compare("TestSimulator", "TrackingRates - Simulator is in Interface V1 mode", "True", "True")
+                                End If
+                            End Try
+
                         Case "Camera"
                             DeviceTest("Camera", "StartExposure")
                         Case "FilterWheel"
@@ -1027,7 +1043,13 @@ Public Class DiagnosticsForm
                     Select Case Test
                         Case "UnPark"
                             DeviceObject.UnPark()
-                            Compare(Device, Test, DeviceObject.AtPark, "False")
+                            Try
+                                Compare(Device, Test, DeviceObject.AtPark, "False")
+                            Catch ex1 As COMException
+                                If ex1.ErrorCode = &H80040400 Then
+                                    Compare("TestSimulator", "UnPark - Simulator is in Interface V1 mode", "True", "True")
+                                End If
+                            End Try
                         Case "TrackingTrue"
                             DeviceObject.UnPark()
                             DeviceObject.Tracking = True
@@ -1060,72 +1082,84 @@ Public Class DiagnosticsForm
                             RetValDouble = DeviceObject.TargetRightAscension
                             CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.00001)
                         Case "TrackingRates"
-                            DeviceTrackingRates = DeviceObject.TrackingRates
-                            For Each TrackingRate As DriveRates In DeviceTrackingRates
-                                If PossibleDriveRates.Contains(TrackingRate.ToString) Then
-                                    NMatches += 1
-                                    TL.LogMessage(Device, "Matched Tracking Rate = " & TrackingRate.ToString)
-                                Else
-                                    LogException(Device, "Found unexpected tracking rate: """ & TrackingRate.ToString & """")
+                            Try
+                                DeviceTrackingRates = DeviceObject.TrackingRates
+                                For Each TrackingRate As DriveRates In DeviceTrackingRates
+                                    If PossibleDriveRates.Contains(TrackingRate.ToString) Then
+                                        NMatches += 1
+                                        TL.LogMessage(Device, "Matched Tracking Rate = " & TrackingRate.ToString)
+                                    Else
+                                        LogException(Device, "Found unexpected tracking rate: """ & TrackingRate.ToString & """")
+                                    End If
+                                Next
+                            Catch ex1 As COMException
+                                If ex1.ErrorCode = &H80040400 Then
+                                    Compare("TestSimulator", "TrackingRates - Simulator is in Interface V1 mode", "True", "True")
                                 End If
-                            Next
+                            End Try
                         Case "AxisRates"
-                            RetVal = DeviceObject.AxisRates(TelescopeAxes.axisPrimary)
+                            Try
+                                RetVal = DeviceObject.AxisRates(TelescopeAxes.axisPrimary)
+                            Catch ex1 As COMException
+                                If ex1.ErrorCode = &H80040400 Then
+                                    Compare("TestSimulator", "AxisRates - Simulator is in Interface V1 mode", "True", "True")
+                                End If
+                            End Try
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
                 Case "Dome"
-                    Select Case Test
-                        Case "OpenShutter"
-                            StartTime = Now
-                            DeviceObject.OpenShutter()
-                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
-                                Thread.Sleep(100)
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                                Application.DoEvents()
-                            Loop
-                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
-                        Case "ShutterStatus"
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), 0)
-                        Case "Slewing"
-                            Compare(Device, Test, DeviceObject.Slewing.ToString, "False")
-                        Case "CloseShutter"
-                            StartTime = Now
-                            DeviceObject.CloseShutter()
-                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
-                                Thread.Sleep(100)
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                                Application.DoEvents()
-                            Loop
-                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
-                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
-                        Case "SlewToAltitude"
-                            StartTime = Now
-                            DeviceObject.SlewToAltitude(45.0)
-                            Do
-                                Thread.Sleep(100)
-                                Application.DoEvents()
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
-                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                            CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, 0.00001)
-                        Case "SlewToAzimuth"
-                            StartTime = Now
-                            DeviceObject.SlewToAzimuth(225.0)
-                            Do
-                                Thread.Sleep(100)
-                                Application.DoEvents()
-                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
-                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                            CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, 0.00001)
-                        Case Else
-                            LogException("DeviceTest", "Unknown Test: " & Test)
-                    End Select
+        Select Case Test
+            Case "OpenShutter"
+                StartTime = Now
+                DeviceObject.OpenShutter()
+                Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
+                    Thread.Sleep(100)
+                    Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                    Application.DoEvents()
+                Loop
+                Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
+                Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
+            Case "ShutterStatus"
+                Compare(Device, Test, CInt(DeviceObject.ShutterStatus), 0)
+            Case "Slewing"
+                Compare(Device, Test, DeviceObject.Slewing.ToString, "False")
+            Case "CloseShutter"
+                StartTime = Now
+                DeviceObject.CloseShutter()
+                Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
+                    Thread.Sleep(100)
+                    Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                    Application.DoEvents()
+                Loop
+                Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
+                Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
+            Case "SlewToAltitude"
+                StartTime = Now
+                DeviceObject.SlewToAltitude(45.0)
+                Do
+                    Thread.Sleep(100)
+                    Application.DoEvents()
+                    Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
+                CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, 0.00001)
+            Case "SlewToAzimuth"
+                StartTime = Now
+                DeviceObject.SlewToAzimuth(225.0)
+                Do
+                    Thread.Sleep(100)
+                    Application.DoEvents()
+                    Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
+                CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, 0.00001)
+            Case Else
+                LogException("DeviceTest", "Unknown Test: " & Test)
+        End Select
 
                 Case Else
-                    LogException("DeviceTest", "Unknown Device: " & Device)
+        LogException("DeviceTest", "Unknown Device: " & Device)
             End Select
         Catch ex As Exception
             LogException("DeviceTest", Device & " " & Test & " exception: " & ex.ToString)
@@ -3745,36 +3779,39 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub RecurseProgramFiles(ByVal Folder As String)
-        Dim Files(), Directories() As String
-
-        'TL.LogMessage("Folder", Folder)
-        'Process files in this directory
+        Dim DirInfo As DirectoryInfo
+        Dim FileInfos() As FileInfo
+        Dim DirInfos() As DirectoryInfo
         Try
+            DirInfo = New DirectoryInfo(Folder)
             Action(Microsoft.VisualBasic.Left(Folder, 70))
-            Files = Directory.GetFiles(Folder)
-            For Each MyFile As String In Files
-                If MyFile.ToUpper.Contains("\HELPER.DLL") Then
-                    'TL.LogMessage("Helper.DLL", MyFile)
-                    FileDetails(Folder & "\", "Helper.dll")
-                End If
-                If MyFile.ToUpper.Contains("\HELPER2.DLL") Then
-                    'TL.LogMessage("Helper2.DLL", MyFile)
-                    FileDetails(Folder & "\", "Helper2.dll")
-                End If
-            Next
-        Catch ex As Exception
-            LogException("RecurseProgramFiles 1", "Exception: " & ex.ToString)
-        End Try
 
-        Try
-            Directories = Directory.GetDirectories(Folder)
-            For Each Directory As String In Directories
-                'TL.LogMessage("Directory", Directory)
-                RecurseProgramFiles(Directory)
-            Next
+            Try ' Get file details for files in this folder
+                FileInfos = DirInfo.GetFiles
+                For Each MyFile As FileInfo In FileInfos
+                    If MyFile.FullName.ToUpper.EndsWith("\HELPER.DLL") Then
+                        FileDetails(Folder & "\", "Helper.dll")
+                    End If
+                    If MyFile.FullName.ToUpper.EndsWith("\HELPER2.DLL") Then
+                        FileDetails(Folder & "\", "Helper2.dll")
+                    End If
+                Next
+            Catch ex As Exception
+                LogException("RecurseProgramFiles 1", "Exception: " & ex.ToString)
+            End Try
+
+            Try ' Iterate over the sub directories of this folder
+                DirInfos = DirInfo.GetDirectories
+                For Each Directory As DirectoryInfo In DirInfos
+                    RecurseProgramFiles(Directory.FullName) ' Recursively process this sub directory
+                Next
+            Catch ex As Exception
+                LogException("RecurseProgramFiles 2", "Exception: " & ex.ToString)
+            End Try
+
             Action("")
         Catch ex As Exception
-            LogException("RecurseProgramFiles 2", "Exception: " & ex.ToString)
+            LogException("RecurseProgramFiles 3", "Exception: " & ex.ToString)
         End Try
     End Sub
 
@@ -4209,7 +4246,7 @@ Public Class DiagnosticsForm
         Dim ass As Assembly
         Dim AssemblyNames As Generic.SortedList(Of String, String)
         Dim assname As AssemblyName
-
+        Dim AscomGACPaths As Generic.List(Of String)
         Try
             Status("Scanning Assemblies")
             AssemblyNames = New Generic.SortedList(Of String, String)
@@ -4228,7 +4265,9 @@ Public Class DiagnosticsForm
 
             Loop
 
-            For Each AssemblyName As Generic.KeyValuePair(Of String, String) In AssemblyNames
+            AscomGACPaths = New Generic.List(Of String)
+
+            For Each AssemblyName As Generic.KeyValuePair(Of String, String) In AssemblyNames ' Process each assembly in turn
                 Try
                     If InStr(AssemblyName.Key, "ASCOM") > 0 Then 'Extra information for ASCOM files
                         TL.LogMessage("Assemblies", AssemblyName.Value)
@@ -4238,19 +4277,82 @@ Public Class DiagnosticsForm
                         Try
                             Dim U As New Uri(ass.GetName.CodeBase)
                             Dim LocalPath As String = U.LocalPath
-                            FileDetails(Path.GetDirectoryName(LocalPath) & "\", Path.GetFileName(LocalPath))
+                            If (LocalPath.ToUpper.Contains("\ASCOM.DRIVERACCESS\6") Or _
+                                LocalPath.ToUpper.Contains("\ASCOM.UTILITIES\6") Or _
+                                LocalPath.ToUpper.Contains("\ASCOM.ASTROMETRY\6") Or _
+                                LocalPath.ToUpper.Contains("\ASCOM.DEVICEINTERFACES\6")) Then
+                                AscomGACPaths.Add(LocalPath)
+                            Else
+                                FileDetails(Path.GetDirectoryName(LocalPath) & "\", Path.GetFileName(LocalPath))
+                            End If
                         Catch ex As Exception
 
                         End Try
 
-
                     Else
-                        TL.LogMessage("Assemblies", AssemblyName.Key)
+                        TL.LogMessage("Assemblies", AssemblyName.Key) ' Non-ASCOM assembly
                     End If
                 Catch ex As Exception
                     LogException("Assemblies", "Exception 2: " & ex.ToString)
                 End Try
             Next
+            Dim FVInfo As FileVersionInfo = Nothing
+            Dim MyName, FVer As String
+            Dim FileLocation As String
+            Dim FileVer As FileVersionInfo
+            Dim DiagnosticsVersion As New Version("0.0.0.0")
+            Dim FileVersion As New Version("0.0.0.0")
+            Dim VersionComparison As Integer
+
+            Try
+                ass = Assembly.GetExecutingAssembly
+                MyName = ass.FullName
+                FileLocation = ass.Location
+                If String.IsNullOrEmpty(FileLocation) Then
+                    TL.LogMessage("FileDetails", MyName & "Assembly location is missing, cannot determine file version")
+                Else
+                    FileVer = FileVersionInfo.GetVersionInfo(FileLocation)
+                    If FileVer Is Nothing Then
+                        TL.LogMessage("FileDetails", MyName & " File version object is null, cannot determine file version number")
+                    Else
+                        FVer = FileVer.FileVersion
+                        If Not String.IsNullOrEmpty(FVer) Then
+                            DiagnosticsVersion = New Version(FVer)
+                        Else
+                            TL.LogMessage("FileDetails", MyName & " File version string is null or empty, cannot determine file version")
+                        End If
+                    End If
+                End If
+            Catch ex As Exception
+                LogException("FileDetails", "Exception EX2: " & ex.ToString)
+            End Try
+            TL.LogMessage("", "")
+
+            For Each AscomGACPath As String In AscomGACPaths
+                Try
+                    FVInfo = FileVersionInfo.GetVersionInfo(AscomGACPath)
+                    TL.LogMessage("GACFileVersion", FVInfo.FileName)
+                    FileVersion = New Version(FVInfo.FileVersion)
+                    VersionComparison = DiagnosticsVersion.CompareTo(FileVersion)
+
+                    Select Case VersionComparison
+                        Case Is < 0
+                            TL.LogMessage("GACFileVersion", "   ##### Diagnostics is older than this assembly! Diagnostics: " & DiagnosticsVersion.ToString & ", Assembly: " & FileVersion.ToString)
+                            NNonMatches += 1
+                            ErrorList.Add("Diagnostics is older than this assembly! Diagnostics: " & DiagnosticsVersion.ToString & ", Assembly: " & FileVersion.ToString & " " & AscomGACPath)
+                        Case 0
+                            TL.LogMessage("GACFileVersion", "   Diagnostics is the same version as this assembly! Diagnostics: " & DiagnosticsVersion.ToString & ", Assembly: " & FileVersion.ToString)
+                            NMatches += 1
+                        Case Is > 0
+                            TL.LogMessage("GACFileVersion", "   ##### Diagnostics is newer than this assembly! Diagnostics: " & DiagnosticsVersion.ToString & ", Assembly: " & FileVersion.ToString)
+                            NNonMatches += 1
+                            ErrorList.Add("Diagnostics is older than this assembly! Diagnostics: " & DiagnosticsVersion.ToString & ", Assembly: " & FileVersion.ToString & " " & AscomGACPath)
+                    End Select
+                Catch ex As FormatException
+                    LogException("GACFileVersion", "  ##### File version is in an invalid format: " & FVInfo.FileVersion)
+                End Try
+            Next
+
             TL.LogMessage("", "")
         Catch ex As Exception
             LogException("ScanGac", "Exception: " & ex.ToString)
