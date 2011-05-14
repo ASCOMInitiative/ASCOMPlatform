@@ -1,0 +1,106 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Timer Object</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="DriverHelperCLASSTimer"></a>Timer Object</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSTimerC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSTimerX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- Properties -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Properties">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSTimerP">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Methods -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Methods">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSTimerM">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Events -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Events">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSTimerE">
+</object>&nbsp;&nbsp;&nbsp;
+</p>
+
+<p class=desc>
+Programmable timer that fires events periodically</p>
+
+<h2>Remarks</h2>
+
+You can create multiple instances of this object. When enabled, the Timer delivers <b>Tick</b> events periodically (determined by setting the Interval property). The interface is callable from any automation-compliant client including a Windows Script Component (script implementation of an object, see the Windows Script Host documentation that comes with the ASCOM Platform). The object implements IObjectSafety, and reports itself safe for scripting, thus it may be used from within a web browser and dynamic HTML as well.
+
+<h2>Usage with Visual Basic</h2>
+
+To receive the <a href="DriverHelperTimerEVENTTick.htm">Tick</a> events in Visual Basic, you must declare a variable outside procedures and use the <b>WithEvents</b> keyword. You also must set a reference to the DriverHelper object -- you cannot use CreateObject() to create the Timer. Here is an example:
+
+<pre><code>Option Explicit
+Private <b>WithEvents</b> m_Timer as DriverHelper.Timer
+
+Sub Main()
+    Set m_Timer = New DriverHelper.Timer
+    m_Timer.Interval = 5000
+    m_Timer.Enabled = True          ' Start it
+    Do While True
+        DoEvents
+        <I>some way to exit this loop</I>
+    Loop
+End Sub
+
+Private Sub m_Timer_Tick()
+    Beep              ' Beeps every 5 sec...
+End Sub</code></pre>
+
+When you declare the Timer object <b>WithEvents</b> it appears in the left hand droplist of the code window, and if you select it, it will insert the prototype event handler Sub.
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2007, The ASCOM Initiative</div>
+
+
+
+<object type="application/x-oleobject" 
+	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="DriverHelperCLASSTimerO">
+</object>
+
+</body>
+</html>
+
