@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+	<title>ASCOM Dome Interface Standard</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+
+</head>
+<body>
+
+<h1><a name="DomeHOME"></a><a href="http://ASCOM-Standards.org/" target="browser"><img src="images/Bug72T-sm.jpg" width="48" height="56" alt="" border="0" align="left"></a>&nbsp;&nbsp;Dome Interface Standard 1.0<br>
+&nbsp;&nbsp;Programmer's Reference</h1><br clear=all>
+
+<div class=note>Please conduct discussions regarding this interface and its usage on the <a href="http://groups.yahoo.com/group/ASCOM-Talk" target="browser">ASCOM-Talk List</a>.
+
+<p><b><a href="http://groups.yahoo.com/group/ASCOM-Talk/join" target="browser">Click here to join ASCOM-Talk</a></b></div>
+
+<h2>Introduction</h2>
+
+This document describes the interface used by low-level dome "driver" components as part of the Astronomy Common Object Model (ASCOM). Components that implement this interface can provide way for programs to control various domes and roll-off roofs via a standard set of properties and methods. The characteristics of this interface comply with the <a href="http://ascom-standards.org/qual-spec.html" target="browser">ASCOM Quality Guidelines</a>, assuring consistent behavior and compatibility with the widest possible variety of Windows Automation clients.
+
+<p>To control a particular dome, a program would create an instance of the driver for its dome controller type, then use the standard properties and methods described in this document to effect control of that dome. Thus any program or script that uses the standard driver interface automatically gains access to any dome type for which a driver exists. For more information on ASCOM, see the <a href="http://ascom-standards.org/" target="browser">ASCOM Home Page</a>.
+
+<p>This specification covers a <i>simple, low-level</i> dome control interface for opening and closing apertures, slewing, and synchronizing. It does not provide for higher-level operations such as dome slaving, telescope-dome geometry transformations, weather safety, etc. These functions are left to higher-level client programs or scripts which make use of various ASCOM drivers and which integrate the corresponding devices to form a complete control system.
+
+<h2>Azimuth and Altitude</h2>
+
+This specification provides for slewing and read-back of dome azimuth <i>and</i> altitude. The intent is to create the concept of a "window on the sky" through which the telescope has access. Within the driver and/or control hardware, shutters, roll-off roof sections, or other openings may be controlled to provide only the minimum sized aperture for the telescope, allowing the hardware to optimize protection from ambient light and weather.
+
+<h2>Hardware Slaving and <b>Dome.Slaved</b></h2>
+Dome hardware systems may provide a way to slave the dome to the telescope without ASCOM driver and/or client software involvement. In this case (only) it is permitted for the driver to return True for the Dome.CanSlave property, and support setting the <a href="DomeDomePROPSlaved.htm">Dome.Slaved</a> property to True. 
+
+<div class=note>
+<div align=center>
+<img src="images/important2.gif" width=135 height=27 alt="" border=0>
+</div>
+It is specifically prohibited for ASCOM Dome drivers to cross-connect themselves to ASCOM Telescope drivers to perform the slaving function within the Dome driver. The intent of this specification is to provide a standard interface to the Dome control hardware only.
+</div>
+
+
+<h2>For best results</h2>
+
+This will display best if you have Internet Explorer 5.5 or 6, and the following fonts installed:
+<ul>
+	<li> Arial
+	<li> Verdana
+	<li> Lucida Console
+</ul>
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2003, The ASCOM Initiative</div>
+
+</body>
+</html>
