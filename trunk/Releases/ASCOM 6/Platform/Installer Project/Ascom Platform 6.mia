@@ -668,6 +668,8 @@ Comment
 Comment
 Install Files
 Install Files
+Install Files
+Install Files
 Comment
 Install Files
 Install Files
@@ -1777,6 +1779,8 @@ $
 {392171FB-85AE-4E99-BA8D-A2CF06FED8D7}
 {91B5B5E8-DC66-4722-AFC5-8E2D1005E153}
 {EAE2E045-3243-456D-ADF2-1889EB62AAF2}
+{3A9A6CA1-04F9-4785-8569-F23231C485BE}
+{3B716432-4790-4880-9B65-CBFC197D6C93}
 {E9DC3497-D934-4CD2-9641-E5F5706991AD}
 {081B258C-DCE5-4FB9-A7AE-10499D06228E}
 {F8ED3511-34B8-4FA5-B1E5-42F5F148C11A}
@@ -4941,6 +4945,32 @@ FALSE
 ..\..\..\..\drivers and simulators\safetymonitor simulator\bin\release\ASCOM.Simulator.SafetyMonitor.dll
 FALSE|
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{3A9A6CA1-04F9-4785-8569-F23231C485BE}
+..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\M42-800x600.jpg
+FALSE|
+$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{3B716432-4790-4880-9B65-CBFC197D6C93}
+..\..\..\..\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Testcard_F.jpg
+FALSE|
+$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera
 FALSE
 FALSE
 FALSE
@@ -8399,6 +8429,8 @@ C
 
 
 
+
+
 C
 
 
@@ -8653,6 +8685,8 @@ C
 
 
 $
+
+
 
 
 
