@@ -96,6 +96,7 @@ Set Variable
 Get System Settings
 MessageBalloon
 Comment
+Comment
 Set Variable
 Set Variable
 Set Variable
@@ -124,12 +125,19 @@ Get Folder Location
 Get Folder Location
 Get Folder Location
 Get Folder Location
+Get Folder Location
 Read Registry
 Set Variable
+Comment
 Comment
 Set Variable
 Read Registry
 Comment
+Comment
+Set Variable
+Comment
+Comment
+Set Variable
 Set Variable
 Code Folding Region
 Comment
@@ -142,6 +150,12 @@ Write to Text File
 Else
 Write to Text File
 End
+Write to Text File
+Write to Text File
+Write to Text File
+Write to Text File
+Write to Text File
+Write to Text File
 Write to Text File
 Write to Text File
 Write to Text File
@@ -292,7 +306,9 @@ Set Variable
 Set Variable
 If
 Set Variable
+Set Variable
 Else
+Set Variable
 Set Variable
 End
 Display Dialog
@@ -817,31 +833,34 @@ Code Folding Region
 Comment
 Comment
 Write to Text File
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
 Write to Text File
+Write to Text File
+Write to Text File
+Write to Text File
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
 Code Folding Region
 Code Folding Region
 Comment
@@ -1206,6 +1225,7 @@ $
 {623FF25B-17C6-45D2-ACA4-0A70F98C5CA5}
 {F1423269-2139-4396-951A-93978CBA8A78}
 {68FDA90D-9BCD-4DE6-95CF-28C991746CBF}
+{85C660CD-6423-4009-806C-B3402429CB48}
 {AD66F172-8F28-4F8C-92A3-D2B504309AB9}
 {D84DED7F-FA50-47D1-9C9A-FA3C05C084FD}
 {F03DA6D9-ED48-4D6E-A086-D3476E159062}
@@ -1231,17 +1251,24 @@ $
 {B343FA10-F617-4080-9A4C-A0AC5358B03A}
 {FF8362A7-F95C-4C69-BA98-BE62F41ED2FB}
 {B2C02245-36DD-4EB5-BA69-794FC36E6679}
+{8A869D3A-E4DE-4D45-8A26-8FE9A8EE9137}
 {973C4E18-30BB-438E-AE75-277E90CBC542}
 {6B5C335A-6D97-4F60-9A4A-6D1F34C257E1}
 {7486E8B4-7C74-4DCB-9116-2C03C3253BFC}
 {F389B2C5-4DF9-4C71-BAB5-7761ECEEB198}
 {3B1E2BB5-391A-47E8-8128-A9856C0D9CC0}
 {F1BC1B97-C86F-44A1-BE5A-BBDC8771B89D}
+{5B1C6FE0-9CD0-4616-869E-ED493D961D1D}
 {FE112823-2E0D-4F8F-AEC9-7C936E649A0A}
 {B8648F6D-8A39-49F4-A7C6-BCE61FF703AB}
 {B6098CA8-AA41-414A-BE61-8C02B0CD406E}
+{C50CF621-D13D-42E1-A1DA-1D038EBB0B6B}
 {8914A571-DF67-4756-83BF-42D365032E36}
 {11A0A8E5-D768-493B-A700-5867EA3BA535}
+{73967DF1-00F1-4338-ACEC-2F8412285EEF}
+{975A5F71-CFE2-4FC0-92CE-03515DCED696}
+{3058A604-212A-42C5-8228-28E83CE9FE52}
+{BFF1352B-E850-4E52-A789-6523ED22D508}
 {AB277D12-13AE-46F2-B4E2-12C520DC6EA8}
 {B96BF1FD-FBA4-4D09-8D1B-0AF6F644CB7F}
 {01B1F73B-FD2E-4826-9655-631FBDDFE68F}
@@ -1262,6 +1289,12 @@ $
 {DE5E3E16-C3F1-4C7E-86C7-47A04C08432F}
 {8DDF0592-A0B9-49FF-BBE0-412A87520791}
 {8D0FBB0D-24EF-4CE1-B35E-6DCC061DF57A}
+{2FD6F9A9-AFE7-4CF9-9994-F83A46ED2D9D}
+{7BA3D97F-C0D2-482E-8A45-D97529805F0B}
+{11E781ED-6E1D-483F-8C55-1CA485A0A744}
+{21834060-9A82-4EC9-99E2-056AD870CF00}
+{E11C3DCF-2E24-46EA-8EB1-20D894628C81}
+{B3F9547F-0F72-4D73-9B2D-17B5C206C926}
 {EDFEA293-82F9-49C0-BAC4-38E488FB5E46}
 {633CC1A8-4D77-4007-BDB1-C912D57BCB59}
 {FB082F18-9F1E-4721-8794-882E0FCB5658}
@@ -1403,8 +1436,10 @@ $
 {41FF155A-EE69-4472-880E-7A1483C39530}
 {998D6864-41B8-46A6-96FB-31F7E9564295}
 {A4096648-40D6-4817-81BA-DE0AD4949DE5}
+{AF244C7F-DC0E-4925-BC15-C992DF31259D}
 {FDD1E513-43EF-4115-AD55-5119426883E6}
 {25B03745-7E2B-44DD-B32C-4650AD3DF648}
+{0926B111-27A2-4796-B480-A2B9BAD306E5}
 {1BBA2694-51AA-48E3-AAE5-8DC13CFCFA68}
 {21DF14DC-4CCA-4709-87DD-2FDEC5F60C15}
 {5C749DF8-0460-46BC-8CF8-C1A358290E10}
@@ -1927,7 +1962,11 @@ $
 {C18794F7-E254-4834-A656-4C9D6693BF3F}
 {977AC1B0-F1BE-4842-90CD-8F7AE059AC61}
 {4AAF024B-1F71-4C2F-BC33-675E20C04034}
+{9C8E5B37-6801-4948-B8AC-486630EEE90B}
 {BE447C96-7DE1-4A72-AD92-CB4C56D3A26B}
+{CA90B258-0BDD-49F7-9E9F-13FE6FA6B2E0}
+{D472F813-687B-453F-A19C-A6C53FB04122}
+{A67A97B8-A7CE-491A-A71E-846F76F99A63}
 {F408B452-6A27-4915-A049-D21E2138FC23}
 {9469E59E-A8EF-4649-BA92-8396F0CC1A61}
 {70870DF3-F798-40B3-9E5F-15C080A938E5}
@@ -1952,7 +1991,6 @@ $
 {A228BF9E-0DEF-47CB-B26F-87EE4A84FB85}
 {89AD8832-8907-4C06-84E6-CA1C868F2471}
 {0340B240-2C74-444A-A521-34C6C4F341EF}
-{1937E33B-4B56-4399-B8F6-6AD18C88D6B5}
 {5D237D3B-5CFE-4064-86D3-664EFF08501D}
 {61F26F95-F38F-47DE-B264-711D7373BB84}
 {A9FAC6E7-A7B1-450B-BB7C-970CD4BE8494}
@@ -2468,6 +2506,16 @@ Clean up unwanted GAC assembly references left by bad native installer used duri
 Create the path to the GAC installer reference list
 {B96BF1FD-FBA4-4D09-8D1B-0AF6F644CB7F}
 
+{975A5F71-CFE2-4FC0-92CE-03515DCED696}
+Set  up start menu variables, ASCOMSTARTMENU is the name of the Platform folder
+{73967DF1-00F1-4338-ACEC-2F8412285EEF}
+
+{C50CF621-D13D-42E1-A1DA-1D038EBB0B6B}
+
+{5B1C6FE0-9CD0-4616-869E-ED493D961D1D}
+
+{85C660CD-6423-4009-806C-B3402429CB48}
+
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -2478,11 +2526,11 @@ SUCCESS
 LASTERROR
 
 {A4096648-40D6-4817-81BA-DE0AD4949DE5}
-SHORTCUTFOLDER
-$SHORTCUTFILESALL$\$STARTMENU$
+SHORTCUTFOLDER$MYAH$MYAH$FALSE
+$SHORTCUTFILESALL$$ASCOMSTARTMENU$
 {25B03745-7E2B-44DD-B32C-4650AD3DF648}
-SHORTCUTFOLDER
-$SHORTCUTFILES$\$STARTMENU$
+SHORTCUTFOLDER$MYAH$MYAH$FALSE
+$SHORTCUTFILES$$ASCOMSTARTMENU$
 {C974C952-7C50-4503-BFEF-AF3B492C0AEE}
 PROGRESS
 100
@@ -2753,6 +2801,18 @@ RC3A$MYAH$MYAH$FALSE
 {11A0A8E5-D768-493B-A700-5867EA3BA535}
 GACREF$MYAH$MYAH$FALSE
 SOFTWARE\$WOW6432NODE$Microsoft\Fusion\References
+{3058A604-212A-42C5-8228-28E83CE9FE52}
+ASCOMSTARTMENU$MYAH$MYAH$FALSE
+ASCOM Platform 6
+{BFF1352B-E850-4E52-A789-6523ED22D508}
+ALLUSERS$MYAH$MYAH$FALSE
+TRUE
+{AF244C7F-DC0E-4925-BC15-C992DF31259D}
+DESKTOPFOLDER$MYAH$MYAH$FALSE
+$DESKTOPDIRALL$
+{0926B111-27A2-4796-B480-A2B9BAD306E5}
+DESKTOPFOLDER$MYAH$MYAH$FALSE
+$DESKTOPDIR$
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -3496,6 +3556,10 @@ FALSE
 MYDOCUMENTS
 2
 FALSE
+{8A869D3A-E4DE-4D45-8A26-8FE9A8EE9137}
+DESKTOPDIRALL
+17
+TRUE
 {2AAD830F-7B63-497D-9A5A-19F6E10861E1}
 CHECKSYSTEM
 25
@@ -5363,7 +5427,7 @@ TRUE
 {0340B240-2C74-444A-A521-34C6C4F341EF}
 $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
 ASCOM Dome Control
-$SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
+$SHORTCUTFOLDER$\Scope-Dome Hubs
 
 
 
@@ -5373,7 +5437,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {89AD8832-8907-4C06-84E6-CA1C868F2471}
 $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
 POTH Help
-$SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
+$SHORTCUTFOLDER$\Scope-Dome Hubs
 
 
 
@@ -5383,7 +5447,7 @@ c:\installaware-ascom-build\Help.ico
 {A228BF9E-0DEF-47CB-B26F-87EE4A84FB85}
 $COMMONFILES$\ASCOM\Telescope\POTH.exe
 POTH Scope-Dome Hub
-$SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs
+$SHORTCUTFOLDER$\Scope-Dome Hubs
 
 
 
@@ -5393,7 +5457,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {494D0686-431B-442B-B3C5-5EE7B90CAFF0}
 $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
 Pipe Help
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFOLDER$\Tools
 
 
 
@@ -5403,7 +5467,7 @@ c:\installaware-ascom-build\Help.ico
 {78C884B0-AD58-4354-AD72-9D7643279653}
 $COMMONFILES$\ASCOM\Telescope\Pipe.exe
 Pipe Connection Monitor
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFOLDER$\Tools
 
 
 
@@ -5413,7 +5477,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {21A81DD1-0D42-46F4-95F3-723A228A7022}
 $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
 Telescope Simulator .NET
-$SHORTCUTFILES$\ASCOM Platform 6\Simulators
+$SHORTCUTFOLDER$\Simulators
 
 
 
@@ -5423,7 +5487,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {F6F288FC-EC44-43FA-B8A7-423917595944}
 $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
 Telescope Simulator
-$SHORTCUTFILES$\ASCOM Platform 6\Simulators
+$SHORTCUTFOLDER$\Simulators
 
 
 
@@ -5433,7 +5497,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {B2DD97BA-AF71-4E57-BF52-5C923CAF7886}
 $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
 Switch Simulator
-$SHORTCUTFILES$\ASCOM Platform 6\Simulators
+$SHORTCUTFOLDER$\Simulators
 
 
 
@@ -5443,7 +5507,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {32722E76-A1CD-49AD-9970-9F5CD57EEC8A}
 $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
 Rotator Simulator .NET
-$SHORTCUTFILES$\ASCOM Platform 6\Simulators
+$SHORTCUTFOLDER$\Simulators
 
 
 
@@ -5453,7 +5517,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {1DC33AC4-B7FF-46AC-9EB3-19F7AB204528}
 $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
 Focus Simulator
-$SHORTCUTFILES$\ASCOM Platform 6\Simulators
+$SHORTCUTFOLDER$\Simulators
 
 
 
@@ -5463,7 +5527,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {1E6AE9D2-6353-4E6F-AB69-568D125ECF5B}
 $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
 FilterWheel Simulator .NET
-$SHORTCUTFILES$\ASCOM Platform 6\Simulators
+$SHORTCUTFOLDER$\Simulators
 
 
 
@@ -5473,7 +5537,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {3FB6086A-E1B3-466A-86AA-49027E1CBA47}
 $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
 FilterWheel Simulator
-$SHORTCUTFILES$\ASCOM Platform 6\Simulators
+$SHORTCUTFOLDER$\Simulators
 
 
 
@@ -5483,7 +5547,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {10F7703F-F195-4D6D-B8B4-765F9230CB72}
 $COMMONFILES$\ASCOM\Dome\DomeSim.exe
 Dome Simulator
-$SHORTCUTFILES$\ASCOM Platform 6\Simulators
+$SHORTCUTFOLDER$\Simulators
 
 
 
@@ -5493,17 +5557,17 @@ c:\installaware-ascom-build\ASCOM.ico
 {49C8A4F0-B891-4903-994B-EBEA249248D9}
 $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 ASCOM Diagnostics
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFOLDER$\Tools
 
 
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFOLDER$\Tools
 
 |
 0|
 {71C0904E-9B76-49AE-95C0-3EEB72119C98}
 $TARGETDIR$\Tools\ProfileExplorer.exe
 Profile Explorer
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFOLDER$\Tools
 
 
 
@@ -5513,7 +5577,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Tools
 {D1D78677-32AF-4E85-B43E-53C57B29FFCB}
 $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
 Show Platform Version
-$SHORTCUTFILES$\ASCOM Platform 6
+$SHORTCUTFOLDER$
 Display the ASCOM Platform version
 
 
@@ -5523,7 +5587,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {B20408C8-EC3B-446B-A3B3-124C62434784}
 http://ascom-standards.org/Support/index.htm
 How to get support
-$SHORTCUTFILES$\ASCOM Platform 6
+$SHORTCUTFOLDER$
 
 
 
@@ -5533,7 +5597,7 @@ c:\installaware-ascom-build\Internet.ico
 {D1DCD5D1-7B82-4D54-8848-383E7E83E045}
 $TARGETDIR$\Docs\PlatformHelp.chm
 Help and Device Interface Standards
-$SHORTCUTFILES$\ASCOM Platform 6
+$SHORTCUTFOLDER$
 
 
 
@@ -5543,7 +5607,7 @@ $SHORTCUTFILES$\ASCOM Platform 6
 {B4A18B28-7A3F-4D5E-8B41-03E57412D959}
 $TARGETDIR$\Tools\CheckForUpdates.js
 Check for Updates
-$SHORTCUTFILES$\ASCOM Platform 6
+$SHORTCUTFOLDER$
 
 
 
@@ -5553,7 +5617,7 @@ c:\installaware-ascom-build\Internet.ico
 {F396F4E5-6EFC-4CE7-A8EA-AF048686E6CC}
 $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
 ASCOM User Guide
-$SHORTCUTFILES$\ASCOM Platform 6
+$SHORTCUTFOLDER$
 ASCOM User Guide
 
 
@@ -5563,7 +5627,7 @@ c:\installaware-ascom-build\ASCOM.ico
 {042045AC-127D-4E9F-A10A-EC38A24C312B}
 http://www.ascom-standards.org/Downloads/Index.htm
 ASCOM Drivers and Downloads
-$SHORTCUTFILES$\ASCOM Platform 6
+$SHORTCUTFOLDER$
 
 
 
@@ -5573,7 +5637,7 @@ c:\installaware-ascom-build\Internet.ico
 {70870DF3-F798-40B3-9E5F-15C080A938E5}
 http://ascom-standards.org/Community/Partners.htm
 ASCOM Compatible Software
-$SHORTCUTFILES$\ASCOM Platform 6
+$SHORTCUTFOLDER$
 
 
 
@@ -5583,7 +5647,7 @@ c:\installaware-ascom-build\Internet.ico
 {9469E59E-A8EF-4649-BA92-8396F0CC1A61}
 $TARGETDIR$\Tools\ProfileExplorer.exe
 ProfileExplorer
-$DESKTOPDIR$
+$DESKTOPFOLDER$
 
 
 
@@ -5593,10 +5657,10 @@ $DESKTOPDIR$
 {F408B452-6A27-4915-A049-D21E2138FC23}
 $TARGETDIR$\Tools\ASCOM Diagnostics.exe
 ASCOM Diagnostics
-$DESKTOPDIR$
+$DESKTOPFOLDER$
 
 
-$SHORTCUTFILES$\ASCOM Platform 6\Tools
+$SHORTCUTFOLDER$\Tools
 
 |
 0|
@@ -6872,7 +6936,7 @@ FALSE
 TRUE
 {91FB1AB9-5720-449B-B191-505ED3E24638}
 $SETUPLOG$
-ReggAsm64: $REGASM64$
+RegAsm64: $REGASM64$
 FALSE
 TRUE
 {44A870A8-5CB5-4BBF-BE82-D6A77EDE93BC}
@@ -6945,11 +7009,6 @@ $SETUPLOG$
 Uninstall return code: $SUCCESS$
 FALSE
 TRUE
-{1937E33B-4B56-4399-B8F6-6AD18C88D6B5}
-$SETUPLOG$
-Completed shortcuts
-FALSE
-TRUE
 {BE447C96-7DE1-4A72-AD92-CB4C56D3A26B}
 $SETUPLOG$
 Creating shortcuts
@@ -6958,6 +7017,56 @@ TRUE
 {8D0FBB0D-24EF-4CE1-B35E-6DCC061DF57A}
 $SETUPLOG$
 GAC Assembly Reference Path: $GACREF$
+FALSE
+TRUE
+{7BA3D97F-C0D2-482E-8A45-D97529805F0B}
+$SETUPLOG$
+ShortcutFilesAll: $SHORTCUTFILESALL$
+FALSE
+TRUE
+{2FD6F9A9-AFE7-4CF9-9994-F83A46ED2D9D}
+$SETUPLOG$
+ShortcutFiles: $SHORTCUTFILES$
+FALSE
+TRUE
+{B3F9547F-0F72-4D73-9B2D-17B5C206C926}
+$SETUPLOG$
+AllUsers: $ALLUSERS$
+FALSE
+TRUE
+{D472F813-687B-453F-A19C-A6C53FB04122}
+$SETUPLOG$
+ShortcutFolder: $SHORTCUTFOLDER$
+FALSE
+TRUE
+{E11C3DCF-2E24-46EA-8EB1-20D894628C81}
+$SETUPLOG$
+ASCOMStartMenu: $ASCOMSTARTMENU$
+FALSE
+TRUE
+{A67A97B8-A7CE-491A-A71E-846F76F99A63}
+$SETUPLOG$
+
+FALSE
+TRUE
+{9C8E5B37-6801-4948-B8AC-486630EEE90B}
+$SETUPLOG$
+
+FALSE
+TRUE
+{11E781ED-6E1D-483F-8C55-1CA485A0A744}
+$SETUPLOG$
+DesktopDir: $DESKTOPDIR$
+FALSE
+TRUE
+{21834060-9A82-4EC9-99E2-056AD870CF00}
+$SETUPLOG$
+DesktopDirAll: $DESKTOPDIRALL$
+FALSE
+TRUE
+{CA90B258-0BDD-49F7-9E9F-13FE6FA6B2E0}
+$SETUPLOG$
+DesktopFolder: $DESKTOPFOLDER$
 FALSE
 TRUE
 {E42FC0DC-6FA0-4ACD-867C-2F3AEF24B539}
@@ -7753,25 +7862,12 @@ C
 
 
 
-C
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-C
 
 
 
@@ -7781,6 +7877,9 @@ C
 
 
 C
+
+
+
 
 
 
@@ -7813,6 +7912,30 @@ C
 
 
 
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
 C
 
 
@@ -7841,229 +7964,6 @@ C
 
 C
 C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -8192,6 +8092,234 @@ C
 
 
 C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
 
 
 
@@ -8685,6 +8813,25 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

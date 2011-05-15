@@ -95,6 +95,7 @@ Set Variable COMMONFILES64 to
 Set Variable WIN64MODE to 
 Get System Setting Windows in 64 bit Mode into WIN64MODE
 Comment: MessageBalloon: Win 64Mode, Win64Mode is $WIN64MODE$
+ 
 Comment: Initialise to a null value that will access the correct portion of the registry on a 32bit OS
 Set Variable WOW6432NODE to 
 Set Variable REGASM64 to 
@@ -120,17 +121,24 @@ if Variable SHORTCUTFILESALL Equals
   Set Variable SHORTCUTFILESALL to $SHORTCUTFILES$
 end
 Get Folder Location System->Desktop Directory into DESKTOPDIR
+Get Common Folder Location System->Desktop Directory into DESKTOPDIRALL
 Get Folder Location System->Windows Directory into WINDIR
 Get Folder Location System->System Directory into WINSYSDIR
 Get Folder Location Taskbar->Quick Launch Directory into QUICKLAUNCHDIR
 Get Folder Location WWW->WWWRoot into WWWROOTDIR
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
 Set Variable REGASM to $FRAMEWORKROOT$v2.0.50727\RegAsm.exe
+ 
 Comment: Determine if Acrobat is installed
 Set Variable ACROBATKEY to 
 Read Registry Key HKCR\.pdf\ into ACROBATKEY
+ 
 Comment: Create the path to the GAC installer reference list
 Set Variable GACREF to SOFTWARE\$WOW6432NODE$Microsoft\Fusion\References
+ 
+Comment: Set  up start menu variables, ASCOMSTARTMENU is the name of the Platform folder
+Set Variable ASCOMSTARTMENU to ASCOM Platform 6
+Set Variable ALLUSERS to TRUE
 [END REGION]
  
 Comment: Create the start of the installation log
@@ -145,12 +153,18 @@ end
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value Win64Mode: $WIN64MODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value RegAsm: $REGASM$ (at end of file)
-Write into Text File $SETUPLOG$ from Value ReggAsm64: $REGASM64$ (at end of file)
+Write into Text File $SETUPLOG$ from Value RegAsm64: $REGASM64$ (at end of file)
 Write into Text File $SETUPLOG$ from Value NGen64: $NGEN64$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ProgramFiles: $PROGRAMFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value CommonFiles: $COMMONFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value GAC Assembly Reference Path: $GACREF$ (at end of file)
+Write into Text File $SETUPLOG$ from Value ShortcutFiles: $SHORTCUTFILES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value ShortcutFilesAll: $SHORTCUTFILESALL$ (at end of file)
+Write into Text File $SETUPLOG$ from Value DesktopDir: $DESKTOPDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value DesktopDirAll: $DESKTOPDIRALL$ (at end of file)
+Write into Text File $SETUPLOG$ from Value ASCOMStartMenu: $ASCOMSTARTMENU$ (at end of file)
+Write into Text File $SETUPLOG$ from Value AllUsers: $ALLUSERS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
 [DEFINE REGION: Setup User Interview]
@@ -291,9 +305,11 @@ Set Variable PROGRESSTEXT to Installing $TITLE$
 Set Variable SUCCESS to 
 Set Variable LASTERROR to 
 if Variable ALLUSERS Equals TRUE
-  Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$\$STARTMENU$
+  Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$$ASCOMSTARTMENU$
+  Set Variable DESKTOPFOLDER to $DESKTOPDIRALL$
 else
-  Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$\$STARTMENU$
+  Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$$ASCOMSTARTMENU$
+  Set Variable DESKTOPFOLDER to $DESKTOPDIR$
 end
 Display Dialog: progress, use as progress dialog (non-modal)
  
@@ -816,32 +832,35 @@ else
     [DEFINE REGION: Create shortcuts]
     Comment: Menu shortcuts
     Comment: Install after main MSI install has run so we pick up correct icons from applicaitons
+    Write into Text File $SETUPLOG$ from Value  (at end of file)
     Write into Text File $SETUPLOG$ from Value Creating shortcuts (at end of file)
-    Create Shortcut $DESKTOPDIR$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $DESKTOPDIR$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\How to get support to http://ascom-standards.org/Support/index.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
-    Write into Text File $SETUPLOG$ from Value Completed shortcuts (at end of file)
+    Write into Text File $SETUPLOG$ from Value DesktopFolder: $DESKTOPFOLDER$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value  (at end of file)
+    Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
+    Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+    Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+    Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
+    Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
+    Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
+    Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
+    Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFOLDER$\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+    Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
+    Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
+    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
     [END REGION]
     [DEFINE REGION: Additional clean-up when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
