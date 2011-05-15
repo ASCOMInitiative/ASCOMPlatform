@@ -888,6 +888,25 @@ B
 
 
 
+B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1160,6 +1179,9 @@ B
 
 
 $
+SHORTCUTFOLDER
+SHORTCUTFILESALL
+SHORTCUTFILES
 $
 1
 4
@@ -1175,7 +1197,7 @@ ASCOM Platform 6 RC
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{6DBCE31B-4246-41F3-A59B-540AB9479434}
+{6B88FC54-5649-4B58-8E7D-8AC438900C38}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
