@@ -235,12 +235,22 @@ Namespace VB6HelperSupport 'Tuck this out of the way of the main ASCOM.Utilities
 
             Try
                 keys = Profile.EnumKeys(DriverType & " Drivers")
-                If keys.ContainsKey(DriverID) Then
-                    TL.LogFinish("Key " & DriverID & " found")
-                    IsRegistered = True ' Found it
-                Else
-                    TL.LogFinish("Key " & DriverID & " not found")
-                End If
+
+                'Iterate through all returned driver names comparing them to the required driver name, set a flag if the required driver is present
+                For Each kvp As Generic.KeyValuePair(Of String, String) In keys ' Platform 6 version - makes the test case insensitive! ASCOM-235
+                    If kvp.Key.ToUpperInvariant = DriverID.ToUpperInvariant Then
+                        TL.LogFinish("Key " & DriverID & " found")
+                        IsRegistered = True ' Found it
+                    End If
+                Next
+                If Not IsRegistered Then TL.LogFinish("Key " & DriverID & " not found")
+
+                'If keys.ContainsKey(DriverID) Then Platform 5.5 version
+                ' TL.LogFinish("Key " & DriverID & " found")
+                ' IsRegistered = True ' Found it
+                ' Else
+                ' TL.LogFinish("Key " & DriverID & " not found")
+                ' End If
             Catch ex As Exception
                 TL.LogFinish("Exception: " & ex.ToString)
             End Try
