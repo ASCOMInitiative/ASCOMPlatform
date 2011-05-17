@@ -4196,7 +4196,7 @@ Public Class DiagnosticsForm
                                     P.Start() 'Start the process and wait for it to finish
                                     TL.LogMessage("HelperHijacking", "  Started registration")
                                     P.WaitForExit()
-                                    TL.LogMessage("HelperHijacking", "  Finished registration, Return code: " + P.ExitCode)
+                                    TL.LogMessage("HelperHijacking", "  Finished registration, Return code: " & P.ExitCode) ' ASCOM-217 changed + to & concatenator
                                     P.Dispose()
 
                                     'Reread the COM information to check whether it is now fixed
