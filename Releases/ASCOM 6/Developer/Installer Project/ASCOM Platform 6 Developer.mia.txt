@@ -98,6 +98,9 @@ Get Folder Location System->System Directory into WINSYSDIR
 Get Folder Location Taskbar->Quick Launch Directory into QUICKLAUNCHDIR
 Get Folder Location WWW->WWWRoot into WWWROOTDIR
 Get Folder Location System->Profiles Directory into USERPROFILE
+ 
+Comment: Find the build number ready to store in the Profile
+Get File Version $SUPPORTDIR$\MigrationSupport.dll into Variable DEVELOPERTOOLSBUILDVERSION
 [END REGION]
  
 [DEFINE REGION: Setup User Interview]
@@ -281,8 +284,8 @@ else
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 6\, $TARGETDIR$\Components\Platform6
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
-    [END REGION]
     Set Variable PROGRESS to 50
+    [END REGION]
     [DEFINE REGION: Developer Documentation]
     Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Developer Documentation
@@ -322,14 +325,17 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Driver Install Script Generator to $TARGETDIR$\Installer Generator\InstallerGen.exe
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
     [END REGION]
+    [DEFINE REGION: Update Developer Tools installation information in Profile]
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Build, $DEVELOPERTOOLSBUILDVERSION$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Installation Date, $DATE$ $TIME$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Name, $TITLE$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $PRODUCTCODE$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
+    [END REGION]
   end
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Installation Date, $DATE$ $TIME$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Name, $TITLE$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $PRODUCTCODE$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
-  Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
-  Set Variable PROGRESS to 90
   [DEFINE REGION: Visual Studio Driver Templates]
+  Set Variable PROGRESS to 90
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     Install Files ..\..\..\..\DriverTemplates\ASCOM 6 Driver Templates.vsi to $TARGETDIR$\Templates
@@ -340,17 +346,16 @@ else
   [DEFINE WEB MEDIA ASCOM Platform 6 Developer Components]
   if Variable SELECTED Equals TRUE
   end
-  Comment: Remove previous message baloon
   [compiler if Variable BUILDMODE Equals PATCH]
   Apply Patch (get result into variable SUCCESS)
   [compiler else]
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
-    Create Folder $TARGETDIR$\Components\Platform5
     Apply Install (get result into variable SUCCESS)
   end
   [compiler end]
+  Comment: Remove previous message baloon
   MessageBalloon: , 
    
   Comment: Run the VsiInstaller to install the templates, provided that it is present on the system.
