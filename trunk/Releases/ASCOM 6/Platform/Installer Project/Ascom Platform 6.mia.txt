@@ -139,6 +139,9 @@ Set Variable GACREF to SOFTWARE\$WOW6432NODE$Microsoft\Fusion\References
 Comment: Set  up start menu variables, ASCOMSTARTMENU is the name of the Platform folder
 Set Variable ASCOMSTARTMENU to ASCOM Platform 6
 Set Variable ALLUSERS to TRUE
+ 
+Comment: Get the build version into a variable so it can be written to the Profile
+Get File Version $SUPPORTDIR$\UninstallAscom.exe into Variable PLATFORMBUILDVERSION
 [END REGION]
  
 Comment: Create the start of the installation log
@@ -813,6 +816,7 @@ else
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\WScript.Exe, True
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\ForceSystemTimer\Astroart.Exe, True
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
+    Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Build, $PLATFORMBUILDVERSION$
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Name, $TITLE$
     Write Registry Key HKLM\SOFTWARE\$WOW6432NODE$ASCOM\Platform\Platform Product Code, $PRODUCTCODE$

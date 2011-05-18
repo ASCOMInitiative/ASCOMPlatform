@@ -139,6 +139,9 @@ Comment
 Comment
 Set Variable
 Set Variable
+Comment
+Comment
+Get File Version
 Code Folding Region
 Comment
 Comment
@@ -828,6 +831,7 @@ Write Registry
 Write Registry
 Write Registry
 Write Registry
+Write Registry
 Code Folding Region
 Code Folding Region
 Comment
@@ -1269,6 +1273,9 @@ $
 {975A5F71-CFE2-4FC0-92CE-03515DCED696}
 {3058A604-212A-42C5-8228-28E83CE9FE52}
 {BFF1352B-E850-4E52-A789-6523ED22D508}
+{5B6C62AC-C7A0-472A-8D13-F1B941C71652}
+{CAF0E4DA-0923-4254-9CD8-227B166F65DA}
+{9F6EBC19-BF11-471A-A2E2-EFC05352F3DF}
 {AB277D12-13AE-46F2-B4E2-12C520DC6EA8}
 {B96BF1FD-FBA4-4D09-8D1B-0AF6F644CB7F}
 {01B1F73B-FD2E-4826-9655-631FBDDFE68F}
@@ -1943,6 +1950,7 @@ $
 {1DDCD4CB-4D72-4E5E-ACC1-65E7C3B23C28}
 {BD13406C-6E56-4A1D-A0D0-90F9750A9E16}
 {DE5AD0F2-57D5-4F8D-AD86-7BFE3BFD964D}
+{3145989B-4510-4D37-971C-3FA71390B192}
 {4B82FF86-08DB-4357-B3C9-ACEEA4760E95}
 {D005D94D-E773-462D-A222-095E4B185C7E}
 {32CEBC0B-E0E2-419A-A1D2-6252FF92610F}
@@ -2516,6 +2524,10 @@ Set  up start menu variables, ASCOMSTARTMENU is the name of the Platform folder
 
 {85C660CD-6423-4009-806C-B3402429CB48}
 
+{5B6C62AC-C7A0-472A-8D13-F1B941C71652}
+
+{CAF0E4DA-0923-4254-9CD8-227B166F65DA}
+Get the build version into a variable so it can be written to the Profile
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -6494,6 +6506,14 @@ Platform Version
 $VERSION$
 TRUE
 FALSE
+{3145989B-4510-4D37-971C-3FA71390B192}
+0
+2
+SOFTWARE\$WOW6432NODE$ASCOM\Platform
+Platform Build
+$PLATFORMBUILDVERSION$
+TRUE
+FALSE
 {8AA36511-3191-491E-876E-DE65536D79FE}
 $COMMONFILES$\ASCOM\.net
 GACInstall.exe
@@ -7250,6 +7270,9 @@ TRUE
 ..\..\..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll
 TRUE
 
+{9F6EBC19-BF11-471A-A2E2-EFC05352F3DF}
+$SUPPORTDIR$\UninstallAscom.exe
+PLATFORMBUILDVERSION
 {832FEADB-3683-45B9-9713-8468286F1512}
 SUCCESS
 {B6FE6446-C956-47F3-BD07-E1937CB75F1A}
@@ -7876,21 +7899,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -7898,12 +7906,6 @@ C
 
 
 
-
-
-
-
-
-C
 
 
 
@@ -7936,6 +7938,30 @@ C
 
 
 
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
 C
 
 
@@ -7964,231 +7990,6 @@ C
 
 C
 C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -8317,6 +8118,232 @@ C
 
 
 C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
 
 
 
@@ -8813,6 +8840,10 @@ C
 
 
 $
+
+
+
+
 
 
 
