@@ -242,6 +242,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SimulatorDescriptor.vb" />
+    <Compile Include="VersionForm.Designer.vb">
+      <DependentUpon>VersionForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="VersionForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ConnectForm.resx">
@@ -258,6 +264,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SerialForm.resx">
       <DependentUpon>SerialForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VersionForm.resx">
+      <DependentUpon>VersionForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
