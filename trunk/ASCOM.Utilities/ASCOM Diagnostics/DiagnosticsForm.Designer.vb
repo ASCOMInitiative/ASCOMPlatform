@@ -47,9 +47,10 @@ Partial Class DiagnosticsForm
         Me.MenuTimerTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuSimulatorTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuDriverAccessTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblAction = New System.Windows.Forms.Label()
         Me.btnLastLog = New System.Windows.Forms.Button()
-        Me.MenuDriverAccessTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -109,7 +110,7 @@ Partial Class DiagnosticsForm
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuChooseDevice, Me.mnuTools, Me.mnuTrace})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuChooseDevice, Me.mnuTools, Me.mnuTrace, Me.AboutToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(530, 24)
@@ -228,6 +229,12 @@ Partial Class DiagnosticsForm
         Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuSimulatorTraceEnabled.Text = "Simulator Trace Enabled"
         '
+        'MenuDriverAccessTraceEnabled
+        '
+        Me.MenuDriverAccessTraceEnabled.Name = "MenuDriverAccessTraceEnabled"
+        Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuDriverAccessTraceEnabled.Text = "DriverAccess Trace Enabled"
+        '
         'lblAction
         '
         Me.lblAction.AutoSize = True
@@ -250,11 +257,11 @@ Partial Class DiagnosticsForm
         Me.btnLastLog.Text = "View Last Log"
         Me.btnLastLog.UseVisualStyleBackColor = True
         '
-        'MenuDriverAccessTraceEnabled
+        'AboutToolStripMenuItem
         '
-        Me.MenuDriverAccessTraceEnabled.Name = "MenuDriverAccessTraceEnabled"
-        Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(280, 22)
-        Me.MenuDriverAccessTraceEnabled.Text = "DriverAccess Trace Enabled"
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
+        Me.AboutToolStripMenuItem.Text = "About"
         '
         'DiagnosticsForm
         '
@@ -308,5 +315,6 @@ Partial Class DiagnosticsForm
     Friend WithEvents MenuTimerTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuSimulatorTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuDriverAccessTraceEnabled As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -5263,4 +5263,8 @@ Public Class DiagnosticsForm
         MenuDriverAccessTraceEnabled.Checked = Not MenuDriverAccessTraceEnabled.Checked 'Invert the selection
         SetName(DRIVERACCESS_TRACE, MenuDriverAccessTraceEnabled.Checked.ToString)
     End Sub
+
+    Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
+        VersionForm.ShowDialog()
+    End Sub
 End Class
