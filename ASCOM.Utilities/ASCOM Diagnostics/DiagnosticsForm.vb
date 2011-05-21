@@ -3483,6 +3483,9 @@ Public Class DiagnosticsForm
         Dim ELog As EventLog
         Dim Entries As EventLogEntryCollection
         Dim EventLogs() As EventLog
+        Dim ErrorLog, MessageLog As String
+        Dim SR As StreamReader = Nothing
+
         Dim Found As Boolean
         Try
             TL.LogMessage("ScanEventLog", "Start")
@@ -3512,10 +3515,65 @@ Public Class DiagnosticsForm
                 TL.LogMessage("ScanEventLog", "ASCOM Log entries complete")
                 TL.BlankLine()
             Else
-                TL.LogMessage("ScanEventLog", "ASCOM event log not yet created")
+                LogError("ScanEventLog", "ASCOM event log does not exist!")
                 TL.BlankLine()
             End If
 
+            ErrorLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_ERRORS
+            MessageLog = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_MESSAGES
+
+            If File.Exists(MessageLog) Or File.Exists(ErrorLog) Then
+                LogError("ScanEventLog", "Errors have occured while writing to the ASCOM event log, please see detail earlier in this log.")
+                TL.LogMessage("", "")
+
+                If File.Exists(MessageLog) Then
+                    Try
+                        TL.LogMessage("ScanEventLog Found", GlobalConstants.EVENTLOG_MESSAGES)
+                        SR = File.OpenText(MessageLog)
+
+                        Do Until SR.EndOfStream 'include the file
+                            TL.LogMessage("ScanEventLog", SR.ReadLine())
+                        Loop
+
+                        TL.LogMessage("", "")
+                        SR.Close()
+                        SR.Dispose()
+                        SR = Nothing
+                    Catch ex As Exception
+                        LogException("ScanEventLog", "Exception: " & ex.ToString)
+                        If Not (SR Is Nothing) Then 'Clean up streamreader
+                            Try : SR.Close() : Catch : End Try
+                            Try : SR.Dispose() : Catch : End Try
+                            SR = Nothing
+                        End If
+                    End Try
+                End If
+
+                If File.Exists(ErrorLog) Then
+                    Try
+                        TL.LogMessage("ScanEventLog Found", GlobalConstants.EVENTLOG_ERRORS)
+                        SR = File.OpenText(ErrorLog)
+
+                        Do Until SR.EndOfStream 'include the file
+                            TL.LogMessage("ScanEventLog", SR.ReadLine())
+                        Loop
+
+                        TL.LogMessage("", "")
+                        SR.Close()
+                        SR.Dispose()
+                        SR = Nothing
+                    Catch ex As Exception
+                        LogException("ScanEventLog", "Exception: " & ex.ToString)
+                        If Not (SR Is Nothing) Then 'Clean up streamreader
+                            Try : SR.Close() : Catch : End Try
+                            Try : SR.Dispose() : Catch : End Try
+                            SR = Nothing
+                        End If
+                    End Try
+                End If
+
+            End If
+            TL.LogMessage("", "")
         Catch ex As Exception
             LogException("ScanEventLog", "Exception: " & ex.ToString)
         End Try

@@ -21,7 +21,7 @@ namespace UninstallAscom
         const string platform4164 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ASCOM Platform 4.1";
         const string platform532a = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{075F543B-97C5-4118-9D54-93910DE03FE9}";
         const string platform564a = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{075F543B-97C5-4118-9D54-93910DE03FE9}";
-        const string platform532b ="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{14C10725-0018-4534-AE5E-547C08B737B7}";
+        const string platform532b = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{14C10725-0018-4534-AE5E-547C08B737B7}";
         const string platform564b = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{14C10725-0018-4534-AE5E-547C08B737B7}";
         const string platform5532 = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ASCOM.Platform.NET.Components_is1";
         const string platform5564 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\ASCOM.Platform.NET.Components_is1";
@@ -35,22 +35,22 @@ namespace UninstallAscom
         const int CSIDL_PROGRAM_FILES_COMMONX86 = 44; // 0x002c
         const int CSIDL_SYSTEM = 37;// 0x0025,
         const int CSIDL_SYSTEMX86 = 41; // 0x0029,
-        
+
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsWow64Process(
             [In] IntPtr hProcess,
             [Out] out bool wow64Process
-        ); 
+        );
 
         [DllImport("Shell32.dll")]
-        static extern int SHGetSpecialFolderPath([In] IntPtr hwndOwner, 
-                                                 [Out] StringBuilder lpszPath, 
-                                                 [In] int nFolder, 
+        static extern int SHGetSpecialFolderPath([In] IntPtr hwndOwner,
+                                                 [Out] StringBuilder lpszPath,
+                                                 [In] int nFolder,
                                                  [In] int fCreate);
 
         static TraceLogger TL;
-        static RegistryAccess RegAccess; 
+        static RegistryAccess RegAccess;
         static string AscomDirectory;
         static int ReturnCode = 0;
 
@@ -58,7 +58,7 @@ namespace UninstallAscom
         {
             try
             {
-                TL = new TraceLogger("","UninstallASCOM"); // Create a tracelogger so we can log what happens
+                TL = new TraceLogger("", "UninstallASCOM"); // Create a tracelogger so we can log what happens
                 TL.Enabled = true;
 
                 LogMessage("Uninstall", "Creating RegistryAccess object");
@@ -67,7 +67,7 @@ namespace UninstallAscom
                 // This has been removed because it destroys the ability to remove 5.5 after use and does NOT restore all the 
                 // Platform 5 files resulting in an unexpected automatic repair. Its left here just in case, Please DO NOT RE-ENABLE THIS FEATURE unless have a way round the resulting issues
                 // CreateRestorePoint(); 
-                            
+
                 LogMessage("Uninstall", "Removing previous versions of ASCOM....");
 
                 //Initial setup
@@ -75,7 +75,7 @@ namespace UninstallAscom
                 bool is64BitOperatingSystem = is64BitProcess || InternalCheckIsWow64();
                 LogMessage("Uninstall", "OS is 64bit: " + is64BitOperatingSystem.ToString() + ", Process is 64bit: " + is64BitProcess.ToString());
 
-                string platform4164KeyValue = null; 
+                string platform4164KeyValue = null;
                 string platform564aKeyValue = null;
                 string platform564bKeyValue = null;
                 string platform564KeyValue = null;
@@ -187,7 +187,7 @@ namespace UninstallAscom
                     LogMessage("Uninstall", "64 Removing ASCOM 4.1... " + platform4164KeyValue);
                     found = true;
 
-                    string[] vals = platform4164KeyValue.Split(new string[] {" "},System.StringSplitOptions.RemoveEmptyEntries);
+                    string[] vals = platform4164KeyValue.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries);
                     LogMessage("Uninstall", @"Found uninstall values: """ + vals[0] + @""", """ + vals[1] + @"""");
 
                     RunProcess(vals[0], @"/S /Z " + vals[1]);
@@ -230,14 +230,14 @@ namespace UninstallAscom
                 }
                 else if ((platform564KeyValue != null) | (platform532KeyValue != null))
                 {
-                    LogMessage("Uninstall", "Restoring Platform 5 Profile"); 
+                    LogMessage("Uninstall", "Restoring Platform 5 Profile");
                     RegAccess.RestoreProfile("5");
                 }
 
                 LogMessage("Uninstall", "Disposing of registry access object");
                 RegAccess.Dispose();
                 RegAccess = null;
-                LogMessage("Uninstall", "Completed uninstall process"); 
+                LogMessage("Uninstall", "Completed uninstall process");
             }
             catch (Exception ex)
             {
@@ -252,7 +252,7 @@ namespace UninstallAscom
             return ReturnCode;
         }
 
-        public static void FixHelper( string HelperName, int MajorVersion, int MinorVersion)
+        public static void FixHelper(string HelperName, int MajorVersion, int MinorVersion)
         {
             StringBuilder PathShell = new StringBuilder(260);
             try
@@ -260,7 +260,7 @@ namespace UninstallAscom
                 string HelperFileName = AscomDirectory + @"\" + HelperName;
                 LogMessage("FixHelper", "Ensuring " + HelperName + " is a Platform 5 version: " + HelperFileName);
                 FileVersionInfo FVInfo = FileVersionInfo.GetVersionInfo(HelperFileName);
-                LogMessage("FixHelper", "  Found version : " + FVInfo.FileMajorPart.ToString() + "." + FVInfo.FileMinorPart.ToString() + "." + FVInfo.FileBuildPart.ToString()  + "." + FVInfo.FilePrivatePart.ToString());
+                LogMessage("FixHelper", "  Found version : " + FVInfo.FileMajorPart.ToString() + "." + FVInfo.FileMinorPart.ToString() + "." + FVInfo.FileBuildPart.ToString() + "." + FVInfo.FilePrivatePart.ToString());
                 if ((((FVInfo.FileMajorPart * 0x1000) + FVInfo.FileMinorPart) > ((MajorVersion * 0x1000) + MinorVersion))) // Version is not 5.0.x.x so replace
                 {
                     LogMessage("FixHelper", "  File does not match required version number: " + MajorVersion.ToString() + "." + MinorVersion.ToString() + ".x.x, restoring original Platform 5 file");
@@ -269,7 +269,7 @@ namespace UninstallAscom
                         File.Copy(HelperName, HelperFileName, true); // Copy from the installer directory to the ASCOM directory on this system
                         LogMessage("FixHelper", "  File copied OK");
                         FVInfo = FileVersionInfo.GetVersionInfo(HelperFileName);
-                        LogMessage("FixHelper", "  Restored version : " + FVInfo.FileMajorPart.ToString() + "." + FVInfo.FileMinorPart.ToString() + "." + FVInfo.FileBuildPart.ToString()  + "." + FVInfo.FilePrivatePart.ToString());
+                        LogMessage("FixHelper", "  Restored version : " + FVInfo.FileMajorPart.ToString() + "." + FVInfo.FileMinorPart.ToString() + "." + FVInfo.FileBuildPart.ToString() + "." + FVInfo.FilePrivatePart.ToString());
                         if ((((FVInfo.FileMajorPart * 0x1000) + FVInfo.FileMinorPart) > ((MajorVersion * 0x1000) + MinorVersion))) // Version is not 5.0.x.x so replace
                         {
                             LogMessage("FixHelper", "  ERROR incorrect file still in place!");
@@ -321,28 +321,53 @@ namespace UninstallAscom
                 LogError("FixHelper", "FixHelper exception: " + ex.ToString());
             }
         }
-   
+
         //log messages and send to screen when appropriate
         public static void LogMessage(string section, string logMessage)
         {
-            Console.WriteLine(logMessage);
-            TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
-            EventLogCode.LogEvent("UninstallAscom", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.UninstallASCOMInfo, "");
+            // Make sure none of these failing stops the overall migration process
+            try 
+            { 
+                Console.WriteLine(logMessage); 
+            } 
+            catch { }
+            try 
+            {
+                TL.LogMessageCrLf(section, logMessage);  // The CrLf version is used in order properly to format exception messages
+            } 
+            catch { }
+            try
+            {
+                EventLogCode.LogEvent("UninstallAscom", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.UninstallASCOMInfo, "");
+            }
+            catch { }
         }
 
         //log error messages and send to screen when appropriate
         public static void LogError(string section, string logMessage)
         {
+            try 
+            { 
             Console.WriteLine(logMessage);
+            }
+            catch { }
+            try 
+            { 
             TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
+            }
+            catch { }
+            try 
+            { 
             EventLogCode.LogEvent("UninstallAscom", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
+            }
+            catch { }
         }
-        
+
         //split the installer string
         public static string SplitKey(string keyToSplit)
         {
 
-            string[] s = keyToSplit.Split(new[] {' '});
+            string[] s = keyToSplit.Split(new[] { ' ' });
             s[1] = s[1].Replace("/I", "/q /x ");
             return s[1];
         }
@@ -376,7 +401,7 @@ namespace UninstallAscom
             // Opening the registry key
             var rk = Registry.LocalMachine;
             // Open a subKey as read-only
-            var sk1 = rk.OpenSubKey(subKey,false);
+            var sk1 = rk.OpenSubKey(subKey, false);
             // If the RegistrySubKey doesn't exist -> (null)
             if (sk1 == null)
             {
@@ -415,7 +440,7 @@ namespace UninstallAscom
             return false;
         }
 
-        
+
         // Clean up debris left over from 4
         protected static void CleanUp4()
         {
@@ -426,7 +451,7 @@ namespace UninstallAscom
                 RK.DeleteSubKeyTree(@"Telescope Drivers\SS2K.Telescope");
                 LogMessage("CleanUp4", @"Deleted Registry: Telescope Drivers\SS2K.Telescope");
             }
-            catch {}
+            catch { }
 
             try
             {
@@ -463,36 +488,36 @@ namespace UninstallAscom
         //clean up any left over files from 5.5
         public static void CleanUp55()
         {
-                //start menu
-                var startMenuDir = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
-                var shortcut = Path.Combine(startMenuDir, @"Programs\ASCOM Platform");
-                LogMessage("CleanUp55", "Start Menu Path: " + shortcut);
-                if (Directory.Exists(shortcut))
-                    DeleteDirectory(shortcut);
+            //start menu
+            var startMenuDir = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+            var shortcut = Path.Combine(startMenuDir, @"Programs\ASCOM Platform");
+            LogMessage("CleanUp55", "Start Menu Path: " + shortcut);
+            if (Directory.Exists(shortcut))
+                DeleteDirectory(shortcut);
 
-                //clean up prog files
-                const string ascomDir = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ASCOM Platform";
-                LogMessage("CleanUp55", "ProgramData Path: " + ascomDir);
-                if (Directory.Exists(ascomDir))
-                    DeleteDirectory(ascomDir);
+            //clean up prog files
+            const string ascomDir = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ASCOM Platform";
+            LogMessage("CleanUp55", "ProgramData Path: " + ascomDir);
+            if (Directory.Exists(ascomDir))
+                DeleteDirectory(ascomDir);
 
-                //clean up files
-                /*string pathToAscom = AscomDirectory + @"\ASCOM\.net"; //Remove the .net directory to fully clean this up
-                LogMessage("CleanUp55", "ASCOM .net Path: " + pathToAscom);
-                if (Directory.Exists(pathToAscom))
-                    DeleteDirectory(pathToAscom);
-                */
-                //clean up files
-                const string pathToAscom1 = @"C:\Program Files (x86)\ASCOM";
-                LogMessage("CleanUp55", "ASCOM Program Files (x86) Path: " + pathToAscom1); 
-                if (Directory.Exists(pathToAscom1))
-                    DeleteDirectory(pathToAscom1);
+            //clean up files
+            /*string pathToAscom = AscomDirectory + @"\ASCOM\.net"; //Remove the .net directory to fully clean this up
+            LogMessage("CleanUp55", "ASCOM .net Path: " + pathToAscom);
+            if (Directory.Exists(pathToAscom))
+                DeleteDirectory(pathToAscom);
+            */
+            //clean up files
+            const string pathToAscom1 = @"C:\Program Files (x86)\ASCOM";
+            LogMessage("CleanUp55", "ASCOM Program Files (x86) Path: " + pathToAscom1);
+            if (Directory.Exists(pathToAscom1))
+                DeleteDirectory(pathToAscom1);
 
-                //clean up files
-                const string pathToAscom2 = @"C:\Program Files\ASCOM";
-                LogMessage("CleanUp55", "ASCOM Program Files Path: " + pathToAscom2);
-                if (Directory.Exists(pathToAscom2))
-                    DeleteDirectory(pathToAscom2);
+            //clean up files
+            const string pathToAscom2 = @"C:\Program Files\ASCOM";
+            LogMessage("CleanUp55", "ASCOM Program Files Path: " + pathToAscom2);
+            if (Directory.Exists(pathToAscom2))
+                DeleteDirectory(pathToAscom2);
         }
 
         //reset the file attributes and then deletes the file
@@ -526,7 +551,7 @@ namespace UninstallAscom
                 return false;
             }
 
-        } 
+        }
 
         public static void Pic()
         {
@@ -547,7 +572,7 @@ namespace UninstallAscom
 
         protected static void RemoveAssembly(string AssemblyName)
         {
-            LogMessage("RemoveAssembly", "Uninstalling: " + AssemblyName); 
+            LogMessage("RemoveAssembly", "Uninstalling: " + AssemblyName);
 
             // Get an IAssemblyCache interface
             IAssemblyCache pCache = AssemblyCache.CreateAssemblyCache();
@@ -561,19 +586,19 @@ namespace UninstallAscom
             switch (puldisposition)
             {
                 case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_ALREADY_UNINSTALLED:
-                    LogMessage("RemoveAssembly","Outcome: Assembly already uninstalled"); break;
+                    LogMessage("RemoveAssembly", "Outcome: Assembly already uninstalled"); break;
                 case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_DELETE_PENDING:
-                    LogMessage("RemoveAssembly","Outcome: Delete currently pending"); break;
+                    LogMessage("RemoveAssembly", "Outcome: Delete currently pending"); break;
                 case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_HAS_INSTALL_REFERENCES:
-                    LogMessage("RemoveAssembly","Outcome: Assembly has remaining install references"); break;
+                    LogMessage("RemoveAssembly", "Outcome: Assembly has remaining install references"); break;
                 case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_REFERENCE_NOT_FOUND:
-                    LogMessage("RemoveAssembly","Outcome: Unable to find assembly - " + AssemblyName); break;
+                    LogMessage("RemoveAssembly", "Outcome: Unable to find assembly - " + AssemblyName); break;
                 case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_STILL_IN_USE:
-                    LogMessage("RemoveAssembly","Outcome: Assembly still in use"); break;
+                    LogMessage("RemoveAssembly", "Outcome: Assembly still in use"); break;
                 case IASSEMBLYCACHE_UNINSTALL_DISPOSITION.IASSEMBLYCACHE_UNINSTALL_DISPOSITION_UNINSTALLED:
-                    LogMessage("RemoveAssembly","Outcome: Assembly uninstalled"); break;
+                    LogMessage("RemoveAssembly", "Outcome: Assembly uninstalled"); break;
                 default:
-                    LogMessage("RemoveAssembly","Unknown uninstall outcome code: " + puldisposition); break;
+                    LogMessage("RemoveAssembly", "Unknown uninstall outcome code: " + puldisposition); break;
             }
 
         }
@@ -594,7 +619,7 @@ namespace UninstallAscom
                 oInParams["EventType"] = 100;
 
                 ManagementBaseObject oOutParams = oProcess.InvokeMethod("CreateRestorePoint", oInParams, null);
-                LogMessage("CreateRestorePoint", "Returned from CreateRestorePoint method" );
+                LogMessage("CreateRestorePoint", "Returned from CreateRestorePoint method");
             }
             catch (Exception ex)
             {

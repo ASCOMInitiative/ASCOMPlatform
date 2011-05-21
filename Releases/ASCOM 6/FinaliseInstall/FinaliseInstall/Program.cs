@@ -18,7 +18,7 @@ namespace ConsoleApplication1
     {
 
         [DllImport("ole32.dll")]
-        static extern int CLSIDFromProgID( [MarshalAs(UnmanagedType.LPWStr)] string lpszProgID, out Guid pclsid);
+        static extern int CLSIDFromProgID([MarshalAs(UnmanagedType.LPWStr)] string lpszProgID, out Guid pclsid);
 
         static private Type tProfile;												// Late bound Helper.Profile
         static private object oProfile;
@@ -26,13 +26,13 @@ namespace ConsoleApplication1
         private const string sMsgTitle = "ASCOM Platform 6 Install Finaliser";
         static int ReturnCode = 0;
 
-        static int  Main(string[] args)
+        static int Main(string[] args)
         {
             TL = new TraceLogger("", "FinaliseInstall"); // Create a tracelogger so we can log what happens
             TL.Enabled = true;
 
             LogMessage("FinaliseInstall", "Starting finalise process");
-            
+
             tProfile = Type.GetTypeFromProgID("DriverHelper.Profile");					// Late bound Helper.Profile
             oProfile = Activator.CreateInstance(tProfile);
 
@@ -370,17 +370,42 @@ namespace ConsoleApplication1
         //log messages and send to screen when appropriate
         public static void LogMessage(string section, string logMessage)
         {
-            Console.WriteLine(logMessage);
-            TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
-            EventLogCode.LogEvent("FinaliseInstall", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.UninstallASCOMInfo, "");
+            // Make sure none of these failing stops the overall migration process
+            try
+            {
+                Console.WriteLine(logMessage);
+            }
+            catch { }
+            try
+            {
+                TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
+            }
+            catch { }
+            try
+            {
+                EventLogCode.LogEvent("FinaliseInstall", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.UninstallASCOMInfo, "");
+            }
+            catch { }
         }
 
         //log error messages and send to screen when appropriate
         public static void LogError(string section, string logMessage)
         {
-            Console.WriteLine(logMessage);
-            TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
-            EventLogCode.LogEvent("FinaliseInstall", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
+            try
+            {
+                Console.WriteLine(logMessage);
+            }
+            catch { }
+            try
+            {
+                TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
+            }
+            catch { }
+            try
+            {
+                EventLogCode.LogEvent("FinaliseInstall", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
+            }
+            catch { }
         }
 
         protected static void FinaliseRestorePoint()
