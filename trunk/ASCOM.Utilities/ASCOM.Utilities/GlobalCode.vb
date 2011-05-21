@@ -157,22 +157,67 @@ Module EventLogCode
     Friend Sub LogEvent(ByVal Caller As String, ByVal Msg As String, ByVal Severity As EventLogEntryType, ByVal Id As EventLogErrors, ByVal Except As String)
         Dim ELog As EventLog, MsgTxt As String
 
-        If Not EventLog.SourceExists(EVENT_SOURCE) Then 'Create the event log if it doesn't exist
-            EventLog.CreateEventSource(EVENT_SOURCE, EVENTLOG_NAME)
+        ' During Platform 6 RC testing a report was received showing that a failure in this code had caused a bad Profile migration
+        ' There was no problem with the migration code, the issue was caused by the event log code throwing an unexpected exception back to MigrateProfile
+        ' It is wrong that an error in logging code should cause a client process to fail, so this code has been 
+        ' made more robust and ultimately will swallow exceptions silently rather than throwing an unexpected exception back to the caller
+
+        Try
+            If Not EventLog.SourceExists(EVENT_SOURCE) Then 'Create the event log if it doesn't exist
+                EventLog.CreateEventSource(EVENT_SOURCE, EVENTLOG_NAME)
+                ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE) 'Create a pointer to the event log
+                ELog.ModifyOverflowPolicy(OverflowAction.OverwriteAsNeeded, 0) 'Force the policy to overwrite oldest
+                ELog.MaximumKilobytes = 1024 ' Set the maximum log size to 1024kb, the Win 7 minimum size
+                ELog.Close() 'Force the log file to be created by closing the log
+                ELog.Dispose()
+                ELog = Nothing
+
+                'MSDN documentation advises waiting before writing, first time to a newly created event log file but doesn't say how long...
+                ' Waiting 3 seconds to allow the log to be created by the OS
+                Threading.Thread.Sleep(3000)
+
+                'Try and create the initial log message
+                ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE) 'Create a pointer to the event log
+                ELog.WriteEntry("Successfully created event log - Policy: " & ELog.OverflowAction.ToString & ", Size: " & ELog.MaximumKilobytes & "kb", EventLogEntryType.Information, EventLogErrors.EventLogCreated)
+                ELog.Close()
+                ELog.Dispose()
+            End If
+
+            ' Write the event to the log
             ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE) 'Create a pointer to the event log
-            ELog.ModifyOverflowPolicy(OverflowAction.OverwriteAsNeeded, 0) 'Force the policy to overwrite oldest
-            ELog.MaximumKilobytes = 1024 ' Set the maximum log size to 1024kb, the Win 7 minimum size
-            ELog.WriteEntry("Successfully created event log - Policy: " & ELog.OverflowAction.ToString & ", Size: " & ELog.MaximumKilobytes & "kb", EventLogEntryType.Information, EventLogErrors.EventLogCreated)
+
+            MsgTxt = Caller & " - " & Msg 'Format the message to be logged
+            If Not Except Is Nothing Then MsgTxt += vbCrLf & Except
+            ELog.WriteEntry(MsgTxt, Severity, Id) 'Write the message to the error log
+
             ELog.Close()
             ELog.Dispose()
-        End If
-        ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE) 'Create a pointer to the event log
+        Catch ex As System.ComponentModel.Win32Exception ' Special handling because these exceptions contain error codes we may want to know
+            Try
+                Dim TodaysDateTime As String = Format(Now(), "dd MMMM yyyy HH:mm:ss.fff")
+                Dim ErrorLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_ERRORS
+                Dim MessageLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_MESSAGES
 
-        MsgTxt = Caller & " - " & Msg 'Format the message to be logged
-        If Not Except Is Nothing Then MsgTxt += vbCrLf & Except
-        ELog.WriteEntry(MsgTxt, Severity, Id) 'Write the message to the error log
-        ELog.Close()
-        ELog.Dispose()
+                ' Write to backup eventlog message and error logs
+                File.AppendAllText(ErrorLog, TodaysDateTime & " ErrorCode: 0x" & Hex(ex.ErrorCode) & " NativeErrorCode: 0x" & Hex(ex.NativeErrorCode) & " " & ex.ToString & vbCrLf)
+                File.AppendAllText(MessageLog, TodaysDateTime & " " & Caller & " " & Msg & " " & Severity.ToString & " " & Id.ToString & " " & Except & vbCrLf)
+            Catch ex1 As Exception ' Ignore exceptions here, the PC seems to be in a catastrophic failure!
+
+            End Try
+        Catch ex As Exception ' Catch all other exceptions
+            'Somthing bad happened when writing to the event log so try and log it in a log file on the file system
+            Try
+                Dim TodaysDateTime As String = Format(Now(), "dd MMMM yyyy HH:mm:ss.fff")
+                Dim ErrorLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_ERRORS
+                Dim MessageLog As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & GlobalConstants.EVENTLOG_MESSAGES
+
+                ' Write to backup eventlog message and error logs
+                File.AppendAllText(ErrorLog, TodaysDateTime & " " & ex.ToString & vbCrLf)
+                File.AppendAllText(MessageLog, TodaysDateTime & " " & Caller & " " & Msg & " " & Severity.ToString & " " & Id.ToString & " " & Except & vbCrLf)
+            Catch ex1 As Exception ' Ignore exceptions here, the PC seems to be in a catastrophic failure!
+
+            End Try
+        End Try
     End Sub
 End Module
 
@@ -1030,9 +1075,9 @@ Friend Class PEReader
             If disposing Then
                 reader.Close()
 
-                Stream.Close()
-                Stream.Dispose()
-                Stream = Nothing
+                stream.Close()
+                stream.Dispose()
+                stream = Nothing
             End If
 
             ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

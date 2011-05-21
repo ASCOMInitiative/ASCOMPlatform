@@ -1,4 +1,6 @@
-﻿'Common constants for the ASCOM.Utilities namesapce
+﻿Imports System
+
+'Common constants for the ASCOM.Utilities namesapce
 
 Module GlobalConstants
     Friend Const PLATFORM_VERSION As String = "6.0" 'This is the master platform version and is set during profile migration
@@ -31,6 +33,8 @@ Module GlobalConstants
     'Settings for the ASCOM Windows event log
     Friend Const EVENT_SOURCE As String = "ASCOM Platform" 'Name of the the event source
     Friend Const EVENTLOG_NAME As String = "ASCOM" 'Name of the event log as it appears in Windows event viewer
+    Friend Const EVENTLOG_MESSAGES As String = "ASCOM\EventLogMessages.txt"
+    Friend Const EVENTLOG_ERRORS As String = "ASCOM\EventLogErrors.txt"
 
     'RegistryAccess constants
     Friend Const REGISTRY_ROOT_KEY_NAME As String = "SOFTWARE\ASCOM" 'Location of ASCOM profile in HKLM registry hive
