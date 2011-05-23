@@ -691,16 +691,70 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     Sub SetPark()
 
     ''' <summary>
-    ''' Indicates which side of the pier a German equatorial mount is currently on
+    ''' Indicates the pointing state of the mount.
     ''' </summary>
     ''' <remarks>
-    ''' It is allowed (though not required) that this property may be written to
-    ''' force the mount to flip. Doing so, however, may change the right 
-    ''' ascension of the telescope. During flipping,
-    ''' Telescope.Slewing must return True. 
-    ''' If the telescope is not a German equatorial mount (<see cref="AlignmentMode" /> is not <see cref="AlignmentModes.algGermanPolar" />), this 
-    ''' method will raise an error. 
-    ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
+    ''' <para>For historical reasons, this property's name does not reflect its true meaning. The name will not be changed (so as to preserve 
+    ''' compatibility), but the meaning has since become clear. All conventional mounts have two pointing states for a given equatorial (sky) position. 
+    ''' Mechanical limitations often make it impossible for the mount to position the optics at given HA/Dec in one of the two pointing 
+    ''' states, but there are places where the same point can be reached sensibly in both pointing states (e.g. near the pole and 
+    ''' close to the meridian). In order to understand these pointing states, consider the following (thanks to Patrick Wallace for this info):</para>
+    ''' <para>All conventional telescope mounts have two axes nominally at right angles. For an equatorial, the longitude axis is mechanical 
+    ''' hour angle and the latitude axis is mechanical declination. Sky coordinates and mechanical coordinates are two completely separate arenas. 
+    ''' This becomes rather more obvious if your mount is an altaz, but it's still true for an equatorial. Both mount axes can in principle 
+    ''' move over a range of 360 deg. This is distinct from sky HA/Dec, where Dec is limited to a 180 deg range (+90 to -90).  Apart from 
+    ''' practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis 
+    ''' is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky codeclination (90 - sky declination).</para>
+    ''' <para>Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian. 
+    ''' Choose one, and move your scope there. Once you're there, consider the two mechanical encoders zeroed. The two pointing states are, then:
+    ''' <list type="table">
+    ''' <item><term><b>Normal</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>
+    ''' <item><term><b>Beyond the pole</b></term><description>Where the mechanical Dec is in the range -180 deg to -90 deg or +90 deg to +180 deg.</description></item>
+    ''' </list>
+    ''' </para>
+    ''' <para>"Side of pier" is a "consequence" of the former definition, not something fundamental. 
+    ''' Apart from mechanical interference, the telescope can move from one side of the pier to the other without the mechanical Dec 
+    ''' having changed: you could track Polaris forever with the telescope moving from west of pier to east of pier or vice versa every 12h. 
+    ''' Thus, "side of pier" is, in general, not a useful term (except perhaps in a loose, descriptive, explanatory sense). 
+    ''' All this applies to a fork mount just as much as to a GEM, and it would be wrong to make the "beyond pole" state illegal for the 
+    ''' former. Your mount may not be able to get there if your camera hits the fork, but it's possible on some mounts. Whether this is useful 
+    ''' depends on whether you're in Hawaii or Finland.</para>
+    ''' <para>To first order, the relationship between sky and mechanical HA/Dec is as follows:</para>
+    ''' <para><b>Normal state:</b>
+    ''' <list type="bullet">
+    ''' <item><description>HA_sky  = HA_mech</description></item>
+    ''' <item><description>Dec_sky = Dec_mech</description></item>
+    ''' </list>
+    ''' </para>
+    ''' <para><b>Beyond the pole</b>
+    ''' <list type="bullet">
+    ''' <item><description>HA_sky  = HA_mech + 12h, expressed in range ± 12h</description></item>
+    ''' <item><description>Dec_sky = 180d - Dec_mech, expressed in range ± 90d</description></item>
+    ''' </list>
+    ''' </para>
+    ''' <para>Astronomy software often needs to know which which pointing state the mount is in. Examples include setting guiding polarities 
+    ''' and calculating dome opening azimuth/altitude. The meaning of the SideOfPier property, then is:
+    ''' <list type="bullet">
+    ''' <item><description>pierEast - Normal pointing state</description></item>
+    ''' <item><description>pierWest - Beyond the pole pointing state</description></item>
+    ''' </list>
+    ''' </para>
+    ''' <para>If the mount hardware reports neither the true pointing state (or equivalent) nor the mechanical declination axis position 
+    ''' (which varies from -180 to +180), a driver cannot calculate the pointing state, and *must not* implement SideOfPier.
+    ''' If the mount hardware reports only the mechanical declination axis position (-180 to +180) then a driver can calculate SideOfPier as follows:
+    ''' <list type="bullet">
+    ''' <item><description>pierEast = abs(mechanical dec) &lt;= 90 deg</description></item>
+    ''' <item><description>pierWest = abs(mechanical Dec) &gt; 90 deg</description></item>
+    ''' </list>
+    ''' </para>
+    ''' <para>It is allowed (though not required) that this property may be written to force the mount to flip. Doing so, however, may change 
+    ''' the right ascension of the telescope. During flipping, Telescope.Slewing must return True.</para>
+    ''' <para>This property is only available in telescope InterfaceVersions 2 and 3.</para>
+    ''' <para><b>Pointing State and Side of Pier - Help for Driver Developers</b></para>
+    ''' <para>A further document, "Pointing State and Side of Pier", is installed in the Developer Documentation folder by the ASCOM Developer 
+    ''' Components installer. This further explains the pointing state concept and includes diagrams illustrating how it relates 
+    ''' to physical side of pier for German equatorial telescopes. It also includes details of the tests performed by Conform to determine whether 
+    ''' the driver correctly reports the pointing state as defined above.</para>
     ''' </remarks>
     Property SideOfPier() As PierSide
 

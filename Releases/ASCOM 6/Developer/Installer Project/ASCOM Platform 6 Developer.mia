@@ -293,13 +293,15 @@ Install Files
 Install Files
 Install Files
 Install Files
-Set Variable
-Install Files
-Install Files
-Install Files
 Install Files
 Set Variable
 Install Files
+Install Files
+Install Files
+Install Files
+Set Variable
+Install Files
+Create Shortcut
 Create Shortcut
 Create Shortcut
 Create Shortcut
@@ -694,6 +696,7 @@ $
 {B4C56F48-1BFF-4D7D-8051-EDBD440086CB}
 {AEB32696-6C68-445C-AB07-5DE245FFFD2D}
 {1DC07DA9-1EEC-4170-8AB4-1E7E5C6B2D8D}
+{0B757607-DE34-4DAD-8DCC-2B15B92029A6}
 {AF656437-F350-48A3-9158-A2BBD33BB0EC}
 {3271FA9C-AB3C-47AD-87CF-42F84355CD5F}
 {371E786E-2B25-4957-9BD2-FF05346AE7E8}
@@ -715,6 +718,7 @@ $
 {6164BBCC-8F3C-4A2D-9975-22D1625D32A2}
 {E4908A1B-BF68-4E04-9935-C889916AC793}
 {ACBBA184-E349-40FD-A1BE-4AE88D234DB4}
+{22BEB51E-76A8-4F0D-B618-F4C15C80AE1C}
 {221A8A01-69CB-4B44-81CB-611CBF4BC171}
 {B36D7EB8-A369-410D-A6A9-16913BEEAC41}
 {FFF5D8FD-CDA9-4FA6-8BA7-E922004CD2BB}
@@ -2013,6 +2017,19 @@ FALSE
 FALSE
 FALSE
 FALSE
+{0B757607-DE34-4DAD-8DCC-2B15B92029A6}
+..\..\..\..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf
+FALSE|
+$TARGETDIR$\Developer Documentation
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {F26D7990-7248-42E8-983D-ED40A4ABF441}
 $TARGETDIR$\Templates\ASCOM 6 Driver Templates.vsi
 FALSE
@@ -2159,6 +2176,16 @@ $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 {ADD53AAB-8DB2-492F-8649-6C2DC33DAC6F}
 $TARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
 How to create a local server  based driver
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{22BEB51E-76A8-4F0D-B618-F4C15C80AE1C}
+$TARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
+Pointing State and Side of Pier
 $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
@@ -2836,6 +2863,8 @@ C
 
 
 
+
+
 C
 
 
@@ -2855,6 +2884,8 @@ C
 
 
 $
+
+
 
 
 
