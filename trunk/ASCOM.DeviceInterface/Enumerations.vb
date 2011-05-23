@@ -171,22 +171,18 @@ Public Enum TelescopeAxes ' BCB5C21D-B0EA-40d1-B36C-272456F44D01
 End Enum
 
 ''' <summary>
-''' The side of the pier on which the optical tube assembly is located.
-''' Only used with telescope interface versions 2 or 3
+''' The pointing state of the mount
 ''' </summary>
 ''' <remarks>
-'''		<alert class="caution">
-'''			<para>
-'''			<c>Pier side</c> is a GEM-specific term that has historically
-'''			caused much confusion. Do not confuse <c>Pier Side</c>
-'''			with <c>Pointing State</c>.
-'''			</para>
-'''		</alert>
+'''	<para><c>Pier side</c> is a GEM-specific term that has historically caused much confusion. 
+''' As of Platform 6, the PierSide property is defined to refer to pointing state. Please see <see cref="ITelescopeV3.SideOfPier" />
+''' for much more information on this topic.</para>
+''' <para>Only used with telescope interface versions 2 and later.</para>
 ''' </remarks>
 <Guid("6F0E1F45-129A-4c3a-A3B0-3611AEDB33FB"), ComVisible(True)> _
 Public Enum PierSide ' ECD99531-A2CF-4b9f-91A0-35FE5D12B043
     ''' <summary>
-    ''' Mount on East side of pier (looking West)
+    ''' Normal pointing state
     ''' </summary>
     pierEast = 0
 
@@ -196,7 +192,7 @@ Public Enum PierSide ' ECD99531-A2CF-4b9f-91A0-35FE5D12B043
     pierUnknown = -1
 
     ''' <summary>
-    ''' Mount on West side of pier (looking East)
+    ''' Through the pole pointing state
     ''' </summary>
     pierWest = 1
 End Enum
