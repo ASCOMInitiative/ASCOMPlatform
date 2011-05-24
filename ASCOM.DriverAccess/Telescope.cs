@@ -798,9 +798,9 @@ namespace ASCOM.DriverAccess
         /// </para>
         /// <para>Astronomy software often needs to know which which pointing state the mount is in. Examples include setting guiding polarities 
         /// and calculating dome opening azimuth/altitude. The meaning of the SideOfPier property, then is:
-        /// <list type="bullet">
-        /// <item><description>pierEast - Normal pointing state</description></item>
-        /// <item><description>pierWest - Beyond the pole pointing state</description></item>
+        /// <list type="table">
+        /// <item><term><b>pierEast</b></term><description>Normal pointing state</description></item>
+        /// <item><term><b>pierWest</b></term><description>Beyond the pole pointing state</description></item>
         /// </list>
         /// </para>
         /// <para>If the mount hardware reports neither the true pointing state (or equivalent) nor the mechanical declination axis position 

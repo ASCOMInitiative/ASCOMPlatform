@@ -128,13 +128,23 @@
    			</content>
    		</section>
 
+        <section address="PolicyChanges">
+           	<title>Policy Changes (For Developers)</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>Support for COM early binding, introduced in Platform 5, has been frozen to ease on-going platform development.
+ 		 			The Current level of support will be retained for compatibility, but clients and drivers developed for Platform 6 and 
+ 		 			later should only use late bound COM binding.</listItem>
+				</list>
+   			</content>
+   		</section>
+
         <section address="BreakingChanges">
            	<title>Breaking Changes (For Developers)</title>
             <content>
       			<list class="bullet">
  		 			<listItem>RegisteredDevices(ByVal DeviceType As String) has been changed from a property to a method to maximise 
  		 			compatibility between .NET programming languages.</listItem>
- 		 			<listItem>Support for early COM binding, introduced in Platform 5 removed to ease on-going platform development</listItem>
 				</list>
    			</content>
    		</section>
