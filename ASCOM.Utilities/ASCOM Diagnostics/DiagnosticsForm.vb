@@ -397,7 +397,7 @@ Public Class DiagnosticsForm
                 SimulatorTests() : Action("")
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
-                    SuccessMessage = "Congratualtions, all " & NMatches & " function tests passed!"
+                    SuccessMessage = "Congratulations, all " & NMatches & " function tests passed!"
                 Else
                     SuccessMessage = "Completed function testing run: " & NMatches & " matches, " & NNonMatches & " fail(s), " & NExceptions & " exception(s)."
                     TL.BlankLine()
