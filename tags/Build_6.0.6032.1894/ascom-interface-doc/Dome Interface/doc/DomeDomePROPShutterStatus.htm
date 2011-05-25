@@ -1,0 +1,131 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Dome.ShutterStatus Property</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="DomeDomePROPShutterStatus"></a>Dome.ShutterStatus Property</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also ">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DomeDomePROPShutterStatusC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example 
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DomeDomePROPShutterStatusX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- parent class -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink">
+<param name="Text" value="Text:Dome object">
+<param name="Flags" value=",,1">
+<param name="Item1" value="">
+<param name="Item2" value="DomeCLASSDomeO">
+</object>
+</p>
+
+<p class=desc>
+<img src="images/ro.gif" width=16 height=13
+align=absmiddle>&nbsp;<b>Dome.ShutterStatus</b>&nbsp;&nbsp;(read-only, <a href="#ShutterState">ShutterState</a>)<br>
+&nbsp;<br>
+Ttatus of the dome shutter or roll-off roof.</p>
+
+<h2>Syntax</h2>
+
+<p class=indent><code>
+Dome.<b>ShutterStatus</b></code></p>
+
+<p>
+The property syntax has these parts:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Part</th>
+  <th>Description</th>
+ </tr>
+
+ <tr>
+  <td>Value&nbsp;(<a href="#ShutterState">ShutterState</a>)</td>
+  <td>Ttatus of the dome shutter or roll-off roof.</td>
+ </tr>
+</table></div><br>
+
+<h2>Remarks</h2>
+
+Raises an error only if no shutter control.  If actual shutter status can not be read, then reports back the last shutter state.
+
+<h2>Symbolic Constants</h2>
+
+<p>
+<a name="ShutterState"></a>The (symbolic) values for <b>ShutterState</b> are:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Constant</th>
+  <th>Value</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><b>shutterOpen</b></td>
+  <td>0</td>
+  <td>shutterOpen</td>
+ </tr>
+ <tr>
+  <td><b>shutterClosed</b></td>
+  <td>1</td>
+  <td>shutterClosed</td>
+ </tr>
+ <tr>
+  <td><b>shutterOpening</b></td>
+  <td>2</td>
+  <td>shutterOpening</td>
+ </tr>
+ <tr>
+  <td><b>shutterClosing</b></td>
+  <td>3</td>
+  <td>shutterClosing</td>
+ </tr>
+ <tr>
+  <td><b>shutterError</b></td>
+  <td>4</td>
+  <td>shutterError</td>
+ </tr>
+
+</table></div>
+
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2002-2003, The ASCOM Initiative</div>
+
+
+
+<object type="application/x-oleobject"
+ 	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="DomeCLASSDomeP">
+</object>
+
+</body>
+</html>
+
