@@ -19,6 +19,13 @@ Friend Class ChooserForm
     Private m_Drivers As Generic.SortedList(Of String, String)
     Private WithEvents ToolTipMsg As ToolTip
     Private DriverIsCompatible As String = ""
+    Private TL As TraceLogger
+
+    Private Sub ChooserForm_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
+        'Clean up the trace logger
+        TL.Enabled = False
+        TL.Dispose()
+    End Sub
 
     Private Sub ChooserForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim ProfileStore As RegistryAccess
@@ -27,6 +34,10 @@ Friend Class ChooserForm
         Dim Description As String
 
         Try
+            'Create the trace logger
+            TL = New TraceLogger("", "ChooserForm")
+            TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+
             'Configure the tooltip warning for driver compatibility messages
             ToolTipMsg = New ToolTip()
             ToolTipMsg.UseAnimation = True
@@ -251,8 +262,8 @@ Friend Class ChooserForm
             For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
                 If LCase(de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
             Next
-
-            DriverIsCompatible = VersionCode.DriverCompatibilityMessage(sProgID, ApplicationBits) 'Get compatibility warning message, if any
+            TL.LogMessage("DriverSelected", "ProgID:" & sProgID & ", Bitness: " & ApplicationBits.ToString)
+            DriverIsCompatible = VersionCode.DriverCompatibilityMessage(sProgID, ApplicationBits, TL) 'Get compatibility warning message, if any
 
             If DriverIsCompatible <> "" Then 'This is an incompatible driver
                 Me.cmdProperties.Enabled = False ' So prevent access!
