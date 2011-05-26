@@ -476,16 +476,18 @@ Module VersionCode
     ''' <param name="RequiredBitness">Application bitness for which application compatibility should be tested</param>
     ''' <returns>String compatibility message or empty string if driver is fully compatible</returns>
     ''' <remarks></remarks>
-    Friend Function DriverCompatibilityMessage(ByVal ProgID As String, ByVal RequiredBitness As Bitness) As String
+    Friend Function DriverCompatibilityMessage(ByVal ProgID As String, ByVal RequiredBitness As Bitness, ByVal TL As TraceLogger) As String
         'Dim Drivers32Bit, Drivers64Bit As Generic.SortedList(Of String, String)
         Dim ProfileStore As RegistryAccess
         Dim InProcServer As PEReader = Nothing, Registered64Bit As Boolean, InprocServerBitness As Bitness
         Dim RK, RKInprocServer32 As RegistryKey, CLSID, InprocFilePath, CodeBase As String
+        Dim RK32 As RegistryKey = Nothing
+        Dim RK64 As RegistryKey = Nothing
 
         ProfileStore = New RegistryAccess("DriverCompatibilityMessage") 'Get access to the profile store
 
         DriverCompatibilityMessage = "" 'Set default return value as OK
-
+        TL.LogMessage("DriverCompatibility", "     ProgID: " & ProgID & ", Bitness: " & RequiredBitness.ToString)
         'Parse the COM registry section to determine whether this ProgID is an in-process DLL server.
         'If it is then parse the executable to determine whether it is a 32bit only driver and gie a suitable message if it is
         'Picks up some COM registration issues as well as a by-product.
@@ -497,9 +499,11 @@ Module VersionCode
 
                 RK = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID) ' Check the 64bit registry section for this CLSID
                 If RK Is Nothing Then 'We don't have an entry in the 64bit CLSID registry section so try the 32bit section
+                    TL.LogMessage("DriverCompatibility", "     No entry in the 64bit registry, checking the 32bit registry")
                     RK = Registry.ClassesRoot.OpenSubKey("Wow6432Node\CLSID\" & CLSID) 'Check the 32bit registry section
                     Registered64Bit = False
                 Else
+                    TL.LogMessage("DriverCompatibility", "     Found entry in the 64bit registry")
                     Registered64Bit = True
                 End If
                 If Not RK Is Nothing Then 'We have a CLSID entry so process it
@@ -551,17 +555,42 @@ Module VersionCode
             Else 'No COM ProgID registry entry
                 DriverCompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
             End If
-        Else 'We are a 32bit application so make sure the executable is not 64bit only
+        Else 'We are running a 32bit application test so make sure the executable is not 64bit only
             RK = Registry.ClassesRoot.OpenSubKey(ProgID & "\CLSID", False) 'Look in the 32bit registry
+
             If Not RK Is Nothing Then ' ProgID is registered and has a CLSID!
+                TL.LogMessage("DriverCompatibility", "     Found 32bit ProgID registration")
                 CLSID = RK.GetValue("").ToString 'Get the CLSID for this ProgID
                 RK.Close()
+                RK = Nothing
 
-                RK = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID) ' Check the 32bit registry section for this CLSID
-                If RK Is Nothing And ApplicationBits() = Bitness.Bits64 Then 'check the 32bit registry sectionon a 64bit machine
-                    RK = Registry.ClassesRoot.OpenSubKey("Wow6432Node\CLSID\" & CLSID) ' Check the 32bit registry section for this CLSID
+                If OSBits() = Bitness.Bits64 Then ' We want to test as if we are a 32bit app on a 64bit OS
+                    Try
+                        RK32 = ProfileStore.OpenSubKey(Registry.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                    Catch ex As Exception 'Ignore any exceptions, they just mean the operation wasn't successful
+                    End Try
+
+                    Try
+                        RK64 = ProfileStore.OpenSubKey(Registry.ClassesRoot, "CLSID\" & CLSID, False, RegistryAccess.RegWow64Options.KEY_WOW64_64KEY)
+                    Catch ex As Exception 'Ignore any exceptions, they just mean the operation wasn't successful
+                    End Try
+
+                Else ' We are running on a 32bit OS
+                    RK = Registry.ClassesRoot.OpenSubKey("CLSID\" & CLSID) ' Check the 32bit registry section for this CLSID
+                    TL.LogMessage("DriverCompatibility", "     Running on a 32bit OS, 32Bit Registered: " & (Not RK Is Nothing))
                 End If
+
+                If OSBits() = Bitness.Bits64 Then
+                    TL.LogMessage("DriverCompatibility", "     Running on a 64bit OS, 32bit Registered: " & (Not RK32 Is Nothing) & ", 64Bit Registered: " & (Not RK64 Is Nothing))
+                    If Not RK32 Is Nothing Then 'We are testing as a 32bit app so if there is a 32bit key return this
+                        RK = RK32
+                    Else 'Otherwise return the 64bit key
+                        RK = RK64
+                    End If
+                End If
+
                 If Not RK Is Nothing Then 'We have a CLSID entry so process it
+                    TL.LogMessage("DriverCompatibility", "     Found CLSID entry")
                     RKInprocServer32 = RK.OpenSubKey("InprocServer32")
                     RK.Close()
                     If Not RKInprocServer32 Is Nothing Then ' This is an in process server so test for compatibility
@@ -595,13 +624,14 @@ Module VersionCode
                     End If
                 Else 'Cannot find a CLSID entry
                     DriverCompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
+                    TL.LogMessage("DriverCompatibility", "     Could not find CLSID entry!")
                 End If
             Else 'No COM ProgID registry entry
                 DriverCompatibilityMessage = "This driver is not registered for COM (can't find ProgID), please re-install."
             End If
 
         End If
-
+        TL.LogMessage("DriverCompatibility", "     Returning: """ & DriverCompatibilityMessage & """")
         Return DriverCompatibilityMessage
     End Function
 

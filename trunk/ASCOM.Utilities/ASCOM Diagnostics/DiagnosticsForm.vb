@@ -4879,14 +4879,14 @@ Public Class DiagnosticsForm
                 TL.LogMessage("Registered Device Type", DeviceType)
                 For Each Device As KeyValuePair In Devices
                     TL.LogMessage("Registered Devices", "   " & Device.Key & " - " & Device.Value)
-                    CompatibiityMessage32Bit = DriverCompatibilityMessage(Device.Key, Bitness.Bits32)
+                    CompatibiityMessage32Bit = DriverCompatibilityMessage(Device.Key, Bitness.Bits32, TL)
                     If CompatibiityMessage32Bit = "" Then CompatibiityMessage32Bit = "OK for 32bit applications"
-                    TL.LogMessage("Registered Devices", "     " & CompatibiityMessage32Bit)
+                    TL.LogMessage("Registered Devices", "       " & CompatibiityMessage32Bit)
 
                     If ApplicationBits() = Bitness.Bits64 Then 'We are on a 64bit system so test this
-                        CompatibiityMessage64Bit = DriverCompatibilityMessage(Device.Key, Bitness.Bits64)
+                        CompatibiityMessage64Bit = DriverCompatibilityMessage(Device.Key, Bitness.Bits64, TL)
                         If CompatibiityMessage64Bit = "" Then CompatibiityMessage64Bit = "OK for 64bit applications"
-                        TL.LogMessage("Registered Devices", "     " & CompatibiityMessage64Bit)
+                        TL.LogMessage("Registered Devices", "       " & CompatibiityMessage64Bit)
                     End If
 
                 Next
