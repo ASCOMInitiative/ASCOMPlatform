@@ -675,12 +675,12 @@ else
     Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\Win32\Release\NOVAS3.pdb to $COMMONFILES$\ASCOM\Astrometry
     Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.dll to $COMMONFILES$\ASCOM\Astrometry
     Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS3\x64\Release\NOVAS3-64.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Install Files ..\..\..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
     Install Files ..\..\..\..\NOVAS\NOVAS-3\CioFile\cio_ra.bin to $COMMONFILES$\ASCOM\Astrometry
-    Install Files ..\..\..\..\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files ..\..\..\..\ASCOM.Utilities\NOVAS-C x86-x64\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
-    Install Files ..\..\..\..\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files ..\..\..\..\ASCOM.Utilities\NOVAS-C x86-x64\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\ASCOM.Astrometry\JPL Ephemeris 421\JPLEPH to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\NOVAS\NOVAS-C\Win32\Release\NOVAS-C.pdb to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\NOVAS\NOVAS-C\x64\Release\NOVAS-C64.pdb to $COMMONFILES$\ASCOM\Astrometry
     Comment: Platform 6 Internal
     Install Files ..\..\..\..\ASCOM.Utilities\MigrateProfile\bin\Release\MigrateProfile.exe to $COMMONFILES$\ASCOM\Platform\Internal
     Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
