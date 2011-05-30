@@ -556,11 +556,16 @@ namespace ASCOM.DriverAccess
         /// Sets the camera cooler setpoint in degrees Celsius, and returns the current setpoint.
         /// </summary>
         /// <remarks>
+        /// <para>The driver should throw an <see cref="InvalidValueException" /> if an attempt is made to set <see cref="SetCCDTemperature" /> 
+        /// outside the valid range for the camera. As an assitance to driver authors, to protect equipment and prevent harm to individuals, 
+        /// Conform will report an issue if it is possible to set <see cref="SetCCDTemperature" /> below -280C or above +100C.</para>
         /// <b>Note:</b>  Camera hardware and/or driver should perform cooler ramping, to prevent
         /// thermal shock and potential damage to the CCD array or cooler stack.
         /// </remarks>
         /// <value>The set CCD temperature.</value>
         /// <exception cref="DriverException">Must throw exception if command not successful.</exception>
+        /// <exception cref="InvalidValueException">Must throw an InvalidValueException if an attempt is made to set a value is outside the 
+        /// camera's valid termperature setpoint range.</exception>
         /// <exception cref="PropertyNotImplementedException">Must throw exception if <see cref="CanSetCCDTemperature" /> is False.</exception>
         public double SetCCDTemperature
         {
