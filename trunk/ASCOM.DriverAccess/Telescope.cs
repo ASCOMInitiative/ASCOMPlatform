@@ -1150,7 +1150,9 @@ namespace ASCOM.DriverAccess
                 /* if (!memberFactory.IsCOMObject)
                      return memberFactory.TrackingRates;
                  else*/
-                return new TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject);
+                TL.LogMessage("TrackingRates", "Retrieving TrackingRates object");
+                TrackingRates retval = new TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject, TL);
+                return retval;
             }
         }
 
@@ -1394,6 +1396,8 @@ namespace ASCOM.DriverAccess
     {
         Type objTypeTrackingRates;
         object objTrackingRatesLateBound;
+        TraceLogger TL;
+
         // private static int pos = 0;
 
         /// <summary>
@@ -1401,7 +1405,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="objTypeScope">The type of the supplied object</param>
         /// <param name="objScopeLateBound">The object representing the telescope device</param>
-        public TrackingRates(Type objTypeScope, object objScopeLateBound)
+        /// <param name="TraceLog">A pointer to a trace loger in which to record trace information</param>
+        public TrackingRates(Type objTypeScope, object objScopeLateBound, TraceLogger TraceLog)
         {
             objTrackingRatesLateBound = objTypeScope.InvokeMember("TrackingRates",
                                                                   BindingFlags.Default | BindingFlags.GetProperty,
@@ -1409,6 +1414,8 @@ namespace ASCOM.DriverAccess
                                                                   objScopeLateBound,
                                                                   new object[] { });
             objTypeTrackingRates = objTrackingRatesLateBound.GetType();
+            TL = TraceLog; // Save the trace logger reference
+            TL.LogMessage("TrackingRates Class","Created object: " + objTypeTrackingRates.FullName);
         }
 
         /// <summary>
@@ -1420,11 +1427,13 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                return (DriveRates)objTypeTrackingRates.InvokeMember("Item",
+                DriveRates retval = (DriveRates)objTypeTrackingRates.InvokeMember("Item",
                                                                      BindingFlags.Default | BindingFlags.GetProperty,
                                                                      null,
                                                                      objTrackingRatesLateBound,
                                                                      new object[] { index });
+                TL.LogMessage("TrackingRates Class", "DriveRates[" + index + "] " + retval.ToString());
+                return retval;
             }
         }
 
@@ -1442,7 +1451,7 @@ namespace ASCOM.DriverAccess
                                                                                   objTrackingRatesLateBound,
                                                                                   new object[] { });
             IEnumerator enumerator = (IEnumerator)enumeratorobj;
-
+            TL.LogMessage("TrackingRates Class", "Enumerator: " + enumerator.ToString());
             return enumerator;
         }
 
@@ -1453,11 +1462,13 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                return (int)objTypeTrackingRates.InvokeMember("Count",
+                int retval = (int)objTypeTrackingRates.InvokeMember("Count",
                                                                BindingFlags.Default | BindingFlags.GetProperty,
                                                                null,
                                                                objTrackingRatesLateBound,
                                                                new object[] { });
+                TL.LogMessage("TrackingRates Class", "Count: " + retval);
+                return retval;
             }
         }
 
