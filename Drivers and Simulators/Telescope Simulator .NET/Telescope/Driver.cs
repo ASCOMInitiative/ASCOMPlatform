@@ -219,11 +219,14 @@ namespace ASCOM.Simulator
             switch (Axis)
             {
                 case TelescopeAxes.axisPrimary:
-                    return m_AxisRates[0];
+//                    return m_AxisRates[0];
+                    return new AxisRates(TelescopeAxes.axisPrimary);
                 case TelescopeAxes.axisSecondary:
-                    return m_AxisRates[1];
+//                    return m_AxisRates[1];
+                    return new AxisRates(TelescopeAxes.axisSecondary);
                 case TelescopeAxes.axisTertiary:
-                    return m_AxisRates[2];
+//                    return m_AxisRates[2];
+                    return new AxisRates(TelescopeAxes.axisTertiary);
                 default:
                     return null;
             }
@@ -1516,7 +1519,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (index <= 1 || index > this.Count)
+                if (index < 1 || index > this.Count)
                     throw new InvalidValueException("AxisRates.index", index.ToString(CultureInfo.CurrentCulture), string.Format(CultureInfo.CurrentCulture, "1 to {0}", this.Count));
                 return (IRate)m_Rates[index - 1]; 	// 1-based
             }

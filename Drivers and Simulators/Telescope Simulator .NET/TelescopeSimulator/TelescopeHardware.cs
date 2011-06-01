@@ -325,7 +325,7 @@ namespace ASCOM.Simulator
                 declinationRate = 0;
                 rightAscensionRate = 0;
 
-                trackingRate = (int) DriveRates.driveSidereal;
+                trackingRate = (int)DriveRates.driveSidereal;
                 slewSettleTime = 0;
                 ChangePark(atPark);
 
@@ -349,6 +349,13 @@ namespace ASCOM.Simulator
             if (tracking)
             {
                 CalculateAltAz();
+                if (altitude < 0.0)
+                {
+                    declination = 0.0;
+                    rightAscension = AstronomyFunctions.LocalSiderealTime(longitude) + 3.0;
+                    if (rightAscension > 24.0) rightAscension = rightAscension - 24.0;
+                    CalculateAltAz();
+                }
             }
             else
             {
