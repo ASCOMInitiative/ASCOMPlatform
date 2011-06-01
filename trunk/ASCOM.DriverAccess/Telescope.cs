@@ -168,7 +168,8 @@ namespace ASCOM.DriverAccess
         {
             object obj;
             AxisRates ReturnValue = new AxisRates();
-
+            TL.LogMessage("AxisRates", ""); 
+            TL.LogMessage("AxisRates", Axis.ToString());
             if (!memberFactory.IsComObject)
             {
                 obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
@@ -176,23 +177,56 @@ namespace ASCOM.DriverAccess
                 //global::System.Windows.Forms.MessageBox.Show("TelescopePIA " + isPlatform5Telescope.ToString() + ", TelescopeV2 " + isPlatform6Telescope.ToString());
                 if (isPlatform6Telescope)
                 {
+                    IAxisRates retval = (IAxisRates)obj;
+                    TL.LogMessage("AxisRates", "Platform 6 .NET Telescope");
+
+                    if (retval.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
+                    {
+                        for (int i = 1; i <= retval.Count; i++)
+                        {
+                            TL.LogMessage("AxisRates", "Found Minimim: " + retval[i].Minimum + ", Maximum: " + retval[i].Maximum);
+                        }
+                    }
+
                     return (IAxisRates)obj;
                 }
 
                 if (isPlatform5Telescope)
                 {
+                    TL.LogMessage("AxisRates", "Platform 5 .NET Telescope");
                     ASCOM.Interface.IAxisRates PIAAxisRates = (ASCOM.Interface.IAxisRates)obj;
 
-                    foreach (ASCOM.Interface.IRate r in PIAAxisRates)
+                    if (PIAAxisRates.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
                     {
-                        ReturnValue.Add(r.Minimum, r.Maximum);
+                        for (int i = 1; i <= PIAAxisRates.Count; i++)
+                        {
+                            TL.LogMessage("AxisRates", "Found Minimim: " + PIAAxisRates[i].Minimum + ", Maximum: " + PIAAxisRates[i].Maximum);
+                        }
                     }
+
+                    return ReturnValue;
                 }
+
+                TL.LogMessage("AxisRates", "Neither Platform 5 nor Platform 6 .NET Telescope");
                 return ReturnValue;
 
             }
 
-            else return new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject);
+            else
+            {
+                TL.LogMessage("AxisRates", "Platform 5 COM Telescope");
+                _AxisRates retval = new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject, TL);
+
+                if (retval.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
+                {
+                    for (int i = 1; i <= retval.Count; i++)
+                    {
+                        TL.LogMessage("AxisRates", "Found Minimim: " + retval[i].Minimum + ", Maximum: " + retval[i].Maximum);
+                    }
+                }
+
+                return retval;
+            }
         }
 
         /// <summary>
@@ -1150,8 +1184,10 @@ namespace ASCOM.DriverAccess
                 /* if (!memberFactory.IsCOMObject)
                      return memberFactory.TrackingRates;
                  else*/
-                TL.LogMessage("TrackingRates", "Retrieving TrackingRates object");
+                TL.LogMessage("TrackingRates", "");
+                TL.LogMessage("TrackingRates", "Creating TrackingRates object");
                 TrackingRates retval = new TrackingRates(memberFactory.GetObjType, memberFactory.GetLateBoundObject, TL);
+                TL.LogMessage("TrackingRates", "Returning TrackingRates object");
                 return retval;
             }
         }
@@ -1344,25 +1380,33 @@ namespace ASCOM.DriverAccess
     {
         Type objTypeAxisRates;
         object objAxisRatesLateBound;
+        TraceLogger TL;
+        TelescopeAxes CurrentAxis;
 
-        public _AxisRates(TelescopeAxes Axis, Type objTypeScope, object objScopeLateBound)
+        public _AxisRates(TelescopeAxes Axis, Type objTypeScope, object objScopeLateBound, TraceLogger TraceLog)
         {
             objAxisRatesLateBound = objTypeScope.InvokeMember("AxisRates",
                         BindingFlags.Default | BindingFlags.InvokeMethod,
                         null, objScopeLateBound, new object[] { (int)Axis });
             objTypeAxisRates = objAxisRatesLateBound.GetType();
+            CurrentAxis = Axis;
+            TL = TraceLog;
+            TL.LogMessage("AxisRates Class", "Created object: " + objTypeAxisRates.FullName + " for axis: " + CurrentAxis.ToString());
         }
 
         public IRate this[int index]
         {
             get
             {
-                return new _Rate(index, objTypeAxisRates, objAxisRatesLateBound);
+                _Rate retval = new _Rate(index, objTypeAxisRates, objAxisRatesLateBound);
+                TL.LogMessage("AxisRates Class", "Axis: " + CurrentAxis.ToString() + "- returned rate " + index.ToString() + " = Minimum: " + retval.Minimum.ToString() + ", Maximum: " + retval.Maximum.ToString());
+                return retval;
             }
         }
 
         public IEnumerator GetEnumerator()
         {
+            TL.LogMessage("AxisRates Class", "GetEnumerator(" + CurrentAxis.ToString() + "): Returning rate enumerator");
             return new _RateEnumerator(objTypeAxisRates, objAxisRatesLateBound);
         }
 
@@ -1370,9 +1414,11 @@ namespace ASCOM.DriverAccess
         {
             get
             {
-                return (int)objTypeAxisRates.InvokeMember("Count",
+                int retval = (int)objTypeAxisRates.InvokeMember("Count",
                             BindingFlags.Default | BindingFlags.GetProperty,
                             null, objAxisRatesLateBound, new object[] { });
+                TL.LogMessage("AxisRates Class", "Count(" + CurrentAxis.ToString() + ") = " + retval);
+                return retval;
             }
         }
 
