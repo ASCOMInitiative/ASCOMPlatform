@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6c2d0f0d-6460-494e-9c1f-08545fcff623" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        	
+    	<section address="Changes">
+    		<title>Key Changes in 6.0 - For Everyone</title>
+      		<content>
+				<list class="bullet">
+	  				<listItem>New full platform installer. Removes the need to install Platform 5 and then the 5.5 update.</listItem>
+	     			<listItem>Driver installers that did not run in locale's where "." is not the decimal separator will now run.</listItem>
+	      			<listItem>Incorrectly registered drivers are now identified by the Chooser and report why rather than 
+	      			generating difficult to assess exception messages.</listItem>
+	      			<listItem>32bit only drivers will now be identified by the Chooser if selected by a 64bit application and an appropriate
+	      			message will be given.</listItem>
+	      			<listItem>Flexibility - Capability for driver authors to implement their own commands (Action and SupportedActions methods)</listItem>
+	      			<listItem>Supported Device Types
+	  					<list class="bullet">
+	  						<listItem>New SafetyDevice device definition</listItem>
+	  						<listItem>New CameraV2 device definition</listItem>
+	  						<listItem>All device types now support a common set of core capabilities
+		  						<list class="bullet">
+			  						<listItem>Action - Execute a device specific capability defined by the driver author</listItem>
+			  						<listItem>CommandBlind - Send a device specific control code to a device expecting no response</listItem>
+			  						<listItem>CommandBool - Send a device specific control code to a device expecting a boolean response</listItem>
+			  						<listItem>CommandString - Send a device specific control code to a device expecting a string response</listItem>
+			  						<listItem>Connected - connects and disconnects the controlled device</listItem>
+			  						<listItem>Description - Long description of the device being controlled</listItem>	  						
+			  						<listItem>Dispose - Clean up and release any driver resources prior to driver shutdown</listItem>
+			  						<listItem>DriverInfo - Long description of the driver controlling the device</listItem>
+			  						<listItem>DriverVersion - m.n format driver version number</listItem>
+			  						<listItem>InterfaceVersion - Version number of the ASCOM interface that the driver supports</listItem>
+			  						<listItem>Name - Short display name of the driver</listItem>
+			  						<listItem>SetupDialog - DIsplays the driver / device configuration screen</listItem>
+			  						<listItem>SupportedActions - List of actions supported by this device</listItem>
+			  					</list>
+		  					</listItem>
+	  					</list>
+	  				</listItem>
+	  				<listItem>New simulators authored in .NET, compatible with 32 and 64bit operating systems.</listItem>
+	  				<listItem>Enhanced Profile Explorer with right click features in both left and right hand panes</listItem>
+	  				<listItem>Tool to tell you when updated components are available (Not in current build)</listItem>  	
+	  				<listItem>New full implementation of the USNO NOVAS3 library.</listItem>
+	  				<listItem>Improved recognition of serial ports and the ability to hide specific ports from the available list if required.</listItem>
+	  				<listItem>Device Interface version numbers have been increased by 1 to reflect introduction of the common core capabilities</listItem>
+	  				<listItem>Separate developer tool installer, that can be updated independently of the core platform, allowing development tools 
+	  				to be continuously improved without requiring platform users to install updated platform versions.</listItem>
+	  			</list>
+            </content>
+		</section>
+          			
+    	<section address="KeyChangesin6.0Dev">
+	     	<title>Key Changes in 6.0 - For Developers</title>
+	      	<content>
+	      		<list class="bullet">
+	     			<listItem>Enhanced Client Toolkit that transparently handles Platform 5 and Platform 6 conformant drivers
+	     			providing a consistent interface for .NET application developers.</listItem>
+	     			<listItem>Enhanced version of Conform to confirm adherence to the new Platform 6 interfaces</listItem>
+	     			<listItem>Driver Templates - New templates updated for Platform 6 and creating multi-instance drivers</listItem>>
+	     			<listItem>Settings Provider component</listItem>
+	     			<listItem>Developer Documentation</listItem>
+	  					<list class="bullet">
+	  						<listItem>Architecture diagram</listItem>
+	  						<listItem>How to create a local server driver</listItem>
+	  						<listItem>How to create a multi-instance driver</listItem>
+	  						<listItem>NOVAS 3 Guide</listItem>
+	  						<listItem>Scripting documentation</listItem>
+	  					</list>
+	     			<listItem>Full implementation of NOVAS3 including:
+	  					<list class="bullet">
+	  						<listItem>A DeltaT method valid for the years 1650 to 2050</listItem>
+	  						<listItem>The
+	  							<externalLink>
+									<linkText>JPL DE421 Planetary and Lunar Ephemeris</linkText>
+									<linkAlternateText>JPL DE421 Planetary and Lunar Ephemeris</linkAlternateText>
+									<linkUri>http://ipnpr.jpl.nasa.gov/progress_report/42-178/178C.pdf</linkUri>
+									<linkTarget>_blank</linkTarget>
+								</externalLink>
+							 (William M. Folkner, James G. Williams and Dale H. Boggs - IPN Progress Report 42-178 • August 15, 2009.)</listItem>
+	  						<listItem>Compensation for movement of the CIO in RA using supplied NOVAS data</listItem>
+	  						<listItem>The AE98 readeph routine to parse locally held minor planet ephemeris files.</listItem>
+	  					</list>
+	  				</listItem>
+	  				<listItem>ASCOM Controls - reusable components that can be embedded in forms to ease development of common tasks
+	  					<list class="bullet">
+	  						<listItem>LED Indicator - a simple red / green indicator supporting various blink cadences</listItem>
+	  						<listItem>Annunciator - Displays status with a standard look and feel</listItem>
+	  					</list>
+	  				</listItem>
+	     			<listItem>Separate developer components installer</listItem>
+	     			<listItem>TraceLogger - Has a new menu option to return the full path name of the log file being created.</listItem>
+	 		 		<listItem>TraceLogger - New LogMessageCrLf method that respects carriage returns and line feeds in 
+	 		 		messages and doesn't translate these to hex display characters.</listItem>>
+	 	 			<listItem>Profile - Has four new methods to retrieve and set all values in a device
+	 		 		profile in one operation. GetProfileXML and SetProfileXML work with an XML encoding of the profile
+	 		 		while GetProfile and SetProfile work with a new ASCOMProfile object that contains all 
+	 		 		entries in the profile and provides simple methods to read and set values.</listItem>
+	 		 		<listItem>Additional logging for serial component accesed through DriverHelper.Serial.</listItem>
+	 		 		<listItem>Serial - Now has an RTSEnable property to control whether RTS is asserted when using 
+	 		 		RTS/CTS hardware handshaking.</listItem>
+	 		 		<listItem>Conform - An updated version that supports both Platform 5 and Platfom 6 drivers is available as a 
+	 		 		separate download. Conform is no longer distributed through the Platform itself so that it can be updated 
+	 		 		regularly without requiring a full Platform update</listItem>
+  				</list>
+      		</content>
+   		</section>
+   		
+        <section address="IssuesFixed">
+           	<title>Issues Fixed</title>
+            <content>
+      			<list class="bullet">
+					<listItem>Installer - Now applies required security attributes every time the installer is run,
+					regardless of whether the profile is already migrated. This ensures correct attributes are applied
+					for early adopters whose profile was migrated by an early "HelperNET" install.</listItem>
+					<listItem>MigrateProfile - Now applies the "Full Control" security attribute to the entire ASCOM shared
+					file area where the Profile is stored to remove access control issues seen by some people.</listItem>
+ 		 			<listItem>NOVAS2 - sun_eph is now accesible.</listItem>>
+ 		 			<listItem>Profile - Improved resilience to transient operational issues</listItem>>
+ 		 			<listItem>Profile - Improved recovery from profile file corruption</listItem>>
+ 		 			<listItem>Profile - Fixed exception thrown when a calling application has no version number of any kind</listItem>
+ 		 			<listItem>Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
+ 		 			improved to actively test for COM ports rather than simply relying on the list of ports returned by the .NET Framework.</listItem>
+ 		 			<listItem>ShowPlatformVersion - Fixed failure when run on a 64bit OS</listItem>>
+ 		 			<listItem>Timer - Now works consistently in console environments as well as windowed environments.</listItem>>
+					<listItem>TraceLogger - Fixed exception thrown if object was disposed while writing</listItem>
+					<listItem>TraceLogger - Fixed low probability IOException thrown when creating the object
+					if multiple traceloggers were created simultaneously in multi-threaded applications.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+        <section address="PolicyChanges">
+           	<title>Policy Changes (For Developers)</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>Support for COM early binding, introduced in Platform 5, has been frozen to ease on-going platform development.
+ 		 			The Current level of support will be retained for compatibility, but clients and drivers developed for Platform 6 and 
+ 		 			later should only use late bound COM binding.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+        <section address="BreakingChanges">
+           	<title>Breaking Changes (For Developers)</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>RegisteredDevices(ByVal DeviceType As String) has been changed from a property to a method to maximise 
+ 		 			compatibility between .NET programming languages.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+  </developerConceptualDocument>
+</topic>
