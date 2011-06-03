@@ -53,7 +53,7 @@ Public Class Camera
 #Region "ASCOM Registration"
 
     Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
-        Using Dim P As New Profile()
+        Using P As New Profile()
             P.DeviceType = "Camera"
             If bRegister Then
                 P.Register(s_csDriverID, s_csDriverDescription)
