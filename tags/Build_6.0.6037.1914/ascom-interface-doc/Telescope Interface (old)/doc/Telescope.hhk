@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="DC-3 AutoDoc 0.6">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+	<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="AbortSlew method">
+		<param name="Local"  value="TelescopeTelescopeMETHAbortSlew.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="AlignmentMode property">
+		<param name="Local"  value="TelescopeTelescopePROPAlignmentMode.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Altitude property">
+		<param name="Local"  value="TelescopeTelescopePROPAltitude.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ApertureDiameter property">
+		<param name="Local"  value="TelescopeTelescopePROPApertureDiameter.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Azimuth property">
+		<param name="Local"  value="TelescopeTelescopePROPAzimuth.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanFindHome property">
+		<param name="Local"  value="TelescopeTelescopeMETHFindHome.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanFindHome.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanPark property">
+		<param name="Local"  value="TelescopeTelescopeMETHPark.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanPark.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanPulseGuide property">
+		<param name="Local"  value="TelescopeTelescopeMETHPulseGuide.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanPulseGuide.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanSetPark property">
+		<param name="Local"  value="TelescopeTelescopeMETHSetPark.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSetPark.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanSetTracking property">
+		<param name="Local"  value="TelescopeTelescopePROPCanSetTracking.htm">
+		<param name="Local"  value="TelescopeTelescopePROPTracking.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanSlew property">
+		<param name="Local"  value="TelescopeTelescopeMETHAbortSlew.htm">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToCoordinates.htm">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToCoordinatesAsync.htm">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToTarget.htm">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToTargetAsync.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSlew.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanSlewAsync property">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToCoordinatesAsync.htm">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToTargetAsync.htm">
+		<param name="Local"  value="TelescopeTelescopeMETHAbortSlew.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSlewAsync.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanSync property">
+		<param name="Local"  value="TelescopeTelescopeMETHSyncToCoordinates.htm">
+		<param name="Local"  value="TelescopeTelescopeMETHSyncToTarget.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSync.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CanUnpark property">
+		<param name="Local"  value="TelescopeTelescopeMETHUnpark.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanUnpark.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Capabilities flags">
+		<param name="Local"  value="TelescopeTelescopePROPCanFindHome.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanPark.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSetPark.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSlew.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSlewAsync.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSync.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanUnpark.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSetTracking.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CommandBlind method">
+		<param name="Local"  value="TelescopeTelescopeMETHCommandBlind.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CommandBool method">
+		<param name="Local"  value="TelescopeTelescopeMETHCommandBool.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CommandString method">
+		<param name="Local"  value="TelescopeTelescopeMETHCommandString.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Connected property">
+		<param name="Local"  value="TelescopeTelescopePROPConnected.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Declination property">
+		<param name="Local"  value="TelescopeTelescopePROPDeclination.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DeclinationRate property">
+		<param name="Local"  value="TelescopeTelescopePROPDeclinationRate.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Description property">
+		<param name="Local"  value="TelescopeTelescopePROPDescription.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DriverInfo property">
+		<param name="Local"  value="TelescopeTelescopePROPDriverInfo.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="FindHome method">
+		<param name="Local"  value="TelescopeTelescopeMETHFindHome.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="FocalLength property">
+		<param name="Local"  value="TelescopeTelescopePROPFocalLength.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Name property">
+		<param name="Local"  value="TelescopeTelescopePROPName.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Park method">
+		<param name="Local"  value="TelescopeTelescopeMETHPark.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="PulseGuide method">
+		<param name="Local"  value="TelescopeTelescopeMETHPulseGuide.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanPulseGuide.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="RightAscension property">
+		<param name="Local"  value="TelescopeTelescopePROPRightAscension.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="RightAscensionRate property">
+		<param name="Local"  value="TelescopeTelescopePROPRightAscensionRate.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SetPark method">
+		<param name="Local"  value="TelescopeTelescopeMETHSetPark.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SetupDialog method">
+		<param name="Local"  value="TelescopeTelescopeMETHSetupDialog.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SiderealTime property">
+		<param name="Local"  value="TelescopeTelescopePROPSiderealTime.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SiteElevation property">
+		<param name="Local"  value="TelescopeTelescopePROPSiteElevation.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SiteLatitude property">
+		<param name="Local"  value="TelescopeTelescopePROPSiteLatitude.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SiteLongitude property">
+		<param name="Local"  value="TelescopeTelescopePROPSiteLongitude.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Slewing property">
+		<param name="Local"  value="TelescopeTelescopePROPSlewing.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SlewSettleTime property">
+		<param name="Local"  value="TelescopeTelescopePROPSlewSettleTime.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SlewToCoordinates method">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToCoordinates.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SlewToCoordinatesAsync method">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToCoordinatesAsync.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SlewToTarget method">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToTarget.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SlewToTargetAsync method">
+		<param name="Local"  value="TelescopeTelescopeMETHSlewToTargetAsync.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SyncToCoordinates method">
+		<param name="Local"  value="TelescopeTelescopeMETHSyncToCoordinates.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="SyncToTarget method">
+		<param name="Local"  value="TelescopeTelescopeMETHSyncToTarget.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="TargetDeclination property">
+		<param name="Local"  value="TelescopeTelescopePROPTargetDeclination.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="TargetRightAscension property">
+		<param name="Local"  value="TelescopeTelescopePROPTargetRightAscension.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Telescope object">
+		<param name="Local"  value="TelescopeCLASSTelescope.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Tracking property">
+		<param name="Local"  value="TelescopeTelescopePROPTracking.htm">
+		<param name="Local"  value="TelescopeTelescopePROPCanSetTracking.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Unpark method">
+		<param name="Local"  value="TelescopeTelescopeMETHUnpark.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="UTCDate property">
+		<param name="Local"  value="TelescopeTelescopePROPUTCDate.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Error Codes">
+		<param name="Local"  value="TelescopeERRORS.htm">
+		</OBJECT>
+		<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040400">
+			<param name="Local"  value="TelescopeMSG0x80040400.htm">
+			</OBJECT>
+		</UL>
+	</UL>
+</BODY></HTML>

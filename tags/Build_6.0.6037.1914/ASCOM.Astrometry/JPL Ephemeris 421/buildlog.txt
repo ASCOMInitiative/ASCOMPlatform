@@ -1,0 +1,55 @@
+/////////////////////////////////////
+
+Build log for project: ASC2EPH
+Configuration: Debug/.NET
+Date: 9/5/2009 - 09:07:39
+
+/////////////////////////////////////
+
+System Configuration
+////////////////////
+
+Path Directories:
+C:\Program Files\Silverfrost\FTN95
+C:\windows\system32
+C:\windows
+C:\windows\System32\Wbem
+C:\UNIX Tools
+C:\Program Files\NTP\bin
+C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin
+C:\Program Files\Support Tools\
+c:\program files\java\jdk1.6.0_06\bin
+C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727
+C:\Program Files\Liquid Technologies\Liquid XML Studio 2009\XmlDataBinder7\Redist7\cpp\win32\bin
+C:\Program Files\SlikSvn\bin\
+C:\Program Files\TortoiseSVN\bin
+C:\windows\system32\WindowsPowerShell\v1.0
+C:\Program Files\VisualSVN\bin
+C:\Program Files\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Tools\Sandcastle\ProductionTools\
+C:\Documents and Settings\Peter\My Documents\Download\Fortran\g95\bin
+
+Project Directory: C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\ASC2EPH\ASC2EPH\
+Output Directory: C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\ASC2EPH\ASC2EPH\Debug\NET
+Output File: Debug\NET\ASC2EPH.exe
+
+Project Build
+/////////////
+
+   C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\ASC2EPH\ASC2EPH\ASC2EPH.for
+
+Compiling...
+
+Compiling file: ASC2EPH.for
+FTN95.EXE "C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\ASC2EPH\ASC2EPH\ASC2EPH.for" /NO_BANNER /DEBUG /FULL_DEBUG /STANDARD_ERROR_REPORTS /SINGLE_THREADED /FPP /CLR  /CLR_VER 2 /REF "c:\windows\Microsoft.NET\Framework\v2.0.50727\System.dll" /REF "c:\windows\Microsoft.NET\Framework\v2.0.50727\System.Data.dll" /REF "c:\windows\Microsoft.NET\Framework\v2.0.50727\System.XML.dll" /VS8 /DELETE_OBJ_ON_ERROR /ERROR_NUMBERS /UNLIMITED_ERRORS /BINARY "Debug\NET\ASC2EPH.dbk"
+Compiler output: 
+   C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\ASC2EPH\ASC2EPH\ASC2EPH.FOR(71) : comment 1031: This IF statement is redundant as it will never succeed   C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\ASC2EPH\ASC2EPH\ASC2EPH.FOR(219) : warning 179: Comparing floating point quantities for inequality may give misleading results
+Linking...
+
+Command line for link:
+   dbk_link2.exe /VS7 /NO_BANNER /REF:"c:\windows\Microsoft.NET\Framework\v2.0.50727\System.dll";"c:\windows\Microsoft.NET\Framework\v2.0.50727\System.Data.dll";"c:\windows\Microsoft.NET\Framework\v2.0.50727\System.XML.dll" "Debug\NET\ASC2EPH.exe" @"C:\Documents and Settings\Peter\My Documents\Visual Studio 2008\Projects\ASC2EPH\ASC2EPH\link.lst"
+Linker output: 
+   Assembly file Debug\NET\ASC2EPH.exe for .NET 2.0 produced
+
+ASC2EPH build succeeded.
+
+/////////////////////////////////////
