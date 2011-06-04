@@ -160,8 +160,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocuserSimulatorDriver", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Platform.UnitTest", "ASCOM.Platform.UnitTest\ASCOM.Platform.UnitTest.csproj", "{A48688B8-9E35-42CE-8D3A-7C41CB8105AB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSpec", "MSpec", "{EDBA5DAC-173D-4247-8A68-45E23ED4EA1F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator Testing Project", "Drivers and Simulators\SimulatorTestingProject\Simulator Testing Project\Simulator Testing Project.csproj", "{342EC739-BA3D-48BF-B007-BBDDEA9E882A}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBDomeSimulator", "Drivers and Simulators\Dome Simulator .NET\VBDomeSimulator.vbproj", "{CE0387AA-0376-4001-8092-46D4561561EE}"
@@ -1277,7 +1275,6 @@ Global
 		{D202E935-5ADA-4769-A4D8-4A915B4267FA} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{7814C016-C363-4A04-B095-27A5B33AA783} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{74D351E3-1E5A-451D-AA70-D3FA28CF1F54} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
-		{EDBA5DAC-173D-4247-8A68-45E23ED4EA1F} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{908A13CE-4C6D-4546-AD52-AB958FF46C5B} = {7814C016-C363-4A04-B095-27A5B33AA783}
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2} = {29B3E411-4259-4315-85A7-3063F31A282A}
 		{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F} = {29B3E411-4259-4315-85A7-3063F31A282A}
@@ -1290,13 +1287,13 @@ Global
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal
