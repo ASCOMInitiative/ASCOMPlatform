@@ -47,7 +47,8 @@ Public Class Telescope
     ' Driver private data (rate collections)
     '
     Private m_AxisRates(2) As AxisRates
-    'Private m_TrackingRates As TrackingRates
+
+    Private m_longitude As Double
 
     '
     ' Constructor - Must be public for COM registration!
@@ -56,7 +57,6 @@ Public Class Telescope
         m_AxisRates(0) = New AxisRates(TelescopeAxes.axisPrimary)
         m_AxisRates(1) = New AxisRates(TelescopeAxes.axisSecondary)
         m_AxisRates(2) = New AxisRates(TelescopeAxes.axisTertiary)
-        'm_TrackingRates = New TrackingRates()
         ' TODO Implement your additional construction here
     End Sub
 
@@ -97,21 +97,21 @@ Public Class Telescope
     End Sub
 
     Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ITelescopeV3.Action
-        Throw New ASCOM.MethodNotImplementedException("Action")
+        Throw New MethodNotImplementedException("Action")
     End Function
 
     Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ITelescopeV3.CommandBlind
-        Throw New ASCOM.MethodNotImplementedException("CommandBlind")
+        Throw New MethodNotImplementedException("CommandBlind")
     End Sub
 
     Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean _
         Implements ITelescopeV3.CommandBool
-        Throw New ASCOM.MethodNotImplementedException("CommandBool")
+        Throw New MethodNotImplementedException("CommandBool")
     End Function
 
     Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String _
         Implements ITelescopeV3.CommandString
-        Throw New ASCOM.MethodNotImplementedException("CommandString")
+        Throw New MethodNotImplementedException("CommandString")
     End Function
 
     Public Sub Dispose() Implements ITelescopeV3.Dispose
@@ -119,11 +119,12 @@ Public Class Telescope
     End Sub
 
     Public Sub AbortSlew() Implements ITelescopeV3.AbortSlew
-        Throw New System.NotImplementedException()
+        ' TODO Implement your additional code here
+        Throw New MethodNotImplementedException("AbortSlew")
     End Sub
 
     Public Function AxisRates(ByVal Axis As TelescopeAxes) As IAxisRates Implements ITelescopeV3.AxisRates
-        Throw New System.NotImplementedException()
+        AxisRates = m_AxisRates(Axis)
     End Function
 
     Public Function CanMoveAxis(ByVal Axis As TelescopeAxes) As Boolean Implements ITelescopeV3.CanMoveAxis
@@ -466,7 +467,10 @@ Public Class Telescope
 
     Public ReadOnly Property SiderealTime() As Double Implements ITelescopeV3.SiderealTime
         Get
-            Throw New System.NotImplementedException()
+            ' TODO Implement your additional code here
+            ' this should be read from the scope if possible. It requires a good value
+            ' of the site longitude to be correct.
+            SiderealTime = (18.697374558 + 24.065709824419081 * (DateTime.UtcNow.ToOADate() - 36526.5) + (m_longitude / 15.0)) Mod 24.0
         End Get
     End Property
 
@@ -556,10 +560,12 @@ Public Class Telescope
 
     Public Property UTCDate() As Date Implements ITelescopeV3.UTCDate
         Get
-            Throw New System.NotImplementedException()
+            ' TODO read this from the scope if you can
+            UTCDate = DateTime.UtcNow
         End Get
         Set(ByVal value As Date)
-            Throw New System.NotImplementedException()
+            ' TODO Implement your additional code here
+            Throw New PropertyNotImplementedException("UTCDate", True)
         End Set
     End Property
 #End Region
