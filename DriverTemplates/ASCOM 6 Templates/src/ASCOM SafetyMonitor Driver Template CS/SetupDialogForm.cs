@@ -23,7 +23,7 @@ namespace ASCOM.$safeprojectname$
             Dispose();
         }
 
-        private static void BrowseToAscom(object sender, EventArgs e)
+        private void BrowseToAscom(object sender, EventArgs e)
         {
             try
             {
