@@ -547,7 +547,7 @@ namespace ASCOM.DriverAccess
 
             if (e.InnerException is ValueNotSetException)
             {
-                string member = ((NotImplementedException)e.InnerException).PropertyOrMethod;
+                string member = ((ValueNotSetException)e.InnerException).PropertyOrMethod;
 
                 TL.LogMessageCrLf(memberName, "  Throwing ValueNotSetException: '" + member + "'");
                 throw new ValueNotSetException(member, e.InnerException);
