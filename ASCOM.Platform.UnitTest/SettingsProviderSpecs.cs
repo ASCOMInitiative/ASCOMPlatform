@@ -65,7 +65,8 @@ namespace ASCOM.Platform.UnitTest
         protected const string csUnitTest = "UnitTest";
         protected const string ItemName = "Item Name";
         protected const string SettingName = "UnitTestSetting";
-        protected const string SettingDefaultValue = "Default";
+        protected const string SettingStringDefaultValue = "Default";
+        protected const int SettingIntDefaultValue = 9600;    // typical baud rate
         protected const string SettingSetValue = "You've Been Set";
         protected const string DeviceName = "My.UnitTest";
         protected const string DeviceType = "Switch";
@@ -123,27 +124,28 @@ namespace ASCOM.Platform.UnitTest
         It should_return_name_for_app_name = () => Target.ApplicationName.ShouldEqual(csUnitTest);
     }
 
-    // Tests that a property retrieved from a device that hasn't been registered returns the property's default value.
-    [Subject(typeof (SettingsProvider), "Property defaults")]
-    public class When_getting_properties_for_an_unregistered_device : With_mock_ascom_profile
+    // Tests that a string property retrieved from a device that hasn't been registered returns the property's default value.
+    // [ASCOM-256] test seperately for string and integer properties
+    [Subject(typeof(SettingsProvider), "Property string defaults")]
+    public class When_getting_string_properties_for_an_unregistered_device : With_mock_ascom_profile
     {
         static SettingsPropertyValueCollection result;
         static SettingsPropertyCollection Properties;
         // Context:
         //	- mockProfile should capture whatever the DeviceType is configured to.
         Establish context = () =>
-            {
-                SettingsProperty settingsProperty = new SettingsProperty(SettingName, typeof (string), null, false,
-                                                                         SettingDefaultValue, SettingsSerializeAs.String,
-                                                                         FakeAttributeDictionary,
-                                                                         true, true);
-                Properties = new SettingsPropertyCollection();
-                Properties.Add(settingsProperty);
-                SetDeviceType = String.Empty; // Captures the device type that has been set.
-                MockProfile.SetupSet(x => x.DeviceType).Callback(y => SetDeviceType = y);
-                Target = new SettingsProvider(MockProfile.Object);
-                SettingsContext = new SettingsContext();
-            };
+        {
+            SettingsProperty settingsProperty = new SettingsProperty(SettingName, typeof(string), null, false,
+                                                                     SettingStringDefaultValue, SettingsSerializeAs.String,
+                                                                     FakeAttributeDictionary,
+                                                                     true, true);
+            Properties = new SettingsPropertyCollection();
+            Properties.Add(settingsProperty);
+            SetDeviceType = String.Empty; // Captures the device type that has been set.
+            MockProfile.SetupSet(x => x.DeviceType).Callback(y => SetDeviceType = y);
+            Target = new SettingsProvider(MockProfile.Object);
+            SettingsContext = new SettingsContext();
+        };
 
         Because of = () => result = Target.GetPropertyValues(SettingsContext, Properties);
 
@@ -157,18 +159,62 @@ namespace ASCOM.Platform.UnitTest
         It should_have_exactly_one_property_item = () => result.Count.ShouldEqual(1);
 
         It should_have_propert_value_equal_setting_default_value = () =>
-            {
-                SettingsPropertyValue settingsPropertyValue = result.OfType<SettingsPropertyValue>().First();
-                settingsPropertyValue.IsDirty.ShouldBeFalse();
-                settingsPropertyValue.PropertyValue.ShouldEqual(SettingDefaultValue);
-            };
+        {
+            SettingsPropertyValue settingsPropertyValue = result.OfType<SettingsPropertyValue>().First();
+            settingsPropertyValue.IsDirty.ShouldBeFalse();
+            settingsPropertyValue.PropertyValue.ShouldEqual(SettingStringDefaultValue);
+        };
+
+        It should_return_a_non_empty_collection = () => result.ShouldNotBeEmpty();
+    }
+
+    // Tests that a numeric property retrieved from a device that hasn't been registered returns the property's default value.
+    // [ASCOM-256] test seperately for string and integer properties
+    [Subject(typeof(SettingsProvider), "Property numeric defaults")]
+    public class When_getting_integer_properties_for_an_unregistered_device : With_mock_ascom_profile
+    {
+        static SettingsPropertyValueCollection result;
+        static SettingsPropertyCollection Properties;
+        // Context:
+        //	- mockProfile should capture whatever the DeviceType is configured to.
+        Establish context = () =>
+        {
+            SettingsProperty settingsProperty = new SettingsProperty(SettingName, typeof(int), null, false,
+                                                                     SettingIntDefaultValue, SettingsSerializeAs.String,
+                                                                     FakeAttributeDictionary,
+                                                                     true, true);
+            Properties = new SettingsPropertyCollection {settingsProperty};
+            SetDeviceType = String.Empty; // Captures the device type that has been set.
+            MockProfile.SetupSet(x => x.DeviceType).Callback(y => SetDeviceType = y);
+            Target = new SettingsProvider(MockProfile.Object);
+            SettingsContext = new SettingsContext();
+        };
+
+        Because of = () => result = Target.GetPropertyValues(SettingsContext, Properties);
+
+        // Assertions:
+        //	- MockProfile's device type (captured in SetDeviceType) must match deviceType.
+        //	- The returned SettingsPropertyValueCollection must not be empty.
+        //	- The returned SettingsPropertyValueCollection must have exactly one entry.
+        //	- The entry must match the value of SettingDefaultValue. 
+
+        //It should_have_the_correct_device_type = () => SetDeviceType.ShouldEqual(DeviceType);
+        It should_have_exactly_one_property_item = () => result.Count.ShouldEqual(1);
+
+        It should_have_propert_value_equal_setting_default_value = () =>
+        {
+            SettingsPropertyValue settingsPropertyValue = result.OfType<SettingsPropertyValue>().First();
+            settingsPropertyValue.IsDirty.ShouldBeFalse();
+            settingsPropertyValue.PropertyValue.ShouldEqual(SettingIntDefaultValue);
+        };
 
         It should_return_a_non_empty_collection = () => result.ShouldNotBeEmpty();
     }
 
     // Tests that a property correctly returns the value it was set to (for a registered device).
+    // [ASCOM-256] test seperately for string and integer properties
     [Subject(typeof (SettingsProvider), "Property defaults")]
-    public class When_setting_then_getting_properties_for_a_registered_device : With_mock_ascom_profile
+    public class When_setting_then_getting_string_properties_for_a_registered_device : With_mock_ascom_profile
     {
         static SettingsPropertyValueCollection result;
         //static SettingsPropertyCollection properties; Commented out to remove compiler warning
@@ -177,7 +223,7 @@ namespace ASCOM.Platform.UnitTest
         Establish context = () =>
             {
                 SettingsProperty settingsProperty = new SettingsProperty(SettingName, typeof (string), null, false,
-                                                                         SettingDefaultValue, SettingsSerializeAs.String,
+                                                                         SettingStringDefaultValue, SettingsSerializeAs.String,
                                                                          FakeAttributeDictionary,
                                                                          true, true);
                 SettingsProperties = new SettingsPropertyCollection();
