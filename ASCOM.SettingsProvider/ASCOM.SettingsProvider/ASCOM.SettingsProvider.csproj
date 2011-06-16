@@ -149,9 +149,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <ExcludeFromStyleCop>false</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="PropertyNotAttributedException.cs">
-      <ExcludeFromStyleCop>false</ExcludeFromStyleCop>
-    </Compile>
     <Compile Include="SettingsProvider.cs">
       <ExcludeFromStyleCop>false</ExcludeFromStyleCop>
     </Compile>

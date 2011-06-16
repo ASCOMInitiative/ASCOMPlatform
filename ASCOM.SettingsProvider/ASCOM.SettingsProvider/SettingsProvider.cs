@@ -99,7 +99,6 @@ namespace ASCOM
             appName = assembly.GetName().Name;
             base.Initialize(name ?? appName, config);
             ApplicationName = name ?? appName;
-            //EnsureRegistered(appName);	// Ensure the driver is registered with ASCOM Chooser.
         }
 
         /// <summary>
@@ -116,9 +115,6 @@ namespace ASCOM
         ///   retrieving them, then the property's default value is used.	This will be the case
         ///   if the driver has never been registered with ASCOM.
         /// </remarks>
-        /// <exception cref = "ASCOM.PropertyNotAttributedException">
-        ///   Thrown if a setting is found that is not decortated with a <see cref = "DeviceIdAttribute" />.
-        /// </exception>
         public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context,
                                                                           SettingsPropertyCollection collection)
         {
@@ -159,6 +155,7 @@ namespace ASCOM
                     Diagnostics.TraceWarning("Unable to parse DeviceID, using {0}.{1}", deviceName, deviceType);
                 }
                 ascomProfile.DeviceType = deviceType;
+                EnsureRegistered(ascomProfile, deviceId);
                 try
                 {
                     string value = ascomProfile.GetValue(deviceId, item.Name, null, String.Empty);
@@ -177,7 +174,7 @@ namespace ASCOM
                 }
                 catch
                 {
-                    spv.PropertyValue = spv.Property.DefaultValue;
+                    spv.SerializedValue = spv.Property.DefaultValue;
                     Diagnostics.TraceVerbose("Defaulted/missing ASCOM Profile DeviceID={0}, Key={1}, Value={2}",
                                              deviceId, item.Name, spv.PropertyValue);
                 }
@@ -213,6 +210,7 @@ namespace ASCOM
                     string deviceName = deviceId.Head(split);
                     string deviceType = deviceId.RemoveHead(split + 1);
                     ascomProfile.DeviceType = deviceType;
+                    EnsureRegistered(ascomProfile, deviceId);
                     try
                     {
                         Diagnostics.TraceVerbose("Writing ASCOM Profile DeviceID={0}, Key={1}, Value={2}", deviceId,
@@ -221,7 +219,7 @@ namespace ASCOM
                     }
                     catch
                     {
-                        Diagnostics.TraceError("Failed to persist property Key={0}", item.Name);
+                        Diagnostics.TraceError("Failed to persist property Key={0} - make sure your driver is properly registered", item.Name);
                     }
                 }
                 else
@@ -239,11 +237,12 @@ namespace ASCOM
         ///   that is used to query the ASCOM Device Profile.
         /// </param>
         /// <param name = "driverId">The full ASCOM DeviceID to be verified.</param>
-        static void EnsureRegistered(Profile ascomProfile, string driverId)
+        static void EnsureRegistered(IProfile ascomProfile, string driverId)
         {
             if (!ascomProfile.IsRegistered(driverId))
             {
-                ascomProfile.Register(driverId, "Auto-registered by SettingsProvider");
+                ascomProfile.Register(driverId, driverId + " Auto-registered by SettingsProvider");
+                Diagnostics.TraceWarning("Your driver has been auto-registered with ASCOM.Utilities.profile for easy debugging. You must provide a correct registration in your setup before deploying to an end user system.");
             }
         }
     }
