@@ -686,6 +686,8 @@ else
     Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $COMMONFILES$\ASCOM\Platform\Internal
     Install Assembly ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to Global Assembly Cache
     Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.pdb to $WINDIR$\Symbols\dll
+    Install Assembly ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to Global Assembly Cache
+    Install Files ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.pdb to $WINDIR$\Symbols\dll
     Comment: Platform 6 Tools
     Install Files ..\..\..\..\ShowPlatformVersion.vbs to $COMMONFILES$\ASCOM
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $WINDIR$\Symbols\dll
