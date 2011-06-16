@@ -3854,6 +3854,8 @@ Public Class DiagnosticsForm
                         FileDetails(Folder & "\", "Helper2.dll")
                     End If
                 Next
+            Catch ex As UnauthorizedAccessException
+                TL.LogMessage("RecurseProgramFiles 1", "UnauthorizedAccessException for directory; " & Folder)
             Catch ex As Exception
                 LogException("RecurseProgramFiles 1", "Exception: " & ex.ToString)
             End Try
@@ -3863,11 +3865,15 @@ Public Class DiagnosticsForm
                 For Each Directory As DirectoryInfo In DirInfos
                     RecurseProgramFiles(Directory.FullName) ' Recursively process this sub directory
                 Next
+            Catch ex As UnauthorizedAccessException
+                TL.LogMessage("RecurseProgramFiles 2", "UnauthorizedAccessException for directory; " & Folder)
             Catch ex As Exception
                 LogException("RecurseProgramFiles 2", "Exception: " & ex.ToString)
             End Try
 
             Action("")
+        Catch ex As UnauthorizedAccessException
+            TL.LogMessage("RecurseProgramFiles 3", "UnauthorizedAccessException for directory; " & Folder)
         Catch ex As Exception
             LogException("RecurseProgramFiles 3", "Exception: " & ex.ToString)
         End Try
