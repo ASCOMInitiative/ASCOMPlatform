@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="DC-3 AutoDoc 0.6 (special)">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+	<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ClearBuffers method">
+		<param name="Local"  value="DriverHelperSerialMETHClearBuffers.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Connected property">
+		<param name="Local"  value="DriverHelperSerialPROPConnected.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DegreesToDM method">
+		<param name="Local"  value="DriverHelperUtilMETHDegreesToDM.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DegreesToDMS method">
+		<param name="Local"  value="DriverHelperUtilMETHDegreesToDMS.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DegreesToHM method">
+		<param name="Local"  value="DriverHelperUtilMETHDegreesToHM.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DegreesToHMS method">
+		<param name="Local"  value="DriverHelperUtilMETHDegreesToHMS.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DeviceType property">
+		<param name="Local"  value="DriverHelperChooserPROPDeviceType.htm">
+		<param name="Local"  value="DriverHelperProfilePROPDeviceType.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DMSToDegrees method">
+		<param name="Local"  value="DriverHelperUtilMETHDMSToDegrees.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Enabled property">
+		<param name="Local"  value="DriverHelperTimerPROPEnabled.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="FormatVar method">
+		<param name="Local"  value="DriverHelperUtilMETHFormatVar.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="HMSToDegrees method">
+		<param name="Local"  value="DriverHelperUtilMETHHMSToDegrees.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="HMSToHours method">
+		<param name="Local"  value="DriverHelperUtilMETHHMSToHours.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="HoursToHM method">
+		<param name="Local"  value="DriverHelperUtilMETHHoursToHM.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="HoursToHMS method">
+		<param name="Local"  value="DriverHelperUtilMETHHoursToHMS.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Interval Property">
+		<param name="Local"  value="DriverHelperTimerPROPInterval.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="LTrimString method">
+		<param name="Local"  value="DriverHelperUtilMETHLTrimString.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="MessageBox method">
+		<param name="Local"  value="DriverHelperUtilMETHMessageBox.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Port property">
+		<param name="Local"  value="DriverHelperSerialPROPPort.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Receive method">
+		<param name="Local"  value="DriverHelperSerialMETHReceive.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ReceiveByte method">
+		<param name="Local"  value="DriverHelperSerialMETHReceiveByte.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ReceiveCounted method">
+		<param name="Local"  value="DriverHelperSerialMETHReceiveCounted.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ReceiveTerminated method">
+		<param name="Local"  value="DriverHelperSerialMETHReceiveTerminated.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ReceiveTimeout property">
+		<param name="Local"  value="DriverHelperSerialPROPReceiveTimeout.htm">
+		<param name="Local"  value="DriverHelperSerialPROPReceiveTimeoutMs.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ReceiveTimeoutMs">
+		<param name="Local"  value="DriverHelperSerialPROPReceiveTimeoutMs.htm">
+		<param name="Local"  value="DriverHelperSerialPROPReceiveTimeout.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="RTrimString method">
+		<param name="Local"  value="DriverHelperUtilMETHRTrimString.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Serial object">
+		<param name="Local"  value="DriverHelperCLASSSerial.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Speed property">
+		<param name="Local"  value="DriverHelperSerialPROPSpeed.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Tick event">
+		<param name="Local"  value="DriverHelperTimerEVENTTick.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Transmit method">
+		<param name="Local"  value="DriverHelperSerialMETHTransmit.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="TransmitBinary method">
+		<param name="Local"  value="DriverHelperSerialMETHTransmitBinary.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="TrimString method">
+		<param name="Local"  value="DriverHelperUtilMETHTrimString.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Util object">
+		<param name="Local"  value="DriverHelperCLASSUtil.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="WaitForMilliseconds method">
+		<param name="Local"  value="DriverHelperUtilMETHWaitForMilliseconds.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Yield method">
+		<param name="Local"  value="DriverHelperUtilMETHYield.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Error Codes">
+		<param name="Local"  value="DriverHelperERRORS.htm">
+		</OBJECT>
+		<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040400">
+			<param name="Local"  value="DriverHelperMSG0x80040400.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040401">
+			<param name="Local"  value="DriverHelperMSG0x80040401.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040402">
+			<param name="Local"  value="DriverHelperMSG0x80040402.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040403">
+			<param name="Local"  value="DriverHelperMSG0x80040403.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040404">
+			<param name="Local"  value="DriverHelperMSG0x80040404.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040420">
+			<param name="Local"  value="DriverHelperMSG0x80040420.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040421">
+			<param name="Local"  value="DriverHelperMSG0x80040421.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040422">
+			<param name="Local"  value="DriverHelperMSG0x80040422.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040430">
+			<param name="Local"  value="DriverHelperMSG0x80040430.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="0x80040440">
+			<param name="Local"  value="DriverHelperMSG0x80040440.htm">
+			</OBJECT>
+		</UL>
+	</UL>
+</BODY></HTML>
