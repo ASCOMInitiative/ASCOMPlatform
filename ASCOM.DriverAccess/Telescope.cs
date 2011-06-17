@@ -1254,6 +1254,7 @@ namespace ASCOM.DriverAccess
             objRateLateBound = objTypeAxisRates.InvokeMember("Item",
                         BindingFlags.Default | BindingFlags.GetProperty,
                         null, objAxisRatesLateBound, new object[] { index });
+            if (objRateLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of a Rate object");
             objTypeRate = objRateLateBound.GetType();
         }
 
@@ -1388,6 +1389,7 @@ namespace ASCOM.DriverAccess
             objAxisRatesLateBound = objTypeScope.InvokeMember("AxisRates",
                         BindingFlags.Default | BindingFlags.InvokeMethod,
                         null, objScopeLateBound, new object[] { (int)Axis });
+            if (objAxisRatesLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of an AxisRates object for axis " + Axis.ToString());
             objTypeAxisRates = objAxisRatesLateBound.GetType();
             CurrentAxis = Axis;
             TL = TraceLog;
@@ -1459,6 +1461,7 @@ namespace ASCOM.DriverAccess
                                                                   null,
                                                                   objScopeLateBound,
                                                                   new object[] { });
+            if (objTrackingRatesLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of an TrackingRates object");
             objTypeTrackingRates = objTrackingRatesLateBound.GetType();
             TL = TraceLog; // Save the trace logger reference
             TL.LogMessage("TrackingRates Class","Created object: " + objTypeTrackingRates.FullName);
