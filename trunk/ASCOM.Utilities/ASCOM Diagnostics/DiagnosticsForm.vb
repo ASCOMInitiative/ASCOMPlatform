@@ -329,72 +329,187 @@ Public Class DiagnosticsForm
                     LogException("Diagnostics", ex.ToString)
                 End Try
 
-                ScanInstalledPlatform()
+                Try
+                    ScanInstalledPlatform()
+                Catch ex As Exception
+                    LogException("ScanInstalledPlatform", ex.ToString)
+                End Try
 
-                RunningVersions(TL) 'Log diagnostic information
+                Try
+                    RunningVersions(TL) 'Log diagnostic information
+                Catch ex As Exception
+                    LogException("RunningVersions", ex.ToString)
+                End Try
 
-                ScanDrives() 'Scan PC drives and report information
+                Try
+                    ScanDrives() 'Scan PC drives and report information
+                Catch ex As Exception
+                    LogException("ScanDrives", ex.ToString)
+                End Try
 
-                ScanFrameworks() 'Report on installed .NET Framework versions
+                Try
+                    ScanFrameworks() 'Report on installed .NET Framework versions
+                Catch ex As Exception
+                    LogException("ScanFrameworks", ex.ToString)
+                End Try
 
-                ScanSerial() 'Report serial port information
+                Try
+                    ScanSerial() 'Report serial port information
+                Catch ex As Exception
+                    LogException("ScanSerial", ex.ToString)
+                End Try
 
-                ScanASCOMDrivers() : Action("") 'Report installed driver versions
+                Try
+                    ScanASCOMDrivers() : Action("") 'Report installed driver versions
+                Catch ex As Exception
+                    LogException("ScanASCOMDrivers", ex.ToString)
+                End Try
 
-                ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
+                Try
+                    ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
+                Catch ex As Exception
+                    LogException("ScanDriverExceptions", ex.ToString)
+                End Try
 
-                ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+                Try
+                    ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+                Catch ex As Exception
+                    LogException("ScanProgramFiles", ex.ToString)
+                End Try
 
-                ScanProfile() : Action("") 'Report profile information
+                Try
+                    ScanProfile() : Action("") 'Report profile information
+                Catch ex As Exception
+                    LogException("ScanProfile", ex.ToString)
+                End Try
 
-                ScanRegistry() 'Scan Old ASCOM Registry Profile
+                Try
+                    ScanRegistry() 'Scan Old ASCOM Registry Profile
+                Catch ex As Exception
+                    LogException("ScanInstalledPlatform", ex.ToString)
+                End Try
 
-                ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
+                Try
+                    ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
+                Catch ex As Exception
+                    LogException("ScanProfile55Files", ex.ToString)
+                End Try
 
-                ScanCOMRegistration() 'Report Com Registration
+                Try
+                    ScanCOMRegistration() 'Report Com Registration
+                Catch ex As Exception
+                    LogException("ScanCOMRegistration", ex.ToString)
+                End Try
 
-                ScanForHelperHijacking()
+                Try
+                    ScanForHelperHijacking()
+                Catch ex As Exception
+                    LogException("ScanInstalledPlatform", ex.ToString)
+                End Try
 
                 'Scan files on 32 and 64bit systems
                 TL.LogMessage("Platform Files", "")
                 ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
-                Call ScanPlatformFiles(ASCOMPath) : Action("")
+                Try
+                    Call ScanPlatformFiles(ASCOMPath) : Action("")
+                Catch ex As Exception
+                    LogException("ScanPlatformFiles", ex.ToString)
+                End Try
 
-                ScanDeveloperFiles()
+                Try
+                    ScanDeveloperFiles()
+                Catch ex As Exception
+                    LogException("ScanDeveloperFiles", ex.ToString)
+                End Try
 
                 'List GAC contents
-                ScanGac()
+                Try
+                    ScanGac()
+                Catch ex As Exception
+                    LogException("ScanGac", ex.ToString)
+                End Try
 
                 'List setup files
-                ScanLogs()
+                Try
+                    ScanLogs()
+                Catch ex As Exception
+                    LogException("ScanLogs", ex.ToString)
+                End Try
 
                 'List Platform 6 install logs
-                ScanPlatform6Logs()
+                Try
+                    ScanPlatform6Logs()
+                Catch ex As Exception
+                    LogException("ScanPlatform6Logs", ex.ToString)
+                End Try
 
                 'Scan registry security rights
-                ScanRegistrySecurity()
+                Try
+                    ScanRegistrySecurity()
+                Catch ex As Exception
+                    LogException("ScanRegistrySecurity", ex.ToString)
+                End Try
 
                 'Scan event log messages
-                ScanEventLog()
+                Try
+                    ScanEventLog()
+                Catch ex As Exception
+                    LogException("ScanEventLog", ex.ToString)
+                End Try
 
                 'Scan for ASCOM Applications
-                ScanApplications()
+                Try
+                    ScanApplications()
+                Catch ex As Exception
+                    LogException("ScanApplications", ex.ToString)
+                End Try
 
                 TL.BlankLine()
                 TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
                 TL.BlankLine()
                 TL.BlankLine()
-
-                'Functional tests
-                UtilTests() : Action("")
-                ProfileTests() : Action("")
-                TimerTests() : Action("")
-                NovasComTests() : Action("")
-                KeplerTests() : Action("")
-                TransformTest() : Action("")
-                NOVAS2Tests() : Action("")
-                NOVAS3Tests() : Action("")
-                SimulatorTests() : Action("")
+                Try
+                    'Functional tests
+                    UtilTests() : Action("")
+                Catch ex As Exception
+                    LogException("UtilTests", ex.ToString)
+                End Try
+                Try
+                    ProfileTests() : Action("")
+                Catch ex As Exception
+                    LogException("ProfileTests", ex.ToString)
+                End Try
+                Try
+                    TimerTests() : Action("")
+                Catch ex As Exception
+                    LogException("TimerTests", ex.ToString)
+                End Try
+                Try
+                    NovasComTests() : Action("")
+                Catch ex As Exception
+                    LogException("NovasComTests", ex.ToString)
+                End Try
+                Try
+                    KeplerTests() : Action("")
+                Catch ex As Exception
+                    LogException("KeplerTests", ex.ToString)
+                End Try
+                Try
+                    TransformTest() : Action("")
+                Catch ex As Exception
+                    LogException("TransformTest", ex.ToString)
+                End Try
+                Try
+                    NOVAS2Tests() : Action("")
+                Catch ex As Exception
+                    LogException("NOVAS2Tests", ex.ToString)
+                End Try
+                Try
+                    NOVAS3Tests() : Action("")
+                    SimulatorTests() : Action("")
+                Catch ex As Exception
+                    LogException("NOVAS3Tests", ex.ToString)
+                End Try
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratulations, all " & NMatches & " function tests passed!"
@@ -1109,57 +1224,57 @@ Public Class DiagnosticsForm
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
                 Case "Dome"
-        Select Case Test
-            Case "OpenShutter"
-                StartTime = Now
-                DeviceObject.OpenShutter()
-                Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
-                    Thread.Sleep(100)
-                    Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                    Application.DoEvents()
-                Loop
-                Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
-                Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
-            Case "ShutterStatus"
-                Compare(Device, Test, CInt(DeviceObject.ShutterStatus), 0)
-            Case "Slewing"
-                Compare(Device, Test, DeviceObject.Slewing.ToString, "False")
-            Case "CloseShutter"
-                StartTime = Now
-                DeviceObject.CloseShutter()
-                Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
-                    Thread.Sleep(100)
-                    Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                    Application.DoEvents()
-                Loop
-                Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
-                Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
-            Case "SlewToAltitude"
-                StartTime = Now
-                DeviceObject.SlewToAltitude(45.0)
-                Do
-                    Thread.Sleep(100)
-                    Application.DoEvents()
-                    Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
-                Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, 0.00001)
-            Case "SlewToAzimuth"
-                StartTime = Now
-                DeviceObject.SlewToAzimuth(225.0)
-                Do
-                    Thread.Sleep(100)
-                    Application.DoEvents()
-                    Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
-                Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
-                Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, 0.00001)
-            Case Else
-                LogException("DeviceTest", "Unknown Test: " & Test)
-        End Select
+                    Select Case Test
+                        Case "OpenShutter"
+                            StartTime = Now
+                            DeviceObject.OpenShutter()
+                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterOpen)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
+                                Thread.Sleep(100)
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                Application.DoEvents()
+                            Loop
+                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
+                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterOpen))
+                        Case "ShutterStatus"
+                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), 0)
+                        Case "Slewing"
+                            Compare(Device, Test, DeviceObject.Slewing.ToString, "False")
+                        Case "CloseShutter"
+                            StartTime = Now
+                            DeviceObject.CloseShutter()
+                            Do While (Not (DeviceObject.ShutterStatus = ShutterState.shutterClosed)) And (Now.Subtract(StartTime).TotalSeconds < DOME_SLEW_TIMEOUT)
+                                Thread.Sleep(100)
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                                Application.DoEvents()
+                            Loop
+                            Compare(Device, Test & " Timeout", Now.Subtract(StartTime).TotalSeconds >= DOME_SLEW_TIMEOUT, "False")
+                            Compare(Device, Test, CInt(DeviceObject.ShutterStatus), CInt(ShutterState.shutterClosed))
+                        Case "SlewToAltitude"
+                            StartTime = Now
+                            DeviceObject.SlewToAltitude(45.0)
+                            Do
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
+                            CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, 0.00001)
+                        Case "SlewToAzimuth"
+                            StartTime = Now
+                            DeviceObject.SlewToAzimuth(225.0)
+                            Do
+                                Thread.Sleep(100)
+                                Application.DoEvents()
+                                Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
+                            Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
+                            Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
+                            CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, 0.00001)
+                        Case Else
+                            LogException("DeviceTest", "Unknown Test: " & Test)
+                    End Select
 
                 Case Else
-        LogException("DeviceTest", "Unknown Device: " & Device)
+                    LogException("DeviceTest", "Unknown Device: " & Device)
             End Select
         Catch ex As Exception
             LogException("DeviceTest", Device & " " & Test & " exception: " & ex.ToString)
