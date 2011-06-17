@@ -431,29 +431,32 @@ if Variable REMOVE Equals TRUE
   Comment: Remove 32bit native images
   Set Variable PROGRESS to 60
   MessageBalloon: ASCOM Platform Maintenance, Removing 32bit native images
-  Delete Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Delete Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Delete Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESS to 65
-  Delete Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESS to 75
   Delete Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESS to 80
+  Delete Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESS to 65
+  Delete Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Delete Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Delete Native Images for assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESS to 75
+  Delete Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Delete Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESS to 80
   Comment: Remove 64bit native images if necessary and remove 64bit component COM registration
   if Variable WIN64MODE Equals TRUE
     MessageBalloon: ASCOM Platform Maintenance, Removing 64bit native images
     Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-    Run Program $NGEN64$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove DeviceInterfaces (at end of file)
     Set Variable PROGRESS to 85
     Run Program $NGEN64$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove DriverAccess (at end of file)
+    Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Astrometry (at end of file)
     Set Variable PROGRESS to 90
     Run Program $NGEN64$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Utilities (at end of file)
-    Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Astrometry (at end of file)
+    Run Program $NGEN64$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove DeviceInterfaces (at end of file)
+    Run Program $NGEN64$ uninstall "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Exceptions (at end of file)
     Set Variable PROGRESS to 95
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Astrometry (at end of file)
