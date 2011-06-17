@@ -1,9 +1,0 @@
-AstronomyFuncs = 23, 7, 774, 579, C
-Focuser = 282, 126, 1294, 909, C
-ErrorConstants = 6, 13, 732, 592, C
-AxisRates = 0, 0, 1200, 690, C
-Rate = 0, 0, 0, 0, C
-TrackingRates = 0, 0, 0, 0, C
-Telescope = 14, 31, 1017, 814, Z
-Common = 42, 71, 1030, 832, 
-frmSetup = 268, -7, 1270, 702, C, 965, 69, 1418, 691, C

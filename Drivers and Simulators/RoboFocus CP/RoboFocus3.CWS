@@ -1,7 +1,0 @@
-[Options]
-DisabledThunks=0
-
-[Filters]
-vb6.srf=1
-vb6.smf=1
-vb6.sef=1
