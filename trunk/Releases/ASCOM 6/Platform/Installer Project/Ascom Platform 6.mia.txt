@@ -432,6 +432,7 @@ if Variable REMOVE Equals TRUE
   Set Variable PROGRESS to 60
   MessageBalloon: ASCOM Platform Maintenance, Removing 32bit native images
   Delete Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Delete Native Images for assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Delete Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESS to 65
   Delete Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -448,8 +449,10 @@ if Variable REMOVE Equals TRUE
     Set Variable PROGRESS to 85
     Run Program $NGEN64$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove DriverAccess (at end of file)
+    Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Astrometry 5.5.6.0 (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Astrometry (at end of file)
+    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Astrometry 6.0.0.0 (at end of file)
     Set Variable PROGRESS to 90
     Run Program $NGEN64$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Utilities (at end of file)
