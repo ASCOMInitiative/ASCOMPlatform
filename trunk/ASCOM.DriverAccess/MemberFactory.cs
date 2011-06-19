@@ -267,7 +267,7 @@ namespace ASCOM.DriverAccess
                                 else // Throw a new COM exception that looks like the original exception, containing the original inner COM exception for reference
                                 {
                                     TL.LogMessageCrLf(memberName + " Get", "COM Exception so throwing inner exception: '" + message + "' '0x" + String.Format("{0:x8}", errorcode) + "'");
-                                    throw new DriverAccessCOMException(message, errorcode, e.InnerException);
+                                    throw new DriverAccessCOMException(message, errorcode, e);
                                 }
                             }
 
@@ -352,7 +352,7 @@ namespace ASCOM.DriverAccess
                                 else // Throw a new COM exception that looks like the original exception, containing the original inner COM exception for reference
                                 {
                                     TL.LogMessageCrLf(memberName + " Set", "COM Exception so throwing inner exception: '" + message + "' '0x" + String.Format("{0:x8}", errorcode) + "'");
-                                    throw new DriverAccessCOMException(message, errorcode, e.InnerException);
+                                    throw new DriverAccessCOMException(message, errorcode, e);
                                 }
                             }
 
@@ -466,7 +466,7 @@ namespace ASCOM.DriverAccess
                                 else // Throw a new COM exception that looks like the original exception, containing the original inner COM exception for reference
                                 {
                                     TL.LogMessageCrLf(memberName, "  COM Exception so throwing inner exception: '" + message + "' '0x" + String.Format("{0:x8}", errorcode) + "'");
-                                    throw new DriverAccessCOMException(message, errorcode, e.InnerException);
+                                    throw new DriverAccessCOMException(message, errorcode, e);
                                 }
                             }
 

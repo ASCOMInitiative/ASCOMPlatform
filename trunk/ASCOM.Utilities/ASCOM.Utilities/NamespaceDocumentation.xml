@@ -21,6 +21,16 @@
       </summary>
     </member>
 
+    <member name="N:ASCOM.Controls">
+      <summary>
+        <h2>ASCOM.Controls Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains components to enhance the user's visual experience.
+        </p>
+      </summary>
+    </member>
+
     <member name="N:ASCOM.DeviceInterface">
       <summary>
         <h2>ASCOM.DeviceInterface Namespace</h2>

@@ -156,14 +156,18 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Determine the rates at which the telescope may be moved about the specified axis by the <see cref="MoveAxis" /> method.
+        /// A collection of rates at which the telescope may be moved about the specified axis by the <see cref="MoveAxis" /> method.
         /// </summary>
+        /// <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
+        /// <returns>Collection of <see cref="AxisRates" /> rate objects</returns>
         /// <remarks>
         /// See the description of <see cref="MoveAxis" /> for more information. This method must return an empty collection if <see cref="MoveAxis" /> is not supported. 
         /// <para>This is only available for telescope InterfaceVersions 2 and 3</para>
+        /// <para>
+        /// Please note that the rate objects must contain absolute non-negative values only. Applications determine the direction by applying a
+        /// positive or negative sign to the rates provided. This obviates the need for the driver to to present a duplicate set of negative rates 
+        /// as well as the positive rates.</para>
         /// </remarks>
-        /// <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
-        /// <returns>Collection of Axis Rates</returns>
         public IAxisRates AxisRates(ASCOM.DeviceInterface.TelescopeAxes Axis)
         {
             object obj;
@@ -659,9 +663,12 @@ namespace ASCOM.DriverAccess
         /// <para>
         /// <b>NOTES:</b>
         /// <list type="bullet">
-        /// <item><description>The movement rate must be within the value(s) obtained from a <see cref="IRate" /> object in the the <see cref="AxisRates" /> collection.</description></item>
+        /// <item><description>The movement rate must be within the value(s) obtained from a <see cref="IRate" /> object in the 
+        /// the <see cref="AxisRates" /> collection. This is a signed value with negative rates moving in the oposite direction to positive rates.</description></item>
+        /// <item><description>The values specified in <see cref="AxisRates" /> are absolute, unsigned values and apply to both directions, 
+        /// determined by the sign used in this command.</description></item>
         /// <item><description>An out of range exception is raised the rate is out of range.</description></item>
-        /// <item><description>The value of the <see cref="Slewing" /> must be True if the telescope is moving 
+        /// <item><description>The value of <see cref="Slewing" /> must be True if the telescope is moving 
         /// about any of its axes as a result of this method being called. 
         /// This can be used to simulate a handbox by initiating motion with the
         /// MouseDown event and stopping the motion with the MouseUp event.</description></item>
@@ -1537,9 +1544,15 @@ namespace ASCOM.DriverAccess
         #endregion
     }
 
-    ///<summary>
-    /// Axis Rates implementation.
-    ///</summary>
+    /// <summary>
+    /// A collection of rates at which the telescope may be moved about the specified axis by the <see cref="ITelescopeV3.MoveAxis" /> method.
+    /// This is only used if the telescope interface version is 2 or 3
+    /// </summary>
+    /// <remarks><para>See the description of the <see cref="ITelescopeV3.MoveAxis" /> method for more information.</para>
+    /// <para>This method must return an empty collection if <see cref="ITelescopeV3.MoveAxis" /> is not supported.</para>
+    /// <para>The values used in <see cref="IRate" /> members must be non-negative; forward and backward motion is achieved by the application
+    /// applying an appropriate sign to the returned <see cref="IRate" /> values in the <see cref="ITelescopeV3.MoveAxis" /> command.</para>
+    /// </remarks>
     public class AxisRates : ASCOM.DeviceInterface.IAxisRates
     {
         List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
@@ -1572,10 +1585,18 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Retuns a rate object identified by its index value
+        /// Return information about the rates at which the telescope may be moved about the specified axis by the <see cref="Telescope.MoveAxis" /> method.
         /// </summary>
-        /// <param name="index">1 based index value identifying the member required</param>
-        /// <returns>IRate object</returns>
+        /// <param name="index">The axis about which rate information is desired</param>
+        /// <value>Collection of Rate objects describing the supported rates of motion that can be supplied to the <see cref="Telescope.MoveAxis" /> method for the specified axis.</value>
+        /// <returns>Collection of Rate objects </returns>
+        /// <remarks><para>The (symbolic) values for Index (<see cref="TelescopeAxes" />) are:</para>
+        /// <bl>
+        /// <li><see cref="TelescopeAxes.axisPrimary"/> 0 Primary axis (e.g., Right Ascension or Azimuth)</li>
+        /// <li><see cref="TelescopeAxes.axisSecondary"/> 1 Secondary axis (e.g., Declination or Altitude)</li>
+        /// <li><see cref="TelescopeAxes.axisTertiary"/> 2 Tertiary axis (e.g. imager rotator/de-rotator)</li> 
+        /// </bl>
+        /// </remarks>
         public IRate this[int index]
         {
             get { return new Rate(m_Rates[index].Minimum, m_Rates[index].Maximum); }
@@ -1596,8 +1617,15 @@ namespace ASCOM.DriverAccess
     }
 
     /// <summary>
-    /// Single rate range value
+    /// Describes a range of rates supported by the <see cref="Telescope.MoveAxis" /> method (degrees/per second)
+    /// These are contained within an <see cref="AxisRates" /> collection and serve to describe one or more supported ranges of rates of motion about a mechanical axis. 
+    /// It is possible that the <see cref="Rate.Maximum" /> and <see cref="Rate.Minimum" /> properties will be equal. In this case, the <see cref="Rate" /> object expresses a single discrete rate. 
+    /// Both the <see cref="Rate.Minimum" />  and <see cref="Rate.Maximum" />  properties are always expressed in units of degrees per second.
+    /// This is only using for Telescope InterfaceVersions 2 and 3
     /// </summary>
+    /// <remarks>Values used must be non-negative and are scalar values. You do not need to supply complementary negative rates for each positive 
+    /// rate that you specify. Movement in both directions is achieved by the application applying an appropriate positive or negative sign to the 
+    /// rate when it is used in the <see cref="Telescope.MoveAxis" /> command.</remarks>
     public class Rate : IRate
     {
 
@@ -1617,7 +1645,8 @@ namespace ASCOM.DriverAccess
         #region IRate Members
 
         /// <summary>
-        /// Maximum value of the rate range
+        /// The maximum rate (degrees per second)
+        /// This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
         /// </summary>
         public double Maximum
         {
@@ -1626,7 +1655,8 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Minimum value of the rate range
+        /// The minimum rate (degrees per second)
+        /// This must always be a positive number. It indicates the maximum rate in either direction about the axis. 
         /// </summary>
         public double Minimum
         {

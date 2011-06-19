@@ -45,25 +45,23 @@
 		  	</row>
 		  	<row>
 		    	<entry>Overloads</entry>
-		    	<entry>All overloads have been allocated into separate interfaces from the main class interfaces. Each main interface 
-		    	contains all the core component functionality that is visible to both .NET and COM clients, while the additional 
-		    	interface contains the overloads and is not COM visible. The most extensive additional interface is for the 
-		    	Util component, which sports the <quoteInline>IUtil</quoteInline> and extensive 
-		    	<quoteInline>IUtilExtra</quoteInline> interfaces.</entry>
+		    	<entry>In every case the most functional overload has been made COM visible to ensure that maximum functionality is available to 
+		    	both .NET and COM clients. Less functional overloads i.e. those that default some parameters have been assigned to an additional 
+		    	interface that is .NET visible but not COM visible. The need to do this comes from a fundamental COM limitation in that it does not 
+		    	support overloads.</entry>
 		  	</row><row>
-			    <entry>Generic Variables</entry>
+			    <entry>.NET Generic Variables</entry>
 		    	<entry>These have been avoided by use of a custom <quoteInline>KeyValuePair</quoteInline> 
 		    	class in the ASCOM.Utilities namespace. This is non-generic and allows a set of string keys and 
-		    	associated string values to be returned to both COM and .NET clients. While generics are a little 
-		    	more elegant and provide compiler level type checking, the advantages of having a single return 
-		    	type common to both COM and .NET clients was considered to outweigh these.</entry>
+		    	associated string values to be returned to both COM and .NET clients. As for overloads, COM does not support generic data types 
+		    	and so the non-generic approach was adopted to ensure a single return type common to both COM and .NET clients is used.</entry>
 		  	</row><row>
 			    <entry>Parameterless Constructors</entry>
 		    	<entry>COM needs a parameterless constructor, while .NET supports constructors with parameters. Where it 
 		    	is convenient to have a constructor with parameters, this is provided along with a parameterless 
 		    	constructor and set method for COM use. A typical example is the <quoteInline>TraceLogger</quoteInline> 
 		    	component which has a constructor that takes <quoteInline>LogFileName</quoteInline> and 
-		    	<quoteInline>LogFileType</quoteInline> as well as a paraemterless constructor and the 
+		    	<quoteInline>LogFileType</quoteInline> as well as a parameterless constructor and the 
 		    	<quoteInline>SetLogFile</quoteInline> method that sets <quoteInline>LogFileName</quoteInline> and 
 		    	<quoteInline>LogFileType</quoteInline>.</entry>
 		  	</row>
@@ -74,8 +72,8 @@
     <section address="COMNames">
     <title>COM Names and Type Libraries</title>
     <content>  	
-		<para>Type libraries for all components are provided in the 
-		<quoteInline>Program Files\Common Files\ASCOM\.net</quoteInline> directory.</para>
+		<para>Type libraries for all Platform 5 components are provided in the 
+		<quoteInline>Program Files\Common Files\ASCOM\Interface</quoteInline> directory.</para>
 		
 		<alert class="caution">
 		<para>With one exception, COM names of all elements are identical to the namespace names given in this help 

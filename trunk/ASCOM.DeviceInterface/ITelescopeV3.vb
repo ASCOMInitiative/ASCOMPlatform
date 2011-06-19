@@ -234,12 +234,16 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Determine the rates at which the telescope may be moved about the specified axis by the <see cref="MoveAxis" /> method.
     ''' </summary>
+    ''' <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
+    ''' <returns>Collection of <see cref="IRate" /> rate objects</returns>
     ''' <remarks>
     ''' See the description of <see cref="MoveAxis" /> for more information. This method must return an empty collection if <see cref="MoveAxis" /> is not supported. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
+    ''' <para>
+    ''' Please note that the rate objects must contain absolute non-negative values only. Applications determine the direction by applying a
+    ''' positive or negative sign to the rates provided. This obviates the need for the driver to to present a duplicate set of negative rates 
+    ''' as well as the positive rates.</para>
     ''' </remarks>
-    ''' <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
-    ''' <returns>Collection of Axis Rates</returns>
     Function AxisRates(ByVal Axis As TelescopeAxes) As IAxisRates
 
     ''' <summary>
@@ -580,9 +584,11 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <para>
     ''' <b>NOTES:</b>
     ''' <list type="bullet">
-    ''' <item><description>The movement rate must be within the value(s) obtained from a <see cref="IRate" /> object in the the <see cref="AxisRates" /> collection.</description></item>
-    ''' <item><description>An out of range exception is raised the rate is out of range.</description></item>
-    ''' <item><description>The value of the <see cref="Slewing" /> must be True if the telescope is moving 
+    ''' <item><description>The movement rate must be within the value(s) obtained from a <see cref="IRate" /> object in the 
+    ''' the <see cref="AxisRates" /> collection. This is a signed value with negative rates moving in the oposite direction to positive rates.</description></item>
+    ''' <item><description>The values specified in <see cref="AxisRates" /> are absolute, unsigned values and apply to both directions, 
+    ''' determined by the sign used in this command.</description></item>
+    ''' <item><description>The value of <see cref="Slewing" /> must be True if the telescope is moving 
     ''' about any of its axes as a result of this method being called. 
     ''' This can be used to simulate a handbox by initiating motion with the
     ''' MouseDown event and stopping the motion with the MouseUp event.</description></item>
