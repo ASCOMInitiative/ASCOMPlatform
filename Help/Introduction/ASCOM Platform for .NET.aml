@@ -17,12 +17,19 @@
 			  <row>
 			    <entry>ASCOM Astrometry</entry>
 			    <entry>This includes 32/64bit versions of the original, optional NOVASCOM and Kepler components together with 
-			    a full implementation of the USNO NOVAS2 astrometry library and a new easy to use component from converting
-			    between J2000, apparent and topocentric co-ordinates.</entry>
+			    a full implementation of the USNO NOVAS v2 astrometry library and a new easy to use component from converting
+			    between J2000, apparent and topocentric co-ordinates. Version 6.0.0.0 and later also have a full implementation of NOVAS v3.</entry>
 			  </row>
 			  <row>
 			    <entry>ASCOM Client Toolkit</entry>
-			    <entry>This is the 1.0.5, updated toolkit that enables clients to use early and late binding drivers.</entry>
+			    <entry>The 1.0.5 version enables clients to use early and late binding drivers from Platform 5. Version 6.0.0.0 and
+			    later enables .NET clients to access drivers from Platform 5 and Platform 6 transparently, without regard for interface 
+			    changes. </entry>
+			  </row>
+			  <row>
+			    <entry>ASCOM Device Intrfaces</entry>
+			    <entry>This provdes master device interface definitions for Platform 6 compliant drivers. .NET clients and drivers can use this
+			    directly or through the Client Toolkit, which provides a concrete implementation.</entry>
 			  </row>
 			  <row>
 			    <entry>ASCOM Exceptions</entry>
@@ -31,14 +38,14 @@
 			  </row>
 			  <row>
 			    <entry>ASCOM Utilities</entry>
-			    <entry>This is one component, refactored from the original driver helpers,that provides a range of helpful
-			    support functions. A fewfunctions have been omitted as almost all programming languages provide these and 
+			    <entry>This is a single component, refactored from the Platform 5 driver helpers,that provides a range of helpful
+			    support functions. A few functions have been omitted as almost all programming languages provide these and 
 			    it has been extended in a variaty of ways, see: <link xlink:href="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" /></entry>
 			  </row>
 			  <row>
-			    <entry>ASCOM IConform</entry>
-			    <entry>This allows driver authors to specify the required commands and expected responses that Conform should use 
-			    when testing the CommandXXX functions.</entry>
+			    <entry>ASCOM Conrtols</entry>
+			    <entry>This prodes a number of GUI components for use within Visual Studio to enhance the user visual experience of
+			    setup dialogues and handboxes.</entry>
 			  </row>
 			  <row>
 			    <entry>ASCOM Attributes</entry>
@@ -49,15 +56,17 @@
 			</table>
 
 			<para>The names above will appear on the Visual Studio Add Reference .NET tab, simply add these to your project 
-      		to access to the new components. You should continue to use the Master Interfaces definition from the COM
-      		components tab to access the device interface definitions as COM remains the only supported interface 
-      		mechanic.</para>
+      		to access to the new components. If you wish to develop a Platform 5 only client or driver, you should use the Master Interfaces definition from the COM
+      		components tab to access the device interface definitions. If you are developing to Platform 6 standards you should use the ASCOM DeviceInterfaces
+      		reference on the .NET tab.</para>
       		
       		<alert class="caution">
       		<para>Over time you should migrate away from the VB6 COM components to use the native .NET components 
       		to maximise the longevity of your drivers and applications. There is curently no "must do by" date in sight but
       		a change to the Windows platform that renders the VB6 components unviable to repair could occur at any 
       		point in the future.</para>
+      		<para>The same is the case for Platform 5 device interfaces; the Platform 6 interfaces are backwards compatible and offer 
+      		sigificant extensibility benefits such as the Actions method.</para>
 			</alert>
       		
       		<para>Further information on capabilities is given in the namespace section and some code examples of using the new
