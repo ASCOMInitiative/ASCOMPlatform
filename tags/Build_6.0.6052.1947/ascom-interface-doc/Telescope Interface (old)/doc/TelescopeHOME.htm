@@ -1,0 +1,46 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>ASCOM Telescope Interface Programmer's Reference</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="TelescopeHOME"></a><img src="images/Bug72T-sm.jpg" width="48" height="56" alt="" border="0" align="left">&nbsp;&nbsp;Telescope Interface Standard 1.4<br>
+&nbsp;&nbsp;Programmer's Reference</h1>
+<b>Written by <a href="mailto:rdenny@dc3.com">Robert B. Denny</a></b>
+
+<div class=note>Please conduct discussions regarding this interface and its usage on the <a href="http://groups.yahoo.com/group/ASCOM-Talk" target="browser">ASCOM-Talk List</a>.
+
+<p><b><a href="http://groups.yahoo.com/group/ASCOM-Talk/join" target="browser">Click here to join ASCOM-Talk</a></b></div>
+
+<h2>Introduction</h2>
+
+This document describes the interface used by low-level telescope "driver" components as part of the Astronomy Common Object Model (ASCOM). Components that implement this interface can provide way for programs to control various telescopes via a standard set of properties and methods. The characteristics of this interface comply with the <a href="http://ascom-standards.org/qual-spec.html" target="browser">ASCOM Quality Guidelines</a>, assuring consistent behavior and compatibility with the widest possible variety of Windows Automation clients.
+
+<p>To control a particular telescope type, a program would create an instance of the driver for that telescope type, then use the standard properties and methods described in this document to effect control of that scope. Thus any program or script that uses the standard driver interface automatically gains access to any telescope type for which a driver exists. For more information on ASCOM, see the <a href="http://ascom-standards.org/" target="browser">ASCOM Home Page</a>.
+
+<p>This specification covers a <i>simple, low-level</i> telescope control interface for reading and writing coordinates, slewing, and synchronizing. It does not provide for features (such as drive speed controls) that vary widely between mount types, nor for accessories such as focusers, flip mirrors, etc. Those sorts of things will have their own interfaces. 
+
+<p>Equatorial coordinates are local topocentric, equinox of the current date, hours for right ascension, and degrees for declination. Thus, "inner loop" issues such as mechanical compensation must be contained within the driver or it's underlying controller(s). Time is in Coordinated Universal Time (UTC). 
+
+<h2>For best results</h2>
+
+This will display best if you have Internet Explorer 5 or later, text size set to "smaller", and the following fonts installed:
+<ul>
+	<li> Arial
+	<li> Verdana
+	<li> Lucida Console
+</ul>
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2002, The ASCOM Initiative</div>
+
+</body>
+</html>
