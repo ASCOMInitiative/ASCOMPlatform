@@ -53,7 +53,7 @@ Public Const DESC As String = "POTH (Plain Old Telescope Handset)"
 
 ' registry version - only change if registry needs to change
 ' in an incompatible way - do not track program version
-Public Const RegVer As String = "5.2"
+Public Const RegVer As Double = 5.2
 
 ' parameter management constants
 Public Const INVALID_PARAMETER As Double = -10000#

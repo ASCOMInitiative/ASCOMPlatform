@@ -28,6 +28,8 @@ Attribute VB_Name = "Startup"
 '                   because object creation PUMPS EVENTS, allowing property
 '                   and method calls to be services before initialization
 '                   completes.
+' 21-Jun-11 cdr     Fix localisation bugs, Use Val to read registry settings and
+'                   Str for writing all except booleans, which use CInt.
 ' -----------------------------------------------------------------------------
 
 Option Explicit
@@ -121,7 +123,7 @@ Sub DoStartupIf()
     ' get the registry format version so we can only update whats changed
     oldRegVer = 0#
     On Error Resume Next
-    oldRegVer = CDbl(g_Profile.GetValue(ID, "RegVer"))
+    oldRegVer = val(g_Profile.GetValue(ID, "RegVer"))
     On Error GoTo 0
     
     ' Persistent settings for the scope - Create on first start, or update
@@ -139,29 +141,29 @@ Sub DoStartupIf()
         g_Profile.WriteValue ID, "MeridianDelay", "0.0"
         g_Profile.WriteValue ID, "EquSystem", Str(equLocalTopocentric)
         g_Profile.WriteValue ID, "DoesRefraction", Str(refUnknown)
-        g_Profile.WriteValue ID, "AutoUnpark", "False"
+        g_Profile.WriteValue ID, "AutoUnpark", "0"
         
         g_Profile.WriteValue ID, "Left", "100"
         g_Profile.WriteValue ID, "Top", "100"
-        g_Profile.WriteValue ID, "AdvancedSetup", "False"
-        g_Profile.WriteValue ID, "DomeMode", "False"
-        g_Profile.WriteValue ID, "MotionControl", "False"
+        g_Profile.WriteValue ID, "AdvancedSetup", "0"
+        g_Profile.WriteValue ID, "DomeMode", "0"
+        g_Profile.WriteValue ID, "MotionControl", "0"
     End If
     
     If oldRegVer < 4.7 Then
-        g_Profile.WriteValue ID, "FocusMode", "False"
+        g_Profile.WriteValue ID, "FocusMode", "0"
     End If
     
     If oldRegVer < 4.9 Then
-        g_Profile.WriteValue ID, "QuietMode", "False"
+        g_Profile.WriteValue ID, "QuietMode", "0"
     End If
     
     If oldRegVer < 5# Then
-        g_Profile.WriteValue ID, "HAMode", False
+        g_Profile.WriteValue ID, "HAMode", "0"
     End If
     
     If oldRegVer < 5.1 Then
-        g_Profile.WriteValue ID, "Backlash", False
+        g_Profile.WriteValue ID, "Backlash", "0"
         
         ' To initialize the new east side delay negate the west side delay
         ' This will keep the same behavior as the single variable case
@@ -173,10 +175,10 @@ Sub DoStartupIf()
     End If
     
     If oldRegVer < 5.2 Then
-        g_Profile.WriteValue ID, "Simple", False
+        g_Profile.WriteValue ID, "Simple", "0"
     End If
     
-    g_Profile.WriteValue ID, "RegVer", RegVer
+    g_Profile.WriteValue ID, "RegVer", Str(RegVer)
     
     ' if we need to, then create initial persisted state for the dome
     ' do keep version 2.4 and 4.6 as sufficient
@@ -193,10 +195,10 @@ Sub DoStartupIf()
         g_DomeProfile.WriteValue IDDOME, "Freq", "5"
     End If
     
-    g_DomeProfile.WriteValue IDDOME, "RegVer", RegVer
+    g_DomeProfile.WriteValue IDDOME, "RegVer", Str(RegVer)
     
     ' if we need to, then create initial persisted state for the focuser
-    If oldRegVer < "4.6" Then
+    If oldRegVer < 4.6 Then
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserID", "FocusSim.Focuser"
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserName", "FocusSim.Focuser"
         
@@ -205,18 +207,18 @@ Sub DoStartupIf()
     End If
     
     If oldRegVer < 4.8 Then
-        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxIncrement", Str(EMPTY_PARAMETER)
+        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxIncrement", CStr(EMPTY_PARAMETER)
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxStep", Str(EMPTY_PARAMETER)
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserStepSize", Str(EMPTY_PARAMETER)
-        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", "True"
-        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMoveMicrons", "False"
+        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", "-1"   ' true
+        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMoveMicrons", "0"
     End If
         
-    g_FocuserProfile.WriteValue IDFOCUSER, "RegVer", RegVer
+    g_FocuserProfile.WriteValue IDFOCUSER, "RegVer", Str(RegVer)
     
     ' find out if we're forcing classic late binding
     ' be careful, this registry entry may not exist
-    If g_Profile.GetValue(ID, "ForceLate") = "True" Then
+    If val(g_Profile.GetValue(ID, "ForceLate")) = True Then
         g_bForceLate = True
     Else
         g_bForceLate = False
@@ -233,13 +235,13 @@ Sub DoStartupIf()
     g_sFocuserName = g_FocuserProfile.GetValue(IDFOCUSER, "FocuserName")
       
     ' set up any gui state
-    g_bSetupAdvanced = CBool(g_Profile.GetValue(ID, "AdvancedSetup"))
-    g_bDomeMode = CBool(g_Profile.GetValue(ID, "DomeMode"))
-    g_bFocusMode = CBool(g_Profile.GetValue(ID, "FocusMode"))
-    g_bMotionControl = CBool(g_Profile.GetValue(ID, "MotionControl"))
-    g_bHAMode = CBool(g_Profile.GetValue(ID, "HAMode"))
-    g_handBox.Left = CLng(g_Profile.GetValue(ID, "Left")) * Screen.TwipsPerPixelX
-    g_handBox.Top = CLng(g_Profile.GetValue(ID, "Top")) * Screen.TwipsPerPixelY
+    g_bSetupAdvanced = val(g_Profile.GetValue(ID, "AdvancedSetup"))
+    g_bDomeMode = val(g_Profile.GetValue(ID, "DomeMode"))
+    g_bFocusMode = val(g_Profile.GetValue(ID, "FocusMode"))
+    g_bMotionControl = val(g_Profile.GetValue(ID, "MotionControl"))
+    g_bHAMode = val(g_Profile.GetValue(ID, "HAMode"))
+    g_handBox.Left = val(g_Profile.GetValue(ID, "Left")) * Screen.TwipsPerPixelX
+    g_handBox.Top = val(g_Profile.GetValue(ID, "Top")) * Screen.TwipsPerPixelY
     
     ' get the dialogs created
     Load g_setupDlg
@@ -318,11 +320,11 @@ Sub DoShutdown()
     FocuserDelete
     
     ' save GUI state
-    g_Profile.WriteValue ID, "AdvancedSetup", CStr(g_bSetupAdvanced)
-    g_Profile.WriteValue ID, "DomeMode", CStr(g_bDomeMode)
-    g_Profile.WriteValue ID, "FocusMode", CStr(g_bFocusMode)
-    g_Profile.WriteValue ID, "MotionControl", CStr(g_bMotionControl)
-    g_Profile.WriteValue ID, "HAMode", CStr(g_bHAMode)
+    g_Profile.WriteValue ID, "AdvancedSetup", CInt(g_bSetupAdvanced)
+    g_Profile.WriteValue ID, "DomeMode", CInt(g_bDomeMode)
+    g_Profile.WriteValue ID, "FocusMode", CInt(g_bFocusMode)
+    g_Profile.WriteValue ID, "MotionControl", CInt(g_bMotionControl)
+    g_Profile.WriteValue ID, "HAMode", CInt(g_bHAMode)
     
     ' save windowing state
     g_handBox.Visible = True

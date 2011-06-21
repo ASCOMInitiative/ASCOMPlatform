@@ -87,12 +87,12 @@ Public Sub ScopeClean(clear As Boolean)
         g_dMeridianDelayEast = val(g_Profile.GetValue(ID, "MeridianDelayEast"))
         g_eDoesRefraction = CLng(g_Profile.GetValue(ID, "DoesRefraction"))
         g_eEquSystem = CLng(g_Profile.GetValue(ID, "EquSystem"))
-        g_bAutoUnpark = CBool(g_Profile.GetValue(ID, "AutoUnpark"))
-        g_bBacklash = CBool(g_Profile.GetValue(ID, "Backlash"))
-        g_bSimple = CBool(g_Profile.GetValue(ID, "Simple"))
+        g_bAutoUnpark = val(g_Profile.GetValue(ID, "AutoUnpark"))
+        g_bBacklash = val(g_Profile.GetValue(ID, "Backlash"))
+        g_bSimple = val(g_Profile.GetValue(ID, "Simple"))
         If g_bSimple Then _
             g_bAutoUnpark = False
-        g_bQuiet = CBool(g_Profile.GetValue(ID, "QuietMode"))
+        g_bQuiet = val(g_Profile.GetValue(ID, "QuietMode"))
     End If
     
     g_dRightAscension = INVALID_PARAMETER
@@ -242,10 +242,10 @@ Public Sub ScopeSave()
     g_Profile.WriteValue ID, "MeridianDelayEast", Str(g_dMeridianDelayEast)
     g_Profile.WriteValue ID, "EquSystem", Str(g_eEquSystem)
     g_Profile.WriteValue ID, "DoesRefraction", Str(g_eDoesRefraction)
-    g_Profile.WriteValue ID, "AutoUnpark", CStr(g_bAutoUnpark)
-    g_Profile.WriteValue ID, "Backlash", CStr(g_bBacklash)
-    g_Profile.WriteValue ID, "Simple", CStr(g_bSimple)
-    g_Profile.WriteValue ID, "QuietMode", CStr(g_bQuiet)
+    g_Profile.WriteValue ID, "AutoUnpark", CInt(g_bAutoUnpark)
+    g_Profile.WriteValue ID, "Backlash", CInt(g_bBacklash)
+    g_Profile.WriteValue ID, "Simple", CInt(g_bSimple)
+    g_Profile.WriteValue ID, "QuietMode", CInt(g_bQuiet)
     
 End Sub
 
