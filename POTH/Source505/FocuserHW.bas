@@ -29,13 +29,13 @@ Public Sub FocuserClean(clear As Boolean)
     g_bFocuserAbsolute = False
     
     If clear Then
-        g_lFocuserPosition = CLng(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserRelativePosition"))
-        g_lFocuserIncrement = CLng(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserRelativeIncrement"))
-        g_lFocuserMaxIncrement = CLng(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMaxIncrement"))
-        g_lFocuserMaxStep = CLng(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMaxStep"))
+        g_lFocuserPosition = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserRelativePosition"))
+        g_lFocuserIncrement = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserRelativeIncrement"))
+        g_lFocuserMaxIncrement = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMaxIncrement"))
+        g_lFocuserMaxStep = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMaxStep"))
         g_dFocuserStepSizeInMicrons = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserStepSize"))
-        g_bFocuserAbsMove = CBool(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserAbsMove"))
-        g_bFocuserMoveMicrons = CBool(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMoveMicrons"))
+        g_bFocuserAbsMove = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserAbsMove"))
+        g_bFocuserMoveMicrons = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMoveMicrons"))
     End If
 
 End Sub
@@ -130,7 +130,7 @@ Public Sub FocuserSave()
     g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxIncrement", Str(g_lFocuserMaxIncrement)
     g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxStep", Str(g_lFocuserMaxStep)
     g_FocuserProfile.WriteValue IDFOCUSER, "FocuserStepSize", Str(g_dFocuserStepSizeInMicrons)
-    g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", CStr(g_bFocuserAbsMove)
-    g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMoveMicrons", CStr(g_bFocuserMoveMicrons)
+    g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", CInt(g_bFocuserAbsMove)
+    g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMoveMicrons", CInt(g_bFocuserMoveMicrons)
 
 End Sub
