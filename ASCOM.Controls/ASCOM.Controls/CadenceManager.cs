@@ -69,6 +69,11 @@ namespace ASCOM.Controls
         private static readonly Timer CadenceTimer = new Timer();
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CadenceManager"/> class.
+        /// This constructor is declared private so that no instances of the class can be created
+        /// except by the class itself - this is how the singleton pattern ensures there is just a single instance.
+        /// </summary>
         private CadenceManager()
         {
             UpdateList.Clear();
@@ -77,19 +82,22 @@ namespace ASCOM.Controls
         /// <summary>
         ///   Gets a reference to the Singleton.
         ///   If the Singleton has not yet be instantiated, this causes the object
-        ///   to be created and the constructor to execute.
-        ///   This operation is thread-safe.
+        ///   to be created and the constructor to execute (lazy loading).
+        ///   This operation uses the double-checked locking pattern to ensure thread-safety.
         /// </summary>
         public static CadenceManager Instance
         {
             get
             {
-                if (instance == null)
+                if (instance == null)           // check
                 {
-                    lock (SyncRoot) // Ensures thread safety
+                    lock (SyncRoot)             // lock
                     {
-                        if (instance == null)
+                        if (instance == null)   // double-check
+                        {
                             instance = new CadenceManager();
+                            System.Threading.Thread.MemoryBarrier();    // memory fence (see http://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Microsoft_.NET_.28Visual_Basic.2C_C.23.29)
+                        }
                     }
                 }
                 return instance;
@@ -129,11 +137,19 @@ namespace ASCOM.Controls
         }
 
         /// <summary>
-        ///   Removes a control from the <see cref = "UpdateList" />.
+        ///   Removes a control from the update list.
         ///   If no managed controls remain in the list, then the update timer is stopped.
         /// </summary>
+        /// <param name="control">
+        ///   The <see cref="ICadencedControl"/> to be removed from the update list.
+        /// </param>
+        /// <remarks>
+        ///   If the control is null, or is not in the update list, no action is taken.
+        ///   If the update list is empty after the control is removed, then the cadence timer is stopped.
+        /// </remarks>
         public void Remove(ICadencedControl control)
         {
+            if (control == null) return;
             try
             {
                 // Putting all the code in the finally block makes it a CONSTRAINED REGION that executes atomically
