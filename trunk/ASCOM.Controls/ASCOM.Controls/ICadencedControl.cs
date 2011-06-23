@@ -22,6 +22,9 @@ namespace ASCOM.Controls
         ///   Updates the control's display.
         ///   <see cref = "CadenceManager" /> always calls this method on the GUI thread so that control updates are thread-safe.
         /// </summary>
+        /// <param name="newState">
+        ///   The new display state of the control: <c>true</c> for active, <c>false</c> for inactive.
+        /// </param>
         void CadenceUpdate(bool newState);
     }
 }
