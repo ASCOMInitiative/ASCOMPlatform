@@ -1378,6 +1378,7 @@ Attribute VB_Exposed = False
 ' 31-Aug-06 jab     new gui layout
 ' 10-Sep-06 jab     major changes to handle new focuser gui/functionality
 ' 17-Nov-08 dpp     improve SiteLatitude/Longitude and UTC behaviour
+' 24-Jun-11 cdr     Try to fix problem with MaxIncrement, MaxStep and StepSize.
 ' -----------------------------------------------------------------------------
 Option Explicit
 
@@ -2550,10 +2551,10 @@ End Function
 
 Public Property Let MaxIncrement(ByVal newVal As Long)
 
-    If newVal < 0 Then
+    If newVal <= 0 Then
         txtMaxIncrement.Text = "N/A"
     Else
-        txtMaxIncrement.Text = CStr(newVal)
+        txtMaxIncrement.Text = Str(newVal)
     End If
     
 End Property
@@ -2576,7 +2577,7 @@ Private Function getMaxIncrement(prompt As Boolean, send As Boolean) As Long
         If prompt Then
             MsgBox "You must enter a valid number for Max Increment", _
                 vbExclamation
-            txtMaxIncrement.SetFocus                ' Put cursor in this box
+'            txtMaxIncrement.SetFocus                ' Put cursor in this box
         End If
         Exit Function
     End If
@@ -2602,10 +2603,10 @@ End Function
 
 Public Property Let MaxStep(ByVal newVal As Long)
 
-    If newVal < 0 Then
+    If newVal <= 0 Then
         txtMaxStep.Text = "N/A"
     Else
-        txtMaxStep.Text = CStr(newVal)
+        txtMaxStep.Text = Str(newVal)
     End If
     
 End Property
@@ -2628,7 +2629,7 @@ Private Function getMaxStep(prompt As Boolean, send As Boolean) As Double
         If prompt Then
             MsgBox "You must enter a valid number for Max Step", _
                 vbExclamation
-            txtMaxStep.SetFocus                ' Put cursor in this box
+'            txtMaxStep.SetFocus                ' Put cursor in this box
         End If
         Exit Function
     End If
@@ -2673,12 +2674,13 @@ Private Function getStepSize(prompt As Boolean, send As Boolean) As Double
         getStepSize = CDbl(txtStepSize.Text)
     On Error GoTo 0
     
-    If getStepSize <= 0 Then
+    ' cdr StepSize of zero is allowed
+    If getStepSize < 0 Then
         getStepSize = INVALID_PARAMETER
         If prompt Then
             MsgBox "You must enter a valid number for Step Size", _
                 vbExclamation
-            txtStepSize.SetFocus                ' Put cursor in this box
+'            txtStepSize.SetFocus                ' Put cursor in this box
         End If
         Exit Function
     End If
