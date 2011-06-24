@@ -207,7 +207,7 @@ Sub DoStartupIf()
     End If
     
     If oldRegVer < 4.8 Then
-        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxIncrement", CStr(EMPTY_PARAMETER)
+        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxIncrement", Str(EMPTY_PARAMETER)
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxStep", Str(EMPTY_PARAMETER)
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserStepSize", Str(EMPTY_PARAMETER)
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", "-1"   ' true

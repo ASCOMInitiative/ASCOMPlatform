@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=ASCOM POTH
-AppVerName=POTH 5.0.6
-AppVersion=5.0.6
+AppVerName=POTH 5.0.7
+AppVersion=5.0.7
 AppPublisher=Jon Brewster jon@brewsters.net
 AppPublisherURL=http://ascom-standards.org/
 AppSupportURL=http://ascom-standards.org/
