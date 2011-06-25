@@ -22,6 +22,7 @@ Module GlobalConstants
     Friend Const SIMULATOR_TRACE As String = "Trace Simulators", SIMULATOR_TRACE_DEFAULT As Boolean = True
     Friend Const DRIVERACCESS_TRACE As String = "Trace DriverAccess", DRIVERACCESS_TRACE_DEFAULT As Boolean = True
     Friend Const CHOOSER_USE_CREATEOBJECT As String = "Chooser Use CreateObject", CHOOSER_USE_CREATEOBJECT_DEFAULT As Boolean = False
+    Friend Const ABANDONED_MUTEXT_TRACE As String = "Trace Abandoned Mutexes", ABANDONED_MUTEX_TRACE_DEFAULT As Boolean = False
 
     Friend Const PROFILE_MUTEX_NAME As String = "ASCOMProfileMutex" 'Name and timout value for the Profile mutex than ensures only one profile action happens at a time
     Friend Const PROFILE_MUTEX_TIMEOUT As Integer = 5000
@@ -111,5 +112,8 @@ Module GlobalConstants
         EraseTemplatesInfo = 26
         EraseTemplatesError = 27
         TraceLoggerException = 28
+        TraceLoggerMutexTimeOut = 29
+        TraceLoggerMutexAbandoned = 30
+        RegistryProfileMutexAbandoned = 31
     End Enum
 End Module

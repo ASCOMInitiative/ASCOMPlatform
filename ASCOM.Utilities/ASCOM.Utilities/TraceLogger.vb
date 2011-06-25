@@ -33,6 +33,7 @@ Public Class TraceLogger
     Private g_LogFileActualName As String 'Full name of the log file being created (includes automatic file name)
 
     Private mut As System.Threading.Mutex
+    Private GotMutex As Boolean
 
 #Region "New and IDisposable Support"
     Private disposedValue As Boolean = False        ' To detect redundant calls
@@ -124,7 +125,7 @@ Public Class TraceLogger
     ''' with StartLine</remarks>
     Public Sub LogIssue(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogIssue
         Try
-            mut.WaitOne()
+            GetTraceLoggerMutex("LogIssue", """" & Identifier & """, """ & Message & """")
             If g_Enabled Then
                 If g_LogFile Is Nothing Then Call CreateLogFile()
                 If g_LineStarted Then g_LogFile.WriteLine()
@@ -159,7 +160,7 @@ Public Class TraceLogger
     Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean) Implements ITraceLogger.LogMessage
         Dim Msg As String = Message
         Try
-            mut.WaitOne()
+            GetTraceLoggerMutex("LogMessage", """" & Identifier & """, """ & Message & """, " & HexDump.ToString & """")
             If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Silently close the open line
 
             If g_Enabled Then
@@ -184,7 +185,7 @@ Public Class TraceLogger
     ''' </remarks>
     Public Sub LogMessageCrLf(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogMessageCrLf
         Try
-            mut.WaitOne()
+            GetTraceLoggerMutex("LogMessage", """" & Identifier & """, """ & Message & """")
             If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Silently close the open line
 
             If g_Enabled Then
@@ -213,7 +214,7 @@ Public Class TraceLogger
     ''' </remarks>
     Public Sub LogStart(ByVal Identifier As String, ByVal Message As String) Implements ITraceLogger.LogStart
         Try
-            mut.WaitOne()
+            GetTraceLoggerMutex("LogStart", """" & Identifier & """, """ & Message & """")
             If g_LineStarted Then
                 LogFinish("LOGISSUE: LogStart has been called before LogFinish. Parameters: " & Identifier & " " & Message)
             Else
@@ -334,7 +335,7 @@ Public Class TraceLogger
     <ComVisible(False)> _
     Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String) Implements ITraceLoggerExtra.LogMessage
         Try
-            mut.WaitOne()
+            GetTraceLoggerMutex("LogMessage", """" & Identifier & """, """ & Message & """")
             If g_LineStarted Then LogFinish(" ") ' 1/10/09 PWGS Made line closure silent
             If g_Enabled Then
                 If g_LogFile Is Nothing Then Call CreateLogFile()
@@ -360,7 +361,7 @@ Public Class TraceLogger
     <ComVisible(False)> _
     Public Overloads Sub LogContinue(ByVal Message As String) Implements ITraceLoggerExtra.LogContinue
         Try
-            mut.WaitOne()
+            GetTraceLoggerMutex("LogContinue", """" & Message & """")
             If Not g_LineStarted Then
                 LogMessage("LOGISSUE", "LogContinue has been called before LogStart. Parameter: " & Message)
             Else
@@ -389,7 +390,7 @@ Public Class TraceLogger
     <ComVisible(False)> _
         Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLoggerExtra.LogFinish
         Try
-            mut.WaitOne()
+            GetTraceLoggerMutex("LogFinish", """" & Message & """")
             If Not g_LineStarted Then
                 LogMessage("LOGISSUE", "LogFinish has been called before LogStart. Parameter: " & Message)
             Else
@@ -503,6 +504,31 @@ Public Class TraceLogger
             LogEvent("LogMsgFormatter", "Exception", EventLogEntryType.Error, EventLogErrors.TraceLoggerException, ex.ToString)
             'MsgBox("LogMsgFormatter exception: " & Len(l_Msg) & " *" & l_Msg & "* " & ex.ToString, MsgBoxStyle.Critical)
         End Try
+    End Sub
+
+    Private Sub GetTraceLoggerMutex(ByVal Method As String, ByVal Parameters As String)
+        'Get the profile mutex or log an error and throw an exception that will terminate this profile call and return to the calling application
+        Try
+            'Try to acquire the mutex
+            GotMutex = mut.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            'Catch the AbandonedMutexException but not any others, these are passed to the calling routine
+        Catch ex As System.Threading.AbandonedMutexException
+            ' We've received this exception but it indicates an issue in a PREVIOUS thread not this one. Log it and we have also got the mutex; so continue!
+            LogEvent("TraceLogger", "AbandonedMutexException in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexAbandoned, ex.ToString)
+            If GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT) Then
+                LogEvent("TraceLogger", "AbandonedMutexException in " & Method & ": Throwing exception to application", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, Nothing)
+                Throw 'Throw the exception in order to report it
+            Else
+                LogEvent("TraceLogger", "AbandonedMutexException in " & Method & ": Absorbing exception, continuing normal execution", EventLogEntryType.Warning, EventLogErrors.TraceLoggerMutexAbandoned, Nothing)
+                GotMutex = True 'Flag that we have got the mutex.
+            End If
+        End Try
+
+        'Check whether we have the mutex, throw an error if not
+        If Not GotMutex Then
+            LogEvent(Method, "Timed out waiting for TraceLogger mutex in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, EventLogErrors.TraceLoggerMutexTimeOut, Nothing)
+            Throw New ProfilePersistenceException("Timed out waiting for TraceLogger mutex in " & Method & ", parameters: " & Parameters)
+        End If
     End Sub
 
 #End Region

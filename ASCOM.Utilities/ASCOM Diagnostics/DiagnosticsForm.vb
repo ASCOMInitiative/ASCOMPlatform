@@ -254,6 +254,7 @@ Public Class DiagnosticsForm
         MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
         MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
         MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+        MenuThrowAbandonedMutexExceptions.Checked = GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT)
     End Sub
 
     Private Sub Status(ByVal Msg As String)
@@ -5445,5 +5446,10 @@ Public Class DiagnosticsForm
 
     Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
         VersionForm.ShowDialog()
+    End Sub
+
+    Private Sub MenuThrowAbandonedMutexExceptions_Click(sender As System.Object, e As System.EventArgs) Handles MenuThrowAbandonedMutexExceptions.Click
+        MenuThrowAbandonedMutexExceptions.Checked = Not MenuThrowAbandonedMutexExceptions.Checked 'Invert the selection
+        SetName(ABANDONED_MUTEXT_TRACE, MenuThrowAbandonedMutexExceptions.Checked.ToString)
     End Sub
 End Class

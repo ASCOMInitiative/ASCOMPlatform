@@ -117,6 +117,8 @@
  		 			<listItem>Profile - Improved resilience to transient operational issues</listItem>>
  		 			<listItem>Profile - Improved recovery from profile file corruption</listItem>>
  		 			<listItem>Profile - Fixed exception thrown when a calling application has no version number of any kind</listItem>
+ 		 			<listItem>Profile - AbandonedMutexExceptions are now suppressed because they indicate issues in already terminated threads 
+ 		 			and not in the thread that receives the exception. Previous behaviour can be enabled for testing through a Trace menu option</listItem>
  		 			<listItem>Serial - Some installed COM ports were not returned by Serial.AvailableCOMPorts. This has been 
  		 			improved to actively test for COM ports rather than simply relying on the list of ports returned by the .NET Framework.</listItem>
  		 			<listItem>ShowPlatformVersion - Fixed failure when run on a 64bit OS</listItem>>
