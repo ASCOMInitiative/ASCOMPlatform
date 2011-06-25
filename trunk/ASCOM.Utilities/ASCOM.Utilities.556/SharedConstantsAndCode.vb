@@ -6,6 +6,7 @@ Imports Microsoft.Win32
 Module SharedConstants
     Friend Const TRACE_TRANSFORM As String = "Trace Transform", TRACE_TRANSFORM_DEFAULT As Boolean = False
     Friend Const REGISTRY_UTILITIES_FOLDER As String = "Software\ASCOM\Utilities"
+    Friend Const ABANDONED_MUTEXT_TRACE As String = "Trace Abandoned Mutexes", ABANDONED_MUTEX_TRACE_DEFAULT As Boolean = False
 End Module
 
 #Region "Registry Utility Code"
@@ -177,6 +178,9 @@ Module EventLogCode
         EraseTemplatesInfo = 26
         EraseTemplatesError = 27
         TraceLoggerException = 28
+        TraceLoggerMutexTimeOut = 29
+        TraceLoggerMutexAbandoned = 30
+        RegistryProfileMutexAbandoned = 31
     End Enum
 
     ''' <summary>

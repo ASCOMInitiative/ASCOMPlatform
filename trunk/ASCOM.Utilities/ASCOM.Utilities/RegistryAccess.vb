@@ -191,7 +191,7 @@ Friend Class RegistryAccess
             End Try
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("DeleteProfile")
         End Try
     End Sub
 
@@ -223,7 +223,7 @@ Friend Class RegistryAccess
             Next
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("EnumKeys")
         End Try
         For Each kvp As Generic.KeyValuePair(Of String, String) In RetValues
             TL.LogMessage("", "Found: " & kvp.Key & " " & kvp.Value)
@@ -248,7 +248,7 @@ Friend Class RegistryAccess
 
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("EnumProfile")
         End Try
         Return RetValues
     End Function
@@ -287,7 +287,7 @@ Friend Class RegistryAccess
 
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds")
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("GetProfile")
         End Try
 
         Return RetVal
@@ -317,7 +317,7 @@ Friend Class RegistryAccess
             TL.LogMessageCrLf("WriteProfile", "Exception: " & ex.ToString)
             Throw New ProfilePersistenceException("RegistryAccess.WriteProfile exception", ex)
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("WriteProfile")
         End Try
     End Sub
 
@@ -350,7 +350,7 @@ Friend Class RegistryAccess
             LogError("BackupProfile", "Exception: " & ex.ToString)
             Throw New ProfilePersistenceException("RegistryAccess.BackupProfile exception", ex)
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("BackupProfile")
         End Try
     End Sub
 
@@ -385,7 +385,7 @@ Friend Class RegistryAccess
             LogError("RestoreProfile", "Exception: " & ex.ToString)
             Throw New ProfilePersistenceException("RegistryAccess.BackupProfile exception", ex)
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("RestoreProfile")
         End Try
     End Sub
 
@@ -401,7 +401,7 @@ Friend Class RegistryAccess
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds ")
 
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("GetProfile")
         End Try
 
         Return ProfileContents
@@ -447,7 +447,7 @@ Friend Class RegistryAccess
             sw.Stop() : TL.LogMessage("  ElapsedTime", "  " & sw.ElapsedMilliseconds & " milliseconds ")
 
         Finally
-            ProfileMutex.ReleaseMutex()
+            ReleaseProfileMutex("SetProfile")
         End Try
 
     End Sub
@@ -737,12 +737,51 @@ Friend Class RegistryAccess
 
     Private Sub GetProfileMutex(ByVal Method As String, ByVal Parameters As String)
         'Get the profile mutex or log an error and throw an exception that will terminate this profile call and return to the calling application
-        GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+        Try
+            'Try to acquire the mutex
+            GotMutex = ProfileMutex.WaitOne(PROFILE_MUTEX_TIMEOUT, False)
+            TL.LogMessage("GetProfileMutex", "Got Profile Mutex for " & Method)
+            'Catch the AbandonedMutexException but not any others, these are passed to the calling routine
+        Catch ex As System.Threading.AbandonedMutexException
+            ' We've received this exception but it indicates an issue in a PREVIOUS thread not this one. Log it and we have also got the mutex; so continue!
+            TL.LogMessage("GetProfileMutex", "***** WARNING ***** AbandonedMutexException in " & Method & ", parameters: " & Parameters)
+            TL.LogMessageCrLf("AbandonedMutexException", ex.ToString)
+            LogEvent("RegistryAccess", "AbandonedMutexException in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, EventLogErrors.RegistryProfileMutexAbandoned, ex.ToString)
+            If GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT) Then
+                TL.LogMessage("RegistryAccess", "Throwing exception to application")
+                LogEvent("RegistryAccess", "AbandonedMutexException in " & Method & ": Throwing exception to application", EventLogEntryType.Warning, EventLogErrors.RegistryProfileMutexAbandoned, Nothing)
+                Throw 'Throw the exception in order to report it
+            Else
+                TL.LogMessage("RegistryAccess", "Absorbing exception, continuing normal execution")
+                LogEvent("RegistryAccess", "AbandonedMutexException in " & Method & ": Absorbing exception, continuing normal execution", EventLogEntryType.Warning, EventLogErrors.RegistryProfileMutexAbandoned, Nothing)
+                GotMutex = True 'Flag that we have got the mutex.
+            End If
+        End Try
+
+        'Check whether we have the mutex, throw an error if not
         If Not GotMutex Then
             TL.LogMessage("GetProfileMutex", "***** WARNING ***** Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters)
             LogEvent(Method, "Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters, EventLogEntryType.Error, EventLogErrors.RegistryProfileMutexTimeout, Nothing)
             Throw New ProfilePersistenceException("Timed out waiting for Profile mutex in " & Method & ", parameters: " & Parameters)
         End If
+    End Sub
+
+    Sub ReleaseProfileMutex(ByVal Method As String)
+        Try
+            ProfileMutex.ReleaseMutex()
+            TL.LogMessage("ReleaseProfileMutex", "Released Profile Mutex for " & Method)
+        Catch ex As Exception
+            TL.LogMessage("ReleaseProfileMutex", "Exception: " & ex.ToString)
+            If GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT) Then
+                TL.LogMessage("ReleaseProfileMutex", "Release Mutex Exception in " & Method & ": Throwing exception to application")
+                LogEvent("RegistryAccess", "Release Mutex Exception in " & Method & ": Throwing exception to application", EventLogEntryType.Error, EventLogErrors.RegistryProfileMutexAbandoned, ex.ToString)
+                Throw 'Throw the exception in order to report it
+            Else
+                TL.LogMessage("ReleaseProfileMutex", "Release Mutex Exception in " & Method & ": Absorbing exception, continuing normal execution")
+                LogEvent("RegistryAccess", "Release Mutex Exception in " & Method & ": Absorbing exception, continuing normal execution", EventLogEntryType.Error, EventLogErrors.RegistryProfileMutexAbandoned, ex.ToString)
+            End If
+
+        End Try
     End Sub
 
 #Region "32/64bit registry access code"

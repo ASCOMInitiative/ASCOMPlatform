@@ -151,7 +151,31 @@ namespace ConsoleApplication1
             // Platform 5 files resulting in an unexpected automatic repair. Its left here just in case, Please DO NOT RE-ENABLE THIS FEATURE unless have a way round the resulting issues
             //FinaliseRestorePoint();
 
+            
+            //Clean up objects before close
+            try
+            {
+                int rc = 0;
+                int loopcount = 0;
+                do
+                {
+                    rc = System.Runtime.InteropServices.Marshal.ReleaseComObject(oProfile);
+                    loopcount += 1;
+                    LogMessage("FinaliseInstall", "Releasing Profile object" + rc.ToString() + " " + loopcount.ToString());
+                } while ((rc > 0) & (loopcount < 10));
+                
+            }
+            catch { }
+
             LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
+
+            try
+            {
+                TL.Enabled = false;
+                TL.Dispose();
+                TL = null;
+            }
+            catch { }
 
             return ReturnCode;
         }
