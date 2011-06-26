@@ -343,11 +343,13 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Info(0, "Ethernet received:", command.m_Command, result);
             
-            result = DeEscape(result);
+            if (!string.IsNullOrEmpty(result)) result = DeEscape(result);
 
             Trace.Exit(4, "GetCommandResultEthernet", command.m_Command, result);
             return result;
         }
+
+        static Regex regexUnicode = new Regex(@"\&\^([0-9]+)\;", RegexOptions.Compiled);
 
         /// <summary>
         /// Translates G2 escaped Unicode characters into real characters
@@ -362,8 +364,7 @@ namespace ASCOM.GeminiTelescope
             string DeEscapedString = EscapedString;
             try
             {
-                Regex regex = new Regex(@"\&\^([0-9]+)\;", RegexOptions.IgnoreCase);
-                DeEscapedString = regex.Replace(EscapedString, match => ((char)int.Parse(match.Groups[1].Value, System.Globalization.NumberStyles.Number)).ToString());
+                DeEscapedString = regexUnicode.Replace(EscapedString, match => ((char)int.Parse(match.Groups[1].Value, System.Globalization.NumberStyles.Number)).ToString());
             }
             catch (Exception ex)
             {
