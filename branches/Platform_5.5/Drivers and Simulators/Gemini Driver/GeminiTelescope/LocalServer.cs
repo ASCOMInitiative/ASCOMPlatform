@@ -615,7 +615,7 @@ namespace ASCOM.GeminiTelescope
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             m_MainForm = new frmMain();
-            if (m_bComStart && !GeminiHardware.ShowHandbox) m_MainForm.WindowState = FormWindowState.Minimized;
+            if (m_bComStart && !GeminiHardware.Instance.ShowHandbox) m_MainForm.WindowState = FormWindowState.Minimized;
 
             // Register the class factories of the served objects
             RegisterClassFactories();
@@ -636,12 +636,12 @@ namespace ASCOM.GeminiTelescope
             // Don't wait until the thread has stopped before
             // we perform revocation!!!
             RevokeClassFactories();
+            if (mut != null) mut.ReleaseMutex();
 
             // Now stop the Garbage Collector thread.
             GarbageCollector.StopThread();
             GarbageCollector.WaitForThreadToStop();
 
-            if (mut!=null) mut.ReleaseMutex();
 
         }
 
@@ -651,13 +651,13 @@ namespace ASCOM.GeminiTelescope
             {
                 if (m_MainForm != null)
                 {
-                    if (GeminiHardware.Trace != null)
+                    if (GeminiHardware.Instance.Trace != null)
                     {
                         Exception ex = e.ExceptionObject as Exception;
                         if (ex != null)
                         {
-                            GeminiHardware.Trace.Except(ex);
-                            GeminiHardware.Trace.Error("CurrentDomain_Exception", ex.Message, ex.Source, ex.StackTrace, ex.InnerException);
+                            GeminiHardware.Instance.Trace.Except(ex);
+                            GeminiHardware.Instance.Trace.Error("CurrentDomain_Exception", ex.Message, ex.Source, ex.StackTrace, ex.InnerException);
                         }
                         MessageBox.Show(SharedResources.TELESCOPE_DRIVER_NAME + " has encountered an error and must now close\r\n\r\n"+ex.ToString(), SharedResources.TELESCOPE_DRIVER_NAME + "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -675,13 +675,13 @@ namespace ASCOM.GeminiTelescope
             {
                 if (m_MainForm != null)
                 {
-                    if (GeminiHardware.Trace != null)
+                    if (GeminiHardware.Instance.Trace != null)
                     {
                         Exception ex = e.Exception as Exception;
                         if (ex != null)
                         {
-                            GeminiHardware.Trace.Except(ex);
-                            GeminiHardware.Trace.Error("ThreadException", ex.Message, ex.Source, ex.StackTrace, ex.InnerException);
+                            GeminiHardware.Instance.Trace.Except(ex);
+                            GeminiHardware.Instance.Trace.Error("ThreadException", ex.Message, ex.Source, ex.StackTrace, ex.InnerException);
                             MessageBox.Show(SharedResources.TELESCOPE_DRIVER_NAME + " has encountered an error and must now close\r\n\r\n" + ex.ToString(), SharedResources.TELESCOPE_DRIVER_NAME + "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }

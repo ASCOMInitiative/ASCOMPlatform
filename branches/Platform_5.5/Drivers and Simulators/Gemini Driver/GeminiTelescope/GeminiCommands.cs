@@ -222,7 +222,8 @@ namespace ASCOM.GeminiTelescope
             Commands.Add(">222:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">411:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
             Commands.Add(">412:", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
-            Commands.Add(">226:", new GeminiCommand(GeminiCommand.ResultType.Custom, 0, false, new CustomCommand(GeminiHardware.TimeToLimitL4))); 
+            Commands.Add("<226:", new GeminiCommand(GeminiCommand.ResultType.Custom, 0, false, new CustomCommand(GeminiHardware.Instance.TimeToLimitL4)));
+
         }
 
         /// <summary>
@@ -231,8 +232,28 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public static void GeminiCommandsL5()
         {
-            Commands.Add(">97", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 6));
-            Commands.Remove("<226");    //delete custom implementation used for L4 mounts, this is implemented in firmware in L5
+            // if we didn't add these L5 commands yet, do this now
+            if (!Commands.ContainsKey(">97:"))
+            {
+                Commands.Add(">97:", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 6));
+                Commands.Remove("<226:");    //delete custom implementation used for L4 mounts, this is implemented in firmware in L5
+                Commands.Add(":GW", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+                Commands.Add(":Gw", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+                Commands.Add(":Gu", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
+                Commands.Add(":GI", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+                Commands.Add(":OO", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+                Commands.Add(":Oo", new GeminiCommand(GeminiCommand.ResultType.HashChar, 0));
+
+                // L5 fixes the return values for these, so need to remove them from the list of special cases:
+                Commands.Remove(">181:");
+                Commands.Remove(">182:");
+                Commands.Remove(">509:");
+                Commands.Remove(">511:");
+                Commands.Remove(">221:");
+                Commands.Remove(">222:");
+                Commands.Remove(">411:");
+                Commands.Remove(">412:");
+            }
         }
 
     }

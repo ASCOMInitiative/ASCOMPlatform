@@ -695,7 +695,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(104, 31);
             this.label6.TabIndex = 13;
-            this.label6.Text = " DEC Comet  Rate Divisor (0 to 65535):";
+            this.label6.Text = " DEC Comet  Rate Divisor:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label4
@@ -708,7 +708,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(104, 31);
             this.label4.TabIndex = 4;
-            this.label4.Text = "RA Tracking Divisor  (256 to 65535):";
+            this.label4.Text = "RA Tracking Divisor:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label5

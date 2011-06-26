@@ -46,9 +46,9 @@ namespace ASCOM.GeminiTelescope
             SetControlColor(this.groupBox1);
             SetControlColor(this.groupBox2);
             SetControlColor(this.groupBox3);
-            chkNudge.Checked = GeminiHardware.NudgeFromSafety;
+            chkNudge.Checked = GeminiHardware.Instance.NudgeFromSafety;
 
-            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChange);
+            GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnectChange);
         }
 
 
@@ -63,7 +63,7 @@ namespace ASCOM.GeminiTelescope
             foreach (Control c in panel.Controls)
             {
                 if (c.BackColor == Color.Transparent || c.BackColor == Color.Black)
-                    if (GeminiHardware.Connected)
+                    if (GeminiHardware.Instance.Connected)
                         c.ForeColor = Color.Lime;
                     else
                         c.ForeColor = Color.LightGray;
@@ -91,7 +91,7 @@ namespace ASCOM.GeminiTelescope
                     }
                 }
 
-                GeminiHardware.NudgeFromSafety = chkNudge.Checked;
+                GeminiHardware.Instance.NudgeFromSafety = chkNudge.Checked;
                 DialogResult = DialogResult.OK;
             }
         }

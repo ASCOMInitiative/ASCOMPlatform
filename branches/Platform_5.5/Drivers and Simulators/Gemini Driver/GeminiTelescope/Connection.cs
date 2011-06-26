@@ -33,12 +33,12 @@ using System.Web;
 namespace ASCOM.GeminiTelescope
 {
 
-    public static partial class GeminiHardware
+    public partial class GeminiHardwareBase
     {
-        private static string EthernetResult = "";
-        private static HttpWebResponse Response = null;
+        private  string EthernetResult = "";
+        private  HttpWebResponse Response = null;
 
-        private static void TransmitEthernet(string s)
+        private void TransmitEthernet(string s)
         {
              Trace.Enter(4, "TransmitE", s);
 
@@ -49,9 +49,9 @@ namespace ASCOM.GeminiTelescope
 
             if (s == String.Empty) return;
 
-            string url = GeminiHardware.UseDHCP?
-                "http://" + GeminiHardware.GeminiDHCPName + "/ser.cgx?SE=" + s :
-                "http://" + GeminiHardware.EthernetIP + "/ser.cgx?SE=" + s;
+            string url = UseDHCP?
+                "http://" + GeminiDHCPName + "/ser.cgx?SE=" + s :
+                "http://" + EthernetIP + "/ser.cgx?SE=" + s;
 
             url = url.Replace("#", "%23");
 
@@ -72,7 +72,7 @@ namespace ASCOM.GeminiTelescope
 
                 request.Headers = new WebHeaderCollection();
                 request.Headers.Add("Accept-Language: en-US");
-                if (GeminiHardware.BypassProxy) request.Proxy = null;
+                if (BypassProxy) request.Proxy = null;
 
                 request.Credentials = new NetworkCredential(EthernetUser, EthernetPassword);
                 request.PreAuthenticate = true;
@@ -115,7 +115,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        private static void TransmitSerial(string s)
+        private void TransmitSerial(string s)
         {
             Trace.Enter(4, "Transmit", s);
 
@@ -150,7 +150,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command">actual command sent to Gemini</param>
         /// <param name="bResyncOnError">true if driver should resync if an error was detected</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        private static string GetCommandResult(CommandItem command, bool bResyncOnError)
+        private string GetCommandResult(CommandItem command, bool bResyncOnError)
         {
             if (m_EthernetPort)
                 return GetCommandResultEthernet(command, bResyncOnError);
@@ -161,7 +161,7 @@ namespace ASCOM.GeminiTelescope
 
 
 
-        private static string getEthernetCommandResult(int timeout)
+        private string getEthernetCommandResult(int timeout)
         {
             if (Response == null) return null;
 
@@ -206,7 +206,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command">actual command sent to Gemini</param>
         /// <param name="bResyncOnError">true if driver should resync if an error was detected</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        private static string GetCommandResultEthernet(CommandItem command, bool bResyncOnError)
+        private string GetCommandResultEthernet(CommandItem command, bool bResyncOnError)
         {
             string result = null;
             Trace.Enter(4, "GetCommandResultE", command.m_Command);
@@ -354,7 +354,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command">actual command sent to Gemini</param>
         /// <param name="bResyncOnError">true if driver should resync if an error was detected</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        private static string GetCommandResultSerial(CommandItem command, bool bResyncOnError)
+        private string GetCommandResultSerial(CommandItem command, bool bResyncOnError)
         {
             string result = null;
 
@@ -503,7 +503,7 @@ namespace ASCOM.GeminiTelescope
         ///   reset pending communication queues, and wait a defined "cool-down" interval of (RECOVER_SLEEP)
         ///   then, resume processing.
         /// </summary>
-        private static void AddOneMoreError()
+        private void AddOneMoreError()
         {
             Trace.Enter("AddOneMoreError", m_TotalErrors);
 
@@ -572,7 +572,7 @@ namespace ASCOM.GeminiTelescope
 
 
 
-        static void tmrReadTimeout_Elapsed(object sender, ElapsedEventArgs e)
+        void tmrReadTimeout_Elapsed(object sender, ElapsedEventArgs e)
         {
             m_SerialTimeoutExpired.Set();
         }
@@ -583,7 +583,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="terminate"></param>
         /// <returns></returns>
-        private static string ReadTo(char terminate)
+        private string ReadTo(char terminate)
         {
             StringBuilder res = new StringBuilder();
 
@@ -631,7 +631,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="chars"></param>
         /// <returns></returns>
-        private static string ReadNumber(int chars)
+        private string ReadNumber(int chars)
         {
             StringBuilder res = new StringBuilder();
             StringBuilder outp = new StringBuilder();
@@ -672,7 +672,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="terminate"></param>
         /// <returns></returns>
-        private static string ReadToE(char terminate)
+        private string ReadToE(char terminate)
         {
             StringBuilder res = new StringBuilder();
 
@@ -716,7 +716,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="chars"></param>
         /// <returns></returns>
-        private static string ReadNumberE(int chars)
+        private string ReadNumberE(int chars)
         {
             StringBuilder res = new StringBuilder();
             StringBuilder outp = new StringBuilder();
@@ -749,7 +749,7 @@ namespace ASCOM.GeminiTelescope
 
 
 
-        private static void DiscardInBuffer()
+        internal void DiscardInBuffer()
         {
             if (EthernetPort) 
                 DiscardInBufferEthernet();
@@ -765,7 +765,7 @@ namespace ASCOM.GeminiTelescope
         /// pass-through port
         /// </summary>
         /// 
-        private static void DiscardInBufferEthernet()
+        private void DiscardInBufferEthernet()
         {
             EthernetResult = "";
         }
@@ -778,7 +778,7 @@ namespace ASCOM.GeminiTelescope
         /// pass-through port
         /// </summary>
         /// 
-        private static void DiscardInBufferSerial()
+        private void DiscardInBufferSerial()
         {
             StringBuilder sb = new StringBuilder();
 

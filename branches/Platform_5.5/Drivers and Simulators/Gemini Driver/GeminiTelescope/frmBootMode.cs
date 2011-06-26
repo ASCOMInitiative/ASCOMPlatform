@@ -20,30 +20,30 @@ namespace ASCOM.GeminiTelescope
             SharedResources.SetTopWindow(this);
         }
 
-        public GeminiHardware.GeminiBootMode BootMode
+        public GeminiHardwareBase.GeminiBootMode BootMode
         {
             get
             {
                 if (radioButton1.Checked)
-                    return GeminiHardware.GeminiBootMode.WarmRestart;
+                    return GeminiHardwareBase.GeminiBootMode.WarmRestart;
                 else if (radioButton2.Checked)
-                    return GeminiHardware.GeminiBootMode.WarmStart;
+                    return GeminiHardwareBase.GeminiBootMode.WarmStart;
                 else if (radioButton3.Checked)                
-                    return GeminiHardware.GeminiBootMode.ColdStart;
+                    return GeminiHardwareBase.GeminiBootMode.ColdStart;
 
-                return GeminiHardware.GeminiBootMode.Prompt;
+                return GeminiHardwareBase.GeminiBootMode.Prompt;
             }
             set
             {
                 switch (value)
                 {
-                    case GeminiHardware.GeminiBootMode.ColdStart :
+                    case GeminiHardwareBase.GeminiBootMode.ColdStart :
                         radioButton3.Checked = true;
                         break;
-                    case GeminiHardware.GeminiBootMode.WarmStart:
+                    case GeminiHardwareBase.GeminiBootMode.WarmStart:
                         radioButton2.Checked = true;
                         break;
-                    case GeminiHardware.GeminiBootMode.WarmRestart:
+                    case GeminiHardwareBase.GeminiBootMode.WarmRestart:
                         radioButton1.Checked = true;
                         break;
                 }
@@ -52,7 +52,7 @@ namespace ASCOM.GeminiTelescope
 
         private void btnBoot_Click(object sender, EventArgs e)
         {
-            if (BootMode == GeminiHardware.GeminiBootMode.Prompt)
+            if (BootMode == GeminiHardwareBase.GeminiBootMode.Prompt)
                 return; // nothing selected!
 
             DialogResult = DialogResult.OK;

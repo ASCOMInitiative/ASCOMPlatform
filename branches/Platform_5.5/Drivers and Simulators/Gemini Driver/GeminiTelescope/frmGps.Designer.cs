@@ -139,7 +139,10 @@
             "14400",
             "19200",
             "28800",
-            "38400"});
+            "38400",
+            "57600",
+            "115200"});
+
             this.comboBoxBaudRate.Location = new System.Drawing.Point(16, 216);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
             this.comboBoxBaudRate.Size = new System.Drawing.Size(89, 21);

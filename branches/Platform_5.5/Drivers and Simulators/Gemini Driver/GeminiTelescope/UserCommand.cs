@@ -34,9 +34,9 @@ namespace ASCOM.GeminiTelescope
         private static bool Cmd(string cm)
         {
 
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
-                string result = GeminiHardware.DoCommandResult(cm, GeminiHardware.MAX_TIMEOUT, false);
+                string result = GeminiHardware.Instance.DoCommandResult(cm, GeminiHardware.Instance.MAX_TIMEOUT, false);
                 return true;
             }
             return false;
@@ -51,10 +51,10 @@ namespace ASCOM.GeminiTelescope
         /// <returns></returns>
         private static bool SendKeyCmd(int key, bool keyDown)
         {
-            if (!GeminiHardware.Connected) return false;
+            if (!GeminiHardware.Instance.Connected) return false;
 
             // get current state
-            string curr = GeminiHardware.DoCommandResult(":T", GeminiHardware.MAX_TIMEOUT, false);
+            string curr = GeminiHardware.Instance.DoCommandResult(":T", GeminiHardware.Instance.MAX_TIMEOUT, false);
 
             if (curr == null) return false;
 
@@ -65,15 +65,15 @@ namespace ASCOM.GeminiTelescope
             if ((cvalue & 0x40) == 0) return false;
 
             value = (cvalue & ~key) | (keyDown ? key : 0);  // set the current key state into the current state from hand controller
-            GeminiHardware.DoCommandResult(":k" + (char)value, GeminiHardware.MAX_TIMEOUT, false);
+            GeminiHardware.Instance.DoCommandResult(":k" + (char)value, GeminiHardware.Instance.MAX_TIMEOUT, false);
             return true;
         }
 
         private static bool ToggleMode()
         {
-            if (!GeminiHardware.Connected)  return false;
+            if (!GeminiHardware.Instance.Connected)  return false;
 
-            string res = GeminiHardware.DoCommandResult("<160:", GeminiHardware.MAX_TIMEOUT, false);
+            string res = GeminiHardware.Instance.DoCommandResult("<160:", GeminiHardware.Instance.MAX_TIMEOUT, false);
             if (res == null) return false;
 
             int curr;
@@ -82,7 +82,7 @@ namespace ASCOM.GeminiTelescope
             curr++;
             if (curr > 163) curr = 161;
             if (curr < 161) curr = 161;
-            GeminiHardware.DoCommandResult(">" + curr.ToString() + ":", GeminiHardware.MAX_TIMEOUT, false);
+            GeminiHardware.Instance.DoCommandResult(">" + curr.ToString() + ":", GeminiHardware.Instance.MAX_TIMEOUT, false);
             return true;
         }
 
@@ -108,18 +108,18 @@ namespace ASCOM.GeminiTelescope
                 case UserFunction.AccelerateSlew:
                     if (!keyDown)
                     {
-                        int acc = GeminiHardware.JoystickFixedSpeed + 1;
+                        int acc = GeminiHardware.Instance.JoystickFixedSpeed + 1;
                         if (acc > 2) acc = 2;
-                        GeminiHardware.JoystickFixedSpeed = acc;
+                        GeminiHardware.Instance.JoystickFixedSpeed = acc;
                         Speech.SayIt("Accelerate", Speech.SpeechType.Command);
                     }
                     break;
                 case UserFunction.DecelerateSlew:
                     if (!keyDown)
                     {
-                        int dec = GeminiHardware.JoystickFixedSpeed - 1;
+                        int dec = GeminiHardware.Instance.JoystickFixedSpeed - 1;
                         if (dec < 0) dec = 0;
-                        GeminiHardware.JoystickFixedSpeed = dec;
+                        GeminiHardware.Instance.JoystickFixedSpeed = dec;
                         Speech.SayIt("Decelerate", Speech.SpeechType.Command);
                     }
                     break;
@@ -140,7 +140,7 @@ namespace ASCOM.GeminiTelescope
                 case UserFunction.ParkCWD:
                     if (!keyDown)
                     {
-                        GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewCWD);
+                        GeminiHardware.Instance.DoParkAsync(GeminiHardwareBase.GeminiParkMode.SlewCWD);
                         Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
                         return true;
                     }

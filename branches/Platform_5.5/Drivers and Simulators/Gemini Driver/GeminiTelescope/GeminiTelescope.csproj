@@ -187,6 +187,7 @@
     <Compile Include="CollapsibleGroupBox.Designer.cs">
       <DependentUpon>CollapsibleGroupBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommandItem.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="frmNetworkSettings.cs">
       <SubType>Form</SubType>
@@ -278,6 +279,7 @@
     <Compile Include="frmStatus.Designer.cs">
       <DependentUpon>frmStatus.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gemini5Hardware.cs" />
     <Compile Include="GeminiProperties.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -363,6 +365,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmModel.resx">
       <DependentUpon>frmModel.cs</DependentUpon>
@@ -388,14 +391,22 @@
       <LastGenOutput>Resources.en-GB.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ru.resx" />
+    <EmbeddedResource Include="Properties\Resources.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.fr.resx">
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelescopeSetupDialogForm.de.resx">
+      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelescopeSetupDialogForm.fr.resx">
       <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelescopeSetupDialogForm.resx">
+      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelescopeSetupDialogForm.ru.resx">
       <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">

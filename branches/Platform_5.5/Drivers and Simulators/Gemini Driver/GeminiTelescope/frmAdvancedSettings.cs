@@ -38,6 +38,13 @@ namespace ASCOM.GeminiTelescope
 
             InitializeComponent();
 
+            if (GeminiHardware.Instance.GeminiLevel >= 5)
+            {
+                // divisor values are up to a maximum 4 byte integer size starting in L5
+                numericUpDown1.Maximum = numericUpDown2.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
+                numericUpDown1.Minimum = new decimal(new int[] { 256, 0, 0, 0 });
+                numericUpDown2.Minimum = numericUpDown2.Minimum = new decimal(new int[] { 0, 0, 0, 0 });
+            }
             comboBox1.Items.AddRange(GeminiProperties.Brightness_names);
             comboBox2.Items.AddRange(GeminiProperties.HandController_names);
             comboBox3.Items.AddRange(GeminiProperties.TrackingRate_names);
@@ -55,11 +62,11 @@ namespace ASCOM.GeminiTelescope
 
             this.geminiPropertiesBindingSource.Add(props);
 
-            chkSendSettings.Checked = GeminiHardware.SendAdvancedSettings;
+            chkSendSettings.Checked = GeminiHardware.Instance.SendAdvancedSettings;
 
             OnConnectChange(true, 1);
 
-            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChangeAsync);
+            GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnectChangeAsync);
 
             this.UseWaitCursor = false;
         }
@@ -70,7 +77,7 @@ namespace ASCOM.GeminiTelescope
             GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
 
             
-            GeminiHardware.Profile.DeviceType = "Telescope";
+            GeminiHardware.Instance.Profile.DeviceType = "Telescope";
             
             foreach (Control gc in this.flowLayoutPanel1.Controls)
             {
@@ -79,7 +86,7 @@ namespace ASCOM.GeminiTelescope
                     Indigo.CollapsibleGroupBox gb = gc as Indigo.CollapsibleGroupBox;
                     bool bCollapse = false;
 
-                    string res = GeminiHardware.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, "");
+                    string res = GeminiHardware.Instance.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, "");
                     bool.TryParse(res, out bCollapse);
                     if (!gb.IsCollapsed)
                     {
@@ -111,7 +118,7 @@ namespace ASCOM.GeminiTelescope
             foreach (Control c in panel.Controls)
             {
                 if (c.BackColor == Color.Transparent || c.BackColor == Color.Black)
-                    if (GeminiHardware.Connected)
+                    if (GeminiHardware.Instance.Connected)
                     {
                             c.ForeColor = Color.Lime;
                     }
@@ -138,32 +145,32 @@ namespace ASCOM.GeminiTelescope
             SetControlColor(tableLayoutPanel5);
             SetControlColor(this.panel1);
 
-//            pbApply.Enabled = GeminiHardware.Connected;
-            pbReboot.Enabled = GeminiHardware.Connected;
-//            pbOK.Enabled = GeminiHardware.Connected;
-            pbFromGemini.Enabled = GeminiHardware.Connected;
+//            pbApply.Enabled = GeminiHardware.Instance.Connected;
+            pbReboot.Enabled = GeminiHardware.Instance.Connected;
+//            pbOK.Enabled = GeminiHardware.Instance.Connected;
+            pbFromGemini.Enabled = GeminiHardware.Instance.Connected;
 
             pbButton_EnabledChanged(pbApply, null);
             pbButton_EnabledChanged(pbReboot, null);
             pbButton_EnabledChanged(pbOK, null);
             pbButton_EnabledChanged(pbFromGemini, null);
 
-            menuItemGetSettings.Enabled = GeminiHardware.Connected;
-            menuItemSendSettings.Enabled = GeminiHardware.Connected;
+            menuItemGetSettings.Enabled = GeminiHardware.Instance.Connected;
+            menuItemSendSettings.Enabled = GeminiHardware.Instance.Connected;
 
         }
 
 
         private void pbApply_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("AdvancedSettings:pbApply_Click");
+            GeminiHardware.Instance.Trace.Enter("AdvancedSettings:pbApply_Click");
 
             if (this.ValidateChildren())
             {
                 DialogResult res = MessageBox.Show(Resources.OverwriteSettings, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (res != DialogResult.Yes) return;
 
-                if (GeminiHardware.Connected)
+                if (GeminiHardware.Instance.Connected)
                 {
                     this.UseWaitCursor = true;
 
@@ -172,7 +179,7 @@ namespace ASCOM.GeminiTelescope
                         GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
                         props.SyncWithGemini(true);    // write all properties from profile to Gemini
 
-                        if (GeminiHardware.SendAdvancedSettings)
+                        if (GeminiHardware.Instance.SendAdvancedSettings)
                             props.Serialize(true, null);   // save to default profile
 
                         props.ClearProfile();
@@ -183,7 +190,7 @@ namespace ASCOM.GeminiTelescope
                     }
                     catch (Exception ex)
                     {
-                        GeminiHardware.Trace.Except(ex);
+                        GeminiHardware.Instance.Trace.Except(ex);
                         MessageBox.Show(Resources.NoProfileSave + "\r\n" + ex.Message);
                     }
                     finally
@@ -197,12 +204,12 @@ namespace ASCOM.GeminiTelescope
                     pbSaveDefault_Click(sender, e);
                 }
             }
-            GeminiHardware.Trace.Exit("AdvancedSettings:pbApply_Click");
+            GeminiHardware.Instance.Trace.Exit("AdvancedSettings:pbApply_Click");
         }
 
         private void pbLoad_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("AdvancedSettings:pbLoad_Click");
+            GeminiHardware.Instance.Trace.Enter("AdvancedSettings:pbLoad_Click");
 
 
             try
@@ -227,16 +234,16 @@ namespace ASCOM.GeminiTelescope
             }
             catch (Exception ex)
             {
-                GeminiHardware.Trace.Except(ex);
+                GeminiHardware.Instance.Trace.Except(ex);
                 MessageBox.Show(Resources.NoProfileLoad+ "\r\n" + ex.Message);
             }
-            GeminiHardware.Trace.Enter("AdvancedSettings:pbSave_Click");
+            GeminiHardware.Instance.Trace.Enter("AdvancedSettings:pbSave_Click");
                  
         }
 
         private void pbSave_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("AdvancedSettings:pbSave_Click");
+            GeminiHardware.Instance.Trace.Enter("AdvancedSettings:pbSave_Click");
 
             
             try
@@ -257,10 +264,10 @@ namespace ASCOM.GeminiTelescope
             }
             catch (Exception ex)
             {
-                GeminiHardware.Trace.Except(ex);
+                GeminiHardware.Instance.Trace.Except(ex);
                 MessageBox.Show(Resources.NoProfileSave + "\r\n" + ex.Message);
             }
-            GeminiHardware.Trace.Exit("AdvancedSettings:pbSave_Click");
+            GeminiHardware.Instance.Trace.Exit("AdvancedSettings:pbSave_Click");
         }
 
 
@@ -274,23 +281,23 @@ namespace ASCOM.GeminiTelescope
 
         void pbReboot_Click(object sender, System.EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 DialogResult res = MessageBox.Show(Resources.RebootController, Resources.RebootGemini, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Hand);
                 if (res == DialogResult.Yes)
                 {
                     this.ValidateChildren();
-                    GeminiHardware.DoCommandResult(">65535:", GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">65535:", GeminiHardware.Instance.MAX_TIMEOUT, false);
                 }
             }
         }
 
         private void pbOK_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("Props:pbOK");
+            GeminiHardware.Instance.Trace.Enter("Props:pbOK");
             if (ValidateChildren())
             {
-                if (GeminiHardware.Connected)
+                if (GeminiHardware.Instance.Connected)
                 {
                     try
                     {
@@ -299,7 +306,7 @@ namespace ASCOM.GeminiTelescope
                         if (props.IsDirty)
                         {
                             props.SyncWithGemini(true);
-                            if (GeminiHardware.SendAdvancedSettings) props.Serialize(true, null);     // save default profile
+                            if (GeminiHardware.Instance.SendAdvancedSettings) props.Serialize(true, null);     // save default profile
                         }
                         else
                         {
@@ -308,7 +315,7 @@ namespace ASCOM.GeminiTelescope
                     }
                     catch (Exception ex)
                     {
-                        GeminiHardware.Trace.Except(ex);
+                        GeminiHardware.Instance.Trace.Except(ex);
                     }
                     finally
                     {
@@ -319,70 +326,70 @@ namespace ASCOM.GeminiTelescope
                     pbSaveDefault_Click(sender, e);
                 }
             }
-            GeminiHardware.Trace.Exit("Props:pbOK");
+            GeminiHardware.Instance.Trace.Exit("Props:pbOK");
         }
 
         private void pbModel_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("Props:pbModel");
+            GeminiHardware.Instance.Trace.Enter("Props:pbModel");
             this.ValidateChildren();           
 
             GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
             frmModel dlg = new frmModel(props);
             DialogResult res = dlg.ShowDialog(this);
-            GeminiHardware.Trace.Exit("Props:pbModel");
+            GeminiHardware.Instance.Trace.Exit("Props:pbModel");
         }
 
         private void chkSendSettings_CheckedChanged(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("Props:chkSendSettings", chkSendSettings.Checked);
-            GeminiHardware.SendAdvancedSettings = chkSendSettings.Checked;
+            GeminiHardware.Instance.Trace.Enter("Props:chkSendSettings", chkSendSettings.Checked);
+            GeminiHardware.Instance.SendAdvancedSettings = chkSendSettings.Checked;
         }
 
         private void SavePEC_CheckedChanged(object sender, EventArgs e)
         {
             GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
             props.SavePEC = chkSavePEC.Checked;
-            GeminiHardware.Trace.Enter("Props:chkSavePEC", chkSavePEC.Checked);
+            GeminiHardware.Instance.Trace.Enter("Props:chkSavePEC", chkSavePEC.Checked);
         }
 
         private void menuSetSafetyHere_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
-                GeminiHardware.Trace.Enter("Props:SetSafetyHere");
+                GeminiHardware.Instance.Trace.Enter("Props:SetSafetyHere");
                 this.ValidateChildren();
-                GeminiHardware.DoCommandResult(">220:", GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.Instance.DoCommandResult(">220:", GeminiHardware.Instance.MAX_TIMEOUT, false);
                 MessageBox.Show(Resources.SafetyLimitSet);
-                GeminiHardware.Trace.Exit("Props:SetSafetyHere");
+                GeminiHardware.Instance.Trace.Exit("Props:SetSafetyHere");
             }
         }
 
         private void menuSetLimits_Click(object sender, EventArgs e)
         {
             this.ValidateChildren();
-            GeminiHardware.Trace.Enter("Props:SetLimits");
+            GeminiHardware.Instance.Trace.Enter("Props:SetLimits");
 
             frmSafetyLimits dlg = new frmSafetyLimits((GeminiProperties)this.geminiPropertiesBindingSource[0]);
             DialogResult res = dlg.ShowDialog(this);
             if (res == DialogResult.OK) this.geminiPropertiesBindingSource.ResetBindings(false);
-            GeminiHardware.Trace.Exit("Props:SetLimits");
+            GeminiHardware.Instance.Trace.Exit("Props:SetLimits");
         }
 
         private void g11DefaultsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
-                GeminiHardware.DoCommandResult(">43690:", GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.Instance.DoCommandResult(">43690:", GeminiHardware.Instance.MAX_TIMEOUT, false);
                 MessageBox.Show(Resources.SafetyLimitSet);
             }
         }
 
         private void mI250DefaultsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
-                GeminiHardware.DoCommandResult(">43691:", GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.Instance.DoCommandResult(">43691:", GeminiHardware.Instance.MAX_TIMEOUT, false);
                 MessageBox.Show(Resources.SafetyLimitSet);
             }
 
@@ -396,8 +403,8 @@ namespace ASCOM.GeminiTelescope
             else
                 gb.ForeColor = Color.White;
 
-            GeminiHardware.Profile.DeviceType = "Telescope";
-            GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, gb.IsCollapsed.ToString());
+            GeminiHardware.Instance.Profile.DeviceType = "Telescope";
+            GeminiHardware.Instance.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GroupCollapse_" + gb.Text, gb.IsCollapsed.ToString());
         }
 
         private void frmAdvancedSettings_Load(object sender, EventArgs e)
@@ -409,13 +416,13 @@ namespace ASCOM.GeminiTelescope
 
         public void pbUpdate_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("Props:pbUpdate");
+            GeminiHardware.Instance.Trace.Enter("Props:pbUpdate");
 
             Button pb = (Button)sender;
             m_ParentPanel = pb.Parent;
             pb.ContextMenuStrip.Show(pb, new Point(pb.Width, 0));
 
-            GeminiHardware.Trace.Exit("Props:pbUpdate");
+            GeminiHardware.Instance.Trace.Exit("Props:pbUpdate");
         }
 
         /// <summary>
@@ -425,7 +432,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="e"></param>
         public void menuItemGetSettings_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("Props:GetSettings", m_ParentPanel.Text);
+            GeminiHardware.Instance.Trace.Enter("Props:GetSettings", m_ParentPanel.Text);
 
             List<string> p = GetAllBindings(m_ParentPanel);
             GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
@@ -434,7 +441,7 @@ namespace ASCOM.GeminiTelescope
             props.SyncWithGemini(false, p);
             geminiPropertiesBindingSource.ResetBindings(false);
             Cursor.Current = Cursors.Default;
-            GeminiHardware.Trace.Exit("Props:GetSettings", m_ParentPanel.Text);
+            GeminiHardware.Instance.Trace.Exit("Props:GetSettings", m_ParentPanel.Text);
         }
 
         /// <summary>
@@ -444,7 +451,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="e"></param>
         public void menuItemSendSettings_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("Props:SendSettings", m_ParentPanel.Text);
+            GeminiHardware.Instance.Trace.Enter("Props:SendSettings", m_ParentPanel.Text);
 
             List<string> p = GetAllBindings(m_ParentPanel);
             GeminiProperties props = (GeminiProperties)geminiPropertiesBindingSource[0];
@@ -458,7 +465,7 @@ namespace ASCOM.GeminiTelescope
                 geminiPropertiesBindingSource.ResetBindings(false);
                 Cursor.Current = Cursors.Default;
             }
-            GeminiHardware.Trace.Exit("Props:SendSettings", m_ParentPanel.Text);
+            GeminiHardware.Instance.Trace.Exit("Props:SendSettings", m_ParentPanel.Text);
         }
 
         private List<string> GetAllBindings(Control panel)
@@ -484,7 +491,7 @@ namespace ASCOM.GeminiTelescope
 
         private void pbSaveDefault_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("Props:pbSaveDefault");
+            GeminiHardware.Instance.Trace.Enter("Props:pbSaveDefault");
 
             this.ValidateChildren();           
 
@@ -495,14 +502,14 @@ namespace ASCOM.GeminiTelescope
             } else
                 MessageBox.Show(Resources.DefaultProfileNotSaved, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            GeminiHardware.Trace.Exit("Props:pbSaveDefault");
+            GeminiHardware.Instance.Trace.Exit("Props:pbSaveDefault");
         }
 
         private void pbFromGemini_Click(object sender, EventArgs e)
         {
-            GeminiHardware.Trace.Enter("Props:pbFromGemini");
+            GeminiHardware.Instance.Trace.Enter("Props:pbFromGemini");
 
-            GeminiHardware.Trace.Enter("AdvancedSettings:FromGemini_Click");
+            GeminiHardware.Instance.Trace.Enter("AdvancedSettings:FromGemini_Click");
 
             if (this.ValidateChildren())
             {
@@ -519,14 +526,14 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch (Exception ex)
                 {
-                    GeminiHardware.Trace.Except(ex);
+                    GeminiHardware.Instance.Trace.Except(ex);
                 }
                 finally
                 {
                     this.UseWaitCursor = false;
                 }
             }
-            GeminiHardware.Trace.Enter("Props:pbFromGemini");
+            GeminiHardware.Instance.Trace.Enter("Props:pbFromGemini");
 
         }
 

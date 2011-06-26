@@ -86,7 +86,7 @@ namespace ASCOM.GeminiTelescope
             gvAllObjects.RowHeadersVisible = false;
             gvGeminiCatalog.RowHeadersVisible = false;
             dtDateTime.Checked = false;
-            numHorizon.Value = (decimal)GeminiHardware.HorizonAltitude;
+            numHorizon.Value = (decimal)GeminiHardware.Instance.HorizonAltitude;
         }
 
         public void PopulateCatalogs()
@@ -127,7 +127,7 @@ namespace ASCOM.GeminiTelescope
             double incr =  1;
             if (files.Length != 0) incr = 100.0/files.Length;
 
-            GeminiHardware.Profile.DeviceType = "Telescope";
+            GeminiHardware.Instance.Profile.DeviceType = "Telescope";
             foreach (System.IO.FileInfo fi in files)
             {
 
@@ -136,7 +136,7 @@ namespace ASCOM.GeminiTelescope
                 if (bAlreadyLoaded || LoadCatalog(fi.FullName, cn, m_Objects))
                 {
                     int idx = lbCatalogs.Items.Add(cn);
-                    string v = GeminiHardware.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + cn);
+                    string v = GeminiHardware.Instance.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + cn);
                     if (!string.IsNullOrEmpty(v))
                     {
                         bool b  = false;
@@ -211,21 +211,21 @@ namespace ASCOM.GeminiTelescope
             UpdateGeminiCatalog();
             lbCatalogs.ItemCheck += new ItemCheckEventHandler(lbCatalogs_ItemCheck);
             SetButtonState();
-            GeminiHardware.OnConnect += new ConnectDelegate(OnConnect);
+            GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnect);
             frmProgress.HideProgress();
         }
 
         void SetButtonState()
         {
-            pbToGemini.Enabled = GeminiHardware.Connected;
-            pbFromGemini.Enabled = GeminiHardware.Connected;
-            btnGoto.Enabled = GeminiHardware.Connected;
-            btnSync.Enabled = GeminiHardware.Connected;
-            btnAddAlign.Enabled = GeminiHardware.Connected;
+            pbToGemini.Enabled = GeminiHardware.Instance.Connected;
+            pbFromGemini.Enabled = GeminiHardware.Instance.Connected;
+            btnGoto.Enabled = GeminiHardware.Instance.Connected;
+            btnSync.Enabled = GeminiHardware.Instance.Connected;
+            btnAddAlign.Enabled = GeminiHardware.Instance.Connected;
             if (gvAllObjects.SelectedRows.Count == 1)
             {
                 string cat = gvAllObjects.SelectedRows[0].Cells["Catalog"].Value.ToString().ToLower();
-                if (GeminiHardware.Connected && m_GeminiCatalogs.ContainsKey(cat))
+                if (GeminiHardware.Instance.Connected && m_GeminiCatalogs.ContainsKey(cat))
                     pbSendtObject.Enabled = true;
                 else
                     pbSendtObject.Enabled = false;
@@ -247,7 +247,7 @@ namespace ASCOM.GeminiTelescope
 
                 CatalogObject.SetTransform(GetTime(), (double)numHorizon.Value);
 
-                GeminiHardware.Profile.DeviceType = "Telescope";
+                GeminiHardware.Instance.Profile.DeviceType = "Telescope";
 
                 string wh = "";
 
@@ -258,7 +258,7 @@ namespace ASCOM.GeminiTelescope
 
                     if (lbCatalogs.Items[i].ToString() == clicked) bChecked = !bChecked;
 
-                    GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + lbCatalogs.Items[i],
+                    GeminiHardware.Instance.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Catalog " + lbCatalogs.Items[i],
                         bChecked.ToString());
 
                     if (bChecked) wh = wh + lbCatalogs.Items[i].ToString() + ",";
@@ -441,12 +441,12 @@ namespace ASCOM.GeminiTelescope
 
         private void pbFromGemini_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 Cursor.Current = Cursors.WaitCursor;
                 frmProgress.Initialize(0, 100, "Loading User Catalog from Gemini", null);
                 frmProgress.ShowProgress(this);
-                SerializableDictionary<string, CatalogObject> cat = GeminiHardware.GetUserCatalog;
+                SerializableDictionary<string, CatalogObject> cat = GeminiHardware.Instance.GetUserCatalog;
                 if (cat != null)
                 {
                     m_GeminiObjects = cat;
@@ -459,7 +459,7 @@ namespace ASCOM.GeminiTelescope
 
         private void pbToGemini_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {                
                 DialogResult res = MessageBox.Show("Are you sure you want to send this catalog to Gemini?", SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question );
                 if (res == DialogResult.Yes)
@@ -479,7 +479,7 @@ namespace ASCOM.GeminiTelescope
                     else
                         qry = qry.OrderBy(CList[m_GeminiOrderBy]).ThenBy(CList["Name"]);
 
-                    GeminiHardware.SetUserCatalog = qry.ToList();
+                    GeminiHardware.Instance.SetUserCatalog = qry.ToList();
                     frmProgress.HideProgress();
                     Cursor.Current = Cursors.Default;
                 }
@@ -514,23 +514,23 @@ namespace ASCOM.GeminiTelescope
             CatalogObject obj = m_Objects[gvAllObjects.SelectedRows[0].Cells["Name"].Value.ToString()];
             double ra, dec;
             obj.GetCoords(out ra, out dec);
-            GeminiHardware.TargetRightAscension = ra;
-            GeminiHardware.TargetDeclination = dec;
-            GeminiHardware.TargetName = string.Format("{0} {1}", obj.Name, obj.Catalog);
+            GeminiHardware.Instance.TargetRightAscension = ra;
+            GeminiHardware.Instance.TargetDeclination = dec;
+            GeminiHardware.Instance.TargetName = string.Format("{0} {1}", obj.Name, obj.Catalog);
 
             try
             {
                 if (sender == btnGoto)
-                    GeminiHardware.SlewEquatorial();
+                    GeminiHardware.Instance.SlewEquatorial();
                 else if (sender == btnSync)
                 {
-                    GeminiHardware.SyncEquatorial();
-                    GeminiHardware.ReportAlignResult(((Button)sender).Text);
+                    GeminiHardware.Instance.SyncEquatorial();
+                    GeminiHardware.Instance.ReportAlignResult(((Button)sender).Text);
                 }
                 else
                 {                   
-                    GeminiHardware.AlignEquatorial();
-                    GeminiHardware.ReportAlignResult(((Button)sender).Text);
+                    GeminiHardware.Instance.AlignEquatorial();
+                    GeminiHardware.Instance.ReportAlignResult(((Button)sender).Text);
                 }
             }
             catch (Exception ex) {
@@ -643,7 +643,7 @@ namespace ASCOM.GeminiTelescope
                         if (i > 0) id = id.Substring(i + 1);
 
                         string cmd = string.Format(":OI{0}{1}", catnbr, id);
-                        GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
                     }
                 }
             }
@@ -652,7 +652,7 @@ namespace ASCOM.GeminiTelescope
 
         private void frmUserCatalog_FormClosed(object sender, FormClosedEventArgs e)
         {
-            GeminiHardware.Profile = null;
+            GeminiHardware.Instance.Profile = null;
         }
 
         private void chkVisibleOnly_CheckedChanged(object sender, EventArgs e)
@@ -691,7 +691,7 @@ namespace ASCOM.GeminiTelescope
 
         private void numHorizon_ValueChanged(object sender, EventArgs e)
         {
-            GeminiHardware.HorizonAltitude = (double)numHorizon.Value;
+            GeminiHardware.Instance.HorizonAltitude = (double)numHorizon.Value;
             if (tm == null)
             {
                 tm = new Timer();
@@ -772,8 +772,8 @@ namespace ASCOM.GeminiTelescope
 
             m_Objects.Add(k, new CatalogObject {                    
                     Catalog = "Custom", Name = k, 
-                    RA = new RACoord(GeminiHardware.m_Util.HMSToHours("00:00:00")), 
-                    DEC = new DECCoord(GeminiHardware.m_Util.DMSToDegrees("00:00:00")) });
+                    RA = new RACoord(GeminiHardware.Instance.m_Util.HMSToHours("00:00:00")), 
+                    DEC = new DECCoord(GeminiHardware.Instance.m_Util.DMSToDegrees("00:00:00")) });
 
             foreach (int cat in lbCatalogs.CheckedIndices)
                 lbCatalogs.SetItemCheckState(cat, ((string)lbCatalogs.Items[cat] == "Custom"? CheckState.Checked : CheckState.Unchecked));
@@ -808,8 +808,8 @@ namespace ASCOM.GeminiTelescope
             {
                 obj = new CatalogObject { 
                     Catalog = catalog, Name = sp[0], 
-                    RA = new RACoord(GeminiHardware.m_Util.HMSToHours(sp[1])), 
-                    DEC = new DECCoord(GeminiHardware.m_Util.DMSToDegrees(sp[2])) };
+                    RA = new RACoord(GeminiHardware.Instance.m_Util.HMSToHours(sp[1])), 
+                    DEC = new DECCoord(GeminiHardware.Instance.m_Util.DMSToDegrees(sp[2])) };
             }
             catch
             {
@@ -826,36 +826,36 @@ namespace ASCOM.GeminiTelescope
             ra = RA.RA;
             dec =DEC.DEC;
 
-            GeminiHardware.m_Transform.SiteElevation = GeminiHardware.Elevation;
-            GeminiHardware.m_Transform.SiteLatitude = GeminiHardware.Latitude;
-            GeminiHardware.m_Transform.SiteLongitude = GeminiHardware.Longitude;
+            GeminiHardware.Instance.m_Transform.SiteElevation = GeminiHardware.Instance.Elevation;
+            GeminiHardware.Instance.m_Transform.SiteLatitude = GeminiHardware.Instance.Latitude;
+            GeminiHardware.Instance.m_Transform.SiteLongitude = GeminiHardware.Instance.Longitude;
 
 
-            if (!GeminiHardware.Refraction)
-                GeminiHardware.m_Transform.Refraction = true;
+            if (!GeminiHardware.Instance.Refraction)
+                GeminiHardware.Instance.m_Transform.Refraction = true;
             else
-                GeminiHardware.m_Transform.Refraction = false;
+                GeminiHardware.Instance.m_Transform.Refraction = false;
 
-            if (!GeminiHardware.Precession) //need to precess!
-                GeminiHardware.m_Transform.SetJ2000(ra, dec);
+            if (!GeminiHardware.Instance.Precession) //need to precess!
+                GeminiHardware.Instance.m_Transform.SetJ2000(ra, dec);
             else
-                GeminiHardware.m_Transform.SetTopocentric(ra, dec);
+                GeminiHardware.Instance.m_Transform.SetTopocentric(ra, dec);
 
-            ra = GeminiHardware.m_Transform.RATopocentric;
-            dec = GeminiHardware.m_Transform.DECTopocentric;
+            ra = GeminiHardware.Instance.m_Transform.RATopocentric;
+            dec = GeminiHardware.Instance.m_Transform.DECTopocentric;
         }
 
         public static void SetTransform(DateTime dt, double horiz)
         {
-            GeminiHardware.m_Transform.SiteElevation = GeminiHardware.Elevation;
-            GeminiHardware.m_Transform.SiteLatitude = GeminiHardware.Latitude;
-            GeminiHardware.m_Transform.SiteLongitude = GeminiHardware.Longitude;
+            GeminiHardware.Instance.m_Transform.SiteElevation = GeminiHardware.Instance.Elevation;
+            GeminiHardware.Instance.m_Transform.SiteLatitude = GeminiHardware.Instance.Latitude;
+            GeminiHardware.Instance.m_Transform.SiteLongitude = GeminiHardware.Instance.Longitude;
 
             // [pk] the following values are pre-computed for the Altitude calculation 
             // for Visible property:
-            lon = GeminiHardware.Longitude * SharedResources.DEG_RAD;
-            lat = GeminiHardware.Latitude * SharedResources.DEG_RAD;
-            LST = AstronomyFunctions.LocalSiderealTime(GeminiHardware.Longitude, dt) * SharedResources.DEG_RAD;
+            lon = GeminiHardware.Instance.Longitude * SharedResources.DEG_RAD;
+            lat = GeminiHardware.Instance.Latitude * SharedResources.DEG_RAD;
+            LST = AstronomyFunctions.LocalSiderealTime(GeminiHardware.Instance.Longitude, dt) * SharedResources.DEG_RAD;
             horizon = horiz;
         }
 
@@ -883,8 +883,8 @@ namespace ASCOM.GeminiTelescope
             try
             {
                 double ra,dec;
-                if (!double.TryParse(sp[1], System.Globalization.NumberStyles.Float, GeminiHardware.m_GeminiCulture, out ra)) return false;
-                if (!double.TryParse(sp[2], System.Globalization.NumberStyles.Float, GeminiHardware.m_GeminiCulture, out dec)) return false;
+                if (!double.TryParse(sp[1], System.Globalization.NumberStyles.Float, GeminiHardware.Instance.m_GeminiCulture, out ra)) return false;
+                if (!double.TryParse(sp[2], System.Globalization.NumberStyles.Float, GeminiHardware.Instance.m_GeminiCulture, out dec)) return false;
 
                 obj = new CatalogObject
                 {

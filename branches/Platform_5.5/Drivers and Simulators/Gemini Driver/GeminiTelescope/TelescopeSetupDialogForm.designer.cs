@@ -146,9 +146,13 @@ namespace ASCOM.GeminiTelescope
             // 
             // buttonGps
             // 
-            buttonGps.BackColor = System.Drawing.Color.Black;
-            buttonGps.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            buttonGps.AccessibleDescription = null;
+            buttonGps.AccessibleName = null;
             resources.ApplyResources(buttonGps, "buttonGps");
+            buttonGps.BackColor = System.Drawing.Color.Black;
+            buttonGps.BackgroundImage = null;
+            buttonGps.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            buttonGps.Font = null;
             buttonGps.ForeColor = System.Drawing.Color.White;
             buttonGps.Name = "buttonGps";
             buttonGps.UseVisualStyleBackColor = false;
@@ -156,9 +160,13 @@ namespace ASCOM.GeminiTelescope
             // 
             // pbGeminiSettings
             // 
-            pbGeminiSettings.BackColor = System.Drawing.Color.Black;
-            pbGeminiSettings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            pbGeminiSettings.AccessibleDescription = null;
+            pbGeminiSettings.AccessibleName = null;
             resources.ApplyResources(pbGeminiSettings, "pbGeminiSettings");
+            pbGeminiSettings.BackColor = System.Drawing.Color.Black;
+            pbGeminiSettings.BackgroundImage = null;
+            pbGeminiSettings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            pbGeminiSettings.Font = null;
             pbGeminiSettings.ForeColor = System.Drawing.Color.White;
             pbGeminiSettings.Name = "pbGeminiSettings";
             pbGeminiSettings.UseVisualStyleBackColor = false;
@@ -166,19 +174,27 @@ namespace ASCOM.GeminiTelescope
             // 
             // button1
             // 
-            button1.BackColor = System.Drawing.Color.Black;
-            button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            button1.ForeColor = System.Drawing.Color.White;
+            button1.AccessibleDescription = null;
+            button1.AccessibleName = null;
             resources.ApplyResources(button1, "button1");
+            button1.BackColor = System.Drawing.Color.Black;
+            button1.BackgroundImage = null;
+            button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            button1.Font = null;
+            button1.ForeColor = System.Drawing.Color.White;
             button1.Name = "button1";
             button1.UseVisualStyleBackColor = false;
             button1.Click += new System.EventHandler(this.buttonGps_Click);
             // 
             // pbEditSavedOptics
             // 
-            pbEditSavedOptics.BackColor = System.Drawing.Color.Black;
-            pbEditSavedOptics.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            pbEditSavedOptics.AccessibleDescription = null;
+            pbEditSavedOptics.AccessibleName = null;
             resources.ApplyResources(pbEditSavedOptics, "pbEditSavedOptics");
+            pbEditSavedOptics.BackColor = System.Drawing.Color.Black;
+            pbEditSavedOptics.BackgroundImage = null;
+            pbEditSavedOptics.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            pbEditSavedOptics.Font = null;
             pbEditSavedOptics.ForeColor = System.Drawing.Color.White;
             pbEditSavedOptics.Name = "pbEditSavedOptics";
             pbEditSavedOptics.UseVisualStyleBackColor = false;
@@ -186,10 +202,14 @@ namespace ASCOM.GeminiTelescope
             // 
             // cmdOK
             // 
+            this.cmdOK.AccessibleDescription = null;
+            this.cmdOK.AccessibleName = null;
             resources.ApplyResources(this.cmdOK, "cmdOK");
             this.cmdOK.BackColor = System.Drawing.Color.Black;
+            this.cmdOK.BackgroundImage = null;
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.cmdOK.Font = null;
             this.cmdOK.ForeColor = System.Drawing.Color.White;
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.UseVisualStyleBackColor = false;
@@ -197,10 +217,14 @@ namespace ASCOM.GeminiTelescope
             // 
             // cmdCancel
             // 
+            this.cmdCancel.AccessibleDescription = null;
+            this.cmdCancel.AccessibleName = null;
             resources.ApplyResources(this.cmdCancel, "cmdCancel");
             this.cmdCancel.BackColor = System.Drawing.Color.Black;
+            this.cmdCancel.BackgroundImage = null;
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.cmdCancel.Font = null;
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.UseVisualStyleBackColor = false;
@@ -208,15 +232,22 @@ namespace ASCOM.GeminiTelescope
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
-            this.groupBox1.ForeColor = System.Drawing.Color.White;
+            this.groupBox1.AccessibleDescription = null;
+            this.groupBox1.AccessibleName = null;
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.BackgroundImage = null;
+            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
+            this.groupBox1.Font = null;
+            this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.AccessibleDescription = null;
+            this.tableLayoutPanel1.AccessibleName = null;
             resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.BackgroundImage = null;
             this.tableLayoutPanel1.Controls.Add(this.comboBoxSites, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.pbSiteConfig, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label10, 0, 4);
@@ -233,100 +264,157 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel1.Controls.Add(this.pbSetSiteNow, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxUseDriverSite, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.comboBoxTZ, 1, 4);
+            this.tableLayoutPanel1.Font = null;
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             // 
             // comboBoxSites
             // 
+            this.comboBoxSites.AccessibleDescription = null;
+            this.comboBoxSites.AccessibleName = null;
+            resources.ApplyResources(this.comboBoxSites, "comboBoxSites");
+            this.comboBoxSites.BackgroundImage = null;
             this.tableLayoutPanel1.SetColumnSpan(this.comboBoxSites, 3);
             this.comboBoxSites.DisplayMember = "Name";
+            this.comboBoxSites.Font = null;
             this.comboBoxSites.FormattingEnabled = true;
-            resources.ApplyResources(this.comboBoxSites, "comboBoxSites");
             this.comboBoxSites.Name = "comboBoxSites";
             // 
             // pbSiteConfig
             // 
-            this.pbSiteConfig.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSiteConfig.AccessibleDescription = null;
+            this.pbSiteConfig.AccessibleName = null;
             resources.ApplyResources(this.pbSiteConfig, "pbSiteConfig");
+            this.pbSiteConfig.BackgroundImage = null;
+            this.pbSiteConfig.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSiteConfig.Font = null;
             this.pbSiteConfig.Name = "pbSiteConfig";
             this.pbSiteConfig.UseVisualStyleBackColor = false;
             this.pbSiteConfig.Click += new System.EventHandler(this.pbSiteConfig_Click);
             // 
             // label10
             // 
+            this.label10.AccessibleDescription = null;
+            this.label10.AccessibleName = null;
             resources.ApplyResources(this.label10, "label10");
+            this.label10.Font = null;
             this.label10.Name = "label10";
             // 
             // textBoxLongitudeMinutes
             // 
+            this.textBoxLongitudeMinutes.AccessibleDescription = null;
+            this.textBoxLongitudeMinutes.AccessibleName = null;
             resources.ApplyResources(this.textBoxLongitudeMinutes, "textBoxLongitudeMinutes");
+            this.textBoxLongitudeMinutes.BackgroundImage = null;
+            this.textBoxLongitudeMinutes.Font = null;
             this.textBoxLongitudeMinutes.Name = "textBoxLongitudeMinutes";
             // 
             // textBoxLatitudeMinutes
             // 
+            this.textBoxLatitudeMinutes.AccessibleDescription = null;
+            this.textBoxLatitudeMinutes.AccessibleName = null;
             resources.ApplyResources(this.textBoxLatitudeMinutes, "textBoxLatitudeMinutes");
+            this.textBoxLatitudeMinutes.BackgroundImage = null;
+            this.textBoxLatitudeMinutes.Font = null;
             this.textBoxLatitudeMinutes.Name = "textBoxLatitudeMinutes";
             // 
             // textBoxLatitudeDegrees
             // 
+            this.textBoxLatitudeDegrees.AccessibleDescription = null;
+            this.textBoxLatitudeDegrees.AccessibleName = null;
             resources.ApplyResources(this.textBoxLatitudeDegrees, "textBoxLatitudeDegrees");
+            this.textBoxLatitudeDegrees.BackgroundImage = null;
+            this.textBoxLatitudeDegrees.Font = null;
             this.textBoxLatitudeDegrees.Name = "textBoxLatitudeDegrees";
             // 
             // comboBoxLatitude
             // 
+            this.comboBoxLatitude.AccessibleDescription = null;
+            this.comboBoxLatitude.AccessibleName = null;
+            resources.ApplyResources(this.comboBoxLatitude, "comboBoxLatitude");
+            this.comboBoxLatitude.BackgroundImage = null;
+            this.comboBoxLatitude.Font = null;
             this.comboBoxLatitude.FormattingEnabled = true;
             this.comboBoxLatitude.Items.AddRange(new object[] {
             resources.GetString("comboBoxLatitude.Items"),
             resources.GetString("comboBoxLatitude.Items1")});
-            resources.ApplyResources(this.comboBoxLatitude, "comboBoxLatitude");
             this.comboBoxLatitude.Name = "comboBoxLatitude";
             // 
             // label1
             // 
+            this.label1.AccessibleDescription = null;
+            this.label1.AccessibleName = null;
             resources.ApplyResources(this.label1, "label1");
+            this.label1.Font = null;
             this.label1.Name = "label1";
             // 
             // label2
             // 
+            this.label2.AccessibleDescription = null;
+            this.label2.AccessibleName = null;
             resources.ApplyResources(this.label2, "label2");
+            this.label2.Font = null;
             this.label2.Name = "label2";
             // 
             // label3
             // 
+            this.label3.AccessibleDescription = null;
+            this.label3.AccessibleName = null;
             resources.ApplyResources(this.label3, "label3");
+            this.label3.Font = null;
             this.label3.Name = "label3";
             // 
             // textBoxElevation
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.textBoxElevation, 2);
+            this.textBoxElevation.AccessibleDescription = null;
+            this.textBoxElevation.AccessibleName = null;
             resources.ApplyResources(this.textBoxElevation, "textBoxElevation");
+            this.textBoxElevation.BackgroundImage = null;
+            this.tableLayoutPanel1.SetColumnSpan(this.textBoxElevation, 2);
+            this.textBoxElevation.Font = null;
             this.textBoxElevation.Name = "textBoxElevation";
             // 
             // comboBoxLongitude
             // 
+            this.comboBoxLongitude.AccessibleDescription = null;
+            this.comboBoxLongitude.AccessibleName = null;
+            resources.ApplyResources(this.comboBoxLongitude, "comboBoxLongitude");
+            this.comboBoxLongitude.BackgroundImage = null;
+            this.comboBoxLongitude.Font = null;
             this.comboBoxLongitude.FormattingEnabled = true;
             this.comboBoxLongitude.Items.AddRange(new object[] {
             resources.GetString("comboBoxLongitude.Items"),
             resources.GetString("comboBoxLongitude.Items1")});
-            resources.ApplyResources(this.comboBoxLongitude, "comboBoxLongitude");
             this.comboBoxLongitude.Name = "comboBoxLongitude";
             // 
             // textBoxLongitudeDegrees
             // 
+            this.textBoxLongitudeDegrees.AccessibleDescription = null;
+            this.textBoxLongitudeDegrees.AccessibleName = null;
             resources.ApplyResources(this.textBoxLongitudeDegrees, "textBoxLongitudeDegrees");
+            this.textBoxLongitudeDegrees.BackgroundImage = null;
+            this.textBoxLongitudeDegrees.Font = null;
             this.textBoxLongitudeDegrees.Name = "textBoxLongitudeDegrees";
             // 
             // pbSetSiteNow
             // 
-            this.pbSetSiteNow.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSetSiteNow.AccessibleDescription = null;
+            this.pbSetSiteNow.AccessibleName = null;
             resources.ApplyResources(this.pbSetSiteNow, "pbSetSiteNow");
+            this.pbSetSiteNow.BackgroundImage = null;
+            this.pbSetSiteNow.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSetSiteNow.Font = null;
             this.pbSetSiteNow.Name = "pbSetSiteNow";
             this.pbSetSiteNow.UseVisualStyleBackColor = false;
             this.pbSetSiteNow.Click += new System.EventHandler(this.pbSetSiteNow_Click);
             // 
             // checkBoxUseDriverSite
             // 
+            this.checkBoxUseDriverSite.AccessibleDescription = null;
+            this.checkBoxUseDriverSite.AccessibleName = null;
             resources.ApplyResources(this.checkBoxUseDriverSite, "checkBoxUseDriverSite");
+            this.checkBoxUseDriverSite.BackgroundImage = null;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxUseDriverSite, 4);
+            this.checkBoxUseDriverSite.Font = null;
             this.checkBoxUseDriverSite.ForeColor = System.Drawing.Color.White;
             this.checkBoxUseDriverSite.Name = "checkBoxUseDriverSite";
             this.checkBoxUseDriverSite.UseVisualStyleBackColor = false;
@@ -334,76 +422,115 @@ namespace ASCOM.GeminiTelescope
             // 
             // comboBoxTZ
             // 
+            this.comboBoxTZ.AccessibleDescription = null;
+            this.comboBoxTZ.AccessibleName = null;
+            resources.ApplyResources(this.comboBoxTZ, "comboBoxTZ");
+            this.comboBoxTZ.BackgroundImage = null;
             this.tableLayoutPanel1.SetColumnSpan(this.comboBoxTZ, 3);
             this.comboBoxTZ.DisplayMember = "Id";
-            resources.ApplyResources(this.comboBoxTZ, "comboBoxTZ");
             this.comboBoxTZ.FormattingEnabled = true;
             this.comboBoxTZ.Name = "comboBoxTZ";
             // 
             // labelVersion
             // 
+            this.labelVersion.AccessibleDescription = null;
+            this.labelVersion.AccessibleName = null;
             resources.ApplyResources(this.labelVersion, "labelVersion");
+            this.labelVersion.Font = null;
             this.labelVersion.ForeColor = System.Drawing.Color.White;
             this.labelVersion.Name = "labelVersion";
             // 
             // labelTime
             // 
+            this.labelTime.AccessibleDescription = null;
+            this.labelTime.AccessibleName = null;
             resources.ApplyResources(this.labelTime, "labelTime");
+            this.labelTime.Font = null;
             this.labelTime.ForeColor = System.Drawing.Color.White;
             this.labelTime.Name = "labelTime";
             // 
             // tableLayoutPanel3
             // 
+            this.tableLayoutPanel3.AccessibleDescription = null;
+            this.tableLayoutPanel3.AccessibleName = null;
             resources.ApplyResources(this.tableLayoutPanel3, "tableLayoutPanel3");
+            this.tableLayoutPanel3.BackgroundImage = null;
             this.tableLayoutPanel3.Controls.Add(this.label7, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.comboBox1, 1, 0);
+            this.tableLayoutPanel3.Font = null;
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             // 
             // label7
             // 
+            this.label7.AccessibleDescription = null;
+            this.label7.AccessibleName = null;
             resources.ApplyResources(this.label7, "label7");
+            this.label7.Font = null;
             this.label7.Name = "label7";
             // 
             // comboBox1
             // 
-            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.AccessibleDescription = null;
+            this.comboBox1.AccessibleName = null;
             resources.ApplyResources(this.comboBox1, "comboBox1");
+            this.comboBox1.BackgroundImage = null;
+            this.comboBox1.Font = null;
+            this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Name = "comboBox1";
             // 
             // label8
             // 
+            this.label8.AccessibleDescription = null;
+            this.label8.AccessibleName = null;
             resources.ApplyResources(this.label8, "label8");
+            this.label8.Font = null;
             this.label8.Name = "label8";
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.tableLayoutPanel4);
-            this.groupBox3.ForeColor = System.Drawing.Color.White;
+            this.groupBox3.AccessibleDescription = null;
+            this.groupBox3.AccessibleName = null;
             resources.ApplyResources(this.groupBox3, "groupBox3");
+            this.groupBox3.BackgroundImage = null;
+            this.groupBox3.Controls.Add(this.tableLayoutPanel4);
+            this.groupBox3.Font = null;
+            this.groupBox3.ForeColor = System.Drawing.Color.White;
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.TabStop = false;
             // 
             // tableLayoutPanel4
             // 
+            this.tableLayoutPanel4.AccessibleDescription = null;
+            this.tableLayoutPanel4.AccessibleName = null;
             resources.ApplyResources(this.tableLayoutPanel4, "tableLayoutPanel4");
+            this.tableLayoutPanel4.BackgroundImage = null;
             this.tableLayoutPanel4.Controls.Add(this.pbSetTimeNow, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxUseDriverTime, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.labelUtc, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.label5, 0, 0);
+            this.tableLayoutPanel4.Font = null;
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             // 
             // pbSetTimeNow
             // 
-            this.pbSetTimeNow.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSetTimeNow.AccessibleDescription = null;
+            this.pbSetTimeNow.AccessibleName = null;
             resources.ApplyResources(this.pbSetTimeNow, "pbSetTimeNow");
+            this.pbSetTimeNow.BackgroundImage = null;
+            this.pbSetTimeNow.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pbSetTimeNow.Font = null;
             this.pbSetTimeNow.Name = "pbSetTimeNow";
             this.pbSetTimeNow.UseVisualStyleBackColor = false;
             this.pbSetTimeNow.Click += new System.EventHandler(this.pbSetTimeNow_Click_1);
             // 
             // checkBoxUseDriverTime
             // 
+            this.checkBoxUseDriverTime.AccessibleDescription = null;
+            this.checkBoxUseDriverTime.AccessibleName = null;
             resources.ApplyResources(this.checkBoxUseDriverTime, "checkBoxUseDriverTime");
+            this.checkBoxUseDriverTime.BackgroundImage = null;
             this.tableLayoutPanel4.SetColumnSpan(this.checkBoxUseDriverTime, 4);
+            this.checkBoxUseDriverTime.Font = null;
             this.checkBoxUseDriverTime.ForeColor = System.Drawing.Color.White;
             this.checkBoxUseDriverTime.Name = "checkBoxUseDriverTime";
             this.checkBoxUseDriverTime.UseVisualStyleBackColor = false;
@@ -411,83 +538,131 @@ namespace ASCOM.GeminiTelescope
             // 
             // labelUtc
             // 
+            this.labelUtc.AccessibleDescription = null;
+            this.labelUtc.AccessibleName = null;
             resources.ApplyResources(this.labelUtc, "labelUtc");
+            this.labelUtc.Font = null;
             this.labelUtc.Name = "labelUtc";
             // 
             // label5
             // 
+            this.label5.AccessibleDescription = null;
+            this.label5.AccessibleName = null;
             resources.ApplyResources(this.label5, "label5");
+            this.label5.Font = null;
             this.label5.Name = "label5";
             // 
             // groupBox4
             // 
+            this.groupBox4.AccessibleDescription = null;
+            this.groupBox4.AccessibleName = null;
             resources.ApplyResources(this.groupBox4, "groupBox4");
+            this.groupBox4.BackgroundImage = null;
+            this.groupBox4.Font = null;
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.TabStop = false;
             // 
             // tableLayoutPanel5
             // 
+            this.tableLayoutPanel5.AccessibleDescription = null;
+            this.tableLayoutPanel5.AccessibleName = null;
             resources.ApplyResources(this.tableLayoutPanel5, "tableLayoutPanel5");
+            this.tableLayoutPanel5.BackgroundImage = null;
             this.tableLayoutPanel5.Controls.Add(this.comboBox2, 1, 0);
+            this.tableLayoutPanel5.Font = null;
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             // 
             // comboBox2
             // 
-            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.AccessibleDescription = null;
+            this.comboBox2.AccessibleName = null;
             resources.ApplyResources(this.comboBox2, "comboBox2");
+            this.comboBox2.BackgroundImage = null;
+            this.comboBox2.Font = null;
+            this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Name = "comboBox2";
             // 
             // label6
             // 
+            this.label6.AccessibleDescription = null;
+            this.label6.AccessibleName = null;
             resources.ApplyResources(this.label6, "label6");
+            this.label6.Font = null;
             this.label6.Name = "label6";
             // 
             // checkBoxShowHandbox
             // 
+            this.checkBoxShowHandbox.AccessibleDescription = null;
+            this.checkBoxShowHandbox.AccessibleName = null;
             resources.ApplyResources(this.checkBoxShowHandbox, "checkBoxShowHandbox");
+            this.checkBoxShowHandbox.BackgroundImage = null;
+            this.checkBoxShowHandbox.Font = null;
             this.checkBoxShowHandbox.ForeColor = System.Drawing.Color.White;
             this.checkBoxShowHandbox.Name = "checkBoxShowHandbox";
             this.checkBoxShowHandbox.UseVisualStyleBackColor = false;
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.tableLayoutPanel2);
-            this.groupBox2.ForeColor = System.Drawing.Color.White;
+            this.groupBox2.AccessibleDescription = null;
+            this.groupBox2.AccessibleName = null;
             resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.BackgroundImage = null;
+            this.groupBox2.Controls.Add(this.tableLayoutPanel2);
+            this.groupBox2.Font = null;
+            this.groupBox2.ForeColor = System.Drawing.Color.White;
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // tableLayoutPanel2
             // 
+            this.tableLayoutPanel2.AccessibleDescription = null;
+            this.tableLayoutPanel2.AccessibleName = null;
             resources.ApplyResources(this.tableLayoutPanel2, "tableLayoutPanel2");
+            this.tableLayoutPanel2.BackgroundImage = null;
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.comboBoxComPort, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label9, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.comboBoxBaudRate, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.buttonVirtualPort, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.chkPortScan, 0, 2);
+            this.tableLayoutPanel2.Font = null;
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             // 
             // label4
             // 
+            this.label4.AccessibleDescription = null;
+            this.label4.AccessibleName = null;
             resources.ApplyResources(this.label4, "label4");
+            this.label4.Font = null;
             this.label4.Name = "label4";
             // 
             // comboBoxComPort
             // 
-            this.comboBoxComPort.FormattingEnabled = true;
+            this.comboBoxComPort.AccessibleDescription = null;
+            this.comboBoxComPort.AccessibleName = null;
             resources.ApplyResources(this.comboBoxComPort, "comboBoxComPort");
+            this.comboBoxComPort.BackgroundImage = null;
+            this.comboBoxComPort.Font = null;
+            this.comboBoxComPort.FormattingEnabled = true;
             this.comboBoxComPort.Name = "comboBoxComPort";
             this.comboBoxComPort.SelectedIndexChanged += new System.EventHandler(this.comboBoxComPort_SelectedIndexChanged);
             // 
             // label9
             // 
+            this.label9.AccessibleDescription = null;
+            this.label9.AccessibleName = null;
             resources.ApplyResources(this.label9, "label9");
+            this.label9.Font = null;
             this.label9.Name = "label9";
             // 
             // comboBoxBaudRate
             // 
+            this.comboBoxBaudRate.AccessibleDescription = null;
+            this.comboBoxBaudRate.AccessibleName = null;
+            resources.ApplyResources(this.comboBoxBaudRate, "comboBoxBaudRate");
+            this.comboBoxBaudRate.BackgroundImage = null;
+            this.comboBoxBaudRate.Font = null;
             this.comboBoxBaudRate.FormattingEnabled = true;
             this.comboBoxBaudRate.Items.AddRange(new object[] {
             resources.GetString("comboBoxBaudRate.Items"),
@@ -497,23 +672,30 @@ namespace ASCOM.GeminiTelescope
             resources.GetString("comboBoxBaudRate.Items4"),
             resources.GetString("comboBoxBaudRate.Items5"),
             resources.GetString("comboBoxBaudRate.Items6")});
-            resources.ApplyResources(this.comboBoxBaudRate, "comboBoxBaudRate");
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
             // 
             // buttonVirtualPort
             // 
+            this.buttonVirtualPort.AccessibleDescription = null;
+            this.buttonVirtualPort.AccessibleName = null;
+            resources.ApplyResources(this.buttonVirtualPort, "buttonVirtualPort");
             this.buttonVirtualPort.BackColor = System.Drawing.Color.Black;
+            this.buttonVirtualPort.BackgroundImage = null;
             this.tableLayoutPanel2.SetColumnSpan(this.buttonVirtualPort, 2);
             this.buttonVirtualPort.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            resources.ApplyResources(this.buttonVirtualPort, "buttonVirtualPort");
+            this.buttonVirtualPort.Font = null;
             this.buttonVirtualPort.Name = "buttonVirtualPort";
             this.buttonVirtualPort.UseVisualStyleBackColor = false;
             this.buttonVirtualPort.Click += new System.EventHandler(this.buttonVirtualPort_Click);
             // 
             // chkPortScan
             // 
+            this.chkPortScan.AccessibleDescription = null;
+            this.chkPortScan.AccessibleName = null;
             resources.ApplyResources(this.chkPortScan, "chkPortScan");
+            this.chkPortScan.BackgroundImage = null;
             this.tableLayoutPanel2.SetColumnSpan(this.chkPortScan, 2);
+            this.chkPortScan.Font = null;
             this.chkPortScan.Name = "chkPortScan";
             this.chkPortScan.UseVisualStyleBackColor = true;
             this.chkPortScan.CheckedChanged += new System.EventHandler(this.chkPortScan_CheckedChanged);
@@ -526,69 +708,105 @@ namespace ASCOM.GeminiTelescope
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.tableLayoutPanel6);
-            this.groupBox5.ForeColor = System.Drawing.Color.White;
+            this.groupBox5.AccessibleDescription = null;
+            this.groupBox5.AccessibleName = null;
             resources.ApplyResources(this.groupBox5, "groupBox5");
+            this.groupBox5.BackgroundImage = null;
+            this.groupBox5.Controls.Add(this.tableLayoutPanel6);
+            this.groupBox5.Font = null;
+            this.groupBox5.ForeColor = System.Drawing.Color.White;
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.TabStop = false;
             // 
             // tableLayoutPanel6
             // 
+            this.tableLayoutPanel6.AccessibleDescription = null;
+            this.tableLayoutPanel6.AccessibleName = null;
             resources.ApplyResources(this.tableLayoutPanel6, "tableLayoutPanel6");
+            this.tableLayoutPanel6.BackgroundImage = null;
             this.tableLayoutPanel6.Controls.Add(this.radioButtonPrompt, 0, 3);
             this.tableLayoutPanel6.Controls.Add(this.radioButtonColdStart, 0, 2);
             this.tableLayoutPanel6.Controls.Add(this.radioButtonWarmStart, 0, 1);
             this.tableLayoutPanel6.Controls.Add(this.radioButtonWarmRestart, 0, 0);
+            this.tableLayoutPanel6.Font = null;
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             // 
             // radioButtonPrompt
             // 
+            this.radioButtonPrompt.AccessibleDescription = null;
+            this.radioButtonPrompt.AccessibleName = null;
             resources.ApplyResources(this.radioButtonPrompt, "radioButtonPrompt");
+            this.radioButtonPrompt.BackgroundImage = null;
+            this.radioButtonPrompt.Font = null;
             this.radioButtonPrompt.Name = "radioButtonPrompt";
             this.radioButtonPrompt.TabStop = true;
             this.radioButtonPrompt.UseVisualStyleBackColor = true;
             // 
             // radioButtonColdStart
             // 
+            this.radioButtonColdStart.AccessibleDescription = null;
+            this.radioButtonColdStart.AccessibleName = null;
             resources.ApplyResources(this.radioButtonColdStart, "radioButtonColdStart");
+            this.radioButtonColdStart.BackgroundImage = null;
+            this.radioButtonColdStart.Font = null;
             this.radioButtonColdStart.Name = "radioButtonColdStart";
             this.radioButtonColdStart.TabStop = true;
             this.radioButtonColdStart.UseVisualStyleBackColor = true;
             // 
             // radioButtonWarmStart
             // 
+            this.radioButtonWarmStart.AccessibleDescription = null;
+            this.radioButtonWarmStart.AccessibleName = null;
             resources.ApplyResources(this.radioButtonWarmStart, "radioButtonWarmStart");
+            this.radioButtonWarmStart.BackgroundImage = null;
+            this.radioButtonWarmStart.Font = null;
             this.radioButtonWarmStart.Name = "radioButtonWarmStart";
             this.radioButtonWarmStart.TabStop = true;
             this.radioButtonWarmStart.UseVisualStyleBackColor = true;
             // 
             // radioButtonWarmRestart
             // 
+            this.radioButtonWarmRestart.AccessibleDescription = null;
+            this.radioButtonWarmRestart.AccessibleName = null;
             resources.ApplyResources(this.radioButtonWarmRestart, "radioButtonWarmRestart");
+            this.radioButtonWarmRestart.BackgroundImage = null;
+            this.radioButtonWarmRestart.Font = null;
             this.radioButtonWarmRestart.Name = "radioButtonWarmRestart";
             this.radioButtonWarmRestart.TabStop = true;
             this.radioButtonWarmRestart.UseVisualStyleBackColor = true;
             // 
             // chkJoystick
             // 
-            this.chkJoystick.ForeColor = System.Drawing.Color.White;
+            this.chkJoystick.AccessibleDescription = null;
+            this.chkJoystick.AccessibleName = null;
             resources.ApplyResources(this.chkJoystick, "chkJoystick");
+            this.chkJoystick.BackgroundImage = null;
+            this.chkJoystick.Font = null;
+            this.chkJoystick.ForeColor = System.Drawing.Color.White;
             this.chkJoystick.Name = "chkJoystick";
             this.chkJoystick.UseVisualStyleBackColor = false;
             this.chkJoystick.CheckedChanged += new System.EventHandler(this.chkJoystick_CheckedChanged);
             // 
             // cmbJoystick
             // 
-            this.cmbJoystick.BackColor = System.Drawing.Color.Black;
-            this.cmbJoystick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbJoystick.AccessibleDescription = null;
+            this.cmbJoystick.AccessibleName = null;
             resources.ApplyResources(this.cmbJoystick, "cmbJoystick");
+            this.cmbJoystick.BackColor = System.Drawing.Color.Black;
+            this.cmbJoystick.BackgroundImage = null;
+            this.cmbJoystick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbJoystick.Font = null;
             this.cmbJoystick.ForeColor = System.Drawing.Color.White;
             this.cmbJoystick.FormattingEnabled = true;
             this.cmbJoystick.Name = "cmbJoystick";
             // 
             // chkVoice
             // 
+            this.chkVoice.AccessibleDescription = null;
+            this.chkVoice.AccessibleName = null;
             resources.ApplyResources(this.chkVoice, "chkVoice");
+            this.chkVoice.BackgroundImage = null;
+            this.chkVoice.Font = null;
             this.chkVoice.ForeColor = System.Drawing.Color.White;
             this.chkVoice.Name = "chkVoice";
             this.chkVoice.UseVisualStyleBackColor = true;
@@ -596,18 +814,27 @@ namespace ASCOM.GeminiTelescope
             // 
             // btnJoysticConfig
             // 
+            this.btnJoysticConfig.AccessibleDescription = null;
+            this.btnJoysticConfig.AccessibleName = null;
             resources.ApplyResources(this.btnJoysticConfig, "btnJoysticConfig");
             this.btnJoysticConfig.BackColor = System.Drawing.Color.Transparent;
+            this.btnJoysticConfig.BackgroundImage = null;
             this.btnJoysticConfig.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnJoysticConfig.Font = null;
             this.btnJoysticConfig.Name = "btnJoysticConfig";
             this.btnJoysticConfig.UseVisualStyleBackColor = false;
             this.btnJoysticConfig.Click += new System.EventHandler(this.btnJoysticConfig_Click);
             // 
             // picASCOM
             // 
+            this.picASCOM.AccessibleDescription = null;
+            this.picASCOM.AccessibleName = null;
             resources.ApplyResources(this.picASCOM, "picASCOM");
+            this.picASCOM.BackgroundImage = null;
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picASCOM.Font = null;
             this.picASCOM.Image = global::ASCOM.GeminiTelescope.Properties.Resources.ASCOM;
+            this.picASCOM.ImageLocation = null;
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.TabStop = false;
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
@@ -615,15 +842,22 @@ namespace ASCOM.GeminiTelescope
             // 
             // label11
             // 
+            this.label11.AccessibleDescription = null;
+            this.label11.AccessibleName = null;
             resources.ApplyResources(this.label11, "label11");
+            this.label11.Font = null;
             this.label11.ForeColor = System.Drawing.Color.White;
             this.label11.Name = "label11";
             // 
             // cbLogging
             // 
-            this.cbLogging.BackColor = System.Drawing.Color.Black;
-            this.cbLogging.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLogging.AccessibleDescription = null;
+            this.cbLogging.AccessibleName = null;
             resources.ApplyResources(this.cbLogging, "cbLogging");
+            this.cbLogging.BackColor = System.Drawing.Color.Black;
+            this.cbLogging.BackgroundImage = null;
+            this.cbLogging.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLogging.Font = null;
             this.cbLogging.ForeColor = System.Drawing.Color.White;
             this.cbLogging.FormattingEnabled = true;
             this.cbLogging.Items.AddRange(new object[] {
@@ -637,7 +871,11 @@ namespace ASCOM.GeminiTelescope
             // 
             // chkAsyncPulseGuide
             // 
+            this.chkAsyncPulseGuide.AccessibleDescription = null;
+            this.chkAsyncPulseGuide.AccessibleName = null;
             resources.ApplyResources(this.chkAsyncPulseGuide, "chkAsyncPulseGuide");
+            this.chkAsyncPulseGuide.BackgroundImage = null;
+            this.chkAsyncPulseGuide.Font = null;
             this.chkAsyncPulseGuide.ForeColor = System.Drawing.Color.White;
             this.chkAsyncPulseGuide.Name = "chkAsyncPulseGuide";
             this.chkAsyncPulseGuide.UseVisualStyleBackColor = true;
@@ -645,7 +883,11 @@ namespace ASCOM.GeminiTelescope
             // 
             // chkPierSide
             // 
+            this.chkPierSide.AccessibleDescription = null;
+            this.chkPierSide.AccessibleName = null;
             resources.ApplyResources(this.chkPierSide, "chkPierSide");
+            this.chkPierSide.BackgroundImage = null;
+            this.chkPierSide.Font = null;
             this.chkPierSide.ForeColor = System.Drawing.Color.White;
             this.chkPierSide.Name = "chkPierSide";
             this.chkPierSide.UseVisualStyleBackColor = true;
@@ -653,43 +895,70 @@ namespace ASCOM.GeminiTelescope
             // 
             // checkBox1
             // 
-            this.checkBox1.ForeColor = System.Drawing.Color.White;
+            this.checkBox1.AccessibleDescription = null;
+            this.checkBox1.AccessibleName = null;
             resources.ApplyResources(this.checkBox1, "checkBox1");
+            this.checkBox1.BackgroundImage = null;
+            this.checkBox1.Font = null;
+            this.checkBox1.ForeColor = System.Drawing.Color.White;
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.UseVisualStyleBackColor = false;
             // 
             // groupBox6
             // 
+            this.groupBox6.AccessibleDescription = null;
+            this.groupBox6.AccessibleName = null;
             resources.ApplyResources(this.groupBox6, "groupBox6");
+            this.groupBox6.BackgroundImage = null;
+            this.groupBox6.Font = null;
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.TabStop = false;
             // 
             // tableLayoutPanel7
             // 
+            this.tableLayoutPanel7.AccessibleDescription = null;
+            this.tableLayoutPanel7.AccessibleName = null;
+            resources.ApplyResources(this.tableLayoutPanel7, "tableLayoutPanel7");
+            this.tableLayoutPanel7.BackgroundImage = null;
             this.tableLayoutPanel7.Controls.Add(this.label12, 0, 1);
             this.tableLayoutPanel7.Controls.Add(this.comboBox3, 1, 0);
             this.tableLayoutPanel7.Controls.Add(this.label13, 0, 0);
-            resources.ApplyResources(this.tableLayoutPanel7, "tableLayoutPanel7");
+            this.tableLayoutPanel7.Font = null;
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             // 
             // label12
             // 
+            this.label12.AccessibleDescription = null;
+            this.label12.AccessibleName = null;
             resources.ApplyResources(this.label12, "label12");
+            this.label12.Font = null;
             this.label12.Name = "label12";
             // 
             // comboBox3
             // 
-            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.AccessibleDescription = null;
+            this.comboBox3.AccessibleName = null;
             resources.ApplyResources(this.comboBox3, "comboBox3");
+            this.comboBox3.BackgroundImage = null;
+            this.comboBox3.Font = null;
+            this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Name = "comboBox3";
             // 
             // label13
             // 
+            this.label13.AccessibleDescription = null;
+            this.label13.AccessibleName = null;
             resources.ApplyResources(this.label13, "label13");
+            this.label13.Font = null;
             this.label13.Name = "label13";
             // 
             // comboBox4
             // 
+            this.comboBox4.AccessibleDescription = null;
+            this.comboBox4.AccessibleName = null;
+            resources.ApplyResources(this.comboBox4, "comboBox4");
+            this.comboBox4.BackgroundImage = null;
+            this.comboBox4.Font = null;
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Items.AddRange(new object[] {
             resources.GetString("comboBox4.Items"),
@@ -697,84 +966,126 @@ namespace ASCOM.GeminiTelescope
             resources.GetString("comboBox4.Items2"),
             resources.GetString("comboBox4.Items3"),
             resources.GetString("comboBox4.Items4")});
-            resources.ApplyResources(this.comboBox4, "comboBox4");
             this.comboBox4.Name = "comboBox4";
             // 
             // button2
             // 
-            this.button2.BackColor = System.Drawing.Color.Black;
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.button2.AccessibleDescription = null;
+            this.button2.AccessibleName = null;
             resources.ApplyResources(this.button2, "button2");
+            this.button2.BackColor = System.Drawing.Color.Black;
+            this.button2.BackgroundImage = null;
+            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.button2.Font = null;
             this.button2.Name = "button2";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.buttonVirtualPort_Click);
             // 
             // checkBox2
             // 
+            this.checkBox2.AccessibleDescription = null;
+            this.checkBox2.AccessibleName = null;
             resources.ApplyResources(this.checkBox2, "checkBox2");
+            this.checkBox2.BackgroundImage = null;
+            this.checkBox2.Font = null;
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // groupBox7
             // 
+            this.groupBox7.AccessibleDescription = null;
+            this.groupBox7.AccessibleName = null;
             resources.ApplyResources(this.groupBox7, "groupBox7");
+            this.groupBox7.BackgroundImage = null;
+            this.groupBox7.Font = null;
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.TabStop = false;
             // 
             // tableLayoutPanel8
             // 
+            this.tableLayoutPanel8.AccessibleDescription = null;
+            this.tableLayoutPanel8.AccessibleName = null;
+            resources.ApplyResources(this.tableLayoutPanel8, "tableLayoutPanel8");
+            this.tableLayoutPanel8.BackgroundImage = null;
             this.tableLayoutPanel8.Controls.Add(this.radioButton1, 0, 3);
             this.tableLayoutPanel8.Controls.Add(this.radioButton2, 0, 2);
             this.tableLayoutPanel8.Controls.Add(this.radioButton3, 0, 1);
-            resources.ApplyResources(this.tableLayoutPanel8, "tableLayoutPanel8");
+            this.tableLayoutPanel8.Font = null;
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             // 
             // radioButton1
             // 
+            this.radioButton1.AccessibleDescription = null;
+            this.radioButton1.AccessibleName = null;
             resources.ApplyResources(this.radioButton1, "radioButton1");
+            this.radioButton1.BackgroundImage = null;
+            this.radioButton1.Font = null;
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.TabStop = true;
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // radioButton2
             // 
+            this.radioButton2.AccessibleDescription = null;
+            this.radioButton2.AccessibleName = null;
             resources.ApplyResources(this.radioButton2, "radioButton2");
+            this.radioButton2.BackgroundImage = null;
+            this.radioButton2.Font = null;
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.TabStop = true;
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // radioButton3
             // 
+            this.radioButton3.AccessibleDescription = null;
+            this.radioButton3.AccessibleName = null;
             resources.ApplyResources(this.radioButton3, "radioButton3");
+            this.radioButton3.BackgroundImage = null;
+            this.radioButton3.Font = null;
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.TabStop = true;
             this.radioButton3.UseVisualStyleBackColor = true;
             // 
             // radioButton4
             // 
+            this.radioButton4.AccessibleDescription = null;
+            this.radioButton4.AccessibleName = null;
             resources.ApplyResources(this.radioButton4, "radioButton4");
+            this.radioButton4.BackgroundImage = null;
+            this.radioButton4.Font = null;
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.TabStop = true;
             this.radioButton4.UseVisualStyleBackColor = true;
             // 
             // chkPrecisionPulse
             // 
+            this.chkPrecisionPulse.AccessibleDescription = null;
+            this.chkPrecisionPulse.AccessibleName = null;
             resources.ApplyResources(this.chkPrecisionPulse, "chkPrecisionPulse");
+            this.chkPrecisionPulse.BackgroundImage = null;
+            this.chkPrecisionPulse.Font = null;
             this.chkPrecisionPulse.ForeColor = System.Drawing.Color.White;
             this.chkPrecisionPulse.Name = "chkPrecisionPulse";
             this.chkPrecisionPulse.UseVisualStyleBackColor = true;
             // 
             // groupBox8
             // 
-            this.groupBox8.Controls.Add(this.tableLayoutPanel9);
-            this.groupBox8.ForeColor = System.Drawing.Color.White;
+            this.groupBox8.AccessibleDescription = null;
+            this.groupBox8.AccessibleName = null;
             resources.ApplyResources(this.groupBox8, "groupBox8");
+            this.groupBox8.BackgroundImage = null;
+            this.groupBox8.Controls.Add(this.tableLayoutPanel9);
+            this.groupBox8.Font = null;
+            this.groupBox8.ForeColor = System.Drawing.Color.White;
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.TabStop = false;
             // 
             // tableLayoutPanel9
             // 
+            this.tableLayoutPanel9.AccessibleDescription = null;
+            this.tableLayoutPanel9.AccessibleName = null;
             resources.ApplyResources(this.tableLayoutPanel9, "tableLayoutPanel9");
+            this.tableLayoutPanel9.BackgroundImage = null;
             this.tableLayoutPanel9.Controls.Add(this.label16, 0, 3);
             this.tableLayoutPanel9.Controls.Add(this.textBoxObstruction, 1, 3);
             this.tableLayoutPanel9.Controls.Add(this.comboBoxSavedOptics, 1, 0);
@@ -785,25 +1096,36 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel9.Controls.Add(pbEditSavedOptics, 0, 0);
             this.tableLayoutPanel9.Controls.Add(this.radioButtonmillimeters, 1, 4);
             this.tableLayoutPanel9.Controls.Add(this.radioButtonInches, 0, 4);
+            this.tableLayoutPanel9.Font = null;
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             // 
             // label16
             // 
+            this.label16.AccessibleDescription = null;
+            this.label16.AccessibleName = null;
             resources.ApplyResources(this.label16, "label16");
+            this.label16.Font = null;
             this.label16.Name = "label16";
             // 
             // textBoxObstruction
             // 
+            this.textBoxObstruction.AccessibleDescription = null;
+            this.textBoxObstruction.AccessibleName = null;
             resources.ApplyResources(this.textBoxObstruction, "textBoxObstruction");
+            this.textBoxObstruction.BackgroundImage = null;
+            this.textBoxObstruction.Font = null;
             this.textBoxObstruction.Name = "textBoxObstruction";
             this.textBoxObstruction.TextChanged += new System.EventHandler(this.textBoxObstruction_TextChanged);
             this.textBoxObstruction.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxObstruction_KeyPress);
             // 
             // comboBoxSavedOptics
             // 
+            this.comboBoxSavedOptics.AccessibleDescription = null;
+            this.comboBoxSavedOptics.AccessibleName = null;
+            resources.ApplyResources(this.comboBoxSavedOptics, "comboBoxSavedOptics");
+            this.comboBoxSavedOptics.BackgroundImage = null;
             this.comboBoxSavedOptics.DisplayMember = "Id";
             this.comboBoxSavedOptics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            resources.ApplyResources(this.comboBoxSavedOptics, "comboBoxSavedOptics");
             this.comboBoxSavedOptics.FormattingEnabled = true;
             this.comboBoxSavedOptics.Items.AddRange(new object[] {
             resources.GetString("comboBoxSavedOptics.Items")});
@@ -812,38 +1134,60 @@ namespace ASCOM.GeminiTelescope
             // 
             // label14
             // 
+            this.label14.AccessibleDescription = null;
+            this.label14.AccessibleName = null;
             resources.ApplyResources(this.label14, "label14");
+            this.label14.Font = null;
             this.label14.Name = "label14";
             // 
             // textBoxAperture
             // 
+            this.textBoxAperture.AccessibleDescription = null;
+            this.textBoxAperture.AccessibleName = null;
             resources.ApplyResources(this.textBoxAperture, "textBoxAperture");
+            this.textBoxAperture.BackgroundImage = null;
+            this.textBoxAperture.Font = null;
             this.textBoxAperture.Name = "textBoxAperture";
             this.textBoxAperture.TextChanged += new System.EventHandler(this.textBoxAperture_TextChanged);
             this.textBoxAperture.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxAperture_KeyPress);
             // 
             // textBoxFocalLength
             // 
+            this.textBoxFocalLength.AccessibleDescription = null;
+            this.textBoxFocalLength.AccessibleName = null;
             resources.ApplyResources(this.textBoxFocalLength, "textBoxFocalLength");
+            this.textBoxFocalLength.BackgroundImage = null;
+            this.textBoxFocalLength.Font = null;
             this.textBoxFocalLength.Name = "textBoxFocalLength";
             this.textBoxFocalLength.TextChanged += new System.EventHandler(this.textBoxFocalLength_TextChanged);
             this.textBoxFocalLength.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxFocalLength_KeyPress);
             // 
             // label15
             // 
+            this.label15.AccessibleDescription = null;
+            this.label15.AccessibleName = null;
             resources.ApplyResources(this.label15, "label15");
+            this.label15.Font = null;
             this.label15.Name = "label15";
             // 
             // radioButtonmillimeters
             // 
+            this.radioButtonmillimeters.AccessibleDescription = null;
+            this.radioButtonmillimeters.AccessibleName = null;
             resources.ApplyResources(this.radioButtonmillimeters, "radioButtonmillimeters");
+            this.radioButtonmillimeters.BackgroundImage = null;
+            this.radioButtonmillimeters.Font = null;
             this.radioButtonmillimeters.Name = "radioButtonmillimeters";
             this.radioButtonmillimeters.TabStop = true;
             this.radioButtonmillimeters.UseVisualStyleBackColor = true;
             // 
             // radioButtonInches
             // 
+            this.radioButtonInches.AccessibleDescription = null;
+            this.radioButtonInches.AccessibleName = null;
             resources.ApplyResources(this.radioButtonInches, "radioButtonInches");
+            this.radioButtonInches.BackgroundImage = null;
+            this.radioButtonInches.Font = null;
             this.radioButtonInches.Name = "radioButtonInches";
             this.radioButtonInches.TabStop = true;
             this.radioButtonInches.UseVisualStyleBackColor = true;
@@ -851,9 +1195,12 @@ namespace ASCOM.GeminiTelescope
             // 
             // TelescopeSetupDialogForm
             // 
+            this.AccessibleDescription = null;
+            this.AccessibleName = null;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.BackgroundImage = null;
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.chkPrecisionPulse);
             this.Controls.Add(this.chkPierSide);
@@ -876,6 +1223,7 @@ namespace ASCOM.GeminiTelescope
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
+            this.Font = null;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -899,7 +1247,9 @@ namespace ASCOM.GeminiTelescope
             this.tableLayoutPanel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.tableLayoutPanel7.ResumeLayout(false);
+            this.tableLayoutPanel7.PerformLayout();
             this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel8.PerformLayout();
             this.groupBox8.ResumeLayout(false);
             this.tableLayoutPanel9.ResumeLayout(false);
             this.tableLayoutPanel9.PerformLayout();

@@ -19,9 +19,9 @@ namespace ASCOM.GeminiTelescope
                 comboBoxComPort.Items.Add(s);
             }
 
-            ComPort = GeminiHardware.PassThroughComPort;
-            BaudRate = GeminiHardware.PassThroughBaudRate.ToString();
-            VirtualPortEnabled = GeminiHardware.PassThroughPortEnabled;
+            ComPort = GeminiHardware.Instance.PassThroughComPort;
+            BaudRate = GeminiHardware.Instance.PassThroughBaudRate.ToString();
+            VirtualPortEnabled = GeminiHardware.Instance.PassThroughPortEnabled;
         }
 
         #region Properties for Settings

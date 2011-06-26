@@ -170,7 +170,7 @@ namespace ASCOM.GeminiTelescope
 
             if (!string.IsNullOrEmpty(JoystickName))
             {
-                if (!m_JS.Initialize(JoystickName, GeminiHardware.JoystickAxisRA, GeminiHardware.JoystickAxisDEC))
+                if (!m_JS.Initialize(JoystickName, GeminiHardware.Instance.JoystickAxisRA, GeminiHardware.Instance.JoystickAxisDEC))
                     m_JS = null;
                 else
                 {
@@ -248,61 +248,61 @@ namespace ASCOM.GeminiTelescope
                     else
                         button_mappings[i] = (int)UserFunction.Unassigned;
                 }
-                GeminiHardware.JoystickButtonMap = button_mappings;
-                GeminiHardware.JoystickIsAnalog = rbAnalog.Checked;
+                GeminiHardware.Instance.JoystickButtonMap = button_mappings;
+                GeminiHardware.Instance.JoystickIsAnalog = rbAnalog.Checked;
                 if (cmbAxisRA.SelectedIndex >= 0)
                 {
-                    GeminiHardware.JoystickAxisRA = cmbAxisRA.SelectedIndex;
+                    GeminiHardware.Instance.JoystickAxisRA = cmbAxisRA.SelectedIndex;
                 }
                 if (cmbAxisDEC.SelectedIndex >= 0)
                 {
-                    GeminiHardware.JoystickAxisDEC = cmbAxisDEC.SelectedIndex;
+                    GeminiHardware.Instance.JoystickAxisDEC = cmbAxisDEC.SelectedIndex;
                 }
 
-                GeminiHardware.JoystickFlipRA = ckFlipRA.Checked;
-                GeminiHardware.JoystickFlipDEC = ckFlipDec.Checked;
+                GeminiHardware.Instance.JoystickFlipRA = ckFlipRA.Checked;
+                GeminiHardware.Instance.JoystickFlipDEC = ckFlipDec.Checked;
 
                 try
                 {
-                    GeminiHardware.JoystickSensitivity = (double)txtSensitivity.Value;
+                    GeminiHardware.Instance.JoystickSensitivity = (double)txtSensitivity.Value;
                 }
                 catch { }
 
-                GeminiHardware.Profile = null;
+                GeminiHardware.Instance.Profile = null;
 
                 return true;
             }
             else
             {
-                button_mappings = GeminiHardware.JoystickButtonMap;
+                button_mappings = GeminiHardware.Instance.JoystickButtonMap;
                 if (button_mappings.Length < 36) Array.Resize<UserFunction>(ref button_mappings, 36); // increase to include POV settings for profiles written with an older driver
                 for (int i = 0; i < ButtonGrid.Rows.Count; ++i)
                 {
                     AssignmentClass ac = FindAssignmentClass(button_mappings[i]);
                     ButtonGrid.Rows[i].Cells[1].Value = ac;
                 }
-                rbAnalog.Checked = GeminiHardware.JoystickIsAnalog;
-                rbFixed.Checked = !GeminiHardware.JoystickIsAnalog;
+                rbAnalog.Checked = GeminiHardware.Instance.JoystickIsAnalog;
+                rbFixed.Checked = !GeminiHardware.Instance.JoystickIsAnalog;
 
-                if (cmbAxisRA.Items.Count > GeminiHardware.JoystickAxisRA)
-                    cmbAxisRA.SelectedIndex = GeminiHardware.JoystickAxisRA;
+                if (cmbAxisRA.Items.Count > GeminiHardware.Instance.JoystickAxisRA)
+                    cmbAxisRA.SelectedIndex = GeminiHardware.Instance.JoystickAxisRA;
 
-                if (cmbAxisDEC.Items.Count > GeminiHardware.JoystickAxisDEC)
-                    cmbAxisDEC.SelectedIndex = GeminiHardware.JoystickAxisDEC;
+                if (cmbAxisDEC.Items.Count > GeminiHardware.Instance.JoystickAxisDEC)
+                    cmbAxisDEC.SelectedIndex = GeminiHardware.Instance.JoystickAxisDEC;
 
-                ckFlipRA.Checked = GeminiHardware.JoystickFlipRA;
-                ckFlipDec.Checked = GeminiHardware.JoystickFlipDEC;
+                ckFlipRA.Checked = GeminiHardware.Instance.JoystickFlipRA;
+                ckFlipDec.Checked = GeminiHardware.Instance.JoystickFlipDEC;
 
                 try
                 {
-                    txtSensitivity.Value = (decimal)GeminiHardware.JoystickSensitivity;
+                    txtSensitivity.Value = (decimal)GeminiHardware.Instance.JoystickSensitivity;
                 }
                 catch
                 {
                     txtSensitivity.Value = 100;
                 }
 
-                GeminiHardware.Profile = null;
+                GeminiHardware.Instance.Profile = null;
                 return true;
             }
 

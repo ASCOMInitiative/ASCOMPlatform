@@ -431,7 +431,7 @@ namespace ASCOM.GeminiTelescope
 
             if (Win32API.joyGetDevCaps(jnbr, ref m_JCAPS, 404) != 0) return false;
 
-            GeminiHardware.Trace.Info(2, "Joystick caps", 
+            GeminiHardware.Instance.Trace.Info(2, "Joystick caps", 
                 "axes="+m_JCAPS.wNumAxes.ToString(), "buttons=" + m_JCAPS.wNumButtons.ToString(),
                 "caps=0x"+m_JCAPS.wCaps.ToString("X"));
 
@@ -455,9 +455,9 @@ namespace ASCOM.GeminiTelescope
             m_CenterX = RawX;
             m_CenterY = RawY;
 
-            GeminiHardware.Trace.Info(2, "Joystick RA, DEC", m_AxisRA, m_AxisDEC);
-            GeminiHardware.Trace.Info(2, "Joystick Center", m_CenterX, m_CenterY);
-            GeminiHardware.Trace.Info(2, "Joystick Min/Max", MinX, MinY, MaxX, MaxY );
+            GeminiHardware.Instance.Trace.Info(2, "Joystick RA, DEC", m_AxisRA, m_AxisDEC);
+            GeminiHardware.Instance.Trace.Info(2, "Joystick Center", m_CenterX, m_CenterY);
+            GeminiHardware.Instance.Trace.Info(2, "Joystick Min/Max", MinX, MinY, MaxX, MaxY );
 
             return true;
         }

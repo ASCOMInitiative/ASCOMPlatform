@@ -59,7 +59,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="speed"></param>
         public void Initialize(string port, int speed)
         {
-            GeminiHardware.Trace.Enter("PTP:Initialize", port, speed);
+            GeminiHardware.Instance.Trace.Enter("PTP:Initialize", port, speed);
 
             if (m_SerialPort.IsOpen) m_SerialPort.Close();  //reset the port if already open
 
@@ -84,7 +84,7 @@ namespace ASCOM.GeminiTelescope
             m_ListenerThread = new System.Threading.Thread(ListenUp);
             m_ListenerThread.Start();
 
-            GeminiHardware.Trace.Exit("PTP:Initialize", port, speed);
+            GeminiHardware.Instance.Trace.Exit("PTP:Initialize", port, speed);
         
         }
 
@@ -93,7 +93,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void Stop()
         {
-            GeminiHardware.Trace.Enter("PTP:Stop");
+            GeminiHardware.Instance.Trace.Enter("PTP:Stop");
 
             try
             {
@@ -106,7 +106,7 @@ namespace ASCOM.GeminiTelescope
                 m_ListenerThread = null;
             }
             catch { }
-            GeminiHardware.Trace.Enter("PTP:Stop");
+            GeminiHardware.Instance.Trace.Enter("PTP:Stop");
 
         }
         
@@ -122,7 +122,7 @@ namespace ASCOM.GeminiTelescope
             {
                 m_DisplayString += s.ToString();
                 m_DisplayDataAvailable.Set();
-                GeminiHardware.Trace.Info(1, "PTP:PassStringToPort", m_DisplayString);
+                GeminiHardware.Instance.Trace.Info(1, "PTP:PassStringToPort", m_DisplayString);
             }
         }
 
@@ -155,7 +155,7 @@ namespace ASCOM.GeminiTelescope
         {
             System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 
-            GeminiHardware.Trace.Enter("PTP:ListenUp");
+            GeminiHardware.Instance.Trace.Enter("PTP:ListenUp");
 
             string incoming = "";
             System.Threading.ManualResetEvent [] evts = {m_SerialDataAvailable, m_DisplayDataAvailable, m_CancelAsync};
@@ -178,7 +178,7 @@ namespace ASCOM.GeminiTelescope
                             incoming += Convert.ToChar(m_SerialPort.ReadByte());
 
 
-                        GeminiHardware.Trace.Info(4, "Incoming data:", incoming);
+                        GeminiHardware.Instance.Trace.Info(4, "Incoming data:", incoming);
 
                         string[] cmds = incoming.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -215,16 +215,16 @@ namespace ASCOM.GeminiTelescope
                                 string[] cmds16 = new string[16];
                                 Array.Copy(cmds, 0, cmds16, 0, 16);
 
-                                GeminiHardware.Trace.Info(2, "PTP: Process 16 commands", cmds.Length);
-                                GeminiHardware.DoCommandResult(cmds16, GeminiHardware.MAX_TIMEOUT, true, out res);
+                                GeminiHardware.Instance.Trace.Info(2, "PTP: Process 16 commands", cmds.Length);
+                                GeminiHardware.Instance.DoCommandResult(cmds16, GeminiHardware.Instance.MAX_TIMEOUT, true, out res);
                                 cmds16 = new string[cmds.Length - 16];
                                 Array.Copy(cmds, 16, cmds16, 0, cmds.Length - 16);  // remove first 16
                                 cmds = cmds16;
                             }
                             else
                             {
-                                GeminiHardware.Trace.Info(2, "PTP: Process commands", cmds.Length);
-                                GeminiHardware.DoCommandResult(cmds, GeminiHardware.MAX_TIMEOUT, true, out res);
+                                GeminiHardware.Instance.Trace.Info(2, "PTP: Process commands", cmds.Length);
+                                GeminiHardware.Instance.DoCommandResult(cmds, GeminiHardware.Instance.MAX_TIMEOUT, true, out res);
                                 cmds = new string[0];
                             }
 
@@ -239,7 +239,7 @@ namespace ASCOM.GeminiTelescope
 
                                         lock (m_SerialPort)
                                         {
-                                            GeminiHardware.Trace.Info(4, "PTP: Write to port", r);
+                                            GeminiHardware.Instance.Trace.Info(4, "PTP: Write to port", r);
                                             m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(r), 0, r.Length);
                                             m_SerialPort.BaseStream.Flush();
                                             System.Threading.Thread.Sleep(0);
@@ -256,7 +256,7 @@ namespace ASCOM.GeminiTelescope
                         {
                             m_DisplayDataAvailable.Reset();
 
-                            GeminiHardware.Trace.Info(2, "PTP: display data");
+                            GeminiHardware.Instance.Trace.Info(2, "PTP: display data");
 
                             if (m_SerialPort.IsOpen)
                             {
@@ -264,7 +264,7 @@ namespace ASCOM.GeminiTelescope
                                 {
                                     lock (m_SerialPort)
                                     {
-                                        GeminiHardware.Trace.Info(4, "PTP: write to port(2)", m_DisplayString );
+                                        GeminiHardware.Instance.Trace.Info(4, "PTP: write to port(2)", m_DisplayString );
                                         m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(m_DisplayString), 0, m_DisplayString.Length);
                                         m_SerialPort.BaseStream.Flush();
                                         System.Threading.Thread.Sleep(0);
@@ -294,7 +294,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     incoming = "";          //reset data that may've caused an exception
                     m_DisplayString = "";   // " " "
-                    GeminiHardware.Trace.Error("ListenUp:Exception: ", ex.ToString(), ex.Message, ex.StackTrace, ex.Source, ex.InnerException);
+                    GeminiHardware.Instance.Trace.Error("ListenUp:Exception: ", ex.ToString(), ex.Message, ex.StackTrace, ex.Source, ex.InnerException);
                 }
             }
         }

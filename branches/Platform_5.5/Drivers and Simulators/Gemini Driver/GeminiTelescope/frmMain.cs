@@ -63,10 +63,11 @@ namespace ASCOM.GeminiTelescope
 
             tmrUpdate.Elapsed+=new System.Timers.ElapsedEventHandler(tmrUpdate_Tick);
             tmrUpdate.Start();
-            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectEvent);
-            GeminiHardware.OnError += new ErrorDelegate(OnError);
-            GeminiHardware.OnInfo += new ErrorDelegate(OnInfo);
+            GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnectEvent);
+            GeminiHardware.Instance.OnError += new ErrorDelegate(OnError);
+            GeminiHardware.Instance.OnInfo += new ErrorDelegate(OnInfo);
 
+            GeminiHardware.Instance.OnDisplayChanged += new DisplayChangedDelegate(Instance_OnDisplayChanged);
             m_BalloonMenu = new ContextMenu();
 
             MenuItem connectMenu = new MenuItem(Resources.Connect, new EventHandler(ConnectMenu));
@@ -117,7 +118,7 @@ namespace ASCOM.GeminiTelescope
             tmrBaloon.Tick += new EventHandler(tmrBaloon_Tick);
             BalloonIcon.MouseDoubleClick += new MouseEventHandler(BalloonIcon_MouseDoubleClick);
             BalloonIcon.MouseMove += new MouseEventHandler(BalloonIcon_MouseMove);
-            GeminiHardware.OnSafetyLimit += new SafetyDelegate(OnSafetyLimit);
+            GeminiHardware.Instance.OnSafetyLimit += new SafetyDelegate(OnSafetyLimit);
 
             ToolTip toolTip1 = new ToolTip();
 
@@ -160,6 +161,16 @@ namespace ASCOM.GeminiTelescope
 
         }
 
+        void Instance_OnDisplayChanged()
+        {    
+            string display = GeminiHardware.Instance.DoCommandResult(":OO", GeminiHardware.Instance.MAX_TIMEOUT, false);
+            if (string.IsNullOrEmpty(display) || display.Trim()=="")
+                display = GeminiHardware.Instance.DoCommandResult(":Oo", GeminiHardware.Instance.MAX_TIMEOUT, false); 
+            
+            if (!string.IsNullOrEmpty(display) && display.Trim()!="")
+                OnInfo("Gemini Controller", display);
+        }
+
         private void StartJoystick()
         {
             m_JoystickRate = null;
@@ -168,16 +179,16 @@ namespace ASCOM.GeminiTelescope
             int[] joys = Joystick.Joysticks;
             if (joys != null && joys.Length > 0)
             {
-                if (!string.IsNullOrEmpty(GeminiHardware.JoystickName))
+                if (!string.IsNullOrEmpty(GeminiHardware.Instance.JoystickName))
                 {
                     m_Joystick = new Joystick();
-                    if (m_Joystick.Initialize(GeminiHardware.JoystickName, GeminiHardware.JoystickAxisRA, GeminiHardware.JoystickAxisDEC))
+                    if (m_Joystick.Initialize(GeminiHardware.Instance.JoystickName, GeminiHardware.Instance.JoystickAxisRA, GeminiHardware.Instance.JoystickAxisDEC))
                     {
                         tmrJoystick.Interval = 200;
                         tmrJoystick.Start();
                     }
                     else
-                        SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, Resources.JoystickIsNotAvailable + "\r\n" + GeminiHardware.JoystickName, ToolTipIcon.Warning);
+                        SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, Resources.JoystickIsNotAvailable + "\r\n" + GeminiHardware.Instance.JoystickName, ToolTipIcon.Warning);
                 }
             }
         }
@@ -191,27 +202,27 @@ namespace ASCOM.GeminiTelescope
         void tmrJoystick_Tick(object sender, EventArgs e)
         {
             tmrJoystick.Stop();
-            if (GeminiHardware.Connected && this.Visible && GeminiHardware.UseJoystick && !string.IsNullOrEmpty(GeminiHardware.JoystickName))
+            if (GeminiHardware.Instance.Connected && this.Visible && GeminiHardware.Instance.UseJoystick && !string.IsNullOrEmpty(GeminiHardware.Instance.JoystickName))
             {
                 double x = m_Joystick.PosX;
                 double y = m_Joystick.PosY;
 #if DEBUG
                 System.Diagnostics.Trace.WriteLine("JOYSTICK : X = " + x.ToString() + "   Y = " + y.ToString());
 #endif
-                GeminiHardware.Trace.Info(4, "JOYSTICK X,Y:", x.ToString() , y.ToString());
+                GeminiHardware.Instance.Trace.Info(4, "JOYSTICK X,Y:", x.ToString() , y.ToString());
                 ulong buttons = m_Joystick.ButtonState;
                 
                 ProcessButtonPress(ref buttons, m_PreviousJoystickButtonState);
                 
                 m_PreviousJoystickButtonState = buttons;
 
-                if (!GeminiHardware.JoystickIsAnalog)
+                if (!GeminiHardware.Instance.JoystickIsAnalog)
                 {
                     // make the requested sensitivity adjustment to joystick coordinates:
-                    if (GeminiHardware.JoystickSensitivity != 0) {
-                        GeminiHardware.Trace.Info(4, "JOYSTICK Sensitivity:", GeminiHardware.JoystickSensitivity.ToString());
-                        x *= GeminiHardware.JoystickSensitivity / 100.0;
-                        y *= GeminiHardware.JoystickSensitivity / 100.0; 
+                    if (GeminiHardware.Instance.JoystickSensitivity != 0) {
+                        GeminiHardware.Instance.Trace.Info(4, "JOYSTICK Sensitivity:", GeminiHardware.Instance.JoystickSensitivity.ToString());
+                        x *= GeminiHardware.Instance.JoystickSensitivity / 100.0;
+                        y *= GeminiHardware.Instance.JoystickSensitivity / 100.0; 
                     }
                 }
 
@@ -227,14 +238,14 @@ namespace ASCOM.GeminiTelescope
 
                 if (this.CheckBoxFlipRa.Checked) x = -x;
                 if (this.CheckBoxFlipDec.Checked) y = -y;
-                if (GeminiHardware.JoystickFlipRA) x = -x;
-                if (GeminiHardware.JoystickFlipDEC) y = -y;
+                if (GeminiHardware.Instance.JoystickFlipRA) x = -x;
+                if (GeminiHardware.Instance.JoystickFlipDEC) y = -y;
 
                 string dir, rate;
 
                 // if last joystick rate was zero, but we are still moving at speed, then
                 // the mount must be slowing down from a slew.. continue waiting
-                if ((m_JoystickRate == null) && (GeminiHardware.Velocity == "S"))
+                if ((m_JoystickRate == null) && (GeminiHardware.Instance.Velocity == "S"))
                 {
                     tmrJoystick.Start();
                     return;
@@ -247,7 +258,7 @@ namespace ASCOM.GeminiTelescope
                     {
                         m_JoystickRate = null;
                         m_JoystickDirection = null;
-                        GeminiHardware.DoCommand(":Q", false);
+                        GeminiHardware.Instance.DoCommand(":Q", false);
                         Speech.SayIt(Resources.JoystickStop, Speech.SpeechType.Command); 
                     }
                     tmrJoystick.Start();
@@ -255,9 +266,9 @@ namespace ASCOM.GeminiTelescope
                 }
 
                 // fixed speed selected, use the value in JoysticFixedSpeed (0-2 == G/C/S):
-                if (!GeminiHardware.JoystickIsAnalog)
+                if (!GeminiHardware.Instance.JoystickIsAnalog)
                 {
-                    double speed = joystick_speeds[GeminiHardware.JoystickFixedSpeed];
+                    double speed = joystick_speeds[GeminiHardware.Instance.JoystickFixedSpeed];
                     if (x < -0.25) x = -speed;
                     if (x > 0.25) x = speed;
                     if (y < -0.25) y = -speed;
@@ -289,10 +300,10 @@ namespace ASCOM.GeminiTelescope
                     // if we are moving at speed, we can't change rates/directions until
                     // the mount slows down to tracking speed. Issue move quit command, and 
                     // return until next time...
-                    if (((GeminiHardware.Velocity == "S") && (m_JoystickRate == ":RS" || rate == ":RS")) ||
-                         ((GeminiHardware.Velocity == "C") && (rate == ":RS")))
+                    if (((GeminiHardware.Instance.Velocity == "S") && (m_JoystickRate == ":RS" || rate == ":RS")) ||
+                         ((GeminiHardware.Instance.Velocity == "C") && (rate == ":RS")))
                     {
-                        GeminiHardware.DoCommand(":Q", false);
+                        GeminiHardware.Instance.DoCommand(":Q", false);
                         m_JoystickRate = null;
                         m_JoystickDirection = null;
                         tmrJoystick.Start();
@@ -304,9 +315,9 @@ namespace ASCOM.GeminiTelescope
                     m_JoystickDirection = dir;
                     m_JoystickRate = rate;
                     Speech.SayIt(Resources.MoveJoystick + " "+ s_dir + " at " + s_rate + " speed", Speech.SpeechType.Command);
-                    GeminiHardware.Trace.Info(4, "Move Joystick", s_dir, s_rate);
+                    GeminiHardware.Instance.Trace.Info(4, "Move Joystick", s_dir, s_rate);
                 }
-                if (cmds.Count > 0) GeminiHardware.DoCommand(cmds.ToArray(), false);
+                if (cmds.Count > 0) GeminiHardware.Instance.DoCommand(cmds.ToArray(), false);
                 tmrJoystick.Start();
             }
         }
@@ -337,13 +348,13 @@ namespace ASCOM.GeminiTelescope
                     if ((buttons & mask) == 0 && m_AutoFireCount[i] > 0)
                         m_AutoFireCount[i] = 0;
 
-                    UserCommand.Execute(GeminiHardware.JoystickButtonMap[i], (buttons & mask) != 0);
+                    UserCommand.Execute(GeminiHardware.Instance.JoystickButtonMap[i], (buttons & mask) != 0);
 
                     // if this is the first button down in a while, let up
                     // and wait for 5 cycles before continually firing:
                     if ((buttons & mask) != 0 && m_AutoFireCount[i] == 0)
                     {
-                        UserCommand.Execute(GeminiHardware.JoystickButtonMap[i], false);    //key up
+                        UserCommand.Execute(GeminiHardware.Instance.JoystickButtonMap[i], false);    //key up
                         buttons &= ~mask;   //remove it from state, so it fires the next time
                         m_AutoFireCount[i]++;
                     }
@@ -357,7 +368,7 @@ namespace ASCOM.GeminiTelescope
             if ((m_StatusForm == null || !m_StatusForm.Visible) && m_ShowStatusPanel)
             {
                 Screen scr = Screen.FromPoint(Cursor.Position);
-                GeminiHardware.ShowStatus(new Point(scr.WorkingArea.Right, scr.WorkingArea.Bottom), true);
+                GeminiHardware.Instance.ShowStatus(new Point(scr.WorkingArea.Right, scr.WorkingArea.Bottom), true);
             }
         }
 
@@ -553,11 +564,11 @@ namespace ASCOM.GeminiTelescope
                 m_Messages.Clear(); // remove all queued up messages, we don't care now that the mount is connected:
                 
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME + "\r\n" + 
-                    (GeminiHardware.EthernetPort? "" : (GeminiHardware.BaudRate.ToString()) + "b/s ") +  "On " + GeminiHardware.ComPort, Resources.MountIsConnected, ToolTipIcon.Info);
+                    (GeminiHardware.Instance.EthernetPort? "" : (GeminiHardware.Instance.BaudRate.ToString()) + "b/s ") +  "On " + GeminiHardware.Instance.ComPort, Resources.MountIsConnected, ToolTipIcon.Info);
             }
             if (Connected)
             {
-                if (GeminiHardware.UseJoystick && !string.IsNullOrEmpty(GeminiHardware.JoystickName)) StartJoystick();
+                if (GeminiHardware.Instance.UseJoystick && !string.IsNullOrEmpty(GeminiHardware.Instance.JoystickName)) StartJoystick();
             }
             if (!Connected && Clients <= 0) // last client to disconnect
             {
@@ -598,7 +609,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         void OnSafetyLimit()
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 SetBaloonText(SharedResources.TELESCOPE_DRIVER_NAME, Resources.SafetyLimitReached + " " + Resources.MountStopped, ToolTipIcon.Warning);
                 Speech.SayIt(Resources.SafetyLimitReached, Speech.SpeechType.Always);
@@ -616,25 +627,25 @@ namespace ASCOM.GeminiTelescope
 
         void UpdateDisplay(byte pec)
         {
-            if (GeminiHardware.Connected) 
+            if (GeminiHardware.Instance.Connected) 
             {
-                labelSlew.BackColor = (GeminiHardware.Velocity == "S" ? m_ActiveBkColor : m_InactiveBkColor);
+                labelSlew.BackColor = (GeminiHardware.Instance.Velocity == "S" ? m_ActiveBkColor : m_InactiveBkColor);
 
                 // blink the text while slewing is active:
                 Color active = ((m_UpdateCount & 1) == 0 ? m_ActiveForeColor : m_InactiveForeColor);
 
-                labelSlew.ForeColor = (GeminiHardware.Velocity == "S" ? active : m_InactiveForeColor);
-                labelPARK.BackColor = (GeminiHardware.AtPark ? m_ActiveBkColor : m_InactiveBkColor);
-                labelPARK.ForeColor = (GeminiHardware.AtPark ? m_ActiveForeColor : m_InactiveForeColor);
+                labelSlew.ForeColor = (GeminiHardware.Instance.Velocity == "S" ? active : m_InactiveForeColor);
+                labelPARK.BackColor = (GeminiHardware.Instance.AtPark ? m_ActiveBkColor : m_InactiveBkColor);
+                labelPARK.ForeColor = (GeminiHardware.Instance.AtPark ? m_ActiveForeColor : m_InactiveForeColor);
 
-                if (GeminiHardware.AtPark)
+                if (GeminiHardware.Instance.AtPark)
                     labelPARK.Text = Resources.dispPARK;
                 else
-                    labelPARK.Text = GeminiHardware.SideOfPier == "E" ? Resources.dispEAST : Resources.dispWEST;
+                    labelPARK.Text = GeminiHardware.Instance.SideOfPier == "E" ? Resources.dispEAST : Resources.dispWEST;
 
                 string prev_label = labelSlew.Text;
 
-                switch (GeminiHardware.Velocity)
+                switch (GeminiHardware.Instance.Velocity)
                 {
                     case "S": labelSlew.Text = Resources.dispSLEW; break;
                     case "C": labelSlew.Text = Resources.dispCENTER; break;
@@ -643,7 +654,7 @@ namespace ASCOM.GeminiTelescope
                     default: labelSlew.Text = Resources.dispTRACK; break;
                 }
                 //add an indicator for a "safety limit alert".
-                if (GeminiHardware.AtSafetyLimit)
+                if (GeminiHardware.Instance.AtSafetyLimit)
                 {
                     labelSlew.Text = Resources.dispLIMIT;
                     labelSlew.ForeColor = m_ActiveForeColor;
@@ -651,7 +662,7 @@ namespace ASCOM.GeminiTelescope
                     labelLimit.Text = "00:00:00";
                 }
 
-                pbStop.Visible = (GeminiHardware.Velocity == "S");  //only show Stop! button when slewing
+                pbStop.Visible = (GeminiHardware.Instance.Velocity == "S");  //only show Stop! button when slewing
 
                 if (labelSlew.Text != prev_label)
                 {
@@ -698,22 +709,23 @@ namespace ASCOM.GeminiTelescope
             m_BalloonMenu.MenuItems[Resources.Control].Checked = this.Visible;
 
             string tooltip = Resources.GeminiIs;
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
-                tooltip += Resources.Connected + "\r\n" + (GeminiHardware.BaudRate.ToString()) + "b/s on " + GeminiHardware.ComPort;
+                tooltip += Resources.Connected + "\r\n" + (GeminiHardware.Instance.BaudRate.ToString()) + "b/s on " + GeminiHardware.Instance.ComPort;
                 tooltip += "\r\n" + Resources.Status + ": " + labelSlew.Text;
 
             }
             else
                 tooltip+= Resources.NotConnected;
 
-            checkBoxTrack.Checked = (GeminiHardware.Velocity == "N" ? false : true);
+            checkBoxTrack.Checked = (GeminiHardware.Instance.Velocity == "N" ? false : true);
 
 
             checkboxPEC.BackColor = (checkboxPEC.Enabled ? Color.Transparent : Color.FromArgb(64, 64, 64)) ;
 
 
             BalloonIcon.Text = ""; // tooltip;    
+        
         }
 
 
@@ -723,18 +735,18 @@ namespace ASCOM.GeminiTelescope
         {
 
 
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 m_UpdateCount++;
 
-                RightAscension = GeminiHardware.RightAscension;
-                Declination = GeminiHardware.Declination;
-                SiderealTime = GeminiHardware.SiderealTime;
+                RightAscension = GeminiHardware.Instance.RightAscension;
+                Declination = GeminiHardware.Instance.Declination;
+                SiderealTime = GeminiHardware.Instance.SiderealTime;
 
                 // don't bother with PEC status and
                 // distance to safety while slewing: this is too
                 // much for Gemini to handle
-                if (GeminiHardware.Velocity != "S")
+                if (GeminiHardware.Instance.Velocity != "S")
                 {
                     // update limit distance every 4th time
                     if ((m_UpdateCount & 3) == 0)
@@ -743,24 +755,25 @@ namespace ASCOM.GeminiTelescope
                         HourAngleDisplay = HourAngle; 
                     }
 
-                    if (GeminiHardware.QueueDepth < 3)  //don't keep queuing if queue is large
+                    if (GeminiHardware.Instance.QueueDepth < 3)  //don't keep queuing if queue is large
                     {
-                        byte pec = GeminiHardware.PECStatus;
+                        byte pec = GeminiHardware.Instance.PECStatus;
                         if (pec != 0xff) previous_PECStatus = pec;
                     }
 
                 }
+
                 this.BeginInvoke(new UpdateDisplayDelegate(UpdateDisplay), previous_PECStatus);
             }
         }
 
         private void UpdateTimeToLimit()
         {
-            if (GeminiHardware.QueueDepth > 2) return;  // Don't queue up if queue is large
+            if (GeminiHardware.Instance.QueueDepth > 2) return;  // Don't queue up if queue is large
 
-            string safety = GeminiHardware.DoCommandResult("<230:", GeminiHardware.MAX_TIMEOUT, false);
-            string position = GeminiHardware.DoCommandResult("<235:", GeminiHardware.MAX_TIMEOUT, false);
-            string size = GeminiHardware.DoCommandResult("<237:", GeminiHardware.MAX_TIMEOUT, false);
+            string safety = GeminiHardware.Instance.DoCommandResult("<230:", GeminiHardware.Instance.MAX_TIMEOUT, false);
+            string position = GeminiHardware.Instance.DoCommandResult("<235:", GeminiHardware.Instance.MAX_TIMEOUT, false);
+            string size = GeminiHardware.Instance.DoCommandResult("<237:", GeminiHardware.Instance.MAX_TIMEOUT, false);
             if (safety == null || position == null || size == null) return; //???
 
             string [] sp = safety.Split(new char[] {';'});
@@ -824,37 +837,37 @@ namespace ASCOM.GeminiTelescope
 
             TelescopeSetupDialogForm setupForm = new TelescopeSetupDialogForm();
 
-            setupForm.ComPort = GeminiHardware.ComPort;
-            setupForm.BaudRate = GeminiHardware.BaudRate.ToString();
+            setupForm.ComPort = GeminiHardware.Instance.ComPort;
+            setupForm.BaudRate = GeminiHardware.Instance.BaudRate.ToString();
 
-            setupForm.Elevation = GeminiHardware.Elevation;
-            setupForm.Latitude = GeminiHardware.Latitude;
-            setupForm.Longitude = GeminiHardware.Longitude;
-            setupForm.TZ = -GeminiHardware.UTCOffset; 
+            setupForm.Elevation = GeminiHardware.Instance.Elevation;
+            setupForm.Latitude = GeminiHardware.Instance.Latitude;
+            setupForm.Longitude = GeminiHardware.Instance.Longitude;
+            setupForm.TZ = -GeminiHardware.Instance.UTCOffset; 
 
-            setupForm.UseDriverSite = GeminiHardware.UseDriverSite;
-            setupForm.UseDriverTime = GeminiHardware.UseDriverTime;
+            setupForm.UseDriverSite = GeminiHardware.Instance.UseDriverSite;
+            setupForm.UseDriverTime = GeminiHardware.Instance.UseDriverTime;
 
-            setupForm.ShowHandbox = GeminiHardware.ShowHandbox;
+            setupForm.ShowHandbox = GeminiHardware.Instance.ShowHandbox;
 
-            setupForm.BootMode = GeminiHardware.BootMode;
-            setupForm.UseSpeech = GeminiHardware.UseSpeech;
-            setupForm.SpeechFlags = GeminiHardware.SpeechFilter;
-            setupForm.SpeechVoice = GeminiHardware.SpeechVoice;
-            setupForm.Sites = GeminiHardware.Sites;
-            setupForm.AllowPortScan = GeminiHardware.ScanCOMPorts;
+            setupForm.BootMode = GeminiHardware.Instance.BootMode;
+            setupForm.UseSpeech = GeminiHardware.Instance.UseSpeech;
+            setupForm.SpeechFlags = GeminiHardware.Instance.SpeechFilter;
+            setupForm.SpeechVoice = GeminiHardware.Instance.SpeechVoice;
+            setupForm.Sites = GeminiHardware.Instance.Sites;
+            setupForm.AllowPortScan = GeminiHardware.Instance.ScanCOMPorts;
 
-            setupForm.TraceLevel = GeminiHardware.TraceLevel;
+            setupForm.TraceLevel = GeminiHardware.Instance.TraceLevel;
 
-            setupForm.AsyncPulseGuide = GeminiHardware.AsyncPulseGuide;
-            setupForm.ReportPierSide = GeminiHardware.ReportPierSide;
-            setupForm.PrecisionPulseGuide = GeminiHardware.PrecisionPulseGuide;
+            setupForm.AsyncPulseGuide = GeminiHardware.Instance.AsyncPulseGuide;
+            setupForm.ReportPierSide = GeminiHardware.Instance.ReportPierSide;
+            setupForm.PrecisionPulseGuide = GeminiHardware.Instance.PrecisionPulseGuide;
 
-            string[] optics = GeminiHardware.OpticsNames.Split('~');
-            string[] focallengths = GeminiHardware.FocalLength.Split('~');
-            string[] apertures = GeminiHardware.ApertureDiameter.Split('~');
-            string[] uoms = GeminiHardware.OpticsUnitOfMeasure.Split('~');
-            string[] obstructions = GeminiHardware.OpticsObstruction.Split('~');
+            string[] optics = GeminiHardware.Instance.OpticsNames.Split('~');
+            string[] focallengths = GeminiHardware.Instance.FocalLength.Split('~');
+            string[] apertures = GeminiHardware.Instance.ApertureDiameter.Split('~');
+            string[] uoms = GeminiHardware.Instance.OpticsUnitOfMeasure.Split('~');
+            string[] obstructions = GeminiHardware.Instance.OpticsObstruction.Split('~');
 
             setupForm.ClearOpticsInfos();
 
@@ -883,7 +896,7 @@ namespace ASCOM.GeminiTelescope
                 }
             }
 
-            setupForm.SelectedOptic = GeminiHardware.OpticsValueIndex;
+            setupForm.SelectedOptic = GeminiHardware.Instance.OpticsValueIndex;
 
             DialogResult ans;
             if (this.Visible==false)
@@ -897,63 +910,63 @@ namespace ASCOM.GeminiTelescope
 
                 try
                 {
-                    GeminiHardware.ComPort = setupForm.ComPort;                 
+                    GeminiHardware.Instance.ComPort = setupForm.ComPort;                 
                 }
                 catch 
                 {
                     error += Resources.COMport + ", ";
                 }
 
-                try{ GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate); }
-                catch { error += Resources.BaudRate + ", ";}
+                try{ GeminiHardware.Instance.BaudRate = int.Parse(setupForm.BaudRate); }
+                catch { if (setupForm.ComPort != "Ethernet") error += Resources.BaudRate + ", ";}
 
-                try {GeminiHardware.Elevation = setupForm.Elevation;}
+                try {GeminiHardware.Instance.Elevation = setupForm.Elevation;}
                 catch {error += Resources.Elevation + ", ";}
 
-                try { GeminiHardware.Latitude = setupForm.Latitude; }
+                try { GeminiHardware.Instance.Latitude = setupForm.Latitude; }
                 catch {error+= Resources.Latitude + ", "; }
                 
-                try {GeminiHardware.Longitude = setupForm.Longitude;}
+                try {GeminiHardware.Instance.Longitude = setupForm.Longitude;}
                 catch { error += Resources.Longitude + ", ";  }
 
-                try { GeminiHardware.UTCOffset = -setupForm.TZ; }
+                try { GeminiHardware.Instance.UTCOffset = -setupForm.TZ; }
                 catch { error += "Timezone" + ", "; }
 
 
 
-                GeminiHardware.UseDriverTime = setupForm.UseDriverTime;
-                GeminiHardware.UseDriverSite = setupForm.UseDriverSite;
+                GeminiHardware.Instance.UseDriverTime = setupForm.UseDriverTime;
+                GeminiHardware.Instance.UseDriverSite = setupForm.UseDriverSite;
 
-                GeminiHardware.ShowHandbox = setupForm.ShowHandbox;
+                GeminiHardware.Instance.ShowHandbox = setupForm.ShowHandbox;
 
-                GeminiHardware.BootMode = setupForm.BootMode;
+                GeminiHardware.Instance.BootMode = setupForm.BootMode;
 
-                GeminiHardware.TraceLevel = setupForm.TraceLevel;
+                GeminiHardware.Instance.TraceLevel = setupForm.TraceLevel;
 
-                GeminiHardware.AsyncPulseGuide = setupForm.AsyncPulseGuide;
+                GeminiHardware.Instance.AsyncPulseGuide = setupForm.AsyncPulseGuide;
 
-                GeminiHardware.ReportPierSide = setupForm.ReportPierSide;
+                GeminiHardware.Instance.ReportPierSide = setupForm.ReportPierSide;
 
-                GeminiHardware.PrecisionPulseGuide = setupForm.PrecisionPulseGuide;
+                GeminiHardware.Instance.PrecisionPulseGuide = setupForm.PrecisionPulseGuide;
 
-                GeminiHardware.ScanCOMPorts = setupForm.AllowPortScan;
+                GeminiHardware.Instance.ScanCOMPorts = setupForm.AllowPortScan;
 
                 if (setupForm.UseJoystick && !string.IsNullOrEmpty(setupForm.JoystickName))
                 {
-                    GeminiHardware.UseJoystick = true;
-                    GeminiHardware.JoystickName = setupForm.JoystickName;
+                    GeminiHardware.Instance.UseJoystick = true;
+                    GeminiHardware.Instance.JoystickName = setupForm.JoystickName;
                 }
                 else
                 {
-                    GeminiHardware.UseJoystick = false;
+                    GeminiHardware.Instance.UseJoystick = false;
                 }
 
-                GeminiHardware.UseSpeech = setupForm.UseSpeech;
-                GeminiHardware.SpeechVoice = setupForm.SpeechVoice;
-                GeminiHardware.SpeechFilter = setupForm.SpeechFlags;
+                GeminiHardware.Instance.UseSpeech = setupForm.UseSpeech;
+                GeminiHardware.Instance.SpeechVoice = setupForm.SpeechVoice;
+                GeminiHardware.Instance.SpeechFilter = setupForm.SpeechFlags;
 
                 //Get the Optics Data
-                GeminiHardware.OpticsValueIndex = setupForm.SelectedOptic;
+                GeminiHardware.Instance.OpticsValueIndex = setupForm.SelectedOptic;
                 string focallength = "";
                 string aperture = "";
                 string uom = "";
@@ -974,11 +987,11 @@ namespace ASCOM.GeminiTelescope
 
                 }
 
-                GeminiHardware.FocalLength = focallength;
-                GeminiHardware.ApertureDiameter = aperture;
-                GeminiHardware.OpticsUnitOfMeasure = uom;
-                GeminiHardware.OpticsNames = name;
-                GeminiHardware.OpticsObstruction = obstruction;
+                GeminiHardware.Instance.FocalLength = focallength;
+                GeminiHardware.Instance.ApertureDiameter = aperture;
+                GeminiHardware.Instance.OpticsUnitOfMeasure = uom;
+                GeminiHardware.Instance.OpticsNames = name;
+                GeminiHardware.Instance.OpticsObstruction = obstruction;
 
                 if (error != "")
                 {
@@ -991,27 +1004,27 @@ namespace ASCOM.GeminiTelescope
                 
             }
 
-            Speech.SpeechInitialize(this.Handle, GeminiHardware.UseSpeech ? GeminiHardware.SpeechVoice : null);
-            Speech.Filter = GeminiHardware.SpeechFilter;
+            Speech.SpeechInitialize(this.Handle, GeminiHardware.Instance.UseSpeech ? GeminiHardware.Instance.SpeechVoice : null);
+            Speech.Filter = GeminiHardware.Instance.SpeechFilter;
 
             setupForm.Dispose();
-            GeminiHardware.Profile = null;
+            GeminiHardware.Instance.Profile = null;
         }
 
         private void _DoFocuserSetupDialog()
         {
             Speech.SayIt(Resources.ShowSetupFocuser, Speech.SpeechType.Command);
             FocuserSetupDialogForm setupForm = new FocuserSetupDialogForm();
-            setupForm.ComPort = GeminiHardware.ComPort;
-            setupForm.BaudRate = GeminiHardware.BaudRate.ToString();
-            setupForm.ReverseDirection = GeminiHardware.ReverseDirection;
-            setupForm.MaxIncrement = GeminiHardware.MaxIncrement;
-            setupForm.StepSize = GeminiHardware.StepSize;
-            setupForm.BrakeSize = GeminiHardware.BrakeSize;
-            setupForm.BacklashSize = GeminiHardware.BacklashSize;
-            setupForm.BacklashDirection = GeminiHardware.BacklashDirection;
-            setupForm.Speed = GeminiHardware.Speed;
-            setupForm.AbsoluteFocuser = GeminiHardware.AbsoluteFocuser;
+            setupForm.ComPort = GeminiHardware.Instance.ComPort;
+            setupForm.BaudRate = GeminiHardware.Instance.BaudRate.ToString();
+            setupForm.ReverseDirection = GeminiHardware.Instance.ReverseDirection;
+            setupForm.MaxIncrement = GeminiHardware.Instance.MaxIncrement;
+            setupForm.StepSize = GeminiHardware.Instance.StepSize;
+            setupForm.BrakeSize = GeminiHardware.Instance.BrakeSize;
+            setupForm.BacklashSize = GeminiHardware.Instance.BacklashSize;
+            setupForm.BacklashDirection = GeminiHardware.Instance.BacklashDirection;
+            setupForm.Speed = GeminiHardware.Instance.Speed;
+            setupForm.AbsoluteFocuser = GeminiHardware.Instance.AbsoluteFocuser;
 
             DialogResult ans = setupForm.ShowDialog();
 
@@ -1019,16 +1032,16 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
-                    GeminiHardware.AbsoluteFocuser = setupForm.AbsoluteFocuser;
-                    GeminiHardware.ComPort = setupForm.ComPort;
-                    GeminiHardware.BaudRate = int.Parse(setupForm.BaudRate);
-                    GeminiHardware.ReverseDirection = setupForm.ReverseDirection;
-                    GeminiHardware.MaxIncrement = setupForm.MaxIncrement;
-                    GeminiHardware.StepSize = setupForm.StepSize;
-                    GeminiHardware.BrakeSize = setupForm.BrakeSize;
-                    GeminiHardware.BacklashSize = setupForm.BacklashSize;
-                    GeminiHardware.BacklashDirection = setupForm.BacklashDirection;
-                    GeminiHardware.Speed = setupForm.Speed;
+                    GeminiHardware.Instance.AbsoluteFocuser = setupForm.AbsoluteFocuser;
+                    GeminiHardware.Instance.ComPort = setupForm.ComPort;
+                    GeminiHardware.Instance.BaudRate = int.Parse(setupForm.BaudRate);
+                    GeminiHardware.Instance.ReverseDirection = setupForm.ReverseDirection;
+                    GeminiHardware.Instance.MaxIncrement = setupForm.MaxIncrement;
+                    GeminiHardware.Instance.StepSize = setupForm.StepSize;
+                    GeminiHardware.Instance.BrakeSize = setupForm.BrakeSize;
+                    GeminiHardware.Instance.BacklashSize = setupForm.BacklashSize;
+                    GeminiHardware.Instance.BacklashDirection = setupForm.BacklashDirection;
+                    GeminiHardware.Instance.Speed = setupForm.Speed;
                 }
                 catch
                 {
@@ -1037,7 +1050,7 @@ namespace ASCOM.GeminiTelescope
             }
 
             setupForm.Dispose();
-            GeminiHardware.Profile = null;
+            GeminiHardware.Instance.Profile = null;
         }
 
 
@@ -1063,7 +1076,7 @@ namespace ASCOM.GeminiTelescope
 
         private void SetSlewButtons()
         {
-            if (GeminiHardware.SouthernHemisphere)
+            if (GeminiHardware.Instance.SouthernHemisphere)
             {
                 //buttonSlew1.Text = "S";
                 //buttonSlew2.Text = "N";
@@ -1083,8 +1096,8 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                string res = GeminiHardware.DoCommandResult(":GH", 2000, false);               
-                return GeminiHardware.m_Util.HMSToHours(res);
+                string res = GeminiHardware.Instance.DoCommandResult(":GH", 2000, false);               
+                return GeminiHardware.Instance.m_Util.HMSToHours(res);
             }        
         }
 
@@ -1093,7 +1106,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetLstText);
-                string text = GeminiHardware.m_Util.HoursToHMS(value,":",":",""); // .ConvertDoubleToHMS(value);
+                string text = GeminiHardware.Instance.m_Util.HoursToHMS(value,":",":",""); // .ConvertDoubleToHMS(value);
                
                 try{
                     if (InvokeRequired) this.BeginInvoke(setText, text);
@@ -1110,7 +1123,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetRaText);
-                string text = GeminiHardware.m_Util.HoursToHMS(value, ":", ":", ""); 
+                string text = GeminiHardware.Instance.m_Util.HoursToHMS(value, ":", ":", ""); 
                 try {
 
                     if (InvokeRequired)
@@ -1125,7 +1138,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetDecText);
-                string text = GeminiHardware.m_Util.DegreesToDMS(value, ":", ":", ""); 
+                string text = GeminiHardware.Instance.m_Util.DegreesToDMS(value, ":", ":", ""); 
                 try {
                     if (InvokeRequired)
                         this.BeginInvoke(setText, text);
@@ -1141,7 +1154,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 SetTextCallback setText = new SetTextCallback(SetHAText);
-                string text = GeminiHardware.m_Util.HoursToHMS(value, ":", ":", "");
+                string text = GeminiHardware.Instance.m_Util.HoursToHMS(value, ":", ":", "");
                 try
                 {
                     if (InvokeRequired)
@@ -1158,29 +1171,29 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                Speech.SpeechInitialize(this.Handle, GeminiHardware.UseSpeech ? GeminiHardware.SpeechVoice : null);
-                Speech.Filter = GeminiHardware.SpeechFilter;
+                Speech.SpeechInitialize(this.Handle, GeminiHardware.Instance.UseSpeech ? GeminiHardware.Instance.SpeechVoice : null);
+                Speech.Filter = GeminiHardware.Instance.SpeechFilter;
             }
             catch
             {
             }
 
-            if (GeminiHardware.MainFormPosition != Point.Empty)
+            if (GeminiHardware.Instance.MainFormPosition != Point.Empty)
             {
-                Rectangle rc = new Rectangle(GeminiHardware.MainFormPosition, this.Size);
+                Rectangle rc = new Rectangle(GeminiHardware.Instance.MainFormPosition, this.Size);
                 Screen scr = Screen.FromControl(this);
 
                 // only set the recorded position if the window is at all visible on the current screen:
                 if (scr.Bounds.IntersectsWith(rc))
-                    this.Location = GeminiHardware.MainFormPosition;
+                    this.Location = GeminiHardware.Instance.MainFormPosition;
             }
 
             SharedResources.SetTopWindow(this);
 
             SetSlewButtons();
             SetTopMost();
-            if (!GeminiHardware.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();
-            GeminiHardware.Profile = null;
+            if (!GeminiHardware.Instance.ShowHandbox && GeminiTelescope.m_bComStart) this.Hide();
+            GeminiHardware.Instance.Profile = null;
             
         }
 
@@ -1227,12 +1240,12 @@ namespace ASCOM.GeminiTelescope
 
             }
             parametersForm.Dispose();
-            GeminiHardware.Profile = null;
+            GeminiHardware.Instance.Profile = null;
         }
 
         private void UpdateConnectStatus()
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 this.ButtonConnect.Text = Resources.Disconnect;
             }
@@ -1254,12 +1267,12 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                GeminiHardware.Connected = true;
+                GeminiHardware.Instance.Connected = true;
             }
             catch {
             }
 
-            if (!GeminiHardware.Connected)
+            if (!GeminiHardware.Instance.Connected)
             {
                 MessageBox.Show(Resources.CannotConnect + "\r\n" + frm.m_LastError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 frm.BeginInvoke(new SetTextCallback(frm.SetConnectText), Resources.Connect);
@@ -1268,12 +1281,12 @@ namespace ASCOM.GeminiTelescope
 
         private void ButtonConnect_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.IsConnecting)
+            if (GeminiHardware.Instance.IsConnecting)
             {
-                GeminiHardware.IsConnecting = false;
+                GeminiHardware.Instance.IsConnecting = false;
             }
             else
-            if (!GeminiHardware.Connected)
+            if (!GeminiHardware.Instance.Connected)
             {
                 Speech.SayIt(Resources.Connect, Speech.SpeechType.Command);
                 ButtonConnect.Text = Resources.Stop;                
@@ -1283,7 +1296,7 @@ namespace ASCOM.GeminiTelescope
             else
             {
                 Speech.SayIt(Resources.Disconnect, Speech.SpeechType.Command);
-                if (GeminiHardware.Clients > 1)
+                if (GeminiHardware.Instance.Clients > 1)
                 {
                     DialogResult res = MessageBox.Show(Resources.DisconnectWarning,
                         SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
@@ -1291,14 +1304,14 @@ namespace ASCOM.GeminiTelescope
                         return;
                 }
                 
-                while (GeminiHardware.Clients > 0)
+                while (GeminiHardware.Instance.Clients > 0)
                     try
                     {
-                        GeminiHardware.Connected = false;
+                        GeminiHardware.Instance.Connected = false;
                     }
                     catch { }
 
-                if (GeminiHardware.Connected != false)
+                if (GeminiHardware.Instance.Connected != false)
                     MessageBox.Show(Resources.CannotDisconnect, SharedResources.TELESCOPE_DRIVER_NAME);
 
                 UpdateConnectStatus();
@@ -1308,7 +1321,7 @@ namespace ASCOM.GeminiTelescope
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            GeminiHardware.MainFormPosition = this.Location;
+            GeminiHardware.Instance.MainFormPosition = this.Location;
  
             //If we hit the close X on the form then hide it. If called from exit menu then exit for real.
             if (!m_ExitFormMenuCall)
@@ -1319,9 +1332,9 @@ namespace ASCOM.GeminiTelescope
                 return;
             }
             m_ExitFormMenuCall = false;
-            if (GeminiHardware.Connected && GeminiHardware.Clients > 0)
+            if (GeminiHardware.Instance.Connected && GeminiHardware.Instance.Clients > 0)
             {
-                DialogResult res = MessageBox.Show(Resources.discWarning1 + (GeminiHardware.Clients > 1 ? Resources.discWarning2 : " " + Resources.discWarning3) + " " + Resources.discWarning4 + Resources.GeminiConnectionAlive1,
+                DialogResult res = MessageBox.Show(Resources.discWarning1 + (GeminiHardware.Instance.Clients > 1 ? Resources.discWarning2 : " " + Resources.discWarning3) + " " + Resources.discWarning4 + Resources.GeminiConnectionAlive1,
                     SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (res != DialogResult.Yes)
                 {
@@ -1330,10 +1343,10 @@ namespace ASCOM.GeminiTelescope
                 }
             }
 
-            while (GeminiHardware.Clients > 0)  //disconnect all clients
-                GeminiHardware.Connected = false;
+            while (GeminiHardware.Instance.Clients > 0)  //disconnect all clients
+                GeminiHardware.Instance.Connected = false;
 
-            GeminiHardware.CloseStatusForm();
+            GeminiHardware.Instance.CloseStatusForm();
             
         }
 
@@ -1349,17 +1362,17 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSlew0_MouseClick(object sender, MouseEventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
 
-                GeminiHardware.DoCommand(":Q",false);
+                GeminiHardware.Instance.DoCommand(":Q",false);
             }
         }
 
 
         private void buttonSlew1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 Speech.SayIt(Resources.UpButton, Speech.SpeechType.Command);
                 ((Control)sender).Capture = true;
@@ -1380,7 +1393,7 @@ namespace ASCOM.GeminiTelescope
                     cmds[1] = ":Mn";
                 }
 
-                GeminiHardware.DoCommand(cmds, false);
+                GeminiHardware.Instance.DoCommand(cmds, false);
 
             }
         }
@@ -1388,23 +1401,23 @@ namespace ASCOM.GeminiTelescope
         private void buttonSlew1_MouseUp(object sender, MouseEventArgs e)
         {
             ((Control)sender).Capture = false;
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
 
                 if (CheckBoxFlipDec.Checked)
                 {
-                    GeminiHardware.DoCommand(":Qs", false);
+                    GeminiHardware.Instance.DoCommand(":Qs", false);
                 }
                 else
                 {
-                    GeminiHardware.DoCommand(":Qn", false);
+                    GeminiHardware.Instance.DoCommand(":Qn", false);
                 }
             }
         }
 
         private void buttonSlew2_MouseDown(object sender, MouseEventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 Speech.SayIt(Resources.DownButton, Speech.SpeechType.Command);
 
@@ -1424,7 +1437,7 @@ namespace ASCOM.GeminiTelescope
                         cmds[1] = ":Ms";
                     }
 
-                GeminiHardware.DoCommand(cmds, false);
+                GeminiHardware.Instance.DoCommand(cmds, false);
             }
         }
 
@@ -1432,22 +1445,22 @@ namespace ASCOM.GeminiTelescope
         {
             ((Control)sender).Capture = false;
 
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 if (CheckBoxFlipDec.Checked)
                 {
-                    GeminiHardware.DoCommand(":Qn", false);
+                    GeminiHardware.Instance.DoCommand(":Qn", false);
                 }
                 else
                 {
-                    GeminiHardware.DoCommand(":Qs", false);
+                    GeminiHardware.Instance.DoCommand(":Qs", false);
                 }
             }
         }
 
         private void buttonSlew4_MouseDown(object sender, MouseEventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 Speech.SayIt(Resources.RightButton, Speech.SpeechType.Command);
 
@@ -1466,7 +1479,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     cmds[1] = ":Mw";
                 }
-                GeminiHardware.DoCommand(cmds, false);
+                GeminiHardware.Instance.DoCommand(cmds, false);
             }
         }
 
@@ -1474,22 +1487,22 @@ namespace ASCOM.GeminiTelescope
         {
             ((Control)sender).Capture = false;
 
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 if (CheckBoxFlipRa.Checked)
                 {
-                    GeminiHardware.DoCommand(":Qe", false);
+                    GeminiHardware.Instance.DoCommand(":Qe", false);
                 }
                 else
                 {
-                    GeminiHardware.DoCommand(":Qw", false);
+                    GeminiHardware.Instance.DoCommand(":Qw", false);
                 }
             }
         }
 
         private void buttonSlew3_MouseDown(object sender, MouseEventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 Speech.SayIt(Resources.LeftButton, Speech.SpeechType.Command);
 
@@ -1508,7 +1521,7 @@ namespace ASCOM.GeminiTelescope
                 {
                     cmds[1] = ":Me";
                 }
-                GeminiHardware.DoCommand(cmds, false);
+                GeminiHardware.Instance.DoCommand(cmds, false);
 
             }
         }
@@ -1516,44 +1529,44 @@ namespace ASCOM.GeminiTelescope
         private void buttonSlew3_MouseUp(object sender, MouseEventArgs e)
         {
             ((Control)sender).Capture = false;
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 if (CheckBoxFlipRa.Checked)
                 {
-                    GeminiHardware.DoCommand(":Qw", false);
+                    GeminiHardware.Instance.DoCommand(":Qw", false);
                 }
                 else
                 {
-                    GeminiHardware.DoCommand(":Qe", false);
+                    GeminiHardware.Instance.DoCommand(":Qe", false);
                 }
             }
         }
 
         private void toolStripMenuParkHere_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 DialogResult res = MessageBox.Show("Do you really want to " + Resources.ParkHere + "?", "Telescope Park", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (res == DialogResult.Yes)
                 {
                     Speech.SayIt(Resources.ParkHere, Speech.SpeechType.Command);
-                    GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.NoSlew);
+                    GeminiHardware.Instance.DoParkAsync(GeminiHardwareBase.GeminiParkMode.NoSlew);
                 }
-//                GeminiHardware.DoCommand(":hN", false);
+//                GeminiHardware.Instance.DoCommand(":hN", false);
             }
         }
 
         private void toolStripMenuParkCWD_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 DialogResult res = MessageBox.Show("Do you really want to " + Resources.ParkCWD+ "?", "Telescope Park", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (res == DialogResult.Yes)
                 {
                     this.UseWaitCursor = true;
                     Speech.SayIt(Resources.ParkCWD, Speech.SpeechType.Command);
-                    GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewCWD);
-                    //                GeminiHardware.DoCommand(":hC", false);
+                    GeminiHardware.Instance.DoParkAsync(GeminiHardwareBase.GeminiParkMode.SlewCWD);
+                    //                GeminiHardware.Instance.DoCommand(":hC", false);
                     this.UseWaitCursor = false;
                 }
             }
@@ -1561,7 +1574,7 @@ namespace ASCOM.GeminiTelescope
 
         private void toolStripMenuParkHome_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 DialogResult res = MessageBox.Show("Do you really want to " + Resources.ParkAtHome+ "?", "Telescope Park", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (res == DialogResult.Yes)
@@ -1569,8 +1582,8 @@ namespace ASCOM.GeminiTelescope
 
                     this.UseWaitCursor = true;
                     Speech.SayIt(Resources.ParkHome, Speech.SpeechType.Command);
-                    GeminiHardware.DoParkAsync(GeminiHardware.GeminiParkMode.SlewHome);
-                    //                GeminiHardware.DoCommand(":hP", false);
+                    GeminiHardware.Instance.DoParkAsync(GeminiHardwareBase.GeminiParkMode.SlewHome);
+                    //                GeminiHardware.Instance.DoCommand(":hP", false);
                     this.UseWaitCursor = false;
                 }
             }
@@ -1578,32 +1591,32 @@ namespace ASCOM.GeminiTelescope
 
         private void checkBoxTrack_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 checkBoxTrack.Checked = !checkBoxTrack.Checked;
 
                 if (!checkBoxTrack.Checked)
-                    GeminiHardware.DoCommand(":hN", false);
+                    GeminiHardware.Instance.DoCommand(":hN", false);
                 else
-                    GeminiHardware.DoCommand(":hW", false);
+                    GeminiHardware.Instance.DoCommand(":hW", false);
             }
         }
 
         private void pbStop_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
-                GeminiHardware.AbortSlew();
+                GeminiHardware.Instance.AbortSlew();
                 Speech.SayIt(Resources.StopSlew, Speech.SpeechType.Command);
             }
         }
 
         private void frmMain_VisibleChanged(object sender, EventArgs e)
         {
-            if (GeminiHardware.UseJoystick) 
+            if (GeminiHardware.Instance.UseJoystick) 
                 if (this.Visible)
-                    if (GeminiHardware.UseJoystick)
-                        if (GeminiHardware.Connected) StartJoystick();
+                    if (GeminiHardware.Instance.UseJoystick)
+                        if (GeminiHardware.Instance.Connected) StartJoystick();
                      else
                          tmrJoystick.Stop();
 
@@ -1624,21 +1637,21 @@ namespace ASCOM.GeminiTelescope
         {
             checkboxPEC.Checked = !checkboxPEC.Checked;
             
-            byte pec = GeminiHardware.PECStatus;
+            byte pec = GeminiHardware.Instance.PECStatus;
             if (pec != 0xff)
             {
                 pec = (byte)((pec & 0xfe) | (checkboxPEC.Checked ? 1 : 0));
-                GeminiHardware.PECStatus = pec;
+                GeminiHardware.Instance.PECStatus = pec;
             }
         }
 
 
         private void ButtonFlip_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 Speech.SayIt(Resources.MedidianFlip, Speech.SpeechType.Command);
-                string res = GeminiHardware.DoMeridianFlip();
+                string res = GeminiHardware.Instance.DoMeridianFlip();
                 switch (res)
                 {
                     case "1Object below horizon.":
@@ -1660,15 +1673,15 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonSync_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
 
-                if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
+                if (GeminiHardware.Instance.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.Instance.TargetRightAscension != SharedResources.INVALID_DOUBLE)
                 {
                     try
                     {
-                        GeminiHardware.SyncEquatorial();
-                        GeminiHardware.ReportAlignResult("Sync");
+                        GeminiHardware.Instance.SyncEquatorial();
+                        GeminiHardware.Instance.ReportAlignResult("Sync");
                     }
                     catch (Exception ex)
                     {
@@ -1689,14 +1702,14 @@ namespace ASCOM.GeminiTelescope
 
         private void buttonAddlAlign_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
-                if (GeminiHardware.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.TargetRightAscension != SharedResources.INVALID_DOUBLE)
+                if (GeminiHardware.Instance.TargetDeclination != SharedResources.INVALID_DOUBLE || GeminiHardware.Instance.TargetRightAscension != SharedResources.INVALID_DOUBLE)
                 {
                     try
                     {
-                        GeminiHardware.AlignEquatorial();
-                        GeminiHardware.ReportAlignResult("Additional Align");
+                        GeminiHardware.Instance.AlignEquatorial();
+                        GeminiHardware.Instance.ReportAlignResult("Additional Align");
                     }
                     catch (Exception ex)
                     {
@@ -1710,15 +1723,15 @@ namespace ASCOM.GeminiTelescope
 
         private void SetTopMost()
         {
-            this.TopMost = GeminiHardware.KeepMainFormOnTop;
-            //keepThisWindowOnTopToolStripMenuItem.Checked = GeminiHardware.KeepMainFormOnTop;
-            if (GeminiHardware.KeepMainFormOnTop) keepThisWindowOnTopToolStripMenuItem.Image = Properties.Resources.Ticked;
+            this.TopMost = GeminiHardware.Instance.KeepMainFormOnTop;
+            //keepThisWindowOnTopToolStripMenuItem.Checked = GeminiHardware.Instance.KeepMainFormOnTop;
+            if (GeminiHardware.Instance.KeepMainFormOnTop) keepThisWindowOnTopToolStripMenuItem.Image = Properties.Resources.Ticked;
             else keepThisWindowOnTopToolStripMenuItem.Image = Properties.Resources.UnTicked;
         }
 
         private void keepThisWindowOnTopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GeminiHardware.KeepMainFormOnTop = !GeminiHardware.KeepMainFormOnTop;
+            GeminiHardware.Instance.KeepMainFormOnTop = !GeminiHardware.Instance.KeepMainFormOnTop;
             SetTopMost();
         }
 
@@ -1757,16 +1770,16 @@ namespace ASCOM.GeminiTelescope
 
         private void parkAtCustomParkPositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 string park = "";
 
-                switch (GeminiHardware.ParkPosition)
+                switch (GeminiHardware.Instance.ParkPosition)
                 {
-                    case GeminiHardware.GeminiParkMode.NoSlew: park = Resources.ParkAtCurrent; break;
-                    case GeminiHardware.GeminiParkMode.SlewAltAz: park = Resources.ParkAtAltAz; break;
-                    case GeminiHardware.GeminiParkMode.SlewCWD: park = Resources.ParkAtCWD; break;
-                    case GeminiHardware.GeminiParkMode.SlewHome: park = Resources.ParkAtHome; break;
+                    case GeminiHardwareBase.GeminiParkMode.NoSlew: park = Resources.ParkAtCurrent; break;
+                    case GeminiHardwareBase.GeminiParkMode.SlewAltAz: park = Resources.ParkAtAltAz; break;
+                    case GeminiHardwareBase.GeminiParkMode.SlewCWD: park = Resources.ParkAtCWD; break;
+                    case GeminiHardwareBase.GeminiParkMode.SlewHome: park = Resources.ParkAtHome; break;
                     default: park = Resources.Park; break;
                 }
 
@@ -1774,17 +1787,17 @@ namespace ASCOM.GeminiTelescope
                 if (res == DialogResult.Yes)
                 {
                     Speech.SayIt(Resources.Park, Speech.SpeechType.Command);
-                    GeminiHardware.DoParkAsync(GeminiHardware.ParkPosition);
+                    GeminiHardware.Instance.DoParkAsync(GeminiHardware.Instance.ParkPosition);
                 }
             }
         }
 
         private void unparkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 Speech.SayIt(Resources.Unpark, Speech.SpeechType.Command);
-                GeminiHardware.DoCommand(":hW", false);
+                GeminiHardware.Instance.DoCommand(":hW", false);
             }
         }
 

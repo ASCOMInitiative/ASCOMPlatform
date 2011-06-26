@@ -75,12 +75,12 @@ namespace ASCOM.GeminiTelescope
 
         private void pbFromGemini_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 frmProgress.Initialize(0, 100, Resources.RetrieveGeminiObservationLog, null, true);
                 frmProgress.ShowProgress(this);
 
-                List<string> allobs = GeminiHardware.ObservationLog;
+                List<string> allobs = GeminiHardware.Instance.ObservationLog;
                 if (allobs != null)
                 {
                     m_Observations.Clear();
@@ -101,7 +101,7 @@ namespace ASCOM.GeminiTelescope
 
         private void pbToGemini_Click(object sender, EventArgs e)
         {
-            GeminiHardware.ObservationLog = null;
+            GeminiHardware.Instance.ObservationLog = null;
             m_Observations.Clear();
             UpdateList();
         }
@@ -120,7 +120,7 @@ namespace ASCOM.GeminiTelescope
         private void frmObservationLog_Load(object sender, EventArgs e)
         {
             SetButtonState();
-            GeminiHardware.OnConnect += new ConnectDelegate(OnConnect);
+            GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnect);
             ObsTime.UTC = chkUTC.Checked;
             pbFromGemini_Click(pbFromGemini, null);
         }
@@ -128,9 +128,9 @@ namespace ASCOM.GeminiTelescope
 
         void SetButtonState()
         {
-            pbToGemini.Enabled = GeminiHardware.Connected;
-            pbFromGemini.Enabled = GeminiHardware.Connected;
-            btnGoto.Enabled = (GeminiHardware.Connected && gvLog.SelectedRows.Count == 1);
+            pbToGemini.Enabled = GeminiHardware.Instance.Connected;
+            pbFromGemini.Enabled = GeminiHardware.Instance.Connected;
+            btnGoto.Enabled = (GeminiHardware.Instance.Connected && gvLog.SelectedRows.Count == 1);
 
             pbToGemini.BackColor = pbToGemini.Enabled? Color.FromArgb(16,16,16): Color.FromArgb(64,64,64);
             pbFromGemini.BackColor = pbFromGemini.Enabled? Color.FromArgb(16,16,16): Color.FromArgb(64, 64, 64);
@@ -221,19 +221,19 @@ namespace ASCOM.GeminiTelescope
 
             obs.GetCoords(out ra, out dec);
 
-            GeminiHardware.TargetRightAscension = ra;
-            GeminiHardware.TargetDeclination = dec;
-            GeminiHardware.TargetName = obs.Object;
+            GeminiHardware.Instance.TargetRightAscension = ra;
+            GeminiHardware.Instance.TargetDeclination = dec;
+            GeminiHardware.Instance.TargetName = obs.Object;
 
             try
             {
                 if (sender == btnGoto)
-                    GeminiHardware.SlewEquatorial();
+                    GeminiHardware.Instance.SlewEquatorial();
 #if false
                 else if (sender == btnSync)
-                    GeminiHardware.SyncEquatorial();
+                    GeminiHardware.Instance.SyncEquatorial();
                 else
-                    GeminiHardware.AlignEquatorial();
+                    GeminiHardware.Instance.AlignEquatorial();
 #endif
             }
             catch (Exception ex)
@@ -265,7 +265,7 @@ namespace ASCOM.GeminiTelescope
                         int catnbr = 0;
                         // need a way to extract catalog number from object name... don't know how to do that....
                         string cmd = string.Format(":OI{0}{1}", catnbr, id);
-                        GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
                     }
                 }
             }
@@ -356,12 +356,12 @@ namespace ASCOM.GeminiTelescope
         }
         public override string ToString()
         {
-            return GeminiHardware.m_Util.HoursToHMS(RA);
+            return GeminiHardware.Instance.m_Util.HoursToHMS(RA);
         }
 
         public string ToString(string s1, string s2)
         {
-            return GeminiHardware.m_Util.HoursToHMS(RA, s1, s2);
+            return GeminiHardware.Instance.m_Util.HoursToHMS(RA, s1, s2);
         }
 
         int IComparable.CompareTo(Object obj)
@@ -382,11 +382,11 @@ namespace ASCOM.GeminiTelescope
         }
         public override string ToString()
         {
-            return GeminiHardware.m_Util.DegreesToDMS(DEC);
+            return GeminiHardware.Instance.m_Util.DegreesToDMS(DEC);
         }
         public  string ToString(string s1, string s2)
         {
-            return GeminiHardware.m_Util.DegreesToDMS(DEC,s1,s2);
+            return GeminiHardware.Instance.m_Util.DegreesToDMS(DEC,s1,s2);
         }
 
         int IComparable.CompareTo(Object obj)
@@ -474,8 +474,8 @@ namespace ASCOM.GeminiTelescope
                obs.Time = new ObsTime( new DateTime(y, mo, d, h, m, s, 0, DateTimeKind.Utc));
 
                obs.Operation = m_Ops[line.Substring(12, 1)];
-               obs.RA = new RACoord(GeminiHardware.m_Util.HMSToHours(line.Substring(13, 8)));
-               obs.DEC = new DECCoord(GeminiHardware.m_Util.DMSToDegrees(line.Substring(21, 9)));
+               obs.RA = new RACoord(GeminiHardware.Instance.m_Util.HMSToHours(line.Substring(13, 8)));
+               obs.DEC = new DECCoord(GeminiHardware.Instance.m_Util.DMSToDegrees(line.Substring(21, 9)));
                if (line.Length > 30)
                {
                    obs.Object = line.Substring(30);
@@ -527,8 +527,8 @@ namespace ASCOM.GeminiTelescope
                 string dec= line.Substring(47+15,15);
                 ra = ra.Trim();
                 dec = dec.Trim();
-                obs.RA = new RACoord(GeminiHardware.m_Util.HMSToHours(ra));
-                obs.DEC = new DECCoord(GeminiHardware.m_Util.DMSToDegrees(dec));
+                obs.RA = new RACoord(GeminiHardware.Instance.m_Util.HMSToHours(ra));
+                obs.DEC = new DECCoord(GeminiHardware.Instance.m_Util.DMSToDegrees(dec));
 
                 string obj = "";
                 if (line.Length > 47+30) obj = line.Substring(47+30+1);

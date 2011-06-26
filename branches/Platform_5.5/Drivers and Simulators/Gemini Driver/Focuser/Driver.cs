@@ -85,11 +85,11 @@ namespace ASCOM.GeminiTelescope
             {
                 m_State = FocuserState.Focusing;
 
-                if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
-                    GeminiHardware.DoCommand(":F+", false);
+                if ((val > 0 && !GeminiHardware.Instance.ReverseDirection) || (val < 0 && GeminiHardware.Instance.ReverseDirection))
+                    GeminiHardware.Instance.DoCommand(":F+", false);
                 else
-                    GeminiHardware.DoCommand(":F-", false);
-                tmrFocus.Interval = (GeminiHardware.StepSize * Math.Abs(val)) / 1000;
+                    GeminiHardware.Instance.DoCommand(":F-", false);
+                tmrFocus.Interval = (GeminiHardware.Instance.StepSize * Math.Abs(val)) / 1000;
                 tmrFocus.Enabled = true;
                 return;
             }
@@ -97,15 +97,15 @@ namespace ASCOM.GeminiTelescope
                 // and execute a break maneuver (move in the opposite direction for a bit)
             else if (m_State == FocuserState.Focusing)
             {
-                if (GeminiHardware.BrakeSize > 0)
+                if (GeminiHardware.Instance.BrakeSize > 0)
                 {
                     // move in the opposite direction for specified step*interval
-                    if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
-                        GeminiHardware.DoCommand(":F-", false);
+                    if ((val > 0 && !GeminiHardware.Instance.ReverseDirection) || (val < 0 && GeminiHardware.Instance.ReverseDirection))
+                        GeminiHardware.Instance.DoCommand(":F-", false);
                     else
-                        GeminiHardware.DoCommand(":F+", false);
+                        GeminiHardware.Instance.DoCommand(":F+", false);
 
-                    tmrFocus.Interval = (GeminiHardware.StepSize * GeminiHardware.BrakeSize) / 1000;
+                    tmrFocus.Interval = (GeminiHardware.Instance.StepSize * GeminiHardware.Instance.BrakeSize) / 1000;
                     tmrFocus.Enabled = true;
                     return;
                 }
@@ -113,7 +113,7 @@ namespace ASCOM.GeminiTelescope
 
             // at this point, we're done focusing!
             Halt();
-            m_Position += m_PreviousMove * GeminiHardware.StepSize;  // new position 
+            m_Position += m_PreviousMove * GeminiHardware.Instance.StepSize;  // new position 
         }
 
 
@@ -129,7 +129,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public bool Absolute
         {
-            get { return GeminiHardware.AbsoluteFocuser; }
+            get { return GeminiHardware.Instance.AbsoluteFocuser; }
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace ASCOM.GeminiTelescope
             tmrFocus.Enabled = false;
             m_State = FocuserState.None;
 
-            GeminiHardware.DoCommand(":FQ", false);
+            GeminiHardware.Instance.DoCommand(":FQ", false);
         }
 
         /// <summary>
@@ -157,13 +157,13 @@ namespace ASCOM.GeminiTelescope
         public bool Link
         {
             get { 
-                return GeminiHardware.Connected && m_Connected;  
+                return GeminiHardware.Instance.Connected && m_Connected;  
             }
             set {
                 if (value && !m_Connected) 
                 {
-                    GeminiHardware.Connected = true;
-                    if (!GeminiHardware.Connected)
+                    GeminiHardware.Instance.Connected = true;
+                    if (!GeminiHardware.Instance.Connected)
                         throw new DriverException("Cannot connect to Gemini Focuser", -1);
                     else
                     {
@@ -171,10 +171,10 @@ namespace ASCOM.GeminiTelescope
 
                         // set the desired focuser speed:
                         string sCmd = ":FS";
-                        if (GeminiHardware.Speed == 2) sCmd = ":FM";
+                        if (GeminiHardware.Instance.Speed == 2) sCmd = ":FM";
                         else
-                            if (GeminiHardware.Speed == 3) sCmd = ":FF";
-                        GeminiHardware.DoCommand(sCmd, false);
+                            if (GeminiHardware.Instance.Speed == 3) sCmd = ":FF";
+                        GeminiHardware.Instance.DoCommand(sCmd, false);
 
                         m_Connected = true;
                     }
@@ -182,7 +182,7 @@ namespace ASCOM.GeminiTelescope
                 else
                     if (m_Connected) {
                         tmrFocus.Enabled = false;
-                        GeminiHardware.Connected = false;
+                        GeminiHardware.Instance.Connected = false;
                         m_Connected = false;
                         m_State = FocuserState.None;
                     }                    
@@ -196,7 +196,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public int MaxIncrement
         {
-            get { return GeminiHardware.MaxIncrement; }
+            get { return GeminiHardware.Instance.MaxIncrement; }
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public int MaxStep
         {
-            get { return GeminiHardware.MaxStep; }
+            get { return GeminiHardware.Instance.MaxStep; }
         }
 
         /// <summary>
@@ -216,40 +216,40 @@ namespace ASCOM.GeminiTelescope
             if (m_State != FocuserState.None) Halt();
 
 
-            if (GeminiHardware.AbsoluteFocuser)
-                val = val * GeminiHardware.StepSize - m_Position; // how far to move from current position
+            if (GeminiHardware.Instance.AbsoluteFocuser)
+                val = val * GeminiHardware.Instance.StepSize - m_Position; // how far to move from current position
             else
-                val = val * GeminiHardware.StepSize;
+                val = val * GeminiHardware.Instance.StepSize;
 
-            val /= GeminiHardware.StepSize;
+            val /= GeminiHardware.Instance.StepSize;
 
             // limit the move to max increment setting
-            if (Math.Abs(val) > GeminiHardware.MaxIncrement)
-                val = GeminiHardware.MaxIncrement * Math.Sign(val);
+            if (Math.Abs(val) > GeminiHardware.Instance.MaxIncrement)
+                val = GeminiHardware.Instance.MaxIncrement * Math.Sign(val);
 
-            if (GeminiHardware.BacklashDirection != 0 && Math.Sign(GeminiHardware.BacklashDirection) == Math.Sign(val))
+            if (GeminiHardware.Instance.BacklashDirection != 0 && Math.Sign(GeminiHardware.Instance.BacklashDirection) == Math.Sign(val))
             {
                 m_State = FocuserState.Backlash;
                 m_PreviousMove = val;
 
-                if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
-                    GeminiHardware.DoCommand(":F+",false);
+                if ((val > 0 && !GeminiHardware.Instance.ReverseDirection) || (val < 0 && GeminiHardware.Instance.ReverseDirection))
+                    GeminiHardware.Instance.DoCommand(":F+",false);
                 else
-                    GeminiHardware.DoCommand(":F-", false);
+                    GeminiHardware.Instance.DoCommand(":F-", false);
 
-                tmrFocus.Interval = (GeminiHardware.StepSize * GeminiHardware.BacklashSize) / 1000;
+                tmrFocus.Interval = (GeminiHardware.Instance.StepSize * GeminiHardware.Instance.BacklashSize) / 1000;
                 tmrFocus.Enabled = true;
             }
             else
             {
                 m_State = FocuserState.Focusing;
                 m_PreviousMove = val;
-                if ((val > 0 && !GeminiHardware.ReverseDirection) || (val < 0 && GeminiHardware.ReverseDirection))
-                    GeminiHardware.DoCommand(":F+", false);
+                if ((val > 0 && !GeminiHardware.Instance.ReverseDirection) || (val < 0 && GeminiHardware.Instance.ReverseDirection))
+                    GeminiHardware.Instance.DoCommand(":F+", false);
                 else
-                    GeminiHardware.DoCommand(":F-", false);
+                    GeminiHardware.Instance.DoCommand(":F-", false);
 
-                tmrFocus.Interval = (GeminiHardware.StepSize * Math.Abs(val)) / 1000;
+                tmrFocus.Interval = (GeminiHardware.Instance.StepSize * Math.Abs(val)) / 1000;
                 tmrFocus.Enabled = true;               
             }
  
@@ -261,8 +261,8 @@ namespace ASCOM.GeminiTelescope
         public int Position
         {
             get {
-                if (GeminiHardware.AbsoluteFocuser)
-                    return m_Position / GeminiHardware.StepSize;
+                if (GeminiHardware.Instance.AbsoluteFocuser)
+                    return m_Position / GeminiHardware.Instance.StepSize;
                 else
                     throw new ASCOM.PropertyNotImplementedException("Position", false);
             }
@@ -273,7 +273,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void SetupDialog()
         {
-            //if (GeminiHardware.Connected)
+            //if (GeminiHardware.Instance.Connected)
             //{
             //    throw new DriverException("The hardware is connected, cannot do SetupDialog()",
             //                        unchecked(ErrorCodes.DriverBase + 4));
@@ -286,7 +286,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public double StepSize
         {
-            get { return GeminiHardware.StepSize;  }
+            get { return GeminiHardware.Instance.StepSize;  }
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace ASCOM.GeminiTelescope
                 uc.Dispose();
                 frmProgress.HideProgress();
             }
-            GeminiHardware.OnConnect += new ConnectDelegate(OnConnect);
+            GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnect);
             txtObject.AutoCompleteSource = AutoCompleteSource.CustomSource;
             txtObject.AutoCompleteMode = AutoCompleteMode.Suggest;
             System.Windows.Forms.AutoCompleteStringCollection coll = new AutoCompleteStringCollection();
@@ -69,8 +69,8 @@ namespace ASCOM.GeminiTelescope
                 // update custom catalog entry if RA/DEC are different?
                 //if (obj.Catalog == "Custom")
                 //{
-                //    double ra = GeminiHardware.m_Util.HMSToHours(txtRA.Text);
-                //    double dec = GeminiHardware.m_Util.DMSToDegrees(txtDEC.Text);
+                //    double ra = GeminiHardware.Instance.m_Util.HMSToHours(txtRA.Text);
+                //    double dec = GeminiHardware.Instance.m_Util.DMSToDegrees(txtDEC.Text);
                 //    if ((ra!=0 || dec != 0) && (ra != obj.RA.RA || dec != obj.DEC.DEC))
                 //    {
                 //        obj.RA = new RACoord(ra);
@@ -85,11 +85,11 @@ namespace ASCOM.GeminiTelescope
             }
             else
             {
-                if (GeminiHardware.Connected)
+                if (GeminiHardware.Instance.Connected)
                 {
-                    txtRA.Text = GeminiHardware.m_Util.HoursToHMS(GeminiHardware.RightAscension, ":", ":", "");
-                    txtDEC.Text = (Math.Sign(GeminiHardware.Declination)>=0? "+":"-") + GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.Declination, ":", ":", ".0");
-                    if (GeminiHardware.Precession)
+                    txtRA.Text = GeminiHardware.Instance.m_Util.HoursToHMS(GeminiHardware.Instance.RightAscension, ":", ":", "");
+                    txtDEC.Text = (Math.Sign(GeminiHardware.Instance.Declination)>=0? "+":"-") + GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.Declination, ":", ":", ".0");
+                    if (GeminiHardware.Instance.Precession)
                         chkJ2000.Checked = true;
                     else
                         chkJ2000.Checked = false;
@@ -97,8 +97,8 @@ namespace ASCOM.GeminiTelescope
                 }
                 else
                 {
-                    //txtRA.Text = GeminiHardware.m_Util.HoursToHMS(0, ":", ":", ".0");
-                    //txtDEC.Text = "+" + GeminiHardware.m_Util.DegreesToDMS(0, ":", ":", "");
+                    //txtRA.Text = GeminiHardware.Instance.m_Util.HoursToHMS(0, ":", ":", ".0");
+                    //txtDEC.Text = "+" + GeminiHardware.Instance.m_Util.DegreesToDMS(0, ":", ":", "");
                     //chkJ2000.Checked = true;
                     lbCatalog.Text = "Custom";
                 }
@@ -108,9 +108,9 @@ namespace ASCOM.GeminiTelescope
 
         void SetButtonState()
         {
-            btnGoto.Enabled = GeminiHardware.Connected;
-            btnSync.Enabled = GeminiHardware.Connected;
-            btnAddAlign.Enabled = GeminiHardware.Connected;
+            btnGoto.Enabled = GeminiHardware.Instance.Connected;
+            btnSync.Enabled = GeminiHardware.Instance.Connected;
+            btnAddAlign.Enabled = GeminiHardware.Instance.Connected;
         }
 
         void OnConnect(bool bConnect, int clients)
@@ -121,8 +121,8 @@ namespace ASCOM.GeminiTelescope
 
         private void btnGoto_Click(object sender, EventArgs e)
         {
-            double ra = GeminiHardware.m_Util.HMSToHours(txtRA.Text);
-            double dec =  GeminiHardware.m_Util.DMSToDegrees(txtDEC.Text);
+            double ra = GeminiHardware.Instance.m_Util.HMSToHours(txtRA.Text);
+            double dec =  GeminiHardware.Instance.m_Util.DMSToDegrees(txtDEC.Text);
 
             if (ra==0 && dec==0)
             {
@@ -150,23 +150,23 @@ namespace ASCOM.GeminiTelescope
 
             obj.GetCoords(out ra, out dec); //convert to correct epoch/refraction settings
 
-            GeminiHardware.TargetRightAscension = ra;
-            GeminiHardware.TargetDeclination = dec;
-            GeminiHardware.TargetName = string.Format("{0} {1}", obj.Name, obj.Catalog);
+            GeminiHardware.Instance.TargetRightAscension = ra;
+            GeminiHardware.Instance.TargetDeclination = dec;
+            GeminiHardware.Instance.TargetName = string.Format("{0} {1}", obj.Name, obj.Catalog);
 
             try
             {
                 if (sender == btnGoto)
-                    GeminiHardware.SlewEquatorial();
+                    GeminiHardware.Instance.SlewEquatorial();
                 else if (sender == btnSync)
                 {
-                    GeminiHardware.SyncEquatorial();
-                    GeminiHardware.ReportAlignResult(((Button)sender).Text);
+                    GeminiHardware.Instance.SyncEquatorial();
+                    GeminiHardware.Instance.ReportAlignResult(((Button)sender).Text);
                 }
                 else
                 {
-                    GeminiHardware.AlignEquatorial();
-                    GeminiHardware.ReportAlignResult(((Button)sender).Text);
+                    GeminiHardware.Instance.AlignEquatorial();
+                    GeminiHardware.Instance.ReportAlignResult(((Button)sender).Text);
                 }
             }
             catch (Exception ex)
@@ -178,14 +178,14 @@ namespace ASCOM.GeminiTelescope
         private void ToJ2000(ref double ra, ref double dec)
         {
 
-            GeminiHardware.m_Transform.SiteElevation = GeminiHardware.Elevation;
-            GeminiHardware.m_Transform.SiteLatitude = GeminiHardware.Latitude;
-            GeminiHardware.m_Transform.SiteLongitude = GeminiHardware.Longitude;
+            GeminiHardware.Instance.m_Transform.SiteElevation = GeminiHardware.Instance.Elevation;
+            GeminiHardware.Instance.m_Transform.SiteLatitude = GeminiHardware.Instance.Latitude;
+            GeminiHardware.Instance.m_Transform.SiteLongitude = GeminiHardware.Instance.Longitude;
 
-            GeminiHardware.m_Transform.SetTopocentric(ra, dec);
+            GeminiHardware.Instance.m_Transform.SetTopocentric(ra, dec);
 
-            ra = GeminiHardware.m_Transform.RAJ2000;
-            dec = GeminiHardware.m_Transform.DecJ2000;
+            ra = GeminiHardware.Instance.m_Transform.RAJ2000;
+            dec = GeminiHardware.Instance.m_Transform.DecJ2000;
         }
 
         private void btnExit_Click(object sender, EventArgs e)

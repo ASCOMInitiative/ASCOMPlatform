@@ -112,9 +112,9 @@ namespace ASCOM.GeminiTelescope
                 {
                     cmbJoystick.Items.Add(s);
                 }
-                cmbJoystick.SelectedItem = GeminiHardware.JoystickName;
+                cmbJoystick.SelectedItem = GeminiHardware.Instance.JoystickName;
 
-                chkJoystick.CheckState = GeminiHardware.UseJoystick ? CheckState.Checked : CheckState.Unchecked;
+                chkJoystick.CheckState = GeminiHardware.Instance.UseJoystick ? CheckState.Checked : CheckState.Unchecked;
                 if (!chkJoystick.Checked) cmbJoystick.Enabled = false;
                 chkJoystick.BackColor = Color.Transparent;
             }
@@ -127,9 +127,9 @@ namespace ASCOM.GeminiTelescope
 
             }
 
-            chkVoice.Checked = GeminiHardware.UseSpeech;
-            m_SpeechVoice = GeminiHardware.SpeechVoice;
-            m_SpeechFlags = GeminiHardware.SpeechFilter;
+            chkVoice.Checked = GeminiHardware.Instance.UseSpeech;
+            m_SpeechVoice = GeminiHardware.Instance.SpeechVoice;
+            m_SpeechFlags = GeminiHardware.Instance.SpeechFilter;
 
             Version version = new Version(Application.ProductVersion);
             labelVersion.Text = "ASCOM Gemini Telescope .NET " + string.Format("Version {0}.{1}.{2}", version.Major, version.Minor, version.Build);
@@ -174,45 +174,45 @@ namespace ASCOM.GeminiTelescope
 
         #region Properties for Settings
        
-        public GeminiHardware.GeminiBootMode BootMode
+        public GeminiHardwareBase.GeminiBootMode BootMode
         {
             get
             {
                 if (radioButtonPrompt.Checked)
                 {
-                    return GeminiHardware.GeminiBootMode.Prompt;
+                    return GeminiHardwareBase.GeminiBootMode.Prompt;
                 }
                 else if (radioButtonColdStart.Checked)
                 {
-                    return GeminiHardware.GeminiBootMode.ColdStart;
+                    return GeminiHardwareBase.GeminiBootMode.ColdStart;
                 }
                 else if (radioButtonWarmStart.Checked)
                 {
-                    return GeminiHardware.GeminiBootMode.WarmStart;
+                    return GeminiHardwareBase.GeminiBootMode.WarmStart;
                 }
                 else if (radioButtonWarmRestart.Checked)
                 {
-                    return GeminiHardware.GeminiBootMode.WarmRestart;
+                    return GeminiHardwareBase.GeminiBootMode.WarmRestart;
                 }
                 else
                 {
-                    return GeminiHardware.GeminiBootMode.Prompt;
+                    return GeminiHardwareBase.GeminiBootMode.Prompt;
                 }
             }
             set
             {
                 switch (value)
                 {
-                    case GeminiHardware.GeminiBootMode.Prompt:
+                    case GeminiHardwareBase.GeminiBootMode.Prompt:
                         radioButtonPrompt.Checked = true;
                         break;
-                    case GeminiHardware.GeminiBootMode.ColdStart:
+                    case GeminiHardwareBase.GeminiBootMode.ColdStart:
                         radioButtonColdStart.Checked = true;
                         break;
-                    case GeminiHardware.GeminiBootMode.WarmStart:
+                    case GeminiHardwareBase.GeminiBootMode.WarmStart:
                         radioButtonWarmStart.Checked = true;
                         break;
-                    case GeminiHardware.GeminiBootMode.WarmRestart:
+                    case GeminiHardwareBase.GeminiBootMode.WarmRestart:
                         radioButtonWarmRestart.Checked = true;
                         break;
                     default:
@@ -499,9 +499,9 @@ namespace ASCOM.GeminiTelescope
             {
                 try
                 {
-                    GeminiHardware.PassThroughPortEnabled = frm.VirtualPortEnabled;
-                    GeminiHardware.PassThroughComPort = frm.ComPort;
-                    GeminiHardware.PassThroughBaudRate = int.Parse(frm.BaudRate);
+                    GeminiHardware.Instance.PassThroughPortEnabled = frm.VirtualPortEnabled;
+                    GeminiHardware.Instance.PassThroughComPort = frm.ComPort;
+                    GeminiHardware.Instance.PassThroughBaudRate = int.Parse(frm.BaudRate);
                 }
                 catch
                 {
@@ -513,8 +513,8 @@ namespace ASCOM.GeminiTelescope
         private void timerUpdate_Tick(object sender, EventArgs e)
         {
             labelUtc.Text = DateTime.UtcNow.ToShortDateString() + " " + DateTime.UtcNow.ToShortTimeString();
-            pbSetSiteNow.Visible = GeminiHardware.Connected;
-            pbSetTimeNow.Visible = GeminiHardware.Connected;
+            pbSetSiteNow.Visible = GeminiHardware.Instance.Connected;
+            pbSetTimeNow.Visible = GeminiHardware.Instance.Connected;
 
         }
 
@@ -527,9 +527,9 @@ namespace ASCOM.GeminiTelescope
         {
             frmGps gpsForm = new frmGps();
 
-            gpsForm.ComPort = GeminiHardware.GpsComPort;
-            gpsForm.BaudRate = GeminiHardware.GpsBaudRate.ToString();
-            gpsForm.UpdateClock = GeminiHardware.GpsUpdateClock;
+            gpsForm.ComPort = GeminiHardware.Instance.GpsComPort;
+            gpsForm.BaudRate = GeminiHardware.Instance.GpsBaudRate.ToString();
+            gpsForm.UpdateClock = GeminiHardware.Instance.GpsUpdateClock;
 
             DialogResult ans = gpsForm.ShowDialog(this);
             if (ans == DialogResult.OK)
@@ -541,10 +541,10 @@ namespace ASCOM.GeminiTelescope
                     if (!int.TryParse(gpsForm.BaudRate, out gpsBaudRate))
                         error += Resources.GPS + " " + Resources.BaudRate + ", ";
                     else
-                        GeminiHardware.GpsBaudRate = gpsBaudRate;
-                    try { GeminiHardware.GpsComPort = gpsForm.ComPort; }
+                        GeminiHardware.Instance.GpsBaudRate = gpsBaudRate;
+                    try { GeminiHardware.Instance.GpsComPort = gpsForm.ComPort; }
                     catch { error += Resources.GPS + " " + Resources.COMport + ", "; }
-                    GeminiHardware.GpsUpdateClock = gpsForm.UpdateClock;
+                    GeminiHardware.Instance.GpsUpdateClock = gpsForm.UpdateClock;
 
                     if (gpsForm.UpdateClock) checkBoxUseDriverTime.Checked = false;
                     if (gpsForm.Latitude != 0 && gpsForm.Longitude != 0)
@@ -606,11 +606,11 @@ namespace ASCOM.GeminiTelescope
 
         private void pbSetTimeNow_Click_1(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 try
                 {
-                    GeminiHardware.UTCDate = DateTime.UtcNow;
+                    GeminiHardware.Instance.UTCDate = DateTime.UtcNow;
                 }
                 catch
                 {
@@ -621,15 +621,15 @@ namespace ASCOM.GeminiTelescope
 
         private void pbSetSiteNow_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
             {
                 if (Longitude != -900 && Latitude != -900)
                 {
                     try
                     {
-                        GeminiHardware.SetLatitude(Latitude);
-                        GeminiHardware.SetLongitude(Longitude);
-                        GeminiHardware.UTCOffset = -TZ;
+                        GeminiHardware.Instance.SetLatitude(Latitude);
+                        GeminiHardware.Instance.SetLongitude(Longitude);
+                        GeminiHardware.Instance.UTCOffset = -TZ;
                     }
                     catch
                     {
@@ -661,21 +661,21 @@ namespace ASCOM.GeminiTelescope
         private void pbSiteConfig_Click(object sender, EventArgs e)
         {
             if (comboBoxSites.SelectedIndex >= 0 && comboBoxSites.SelectedIndex < 5)
-                if (GeminiHardware.SetSiteNumber(comboBoxSites.SelectedIndex))
+                if (GeminiHardware.Instance.SetSiteNumber(comboBoxSites.SelectedIndex))
                 {
-                    Longitude = GeminiHardware.Longitude;
-                    Latitude = GeminiHardware.Latitude;
-                    TZ = -GeminiHardware.UTCOffset;
+                    Longitude = GeminiHardware.Instance.Longitude;
+                    Latitude = GeminiHardware.Instance.Latitude;
+                    TZ = -GeminiHardware.Instance.UTCOffset;
                 }
                 else if (comboBoxSites.SelectedIndex == 4)  //restore original values
                 {
-                    GeminiHardware.Longitude = m_SaveLongitude;
-                    GeminiHardware.Latitude = m_SaveLatitude;
-                    GeminiHardware.UTCOffset = -m_SaveUTCOffset;
+                    GeminiHardware.Instance.Longitude = m_SaveLongitude;
+                    GeminiHardware.Instance.Latitude = m_SaveLatitude;
+                    GeminiHardware.Instance.UTCOffset = -m_SaveUTCOffset;
 
-                    Longitude = GeminiHardware.Longitude;
-                    Latitude = GeminiHardware.Latitude;
-                    TZ = -GeminiHardware.UTCOffset;
+                    Longitude = GeminiHardware.Instance.Longitude;
+                    Latitude = GeminiHardware.Instance.Latitude;
+                    TZ = -GeminiHardware.Instance.UTCOffset;
                 }
 
         }

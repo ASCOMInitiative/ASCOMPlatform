@@ -20,24 +20,24 @@ namespace ASCOM.GeminiTelescope
 
         private void frmParkPosition_Load(object sender, EventArgs e)
         {
-            txtAlt.Text = GeminiHardware.ParkAlt.ToString();
-            txtAz.Text = GeminiHardware.ParkAz.ToString();
-            switch (GeminiHardware.ParkPosition)
+            txtAlt.Text = GeminiHardware.Instance.ParkAlt.ToString();
+            txtAz.Text = GeminiHardware.Instance.ParkAz.ToString();
+            switch (GeminiHardware.Instance.ParkPosition)
             {
-                case GeminiHardware.GeminiParkMode.SlewAltAz: rbAltAz.Checked = true; break;
-                case GeminiHardware.GeminiParkMode.SlewCWD : this.rbCWD.Checked = true; break;
-                case GeminiHardware.GeminiParkMode.SlewHome: this.rbHome.Checked = true; break;
+                case GeminiHardwareBase.GeminiParkMode.SlewAltAz: rbAltAz.Checked = true; break;
+                case GeminiHardwareBase.GeminiParkMode.SlewCWD : this.rbCWD.Checked = true; break;
+                case GeminiHardwareBase.GeminiParkMode.SlewHome: this.rbHome.Checked = true; break;
                 default: rbNoSlew.Checked = true; break;
             }
         }
 
         private void pbGetPos_Click(object sender, EventArgs e)
         {
-            if (GeminiHardware.Connected)
+            if (GeminiHardware.Instance.Connected)
                 try
                 {
-                    txtAlt.Text = GeminiHardware.Altitude.ToString("0.00");
-                    txtAz.Text = GeminiHardware.Azimuth.ToString("0.00");
+                    txtAlt.Text = GeminiHardware.Instance.Altitude.ToString("0.00");
+                    txtAz.Text = GeminiHardware.Instance.Azimuth.ToString("0.00");
                 }
                 catch { }
         }
@@ -61,8 +61,8 @@ namespace ASCOM.GeminiTelescope
             }
 
             try {
-                GeminiHardware.ParkAlt = alt;
-                GeminiHardware.ParkAz  = az;
+                GeminiHardware.Instance.ParkAlt = alt;
+                GeminiHardware.Instance.ParkAz  = az;
             } catch (Exception ex)
             {
                 MessageBox.Show(Resources.CannotSetParkCoordinates + " " + ex.Message, SharedResources.TELESCOPE_DRIVER_NAME);
@@ -70,16 +70,16 @@ namespace ASCOM.GeminiTelescope
                 return;
             }
 
-            if (rbNoSlew.Checked) GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.NoSlew;
-            if (rbAltAz.Checked) GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.SlewAltAz;
-            if (rbCWD.Checked) GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.SlewCWD;
-            if (rbHome.Checked) GeminiHardware.ParkPosition = GeminiHardware.GeminiParkMode.SlewHome;
+            if (rbNoSlew.Checked) GeminiHardware.Instance.ParkPosition = GeminiHardwareBase.GeminiParkMode.NoSlew;
+            if (rbAltAz.Checked) GeminiHardware.Instance.ParkPosition = GeminiHardwareBase.GeminiParkMode.SlewAltAz;
+            if (rbCWD.Checked) GeminiHardware.Instance.ParkPosition = GeminiHardwareBase.GeminiParkMode.SlewCWD;
+            if (rbHome.Checked) GeminiHardware.Instance.ParkPosition = GeminiHardwareBase.GeminiParkMode.SlewHome;
             DialogResult = DialogResult.OK;
         }
 
         private void frmParkPosition_FormClosed(object sender, FormClosedEventArgs e)
         {
-            GeminiHardware.Profile = null;
+            GeminiHardware.Instance.Profile = null;
         }
     }
 }

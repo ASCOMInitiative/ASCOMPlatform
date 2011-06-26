@@ -39,7 +39,7 @@ namespace ASCOM.GeminiTelescope
             geminiPropertiesBindingSource.Add(props);
             geminiPropertiesBindingSource.ResetBindings(false);
 
-            GeminiHardware.OnConnect += new ConnectDelegate(OnConnectChange);
+            GeminiHardware.Instance.OnConnect += new ConnectDelegate(OnConnectChange);
 
             OnConnectChange(false, 1);
 
@@ -48,8 +48,8 @@ namespace ASCOM.GeminiTelescope
         void OnConnectChange(bool connect, int clients)
         {
             SetControlColor(tableLayoutPanel1);
-            menuItemGetSettings.Enabled = GeminiHardware.Connected;
-            menuItemSendSettings.Enabled = GeminiHardware.Connected;
+            menuItemGetSettings.Enabled = GeminiHardware.Instance.Connected;
+            menuItemSendSettings.Enabled = GeminiHardware.Instance.Connected;
         }
 
         private void pbOK_Click(object sender, EventArgs e)
@@ -96,7 +96,7 @@ namespace ASCOM.GeminiTelescope
             foreach (Control c in panel.Controls)
             {
                 if (c.BackColor == Color.Transparent || c.BackColor == Color.Black)
-                    if (GeminiHardware.Connected)
+                    if (GeminiHardware.Instance.Connected)
                         c.ForeColor = Color.Lime;
                     else
                         c.ForeColor = Color.LightGray;

@@ -111,12 +111,12 @@ namespace ASCOM.GeminiTelescope
         
         private string get_Prop(string s)
         {
-            if (!GeminiHardware.Connected) return null;
+            if (!GeminiHardware.Instance.Connected) return null;
 
             string res = null;
             try
             {
-                res = GeminiHardware.DoCommandResult(s, 2000, false);
+                res = GeminiHardware.Instance.DoCommandResult(s, 2000, false);
             }
             catch
             {
@@ -144,7 +144,7 @@ namespace ASCOM.GeminiTelescope
         {
             string res = null;
 
-            if (!GeminiHardware.Connected) return null;
+            if (!GeminiHardware.Instance.Connected) return null;
             lock (RTProfile)
             {
                 if (RTProfile.ContainsKey(sCmd))
@@ -154,12 +154,12 @@ namespace ASCOM.GeminiTelescope
                 {
                     if (RTProfile.ContainsKey(sCmd))
                     {
-                        GeminiHardware.DoCommandAsync(sCmd, 5000, new HardwareAsyncDelegate(OnHardwarePropertyUpdate), false);
+                        GeminiHardware.Instance.DoCommandAsync(sCmd, 5000, new HardwareAsyncDelegate(OnHardwarePropertyUpdate), false);
                         WaitList[sCmd] = true;
                     }
                     else
                     {
-                        res = GeminiHardware.DoCommandResult(sCmd, GeminiHardware.MAX_TIMEOUT, false);    //first time, get the value non-async
+                        res = GeminiHardware.Instance.DoCommandResult(sCmd, GeminiHardware.Instance.MAX_TIMEOUT, false);    //first time, get the value non-async
                         RTProfile[sCmd] = res;
                     }
                 }
@@ -181,7 +181,7 @@ namespace ASCOM.GeminiTelescope
         {
             string prop = get_Prop(s);
             double val;
-            if (!double.TryParse(prop, System.Globalization.NumberStyles.Float, GeminiHardware.m_GeminiCulture, out val)) return 0;
+            if (!double.TryParse(prop, System.Globalization.NumberStyles.Float, GeminiHardware.Instance.m_GeminiCulture, out val)) return 0;
             return val;
         }
 
@@ -223,7 +223,7 @@ namespace ASCOM.GeminiTelescope
                 string res = get_PropAsync(":GVN");
                 if (res == null) return null;
 
-                return string.Format("L{0} v{1}.{2}", GeminiHardware.Version.Substring(0, 1), GeminiHardware.Version.Substring(1, 1), GeminiHardware.Version.Substring(2,1));
+                return string.Format("L{0} v{1}.{2}", GeminiHardware.Instance.Version.Substring(0, 1), GeminiHardware.Instance.Version.Substring(1, 1), GeminiHardware.Instance.Version.Substring(2,1));
             }
         }
 
@@ -277,9 +277,9 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                if (!GeminiHardware.Connected) return null;
+                if (!GeminiHardware.Instance.Connected) return null;
                 // gemini stores timezone with sign reversed from UTC:
-                return "UTC" + (GeminiHardware.UTCOffset > 0? " - " : " + ") + Math.Abs(GeminiHardware.UTCOffset).ToString();
+                return "UTC" + (GeminiHardware.Instance.UTCOffset > 0? " - " : " + ") + Math.Abs(GeminiHardware.Instance.UTCOffset).ToString();
             }
         }
 
@@ -323,7 +323,7 @@ namespace ASCOM.GeminiTelescope
             {
                 string prop = get_PropAsync("<150:");
                 double rate;
-                if (!double.TryParse(prop, System.Globalization.NumberStyles.Float, GeminiHardware.m_GeminiCulture, out rate)) return null;
+                if (!double.TryParse(prop, System.Globalization.NumberStyles.Float, GeminiHardware.Instance.m_GeminiCulture, out rate)) return null;
                 return rate.ToString("0.0") + "x";
             }
         }
@@ -355,9 +355,9 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                if (!GeminiHardware.Connected) return null;
-                double ra = GeminiHardware.RightAscension;
-                return GeminiHardware.m_Util.HoursToHMS(ra, ":", ":", "");
+                if (!GeminiHardware.Instance.Connected) return null;
+                double ra = GeminiHardware.Instance.RightAscension;
+                return GeminiHardware.Instance.m_Util.HoursToHMS(ra, ":", ":", "");
             }
         }
 
@@ -365,9 +365,9 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                if (!GeminiHardware.Connected) return null;
-                double dec = GeminiHardware.Declination;
-                return GeminiHardware.m_Util.DegreesToDMS(dec, ":", ":", "");
+                if (!GeminiHardware.Instance.Connected) return null;
+                double dec = GeminiHardware.Instance.Declination;
+                return GeminiHardware.Instance.m_Util.DegreesToDMS(dec, ":", ":", "");
             }
         }
 
@@ -375,9 +375,9 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                if (!GeminiHardware.Connected) return null;
-                double alt = GeminiHardware.Altitude;
-                return GeminiHardware.m_Util.DegreesToDMS(alt, ":", ":", "");
+                if (!GeminiHardware.Instance.Connected) return null;
+                double alt = GeminiHardware.Instance.Altitude;
+                return GeminiHardware.Instance.m_Util.DegreesToDMS(alt, ":", ":", "");
             }
         }
 
@@ -385,15 +385,15 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                if (!GeminiHardware.Connected) return null;
-                double az = GeminiHardware.Azimuth;
-                return GeminiHardware.m_Util.DegreesToDMS(az, ":", ":", "");
+                if (!GeminiHardware.Instance.Connected) return null;
+                double az = GeminiHardware.Instance.Azimuth;
+                return GeminiHardware.Instance.m_Util.DegreesToDMS(az, ":", ":", "");
             }
         }
 
         public bool IsConnected
         {
-            get { return GeminiHardware.Connected; }
+            get { return GeminiHardware.Instance.Connected; }
         }
 
 #endregion
@@ -414,7 +414,7 @@ namespace ASCOM.GeminiTelescope
             {
                 for (int i = 0; i < Mount_names.Length; ++i)
                     if (Mount_names[i].Equals((string)value))
-                        GeminiHardware.DoCommandResult(">" + i.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.Instance.DoCommandResult(">" + i.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -434,7 +434,7 @@ namespace ASCOM.GeminiTelescope
             set {
                 for (int i = 0; i < Brightness_names.Length; ++i)
                     if (Brightness_names[i].Equals(value))
-                        GeminiHardware.DoCommandResult(":SB" + i.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.Instance.DoCommandResult(":SB" + i.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -448,8 +448,8 @@ namespace ASCOM.GeminiTelescope
 
         private bool SyncDoesAlign_Gemini
         {
-            get { return GeminiHardware.SwapSyncAdditionalAlign; }
-            set { GeminiHardware.SwapSyncAdditionalAlign = value; }
+            get { return GeminiHardware.Instance.SwapSyncAdditionalAlign; }
+            set { GeminiHardware.Instance.SwapSyncAdditionalAlign = value; }
         }
 
 
@@ -464,7 +464,7 @@ namespace ASCOM.GeminiTelescope
 
         private bool DoesPrecession_Gemini
         {
-            get { return GeminiHardware.Precession; }
+            get { return GeminiHardware.Instance.Precession; }
             set { m_Precession  = value; }
         }
 
@@ -478,8 +478,8 @@ namespace ASCOM.GeminiTelescope
 
         private bool DoesRefraction_Gemini
         {
-            get { return GeminiHardware.Refraction; }
-            set { GeminiHardware.SetPrecessionRefraction(m_Precession, value); }
+            get { return GeminiHardware.Instance.Refraction; }
+            set { GeminiHardware.Instance.SetPrecessionRefraction(m_Precession, value); }
         }
 
         [Sequence(99)]
@@ -493,7 +493,7 @@ namespace ASCOM.GeminiTelescope
         private DateTime AlarmTime_Gemini
         {
             get { return get_time_Prop(":GE"); }
-            set { GeminiHardware.DoCommandResult(":SE" + value.ToString("HH:mm:ss"), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(":SE" + value.ToString("HH:mm:ss"), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(99)]
@@ -514,7 +514,7 @@ namespace ASCOM.GeminiTelescope
             }
             set
             {
-                string prop  =GeminiHardware.DoCommandResult(value ? ">182:" : ">181:", GeminiHardware.MAX_TIMEOUT, false);
+                string prop  =GeminiHardware.Instance.DoCommandResult(value ? ">182:" : ">181:", GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -606,7 +606,7 @@ namespace ASCOM.GeminiTelescope
                 if (value <= 0) return; // value not set -- don't update the mount!
 
                 string cmd = ">222:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
-                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -639,7 +639,7 @@ namespace ASCOM.GeminiTelescope
                 if (value <= 0) return; // value not set -- don't update the mount!
 
                 string cmd = ">221:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
-                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -654,11 +654,11 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return GeminiHardware.Latitude;
+                return GeminiHardware.Instance.Latitude;
             }
             set
             {
-                GeminiHardware.SetLatitude(value);
+                GeminiHardware.Instance.SetLatitude(value);
             }
         }
 
@@ -673,11 +673,11 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return GeminiHardware.Longitude;
+                return GeminiHardware.Instance.Longitude;
             }
             set
             {
-                GeminiHardware.SetLongitude(value);
+                GeminiHardware.Instance.SetLongitude(value);
             }
         }
 
@@ -692,11 +692,11 @@ namespace ASCOM.GeminiTelescope
         {
             get
             {
-                return GeminiHardware.UTCOffset;
+                return GeminiHardware.Instance.UTCOffset;
             }
             set
             {
-                GeminiHardware.UTCOffset = value;
+                GeminiHardware.Instance.UTCOffset = value;
             }
         }
 
@@ -726,7 +726,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 string cmd = ">223:" + string.Format("{0:000}d{1:00}", Math.Truncate(value), (value - Math.Truncate(value)) * 60.0);
-                GeminiHardware.DoCommandResult(cmd, GeminiHardware.MAX_TIMEOUT, false);
+                GeminiHardware.Instance.DoCommandResult(cmd, GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
 
         }
@@ -755,7 +755,7 @@ namespace ASCOM.GeminiTelescope
                 int stat;
                 if (!int.TryParse(prop, out stat)) return ;
                 stat = (stat & 0xfe) | (value? 1 : 0);
-                GeminiHardware.DoCommandResult(">509:" + stat.ToString(), GeminiHardware.MAX_TIMEOUT, false);                
+                GeminiHardware.Instance.DoCommandResult(">509:" + stat.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);                
             }
         }
 
@@ -775,7 +775,7 @@ namespace ASCOM.GeminiTelescope
             set {
                 for (int i = 0; i < HandController_names.Length; ++i)
                     if (HandController_names[i].Equals((string)value))
-                        GeminiHardware.DoCommandResult(">" + (i + 161).ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.Instance.DoCommandResult(">" + (i + 161).ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -792,7 +792,7 @@ namespace ASCOM.GeminiTelescope
             set {
                 for (int i = 0; i < TrackingRate_names.Length; ++i)
                     if (TrackingRate_names[i].Equals(value))
-                        GeminiHardware.DoCommandResult(">" + (i + 131).ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.Instance.DoCommandResult(">" + (i + 131).ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -808,7 +808,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<411:"); }
             set { 
                 if (TrackingRateMode=="Comet Rate")
-                    GeminiHardware.DoCommandResult(">411:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);  
+                    GeminiHardware.Instance.DoCommandResult(">411:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);  
             }
         }
 
@@ -824,7 +824,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<412:"); }
             set {
                 if (TrackingRateMode == "Comet Rate")
-                    GeminiHardware.DoCommandResult(">412:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">412:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -837,7 +837,7 @@ namespace ASCOM.GeminiTelescope
         private int ManualSlewSpeed_Gemini
         {
             get { return get_int_Prop("<120:");  }
-            set { GeminiHardware.DoCommandResult(">120:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">120:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         public int GotoSlewSpeed
@@ -849,7 +849,7 @@ namespace ASCOM.GeminiTelescope
         private int GotoSlewSpeed_Gemini
         {
             get { return get_int_Prop("<140:"); }
-            set { GeminiHardware.DoCommandResult(">140:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">140:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         public int CenteringSpeed
@@ -861,7 +861,7 @@ namespace ASCOM.GeminiTelescope
         private int CenteringSpeed_Gemini
         {
             get { return get_int_Prop("<170:"); }
-            set { GeminiHardware.DoCommandResult(">170:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">170:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         public double GuideSpeed
@@ -873,7 +873,7 @@ namespace ASCOM.GeminiTelescope
         private double GuideSpeed_Gemini
         {
             get { return get_double_Prop("<150:"); }
-            set { GeminiHardware.DoCommandResult(">150:" + value.ToString("0.0",GeminiHardware.m_GeminiCulture), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">150:" + value.ToString("0.0",GeminiHardware.Instance.m_GeminiCulture), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         public int SlewSettleTime
@@ -884,8 +884,8 @@ namespace ASCOM.GeminiTelescope
 
         private int SlewSettleTime_Gemini
         {
-            get { return GeminiHardware.SlewSettleTime; }
-            set { GeminiHardware.SlewSettleTime = value; IsDirty = true; }
+            get { return GeminiHardware.Instance.SlewSettleTime; }
+            set { GeminiHardware.Instance.SlewSettleTime = value; IsDirty = true; }
         }
 
 
@@ -901,7 +901,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<21:"); }
             set {
                 if (MountTypeSetting == "Custom")
-                    GeminiHardware.DoCommandResult(">21:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+                    GeminiHardware.Instance.DoCommandResult(">21:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(4)]
@@ -916,7 +916,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<22:"); }
             set {
                 if (MountTypeSetting == "Custom")
-                    GeminiHardware.DoCommandResult(">22:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">22:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -932,7 +932,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<23:"); }
             set {
                 if (MountTypeSetting == "Custom")
-                    GeminiHardware.DoCommandResult(">23:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">23:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -948,7 +948,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<24:"); }
             set {
                 if (MountTypeSetting == "Custom")
-                    GeminiHardware.DoCommandResult(">24:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">24:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -964,7 +964,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<25:"); }
             set {
                 if (MountTypeSetting == "Custom")
-                    GeminiHardware.DoCommandResult(">25:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">25:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -980,7 +980,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<26:"); }
             set {
                 if (MountTypeSetting == "Custom")
-                    GeminiHardware.DoCommandResult(">26:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">26:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -997,7 +997,7 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 if (MountTypeSetting == "Custom")
-                    GeminiHardware.DoCommandResult(">27:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">27:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -1013,7 +1013,7 @@ namespace ASCOM.GeminiTelescope
             get { return get_int_Prop("<28:"); }
             set {
                 if (MountTypeSetting == "Custom")
-                    GeminiHardware.DoCommandResult(">28:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(">28:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
             }
         }
 
@@ -1034,7 +1034,7 @@ namespace ASCOM.GeminiTelescope
                 if (res == 11) return true;
                 return false;
             }
-            set { GeminiHardware.DoCommandResult(value ? ">11:" : ">13:", GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(value ? ">11:" : ">13:", GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
 
@@ -1055,7 +1055,7 @@ namespace ASCOM.GeminiTelescope
                 if (res == 14) return true;
                 return false;
             }
-            set { GeminiHardware.DoCommandResult(value ? ">14:" : ">15:", GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(value ? ">14:" : ">15:", GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
 
@@ -1069,7 +1069,7 @@ namespace ASCOM.GeminiTelescope
         private int EncoderResolutionRA_Gemini
         {
             get { return get_int_Prop("<100:"); }
-            set { GeminiHardware.DoCommandResult(">100:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">100:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(4)]
@@ -1082,7 +1082,7 @@ namespace ASCOM.GeminiTelescope
         private int EncoderResolutionDEC_Gemini
         {
             get { return get_int_Prop("<110:"); }
-            set { GeminiHardware.DoCommandResult(">110:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">110:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
 
@@ -1096,7 +1096,7 @@ namespace ASCOM.GeminiTelescope
         private int TVC_Gemini
         {
             get { return get_int_Prop("<200:"); }
-            set { GeminiHardware.DoCommandResult(">200:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">200:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1109,7 +1109,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelA_Gemini
         {
             get { return get_int_Prop("<201:"); }
-            set { GeminiHardware.DoCommandResult(">201:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); } 
+            set { GeminiHardware.Instance.DoCommandResult(">201:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); } 
         }
 
         [Sequence(6)]
@@ -1122,7 +1122,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelE_Gemini
         {
             get { return get_int_Prop("<202:"); }
-            set { GeminiHardware.DoCommandResult(">202:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">202:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1135,7 +1135,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelNP_Gemini
         {
             get { return get_int_Prop("<203:"); }
-            set { GeminiHardware.DoCommandResult(">203:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">203:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1148,7 +1148,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelNE_Gemini
         {
             get { return get_int_Prop("<204:"); }
-            set { GeminiHardware.DoCommandResult(">204:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">204:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1161,7 +1161,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelIH_Gemini
         {
             get { return get_int_Prop("<205:"); }
-            set { GeminiHardware.DoCommandResult(">205:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">205:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1174,7 +1174,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelID_Gemini
         {
             get { return get_int_Prop("<206:"); }
-            set { GeminiHardware.DoCommandResult(">206:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">206:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1187,7 +1187,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelFR_Gemini
         {
             get { return get_int_Prop("<207:"); }
-            set { GeminiHardware.DoCommandResult(">207:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">207:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1200,7 +1200,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelFD_Gemini
         {
             get { return get_int_Prop("<208:"); }
-            set { GeminiHardware.DoCommandResult(">208:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">208:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1213,7 +1213,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelCF_Gemini
         {
             get { return get_int_Prop("<209:"); }
-            set { GeminiHardware.DoCommandResult(">209:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">209:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
         [Sequence(6)]
@@ -1226,7 +1226,7 @@ namespace ASCOM.GeminiTelescope
         private int ModelTF_Gemini
         {
             get { return get_int_Prop("<211:"); }
-            set { GeminiHardware.DoCommandResult(">211:" + value.ToString(), GeminiHardware.MAX_TIMEOUT, false); }
+            set { GeminiHardware.Instance.DoCommandResult(">211:" + value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false); }
         }
 
 
@@ -1238,7 +1238,7 @@ namespace ASCOM.GeminiTelescope
             {
                 mProfile["SavePEC"] = value; IsDirty = true;  
                 if (!value)
-                    if (GeminiHardware.Connected && Profile.ContainsKey("PECTable"))
+                    if (GeminiHardware.Instance.Connected && Profile.ContainsKey("PECTable"))
                         Profile.Remove("PECTable"); // delete it: the user doesn't want pec data
             }
         }
@@ -1304,26 +1304,26 @@ namespace ASCOM.GeminiTelescope
 
                 foreach (KeyValuePair<int, string> kp in value)
                 {
-                    if (batch.Count >= 10)
+                    if (batch.Count >= GeminiHardware.Instance.MaxCommands*2)
                     {
-                        GeminiHardware.DoCommandResult(batch.ToArray(), GeminiHardware.MAX_TIMEOUT, false);
+                        GeminiHardware.Instance.DoCommandResult(batch.ToArray(), GeminiHardware.Instance.MAX_TIMEOUT, false);
                         batch.Clear();
                     }
                     frmProgress.Update(incr, null);
                     batch.Add(">511:" + kp.Value.ToString());
-//                    GeminiHardware.DoCommandResult(">511:" + kp.Value.ToString(), GeminiHardware.MAX_TIMEOUT, false);
+//                    GeminiHardware.Instance.DoCommandResult(">511:" + kp.Value.ToString(), GeminiHardware.Instance.MAX_TIMEOUT, false);
                 }
 
                 if (batch.Count > 0)
                 {
-                    GeminiHardware.DoCommandResult(batch.ToArray(), GeminiHardware.MAX_TIMEOUT, false);
+                    GeminiHardware.Instance.DoCommandResult(batch.ToArray(), GeminiHardware.Instance.MAX_TIMEOUT, false);
                     batch.Clear();
                 }
 
-                byte pec = GeminiHardware.PECStatus;
+                byte pec = GeminiHardware.Instance.PECStatus;
                 if (pec != 0xff)
                 {
-                    GeminiHardware.PECStatus = (byte)(pec | (32 + 2));      // PEC data is available
+                    GeminiHardware.Instance.PECStatus = (byte)(pec | (32 + 2));      // PEC data is available
                 }
                 Cursor.Current = Cursors.Default;
             }
@@ -1341,7 +1341,7 @@ namespace ASCOM.GeminiTelescope
         /// <returns>success or failure</returns>
         public bool SyncWithGemini(bool write)
         {
-            GeminiHardware.Trace.Enter("GeminiProps:SyncWithGemini", write);
+            GeminiHardware.Instance.Trace.Enter("GeminiProps:SyncWithGemini", write);
 
             if (!SyncWithGemini(write, null)) return false;
 
@@ -1362,12 +1362,12 @@ namespace ASCOM.GeminiTelescope
                 }
                 frmProgress.HideProgress();
             }
-            else if (GeminiHardware.Connected && !write && Profile.ContainsKey("PECTable"))
+            else if (GeminiHardware.Instance.Connected && !write && Profile.ContainsKey("PECTable"))
                 Profile.Remove("PECTable");
 
             IsDirty = false;    // props are in sync: we downloaded them from Gemini, or uploaded them to Gemini
 
-            GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
+            GeminiHardware.Instance.Trace.Exit("GeminiProps:SyncWithGemini", write);
             return true;
         }
 
@@ -1401,11 +1401,11 @@ namespace ASCOM.GeminiTelescope
         /// <returns></returns>
         public bool SyncWithGemini(bool write, List<string> properties)
         {
-            GeminiHardware.Trace.Enter("GeminiProps:SyncWithGemini", write, properties);
+            GeminiHardware.Instance.Trace.Enter("GeminiProps:SyncWithGemini", write, properties);
             
-            if (!GeminiHardware.Connected)
+            if (!GeminiHardware.Instance.Connected)
             {
-                GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", false, "mount not connected");
+                GeminiHardware.Instance.Trace.Exit("GeminiProps:SyncWithGemini", false, "mount not connected");
                 return false;
             }
 
@@ -1448,12 +1448,12 @@ namespace ASCOM.GeminiTelescope
                 }
                 catch (Exception ex)
                 {
-                    GeminiHardware.Trace.Except(ex);
+                    GeminiHardware.Instance.Trace.Except(ex);
                 }
             }
 
             frmProgress.HideProgress();
-            GeminiHardware.Trace.Exit("GeminiProps:SyncWithGemini", write);
+            GeminiHardware.Instance.Trace.Exit("GeminiProps:SyncWithGemini", write);
             return true;
         }
 
@@ -1485,7 +1485,7 @@ namespace ASCOM.GeminiTelescope
                 if (!write && !File.Exists(FileName)) return false;
             }
 
-            GeminiHardware.Trace.Enter("GeminiProps:Serialize", write, FileName);
+            GeminiHardware.Instance.Trace.Enter("GeminiProps:Serialize", write, FileName);
 
             // get PEC from Gemini if PEC is not in the current profile, but user wants it saved!
             if (write && SavePEC && !Profile.ContainsKey("PECTable"))
@@ -1495,7 +1495,7 @@ namespace ASCOM.GeminiTelescope
                 PECTable = PECTable_Gemini;
                 frmProgress.HideProgress();
             }
-            else if (GeminiHardware.Connected && !SavePEC && Profile.ContainsKey("PECTable"))
+            else if (GeminiHardware.Instance.Connected && !SavePEC && Profile.ContainsKey("PECTable"))
                 Profile.Remove("PECTable");
 
             try
@@ -1517,11 +1517,11 @@ namespace ASCOM.GeminiTelescope
             }
             catch (Exception ex)
             {
-                GeminiHardware.Trace.Error("GeminiProperties.Serialize", write, FileName, ex.ToString(), ex.Message);
+                GeminiHardware.Instance.Trace.Error("GeminiProperties.Serialize", write, FileName, ex.ToString(), ex.Message);
                 return false;
             }
 
-            GeminiHardware.Trace.Exit("GeminiProps:Serialize", write, FileName);
+            GeminiHardware.Instance.Trace.Exit("GeminiProps:Serialize", write, FileName);
 
             return true;
         }

@@ -20,6 +20,7 @@
 // 31-JUL-2009  rbt 1.0.1a  Added Focuser Implementations and Settings
 // 29-MAR-2010  pk  1.0.3   Changed Profile access to allow the release of the object when not needed
 //                          to ensure data is written to disk in case of an improper shut-down at a later point
+// 24-MAY-2011  pk  1.0.19  Refactor GeminiHardware into a non-staic class to allow G1 and G2 functionality
 // --------------------------------------------------------------------------------
 //
 
@@ -28,7 +29,10 @@ using System.Collections;
 using System.Text;
 using System.ComponentModel;
 using System.Timers;
+using System.IO;
 using System.IO.Ports;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;    
 using System.Windows.Forms;
 using System.Drawing;
 using ASCOM.GeminiTelescope.Properties;
@@ -49,117 +53,35 @@ namespace ASCOM.GeminiTelescope
 
     public delegate void SafetyDelegate();
 
-    
-    /// <summary>
-    /// Single serial command to be delivered to Gemini Hardware through worker thread queue
-    /// </summary>
-    internal class CommandItem
+    [Serializable()]    
+
+    public class GeminiHardware 
     {
+        static Gemini5Hardware m_Instance = new Gemini5Hardware();
 
-        internal string m_Command;  //actual serial command to be sent, not including ending '#' or the native checksum
-        int m_ThreadID;             //this will record thread id of the calling thread
-        internal int m_Timeout;     //timeout value for this command in msec, -1 if no timeout wanted
-
-        private System.Threading.ManualResetEvent m_WaitForResultHandle = null; // wait handle set by worker thread when result is received
-        internal HardwareAsyncDelegate m_AsyncDelegate = null;  // call-back delegate for asynchronous operation
-        /// <summary>
-        /// result produced by Gemini, or null if no result. Ending '#' is always stripped off
-        /// </summary>
-        internal string m_Result { get; set; }
-        internal bool m_Raw = false;
-
-        internal bool m_UpdateRequired { get; set; } //true if this command updates a polled status variable, and an update is needed ASAP
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command">actual serial command to be sent, not including ending '#' or the native checksum</param>
-        /// <param name="timeout">timeout value for this command in msec, -1 if no timeout wanted</param>
-        /// <param name="wantResult">does the caller want the result returned by Gemini?</param>
-        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
-        internal CommandItem(string command, int timeout, bool wantResult, bool bRaw)
+        static public Gemini5Hardware Instance 
         {
-            m_Command = command;
-            m_ThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
-            m_Timeout = timeout;
-
-            // create a wait handle if result is desired
-            if (wantResult) 
-                m_WaitForResultHandle = new System.Threading.ManualResetEvent(false);
-            m_Result = null;
-            m_Raw = bRaw;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command">actual serial command to be sent, not including ending '#' or the native checksum</param>
-        /// <param name="timeout">timeout value for this command in msec, -1 if no timeout wanted</param>
-        /// <param name="wantResult">does the caller want the result returned by Gemini?</param>
-        internal CommandItem(string command, int timeout, bool wantResult) : this(command,timeout,wantResult, false)
-        {
-        }
-
-        /// <summary>
-        ///  Initialize with an asynchrounous call-back delegate and a timeout
-        /// </summary>
-        /// <param name="command">actual serial command to be sent, not including ending '#' or the native checksum</param>
-        /// <param name="timeout">timeout value for this command in msec, -1 if no timeout wanted</param>
-        /// <param name="callback">asynchronous callback delegate to call on completion
-        ///        public delegate void HardwareAsyncDelegate(string cmd, string result);
-        /// </param>
-        /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
-        internal CommandItem(string command, int timeout, HardwareAsyncDelegate callback, bool bRaw) 
-            : this(command, timeout, true, bRaw)
-        {
-            m_AsyncDelegate = callback;
-        }
-
-        /// <summary>
-        /// Return WaitHandle object to be set on receipt of the result for this command
-        /// </summary>
-        internal System.Threading.ManualResetEvent WaitObject
-        {
-            get { return m_WaitForResultHandle; }
-        }
-
-        /// <summary>
-        ///     Wait on the synchronization wait handle to signal that the result is now available
-        ///     result is placed into m_sResult by the worker thread and the event is then signaled
-        /// </summary>
-        /// <returns>result produced by Gemini as after executing this command or null if timeout expired</returns>
-        internal string WaitForResult()
-        {
-            if (m_WaitForResultHandle != null)
-            {
-                if (m_Timeout > 0)
-                {
-                    if (m_WaitForResultHandle.WaitOne(m_Timeout))
-                        return m_Result;
-                    else
-                    {
-                        GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Time out occurred after " + m_Timeout.ToString() + "msec processing command '" + m_Command + "'");
-                        return null;
-                    }
-                }
-                else
-                    m_WaitForResultHandle.WaitOne();  // no timeout specified, wait indefinitely
+            get {                
+                return m_Instance;
             }
-            return null;
+
+            set
+            {
+                m_Instance = value;
+            }
         }
     }
-
 
     /// <summary>
     /// Class encapsulating all serial communications with Gemini
     /// </summary>
-    public static partial class GeminiHardware
+    public  partial class GeminiHardwareBase: ICloneable
     {
 #region Member Variables
 
-        private static ASCOM.Utilities.Profile m_Profile;
+        internal ASCOM.Utilities.Profile m_Profile;
 
-        public static ASCOM.Utilities.Profile Profile
+        public ASCOM.Utilities.Profile Profile
         {
             get
             {
@@ -178,32 +100,32 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        public static ASCOM.Utilities.Util m_Util;
-        public static ASCOM.Astrometry.Transform.Transform  m_Transform;
+        public ASCOM.Utilities.Util m_Util;
+        public ASCOM.Astrometry.Transform.Transform  m_Transform;
 
         // culture used to store ASCOM profile data:
-        public static System.Globalization.CultureInfo m_GeminiCulture = new System.Globalization.CultureInfo("en-US");
+        public System.Globalization.CultureInfo m_GeminiCulture = new System.Globalization.CultureInfo("en-US");
 
-        private static Queue m_CommandQueue; //Queue used for messages to the gemini
-        private static System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
+        internal Queue m_CommandQueue; //Queue used for messages to the gemini
+        internal System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
 
-        private static bool m_CancelAsync = false; // when to stop the background thread
+        internal bool m_CancelAsync = false; // when to stop the background thread
  
 
         //Telescope Implementation
         
-        private static double m_Latitude;
-        private static double m_Longitude;
-        private static double m_Elevation;
+        internal double m_Latitude;
+        internal double m_Longitude;
+        internal double m_Elevation;
 
-        private static int m_UTCOffset;
+        internal int m_UTCOffset;
 
-        private static double m_RightAscension;
-        private static double m_Declination;
-        private static double m_Altitude;
-        private static double m_Azimuth;
-        private static string m_TargetName = null;
-        public static string TargetName {
+        internal double m_RightAscension;
+        internal double m_Declination;
+        internal double m_Altitude;
+        internal double m_Azimuth;
+        internal string m_TargetName = null;
+        public string TargetName {
             get
             {
                 return m_TargetName;
@@ -216,146 +138,152 @@ namespace ASCOM.GeminiTelescope
 
         }
 
-        private static double m_TargetRightAscension = SharedResources.INVALID_DOUBLE;
-        private static double m_TargetDeclination = SharedResources.INVALID_DOUBLE;
-        private static double m_SiderealTime;
-        private static string m_Velocity;
-        private static string m_SideOfPier;
-        private static double m_TargetAltitude = SharedResources.INVALID_DOUBLE;
-        private static double m_TargetAzimuth= SharedResources.INVALID_DOUBLE;
+        internal double m_TargetRightAscension = SharedResources.INVALID_DOUBLE;
+        internal double m_TargetDeclination = SharedResources.INVALID_DOUBLE;
+        internal double m_SiderealTime;
+        internal string m_Velocity;
+        internal string m_SideOfPier;
+        internal double m_TargetAltitude = SharedResources.INVALID_DOUBLE;
+        internal double m_TargetAzimuth= SharedResources.INVALID_DOUBLE;
 
-        private static bool m_AdditionalAlign;
+        internal bool m_AdditionalAlign;
 
-        public static bool SwapSyncAdditionalAlign
+        public bool SwapSyncAdditionalAlign
         {
-            get { return GeminiHardware.m_AdditionalAlign; }
-            set { GeminiHardware.m_AdditionalAlign = value; }
+            get { return m_AdditionalAlign; }
+            set { m_AdditionalAlign = value; }
         }
 
-        private static bool m_Precession;
-        private static bool m_Refraction;
-        private static bool m_ShowHandbox;
-        private static bool m_UseDriverSite;
-        private static bool m_UseDriverTime;
+        internal bool m_Precession;
+        internal bool m_Refraction;
+        internal bool m_ShowHandbox;
+        internal bool m_UseDriverSite;
+        internal bool m_UseDriverTime;
 
 
-        private static bool m_SendAdvancedSettings;
+        internal bool m_SendAdvancedSettings;
 
-        public static bool SendAdvancedSettings
+        public bool SendAdvancedSettings
         {
-            get { return GeminiHardware.m_SendAdvancedSettings; }
+            get { return m_SendAdvancedSettings; }
             set { 
-                GeminiHardware.m_SendAdvancedSettings = value;
+                m_SendAdvancedSettings = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SendAdvancedSettings", value.ToString());               
             }
         }
 
 
-        private static bool m_Tracking;
+        internal bool m_Tracking;
 
-        private static bool m_AtPark;
-        private static bool m_AtHome;
-        private static string m_ParkState = "";
-        private static bool m_ParkWasExecuted = false;
+        internal bool m_AtPark;
+        internal bool m_AtHome;
+        internal string m_ParkState = "";
+        internal bool m_ParkWasExecuted = false;
 
-        private static System.Threading.ManualResetEvent m_SlewAborted = new System.Threading.ManualResetEvent(false);
+        internal System.Threading.ManualResetEvent m_SlewAborted = new System.Threading.ManualResetEvent(false);
 
-        private static bool m_SouthernHemisphere = false;
+        internal bool m_SouthernHemisphere = false;
 
-        private static string m_GeminiVersion = "";
+        internal string m_GeminiVersion = "";
 
-        private static TimeSpan m_GPSTimeDifference = TimeSpan.Zero;    // GPS UTC time - PC clock UTC time
+        internal TimeSpan m_GPSTimeDifference = TimeSpan.Zero;    // GPS UTC time - PC clock UTC time
 
-        private static int m_SlewSettleTime = 0;
+        internal int m_SlewSettleTime = 0;
 
-        public static int SlewSettleTime
+        public int SlewSettleTime
         {
-            get { return GeminiHardware.m_SlewSettleTime; }
-            set { GeminiHardware.m_SlewSettleTime = value;
+            get { return m_SlewSettleTime; }
+            set { m_SlewSettleTime = value;
             Profile.DeviceType = "Telescope";
             Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SlewSettleTime", value.ToString());
             }
         }
 
 
-        private static string m_OpticsUnitOfMeasure = "millimeter";
-        public static string OpticsUnitOfMeasure
+        internal string m_OpticsUnitOfMeasure = "millimeter";
+        public string OpticsUnitOfMeasure
         {
-            get { return GeminiHardware.m_OpticsUnitOfMeasure; }
+            get { return m_OpticsUnitOfMeasure; }
             set
             {
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsUnitOfMeasure", value.ToString(GeminiHardware.m_GeminiCulture));
-                GeminiHardware.m_OpticsUnitOfMeasure = value;
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsUnitOfMeasure", value.ToString(m_GeminiCulture));
+                m_OpticsUnitOfMeasure = value;
             }
         }
 
-        private static string m_OpticsNames = "";
-        public static string OpticsNames
+        internal string m_OpticsNames = "";
+        public string OpticsNames
         {
-            get { return GeminiHardware.m_OpticsNames; }
+            get { return m_OpticsNames; }
             set
             {
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsNames", value.ToString(GeminiHardware.m_GeminiCulture));
-                GeminiHardware.m_OpticsNames = value;
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsNames", value.ToString(m_GeminiCulture));
+                m_OpticsNames = value;
             }
         }
 
-        private static string m_OpticsObstruction = "";
-        public static string OpticsObstruction
+        internal string m_OpticsObstruction = "";
+        public string OpticsObstruction
         {
-            get { return GeminiHardware.m_OpticsObstruction; }
+            get { return m_OpticsObstruction; }
             set
             {
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsObstruction", value.ToString(GeminiHardware.m_GeminiCulture));
-                GeminiHardware.m_OpticsObstruction = value;
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsObstruction", value.ToString(m_GeminiCulture));
+                m_OpticsObstruction = value;
             }
         }
 
-        private static int m_OpticsValueIndex = 0;
-        public static int OpticsValueIndex
+        internal int m_OpticsValueIndex = 0;
+        public int OpticsValueIndex
         {
             get { return m_OpticsValueIndex; }
             set
             {
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsValueIndex", value.ToString(GeminiHardware.m_GeminiCulture));
-                GeminiHardware.m_OpticsValueIndex = value;
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "OpticsValueIndex", value.ToString(m_GeminiCulture));
+                m_OpticsValueIndex = value;
             }
         }
 
         
 
 
-        private static string m_FocalLength;
+        internal string m_FocalLength;
 
-        public static string FocalLength
+        public string FocalLength
         {
-            get { return GeminiHardware.m_FocalLength; }
+            get { return m_FocalLength; }
             set {
-                Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", value.ToString(GeminiHardware.m_GeminiCulture));
-                GeminiHardware.m_FocalLength = value; 
+                if (value != null)
+                {
+                    Profile.DeviceType = "Telescope";
+                    Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "FocalLength", value.ToString(m_GeminiCulture));
+                    m_FocalLength = value;
+                }
             }
         }
 
 
-        private static string m_ApertureDiameter;
+        internal string m_ApertureDiameter;
 
-        public static string ApertureDiameter
+        public string ApertureDiameter
         {
-            get { return GeminiHardware.m_ApertureDiameter; }
+            get { return m_ApertureDiameter; }
             set {
-                Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", value.ToString(GeminiHardware.m_GeminiCulture));
-                GeminiHardware.m_ApertureDiameter = value;
+                if (value != null)
+                {
+                    Profile.DeviceType = "Telescope";
+                    Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ApertureDiameter", value.ToString(m_GeminiCulture));
+                    m_ApertureDiameter = value;
+                }
             }
         }
 
-        public static double HorizonAltitude
+        public double HorizonAltitude
         {
             get
             {
@@ -368,150 +296,150 @@ namespace ASCOM.GeminiTelescope
             set
             {
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "HorizonAltitude", value.ToString(GeminiHardware.m_GeminiCulture));
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "HorizonAltitude", value.ToString(m_GeminiCulture));
             }
         }
 
-        private static string m_ComPort;
-        private static int m_BaudRate;
-        private static ASCOM.Utilities.SerialParity m_Parity;
-        private static int m_DataBits;
-        private static ASCOM.Utilities.SerialStopBits m_StopBits;
+        internal string m_ComPort;
+        internal int m_BaudRate;
+        internal ASCOM.Utilities.SerialParity m_Parity;
+        internal int m_DataBits;
+        internal ASCOM.Utilities.SerialStopBits m_StopBits;
 
-        private static string m_GpsComPort;
-        private static int m_GpsBaudRate;
-        private static bool m_GpsUpdateClock;
+        internal string m_GpsComPort;
+        internal int m_GpsBaudRate;
+        internal bool m_GpsUpdateClock;
 
-        private static string m_PassThroughComPort;
+        internal string m_PassThroughComPort;
 
-        private static bool m_ScanCOMPorts;
+        internal bool m_ScanCOMPorts;
 
-        public static bool ScanCOMPorts
+        public bool ScanCOMPorts
         {
-            get { return GeminiHardware.m_ScanCOMPorts; }
+            get { return m_ScanCOMPorts; }
             set {
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ScanCOMPorts", value.ToString(GeminiHardware.m_GeminiCulture));                
-                GeminiHardware.m_ScanCOMPorts = value; 
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ScanCOMPorts", value.ToString(m_GeminiCulture));                
+                m_ScanCOMPorts = value; 
             }
         }
 
 
-        private static bool m_EthernetPort = true;
+        internal bool m_EthernetPort = true;
 
-        public static bool EthernetPort
+        public bool EthernetPort
         {
             get { return m_EthernetPort; }
             set {
-                GeminiHardware.m_EthernetPort = value;
+                m_EthernetPort = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "EthernetPort", value.ToString());
             }
         }
 
 
-        private static string m_EthernetUser = "admin";
+        internal string m_EthernetUser = "admin";
 
-        public static string EthernetUser
+        public string EthernetUser
         {
             get { return m_EthernetUser; }
             set
             {
-                GeminiHardware.m_EthernetUser = value;
+                m_EthernetUser = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "EthernetUser", value);
             }
         }
 
 
-        private static string m_EthernetPassword = "";
+        internal string m_EthernetPassword = "";
 
-        public static string EthernetPassword
+        public string EthernetPassword
         {
             get { return m_EthernetPassword; }
             set
             {
-                GeminiHardware.m_EthernetPassword = value;
+                m_EthernetPassword = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "EthernetPassword", value);
             }
         }
 
-        private static bool m_UseDHCP = true;
+        internal bool m_UseDHCP = true;
 
-        public static bool UseDHCP
+        public bool UseDHCP
         {
-            get { return GeminiHardware.m_UseDHCP; }
+            get { return m_UseDHCP; }
             set { 
-                GeminiHardware.m_UseDHCP = value;
+                m_UseDHCP = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseDHCP", value.ToString());
             }
         }
 
-        private static string m_GeminiDHCPName = "gemini";
+        internal string m_GeminiDHCPName = "gemini";
 
-        public static string GeminiDHCPName
+        public string GeminiDHCPName
         {
-            get { return GeminiHardware.m_GeminiDHCPName; }
+            get { return m_GeminiDHCPName; }
             set { 
-                GeminiHardware.m_GeminiDHCPName = value;
+                m_GeminiDHCPName = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiDHCPName", value);
             }
         }
 
 
-        private static bool m_BypassProxy = true;
+        internal bool m_BypassProxy = true;
 
-        public static bool BypassProxy
+        public bool BypassProxy
         {
             get { return m_BypassProxy; }
             set
             {
-                GeminiHardware.m_BypassProxy = value;
+                m_BypassProxy = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "BypassProxy", value.ToString());
             }
         }
 
-        private static string m_EthernetIP = "192.168.0.111";
+        internal string m_EthernetIP = "192.168.0.111";
 
-        public static string EthernetIP
+        public string EthernetIP
         {
             get { return m_EthernetIP; }
             set
             {
-                GeminiHardware.m_EthernetIP = value;
+                m_EthernetIP = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "EthernetIP", value);
             }
         }
 
-        public static string PassThroughComPort
+        public string PassThroughComPort
         {
-            get { return GeminiHardware.m_PassThroughComPort; }
+            get { return m_PassThroughComPort; }
             set { 
-                GeminiHardware.m_PassThroughComPort = value;
+                m_PassThroughComPort = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughComPort", value);
             }
         }
 
-        private static int m_PassThroughBaudRate;
+        internal int m_PassThroughBaudRate;
 
-        public static int PassThroughBaudRate
+        public int PassThroughBaudRate
         {
-            get { return GeminiHardware.m_PassThroughBaudRate; }
+            get { return m_PassThroughBaudRate; }
             set {
-                GeminiHardware.m_PassThroughBaudRate = value;
+                m_PassThroughBaudRate = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PassThroughBaudRate", value.ToString());
             }
         }
-        private static bool m_PassThroughPortEnabled;
+        internal bool m_PassThroughPortEnabled;
 
-        public static bool PassThroughPortEnabled
+        public bool PassThroughPortEnabled
         {
             get { return m_PassThroughPortEnabled; }
             set { 
@@ -521,65 +449,73 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        private static bool m_AsyncPulseGuide = true;
+        internal bool m_AsyncPulseGuide = true;
 
-        public static bool AsyncPulseGuide
+        public bool AsyncPulseGuide
         {
-            get { return GeminiHardware.m_AsyncPulseGuide; }
+            get { return m_AsyncPulseGuide; }
             set { 
-                GeminiHardware.m_AsyncPulseGuide = value;
+                m_AsyncPulseGuide = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "AsyncPulseGuide", value.ToString());
             }
         }
 
-        private static bool m_ReportPierSide = true;
+        internal bool m_ReportPierSide = true;
 
-        public static bool ReportPierSide
+        public bool ReportPierSide
         {
-            get { return GeminiHardware.m_ReportPierSide; }
+            get { return m_ReportPierSide; }
             set
             {
-                GeminiHardware.m_ReportPierSide = value;
+                m_ReportPierSide = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ReportPierSide", value.ToString());
             }
         }
 
-        private static bool m_PrecisionPulseGuide = true;
+        internal bool m_PrecisionPulseGuide = true;
 
-        public static bool PrecisionPulseGuide
+        public bool PrecisionPulseGuide
         {
-            get { return GeminiHardware.m_PrecisionPulseGuide; }
+            get { return m_PrecisionPulseGuide; }
             set { 
-                GeminiHardware.m_PrecisionPulseGuide = value;
+                m_PrecisionPulseGuide = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "PrecisionPulseGuide", value.ToString());
             }
         }
 
 
-        private static System.Threading.AutoResetEvent m_WaitForCommand;
-        private static System.Threading.AutoResetEvent m_DataReceived;
+        internal System.Threading.AutoResetEvent m_WaitForCommand;
+        internal System.Threading.AutoResetEvent m_DataReceived;
 
-        private static System.Threading.ManualResetEvent m_AbortConnect = new System.Threading.ManualResetEvent(false);
+        internal System.Threading.ManualResetEvent m_AbortConnect = new System.Threading.ManualResetEvent(false);
 
-        private static string m_PolledVariablesString = ":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#<99:F#:h?#";
-        private static string m_ShortPolledVariablesString1 = ":GR#:GD#:GA#:GZ#:Gv#";
-        private static string m_ShortPolledVariablesString2 = ":GS#:Gm#<99:F#:h?#";
+        internal string m_PolledVariablesString = ":GR#:GD#:GA#:GZ#:Gv#:GS#:Gm#<99:F#:h?#";
+        internal string m_ShortPolledVariablesString1 = ":GR#:GD#:GA#:GZ#:Gv#";
+        internal string m_ShortPolledVariablesString2 = ":GS#:Gm#<99:F#:h?#";
 
-        public static int MAX_TIMEOUT = 10000; //max default timeout for all commands
+        public int MAX_TIMEOUT = 10000; //max default timeout for all commands
 
-        static System.Timers.Timer tmrReadTimeout = new System.Timers.Timer();
-        static System.Threading.AutoResetEvent m_SerialTimeoutExpired = new System.Threading.AutoResetEvent(false);
-        static System.Threading.AutoResetEvent m_SerialErrorOccurred = new System.Threading.AutoResetEvent(false);
+        /// <summary>
+        /// max # of commands that can be stacked in one request
+        /// </summary>
+        public virtual int MaxCommands
+        {
+            get { return 5; }
+        }
 
-        static private int m_TraceLevel = -1;
+        System.Timers.Timer tmrReadTimeout = new System.Timers.Timer();
+        System.Threading.AutoResetEvent m_SerialTimeoutExpired = new System.Threading.AutoResetEvent(false);
+        System.Threading.AutoResetEvent m_SerialErrorOccurred = new System.Threading.AutoResetEvent(false);
+
+        internal int m_TraceLevel = -1;
 
         /// <summary>
         /// Trace level, if set at or above zero, will create a new tracer object
         /// </summary>
-        static public int TraceLevel
+        public int TraceLevel
         {
             get { return m_TraceLevel; }    
             set {
@@ -593,297 +529,303 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        static private Tracer m_Trace = new Tracer();
+        internal Tracer m_Trace = new Tracer();
 
         /// <summary>
         /// Tracer object for all tracing needs
         /// </summary>
-        static public Tracer Trace
+        public Tracer Trace
         {
             get { return m_Trace; }
         }
 
 
-        private static bool m_UseJoystick = false;
+        internal bool m_UseJoystick = false;
 
         /// <summary>
         /// Does the user want to use joystick?
         /// </summary>
-        public static bool UseJoystick
+        public bool UseJoystick
         {
-            get { return GeminiHardware.m_UseJoystick; }
+            get { return m_UseJoystick; }
             set {
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseJoystick", value.ToString());
-                GeminiHardware.m_UseJoystick = value; 
+                m_UseJoystick = value; 
             }
         }
 
-        private static string m_JoystickName = null;
+        internal string m_JoystickName = null;
         /// <summary>
         /// Name of the configured joystick driver
         /// </summary>
-        public static string JoystickName
+        public string JoystickName
         {
-            get { return GeminiHardware.m_JoystickName; }
+            get { return m_JoystickName; }
             set {
-                Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickName", value.ToString());
-                GeminiHardware.m_JoystickName = value; 
+                if (value != null)
+                {
+                    Profile.DeviceType = "Telescope";
+                    Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickName", value.ToString());
+                    m_JoystickName = value;
+                }
             }
         }
 
-        private static double m_JoystickSensitivity = 0;
+        internal double m_JoystickSensitivity = 0;
 
         /// <summary>
         /// Scaling factor to apply to both joystick axis
         /// </summary>
-        public static double JoystickSensitivity
+        public double JoystickSensitivity
         {
-            get { return GeminiHardware.m_JoystickSensitivity; }
+            get { return m_JoystickSensitivity; }
             set {
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", value.ToString(GeminiHardware.m_GeminiCulture));
-                GeminiHardware.m_JoystickSensitivity = value;
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickSensitivity", value.ToString(m_GeminiCulture));
+                m_JoystickSensitivity = value;
             }
         }
 
-        private static bool m_JoystickFlipRA = false;
+        internal bool m_JoystickFlipRA = false;
         /// <summary>
         /// Flip RA position on the joystick
         /// </summary>
-        public static bool JoystickFlipRA
+        public bool JoystickFlipRA
         {
-            get { return GeminiHardware.m_JoystickFlipRA; }
+            get { return m_JoystickFlipRA; }
             set {
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickFlipRA", value.ToString());
-                GeminiHardware.m_JoystickFlipRA = value;
+                m_JoystickFlipRA = value;
             }
         }
-        private static bool m_JoystickFlipDEC = false;
+        internal bool m_JoystickFlipDEC = false;
 
         /// <summary>
         /// Flip DEC direction on the joystick
         /// </summary>
-        public static bool JoystickFlipDEC
+        public bool JoystickFlipDEC
         {
-            get { return GeminiHardware.m_JoystickFlipDEC; }
+            get { return m_JoystickFlipDEC; }
             set {
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickFlipDEC", value.ToString());
-                GeminiHardware.m_JoystickFlipDEC = value;
+                m_JoystickFlipDEC = value;
             }
         }
 
 
-        private static double m_ParkAlt;
+        internal double m_ParkAlt;
 
         /// <summary>
         /// If Alt/Az coordinates for parking selected, this is the Alt position where to park
         /// </summary>
-        public static double ParkAlt
+        public double ParkAlt
         {
-            get { return GeminiHardware.m_ParkAlt; }
+            get { return m_ParkAlt; }
             set { 
-                GeminiHardware.m_ParkAlt = value;
+                m_ParkAlt = value;
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAlt", value.ToString(GeminiHardware.m_GeminiCulture));
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAlt", value.ToString(m_GeminiCulture));
             }
         }
-        private static double m_ParkAz;
+        internal double m_ParkAz;
 
         /// <summary>
         /// If Alt/Az coordinates for parking selected, this is the Az position where to park
         /// </summary>
-        public static double ParkAz
+        public double ParkAz
         {
-            get { return GeminiHardware.m_ParkAz; }
+            get { return m_ParkAz; }
             set { 
-                GeminiHardware.m_ParkAz = value;
+                m_ParkAz = value;
                 Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAz", value.ToString(GeminiHardware.m_GeminiCulture));
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkAz", value.ToString(m_GeminiCulture));
             }
         }
 
-        private static GeminiParkMode m_ParkPosition;
+        internal GeminiParkMode m_ParkPosition;
         /// <summary>
         /// Where to park
         /// </summary>
-        public static GeminiParkMode ParkPosition
+        public GeminiParkMode ParkPosition
         {
             get { return m_ParkPosition; }
             set
             {
-                GeminiHardware.m_ParkPosition  = value;
+                m_ParkPosition  = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ParkPosition", ((int)value).ToString());
             }
 
         }
-        private static int m_JoystickAxisRA;
+        internal int m_JoystickAxisRA;
         /// <summary>
         /// Which joystick axis to assign to RA axis
         /// </summary>
-        public static int JoystickAxisRA
+        public int JoystickAxisRA
         {
-            get { return GeminiHardware.m_JoystickAxisRA; }
+            get { return m_JoystickAxisRA; }
             set {
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxisRA", value.ToString());
-                GeminiHardware.m_JoystickAxisRA = value;
+                m_JoystickAxisRA = value;
             }
         }
 
-        private static int m_JoystickAxisDEC;
+        internal int m_JoystickAxisDEC;
         /// <summary>
         /// Which joystick axis to assign to DEC axis
         /// </summary>
-        public static int JoystickAxisDEC
+        public int JoystickAxisDEC
         {
-            get { return GeminiHardware.m_JoystickAxisDEC; }
+            get { return m_JoystickAxisDEC; }
             set
             {
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickAxisDEC", value.ToString());
-                GeminiHardware.m_JoystickAxisDEC = value;
+                m_JoystickAxisDEC = value;
             }
         }
 
-        private static UserFunction[] m_JoystickButtonMap;
+        internal UserFunction[] m_JoystickButtonMap;
         /// <summary>
         /// Mapping between joystick buttons and user functions to execute
         /// </summary>
-        public static UserFunction[] JoystickButtonMap
+        public UserFunction[] JoystickButtonMap
         {
             get { return m_JoystickButtonMap; }
-            set { 
-                m_JoystickButtonMap = value;
-                GeminiHardware.Profile.DeviceType = "Telescope";
-                for (int i = 0; i < value.Length; ++i)
+            set {
+                if (value != null)
                 {
-                    int v = (int)value[i];
-                    GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Button " + (i+1).ToString(), v.ToString());
+                    m_JoystickButtonMap = value;
+                    Profile.DeviceType = "Telescope";
+                    for (int i = 0; i < value.Length; ++i)
+                    {
+                        int v = (int)value[i];
+                        Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Button " + (i + 1).ToString(), v.ToString());
+                    }
                 }
             }
         }
 
-        private static bool m_JoystickIsAnalog = true;
+        internal bool m_JoystickIsAnalog = true;
 
-        public static bool JoystickIsAnalog
+        public bool JoystickIsAnalog
         {
-            get { return GeminiHardware.m_JoystickIsAnalog; }
+            get { return m_JoystickIsAnalog; }
             set { 
-                GeminiHardware.m_JoystickIsAnalog = value;
+                m_JoystickIsAnalog = value;
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "JoystickIsAnalog", value.ToString());
                 m_JoystickFixedSpeed = 0;   //reset this to guiding speed
             }
         }
 
-        private static int m_JoystickFixedSpeed = 0; // 0 = guide, 1=center, 2 = slew
+        internal int m_JoystickFixedSpeed = 0; // 0 = guide, 1=center, 2 = slew
         /// <summary>
         /// Joystick fixed speed: 0 = guide, 1=center, 2 = slew
         /// </summary>
-        public static int JoystickFixedSpeed
+        public int JoystickFixedSpeed
         {
-            get { return GeminiHardware.m_JoystickFixedSpeed; }
-            set { GeminiHardware.m_JoystickFixedSpeed = value; }
+            get { return m_JoystickFixedSpeed; }
+            set { m_JoystickFixedSpeed = value; }
         }
 
 
-        private static bool m_UseSpeech = false;
+        internal bool m_UseSpeech = false;
         /// <summary>
         /// Use announcer or do not
         /// </summary>
-        public static bool UseSpeech
+        public bool UseSpeech
         {
-            get { return GeminiHardware.m_UseSpeech; }
+            get { return m_UseSpeech; }
             set { 
-                GeminiHardware.m_UseSpeech = value; 
-                GeminiHardware.Profile.DeviceType = "Telescope";
-                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseSpeech", value.ToString());
+                m_UseSpeech = value; 
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseSpeech", value.ToString());
             }
         }
 
 
-        private static Speech.SpeechType m_SpeechFilter = 0;
+        internal Speech.SpeechType m_SpeechFilter = 0;
 
         /// <summary>
         /// Filter what kind of announcements to announce
         /// </summary>
-        internal static Speech.SpeechType SpeechFilter
+        internal Speech.SpeechType SpeechFilter
         {
-            get { return GeminiHardware.m_SpeechFilter; }
+            get { return m_SpeechFilter; }
             set { 
                 
-                GeminiHardware.m_SpeechFilter = value;
-                GeminiHardware.Profile.DeviceType = "Telescope";
-                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechFilter", ((int)value).ToString());
+                m_SpeechFilter = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechFilter", ((int)value).ToString());
             }
         }
 
-        private static string m_SpeechVoice = "";
+        internal string m_SpeechVoice = "";
         /// <summary>
         /// Voice selection
         /// </summary>
-        public static string SpeechVoice
+        public string SpeechVoice
         {
-            get { return GeminiHardware.m_SpeechVoice; }
+            get { return m_SpeechVoice; }
             set { 
-                GeminiHardware.m_SpeechVoice = value;
-                GeminiHardware.Profile.DeviceType = "Telescope";
-                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechVoice", value.ToString());
+                m_SpeechVoice = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "SpeechVoice", value.ToString());
             }
         }
 
 
-        private static bool m_KeepMainFormOnTop = false;
+        internal bool m_KeepMainFormOnTop = false;
         /// <summary>
         /// Keep main handbox form topmost
         /// </summary>
-        public static bool KeepMainFormOnTop
+        public bool KeepMainFormOnTop
         {
-            get { return GeminiHardware.m_KeepMainFormOnTop; }
+            get { return m_KeepMainFormOnTop; }
             set
             {
-                GeminiHardware.m_KeepMainFormOnTop = value;
-                GeminiHardware.Profile.DeviceType = "Telescope";
-                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "KeepMainFormOnTop", value.ToString());
+                m_KeepMainFormOnTop = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "KeepMainFormOnTop", value.ToString());
                 Profile = null;
             }
         }
 
 
-        private static Point m_MainFormPosition = Point.Empty;
+        internal Point m_MainFormPosition = Point.Empty;
         /// <summary>
         /// Where to position the main handbox form
         /// </summary>
-        public static Point MainFormPosition
+        public Point MainFormPosition
         {
-            get { return GeminiHardware.m_MainFormPosition; }
+            get { return m_MainFormPosition; }
             set { 
-                GeminiHardware.m_MainFormPosition = value;
-                GeminiHardware.Profile.DeviceType = "Telescope";
-                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "MainFormPositionX", value.X.ToString());
-                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "MainFormPositionY", value.Y.ToString());
+                m_MainFormPosition = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "MainFormPositionX", value.X.ToString());
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "MainFormPositionY", value.Y.ToString());
             }
         }
 
 
-        private static bool m_NudgeFromSafety = false;
+        internal bool m_NudgeFromSafety = false;
 
         /// <summary>
         /// Is NudgeFromSafety feature enabled?
         /// </summary>
-        public static bool NudgeFromSafety
+        public bool NudgeFromSafety
         {
-            get { return GeminiHardware.m_NudgeFromSafety; }
+            get { return m_NudgeFromSafety; }
             set
             {
-                GeminiHardware.m_NudgeFromSafety = value;
-                GeminiHardware.Profile.DeviceType = "Telescope";
-                GeminiHardware.Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "NudgeFromSafety", value.ToString());
+                m_NudgeFromSafety = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "NudgeFromSafety", value.ToString());
             }
         }
 
@@ -905,42 +847,42 @@ namespace ASCOM.GeminiTelescope
             SlewAltAz = 3,
         }
 
-        private static GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
+        internal GeminiBootMode m_BootMode = GeminiBootMode.Prompt; 
 
-        private static SerialPort m_SerialPort; // main physical port
+        internal SerialPort m_SerialPort; // main physical port
 
-        private static PassThroughPort m_PassThroughPort = null; // a secondary port (virtual) for connecting non-ASCOM compliant Gemini applications
+        internal PassThroughPort m_PassThroughPort = null; // a secondary port (virtual) for connecting non-ASCOM compliant Gemini applications
 
-        private static bool m_Connected = false; //Keep track of the connection status of the hardware
+        internal bool m_Connected = false; //Keep track of the connection status of the hardware
 
-        private static int m_Clients;
+        internal int m_Clients;
 
-        private static DateTime m_LastUpdate;
-        private static object m_ConnectLock = new object();
+        internal DateTime m_LastUpdate;
+        internal object m_ConnectLock = new object();
 
-        private static int m_QueryInterval = SharedResources.GEMINI_POLLING_INTERVAL;     // query mount for status this often, in msecs.
+        internal int m_QueryInterval = SharedResources.GEMINI_POLLING_INTERVAL;     // query mount for status this often, in msecs.
 
-        private static int m_TotalErrors = 0;              //total number of errors encountered since m_FirstErrorTick count
-        private static int m_FirstErrorTick = 0;           //
+        internal int m_TotalErrors = 0;              //total number of errors encountered since m_FirstErrorTick count
+        internal int m_FirstErrorTick = 0;           //
 
-        private static DateTime m_LastDataTick;              // tick of when the last successful data was received from the mount
+        internal DateTime m_LastDataTick;              // tick of when the last successful data was received from the mount
 
-        private static int m_GeminiStatusByte;              // result of <99: native command, polled on an interval
-        private static bool m_SafetyNotified;               // true if safety limit notification was already sent
+        internal int m_GeminiStatusByte;              // result of <99: native command, polled on an interval
+        internal bool m_SafetyNotified;               // true if safety limit notification was already sent
 
 
-        private static frmStatus m_StatusForm = null;
+        internal frmStatus m_StatusForm = null;
 
-        //Focuser Private Data
-        private static bool m_AbsoluteFocuser=true;
-        private static int m_MaxIncrement = 0;
-        private static int m_MaxStep = 0;
-        private static int m_StepSize = 0;
-        private static bool m_ReverseDirection = false;
-        private static int m_BacklashDirection = 0;
-        private static int m_BacklashSize = 0;
-        private static int m_BrakeSize = 0;
-        private static int m_Speed = 1;
+        //Focuser internal Data
+        internal bool m_AbsoluteFocuser=true;
+        internal int m_MaxIncrement = 0;
+        internal int m_MaxStep = 0;
+        internal int m_StepSize = 0;
+        internal bool m_ReverseDirection = false;
+        internal int m_BacklashDirection = 0;
+        internal int m_BacklashSize = 0;
+        internal int m_BrakeSize = 0;
+        internal int m_Speed = 1;
 #endregion
 
 #region Public Events
@@ -950,26 +892,26 @@ namespace ASCOM.GeminiTelescope
         ///   Clients is the total number of remaining attached clients after the connect/disconnect
         ///   if Connected is false, and Clients is 0, then the driver is disconnected from the serial port/gemini
         /// </summary>
-        public static ConnectDelegate OnConnect;
+        public ConnectDelegate OnConnect;
 
         /// <summary>
         /// OnError is fired when a serious serial error occurs, such as a command timeout
         ///  checksum error, or other failure to complete a request
         /// </summary>
-        public static ErrorDelegate OnError;
+        public ErrorDelegate OnError;
 
 
         /// <summary>
         /// OnInfo is fired when a UI notification to the user is needed
         /// </summary>
-        public static ErrorDelegate OnInfo;
+        public ErrorDelegate OnInfo;
 
-        private static bool m_AllowErrorNotify = true;
+        internal bool m_AllowErrorNotify = true;
 
         /// <summary>
         /// Fired when safety limit is reached
         /// </summary>
-        public static SafetyDelegate OnSafetyLimit;
+        public SafetyDelegate OnSafetyLimit;
 
 #endregion
 
@@ -978,9 +920,13 @@ namespace ASCOM.GeminiTelescope
         ///  TelescopeHadrware constructor
         ///     create serial port
         /// </summary>
-        static GeminiHardware()
+        public GeminiHardwareBase()
         {
+            Initialize();
+        }
 
+        public void Initialize()
+        {
             m_Profile = new ASCOM.Utilities.Profile();
             m_Util = new ASCOM.Utilities.Util();
             m_Transform = new ASCOM.Astrometry.Transform.Transform();
@@ -991,11 +937,11 @@ namespace ASCOM.GeminiTelescope
 
             m_WaitForCommand = new System.Threading.AutoResetEvent(false);
 
-            tmrReadTimeout.AutoReset = false;            
+            tmrReadTimeout.AutoReset = false;
             tmrReadTimeout.Elapsed += new ElapsedEventHandler(tmrReadTimeout_Elapsed);
 
             GetProfileSettings();
-            Trace.Enter(0, "GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString(GeminiHardware.m_GeminiCulture), "Trace="+m_TraceLevel.ToString());
+            Trace.Enter(0, "GeminiHardware", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, DateTime.Now.ToString(m_GeminiCulture), "Trace=" + m_TraceLevel.ToString());
 
             m_SerialPort.DataReceived += new SerialDataReceivedEventHandler(m_SerialPort_DataReceived);
             m_DataReceived = new System.Threading.AutoResetEvent(false);
@@ -1003,7 +949,32 @@ namespace ASCOM.GeminiTelescope
             Trace.Exit(0, "GeminiHardware");
         }
 
-        static void m_SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+
+        public static T Clone<T>(T source)
+        {
+
+            // Don't serialize a null object, simply return the default for that object        
+            if (Object.ReferenceEquals(source, null)) 
+            { 
+                return default(T); 
+            } 
+            
+            IFormatter formatter = new BinaryFormatter(); 
+            Stream stream = new MemoryStream(); 
+            using (stream) { 
+                formatter.Serialize(stream, source); 
+                stream.Seek(0, SeekOrigin.Begin); 
+                return (T)formatter.Deserialize(stream); 
+            }
+        }
+
+        public  object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
+     
+        void m_SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             m_DataReceived.Set();
         }
@@ -1012,7 +983,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         ///  reloads all the variables from the profile
         /// </summary>
-        private static void GetProfileSettings() 
+        internal void GetProfileSettings() 
         {
             Trace.Enter("GetProfileSettings");
 
@@ -1366,13 +1337,13 @@ namespace ASCOM.GeminiTelescope
 
         }
 
-        private static UserFunction[] JoystickButtonMapFromProfile()
+        internal UserFunction[] JoystickButtonMapFromProfile()
         {
             UserFunction [] funcs = new UserFunction[36];
             
             for (int i = 0; i < 36; ++i)
             {
-                string value = GeminiHardware.Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Button " + (i + 1).ToString(), "");
+                string value = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Button " + (i + 1).ToString(), "");
                 int val = 0;
                 int.TryParse(value, out val);
                 funcs[i] = (UserFunction)val;
@@ -1387,7 +1358,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set Boot Mode 
         /// </summary>
-        public static GeminiBootMode BootMode
+        public GeminiBootMode BootMode
         {
             get { return m_BootMode; }
             set 
@@ -1418,20 +1389,31 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Returns Gemini version, level number digit, followed by two version digits
         /// </summary>
-        public static string Version
+        public virtual string Version
         {
             get { return m_GeminiVersion; }
 
         }
 
         /// <summary>
+        /// return integer Level number for Gemini (4, 5, etc.)
+        /// </summary>
+        public int GeminiLevel
+        {
+            get
+            {
+                return int.Parse(Version.Substring(0,1));
+            }
+        }
+
+        /// <summary>
         /// Gemini-defined UTC offset (timezone)
         /// </summary>
-        public static int UTCOffset
+        public int UTCOffset
         {
-            get { return GeminiHardware.m_UTCOffset; }
+            get { return m_UTCOffset; }
             set {
-                GeminiHardware.m_UTCOffset = value;
+                m_UTCOffset = value;
                 string result = DoCommandResult(":SG" + (value > 0 ? "+" : "") + (value).ToString("0"), MAX_TIMEOUT, false);
                 Profile.DeviceType = "Telescope";
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UTCOffset", value.ToString());
@@ -1441,7 +1423,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set Hanbox Form Setting 
         /// </summary>
-        public static bool ShowHandbox
+        public bool ShowHandbox
         {
             get { return m_ShowHandbox; }
             set
@@ -1455,7 +1437,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set Use Gemini Site 
         /// </summary>
-        public static bool UseDriverSite
+        public bool UseDriverSite
         {
             get { return m_UseDriverSite; }
             set
@@ -1468,7 +1450,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set Use Gemini Time 
         /// </summary>
-        public static bool UseDriverTime
+        public bool UseDriverTime
         {
             get { return m_UseDriverTime; }
             set
@@ -1481,22 +1463,25 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set serial comm port 
         /// </summary>
-        public static string ComPort
+        public string ComPort
         {
             get { return m_ComPort; }
             set 
             {
-                Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", value.ToString());
-                m_ComPort = value;
-                if (m_ComPort == "Ethernet") EthernetPort = true;
-                else EthernetPort = false;
+                if (value != null)
+                {
+                    Profile.DeviceType = "Telescope";
+                    Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "ComPort", value.ToString());
+                    m_ComPort = value;
+                    if (m_ComPort == "Ethernet") EthernetPort = true;
+                    else EthernetPort = false;
+                }
             }
         }
         /// <summary>
         /// Get/Set baud rate
         /// </summary>
-        public static int BaudRate
+        public int BaudRate
         {
             get { return m_BaudRate; }
             set
@@ -1509,20 +1494,23 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set serial comm port 
         /// </summary>
-        public static string GpsComPort
+        public string GpsComPort
         {
             get { return m_GpsComPort; }
             set
             {
-                Profile.DeviceType = "Telescope";
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", value.ToString());
-                m_GpsComPort = value;
+                if (value != null)
+                {
+                    Profile.DeviceType = "Telescope";
+                    Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsComPort", value.ToString());
+                    m_GpsComPort = value;
+                }
             }
         }
         /// <summary>
         /// Get/Set baud rate
         /// </summary>
-        public static int GpsBaudRate
+        public int GpsBaudRate
         {
             get { return m_GpsBaudRate; }
             set
@@ -1535,7 +1523,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set Gps Updates Clock
         /// </summary>
-        public static bool GpsUpdateClock
+        public bool GpsUpdateClock
         {
             get { return m_GpsUpdateClock; }
             set 
@@ -1548,7 +1536,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set parity
         /// </summary>
-        public static ASCOM.Utilities.SerialParity Parity
+        public ASCOM.Utilities.SerialParity Parity
         {
             get { return m_Parity; }
             set
@@ -1562,7 +1550,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set # of stop bits
         /// </summary>
-        public static ASCOM.Utilities.SerialStopBits StopBits
+        public ASCOM.Utilities.SerialStopBits StopBits
         {
             get { return m_StopBits; }
             set
@@ -1576,7 +1564,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set # of data bits
         /// </summary>
-        public static int DataBits
+        public int DataBits
         {
             get { return m_DataBits; }
             set
@@ -1590,20 +1578,20 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set Elevation
         /// </summary>
-        public static double Elevation
+        public double Elevation
         {
             get { return m_Elevation; }
             set
             {
                 Profile.DeviceType = "Telescope";
                 m_Elevation = value;
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", value.ToString(GeminiHardware.m_GeminiCulture));
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Elevation", value.ToString(m_GeminiCulture));
             }
         }
         /// <summary>
         /// Get/Set Latitude
         /// </summary>
-        public static double Latitude
+        public double Latitude
         {
             get { return m_Latitude; }
             set
@@ -1613,7 +1601,7 @@ namespace ASCOM.GeminiTelescope
                 if (value < -90 || value > 90) throw new ASCOM.InvalidValueException("Latitude", value.ToString(), "-90..90");
                 Profile.DeviceType = "Telescope";
                 m_Latitude = value;
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString(GeminiHardware.m_GeminiCulture));
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Latitude", value.ToString(m_GeminiCulture));
                 m_SouthernHemisphere = (m_Latitude < 0);
                 m_Transform.SiteLatitude = m_Latitude;
                 Trace.Exit("Latitude", value);
@@ -1623,7 +1611,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set Longitude
         /// </summary>
-        public static double Longitude
+        public double Longitude
         {
             get { return m_Longitude; }
             set
@@ -1632,7 +1620,7 @@ namespace ASCOM.GeminiTelescope
                 if (value < -180 || value > 180) throw new ASCOM.InvalidValueException("Longitude", value.ToString(), "-180..180");
                 Profile.DeviceType = "Telescope";
                 m_Longitude = value;
-                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString(GeminiHardware.m_GeminiCulture));
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "Longitude", value.ToString(m_GeminiCulture));
                 m_Transform.SiteLongitude = m_Longitude;
                 Trace.Enter("Longitude", value);
 
@@ -1644,7 +1632,7 @@ namespace ASCOM.GeminiTelescope
         ///   current Refraction setting is also updated to the mount, as that's the only way Gemini takes
         ///   these settings: together.
         /// </summary>
-        public static bool Precession
+        public bool Precession
         {
             get
             {
@@ -1676,7 +1664,7 @@ namespace ASCOM.GeminiTelescope
         ///   current precession setting is also updated to the mount, as that's the only way Gemini takes
         ///   these settings: together.
         /// </summary>
-        public static bool Refraction
+        public bool Refraction
         {
             get
             {
@@ -1698,7 +1686,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="precess"></param>
         /// <param name="refract"></param>
         /// <returns></returns>
-        public static bool SetPrecessionRefraction(bool precess, bool refract)
+        public bool SetPrecessionRefraction(bool precess, bool refract)
         {
             Trace.Enter("SetPrecessionRefraction", precess, refract);
             m_Refraction = refract;
@@ -1708,7 +1696,7 @@ namespace ASCOM.GeminiTelescope
             return true;
         }
 
-        public static bool AtSafetyLimit
+        public bool AtSafetyLimit
         {
             get
             {
@@ -1717,7 +1705,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        public static SiteInfo[] Sites
+        public SiteInfo[] Sites
         {
             get
             {
@@ -1738,7 +1726,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="siteNumber"></param>
         /// <returns></returns>
-        public static bool SetSiteNumber( int siteNumber )
+        public bool SetSiteNumber( int siteNumber )
         {
             if (siteNumber < 0 || siteNumber >= 4) return false; // only 4 supported by Gemini
             DoCommandResult(":W" + siteNumber.ToString(), MAX_TIMEOUT, false);
@@ -1754,7 +1742,7 @@ namespace ASCOM.GeminiTelescope
         /// // Get Altitude from Gemini with a 1 second timeout:
         /// double dAltitude = 0;
         /// 
-        /// string sAlt = GeminiHardware.DoCommandResult(":GA", 1000, false);
+        /// string sAlt = DoCommandResult(":GA", 1000, false);
         ///
         /// if (!string.IsNullOrEmpty(sAlt))
         ///     dAltitude = NETHelper.DMSToDegrees(sAlt);
@@ -1764,7 +1752,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="timeout">in msecs, -1 if no timeout</param>
         /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        public static string DoCommandResult(string cmd, int timeout, bool bRaw)
+        public string DoCommandResult(string cmd, int timeout, bool bRaw)
         {
             return DoCommandResult(new string[] { cmd }, timeout, bRaw);
         }
@@ -1776,12 +1764,12 @@ namespace ASCOM.GeminiTelescope
         /// <example>
         /// <code>
         /// // Move to Home Position
-        /// GeminiHardware.DoCommand(":hP", false);
+        /// DoCommand(":hP", false);
         /// </code>
         /// </example>
         /// <param name="cmd">command string to send to Gemini</param>
         /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
-        public static void DoCommand(string cmd, bool bRaw)
+        public void DoCommand(string cmd, bool bRaw)
         {
             DoCommand(new string[] { cmd }, bRaw);
         }
@@ -1791,7 +1779,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="cmd">array of commands to execute, element 0 will be executed first</param>
         /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
-        public static void DoCommand(string [] cmd, bool bRaw)
+        public void DoCommand(string [] cmd, bool bRaw)
         {
             if (!m_Connected) return;
             CommandItem[] ci = new CommandItem[cmd.Length];
@@ -1818,7 +1806,7 @@ namespace ASCOM.GeminiTelescope
         ///     public delegate void HardwareAsyncDelegate(string cmd, string result);
         /// </param>
         /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
-        public static void DoCommandAsync(string cmd, int timeout, HardwareAsyncDelegate callback, bool bRaw)
+        public void DoCommandAsync(string cmd, int timeout, HardwareAsyncDelegate callback, bool bRaw)
         {
             CommandItem ci = new CommandItem(cmd, timeout, callback, bRaw);
             System.Threading.ThreadPool.QueueUserWorkItem(DoCommandAndWaitAsync, ci);
@@ -1839,7 +1827,7 @@ namespace ASCOM.GeminiTelescope
         /// otherwise 'null'.
         /// </returns>
         /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
-        public static string DoCommandResult(string [] cmd, int timeout, bool bRaw)
+        public string DoCommandResult(string [] cmd, int timeout, bool bRaw)
         {
             if (!m_Connected) return null;
 
@@ -1884,7 +1872,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="timeout">total timeout for the whole sequence, in msec, or -1 for no timeout</param>
         /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
         /// <param name="result">out parameter, contains array of results for all the commands</param>
-        public static void DoCommandResult(string[] cmd, int timeout, bool bRaw, out string [] result)
+        public void DoCommandResult(string[] cmd, int timeout, bool bRaw, out string [] result)
         {
             result = null;
 
@@ -1933,7 +1921,7 @@ namespace ASCOM.GeminiTelescope
         ///     public delegate void HardwareAsyncDelegate(string cmd, string result);
         /// </param>
         /// <param name="bRaw">command is a raw string to be passed to the device unmodified</param>
-        public static void DoCommandAsync(string[] cmd, int timeout, HardwareAsyncDelegate callback, bool bRaw)
+        public void DoCommandAsync(string[] cmd, int timeout, HardwareAsyncDelegate callback, bool bRaw)
         {
             CommandItem[] ci = new CommandItem[cmd.Length];
 
@@ -1956,7 +1944,7 @@ namespace ASCOM.GeminiTelescope
         /// </param>
         /// <param name="duration">milliseconds</param>
         /// <param name="bAsync">wait to complete or return immediately</param>
-        public static void DoPulseCommand(string[] cmd, int duration, bool bAsync)
+        public void DoPulseCommand(string[] cmd, int duration, bool bAsync)
         {
            Trace.Enter(4, "GeminiHardware:DoPulseCommand");
 
@@ -1990,7 +1978,7 @@ namespace ASCOM.GeminiTelescope
         /// obj[0] = duration of pulse-guide command
         /// obj[1] = command to stop motion (e.g., :Qe)
         /// </param>
-        private static void StopPulseGuide(object param)
+        internal void StopPulseGuide(object param)
         {
             string cmd = (string)((object[])param)[1] ;
             
@@ -2006,7 +1994,7 @@ namespace ASCOM.GeminiTelescope
         /// executed by a worker thread for an asynchronous command call-back
         /// </summary>
         /// <param name="command_item">CommandItem type containing command to execute</param>
-        private static void DoCommandAndWaitAsync(object command_item)
+        internal void DoCommandAndWaitAsync(object command_item)
         {
             System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 
@@ -2038,7 +2026,7 @@ namespace ASCOM.GeminiTelescope
         ///   the callback will receive the last command string and the result produced by the last command
         /// </summary>
         /// <param name="command_items">CommandItems array containing commands to execute</param>
-        private static void DoCommandsAndWaitAsync(object command_items)
+        internal void DoCommandsAndWaitAsync(object command_items)
         {
             System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 
@@ -2069,10 +2057,10 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        private static DateTime m_endOfPulseGuide = DateTime.MinValue;
-        private static object pulse_lock = new object();
+        internal DateTime m_endOfPulseGuide = DateTime.MinValue;
+        internal object pulse_lock = new object();
 
-        public static double EndOfPulseGuide
+        public double EndOfPulseGuide
         {
             get
             {                
@@ -2097,7 +2085,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// True while PulseGuiding command is in progress
         /// </summary>
-        public static bool IsPulseGuiding
+        public bool IsPulseGuiding
         {
             get 
             {
@@ -2116,7 +2104,7 @@ namespace ASCOM.GeminiTelescope
         /// (don't do it during pulse-guiding to improve timing)
         /// </summary>
         
-        public static bool CanPoll
+        public bool CanPoll
         {
             get
             {
@@ -2128,7 +2116,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Number of connected clients
         /// </summary>
-        public static int Clients
+        public int Clients
         {
             get { return m_Clients; }
         }
@@ -2137,7 +2125,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Returns number of commands pending in the queue
         /// </summary>
-        public static int QueueDepth
+        public int QueueDepth
         {
             get { return m_CommandQueue.Count; }
         }
@@ -2146,7 +2134,7 @@ namespace ASCOM.GeminiTelescope
         /// Wait for completion of a goto home or park at cwd operation
         /// </summary>
         /// <param name="where">'home' or 'park' for logging and exception reporting purposes</param>
-        public static void WaitForHomeOrPark(string where)
+        public void WaitForHomeOrPark(string where)
         {
             Trace.Enter(4, "WaitForHomeOrPark", where);
 
@@ -2160,7 +2148,7 @@ namespace ASCOM.GeminiTelescope
             while (ParkState == "2") { System.Threading.Thread.Sleep(1000); };
 
             // 0 => didn't park.
-            //if (GeminiHardware.ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
+            //if (ParkState == "0") throw new DriverException("Failed to " + where, (int)SharedResources.ERROR_BASE);
             Trace.Exit(4, "WaitForHomeOrPark", where);
         }
 
@@ -2169,7 +2157,7 @@ namespace ASCOM.GeminiTelescope
         /// Wait for mount to stop moving and tracking
         /// </summary>
         /// <param name="timeout">how long to wait in seconds</param>
-        public static bool WaitForStop(int timeout)
+        public bool WaitForStop(int timeout)
         {
             Trace.Enter(4, "WaitForStop");
             int count = 0;
@@ -2183,7 +2171,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Wait for completion of asynchronous slew operation, at end wait out the slewsettle time
         /// </summary>
-        public static void WaitForSlewToEnd()
+        public void WaitForSlewToEnd()
         {
             Trace.Enter(4, "WaitForSlewToEnd");
 
@@ -2207,7 +2195,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="p">contains one or more letters representing velocities we are waiting for: N, T, G, C, S</param>
         /// <param name="tmout">how long to wait or -1 to wait indefinitely</param>
         /// <returns></returns>
-        public static bool WaitForVelocity(string p, int tmout)
+        public bool WaitForVelocity(string p, int tmout)
         {
             Trace.Enter(4, "WaitForVelocity", p, tmout);
 
@@ -2220,7 +2208,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        static private void StartStatus(object arg)
+        internal void StartStatus(object arg)
         {
             System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 
@@ -2244,9 +2232,9 @@ namespace ASCOM.GeminiTelescope
             Application.Run(m_StatusForm);
         }
 
-        private static System.Threading.Thread statusThread = null;
+        internal System.Threading.Thread statusThread = null;
 
-        public static void ShowStatus(Point pt, bool autoHide)
+        public void ShowStatus(Point pt, bool autoHide)
         {
             if (statusThread != null)
             {
@@ -2261,7 +2249,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        public static SerializableDictionary<string, CatalogObject> GetUserCatalog
+        public SerializableDictionary<string, CatalogObject> GetUserCatalog
         {
             get
             {
@@ -2289,7 +2277,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        public static System.Collections.Generic.List<CatalogObject> SetUserCatalog
+        public System.Collections.Generic.List<CatalogObject> SetUserCatalog
         {
             set
             {
@@ -2310,7 +2298,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        public static System.Collections.Generic.List<string> ObservationLog
+        public System.Collections.Generic.List<string> ObservationLog
         {
             get
             {
@@ -2340,7 +2328,7 @@ namespace ASCOM.GeminiTelescope
         /// get: true if currently in the middle of executing Connect()
         /// set: false to abort connection
         /// </summary>
-        public static bool IsConnecting
+        public bool IsConnecting
         {
             get
             {
@@ -2359,17 +2347,17 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        public static string DoMeridianFlip()
+        public string DoMeridianFlip()
         {
             m_SlewAborted.Reset();
-            GeminiHardware.Velocity = "S";
+            Velocity = "S";
             string[] res = null;
 
             // note that if Gemini executes :Mf successfully, it doesn't return a value at all, 
             // this is not as documented in the manual. So, in case of a timeout of :Mf# command
             // we'll get back the result of the '\x6' command instead, (should be 'G')
 
-            GeminiHardware.DoCommandResult(new string[] { ":Mf#", "\x6" }, 2000, true, out res);
+            DoCommandResult(new string[] { ":Mf#", "\x6" }, 2000, true, out res);
             if (res[0] == "G#")    // no result was returned for :Mf# --> means successful
                 return "0";
             else
@@ -2382,18 +2370,18 @@ namespace ASCOM.GeminiTelescope
 
 
 
-        public static void ReportAlignResult(string op)
+        public void ReportAlignResult(string op)
         {
             string a, e;
-            a = GeminiHardware.DoCommandResult("<201:", GeminiHardware.MAX_TIMEOUT, false);
-            e = GeminiHardware.DoCommandResult("<202:", GeminiHardware.MAX_TIMEOUT, false);
+            a = DoCommandResult("<201:", MAX_TIMEOUT, false);
+            e = DoCommandResult("<202:", MAX_TIMEOUT, false);
 
             int a_err, e_err;
 
             if (!int.TryParse(a, out a_err)) return;
             if (!int.TryParse(e, out e_err)) return;
-            if (GeminiHardware.OnInfo != null)
-                GeminiHardware.OnInfo(op+ " Result", string.Format("A:{0:0.0}' E:{1:0.0}'", ((double)a_err)/60.0, ((double)e_err)/60.0));
+            if (OnInfo != null)
+                OnInfo(op+ " Result", string.Format("A:{0:0.0}' E:{1:0.0}'", ((double)a_err)/60.0, ((double)e_err)/60.0));
         }
 
 #endregion
@@ -2403,7 +2391,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Establish connection with the mount, open serial port
         /// </summary>
-        private static void Connect()
+        internal void Connect()
         {
             Trace.Enter("Connect()");
             lock (m_ConnectLock)   // make sure only one connection goes through at a time
@@ -2526,7 +2514,7 @@ namespace ASCOM.GeminiTelescope
             Trace.Exit("Connect()");
         }
 
-        private static void SetGeminiAdvancedSettings()
+        internal void SetGeminiAdvancedSettings()
         {
             Trace.Enter("SetGeminiAdvancedSettings");
             GeminiProperties props = new GeminiProperties();
@@ -2537,7 +2525,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        private static void SendStartUpCommands()
+        internal void SendStartUpCommands()
         {
             Trace.Enter("SendStartUpCommands");
             // check that the precision is set to high, if not, set it:
@@ -2573,7 +2561,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        static void m_SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        void m_SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
             Trace.Error("Serial Port Error", e.EventType, e);
             m_SerialErrorOccurred.Set();    //signal that an error has occurred
@@ -2581,7 +2569,7 @@ namespace ASCOM.GeminiTelescope
 
 
 
-        public static void Transmit(string s)
+        public void Transmit(string s)
         {
             if (m_EthernetPort)
                 TransmitEthernet(s);
@@ -2600,11 +2588,11 @@ namespace ASCOM.GeminiTelescope
         /// <remarks>
         /// param name="sRes" value returned by Gemini to the ^G command /param
         ///</remarks>
-        private static bool StartGemini()
+        internal bool StartGemini()
         {
             Trace.Enter("StartGemini");
             if (OnInfo!=null) OnInfo(Resources.ConnectingToGemini+ m_SerialPort.PortName + 
-                (GeminiHardware.EthernetPort? "" : ", " + m_SerialPort.BaudRate.ToString()), Resources.Connecting);
+                (EthernetPort? "" : ", " + m_SerialPort.BaudRate.ToString()), Resources.Connecting);
             Transmit("\x6");
             System.Threading.Thread.Sleep(0);
             
@@ -2710,7 +2698,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// 
         /// <returns></returns>
-        private static bool HuntForGemini(string one_port)
+        internal bool HuntForGemini(string one_port)
         {            
             Trace.Enter("HuntForGemini", m_SerialPort.PortName, m_SerialPort.BaudRate);
             
@@ -2769,8 +2757,8 @@ namespace ASCOM.GeminiTelescope
                                 else
                                 {
                                     Trace.Info(1, "Found Gemini!", p, rates[i]);
-                                    GeminiHardware.ComPort = p;
-                                    GeminiHardware.BaudRate = rates[i];
+                                    ComPort = p;
+                                    BaudRate = rates[i];
                                     return true;
                                 }
                             }
@@ -2798,7 +2786,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Disconnect this client. If no more clients, close the port, disconnect from the mount.
         /// </summary>
-        private static void Disconnect()
+        internal void Disconnect()
         {
             Trace.Enter("Disconnect()");
 
@@ -2823,7 +2811,7 @@ namespace ASCOM.GeminiTelescope
                         m_Connected = false;
                         // no new commands will be queued after m_Connected is set to false, clear out
                         // anything remaining:
-                        m_CommandQueue.Clear();
+                        if (m_CommandQueue!=null) m_CommandQueue.Clear();
 
                         // wait for the thread to die for 5 seconds,
                         // then kill it -- we don't want to tie up the serial comm
@@ -2843,7 +2831,7 @@ namespace ASCOM.GeminiTelescope
                         //Transmit(":Q#"); // stop all slews, in case we are in the middle of one
 
                         Trace.Info(2, "Closing serial port");
-                        m_SerialPort.Close();
+                        if (m_SerialPort!=null) m_SerialPort.Close();
                         Trace.Info(2, "Serial port closed");
 
                         m_BackgroundWorker = null;
@@ -2862,36 +2850,36 @@ namespace ASCOM.GeminiTelescope
             Trace.Exit("Disconnect()");
         }
 
-        public static void CloseStatusForm()
+        public void CloseStatusForm()
         {
-            GeminiHardware.Trace.Info(4, "Before closing status form");
+            Trace.Info(4, "Before closing status form");
 
             if (m_StatusForm != null && m_StatusForm.InvokeRequired)
             {
-                GeminiHardware.Trace.Info(4, "Before BeginInvoke status form");
+                Trace.Info(4, "Before BeginInvoke status form");
                 m_StatusForm.BeginInvoke(new EventHandler(m_StatusForm.ShutDown));
 
-                GeminiHardware.Trace.Info(4, "After BeginInvoke status form");
+                Trace.Info(4, "After BeginInvoke status form");
 
                 if (statusThread != null)
                 {
                     if (!statusThread.Join(2000))
                     {
-                        GeminiHardware.Trace.Info(4, "Failed to stop thread: status form");
+                        Trace.Info(4, "Failed to stop thread: status form");
 //                        statusThread.Abort();
                     }
                     statusThread = null;
 
                 }
                 m_StatusForm = null;
-                GeminiHardware.Trace.Info(4, "After closing status form");
+                Trace.Info(4, "After closing status form");
             }
         }
 
         /// <summary>
         /// Process queued up commands in the sequence queued.
         /// </summary>
-        private static void BackgroundWorker_DoWork()
+        internal void BackgroundWorker_DoWork()
         {
 
             System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
@@ -2910,7 +2898,7 @@ namespace ASCOM.GeminiTelescope
                         Trace.Info(4, "Command queue depth", m_CommandQueue.Count);
                         // gemini doesn't like too many long commands (buffer size problem?)
                         // remove up to x commands at a time
-                        int cnt = Math.Min(5, m_CommandQueue.Count);
+                        int cnt = Math.Min(MaxCommands, m_CommandQueue.Count);
 
                         commands = new object[cnt]; // m_CommandQueue.ToArray();
                         for (int i = 0; i < cnt; ++i) commands[i] = m_CommandQueue.Dequeue();
@@ -3022,7 +3010,7 @@ namespace ASCOM.GeminiTelescope
 
         }
 
-        private static void UpdateSiteInfo()
+        internal void UpdateSiteInfo()
         {
             string longitude = DoCommandResult(":Gg", MAX_TIMEOUT, false);
             string latitude = DoCommandResult(":Gt", MAX_TIMEOUT, false);
@@ -3059,7 +3047,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// update all variable sthat are polled on an interval
         /// </summary>
-        private static void UpdateInitialVariables()
+        internal void UpdateInitialVariables()
         {
             CommandItem command;
 
@@ -3084,7 +3072,11 @@ namespace ASCOM.GeminiTelescope
                         if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, SharedResources.MSG_GEMINI_VERSION);
                         throw new DriverException(SharedResources.MSG_GEMINI_VERSION, (int)SharedResources.SCODE_GEMINI_VERSION);
                     }
+
                     m_GeminiVersion = ver;
+
+                    // add and remove commands as needed for Level 5
+                    if (GeminiLevel > 4) GeminiCommands.GeminiCommandsL5();
                 }
             }
 
@@ -3117,7 +3109,13 @@ namespace ASCOM.GeminiTelescope
             }
             try
             {
-                if (UTC_Offset != null && !UseDriverSite) int.TryParse(UTC_Offset, out m_UTCOffset);
+                if (UTC_Offset != null && !UseDriverSite)
+                    if (UTC_Offset.Contains(":"))
+                    { 
+                      
+                    }
+
+                    int.TryParse(UTC_Offset, out m_UTCOffset);
             }
             catch (Exception ex)
             {
@@ -3138,9 +3136,9 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        static private int m_PollUpdateCount = 0;    // keep track of number of updates
+        internal int m_PollUpdateCount = 0;    // keep track of number of updates
 
-        private static void UpdatePolledVariables(bool bUpdateAll)
+        internal void UpdatePolledVariables(bool bUpdateAll)
         {
             Trace.Enter("UpdatePolledVariables", bUpdateAll);
             _UpdatePolledVariables();
@@ -3156,7 +3154,7 @@ namespace ASCOM.GeminiTelescope
         ///  reduce serial port traffic and load on Gemini and PC
         /// </summary>
         /// 
-        private static void _UpdatePolledVariables()
+        internal virtual void _UpdatePolledVariables()
         {
             if (!CanPoll) return; //don't tie up the serial port while pulse guiding -- timing is critical!
 
@@ -3365,7 +3363,7 @@ namespace ASCOM.GeminiTelescope
         ///  commands and their results are synchronized after 
         ///  this
         /// </summary>
-        public static void Resync()
+        public void Resync()
         {
             if (!m_Connected || m_BackgroundWorker== null || !m_BackgroundWorker.IsAlive) return;
 
@@ -3433,7 +3431,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="command">actual command sent to Gemini</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        private static string GetCommandResult(CommandItem command)
+        internal string GetCommandResult(CommandItem command)
         {
             return GetCommandResult(command, true);
         }
@@ -3444,7 +3442,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="full_cmd">full command, possibly including parameters</param>
         /// <returns>object describing return value for this Gemini command, or null if not found</returns>
-        private static GeminiCommand FindGeminiCommand(string full_cmd)
+        internal GeminiCommand FindGeminiCommand(string full_cmd)
         {
 
             bool found = GeminiCommands.Commands.ContainsKey(full_cmd);
@@ -3484,7 +3482,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get/Set serial port connection state
         /// </summary>
-        public static bool Connected
+        public bool Connected
         {
             get
             { 
@@ -3509,7 +3507,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get SouthernHemisphere state
         /// </summary>
-       public static bool SouthernHemisphere
+       public bool SouthernHemisphere
        { get { return m_SouthernHemisphere; } }
 
 
@@ -3517,14 +3515,14 @@ namespace ASCOM.GeminiTelescope
         /// Get current RightAscention propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
-        public static double RightAscension
+        public double RightAscension
        { get { return m_RightAscension; } }
 
         /// <summary>
         /// Get current Declination propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
-        public static double Declination
+        public double Declination
         { get { return m_Declination; } }
 
 
@@ -3532,28 +3530,28 @@ namespace ASCOM.GeminiTelescope
         /// Get current Altitude propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
-        public static double Altitude
+        public double Altitude
         { get { return m_Altitude; } }
 
         /// <summary>
         /// Get current Azimuth propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
-        public static double Azimuth
+        public double Azimuth
         { get { return m_Azimuth; } }
 
         /// <summary>
         /// Get current AtHome propery
         /// returns whether the telescope is at the home position
         /// </summary>
-        public static bool AtHome
+        public bool AtHome
         { get { return m_AtHome; } }
 
         /// <summary>
         /// Get current AtPark propery
         /// returns whether the telescope is parked
         /// </summary>
-        public static bool AtPark
+        public bool AtPark
         { get { return m_AtPark; } }
 
 
@@ -3563,7 +3561,7 @@ namespace ASCOM.GeminiTelescope
         /// if background worker is waiting for a command result, it will be discarded
         /// the background command queue is suspended while this command is issued
         /// </summary>        
-        public static void AbortSlew()
+        public void AbortSlew()
         {
             Trace.Enter(4, "GeminiHardware:AbortSlew");
             lock (m_CommandQueue)
@@ -3579,7 +3577,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="mode"></param>
         /// <returns></returns>
-        public static void DoPark(object mode)
+        public void DoPark(object mode)
         {           
             m_Trace.Enter("DoPark", mode);
 
@@ -3589,7 +3587,7 @@ namespace ASCOM.GeminiTelescope
 
             if (((GeminiParkMode)mode) != GeminiParkMode.NoSlew)
             {
-                if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+                if (NudgeFromSafety && AtSafetyLimit)
                     DoNudgeFromSafety();
             }
 
@@ -3601,10 +3599,10 @@ namespace ASCOM.GeminiTelescope
                     wait = false;
                     break;  // already there
                 case GeminiParkMode.SlewCWD:
-                    GeminiHardware.DoCommandResult(":hC", GeminiHardware.MAX_TIMEOUT, false);
+                    DoCommandResult(":hC", MAX_TIMEOUT, false);
                     break;
                 case GeminiParkMode.SlewHome:
-                    GeminiHardware.DoCommandResult(":hP", GeminiHardware.MAX_TIMEOUT, false);
+                    DoCommandResult(":hP", MAX_TIMEOUT, false);
                     break;
                 case GeminiParkMode.SlewAltAz:
                     m_TargetAltitude = ParkAlt;
@@ -3646,7 +3644,7 @@ namespace ASCOM.GeminiTelescope
         /// Perform park operation on a worker thread
         /// </summary>
         /// <returns></returns>
-        public static bool DoParkAsync(GeminiParkMode mode)
+        public bool DoParkAsync(GeminiParkMode mode)
         {
             if (!Connected) return false;
             System.Threading.ThreadPool.QueueUserWorkItem(DoPark, mode );
@@ -3658,7 +3656,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get Set current TargetRightAscention propery
         /// </summary>
-        public static double TargetRightAscension
+        public double TargetRightAscension
         { 
             get { return m_TargetRightAscension; }
             set { 
@@ -3670,7 +3668,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get Set current TargetDeclination propery
         /// </summary>
-        public static double TargetDeclination
+        public double TargetDeclination
         { 
             get { return m_TargetDeclination; }
             set { m_TargetDeclination = value; }
@@ -3679,7 +3677,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get Set current TargetAltitude propery
         /// </summary>
-        public static double TargetAltitude
+        public double TargetAltitude
         {
             get { return m_TargetAltitude; }
             set {
@@ -3691,7 +3689,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get Set current TargetAzimuth propery
         /// </summary>
-        public static double TargetAzimuth
+        public double TargetAzimuth
         {
             get { return m_TargetAzimuth; }
             set { m_TargetAzimuth = value; }
@@ -3701,22 +3699,22 @@ namespace ASCOM.GeminiTelescope
         /// Get current SiderealTime propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
-        public static double SiderealTime
+        public double SiderealTime
         { get { return m_SiderealTime; } }
 
         /// <summary>
         /// Get/Set current UTC propery
         /// </summary>
-        public static DateTime UTCDate
+        public DateTime UTCDate
         { 
             get 
             {
                 try
                 {
                     DateTime geminiDateTime = DateTime.Now ;
-                    string l_Time = GeminiHardware.DoCommandResult(":GL", GeminiHardware.MAX_TIMEOUT, false);
-                    string l_Date = GeminiHardware.DoCommandResult(":GC", GeminiHardware.MAX_TIMEOUT, false);
-                    double l_TZOffset = double.Parse(GeminiHardware.DoCommandResult(":GG", GeminiHardware.MAX_TIMEOUT, false));
+                    string l_Time = DoCommandResult(":GL", MAX_TIMEOUT, false);
+                    string l_Date = DoCommandResult(":GC", MAX_TIMEOUT, false);
+                    double l_TZOffset = double.Parse(DoCommandResult(":GG", MAX_TIMEOUT, false));
                     geminiDateTime = DateTime.ParseExact(l_Date + " " + l_Time, "MM/dd/yy HH:mm:ss", new System.Globalization.DateTimeFormatInfo()); // Parse to a local datetime using the given format
                     geminiDateTime = geminiDateTime.AddHours(l_TZOffset); // Add this to the local time to get a UTC date time
                     return geminiDateTime;
@@ -3746,7 +3744,7 @@ namespace ASCOM.GeminiTelescope
         /// SetLatitude Method
         /// Stores the Latitude in the Gemini Computer
         /// </summary>
-        public static void SetLatitude(double Latitude)
+        public void SetLatitude(double Latitude)
         {         
             m_Latitude = Latitude;
             string latitudedddmm = m_Util.DegreesToDM(Latitude, "*", "");
@@ -3759,7 +3757,7 @@ namespace ASCOM.GeminiTelescope
         /// SetLatitude Method
         /// Stores the Latitude in the Gemini Computer
         /// </summary>
-        public static void SetLongitude(double Longitude)
+        public void SetLongitude(double Longitude)
         {
             m_Longitude = Longitude;
             string longitudedddmm = m_Util.DegreesToDM(-Longitude, "*", "");  // Gemini has the reverse notion of longitude sign: + for West, - for East
@@ -3772,14 +3770,14 @@ namespace ASCOM.GeminiTelescope
         /// Get current SiderealTime propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
-        public static string Velocity
+        public string Velocity
         {
             get { return m_Velocity; }
             set { m_Velocity = value; }
         }
 
 
-        public static bool Slewing
+        public bool Slewing
         {
             get
             {
@@ -3799,21 +3797,21 @@ namespace ASCOM.GeminiTelescope
         /// Get current Status of Gemini Park
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
-        public static string ParkState
+        public string ParkState
         { get { return m_ParkState; } }
 
         /// <summary>
         /// Get current SideOfPier propery
         /// retrieved from the latest polled value from the mount, no actual command is executed
         /// </summary>
-        public static string SideOfPier
+        public string SideOfPier
         { get { return m_SideOfPier; } }
 
         /// <summary>
         /// Get current Tracking propery
         /// returns whether the telescope is tracking
         /// </summary>
-        public static bool Tracking
+        public bool Tracking
         { 
             get { return m_Tracking; }
         }
@@ -3821,13 +3819,13 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Syncs the mount using Ra and Dec
         /// </summary>
-        public static void SyncEquatorial()
+        public void SyncEquatorial()
         {
             SyncToEquatorialCoords(m_TargetRightAscension, m_TargetDeclination);
         }
 
 
-        private static string GetTargetName()
+        internal string GetTargetName()
         {
             return (TargetName ?? "PC Object");
         }
@@ -3835,7 +3833,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Syncs the mount using Ra and Dec coordinates passed in
         /// </summary>
-        public static void SyncToEquatorialCoords(double ra, double dec)
+        public void SyncToEquatorialCoords(double ra, double dec)
         {
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), 
                              ":ON" + GetTargetName(),
@@ -3866,7 +3864,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Syncs the mount using Ra and Dec
         /// </summary>
-        public static void AlignEquatorial()
+        public void AlignEquatorial()
         {
             AlignToEquatorialCoords(m_TargetRightAscension, m_TargetDeclination);
         }
@@ -3875,7 +3873,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Syncs the mount using Ra and Dec coordinates passed in
         /// </summary>
-        public static void AlignToEquatorialCoords(double ra, double dec)
+        public void AlignToEquatorialCoords(double ra, double dec)
         {
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), 
                              ":ON" + GetTargetName(),
@@ -3907,13 +3905,13 @@ namespace ASCOM.GeminiTelescope
         /// Distance from western safety limit, in clusters of 256 encoder ticks
         /// </summary>
         /// <returns> null if operation failed, else # of encoder clusters, + means before limit, - means after limit </returns>
-        public static object ClustersFromSafetyLimit()
+        public object ClustersFromSafetyLimit()
         {
-            if (GeminiHardware.QueueDepth > 1) return null;  // Don't queue up if queue is large
+            if (QueueDepth > 1) return null;  // Don't queue up if queue is large
 
-            string safety = GeminiHardware.DoCommandResult("<230:", GeminiHardware.MAX_TIMEOUT, false);
-            string position = GeminiHardware.DoCommandResult("<235:", GeminiHardware.MAX_TIMEOUT, false);
-            string size = GeminiHardware.DoCommandResult("<237:", GeminiHardware.MAX_TIMEOUT, false);
+            string safety = DoCommandResult("<230:", MAX_TIMEOUT, false);
+            string position = DoCommandResult("<235:", MAX_TIMEOUT, false);
+            string size = DoCommandResult("<237:", MAX_TIMEOUT, false);
             if (safety == null || position == null || size == null) return null; //???
 
             string[] sp = safety.Split(new char[] { ';' });
@@ -3953,7 +3951,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public static string TimeToLimitL4(string cmd, int timeout)
+        public string TimeToLimitL4(string cmd, int timeout)
         {
             object clusters = ClustersFromSafetyLimit();
             if (clusters == null) throw new TimeoutException("Time to limit L4");
@@ -3973,25 +3971,25 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        static void DoNudgeFromSafety()
+        void DoNudgeFromSafety()
         {
             if (AtSafetyLimit)
             {
                 string[] cmds = { ":RS", ":Me"};                
-                if (GeminiHardware.SideOfPier == "E") cmds[1] = ":Mw";
+                if (SideOfPier == "E") cmds[1] = ":Mw";
 
-                GeminiHardware.DoCommand(cmds, false);
+                DoCommand(cmds, false);
                 System.Threading.Thread.Sleep(1000);    // move for 1 second at slew speed 
-                GeminiHardware.DoCommandResult(":Q", GeminiHardware.MAX_TIMEOUT, false);
+                DoCommandResult(":Q", MAX_TIMEOUT, false);
 
-                GeminiHardware.WaitForVelocity("TN", 2000); // shouldn't too long to stop, right?
+                WaitForVelocity("TN", 2000); // shouldn't too long to stop, right?
             }
         }
 
         /// <summary>
         /// Slews the mount using Ra and Dec
         /// </summary>
-        public static void SlewEquatorial()
+        public void SlewEquatorial()
         {
 
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), 
@@ -4002,7 +4000,7 @@ namespace ASCOM.GeminiTelescope
 
             m_SlewAborted.Reset();
 
-            if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+            if (NudgeFromSafety && AtSafetyLimit)
                 DoNudgeFromSafety();
 
             string [] result= null;
@@ -4026,7 +4024,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Slews the mount using Ra and Dec
         /// </summary>
-        public static void SlewEquatorialAsync()
+        public void SlewEquatorialAsync()
         {
             string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), 
                              ":ON" + GetTargetName(),
@@ -4036,7 +4034,7 @@ namespace ASCOM.GeminiTelescope
 
             m_SlewAborted.Reset();
 
-            if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+            if (NudgeFromSafety && AtSafetyLimit)
                 DoNudgeFromSafety();
 
             string[] result = null;
@@ -4060,7 +4058,7 @@ namespace ASCOM.GeminiTelescope
         }
 
 
-        public static void SyncHorizonCoordinates(double azimuth, double altitude)
+        public void SyncHorizonCoordinates(double azimuth, double altitude)
         {
             string[] cmd = { ":Sz" + m_Util.DegreesToDMS(azimuth, ":", ":", ""), 
                              ":ON" + GetTargetName(),
@@ -4095,7 +4093,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Syncs the mount using Alt and Az
         /// </summary>
-        public static void SyncHorizon()
+        public void SyncHorizon()
         {
             SyncHorizonCoordinates(TargetAzimuth, TargetAltitude);
         }
@@ -4103,7 +4101,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Slews the mount using Alt and Az
         /// </summary>
-        public static void SlewHorizon()
+        public void SlewHorizon()
         {
             string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), 
                              ":ON" + GetTargetName(),
@@ -4113,7 +4111,7 @@ namespace ASCOM.GeminiTelescope
 
             m_SlewAborted.Reset();
 
-            if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+            if (NudgeFromSafety && AtSafetyLimit)
                 DoNudgeFromSafety();
 
             string[] result = null;
@@ -4133,7 +4131,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Slews the mount using Alt and Az
         /// </summary>
-        public static void SlewHorizonAsync()
+        public void SlewHorizonAsync()
         {
             string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), 
                              ":ON" + GetTargetName(),
@@ -4143,7 +4141,7 @@ namespace ASCOM.GeminiTelescope
 
             m_SlewAborted.Reset();
 
-            if (GeminiHardware.NudgeFromSafety && GeminiHardware.AtSafetyLimit)
+            if (NudgeFromSafety && AtSafetyLimit)
                 DoNudgeFromSafety();
 
 
@@ -4171,7 +4169,7 @@ namespace ASCOM.GeminiTelescope
         ///     16: PEC training will start soon,
         ///   0xff: failed to get status
         /// </summary>
-        public static byte PECStatus
+        public byte PECStatus
         {
             get
             {
@@ -4186,18 +4184,72 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+
+        /// <summary>
+        /// Return mechanical declination as defined in SideOfPier property description:
+        /// Both mount axes can in principle move over a range of 360 deg. This is distinct from sky HA/Dec, where Dec is limited to a 180 deg range (+90 to -90). 
+        /// Apart from practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis is moved 180 deg and 
+        /// the Dec axis is moved through the pole a distance twice the sky codeclination (90 - sky declination). 
+        /// 
+        /// Mechanical zero HA/Dec is one of the two ways of pointing at the intersection of the celestial equator and the local meridian. 
+        /// Choose one, and once you're there, consider the two mechanical encoders zeroed. 
+        /// The two states are, then, 
+        ///     (a) "normal", where the mechanical Dec is in the range ± 90 deg, and 
+        ///     (b) "beyond the pole", where the mechanical Dec is outside that range. 
+        ///
+        /// For Gemini, we chose mechanical zero to be when OTA is on the West side of the mount pointing at the meridian/equator intersection.
+        /// </summary>
+        public double MechanicalDeclination
+        {
+            get
+            {
+                string position = DoCommandResult("<235:", MAX_TIMEOUT, false);
+                string size = DoCommandResult("<237:", MAX_TIMEOUT, false);
+                if (position == null || size == null) throw new TimeoutException("Mechanical Declination"); //???
+
+                string[] sp = null;
+
+                sp = position.Split(new char[] { ';' });
+                if (sp == null || sp.Length != 2) throw new InvalidDataException("Mechanical Declination:position='" +  position + "'"); //???
+
+                int ra_clusters = 0;
+                int dec_clusters = 0;
+                // current RA position in clusters of 256 motor encoder ticks
+                if (!int.TryParse(sp[0], out ra_clusters)) throw new InvalidDataException("Mechanical Declination:position='" + position + "'"); //???
+                if (!int.TryParse(sp[1], out dec_clusters)) throw new InvalidDataException("Mechanical Declination:position='" + position + "'"); //???
+                
+                sp = size.Split(new char[] { ';' });
+                if (sp == null || sp.Length != 2) throw new InvalidDataException("Mechanical Declination:size='" + size + "'"); //???
+
+                int ra_size_clusters = 0;
+                int dec_size_clusters = 0;
+                // size of 1/2 a cirlce (180 degrees) in RA in clusters of 256 motor encoder ticks
+                if (!int.TryParse(sp[0], out ra_size_clusters)) throw new InvalidDataException("Mechanical Declination:size='" + size + "'"); //???
+                if (!int.TryParse(sp[1], out dec_size_clusters)) throw new InvalidDataException("Mechanical Declination:size='" + size + "'"); //???
+
+                double dec_zero = dec_size_clusters + dec_size_clusters / 2;
+
+                double distance = dec_zero - dec_clusters;
+
+                double distance_deg = distance / (dec_size_clusters) * 180; //mechanical declination in degrees from -90 to 90
+                return distance_deg;
+
+            }
+        }
+
+
         #endregion
 
         #region Focuser Implementation
 
-        public static bool AbsoluteFocuser
+        public bool AbsoluteFocuser
         {
             get { return m_AbsoluteFocuser; }
             set
             {
                 m_AbsoluteFocuser = value;
                 Profile.DeviceType = "Focuser";
-                Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "AbsoluteFocuser", value.ToString(GeminiHardware.m_GeminiCulture));
+                Profile.WriteValue(SharedResources.FOCUSER_PROGRAM_ID, "AbsoluteFocuser", value.ToString(m_GeminiCulture));
             }
         }
 
@@ -4205,7 +4257,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Focuser Reverse Directions
         /// </summary>
-        public static bool ReverseDirection
+        public bool ReverseDirection
         { 
             get { return m_ReverseDirection; }
             set
@@ -4219,7 +4271,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Focuser Step Size
         /// </summary>
-        public static int StepSize
+        public int StepSize
         { 
             get { return m_StepSize; }
             set
@@ -4233,7 +4285,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Focuser Brake Size
         /// </summary>
-        public static int BrakeSize
+        public int BrakeSize
         { 
             get { return m_BrakeSize; }
             set
@@ -4247,7 +4299,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Focuser Speed
         /// </summary>
-        public static int Speed
+        public int Speed
         { 
             get { return m_Speed; }
             set
@@ -4261,7 +4313,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Focuser Maximum Increment
         /// </summary>
-        public static int MaxIncrement
+        public int MaxIncrement
         { 
             get { return m_MaxIncrement; }
             set
@@ -4276,7 +4328,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Focuser Maximum Step Size
         /// </summary>
-        public static int MaxStep
+        public int MaxStep
         { 
             get { return m_MaxStep; }
             set
@@ -4291,7 +4343,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Focuser Backlash Direction
         /// </summary>
-        public static int BacklashDirection
+        public int BacklashDirection
         { 
             get { return m_BacklashDirection; }
             set
@@ -4305,7 +4357,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Focuser Backlash Size
         /// </summary>
-        public static int BacklashSize
+        public int BacklashSize
         { 
             get { return m_BacklashSize; }
             set
@@ -4321,7 +4373,7 @@ namespace ASCOM.GeminiTelescope
         /// <summary>
         /// Get the time the RA/DEC values were last updated from the mount
         /// </summary>
-        public static DateTime LastUpdate
+        public DateTime LastUpdate
         { get { return m_LastUpdate; } }
 
         
@@ -4332,7 +4384,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="p">standard command to complete, not including '#' at the end</param>
         /// <returns>completed command to send to the mount</returns>
-        private static string CompleteStandardCommand(string p)
+        internal string CompleteStandardCommand(string p)
         {
             // resolve some common mistakes in specifying Gemini commands:
             if (p[0]!=':') p = ":"+p;
@@ -4345,7 +4397,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="p">command to complete</param>
         /// <returns>completed command to send to the mount</returns>
-        private static string CompleteNativeCommand(string p)
+        internal string CompleteNativeCommand(string p)
         {
             // resolve some common mistakes in specifying Gemini commands:
             if (!p.Contains(":")) p = p + ":";  // no argument and not ':' terminated??
@@ -4357,7 +4409,7 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="p">command to compute checksum for</param>
         /// <returns>Gemini checksum character</returns>
-        private static char ComputeChecksum(string p)
+        internal char ComputeChecksum(string p)
         {
             byte chksum = 0;
 
@@ -4372,7 +4424,7 @@ namespace ASCOM.GeminiTelescope
         /// Add command item 'ci' to the queue for execution
         /// </summary>
         /// <param name="ci">actual command to queue</param>
-        private static bool QueueCommand(CommandItem ci)
+        internal bool QueueCommand(CommandItem ci)
         {
 #if DEBUG
             System.Diagnostics.Trace.WriteLine("Queue command..."+ci.m_Command);
@@ -4390,7 +4442,7 @@ namespace ASCOM.GeminiTelescope
         /// Add all the command items in 'ci' to the queue for execution
         /// </summary>
         /// <param name="ci">array of commands to be executed in sequence</param>
-        private static bool QueueCommands(CommandItem[] ci)
+        internal bool QueueCommands(CommandItem[] ci)
         {
 #if DEBUG
             System.Diagnostics.Trace.Write("Queue commands...");

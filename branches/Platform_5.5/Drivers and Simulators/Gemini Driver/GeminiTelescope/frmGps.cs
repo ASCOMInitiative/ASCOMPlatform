@@ -116,8 +116,8 @@ namespace ASCOM.GeminiTelescope
 
             try
             {
-                labelLatitudeData.Text = GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Latitude));
-                labelLongitudeData.Text = GeminiHardware.m_Util.DegreesToDMS(GeminiHardware.m_Util.DMSToDegrees(m_Longitude));
+                labelLatitudeData.Text = GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.m_Util.DMSToDegrees(m_Latitude));
+                labelLongitudeData.Text = GeminiHardware.Instance.m_Util.DegreesToDMS(GeminiHardware.Instance.m_Util.DMSToDegrees(m_Longitude));
             }
             catch { }
             
@@ -186,7 +186,7 @@ namespace ASCOM.GeminiTelescope
                 double lat = 0;
                 try
                 {
-                    lat = GeminiHardware.m_Util.DMSToDegrees(m_Latitude);
+                    lat = GeminiHardware.Instance.m_Util.DMSToDegrees(m_Latitude);
                 }
                 catch { }
                 return lat;
@@ -199,7 +199,7 @@ namespace ASCOM.GeminiTelescope
                 double log = 0;
                 try
                 {
-                    log = GeminiHardware.m_Util.DMSToDegrees(m_Longitude);
+                    log = GeminiHardware.Instance.m_Util.DMSToDegrees(m_Longitude);
                 }
                 catch { }
                 return log;
