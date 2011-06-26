@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Timers;
 using System.IO.Ports;
@@ -341,11 +342,36 @@ namespace ASCOM.GeminiTelescope
             }
 
             Trace.Info(0, "Ethernet received:", command.m_Command, result);
+            
+            result = DeEscape(result);
+
             Trace.Exit(4, "GetCommandResultEthernet", command.m_Command, result);
             return result;
         }
 
+        /// <summary>
+        /// Translates G2 escaped Unicode characters into real characters
+        /// </summary>
+        /// <param name="EscapedString">The string contraining one or more escaped characters</param>
+        /// <returns>The supplied string with escaped charcters converted to real characters.</returns>
+        /// <remarks>G2 supplies extended Unicode characters in the form &^XXX; where X is a decimal number of arbitary length as required. This routine 
+        /// uses a regular expression to remove  the encoded character string, extract the decimal part, convert this to a character and subsititute this
+        /// for the original encoded character string.</remarks>
+        string DeEscape(string EscapedString)
+        {
+            string DeEscapedString = EscapedString;
+            try
+            {
+                Regex regex = new Regex(@"\&\^([0-9]+)\;", RegexOptions.IgnoreCase);
+                DeEscapedString = regex.Replace(EscapedString, match => ((char)int.Parse(match.Groups[1].Value, System.Globalization.NumberStyles.Number)).ToString());
+            }
+            catch (Exception ex)
+            {
+                Trace.Info(0, "DeEscape Exception: ", ex.ToString());
+            }
 
+            return DeEscapedString;
+        }
 
         /// <summary>
         /// Wait for a proper response from Gemini for a given command. Command has already been sent.
