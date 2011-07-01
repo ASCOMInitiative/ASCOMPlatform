@@ -1,0 +1,92 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
+	<title>Chooser.Choose() Method</title>
+
+	<style type="text/css">
+		@import url(dc3_hh.css);
+	</style>
+</head>
+<body>
+
+<h1><a name="DriverHelperChooserMETHChoose"></a>Chooser.Choose() Method</h1>
+
+<p>
+<!-- See Also -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:See Also">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperChooserMETHChooseC">
+</object>&nbsp;&nbsp;&nbsp;
+<!-- Example
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink,MENU">
+<param name="Text" value="Text:Example">
+<param name="Flags" value="1,,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperChooserMETHChooseX">
+</object>&nbsp;&nbsp;&nbsp; -->
+<!-- parent class -->
+<object type="application/x-oleobject"
+	classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<param name="Command" value="ALink">
+<param name="Text" value="Text:Chooser object">
+<param name="Flags" value=",,1">
+<param name="Item1" value="">
+<param name="Item2" value="DriverHelperCLASSChooserO">
+</object>
+</p>
+
+<p class=desc>
+Select ASCOM Telescope Driver to use, return Driver ID of chosen driver</p>
+
+<h2>Syntax</h2>
+
+<p class=indent><code>
+<b>Chooser.Choose(</b><i>[CurrentDriverID]</i><b>)</b></code></p>
+
+<p>
+The method syntax has these parts:</p>
+
+<div class=indent>
+<table border=1 cellpadding=3 cellspacing=0>
+ <tr>
+  <th>Part</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td><i>CurrentDriverID</i>&nbsp;(String)</td>
+  <td>The caller's currently selected DriverID (optional, default=nothing)</td>
+ </tr>
+
+ <tr>
+  <td>Return&nbsp;(String)</td>
+  <td>The DriverID of the chosen driver, or "" (empty string) if nothing chosen or chooser Cancel button was clicked</td>
+ </tr>
+</table></div><br>
+
+<h2>Remarks</h2>
+
+If you supply a CurrentDriverID, the corresponding driver will be pre-selected in the Chooser's list when the choosec window is first opened. The parameter is optional, and if omitted or passed "", no driver will be pre-selected in the chooser window.
+
+
+
+<hr color="silver" size=2>
+<div class=copyright>Copyright &copy; 2001-2007, The ASCOM Initiative</div>
+
+
+
+<object type="application/x-oleobject" 
+	classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<param name="ALink Name" value="DriverHelperCLASSChooserM">
+</object>
+
+</body>
+</html>
+
