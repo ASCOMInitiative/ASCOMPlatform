@@ -105,8 +105,8 @@ namespace ASCOM.GeminiTelescope
 
                 if (m_CurrentUpdateState != m_PreviousUpdateState) ProcessUpdates();
 
-                base._UpdatePolledVariables();
             }
+            base._UpdatePolledVariables();
         }
 
         /// <summary>
