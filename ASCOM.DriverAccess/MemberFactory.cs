@@ -142,6 +142,13 @@ namespace ASCOM.DriverAccess
                                                     CultureInfo.InvariantCulture);
                             TL.LogMessageCrLf("Dispose COM", "Successfully called its Dispose method");
                         }
+                        catch (COMException ex)
+                        {
+                            if (ex.ErrorCode == int.Parse("80020006", NumberStyles.HexNumber, CultureInfo.InvariantCulture))                            
+                            {
+                                TL.LogMessageCrLf("Dispose COM", "Driver does not have a Dispose method");
+                            }
+                        }
                         catch (Exception ex)
                         {
                             TL.LogMessageCrLf("Dispose COM", "Exception " + ex.ToString());
