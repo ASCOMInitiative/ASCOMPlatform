@@ -38,7 +38,7 @@ namespace ASCOM.GeminiTelescope
 
             InitializeComponent();
 
-            if (GeminiHardware.Instance.GeminiLevel >= 5)
+            if (GeminiHardware.Instance.Connected && GeminiHardware.Instance.GeminiLevel >= 5)
             {
                 // divisor values are up to a maximum 4 byte integer size starting in L5
                 numericUpDown1.Maximum = numericUpDown2.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
