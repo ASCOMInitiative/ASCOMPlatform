@@ -181,6 +181,19 @@ namespace ASCOM.GeminiTelescope
         internal string m_ParkState = "";
         internal bool m_ParkWasExecuted = false;
 
+        private string m_LastParkOperation = "";
+
+        internal string LastParkOperation
+        {
+            get { return m_LastParkOperation; }
+            set { 
+                m_LastParkOperation = value;
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "LastParkOperation", value.ToString());
+            }
+        }
+
+
         internal System.Threading.ManualResetEvent m_SlewAborted = new System.Threading.ManualResetEvent(false);
 
         internal bool m_SouthernHemisphere = false;
@@ -1080,8 +1093,10 @@ namespace ASCOM.GeminiTelescope
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GpsUpdateClock", ""), out m_GpsUpdateClock))
                 m_GpsUpdateClock = false;
 
-            if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "DataBits", ""), out m_DataBits))
-                m_DataBits = 8;
+            //if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "DataBits", ""), out m_DataBits))
+              
+            m_DataBits = 8;
+             
 
             int _parity = 0;
             if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "Parity", ""), out _parity))
@@ -1200,6 +1215,19 @@ namespace ASCOM.GeminiTelescope
                 prk = 0;
 
             m_ParkPosition = (GeminiParkMode)prk;
+
+            m_LastParkOperation = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "LastParkOperation", "");
+
+            if (m_LastParkOperation == "Home")
+            {
+                m_AtHome = true;
+                m_AtPark = false;
+            }
+            else if (m_LastParkOperation == "Park")
+            {
+                m_AtPark = true;
+                m_AtHome = false;
+            }
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseJoystick", ""), out m_UseJoystick))
                 m_UseJoystick = false;
@@ -3294,32 +3322,15 @@ namespace ASCOM.GeminiTelescope
                     if (SOP != null) m_SideOfPier = SOP;
 
                     if (HOME != null)
-                    {
                         m_ParkState = HOME;
-                        if (HOME == "1")
-                        {
-                            m_AtHome = true;
-                            if (Velocity == "N") m_AtPark = true;
-                            else
-                            {
-                                m_AtPark = false;
-                            }
-                        }
-                        else
-                        {
-                            m_AtHome = false;
-                            m_AtPark = false;
-                        }
-                    }
 
-                    if (m_ParkWasExecuted && Velocity != "N") //unparked!
+                    if ((m_ParkWasExecuted || m_AtPark || m_AtHome) && Velocity != "N") //unparked!
                     {
-                        m_AtPark = false;   //not parked anymore
+                        m_AtPark = false;
+                        m_AtHome = false;
+                        LastParkOperation = "";
                         m_ParkWasExecuted = false;
                     }
-                    else
-                        if (m_ParkWasExecuted && Velocity == "N")
-                            m_AtPark = true;
 
                     if (STATUS != null)
                     {
@@ -3545,14 +3556,26 @@ namespace ASCOM.GeminiTelescope
         /// returns whether the telescope is at the home position
         /// </summary>
         public bool AtHome
-        { get { return m_AtHome; } }
+        {
+            get
+            {
+                m_AtHome = (m_AtHome && Velocity == "N");
+                return m_AtHome;
+            }
+        }
 
         /// <summary>
         /// Get current AtPark propery
         /// returns whether the telescope is parked
         /// </summary>
         public bool AtPark
-        { get { return m_AtPark; } }
+        {
+            get
+            {
+                m_AtPark = (m_AtPark && Velocity == "N");
+                return m_AtPark;
+            }
+        }
 
 
         /// <summary>
@@ -3624,6 +3647,7 @@ namespace ASCOM.GeminiTelescope
             if (m_SlewAborted.WaitOne(0))
             {
                 m_ParkWasExecuted = false;
+                m_AtPark = false;
                 m_Trace.Exit("DoPark", false);
                 return;
             }
@@ -3636,7 +3660,8 @@ namespace ASCOM.GeminiTelescope
                 return;
             }
             m_ParkWasExecuted = true;
-
+            LastParkOperation = "Park";
+            m_AtPark = true;
             m_Trace.Exit("DoPark", true);
         }
 
@@ -3651,6 +3676,46 @@ namespace ASCOM.GeminiTelescope
             return true;
         }
 
+
+        /// <summary>
+        /// Goto Home position
+        /// </summary>
+        /// <returns></returns>
+        public bool DoHome()
+        {
+            m_Trace.Enter("DoHome");
+
+            if (!Connected) return false;
+
+            m_SlewAborted.Reset();
+
+            DoCommandResult(":hP", GeminiHardware.Instance.MAX_TIMEOUT, false);
+            WaitForHomeOrPark("Home");
+
+            WaitForSlewToEnd();
+
+            if (m_SlewAborted.WaitOne(0))
+            {
+                m_ParkWasExecuted = false;
+                m_AtHome = false;
+                m_Trace.Exit("DoHome - slew aborted", false);
+                return false;
+            }
+
+            DoCommandResult(":hN", MAX_TIMEOUT, false);
+
+            if (!WaitForStop(120))    // wait for a stop for 2 minutes, then fail
+            {
+                m_Trace.Error("Failed to stop DoHome");
+                return false;
+            }
+            m_ParkWasExecuted = true;
+            LastParkOperation = "Home";
+            m_AtHome = true;
+            m_Trace.Exit("DoHome", true);
+            return true;
+
+        }
 
 
         /// <summary>
@@ -3814,6 +3879,7 @@ namespace ASCOM.GeminiTelescope
         public bool Tracking
         { 
             get { return m_Tracking; }
+            set { m_Tracking = value; }
         }
 
         /// <summary>
