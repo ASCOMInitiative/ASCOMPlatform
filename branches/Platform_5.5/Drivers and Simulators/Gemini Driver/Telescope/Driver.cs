@@ -1018,12 +1018,15 @@ namespace ASCOM.GeminiTelescope
                 throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
 
             if (GeminiHardware.Instance.AtHome) return;
-
+/*
             GeminiHardware.Instance.DoCommandResult(":hP", GeminiHardware.Instance.MAX_TIMEOUT, false);
             GeminiHardware.Instance.WaitForHomeOrPark("Home");
             GeminiHardware.Instance.DoCommandResult(":hW", GeminiHardware.Instance.MAX_TIMEOUT, false); //resume tracking, as FindHome isn't supposed to stop the mount
             GeminiHardware.Instance.WaitForVelocity("TG", GeminiHardware.Instance.MAX_TIMEOUT);
-            m_FoundHome = true;
+ */
+
+            m_FoundHome = GeminiHardware.Instance.DoHome();
+
             GeminiHardware.Instance.Trace.Exit("IT:FindHome");
         }
 
@@ -1107,6 +1110,8 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private bool TrackingState = true;  //set when MoveAxis is initiated, restored when it ended
+
         public void MoveAxis(TelescopeAxes Axis, double Rate)
         {
             GeminiHardware.Instance.Trace.Enter("IT:MoveAxis", Axis, Rate);
@@ -1127,6 +1132,12 @@ namespace ASCOM.GeminiTelescope
                     {
                         GeminiHardware.Instance.DoCommandResult(new string[] { ":Qe", ":Qw" }, GeminiHardware.Instance.MAX_TIMEOUT/2, false); //stop motion in RA
                         GeminiHardware.Instance.WaitForVelocity("T", GeminiHardware.Instance.MAX_TIMEOUT);
+                        if (!TrackingState)
+                        {
+                            GeminiHardware.Instance.DoCommandResult(":hN", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                            GeminiHardware.Instance.WaitForVelocity("N", GeminiHardware.Instance.MAX_TIMEOUT);
+                            GeminiHardware.Instance.Tracking = false;
+                        }
                         GeminiHardware.Instance.Trace.Exit("IT:MoveAxis", Axis, Rate);
                         return;
                     }
@@ -1140,6 +1151,12 @@ namespace ASCOM.GeminiTelescope
                         GeminiHardware.Instance.DoCommandResult(new string[] { ":Qn", ":Qs" }, GeminiHardware.Instance.MAX_TIMEOUT/2, false); //stop motion in DEC
                         GeminiHardware.Instance.WaitForVelocity("T", GeminiHardware.Instance.MAX_TIMEOUT);
                         GeminiHardware.Instance.Trace.Exit("IT:MoveAxis", Axis, Rate);
+                        if (!TrackingState)
+                        {
+                            GeminiHardware.Instance.DoCommandResult(":hN", GeminiHardware.Instance.MAX_TIMEOUT, false);
+                            GeminiHardware.Instance.WaitForVelocity("N", GeminiHardware.Instance.MAX_TIMEOUT);
+                            GeminiHardware.Instance.Tracking = false;
+                        }
                         return;
                     }
                     break;
@@ -1173,6 +1190,8 @@ namespace ASCOM.GeminiTelescope
                 default:
                     throw new ASCOM.InvalidValueException("MoveAxis", Axis.ToString(), "guiding, centering, or slewing speeds");
             }
+
+            TrackingState = GeminiHardware.Instance.Tracking;
 
             GeminiHardware.Instance.DoCommandResult(cmds, GeminiHardware.Instance.MAX_TIMEOUT/2, false);
             GeminiHardware.Instance.WaitForVelocity("GCS", GeminiHardware.Instance.MAX_TIMEOUT);
@@ -1857,7 +1876,7 @@ namespace ASCOM.GeminiTelescope
                 AssertConnect();
                 System.Threading.Thread.Sleep(10); // since this is a polled property, don't let the caller monopolize the cpu in a tight loop (StaryNights!)
 
-                if (GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Velocity == "C")
+                if (GeminiHardware.Instance.Velocity == "S" || GeminiHardware.Instance.Velocity == "C" || GeminiHardware.Instance.Velocity=="G")
                 {
                     GeminiHardware.Instance.Trace.Enter("IT:Slewing.Get", true);
                     return true;
@@ -1975,14 +1994,16 @@ namespace ASCOM.GeminiTelescope
 
                 AssertConnect();
                 if (value && !GeminiHardware.Instance.Tracking)
-                {
+                {                   
                     GeminiHardware.Instance.DoCommandResult(":hW", GeminiHardware.Instance.MAX_TIMEOUT, false);
                     GeminiHardware.Instance.WaitForVelocity("TG", GeminiHardware.Instance.MAX_TIMEOUT);
+                    GeminiHardware.Instance.Tracking = true;
                 }
                 if (!value && GeminiHardware.Instance.Tracking)
                 {
                     GeminiHardware.Instance.DoCommandResult(":hN", GeminiHardware.Instance.MAX_TIMEOUT, false);
                     GeminiHardware.Instance.WaitForVelocity("N", GeminiHardware.Instance.MAX_TIMEOUT);
+                    GeminiHardware.Instance.Tracking = false;
                 }
                 GeminiHardware.Instance.Trace.Exit("IT:Tracking.Set", value);
             }
