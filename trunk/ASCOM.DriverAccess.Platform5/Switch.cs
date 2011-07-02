@@ -16,7 +16,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     ///   Provides universal access to Switch drivers
     /// </summary>
-    public class Switch //: ISwitch, IDisposable
+    public class Switch: ASCOM.Interface.ISwitch, IDisposable
     {
         private TraceLogger TL;
         #region Switch constructors
@@ -36,15 +36,7 @@ namespace ASCOM.DriverAccess
 
         #endregion
 
-        /// <summary>
-        ///   Yields a collection of ISwitchController objects.
-        /// </summary>
-        public ArrayList SwitchCollection
-        {
-            get { return (ArrayList) _memberFactory.CallMember(1, "SwitchCollection", new Type[] {}, new object[] {}); }
-        }
-
-
+        #region Common Methods
         /// <summary>
         ///   Set True to Connect to the switches; set False to terminate the Connection.
         ///   The current Connected status can also be read back as this property.
@@ -61,7 +53,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Description
         {
-            get { return (string) _memberFactory.CallMember(1, "Description", new[] {typeof (string)}, new object[] {}); }
+            get { return (string) _memberFactory.CallMember(1, "Description", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -69,7 +61,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverInfo
         {
-            get { return (string) _memberFactory.CallMember(1, "DriverInfo", new[] {typeof (string)}, new object[] {}); }
+            get { return (string) _memberFactory.CallMember(1, "DriverInfo", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -77,7 +69,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string DriverVersion
         {
-            get { return (string) _memberFactory.CallMember(1, "DriverVersion", new[] {typeof (string)}, new object[] {}); }
+            get { return (string) _memberFactory.CallMember(1, "DriverVersion", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -93,7 +85,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public string Name
         {
-            get { return (string) _memberFactory.CallMember(1, "Name", new[] {typeof (string)}, new object[] {}); }
+            get { return (string) _memberFactory.CallMember(1, "Name", new Type[] {}, new object[] {}); }
         }
 
         /// <summary>
@@ -126,7 +118,58 @@ namespace ASCOM.DriverAccess
             var oChooser = new Chooser {DeviceType = "Switch"};
             return oChooser.Choose(switchId);
         }
+        #endregion
+
+        #region Device Methods
+        /// <summary>
+        /// Return the state of switch n
+        /// </summary>
+        /// <param name="ID">The switch number to return</param>
+        /// <returns>True or false</returns>
+        public bool GetSwitch(short ID) 
+        {
+            return (bool)_memberFactory.CallMember(3, "GetSwitch", new Type[] { typeof(short) }, new object[] { ID });
+        }
+
+        /// <summary>
+        /// Return the name of switch n
+        /// </summary>
+        /// <param name="ID">The switch number to return</param>
+        /// <returns>The name of the switch</returns>
+        public string GetSwitchName(short ID)
+        {
+            return (string)_memberFactory.CallMember(3, "GetSwitchName", new Type[] { typeof(short) }, new object[] { ID });
+        }
+
+        /// <summary>
+        /// The number of switches managed by this driver
+        /// </summary>
+        public short MaxSwitch
+        {
+            get { return (short)_memberFactory.CallMember(1, "MaxSwitch", new Type[] { }, new object[] { }); }
+        }
+
+        /// <summary>
+        /// Sets a switch to the specified state
+        /// </summary>
+        /// <param name="ID">The number of the switch to set</param>
+        /// <param name="State">The required switch state</param>
+        public void SetSwitch(short ID, bool State)
+        {
+            _memberFactory.CallMember(3, "SetSwitch", new Type[] { typeof(short), typeof(bool) }, new object[] { ID, State });
+        }
+
+        /// <summary>
+        /// Sets a switch name to a specified value
+        /// </summary>
+        /// <param name="ID">The number of the switch whose name is to be set</param>
+        /// <param name="State">The name of the switch</param>
+        public void SetSwitchName(short ID, string State)
+        {
+            _memberFactory.CallMember(3, "SetSwitchName", new Type[] { typeof(short), typeof(string) }, new object[] { ID, State });
+        }
     }
+        #endregion
 
     #endregion
 }
