@@ -1,2 +1,0 @@
-//Version|Manufacturer|Model|Comment|MapsTo|PlugInDllName
-1|ASCOM|Telescope Driver|Connect to any ASCOM Telescope driver| |ASCOM.Telescope

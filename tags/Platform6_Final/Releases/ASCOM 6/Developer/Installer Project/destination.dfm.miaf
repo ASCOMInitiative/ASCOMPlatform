@@ -1,2 +1,0 @@
-IF (FolderText.Text = )  THEN  Next.Enabled := False;
-IF (FolderText.Text <> )  THEN  Next.Enabled := True;

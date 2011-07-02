@@ -1,7 +1,0 @@
-<Project DefaultTargets="UnitTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- Required Import to use MSBuild Community Tasks -->
-  <Import Project=".\External Dependencies\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
-  <Target Name="UnitTest">
-    <Exec Command='".\External Dependencies\MSpec\mspec.exe" ASCOM.Platform.UnitTest\bin\Release\ASCOM.Platform.UnitTest.dll --teamcity' />
-  </Target>
-</Project>

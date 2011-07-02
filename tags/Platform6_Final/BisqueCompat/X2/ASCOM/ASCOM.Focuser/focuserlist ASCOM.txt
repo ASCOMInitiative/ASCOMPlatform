@@ -1,2 +1,0 @@
-//Version|Manufacturer|Model|Comment|MapsTo|PlugInDllName
-1|ASCOM|Focuser Driver|Connect to any ASCOM Focuser driver| |ASCOM.Focuser

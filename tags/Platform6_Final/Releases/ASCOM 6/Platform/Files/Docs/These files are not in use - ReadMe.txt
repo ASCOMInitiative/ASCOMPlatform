@@ -1,1 +1,0 @@
-These files are not in use by the Platform, they are just present to ensure that installers created for Platform 5, that test for their presence, continue to work correctly.

@@ -1,5 +1,0 @@
-C:\ASCOM\trunk\DriverTemplates\ASCOM 6 Templates\src\ASCOM Telescope Driver Template CS\obj\Debug\ResolveAssemblyReference.cache
-C:\ASCOM\trunk\DriverTemplates\ASCOM 6 Templates\src\ASCOM Telescope Driver Template CS\obj\Debug\$safeprojectname$.Properties.Resources.resources
-C:\ASCOM\trunk\DriverTemplates\ASCOM 6 Templates\src\ASCOM Telescope Driver Template CS\obj\Debug\ASCOM.safeprojectname.SetupDialogForm.resources
-C:\ASCOM\trunk\DriverTemplates\ASCOM 6 Templates\src\ASCOM Telescope Driver Template CS\obj\Debug\ResGen.read.1.tlog
-C:\ASCOM\trunk\DriverTemplates\ASCOM 6 Templates\src\ASCOM Telescope Driver Template CS\obj\Debug\ResGen.write.1.tlog
