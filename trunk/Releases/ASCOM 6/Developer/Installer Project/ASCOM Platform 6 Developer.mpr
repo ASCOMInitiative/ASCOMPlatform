@@ -451,6 +451,24 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
 PLATFORM6OK
 PREREQ
@@ -462,23 +480,23 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6 Developer Components
+ASCOM Platform 6 Developer Components - FixTest 1
 {4A195DC6-7DF9-459E-8F93-60B61EB45288}
 {DAF6A65F-A20B-4FB8-859C-1F82F1D1AEF5}
 6.0.0.0
 English
 ASCOM Platform 6 Developer Components
-ASCOM Platform 6 Developer Components Installation
+ASCOM Platform 6 Developer Components Installation - FixTest 1
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{2939F755-15D5-4833-8B74-D8A1E7C59B79}
+{472276FB-3A7C-4F3A-AD1B-70FC3E6B763F}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright © 1998-2011, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform6Developer
+ASCOMPlatform6DeveloperFixTest1
 TRUE
 FALSE
 

@@ -265,22 +265,40 @@ else
   Get Component Developer Components Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     [DEFINE REGION: Visual Studio references]
+    Comment: Platform 6 references
     Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Attributes\bin\Release\ASCOM.Attributes.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $TARGETDIR$\Components\Platform6
-    Set Variable PROGRESS to 40
+    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.DriverAccess\bin\Release\ASCOM.DriverAccess.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Internal.Extensions\bin\Release\ASCOM.Internal.Extensions.xml to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.xml to $TARGETDIR$\Components\Platform6
+    Set Variable PROGRESS to 40
     Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform6
+    Comment: Platform 5.5 references
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Astrometry.xml to $TARGETDIR$\Components\Platform55\
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.xml to $TARGETDIR$\Components\Platform55\
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform55\
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.xml to $TARGETDIR$\Components\Platform55\
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.dll to $TARGETDIR$\Components\Platform55\
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.DriverAccess.xml to $TARGETDIR$\Components\Platform55\
+    Comment: Platform 5 references
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to $TARGETDIR$\Components\Platform5
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.xml to $TARGETDIR$\Components\Platform5
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 6\, $TARGETDIR$\Components\Platform6
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
