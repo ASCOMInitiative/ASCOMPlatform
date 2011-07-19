@@ -29,6 +29,7 @@
 #include <initguid.h>
 #include <stdlib.h>
 #include <string.h>
+#include <shellapi.h>
 #include "main.h"
 #include "ASCOM.Telescope.h"
 
