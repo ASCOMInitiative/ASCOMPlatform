@@ -5,7 +5,7 @@
 ;
 [Setup]
 AppName=X2 Mount Driver for ASCOM Telescopes
-AppVersion=0.9.2
+AppVersion=0.9.3
 AppPublisher=ASCOM Initiative
 AppPublisherURL=http://ascom-standards.org/
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -28,7 +28,7 @@ UninstallFilesDir="{cf}\ASCOM\Uninstall\X2\Telescope"
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "../Release/ASCOM.Telescope.dll";   DestDir: "{code:GetDLLPath}";  Flags: ignoreversion 
+Source: "../Release/ASCOM.Telescope.dll";   DestDir: "{code:GetDLLPath}";  Flags: 
 Source: "../mountlist ASCOM.txt"; DestDir: "{code:GetMiscPath}"; Flags: ignoreversion
 Source: "X2-ASCOM-ReadMe.txt";  DestDir: "{code:GetDLLPath}";  Flags: ignoreversion isreadme
 

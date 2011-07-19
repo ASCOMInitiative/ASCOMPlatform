@@ -7,19 +7,25 @@ This X2 driver/plugin allows you to control any mount/telescope that has an ASCO
 One-time Setup
 --------------
 
-1. Select ASCOM/Telescope Driver for the mount type (Mount Setup, Choose...)
+1. Mount Setup, Choose... Select ASCOM/Telescope Driver for the mount type
 
-2. Mount Setup, Settings... will open the usual ASCOM Chooser
+2. Mount Setup, Settings... ANswer Yes to the "Have you read...?" popup. You will see the usual ASCOM Chooser
 
 3. Select your telescope type. Click Properties in the Chooser to configure the telescope.
 
 4. Close the Chooser, and from there it's normal TheSky X operation.
 
 
-Variable Capabilities
----------------------
+Adapting to Varying Mount Capabilities
+--------------------------------------
 
 Depending on the capabilities of the selected ASCOM mount/telescope, controls may or may not appear in TheSky X. For example, if the ASCOM mount does not support control of sidereal tracking (on/off), TheSky X's Telescope panel Tools popup menu will not contain the "Turn Sidereal Tracking On" or "Turn Tracking Off" items.
+
+
+Communications Logging
+----------------------
+
+This driver supports logging of ASCOM calls made from TheSky X to the selected ASCOM mount/telescope driver. This can be useful for diagnosis. In TheSky X, Telescope tab, Tools drop-menu, select Communications Logging. 
 
 
 Operational Issues
