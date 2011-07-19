@@ -18,6 +18,7 @@
 // When			Who		What
 //----------	---		--------------------------------------------------
 // 22-Apr-11	rbd		Initial edit, taken from TeleAPI/ASCOM plugin
+// 12-Jul-11	rbd		0.9.3 - Log exceptions to TheSky X's comm log
 //========================================================================
 #include "StdAfx.h"
 
@@ -136,6 +137,10 @@ void drvFail(char *msg, EXCEPINFO *ei, bool bCloseConn)
 		{
 			char *msg = uni_to_ansi(ei->bstrDescription);
 			char *src = uni_to_ansi(ei->bstrSource);
+			_pLogger->out("== ERROR FROM DRIVER ==");
+			_pLogger->out(src);
+			_pLogger->out(msg);
+			_pLogger->out("=======================");
 			MessageBox(NULL, msg, src, (MB_OK | MB_ICONSTOP | MB_SETFOREGROUND));
 			delete [] msg;
 			delete[] src;

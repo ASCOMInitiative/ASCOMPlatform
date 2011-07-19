@@ -38,6 +38,8 @@
 //						parked. Use try/finally to assure release of 
 //						marshalled interface if DrvFail(). Was leaving
 //						references...
+// 12-Jul-11	rbd		0.9.3 - Logging to TheSky (hooray)
+// 15-Jul-11	rbd		0.9.3 - Display ReadMe when activating the chooser.
 //========================================================================
 
 #include "StdAfx.h"
@@ -77,6 +79,7 @@ bool _bScopeCanSideOfPier = false;
 // State variables
 //
 bool _bScopeActive = false;										// This is true if mount is active
+LoggerInterface *_pLogger = NULL;
 
 //
 // Forward declarations
@@ -111,7 +114,6 @@ static DWORD dOrigIntfcThreadId;								// ID ot thread on which the interface w
 static LPSTREAM pMarshalStream = NULL;
 #endif
 static bool isParkedForV1 = false;
-static LoggerInterface *pLog;
 
 // -------------
 // InitDrivers()
@@ -125,7 +127,7 @@ bool InitDrivers(LoggerInterface *pLogger)
 	bool bResult = true;
 	static bool bInitDone = false;								// Exec this only once
 
-	pLog = pLogger;
+	_pLogger = pLogger;
 	if(!bInitDone)
 	{
 		__try
@@ -147,8 +149,6 @@ bool InitDrivers(LoggerInterface *pLogger)
 #endif
 			bInitDone = true;
 			get_driverid(_szDriverID, true);					// Get any saved ProgID or ""
-//pLog->out("Get RA");
-//pLog->packetsRetriesFailuresChanged(0, 0, 0);
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER)
 		{
@@ -244,6 +244,7 @@ short InitScope(void)
 		// We now need to connect the scope. To do this, we set the 
 		// Connected property to TRUE.
 		//
+		_pLogger->packetsRetriesFailuresChanged(0, 0, 0);
 		set_bool(L"Connected", true);
 
 		//
@@ -693,7 +694,27 @@ short ConfigScope()
 	IDispatch *pChsrDsp = NULL;									// [sentinel]
 	char *cp = NULL;											// [sentinel]
 	BSTR bsProgID = NULL;										// [sentinel]
+	char path[256];
 	
+	int iAns = MessageBox(NULL, "Have you read and understood the usage info for this driver?", "ASCOM Controlled Mount",
+				(MB_YESNO + MB_ICONQUESTION));
+	if (iAns != IDYES)
+	{
+		GetModuleFileName(NULL, path, 255);
+		if (GetLastError() == ERROR_SUCCESS)
+		{
+			char *cp = strrchr(path, '\\');
+			if (cp != NULL)
+			{
+				*cp = '\0';
+				strcat(path, "\\Resources\\Common\\PlugIns\\MountPlugIns\\X2-ASCOM-ReadMe.txt");
+				ShellExecute(NULL, "Open", path, NULL, NULL, SW_SHOW);
+			}
+		}
+
+		return 0;
+	}
+
 	__try {
 		
 		_szDriverID[0] = '\0';									// Assume no current ProgID
@@ -981,6 +1002,11 @@ static int get_integer(OLECHAR *name, bool noAlert)
 		_p_DrvDisp->Release();
 	}
 #endif
+	
+	cp = uni_to_ansi(name);
+	sprintf(buf, "Get %s <- %i", cp, result.intVal);
+	_pLogger->out(buf);
+	delete[] cp;
 
 	return(result.intVal);										// Return integer result
 }
@@ -1063,6 +1089,10 @@ static double get_double(OLECHAR *name)
 		_p_DrvDisp->Release();
 	}
 #endif
+	cp = uni_to_ansi(name);
+	sprintf(buf, "Get %s <- %0.7f", cp, (double)result.dblVal);
+	_pLogger->out(buf);
+	delete[] cp;
 
 	return(result.dblVal);										// Return long result
 }
@@ -1085,6 +1115,11 @@ static void set_double(OLECHAR *name, double val)
 	EXCEPINFO excep;
 	char *cp;
 	char buf[256];
+
+	cp = uni_to_ansi(name);
+	sprintf(buf, "Set %s -> %i", cp, val);
+	_pLogger->out(buf);
+	delete[] cp;
 
 #ifdef CROSS_THREAD_GIT
 	switchThreadIf();
@@ -1231,6 +1266,11 @@ static bool get_bool(OLECHAR *name)
 	}
 #endif
 
+	cp = uni_to_ansi(name);
+	sprintf(buf, "Get %s <- %s", cp, (result.boolVal == VARIANT_TRUE ? "true" : "false"));
+	_pLogger->out(buf);
+	delete[] cp;
+
 	return(result.boolVal == VARIANT_TRUE);						// Return C++ bool result
 }
 
@@ -1254,6 +1294,11 @@ static void set_bool(OLECHAR *name, bool val)
 	char *cp;
 	char buf[256];
 	HRESULT hr;
+
+	cp = uni_to_ansi(name);
+	sprintf(buf, "Set %s -> %s", cp, (val ? "true" : "false"));
+	_pLogger->out(buf);
+	delete[] cp;
 
 #ifdef CROSS_THREAD_GIT
 	switchThreadIf();
@@ -1391,6 +1436,12 @@ static char *get_string(OLECHAR *name )
 		_p_DrvDisp->Release();
 	}
 #endif
+	cp = uni_to_ansi(name);
+	char *dp = uni_to_ansi(vRes.bstrVal);
+	sprintf(buf, "Get %s <- %s", cp, dp);
+	_pLogger->out(buf);
+	delete[] cp;
+	delete[] dp;
 		
 	return(uni_to_ansi(vRes.bstrVal));
 }
@@ -1409,6 +1460,11 @@ static void call(OLECHAR *name)
 	VARIANT vRes;
 	char *cp;
 	char buf[256];
+
+	cp = uni_to_ansi(name);
+	sprintf(buf, "%s()", cp);
+	_pLogger->out(buf);
+	delete[] cp;
 
 #ifdef CROSS_THREAD_GIT
 	switchThreadIf();
@@ -1481,6 +1537,11 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 	HRESULT hr;
 	char *cp;
 	char buf[256];
+
+	cp = uni_to_ansi(name);
+	sprintf(buf, "%s(%0.7f, %0.7f)", cp, dRA, dDec);
+	_pLogger->out(buf);
+	delete[] cp;
 
 #ifdef CROSS_THREAD_GIT
 	switchThreadIf();

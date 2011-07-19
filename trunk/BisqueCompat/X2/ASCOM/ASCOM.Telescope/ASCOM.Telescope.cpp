@@ -146,6 +146,8 @@ int	X2Mount::queryAbstraction(const char* pszName, void** ppVal)
 		*ppVal = dynamic_cast<ParkInterface*>(this);
 	else if (!strcmp(pszName, UnparkInterface_Name) && _bScopeCanUnpark)
 		*ppVal = dynamic_cast<UnparkInterface*>(this);
+	else if (!strcmp(pszName, LoggerInterface_Name))
+		*ppVal = dynamic_cast<LoggerInterface*>(m_pLogger);
 	else if (!strcmp(pszName, LinkFromUIThreadInterface_Name))
 		*ppVal = dynamic_cast<LinkFromUIThreadInterface*>(this);
 

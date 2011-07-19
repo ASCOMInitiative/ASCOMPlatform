@@ -175,6 +175,7 @@ private:
 extern bool _bScopeActive;
 extern const char *_szAlertTitle;
 extern HWND _hWndMain;
+extern LoggerInterface *_pLogger;
 extern char *_szScopeName;									// These need to be delete[]ed
 extern char *_szScopeDescription;
 extern char *_szScopeDriverInfo;
