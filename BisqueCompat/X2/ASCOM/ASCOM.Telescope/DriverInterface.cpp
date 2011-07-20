@@ -1624,6 +1624,11 @@ static void switchThreadIf()
 						(void **)&pTemp)))
 			drvFail("Failed to get interface from GIT in new thread", NULL, true);
 		_p_DrvDisp = pTemp;
+#ifndef NDEBUG
+		char buf[256];
+		sprintf(buf, "disp -> %i", pTemp);
+		_pLogger->out(buf);
+#endif
 	}
 }
 #endif
@@ -1637,7 +1642,11 @@ static IDispatch *get_dispatch(void)
 		drvFail("Failed to unmarshal dispatch pointer", NULL, true);
 	if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, pDisp, &pMarshalStream)))
 		drvFail("Failed to remarshal dispatch pointer", NULL, true);
-
+#ifndef NDEBUG
+	char buf[256];
+	sprintf(buf, "disp -> %i", pDisp);
+	_pLogger->out(buf);
+#endif
 	return pDisp;
 }
 #endif
