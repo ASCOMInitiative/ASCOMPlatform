@@ -4,12 +4,12 @@ ASCOM Mount/Telescope Plugin for TheSky X
 This X2 driver/plugin allows you to control any mount/telescope that has an ASCOM driver. The plugin conforms to the Software Bisque X2 standard for device control. It provides a pathway from TheSky X to any ASCOM Telescope driver and its mount.
 
 
-One-time Setup
---------------
+One-time Setup - THIS IS DONE WITHIN TheSky X
+---------------------------------------------
 
 1. Mount Setup, Choose... Select ASCOM/Telescope Driver for the mount type
 
-2. Mount Setup, Settings... ANswer Yes to the "Have you read...?" popup. You will see the usual ASCOM Chooser
+2. Mount Setup, Settings... Answer Yes to the "Have you read...?" popup. You will see the usual ASCOM Chooser
 
 3. Select your telescope type. Click Properties in the Chooser to configure the telescope.
 
