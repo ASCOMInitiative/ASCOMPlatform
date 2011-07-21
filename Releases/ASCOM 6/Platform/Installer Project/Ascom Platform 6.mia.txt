@@ -148,8 +148,11 @@ Get File Version $SUPPORTDIR$\UninstallAscom.exe into Variable PLATFORMBUILDVERS
 [END REGION]
  
 Comment: Create the start of the installation log
-Write into Text File $SETUPLOG$ from Value $TITLE$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Installed $DATE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TITLE$ v$VERSION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Installed $DATE$ $TIME$ (at end of file)
+Write into Text File $SETUPLOG$ from Value  (at end of file)
+Write into Text File $SETUPLOG$ from Value Platform build: $PLATFORMBUILDVERSION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Revision code: $REVISIONCODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 if Variable NATIVE_ENGINE Equals TRUE
   Write into Text File $SETUPLOG$ from Value Installer mode: Native Engine (at end of file)
@@ -788,6 +791,14 @@ else
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup_5_03.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
@@ -818,6 +829,14 @@ else
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup.exe, 
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup_5_03.exe, 
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505.exe, 
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two.exe, 
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505.exe, 
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
@@ -895,6 +914,14 @@ else
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup_5_03.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505.exe, 5.5
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
@@ -925,6 +952,14 @@ else
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup.exe, 
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup_5_03.exe, 
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505.exe, 
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two.exe, 
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505.exe, 
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
