@@ -91,6 +91,7 @@
     <ProjectReference Include="..\..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
       <Name>ASCOM.Exceptions</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\MigrationSupport\MigrationSupport.vbproj">
       <Project>{645C8113-FD52-44BB-844F-63F11FEC5F74}</Project>
