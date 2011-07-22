@@ -60,11 +60,11 @@ It is <b>strongly</b> recommended that you use the DriverHelper.Chooser object f
 
 <p>The chooser returns the selected device's ProgID. You can pass a (saved) ProgID to the Choose() method, and that device will be pre-selected in the list. The drivers are listed in a special registry area, with the user-friendly name and progID. The Chooser hides all of this from you, and allows us to evolve the registry area without fear of breaking your code. Also, the Chooser provides an interlock which forces the user to pop open the configuration dialog for the chosen device before being able to click OK to change the selected device. It looks like this to the user:
 
-<p><div align="center"><img src="../Images/Chooser.gif" width="334" height="194" alt="" border="0"></div>
+<p><div align="center"><img src="../Images/Chooser.gif" width="349" height="219" alt="" border="0"></div>
 
 <p>The code to use the Chooser is simple (set a reference to <tt>ASCOM Scope Driver helper objects</tt> for early binding and IntelliSense):
 
-<pre>  Dim chsr as New DriverHelper.Chooser
+<pre>  Dim chsr as New ASCOM.Utilities.Chooser
   <span style="color: #999999;">' This will be a Telescope chooser</span>
   chsr.DeviceType = "Telescope"  
   <span style="color: #999999;">' Retrieve the ProgID of the previously chosen
