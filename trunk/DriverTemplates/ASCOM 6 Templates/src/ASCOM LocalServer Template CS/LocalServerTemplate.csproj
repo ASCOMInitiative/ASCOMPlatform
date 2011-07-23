@@ -8,8 +8,8 @@
     <ProjectGuid>{3689A2CB-94C5-4012-A5CF-7E7D1DD27143}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$safeprojectname$</RootNamespace>
-    <AssemblyName>ASCOM.safeprojectname.Server</AssemblyName>
+    <RootNamespace>ASCOM.$safeprojectname$</RootNamespace>
+    <AssemblyName>ASCOM.$safeprojectname$.Server</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

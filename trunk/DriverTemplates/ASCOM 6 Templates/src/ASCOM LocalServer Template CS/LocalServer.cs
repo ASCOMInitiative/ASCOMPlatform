@@ -25,6 +25,7 @@ using System.Text;
 using System.Threading;
 using System.Security.Principal;
 using System.Diagnostics;
+using ASCOM;
 
 namespace $safeprojectname$
 {
