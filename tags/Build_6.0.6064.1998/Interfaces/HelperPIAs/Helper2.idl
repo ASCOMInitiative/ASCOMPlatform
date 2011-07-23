@@ -1,0 +1,104 @@
+//
+// ==========================
+// ASCOM Helper2 Type Library
+// ==========================
+//
+// Bob Denny 02-May-2007
+//
+// This was created from an OLEView dump, then I removed the references
+// to IObjectSafety and Scripting Runtime, so a PIA could be created
+// without needing PIAs for those two things. Otherwise, this is exactly 
+// the interfaces, coclasses and enums for Helper and Helper2 (well, 
+// except for the library name, LIBID, and some helpstrings.
+//
+// 15-May-2007  rbd Better library custom attrib which shows in 
+//                  References window of VS.NET.
+
+#define VARIANT_TRUE ((VARIANT_BOOL)-1)
+#define VARIANT_FALSE ((VARIANT_BOOL)0)
+
+#if (__midl >= 501)
+midl_pragma warning( disable: 2400 2401 )   // rbd These warnings are n/a
+#endif
+
+[
+  uuid(55B16037-26C0-4f1e-A6DC-4C0E702D9FBE),
+  version(1.0),
+  helpstring("ASCOM Helper2 interfaces for .NET"),
+  custom(0F21F359-AB84-41E8-9A78-36D110E6D2F9, "ASCOM.Helper2")
+]
+library ASCOMHelper2Library
+{
+    importlib("stdole2.tlb");
+
+    // Forward declare all types defined in this typelib
+    interface _Util;
+
+    [
+      odl,
+      uuid(423625BB-CCBA-4E31-AB13-1A0EBDBC3C3B),
+      version(1.0),
+      helpstring("ASCOM Driver Helper-2 Auxiliary Utility Object"),
+      hidden,
+      dual,
+      nonextensible,
+      oleautomation
+    ]
+    interface _Util : IDispatch {
+        [restricted, hidden] void Missing7();
+        [restricted,hidden] void Missing8();
+        [restricted,hidden] void Missing9();
+        [id(0x68030006), propget, helpstring("String containing the current Platform version in m.n form")]
+        HRESULT PlatformVersion([out, retval] BSTR* );
+        [id(0x68030005), propget, helpstring("Change the serial trace file (default C:\SerialTrace.txt)")]
+        HRESULT SerialTraceFile([out, retval] BSTR* );
+        [id(0x68030005), propput, helpstring("Change the serial trace file (default C:\SerialTrace.txt)")]
+        HRESULT SerialTraceFile([in] BSTR );
+        [id(0x68030004), propget, helpstring("Enable/disable serial I/O tracing")]
+        HRESULT SerialTrace([out, retval] VARIANT_BOOL* );
+        [id(0x68030004), propput, helpstring("Enable/disable serial I/O tracing")]
+        HRESULT SerialTrace([in] VARIANT_BOOL );
+        [id(0x68030003), propget, helpstring("String containing the name of the computer's time zone")]
+        HRESULT TimeZoneName([out, retval] BSTR* );
+        [id(0x68030002), propget, helpstring("UTC offset (hours) for the computer's clock such that UTC = local + offset")]
+        HRESULT TimeZoneOffset([out, retval] double* );
+        [id(0x68030001), propget, helpstring("The current UTC Date")]
+        HRESULT UTCDate([out, retval] DATE* );
+        [id(0x68030000), propget, helpstring("The current Julian date")]
+        HRESULT JulianDate([out, retval] double* );
+        [id(0x60030008), helpstring("Convert local-time Date to Julian date")]
+        HRESULT DateLocalToJulian(
+                        [in] DATE LocDate, 
+                        [out, retval] double* );
+        [id(0x60030009), helpstring("Convert Julian date to local-time Date")]
+        HRESULT DateJulianToLocal(
+                        [in] double JD, 
+                        [out, retval] DATE* );
+        [id(0x6003000a), helpstring("Convert UTC Date toJulian date")]
+        HRESULT DateUTCToJulian(
+                        [in] DATE UTCDate, 
+                        [out, retval] double* );
+        [id(0x6003000b), helpstring("Convert Julian date to UTC Date")]
+        HRESULT DateJulianToUTC(
+                        [in] double JD, 
+                        [out, retval] DATE* );
+        [id(0x6003000c), helpstring("Convert UTC Date to local-time Date")]
+        HRESULT DateUTCToLocal(
+                        [in] DATE d, 
+                        [out, retval] DATE* );
+        [id(0x6003000d), helpstring("Convert local-time Date to UTC Date")]
+        HRESULT DateLocalToUTC(
+                        [in] DATE d, 
+                        [out, retval] DATE* );
+    };
+
+    [
+      uuid(C73CED5A-104A-443C-A96F-C38DE77578D4),
+      version(1.0),
+      helpstring("ASCOM Driver Helper-2 Auxiliary Utility Object")
+    ]
+    coclass Util {
+        [default] interface _Util;
+    };
+};
+
