@@ -233,11 +233,11 @@ namespace $safeprojectname$
 		void IClassFactory.LockServer(bool bLock)
 		{
 			if (bLock)
-				safeprojectname.CountLock();
+				$safeprojectname$.CountLock();
 			else
-				safeprojectname.UncountLock();
+				$safeprojectname$.UncountLock();
 			// Always attempt to see if we need to shutdown this server application.
-			safeprojectname.ExitIf();
+			$safeprojectname$.ExitIf();
 		}
 		#endregion
 	}
