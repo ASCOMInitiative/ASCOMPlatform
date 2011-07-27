@@ -11,6 +11,14 @@
 //
 // USING:		Global Interface Table to marshal driver interface across 
 //				threads. See http://msdn.microsoft.com/en-us/library/ms678517
+//				-- or --
+//				Marshalling via CoMarshalInterThreadInterfaceInStream() and
+//				CoMarshalInterThreadInterfaceInStream(). See conditional.
+//
+// NOTES:		The GIT method fails to release a LocalServer (exe) COM server.
+//				The CoMarshalXxx() method seems to require multiple releases
+//				in order to release a LocalServer.
+//				
 //
 // ENVIRONMENT:	Microsoft Windows XP/Vista/7
 //				Developed under Microsoft Visual C++ 9 (VS2008)
@@ -40,18 +48,22 @@
 //						references...
 // 12-Jul-11	rbd		0.9.3 - Logging to TheSky (hooray)
 // 15-Jul-11	rbd		0.9.3 - Display ReadMe when activating the chooser.
+// 27-Jul-11	rbd		0.9.4 - Log threads and interface pointers, having
+//						serious maybe fatal problems with Maestro. Works OK
+//						with both scope simulators. 
 //========================================================================
 
 #include "StdAfx.h"
 
-#define CROSS_THREAD_GIT_OFF
-#define CROSS_THREAD_CO
+#define CROSS_THREAD_GIT_OFF //MAY REQUIRE LinkFromUIThreadInterface // Use GIT cross-thread based marshalling
+#define CROSS_THREAD_CO											// Use CoMarshalXxx() based marshalling
 
 #define OUR_REGISTRY_BASE HKEY_LOCAL_MACHINE
 #define OUR_REGISTRY_AREA "Software\\ASCOM\\TheSky X2\\Mount"
 #define OUR_DRIVER_SEL "Current Driver ID"
 
 const char *_szAlertTitle = "ASCOM Standard Telescope";
+const char *_szGidFailMsg = "[%s] lost link to ASCOM driver.";
 
 //
 // Mount characteristics
@@ -80,6 +92,7 @@ bool _bScopeCanSideOfPier = false;
 //
 bool _bScopeActive = false;										// This is true if mount is active
 LoggerInterface *_pLogger = NULL;
+static bool isParkedForV1 = false;
 
 //
 // Forward declarations
@@ -107,19 +120,17 @@ static IDispatch *_p_DrvDisp = NULL;							// [sentinel] Pointer to driver inter
 static IDispatch *_p_OrigDrvDisp = NULL;
 static IGlobalInterfaceTable *_p_GIT = NULL;					// Pointer to Global Interface Table interface
 static DWORD dwIntfcCookie;										// Driver interface cookie for GIT
-static DWORD dCurrIntfcThreadId;								// ID of thread on which the interface is currently marshalled
-static DWORD dOrigIntfcThreadId;								// ID ot thread on which the interface was originally registered
+static DWORD _dCurrIntfcThreadId;								// ID of thread on which the interface is currently marshalled
 #endif
 #ifdef CROSS_THREAD_CO
-static LPSTREAM pMarshalStream = NULL;
+static LPSTREAM _pMarshalStream = NULL;
 #endif
-static bool isParkedForV1 = false;
 
 // -------------
 // InitDrivers()
 // -------------
 //
-// Really just starts OLE
+// Really just starts COM and GIT marshalling
 //
 bool InitDrivers(LoggerInterface *pLogger)
 {
@@ -132,13 +143,8 @@ bool InitDrivers(LoggerInterface *pLogger)
 	{
 		__try
 		{
-			//SetMessageQueue(96);
-			//dwVer = CoBuildVersion();
-			//if(rmm != HIWORD(dwVer))
-			//	drvFail("Wrong version of OLE", NULL, true);
-//			if(FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
-			//if(FAILED(CoInitializeEx(NULL, COINIT_MULTITHREADED)))
-			//	drvFail("Failed to start OLE", NULL, true);
+			if(FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
+				drvFail("Failed to start OLE", NULL, true);
 #ifdef CROSS_THREAD_GIT
 			if(FAILED(CoCreateInstance(CLSID_StdGlobalInterfaceTable,
 						NULL,
@@ -227,7 +233,7 @@ short InitScope(void)
 		//
 		// Get the marshalled interface pointer for later possible thread switching
 		//
-		dCurrIntfcThreadId = dOrigIntfcThreadId = GetCurrentThreadId();
+		_dCurrIntfcThreadId = GetCurrentThreadId();
 		if(FAILED(_p_GIT->RegisterInterfaceInGlobal(
 				_p_DrvDisp,
 				IID_IDispatch,
@@ -235,7 +241,7 @@ short InitScope(void)
 			drvFail("Failed to register driver interface in GIT", NULL, true);
 #endif
 #ifdef CROSS_THREAD_CO
-		if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, _p_DrvDisp, &pMarshalStream)))
+		if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, _p_DrvDisp, &_pMarshalStream)))
 			drvFail("Failed to set up cross-thread marshaling", NULL, true);
 		_p_DrvDisp->Release();
 		// NOT USED BELOW - EACH COM CALL GETS ITS OWN
@@ -367,7 +373,7 @@ void TermScope(bool bestEfforts)
 		_p_DrvDisp = _p_OrigDrvDisp;
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
+		_p_DrvDisp = get_dispatch();
 #endif
 
 		//
@@ -410,7 +416,7 @@ void TermScope(bool bestEfforts)
 #endif
 #ifdef CROSS_THREAD_CO
 		// Best efforts
-		if(CoGetInterfaceAndReleaseStream(pMarshalStream, IID_IDispatch, (LPVOID *)&_p_DrvDisp) == S_OK)
+		if(CoGetInterfaceAndReleaseStream(_pMarshalStream, IID_IDispatch, (LPVOID *)&_p_DrvDisp) == S_OK)
 		{
 			//** TODO ** WTF? I could never get the refcounts right on the GIT method.
 			// Using these CoXxx() calls, I'm close, but I end up with an extra reference
@@ -958,8 +964,7 @@ static int get_integer(OLECHAR *name, bool noAlert)
 			else
 			{
 				cp = uni_to_ansi(name);
-				wsprintf(buf, 
-					"[%s] lost link to ASCOM driver.", cp);
+				wsprintf(buf, _szGidFailMsg, cp);
 				delete[] cp;
 				drvFail(buf, NULL, true);
 			}
@@ -1046,8 +1051,7 @@ static double get_double(OLECHAR *name)
 			&dispid)))
 		{
 			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				 "[%s] lost link to ASCOM driver.", cp);
+			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
@@ -1139,8 +1143,7 @@ static void set_double(OLECHAR *name, double val)
 			&dispid)))
 		{
 			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				 "[%s] lost link to ASCOM driver.", cp);
+			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
@@ -1222,8 +1225,7 @@ static bool get_bool(OLECHAR *name)
 			&dispid)))
 		{
 			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				 "[%s] lost link to ASCOM driver.", cp);
+			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
@@ -1318,8 +1320,7 @@ static void set_bool(OLECHAR *name, bool val)
 			&dispid)))
 		{
 			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				 "[%s] lost link to ASCOM driver.", cp);
+			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
@@ -1393,8 +1394,7 @@ static char *get_string(OLECHAR *name )
 			&dispid)))
 		{
 			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				 "[%s] lost link to ASCOM driver.", cp);
+			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
@@ -1484,8 +1484,7 @@ static void call(OLECHAR *name)
 			&dispid)))
 		{
 			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				 "[%s] lost link to ASCOM driver.", cp);
+			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
@@ -1561,8 +1560,7 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 			&dispid)))
 		{
 			cp = uni_to_ansi(name);
-			wsprintf(buf, 
-				 "[%s] lost link to ASCOM driver.", cp);
+			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
@@ -1614,11 +1612,12 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 //
 static void switchThreadIf()
 {
-	if (GetCurrentThreadId() != dCurrIntfcThreadId)
+	DWORD tid = GetCurrentThreadId();
+	if(tid != _dCurrIntfcThreadId)
 	{
 		IDispatch *pTemp;
 
-		dCurrIntfcThreadId = GetCurrentThreadId();
+		_dCurrIntfcThreadId = tid;
 		if(FAILED(_p_GIT->GetInterfaceFromGlobal(dwIntfcCookie, 
 						IID_IDispatch, 
 						(void **)&pTemp)))
@@ -1626,7 +1625,7 @@ static void switchThreadIf()
 		_p_DrvDisp = pTemp;
 #ifndef NDEBUG
 		char buf[256];
-		sprintf(buf, "disp -> %i", pTemp);
+		sprintf(buf, "tid %i, disp %i", tid, _p_DrvDisp);
 		_pLogger->out(buf);
 #endif
 	}
@@ -1637,14 +1636,15 @@ static void switchThreadIf()
 static IDispatch *get_dispatch(void)
 {
 	IDispatch *pDisp;
+	DWORD tid = GetCurrentThreadId();
 
-	if(FAILED(CoGetInterfaceAndReleaseStream(pMarshalStream, IID_IDispatch, (LPVOID *)&pDisp)))
+	if(FAILED(CoGetInterfaceAndReleaseStream(_pMarshalStream, IID_IDispatch, (LPVOID *)&pDisp)))
 		drvFail("Failed to unmarshal dispatch pointer", NULL, true);
-	if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, pDisp, &pMarshalStream)))
+	if(FAILED(CoMarshalInterThreadInterfaceInStream(IID_IDispatch, pDisp, &_pMarshalStream)))
 		drvFail("Failed to remarshal dispatch pointer", NULL, true);
 #ifndef NDEBUG
 	char buf[256];
-	sprintf(buf, "disp -> %i", pDisp);
+	sprintf(buf, "tid %i, disp %i", tid, pDisp);
 	_pLogger->out(buf);
 #endif
 	return pDisp;
