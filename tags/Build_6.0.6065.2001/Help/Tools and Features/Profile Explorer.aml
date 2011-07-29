@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="62da8408-c4ed-45d8-9398-9990dcbe8cbd" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+       <introduction>
+      <para>Profile Explorer visualises the ASCOM Profile store and allows editing of individual values.</para>
+    </introduction>
+
+    <section address="Section1">
+      <title>Profile Explorer</title>
+      <content>
+         <para>Those familiar with using RegEdit on the old ASCOM Profile will find similar uses for this tool.</para>
+         
+         <para>Profile Explorer is installed to the Start Menu\ASCOM Platform\Tools folder. It visualises the Profile
+         store and allows editing of individual values by presenting the store as a hierarchical folder structure 
+         in a left pane with values stored in the current folder presented in the linked right pane. </para>
+         
+         <para>To manage keys, right click on a key in the left hand window and select add, delete or rename as 
+         appropriate. The Profile Root key is protected so that you cannot rename or delete it. The context functions can 
+         also be activated by selecting the key and pressing Ins to add a key, Del to delete a key and F2 to
+         rename a key.</para>
+         
+         <para>Both names and values in the right hand pane can be edited. New name value pairs can be added through
+         the * column in the right hand pane. Whole rows in the right pane can be deleted by highlighting the row using 
+         the grey box at the left of each line and hitting the delete key. A confirmation box prevents accidental 
+         deletion.</para>
+         
+         <para>Values in the Profile Root are initially protected from writing and deletion and this is indicated by a red 
+         background and appropriate tooltip text. The Root Profile values can be made editable by clicking the 
+         "Enable Root Edit" item in the Options menu; the background then changes to green as a reminder.</para>
+                          
+         <para><legacyBold>Note</legacyBold> Be very careful if changing values in the Profile Root, these are relied upon 
+         by the ASCOM Platform and errors may occur if they are changed to unexpected values or deleted.</para>
+         
+         <para><legacyBold>Note</legacyBold> Any changes made in the right hand pane are effective immediately you move
+         to another column or row!</para>
+                                           
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>
