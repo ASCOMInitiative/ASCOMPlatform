@@ -1,0 +1,15 @@
+Telescope = 1, 16, 682, 869, 
+ErrorConstants = -136, 21, 813, 994, C
+frmAbout = 70, 0, 941, 932, C, 22, 22, 699, 690, C
+Global = 37, 77, 689, 952, C
+frmSetup = 24, 5, 838, 956, C, 540, 100, 985, 484, C
+frmMain = 7, 13, 875, 934, C, 292, 150, 969, 818, C
+MainModule = 1, 5, 853, 844, C
+WindowsAPI = 11, 3, 897, 888, C
+Registry = 30, 50, 875, 866, C
+frmGoTo = 3, 3, 890, 916, C, 400, 226, 745, 406, C
+modDsync = 0, 0, 984, 976, C
+AstronomyFuncs = 22, 22, 976, 964, C
+DomeSyncWrapper = 6, 47, 987, 1021, C
+Dome = 2, 1, 1006, 1065, C
+Rate = 110, 110, 765, 824, C
