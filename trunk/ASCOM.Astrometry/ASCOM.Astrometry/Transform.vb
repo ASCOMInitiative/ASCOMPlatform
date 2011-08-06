@@ -4,8 +4,8 @@ Imports System.Math
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Interfaces
 Imports System.Runtime.InteropServices
-Imports ASCOM.Astrometry.NOVAS.NOVAS2
 Imports ASCOM.Astrometry.Kepler
+Imports ASCOM.Astrometry.AstroUtils
 Imports System.Reflection
 
 Namespace Transform
@@ -29,26 +29,24 @@ Namespace Transform
     Public Class Transform
         Implements ITransform, IDisposable
         Private disposedValue As Boolean = False        ' To detect redundant calls
-        Private Utl As Util
+        Private Utl As Util, AstroUtl As AstroUtils.AstroUtils, Nov3 As NOVAS.NOVAS3
         Private RAJ2000Value, RATopoValue, DECJ2000Value, DECTopoValue, SiteElevValue, SiteLatValue, SiteLongValue, SiteTempValue As Double
         Private RAApparentValue, DECApparentValue, AzimuthTopoValue, ElevationTopoValue As Double
         Private RefracValue, RequiresRecalculate As Boolean
         Private LastSetBy As SetBy
 
         Private Earth As BodyDescription
-        Private CatEntry As CatEntry
-        Private Site As SiteInfo
+        Private Location As New OnSurface, Cat3 As New CatEntry3
 
         Private TL As TraceLogger
         Private Sw As Stopwatch
-
-        Private Const J2000 As Double = 2451545.0
 
         Private Enum SetBy
             Never
             J2000
             Apparent
             Topocentric
+            AzimuthElevation
             Refresh
         End Enum
 
@@ -60,6 +58,8 @@ Namespace Transform
 
             Utl = New Util 'Get a Util component for Julian functions
             Sw = New Stopwatch
+            AstroUtl = New AstroUtils.AstroUtils
+            Nov3 = New NOVAS.NOVAS3
 
             Earth.Name = "Earth"
             Earth.Number = Body.Earth
@@ -85,10 +85,18 @@ Namespace Transform
                     Utl.Dispose()
                     Utl = Nothing
                 End If
+                If Not AstroUtl Is Nothing Then
+                    AstroUtl.Dispose()
+                    AstroUtl = Nothing
+                End If
+                If Not Nov3 Is Nothing Then
+                    Nov3.Dispose()
+                    Nov3 = Nothing
+                End If
                 'Clean up the NOVAS.Net objects
                 Earth = Nothing
-                CatEntry = Nothing
-                Site = Nothing
+                Cat3 = Nothing
+                Location = Nothing
                 If Not Sw Is Nothing Then
                     Sw.Stop()
                     Sw = Nothing
@@ -220,7 +228,7 @@ Namespace Transform
             If (RA <> RAJ2000Value) Or (DEC <> DECJ2000Value) Then RequiresRecalculate = True
             RAJ2000Value = RA
             DECJ2000Value = DEC
-            TL.LogMessage("SetJ2000", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & "DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
+            TL.LogMessage("SetJ2000", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
         End Sub
         ''' <summary>
         ''' Sets the known apparent Right Ascension and Declination coordinates that are to be transformed
@@ -233,7 +241,7 @@ Namespace Transform
             If (RA <> RAApparentValue) Or (DEC <> DECApparentValue) Then RequiresRecalculate = True
             RAApparentValue = RA
             DECApparentValue = DEC
-            TL.LogMessage("SetApparent", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & "DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
+            TL.LogMessage("SetApparent", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
         End Sub
         '''<summary>
         ''' Sets the known local topocentric Right Ascension and Declination coordinates that are to be transformed
@@ -246,7 +254,7 @@ Namespace Transform
             If (RA <> RATopoValue) Or (DEC <> DECTopoValue) Then RequiresRecalculate = True
             RATopoValue = RA
             DECTopoValue = DEC
-            TL.LogMessage("SetTopocentric", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & "DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
+            TL.LogMessage("SetTopocentric", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
         End Sub
         ''' <summary>
         ''' Returns the Right Ascension in J2000 co-ordinates
@@ -374,7 +382,8 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property AzimuthTopocentric() As Double Implements ITransform.AzimuthTopocentric
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECApparent before SetJ2000 or SetApparent has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read AzimuthTopocentric before SetJ2000 or SetApparent has been called")
+                RequiresRecalculate = True 'Force a recalculation of Azimuth
                 Recalculate()
                 CheckSet("AzimuthTopocentric", AzimuthTopoValue, "Azimuth topocentric can not be derived from the information provided. Are site parameters set?")
                 TL.LogMessage("AzimuthTopocentric Get", Utl.DegreesToDMS(AzimuthTopoValue, ":", ":", "", 3))
@@ -394,13 +403,22 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property ElevationTopocentric() As Double Implements ITransform.ElevationTopocentric
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECApparent before SetJ2000 or SetApparent has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read ElevationTopocentric before SetJ2000 or SetApparent has been called")
+                RequiresRecalculate = True 'Force a recalculation of Elevation
                 Recalculate()
                 CheckSet("ElevationTopocentric", ElevationTopoValue, "Elevation topocentric can not be derived from the information provided. Are site parameters set?")
                 TL.LogMessage("ElevationTopocentric Get", Utl.DegreesToDMS(ElevationTopoValue, ":", ":", "", 3))
                 Return ElevationTopoValue
             End Get
         End Property
+
+        Sub SetAzimuthElevation(Azimuth As Double, Elevation As Double) Implements ITransform.SetAzimuthElevation
+            LastSetBy = SetBy.AzimuthElevation
+            RequiresRecalculate = True
+            AzimuthTopoValue = Azimuth
+            ElevationTopoValue = Elevation
+            TL.LogMessage("SetAzimuthElevation", "Azimuth: " & Utl.DegreesToDMS(Azimuth, ":", ":", "", 3) & ", Elevation: " & Utl.DegreesToDMS(Elevation, ":", ":", "", 3))
+        End Sub
 #End Region
 
 #Region "Support Code"
@@ -413,26 +431,33 @@ Namespace Transform
         End Sub
 
         Private Sub J2000ToTopo()
-            Dim rc As Short, RefracOption As RefractionOption
+            Dim rc As Short, RefracOption As RefractionOption, JulianDate, DeltaT As Double
+
             If Double.IsNaN(SiteElevValue) Then Throw New Exceptions.TransformUninitialisedException("Site elevation has not been set")
             If Double.IsNaN(SiteLatValue) Then Throw New Exceptions.TransformUninitialisedException("Site latitude has not been set")
             If Double.IsNaN(SiteLongValue) Then Throw New Exceptions.TransformUninitialisedException("Site longitude has not been set")
             If Double.IsNaN(SiteTempValue) Then Throw New Exceptions.TransformUninitialisedException("Site temperature has not been set")
 
-            Site.Height = SiteElevValue
-            Site.Latitude = SiteLatValue
-            Site.Longitude = SiteLongValue
-            Site.Temperature = SiteTempValue
+            Sw.Start()
 
-            CatEntry.Dec = DECJ2000Value
-            CatEntry.RA = RAJ2000Value
-            CatEntry.ProMoRA = 0.0
-            CatEntry.ProMoDec = 0.0
-            CatEntry.Parallax = 0.0
-            CatEntry.RadialVelocity = 0.0
+            Location.Height = SiteElevValue
+            Location.Latitude = SiteLatValue
+            Location.Longitude = SiteLongValue
+            Location.Pressure = 1000.0
+            Location.Temperature = SiteTempValue
+
+            Cat3.Dec = DECJ2000Value
+            Cat3.RA = RAJ2000Value
+            Cat3.ProMoRA = 0.0
+            Cat3.ProMoDec = 0.0
+            Cat3.Parallax = 0.0
+            Cat3.RadialVelocity = 0.0
+
+            JulianDate = AstroUtl.JulianDateTT(0.0)
+            DeltaT = AstroUtl.DeltaT
 
             'Get unrefracted topo RA and DEC
-            rc = TopoStar(Utl.JulianDate, Earth, 0.0, CatEntry, Site, RATopoValue, DECTopoValue)
+            rc = Nov3.TopoStar(JulianDate, DeltaT, Cat3, Location, Accuracy.Full, RATopoValue, DECTopoValue)
 
             'Set refraction option variable
             If RefracValue Then
@@ -441,30 +466,38 @@ Namespace Transform
                 RefracOption = RefractionOption.NoRefraction
             End If
             'Calculate Az/El and refracted RA and DEC if required
-            Equ2Hor(Utl.JulianDate, 0.0, 0.0, 0.0, Site, RATopoValue, DECTopoValue, RefracOption, ElevationTopoValue, AzimuthTopoValue, RATopoValue, DECTopoValue)
+
+            TL.LogMessage("  J2000 To Topo Unref", "  " & Sw.ElapsedMilliseconds & "ms " & Utl.HoursToHMS(RATopoValue, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECTopoValue, ":", ":", "", 3))
+
+            Nov3.Equ2Hor(JulianDate, DeltaT, Accuracy.Full, 0.0, 0.0, Location, RATopoValue, DECTopoValue, RefracOption, ElevationTopoValue, AzimuthTopoValue, RATopoValue, DECTopoValue)
             ElevationTopoValue = 90.0 - ElevationTopoValue 'Convert zenith distance to elevation
+            TL.LogMessage("  J2000 To Topo", "  " & Utl.DegreesToDMS(AzimuthTopoValue, ":", ":", "", 3) & " " & Utl.DegreesToDMS(ElevationTopoValue, ":", ":", "", 3))
+
             Sw.Stop()
-            TL.LogMessage("  J2000 To Topo", "  " & Sw.ElapsedMilliseconds & "ms " & Utl.HoursToHMS(RATopoValue) & " " & Utl.DegreesToDMS(DECTopoValue, ":", ":"))
 
         End Sub
 
         Private Sub J2000ToApparent()
             Dim rc As Short
 
-            CatEntry.Dec = DECJ2000Value
-            CatEntry.RA = RAJ2000Value
-            CatEntry.ProMoRA = 0.0
-            CatEntry.ProMoDec = 0.0
-            CatEntry.Parallax = 0.0
-            CatEntry.RadialVelocity = 0.0
-            rc = (AppStar(Utl.JulianDate, Earth, CatEntry, RAApparentValue, DECApparentValue))
+            Cat3.Dec = DECJ2000Value
+            Cat3.RA = RAJ2000Value
+            Cat3.ProMoRA = 0.0
+            Cat3.ProMoDec = 0.0
+            Cat3.Parallax = 0.0
+            Cat3.RadialVelocity = 0.0
+            rc = Nov3.AppStar(AstroUtl.JulianDateTT(0.0), Cat3, Accuracy.Full, RAApparentValue, DECApparentValue)
 
             Sw.Stop()
             TL.LogMessage("  J2000 To Apparent", "  " & Sw.ElapsedMilliseconds & "ms " & Utl.HoursToHMS(RAApparentValue) & " " & Utl.DegreesToDMS(DECApparentValue, ":", ":"))
         End Sub
 
         Private Sub TopoToJ2000()
-            Dim RAOld, DECOld, DeltaRA, DeltaDEC, RACalc, DECCalc As Double
+            TopoToJ2000(True) 'We do want to calculate azimuth and elevation
+        End Sub
+
+        Private Sub TopoToJ2000(CalculateAzEl As Boolean)
+            Dim RAOld, DECOld, DeltaRA, DeltaDEC, RACalc, DECCalc, DeltaT As Double
             Dim ct As Integer, rc As Short, RefracOption As RefractionOption
             Dim JNow As Double
 
@@ -472,12 +505,14 @@ Namespace Transform
             If Double.IsNaN(SiteLatValue) Then Throw New Exceptions.TransformUninitialisedException("Site latitude has not been set")
             If Double.IsNaN(SiteLongValue) Then Throw New Exceptions.TransformUninitialisedException("Site longitude has not been set")
             If Double.IsNaN(SiteTempValue) Then Throw New Exceptions.TransformUninitialisedException("Site temperature has not been set")
-            Site.Height = SiteElevValue
-            Site.Latitude = SiteLatValue
-            Site.Longitude = SiteLongValue
-            Site.Temperature = SiteTempValue
+            Location.Height = SiteElevValue
+            Location.Latitude = SiteLatValue
+            Location.Longitude = SiteLongValue
+            Location.Temperature = SiteTempValue
 
             JNow = Utl.JulianDate
+            DeltaT = DeltaTCalc(JNow)
+            TL.LogMessage("  Topo To J2000", "  Julian Date:" & JNow)
 
             RAJ2000Value = RATopoValue
             DECJ2000Value = DECTopoValue
@@ -487,13 +522,13 @@ Namespace Transform
                 RAOld = RAJ2000Value
                 DECOld = DECJ2000Value
 
-                CatEntry.RA = RAOld
-                CatEntry.Dec = DECOld
-                CatEntry.ProMoRA = 0.0
-                CatEntry.ProMoDec = 0.0
-                CatEntry.Parallax = 0.0
-                CatEntry.RadialVelocity = 0.0
-                rc = TopoStar(JNow, Earth, 0.0, CatEntry, Site, RACalc, DECCalc)
+                Cat3.RA = RAOld
+                Cat3.Dec = DECOld
+                Cat3.ProMoRA = 0.0
+                Cat3.ProMoDec = 0.0
+                Cat3.Parallax = 0.0
+                Cat3.RadialVelocity = 0.0
+                rc = Nov3.TopoStar(AstroUtl.JulianDateTT(0.0), AstroUtl.DeltaT, Cat3, Location, Accuracy.Full, RACalc, DECCalc)
 
                 DeltaRA = RACalc - RAOld
                 DeltaDEC = DECCalc - DECOld
@@ -506,16 +541,20 @@ Namespace Transform
                 TL.LogMessage("  Iteration", "  " & ct.ToString & " " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3))
             Loop Until (ct > 5) And ((ct = 20) Or (Abs(RAOld - RAJ2000Value) < 1 / (24 * 60 * 60) And Abs(DECOld - DECJ2000Value) < 1 / (24 * 60 * 60)))
 
-            'Set refraction option variable
-            If RefracValue Then
-                RefracOption = RefractionOption.LocationRefraction
+            If CalculateAzEl Then
+                TL.LogMessage("  Topo To J2000", "  Calculating azimuth and elevation")
+                'Set refraction option variable
+                If RefracValue Then
+                    RefracOption = RefractionOption.LocationRefraction
+                Else
+                    RefracOption = RefractionOption.NoRefraction
+                End If
+                'Calculate Az/El and refracted RA and DEC if required
+                Nov3.Equ2Hor(AstroUtl.JulianDateTT(0.0), AstroUtl.DeltaT, Accuracy.Full, 0.0, 0.0, Location, RATopoValue, DECTopoValue, RefracOption, ElevationTopoValue, AzimuthTopoValue, RATopoValue, DECTopoValue)
+                ElevationTopoValue = 90.0 - ElevationTopoValue 'Convert zenith distance to elevation
             Else
-                RefracOption = RefractionOption.NoRefraction
+                TL.LogMessage("  Topo To J2000", "  Not calculating azimuth and elevation")
             End If
-            'Calculate Az/El and refracted RA and DEC if required
-            Equ2Hor(JNow, 0.0, 0.0, 0.0, Site, RATopoValue, DECTopoValue, RefracOption, ElevationTopoValue, AzimuthTopoValue, RATopoValue, DECTopoValue)
-            ElevationTopoValue = 90.0 - ElevationTopoValue 'Convert zenith distance to elevation
-
             Sw.Stop()
             TL.LogMessage("  Topo To J2000", "  " & ct & " iterations " & Sw.ElapsedMilliseconds & "ms " & Utl.HoursToHMS(RAJ2000Value) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":"))
 
@@ -535,13 +574,13 @@ Namespace Transform
                 RAOld = RAApparentValue
                 DECOld = DECApparentValue
 
-                CatEntry.RA = RAOld
-                CatEntry.Dec = DECOld
-                CatEntry.ProMoRA = 0.0
-                CatEntry.ProMoDec = 0.0
-                CatEntry.Parallax = 0.0
-                CatEntry.RadialVelocity = 0.0
-                rc = AppStar(JNow, Earth, CatEntry, RACalc, DECCalc)
+                Cat3.RA = RAOld
+                Cat3.Dec = DECOld
+                Cat3.ProMoRA = 0.0
+                Cat3.ProMoDec = 0.0
+                Cat3.Parallax = 0.0
+                Cat3.RadialVelocity = 0.0
+                rc = Nov3.AppStar(AstroUtl.JulianDateTT(0.0), Cat3, Accuracy.Full, RACalc, DECCalc)
 
                 DeltaRA = RACalc - RAOld
                 DeltaDEC = DECCalc - DECOld
@@ -562,7 +601,7 @@ Namespace Transform
             Sw.Reset() : Sw.Start()
             If RequiresRecalculate Then
                 Select Case LastSetBy
-                    Case SetBy.J2000 'J2000 cororinates have bee set so calculate apparent and topocentric coords
+                    Case SetBy.J2000 'J2000 coordinates have bee set so calculate apparent and topocentric coords
                         TL.LogMessage("  Recalculating", "  Values last set by SetJ2000")
                         'Check whether required topo values have been set
                         If (Not Double.IsNaN(SiteLatValue)) And _
@@ -573,6 +612,8 @@ Namespace Transform
                         Else 'Set to NaN
                             RATopoValue = Double.NaN
                             DECTopoValue = Double.NaN
+                            AzimuthTopoValue = Double.NaN
+                            ElevationTopoValue = Double.NaN
                         End If
                         Call J2000ToApparent()
                     Case SetBy.Topocentric 'Topocentric co-ordinates have been set so calculate J2000 and apparent coords
@@ -585,10 +626,12 @@ Namespace Transform
                             Call TopoToJ2000()
                             Call J2000ToApparent()
                         Else 'Set the topo and apaprent values to NaN
+                            RAJ2000Value = Double.NaN
+                            DECJ2000Value = Double.NaN
                             RAApparentValue = Double.NaN
                             DECApparentValue = Double.NaN
-                            RATopoValue = Double.NaN
-                            DECTopoValue = Double.NaN
+                            AzimuthTopoValue = Double.NaN
+                            ElevationTopoValue = Double.NaN
                         End If
                     Case SetBy.Apparent 'Apparent values have been set so calculate J2000 values and topo values if appropriate
                         TL.LogMessage("  Recalculating", "  Values last set by SetApparent")
@@ -602,7 +645,27 @@ Namespace Transform
                         Else
                             RATopoValue = Double.NaN
                             DECTopoValue = Double.NaN
+                            AzimuthTopoValue = Double.NaN
+                            ElevationTopoValue = Double.NaN
                         End If
+                    Case SetBy.AzimuthElevation
+                        TL.LogMessage("  Recalculating", "  Values last set by AzimuthElevation")
+                        If (Not Double.IsNaN(SiteLatValue)) And _
+                           (Not Double.IsNaN(SiteLongValue)) And _
+                           (Not Double.IsNaN(SiteElevValue)) And _
+                           (Not Double.IsNaN(SiteTempValue)) Then
+                            Call AzElToTopo()
+                            Call TopoToJ2000(False) 'Calculate J2000 value but don't update the azimuth and elevation that were set by the user
+                            Call J2000ToApparent()
+                        Else
+                            RAJ2000Value = Double.NaN
+                            DECJ2000Value = Double.NaN
+                            RAApparentValue = Double.NaN
+                            DECApparentValue = Double.NaN
+                            RATopoValue = Double.NaN
+                            DECTopoValue = Double.NaN
+                        End If
+
                     Case Else 'Neither SetJ2000 nor SetTopocentric nor SetApparent have been called, so throw an exception
                         TL.LogMessage("Recalculating", "Neither SetJ2000 nor SetTopocentric nor SetApparent have been called. Throwing TransforUninitialisedException")
                         Throw New Exceptions.TransformUninitialisedException("Can't recalculate Transform object values because neither SetJ2000 nor SetTopocentric nor SetApparent have been called")
@@ -611,6 +674,95 @@ Namespace Transform
             Else
                 TL.LogMessage("  Recalculate", "No parameters have changed, recalculation not required")
             End If
+        End Sub
+
+        Private Sub AzElToTopo()
+            Dim GreenwichApparentSiderealTime, LocalApparentSiderealTime, RefractionCorrection, ElevationDegRefracted, ElevationRadians, AzimuthRadians As Double
+            Dim DeclinationSin, DeclinationRadians, LatitudeRadians, HourAngleRadians, HourAngle As Double
+            Dim RefracOption As RefractionOption
+            Dim DeltaT, JulianDate As Double
+            Dim EstimatedElevation, EstimatedAzimuth, LastAltitude, LastAzimuth As Double, LoopCount As Integer
+            Dim RACalculated, DECCalculated As Double
+            Dim Az, El As Double
+            Dim ZdN, AzN, RaRN, DecRN As Double
+
+            Const RadToDeg As Double = 180.0 / PI
+            Const DegToRad As Double = PI / 180.0
+            Const RadToHours As Double = 180.0 / (PI * 15.0)
+            Const Deg2Hours As Double = 1.0 / 15.0
+
+            If Double.IsNaN(SiteElevValue) Then Throw New Exceptions.TransformUninitialisedException("Site elevation has not been set")
+            If Double.IsNaN(SiteLatValue) Then Throw New Exceptions.TransformUninitialisedException("Site latitude has not been set")
+            If Double.IsNaN(SiteLongValue) Then Throw New Exceptions.TransformUninitialisedException("Site longitude has not been set")
+            If Double.IsNaN(SiteTempValue) Then Throw New Exceptions.TransformUninitialisedException("Site temperature has not been set")
+
+            Location.Height = SiteElevValue
+            Location.Latitude = SiteLatValue
+            Location.Longitude = SiteLongValue
+            Location.Temperature = SiteTempValue
+
+            Nov3.SiderealTime(AstroUtl.JulianDateUT1(0.0), 0.0, AstroUtl.DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GreenwichApparentSiderealTime)
+            LocalApparentSiderealTime = AstroUtl.ConditionHA(GreenwichApparentSiderealTime + SiteLongValue * Deg2Hours)
+            TL.LogMessage("  AzEl To Topo", "  Sidereal time: " & Utl.HoursToHMS(GreenwichApparentSiderealTime, ":", ":", ".", 3) & " " & Utl.HoursToHMS(LocalApparentSiderealTime, ":", ":", ".", 3))
+
+            TL.LogMessage("  AzEl To Topo", "  Azimuth: " & Utl.DegreesToDMS(AzimuthTopoValue, ":", ":", ""))
+
+            LatitudeRadians = SiteLatValue * DegToRad
+            TL.LogMessage("  AzEl To Topo", "  Site Latitude: " & Utl.DegreesToDMS(SiteLatValue, ":", ":", ""))
+
+            JulianDate = Utl.JulianDate
+            DeltaT = DeltaTCalc(JulianDate)
+            TL.LogMessage("  AzEl To Topo", "  Julian Date: " & JulianDate.ToString & ", DeltaT: " & DeltaT)
+
+            'Set refraction option variable
+            If RefracValue Then
+                RefracOption = RefractionOption.LocationRefraction
+                TL.LogMessage("  AzEl To Topo", "  Refraction enabled")
+                RefractionCorrection = Nov3.Refract(Location, RefracOption, 90.0 - ElevationTopoValue)
+            Else
+                RefracOption = RefractionOption.NoRefraction
+                TL.LogMessage("  AzEl To Topo", "  Refraction disabled")
+                RefractionCorrection = 0.0
+            End If
+            ElevationDegRefracted = ElevationTopoValue - RefractionCorrection
+            TL.LogMessage("  AzEl To Topo", "  Elevation: " & Utl.DegreesToDMS(ElevationTopoValue, ":", ":", "") & ", Refracted: " & Utl.DegreesToDMS(ElevationDegRefracted, ":", ":", "") & ", Refraction: " & Utl.DegreesToDMS(RefractionCorrection, ":", ":", ""))
+            EstimatedAzimuth = AzimuthTopoValue
+            EstimatedElevation = ElevationDegRefracted
+            LoopCount = 0
+
+            Do
+                LoopCount += 1
+                LastAzimuth = EstimatedAzimuth
+                LastAltitude = EstimatedElevation
+                TL.LogMessage("  Iteration", "  " & LoopCount.ToString & _
+                              " Estimated Azimuth: " & Utl.DegreesToDMS(Az, ":", ":", "", 3) & _
+                              ", Estimated Elevation: " & Utl.DegreesToDMS(El, ":", ":", "", 3) & _
+                              ", Estimated HA: " & Utl.HoursToHMS(HourAngle, ":", ":", "", 3) & _
+                              ", Estimated RA: " & Utl.HoursToHMS(RATopoValue, ":", ":", "", 3) & _
+                              ", Estimated Declination: " & Utl.DegreesToDMS(DECTopoValue, ":", ":", "", 3))
+
+                AzimuthRadians = EstimatedAzimuth * DegToRad
+                ElevationRadians = EstimatedElevation * DegToRad
+
+                DeclinationSin = (Sin(ElevationRadians) * Sin(LatitudeRadians)) + (Cos(ElevationRadians) * Cos(LatitudeRadians) * Cos(AzimuthRadians))
+                DeclinationRadians = Atan2(DeclinationSin, Sqrt(-DeclinationSin * DeclinationSin + 1.0))
+                DECCalculated = DeclinationRadians * RadToDeg
+
+                HourAngleRadians = Atan2(-Sin(AzimuthRadians) * Cos(ElevationRadians), -Cos(AzimuthRadians) * Sin(LatitudeRadians) * Cos(ElevationRadians) + Sin(ElevationRadians) * Cos(LatitudeRadians))
+                HourAngle = HourAngleRadians * RadToHours
+                RACalculated = AstroUtl.ConditionRA(LocalApparentSiderealTime - HourAngle)
+
+                Nov3.Equ2Hor(AstroUtl.JulianDateTT(0.0), AstroUtl.DeltaT, Accuracy.Full, 0.0, 0.0, Location, RACalculated, DECCalculated, RefracOption, El, Az, RATopoValue, DECTopoValue)
+                El = 90.0 - El 'Convert zenith distance to elevation
+                EstimatedAzimuth = EstimatedAzimuth + (AzimuthTopoValue - Az)
+                EstimatedElevation = EstimatedElevation + (ElevationTopoValue - El)
+            Loop Until (LoopCount = 20) Or (((ElevationTopoValue - El) < 0.00001) And ((AzimuthTopoValue - Az) < 0.00001))
+
+            Nov3.Equ2Hor(AstroUtl.JulianDateTT(0.0), DeltaT, Accuracy.Full, 0.0, 0.0, Location, RACalculated, DECCalculated, RefracOption, ZdN, AzN, RaRN, DecRN)
+            TL.LogMessage("  AzEl To Topo", "  NOVAS3 RA: " & Utl.HoursToHMS(RaRN, ":", ":", "", 3) & ", Declination: " & Utl.DegreesToDMS(DecRN, ":", ":", "", 3))
+            TL.LogMessage("  AzEl To Topo", "  NOVAS3 Azimuth: " & Utl.DegreesToDMS(AzN, ":", ":") & ", Elevation: " & Utl.DegreesToDMS(90.0 - ZdN, ":", ":"))
+
+            TL.BlankLine()
         End Sub
 
         Private Sub CheckGAC()

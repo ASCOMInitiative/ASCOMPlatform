@@ -988,11 +988,10 @@ Public Class Util
     End Function
 
     ''' <summary>
-    ''' Convert a string safearray to an ArrayList that can be used
-    ''' in scripting languages
+    ''' Convert a string safearray to an ArrayList that can be used in scripting languages
     ''' </summary>
-    ''' <param name="stringArray"> array of strings</param>
-    ''' <returns>collection of integers</returns>
+    ''' <param name="stringArray">Array of strings</param>
+    ''' <returns>Collection of integers</returns>
     ''' <remarks></remarks>
     Public Function ToStringCollection(ByVal stringArray As String()) As ArrayList Implements IUtil.ToStringCollection
         ToStringCollection = New ArrayList()
@@ -1002,11 +1001,10 @@ Public Class Util
     End Function
 
     ''' <summary>
-    ''' Convers an integer safearray to and ArrayList collection that can be used
-    ''' in scripting languages
+    ''' Convert an integer safearray to an ArrayList collection that can be used in scripting languages
     ''' </summary>
-    ''' <param name="integerArray">safearray of integers</param>
-    ''' <returns>colection of integers</returns>
+    ''' <param name="integerArray">Safearray of integers</param>
+    ''' <returns>Colection of integers</returns>
     ''' <remarks></remarks>
     Public Function ToIntegerCollection(ByVal integerArray As Integer()) As ArrayList Implements IUtil.ToIntegerCollection
         ToIntegerCollection = New ArrayList()
