@@ -174,6 +174,13 @@ Namespace Transform
         ''' a SetApparent and one of the Site properties has not been set.</exception>
         ''' <remarks></remarks>
         <DispId(17)> ReadOnly Property ElevationTopocentric() As Double
+        ''' <summary>
+        ''' Sets known Altitude and Azimuth values which are to be transformed
+        ''' </summary>
+        ''' <param name="Azimuth">Object's azimuth in degrees</param>
+        ''' <param name="Elevation">Object's Elevation in degrees</param>
+        ''' <remarks></remarks>
+        <DispId(18)> Sub SetAzimuthElevation(Azimuth As Double, Elevation As Double)
     End Interface
 End Namespace
 #End Region
@@ -3399,5 +3406,18 @@ Namespace NOVAS
         ''' <remarks>Valid between the years 1650 and 2050</remarks>
         <DispId(72)> Function DeltaT(ByVal Tjd As Double) As Double
     End Interface
+End Namespace
+#End Region
+
+#Region "AstroUtils Interface"
+Namespace AstroUtils
+    <ComVisible(True), Guid("143068F6-ADC9-4751-AC39-924111396F0F"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
+    Public Interface IAstroUtils
+        <DispId(1)> Function ConditionRA(RA As Double) As Double
+        <DispId(2)> Function ConditionHA(HA As Double) As Double
+        <DispId(2)> Function DeltaT() As Double
+
+    End Interface
+
 End Namespace
 #End Region

@@ -141,6 +141,7 @@
       <Link>CLSCompliant.vb</Link>
     </Compile>
     <Compile Include="AstrometryExceptions.vb" />
+    <Compile Include="AstroUtils.vb" />
     <Compile Include="DeltaT.vb" />
     <Compile Include="GlobalItems.vb" />
     <Compile Include="Interfaces.vb" />
@@ -245,6 +246,11 @@
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

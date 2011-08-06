@@ -28,6 +28,7 @@ Public Class DiagnosticsForm
     Private Const TestTelescopeDescription As String = "This is a test telescope"
     Private Const RevisedTestTelescopeDescription As String = "Updated description for test telescope!!!"
     Private Const NewTestTelescopeDescription As String = "New description for test telescope!!!"
+    Private Const TOLERANCE_E5 As Double = 0.00001 ' Used in evaluating precision match of double values
     Private Const TOLERANCE_E6 As Double = 0.000001 ' Used in evaluating precision match of double values
     Private Const TOLERANCE_E7 As Double = 0.0000001 ' Used in evaluating precision match of double values
     Private Const TOLERANCE_E8 As Double = 0.00000001 ' Used in evaluating precision match of double values
@@ -67,6 +68,7 @@ Public Class DiagnosticsForm
     Private NumberOfTicks As Integer
 
     Private Nov3 As ASCOM.Astrometry.NOVAS.NOVAS3
+    Private AstroUtl As AstroUtils.AstroUtils
     Private DeviceObject As Object ' Device test object
 
     Private LastLogFile As String ' Name of last diagnostics log file
@@ -206,7 +208,8 @@ Public Class DiagnosticsForm
             sw = New Stopwatch
 
             RefreshTraceItems() ' Get current values for the trace menu settings
-
+            AstroUtl = New AstroUtils.AstroUtils
+            Nov3 = New NOVAS.NOVAS3
             Me.BringToFront()
         Catch ex As Exception
             EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
@@ -1362,7 +1365,6 @@ Public Class DiagnosticsForm
 
     Sub NOVAS3Tests()
         Status("NOVAS 3 Tests")
-        Nov3 = New ASCOM.Astrometry.NOVAS.NOVAS3
 
         NOVAS3Test(NOVAS3Functions.PlanetEphemeris)
         NOVAS3Test(NOVAS3Functions.ReadEph)
@@ -1439,9 +1441,6 @@ Public Class DiagnosticsForm
         TL.BlankLine()
 
         CheckoutStarsFull()
-
-        Nov3.Dispose()
-        Nov3 = Nothing
 
         TL.BlankLine()
 
@@ -2552,7 +2551,7 @@ Public Class DiagnosticsForm
         Dim tjd, RA, DEC As Double
         Dim star As New CatEntry
         Dim rc As Short
-        Dim location As New SiteInfo
+        Dim Location As New SiteInfo, OnSurface3 As New OnSurface, Cat3 As New CatEntry3
 
         Try
             'RA and DEC
@@ -2578,19 +2577,35 @@ Public Class DiagnosticsForm
             Earth.Type = BodyType.MajorPlanet
             star.RA = AstroRA
             star.Dec = AstroDEC
-            location.Height = SiteElev
-            location.Latitude = SiteLat
-            location.Longitude = SiteLong
-            location.Pressure = 1000
-            location.Temperature = 10
+            Location.Height = SiteElev
+            Location.Latitude = SiteLat
+            Location.Longitude = SiteLong
+            Location.Pressure = 1000
+            Location.Temperature = 10
 
             T.SetJ2000(AstroRA, AstroDEC)
-            rc = NOVAS.NOVAS2.TopoStar(tjd, Earth, 0, star, location, RA, DEC) ' Compare to the NOVAS 2 prediction
+            rc = NOVAS.NOVAS2.TopoStar(tjd, Earth, 0, star, Location, RA, DEC) ' Compare to the NOVAS 2 prediction
             TL.LogMessage("TransformTest", Name & ": Astrometric(" & Util.HoursToHMS(AstroRA, ":", ":", "", 3) & ", " & Util.DegreesToDMS(AstroDEC, ":", ":", "", 2) & _
                                                      ") Topocentric(" & Util.HoursToHMS(RA, ":", ":", "", 3) & " DEC: " & Util.DegreesToDMS(DEC, ":", ":", "", 2) & ")")
+            TL.LogMessage("TransformTest", Name & " RA/DEC Actual  : " & Util.HoursToHMS(T.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(T.DECTopocentric, ":", ":", "", 3))
+            TL.LogMessage("TransformTest", Name & " RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
+            CompareDouble("TransformTest", Name & " Topocentric RA", T.RATopocentric, RA, TOLERANCE_E5)
+            CompareDouble("TransformTest", Name & " Topocentric Dec", T.DECTopocentric, DEC, TOLERANCE_E5)
 
-            CompareDouble("TransformTest", Name & " Topocentric RA", T.RATopocentric, RA, Tolerance)
-            CompareDouble("TransformTest", Name & " Topocentric Dec", T.DECTopocentric, DEC, Tolerance)
+            Cat3.RA = star.RA
+            Cat3.Dec = star.Dec
+            OnSurface3.Height = Location.Height
+            OnSurface3.Latitude = Location.Latitude
+            OnSurface3.Longitude = Location.Longitude
+            OnSurface3.Pressure = Location.Pressure
+            OnSurface3.Temperature = Location.Temperature
+
+            rc = Nov3.TopoStar(AstroUtl.JulianDateTT(0.0), AstroUtl.DeltaT, Cat3, OnSurface3, Accuracy.Full, RA, DEC)
+            TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Actual  : " & Util.HoursToHMS(T.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(T.DECTopocentric, ":", ":", "", 3))
+            TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
+            CompareDouble("TransformTest", Name & " Novas3 Topocentric RA", T.RATopocentric, RA, Tolerance)
+            CompareDouble("TransformTest", Name & " Novas3 Topocentric Dec", T.DECTopocentric, DEC, Tolerance)
+
         Catch ex As Exception
             LogException("TransformTest2000 Exception", ex.ToString)
         End Try
