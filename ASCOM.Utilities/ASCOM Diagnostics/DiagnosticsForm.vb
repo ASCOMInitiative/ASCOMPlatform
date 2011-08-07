@@ -67,7 +67,7 @@ Public Class DiagnosticsForm
     Private StartTime As Date
     Private NumberOfTicks As Integer
 
-    Private Nov3 As ASCOM.Astrometry.NOVAS.NOVAS3
+    Private Nov3 As ASCOM.Astrometry.NOVAS.NOVAS3, Nov31 As ASCOM.Astrometry.NOVAS.NOVAS31
     Private AstroUtl As AstroUtils.AstroUtils
     Private DeviceObject As Object ' Device test object
 
@@ -210,6 +210,7 @@ Public Class DiagnosticsForm
             RefreshTraceItems() ' Get current values for the trace menu settings
             AstroUtl = New AstroUtils.AstroUtils
             Nov3 = New NOVAS.NOVAS3
+            Nov31 = New NOVAS.NOVAS31
             Me.BringToFront()
         Catch ex As Exception
             EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
@@ -510,9 +511,18 @@ Public Class DiagnosticsForm
                 End Try
                 Try
                     NOVAS3Tests() : Action("")
-                    SimulatorTests() : Action("")
                 Catch ex As Exception
                     LogException("NOVAS3Tests", ex.ToString)
+                End Try
+                Try
+                    NOVAS31Tests() : Action("")
+                Catch ex As Exception
+                    LogException("NOVAS31Tests", ex.ToString)
+                End Try
+                Try
+                    SimulatorTests() : Action("")
+                Catch ex As Exception
+                    LogException("SimulatorTests", ex.ToString)
                 End Try
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
@@ -545,7 +555,7 @@ Public Class DiagnosticsForm
                 Try : ASCOMRegistryAccess.Dispose() : Catch : End Try 'Clean up registryaccess object
                 ASCOMRegistryAccess = Nothing
             End Try
-            btnLastLog.Enabled = True
+        btnLastLog.Enabled = True
 
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
@@ -1301,6 +1311,7 @@ Public Class DiagnosticsForm
         AstroStar
         Bary2Obs
         CalDate
+        Cel2Ter ' Only from NOVAS 3.1 onwards
         CelPole
         CioArray
         CioBasis
@@ -1960,7 +1971,7 @@ Public Class DiagnosticsForm
                     NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
                     NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
                     rc = Nov3.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
-                    LogRCDouble(TestFunction, "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E6)
+                    LogRCDouble(TestFunction, "Novas3", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E6)
                 Case NOVAS3Functions.Spin
                     rc = 0
                     Nov3.Spin(20.0, Pos1, Pos2)
@@ -2038,6 +2049,707 @@ Public Class DiagnosticsForm
         Action("")
     End Sub
 
+    Sub NOVAS31Tests()
+        Status("NOVAS 3 Tests")
+
+        NOVAS31Test(NOVAS3Functions.PlanetEphemeris)
+        NOVAS31Test(NOVAS3Functions.ReadEph)
+        NOVAS31Test(NOVAS3Functions.SolarSystem)
+        NOVAS31Test(NOVAS3Functions.State)
+
+        NOVAS31Test(NOVAS3Functions.Aberration)
+        NOVAS31Test(NOVAS3Functions.AppPlanet)
+        NOVAS31Test(NOVAS3Functions.AppStar)
+        NOVAS31Test(NOVAS3Functions.AstroPlanet)
+        NOVAS31Test(NOVAS3Functions.AstroStar)
+        NOVAS31Test(NOVAS3Functions.Bary2Obs)
+        NOVAS31Test(NOVAS3Functions.CalDate)
+        NOVAS31Test(NOVAS3Functions.CelPole)
+        NOVAS31Test(NOVAS3Functions.CioArray)
+        NOVAS31Test(NOVAS3Functions.CioBasis)
+        NOVAS31Test(NOVAS3Functions.CioLocation)
+        NOVAS31Test(NOVAS3Functions.CioRa)
+        NOVAS31Test(NOVAS3Functions.DLight)
+        NOVAS31Test(NOVAS3Functions.Ecl2EquVec)
+        NOVAS31Test(NOVAS3Functions.EeCt)
+        NOVAS31Test(NOVAS3Functions.Ephemeris)
+        NOVAS31Test(NOVAS3Functions.Equ2Ecl)
+        NOVAS31Test(NOVAS3Functions.Equ2EclVec)
+        NOVAS31Test(NOVAS3Functions.Equ2Gal)
+        NOVAS31Test(NOVAS3Functions.Equ2Hor)
+        NOVAS31Test(NOVAS3Functions.Era)
+        NOVAS31Test(NOVAS3Functions.ETilt)
+        NOVAS31Test(NOVAS3Functions.FrameTie)
+        NOVAS31Test(NOVAS3Functions.FundArgs)
+        NOVAS31Test(NOVAS3Functions.Gcrs2Equ)
+        NOVAS31Test(NOVAS3Functions.GeoPosVel)
+        NOVAS31Test(NOVAS3Functions.GravDef)
+        NOVAS31Test(NOVAS3Functions.GravVec)
+        NOVAS31Test(NOVAS3Functions.IraEquinox)
+        NOVAS31Test(NOVAS3Functions.JulianDate)
+        NOVAS31Test(NOVAS3Functions.LightTime)
+        NOVAS31Test(NOVAS3Functions.LimbAngle)
+        NOVAS31Test(NOVAS3Functions.LocalPlanet)
+        NOVAS31Test(NOVAS3Functions.LocalStar)
+        NOVAS31Test(NOVAS3Functions.MakeCatEntry)
+        NOVAS31Test(NOVAS3Functions.MakeInSpace)
+        NOVAS31Test(NOVAS3Functions.MakeObject)
+        NOVAS31Test(NOVAS3Functions.MakeObserver)
+        NOVAS31Test(NOVAS3Functions.MakeObserverAtGeocenter)
+        NOVAS31Test(NOVAS3Functions.MakeObserverInSpace)
+        NOVAS31Test(NOVAS3Functions.MakeObserverOnSurface)
+        NOVAS31Test(NOVAS3Functions.MakeOnSurface)
+        NOVAS31Test(NOVAS3Functions.MeanObliq)
+        NOVAS31Test(NOVAS3Functions.MeanStar)
+        NOVAS31Test(NOVAS3Functions.NormAng)
+        NOVAS31Test(NOVAS3Functions.Nutation)
+        NOVAS31Test(NOVAS3Functions.NutationAngles)
+        NOVAS31Test(NOVAS3Functions.Place)
+        NOVAS31Test(NOVAS3Functions.Precession)
+        NOVAS31Test(NOVAS3Functions.ProperMotion)
+        NOVAS31Test(NOVAS3Functions.RaDec2Vector)
+        NOVAS31Test(NOVAS3Functions.RadVel)
+        NOVAS31Test(NOVAS3Functions.Refract)
+        NOVAS31Test(NOVAS3Functions.SiderealTime)
+        NOVAS31Test(NOVAS3Functions.Spin)
+        NOVAS31Test(NOVAS3Functions.StarVectors)
+        NOVAS31Test(NOVAS3Functions.Tdb2Tt)
+        NOVAS31Test(NOVAS3Functions.Ter2Cel)
+        NOVAS31Test(NOVAS3Functions.Terra)
+        NOVAS31Test(NOVAS3Functions.TopoPlanet)
+        NOVAS31Test(NOVAS3Functions.TopoStar)
+        NOVAS31Test(NOVAS3Functions.TransformCat)
+        NOVAS31Test(NOVAS3Functions.TransformHip)
+        NOVAS31Test(NOVAS3Functions.Vector2RaDec)
+        NOVAS31Test(NOVAS3Functions.VirtualPlanet)
+        NOVAS31Test(NOVAS3Functions.VirtualStar)
+        NOVAS31Test(NOVAS3Functions.Wobble)
+        TL.BlankLine()
+
+        CheckoutStarsFull31()
+
+        TL.BlankLine()
+
+    End Sub
+
+    Sub CheckoutStarsFull31()
+        'Port of the NOVAS 3 ChecoutStarsFull.c program to confirm correct iplementation
+
+        Const N_STARS As Integer = 3
+        Const N_TIMES As Integer = 4
+
+        '/*
+        'Main function to check out many parts of NOVAS-C by calling
+        'function 'topo_star' with version 1 of function 'solarsystem'.
+
+        'For use with NOVAS-C Version 3.
+        '*/
+
+        Dim [error] As Short = 0
+        Dim accuracy As Short = 0
+        Dim i, j, rc As Short
+
+        '/*
+        ''deltat' is the difference in time scales, TT - UT1.
+
+        'The(Array) 'tjd' contains four selected Julian dates at which the
+        'star positions will be evaluated.
+        '*/
+
+        Dim deltat As Double = 60.0
+        Dim tjd() As Double = {2450203.5, 2450203.5, 2450417.5, 2450300.5}
+        Dim ra, dec As Double
+
+        '/*
+        'Hipparcos (ICRS) catalog data for three selected stars.
+        '*/
+        Dim stars(N_STARS - 1) As ASCOM.Astrometry.CatEntry3
+        Nov31.MakeCatEntry("POLARIS", "HIP", 0, 2.530301028, 89.264109444, 44.22, -11.75, 7.56, -17.4, stars(0))
+        Nov31.MakeCatEntry("Delta ORI", "HIP", 1, 5.533444639, -0.299091944, 1.67, 0.56, 3.56, 16.0, stars(1))
+        Nov31.MakeCatEntry("Theta CAR", "HIP", 2, 10.715944806, -64.39445, -18.87, 12.06, 7.43, 24.0, stars(2))
+
+        '/*
+        'The(Observer) 's terrestrial coordinates (latitude, longitude, height).
+        '*/
+        Dim geo_loc As New OnSurface
+        geo_loc.Latitude = 45.0
+        geo_loc.Longitude = -75.0
+        geo_loc.Height = 0.0
+        geo_loc.Temperature = 10.0
+        geo_loc.Pressure = 1010.0
+
+        '/*
+        'Compute the topocentric places of the three stars at the four
+        'selected Julian dates.
+        '*/
+
+        Dim ExpectedResults(N_TIMES - 1, N_STARS - 1) As String
+        ExpectedResults(0, 0) = "2450203" & DecimalSeparator & "5 POLARIS RA = 2" & DecimalSeparator & "446988922 Dec = 89" & DecimalSeparator & "24635149"
+        ExpectedResults(0, 1) = "2450203" & DecimalSeparator & "5 Delta ORI RA = 5" & DecimalSeparator & "530110723 Dec = -0" & DecimalSeparator & "30571737"
+        ExpectedResults(0, 2) = "2450203" & DecimalSeparator & "5 Theta CAR RA = 10" & DecimalSeparator & "714525513 Dec = -64" & DecimalSeparator & "38130590"
+        ExpectedResults(1, 0) = "2450203" & DecimalSeparator & "5 POLARIS RA = 2" & DecimalSeparator & "446988922 Dec = 89" & DecimalSeparator & "24635149"
+        ExpectedResults(1, 1) = "2450203" & DecimalSeparator & "5 Delta ORI RA = 5" & DecimalSeparator & "530110723 Dec = -0" & DecimalSeparator & "30571737"
+        ExpectedResults(1, 2) = "2450203" & DecimalSeparator & "5 Theta CAR RA = 10" & DecimalSeparator & "714525513 Dec = -64" & DecimalSeparator & "38130590"
+        ExpectedResults(2, 0) = "2450417" & DecimalSeparator & "5 POLARIS RA = 2" & DecimalSeparator & "509480139 Dec = 89" & DecimalSeparator & "25196813"
+        ExpectedResults(2, 1) = "2450417" & DecimalSeparator & "5 Delta ORI RA = 5" & DecimalSeparator & "531195904 Dec = -0" & DecimalSeparator & "30301961"
+        ExpectedResults(2, 2) = "2450417" & DecimalSeparator & "5 Theta CAR RA = 10" & DecimalSeparator & "714444761 Dec = -64" & DecimalSeparator & "37366514"
+        ExpectedResults(3, 0) = "2450300" & DecimalSeparator & "5 POLARIS RA = 2" & DecimalSeparator & "481177532 Dec = 89" & DecimalSeparator & "24254404"
+        ExpectedResults(3, 1) = "2450300" & DecimalSeparator & "5 Delta ORI RA = 5" & DecimalSeparator & "530372288 Dec = -0" & DecimalSeparator & "30231606"
+        ExpectedResults(3, 2) = "2450300" & DecimalSeparator & "5 Theta CAR RA = 10" & DecimalSeparator & "713575394 Dec = -64" & DecimalSeparator & "37966995"
+
+        For i = 0 To N_TIMES - 1
+
+            For j = 0 To N_STARS - 1
+                rc = Nov31.TopoStar(tjd(i), deltat, stars(j), geo_loc, accuracy, ra, dec)
+                If rc <> 0 Then
+                    LogRC31(NOVAS3Functions.CheckoutStarsFull, "Main loop", rc, "Error " & rc & " from topo_star", "")
+                Else
+
+                    LogRC31(NOVAS3Functions.CheckoutStarsFull, "Main loop", rc, tjd(i) & " " & stars(j).StarName & " RA = " & Format(ra, "0.000000000") & " Dec = " & Format(dec, "0.00000000"), ExpectedResults(i, j))
+                End If
+            Next
+        Next
+
+    End Sub
+
+    Sub NOVAS31Test(ByVal TestFunction As NOVAS3Functions)
+        Dim rc As Integer, CatEnt As New CatEntry3, ObjectJupiter As New Object3, Observer As New Observer, skypos, SkyPos1 As New SkyPos
+        Dim OnSurf As New OnSurface
+        Dim RA, Dec, Dis, JD, GST, JDTest As Double
+        Dim BodyJupiter, BodyEarth As New BodyDescription
+        Dim Si As New SiteInfo, Pos(2), Pos1(2), Pos2(2), Vel(2), PosObj(2), PosObs(2), PosBody(2), VelObs(2) As Double
+        Dim Utl As New Util
+
+        Const DeltaT As Double = 66.8
+
+        Action(TestFunction.ToString)
+
+        rc = Integer.MaxValue 'Initialise to a silly value
+
+        JDTest = TestJulianDate()
+
+        Pos1(0) = 1
+        Pos1(1) = 1
+        Pos1(2) = 1
+        PosObs(0) = 0.0001
+        PosObs(1) = 0.0001
+        PosObs(2) = 0.0001
+        Pos2(0) = 0.0001
+        Pos2(1) = 0.0001
+        Pos2(2) = 0.0001
+        Pos(0) = 100.0
+        Pos(1) = 100.0
+        Pos(2) = 100.0
+        PosBody(0) = 0.01
+        PosBody(1) = 0.01
+        PosBody(2) = 0.01
+        Vel(0) = 1000
+        Vel(1) = 1000
+        Vel(2) = 1000
+        VelObs(0) = 500
+        VelObs(1) = 500
+        VelObs(2) = 500
+
+        Si.Height = 80
+        Si.Latitude = 51
+        Si.Longitude = 0
+        Si.Pressure = 1010
+        Si.Temperature = 25
+
+        BodyJupiter.Name = "Jupiter"
+        BodyJupiter.Number = Body.Jupiter
+        BodyJupiter.Type = BodyType.MajorPlanet
+
+        BodyEarth.Name = "Earth"
+        BodyEarth.Number = Body.Earth
+        BodyEarth.Type = BodyType.MajorPlanet
+
+        CatEnt.Catalog = "GMB"
+        CatEnt.Dec = 23.23
+        CatEnt.Parallax = 10.0
+        CatEnt.ProMoDec = 20.0
+        CatEnt.ProMoRA = 30.0
+        CatEnt.RA = 39.39
+        CatEnt.RadialVelocity = 40.0
+        CatEnt.StarName = "GMB 1830"
+        CatEnt.StarNumber = 1830
+
+        ObjectJupiter.Name = "Jupiter"
+        ObjectJupiter.Number = Body.Jupiter
+        ObjectJupiter.Star = New CatEntry3
+        ObjectJupiter.Type = ObjectType.MajorPlanetSunOrMoon
+
+        Observer.OnSurf.Height = 80
+        Observer.OnSurf.Latitude = 51.0
+        Observer.OnSurf.Longitude = 0.0
+        Observer.OnSurf.Pressure = 1010
+        Observer.OnSurf.Temperature = 20
+        Observer.Where = ObserverLocation.EarthSurface
+
+        OnSurf.Height = 80
+        OnSurf.Latitude = 51.0
+        OnSurf.Longitude = 0.0
+        OnSurf.Pressure = 1000
+        OnSurf.Temperature = 5
+
+        Try
+            Select Case TestFunction
+                Case NOVAS3Functions.PlanetEphemeris
+                    Dim JDArr(1) As Double
+                    JDArr(0) = JDTest
+                    JDArr(1) = 0
+                    rc = Nov31.PlanetEphemeris(JDArr, Target.Jupiter, Target.Earth, Pos, Vel)
+                    LogRC31(TestFunction, "Ju Ea", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                    rc = Nov31.PlanetEphemeris(JDArr, Target.Earth, Target.Jupiter, Pos, Vel)
+                    LogRC31(TestFunction, "Ea Ju", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                    rc = Nov31.PlanetEphemeris(JDArr, Target.Jupiter, Target.Mercury, Pos, Vel)
+                    LogRC31(TestFunction, "Ju Me", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                    rc = Nov31.PlanetEphemeris(JDArr, Target.Moon, Target.Earth, Pos, Vel)
+                    LogRC31(TestFunction, "Mo Ea", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                    rc = Nov31.PlanetEphemeris(JDArr, Target.SolarSystemBarycentre, Target.Moon, Pos, Vel)
+                    LogRC31(TestFunction, "SS Mo", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                Case NOVAS3Functions.SolarSystem
+                    rc = Nov31.SolarSystem(JDTest, Body.Neptune, Origin.Barycentric, Pos, Vel)
+                    LogRC31(TestFunction, "Neptune", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                Case NOVAS3Functions.State
+                    Dim JDArr(1) As Double
+                    JDArr(0) = JDTest
+                    JDArr(1) = 0
+                    rc = Nov31.State(JDArr, Target.Pluto, Pos, Vel)
+                    LogRC31(TestFunction, "Pluto", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                Case NOVAS3Functions.Aberration
+                    rc = 0
+                    Nov31.RaDec2Vector(20.0, 40.0, 100, Pos)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Pos(0) & " " & Pos(1) & " " & Pos(2), "")
+
+                    Nov31.Aberration(Pos, Pos, 10.0, Pos2)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.AppPlanet
+                    rc = Nov31.AppPlanet(JDTest, ObjectJupiter, Accuracy.Full, RA, Dec, Dis)
+                    LogRC31(TestFunction, "Jupiter", rc, Utl.HoursToHMS(RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(Dec, ":", ":", "", 3) & " " & Dis, "")
+                    ObjectJupiter.Number = Body.Moon
+                    ObjectJupiter.Name = "Moon"
+                    ObjectJupiter.Type = ObjectType.MajorPlanetSunOrMoon
+                    rc = Nov31.AppPlanet(JDTest, ObjectJupiter, Accuracy.Full, RA, Dec, Dis)
+                    LogRC31(TestFunction, "Moon", rc, Utl.HoursToHMS(RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(Dec, ":", ":", "", 3) & " " & Dis, "")
+                Case NOVAS3Functions.AppStar
+                    rc = Nov31.AppStar(JDTest, CatEnt, Accuracy.Full, RA, Dec)
+                    LogRC31(TestFunction, "RA Dec", rc, Utl.HoursToHMS(RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(Dec, ":", ":", "", 3), "")
+                Case NOVAS3Functions.AstroPlanet
+                    rc = Nov31.AstroPlanet(JDTest, ObjectJupiter, Accuracy.Full, RA, Dec, Dis)
+                    LogRC31(TestFunction, "Jupiter", rc, Utl.HoursToHMS(RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(Dec, ":", ":", "", 3) & " " & Dis, "")
+                Case NOVAS3Functions.AstroStar
+                    CatEnt.Catalog = "FK6"
+                    CatEnt.Dec = 45.45
+                    CatEnt.Parallax = 0.0
+                    CatEnt.ProMoDec = 0.0
+                    CatEnt.ProMoRA = 0.0
+                    CatEnt.RA = 15.15
+                    CatEnt.RadialVelocity = 0.0
+                    CatEnt.StarName = "GMB 1830"
+                    CatEnt.StarNumber = 1307
+
+                    rc = Nov31.AstroStar(Utl.JulianDate, CatEnt, Accuracy.Reduced, RA, Dec)
+                    LogRC31(TestFunction, "Reduced accuracy:", rc, Utl.HoursToHMS(RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(Dec, ":", ":", "", 3), "")
+                    rc = Nov31.AstroStar(Utl.JulianDate, CatEnt, Accuracy.Full, RA, Dec)
+                    LogRC31(TestFunction, "Full accuracy:   ", rc, Utl.HoursToHMS(RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(Dec, ":", ":", "", 3), "")
+                Case NOVAS3Functions.Bary2Obs
+                    Dim LightTime As Double
+                    rc = 0
+                    Nov31.RaDec2Vector(20.0, 40.0, 100, Pos)
+
+                    Nov31.Bary2Obs(Pos, PosObs, Pos2, LightTime)
+                    LogRC31(TestFunction, "X, Y, Z, LightTime", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2) & " " & LightTime, "")
+                Case NOVAS3Functions.CalDate
+                    Dim Year, Month, Day As Short, Hour As Double
+                    rc = 0
+                    Nov31.CalDate(JDTest, Year, Month, Day, Hour)
+                    LogRC31(TestFunction, "Year Month Day Hour", rc, Year & " " & Month & " " & Day & " " & Format(Hour, "0.0"), "2010 12 30 9" & DecimalSeparator & "0")
+                Case NOVAS3Functions.Cel2Ter
+                    rc = Nov31.Cel2Ter(JDTest, 0.0, 0.0, Method.EquinoxBased, Accuracy.Full, OutputVectorOption.ReferredToEquatorAndEquinoxOfDate, 0.0, 0.0, Pos, Pos2)
+                    LogRC31(TestFunction, "Pos2", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.CelPole
+                    Dim DPole1, DPole2 As Double
+                    rc = Nov31.CelPole(JDTest, PoleOffsetCorrection.ReferredToMeanEclipticOfDate, DPole1, DPole2)
+                    LogRC31(TestFunction, "Mean Ecliptic Of Date", rc, DPole1 & " " & DPole2, "")
+                    rc = Nov31.CelPole(JDTest, PoleOffsetCorrection.ReferredToGCRSAxes, DPole1, DPole2)
+                    LogRC31(TestFunction, "GCRS Axes", rc, DPole1 & " " & DPole2, "")
+                Case NOVAS3Functions.CioArray
+                    Dim Cio As New ArrayList
+                    rc = Nov31.CioArray(JDTest, 20, Cio)
+                    LogRC31(TestFunction, "RC", rc, rc, "")
+                    rc = 0
+                    For Each CioA As ASCOM.Astrometry.RAOfCio In Cio
+                        LogRC31(TestFunction, "CIO Array", rc, CioA.JdTdb & " " & CioA.RACio, "")
+                    Next
+                Case NOVAS3Functions.CioBasis
+                    Dim x, y, z As Double
+                    rc = Nov31.CioBasis(JDTest, 20.0, ReferenceSystem.GCRS, Accuracy.Full, x, y, z)
+                    LogRC31(TestFunction, "CIO Basis", rc, x & " " & y & " " & z, "")
+                Case NOVAS3Functions.CioLocation
+                    Dim RAofCIO As Double, RefSys As ASCOM.Astrometry.ReferenceSystem
+                    rc = Nov31.CioLocation(JDTest, Accuracy.Full, RAofCIO, RefSys)
+                    LogRC31(TestFunction, "CIO Location", rc, RAofCIO & " " & RefSys.ToString, "")
+                Case NOVAS3Functions.CioRa
+                    rc = Nov31.CioRa(JDTest, Accuracy.Full, RA)
+                    LogRC31(TestFunction, "CIO RA", rc, RA, "")
+                Case NOVAS3Functions.DLight
+                    Dim DLight As Double
+                    rc = 0
+                    DLight = Nov31.DLight(Pos1, PosObs)
+                    LogRC31(TestFunction, "D Light", rc, DLight, "")
+                Case NOVAS3Functions.Ecl2EquVec
+                    rc = Nov31.Ecl2EquVec(JDTest, CoordSys.CIOOfDate, Accuracy.Full, Pos1, Pos2)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.EeCt
+                    rc = 0
+                    JD = Nov31.EeCt(JDTest, 0.0, Accuracy.Full)
+                    LogRC31(TestFunction, "J Date", rc, JD, "")
+                Case NOVAS3Functions.Ephemeris
+                    Dim JD1(1) As Double
+                    JD1(0) = JDTest
+                    rc = Nov31.Ephemeris(JD1, ObjectJupiter, Origin.Barycentric, Accuracy.Full, Pos, Vel)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                Case NOVAS3Functions.Equ2Ecl
+                    Dim ELon, ELat As Double
+                    RA = 16.0
+                    Dec = 40.0
+                    rc = Nov31.Equ2Ecl(JDTest, CoordSys.EquinoxOfDate, Accuracy.Full, RA, Dec, ELon, ELat)
+                    LogRC31(TestFunction, "E Lon E Lat", rc, ELon & " " & ELat, "")
+                Case NOVAS3Functions.Equ2EclVec
+                    rc = Nov31.Equ2EclVec(JDTest, CoordSys.EquinoxOfDate, Accuracy.Full, Pos1, Pos2)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.Equ2Gal
+                    Dim GLat, GLong As Double
+                    rc = 0
+                    Nov31.Equ2Gal(12.456, 40.0, GLong, GLat)
+                    LogRC31(TestFunction, "G Long, G Lat", rc, GLong & " " & GLat, "")
+                Case NOVAS3Functions.Equ2Hor
+                    Dim ZD, Az, RaR, DecR As Double
+                    rc = 0
+                    Nov31.Equ2Hor(JDTest, 0.0, Accuracy.Full, 30.0, 50.0, OnSurf, RA, Dec, RefractionOption.LocationRefraction, ZD, Az, RaR, DecR)
+                    LogRC31(TestFunction, "ZD Az RaR DecR", rc, ZD & " " & Az & " " & RaR & " " & DecR, "")
+                Case NOVAS3Functions.Era
+                    Dim Era As Double
+                    rc = 0
+                    Era = Nov31.Era(JDTest, 0.0)
+                    LogRC31(TestFunction, "Era", rc, Era, "")
+                Case NOVAS3Functions.ETilt
+                    Dim Mobl, Tobl, Ee, DEps, DPsi As Double
+                    rc = 0
+                    Nov31.ETilt(JDTest, Accuracy.Full, Mobl, Tobl, Ee, DPsi, DEps)
+                    LogRC31(TestFunction, "Mobl, Tobl, Ee, DPsi, DEps", rc, Format(Mobl, "0.00000000") & " " & Format(Tobl, "0.00000000") & " " & Format(Ee, "0.00000000") & " " & Format(DPsi, "0.00000000") & " " & Format(DEps, "0.00000000"), "")
+                Case NOVAS3Functions.FrameTie
+                    rc = 0
+                    Nov31.FrameTie(Pos1, FrameConversionDirection.DynamicalToICRS, Pos2)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.FundArgs
+                    Dim A(4) As Double
+                    rc = 0
+                    Nov31.FundArgs(JDTest, A)
+                    LogRC31(TestFunction, "A", rc, Format(A(0), "0.00000000") & " " & Format(A(1), "0.00000000") & " " & Format(A(2), "0.00000000") & " " & Format(A(3), "0.00000000") & " " & Format(A(4), "0.00000000"), "")
+                Case NOVAS3Functions.Gcrs2Equ
+                    Dim RaG, DecG As Double
+                    RaG = 11.5
+                    DecG = 40.0
+                    rc = Nov31.Gcrs2Equ(JDTest, CoordSys.EquinoxOfDate, Accuracy.Full, RaG, DecG, RA, Dec)
+                    LogRC31(TestFunction, "RaG 11.5, DecG 40.0", rc, RA & " " & Dec, "")
+                Case NOVAS3Functions.GeoPosVel
+                    rc = Nov31.GeoPosVel(JDTest, 0.0, Accuracy.Full, Observer, Pos, Vel)
+                    LogRC31(TestFunction, "Pos, Vel", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                Case NOVAS3Functions.GravDef
+                    rc = Nov31.GravDef(JDTest, EarthDeflection.AddEarthDeflection, Accuracy.Full, Pos1, PosObs, Pos2)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.GravVec
+                    Dim RMass As Double
+                    rc = 0
+                    Nov31.GravVec(Pos1, PosObs, PosBody, RMass, Pos2)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.IraEquinox
+                    Dim Ira As Double
+                    rc = 0
+                    Ira = Nov31.IraEquinox(JDTest, EquinoxType.MeanEquinox, Accuracy.Full)
+                    LogRC31(TestFunction, "Ira", rc, Ira, "")
+                Case NOVAS3Functions.JulianDate
+                    JD = Nov31.JulianDate(2000, 1, 1, 12)
+                    LogRC31(TestFunction, "J2000: ", 0, JD, NOVAS.NOVAS2.JulianDate(2000, 1, 1, 12.0))
+                    JD = Nov31.JulianDate(2010, 1, 2, 0.0)
+                    LogRC31(TestFunction, "J2010: ", 0, JD, NOVAS.NOVAS2.JulianDate(2010, 1, 2, 0.0))
+                Case NOVAS3Functions.LightTime
+                    Dim TLight0, TLight As Double
+                    TLight0 = 0.0
+                    rc = Nov31.LightTime(JDTest, ObjectJupiter, PosObs, TLight0, Accuracy.Full, Pos, TLight)
+                    LogRC31(TestFunction, "X, Y, Z", rc, Pos(0) & " " & Pos(1) & " " & Pos(2) & " " & TLight, "")
+                Case NOVAS3Functions.LimbAngle
+                    Dim LimbAng, NadirAngle As Double
+                    rc = 0
+                    Nov31.LimbAngle(PosObj, PosObs, LimbAng, NadirAngle)
+                    LogRC31(TestFunction, "LimbAng, NadirAngle", rc, LimbAng & " " & NadirAngle, "")
+                Case NOVAS3Functions.LocalPlanet
+                    rc = Nov31.LocalPlanet(JDTest, ObjectJupiter, 0.0, OnSurf, Accuracy.Full, RA, Dec, Dis)
+                    LogRC31(TestFunction, "Ra, Dec, Dis", rc, RA & " " & Dec & " " & Dis, "")
+                Case NOVAS3Functions.LocalStar
+                    rc = Nov31.LocalStar(JDTest, 0.0, CatEnt, OnSurf, Accuracy.Full, RA, Dec)
+                    LogRC31(TestFunction, "Ra, Dec", rc, RA & " " & Dec, "")
+                Case NOVAS3Functions.MakeCatEntry
+                    Nov31.MakeCatEntry("A Star", "FK6", 1234545, 11.0, 12, 0, 13.0, 14.0, 15.0, CatEnt)
+                    rc = 0
+                    LogRC31(TestFunction, "CatEnt", rc, CatEnt.Catalog & " " & CatEnt.Dec & " " & CatEnt.Parallax & " " & CatEnt.StarName & " " & CatEnt.StarNumber, "")
+                Case NOVAS3Functions.MakeInSpace
+                    Dim Insp As New InSpace
+                    Dim PosOrg(2), VelOrg(2) As Double
+                    PosOrg(0) = 1
+                    PosOrg(1) = 2
+                    PosOrg(2) = 3
+                    VelOrg(0) = 4
+                    VelOrg(1) = 5
+                    VelOrg(2) = 6
+                    Insp.ScPos = Pos
+                    Insp.ScVel = Vel
+                    rc = 0
+                    Nov31.MakeInSpace(PosOrg, VelOrg, Insp)
+                    LogRC31(TestFunction, "Pos, Vel", rc, Insp.ScPos(0) & Insp.ScPos(1) & Insp.ScPos(2) & Insp.ScVel(0) & Insp.ScVel(1) & Insp.ScVel(2), "123456")
+                Case NOVAS3Functions.MakeObject
+                    rc = Nov31.MakeObject(ObjectType.MajorPlanetSunOrMoon, 7, "Uranus", CatEnt, ObjectJupiter)
+                    LogRC31(TestFunction, "Object3", rc, ObjectJupiter.Name & " " & ObjectJupiter.Number & " " & ObjectJupiter.Type.ToString & " " & ObjectJupiter.Star.RA, "")
+                Case NOVAS3Functions.MakeObserver
+                    Dim Obs As New Observer
+                    OnSurf.Latitude = 51.0
+                    Nov31.MakeObserver(ObserverLocation.EarthSurface, OnSurf, New InSpace, Obs)
+                    rc = 0
+                    LogRC31(TestFunction, "Observer", rc, Obs.Where.ToString & " " & Obs.OnSurf.Latitude, "")
+                Case NOVAS3Functions.MakeObserverAtGeocenter
+                    Dim Obs As New Observer
+                    Nov31.MakeObserverAtGeocenter(Obs)
+                    rc = 0
+                    LogRC31(TestFunction, "Observer", rc, Obs.Where.ToString & " " & Obs.OnSurf.Latitude, "")
+                Case NOVAS3Functions.MakeObserverInSpace
+                    Dim Obs As New Observer
+                    Nov31.MakeObserverInSpace(Pos, Vel, Obs)
+                    rc = 0
+                    LogRC31(TestFunction, "Observer", rc, Obs.Where.ToString & " " & Obs.OnSurf.Latitude, "")
+                Case NOVAS3Functions.MakeObserverOnSurface
+                    Dim Obs As New Observer
+                    Nov31.MakeObserverOnSurface(51.0, 0.0, 80.0, 25.0, 1010, Obs)
+                    rc = 0
+                    LogRC31(TestFunction, "Observer", rc, Obs.Where.ToString & " " & Obs.OnSurf.Latitude, "")
+                Case NOVAS3Functions.MakeOnSurface
+                    Nov31.MakeOnSurface(51.0, 0.0, 80.0, 25, 0, OnSurf)
+                    rc = 0
+                    LogRC31(TestFunction, "OnSurface", rc, OnSurf.Latitude & " " & OnSurf.Height, "")
+                Case NOVAS3Functions.MeanObliq
+                    Dim MO As Double
+                    MO = Nov31.MeanObliq(JDTest)
+                    rc = 0
+                    LogRC31(TestFunction, "Mean Obl", rc, MO, "")
+                Case NOVAS3Functions.MeanStar
+                    Dim IRa, IDec As Double
+                    rc = Nov31.MeanStar(JDTest, RA, Dec, Accuracy.Full, IRa, IDec)
+                    LogRC31(TestFunction, "IRa, IDec", rc, IRa & " " & IDec, "")
+                Case NOVAS3Functions.NormAng
+                    Dim NA As Double
+                    NA = Nov31.NormAng(4 * 3.142)
+                    rc = 0
+                    LogRC31(TestFunction, "Norm Ang", rc, NA, "")
+                Case NOVAS3Functions.Nutation
+                    Dim Obs As New Observer
+                    rc = 0
+                    Nov31.Nutation(JDTest, NutationDirection.MeanToTrue, Accuracy.Full, Pos, Pos2)
+                    LogRC31(TestFunction, "Pos, Pos2", rc, Format(Pos(0), "0.00000000") & " " & Format(Pos(1), "0.00000000") & " " & Format(Pos(2), "0.00000000") & " " & Format(Pos2(0), "0.00000000") & " " & Format(Pos2(1), "0.00000000") & " " & Format(Pos2(2), "0.00000000"), "")
+                Case NOVAS3Functions.NutationAngles
+                    Dim DPsi, DEps As Double
+                    rc = 0
+                    Nov31.NutationAngles(JDTest, Accuracy.Full, DPsi, DEps)
+                    LogRC31(TestFunction, "DPsi, DEps", rc, DPsi & " " & DEps, "")
+                Case NOVAS3Functions.Place
+                    ObjectJupiter.Name = "Planet"
+                    'Obj.Star = CatEnt
+                    ObjectJupiter.Type = 0
+                    OnSurf.Height = 80
+                    OnSurf.Latitude = Utl.DMSToDegrees("51:04:43")
+                    OnSurf.Longitude = -Utl.DMSToDegrees("00:17:40")
+                    OnSurf.Pressure = 1010
+                    OnSurf.Temperature = 10
+
+                    Observer.Where = ObserverLocation.EarthSurface
+                    Observer.OnSurf = OnSurf
+
+                    For i As Short = 1 To 11
+                        If i <> 3 Then 'Skip earth test as not relevant - viewing earth from earth has no meaning!
+                            ObjectJupiter.Number = i
+                            JD = Utl.JulianDate
+                            rc = Nov31.Place(JDTest, ObjectJupiter, Observer, DeltaT, CoordSys.EquinoxOfDate, Accuracy.Full, skypos)
+                            rc = Nov31.Place(JDTest, ObjectJupiter, Observer, DeltaT, CoordSys.EquinoxOfDate, Accuracy.Reduced, SkyPos1)
+                            LogRC31(TestFunction, "Planet " & Microsoft.VisualBasic.Right(" " & i.ToString, 2) & "", rc, Utl.HoursToHMS(SkyPos1.RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(SkyPos1.Dec, ":", ":", "", 3), Utl.HoursToHMS(skypos.RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(skypos.Dec, ":", ":", "", 3))
+                        End If
+                    Next
+                Case NOVAS3Functions.Precession
+                    rc = Nov31.Precession(JDTest, Pos, J2000, Pos2)
+                    LogRC31(TestFunction, "Pos2", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.ProperMotion
+                    rc = 0
+                    Nov31.ProperMotion(JDTest, Pos, Vel, J2000, Pos2)
+                    LogRC31(TestFunction, "Pos2", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.RaDec2Vector
+                    rc = 0
+                    Nov31.RaDec2Vector(11.0, 12.0, 13.0, Pos)
+                    LogRC31(TestFunction, "Pos", rc, Pos(0) & " " & Pos(1) & " " & Pos(2), "")
+                Case NOVAS3Functions.RadVel
+                    Dim Rv As Double
+                    rc = 0
+                    Nov31.RadVel(ObjectJupiter, Pos, Vel, VelObs, 12.0, 14.0, 16.0, Rv)
+                    LogRC31(TestFunction, "Rv", rc, Rv, "")
+                Case NOVAS3Functions.ReadEph
+                    Dim Err As Integer, Eph(5) As Double
+                    rc = 0
+                    Eph = Nov31.ReadEph(99, "missingasteroid", JDTest, Err)
+                    LogRC31(TestFunction, "Expect error 4", rc, Err & Eph(0) & Eph(1) & Eph(2) & Eph(3) & Eph(4) & Eph(5), "4000000")
+                    JD = 2453415.5
+                    Eph = Nov31.ReadEph(1, "Ceres", JD, Err)
+                    LogRC31(TestFunction, "JD Before " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "3 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000")
+                    JD = 2453425.5
+                    Eph = Nov31.ReadEph(1, "Ceres", JD, Err)
+                    LogRC31(TestFunction, "JD Start  " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 -2" & DecimalSeparator & "23084 -1" & DecimalSeparator & "38495 -0" & DecimalSeparator & "19822 0" & DecimalSeparator & "00482 -0" & DecimalSeparator & "00838 -0" & DecimalSeparator & "00493")
+                    JD = 2454400.5
+                    Eph = Nov31.ReadEph(1, "Ceres", JD, Err)
+                    LogRC31(TestFunction, "JD Mid    " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 2" & DecimalSeparator & "02286 1" & DecimalSeparator & "91181 0" & DecimalSeparator & "48869 -0" & DecimalSeparator & "00736 0" & DecimalSeparator & "00559 0" & DecimalSeparator & "00413")
+                    JD = 2455370.5 'Fails (screws up the DLL for subsequent calls) beyond JD = 2455389.5, which is just below the theoretical end of 2455402.5
+                    Eph = Nov31.ReadEph(1, "Ceres", JD, Err)
+                    LogRC31(TestFunction, "JD End    " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "0 -0" & DecimalSeparator & "08799 -2" & DecimalSeparator & "57887 -1" & DecimalSeparator & "19703 0" & DecimalSeparator & "00983 -0" & DecimalSeparator & "00018 -0" & DecimalSeparator & "00209")
+                    JD = 2455410.5
+                    Eph = Nov31.ReadEph(1, "Ceres", JD, Err)
+                    LogRC31(TestFunction, "JD After  " & JD, rc, Err & " " & Format(Eph(0), "0.00000") & " " & Format(Eph(1), "0.00000") & " " & Format(Eph(2), "0.00000") & " " & Format(Eph(3), "0.00000") & " " & Format(Eph(4), "0.00000") & " " & Format(Eph(5), "0.00000"), "3 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000 0" & DecimalSeparator & "00000")
+                Case NOVAS3Functions.Refract
+                    Dim Refracted As Double
+                    rc = 0
+                    Refracted = Nov31.Refract(OnSurf, RefractionOption.NoRefraction, 70.0)
+                    LogRC31(TestFunction, "No refraction Zd 70.0", rc, Refracted, "")
+                    Refracted = Nov31.Refract(OnSurf, RefractionOption.StandardRefraction, 70.0)
+                    LogRC31(TestFunction, "Standard Zd 70.0     ", rc, Refracted, "")
+                    Refracted = Nov31.Refract(OnSurf, RefractionOption.LocationRefraction, 70.0)
+                    LogRC31(TestFunction, "Location Zd 70.0     ", rc, Refracted, "")
+                Case NOVAS3Functions.SiderealTime
+                    Dim MObl, TObl, ee, DPSI, DEps, GST2 As Double
+                    JD = Utl.JulianDate
+                    rc = Nov31.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichMeanSiderealTime, Method.EquinoxBased, Accuracy.Reduced, GST)
+                    LogRC31(TestFunction, "Local Mean Equinox    ", rc, Utl.HoursToHMS(GST - (24.0 * Utl.DMSToDegrees("00:17:40") / 360), ":", ":", "", 3), "")
+                    rc = Nov31.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
+                    LogRC31(TestFunction, "Local Apparent Equinox", rc, Utl.HoursToHMS(GST - (24.0 * Utl.DMSToDegrees("00:17:40") / 360), ":", ":", "", 3), "")
+                    rc = Nov31.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichMeanSiderealTime, Method.CIOBased, Accuracy.Reduced, GST)
+                    LogRC31(TestFunction, "Local Mean CIO        ", rc, Utl.HoursToHMS(GST - (24.0 * Utl.DMSToDegrees("00:17:40") / 360), ":", ":", "", 3), "")
+                    rc = Nov31.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.CIOBased, Accuracy.Reduced, GST)
+                    LogRC31(TestFunction, "Local Apparent CIO    ", rc, Utl.HoursToHMS(GST - (24.0 * Utl.DMSToDegrees("00:17:40") / 360), ":", ":", "", 3), "")
+                    NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
+                    NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
+                    rc = Nov31.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
+                    LogRCDouble(TestFunction, "Novas31", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E6)
+                Case NOVAS3Functions.Spin
+                    rc = 0
+                    Nov31.Spin(20.0, Pos1, Pos2)
+                    LogRC31(TestFunction, "Pos2", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.StarVectors
+                    rc = 0
+                    Nov31.StarVectors(CatEnt, Pos, Vel)
+                    LogRC31(TestFunction, "Pos, Vel", rc, Format(Pos(0), "0.000") & " " & Format(Pos(1), "0.000") & " " & Format(Pos(2), "0.000") & " " & Format(Vel(0), "0.00000000") & " " & Format(Vel(1), "0.00000000") & " " & Format(Vel(2), "0.00000000"), "")
+                Case NOVAS3Functions.Tdb2Tt
+                    Dim TT, Secdiff As Double
+                    rc = 0
+                    Nov31.Tdb2Tt(JDTest, TT, Secdiff)
+                    LogRC31(TestFunction, "Pos, Vel", rc, TT & " " & Secdiff, "")
+                Case NOVAS3Functions.Ter2Cel
+                    rc = Nov31.Ter2Cel(JDTest, 0.0, 0.0, Method.EquinoxBased, Accuracy.Full, OutputVectorOption.ReferredToEquatorAndEquinoxOfDate, 0.0, 0.0, Pos, Pos2)
+                    LogRC31(TestFunction, "Pos2", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case NOVAS3Functions.Terra
+                    rc = 0
+                    Nov31.Terra(OnSurf, 0.0, Pos, Vel)
+                    LogRC31(TestFunction, "Pos, Vel", rc, Format(Pos(0), "0.00000000") & " " & Format(Pos(1), "0.00000000") & " " & Format(Pos(2), "0.00000000") & " " & Format(Vel(0), "0.00000000") & " " & Format(Vel(1), "0.00000000") & " " & Format(Vel(2), "0.00000000"), "")
+                Case NOVAS3Functions.TopoPlanet
+                    rc = Nov31.TopoStar(JDTest, 0.0, CatEnt, OnSurf, Accuracy.Full, RA, Dec)
+                    LogRC31(TestFunction, "RA, Dec", rc, RA & " " & Dec, "")
+                Case NOVAS3Functions.TopoStar
+                    CatEnt.Catalog = "HIP"
+                    CatEnt.Dec = Utl.DMSToDegrees("16:30:31")
+                    CatEnt.Parallax = 0.0
+                    CatEnt.ProMoDec = 0.0
+                    CatEnt.ProMoRA = 0.0
+                    CatEnt.RA = Utl.HMSToHours("04:35:55.2")
+                    CatEnt.RadialVelocity = 0.0
+                    CatEnt.StarName = "Aldebaran"
+                    CatEnt.StarNumber = 21421
+
+                    OnSurf.Height = 80
+                    OnSurf.Latitude = 51.0
+                    OnSurf.Longitude = 0.0
+                    OnSurf.Pressure = 1010
+                    OnSurf.Temperature = 10
+
+                    rc = Nov31.TopoStar(Utl.JulianDate, 0.0, CatEnt, OnSurf, Accuracy.Reduced, RA, Dec)
+                    LogRC31(TestFunction, "Reduced accuracy", rc, Utl.HoursToHMS(RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(Dec, ":", ":", "", 3), "")
+
+                    rc = Nov31.TopoStar(Utl.JulianDate, 0.0, CatEnt, OnSurf, Accuracy.Full, RA, Dec)
+                    LogRC31(TestFunction, "Full accuracy   ", rc, Utl.HoursToHMS(RA, ":", ":", "", 3) & " " & Utl.HoursToHMS(Dec, ":", ":", "", 3), "")
+                Case NOVAS3Functions.TransformCat
+                    Dim NewCat As New CatEntry3
+                    rc = Nov31.TransformCat(TransformationOption3.ChangeEquatorAndEquinoxAndEpoch, JDTest, CatEnt, J2000, "PGS", NewCat)
+                    LogRC31(TestFunction, "NewCat", rc, NewCat.RA & " " & NewCat.Dec & " " & NewCat.Catalog & " " & NewCat.StarName, "")
+                Case NOVAS3Functions.TransformHip
+                    Dim HipCat As New CatEntry3
+                    rc = 0
+                    Nov31.TransformHip(CatEnt, HipCat)
+                    LogRC31(TestFunction, "HipCat", rc, HipCat.RA & " " & HipCat.Dec & " " & HipCat.Catalog & " " & HipCat.StarName, "")
+                Case NOVAS3Functions.Vector2RaDec
+                    rc = Nov31.Vector2RaDec(Pos, RA, Dec)
+                    LogRC31(TestFunction, "RA, Dec", rc, RA & " " & Dec, "")
+                Case NOVAS3Functions.VirtualPlanet
+                    rc = Nov31.VirtualPlanet(JDTest, ObjectJupiter, Accuracy.Full, RA, Dec, Dis)
+                    LogRC31(TestFunction, "RA, Dec, Dis", rc, RA & " " & Dec & " " & Dis, "")
+                Case NOVAS3Functions.VirtualStar
+                    rc = Nov31.VirtualStar(JDTest, CatEnt, Accuracy.Full, RA, Dec)
+                    LogRC31(TestFunction, "RA, Dec", rc, RA & " " & Dec, "")
+                Case NOVAS3Functions.Wobble
+                    rc = 0
+                    Nov31.Wobble(JDTest, TransformationDirection.ITRSToTerrestrialIntermediate, 1.0, 1.0, Pos1, Pos2)
+                    LogRC31(TestFunction, "ITRS2Terr Pos2", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                    Nov31.Wobble(JDTest, TransformationDirection.TerrestrialIntermediateToITRS, 1.0, 1.0, Pos1, Pos2)
+                    LogRC31(TestFunction, "Terr2ITRS Pos2", rc, Pos2(0) & " " & Pos2(1) & " " & Pos2(2), "")
+                Case Else
+                    TL.LogMessage(TestFunction.ToString, "Test not implemented")
+            End Select
+
+        Catch ex As Exception
+            LogException("Novas31", TestFunction.ToString & " - " & ex.ToString)
+        End Try
+        Action("")
+    End Sub
+
+    Sub LogRC31(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
+        Dim LMsg As String
+        If Note <> "" Then
+            Note = Note & ": "
+            LMsg = Note & msg
+        Else
+            LMsg = msg
+        End If
+
+        If rc = Integer.MaxValue Then ' Test is not implemented
+            TL.LogMessage("Novas31 *****", "Test " & Test.ToString & " is not implemented")
+        Else
+
+            If rc = 0 Then
+
+                If String.IsNullOrEmpty(Comparison) Then 'No comparison so it must be a success!
+                    Compare("Novas31", Test.ToString & " - " & LMsg & " RC", rc.ToString, "0")
+                Else 'Check comparison value and respond accordingly
+                    Compare("Novas31", Test.ToString & " - " & LMsg & " RC", msg, Comparison)
+                End If
+            Else
+                Compare("Novas31", Test.ToString & " RC", rc.ToString, "0")
+            End If
+        End If
+    End Sub
+
+
+
     Sub LogRC(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
         Dim LMsg As String
         If Note <> "" Then
@@ -2064,15 +2776,15 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
-    Sub LogRCDouble(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As Double, ByVal Comparison As Double, ByVal Tolerance As Double)
+    Sub LogRCDouble(ByVal Test As NOVAS3Functions, ByVal Component As String, ByVal Note As String, ByVal rc As Integer, ByVal msg As Double, ByVal Comparison As Double, ByVal Tolerance As Double)
 
         If rc = Integer.MaxValue Then ' Test is not implemented
-            TL.LogMessage("Novas3 *****", "Test " & Test.ToString & " is not implemented")
+            TL.LogMessage(Component & " *****", "Test " & Test.ToString & " is not implemented")
         Else
             If rc = 0 Then
-                CompareDouble("Novas3", Test.ToString & " - " & Note, msg, Comparison, Tolerance)
+                CompareDouble(Component, Test.ToString & " - " & Note, msg, Comparison, Tolerance)
             Else
-                Compare("Novas3", Test.ToString & " RC", rc.ToString, "0")
+                Compare(Component, Test.ToString & " RC", rc.ToString, "0")
             End If
         End If
     End Sub

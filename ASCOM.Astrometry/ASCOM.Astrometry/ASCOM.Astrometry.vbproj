@@ -179,6 +179,7 @@
     <Compile Include="NOVAS2.vb" />
     <Compile Include="NOVAS2COM.vb" />
     <Compile Include="NOVAS3.vb" />
+    <Compile Include="NOVAS31.vb" />
     <Compile Include="NOVASCOM\Deltat.vb" />
     <Compile Include="NOVASCOM\Ephemeris.vb" />
     <Compile Include="NOVASCOM\NOVASCOM.vb" />
