@@ -211,6 +211,12 @@ End Enum
 #End Region
 
 #Region "NOVAS3 Enums"
+<Guid("45EAC3DA-08FB-49E2-B852-114312933742"), _
+ComVisible(True)> _
+Public Enum TransformationDirection As Short
+    ITRSToTerrestrialIntermediate = 0
+    TerrestrialIntermediateToITRS = 1
+End Enum
 ''' <summary>
 ''' Location of observer
 ''' </summary>

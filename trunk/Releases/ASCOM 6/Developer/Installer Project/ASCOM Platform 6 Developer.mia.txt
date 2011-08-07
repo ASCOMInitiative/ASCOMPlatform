@@ -305,6 +305,7 @@ else
     Set Variable PROGRESS to 50
     [END REGION]
     [DEFINE REGION: Developer Documentation]
+    Comment: Platform 6 Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Developer Documentation
@@ -330,6 +331,9 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Pointing State and Side of Pier to $TARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Windows Scripting Host Help to $TARGETDIR$\Developer Documentation\wsh-56.chm
+    Comment: Platform 6 SP1 Documentation
+    Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $TARGETDIR$\Developer Documentation
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\NOVAS 3.1 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
     [END REGION]
     [DEFINE REGION: Driver installer]
     Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation
