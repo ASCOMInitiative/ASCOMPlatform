@@ -22,7 +22,7 @@
 
 char RACIO_FILE_NAME[255]  = {'c','i','o','_','r','a','.','b','i','n','\0'}; //cio_ra.bin
  
-void set_racio_file (char file_name[255])
+void set_racio_file(char file_name[255])
 {
 strcpy (RACIO_FILE_NAME, file_name);
 }
