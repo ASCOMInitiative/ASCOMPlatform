@@ -23,6 +23,7 @@
 #define _WIN32_DCOM				// Enable DCOM extensions
 
 #include <windows.h>
+#include <winbase.h>
 #include <stdio.h>
 #include <objbase.h>
 #include <ole2ver.h>
