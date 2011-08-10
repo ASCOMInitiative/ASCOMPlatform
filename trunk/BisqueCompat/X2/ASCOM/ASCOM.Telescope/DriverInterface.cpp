@@ -93,6 +93,7 @@ bool _bScopeCanSideOfPier = false;
 bool _bScopeActive = false;										// This is true if mount is active
 LoggerInterface *_pLogger = NULL;
 static bool isParkedForV1 = false;
+static CRITICAL_SECTION _cs;
 
 //
 // Forward declarations
@@ -155,6 +156,8 @@ bool InitDrivers(LoggerInterface *pLogger)
 #endif
 			bInitDone = true;
 			get_driverid(_szDriverID, true);					// Get any saved ProgID or ""
+
+			InitializeCriticalSection(&_cs);
 		}
 		__except(EXCEPTION_EXECUTE_HANDLER)
 		{
@@ -171,6 +174,7 @@ bool InitDrivers(LoggerInterface *pLogger)
 void TermDrivers(void)
 {
 	TermScope(true);
+	DeleteCriticalSection(&_cs);
 #ifdef CROSS_THREAD_GIT
 	if (_p_GIT != NULL)
 	{
@@ -940,12 +944,13 @@ static int get_integer(OLECHAR *name, bool noAlert)
 	char *cp;
 	char buf[256];
 
+	__try {
+		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
 #ifdef CROSS_THREAD_GIT
-	switchThreadIf();
+		switchThreadIf();
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
-	__try {
+		_p_DrvDisp = get_dispatch();
 #endif
 		//
 		// Get our dispatch ID
@@ -1000,13 +1005,14 @@ static int get_integer(OLECHAR *name, bool noAlert)
 				drvFail(buf, &excep, true);
 			}
 		}
-#ifdef CROSS_THREAD_CO
 	}
 	__finally
 	{
+#ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
-	}
 #endif
+		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
+	}
 	
 	cp = uni_to_ansi(name);
 	sprintf(buf, "Get %s <- %i", cp, result.intVal);
@@ -1033,12 +1039,13 @@ static double get_double(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
+	__try {
+		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
 #ifdef CROSS_THREAD_GIT
-	switchThreadIf();
+		switchThreadIf();
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
-	__try {
+		_p_DrvDisp = get_dispatch();
 #endif
 		//
 		// Get our dispatch ID
@@ -1086,13 +1093,15 @@ static double get_double(OLECHAR *name)
 				drvFail(buf, &excep, true);
 			}
 		}
-#ifdef CROSS_THREAD_CO
 	}
 	__finally
 	{
+#ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
-	}
 #endif
+		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
+	}
+
 	cp = uni_to_ansi(name);
 	sprintf(buf, "Get %s <- %0.7f", cp, (double)result.dblVal);
 	_pLogger->out(buf);
@@ -1125,12 +1134,13 @@ static void set_double(OLECHAR *name, double val)
 	_pLogger->out(buf);
 	delete[] cp;
 
+	__try {
+		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
 #ifdef CROSS_THREAD_GIT
-	switchThreadIf();
+		switchThreadIf();
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
-	__try {
+		_p_DrvDisp = get_dispatch();
 #endif
 		//
 		// Get our dispatch ID
@@ -1181,13 +1191,14 @@ static void set_double(OLECHAR *name, double val)
 				drvFail(buf, &excep, true);
 			}
 		}
-#ifdef CROSS_THREAD_CO
 	}
 	__finally
 	{
+#ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
-	}
 #endif
+		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
+	}
 }
 
 // ----------
@@ -1207,12 +1218,13 @@ static bool get_bool(OLECHAR *name)
 	char *cp;
 	char buf[256];
 
+	__try {
+		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
 #ifdef CROSS_THREAD_GIT
-	switchThreadIf();
+		switchThreadIf();
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
-	__try {
+		_p_DrvDisp = get_dispatch();
 #endif
 		//
 		// Get our dispatch ID
@@ -1260,13 +1272,14 @@ static bool get_bool(OLECHAR *name)
 				drvFail(buf, &excep, true);
 			}
 		}
-#ifdef CROSS_THREAD_CO
 	}
 	__finally
 	{
+#ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
-	}
 #endif
+		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
+	}
 
 	cp = uni_to_ansi(name);
 	sprintf(buf, "Get %s <- %s", cp, (result.boolVal == VARIANT_TRUE ? "true" : "false"));
@@ -1302,12 +1315,13 @@ static void set_bool(OLECHAR *name, bool val)
 	_pLogger->out(buf);
 	delete[] cp;
 
+	__try {
+		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
 #ifdef CROSS_THREAD_GIT
-	switchThreadIf();
+		switchThreadIf();
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
-	__try {
+		_p_DrvDisp = get_dispatch();
 #endif
 		//
 		// Get our dispatch ID
@@ -1352,13 +1366,14 @@ static void set_bool(OLECHAR *name, bool val)
 				drvFail(buf, &excep, true);
 			}
 		}
-#ifdef CROSS_THREAD_CO
 	}
 	__finally
 	{
+#ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
-	}
 #endif
+		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
+	}
 }
 
 // ------------
@@ -1376,12 +1391,13 @@ static char *get_string(OLECHAR *name )
 	char *cp;
 	char buf[256];
 
+	__try {
+		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
 #ifdef CROSS_THREAD_GIT
-	switchThreadIf();
+		switchThreadIf();
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
-	__try {
+		_p_DrvDisp = get_dispatch();
 #endif
 		//
 		// Get our dispatch ID
@@ -1429,13 +1445,15 @@ static char *get_string(OLECHAR *name )
 				drvFail(buf, &excep, true);
 			}
 		}
-#ifdef CROSS_THREAD_CO
 	}
 	__finally
 	{
+#ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
-	}
 #endif
+		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
+	}
+
 	cp = uni_to_ansi(name);
 	char *dp = uni_to_ansi(vRes.bstrVal);
 	sprintf(buf, "Get %s <- %s", cp, dp);
@@ -1466,12 +1484,13 @@ static void call(OLECHAR *name)
 	_pLogger->out(buf);
 	delete[] cp;
 
+	__try {
+		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
 #ifdef CROSS_THREAD_GIT
-	switchThreadIf();
+		switchThreadIf();
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
-	__try {
+		_p_DrvDisp = get_dispatch();
 #endif
 		//
 		// Get our dispatch ID
@@ -1511,13 +1530,14 @@ static void call(OLECHAR *name)
 			delete[] cp;
 			drvFail(buf, &excep, true);
 		}		
-#ifdef CROSS_THREAD_CO
 	}
 	__finally
 	{
+#ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
-	}
 #endif
+		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
+	}
 }
 
 // ------------------
@@ -1542,12 +1562,13 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 	_pLogger->out(buf);
 	delete[] cp;
 
+	__try {
+		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
 #ifdef CROSS_THREAD_GIT
-	switchThreadIf();
+		switchThreadIf();
 #endif
 #ifdef CROSS_THREAD_CO
-	_p_DrvDisp = get_dispatch();
-	__try {
+		_p_DrvDisp = get_dispatch();
 #endif
 		//
 		// Get our dispatch ID
@@ -1592,13 +1613,14 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 			delete[] cp;
 			drvFail(buf, &excep, true);
 		}
-#ifdef CROSS_THREAD_CO
 	}
 	__finally
 	{
+#ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
-	}
 #endif
+		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
+	}
 }	
 
 

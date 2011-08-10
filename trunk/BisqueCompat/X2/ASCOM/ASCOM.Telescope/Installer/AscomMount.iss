@@ -1,11 +1,11 @@
 ; Installer for ASCOM Mount driver for X2
 ;
-; Evan - There are many places where things need to be edited for 
-; each plugin type. So I removed the comments in the [Code] section
+; ** WARNING **
+; THIS USES THE DEBUG BUILD!!!
 ;
 [Setup]
-AppName=X2 Mount Driver for ASCOM Telescopes
-AppVersion=0.9.3
+AppName=X2 Mount Driver BETA for ASCOM Telescopes
+AppVersion=0.9.4
 AppPublisher=ASCOM Initiative
 AppPublisherURL=http://ascom-standards.org/
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -16,7 +16,7 @@ CreateAppDir=no
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir=.
-OutputBaseFilename=X2-ASCOM-Telescope-Setup
+OutputBaseFilename=X2AscomTelescope(0.9.4)Setup
 Compression=lzma
 SolidCompression=yes
 WizardImageFile="WizardImage.bmp"
@@ -28,7 +28,7 @@ UninstallFilesDir="{cf}\ASCOM\Uninstall\X2\Telescope"
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "../Release/ASCOM.Telescope.dll";   DestDir: "{code:GetDLLPath}";  Flags: 
+Source: "../Debug/ASCOM.Telescope.dll";   DestDir: "{code:GetDLLPath}";  Flags: 
 Source: "../mountlist ASCOM.txt"; DestDir: "{code:GetMiscPath}"; Flags: ignoreversion
 Source: "X2-ASCOM-ReadMe.txt";  DestDir: "{code:GetDLLPath}";  Flags: ignoreversion isreadme
 
