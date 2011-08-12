@@ -15,11 +15,13 @@ namespace ASCOM.$safeprojectname$
 
 		private void CmdOkClick(object sender, EventArgs e)
 		{
+			Properties.Settings.Default.Save();
 			Dispose();
 		}
 
 		private void CmdCancelClick(object sender, EventArgs e)
 		{
+			Properties.Settings.Default.Reload();
 			Dispose();
 		}
 
