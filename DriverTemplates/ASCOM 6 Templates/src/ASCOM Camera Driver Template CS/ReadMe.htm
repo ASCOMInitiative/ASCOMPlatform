@@ -6,7 +6,8 @@
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Win32)">
 	<META NAME="CREATED" CONTENT="0;0">
 	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
-	<META NAME="CHANGED" CONTENT="20110402;10111900">
+	<META NAME="CHANGED" CONTENT="20110812;17360300">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
 	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
 	<STYLE TYPE="text/css">
 	<!--
@@ -39,31 +40,68 @@ information we've provided</A> at the ASCOM Initiative web site
 <P>You must do the following in order to complete your
 implementation:</P>
 <OL>
-	<LI><P STYLE="margin-bottom: 0cm"><FONT FACE="Lucida Console, Courier New, Courier, monospace"><SPAN STYLE="background: #ffff00">BUILDING!</SPAN></FONT>
-	Right click on the project name and select the properties.<BR>In the
-	Application tab change the assembly name to
-	<FONT FACE="Lucida Console, Courier New, Courier, monospace"><SPAN STYLE="background: #ffff00">ASCOM.$safeprojectname$.Camera</SPAN></FONT>;
-	and the default namespace to <FONT FACE="Lucida Console, Courier New, Courier, monospace"><SPAN STYLE="background: #ffff00">ASCOM.$safeprojectname$</SPAN></FONT>.
-	This could not be automated in the template. <I>This may now be
-	done.</I></P>
 	<LI><P STYLE="margin-bottom: 0cm">Switch the Camera project to the
 	Debug configuration and build the template now. It should build
 	without errors. 
 	</P>
-	<LI><P STYLE="margin-bottom: 0cm">Double-click the <FONT FACE="Lucida Console, Courier New, Courier, monospace">Test.js</FONT>
-	script for a quick check of your driver. It activates only the
-	SetupDialog() method, so it will run after you build the template
-	successfully, even if you haven't yet implemented any of the
-	properties and methods. <I>This doesn't appear to work, an
-	alternative is to create a separate camera test application in a
-	separate project, this will be similar to the test.js script. Set
-	this as startup and debug away.</I></P>
+	<LI><P STYLE="margin-bottom: 0cm">Add a test project to the
+	Solution. A console application is easiest to set up.  To do this:</P>
+</OL>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Select the Solution and Add a new
+	Project. Make this a Console application.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Check the project properties and
+	make sure that the test application uses the same version of .NET as
+	the driver.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Add References to ASCOM Device
+	Interfaces and ASCOM Client Toolkit.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Set the test application to be the
+	startup project</P>
+	<LI><P>Add this lines to the Main subroutine in Program.cs:<BR><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">string
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">id
+	= ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Camera</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.Choose(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">);</FONT></FONT></FONT></P>
+</UL>
+<OL START=3>
+	<LI><P STYLE="margin-bottom: 0cm">Run Visual Studio as
+	Administrator. This is needed to allow it to register the driver.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Debug (F5) your solution for a
+	quick check of your driver. It runs the chooser, select your driver
+	&ndash; it should be in the chooser list and select Properties to
+	run the setup dialog, even if you haven't yet implemented any of the
+	properties and methods.</P>
 	<LI><P STYLE="margin-bottom: 0cm">Open the AssemblyInfo.cs and
 	Driver.cs files, then show the Task List and select Comments. This
 	will show you the places where you need to add or change things for
 	your driver. Tasks include implementing the required properties and
 	methods. See the ASCOM Camera spec. 
 	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Add code to your test program to
+	exercise more of your driver, for
+	example:<BR><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">camera
+	= </FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">new
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(id);<BR><BR></FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;name
+	&quot; </FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">+
+	camera.Name);</FONT></FONT></FONT></P>
+</OL>
+<P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2><FONT COLOR="#2b92b0"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT><FONT COLOR="#a41515"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;description
+&quot; </FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">+
+camera.Description);</FONT></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2><FONT COLOR="#2b92b0"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT><FONT COLOR="#a41515"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;DriverInfo
+&quot; </FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">+
+camera.DriverInfo);</FONT></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2><FONT COLOR="#2b92b0"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT><FONT COLOR="#a41515"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;driverVersion
+&quot; </FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">+
+camera.DriverVersion);</FONT></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2><FONT COLOR="#2b92b0"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT><FONT COLOR="#a41515"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;Press
+Enter to finish&quot;</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">);</FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-left: 1.25cm"><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.ReadLine();<BR></FONT></FONT></FONT>Exercise
+and debug your driver, adding functionality and test code to match.</P>
+<OL START=7>
 	<LI><P>Customize the Setup Dialog (SetupDialogForm) to provide the
 	settings and other controls for your driver. 
 	</P>
@@ -86,31 +124,21 @@ implementation:</P>
 	-u</FONT> on the assembly, unregisters it for both COM and ASCOM
 	(the Chooser). 
 	</P>
-	<LI><P>The project's Debug configuration is already configured
-	(<A HREF="#footnote">note</A>) for driver debugging using the
-	supplied Test.js script. Place a breakpoint in your driver class
-	constructor, then start debugging (go, F5). Your breakpoint will be
-	hit as soon as the test script creates an instance of your driver
-	(after selecting it in the Chooser). You can now single step,
-	examine variables, etc. Please review Test.js and feel free to make
-	changes and additions to activate various parts of your driver
-	during debugging. You can bypass the appearance of the Chooser by
-	removing<BR><BR><FONT FACE="Lucida Console, Courier New, Courier, monospace">var
-	F = new ActiveXObject(H.Choose(&quot;&quot;)); // Create instance of
-	selected Driver </FONT><BR><BR>and substituting<BR><BR><FONT FACE="Lucida Console, Courier New, Courier, monospace">var
-	F = new ActiveXObject(&quot;ASCOM.$safeprojectname$.Camera&quot;);<BR></FONT><BR>This
-	is a great way to incrementally debug your driver's properties and
-	methods. Create additional scripts in either JScript or VBScript. To
-	change the script that is used to activate the driver during
-	debugging, open Project Properties, Debug tab, and change the script
-	name in the Command Line Arguments field. 
+	<LI><P>You can bypass the appearance of the Chooser by
+	changing<BR><BR><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">string
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">id
+	= ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.Choose(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">);<BR>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">focuser
+	= </FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">new
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(id);</FONT></FONT></FONT><FONT FACE="Lucida Console, Courier New, Courier, monospace">
+	</FONT><BR><BR>to<BR><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt"><BR>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">focuser
+	= </FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">new
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(ASCOM.$safeprojectname$.Camera);</FONT></FONT></FONT><FONT FACE="Lucida Console, Courier New, Courier, monospace"><BR></FONT><BR><BR><BR>
 	</P>
 </UL>
-<P STYLE="margin-bottom: 0cm">(note) If you're running on Windows
-2000, you'll have to change the path to cscript.exe in your project
-properties, Debug tab, Start External Program. Change c:\windows\ to
-c:\winnt\. This was unavoidable because VS.NET doesn't support
-substitution macros in this field.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
 <DIV ALIGN=RIGHT>
 	<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
 		<TR>
