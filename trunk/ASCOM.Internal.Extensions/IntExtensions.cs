@@ -6,6 +6,9 @@ using System.Diagnostics;
 
 namespace ASCOM.Internal
 {
+    /// <summary>
+    /// tring extension methods
+    /// </summary>
 	public static class IntExtensions
 	{
 		/// <summary>

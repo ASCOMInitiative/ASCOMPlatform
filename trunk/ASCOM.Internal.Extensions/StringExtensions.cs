@@ -62,11 +62,13 @@ namespace ASCOM.Internal
         }
 
         /// <summary>
-        ///   Remove the head of the string, leaving the tail.
+        /// Remove the head of the string, leaving the tail.
         /// </summary>
-        /// <param name = "source">The source string.</param>
-        /// <param name = "length">Number of characters to remove from the head.</param>
-        /// <returns>A new string containing the old string with <see cref = "length" /> characters removed from the head.</returns>
+        /// <param name="source">The source string.</param>
+        /// <param name="length">Number of characters to remove from the head.</param>
+        /// <returns>
+        /// A new string containing the old string with <paramref name="length"/> characters removed from the head.
+        /// </returns>
         public static string RemoveHead(this string source, int length)
         {
             if (length < 1) return source;
@@ -78,7 +80,7 @@ namespace ASCOM.Internal
         /// </summary>
         /// <param name = "source">The source string.</param>
         /// <param name = "length">Number of characters to remove from the tail.</param>
-        /// <returns>A new string containing the old string with <see cref = "length" /> characters removed from the tail.</returns>
+        /// <returns>A new string containing the old string with <paramref name="length"/> characters removed from the tail.</returns>
         public static string RemoveTail(this string source, int length)
         {
             if (length < 1) return source;

@@ -38,6 +38,9 @@ using ASCOM.Utilities.Interfaces;
 using Machine.Specifications;
 using Moq;
 using It = Machine.Specifications.It;
+using ThenIt = Machine.Specifications.It;
+using Arg = Moq.It;
+using MoqIt = Moq.It;
 
 /*
  * Facts about SettingsProvider
@@ -142,7 +145,7 @@ namespace ASCOM.Platform.UnitTest
             Properties = new SettingsPropertyCollection();
             Properties.Add(settingsProperty);
             SetDeviceType = String.Empty; // Captures the device type that has been set.
-            MockProfile.SetupSet(x => x.DeviceType).Callback(y => SetDeviceType = y);
+            MockProfile.SetupSet(p => p.DeviceType = Arg.IsAny<string>()).Callback<string>(y => SetDeviceType = y);
             Target = new SettingsProvider(MockProfile.Object);
             SettingsContext = new SettingsContext();
         };
@@ -185,7 +188,7 @@ namespace ASCOM.Platform.UnitTest
                                                                      true, true);
             Properties = new SettingsPropertyCollection {settingsProperty};
             SetDeviceType = String.Empty; // Captures the device type that has been set.
-            MockProfile.SetupSet(x => x.DeviceType).Callback(y => SetDeviceType = y);
+            MockProfile.SetupSet(x => x.DeviceType = Arg.IsAny<string>()).Callback<string>(y => SetDeviceType = y);
             Target = new SettingsProvider(MockProfile.Object);
             SettingsContext = new SettingsContext();
         };
@@ -217,7 +220,6 @@ namespace ASCOM.Platform.UnitTest
     public class When_setting_then_getting_string_properties_for_a_registered_device : With_mock_ascom_profile
     {
         static SettingsPropertyValueCollection result;
-        //static SettingsPropertyCollection properties; Commented out to remove compiler warning
         // Context:
         //	- mockProfile should capture whatever the DeviceType is configured to.
         Establish context = () =>
@@ -230,7 +232,7 @@ namespace ASCOM.Platform.UnitTest
                 SettingsProperties.Add(settingsProperty);
 
                 SetDeviceType = String.Empty; // Captures the device type that has been set.
-                MockProfile.SetupSet(x => x.DeviceType).Callback(y => SetDeviceType = y);
+                MockProfile.SetupSet(x => x.DeviceType=Arg.IsAny<string>()).Callback<string>(y => SetDeviceType = y);
                 MockProfile.Setup(x => x.WriteValue(DeviceId, SettingName, SettingSetValue, String.Empty));
 
                 Target = new SettingsProvider(MockProfile.Object);
