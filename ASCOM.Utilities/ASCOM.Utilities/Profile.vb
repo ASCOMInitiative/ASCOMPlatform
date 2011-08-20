@@ -309,7 +309,7 @@ Public Class Profile
         CheckRegistered(DriverID)
         If Name = "" And SubKey = "" Then
             'Err.Raise(SCODE_ILLEGAL_REGACC, ERR_SOURCE_PROFILE, MSG_ILLEGAL_REGACC)
-            Throw New Exceptions.RestrictedAccessException("The device default value is protected as it contains the device descriptio and is set by Profile.Register")
+            Throw New Exceptions.RestrictedAccessException("The device default value is protected as it contains the device description and is set by Profile.Register")
         End If
         ProfileStore.WriteProfile(MakeKey(DriverID, SubKey), Name, Value)
     End Sub

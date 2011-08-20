@@ -2050,7 +2050,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub NOVAS31Tests()
-        Status("NOVAS 3 Tests")
+        Status("NOVAS 3.1 Tests")
 
         NOVAS31Test(NOVAS3Functions.PlanetEphemeris)
         NOVAS31Test(NOVAS3Functions.ReadEph)
@@ -2747,8 +2747,6 @@ Public Class DiagnosticsForm
             End If
         End If
     End Sub
-
-
 
     Sub LogRC(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
         Dim LMsg As String

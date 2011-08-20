@@ -8,14 +8,14 @@ Namespace AstroUtils
     Public Class AstroUtils
         Implements IAstroUtils, IDisposable
 
-        Private TL As TraceLogger, Utl As Util, Nov3 As NOVAS.NOVAS3
+        Private TL As TraceLogger, Utl As Util, Nov31 As NOVAS.NOVAS31
 
 #Region "New and IDisposable Support"
         Sub New()
             TL = New TraceLogger("", "AstroUtils")
             TL.Enabled = True
             Utl = New Util
-            Nov3 = New NOVAS.NOVAS3
+            Nov31 = New NOVAS.NOVAS31
             TL.LogMessage("New", "AstroUtils created Utilities component OK")
         End Sub
         Private disposedValue As Boolean ' To detect redundant calls
@@ -34,9 +34,9 @@ Namespace AstroUtils
                         Utl = Nothing
                     End If
                 End If
-                If Not (Nov3 Is Nothing) Then
-                    Nov3.Dispose()
-                    Nov3 = Nothing
+                If Not (Nov31 Is Nothing) Then
+                    Nov31.Dispose()
+                    Nov31 = Nothing
                 End If
 
             End If
@@ -52,21 +52,67 @@ Namespace AstroUtils
 #End Region
 
         ''' <summary>
+        ''' Flexible routine to range a number between a lower and an higher bound. Switches control whether the ranged value can be equal to either the
+        ''' lower or upper bounds.
+        ''' </summary>
+        ''' <param name="Value">Value to be ranged</param>
+        ''' <param name="LowerBound">Lowest value of the range</param>
+        ''' <param name="LowerEqual">Boolean flag indicating whether the ranged value can have the lower bound value</param>
+        ''' <param name="UpperBound">Highest value of the range</param>
+        ''' <param name="UpperEqual">Boolean flag indicating whether the ranged value can have the upper bound value</param>
+        ''' <returns>The ranged nunmber as a double</returns>
+        ''' <exception cref="ASCOM.InvalidValueException">Thrown if the lower bound is greater than the upper bound.</exception>
+        ''' <exception cref="ASCOM.InvalidValueException">Thrown if LowerEqual and UpperEqual are both false and the ranged value equals
+        ''' one of these values. This is impossible to handle as the algorithm will always violate one of the rules!</exception>
+        ''' <remarks></remarks>
+        Public Function Range(Value As Double, LowerBound As Double, LowerEqual As Boolean, UpperBound As Double, UpperEqual As Boolean) As Double Implements IAstroUtils.Range
+            Dim ModuloValue As Double
+            If LowerBound >= UpperBound Then Throw New ASCOM.InvalidValueException("Range", "LowerBound is >= UpperBound", "LowerBound must be less than UpperBound")
+
+            ModuloValue = UpperBound - LowerBound
+
+            If LowerEqual Then
+                If UpperEqual Then 'Lowest >= Highest <=
+                    Do
+                        If Value < LowerBound Then Value += ModuloValue
+                        If Value > UpperBound Then Value -= ModuloValue
+                    Loop Until (Value >= LowerBound) And (Value <= UpperBound)
+                Else 'Lowest >= Highest <
+                    Do
+                        If Value < LowerBound Then Value += ModuloValue
+                        If Value >= UpperBound Then Value -= ModuloValue
+                    Loop Until (Value >= LowerBound) And (Value < UpperBound)
+                End If
+            Else
+                If UpperEqual Then 'Lowest > Highest<=
+                    Do
+                        If Value <= LowerBound Then Value += ModuloValue
+                        If Value > UpperBound Then Value -= ModuloValue
+                    Loop Until (Value > LowerBound) And (Value <= UpperBound)
+                Else 'Lowest > Highest <
+                    If (Value = LowerBound) Then Throw New InvalidValueException("Range", "The supplied value equals the LowerBound. This can not be ranged when LowerEqual and UpperEqual are both false ", "LowerBound > Value < UpperBound")
+                    If (Value = UpperBound) Then Throw New InvalidValueException("Range", "The supplied value equals the UpperBound. This can not be ranged when LowerEqual and UpperEqual are both false ", "LowerBound > Value < UpperBound")
+                    Do
+                        If Value <= LowerBound Then Value += ModuloValue
+                        If Value >= UpperBound Then Value -= ModuloValue
+                    Loop Until (Value > LowerBound) And (Value < UpperBound)
+                End If
+            End If
+        End Function
+
+        ''' <summary>
         ''' Conditions an hour angle to be in the range -12.0 to +12.0 by adding or subtracting 24.0 hours
         ''' </summary>
         ''' <param name="HA">Hour angle to condition</param>
         ''' <returns>Hour angle in the range -12.0 to +12.0</returns>
         ''' <remarks></remarks>
         Public Function ConditionHA(HA As Double) As Double Implements IAstroUtils.ConditionHA
-            Dim HAOrg As Double
-            HAOrg = HA
+            Dim ReturnValue As Double
 
-            Do
-                If HA < -12.0 Then HA += 24.0
-                If HA > 12.0 Then HA -= 24.0
-            Loop Until (HA >= -12.0) And (HA <= 12.0)
-            TL.LogMessage("ConditionHA", "Conditioned HA: " & Utl.HoursToHMS(HAOrg, ":", ":", "", 3) & " to: " & Utl.HoursToHMS(HA, ":", ":", "", 3))
-            Return HA
+            ReturnValue = Range(HA, -12.0, True, +12.0, True)
+            TL.LogMessage("ConditionHA", "Conditioned HA: " & Utl.HoursToHMS(HA, ":", ":", "", 3) & " to: " & Utl.HoursToHMS(ReturnValue, ":", ":", "", 3))
+
+            Return ReturnValue
         End Function
 
         ''' <summary>
@@ -76,15 +122,11 @@ Namespace AstroUtils
         ''' <returns>Right ascension in the range 0 to 23.999...</returns>
         ''' <remarks></remarks>
         Public Function ConditionRA(RA As Double) As Double Implements IAstroUtils.ConditionRA
-            Dim RAOrg As Double
-            RAOrg = RA
+            Dim ReturnValue As Double
 
-            Do
-                If RA < 0.0 Then RA += 24.0
-                If RA >= 24.0 Then RA -= 24.0
-            Loop Until (RA >= 0.0) And (RA < 24.0)
+            ReturnValue = Range(RA, 0.0, True, 24.0, False)
+            TL.LogMessage("ConditionRA", "Conditioned RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & " to: " & Utl.HoursToHMS(ReturnValue, ":", ":", "", 3))
 
-            TL.LogMessage("ConditionRA", "Conditioned RA: " & Utl.HoursToHMS(RAOrg, ":", ":", "", 3) & " to: " & Utl.HoursToHMS(RA, ":", ":", "", 3))
             Return RA
         End Function
 
@@ -109,12 +151,12 @@ Namespace AstroUtils
         ''' <value>Julian day</value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public ReadOnly Property JulianDateUtc As Double
+        Public ReadOnly Property JulianDateUtc As Double Implements IAstroUtils.JulianDateUtc
             Get
                 Dim CurrentDate As Date, JD As Double
 
                 CurrentDate = Date.UtcNow
-                JD = Nov3.JulianDate(Convert.ToInt16(CurrentDate.Year), Convert.ToInt16(CurrentDate.Month), Convert.ToInt16(CurrentDate.Day), CurrentDate.TimeOfDay.TotalHours)
+                JD = Nov31.JulianDate(Convert.ToInt16(CurrentDate.Year), Convert.ToInt16(CurrentDate.Month), Convert.ToInt16(CurrentDate.Day), CurrentDate.TimeOfDay.TotalHours)
                 TL.LogMessage("JulianDateUtc", "Returning: " & JD & " at UTC: " & Format(CurrentDate, "dddd dd MMMM yyyy HH:mm:ss.fff"))
                 Return JD
             End Get
@@ -129,7 +171,7 @@ Namespace AstroUtils
         ''' <remarks>Terrestrial time is calculated as TT = UTC + DeltaUT1 + DeltaT. This value is then converted to a Julian date and returned.
         ''' <para>Forecast values of DUT1 are published by IERS Bulletin A at http://maia.usno.navy.mil/ser7/ser7.dat
         ''' </para></remarks>
-        Public Function JulianDateTT(DeltaUT1 As Double) As Double
+        Public Function JulianDateTT(DeltaUT1 As Double) As Double Implements IAstroUtils.JulianDateTT
             Dim UTCDate, UT1Date, TTDate As Date, JD As Double, DeltaTTimespan, DeltaUT1Timespan As TimeSpan
 
             If (DeltaUT1 < -0.9) Or (DeltaUT1 > 0.9) Then Throw New ASCOM.InvalidValueException("JulianDateUT1", DeltaUT1.ToString, "-0.9 to +0.9")
@@ -139,7 +181,7 @@ Namespace AstroUtils
             DeltaUT1Timespan = TimeSpan.FromSeconds(DeltaUT1) 'Convert DeltaUT to a timesapn
             UT1Date = UTCDate.Add(DeltaUT1Timespan) 'Add delta-ut to UTC to yield UT1
             TTDate = UT1Date.Add(DeltaTTimespan) 'Add delta-t to UT1 to yield TT
-            JD = Nov3.JulianDate(Convert.ToInt16(TTDate.Year), Convert.ToInt16(TTDate.Month), Convert.ToInt16(TTDate.Day), TTDate.TimeOfDay.TotalHours)
+            JD = Nov31.JulianDate(Convert.ToInt16(TTDate.Year), Convert.ToInt16(TTDate.Month), Convert.ToInt16(TTDate.Day), TTDate.TimeOfDay.TotalHours)
             TL.LogMessage("JulianDateTT", "Returning: " & JD & "at TT: " & Format(TTDate, "dddd dd MMMM yyyy HH:mm:ss.fff") & ", at UTC: " & Format(UTCDate, "dddd dd MMMM yyyy HH:mm:ss.fff"))
             Return JD
         End Function
@@ -153,7 +195,7 @@ Namespace AstroUtils
         ''' <remarks>UT1 time is calculated as UT1 = UTC + DeltaUT1. This value is then converted to a Julian date and returned.
         ''' <para>Forecast values of DUT1 are published by IERS Bulletin A at http://maia.usno.navy.mil/ser7/ser7.dat
         ''' </para></remarks>
-        Public Function JulianDateUT1(DeltaUT1 As Double) As Double
+        Public Function JulianDateUT1(DeltaUT1 As Double) As Double Implements IAstroUtils.JulianDateUT1
             Dim UTCDate, UT1Date As Date, JD As Double, DeltaUT1Timespan As TimeSpan
 
             If (DeltaUT1 < -0.9) Or (DeltaUT1 > 0.9) Then Throw New ASCOM.InvalidValueException("JulianDateUT1", DeltaUT1.ToString, "-0.9 to +0.9")
@@ -162,9 +204,107 @@ Namespace AstroUtils
             DeltaUT1Timespan = TimeSpan.FromSeconds(DeltaUT1) 'Convert DeltaUT to a timesapn
             UT1Date = UTCDate.Add(DeltaUT1Timespan) 'Add delta-ut to UTC to yield UT1
 
-            JD = Nov3.JulianDate(Convert.ToInt16(UT1Date.Year), Convert.ToInt16(UT1Date.Month), Convert.ToInt16(UT1Date.Day), UT1Date.TimeOfDay.TotalHours)
+            JD = Nov31.JulianDate(Convert.ToInt16(UT1Date.Year), Convert.ToInt16(UT1Date.Month), Convert.ToInt16(UT1Date.Day), UT1Date.TimeOfDay.TotalHours)
             TL.LogMessage("JulianDateUT1", "Returning: " & JD & "at UT1: " & Format(UT1Date, "dddd dd MMMM yyyy HH:mm:ss.fff") & ", at UTC: " & Format(UTCDate, "dddd dd MMMM yyyy HH:mm:ss.fff"))
             Return JD
+        End Function
+
+        ''' <summary>
+        ''' Computes atmospheric refraction in zenith distance. 
+        ''' </summary>
+        ''' <param name="Location">Structure containing observer's location.</param>
+        ''' <param name="RefOption">1 ... Use 'standard' atmospheric conditions; 2 ... Use atmospheric 
+        ''' parameters input in the 'Location' structure.</param>
+        ''' <param name="ZdObs">Observed zenith distance, in degrees.</param>
+        ''' <returns>Unrefracted zenith distance in degrees.</returns>
+        ''' <remarks>This version computes approximate refraction for optical wavelengths. This function 
+        ''' can be used for planning observations or telescope pointing, but should not be used for the 
+        ''' reduction of precise observations.
+        ''' <para>Note: Unlike the NOVAS Refract method, Unrefract returns the unrefracted zenith distance itself rather than 
+        ''' the difference between the refracted and unrefracted zenith distances.</para></remarks>
+        Public Function UnRefract(ByVal Location As OnSurface, _
+                                                ByVal RefOption As RefractionOption, _
+                                                ByVal ZdObs As Double) As Double Implements IAstroUtils.UnRefract
+            Dim LoopCount As Integer, RefractedPosition, UnrefractedPosition As Double
+
+            If (ZdObs < 0.0) Or (ZdObs > 90.0) Then Throw New ASCOM.InvalidValueException("Unrefract", "Zenith distance", "0.0 to 90.0 degrees")
+
+            LoopCount = 0
+            UnrefractedPosition = ZdObs
+            Do
+                LoopCount += 1
+                RefractedPosition = UnrefractedPosition - Nov31.Refract(Location, RefOption, UnrefractedPosition)
+                UnrefractedPosition = UnrefractedPosition + (ZdObs - RefractedPosition)
+                TL.LogMessage("Unrefract", LoopCount & ": " & RefractedPosition & " " & UnrefractedPosition)
+            Loop Until (LoopCount = 20) Or (RefractedPosition = ZdObs)
+
+            TL.LogMessage("Unrefract", "Final: " & LoopCount & ", Unrefracted zenith distance: " & UnrefractedPosition)
+            Return UnrefractedPosition
+
+        End Function
+
+        Const MJDBase As Double = 2400000.5 'This is the offset of Modified Julian dates from true Julian dates
+
+        ''' <summary>
+        ''' Converts a calendar day, month, year to a modified Julian date
+        ''' </summary>
+        ''' <param name="Day">Integer day of ther month</param>
+        ''' <param name="Month">Integer month of the year</param>
+        ''' <param name="Year">Integer year</param>
+        ''' <returns>Double modified julian date</returns>
+        ''' <remarks></remarks>
+        Public Function CalendarToMJD(Day As Integer, Month As Integer, Year As Integer) As Double Implements IAstroUtils.CalendarToMJD
+            Dim JD, MJD As Double
+            JD = Nov31.JulianDate(Convert.ToInt16(Year), Convert.ToInt16(Month), Convert.ToInt16(Day), 0.0)
+            MJD = JD - MJDBase
+            Return MJD
+        End Function
+
+        ''' <summary>
+        ''' Translates a modified Julian date to a VB ole automation date, presented as a double
+        ''' </summary>
+        ''' <param name="MJD">Modified Julian date</param>
+        ''' <returns>Date as a VB ole automation date</returns>
+        ''' <remarks></remarks>
+        Public Function MJDToOADate(MJD As Double) As Double Implements IAstroUtils.MJDToOADate
+            Dim JulianDate As Date, JulianOADate As Double
+
+            JulianDate = Utl.DateJulianToLocal(MJD + MJDBase)
+            JulianOADate = JulianDate.ToOADate
+
+            Return JulianOADate
+
+        End Function
+
+        ''' <summary>
+        ''' Translates a modified Julian date to a date
+        ''' </summary>
+        ''' <param name="MJD">Modified Julian date</param>
+        ''' <returns>Date representing the modified Julian date</returns>
+        ''' <remarks></remarks>
+        Public Function MJDToDate(MJD As Double) As Date Implements IAstroUtils.MJDToDate
+            Dim JulianDate As Date
+
+            JulianDate = Utl.DateJulianToLocal(MJD + MJDBase)
+
+            Return JulianDate
+
+        End Function
+
+        ''' <summary>
+        ''' Returns a modified Julian date as a string formatted acording to the supplied presentation format
+        ''' </summary>
+        ''' <param name="MJD">Mofified julian date</param>
+        ''' <param name="PresentationFormat">Format representation</param>
+        ''' <returns>Date string</returns>
+        ''' <remarks>This expects the standard Microsoft date and time formatting characters as described 
+        ''' in http://msdn.microsoft.com/en-us/library/362btx8f%28v=VS.90%29.aspx
+        ''' </remarks>
+        Public Function FormatMJD(MJD As Double, PresentationFormat As String) As String Implements IAstroUtils.FormatMJD
+            Dim MJDDate As Date, MJDDateString As String
+            MJDDate = MJDToDate(MJD)
+            MJDDateString = Format(MJDDate, PresentationFormat)
+            Return MJDDateString
         End Function
 
     End Class
