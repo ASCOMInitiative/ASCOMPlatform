@@ -4993,7 +4993,43 @@ Namespace AstroUtils
     Public Interface IAstroUtils
         <DispId(1)> Function ConditionRA(RA As Double) As Double
         <DispId(2)> Function ConditionHA(HA As Double) As Double
-        <DispId(2)> Function DeltaT() As Double
+        <DispId(3)> Function DeltaT() As Double
+        <DispId(4)> Function UnRefract(ByVal Location As OnSurface, ByVal RefOption As RefractionOption, ByVal ZdObs As Double) As Double
+        ReadOnly Property JulianDateUtc As Double
+        Function JulianDateTT(DeltaUT1 As Double) As Double
+        Function JulianDateUT1(DeltaUT1 As Double) As Double
+        ''' <summary>
+        ''' Flexible routine to range a number between a lower and an higher bound. Switches control whether the ranged value can be equal to either the
+        ''' lower or upper bounds.
+        ''' </summary>
+        ''' <param name="Value">Value to be ranged</param>
+        ''' <param name="LowerBound">Lowest value of the range</param>
+        ''' <param name="LowerEqual">Boolean flag indicating whether the ranged value can have the lower bound value</param>
+        ''' <param name="UpperBound">Highest value of the range</param>
+        ''' <param name="UpperEqual">Boolean flag indicating whether the ranged value can have the upper bound value</param>
+        ''' <returns>The ranged nunmber as a double</returns>
+        ''' <exception cref="ASCOM.InvalidValueException">Thrown if the lower bound is greater than the upper bound.</exception>
+        ''' <exception cref="ASCOM.InvalidValueException">Thrown if LowerEqual and UpperEqual are both false and the ranged value equals
+        ''' one of these values. This is impossible to handle as the algorithm will always violate one of the rules!</exception>
+        ''' <remarks></remarks>
+        Function Range(Value As Double, LowerBound As Double, LowerEqual As Boolean, UpperBound As Double, UpperEqual As Boolean) As Double
+        Function CalendarToMJD(Day As Integer, Month As Integer, Year As Integer) As Double
+        ''' <summary>
+        ''' Translates a modified Julian date to a VB ole automation date, presented as a double
+        ''' </summary>
+        ''' <param name="MJD">Modified Julian date</param>
+        ''' <returns>Date as a VB ole automation date</returns>
+        ''' <remarks></remarks>
+        Function MJDToOADate(MJD As Double) As Double
+        ''' <summary>
+        ''' Translates a modified Julian date to a date
+        ''' </summary>
+        ''' <param name="MJD">Modified Julian date</param>
+        ''' <returns>Date representing the modified Julian date</returns>
+        ''' <remarks></remarks>
+        Function MJDToDate(MJD As Double) As Date
+
+        Function FormatMJD(MJD As Double, PresentationFormat As String) As String
 
     End Interface
 
