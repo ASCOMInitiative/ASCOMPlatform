@@ -26,6 +26,7 @@ using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace ASCOM.$safeprojectname$
 {
@@ -84,10 +85,15 @@ namespace ASCOM.$safeprojectname$
 
         public void SetupDialog()
         {
-            using (var f = new SetupDialogForm())
-            {
-                f.ShowDialog();
-            }
+		// TODO the setup dialog may need only to be shown when the device is not connected.
+		using (var f = new SetupDialogForm())
+		{
+			DialogResult result = f.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				// TODO add code to be executed if the settings have been changed
+			}
+		}
         }
 
         public string Action(string actionName, string actionParameters)
@@ -125,11 +131,23 @@ namespace ASCOM.$safeprojectname$
             throw new System.NotImplementedException();
         }
 
-        public bool Connected
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
+		public bool Connected
+		{
+			get { throw new System.NotImplementedException(); }
+			set 
+			{ 
+				if (value)
+				{
+					// TODO connect to the focuser
+					string comPort = Properties.Settings.Default.ComPort;
+				}
+				else
+				{
+					// TODO disconnect from the focuser
+				}
+				throw new System.NotImplementedException(); 
+			}
+		}
 
         public string Description
         {

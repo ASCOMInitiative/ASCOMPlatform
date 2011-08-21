@@ -26,6 +26,7 @@ using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace ASCOM.$safeprojectname$
 {
@@ -94,9 +95,14 @@ namespace ASCOM.$safeprojectname$
 
         public void SetupDialog()
         {
+            // TODO the setup dialog may need only to be shown when the device is not connected.
             using (var f = new SetupDialogForm())
             {
-                f.ShowDialog();
+                DialogResult result = f.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    // TODO add code to be executed if the settings have been changed
+                }
             }
         }
 

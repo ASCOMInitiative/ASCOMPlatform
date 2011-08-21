@@ -32,6 +32,8 @@ namespace ASCOM.$safeprojectname$
 			this.cmdCancel = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.picASCOM = new System.Windows.Forms.PictureBox();
+			this.comboBoxComPort = new System.Windows.Forms.ComboBox();
+			this.label2 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -44,7 +46,7 @@ namespace ASCOM.$safeprojectname$
 			this.cmdOK.TabIndex = 0;
 			this.cmdOK.Text = "OK";
 			this.cmdOK.UseVisualStyleBackColor = true;
-			this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
+			this.cmdOK.Click += new System.EventHandler(this.cmdOKClick);
 			// 
 			// cmdCancel
 			// 
@@ -55,7 +57,7 @@ namespace ASCOM.$safeprojectname$
 			this.cmdCancel.TabIndex = 1;
 			this.cmdCancel.Text = "Cancel";
 			this.cmdCancel.UseVisualStyleBackColor = true;
-			this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
+			this.cmdCancel.Click += new System.EventHandler(this.cmdCancelClick);
 			// 
 			// label1
 			// 
@@ -78,15 +80,36 @@ namespace ASCOM.$safeprojectname$
 			this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
 			this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
 			// 
+			// comboBoxComPort
+			// 
+			this.comboBoxComPort.FormattingEnabled = true;
+			this.comboBoxComPort.Location = new System.Drawing.Point(76, 53);
+			this.comboBoxComPort.Name = "comboBoxComPort";
+			this.comboBoxComPort.Size = new System.Drawing.Size(58, 21);
+			this.comboBoxComPort.TabIndex = 4;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(12, 56);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(53, 13);
+			this.label2.TabIndex = 5;
+			this.label2.Text = "COM Port";
+			// 
 			// SetupDialogForm
 			// 
+			this.AcceptButton = this.cmdOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.cmdCancel;
 			this.ClientSize = new System.Drawing.Size(203, 155);
 			this.Controls.Add(this.picASCOM);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.cmdCancel);
 			this.Controls.Add(this.cmdOK);
+			this.Controls.Add(this.comboBoxComPort);
+			this.Controls.Add(this.label2);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -106,5 +129,7 @@ namespace ASCOM.$safeprojectname$
 		private System.Windows.Forms.Button cmdCancel;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.PictureBox picASCOM;
+		private System.Windows.Forms.ComboBox comboBoxComPort;
+		private System.Windows.Forms.Label label2;
 	}
 }

@@ -2,11 +2,15 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
-	<TITLE>Untitled Document</TITLE>
+	<TITLE>ASCOM Camera Driver C#</TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Win32)">
 	<META NAME="CREATED" CONTENT="0;0">
 	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
-	<META NAME="CHANGED" CONTENT="20110812;17360300">
+	<META NAME="CHANGED" CONTENT="20110821;16073400">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
 	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
 	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
 	<STYLE TYPE="text/css">
@@ -45,21 +49,18 @@ implementation:</P>
 	without errors. 
 	</P>
 	<LI><P STYLE="margin-bottom: 0cm">Add a test project to the
-	Solution. A console application is easiest to set up.  To do this:</P>
+	Solution. A test console application is provided. To use this:</P>
 </OL>
 <UL>
-	<LI><P STYLE="margin-bottom: 0cm">Select the Solution and Add a new
-	Project. Make this a Console application.</P>
-	<LI><P STYLE="margin-bottom: 0cm">Check the project properties and
-	make sure that the test application uses the same version of .NET as
-	the driver.</P>
-	<LI><P STYLE="margin-bottom: 0cm">Add References to ASCOM Device
-	Interfaces and ASCOM Client Toolkit.</P>
-	<LI><P STYLE="margin-bottom: 0cm">Set the test application to be the
-	startup project</P>
-	<LI><P>Add this lines to the Main subroutine in Program.cs:<BR><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">string
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">id
-	= ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Camera</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.Choose(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">);</FONT></FONT></FONT></P>
+	<LI><P STYLE="margin-bottom: 0cm">Select the Solution and use the
+	Context Menu to Add a new Project. Select &ldquo;Test Application
+	(CS)&rdquo;.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Check that the Test Application is
+	set to run as startup.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Edit Program.cs to uncomment the
+	line:<BR><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>string
+	c</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>id
+	= ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Camera</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>.Choose(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=3>&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>);</FONT></FONT></FONT></P>
 </UL>
 <OL START=3>
 	<LI><P STYLE="margin-bottom: 0cm">Run Visual Studio as
@@ -75,31 +76,25 @@ implementation:</P>
 	your driver. Tasks include implementing the required properties and
 	methods. See the ASCOM Camera spec. 
 	</P>
-	<LI><P STYLE="margin-bottom: 0cm">Add code to your test program to
-	exercise more of your driver, for
-	example:<BR><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">camera
-	= </FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">new
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(id);<BR><BR></FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;name
-	&quot; </FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">+
+	<LI><P STYLE="margin-bottom: 0cm">Uncomment or add code to your test
+	program to exercise more of your driver, for
+	example:<BR><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.Camera</FONT></FONT></FONT><FONT COLOR="#2b92b0">
+	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>camera
+	= </FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>new
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Camera</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>(id);<BR><BR></FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Console</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>.WriteLine(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=3>&quot;name
+	&quot; </FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>+
 	camera.Name);</FONT></FONT></FONT></P>
 </OL>
 <P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
-<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2><FONT COLOR="#2b92b0"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT><FONT COLOR="#a41515"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;description
-&quot; </FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">+
-camera.Description);</FONT></FONT></FONT></FONT></P>
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3><FONT COLOR="#2b92b0">Console</FONT>.WriteLine(<FONT COLOR="#a41515">&quot;description
+&quot; </FONT>+ camera.Description);</FONT></FONT></FONT></P>
 <P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
-<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2><FONT COLOR="#2b92b0"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT><FONT COLOR="#a41515"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;DriverInfo
-&quot; </FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">+
-camera.DriverInfo);</FONT></FONT></FONT></FONT></P>
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3><FONT COLOR="#2b92b0">Console</FONT>.WriteLine(<FONT COLOR="#a41515">&quot;DriverInfo
+&quot; </FONT>+ camera.DriverInfo);</FONT></FONT></FONT></P>
 <P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
-<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2><FONT COLOR="#2b92b0"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT><FONT COLOR="#a41515"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;driverVersion
-&quot; </FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">+
-camera.DriverVersion);</FONT></FONT></FONT></FONT></P>
-<P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
-<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2><FONT COLOR="#2b92b0"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">.WriteLine(</FONT><FONT COLOR="#a41515"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;Press
-Enter to finish&quot;</FONT></FONT><FONT SIZE=2 STYLE="font-size: 9pt">);</FONT></FONT></FONT></FONT></P>
-<P STYLE="margin-left: 1.25cm"><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Console</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.ReadLine();<BR></FONT></FONT></FONT>Exercise
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3><FONT COLOR="#2b92b0">Console</FONT>.WriteLine(<FONT COLOR="#a41515">&quot;driverVersion
+&quot; </FONT>+ camera.DriverVersion);</FONT></FONT></FONT></P>
+<P STYLE="margin-left: 1.25cm"><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt"><BR></FONT></FONT></FONT>Exercise
 and debug your driver, adding functionality and test code to match.</P>
 <OL START=7>
 	<LI><P>Customize the Setup Dialog (SetupDialogForm) to provide the
@@ -125,16 +120,18 @@ and debug your driver, adding functionality and test code to match.</P>
 	(the Chooser). 
 	</P>
 	<LI><P>You can bypass the appearance of the Chooser by
-	changing<BR><BR><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">string
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">id
-	= ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.Choose(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">);<BR>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">focuser
-	= </FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">new
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(id);</FONT></FONT></FONT><FONT FACE="Lucida Console, Courier New, Courier, monospace">
-	</FONT><BR><BR>to<BR><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt"><BR>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">focuser
-	= </FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">new
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Focuser</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(ASCOM.$safeprojectname$.Camera);</FONT></FONT></FONT><FONT FACE="Lucida Console, Courier New, Courier, monospace"><BR></FONT><BR><BR><BR>
+	changing<BR><FONT SIZE=3><BR></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>string
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>id
+	= ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Camera</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>.Choose(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=3>&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>);<BR>ASCOM.DriverAccess.Camera</FONT></FONT></FONT><FONT COLOR="#2b92b0">
+	</FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>camera</FONT></FONT></FONT><FONT COLOR="#000000">
+	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>=
+	</FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>new
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Camera</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>(id);</FONT></FONT></FONT>
+	<FONT SIZE=3><BR><BR>to<BR></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3><BR>ASCOM.DriverAccess.Camera</FONT></FONT></FONT><FONT COLOR="#2b92b0">
+	</FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>camera</FONT></FONT></FONT><FONT COLOR="#000000">
+	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>=
+	</FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>new
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Camera</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>(&quot;ASCOM.$safeprojectname$.Camera&quot;);</FONT></FONT></FONT><FONT FACE="Lucida Console, Courier New, Courier, monospace"><BR></FONT><BR><BR><BR>
 	</P>
 </UL>
 <P STYLE="margin-bottom: 0cm"><BR>
