@@ -14,16 +14,29 @@ namespace ASCOM.$safeprojectname$
 		public SetupDialogForm()
 		{
 			InitializeComponent();
+			// TODO initialise the dialog from the settings, e.g.
+			string comPort = Properties.Settings.Default.ComPort;
+			ASCOM.Utilities.Serial serial = new Utilities.Serial();
+			comboBoxComPort.Items.Clear();
+			foreach (var item in serial.AvailableCOMPorts)
+			{
+				comboBoxComPort.Items.Add(item);
+				if (item == comPort)
+					comboBoxComPort.SelectedIndex = comboBoxComPort.Items.Count - 1;
+			}
 		}
 
-		private void cmdOK_Click(object sender, EventArgs e)
+		private void cmdOKClick(object sender, EventArgs e)
 		{
-			Dispose();
+			Properties.Settings.Default.ComPort = (string)comboBoxComPort.SelectedItem;
+			Properties.Settings.Default.Save();
+			Close();
 		}
 
-		private void cmdCancel_Click(object sender, EventArgs e)
+		private void cmdCancelClick(object sender, EventArgs e)
 		{
-			Dispose();
+			Properties.Settings.Default.Reload();
+			Close();
 		}
 
 		private void BrowseToAscom(object sender, EventArgs e)

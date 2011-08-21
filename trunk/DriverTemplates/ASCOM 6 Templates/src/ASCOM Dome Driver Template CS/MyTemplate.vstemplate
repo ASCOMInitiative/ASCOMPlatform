@@ -18,16 +18,18 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.png">ASCOM.png</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="dome.snk">dome.snk</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Settings.cs">Settings.cs</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="Resources.Designer.cs">Resources.Designer.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Settings.Settings">Settings.Settings</ProjectItem>
       </Folder>
       <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.cs">SetupDialogForm.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.designer.cs">SetupDialogForm.designer.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.resx">SetupDialogForm.resx</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Test.js">Test.js</ProjectItem>
     </Project>
   </TemplateContent>
 </VSTemplate>
