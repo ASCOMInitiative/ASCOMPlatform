@@ -3,7 +3,7 @@
 
 using System.Configuration;
 
-namespace ASCOM.$safeprojectname$
+namespace ASCOM.$safeprojectname$.Properties
 {
     [DeviceId("ASCOM.$safeprojectname$.Camera", DeviceName = "$safeprojectname$ Camera")]
     [SettingsProvider(typeof(ASCOM.SettingsProvider))]
