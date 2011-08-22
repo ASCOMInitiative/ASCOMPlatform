@@ -22,17 +22,19 @@ Partial Class SetupDialogForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-Me.OK_Button = New System.Windows.Forms.Button
-Me.Cancel_Button = New System.Windows.Forms.Button
-Me.Label1 = New System.Windows.Forms.Label
-Me.PictureBox1 = New System.Windows.Forms.PictureBox
-Me.TableLayoutPanel1.SuspendLayout()
-CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-Me.SuspendLayout()
-'
-'TableLayoutPanel1
-'
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
+        Me.OK_Button = New System.Windows.Forms.Button
+        Me.Cancel_Button = New System.Windows.Forms.Button
+        Me.Label1 = New System.Windows.Forms.Label
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox
+        Me.ComboBoxComPort = New System.Windows.Forms.ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel1.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
+        '
+        'TableLayoutPanel1
+        '
 Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
 Me.TableLayoutPanel1.ColumnCount = 2
 Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -85,6 +87,23 @@ Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox1.TabIndex = 2
         Me.PictureBox1.TabStop = False
         '
+        'ComboBoxComPort
+        '
+        Me.ComboBoxComPort.FormattingEnabled = True
+        Me.ComboBoxComPort.Location = New System.Drawing.Point(74, 29)
+        Me.ComboBoxComPort.Name = "ComboBoxComPort"
+        Me.ComboBoxComPort.Size = New System.Drawing.Size(61, 21)
+        Me.ComboBoxComPort.TabIndex = 3
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(18, 32)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(50, 13)
+        Me.Label2.TabIndex = 4
+        Me.Label2.Text = "Com Port"
+        '
         'SetupDialogForm
         '
         Me.AcceptButton = Me.OK_Button
@@ -92,6 +111,8 @@ Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(309, 154)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.ComboBoxComPort)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -110,8 +131,10 @@ Me.PerformLayout()
 End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
-	Friend WithEvents Cancel_Button As System.Windows.Forms.Button
-	Friend WithEvents Label1 As System.Windows.Forms.Label
- Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents Cancel_Button As System.Windows.Forms.Button
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents ComboBoxComPort As System.Windows.Forms.ComboBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
 
 End Class

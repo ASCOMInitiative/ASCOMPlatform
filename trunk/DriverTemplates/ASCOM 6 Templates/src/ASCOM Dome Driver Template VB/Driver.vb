@@ -83,7 +83,10 @@ Public Class Dome
 
     Public Sub SetupDialog() Implements IDomeV2.SetupDialog
         Using f As New SetupDialogForm
-            f.ShowDialog()
+            Dim result As System.Windows.Forms.DialogResult = f.ShowDialog()
+            If result = DialogResult.OK Then
+                ' TODO add code to be done if the settings have been changed
+            End If
         End Using
     End Sub
 

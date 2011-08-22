@@ -6,7 +6,9 @@
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Win32)">
 	<META NAME="CREATED" CONTENT="0;0">
 	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
-	<META NAME="CHANGED" CONTENT="20110821;16102500">
+	<META NAME="CHANGED" CONTENT="20110821;22024700">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
 	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
 	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
 	<STYLE TYPE="text/css">
@@ -24,7 +26,7 @@
 <TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
 	<TR>
 		<TD>
-			<H2>ASCOM Dome Driver (C#)</H2>
+			<H2 STYLE="margin-left: 0.69cm">ASCOM Dome Driver (C#)</H2>
 		</TD>
 	</TR>
 </TABLE>
@@ -40,6 +42,8 @@ information we've provided</A> at the ASCOM Initiative web site
 <P>You must do the following in order to complete your
 implementation:</P>
 <OL>
+	<LI><P STYLE="margin-bottom: 0cm">Run Visual Studio as
+	Administrator. This is needed to allow it to register the driver.</P>
 	<LI><P STYLE="margin-bottom: 0cm">Switch the Dome project to the
 	Debug configuration and build the template now. It should build
 	without errors. 
@@ -53,13 +57,11 @@ implementation:</P>
 	(CS)&rdquo;.</P>
 	<LI><P STYLE="margin-bottom: 0cm">Check that the Test Application is
 	set to run as startup.</P>
-	<LI><P>Edit Program.cs to uncomment the line:<BR><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>string
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>id
-	= ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>.Choose(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=3>&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>);</FONT></FONT></FONT></P>
+	<LI><P>Edit Module1.vb to uncomment the line:<FONT SIZE=3><BR></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>string</FONT></FONT></FONT><FONT COLOR="#000000">
+	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>id </FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>=
+	ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>.Choose(</FONT></FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas"><FONT SIZE=3>&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>);</FONT></FONT></FONT></P>
 </UL>
 <OL START=3>
-	<LI><P STYLE="margin-bottom: 0cm">Run Visual Studio as
-	Administrator. This is needed to allow it to register the driver.</P>
 	<LI><P STYLE="margin-bottom: 0cm">Debug (F5) your solution for a
 	quick check of your driver. It runs the chooser, select your driver
 	&ndash; it should be in the chooser list and select Properties to
@@ -76,21 +78,28 @@ implementation:</P>
 	settings and other controls for your driver.</P>
 	<LI><P STYLE="margin-bottom: 0cm">Add or uncomment code in your test
 	program to exercise more of your driver, for example:</P>
-	<P STYLE="margin-bottom: 0cm"><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.Dome</FONT></FONT></FONT><FONT COLOR="#2b92b0">
-	</FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>dome</FONT></FONT></FONT><FONT COLOR="#000000">
-	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>=
-	</FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>new
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>(id);<BR></FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas, monospace"><FONT SIZE=3>Console</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas, monospace"><FONT SIZE=3>.WriteLine(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas, monospace"><FONT SIZE=3>&quot;name
-	&quot; </FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas, monospace"><FONT SIZE=3>+
-	dome.Name);</FONT></FONT></FONT></P>
-	<P STYLE="margin-bottom: 0cm"><FONT FACE="Consolas, monospace"><FONT COLOR="#2b92b0">Console</FONT>.WriteLine(<FONT COLOR="#a41515">&quot;description
-	&quot; </FONT>+ dome.Description);</FONT></P>
 </OL>
 <P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
-<FONT COLOR="#000000"><FONT FACE="Consolas, monospace"><FONT SIZE=3><FONT COLOR="#2b92b0">Console</FONT>.WriteLine(<FONT COLOR="#a41515">&quot;DriverInfo
-&quot; </FONT>+ dome.DriverInfo);</FONT></FONT></FONT></P>
-<P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm"><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3><SPAN STYLE="font-weight: normal"><FONT COLOR="#2b92b0">Console</FONT>.WriteLine(<FONT COLOR="#a41515">&quot;driverVersion
-&quot; </FONT>+ dome.DriverVersion);</SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt"><BR><BR></FONT></FONT></FONT>Exercise
+<FONT FACE="Times New Roman, serif"><FONT SIZE=3><FONT COLOR="#000000"><FONT FACE="Consolas">ASCOM.DriverAccess.</FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas">Dome</FONT></FONT><FONT COLOR="#000000">
+</FONT><FONT COLOR="#000000"><FONT FACE="Consolas">dome = n</FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas">ew</FONT></FONT><FONT COLOR="#000000">
+</FONT><FONT COLOR="#000000"><FONT FACE="Consolas">ASCOM.DriverAccess.</FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas">Dome</FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas">(id);</FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
+<FONT FACE="Times New Roman, serif"><FONT SIZE=3><FONT COLOR="#2b91af"><FONT FACE="Consolas">Console</FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas">.WriteLine(</FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas">&quot;name
+&quot;</FONT></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000000"><FONT FACE="Consolas">+
+dome.Name);</FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
+<FONT FACE="Times New Roman, serif"><FONT SIZE=3><FONT COLOR="#2b91af"><FONT FACE="Consolas">Console</FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas">.WriteLine(</FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas">&quot;description
+&quot;</FONT></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000000"><FONT FACE="Consolas">+
+dome.Description);</FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
+<FONT FACE="Times New Roman, serif"><FONT SIZE=3><FONT COLOR="#2b91af"><FONT FACE="Consolas">Console</FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas">.WriteLine(</FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas">&quot;DriverInfo
+&quot;</FONT></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000000"><FONT FACE="Consolas">+
+dome.DriverInfo);</FONT></FONT></FONT></FONT></P>
+<P STYLE="margin-left: 1.25cm; margin-bottom: 0cm; font-weight: normal">
+<FONT FACE="Times New Roman, serif"><FONT SIZE=3><FONT COLOR="#2b91af"><FONT FACE="Consolas">Console</FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas">.WriteLine(</FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas">&quot;driverVersion
+&quot;</FONT></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000000"><FONT FACE="Consolas">+
+dome.DriverVersion);</FONT></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="margin-left: 1.25cm; margin-bottom: 0cm"><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt"><BR></FONT></FONT></FONT>Exercise
 and debug your driver, adding functionality and test code to match.</P>
 <OL START=8>
 	<LI><P>Customize the Setup Dialog (SetupDialogForm) to provide the
@@ -121,18 +130,15 @@ and debug your driver, adding functionality and test code to match.</P>
 	(the Chooser). 
 	</P>
 	<LI><P>You can bypass the appearance of the Chooser by
-	changing<BR><FONT SIZE=3><BR></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>string
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>id
-	= ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>.Choose(</FONT></FONT></FONT><FONT COLOR="#a41515"><FONT FACE="Consolas"><FONT SIZE=3>&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>);<BR>ASCOM.DriverAccess.Dome</FONT></FONT></FONT><FONT COLOR="#2b92b0">
-	</FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>dome</FONT></FONT></FONT><FONT COLOR="#000000">
-	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>=
-	</FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>new
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>(id);</FONT></FONT></FONT>
-	<FONT SIZE=3><BR><BR>to<BR></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3><BR>ASCOM.DriverAccess.Dome</FONT></FONT></FONT><FONT COLOR="#2b92b0">
-	</FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>dome</FONT></FONT></FONT><FONT COLOR="#000000">
-	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>=
-	</FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>new
-	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b92b0"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>(&quot;ASCOM.$safeprojectname$.Dome&quot;);</FONT></FONT></FONT></P>
+	changing<BR><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>string</FONT></FONT></FONT><FONT COLOR="#000000">
+	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>id =
+	ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>.Choose(</FONT></FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas"><FONT SIZE=3>&quot;&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>);<BR>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=3>Dome
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>dome
+	= n</FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>ew</FONT></FONT></FONT><FONT COLOR="#000000">
+	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>(id);</FONT></FONT></FONT><FONT SIZE=3><BR>to</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3><BR>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=3>Dome
+	</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>dome
+	= n</FONT></FONT></FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=3>ew</FONT></FONT></FONT><FONT COLOR="#000000">
+	</FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>ASCOM.DriverAccess.</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=3>Dome</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>(</FONT></FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas"><FONT SIZE=3>&quot;ASCOM.$safeprojectname$.Dome&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=3>);</FONT></FONT></FONT></P>
 	<LI><P STYLE="margin-bottom: 0cm">The project uses the new Settings,
 	as described in the ASCOM Settings Provider document. The ComPort
 	setting is included as an example of setting the serial port name.
