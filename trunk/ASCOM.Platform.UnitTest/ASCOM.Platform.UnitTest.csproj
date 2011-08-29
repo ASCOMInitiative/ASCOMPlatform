@@ -100,6 +100,7 @@
     <Compile Include="DeviceIdAttributeSpecs.cs" />
     <Compile Include="FileInfoExtensionsSpecs.cs" />
     <Compile Include="IntExtensionsSpecs.cs" />
+    <Compile Include="KeyValuePairSpecs.cs" />
     <Compile Include="LEDIndicatorSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServedClassNameAttributeSpecs.cs" />
@@ -114,6 +115,10 @@
     <ProjectReference Include="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj">
       <Project>{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}</Project>
       <Name>ASCOM.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj">
+      <Project>{3B6C23F5-C590-4385-86BB-98B604B565BA}</Project>
+      <Name>ASCOM.DriverAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj">
       <Project>{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}</Project>

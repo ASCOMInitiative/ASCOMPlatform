@@ -83,9 +83,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="SetupDialogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="SetupDialogForm.cs" />
     <Compile Include="SetupDialogForm.designer.cs">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
     </Compile>
