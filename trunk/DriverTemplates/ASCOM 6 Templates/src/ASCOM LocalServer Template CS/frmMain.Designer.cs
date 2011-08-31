@@ -49,7 +49,7 @@ namespace $safeprojectname$
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmMain";
-			this.Text = "safeprojectname Driver Server";
+			this.Text = "$safeprojectname$ Driver Server";
 			this.ResumeLayout(false);
 
 		}

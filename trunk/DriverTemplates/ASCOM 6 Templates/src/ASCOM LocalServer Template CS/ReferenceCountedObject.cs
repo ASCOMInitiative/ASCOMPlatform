@@ -9,16 +9,16 @@ namespace $safeprojectname$
 		public ReferenceCountedObjectBase()
 		{
 			// We increment the global count of objects.
-			$safeprojectname$.CountObject();
+			Server.CountObject();
 		}
 
 		~ReferenceCountedObjectBase()
 		{
 			// We decrement the global count of objects.
-			$safeprojectname$.UncountObject();
+			Server.UncountObject();
 			// We then immediately test to see if we the conditions
 			// are right to attempt to terminate this server application.
-			$safeprojectname$.ExitIf();
+			Server.ExitIf();
 		}
 	}
 }
