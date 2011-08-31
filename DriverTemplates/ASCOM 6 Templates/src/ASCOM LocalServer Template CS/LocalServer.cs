@@ -29,7 +29,7 @@ using ASCOM;
 
 namespace $safeprojectname$
 {
-	public static class $safeprojectname$
+	public static class Server
 	{
 
 		#region Access to kernel32.dll, user32.dll, and ole32.dll functions
