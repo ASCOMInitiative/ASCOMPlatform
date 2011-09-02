@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <assembly>
+    <name>ASCOM.Astrometry</name>
+  </assembly>
+  
+  <members>
+
+    <member name="N:ASCOM.Astrometry">
+      <summary>
+        <h2>ASCOM.Astrometry Namespace</h2>
+        <h3>Summary</h3>
+        <p>This namespace contains all ASCOM astrometry components together with associated enums and structures. 
+        The astrometry components (Transform, NOVAS-COM and Kepler) are located in the ASCOM.Astrometry.Components 
+        namespace while unified enums and structures are in the ASCOM.Astrometry namespace and serve all 
+        three components. 
+        </p>
+        <p>Transform is a new component while those familiar with the Kepler and NOVAS-COM components will 
+        recognise find all of their functionality in this namespace. Further information is given in the 
+        "Which NOVAS" topic at the head of this help file.
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Astrometry.Interfaces">
+      <summary>
+        <h2>ASCOM.Astrometry.Interfaces Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all interface definitions for the astrometry components.
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Astrometry.Exceptions">
+      <summary>
+        <h2>ASCOM.Astrometry.Exceptions Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all astrometry related exceptions
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Astrometry.Kepler">
+      <summary>
+        <h2>ASCOM.Astrometry.Kepler Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all Kepler related items
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Astrometry.Transform">
+      <summary>
+        <h2>ASCOM.Astrometry.Transform Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all Transform related items
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Astrometry.NOVAS">
+      <summary>
+        <h2>NOVAS-C: Naval Observatory Vector Astrometry Subroutines
+        </h2>
+        <h3>Introduction</h3>
+        <p>This component is a .NET presentation of the subroutines and function in the US Naval Observatory 
+        NOVAS 2 library. The following is extracted from its accompanying pdf document, which is also included 
+        in the ASCOM distribution</p>
+        <p>
+          The Naval Observatory Vector Astrometry Subroutines, NOVAS, is an integrated
+          package of source-code modules for computing a wide variety of common astrometric
+          quantities and transformations. The package can provide, in one function call, the
+          instantaneous coordinates (apparent, topocentric, or astrometric place) of any star or
+          planet. At a lower level, NOVAS also provides general astrometric utility
+          transformations, such as those for precession, nutation, aberration, parallax, and the
+          gravitational deflection of light. The computations are highly precise.
+        </p>
+        <p>
+          NOVAS-C uses, as input, astrometric reference data that is expressed in the
+          International Astronomical Union (IAU) J2000.0 system. In particular, NOVAS-C 2.0
+          supports (but is not limited to) data that conforms to the ICRS. ICRS-compatible data
+          includes the Hipparcos and Tycho Catalogues, the ACT Reference Catalog, the
+          International Celestial Reference Frame (ICRF), the Jet Propulsion Laboratory’s
+          DE405 planetary ephemeris, and Earth orientation measurements from the
+          International Earth Rotation Service (IERS).
+        </p>
+        <p>
+          The algorithms used by the NOVAS-C functions are based on a vector and matrix
+          formulation that is rigorous, consistent with recent IAU resolutions, and does not use
+          spherical trigonometry or form “day numbers” at any point. Objects within and outside
+          the solar system are treated similarly and the position vectors formed and operated on by
+          these functions place each relevant object at its actual distance (in AU) from the solar
+          system barycenter. Objects at unknown distance (parallax zero or undetermined) are
+          placed on the “celestial sphere” herein defined to be at a radius of 10 megaparsecs (2.06
+          ´ 1012 AU).
+        </p>
+        <p>
+          NOVAS-C contains three levels of functions: basic, utility, and supervisory. Basic level
+          functions supply the values of fundamental variables, such as the nutation angles
+          and the heliocentric positions of solar system bodies, for specific epochs. Utility-level
+          functions perform transformations corresponding to precession, nutation, aberration, etc.
+          Supervisory-level functions call the basic and utility functions in the proper order to
+          compute apparent, topocentric, or astrometric places of stars or solar system bodies for
+          specific dates and times. If desired, the user can interact exclusively with the
+          supervisory-level functions and not become concerned with the details of the geometry or
+          physical models involved in the computation.
+        </p>
+        <h3>Credits</h3>
+        <ul>
+          <li>
+            Original FORTRAN code and algorithms - George Kaplan, USNO - Kaplan, G. (1990), Bulletin of the 
+            American Astronomical Society, Vol. 22, pp. 930-931.
+          </li>
+          <li>
+            Creation of a C equivalent of the FORTAN Code - John Bangert, USNO - Naval Observatory Vector 
+            Astrometry Subroutines C Language Version 2.0
+          </li>
+          <li>Presentation of the C routines as a .NET assembly - Peter Simpson and Tim Long, ASCOM (July, 2009)</li>
+        </ul>
+        
+        <h3>.NET Implementation</h3>
+        <p>The NOVAS class has been implemented as a STATIC class because it does not store state of any kind and 
+        just provides access to the NOVAS code library (see the NOVAS Class entry for more detailed 
+        information).</p>
+        <p>
+          Method and enum names are identical to those in NOVAS2 except for omission of 
+          underscore characters and use of camelcase. There are also a few 
+          new structures and enums but these should be self explanatory. 
+          One significant parameter difference 
+          is that position and velocity vectors are returned as structures rather than double arrays. This was done
+          to make type checking more effective.</p>
+        <p>Testing of the high level supervisory functions has been carried out using real-time star data from
+           the USNO web site. Values provided by this NOVAS2 implementation agree on average to about 50 milli
+           arc-seconds with current USNO web site values.</p>
+        <p>This class is 32/64bit agnostic and transparently operates in both environments.</p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Astrometry.NOVASCOM">
+      <summary>
+        <h2>ASCOM.Astrometry.Components Namespace</h2>
+        <h3>Utilities Update</h3>
+        <p>The Platform 5.0 NOVASCOM and Kepler components have been combined into one namespace 
+          (ASCOM.Utilities.NOVASCOM) for this release. This removes duplication of enums and 
+          structures between the two components and improves interoperability. For backward 
+          compatibility, the 32bit COM Kepler and NOVASCOM components are also included in the platform 
+          and are accessible through their original namespaces of ASCOM.Kepler and ASCOM.NOVASCOM
+          respectively. This is to ensure that existing applications continue to work, unchanged, with 
+          the new platform.</p>
+        <p>
+          The re-factored NOVASCOM classes (not the original COM component classes) such as Planet
+          and Earth now have internal Kepler
+          components by default so it is no longer necessary to create these separately and
+          attach them as ephemeris objects. If you do attach ephemeris objects, they will be used
+          in place of the internal objects just as in the original COM components.
+        </p>
+
+        <p>No other functions in the NOVASCOM and Kepler components has not been altered and testing 
+          shows a numeric result correspondence with the original COM components of than 1 part in 1E-9.</p>
+        
+        <h3>NOVAS-COM Release Notes - V2.1 (July 2007)</h3>
+
+        <p>NOVAS-COM V2.1 is the third production release of a Component Object Model (COM) implementation of the U. S. Naval Observatory Vector Astrometry Subroutines (NOVAS) package. By encapsulating NOVAS within a COM component, the functions of NOVAS become available to most Windows scripting and programming environments. This component may be used by Visual Basic programs, scripts in any ActiveX Scripting language such as VBScript, JScript, Perl, Python, even an Excel spreadsheet. Thus, the proven accuracy of these USNO algorithms is accessible to end-user observatory automation and data reduction script writers.</p>
+
+        <h3>Credits</h3>
+        <ul>
+          <li>NOVAS was developed by the Astronomical Applications department of the United States Naval Observatory. The primary responsibility for tht C language version of NOVAS, on which NOVAS-COM is based, was developed by John Bangert at USNO/AA.</li>
+          <li>NOVAS-COM was developed by Robert B. Denny for contribution to the ASCOM Initiative and for the general benefit of the amateur and educational astronomy community. Additional improvements were added by Rick Sprenkle, the azuthor of NGCView. The executable NOVAS-COM component is offered free of any commercial charge or license.</li>
+          <li>NOVAS-COM was re-factored into .NET form by Peter Simpson</li>
+          <li>This document contains content taken from the NOVAS-C documentation written by J. A. Bangert and G. H. Kaplan of USNO, edited to make it apply to this COM implementation, and from the USNO NOVAS web site.</li>
+          <li>If you use the NOVAS-COM component, please send an e-mail to George Kaplan of USNO that outlines your application. This helps justify further improvements to NOVAS. Comments and suggestions are also welcome. Thank you!.</li>
+        </ul>
+
+        <h3>Introduction</h3>
+        <p>NOVAS-COM was developed according to the ASCOM Initiative's quality and behavior guidelines. Every effort has been taken to provide a quality stable component. Errors are signaled via automation exceptions with clear error messages. The component has a dual interface, and thus can be used in demanding high performance applications without the speed penalty of the dispatch interface. For more information on the ASCOM Initiative and the logo requirements, see the ASCOM Initiative Web Site.</p>
+        <p>NOVAS-COM provides for the computation of a wide variety of common astrometric quantities and transformations. The component can provide, in one or two method calls, the instantaneous coordinates (apparent, topocentric, or astrometric place) of any star. With the addition of acompatible ephemeris component such as the Kepler Orbit Engine, NOVAS-COM can also compute the instantaneous coordinates of major and minor planets. Ignoring ephememeris approximations, the computations provided are precise to better than one milliarcsecond. The NOVAS-COM component is an easy-to-use facility that can be incorporated into data reduction programs, telescope control systems, and simulations. The internal NOVAS subroutines are, in fact, identical to those now used in the production of the Astronomical Almanac. The internally used subroutines are available in ANSI standard Fortran and C versions.</p>
+
+        <p>The algorithms used by the NOVAS-COM routines are based on a vector and matrix formulation which is rigorous, consistent with recent IAU resolutions, and does not use spherical trigonometry or form "day numbers" at any point. Objects within and outside the solar system are treated similarly and the position vectors formed and operated on by these routines place each relevant object at its actual distance (in AU) from the solar system barycenter. Objects at unknown distance (parallax zero or undetermined) are placed on the "celestial sphere" herein defined to be at a radius of 10 megaparsecs (2.06E12 AU). A description of the algorithms used, along with definitions of terms and related information, can be found in Kaplan, et al. (1989) Astron. J. 97, 1197.</p>
+
+        <p>NOVAS-COM uses as input astrometric reference data that is expressed in the IAU J2000.0 system. In particular, NOVAS supports (but is not limited to) data that conforms to the International Celestial Reference System (ICRS). ICRS-compatible data includes the Hipparcos and Tycho Catalogues, the ACT Reference Catalog (obsolete, use Tycho-2), the International Celestial Reference Frame (ICRF), the Jet Propulsion Laboratory DE405 planetary ephemeris, and Earth orientation measurements from the International Earth Rotation Service (IERS). The list of ICRS-compatible data of various types is continually expanding. NOVAS-COM can also be used with data conforming to the FK5 system.</p>
+
+        <p>NOVAS-COM's internal support for solar system body calculations is limited to an the four largest planets, and is used is used for barycenter computations only. In order to use NOVAS-COM's Planet object for major and minor planets, you must furnish an ephemeris source which implements a simple COM interface. When attached to an instance of the NOVAS-COM Planet object, the ephemeris component is responsible for supplying heliocentric J2000-equatorial rectangular coordinates of the planet at the given terrestrial time. One such compatible ephemeris component is the Kepler Orbit Engine, developed by the NOVAS-COM author. See the ASCOM Initiative web site in the downloads section.</p>
+
+        <h3>
+          <b>Delta-T calculations</b>
+        </h3>
+        <p>NOVAS-COM allows the client to directly specify the value of delta-t to used in various situations, as a property of some of its objects. NOVAS-COM also contains an internal utility subroutine that approximates the value of delta-T (TT-UT1) based on a 4th order Bessel interpolation of observed values taken from the Astronomical Almanac and USNO Delta T historical tables. Tables within the delta-t subroutine contain data from 1620.0 through 2007.0. Predictions for 2007.0 through 2050.0 are made using a NASA derived polynomial. Entries prior to 1955 are corrected for secular tidal acceleration as used in JPL's DE403 ephemeris. If the client does not directly set the delta-t property, this internal utility is used.</p>
+ 
+        <h2>Kepler Ephemeris Engine Programmer's Reference</h2>
+
+        <h3>Introduction</h3>
+        <p>This document describes the first production release of the Kepler Ephemeris Engine, an ASCOM component which provides ephemerides for solar system bodies, given their orbital elements. It was written as a companion to the NOVAS-COM vector astrometry engine, providing the ephemerides needed for planetary astrometric calculations, and for high-precision aberration calculations. It provides heliocentric J2000 equatorial cartesian vectors for position and velocity given a set of orbital elements and a terrestrial time. NOVAS-COM can be used to transform these coordinates to Earth-centered ("astrometric") or local topocentric coordinates for observational use. You can download NOVAS-COM from the ASCOM Downloads Page.</p>
+
+        <h3>Credits</h3>
+        <ul>
+          <li>Written by Robert B. Denny, DC-3 Dreams, SP (March, 2001)</li>
+          <li>The ephemeris calculations in Kepler draw heavily from the work of Stephen Moshier moshier@world.std.com. kepler is released as a free software package, further extending the work of Mr. Moshier.</li>
+          <li>NOVASCOM was re-factored into .NET by Peter Simpson (July, 2009). Its calculation algorithm has not been changed and comparison testing shows an RMS error of 1 part in 10E10 with respect to values returned by Bob's original COM component.</li>
+        </ul>
+
+        <h3>Ephemeris Calculations</h3>
+        <p>Kepler does not integrate orbits to the current epoch. If you want the accuracy resulting from an integrated orbit, you must integrate separately and supply Kepler with elements of the current epoch. Orbit integration is on the list of things for the next major version.</p>
+        <p>Kepler uses polynomial approximations for the major planet ephemerides. The tables of coefficients were derived by a least squares fit of periodic terms to JPL's DE404 ephemerides. The periodic frequencies used were determined by spectral analysis and comparison with VSOP87 and other analytical planetary theories. The least squares fit to DE404 covers the interval from -3000 to +3000 for the outer planets, and -1350 to +3000 for the inner planets. For details on the accuracy of the major planet ephemerides, see the Accuracy Tables page.</p>
+
+        <h3>Date and Time Systems</h3>
+        <p>For a detailed explanation of astronomical timekeeping systems, see A Time Tutorial on the NASA Goddard Spaceflight Center site, and the USNO Systems of Time site.</p>
+        <p>
+          <b>Julian dates</b><br />
+          These are standard Julian "date serial" numbers, and are expressed in UTC time or Terrestrial time. The fractional part of these numbers represents time within a day. The standard ActiveX "Double" precision of 15 digits gives a resolution of about one millisecond in a full Julian dates. This is sufficient for the purposes of this program.
+        </p>
+        <p>
+          <b>Hourly Time Values</b><br />
+          These are typically used to represent sidereal time and right ascension. They are simple real numbers in units of hours.
+        </p>
+        <p>
+          <b>UTC Time Scale</b><br />
+          Most of the Util methods that accept date/time values (either Date or Julian) assume that the date/time is in Coordinated Universal Time (UTC). Where necessary, this time is converted internally to other scales. Note that UTC seconds are based on the Cesium atom, not planetary motions. In order to keep UTC in sync with planetary motion, leap seconds are inserted periodically. This program does not account for leap seconds. The error is at most 900 milliseconds.
+        </p>
+        <p>
+          <b>UT1 Time Scale</b><br />
+          The UT1 time scale is the planetary equivalent of UTC. It it runs smoothly and varies a bit with time, but it is never more than 900 milliseconds different from UTC. This program treats UTC and UT1 the same.
+        </p>
+        <p>
+          <b>TT Time Scale</b><br />
+          The Terrestrial Dynamical Time (TT) scale is used in solar system orbital calculations. It is based completely on planetary motions; you can think of the solar system as a giant TT clock. It differs from UT1 by an amount called "delta-t", which slowly increases with time, and is about 60 seconds right now (1998). You can convert Julian dates between UTC and TT using the methods Julian_TJD() and TJD_Julian().
+        </p>
+
+        <h3>Development Process</h3>
+        <p>Development and refinement of this component will be evolutionary rather then revolutionary. The ephemeris engine interface specification will not be blessed as an "ASCOM Standard" until</p>
+        <ol>
+          <li>implemetations have been tested in the real world and/or used in production software, and</li>
+          <li>a consensus of approval has been reached by the ASCOM members.</li>
+        </ol>
+        <p>Discussions between ASCOM members regarding this component, the ephemeris generator interface specification and other issues are conducted on the ASCOM-Talk mailing list. Instructions for joining the list are at the ASCOM web site, or just click here to subscribe.</p>
+
+      </summary>
+    </member>
+
+  </members>
+</doc>
