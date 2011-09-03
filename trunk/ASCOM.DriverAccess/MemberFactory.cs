@@ -57,13 +57,20 @@ namespace ASCOM.DriverAccess
             // Create an instance of the object
             GetLateBoundObject = Activator.CreateInstance(GetObjType);
 
-            // Get list of interfaces
-            var objInterfaces = GetObjType.GetInterfaces();
-
-            foreach (Type objInterface in objInterfaces)
+            // Get list of interfaces but don't throw an exception if this fails
+            try
             {
-                GetInterfaces.Add(objInterface);
-                TL.LogMessage("Interface", objInterface.AssemblyQualifiedName);
+                var objInterfaces = GetObjType.GetInterfaces();
+
+                foreach (Type objInterface in objInterfaces)
+                {
+                    GetInterfaces.Add(objInterface);
+                    TL.LogMessage("GetInterfaces", "Found interface: " + objInterface.AssemblyQualifiedName);
+                }
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("GetInterfaces", "Exception: " + ex.ToString());
             }
 
             /*MemberInfo[] members = GetObjType.GetMembers();
@@ -390,7 +397,7 @@ namespace ASCOM.DriverAccess
                     {
                         //TL.LogMessage(memberName, "  Got MethodInfo");
 
-                        ParameterInfo[] pars = methodInfo.GetParameters();
+                        //ParameterInfo[] pars = methodInfo.GetParameters();
                         /*foreach (ParameterInfo p in pars)
                         {
                             TL.LogMessage(memberName, "    Parameter: " + p.ParameterType);

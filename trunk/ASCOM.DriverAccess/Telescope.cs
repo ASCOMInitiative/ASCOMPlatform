@@ -170,35 +170,20 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public IAxisRates AxisRates(ASCOM.DeviceInterface.TelescopeAxes Axis)
         {
-            object obj;
-            AxisRates ReturnValue = new AxisRates();
             TL.LogMessage("AxisRates", ""); 
             TL.LogMessage("AxisRates", Axis.ToString());
+
             if (!memberFactory.IsComObject)
             {
-                obj = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
+                if (isPlatform6Telescope) TL.LogMessage("AxisRates", "Platform 6 .NET Telescope");
+                else if (isPlatform5Telescope) TL.LogMessage("AxisRates", "Platform 5 .NET Telescope");
+                else TL.LogMessage("AxisRates", "Neither Platform 5 nor Platform 6 .NET Telescope");
+                object ReturnValue = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
 
-                //global::System.Windows.Forms.MessageBox.Show("TelescopePIA " + isPlatform5Telescope.ToString() + ", TelescopeV2 " + isPlatform6Telescope.ToString());
-                if (isPlatform6Telescope)
+                try
                 {
-                    IAxisRates retval = (IAxisRates)obj;
-                    TL.LogMessage("AxisRates", "Platform 6 .NET Telescope");
-
-                    if (retval.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
-                    {
-                        for (int i = 1; i <= retval.Count; i++)
-                        {
-                            TL.LogMessage("AxisRates", "Found Minimim: " + retval[i].Minimum + ", Maximum: " + retval[i].Maximum);
-                        }
-                    }
-
-                    return (IAxisRates)obj;
-                }
-
-                if (isPlatform5Telescope)
-                {
-                    TL.LogMessage("AxisRates", "Platform 5 .NET Telescope");
-                    ASCOM.Interface.IAxisRates PIAAxisRates = (ASCOM.Interface.IAxisRates)obj;
+                    IAxisRates PIAAxisRates = (IAxisRates)ReturnValue;
+                    TL.LogMessage("AxisRates", "Number of returned AxisRates: " + PIAAxisRates.Count);
 
                     if (PIAAxisRates.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
                     {
@@ -207,29 +192,35 @@ namespace ASCOM.DriverAccess
                             TL.LogMessage("AxisRates", "Found Minimim: " + PIAAxisRates[i].Minimum + ", Maximum: " + PIAAxisRates[i].Maximum);
                         }
                     }
-
-                    return ReturnValue;
                 }
-
-                TL.LogMessage("AxisRates", "Neither Platform 5 nor Platform 6 .NET Telescope");
-                return ReturnValue;
-
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("AxisRates", ex.ToString()); // Just report errors here and return the object to the caller
+                }
+                return (IAxisRates) ReturnValue;
             }
 
             else
             {
-                TL.LogMessage("AxisRates", "Platform 5 COM Telescope");
-                _AxisRates retval = new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject, TL);
+                TL.LogMessage("AxisRates", "Platform 5/6 COM Telescope");
+                _AxisRates ReturnValue = new _AxisRates(Axis, memberFactory.GetObjType, memberFactory.GetLateBoundObject, TL);
 
-                if (retval.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
+                try
                 {
-                    for (int i = 1; i <= retval.Count; i++)
+                    if (ReturnValue.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
                     {
-                        TL.LogMessage("AxisRates", "Found Minimim: " + retval[i].Minimum + ", Maximum: " + retval[i].Maximum);
+                        for (int i = 1; i <= ReturnValue.Count; i++)
+                        {
+                            TL.LogMessage("AxisRates", "Found Minimim: " + ReturnValue[i].Minimum + ", Maximum: " + ReturnValue[i].Maximum);
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("AxisRates", ex.ToString()); // Just report errors here and return the object to the caller
+                }
 
-                return retval;
+                return ReturnValue;
             }
         }
 
