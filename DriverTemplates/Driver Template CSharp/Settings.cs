@@ -23,10 +23,10 @@ using ASCOM;
  * **********************/
 
 namespace ASCOM.TEMPLATEDEVICENAME.Properties
-    {
+{
     [SettingsProvider(typeof(ASCOM.SettingsProvider))]
-	[ASCOM.DeviceId("ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS")]
+    [ASCOM.DeviceId("ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS", DeviceName = "TEMPLATEDEVICENAME TEMPLATEDEVICECLASS")]
     internal sealed partial class Settings
-        {
-        }
+    {
     }
+}
