@@ -20,3 +20,5 @@ using System.Runtime.InteropServices;
 
 // Version information for platform components is set globally
 // (do not add an AssemblyVersion here).
+// AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
+[assembly: AssemblyVersion("6.0.0.0")]

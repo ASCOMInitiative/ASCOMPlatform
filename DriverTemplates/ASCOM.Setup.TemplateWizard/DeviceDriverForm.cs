@@ -104,13 +104,62 @@ namespace ASCOM.Setup
 			}
 		}
 
-		public string Namespace
+        /// <summary>
+        /// return the device interface from the device class
+        /// </summary>
+        internal string DeviceInterface
+        {
+            get
+            {
+                switch (this.DeviceClass)
+                {
+                    case "Camera":
+                        return "ICameraV2";
+                    case "Dome":
+                        return "IDomeV2";
+                    case "FilterWheel":
+                        return "IFilterWheelV2";
+                    case "Focuser":
+                        return "IFocuserV2";
+                    case "Rotator":
+                        return "IRotatorV2";
+                    case "SafetyMonitor":
+                        return "ISafetyMonitor";
+                    case "Telescope":
+                        return "ITelescopeV3";
+                    default:
+                        return "I" + DeviceClass;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Return the interface version from the device class
+        /// </summary>
+        internal string InterfaceVersion
+        {
+            get
+            {
+                switch (this.DeviceClass)
+                {
+                    case "SafetyMonitor":
+                        return "1";
+                    case "Telescope":
+                        return "3";
+                    default:
+                        return "2";
+                }
+            }
+        }
+
+		internal string Namespace
 		{
 			get
 			{
 				return String.Format(csNamespaceFormat, this.DeviceName);
 			}
 		}
+
         private void cbDeviceClass_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.lblDeviceId.Text = this.DeviceId;
