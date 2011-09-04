@@ -14,16 +14,18 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		public SetupDialogForm()
 		{
 			InitializeComponent();
+            textBox1.Text = Properties.Settings.Default.CommPort;
 		}
 
 		private void cmdOK_Click(object sender, EventArgs e)
 		{
-			Dispose();
+            Properties.Settings.Default.CommPort = textBox1.Text;
+			Close();
 		}
 
 		private void cmdCancel_Click(object sender, EventArgs e)
 		{
-			Dispose();
+			Close();
 		}
 
 		private void BrowseToAscom(object sender, EventArgs e)
