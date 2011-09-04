@@ -98,6 +98,7 @@ Namespace AstroUtils
                     Loop Until (Value > LowerBound) And (Value < UpperBound)
                 End If
             End If
+            Return Value
         End Function
 
         ''' <summary>
@@ -127,7 +128,7 @@ Namespace AstroUtils
             ReturnValue = Range(RA, 0.0, True, 24.0, False)
             TL.LogMessage("ConditionRA", "Conditioned RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & " to: " & Utl.HoursToHMS(ReturnValue, ":", ":", "", 3))
 
-            Return RA
+            Return ReturnValue
         End Function
 
         ''' <summary>
