@@ -703,7 +703,7 @@ Namespace Transform
 
             Nov3.SiderealTime(AstroUtl.JulianDateUT1(0.0), 0.0, AstroUtl.DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GreenwichApparentSiderealTime)
             LocalApparentSiderealTime = AstroUtl.ConditionHA(GreenwichApparentSiderealTime + SiteLongValue * Deg2Hours)
-            TL.LogMessage("  AzEl To Topo", "  Sidereal time: " & Utl.HoursToHMS(GreenwichApparentSiderealTime, ":", ":", ".", 3) & " " & Utl.HoursToHMS(LocalApparentSiderealTime, ":", ":", ".", 3))
+            TL.LogMessage("  AzEl To Topo", "  Sidereal time: " & Utl.HoursToHMS(GreenwichApparentSiderealTime, ":", ":", "", 3) & " " & Utl.HoursToHMS(LocalApparentSiderealTime, ":", ":", "", 3))
 
             TL.LogMessage("  AzEl To Topo", "  Azimuth: " & Utl.DegreesToDMS(AzimuthTopoValue, ":", ":", ""))
 

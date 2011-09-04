@@ -170,34 +170,69 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public IAxisRates AxisRates(ASCOM.DeviceInterface.TelescopeAxes Axis)
         {
-            TL.LogMessage("AxisRates", ""); 
+            TL.LogMessage("AxisRates", "");
             TL.LogMessage("AxisRates", Axis.ToString());
 
             if (!memberFactory.IsComObject)
             {
-                if (isPlatform6Telescope) TL.LogMessage("AxisRates", "Platform 6 .NET Telescope");
-                else if (isPlatform5Telescope) TL.LogMessage("AxisRates", "Platform 5 .NET Telescope");
-                else TL.LogMessage("AxisRates", "Neither Platform 5 nor Platform 6 .NET Telescope");
-                object ReturnValue = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
-
-                try
+                if (isPlatform6Telescope)
                 {
-                    IAxisRates PIAAxisRates = (IAxisRates)ReturnValue;
-                    TL.LogMessage("AxisRates", "Number of returned AxisRates: " + PIAAxisRates.Count);
+                    TL.LogMessage("AxisRates", "Platform 6 .NET Telescope");
+                    object ReturnValue = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
 
-                    if (PIAAxisRates.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
+                    try
                     {
-                        for (int i = 1; i <= PIAAxisRates.Count; i++)
+                        IAxisRates AxisRatesP6 = (IAxisRates)ReturnValue;
+                        TL.LogMessage("AxisRates", "Number of returned AxisRates: " + AxisRatesP6.Count);
+
+                        if (AxisRatesP6.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
                         {
-                            TL.LogMessage("AxisRates", "Found Minimim: " + PIAAxisRates[i].Minimum + ", Maximum: " + PIAAxisRates[i].Maximum);
+                            for (int i = 1; i <= AxisRatesP6.Count; i++)
+                            {
+                                TL.LogMessage("AxisRates", "Found Minimim: " + AxisRatesP6[i].Minimum + ", Maximum: " + AxisRatesP6[i].Maximum);
+                            }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        TL.LogMessageCrLf("AxisRates", ex.ToString()); // Just report errors here and return the object to the caller
+                    }
+                    return (IAxisRates)ReturnValue;
                 }
-                catch (Exception ex)
+                else if (isPlatform5Telescope)
                 {
-                    TL.LogMessageCrLf("AxisRates", ex.ToString()); // Just report errors here and return the object to the caller
+                    TL.LogMessage("AxisRates", "Platform 5 .NET Telescope");
+                    object ReturnValue = memberFactory.CallMember(3, "AxisRates", new Type[] { typeof(TelescopeAxes) }, new object[] { Axis });//ITelescope.AxisRates(Axis);
+                    IAxisRates AxisRatesP6 = new AxisRates(); //Create a new P6 compliant shell
+
+                    try
+                    {
+                        ASCOM.Interface.IAxisRates AxisRatesP5 = (ASCOM.Interface.IAxisRates)ReturnValue;
+                        AxisRatesP6 = new AxisRates(AxisRatesP5, TL); //Create a new P6 compliant shell that presents the P5 object
+                        TL.LogMessage("AxisRates", "Number of returned AxisRates: " + AxisRatesP5.Count);
+
+                        if (AxisRatesP5.Count > 0) // List the contents without using an iterator so we can test with that is implemented properly in Conform
+                        {
+                            for (int i = 1; i <= AxisRatesP5.Count; i++)
+                            {
+                                TL.LogMessage("AxisRates", "Found Minimim: " + AxisRatesP5[i].Minimum + ", Maximum: " + AxisRatesP5[i].Maximum);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TL.LogMessageCrLf("AxisRates", ex.ToString()); // Just report errors here and return the object to the caller
+                    }
+
+                    return AxisRatesP6;
+
                 }
-                return (IAxisRates) ReturnValue;
+                else
+                {
+                    TL.LogMessage("AxisRates", "Neither Platform 5 nor Platform 6 .NET Telescope");
+                    return new AxisRates();
+                }
+
             }
 
             else
@@ -1462,7 +1497,7 @@ namespace ASCOM.DriverAccess
             if (objTrackingRatesLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of an TrackingRates object");
             objTypeTrackingRates = objTrackingRatesLateBound.GetType();
             TL = TraceLog; // Save the trace logger reference
-            TL.LogMessage("TrackingRates Class","Created object: " + objTypeTrackingRates.FullName);
+            TL.LogMessage("TrackingRates Class", "Created object: " + objTypeTrackingRates.FullName);
         }
 
         /// <summary>
@@ -1544,9 +1579,84 @@ namespace ASCOM.DriverAccess
     /// <para>The values used in <see cref="IRate" /> members must be non-negative; forward and backward motion is achieved by the application
     /// applying an appropriate sign to the returned <see cref="IRate" /> values in the <see cref="ITelescopeV3.MoveAxis" /> command.</para>
     /// </remarks>
-    public class AxisRates : ASCOM.DeviceInterface.IAxisRates
+    public class AxisRates : ASCOM.DeviceInterface.IAxisRates, IEnumerator
     {
-        List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
+        //List<Rate> m_Rates = new List<Rate>();        //' Empty array, but an array nonetheless
+        TraceLogger TL;
+        int CurrentPosition;
+
+        ASCOM.Interface.IAxisRates AxisRatesP5;
+
+        /// <summary>
+        /// Creates an empty AxisRates object
+        /// </summary>
+        public AxisRates() // Default constructor that returns an empty object
+        {
+            this.Reset();
+            TL = null;
+        }
+
+        internal AxisRates(ASCOM.Interface.IAxisRates AxisRates, TraceLogger traceLogger)
+        {
+               TL = traceLogger;
+               AxisRatesP5 = AxisRates;
+               this.Reset();
+               foreach (ASCOM.Interface.IRate Rate in AxisRates)
+            {
+                if (!(TL == null)) TL.LogMessage("AxisRates Class P5 New", "Adding rate: - Minimum: " + Rate.Minimum + ", Maximum: " + Rate.Maximum);
+                //m_Rates.Add(new Rate(Rate.Minimum, Rate.Maximum));
+            }
+
+        }
+
+        #region IEnumerable Members
+        /// <summary>
+        /// Adds a new rate to the collection
+        /// </summary>
+        /// <param name="Minimum">The minimum value of this rate range</param>
+        /// <param name="Maximum">The maximum value of this rate range</param>
+        public void Add(double Minimum, double Maximum)
+        {
+            //m_Rates.Add(new Rate(Minimum, Maximum));
+        }
+
+        /// <summary>
+        /// Returns the current value of the collection
+        /// </summary>
+        public object Current
+        {
+            get 
+            {
+                return this[CurrentPosition];
+            }
+        }
+
+        /// <summary>
+        /// Moves the pointer to the next element
+        /// </summary>
+        /// <returns>True if the Current will return a valid value</returns>
+        public bool MoveNext()
+        {
+            bool ReturnValue;
+            if (CurrentPosition <= this.Count) CurrentPosition += 1;
+            
+            if (CurrentPosition > this.Count) ReturnValue =  false;
+            else ReturnValue = true;
+            if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "MoveNext - Position: " + CurrentPosition + ", Return value: " + ReturnValue);
+
+            return ReturnValue;
+        }
+
+        /// <summary>
+        /// Resets the enumerator to its initial posiiton before the first element
+        /// </summary>
+        public void Reset()
+        {
+            if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Reset enumerator position to 0");
+            CurrentPosition = 0;
+        }
+
+        #endregion
 
         #region IAxisRates Members
 
@@ -1555,7 +1665,11 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public int Count
         {
-            get { return m_Rates.Count; }
+            get
+            {
+                if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Count: " + AxisRatesP5.Count);
+                return AxisRatesP5.Count;
+            }
         }
 
         /// <summary>
@@ -1572,7 +1686,8 @@ namespace ASCOM.DriverAccess
         /// <returns>IEnumerator object</returns>
         public IEnumerator GetEnumerator()
         {
-            return m_Rates.GetEnumerator();
+               if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Returning Enumerator - New object");
+               return this;
         }
 
         /// <summary>
@@ -1590,20 +1705,24 @@ namespace ASCOM.DriverAccess
         /// </remarks>
         public IRate this[int index]
         {
-            get { return new Rate(m_Rates[index].Minimum, m_Rates[index].Maximum); }
+            get
+            {
+                if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Get IRate - Index: " + index);
+
+                try
+                {
+                    if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Get IRate - Minimum: " + AxisRatesP5[index].Minimum + ", Maximum: " + AxisRatesP5[index].Maximum);
+                }
+                catch (Exception ex)
+                {
+                    if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Exception: " + ex.ToString());
+                }
+
+                return new Rate(AxisRatesP5[index].Minimum ,AxisRatesP5[index].Maximum);
+            }
         }
 
         #endregion
-
-        /// <summary>
-        /// Adds a new rate to the collection
-        /// </summary>
-        /// <param name="Minimum">The minimum value of this rate range</param>
-        /// <param name="Maximum">The maximum value of this rate range</param>
-        public void Add(double Minimum, double Maximum)
-        {
-            m_Rates.Add(new Rate(Minimum, Maximum));
-        }
 
     }
 
