@@ -93,6 +93,7 @@ Comment: Set up values for a 64bit OS
 Set Variable PROGRAMFILES64 to 
 Set Variable COMMONFILES64 to 
 Set Variable WIN64MODE to 
+Set Variable PROGRAMDATA to 
 Get System Setting Windows in 64 bit Mode into WIN64MODE
 Get Exact OS Level into OPSYS
 Comment: MessageBalloon: Win 64Mode, Win64Mode is $WIN64MODE$$NEWLINE$IsVista is $ISVISTA$
@@ -113,6 +114,7 @@ end
 Comment: Setup up further global variables
 Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008) into ISNT
 Get Folder Location System->Program Files Directory into PROGRAMFILES
+Get Common Folder Location System->Application Data Directory into PROGRAMDATA
 Get Common Folder Location System->Program Files Directory into COMMONFILES
 Get Common Folder Location Start Menu->Programs Group into SHORTCUTFILESALL
 Get Folder Location Start Menu->Programs Group into SHORTCUTFILES
@@ -400,6 +402,16 @@ if Variable REMOVE Equals TRUE
   Comment: Uninstall product
   Write into Text File $SETUPLOG$ from Value Uninstalling platform (at end of file)
   Set Variable PROGRESS to 0
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.Exceptions, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - removing policy.1.0.ASCOM.Exceptions (at end of file)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$ $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
+  end
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.1.ASCOM.Exceptions, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - removing policy.1.1.ASCOM.Exceptions (at end of file)
+  if Variable GACINSTALLRC not Equals 0
+    MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$ $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
+  end
   Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Utilities, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
   Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - removing policy.5.5.ASCOM.Utiliites (at end of file)
   if Variable GACINSTALLRC not Equals 0
@@ -510,6 +522,24 @@ else
     end
   end
   Comment: Install/Re-Install product
+  Comment: At this point there should not be any Platform 6 Installaware install on the system either because previous version is uninstalled or this is a new P6 install
+  Comment: System restore can screw up installaware under some circumstances by leaving a partially populated directory in ProgramData
+  Comment: The following code removes this, if it exists to ensure that this IA install is successful
+  Comment: This has to be done in the native engine because variables are not expanded to their values in MSI mode - another IA UGH!
+  Set Variable NATIVE_ENGINE to TRUE
+  Set Variable INSTALLCACHEEXISTS to 
+  Set Variable INSTALLCACHEDIRECTORY to 
+  Set Variable INSTALLCACHEDIRECTORY to $PROGRAMDATA$$REVISIONCODE$
+  Does Folder Exist $INSTALLCACHEDIRECTORY$ (get result into variable INSTALLCACHEEXISTS)
+  if Variable INSTALLCACHEEXISTS Equals TRUE
+    Comment: Cache directory does exist so remove it
+    Write into Text File $SETUPLOG$ from Value Removing install cache found at $INSTALLCACHEDIRECTORY$ (at end of file)
+    Recursively Delete Files $INSTALLCACHEDIRECTORY$
+  else
+    Write into Text File $SETUPLOG$ from Value Install cache not found - $INSTALLCACHEDIRECTORY$ (at end of file)
+  end
+  Set Variable NATIVE_ENGINE to FALSE
+   
   Comment: Only try and remove Platform 5 and 5.5 if we are in initial install mode and not Repair or Maintain or Remove
   Write into Text File $SETUPLOG$ from Value Native Engine Mode is: $NATIVE_ENGINE$ (at end of file)
   if Variable MAINTENANCE not Equals TRUE
@@ -597,7 +627,7 @@ else
     Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\policy.1.0.ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\Platform\v5.5
     Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\Publisher Policy 1.0.6\DriverAccess.config to $COMMONFILES$\ASCOM\Platform\v5.5
     Install Assembly ..\..\..\..\Interfaces\Master Interfaces\ASCOM.Interfaces.dll to Global Assembly Cache
-    Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to Global Assembly Cache
+    Comment: Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM.Exceptions.dll to Global Assembly Cache
     Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper.dll to Global Assembly Cache
     Install Assembly ..\..\..\..\Interfaces\HelperPIAs\ASCOM.Helper2.dll to Global Assembly Cache
     Comment: Platform 5 simulators
@@ -629,7 +659,7 @@ else
     Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.dll to Global Assembly Cache
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Attributes.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
     Comment: Updated ASCOM.Exceptions v1.1 for Platform 5.5
-    Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
+    Comment: Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Exceptions.dll to Global Assembly Cache
     Comment: Copy Utilities and DriverAccess to .Net directory to ensure Inno installers that test for this run OK
     Comment: The ASCOM.Utilities.dll file MUST be the original from Platform 5.5 because at least 1 installer checks the file version of the installed file!
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
@@ -645,6 +675,10 @@ else
     end
     [END REGION]
     [DEFINE REGION: Platform 6 files]
+    Comment: Install exceptions redirection policy
+    Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.0.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
+    Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.1.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
+    Install Files ..\..\..\..\ASCOM Redirection Policies\ExceptionsPolicy.xml to $COMMONFILES$\ASCOM\Platform\v6.0
     Comment: Updated Utiities 5.5.6 to replace 5.5.1 that access registry rather than XML files, otherwise unchanged
     Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll to Global Assembly Cache
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.pdb to $COMMONFILES$\ASCOM\Platform\v5.5
@@ -1070,7 +1104,7 @@ else
         Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Set Variable PROGRESS to 5
         Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register assembly ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register the Platform 5 type libraries
         Set Variable PROGRESS to 10
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
@@ -1105,7 +1139,7 @@ else
         Set Variable PROGRESS to 25
         Comment: Register Platform 5.5 components
         Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Comment: Register assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
@@ -1121,6 +1155,16 @@ else
         end
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
         Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - Astrometry Policy (at end of file)
+        if Variable GACINSTALLRC not Equals 0
+          MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+        end
+        Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
+        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.0 (at end of file)
+        if Variable GACINSTALLRC not Equals 0
+          MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+        end
+        Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
+        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.1 (at end of file)
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
         end
