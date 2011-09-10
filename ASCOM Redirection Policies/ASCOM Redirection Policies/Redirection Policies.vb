@@ -3,15 +3,17 @@ Module RedirectPolicy
     Private Const BATCH_FILE_NAME As String = "BuildPolicy1.Cmd"
     Private Const POLICY_FILE_NAME As String = "PublisherPolicy.xml"
     Private Const UTILITIES_ASSEMBLY_NAME As String = "ASCOM.Utilities" ' Don't add .dll
-    Private Const UTILITIES_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Utilities\ASCOM.Utilities\Bin\Release\"
+    Private Const UTILITIES_ASSEMBLY_DIRECTORY As String = "..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Bin\Release\"
 
     Private Const ASTROMETRY_ASSEMBLY_NAME As String = "ASCOM.Astrometry" ' Don't add .dll
-    Private Const ASTROMETRY_ASSEMBLY_DIRECTORY As String = "..\..\ASCOM.Astrometry\ASCOM.Astrometry\Bin\Release\"
+    Private Const ASTROMETRY_ASSEMBLY_DIRECTORY As String = "..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\Bin\Release\"
 
+    Private Const EXCEPTIONS_ASSEMBLY_NAME As String = "ASCOM.Exceptions" ' Don't add .dll
+    Private Const EXCEPTIONS_ASSEMBLY_DIRECTORY As String = "..\..\..\..\Interfaces\ASCOMExceptions\bin\Release\"
 
     Private Const AL_LINK As String = POLICY_FILE_NAME
     'Private Const AL_OUT As String = "policy.5.0.ASCOM.Utilities.dll"
-    Private Const AL_KEYFILE As String = "..\ASCOM.Utilities\ASCOM.snk "
+    Private Const AL_KEYFILE As String = "..\..\..\..\ASCOM.snk "
     'Private Const AL_VERSION As String = "5.0.0.0 "
     'Private Const AL_FILEVERSION As String = "5.0.0.0"
     Private Const AL_COMPANY As String = """ASCOM Initiative"""
@@ -38,8 +40,9 @@ Module RedirectPolicy
             My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "   <runtime>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
             My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "      <assemblyBinding xmlns=""urn:schemas-microsoft-com:asm.v1"">" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
 
-            ProcessAssembly(UTILITIES_ASSEMBLY_DIRECTORY, UTILITIES_ASSEMBLY_NAME)
-            ProcessAssembly(ASTROMETRY_ASSEMBLY_DIRECTORY, ASTROMETRY_ASSEMBLY_NAME)
+            'ProcessAssembly(UTILITIES_ASSEMBLY_DIRECTORY, UTILITIES_ASSEMBLY_NAME)
+            'ProcessAssembly(ASTROMETRY_ASSEMBLY_DIRECTORY, ASTROMETRY_ASSEMBLY_NAME)
+            ProcessAssembly(EXCEPTIONS_ASSEMBLY_DIRECTORY, EXCEPTIONS_ASSEMBLY_NAME)
 
             My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "      </assemblyBinding>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
             My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "   </runtime>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
@@ -79,7 +82,7 @@ Module RedirectPolicy
                 Try
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "         <dependentAssembly>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "            <assemblyIdentity name=""" & p_AssemblyName & """ publicKeyToken=""565de7938946fba7"" culture=""neutral"" />" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
-                    My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "            <bindingRedirect oldVersion=""5.0.0.0-" & Ver.Major.ToString & "." & Ver.Minor.ToString & "." & "65535.65535"" " & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
+                    My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "            <bindingRedirect oldVersion=""1.0.0.0-" & Ver.Major.ToString & "." & Ver.Minor.ToString & "." & "65535.65535"" " & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "                             newVersion=""" & Ver.Major.ToString & "." & Ver.Minor.ToString & "." & Ver.Build.ToString & "." & Ver.Revision.ToString & """ />" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                     My.Computer.FileSystem.WriteAllText(POLICY_FILE_NAME, "         </dependentAssembly>" & vbCrLf, True, System.Text.ASCIIEncoding.ASCII)
                 Catch ex As Exception
