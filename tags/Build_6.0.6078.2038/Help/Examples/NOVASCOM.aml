@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0044dbc3-3e41-4ebe-b979-a4f50063631f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>Examples of how to use NOVASCOM astrometry capabilities.</para>
+	</introduction>
+    <section address="NOVASCOM Examples">
+		<title>NOVASCOM Examples</title>
+   		<content>
+      		<para>
+      		<code lang="vbnet" title="ASCOM NOVASCOM Examples" 
+      		source="..\ASCOM Platform Examples\Examples\NOVASCOMExamples.vb" />
+      		</para>
+      	</content>
+    </section>  
+  </developerConceptualDocument>
+</topic>
