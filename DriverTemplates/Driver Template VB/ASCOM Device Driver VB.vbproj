@@ -144,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />
+    <Content Include="HTMLPage1.htm" />
     <Content Include="MyTemplate.vstemplate" />
     <Content Include="ReadMe.htm" />
   </ItemGroup>
