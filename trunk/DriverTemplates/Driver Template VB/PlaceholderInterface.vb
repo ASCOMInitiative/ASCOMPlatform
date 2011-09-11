@@ -18,15 +18,11 @@ Interface ITEMPLATEDEVICEINTERFACE
 
     Property Connected() As Boolean
 
+    ReadOnly Property DriverVersion() As String
     ReadOnly Property Description() As String
-
     ReadOnly Property DriverInfo() As String
 
-    ReadOnly Property DriverVersion() As String
-
     ReadOnly Property InterfaceVersion() As Short
-
-    ReadOnly Property Name() As String
 
     ReadOnly Property SupportedActions() As ArrayList
 
