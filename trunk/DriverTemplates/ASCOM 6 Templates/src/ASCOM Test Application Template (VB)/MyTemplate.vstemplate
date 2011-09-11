@@ -4,8 +4,9 @@
     <Description>ASCOM Test console application in Visual Basic, Select the driver type using the Wizard.</Description>
     <ProjectType>VisualBasic</ProjectType>
     <ProjectSubType>
+      ASCOM6
     </ProjectSubType>
-    <SortOrder>1000</SortOrder>
+    <SortOrder>1010</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>ASCOM.TestApplication (VB)</DefaultName>
     <ProvideDefaultName>false</ProvideDefaultName>
