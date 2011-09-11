@@ -4,11 +4,12 @@
     <Description>ASCOm driver test forms application. Select the driver type in the wizard.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>
+      ASCOM6
     </ProjectSubType>
     <SortOrder>1000</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Driver Test Forms Application Template CSharp</DefaultName>
-    <ProvideDefaultName>true</ProvideDefaultName>
+    <ProvideDefaultName>false</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>__TemplateIcon.ico</Icon>
