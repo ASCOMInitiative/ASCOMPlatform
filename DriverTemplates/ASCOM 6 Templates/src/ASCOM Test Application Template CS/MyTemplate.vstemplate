@@ -4,8 +4,9 @@
     <Description>Test Console application, uncomment the code for the device to test and set this to run as startup</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>
+      ASCOM6
     </ProjectSubType>
-    <SortOrder>1000</SortOrder>
+    <SortOrder>1010</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Test Application (CS)</DefaultName>
     <ProvideDefaultName>false</ProvideDefaultName>

@@ -6,7 +6,7 @@
     <ProjectSubType>
       ASCOM6
     </ProjectSubType>
-    <SortOrder>1000</SortOrder>
+    <SortOrder>1020</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Driver Test Forms Application Template CSharp</DefaultName>
     <ProvideDefaultName>false</ProvideDefaultName>
