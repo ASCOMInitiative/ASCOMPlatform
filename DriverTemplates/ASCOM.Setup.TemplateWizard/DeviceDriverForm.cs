@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace ASCOM.Setup
 {
@@ -28,9 +29,14 @@ namespace ASCOM.Setup
 		/// Placeholder text used for null or invalid DeviceClass.
 		/// </summary>
 		private const string csDeviceClassPlaceholder = "<DeviceClass>";
+
+        // key is the class name, value is the ASCOM interface properties
+        Dictionary<string, ASCOMInterface> interfaceList;
+
 		public DeviceDriverForm()
 		{
 			InitializeComponent();
+            InitASCOMClasses();
 		}
 
 		/// <summary>
@@ -111,25 +117,7 @@ namespace ASCOM.Setup
         {
             get
             {
-                switch (this.DeviceClass)
-                {
-                    case "Camera":
-                        return "ICameraV2";
-                    case "Dome":
-                        return "IDomeV2";
-                    case "FilterWheel":
-                        return "IFilterWheelV2";
-                    case "Focuser":
-                        return "IFocuserV2";
-                    case "Rotator":
-                        return "IRotatorV2";
-                    case "SafetyMonitor":
-                        return "ISafetyMonitor";
-                    case "Telescope":
-                        return "ITelescopeV3";
-                    default:
-                        return "I" + DeviceClass;
-                }
+                return interfaceList[DeviceClass].InterfaceName;
             }
         }
 
@@ -140,15 +128,7 @@ namespace ASCOM.Setup
         {
             get
             {
-                switch (this.DeviceClass)
-                {
-                    case "SafetyMonitor":
-                        return "1";
-                    case "Telescope":
-                        return "3";
-                    default:
-                        return "2";
-                }
+                return interfaceList[DeviceClass].InterfaceVersion;
             }
         }
 
@@ -228,5 +208,60 @@ namespace ASCOM.Setup
 		{
 			errorProvider.SetError(this.txtOrganizationName, String.Empty);
 		}
+
+        /// <summary>
+        /// Goes through the ASCOM.DeviceInterfaces assembly extracting the interfacces that implement drivers
+        /// Use this information to build a list of interfaces with the associated class name and interfacce version
+        /// put the class names in the device names combo box
+        /// </summary>
+        private void InitASCOMClasses()
+        {
+            interfaceList = new Dictionary<string, ASCOMInterface>();
+            cbDeviceClass.Items.Clear();
+            // get a list of the current interfaces
+            Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+            // look for the interfaces
+            foreach (var type in asm.GetExportedTypes())
+            {
+                if (type.IsInterface)
+                {
+                    // only add those with the SetupDialog method,
+                    // so the extra telescope classes are not added
+                    var p = type.GetMethod("SetupDialog");
+                    if (p != null && p.Name == "SetupDialog")
+                    {
+                        // get the class name by removing the leading I and the training Vn
+                        string name = type.Name.Substring(1);
+                        name = name.TrimEnd('1', '2', '3', '4', 'V');
+                        ASCOMInterface ai = new ASCOMInterface(type.Name);
+                        interfaceList.Add(ai.Name, ai);
+                        cbDeviceClass.Items.Add(ai.Name);
+                    }
+                }
+            }
+        }
+
+        private class ASCOMInterface
+        {
+            internal string Name { get; private set; }
+            internal string InterfaceName { get; private set; }
+            internal string InterfaceVersion { get; set; }
+
+            internal ASCOMInterface(string interfaceName)
+            {
+                InterfaceName = interfaceName;
+                // get the class name by removing the leading I and the training Vn
+                Name = interfaceName.Substring(1);
+                Name = Name.TrimEnd('1', '2', '3', '4', 'V');
+                // get the interface version by looking for a trailing Vn
+                if (InterfaceName.LastIndexOf('V') == InterfaceName.Length - 2)
+                {
+                    InterfaceVersion = InterfaceName.Substring(InterfaceName.Length - 2);
+                }
+                else
+                    InterfaceVersion = "1";
+            }
+
+        }
 	}
 }
