@@ -154,24 +154,40 @@ namespace EraseTemplates
                 FileDelete(Platform5VB, "ASCOM Switch Driver (VB).zip");
                 FileDelete(Platform5VB, "ASCOM Telescope Driver (VB).zip");
 
-                FileDelete(Platform6CSharp, "ASCOM Camera Driver Template CS.zip"); //Platform 6 C#
-                FileDelete(Platform6CSharp, "ASCOM Dome Driver Template CS.zip");
-                FileDelete(Platform6CSharp, "ASCOM FilterWheel Driver Template CS.zip");
-                FileDelete(Platform6CSharp, "ASCOM Focuser Driver Template CS.zip");
-                FileDelete(Platform6CSharp, "ASCOM Rotator Driver Template CS.zip");
-                FileDelete(Platform6CSharp, "ASCOM SafetyMonitor Driver Template CS.zip");
-                FileDelete(Platform6CSharp, "ASCOM Switch Driver Template CS.zip");
-                FileDelete(Platform6CSharp, "ASCOM Telescope Driver Template CS.zip");
-                FileDelete(Platform6CSharp, "ASCOM LocalServer Template CS.zip");
+                //FileDelete(Platform6CSharp, "ASCOM Camera Driver Template CS.zip"); //Platform 6 C#
+                //FileDelete(Platform6CSharp, "ASCOM Dome Driver Template CS.zip");
+                //FileDelete(Platform6CSharp, "ASCOM FilterWheel Driver Template CS.zip");
+                //FileDelete(Platform6CSharp, "ASCOM Focuser Driver Template CS.zip");
+                //FileDelete(Platform6CSharp, "ASCOM Rotator Driver Template CS.zip");
+                //FileDelete(Platform6CSharp, "ASCOM SafetyMonitor Driver Template CS.zip");
+                //FileDelete(Platform6CSharp, "ASCOM Switch Driver Template CS.zip");
+                //FileDelete(Platform6CSharp, "ASCOM Telescope Driver Template CS.zip");
+                //FileDelete(Platform6CSharp, "ASCOM LocalServer Template CS.zip");
 
-                FileDelete(Platform6VB, "ASCOM Camera Driver Template VB.zip"); // Platform 6 VB
-                FileDelete(Platform6VB, "ASCOM Dome Driver Template VB.zip");
-                FileDelete(Platform6VB, "ASCOM FilterWheel Driver Template VB.zip");
-                FileDelete(Platform6VB, "ASCOM Focuser Driver Template VB.zip");
-                FileDelete(Platform6VB, "ASCOM Rotator Driver Template VB.zip");
-                FileDelete(Platform6VB, "ASCOM SafetyMonitor Driver Template VB.zip");
-                FileDelete(Platform6VB, "ASCOM Switch Driver Template VB.zip");
-                FileDelete(Platform6VB, "ASCOM Telescope Driver Template VB.zip");
+                //FileDelete(Platform6VB, "ASCOM Camera Driver Template VB.zip"); // Platform 6 VB
+                //FileDelete(Platform6VB, "ASCOM Dome Driver Template VB.zip");
+                //FileDelete(Platform6VB, "ASCOM FilterWheel Driver Template VB.zip");
+                //FileDelete(Platform6VB, "ASCOM Focuser Driver Template VB.zip");
+                //FileDelete(Platform6VB, "ASCOM Rotator Driver Template VB.zip");
+                //FileDelete(Platform6VB, "ASCOM SafetyMonitor Driver Template VB.zip");
+                //FileDelete(Platform6VB, "ASCOM Switch Driver Template VB.zip");
+                //FileDelete(Platform6VB, "ASCOM Telescope Driver Template VB.zip");
+
+                // erase all files in the ASCOM6 part of the project templates
+                if (Directory.Exists(Platform6CSharp))
+                {
+                    foreach (var item in Directory.GetFiles(Platform6CSharp, "*.zip"))
+                    {
+                        FileDelete(Platform6CSharp, Path.GetFileName(item));
+                    }
+                }
+                if (Directory.Exists(Platform6VB))
+                {
+                    foreach (var item in Directory.GetFiles(Platform6VB, "*.zip"))
+                    {
+                        FileDelete(Platform6VB, Path.GetFileName(item));
+                    }
+                }
 
             }
 
