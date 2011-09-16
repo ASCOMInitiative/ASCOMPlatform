@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSContent xmlns="http://schemas.microsoft.com/developer/vscontent/2005">
+
+  <Content>
+    <FileName>Driver Template CSharp.zip</FileName>
+    <DisplayName>ASCOM C# Driver Template</DisplayName>
+    <Description>Creates a C# skeleton project for an ASCOM driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>Driver Test Console Application VB.zip</FileName>
+    <DisplayName>ASCOM VB Driver test Console Application</DisplayName>
+    <Description>Creates a C# Test console project for an ASCOM driver, select the driver type in the wizard.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>Driver Test Forms Application Template CSharp.zip</FileName>
+    <DisplayName>ASCOM C# Driver test Forms Application</DisplayName>
+    <Description>Creates a C# test Forms project for an ASCOM driver, select the driver type using the Wizard.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM LocalServer Template CS.zip</FileName>
+    <DisplayName>ASCOM LocalServer Template C#</DisplayName>
+    <Description>Creates an EXE based server for multiple drivers/clients.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
+    </Attributes>
+  </Content>
+
+
+  <Content>
+    <FileName>Driver Template VB.zip</FileName>
+    <DisplayName>ASCOM VB Driver Template</DisplayName>
+    <Description>Creates a VB skeleton project for an ASCOM driver.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>Driver Test Forms Application Template VB.zip</FileName>
+    <DisplayName>ASCOM Visual Basic Driver test Forms Application</DisplayName>
+    <Description>Creates a Visual Basic test Forms project for an ASCOM driver, select the driver type using the Wizard.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
+    </Attributes>
+  </Content>
+  <Content>
+    <FileName>ASCOM Test Application Template (VB).zip</FileName>
+    <DisplayName>ASCOM Visual Basic Test Console Application Template</DisplayName>
+    <Description>Creates a Visual Basic test application for ASCOM drivers, select the driver type using the Wizard.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual Basic"></Attribute>
+      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
+    </Attributes>
+  </Content>
+
+  <Content>
+    <FileName>ASCOM Test Application Template CS.zip</FileName>
+    <DisplayName>ASCOM Test Console Application Template CS</DisplayName>
+    <Description>Creates a C# test application for ASCOM drivers, select the driver type using the Wizard.</Description>
+    <FileContentType>VSTemplate</FileContentType>
+    <ContentVersion>1.0</ContentVersion>
+    <Attributes>
+      <Attribute name="TemplateType" value="Project"></Attribute>
+      <Attribute name="ProjectType" value="Visual C#"></Attribute>
+      <Attribute name="ProjectSubType" value="ASCOM6"></Attribute>
+    </Attributes>
+  </Content>
+
+</VSContent>
+

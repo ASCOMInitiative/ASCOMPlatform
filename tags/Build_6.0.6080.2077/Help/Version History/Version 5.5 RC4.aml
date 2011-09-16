@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="79754361-93dd-4a14-bbd8-4853f306dab7" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+   	<section address="Changes">
+      		<title>Changes</title>
+      		<content>
+				<list class="bullet">
+ 		 			<listItem>Switched off forced tracing of VB6 helper profile components that was enabled as a debugging aid. 
+ 		 			Now, no trace files will be created unless selected through the Chooser menu.</listItem>
+ 		 			<listItem>Added drive information to the ASCOM Diagnostics log</listItem>
+ 		 			<listItem>Conform install logs are now included in the ASCOM Diagnostics log.</listItem>
+	  			</list>
+            </content>
+		</section>
+          			
+        <section address="IssuesFixed">
+           	<title>Issues Fixed</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>Hard coded IConform COM registration GUIDs and DispIDs to ease long term support 
+ 		 			and stability.</listItem>
+ 		 			<listItem>Some Inno install logs were not included in the ASCOM Diagnostics log.</listItem>
+ 		 		</list>
+   			</content>
+   		</section>
+    	
+    	
+  		<section address="ToDo">
+      		<title>ToDo...</title>
+      		<content>
+      			<list class="bullet">
+ 			 		<listItem>Help file corrections. - please report these through the "Send Feedback" links.</listItem>
+ 			 		<listItem>Help file Code Examples -  translate to C# for inclusion alongside the VB examples. Any offers of help?</listItem>
+ 			 		<listItem>Help file Code Examples -  does anyone have useful snippets to include?</listItem>
+	  			</list>
+      		</content>
+    	</section>
+
+  </developerConceptualDocument>
+</topic>
