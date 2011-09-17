@@ -8,8 +8,8 @@
     <ProjectGuid>{8E8D406C-1838-4914-867D-AB602D0EAF3E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TEMPLATEDEVICENAME</RootNamespace>
-    <AssemblyName>TEMPLATEDEVICENAME Test Application</AssemblyName>
+    <RootNamespace>ASCOM.TEMPLATEDEVICENAME</RootNamespace>
+    <AssemblyName>ASCOM.TEMPLATEDEVICENAME.Test</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

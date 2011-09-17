@@ -1,6 +1,6 @@
 ﻿' satisfies the template module so it will run without errors using the template substitution parameters.
 ' this file is removed by the template wizard.
-Namespace ASCOM.DeviceInterface
+Namespace ASCOM.DriverAccess
 
     Public Class TEMPLATEDEVICECLASS
         Sub New(ByVal id As String)

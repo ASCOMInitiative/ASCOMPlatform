@@ -8,8 +8,8 @@
     <ProjectGuid>{D5207217-61C7-4E94-8097-91DBACE57D2A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TEMPLATEDEVICENAME</RootNamespace>
-    <AssemblyName>TEMPLATEDEVICENAME.Test</AssemblyName>
+    <RootNamespace>ASCOM.TEMPLATEDEVICENAME</RootNamespace>
+    <AssemblyName>ASCOM.TEMPLATEDEVICENAME.Test</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

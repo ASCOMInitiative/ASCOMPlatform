@@ -1,4 +1,4 @@
-﻿namespace TEMPLATEDEVICENAME
+﻿namespace ASCOM.TEMPLATEDEVICENAME
 {
     partial class Form1
     {
@@ -56,12 +56,12 @@
             // labelDriverId
             // 
             this.labelDriverId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.labelDriverId.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TEMPLATEDEVICENAME.Properties.Settings.Default, "DriverId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.labelDriverId.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ASCOM.TEMPLATEDEVICENAME.Properties.Settings.Default, "DriverId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.labelDriverId.Location = new System.Drawing.Point(12, 40);
             this.labelDriverId.Name = "labelDriverId";
             this.labelDriverId.Size = new System.Drawing.Size(291, 21);
             this.labelDriverId.TabIndex = 2;
-            this.labelDriverId.Text = global::TEMPLATEDEVICENAME.Properties.Settings.Default.DriverId;
+            this.labelDriverId.Text = global::ASCOM.TEMPLATEDEVICENAME.Properties.Settings.Default.DriverId;
             this.labelDriverId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Form1

@@ -256,7 +256,7 @@ namespace ASCOM.Setup
                 // get the interface version by looking for a trailing Vn
                 if (InterfaceName.LastIndexOf('V') == InterfaceName.Length - 2)
                 {
-                    InterfaceVersion = InterfaceName.Substring(InterfaceName.Length - 2);
+                    InterfaceVersion = InterfaceName.Substring(InterfaceName.Length - 1);
                 }
                 else
                     InterfaceVersion = "1";

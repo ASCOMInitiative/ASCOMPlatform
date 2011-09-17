@@ -29,7 +29,7 @@
 '
 
 ' This definition is used to select code that's only applicable for one device type
-#Const Device = TEMPLATEDEVICECLASS
+#Const Device = "TEMPLATEDEVICECLASS"
 
 Imports ASCOM.Utilities
 Imports ASCOM.DeviceInterface

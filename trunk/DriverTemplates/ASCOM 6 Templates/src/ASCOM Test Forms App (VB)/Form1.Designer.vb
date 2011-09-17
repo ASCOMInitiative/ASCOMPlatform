@@ -30,12 +30,12 @@ Partial Class Form1
         'labelDriverId
         '
         Me.labelDriverId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.labelDriverId.DataBindings.Add(New System.Windows.Forms.Binding("Text", Global.Driver_Test_Forms_Application_Template_VB.My.MySettings.Default, "DriverId", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.labelDriverId.DataBindings.Add(New System.Windows.Forms.Binding("Text", Global.ASCOM.TEMPLATEDEVICENAME.My.MySettings.Default, "DriverId", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.labelDriverId.Location = New System.Drawing.Point(12, 37)
         Me.labelDriverId.Name = "labelDriverId"
         Me.labelDriverId.Size = New System.Drawing.Size(291, 21)
         Me.labelDriverId.TabIndex = 5
-        Me.labelDriverId.Text = Global.Driver_Test_Forms_Application_Template_VB.My.MySettings.Default.DriverId
+        Me.labelDriverId.Text = Global.ASCOM.TEMPLATEDEVICENAME.My.MySettings.Default.DriverId
         Me.labelDriverId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'buttonConnect
