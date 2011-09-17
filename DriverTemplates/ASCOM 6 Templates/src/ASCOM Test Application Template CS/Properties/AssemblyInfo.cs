@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("TEMPLATEDEVICENAME Test Application")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("TEMPLATEDEVICENAME")]
 [assembly: AssemblyCopyright("Copyright © Chris Rowland 2011")]
 [assembly: AssemblyTrademark("")]
