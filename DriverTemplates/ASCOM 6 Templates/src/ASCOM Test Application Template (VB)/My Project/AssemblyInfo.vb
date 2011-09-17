@@ -10,7 +10,7 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("ASCOM.TEMPLATEDEVICENAME Test")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Microsoft")> 
+<Assembly: AssemblyCompany("ASCOM Initiative")> 
 <Assembly: AssemblyProduct("TEMPLATEDEVICENAME")> 
 <Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2011")> 
 <Assembly: AssemblyTrademark("")> 
