@@ -21,7 +21,7 @@
       </FullClassName>
   </WizardExtension>
   <TemplateContent>
-    <Project TargetFileName="ASCOM.TestApplication (VB).vbproj" File="ASCOM.TestApplication (VB).vbproj" ReplaceParameters="true">
+    <Project TargetFileName="ASCOM Test Console App (VB).vbproj" File="ASCOM Test Console App (VB).vbproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Module1.vb">Module1.vb</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="PlaceholderClass.vb">PlaceholderClass.vb</ProjectItem>
       <Folder Name="My Project" TargetFolderName="My Project">

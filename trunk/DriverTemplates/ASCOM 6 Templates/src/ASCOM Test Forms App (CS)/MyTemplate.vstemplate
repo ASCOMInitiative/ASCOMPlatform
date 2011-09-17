@@ -1,7 +1,7 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>Driver Test Forms Application Template CSharp</Name>
-    <Description>ASCOm driver test forms application. Select the driver type in the wizard.</Description>
+    <Name> ASCOM Driver Test Forms Application (C#)</Name>
+    <Description>ASCOM driver test forms application. Select the driver type in the wizard.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>
       ASCOM6
@@ -16,7 +16,7 @@
     <PreviewImage>__PreviewImage.png</PreviewImage>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="Driver Test Forms Application Template CSharp.csproj" File="Driver Test Forms Application Template CSharp.csproj" ReplaceParameters="true">
+    <Project TargetFileName="ASCOM Test Forms App CS).csproj" File="ASCOM Test Forms App (CS).csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Form1.cs">Form1.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Form1.Designer.cs">Form1.Designer.cs</ProjectItem>
