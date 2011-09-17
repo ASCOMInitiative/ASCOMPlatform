@@ -1,7 +1,7 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>Driver Test Forms Application Template VB</Name>
-    <Description>ASCOM Driver test forms application template, select the driver type int he wizard</Description>
+    <Name>ASCOM Driver Test Forms Application (VB)</Name>
+    <Description>ASCOM Driver test forms application, select the driver type int he wizard</Description>
     <ProjectType>VisualBasic</ProjectType>
     <ProjectSubType>
     </ProjectSubType>
@@ -14,7 +14,7 @@
     <Icon>__TemplateIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="Driver Test Forms Application Template VB.vbproj" File="Driver Test Forms Application Template VB.vbproj" ReplaceParameters="true">
+    <Project TargetFileName="ASCOM Test Forms App (VB).vbproj" File="ASCOM Test Forms App (VB).vbproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Form1.vb">Form1.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Form1.Designer.vb">Form1.Designer.vb</ProjectItem>

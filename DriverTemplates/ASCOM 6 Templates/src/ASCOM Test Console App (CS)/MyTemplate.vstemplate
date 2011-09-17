@@ -1,7 +1,7 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>ASCOM Test Application (CS)</Name>
-    <Description>Test Console application, uncomment the code for the device to test and set this to run as startup</Description>
+    <Name>ASCOM Test Console Application (CS)</Name>
+    <Description>Test Console application, Use the wizard to select the device type.</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>
       ASCOM6
@@ -19,7 +19,7 @@
     <FullClassName>ASCOM.Setup.DriverWizard</FullClassName>
   </WizardExtension>
   <TemplateContent>
-    <Project TargetFileName="TestApp.csproj" File="TestApp.csproj" ReplaceParameters="true">
+    <Project TargetFileName="ASCOM Test Console App (CS).csproj" File="ASCOM Test Console App (CS).csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
