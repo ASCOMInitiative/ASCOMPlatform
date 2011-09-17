@@ -1,13 +1,19 @@
-﻿
-Class TEMPLATEDEVICECLASS
+﻿Namespace ASCOM.DeviceInterface
 
-    Sub New(ByVal p1 As String)
-    End Sub
+    ''' <summary>
+    ''' Placeholder interface for the device class,
+    ''' enough to allow the application to run without errors
+    ''' </summary>
+    Class TEMPLATEDEVICECLASS
 
-    Property Connected As Boolean
+        Sub New(ByVal p1 As String)
+        End Sub
 
-    Shared Function Choose(ByVal id As String) As String
-        Return "template chooser"
-    End Function
+        Property Connected As Boolean
 
-End Class
+        Shared Function Choose(ByVal id As String) As String
+            Return "template chooser"
+        End Function
+
+    End Class
+End Namespace

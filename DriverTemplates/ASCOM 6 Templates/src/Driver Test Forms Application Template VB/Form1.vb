@@ -1,9 +1,9 @@
 ﻿Public Class Form1
 
-    Private driver As TEMPLATEDEVICECLASS
+    Private driver As ASCOM.DeviceInterface.TEMPLATEDEVICECLASS
 
     Private Sub buttonChoose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonChoose.Click
-        My.Settings.DriverId = TEMPLATEDEVICECLASS.Choose(My.Settings.DriverId)
+        My.Settings.DriverId = ASCOM.DeviceInterface.TEMPLATEDEVICECLASS.Choose(My.Settings.DriverId)
         SetUIState()
     End Sub
 
@@ -11,7 +11,7 @@
         If (IsConnected) Then
             driver.Connected = False
         Else
-            driver = New TEMPLATEDEVICECLASS(My.Settings.DriverId)
+            driver = New ASCOM.DeviceInterface.TEMPLATEDEVICECLASS(My.Settings.DriverId)
             driver.Connected = True
         End If
         SetUIState()
