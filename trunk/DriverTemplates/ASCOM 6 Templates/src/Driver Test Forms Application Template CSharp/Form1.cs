@@ -6,7 +6,7 @@ namespace TEMPLATEDEVICENAME
     public partial class Form1 : Form
     {
 
-        private TEMPLATEDEVICECLASS driver;
+        private ASCOM.DriverAccess.TEMPLATEDEVICECLASS driver;
 
         public Form1()
         {
@@ -24,7 +24,7 @@ namespace TEMPLATEDEVICENAME
 
         private void buttonChoose_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DriverId = TEMPLATEDEVICECLASS.Choose(Properties.Settings.Default.DriverId);
+            Properties.Settings.Default.DriverId = ASCOM.DriverAccess.TEMPLATEDEVICECLASS.Choose(Properties.Settings.Default.DriverId);
             SetUIState();
         }
 
@@ -36,7 +36,7 @@ namespace TEMPLATEDEVICENAME
             }
             else
             {
-                driver = new TEMPLATEDEVICECLASS(Properties.Settings.Default.DriverId);
+                driver = new ASCOM.DriverAccess.TEMPLATEDEVICECLASS(Properties.Settings.Default.DriverId);
                 driver.Connected = true;
             }
             SetUIState();
@@ -56,6 +56,5 @@ namespace TEMPLATEDEVICENAME
                 return ((this.driver != null) && (driver.Connected == true));
             }
         }
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿// this class is included so that the use of TEMPLATEDEVICENAME in the template sources is satisfied.
 // It is removed by the wizard when the project is created from the template
 
-namespace TEMPLATEDEVICENAME
+namespace ASCOM.DriverAccess
 {
     internal class TEMPLATEDEVICECLASS
     {
