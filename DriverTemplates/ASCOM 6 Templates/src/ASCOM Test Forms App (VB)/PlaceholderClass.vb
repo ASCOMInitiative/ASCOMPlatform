@@ -1,4 +1,4 @@
-﻿Namespace ASCOM.DeviceInterface
+﻿Namespace ASCOM.DriverAccess
 
     ''' <summary>
     ''' Placeholder interface for the device class,

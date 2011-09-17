@@ -88,9 +88,6 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InstallerCustomActions.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="PlaceholderInterface.vb" />
     <Compile Include="Driver.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -144,8 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />
-    <Content Include="HTMLPage1.htm" />
-    <Content Include="MyTemplate.vstemplate" />
     <Content Include="ReadMe.htm" />
   </ItemGroup>
   <ItemGroup>

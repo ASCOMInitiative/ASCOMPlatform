@@ -8,9 +8,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D1747C8D-F0CC-4B20-A0E4-517EBA497FA4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Driver_Test_Forms_Application_Template_VB.My.MyApplication</StartupObject>
-    <RootNamespace>Driver_Test_Forms_Application_Template_VB</RootNamespace>
-    <AssemblyName>ASCOM Driver Test Forms Application VB</AssemblyName>
+    <StartupObject>ASCOM.TEMPLATEDEVICENAME.My.MyApplication</StartupObject>
+    <RootNamespace>ASCOM.TEMPLATEDEVICENAME</RootNamespace>
+    <AssemblyName>ASCOM.TEMPLATEDEVICENAME.Test</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -22,7 +22,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>ASCOM Driver Test Forms Application VB.xml</DocumentationFile>
+    <DocumentationFile>ASCOM.TEMPLATEDEVICENAME.Test.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
@@ -32,7 +32,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>ASCOM Driver Test Forms Application VB.xml</DocumentationFile>
+    <DocumentationFile>ASCOM.TEMPLATEDEVICENAME.Test.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -51,6 +51,8 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />

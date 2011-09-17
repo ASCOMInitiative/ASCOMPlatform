@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace TEMPLATEDEVICENAME
+namespace ASCOM.TEMPLATEDEVICENAME
 {
     public partial class Form1 : Form
     {

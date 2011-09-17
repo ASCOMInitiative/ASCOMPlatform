@@ -1,6 +1,6 @@
 ﻿Public Class Form1
 
-    Private driver As ASCOM.DeviceInterface.TEMPLATEDEVICECLASS
+    Private driver As ASCOM.DriverAccess.TEMPLATEDEVICECLASS
 
     ''' <summary>
     ''' This event is where the driver is choosen. The device ID will be saved in the settings.
@@ -8,7 +8,7 @@
     ''' <param name="sender">The source of the event.</param>
     ''' <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     Private Sub buttonChoose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonChoose.Click
-        My.Settings.DriverId = ASCOM.DeviceInterface.TEMPLATEDEVICECLASS.Choose(My.Settings.DriverId)
+        My.Settings.DriverId = ASCOM.DriverAccess.TEMPLATEDEVICECLASS.Choose(My.Settings.DriverId)
         SetUIState()
     End Sub
 
@@ -21,7 +21,7 @@
         If (IsConnected) Then
             driver.Connected = False
         Else
-            driver = New ASCOM.DeviceInterface.TEMPLATEDEVICECLASS(My.Settings.DriverId)
+            driver = New ASCOM.DriverAccess.TEMPLATEDEVICECLASS(My.Settings.DriverId)
             driver.Connected = True
         End If
         SetUIState()

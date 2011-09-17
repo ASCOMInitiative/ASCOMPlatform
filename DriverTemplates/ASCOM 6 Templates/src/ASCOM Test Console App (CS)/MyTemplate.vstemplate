@@ -14,17 +14,18 @@
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <Icon>__TemplateIcon.ico</Icon>
   </TemplateData>
-  <WizardExtension>
-    <Assembly>ASCOM.Setup.TemplateWizard, Version=6.0.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
-    <FullClassName>ASCOM.Setup.DriverWizard</FullClassName>
-  </WizardExtension>
   <TemplateContent>
     <Project TargetFileName="ASCOM Test Console App (CS).csproj" File="ASCOM Test Console App (CS).csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderClass.cs">PlaceholderClass.cs</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       </Folder>
     </Project>
   </TemplateContent>
+  <WizardExtension>
+    <Assembly>ASCOM.Setup.TemplateWizard, Version=6.0.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
+    <FullClassName>ASCOM.Setup.DriverWizard</FullClassName>
+  </WizardExtension>
 </VSTemplate>

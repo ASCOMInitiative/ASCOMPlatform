@@ -35,6 +35,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.vb">SetupDialogForm.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.Designer.vb">SetupDialogForm.Designer.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.resx">SetupDialogForm.resx</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="ASCOMDriverTemplate.snk">ASCOMDriverTemplate.snk</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
