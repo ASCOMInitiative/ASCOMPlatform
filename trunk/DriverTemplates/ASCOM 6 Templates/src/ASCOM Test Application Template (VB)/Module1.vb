@@ -1,10 +1,21 @@
 ﻿Module Module1
 
     Sub Main()
-        Dim id As String = TEMPLATEDEVICECLASS.Choose("")
+        ' Uncomment the code that's required
+        ' choose the device
+        Dim id As String = ASCOM.DeviceInterface.TEMPLATEDEVICECLASS.Choose("")
+        If (String.IsNullOrEmpty(id)) Then
+            Return
+        End If
 
-        Dim driver As TEMPLATEDEVICECLASS = New TEMPLATEDEVICECLASS(id)
+        ' create this device
+        Dim driver As ASCOM.DeviceInterface.TEMPLATEDEVICECLASS = New ASCOM.DeviceInterface.TEMPLATEDEVICECLASS(id)
 
+        ' this can be replaced by this code, it avoids the chooser and creates the driver class directly.
+        ' Dim device As ASCOM.DriverAccess.TEMPLATEDEVICECLASS = New ASCOM.DriverAccess.TEMPLATEDEVICECLASS("ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS")
+
+        ' now run some tests, adding code to your driver so that the tests will pass.
+        ' these first tests are common to all drivers.
         Console.WriteLine("Name " & driver.Name)
         Console.WriteLine("description " + driver.Description)
         Console.WriteLine("DriverInfo " + driver.DriverInfo)
