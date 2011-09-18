@@ -29,6 +29,7 @@ namespace ASCOM.Simulator
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
@@ -85,6 +86,7 @@ namespace ASCOM.Simulator
             this.checkBoxInterfaceVersion = new System.Windows.Forms.CheckBox();
             this.groupBoxGuiding = new System.Windows.Forms.GroupBox();
             this.checkBoxCanPulseGuide = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -167,6 +169,7 @@ namespace ASCOM.Simulator
             this.textBoxCameraYSize.Name = "textBoxCameraYSize";
             this.textBoxCameraYSize.Size = new System.Drawing.Size(47, 20);
             this.textBoxCameraYSize.TabIndex = 28;
+            this.toolTip1.SetToolTip(this.textBoxCameraYSize, "The number of unbinned pixels down the the height of the CCD");
             // 
             // textBoxCameraXSize
             // 
@@ -174,6 +177,7 @@ namespace ASCOM.Simulator
             this.textBoxCameraXSize.Name = "textBoxCameraXSize";
             this.textBoxCameraXSize.Size = new System.Drawing.Size(47, 20);
             this.textBoxCameraXSize.TabIndex = 27;
+            this.toolTip1.SetToolTip(this.textBoxCameraXSize, "The number of unbinned pixels across the width of the CCD");
             // 
             // textBoxMaxBinY
             // 
@@ -181,6 +185,7 @@ namespace ASCOM.Simulator
             this.textBoxMaxBinY.Name = "textBoxMaxBinY";
             this.textBoxMaxBinY.Size = new System.Drawing.Size(16, 20);
             this.textBoxMaxBinY.TabIndex = 26;
+            this.toolTip1.SetToolTip(this.textBoxMaxBinY, "The maximum bin value in Y");
             // 
             // textBoxMaxBinX
             // 
@@ -188,6 +193,7 @@ namespace ASCOM.Simulator
             this.textBoxMaxBinX.Name = "textBoxMaxBinX";
             this.textBoxMaxBinX.Size = new System.Drawing.Size(16, 20);
             this.textBoxMaxBinX.TabIndex = 25;
+            this.toolTip1.SetToolTip(this.textBoxMaxBinX, "The maximum X bin value");
             // 
             // textBoxSensorName
             // 
@@ -195,6 +201,7 @@ namespace ASCOM.Simulator
             this.textBoxSensorName.Name = "textBoxSensorName";
             this.textBoxSensorName.Size = new System.Drawing.Size(90, 20);
             this.textBoxSensorName.TabIndex = 24;
+            this.toolTip1.SetToolTip(this.textBoxSensorName, "Set the Sensor Name.");
             // 
             // label13
             // 
@@ -211,6 +218,7 @@ namespace ASCOM.Simulator
             this.textBoxBayerOffsetY.Name = "textBoxBayerOffsetY";
             this.textBoxBayerOffsetY.Size = new System.Drawing.Size(18, 20);
             this.textBoxBayerOffsetY.TabIndex = 22;
+            this.toolTip1.SetToolTip(this.textBoxBayerOffsetY, "Bayer Offset in Y");
             // 
             // label15
             // 
@@ -227,6 +235,7 @@ namespace ASCOM.Simulator
             this.textBoxBayerOffsetX.Name = "textBoxBayerOffsetX";
             this.textBoxBayerOffsetX.Size = new System.Drawing.Size(18, 20);
             this.textBoxBayerOffsetX.TabIndex = 20;
+            this.toolTip1.SetToolTip(this.textBoxBayerOffsetX, "Bayer offset in X");
             // 
             // label14
             // 
@@ -236,6 +245,8 @@ namespace ASCOM.Simulator
             this.label14.Size = new System.Drawing.Size(84, 13);
             this.label14.TabIndex = 19;
             this.label14.Text = "Bayer Offset   X:";
+            this.toolTip1.SetToolTip(this.label14, "Set the offset in X and Y pixels to the first pixel in the Bayer array. For camer" +
+                    "as with a colour filter array only.");
             // 
             // comboBoxSensorType
             // 
@@ -252,6 +263,7 @@ namespace ASCOM.Simulator
             this.comboBoxSensorType.Name = "comboBoxSensorType";
             this.comboBoxSensorType.Size = new System.Drawing.Size(90, 21);
             this.comboBoxSensorType.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.comboBoxSensorType, "Set the sensor type, Monochrome for a monochrome camera.");
             // 
             // label12
             // 
@@ -270,6 +282,7 @@ namespace ASCOM.Simulator
             this.checkBoxHasShutter.Size = new System.Drawing.Size(82, 17);
             this.checkBoxHasShutter.TabIndex = 14;
             this.checkBoxHasShutter.Text = "Has Shutter";
+            this.toolTip1.SetToolTip(this.checkBoxHasShutter, "Check this if the camera has a mechanical shutter.");
             this.checkBoxHasShutter.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanAsymmetricBin
@@ -282,6 +295,7 @@ namespace ASCOM.Simulator
             this.checkBoxCanAsymmetricBin.Size = new System.Drawing.Size(119, 17);
             this.checkBoxCanAsymmetricBin.TabIndex = 13;
             this.checkBoxCanAsymmetricBin.Text = "Can Asymmetric Bin";
+            this.toolTip1.SetToolTip(this.checkBoxCanAsymmetricBin, "Check this if the camera can have different X and Y bin values");
             this.checkBoxCanAsymmetricBin.UseVisualStyleBackColor = true;
             // 
             // label6
@@ -401,6 +415,7 @@ namespace ASCOM.Simulator
             this.checkBoxHasCooler.Size = new System.Drawing.Size(78, 17);
             this.checkBoxHasCooler.TabIndex = 2;
             this.checkBoxHasCooler.Text = "Has Cooler";
+            this.toolTip1.SetToolTip(this.checkBoxHasCooler, "Check this if the camera has a CCD cooler that can be controlled.");
             this.checkBoxHasCooler.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanGetCoolerPower
@@ -411,6 +426,7 @@ namespace ASCOM.Simulator
             this.checkBoxCanGetCoolerPower.Size = new System.Drawing.Size(131, 17);
             this.checkBoxCanGetCoolerPower.TabIndex = 1;
             this.checkBoxCanGetCoolerPower.Text = "Can Get Cooler Power";
+            this.toolTip1.SetToolTip(this.checkBoxCanGetCoolerPower, "Check this if the cooler power can be read");
             this.checkBoxCanGetCoolerPower.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanSetCCDTemperature
@@ -421,6 +437,7 @@ namespace ASCOM.Simulator
             this.checkBoxCanSetCCDTemperature.Size = new System.Drawing.Size(152, 17);
             this.checkBoxCanSetCCDTemperature.TabIndex = 0;
             this.checkBoxCanSetCCDTemperature.Text = "Can Set CCD Temperature";
+            this.toolTip1.SetToolTip(this.checkBoxCanSetCCDTemperature, "Check this if the CCD temperature can be set");
             this.checkBoxCanSetCCDTemperature.UseVisualStyleBackColor = true;
             // 
             // groupBoxExposure
@@ -513,6 +530,7 @@ namespace ASCOM.Simulator
             this.textBoxPixelSizeY.Name = "textBoxPixelSizeY";
             this.textBoxPixelSizeY.Size = new System.Drawing.Size(42, 20);
             this.textBoxPixelSizeY.TabIndex = 17;
+            this.toolTip1.SetToolTip(this.textBoxPixelSizeY, "Set the pixel height in microns");
             // 
             // textBoxPixelSizeX
             // 
@@ -520,6 +538,7 @@ namespace ASCOM.Simulator
             this.textBoxPixelSizeX.Name = "textBoxPixelSizeX";
             this.textBoxPixelSizeX.Size = new System.Drawing.Size(42, 20);
             this.textBoxPixelSizeX.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.textBoxPixelSizeX, "Set the pixel width in microns.");
             // 
             // textBoxElectronsPerADU
             // 
@@ -527,6 +546,7 @@ namespace ASCOM.Simulator
             this.textBoxElectronsPerADU.Name = "textBoxElectronsPerADU";
             this.textBoxElectronsPerADU.Size = new System.Drawing.Size(47, 20);
             this.textBoxElectronsPerADU.TabIndex = 15;
+            this.toolTip1.SetToolTip(this.textBoxElectronsPerADU, "The number of electrons for a change of one step on the ADU out");
             // 
             // textBoxMaxADU
             // 
@@ -534,6 +554,7 @@ namespace ASCOM.Simulator
             this.textBoxMaxADU.Name = "textBoxMaxADU";
             this.textBoxMaxADU.Size = new System.Drawing.Size(47, 20);
             this.textBoxMaxADU.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.textBoxMaxADU, "This is the maximum ADU value that the camera can return");
             // 
             // label8
             // 
@@ -589,6 +610,7 @@ namespace ASCOM.Simulator
             this.buttonSetImageFile.Size = new System.Drawing.Size(82, 24);
             this.buttonSetImageFile.TabIndex = 2;
             this.buttonSetImageFile.Text = "Image File...";
+            this.toolTip1.SetToolTip(this.buttonSetImageFile, resources.GetString("buttonSetImageFile.ToolTip"));
             this.buttonSetImageFile.UseVisualStyleBackColor = true;
             this.buttonSetImageFile.Click += new System.EventHandler(this.buttonSetImageFile_Click);
             // 
@@ -600,6 +622,8 @@ namespace ASCOM.Simulator
             this.checkBoxApplyNoise.Size = new System.Drawing.Size(82, 17);
             this.checkBoxApplyNoise.TabIndex = 0;
             this.checkBoxApplyNoise.Text = "Apply Noise";
+            this.toolTip1.SetToolTip(this.checkBoxApplyNoise, "Check this to apply noise to the simulated image.  The amount of noise will vary " +
+                    "depending on the CCD temperature, exposure time and image brightness.");
             this.checkBoxApplyNoise.UseVisualStyleBackColor = true;
             // 
             // cameraBindingSource
@@ -619,6 +643,8 @@ namespace ASCOM.Simulator
             this.checkBoxInterfaceVersion.Size = new System.Drawing.Size(115, 17);
             this.checkBoxInterfaceVersion.TabIndex = 10;
             this.checkBoxInterfaceVersion.Text = "Interface Version 2";
+            this.toolTip1.SetToolTip(this.checkBoxInterfaceVersion, "Check this if the camera simulates a Version 2 camera. If unchecked the V2 parame" +
+                    "ters will raise a not implemented error.");
             this.checkBoxInterfaceVersion.UseVisualStyleBackColor = true;
             this.checkBoxInterfaceVersion.CheckedChanged += new System.EventHandler(this.checkBoxInterfaceVersion_CheckedChanged);
             // 
@@ -640,6 +666,8 @@ namespace ASCOM.Simulator
             this.checkBoxCanPulseGuide.Size = new System.Drawing.Size(105, 17);
             this.checkBoxCanPulseGuide.TabIndex = 0;
             this.checkBoxCanPulseGuide.Text = "Can Pulse Guide";
+            this.toolTip1.SetToolTip(this.checkBoxCanPulseGuide, "Check this if the camera can accept pulse guide commands. They will have no effec" +
+                    "t.");
             this.checkBoxCanPulseGuide.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
@@ -744,5 +772,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.CheckBox checkBoxInterfaceVersion;
         private System.Windows.Forms.GroupBox groupBoxGuiding;
         private System.Windows.Forms.CheckBox checkBoxCanPulseGuide;
+        private System.Windows.Forms.ToolTip toolTip1;
 	}
 }

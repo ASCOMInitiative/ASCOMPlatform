@@ -159,7 +159,7 @@ namespace ASCOM.Simulator
             openFileDialog1.CheckPathExists = true;
             openFileDialog1.CheckFileExists = true;
             openFileDialog1.InitialDirectory = Path.GetDirectoryName(camera.imagePath);
-            openFileDialog1.FileName = camera.imagePath;
+            openFileDialog1.FileName = Path.GetFileName(camera.imagePath);
             openFileDialog1.ShowDialog();
             camera.imagePath = openFileDialog1.FileName;
         }
