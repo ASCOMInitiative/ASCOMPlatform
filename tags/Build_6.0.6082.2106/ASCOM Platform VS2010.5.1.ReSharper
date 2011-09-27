@@ -1,0 +1,240 @@
+<Configuration>
+  <SharedSolutionTemplateManager>
+    <LiveTemplates>
+      <Template uid="8a5be1eb-9c71-466c-9432-b605d932fb40" shortcut="l" description="Lambda expression" text="()=&gt;$END$;" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="Expression" minimumLanguageVersion="3.0" />
+        </Context>
+        <Categories>
+          <Category name="Lambdas" />
+        </Categories>
+        <Variables />
+        <CustomProperties />
+      </Template>
+      <Template uid="a354a3aa-9e2a-4cf3-846c-4d111cf09aa5" shortcut="ll" description="Long lambda expression" text="()=&gt;{$END$};" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="Expression" minimumLanguageVersion="3.0" />
+        </Context>
+        <Categories>
+          <Category name="Lambdas" />
+        </Categories>
+        <Variables />
+        <CustomProperties />
+      </Template>
+      <Template uid="d3047eca-e90c-4605-a1d4-0593aaed4cf2" shortcut="it" description="" text="It should_$observation$ = () =&gt; { $END$ };" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="TypeMember" minimumLanguageVersion="3.0" />
+        </Context>
+        <Categories>
+          <Category name="MSpec" />
+        </Categories>
+        <Variables>
+          <Variable name="observation" expression="" initialRange="0" />
+        </Variables>
+        <CustomProperties />
+      </Template>
+      <Template uid="214033bd-1df9-463c-86d4-80b8e2c63f64" shortcut="est" description="" text="Establish context = () =&gt; { $END$ };" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="TypeMember" minimumLanguageVersion="3.0" />
+        </Context>
+        <Categories>
+          <Category name="MSpec" />
+        </Categories>
+        <Variables />
+        <CustomProperties />
+      </Template>
+      <Template uid="2afe0e54-2936-43b8-9c3c-9a79c075a861" shortcut="bec" description="" text="Because of = () =&gt; { $END$ };" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="TypeMember" minimumLanguageVersion="3.0" />
+        </Context>
+        <Categories>
+          <Category name="MSpec" />
+        </Categories>
+        <Variables />
+        <CustomProperties />
+      </Template>
+      <Template uid="f0a9f4e1-aebd-46df-856c-97dda258a0eb" shortcut="fail" description="" text="It should_fail =&#xD;&#xA;	() =&gt; Exception.ShouldNotBeNull();&#xD;&#xA;&#xD;&#xA;static Exception Exception;" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="TypeMember" minimumLanguageVersion="3.0" />
+        </Context>
+        <Categories>
+          <Category name="MSpec" />
+        </Categories>
+        <Variables />
+        <CustomProperties />
+      </Template>
+      <Template uid="44259940-6bfe-430f-ba8f-df44d695399f" shortcut="spec" description="" text="[Subject(typeof($Type$))]&#xD;&#xA;public class When_$Context$&#xD;&#xA;{&#xD;&#xA;	Establish context = () =&gt; $END$;&#xD;&#xA;	Because of = () =&gt; ;&#xD;&#xA;	It should_ = () =&gt; ;&#xD;&#xA;}" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="TypeAndNamespace" minimumLanguageVersion="3.0" />
+        </Context>
+        <Categories>
+          <Category name="MSpec" />
+        </Categories>
+        <Variables>
+          <Variable name="Type" expression="complete()" initialRange="0" />
+          <Variable name="Context" expression="" initialRange="0" />
+        </Variables>
+        <CustomProperties />
+      </Template>
+      <Template uid="9aec27d3-5bd0-49f6-a5ea-6928d6229c14" shortcut="DisposeDerived" description="" text="        #region IDisposable pattern for a subclass.&#xD;&#xA;&#xD;&#xA;        private bool disposed;&#xD;&#xA;&#xD;&#xA;        /// &lt;summary&gt;&#xD;&#xA;        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.&#xD;&#xA;        ///   Implements &lt;see cref = &quot;IDisposable&quot; /&gt;.&#xD;&#xA;        /// &lt;/summary&gt;&#xD;&#xA;        public void Dispose()&#xD;&#xA;        {&#xD;&#xA;            Dispose(true);&#xD;&#xA;            GC.SuppressFinalize(this);&#xD;&#xA;        }&#xD;&#xA;&#xD;&#xA;        protected override void Dispose(bool disposing)&#xD;&#xA;        {&#xD;&#xA;            if (!disposed)&#xD;&#xA;            {&#xD;&#xA;                if (disposing)&#xD;&#xA;                {&#xD;&#xA;                    // Free other state (managed objects).&#xD;&#xA;                }&#xD;&#xA;                // Free own state (unmanaged objects).&#xD;&#xA;                // Set large fields to null.&#xD;&#xA;                disposed = true;&#xD;&#xA;            }&#xD;&#xA;            base.Dispose(disposing);&#xD;&#xA;        }&#xD;&#xA;&#xD;&#xA;        // The derived class does not have a Finalize method&#xD;&#xA;        // or a Dispose method without parameters because it inherits&#xD;&#xA;        // them from the base class.&#xD;&#xA;&#xD;&#xA;        #endregion&#xD;&#xA;" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+        </Context>
+        <Categories />
+        <Variables />
+        <CustomProperties />
+      </Template>
+      <Template uid="25ae2d35-e7b4-44dc-b5af-3f0fc64d7bab" shortcut="DisposeBase" description="IDisposable implementation for a base class" text="        #region IDisposable pattern for a base class.&#xD;&#xA;&#xD;&#xA;        private bool disposed; &#xD;&#xA;&#xD;&#xA;        /// &lt;summary&gt;&#xD;&#xA;        ///   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.&#xD;&#xA;        ///   Implements &lt;see cref = &quot;IDisposable&quot; /&gt;.&#xD;&#xA;        /// &lt;/summary&gt;&#xD;&#xA;        public void Dispose()&#xD;&#xA;        {&#xD;&#xA;            Dispose(true);&#xD;&#xA;            GC.SuppressFinalize(this);&#xD;&#xA;        }&#xD;&#xA;&#xD;&#xA;        protected virtual void Dispose(bool disposing)&#xD;&#xA;        {&#xD;&#xA;            if (!disposed)&#xD;&#xA;            {&#xD;&#xA;                if (disposing)&#xD;&#xA;                {&#xD;&#xA;                    // Free other state (managed objects).&#xD;&#xA;                }&#xD;&#xA;                // Free own state (unmanaged objects).&#xD;&#xA;                // Set large fields to null.&#xD;&#xA;                disposed = true;&#xD;&#xA;            }&#xD;&#xA;        }&#xD;&#xA;&#xD;&#xA;        // Use C# destructor syntax for finalization code.&#xD;&#xA;        ~$Destructor$()&#xD;&#xA;        {&#xD;&#xA;            Dispose(false);&#xD;&#xA;        }&#xD;&#xA;&#xD;&#xA;        #endregion&#xD;&#xA;" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+        </Context>
+        <Categories />
+        <Variables>
+          <Variable name="Destructor" expression="typeName()" initialRange="-1" />
+        </Variables>
+        <CustomProperties />
+      </Template>
+      <Template uid="f2d9997b-a6e0-47d3-919b-04646a852927" shortcut="DisposeBase" description="IDisposable implementation for a base class" text="#Region &quot;IDisposable pattern for a base class.&quot;&#xA;&#xA;Private disposed As Boolean&#xA;&#xA;''' &lt;summary&gt;&#xA;'''   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.&#xA;'''   Implements &lt;see cref = &quot;IDisposable&quot; /&gt;.&#xA;''' &lt;/summary&gt;&#xA;Public Sub Dispose()&#xA;	Dispose(True)&#xA;	GC.SuppressFinalize(Me)&#xA;End Sub&#xA;&#xA;Protected Overridable Sub Dispose(disposing As Boolean)&#xA;	If Not disposed Then&#xA;				' Free other state (managed objects).&#xA;		If disposing Then&#xA;		End If&#xA;		' Free own state (unmanaged objects).&#xA;		' Set large fields to null.&#xA;		disposed = True&#xA;	End If&#xA;End Sub&#xA;&#xA;' Use C# destructor syntax for finalization code.&#xA;Protected Overrides Sub Finalize()&#xA;	Try&#xA;		Dispose(False)&#xA;	Finally&#xA;		MyBase.Finalize()&#xA;	End Try&#xA;End Sub&#xA;&#xA;#End Region&#xD;&#xA;" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <VBContext context="TypeMember" />
+        </Context>
+        <Categories />
+        <Variables />
+        <CustomProperties />
+      </Template>
+      <Template uid="cf1fd4a9-1a7d-4346-bf66-8b7645b9eeb1" shortcut="DisposeDerived" description="IDisposable implementation for a derived class" text="#Region &quot;IDisposable pattern for a subclass.&quot;&#xA;&#xA;Private disposed As Boolean&#xA;&#xA;''' &lt;summary&gt;&#xA;'''   Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.&#xA;'''   Implements &lt;see cref = &quot;IDisposable&quot; /&gt;.&#xA;''' &lt;/summary&gt;&#xA;Public Sub Dispose()&#xA;	Dispose(True)&#xA;	GC.SuppressFinalize(Me)&#xA;End Sub&#xA;&#xA;Protected Overrides Sub Dispose(disposing As Boolean)&#xA;	If Not disposed Then&#xA;				' Free other state (managed objects).&#xA;		If disposing Then&#xA;		End If&#xA;		' Free own state (unmanaged objects).&#xA;		' Set large fields to null.&#xA;		disposed = True&#xA;	End If&#xA;	MyBase.Dispose(disposing)&#xA;End Sub&#xA;&#xA;' The derived class does not have a Finalize method&#xA;' or a Dispose method without parameters because it inherits&#xA;' them from the base class.&#xA;&#xA;#End Region&#xA;" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <VBContext context="TypeMember" />
+        </Context>
+        <Categories />
+        <Variables />
+        <CustomProperties />
+      </Template>
+    </LiveTemplates>
+    <Surrounds>
+      <Template uid="47f8a3f0-32ad-4252-864c-9b7617b40a0c" shortcut="" description="Catch.Exception" text="Exception = Catch.Exception(() =&gt; { $SELECTION$ });" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="Statement" minimumLanguageVersion="3.0" />
+        </Context>
+        <Categories />
+        <Variables />
+        <CustomProperties />
+      </Template>
+    </Surrounds>
+    <FileTemplates>
+      <Template uid="f98639e9-107d-40a4-82d0-de07afb1360f" shortcut="" description="Spec" text="using System;&#xD;&#xA;&#xD;&#xA;using Machine.Specifications;&#xD;&#xA;&#xD;&#xA;namespace $Namespace$&#xD;&#xA;{&#xD;&#xA;	[Subject(typeof($Type$))]&#xD;&#xA;	public class When_$Context$&#xD;&#xA;	{&#xD;&#xA;		Establish context = () =&gt; { $END$ };&#xD;&#xA;&#xD;&#xA;		Because of = () =&gt; { };&#xD;&#xA;&#xD;&#xA;		It should_ = () =&gt; { };&#xD;&#xA;	}&#xD;&#xA;}" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <ProjectLanguageContext language="CSharp" />
+        </Context>
+        <Categories />
+        <Variables>
+          <Variable name="Namespace" expression="fileDefaultNamespace()" initialRange="-1" />
+          <Variable name="Type" expression="" initialRange="0" />
+          <Variable name="Context" expression="" initialRange="0" />
+        </Variables>
+        <CustomProperties>
+          <Property key="FileName" value="Specs" />
+          <Property key="Extension" value="cs" />
+          <Property key="ValidateFileName" value="True" />
+        </CustomProperties>
+      </Template>
+    </FileTemplates>
+  </SharedSolutionTemplateManager>
+  <CodeStyleSettings>
+    <ExternalPath IsNull="False">
+    </ExternalPath>
+    <Sharing>SOLUTION</Sharing>
+    <CSharp>
+      <FormatSettings>
+        <EXPLICIT_PRIVATE_MODIFIER>False</EXPLICIT_PRIVATE_MODIFIER>
+        <INDENT_ANONYMOUS_METHOD_BLOCK>False</INDENT_ANONYMOUS_METHOD_BLOCK>
+        <MODIFIERS_ORDER IsNull="False">
+          <Item>public</Item>
+          <Item>protected</Item>
+          <Item>internal</Item>
+          <Item>private</Item>
+          <Item>new</Item>
+          <Item>abstract</Item>
+          <Item>virtual</Item>
+          <Item>override</Item>
+          <Item>sealed</Item>
+          <Item>static</Item>
+          <Item>readonly</Item>
+          <Item>extern</Item>
+          <Item>unsafe</Item>
+          <Item>volatile</Item>
+        </MODIFIERS_ORDER>
+      </FormatSettings>
+      <UsingsSettings />
+      <Naming2>
+        <EventHandlerPatternLong>$object$_On$event$</EventHandlerPatternLong>
+        <EventHandlerPatternShort>$event$Handler</EventHandlerPatternShort>
+      </Naming2>
+    </CSharp>
+    <VB>
+      <FormatSettings />
+      <ImportsSettings />
+      <Naming2>
+        <EventHandlerPatternLong>$object$_On$event$</EventHandlerPatternLong>
+        <EventHandlerPatternShort>$event$Handler</EventHandlerPatternShort>
+      </Naming2>
+    </VB>
+    <Web>
+      <Naming2 />
+    </Web>
+    <Xaml>
+      <Naming2 />
+    </Xaml>
+    <XML>
+      <FormatSettings />
+    </XML>
+    <GenerateMemberBody />
+    <Naming2>
+      <EventHandlerPatternLong>$object$_On$event$</EventHandlerPatternLong>
+      <EventHandlerPatternShort>$event$Handler</EventHandlerPatternShort>
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="TypesAndNamespaces" />
+      <PredefinedRule Inspect="True" Prefix="I" Suffix="" Style="AaBb" ElementKind="Interfaces" />
+      <PredefinedRule Inspect="True" Prefix="T" Suffix="" Style="AaBb" ElementKind="TypeParameters" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="MethodPropertyEvent" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="Locals" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="LocalConstants" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="Parameters" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PublicFields" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="PrivateInstanceFields" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="PrivateStaticFields" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Constants" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PrivateConstants" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="StaticReadonly" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PrivateStaticReadonly" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="EnumMember" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Other" />
+      <UserRule Inspect="True" Prefix="" Suffix="" Style="aaBb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="MSpec local">
+        <ElementKinds>
+          <Kind Name="Machine.Specifications_Local" />
+        </ElementKinds>
+      </UserRule>
+      <UserRule Inspect="True" Prefix="With_" Suffix="" Style="aa_bb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="MSpec context base class">
+        <ElementKinds>
+          <Kind Name="Machine.Specifications_ContextBase" />
+        </ElementKinds>
+      </UserRule>
+      <UserRule Inspect="True" Prefix="When_" Suffix="" Style="aa_bb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="MSpec context">
+        <ElementKinds>
+          <Kind Name="Machine.Specifications_Context" />
+        </ElementKinds>
+      </UserRule>
+      <UserRule Inspect="True" Prefix="" Suffix="" Style="aa_bb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="MSpec default naming">
+        <ElementKinds>
+          <Kind Name="Machine.Specifications_Behavior" />
+          <Kind Name="Machine.Specifications_Context" />
+          <Kind Name="Machine.Specifications_ContextBase" />
+          <Kind Name="Machine.Specifications_Specification" />
+          <Kind Name="Machine.Specifications_SupportingField" />
+          <Kind Name="Machine.Specifications_Field" />
+          <Kind Name="Machine.Specifications_Constant" />
+          <Kind Name="Machine.Specifications_Local" />
+        </ElementKinds>
+      </UserRule>
+    </Naming2>
+  </CodeStyleSettings>
+</Configuration>

@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ASCOM.Controls.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ASCOMStandardsURL" Description="The URL of the ASCOM Standards web site." Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://www.ascom-standards.org</Value>
+    </Setting>
+    <Setting Name="TiGraAstronomyURL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://www.tigranetworks.co.uk/Astronomy</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

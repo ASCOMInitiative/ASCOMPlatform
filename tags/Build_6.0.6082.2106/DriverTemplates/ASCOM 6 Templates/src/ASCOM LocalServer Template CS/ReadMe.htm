@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Untitled Document</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Win32)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
+	<META NAME="CHANGED" CONTENT="20110422;10442800">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
+	<META NAME="CHANGEDBY" CONTENT="Chris Rowland">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 2cm }
+		P { font-family: "Verdana", "Arial", "Helvetica", sans-serif; font-weight: normal }
+		TD P { font-family: "Verdana", "Arial", "Helvetica", sans-serif; font-weight: normal }
+		H3 { font-family: "Arial", "Helvetica", sans-serif }
+		H2 { font-family: "Arial", "Helvetica", sans-serif }
+		H4 { font-family: "Arial", "Helvetica", sans-serif }
+		PRE { margin-left: 0.18cm; margin-right: 0.18cm; margin-top: 0.18cm; margin-bottom: 0.18cm; background: #ccffff }
+		PRE.western { font-weight: normal }
+		PRE.cjk { font-family: "NSimSun", monospace; font-weight: normal }
+		PRE.ctl { font-weight: normal }
+		EM.underline { text-decoration: underline }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-GB" DIR="LTR">
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0 STYLE="page-break-before: always">
+	<TR>
+		<TD>
+			<H2>ASCOM LocalServer (singleton) Host 
+			</H2>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<H4>You have just created a local server (singleton) host for one or
+more ASCOM driver classes.</H4>
+<HR>
+<P>This project implements an ASCOM host server for one or more
+driver classes in a single-instance executable. It can be used to
+serve multiple instances of a single driver class (hub), provide
+driver services for multiple devices (e.g., Telescope and Focuser) to
+multiple applications and allow multiple devices of the same type to
+be connected. In the latter scenario, the multiple driver classes
+will often share one or more resources such as the serial connection
+and a microcontroller in the combined device. From the client's
+perspective, using the drivers served by the local server is exactly
+the same as if the drivers are loaded into the client's process space
+(in-proc servers). 
+</P>
+<P STYLE="margin-left: 0.42cm; margin-right: 0.42cm; border: 1px solid #000000; padding: 0.21cm">
+<STRONG><SPAN STYLE="background: #ffee88">NOTE:</SPAN></STRONG><SPAN STYLE="background: #ffee88">
+Unless you are prepared to handle all of the timing issues that arise
+when multiple clients are accessing the properties and methods of
+your driver(s), stop now. Just because the local server serializes
+the calls to your driver(s)' properties and methods does not mean
+that there will be no timing or concurrency issues.<BR>&nbsp;<BR>For
+example, suppose the hub serves instances of a Telescope driver. One
+client sets the TargetRightAscension property, then another sets
+TargetRightAscension to a different value, then the first client sets
+TargetDeclination, then the first client calls SlewToTarget()
+followed by the second client calling SlewToTarget(). Besides the
+first client's slew command sending the scope to the wrong (and
+possibly dangerous) coordinates, there is the problem of the second
+client trying to slew a slewing scope. Local server drivers are
+tricky to get right. There is no such thing as &quot;ignorance is
+bliss&quot; here.</SPAN></P>
+<P STYLE="margin-left: 0.42cm; margin-right: 0.42cm; border: 1px solid #000000; padding: 0.21cm">
+<SPAN STYLE="background: #ffee88">This implementation has changed
+from what was defined for Platform 5.5 as follows:</SPAN></P>
+<P STYLE="margin-left: 0.42cm; margin-right: 0.42cm; border: 1px solid #000000; padding: 0.21cm">
+<SPAN STYLE="background: #ffee88">The drivers are now installed in
+the same folder as the local server executable. This makes deployment
+cleaner because the whole driver can exist in a single folder
+independently of other drivers.</SPAN></P>
+<P STYLE="margin-left: 0.42cm; margin-right: 0.42cm; border: 1px solid #000000; padding: 0.21cm">
+<SPAN STYLE="background: #ffee88">The ProgId and friendly name as
+displayed by the Chooser are defined using attributes. This allows
+driver dlls to be identified clearly and so avoids confusion with
+other dlls that may be required such as interop dlls.</SPAN></P>
+<P STYLE="margin-left: 0.42cm; margin-right: 0.42cm; border: 1px solid #000000; padding: 0.21cm">
+<SPAN STYLE="background: #ffee88">Some changes have been made that
+will facilitate generating multiple drivers of the same type.</SPAN></P>
+<P STYLE="margin-left: 0.42cm; margin-right: 0.42cm; border: 1px solid #000000; padding: 0.21cm">
+<SPAN STYLE="background: #ffee88">I've put some additional advice and
+comments in the notes below <I>in italics.</I></SPAN></P>
+<P>You're probably anxious to get going, but you really should read
+through the <A HREF="#theory">Theory of Operation</A> and <A HREF="#details">Detailed
+Use and Deployment</A> below. 
+</P>
+<P>You must do the following in order to complete your local server:</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm">In the local server's project
+	properties, Application tab, change BOTH the AssemblyName and the
+	default assembly name to ASCOM.xxx (e.g., ASCOM.SuperScope). <I>This
+	may be done by default now.</I></P>
+	<LI><P STYLE="margin-bottom: 0cm">Add one or more driver skeleton
+	projects using the in-proc templates. You may use either the C# or
+	VB templates. Project name is not important (not used in ProgID)
+	choose something like TelescopeDriver. You will be changing the
+	substituted project name in these projects below. If you ensure that
+	the LocalServer and all the driver projects have the same NameSpace
+	e.g. ASCOM.SuperScope the renaming in section 5a will not be
+	required.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Develop and debug these driver
+	projects as normal in-process assemblies. This will be much simpler
+	because the driver and test code can be debugged in the same
+	process.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Build the LocalServer. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Set a reference to the local
+	server <STRONG>project</STRONG> in each of the driver skeleton
+	projects.</P>
+	<LI><P STYLE="margin-bottom: 0cm">In each skeleton driver project:</P>
+	<OL TYPE=a>
+		<LI><P STYLE="margin-bottom: 0cm">Do a Find In Files for the
+		project name of the skeleton driver (e.g., TelescopeDriver) and
+		change it to match the project name of your local server (e.g.
+		SuperScope). You don't have to do this in the ReadMe.html file.
+		Everywhere else, however, is IMPORTANT. This sets the correct
+		namespace, progID, etc. If you're a bit more brave, you can use
+		Replace in Files. <I>This may not be needed if the correct
+		namespace and naming conventions have been followed when the
+		derivers and local server were generated.</I></P>
+		<LI><P STYLE="margin-bottom: 0cm">In project properties,
+		Application tab, change the assembly name to
+		ASCOM.<EM CLASS="underline">localserverprojectname</EM>.<EM>drivertype</EM>,
+		(e.g., ASCOM.SuperScope.Telescope). 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm">In project properties,
+		Application tab, click Assembly Information... 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm">Assure that Make assembly COM
+			visible is <STRONG>on</STRONG> (it should already be on). 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm">Edit the Product Name to be the
+			&quot;friendly name&quot; of your driver as will be shown in the
+			Chooser. <I>Not used now, use the ServedClassName attribute
+			instead.</I></P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm">In project properties, Build tab,
+		turn <STRONG>off</STRONG> Register for COM Interop. 
+		</P>
+		<LI><P>Modify the driver class declaration to inherit from
+		ReferenceCountedObjectBase. Examples:<BR>C#:</P>
+		<PRE CLASS="western">    public class Telescope :
+        ReferenceCountedObjectBase,
+        ITelescope</PRE><P>
+		VB:</P>
+		<PRE CLASS="western">    Public Class Telescope
+        '==================================
+        Inherits ReferenceCountedObjectBase
+        Implements ITelescope
+        '==================================</PRE>
+		<LI><P STYLE="margin-bottom: 0cm">In driver.cs/driver.vb, remove
+		the entire ASCOM Registration region 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm">In driver.cs/driver.vb, remove
+		the private strings for driver ID and driver description. <I>They
+		may be needed internally, and if so should be set from the
+		associated attributes, ServedClassName for the description and
+		ProgId for the driver Id.</I></P>
+		<LI><P STYLE="margin-bottom: 0cm">Modify the class attributes by
+		adding the ServedClassName and ProgID attributes. The
+		ServedClassName attribute must be the friendly name shown as the
+		device name in the Chooser and the ProgId the progid of the driver
+		e.g. ASCOM.SuperScope.Telescope. The class header should look like
+		this:</P>
+		<P STYLE="margin-bottom: 0cm">C#:</P>
+		<PRE CLASS="western" STYLE="margin-right: 0.16cm"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">[</FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Guid</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(</FONT></FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;0AE8B38D-10A1-4A8D-A5B7-1B050F74B48B&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">)]  // set by the template</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">[</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ProgId</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(</FONT></FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;ASCOM.SuperScope.Telescope&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">)]</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">[</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ServedClassName</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(</FONT></FONT></FONT><FONT COLOR="#a31515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">&quot;Super Scope Telescope&quot;</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">)]</FONT></FONT></FONT>
+<FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">[</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ClassInterface</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">(</FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ClassInterfaceType</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">.None)]</FONT></FONT></FONT>
+<FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">public</FONT></FONT></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#0000ff"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">class</FONT></FONT></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">Telescope</FONT></FONT></FONT><FONT COLOR="#000000"> </FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">: </FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ReferenceCountedObjectBase</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">, </FONT></FONT></FONT><FONT COLOR="#2b91af"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">ITelescope</FONT></FONT></FONT></PRE>
+	</OL>
+</OL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<OL>
+	<OL TYPE=a>
+		<P>VB:</P>
+		<PRE CLASS="western">&lt;Guid(&ldquo;<FONT COLOR="#a31515"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">0AE8B38D-10A1-4A8D-A5B7-1B050F74B48B</FONT></FONT></FONT>&rdquo;)&gt;
+&lt;ProgId(&ldquo;ASCOM.SuperScope.Telescope&rdquo;)&gt;
+&lt;ServedClassName(&ldquo;Super Scope Telescope&rdquo;)&gt;    
+Public Class Telescope 
+        '==================================
+        Inherits ReferenceCountedObjectBase
+        Implements ITelescope
+        '==================================</PRE>
+	</OL>
+</OL>
+<P STYLE="margin-left: 2.5cm">Add the following line to the driver
+constructor, this sets the driver ID using the ProgId Attribute:</P>
+<OL>
+	<OL TYPE=a>
+		<PRE CLASS="western"><FONT FACE="Consolas"><FONT SIZE=2 STYLE="font-size: 9pt">s_csDriverID = <FONT COLOR="#2b91af">Marshal</FONT><FONT COLOR="#000000">.GenerateProgIdForType(</FONT><FONT COLOR="#0000ff">this</FONT><FONT COLOR="#000000">.GetType());</FONT></FONT></FONT></PRE>
+	</OL>
+	<LI><P STYLE="margin-bottom: 0cm">Unless you're writing a
+	single-driver hub, you will have two or more driver types (e.g.
+	Telescope and Focuser) and thus two or more driver assembly projects
+	added. Presumably, these drivers need to share some resources (e.g.
+	a single COM port via Helper.Serial). <U>Put shared resources into
+	the SharedResources class provided</U>. There are some examples that
+	should give a clue, modify and delete these as required.</P>
+	<LI><P STYLE="margin-bottom: 0cm">A shared serial port is already
+	provided (see SharedResources.cs) as <FONT FACE="Lucida Console, Courier New, Courier, monospace">SharedResources.SharedSerial</FONT>
+	and it is an ASCOM Helper Serial object. You may wish to define
+	additional shared resources in static member variables with public
+	static accessor properties as is already done for SharedSerial.
+	Unfortunately, if you are a Visual Basic programmer, you will have
+	to make these additions in C#. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">If you are writing a hub and don't
+	need the serial port, in SharedResources.cs you can remove the
+	public static SharedSerial property, the m_SharedSerial member in
+	the private data region, and the line in main that initializes it.
+	If you don't need any other shared resources for your hub, then you
+	can remove the SharedResources.cs file completely. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">If you modified the LocalServer,
+	build it again now. This will refresh the stuff that's visible to
+	the drivers. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Build the driver skeletons to
+	verify that you got all of the namespace and other variable changes.
+		</P>
+	<LI><P>The local server dynamically loads the driver assemblies from
+	the same folder as the local server executable. <BR><BR>During
+	development, you'll need to add a post-build task to each of your
+	driver assembly projects which puts a copy of the driver assembly
+	into the local server executable folder. Here is an example:</P>
+	<PRE CLASS="western">    copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\SuperScope\$(OutDir)\$(TargetFileName)&quot;</PRE><P STYLE="margin-bottom: 0cm">
+	This assumes that the server project is called &ldquo;SuperScope&rdquo;,
+	and handles using the debug or release build.<BR>Note the quotes for
+	possible path elements with spaces in them. <I>An alternative is to
+	set the build path to the required destination instead of the
+	default path.</I></P>
+	<LI><P STYLE="margin-bottom: 0cm"><I>Make sure the drivers are
+	registered through the local server by running it with the /register
+	parameter, see below for details.</I></P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="background: #ffff00">IMPORTANT:</SPAN>
+	With a local server based driver (or hub) it is possible for
+	multiple clients to control the device(s). It is up to you to
+	safeguard against abuse. <I>The sort of thing that's needed is to
+	have a counter of the number of connections to a device, the
+	connection is only fully broken when the number of connections is
+	zero. You may also need code to prevent several drivers from talking
+	to the hardware at the same time, the lock pattern is useful for
+	that.</I></P>
+	<LI><P>You may want to add controls and/or status information to the
+	main form frmMain of the local server. Please resist the temptation
+	to turn the local server's main form into a graphical device control
+	panel. Instead, make a separate application that uses the served
+	driver(s). <U>A driver is not a program!</U> 
+	</P>
+</OL>
+<H3>Notes</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">The local server handles all of
+	the registration and unregistration for each of its served driver
+	classes, including the ASCOM Chooser info and the DCOM/AppID info
+	needed for activation from TheSky. By running the server from a
+	command line and giving /register or /unregister as the command line
+	option, it will register or unregister all served classes
+	(respectively). <SPAN STYLE="background: #ffff00">Never use REGASM
+	on the local server executable!</SPAN> <I>This can be done in the
+	Visual Studio IDE by setting the server project to run as startup
+	and setting the command line argument to /register in Debug &ndash;
+	Start Options.</I></P>
+	<LI><P STYLE="margin-bottom: 0cm">When you make the installer for
+	your local server based driver/hub, do not let it register the
+	executable for COM. Instead, have it activate the installed local
+	server with the /register option. 
+	</P>
+	<LI><P>The ASCOM registration uses the ServedClassName attribute as
+	the friendly name that will show in the chooser and the ProgId
+	attribute as the driver Id.</P>
+	<LI><P>The best deployment way is to install all the files in a
+	folder that's a sub folder of the main driver, so the SuperScope
+	driver files will be in the folder ...\ASCOM\Telescope\SuperScope.
+	This can be done in the Inno script by changing the DefaultDirName
+	like this:<BR>DefaultDirName=&quot;{cf}\ASCOM\Telescope\SuperScope&quot;<BR>then
+	the files can all be installed with DestDir: {app}; 
+	</P>
+</UL>
+<H3><A NAME="theory"></A>Theory of Operation</H3>
+<P>The local server is an executable which can provide multiple
+instances of multiple drivers to multiple clients. This capability is
+needed for two applications:</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">A hub, which allows multiple
+	clients to share a single device 
+	</P>
+	<LI><P>A device which provides multiple services, such as a
+	telescope which has a focuser built-in where both the telescope and
+	focuser are controlled by the same serial connection and different
+	client programs need to control to the focuser and telescope. 
+	</P>
+</UL>
+<P>By simply dropping suitably developed driver assemblies into the
+same folder as the local server executable, the local server will
+find them and register them for COM and ASCOM and serve any number of
+instances of the drivers' interfaces to any number of client
+programs. It does this by locating and loading the driver assemblies,
+analysing them to detect their classes and interfaces, and
+implementing a class factory that can create instances of them for
+clients. 
+</P>
+<P>A driver is an assembly which contains a class that <EM>implements</EM>
+one of the ASCOM standard driver interfaces and <EM>inherits</EM> the
+ReferenceCountedObjectBase class of the local server. Apart from
+that, driver assemblies are identical to those that are used
+in-process (DLL-type). The instructions above detail the steps needed
+to convert an in-process driver into one that can be served by the
+local server.</P>
+<P>The name of the local server is important, so we provide it as a
+<EM>template</EM> from which you can create a local server for your
+produce. To make this clear, let's assume that your company AlphaTech
+produces a telescope system which contains a microcontroller that is
+able to control not only the telescope mount, but also a focuser and
+a camera rotator. The mount, focuser, and rotator are all controlled
+via commands sent through a common serial line connecting the
+computer to the microcontroller, so you need a local server. In
+ASCOM, then, you probably want your system to appear as
+AlphaTech.Telescope, AlphaTech.Focuser, and AlphaTech.Rotator. Then
+you would name the local server AlphaTech. Be sure to give this due
+consideration before creating the template, the project name is the
+name of your local server. <I>Is this still correct? I get the
+impression that ASCOM.AlphaTech.Server would be OK.</I></P>
+<P>The fact that driver classes inherit from the local server's
+ReferenceCountedObjectBase class allows the local server to maintain
+a reference count on the driver class. If a client creates an
+instance of a served driver, the local server automatically starts up
+and provides an instance of the class to the client. Once started the
+local server can provide additional instances of any of its served
+driver classes. If the reference count of all served classes drops to
+zero as a result of clients releasing their instances, the local
+server will automatically exit. 
+</P>
+<P>Registration services provided include not only the basic COM
+class registration, but also DCOM/AppID info needed to use the served
+classes from outbound connections from Software Bisque's TheSky. It
+also registers the served classes for the ASCOM Chooser. The
+&quot;friendly&quot; name of each served driver that appears in the
+chooser comes from the driver's ServedClassName attribute. This also
+used to identify a driver so that non driver dlls, such as Interop
+dlls can be ignored. The COM ProgID for each served driver is
+specified in the ProgId attribute - ASCOM.<EM>localservername</EM>.<EM>drivertype</EM>,
+for example, ASCOM.AlphaTech.Telescope, where AlphaTech is the local
+server name and Telescope is the type of the driver. Unregistering
+removes all of this information from the system. Specifying the
+ProgId as an attribute allows multiple driver assemblies to be
+generated using the same source and namespace. This is used to
+provide multiple instances of the same driver, each with a different
+ProgId and so able to be registered separately.</P>
+<P>Driver DLLs are identified for registering/unregistering because
+they contain a type with the ServedClassName attribute. Only these
+will be registered for Com and ASCOM.  This has changed; in Platform
+5 there was no attribute and the local server attempted to register
+all dlls. The new behaviour allows support dlls such as interop dlls
+to be included without them being registered incorrectly.  There was
+also an interim version where the ServedClassName attribute was on
+the assembly, not the class.  <I>All these previous versions, and the
+new drivers will operate together with Platform 6, the changes are
+local to the individual drivers.</I></P>
+<H3><A NAME="details"></A>Detailed Use and Deployment 
+</H3>
+<P>Once you have built your local server and the served driver class
+assemblies, here's how to use it. To register the served classes,
+activate the local server from a shell command line with the option
+/register (or /regserver, for VB6 compatibility): 
+</P>
+<PRE CLASS="western">C:\xxx&gt; <EM>localserver</EM>.exe /register</PRE><P>
+To unregister the local server and its drivers, activate the local
+server from a shell command line with the option /unregister (or
+/unregserver for VB6 compatibility):</P>
+<PRE CLASS="western">C:\xxx&gt; <EM>localserver</EM>.exe /unregister</PRE><P>
+When the operating system starts the local server in response to a
+client creating one of it's served driver classes, the command option
+/embedding is included. The local server's code detects this and sets
+a variable that you can use. 
+</P>
+<P STYLE="margin-bottom: 0cm">When deploying a hub or set of drivers
+with the local server, you'll have to arrange for the local server
+and the driver assemblies to be placed together in a folder in the
+ASCOM driver folder. Any support files, such as Interop DLLs can be
+put in the same fiolder. That's all you need to do, the local server
+will find them in the same folder as it is located in. 
+</P>
+<DIV ALIGN=RIGHT>
+	<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+		<TR>
+			<TD>
+				<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+					<TR>
+						<TD>
+							<H3>ASCOM Initiative</H3>
+						</TD>
+						<TD>
+							<IMG SRC="ASCOM.png" NAME="graphics1" ALIGN=RIGHT WIDTH=48 HEIGHT=56 BORDER=0></TD>
+					</TR>
+				</TABLE>
+				<P><BR><BR>
+				</P>
+			</TD>
+		</TR>
+		<TR>
+			<TD>
+				<P>The ASCOM Initiative consists of a group of astronomy software
+				developers and instrument vendors whose goals are to promote the
+				driver/client model and scripting automation. 
+				</P>
+				<P>See the <A HREF="http://ascom-standards.org/" TARGET="browser">ASCOM
+				web site</A> for more information. Please participate in the
+				<A HREF="http://tech.groups.yahoo.com/group/ASCOM-Talk" TARGET="browser">ASCOM-Talk
+				Yahoo Group</A>. 
+				</P>
+			</TD>
+		</TR>
+	</TABLE>
+</DIV>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+</BODY>
+</HTML>
