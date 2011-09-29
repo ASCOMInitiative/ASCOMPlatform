@@ -198,7 +198,7 @@ namespace ASCOM.GeminiTelescope
 
         internal bool m_SouthernHemisphere = false;
 
-        internal string m_GeminiVersion = "";
+        internal string m_GeminiVersion = "4.0";
 
         internal TimeSpan m_GPSTimeDifference = TimeSpan.Zero;    // GPS UTC time - PC clock UTC time
 
@@ -883,6 +883,7 @@ namespace ASCOM.GeminiTelescope
         internal int m_GeminiStatusByte;              // result of <99: native command, polled on an interval
         internal bool m_SafetyNotified;               // true if safety limit notification was already sent
 
+        public bool IgnoreErrors = false;        // when processing very long slew commands at high baud rates, timeouts may be frequent, so don't report errors
 
         internal frmStatus m_StatusForm = null;
 
@@ -2385,7 +2386,7 @@ namespace ASCOM.GeminiTelescope
             // this is not as documented in the manual. So, in case of a timeout of :Mf# command
             // we'll get back the result of the '\x6' command instead, (should be 'G')
 
-            DoCommandResult(new string[] { ":Mf#", "\x6" }, 2000, true, out res);
+            DoCommandResult(new string[] { ":Mf#", "\x6" }, 90000, true, out res);
             if (res[0] == "G#")    // no result was returned for :Mf# --> means successful
                 return "0";
             else
@@ -2468,6 +2469,23 @@ namespace ASCOM.GeminiTelescope
                             }
                         }
                     }
+                    else
+                    {
+                        try
+                        {
+//                            ConnectToEthernet();
+                        }
+                        catch (Exception e)
+                        {
+                            m_Clients -= 1;
+                            Trace.Except(e);
+                            GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Ethernet comm error connecting " + m_ComPort + ":" + e.Message);
+                            if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.ConnectionFailed + e.Message);
+                            m_Connected = false;
+                            throw e;    //rethrow the exception
+                        }
+                    }
+
 
                     m_TargetRightAscension = SharedResources.INVALID_DOUBLE;
                     m_TargetDeclination = SharedResources.INVALID_DOUBLE;
