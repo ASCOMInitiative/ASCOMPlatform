@@ -489,6 +489,15 @@ namespace ASCOM.GeminiTelescope
             m_SaveLatitude = Latitude;
             m_SaveLongitude = Longitude;
             m_SaveUTCOffset = TZ;
+
+            // Gemini L5 and above: support only precision pulse guiding:
+            if (GeminiHardware.Instance.GeminiLevel > 4)
+            {
+                this.chkPrecisionPulse.Checked = true;
+                this.chkAsyncPulseGuide.Checked = true;
+                this.chkAsyncPulseGuide.Enabled = false;
+                this.chkPrecisionPulse.Enabled = false;
+            }
         }
 
         private void buttonVirtualPort_Click(object sender, EventArgs e)
