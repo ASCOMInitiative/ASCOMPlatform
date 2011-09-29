@@ -85,7 +85,11 @@ namespace ASCOM.GeminiTelescope
         {
             if (GeminiLevel >= 5)
             {
-                if (!CanPoll) return; //don't tie up the serial port while pulse guiding -- timing is critical!
+                if (!CanPoll)
+                {
+                    Thread.Sleep(SharedResources.GEMINI_POLLING_INTERVAL / 2);
+                    return; //don't tie up the serial port while pulse guiding -- timing is critical!
+                }
 
                 Trace.Enter("_UpdatePolledVariables5");
                 try
