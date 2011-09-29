@@ -5,7 +5,7 @@
 //
 // Description:	
 //
-// Implements:	ASCOM Telescope interface version: 2.0
+// Implements:	ASCOM Telescope interface version: 2.0 (now 3.0)
 // Author:		(rbt) Robert Turner <robert@robertturnerastro.com>
 //              (pk)  Paul Kanevsky <paul@pk.darkhorizons.org>
 //
@@ -17,6 +17,7 @@
 // 08-JUL-2009  pk  1.0.1   Full implementation of ITelescope interface, passing Conform test.
 // 29-MAR-2010  pk  1.0.3   Moved CommandXXX methods to their proper location in the interface specification
 //                          modified TrackingRates private 'pos' field to be non-static
+// 10-SEP-2011  pk  1.0.23  implement ITelescope v3 interface
 // --------------------------------------------------------------------------------
 //
 using System;
@@ -201,6 +202,15 @@ public interface IGeminiTelescope
     [DispId(427)]
     IConformErrorNumbers ConformErrors{ get; }
 
+    //ITelescope v3 additions
+    [DispId(429)]
+    void Dispose();    
+    [DispId(430)]
+    ArrayList SupportedActions { get; }
+    [DispId(431)]
+    string Action(string ActionName, string ActionParameters);
+
+
 
     [DispId(500)]
     PierSide PhysicalSideOfPier { get; set; }
@@ -361,7 +371,7 @@ namespace ASCOM.GeminiTelescope
                     double obstruction = double.Parse(GeminiHardware.Instance.OpticsObstruction.Split('~')[GeminiHardware.Instance.OpticsValueIndex]);
                     area -= Math.PI * ((obstruction / 2.0) * (obstruction / 2.0));
                     GeminiHardware.Instance.Trace.Enter("IT:ApertureArea.Get", area);
-                    return area;
+                    return area/1000; // in meters
                 }
                 catch { return 0; }
             }
@@ -375,7 +385,7 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Instance.Trace.Enter("IT:ApertureDiameter.Get", GeminiHardware.Instance.ApertureDiameter);
                     double aperturediameter;
                     double.TryParse(GeminiHardware.Instance.ApertureDiameter.Split('~')[GeminiHardware.Instance.OpticsValueIndex], out aperturediameter);
-                    return aperturediameter;
+                    return aperturediameter/1000; // in meters
                 }
                 catch { return 0; }
             }
@@ -790,12 +800,6 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Instance.DoCommandResult(">412:0", GeminiHardware.Instance.MAX_TIMEOUT, false);
                     return;
                 }
-
-                if (GeminiHardware.Instance.GeminiLevel >= 5)
-                {
-                    L5DeclinationRate = value;
-                    return;
-                }
                 
                 string wormGearRatio = GeminiHardware.Instance.DoCommandResult("<22:", GeminiHardware.Instance.MAX_TIMEOUT, false);
                 string spurGearRatio = GeminiHardware.Instance.DoCommandResult("<24:", GeminiHardware.Instance.MAX_TIMEOUT, false);
@@ -1038,7 +1042,7 @@ namespace ASCOM.GeminiTelescope
                     GeminiHardware.Instance.Trace.Enter("IT:Altitude.Get", GeminiHardware.Instance.FocalLength);
                     double focallength;
                     double.TryParse(GeminiHardware.Instance.FocalLength.Split('~')[GeminiHardware.Instance.OpticsValueIndex], out focallength);
-                    return focallength;
+                    return focallength/1000; // focal length in meters
                 }
                 catch { return 0; }
             }
@@ -1220,6 +1224,58 @@ namespace ASCOM.GeminiTelescope
             GeminiHardware.Instance.Trace.Exit("IT:Park");
         }
 
+        /// <summary>
+        /// PulseGuide for Gemini L5 and above
+        /// </summary>
+        /// <param name="Direction"></param>
+        /// <param name="Duration"></param>
+        public void PulseGuideL5(GuideDirections Direction, int Duration)
+        {
+            GeminiHardware.Instance.Trace.Enter("IT:PulseGuide5", Direction, Duration);
+
+            AssertConnect();
+            if (GeminiHardware.Instance.AtPark) throw new DriverException(SharedResources.MSG_INVALID_AT_PARK, (int)SharedResources.INVALID_AT_PARK);
+
+            string cmd = String.Empty;
+
+            switch (Direction)
+            {
+                case GuideDirections.guideEast:
+                    cmd = ":Mge";
+                    break;
+                case GuideDirections.guideNorth:
+                    cmd = ":Mgn";
+                    break;
+                case GuideDirections.guideSouth:
+                    cmd = ":Mgs";
+                    break;
+                case GuideDirections.guideWest:
+                    cmd = ":Mgw";
+                    break;
+            }
+
+            if (Duration > 60000 || Duration <= 0)  // too large or zero/negative...
+                throw new InvalidValueException("PulseGuide5", Duration.ToString(), "1..60000");
+
+
+            string c = cmd + Duration.ToString();
+
+            // Set time for pulse guide command to be started (used by IsPulseGuiding property)
+            // IsPulseGuiding will report true until this many milliseconds elapse.
+            // After this time, IsPulseGuiding will query the mount for tracking speed
+            // to return the proper status. This is necessary because Gemini doesn't immediately
+            // set 'G' or 'C' tracking rate when pulse-guiding command is issued and continues to track
+            // for a little while. Use 1/2 of the total duration or 100 milliseconds, whichever is greater:
+            GeminiHardware.Instance.EndOfPulseGuide = Math.Max(Duration / 2, 100);
+
+            GeminiHardware.Instance.Velocity = "G";
+            GeminiHardware.Instance.DoCommandResult(c, Duration + GeminiHardware.Instance.MAX_TIMEOUT, false);
+
+            if (!GeminiHardware.Instance.AsyncPulseGuide)
+                    GeminiHardware.Instance.WaitForVelocity("TN", Duration + GeminiHardware.Instance.MAX_TIMEOUT); // shouldn't take much longer than 'Duration', right?
+
+            GeminiHardware.Instance.Trace.Exit("IT:PulseGuide5", Direction, Duration, GeminiHardware.Instance.AsyncPulseGuide);
+        }
 
         /// <summary>
         /// Send pulse-guide commands to the mount in the required direction, for the required duration
@@ -1228,11 +1284,18 @@ namespace ASCOM.GeminiTelescope
         /// <param name="Duration"></param>
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
+            if (GeminiHardware.Instance.GeminiLevel > 4)
+            {
+                PulseGuideL5(Direction, Duration);
+                return;
+            }
+                              
             if (!GeminiHardware.Instance.PrecisionPulseGuide)
             {
                 OldPulseGuide(Direction, Duration);
                 return;
             }
+
 
             GeminiHardware.Instance.Trace.Enter("IT:PulseGuide", Direction, Duration);
 
@@ -1332,20 +1395,16 @@ namespace ASCOM.GeminiTelescope
 
                     Duration = (int)(Duration/fact);
 
-                    // no prescaler bits in Gemini L5, so only apply if L4 :
-                    if (GeminiHardware.Instance.GeminiLevel < 5)
-                    {
-                        // perhaps a bug in Gemini: the prescaler value used for East guiding rate 
-                        // needs to be reversed for West guiding rate.
+                    // perhaps a bug in Gemini: the prescaler value used for East guiding rate 
+                    // needs to be reversed for West guiding rate.
 
-                        // actual divisor:
-                        prescaler = (int)(1500 / m_GuideRateStepsPerMilliSecondEast);
+                    // actual divisor:
+                    prescaler = (int)(1500 / m_GuideRateStepsPerMilliSecondEast);
 
-                        // prescaler needed to fit into 16 bits:
-                        prescaler = (prescaler / 65536) + 1;
-                        // adjust duration to account for prescaler:
-                        Duration *= prescaler;
-                    }
+                    // prescaler needed to fit into 16 bits:
+                    prescaler = (prescaler / 65536) + 1;
+                    // adjust duration to account for prescaler:
+                    Duration *= prescaler;
 
                     cmd = ":Mgw";
                     break;
@@ -1624,15 +1683,24 @@ namespace ASCOM.GeminiTelescope
 
                 if ((value == PierSide.pierEast && GeminiHardware.Instance.SideOfPier == "W") || (value == PierSide.pierWest && GeminiHardware.Instance.SideOfPier == "E"))
                 {
-                    string res = GeminiHardware.Instance.DoMeridianFlip();
+                    try
+                    {
+                        GeminiHardware.Instance.IgnoreErrors = true;
 
-                    if (res == null) throw new TimeoutException("SideOfPier");
-                    if (res.StartsWith("1")) throw new ASCOM.DriverException("Object below horizon");
-                    if (res.StartsWith("4")) throw new ASCOM.DriverException("Position unreachable");
-                    if (res.StartsWith("3")) throw new ASCOM.DriverException("Manual control");
-                   
-                    GeminiHardware.Instance.WaitForVelocity("S", GeminiHardware.Instance.MAX_TIMEOUT);
-                    GeminiHardware.Instance.WaitForVelocity("TN", -1);  // :Mf is asynchronous, wait until done
+                        string res = GeminiHardware.Instance.DoMeridianFlip();
+
+                        if (res == null) throw new TimeoutException("SideOfPier");
+                        if (res.StartsWith("1")) throw new ASCOM.DriverException("Object below horizon");
+                        if (res.StartsWith("4")) throw new ASCOM.DriverException("Position unreachable");
+                        if (res.StartsWith("3")) throw new ASCOM.DriverException("Manual control");
+
+                        GeminiHardware.Instance.WaitForVelocity("S", GeminiHardware.Instance.MAX_TIMEOUT);
+                        GeminiHardware.Instance.WaitForVelocity("TN", -1);  // :Mf is asynchronous, wait until done
+                    }
+                    finally
+                    {
+                        GeminiHardware.Instance.IgnoreErrors = false;
+                    }
                 }
                 GeminiHardware.Instance.Trace.Exit("IT:SideOfPier.Set", value);
 
@@ -2110,6 +2178,21 @@ namespace ASCOM.GeminiTelescope
                                                new int[] {ErrorCodes.InvalidValue}, 
                                                new int[] {ErrorCodes.ValueNotSet});
             }
+        }
+
+        public string Action(string ActionName, string ActionParameters)
+        {          
+            //throw new ASCOM.ActionNotImplementedException(ActionName);
+            throw new ASCOM.MethodNotImplementedException("Action");
+        }
+
+        public ArrayList SupportedActions
+        {
+            get { return new ArrayList(); }
+        }
+
+        public void Dispose()
+        {           
         }
 
         #endregion
