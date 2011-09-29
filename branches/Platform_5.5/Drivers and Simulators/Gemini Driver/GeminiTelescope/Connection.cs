@@ -535,6 +535,7 @@ namespace ASCOM.GeminiTelescope
             Trace.Enter("AddOneMoreError", m_TotalErrors);
 
             if (!Connected || m_BackgroundWorker == null || !m_BackgroundWorker.IsAlive) return;    //not ready yet
+            if (IgnoreErrors) return;   // driver asked us not to report errors, perhaps Gemini is too busy to respond during a slew or a flip...
 
             if (Connected && DateTime.Now - m_LastDataTick > TimeSpan.FromSeconds(SharedResources.MAXIMUM_DISCONNECT_TIME))
             {
