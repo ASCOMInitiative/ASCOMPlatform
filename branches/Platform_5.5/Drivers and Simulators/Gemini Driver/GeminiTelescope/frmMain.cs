@@ -975,6 +975,15 @@ namespace ASCOM.GeminiTelescope
                 for (int i = 0; i < setupForm.OpticsInfos.Count; i++)
                 {
                     OpticsInfo oi = setupForm.GetOpticsInfo(i);
+
+                    // always store in mm
+                    if (uom == "inches")
+                    {
+                        oi.FocalLength *= 25.4;
+                        oi.ApertureDiameter *= 25.4;
+                        oi.ObstructionDiameter *= 25.4;
+                    }
+
                     if (focallength == "") focallength += oi.FocalLength.ToString();
                     else focallength += "~" + oi.FocalLength.ToString();
                     if (aperture == "") aperture += oi.ApertureDiameter.ToString();
