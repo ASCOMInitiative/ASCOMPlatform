@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TiGra.Astronomy.Observatory">
+    <Position X="11" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAIAIAAAAAAAAAAAAAAAAgAEAAA=</HashCode>
+      <FileName>Observatory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Usno.Novas">
+    <Position X="1" Y="11.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAgAAAAAAAAAYAAAAAAAAIA=</HashCode>
+      <FileName>NovasNative.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.Bearing">
+    <Position X="2.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAEAAEQCAIAAEgAAAAAAACAAABAAAABAA=</HashCode>
+      <FileName>Compass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.Declination">
+    <Position X="13.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Declination.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.Latitude">
+    <Position X="7.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Latitude.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.Longitude">
+    <Position X="7.5" Y="3.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAEAAAAAAAAAEQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Longitude.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.HourAngle">
+    <Position X="10.5" Y="2.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAQAAAEAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>HourAngle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.RightAscension">
+    <Position X="13.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RightAscension.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.GeographicCoordinates">
+    <Position X="7.5" Y="6.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAEAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GeographicCoordinates.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.ZenithDistance">
+    <Position X="1" Y="5.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>ZenithDistance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.Sexagesimal">
+    <Position X="7.25" Y="11.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAgAAAAAAAAAAAAAAgAEQAAAAAAEAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Sexagesimal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.Elevation">
+    <Position X="3.75" Y="5.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Elevation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.EquatorialRectangularCoordinate">
+    <Position X="13.5" Y="8" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EquatorialRectangularCoordinate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.Vector">
+    <Position X="2.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAE=</HashCode>
+      <FileName>Vector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TiGra.Astronomy.EquatorialSphericalCoordinate">
+    <Position X="13.5" Y="4.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EquatorialSphericalCoordinate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="TiGra.Astronomy.Point">
+    <Position X="4.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACDDABABAAAAQAAAAAAAAABAEAAAAAAAQAAABAARgAQ=</HashCode>
+      <FileName>Compass.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
