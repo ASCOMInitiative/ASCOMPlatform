@@ -28,154 +28,163 @@ namespace ConsoleApplication1
 
         static int Main(string[] args)
         {
-            TL = new TraceLogger("", "FinaliseInstall"); // Create a tracelogger so we can log what happens
-            TL.Enabled = true;
-
-            LogMessage("FinaliseInstall", "Starting finalise process");
-
-            tProfile = Type.GetTypeFromProgID("DriverHelper.Profile");					// Late bound Helper.Profile
-            oProfile = Activator.CreateInstance(tProfile);
-
-            //
-            // Force TypeLib linkages to PIAs (bug on repair & upgrades).
-            //
-            LogMessage("FinaliseInstall", "Fixing PIA Linkages");
-            FixPiaLinkage("{12DC26BD-E8F7-4328-8A8B-B16C6D87A077}", "ASCOM.Helper");
-            FixPiaLinkage("{55B16037-26C0-4F1E-A6DC-4C0E702D9FBE}", "ASCOM.Helper2");
-            FixPiaLinkage("{76618F90-032F-4424-A680-802467A55742}", "ASCOM.Interfaces");
-
-            //
-            // Remove Platform 4.1 installer entry in Add/Remove Programs (TESTED)
-            //
-            LogMessage("FinaliseInstall", "Removing Platform 4.1 installer entries");
-            RegistryKey rkAddRem = null;
             try
             {
-                rkAddRem = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall", RegistryKeyPermissionCheck.ReadWriteSubTree);
+                TL = new TraceLogger("", "FinaliseInstall"); // Create a tracelogger so we can log what happens
+                TL.Enabled = true;
 
-                rkAddRem.DeleteSubKeyTree("ASCOM Platform 4.1");
-                rkAddRem.DeleteSubKeyTree("ASCOM Platform 4.0");
-            }
-            catch (Exception) { }
-            finally { if (rkAddRem != null) 	rkAddRem.Close(); }
+                LogMessage("FinaliseInstall", "Starting finalise process");
 
-            //
-            // Attempt to remove some old Platform Start Menu items
-            // No special folder for all users start menu?
-            //
-            LogMessage("FinaliseInstall", "Cleaning old start menu items");
-            string startPath = "C:\\Documents and Settings\\All Users\\Start Menu\\Programs\\ASCOM Platform";
-            try
-            {
-                File.Delete(startPath + "\\Other Drivers (web).url");
-                File.Delete(startPath + "\\RoboFocus Control.lnk");
-            }
-            catch (Exception) { }
-            startPath = Environment.SpecialFolder.Programs + "\\ASCOM Platform";	// Try individual user too
-            try
-            {
-                File.Delete(startPath + "\\Other Drivers (web).url");
-                File.Delete(startPath + "\\RoboFocus Control.lnk");
-            }
-            catch (Exception) { }
+                tProfile = Type.GetTypeFromProgID("DriverHelper.Profile");					// Late bound Helper.Profile
+                LogMessage("FinaliseInstall", "Successfully got type for DriverHelper.Profile");
+                oProfile = Activator.CreateInstance(tProfile);
 
-            //
-            // Set up some paths...
-            //
-            string ascomPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) + "\\ASCOM";
-            //string xmlProfPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM";
+                //
+                // Force TypeLib linkages to PIAs (bug on repair & upgrades).
+                //
+                LogMessage("FinaliseInstall", "Fixing PIA Linkages");
+                FixPiaLinkage("{12DC26BD-E8F7-4328-8A8B-B16C6D87A077}", "ASCOM.Helper");
+                FixPiaLinkage("{55B16037-26C0-4F1E-A6DC-4C0E702D9FBE}", "ASCOM.Helper2");
+                FixPiaLinkage("{76618F90-032F-4424-A680-802467A55742}", "ASCOM.Interfaces");
 
-            //
-            // Remove old Wise uninstaller and install log. It's weird, but this
-            // stuff was installed in the Telescope subfolder. Always in program
-            // files, common files, ASCOM\Telescope. 
-            LogMessage("FinaliseInstall", "Removing old Wise installer debris");
-            try
-            {
-                File.Delete(ascomPath + "\\Telescope\\INSTALL.LOG");
-                File.Delete(ascomPath + "\\Telescope\\UNWISE.EXE");
-            }
-            catch (Exception) { }
-            //
-            // Register all of the simulators here, keeping MSI's dirty mits off them 
-            // so they can be worked on and replaced with uupdates, etc.
-            //
-            // MIRROR CALLS IN UNINSTALL!
-            //
-            /*RegUnregExe(ascomPath + "\\Dome\\DomeSim.exe", true);
-            RegUnregExe(ascomPath + "\\Dome\\ASCOMDome.exe", true);
-            RegUnregExe(ascomPath + "\\Focuser\\FocusSim.exe", true);
-            RegUnregExe(ascomPath + "\\Telescope\\ScopeSim.exe", true);
-            RegUnregDll(ascomPath + "\\Camera\\CCDSimulator.dll", true);
-            RegUnregExe(ascomPath + "\\Telescope\\POTH.exe", true);
-            RegUnregExe(ascomPath + "\\Telescope\\Pipe.exe", true);
-            RegUnregExe(ascomPath + "\\Telescope\\Hub.exe", true);
-            RegUnregExe(ascomPath + "\\Switch\\SwitchSim.exe", true);
-            */
-
-            //
-            // Add AppID stuff for EXE simulators Must be in commit because
-            // these things must be registered now! Don't bother for Switch.
-            //
-            // MIRROR CALLS IN UNINSTALL!
-            //
-            LogMessage("FinaliseInstall", "Adding Appid information for EXE simulators");
-            AddAppID("ScopeSim.Telescope", "ScopeSim.exe", "{4597A685-11FD-47ae-A5D2-A8DC54C90CDC}");
-            AddAppID("FocusSim.Focuser", "FocusSim.exe", "{289BFF60-3B9E-417c-8DA1-F96773679342}");
-            AddAppID("DomeSim.Dome", "DomeSim.exe", "{C47DAA29-5788-464e-BBA7-9711FBC7A01F}");
-            AddAppID("POTH.Telescope", "POTH.exe", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
-            AddAppID("POTH.Dome", "", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
-            AddAppID("POTH.Focuser", "", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
-            AddAppID("Pipe.Telescope", "Pipe.exe", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
-            AddAppID("Pipe.Focuser", "", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
-            AddAppID("Pipe.Dome", "", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
-            AddAppID("Hub.Telescope", "Hub.exe", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
-            AddAppID("Hub.Focuser", "", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
-            AddAppID("Hub.Dome", "", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
-            AddAppID("ASCOMDome.Telescope", "ASCOMDome.exe", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
-            AddAppID("ASCOMDome.Dome", "", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
-
-            // New Platform 6 simulator exes - add Appid information
-            AddAppID("ASCOM.Simulator.FilterWheel", "ASCOM.FilterWheelSim.exe", "{AE139A96-FF4D-4F22-A44C-141A9873E823}");
-            AddAppID("ASCOM.Simulator.Rotator", "ASCOM.RotatorSimulator.exe", "{5D4BBF44-2573-401A-AEE1-F9716D0BAEC3}");
-            AddAppID("ASCOM.Simulator.Telescope", "ASCOM.TelescopeSimulator.exe", "{1620DCB8-0352-4717-A966-B174AC868FA0}");
-
-            //
-            // Register VB6 simulators for ASCOM. I set these friendly names.
-            //
-            LogMessage("FinaliseInstall", "Registering ASCOMDome");
-            RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
-            RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
-
-            // This has been removed because it destroys the ability to remove 5.5 after use and does NOT restore all the 
-            // Platform 5 files resulting in an unexpected automatic repair. Its left here just in case, Please DO NOT RE-ENABLE THIS FEATURE unless have a way round the resulting issues
-            //FinaliseRestorePoint();
-
-            
-            //Clean up objects before close
-            try
-            {
-                int rc = 0;
-                int loopcount = 0;
-                do
+                //
+                // Remove Platform 4.1 installer entry in Add/Remove Programs (TESTED)
+                //
+                LogMessage("FinaliseInstall", "Removing Platform 4.1 installer entries");
+                RegistryKey rkAddRem = null;
+                try
                 {
-                    rc = System.Runtime.InteropServices.Marshal.ReleaseComObject(oProfile);
-                    loopcount += 1;
-                    LogMessage("FinaliseInstall", "Releasing Profile object" + rc.ToString() + " " + loopcount.ToString());
-                } while ((rc > 0) & (loopcount < 10));
-                
+                    rkAddRem = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall", RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+                    rkAddRem.DeleteSubKeyTree("ASCOM Platform 4.1");
+                    rkAddRem.DeleteSubKeyTree("ASCOM Platform 4.0");
+                }
+                catch (Exception) { }
+                finally { if (rkAddRem != null) 	rkAddRem.Close(); }
+
+                //
+                // Attempt to remove some old Platform Start Menu items
+                // No special folder for all users start menu?
+                //
+                LogMessage("FinaliseInstall", "Cleaning old start menu items");
+                string startPath = "C:\\Documents and Settings\\All Users\\Start Menu\\Programs\\ASCOM Platform";
+                try
+                {
+                    File.Delete(startPath + "\\Other Drivers (web).url");
+                    File.Delete(startPath + "\\RoboFocus Control.lnk");
+                }
+                catch (Exception) { }
+                startPath = Environment.SpecialFolder.Programs + "\\ASCOM Platform";	// Try individual user too
+                try
+                {
+                    File.Delete(startPath + "\\Other Drivers (web).url");
+                    File.Delete(startPath + "\\RoboFocus Control.lnk");
+                }
+                catch (Exception) { }
+
+                //
+                // Set up some paths...
+                //
+                string ascomPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) + "\\ASCOM";
+                //string xmlProfPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\ASCOM";
+
+                //
+                // Remove old Wise uninstaller and install log. It's weird, but this
+                // stuff was installed in the Telescope subfolder. Always in program
+                // files, common files, ASCOM\Telescope. 
+                LogMessage("FinaliseInstall", "Removing old Wise installer debris");
+                try
+                {
+                    File.Delete(ascomPath + "\\Telescope\\INSTALL.LOG");
+                    File.Delete(ascomPath + "\\Telescope\\UNWISE.EXE");
+                }
+                catch (Exception) { }
+                //
+                // Register all of the simulators here, keeping MSI's dirty mits off them 
+                // so they can be worked on and replaced with uupdates, etc.
+                //
+                // MIRROR CALLS IN UNINSTALL!
+                //
+                /*RegUnregExe(ascomPath + "\\Dome\\DomeSim.exe", true);
+                RegUnregExe(ascomPath + "\\Dome\\ASCOMDome.exe", true);
+                RegUnregExe(ascomPath + "\\Focuser\\FocusSim.exe", true);
+                RegUnregExe(ascomPath + "\\Telescope\\ScopeSim.exe", true);
+                RegUnregDll(ascomPath + "\\Camera\\CCDSimulator.dll", true);
+                RegUnregExe(ascomPath + "\\Telescope\\POTH.exe", true);
+                RegUnregExe(ascomPath + "\\Telescope\\Pipe.exe", true);
+                RegUnregExe(ascomPath + "\\Telescope\\Hub.exe", true);
+                RegUnregExe(ascomPath + "\\Switch\\SwitchSim.exe", true);
+                */
+
+                //
+                // Add AppID stuff for EXE simulators Must be in commit because
+                // these things must be registered now! Don't bother for Switch.
+                //
+                // MIRROR CALLS IN UNINSTALL!
+                //
+                LogMessage("FinaliseInstall", "Adding Appid information for EXE simulators");
+                AddAppID("ScopeSim.Telescope", "ScopeSim.exe", "{4597A685-11FD-47ae-A5D2-A8DC54C90CDC}");
+                AddAppID("FocusSim.Focuser", "FocusSim.exe", "{289BFF60-3B9E-417c-8DA1-F96773679342}");
+                AddAppID("DomeSim.Dome", "DomeSim.exe", "{C47DAA29-5788-464e-BBA7-9711FBC7A01F}");
+                AddAppID("POTH.Telescope", "POTH.exe", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
+                AddAppID("POTH.Dome", "", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
+                AddAppID("POTH.Focuser", "", "{0A21726F-E58B-4461-85A9-9AA739E6E42F}");
+                AddAppID("Pipe.Telescope", "Pipe.exe", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
+                AddAppID("Pipe.Focuser", "", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
+                AddAppID("Pipe.Dome", "", "{080B23A0-3190-45e5-A7C8-53C61F22DFF2}");
+                AddAppID("Hub.Telescope", "Hub.exe", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
+                AddAppID("Hub.Focuser", "", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
+                AddAppID("Hub.Dome", "", "{3213D452-2A8F-4624-9D65-E04E175E4CB2}");
+                AddAppID("ASCOMDome.Telescope", "ASCOMDome.exe", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
+                AddAppID("ASCOMDome.Dome", "", "{B5863239-0A6E-48d4-A9EA-0DDA4D942390}");
+
+                // New Platform 6 simulator exes - add Appid information
+                AddAppID("ASCOM.Simulator.FilterWheel", "ASCOM.FilterWheelSim.exe", "{AE139A96-FF4D-4F22-A44C-141A9873E823}");
+                AddAppID("ASCOM.Simulator.Rotator", "ASCOM.RotatorSimulator.exe", "{5D4BBF44-2573-401A-AEE1-F9716D0BAEC3}");
+                AddAppID("ASCOM.Simulator.Telescope", "ASCOM.TelescopeSimulator.exe", "{1620DCB8-0352-4717-A966-B174AC868FA0}");
+
+                //
+                // Register VB6 simulators for ASCOM. I set these friendly names.
+                //
+                LogMessage("FinaliseInstall", "Registering ASCOMDome");
+                RegAscom("ASCOMDome.Telescope", "ASCOM Dome Control");
+                RegAscom("ASCOMDome.Dome", "ASCOM Dome Control");
+
+                // This has been removed because it destroys the ability to remove 5.5 after use and does NOT restore all the 
+                // Platform 5 files resulting in an unexpected automatic repair. Its left here just in case, Please DO NOT RE-ENABLE THIS FEATURE unless have a way round the resulting issues
+                //FinaliseRestorePoint();
+
+
+                //Clean up objects before close
+                try
+                {
+                    int rc = 0;
+                    int loopcount = 0;
+                    do
+                    {
+                        rc = System.Runtime.InteropServices.Marshal.ReleaseComObject(oProfile);
+                        loopcount += 1;
+                        LogMessage("FinaliseInstall", "Releasing Profile object" + rc.ToString() + " " + loopcount.ToString());
+                    } while ((rc > 0) & (loopcount < 10));
+
+                }
+                catch { }
+
+                LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
+
+                try
+                {
+                    TL.Enabled = false;
+                    TL.Dispose();
+                    TL = null;
+                }
+                catch { }
             }
-            catch { }
-
-            LogMessage("FinaliseInstall", "Completed finalise process, ReturnCode: " + ReturnCode.ToString());
-
-            try
+            catch(Exception ex) //Exception in top level routine
             {
-                TL.Enabled = false;
-                TL.Dispose();
-                TL = null;
+                SetReturnCode(4);
+                LogMessage("FinaliseInstall", "Exception: " + ex.ToString());
             }
-            catch { }
 
             return ReturnCode;
         }
