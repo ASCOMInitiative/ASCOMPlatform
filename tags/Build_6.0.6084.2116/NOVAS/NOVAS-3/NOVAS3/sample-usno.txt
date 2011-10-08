@@ -1,0 +1,32 @@
+JPL ephemeris open. Start JD = 2305424.50  End JD = 2525008.50
+
+NOVAS Sample Calculations
+-------------------------
+
+Geodetic location:
+ -70.000000000000          42.000000000000           0.000000000000
+
+TT and UT1 Julian Dates and Delta-T:
+ 2454580.942629         2454580.941871          65.571845000000
+
+FK6 1307 geocentric and topocentric positions:
+  11.891550989167          37.658635795486
+  11.891547915305          37.658669545555
+
+Moon geocentric and topocentric positions:
+  17.139077426413         -27.537444886950        2.710296515049e-03
+  17.103196764638         -28.290250296711        2.703785125693e-03
+  17.103196764638         -28.290250296711        2.703785125693e-03
+
+Moon zenith distance and azimuth:
+  81.689101650227         219.270890340492
+
+Greenwich and local sidereal time and Earth Rotation Angle:
+   0.793621341478          20.126954674812          11.795615846191
+
+Mars heliocentric ecliptic longitude and latitude and radius vector:
+ 148.003223590623           1.828828407454           1.664218258879
+
+Direction of zenith vector (RA & Dec) in GCRS:
+  20.122183860840          41.976982355392
+
