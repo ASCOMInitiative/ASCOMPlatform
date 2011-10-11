@@ -434,6 +434,9 @@ else
     Install Files ..\..\..\..\DriverTemplates\ASCOM 6 Driver Templates.vsi to $TARGETDIR$\Templates
     Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
+    Comment: Support DLL for driver templates
+    Install Assembly ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to Global Assembly Cache
+    Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.pdb to $WINDIR$\Symbols\dll
   end
   [END REGION]
   [DEFINE WEB MEDIA ASCOM Platform 6 Developer Components]
