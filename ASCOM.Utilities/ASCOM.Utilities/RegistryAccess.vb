@@ -599,6 +599,13 @@ Friend Class RegistryAccess
                                                PropagationFlags.None, _
                                                AccessControlType.Allow) ' Create the new access permission rule
 
+        RegAccessRule = New RegistryAccessRule(Ident, _
+                                               &H10000000, _
+                                               InheritanceFlags.ContainerInherit, _
+                                               PropagationFlags.None, _
+                                               AccessControlType.Allow) ' Create the new access permission rule
+
+
         LogMessage("SetRegistryACL", "Retrieving current ACL rule")
         TL.BlankLine()
         KeySec = Key.GetAccessControl() ' Get existing ACL rules on the key 

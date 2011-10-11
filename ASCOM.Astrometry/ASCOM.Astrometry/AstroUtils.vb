@@ -2,13 +2,21 @@
 Imports ASCOM.Utilities
 
 Namespace AstroUtils
+    ''' <summary>
+    ''' Class providing a suite of tested astronomy support functions to save develpment effort and provide consistant behaviour.
+    ''' </summary>
+    ''' <remarks>
+    ''' A number of these routines are provided to support migration from the Astro32.dll. Unlike Astro32, these routines will work in 
+    ''' both 32bit and 64bit applications.
+    ''' </remarks>
     <Guid("5679F94A-D4D1-40D3-A0F8-7CE61100A691"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
+        ClassInterface(ClassInterfaceType.None), _
+        ComVisible(True)> _
     Public Class AstroUtils
         Implements IAstroUtils, IDisposable
 
         Private TL As TraceLogger, Utl As Util, Nov31 As NOVAS.NOVAS31
+        Const MJDBase As Double = 2400000.5 'This is the offset of Modified Julian dates from true Julian dates
 
 #Region "New and IDisposable Support"
         Sub New()
@@ -44,6 +52,10 @@ Namespace AstroUtils
         End Sub
 
         ' This code added by Visual Basic to correctly implement the disposable pattern.
+        ''' <summary>
+        ''' Releases all resources owned by the AstroUtils component and readies it for disposal
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Sub Dispose() Implements IDisposable.Dispose
             ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
             Dispose(True)
@@ -52,8 +64,7 @@ Namespace AstroUtils
 #End Region
 
         ''' <summary>
-        ''' Flexible routine to range a number between a lower and an higher bound. Switches control whether the ranged value can be equal to either the
-        ''' lower or upper bounds.
+        ''' Flexible routine to range a number into a given range between a lower and an higher bound.
         ''' </summary>
         ''' <param name="Value">Value to be ranged</param>
         ''' <param name="LowerBound">Lowest value of the range</param>
@@ -64,7 +75,14 @@ Namespace AstroUtils
         ''' <exception cref="ASCOM.InvalidValueException">Thrown if the lower bound is greater than the upper bound.</exception>
         ''' <exception cref="ASCOM.InvalidValueException">Thrown if LowerEqual and UpperEqual are both false and the ranged value equals
         ''' one of these values. This is impossible to handle as the algorithm will always violate one of the rules!</exception>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' UpperEqual and LowerEqual switches control whether the ranged value can be equal to either the upper and lower bounds. So, 
+        ''' to range an hour angle into the range 0 to 23.999999.. hours, use this call: 
+        ''' <code>RangedValue = Range(InputValue, 0.0, True, 24.0, False)</code>
+        ''' <para>The input value will be returned in the range where 0.0 is an allowable value and 24.0 is not i.e. in the range 0..23.999999..</para>
+        ''' <para>It is not permissible for both LowerEqual and UpperEqual to be false because it will not be possible to return a value that is exactly equal 
+        ''' to either lower or upper bounds. An exception is thrown if this scenario is requested.</para>
+        ''' </remarks>
         Public Function Range(Value As Double, LowerBound As Double, LowerEqual As Boolean, UpperBound As Double, UpperEqual As Boolean) As Double Implements IAstroUtils.Range
             Dim ModuloValue As Double
             If LowerBound >= UpperBound Then Throw New ASCOM.InvalidValueException("Range", "LowerBound is >= UpperBound", "LowerBound must be less than UpperBound")
@@ -117,10 +135,10 @@ Namespace AstroUtils
         End Function
 
         ''' <summary>
-        ''' Conditions a Right Ascension value to be in the range 0 to 23.999... hours 
+        ''' Conditions a Right Ascension value to be in the range 0 to 23.999999.. hours 
         ''' </summary>
         ''' <param name="RA">Right ascension to be conditioned</param>
-        ''' <returns>Right ascension in the range 0 to 23.999...</returns>
+        ''' <returns>Right ascension in the range 0 to 23.999999...</returns>
         ''' <remarks></remarks>
         Public Function ConditionRA(RA As Double) As Double Implements IAstroUtils.ConditionRA
             Dim ReturnValue As Double
@@ -166,8 +184,8 @@ Namespace AstroUtils
         ''' <summary>
         ''' Current Julian date based on the terrestrial time (TT) time scale
         ''' </summary>
-        ''' <DeltaUT1>Current value for Delta-UT1, the difference between UTC and UT1; always in the range -0.9 to +0.9 seconds.
-        ''' Use 0.0 if you do not know this value; it varies irregularly throughout the year.</DeltaUT1>
+        ''' <param name="DeltaUT1">Current value for Delta-UT1, the difference between UTC and UT1; always in the range -0.9 to +0.9 seconds.
+        ''' Use 0.0 if you do not know this value; it varies irregularly throughout the year.</param>
         ''' <returns>Double - Julian date on the UT1 timescale.</returns>
         ''' <remarks>Terrestrial time is calculated as TT = UTC + DeltaUT1 + DeltaT. This value is then converted to a Julian date and returned.
         ''' <para>Forecast values of DUT1 are published by IERS Bulletin A at http://maia.usno.navy.mil/ser7/ser7.dat
@@ -190,8 +208,8 @@ Namespace AstroUtils
         ''' <summary>
         ''' Current Julian date based on the UT1 time scale
         ''' </summary>
-        ''' <DeltaUT>Current value for Delta-UT1, the difference between UTC and UT1; always in the range -0.9 to +0.9 seconds.
-        ''' Use 0.0 if you do not know this value; it varies irregularly throughout the year.</DeltaUT>
+        ''' <param name="DeltaUT1">Current value for Delta-UT1, the difference between UTC and UT1; always in the range -0.9 to +0.9 seconds.
+        ''' Use 0.0 if you do not know this value; it varies irregularly throughout the year.</param>
         ''' <returns>Double - Julian date on the UT1 timescale.</returns>
         ''' <remarks>UT1 time is calculated as UT1 = UTC + DeltaUT1. This value is then converted to a Julian date and returned.
         ''' <para>Forecast values of DUT1 are published by IERS Bulletin A at http://maia.usno.navy.mil/ser7/ser7.dat
@@ -243,8 +261,6 @@ Namespace AstroUtils
             Return UnrefractedPosition
 
         End Function
-
-        Const MJDBase As Double = 2400000.5 'This is the offset of Modified Julian dates from true Julian dates
 
         ''' <summary>
         ''' Converts a calendar day, month, year to a modified Julian date
@@ -298,8 +314,9 @@ Namespace AstroUtils
         ''' <param name="MJD">Mofified julian date</param>
         ''' <param name="PresentationFormat">Format representation</param>
         ''' <returns>Date string</returns>
+        ''' <exception cref="FormatException">Thrown if the provided PresentationFormat is not valid.</exception>
         ''' <remarks>This expects the standard Microsoft date and time formatting characters as described 
-        ''' in http://msdn.microsoft.com/en-us/library/362btx8f%28v=VS.90%29.aspx
+        ''' in http://msdn.microsoft.com/en-us/library/362btx8f(v=VS.90).aspx
         ''' </remarks>
         Public Function FormatMJD(MJD As Double, PresentationFormat As String) As String Implements IAstroUtils.FormatMJD
             Dim MJDDate As Date, MJDDateString As String

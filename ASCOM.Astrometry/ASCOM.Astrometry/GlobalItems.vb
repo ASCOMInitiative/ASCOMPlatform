@@ -211,6 +211,10 @@ End Enum
 #End Region
 
 #Region "NOVAS3 Enums"
+''' <summary>
+''' Direction of transformation: ITRS to Terrestrial Intermediate or vice versa
+''' </summary>
+''' <remarks></remarks>
 <Guid("45EAC3DA-08FB-49E2-B852-114312933742"), _
 ComVisible(True)> _
 Public Enum TransformationDirection As Short

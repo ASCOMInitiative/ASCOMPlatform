@@ -22,6 +22,16 @@
       </summary>
     </member>
 
+    <member name="N:ASCOM.Astrometry.AstroUtils">
+      <summary>
+        <h2>ASCOM.Astrometry.AstroUtils Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains miscellaneous tested astronomy components to reduce development time and improve consistency of operation.
+        </p>
+      </summary>
+    </member>
+
     <member name="N:ASCOM.Astrometry.Interfaces">
       <summary>
         <h2>ASCOM.Astrometry.Interfaces Namespace</h2>
