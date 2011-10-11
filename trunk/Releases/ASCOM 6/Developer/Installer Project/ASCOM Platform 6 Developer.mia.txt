@@ -373,10 +373,10 @@ else
     [DEFINE REGION: Developer Documentation]
     Comment: Platform 6 Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
-    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\Generating Multiple ASCOM Drivers.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\Making a Local Server based Driver.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform 6 Client-Driver Interaction V2.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\NOVAS\Algorithms.pdf to $TARGETDIR$\Developer Documentation
     Set Variable PROGRESS to 60
@@ -400,6 +400,8 @@ else
     Comment: Platform 6 SP1 Documentation
     Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $TARGETDIR$\Developer Documentation
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\NOVAS 3.1 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf to $TARGETDIR$\Developer Documentation
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to Migrate from Astro32 to $TARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
     [END REGION]
     [DEFINE REGION: Driver installer]
     Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation

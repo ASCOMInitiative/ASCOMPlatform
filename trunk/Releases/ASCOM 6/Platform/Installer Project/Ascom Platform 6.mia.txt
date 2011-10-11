@@ -82,6 +82,7 @@ Comment: Initialize Setup Globals
  
 Comment: Set up the log file
 Set Variable SETUPLOG to 
+Set Variable ASCOMERROR to 
 Get Folder Location My->My Documents into MYDOCUMENTS
 Get Free Space on C: into variable DISKSPACE
  
@@ -597,6 +598,7 @@ else
       end
       if Variable RC not Equals 0
         MessageBox: Profile Migration, An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
+        Set Variable ASCOMERROR to $RC$
       end
     end
   end
@@ -1311,6 +1313,7 @@ else
         Set Variable PROGRESS to 100
         if Variable RC not Equals 0
           MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
+          Set Variable ASCOMERROR to $RC$
         end
         Comment: Remove unwanted registry key from previous beta installers. Remove after final release
         if Variable WIN64MODE Equals TRUE

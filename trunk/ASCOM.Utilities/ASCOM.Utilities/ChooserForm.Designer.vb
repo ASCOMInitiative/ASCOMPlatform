@@ -47,8 +47,9 @@
         Me.MenuUtilTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuSimulatorTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         Me.MenuDriverAccessTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
+        Me.MenuAstroUtilsTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -131,7 +132,7 @@
         Me.Label1.Size = New System.Drawing.Size(160, 54)
         Me.Label1.TabIndex = 6
         Me.Label1.Text = "Click the logo to learn more about ASCOM, a set of standards for inter-operation " & _
-            "of astronomy software."
+    "of astronomy software."
         '
         'lblTitle
         '
@@ -157,7 +158,7 @@
         '
         'MenuTrace
         '
-        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled})
+        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuAstroUtilsTraceEnabled})
         Me.MenuTrace.Name = "MenuTrace"
         Me.MenuTrace.Size = New System.Drawing.Size(48, 20)
         Me.MenuTrace.Text = "Trace"
@@ -227,6 +228,12 @@
         Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuDriverAccessTraceEnabled.Text = "DriverAccess Trace Enabled"
         '
+        'MenuAstroUtilsTraceEnabled
+        '
+        Me.MenuAstroUtilsTraceEnabled.Name = "MenuAstroUtilsTraceEnabled"
+        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled"
+        '
         'ChooserForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -273,5 +280,6 @@
     Friend WithEvents MenuUtilTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuSimulatorTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuDriverAccessTraceEnabled As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuAstroUtilsTraceEnabled As System.Windows.Forms.ToolStripMenuItem
 #End Region
 End Class

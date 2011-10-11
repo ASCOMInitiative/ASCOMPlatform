@@ -412,6 +412,12 @@ Namespace Transform
             End Get
         End Property
 
+        ''' <summary>
+        ''' Sets the topocentric azimuth and elevation
+        ''' </summary>
+        ''' <param name="Azimuth">Topocentric Azimuth in degrees</param>
+        ''' <param name="Elevation">Topocentric elevation in degrees</param>
+        ''' <remarks></remarks>
         Sub SetAzimuthElevation(Azimuth As Double, Elevation As Double) Implements ITransform.SetAzimuthElevation
             LastSetBy = SetBy.AzimuthElevation
             RequiresRecalculate = True

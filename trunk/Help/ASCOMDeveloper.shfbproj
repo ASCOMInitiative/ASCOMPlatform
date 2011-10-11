@@ -32,7 +32,10 @@
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
     <CopyrightText>Copyright &amp;#169%3b ASCOM Initiative 2011</CopyrightText>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.AstroUtils" isExposed="True">
+  <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
+</Filter>
+<Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
   <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
     <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.GetSchema" filterName="GetSchema" isExposed="False" />
     <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.ReadXml" filterName="ReadXml" isExposed="False" />
@@ -44,7 +47,6 @@
   <Filter entryType="Delegate" fullName="ASCOM.Utilities.Timer.TickEventHandler" filterName="Timer.TickEventHandler" isExposed="False" />
 </Filter>
 <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
-<Filter entryType="Namespace" fullName="TiGra" isExposed="False" />
 <Filter entryType="Namespace" fullName="System" isExposed="True">
   <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
   <Filter entryType="Class" fullName="System.ValueType" filterName="ValueType" isExposed="False">

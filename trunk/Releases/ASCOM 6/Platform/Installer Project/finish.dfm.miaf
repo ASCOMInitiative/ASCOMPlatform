@@ -25,3 +25,5 @@ IF (checkRepair.Caption = TRUE)  THEN  textRepair.Visible := True;
 IF (checkRepair.Caption = TRUE)  THEN  textComplete.Visible := False;
 IF (checkRepair.Caption = TRUE)  THEN  RunNow.Visible := False;
 IF (checkRepair.Caption = TRUE)  THEN  InstallMessage.Visible := False;
+IF (CheckASCOMError.Caption <> )  THEN  textComplete.Visible := False;
+IF (CheckASCOMError.Caption = )  THEN  textASCOMFailed.Visible := False;
