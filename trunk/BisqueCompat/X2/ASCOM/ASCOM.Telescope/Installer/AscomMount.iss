@@ -5,7 +5,7 @@
 ;
 [Setup]
 AppName=X2 Mount Driver BETA for ASCOM Telescopes
-AppVersion=0.9.4
+AppVersion=0.9.5
 AppPublisher=ASCOM Initiative
 AppPublisherURL=http://ascom-standards.org/
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -16,7 +16,7 @@ CreateAppDir=no
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir=.
-OutputBaseFilename=X2AscomTelescope(0.9.4)Setup
+OutputBaseFilename=X2AscomTelescope(0.9.5)Setup
 Compression=lzma
 SolidCompression=yes
 WizardImageFile="WizardImage.bmp"
@@ -49,13 +49,20 @@ begin
     Result := True;
   end else
   begin
-    DocPath := ExpandConstant('{userdocs}\Software Bisque\TheSkyX Theater Edition\TheSkyXInstallPath.txt')
+    DocPath := ExpandConstant('{userdocs}\Software Bisque\TheSkyX Serious Astronomer Edition\TheSkyXInstallPath.txt')
     if (LoadStringFromFile(DocPath,TSXPath)) then
     begin
       Result := True;
     end else
     begin
-      Result := False;
+      DocPath := ExpandConstant('{userdocs}\Software Bisque\TheSkyX Theater Edition\TheSkyXInstallPath.txt')
+      if (LoadStringFromFile(DocPath,TSXPath)) then
+      begin
+        Result := True;
+      end else
+      begin
+        Result := False;
+      end;
     end;
   end;
 end;

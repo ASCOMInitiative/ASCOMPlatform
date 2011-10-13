@@ -9,11 +9,15 @@ One-time Setup - THIS IS DONE WITHIN TheSky X
 
 1. Mount Setup, Choose... Select ASCOM/Telescope Driver for the mount type
 
-2. Mount Setup, Settings... Answer Yes to the "Have you read...?" popup. You will see the usual ASCOM Chooser
+2. Mount Setup, Settings... Answer No to the "Do you want to read...?" popup. You will see the usual ASCOM Chooser
 
 3. Select your telescope type. Click Properties in the Chooser to configure the telescope.
 
-4. Close the Chooser, and from there it's normal TheSky X operation.
+4. Close the Chooser.
+
+5. START OUT WITH THE CROSS HAIR UPDATE INTERVAL AT 500ms. Speed it up if you think your scope/driver can handle faster updates.
+
+6. From there it's normal TheSky X operation 
 
 
 Adapting to Varying Mount Capabilities
@@ -33,9 +37,11 @@ Operational Issues
 
 * After changing ASCOM telescope drivers, exit and restart TheSKy X to refresh the descriptive info and available controls (see Variable Capabilities above).
 
-* If your mount supports RA/Dec offset tracking rates (for tracking asteroids, etc.), you can use the Set Track Rates button to enable offsets after selecting the asteroid or whatever. To return the rates to RA=Sidereal/Dec=Zero you need to select a star as a target then use the Set Track Rates button, then click Yes to explicitly set the rate offsets to 0 and 0. The No button in the COnfirm Set Track Rate window does not work (as of TheSky X 10.1.4749).
+* If your mount supports RA/Dec offset tracking rates (for tracking asteroids, etc.), you can use the Set Track Rates button to enable offsets after selecting the asteroid or whatever. To return the rates to RA=Sidereal/Dec=Zero you need to select a star as a target then use the Set Track Rates button, then click Yes to explicitly set the rate offsets to 0 and 0. The No button in the Confirm Set Track Rate window does not work (as of TheSky X 10.1.4749).
 
 * If your mount does not support RA/Dec offset tracking rates, but it does support simple on-off control of Sidereal Tracking, TheSky X will still show the Set Track Rates button. This is due to a limitation in TheSky X where support for the two features is tied to the same enabling/disabling logic. If you try to use the Set Track Rates button, you'll get an Unsupported Function popup, but telescope control will continue uninterrupted.
+
+* If connecting to POTH, Pipe, or MaxPoint, the ASCOM driver Description string will be truncated to 250 characters if needed.
 
 
 Reporting Problems

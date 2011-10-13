@@ -30,8 +30,6 @@
 
 #include "StdAfx.h"
 
-// TODO - How to get Communications Log item to show in Telescope/Tools menu?
-//        When this is solved, log ASCOM calls.
 // TODO - Why doesn't LinkFromUIThreadInterface remove the need for the 
 //        CROSS_THREAD code?
 

@@ -19,6 +19,7 @@
 //----------	---		--------------------------------------------------
 // 22-Apr-11	rbd		Initial edit, taken from TeleAPI/ASCOM plugin
 // 12-Jul-11	rbd		0.9.3 - Log exceptions to TheSky X's comm log
+// 12-Oct-11	rbd		0.9.5 - Improve error reporting in DrvFail.
 //========================================================================
 #include "StdAfx.h"
 
@@ -130,33 +131,39 @@ char *uni_to_ansi(OLECHAR *os)
 void drvFail(char *msg, EXCEPINFO *ei, bool bCloseConn)
 {
 	bool handled = false;
+	char buf[4096];
 
-	if(ei != NULL)
+	//TODO Remove this awful hack when MaxPoint is fixed!!
+	if(!_bDoingInit)
 	{
-		__try
+		if(ei != NULL)
 		{
-			char *msg = uni_to_ansi(ei->bstrDescription);
-			char *src = uni_to_ansi(ei->bstrSource);
-			_pLogger->out("== ERROR FROM DRIVER ==");
-			_pLogger->out(src);
-			_pLogger->out(msg);
-			_pLogger->out("=======================");
-			MessageBox(NULL, msg, src, (MB_OK | MB_ICONSTOP | MB_SETFOREGROUND));
-			delete [] msg;
-			delete[] src;
-			handled = true;
+			__try
+			{
+				char *dsc = uni_to_ansi(ei->bstrDescription);
+				char *src = uni_to_ansi(ei->bstrSource);
+				_pLogger->out("== ERROR FROM DRIVER ==");
+				_pLogger->out(msg);
+				_pLogger->out(src);
+				_pLogger->out(dsc);
+				_pLogger->out("=======================");
+				sprintf(buf, "%s\n%s", msg, dsc);
+				MessageBox(NULL, buf, src, (MB_OK | MB_ICONSTOP | MB_SETFOREGROUND));
+				delete [] dsc;
+				delete[] src;
+				handled = true;
+			}
+			__except(EXCEPTION_EXECUTE_HANDLER)
+			{
+				handled = false;
+			}
 		}
-		__except(EXCEPTION_EXECUTE_HANDLER)
-		{
-			handled = false;
-		}
+		if(!handled)
+			MessageBox(NULL, msg, _szAlertTitle, (MB_OK & MB_ICONSTOP | MB_SETFOREGROUND));
+
+		if(bCloseConn)												// If was a fatal error, 
+			TermScope(true);										// shut ourselves down best efforts
 	}
-	if(!handled)
-		MessageBox(NULL, msg, _szAlertTitle, (MB_OK & MB_ICONSTOP | MB_SETFOREGROUND));
-
-	if(bCloseConn)												// If was a fatal error, 
-		TermScope(true);										// shut ourselves down best efforts
-
 	ABORT;
 }
 
