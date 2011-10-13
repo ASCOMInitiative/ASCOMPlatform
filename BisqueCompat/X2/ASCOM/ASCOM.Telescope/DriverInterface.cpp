@@ -51,6 +51,9 @@
 // 27-Jul-11	rbd		0.9.4 - Log threads and interface pointers, having
 //						serious maybe fatal problems with Maestro. Works OK
 //						with both scope simulators. 
+// 12-Oct-11	rbd		0.9.5 - Hack for MaxPoint which reports CanSetTracking
+//						true for scopes that cannot do this. Reverse sense
+//						of read-me popup for clarity.
 //========================================================================
 
 #include "StdAfx.h"
@@ -91,6 +94,7 @@ bool _bScopeCanSideOfPier = false;
 // State variables
 //
 bool _bScopeActive = false;										// This is true if mount is active
+bool _bDoingInit = false;										// For MaxPoint track rates hack
 LoggerInterface *_pLogger = NULL;
 static bool isParkedForV1 = false;
 static CRITICAL_SECTION _cs;
@@ -332,8 +336,19 @@ short InitScope(void)
 		//
 		if(_bScopeCanSetTrackRates && (!_bScopeCanPark || !GetAtPark()))
 		{
-			set_double(L"RightAscensionRate", 0.0);
-			set_double(L"DeclinationRate", 0.0);
+			//
+			// This hack is for MaxPoint which reports that it can set RA/Dec rates, 
+			// when the telescope in fact cannot.
+			//
+			__try {
+				_bDoingInit = true;								// Silence errors temporatily
+				get_double(L"RightAscensionRate");
+				set_double(L"RightAscensionRate", 0.0);
+				set_double(L"DeclinationRate", 0.0);
+			} __except(EXCEPTION_EXECUTE_HANDLER) {
+				_bScopeCanSetTrackRates = false;
+			}
+			_bDoingInit = false;							// See drvFail() Horrible hack!
 		}
 		//
 		// Done!
@@ -706,9 +721,9 @@ short ConfigScope()
 	BSTR bsProgID = NULL;										// [sentinel]
 	char path[256];
 	
-	int iAns = MessageBox(NULL, "Have you read and understood the usage info for this driver?", "ASCOM Controlled Mount",
+	int iAns = MessageBox(NULL, "Do you want to see the usage document for the X2/ASCOM driver now?", "ASCOM Controlled Mount",
 				(MB_YESNO + MB_ICONQUESTION));
-	if (iAns != IDYES)
+	if (iAns == IDYES)
 	{
 		GetModuleFileName(NULL, path, 255);
 		if (GetLastError() == ERROR_SUCCESS)
@@ -941,7 +956,7 @@ static int get_integer(OLECHAR *name, bool noAlert)
 	VARIANT result;
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
-	char *cp;
+	char *cp = uni_to_ansi(name);
 	char buf[256];
 
 	__try {
@@ -968,7 +983,6 @@ static int get_integer(OLECHAR *name, bool noAlert)
 			}
 			else
 			{
-				cp = uni_to_ansi(name);
 				wsprintf(buf, _szGidFailMsg, cp);
 				delete[] cp;
 				drvFail(buf, NULL, true);
@@ -1014,7 +1028,6 @@ static int get_integer(OLECHAR *name, bool noAlert)
 		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
 	}
 	
-	cp = uni_to_ansi(name);
 	sprintf(buf, "Get %s <- %i", cp, result.intVal);
 	_pLogger->out(buf);
 	delete[] cp;
@@ -1036,7 +1049,7 @@ static double get_double(OLECHAR *name)
 	VARIANT result;
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
-	char *cp;
+	char *cp = uni_to_ansi(name);
 	char buf[256];
 
 	__try {
@@ -1057,7 +1070,6 @@ static double get_double(OLECHAR *name)
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
@@ -1086,7 +1098,6 @@ static double get_double(OLECHAR *name)
 				NOTIMPL;											// Resignal silently
 			else
 			{
-				cp = uni_to_ansi(name);
 				wsprintf(buf, 
 					 "Internal error reading from the %s property.", cp);
 				delete[] cp;
@@ -1102,7 +1113,6 @@ static double get_double(OLECHAR *name)
 		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
 	}
 
-	cp = uni_to_ansi(name);
 	sprintf(buf, "Get %s <- %0.7f", cp, (double)result.dblVal);
 	_pLogger->out(buf);
 	delete[] cp;
@@ -1126,13 +1136,11 @@ static void set_double(OLECHAR *name, double val)
 	DISPID ppdispid[1];
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
-	char *cp;
+	char *cp = uni_to_ansi(name);
 	char buf[256];
 
-	cp = uni_to_ansi(name);
 	sprintf(buf, "Set %s -> %i", cp, val);
 	_pLogger->out(buf);
-	delete[] cp;
 
 	__try {
 		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
@@ -1152,7 +1160,6 @@ static void set_double(OLECHAR *name, double val)
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
@@ -1184,7 +1191,6 @@ static void set_double(OLECHAR *name, double val)
 				NOTIMPL;											// Resignal silently
 			else
 			{
-				cp = uni_to_ansi(name);
 				wsprintf(buf, 
 					 "Internal error writing to the %s property.", cp);
 				delete[] cp;
@@ -1199,6 +1205,10 @@ static void set_double(OLECHAR *name, double val)
 #endif
 		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
 	}
+
+	sprintf(buf, "Set %0.7f -> %s", val, cp);
+	_pLogger->out(buf);
+	delete[] cp;
 }
 
 // ----------
@@ -1215,7 +1225,7 @@ static bool get_bool(OLECHAR *name)
 	VARIANT result;
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
-	char *cp;
+	char *cp = uni_to_ansi(name);
 	char buf[256];
 
 	__try {
@@ -1236,9 +1246,7 @@ static bool get_bool(OLECHAR *name)
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, _szGidFailMsg, cp);
-			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
 
@@ -1265,10 +1273,8 @@ static bool get_bool(OLECHAR *name)
 				NOTIMPL;											// Resignal silently
 			else
 			{
-				cp = uni_to_ansi(name);
 				wsprintf(buf, 
 					 "Internal error reading from the %s property.", cp);
-				delete[] cp;
 				drvFail(buf, &excep, true);
 			}
 		}
@@ -1281,7 +1287,6 @@ static bool get_bool(OLECHAR *name)
 		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
 	}
 
-	cp = uni_to_ansi(name);
 	sprintf(buf, "Get %s <- %s", cp, (result.boolVal == VARIANT_TRUE ? "true" : "false"));
 	_pLogger->out(buf);
 	delete[] cp;
@@ -1306,14 +1311,12 @@ static void set_bool(OLECHAR *name, bool val)
 	DISPID ppdispid[1];
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
-	char *cp;
+	char *cp = uni_to_ansi(name);
 	char buf[256];
 	HRESULT hr;
 
-	cp = uni_to_ansi(name);
 	sprintf(buf, "Set %s -> %s", cp, (val ? "true" : "false"));
 	_pLogger->out(buf);
-	delete[] cp;
 
 	__try {
 		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
@@ -1333,7 +1336,6 @@ static void set_bool(OLECHAR *name, bool val)
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
@@ -1359,7 +1361,6 @@ static void set_bool(OLECHAR *name, bool val)
 				NOTIMPL;											// Resignal silently
 			else
 			{
-				cp = uni_to_ansi(name);
 				wsprintf(buf, 
 					 "Internal error writing to the %s property.", cp);
 				delete[] cp;
@@ -1374,6 +1375,10 @@ static void set_bool(OLECHAR *name, bool val)
 #endif
 		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
 	}
+
+	sprintf(buf, "Set %s -> %s", (val ? "true" : "false"), cp);
+	_pLogger->out(buf);
+	delete[] cp;
 }
 
 // ------------
@@ -1388,8 +1393,8 @@ static char *get_string(OLECHAR *name )
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
 	VARIANT vRes;
-	char *cp;
-	char buf[256];
+	char *cp = uni_to_ansi(name);
+	char buf[2048];
 
 	__try {
 		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
@@ -1409,7 +1414,6 @@ static char *get_string(OLECHAR *name )
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, _szGidFailMsg, cp);
 			delete[] cp;
 			drvFail(buf, NULL, true);
@@ -1438,7 +1442,6 @@ static char *get_string(OLECHAR *name )
 				NOTIMPL;											// Resignal silently
 			else
 			{
-				cp = uni_to_ansi(name);
 				wsprintf(buf, 
 					 "Internal error reading from the %s property.", cp);
 				delete[] cp;
@@ -1454,14 +1457,13 @@ static char *get_string(OLECHAR *name )
 		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
 	}
 
-	cp = uni_to_ansi(name);
 	char *dp = uni_to_ansi(vRes.bstrVal);
 	sprintf(buf, "Get %s <- %s", cp, dp);
 	_pLogger->out(buf);
 	delete[] cp;
-	delete[] dp;
-		
-	return(uni_to_ansi(vRes.bstrVal));
+	if(strlen(dp) > 254)
+		strcpy(dp+250, "...");
+	return(dp);
 }
 
 // ------
@@ -1476,13 +1478,11 @@ static void call(OLECHAR *name)
 	DISPPARAMS dispparms;
 	EXCEPINFO excep;
 	VARIANT vRes;
-	char *cp;
 	char buf[256];
 
-	cp = uni_to_ansi(name);
+	char *cp = uni_to_ansi(name);
 	sprintf(buf, "%s()", cp);
 	_pLogger->out(buf);
-	delete[] cp;
 
 	__try {
 		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
@@ -1502,9 +1502,7 @@ static void call(OLECHAR *name)
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, _szGidFailMsg, cp);
-			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
 
@@ -1524,10 +1522,8 @@ static void call(OLECHAR *name)
 						 &excep, 
 						 NULL)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, 
 				 "%s failed internally.", cp);
-			delete[] cp;
 			drvFail(buf, &excep, true);
 		}		
 	}
@@ -1536,6 +1532,7 @@ static void call(OLECHAR *name)
 #ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
 #endif
+		delete[] cp;
 		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
 	}
 }
@@ -1554,13 +1551,11 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 	EXCEPINFO excep;
 	VARIANT vRes;
 	HRESULT hr;
-	char *cp;
+	char *cp = uni_to_ansi(name);
 	char buf[256];
 
-	cp = uni_to_ansi(name);
 	sprintf(buf, "%s(%0.7f, %0.7f)", cp, dRA, dDec);
 	_pLogger->out(buf);
-	delete[] cp;
 
 	__try {
 		EnterCriticalSection(&_cs);										// ++ CRITICAL ++
@@ -1580,9 +1575,7 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 			LOCALE_USER_DEFAULT,
 			&dispid)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, _szGidFailMsg, cp);
-			delete[] cp;
 			drvFail(buf, NULL, true);
 		}
 
@@ -1607,10 +1600,8 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 			&excep, 
 			NULL)))
 		{
-			cp = uni_to_ansi(name);
 			wsprintf(buf, 
 				 "%s failed internally.", cp);
-			delete[] cp;
 			drvFail(buf, &excep, true);
 		}
 	}
@@ -1619,6 +1610,7 @@ static void call_with_ra_dec(OLECHAR *name, double dRA, double dDec)
 #ifdef CROSS_THREAD_CO
 		_p_DrvDisp->Release();
 #endif
+		delete[] cp;
 		LeaveCriticalSection(&_cs);									// -- NOCRITICAL --
 	}
 }	

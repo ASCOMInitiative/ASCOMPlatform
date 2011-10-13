@@ -173,6 +173,7 @@ private:
 // -------------------
 
 extern bool _bScopeActive;
+extern bool _bDoingInit;
 extern const char *_szAlertTitle;
 extern HWND _hWndMain;
 extern LoggerInterface *_pLogger;
