@@ -39,8 +39,185 @@ namespace ASCOM.GeminiTelescope
         private  string EthernetResult = "";
         private  HttpWebResponse Response = null;
 
+        private Int32 PacketCount = 1;
+     
+
+        internal byte [] UDP_datagram1 = new byte[1024];
+        internal byte [] UDP_datagram2 = new byte[1024];
+        internal int UDP_len_lastdatagram = 0;
+        internal byte [] UDP_buff = null;
+
+
+        /// <summary>
+        /// Previous request response never arrived.
+        /// Request a resend from Gemini (NACK) and then
+        /// decide if the packet was lost on the way to Gemini or on the way back
+        /// If on the way back, resend the original request packet.
+        /// </summary>
+        internal string RetransmitUDP()
+        {
+            Trace.Enter("RetransmitUDP");
+
+            // if no previous packet, don't resync
+            if (UDP_len_lastdatagram == 0)
+            {
+                Trace.Exit("RetransmitUDP", "no previous packet!");
+                return null;
+            }
+
+            int expected_seq_num = BitConverter.ToInt32(UDP_buff, 0); // this is what the reply shouxeld contain as the sequence number
+
+            // extract last command sent:
+            string last_cmd = m_BinaryEncoding.GetString(UDP_buff, 8, UDP_len_lastdatagram - 9);
+
+            Trace.Info(2, "RetransmitUDP", expected_seq_num, last_cmd);
+
+            // try maximum number of times. If no response, we are done. Connection is lost.
+            for (int trynbr = 0; trynbr < SharedResources.MAXIMUM_ERRORS; ++trynbr)
+            {
+                Trace.Info(2, "RetransmitUDP:try", trynbr, last_cmd);
+
+                if (m_AllowErrorNotify)
+                {
+                    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection lost...Retrying");
+                }
+
+                if (trynbr > 0)
+                {
+                    // since we didn't get a proper response, try to reset the socket and see if can get a response:
+                    GeminiHardware.Instance.ResyncEthernet();
+                }
+
+                DiscardInBuffer();
+                DiscardOutBuffer();
+
+                int resend_seq_num = UDPSendNACK(); // ask Gemini to resend last packet it sent to us
+
+                Trace.Info(3, "RetransmitUDP:SentNACK", resend_seq_num);
+
+                byte[] res = null;
+                int len = getUDPCommandResult(1000, ref res);
+
+
+                Trace.Info(3, "RetransmitUDP:GotNACK", len, res);
+
+                // got a response back, check if valid:
+                if (len > 0 && res!=null)
+                {
+                    int seq1 = BitConverter.ToInt32(res, 0);
+                    int seq2 = BitConverter.ToInt32(res, 4);
+
+                    Trace.Info(3, "RetransmitUDP:GotNACK2", seq1, seq2);
+
+                    
+                    // seq1 should be the same as our resend packet seq #, if not, ignore this and try again
+                    if (seq1 != resend_seq_num) {
+                        Trace.Info(3, "RetransmitUDP:GotNACK", "seq1# doesn't match");
+                        System.Threading.Thread.Sleep(500); // wait a little
+                        continue; //unexpected response sequence #, ignore it, and try again
+                    }
+                   
+                    // got a response to our NACK resend request, check if the lost command needs to be resent!
+                    if (seq2 != expected_seq_num) // Gemini never received the command, resend it
+                    {
+                        Trace.Info(3, "RetransmitUDP:GotNACK", "seq2# doesn't match, will resend cmd");
+
+                        //resend it
+                        TransmitUDP(last_cmd);
+
+                        string cmd_res = getUDPCommandResult(1000);
+
+                        Trace.Info(2, "RetransmitUDP:Got result:", cmd_res, last_cmd);
+
+                        // got a proper response, return it!
+                        if (cmd_res != null)
+                        {
+                            if (m_AllowErrorNotify)
+                            {
+                                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection re-established!");
+                            }
+                            return cmd_res;
+                        }
+                        System.Threading.Thread.Sleep(500); // wait a little and retry again
+                    }
+                    else
+                    {
+                        if (m_AllowErrorNotify)
+                        {
+                            if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection re-established!");
+                        }
+                        // Success! Received a matching packet from Gemini. Return the contents as the request result:
+                        string s = m_BinaryEncoding.GetString(UDP_buff, 8, UDP_len_lastdatagram - 9);
+                        Trace.Info(2, "RetransmitUDP:Received", s);
+                    }
+
+                }
+            }
+
+            return null;    // no luck, give up.
+        }
+
+        private void TransmitUDP(string s)
+        {
+
+            UDP_buff = (UDP_buff==UDP_datagram1? UDP_datagram2 : UDP_datagram1);
+            Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
+            Trace.Info(2, "TransmitUDP packet#, cmd", PacketCount, s);
+
+            PacketCount++;
+            Array.Copy(m_BinaryEncoding.GetBytes(s), 0, UDP_buff, 8, s.Length);
+            UDP_buff[s.Length + 8] = 0;
+            UDP_len_lastdatagram = s.Length + 9;
+            GeminiHardware.Instance.UDP_client.Send(UDP_buff, UDP_len_lastdatagram, GeminiHardware.Instance.UDP_endpoint);
+        }
+       
+        private void TransmitUDP(byte[] cmd)
+        {
+            UDP_buff = (UDP_buff == UDP_datagram1 ? UDP_datagram2 : UDP_datagram1);
+            Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
+            Trace.Info(2, "TransmitUDP packet#, cmd", PacketCount, cmd);
+            PacketCount++; 
+            Array.Copy(cmd, 0, UDP_buff, 8, cmd.Length);
+            UDP_len_lastdatagram = cmd.Length + 8;
+            GeminiHardware.Instance.UDP_client.Send(UDP_buff, UDP_len_lastdatagram, GeminiHardware.Instance.UDP_endpoint);
+        }
+        
+        
+        byte[] rbuff = new byte[9];
+
+        /// <summary>
+        /// Request a UDP retransmit of last packet sent
+        ///   this uses a private buffer, so as not to overwrite previously sent datagram data
+        ///   
+        /// returns actual packet sequence number that was sent.
+        /// </summary>
+        private int UDPSendNACK()
+        {
+            Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, rbuff, 0, 4);
+            Trace.Info(2, "ReTransmitUDP packet#, cmd", PacketCount);
+            rbuff[8] = 0x15;
+            GeminiHardware.Instance.UDP_client.Send(rbuff, 9, GeminiHardware.Instance.UDP_endpoint);
+            return PacketCount++;
+        }
+
         private void TransmitEthernet(string s)
         {
+            if (GeminiHardware.Instance.UDP)
+            {
+                lock (m_SerialPort)
+                {
+                    try
+                    {
+                        TransmitUDP(s);
+                    }
+                    catch {
+                        GeminiHardware.Instance.ResyncEthernet();
+                        TransmitUDP(s);
+                    }
+                }
+                return;
+            }
+
              Trace.Enter(4, "TransmitE", s);
 
             EthernetResult = "";
@@ -130,7 +307,7 @@ namespace ASCOM.GeminiTelescope
                 lock (m_SerialPort)
                 {
                     Trace.Info(0, "Serial Transmit", s);
-                    m_SerialPort.Write(Encoding.GetEncoding("Latin1").GetBytes(s), 0, s.Length);
+                    m_SerialPort.Write(m_BinaryEncoding.GetBytes(s), 0, s.Length);
                     m_SerialPort.BaseStream.Flush();
                     Trace.Info(4, "Finished Port.Write");
                 }
@@ -144,6 +321,12 @@ namespace ASCOM.GeminiTelescope
         }
 
 
+        private string GetCommandResult(CommandItem command, bool bResyncOnError)
+        {
+            bool bReturn = false;
+            return GetCommandResult(command, bResyncOnError, ref bReturn);
+        }
+
                 /// <summary>
         /// Wait for a proper response from Gemini for a given command. Command has already been sent.
         /// 
@@ -151,12 +334,12 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command">actual command sent to Gemini</param>
         /// <param name="bResyncOnError">true if driver should resync if an error was detected</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        private string GetCommandResult(CommandItem command, bool bResyncOnError)
+        private string GetCommandResult(CommandItem command, bool bResyncOnError, ref bool bReturn)
         {
             if (m_EthernetPort)
-                return GetCommandResultEthernet(command, bResyncOnError);
+                return GetCommandResultEthernet(command, bResyncOnError, ref bReturn);
             else
-                return GetCommandResultSerial(command, bResyncOnError);
+                return GetCommandResultSerial(command, bResyncOnError, ref bReturn);
         }
 
 
@@ -164,6 +347,9 @@ namespace ASCOM.GeminiTelescope
 
         private string getEthernetCommandResult(int timeout)
         {
+            if (GeminiHardware.Instance.UDP)
+                return getUDPCommandResult(timeout);
+
             if (Response == null) return null;
 
             StringBuilder sb = new StringBuilder();
@@ -186,7 +372,7 @@ namespace ASCOM.GeminiTelescope
                 if (count != 0)
                 {
                     // translate from bytes to ASCII text
-                    tempString = Encoding.ASCII.GetString(buf, 0, count);
+                    tempString = m_BinaryEncoding.GetString(buf, 0, count);
 
                     // continue building the string
                     sb.Append(tempString);
@@ -199,6 +385,74 @@ namespace ASCOM.GeminiTelescope
             return sb.ToString();
         }
 
+        IPEndPoint iep0 = new IPEndPoint(0, 11110);
+        Byte[] receiveBytes = null;
+
+        /// <summary>
+        /// Synchronous get UDP datagram function
+        ///   sleeps until data is available or a timeout occurs
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        internal string getUDPCommandResult(int timeout)
+        {
+wait_again:
+            m_DataReceived.Reset();
+
+            IAsyncResult res = GeminiHardware.Instance.UDP_client.BeginReceive(new AsyncCallback(UDPReceiveData), null);
+            if (m_DataReceived.WaitOne(timeout))
+            {
+                if (res.IsCompleted)
+                {
+                    receiveBytes = GeminiHardware.Instance.UDP_client.EndReceive(res, ref iep0);
+                    string data = m_BinaryEncoding.GetString(receiveBytes, 8, receiveBytes.Length - 9);
+                    Int32 seq2 = BitConverter.ToInt32(receiveBytes,0);
+                    Int32 seq1 = BitConverter.ToInt32(UDP_buff,0);
+                    if (seq1 != seq2) 
+                        goto wait_again;
+
+                    Trace.Info(2, "getUDPCommandResult received", data);
+                    return data;
+                }
+            }
+            Trace.Info(2, "getUDPCommandResult timeout");
+            // do packet recovery logic to determine why we didn't get a response           
+            return RetransmitUDP();
+
+        }
+
+        /// <summary>
+        /// Synchronous get UDP datagram function
+        ///   sleeps until data is available or a timeout occurs
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        internal int getUDPCommandResult(int timeout, ref byte[] result)
+        {
+            m_DataReceived.Reset();
+
+            IAsyncResult res = GeminiHardware.Instance.UDP_client.BeginReceive(new AsyncCallback(UDPReceiveData), null);
+            if (m_DataReceived.WaitOne(timeout))
+            {
+                if (res.IsCompleted)
+                {
+                    Byte[] receiveBytes = GeminiHardware.Instance.UDP_client.EndReceive(res, ref iep0);
+                    Trace.Info(2, "getUDPCommandResult received", receiveBytes);
+                    result = receiveBytes;
+                    return result.Length;
+                }
+            }
+            return 0;
+
+        }
+
+
+
+
+        void UDPReceiveData(IAsyncResult ar)
+        {
+            m_DataReceived.Set();
+        }
 
         /// <summary>
         /// Wait for a proper response from Gemini for a given command. Command has already been sent.
@@ -207,7 +461,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command">actual command sent to Gemini</param>
         /// <param name="bResyncOnError">true if driver should resync if an error was detected</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        private string GetCommandResultEthernet(CommandItem command, bool bResyncOnError)
+        private string GetCommandResultEthernet(CommandItem command, bool bResyncOnError, ref bool bReturn)
         {
             string result = null;
             Trace.Enter(4, "GetCommandResultE", command.m_Command);
@@ -222,9 +476,15 @@ namespace ASCOM.GeminiTelescope
                 char_count = gmc.Chars;
                 command.m_UpdateRequired = gmc.UpdateStatus;
             }
-
+           
             // no result expected by this command, just return;
-            if (gemini_result == GeminiCommand.ResultType.NoResult) return null;
+            if (gemini_result == GeminiCommand.ResultType.NoResult)
+            {
+                bReturn = false;
+                return null;
+            }
+            
+            bReturn = true;
 
             m_SerialTimeoutExpired.Reset();
             m_SerialErrorOccurred.Reset();
@@ -236,13 +496,17 @@ namespace ASCOM.GeminiTelescope
             {
                 Trace.Info(0, "Ethernet wait for response", command.m_Command);
 
+                string res  = "";
 
-                string res = getEthernetCommandResult(timeout);
+                if (EthernetResult.Length == 0)
+                {
+                    res = getEthernetCommandResult(timeout);
 
-                if (res == null && EthernetResult.Length == 0)
-                    throw new Exception("Ethernet connection error");
-                if (res!=null)
-                    EthernetResult += res;
+                    if (res == null && EthernetResult.Length == 0)
+                        throw new Exception("Ethernet connection error");
+                    if (res != null)
+                        EthernetResult += res;
+                }
 
                 switch (gemini_result)
                 {
@@ -381,7 +645,7 @@ namespace ASCOM.GeminiTelescope
         /// <param name="command">actual command sent to Gemini</param>
         /// <param name="bResyncOnError">true if driver should resync if an error was detected</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        private string GetCommandResultSerial(CommandItem command, bool bResyncOnError)
+        private string GetCommandResultSerial(CommandItem command, bool bResyncOnError, ref bool bReturn)
         {
             string result = null;
 
@@ -401,7 +665,13 @@ namespace ASCOM.GeminiTelescope
             }
 
             // no result expected by this command, just return;
-            if (gemini_result == GeminiCommand.ResultType.NoResult) return null;
+            if (gemini_result == GeminiCommand.ResultType.NoResult)
+            {
+                bReturn = false;
+                return null;
+            }
+            
+            bReturn = true;
 
             m_SerialTimeoutExpired.Reset();
             m_SerialErrorOccurred.Reset();
@@ -530,7 +800,7 @@ namespace ASCOM.GeminiTelescope
         ///   reset pending communication queues, and wait a defined "cool-down" interval of (RECOVER_SLEEP)
         ///   then, resume processing.
         /// </summary>
-        private void AddOneMoreError()
+        internal void AddOneMoreError()
         {
             Trace.Enter("AddOneMoreError", m_TotalErrors);
 
@@ -581,7 +851,7 @@ namespace ASCOM.GeminiTelescope
 
                             Trace.Info(0, "Opening port");
                             m_SerialPort.Open();
-                            m_SerialPort.Encoding = Encoding.GetEncoding("Latin1");
+                            m_SerialPort.Encoding = m_BinaryEncoding;
                         }
                         catch (Exception ex)
                         {
@@ -785,6 +1055,13 @@ namespace ASCOM.GeminiTelescope
                 DiscardInBufferSerial();
         }
 
+
+        internal void DiscardOutBuffer()
+        {
+            if (EthernetPort) ;
+            else
+                m_SerialPort.DiscardOutBuffer();
+        }
 
 
         /// <summary>

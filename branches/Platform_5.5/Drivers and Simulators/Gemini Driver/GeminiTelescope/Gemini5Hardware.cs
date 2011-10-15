@@ -31,6 +31,8 @@ using System.Drawing;
 using System.Reflection;
 using ASCOM.GeminiTelescope.Properties;
 using System.Threading;
+using System.Net;
+using System.Net.Sockets;
 
 namespace ASCOM.GeminiTelescope
 {
@@ -66,16 +68,142 @@ namespace ASCOM.GeminiTelescope
         public event ModelChangedDelegate OnModelChanged;
         public event SpeedChangedDelegate OnSpeedChanged;
 
+
+
+        public IPEndPoint UDP_endpoint = null;
+        public UdpClient UDP_client = null;    
+
         public Gemini5Hardware() : base()
         {
         }
+
+
+
+        public void ResyncEthernet()
+        {
+            Trace.Enter(2, "ResyncEthernet");
+            if (UDP)
+            {
+                try
+                {
+                    if (UDP_client != null)
+                    {
+                        UDP_client.Close();
+                        UDP_client = null;
+                    }
+                    UDP_client = new UdpClient(UDPPort);
+                }
+                catch (Exception ex)
+                {
+                    Trace.Error("ResyncEthernet", ex.Message);
+                }
+
+            }
+        }
+            
+        public void DisconnectToEthernet()
+        {
+            Trace.Enter(2, "DisconnectToEthernet");
+            if (UDP)
+            {
+
+                try
+                {
+                    UDP_endpoint = null;
+                    if (UDP_client != null)
+                    {
+                        UDP_client.Close();
+                        UDP_client = null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.Error("DisconnectToEthernet", ex.Message);
+                }
+            }
+            Trace.Exit(2, "DisconnectToEthernet");
+        }
+
+        public bool IsEthernetConnected
+        {
+            get
+            {
+                return EthernetPort && (!UDP || UDP_client != null);
+            }
+        }
+
+        public bool ConnectToEthernet()
+        {
+            Trace.Enter("ConnectToEthernet");
+            if (UDP && UDP_client==null)
+            {
+
+                Trace.Info(2, "UDP connection", GeminiDHCPName, UDPPort);
+
+                IPAddress addr = null;
+
+
+                if (this.UseDHCP)
+                {
+                    Trace.Info(2, "Looking up DHCP name", GeminiDHCPName);
+                    IPAddress[] addresslist = Dns.GetHostAddresses(this.GeminiDHCPName);
+                    if (addresslist == null || addresslist.Length == 0)
+                        throw new Exception("Network name not found: " + GeminiDHCPName);
+                    addr = addresslist[0];
+
+
+                }
+                else
+                {
+                    Trace.Info(2, "Using IP address", EthernetIP);
+                    System.Net.IPAddress ip;
+                    if (!System.Net.IPAddress.TryParse(EthernetIP, out ip))
+                        ip = System.Net.IPAddress.Parse("192.168.000.111");
+                    addr = ip;
+                }
+
+                Trace.Info(2, "UDP IP address", addr.ToString());
+              
+                UDP_endpoint = new IPEndPoint(addr, UDPPort);
+                UDP_client = new UdpClient(UDPPort);
+                Trace.Info(2, "Initialized UDP endpoint and client");
+            }
+
+            Trace.Exit("ConnectToEthernet", true);
+            return true;
+        }
+
+        /// <summary>
+        /// Called when the last command datagram contained no commands
+        /// producing a return value. Gemini send an ACK packet when this is the case,
+        /// so we check for ACK. If a timeout occurs and 
+        /// </summary>
+        /// <returns></returns>
+        internal override bool GetSyncOnEmptyReturn()
+        {
+            if (EthernetPort && UDP)
+            {
+                Trace.Enter("GetSyncOnEmptyReturn");
+                string r = getUDPCommandResult(2000);
+                if (r == null || r.Length == 0 || r[0] != 0x06) // not an ACK or a timeout
+                {
+                    Trace.Enter("GetSyncOnEmptyReturn", r, false);
+                    Resync();
+                    return false;
+                }
+                Trace.Exit("GetSyncOnEmptyReturn", true);
+            }
+
+            return true;
+        }
+
 
         public override int MaxCommands
         {
             get
             {
                 if (GeminiLevel >= 5 && EthernetPort)
-                    return 25;
+                    return 15;
                 else
                     return base.MaxCommands;
             }
@@ -97,7 +225,7 @@ namespace ASCOM.GeminiTelescope
                     CommandItem command;
                     int timeout = 3000; // polling should not hold up the queue for too long
                     DiscardInBuffer(); //clear all received data
-                    Transmit("<97:");
+                    Transmit(CompleteNativeCommand("<97:"));
                     command = new CommandItem("<97:", timeout, true);
                     string change = GetCommandResult(command);
                     if (change != null && change.Length == 6)

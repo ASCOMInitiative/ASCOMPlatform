@@ -19,7 +19,7 @@ namespace ASCOM.GeminiTelescope
             txtIP.Culture = GeminiHardware.Instance.m_GeminiCulture;
             System.Net.IPAddress ip;
             if (!System.Net.IPAddress.TryParse(GeminiHardware.Instance.EthernetIP, out ip))
-                ip = System.Net.IPAddress.Parse("192.168.000.100");
+                ip = System.Net.IPAddress.Parse("192.168.000.111");
 
             txtIP.Text = string.Format("{0:000}.{1:000}.{2:000}.{3:000}",
                 ip.GetAddressBytes()[0],
@@ -32,6 +32,12 @@ namespace ASCOM.GeminiTelescope
             txtPassword.Text = GeminiHardware.Instance.EthernetPassword;
             chkNoProxy.Checked = GeminiHardware.Instance.BypassProxy;
             chkDHCP.Checked = GeminiHardware.Instance.UseDHCP;
+            txtPort.Text = GeminiHardware.Instance.UDPPort.ToString();
+
+            if (GeminiHardware.Instance.UDP)
+                rbUDP.Checked = true;
+            else
+                rbHTTP.Checked = true;
 
         }
 
@@ -81,6 +87,20 @@ namespace ASCOM.GeminiTelescope
 
             GeminiHardware.Instance.EthernetUser = txtUser.Text;
             GeminiHardware.Instance.EthernetPassword = txtPassword.Text;
+
+            GeminiHardware.Instance.UDP = rbUDP.Checked;
+            if (rbUDP.Checked)
+            {
+                int port = 11110;
+                if (!int.TryParse(txtPort.Text, out port))
+                {
+                    MessageBox.Show("Invalid UDP Port: " + txtPort.Text);
+                    txtPort.Focus();
+                    return;
+                }
+                GeminiHardware.Instance.UDPPort = port;
+            }
+
             GeminiHardware.Instance.BypassProxy = chkNoProxy.Checked;
           
             DialogResult = DialogResult.OK;
@@ -110,6 +130,20 @@ namespace ASCOM.GeminiTelescope
                     ip.GetAddressBytes()[1],
                     ip.GetAddressBytes()[2],
                     ip.GetAddressBytes()[3]);
+            }
+        }
+
+        private void rbHTTP_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbHTTP.Checked)
+            {
+                txtPort.Enabled = false;
+                txtPort.BackColor = Color.Gray;
+            }
+            else
+            {
+                txtPort.Enabled = true;
+                txtPort.BackColor = Color.White;
             }
         }
 

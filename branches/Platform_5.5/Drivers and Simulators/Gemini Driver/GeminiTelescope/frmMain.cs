@@ -1002,6 +1002,7 @@ namespace ASCOM.GeminiTelescope
                 GeminiHardware.Instance.OpticsNames = name;
                 GeminiHardware.Instance.OpticsObstruction = obstruction;
 
+                
                 if (error != "")
                 {
                     if (error.EndsWith(", ")) error = error.Substring(0, error.Length - 2);

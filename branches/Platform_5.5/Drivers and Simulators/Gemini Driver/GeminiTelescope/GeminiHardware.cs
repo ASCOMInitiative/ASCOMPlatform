@@ -106,6 +106,8 @@ namespace ASCOM.GeminiTelescope
         // culture used to store ASCOM profile data:
         public System.Globalization.CultureInfo m_GeminiCulture = new System.Globalization.CultureInfo("en-US");
 
+        public Encoding m_BinaryEncoding = Encoding.GetEncoding("Latin1");
+
         internal Queue m_CommandQueue; //Queue used for messages to the gemini
         internal System.Threading.Thread m_BackgroundWorker; // Thread to run for communications
 
@@ -428,6 +430,33 @@ namespace ASCOM.GeminiTelescope
                 Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "EthernetIP", value);
             }
         }
+
+        internal bool m_UDP = true;
+
+        public bool UDP
+        {
+            get { return m_UDP; }
+            set
+            {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseUDP", value.ToString());
+                m_UDP = value;
+            }
+        }
+
+        internal int m_UDPPort = 11110;
+
+        public int UDPPort
+        {
+            get { return m_UDPPort; }
+            set
+            {
+                Profile.DeviceType = "Telescope";
+                Profile.WriteValue(SharedResources.TELESCOPE_PROGRAM_ID, "UDPPort", value.ToString());
+                m_UDPPort = value;
+            }
+        }
+
 
         public string PassThroughComPort
         {
@@ -1083,6 +1112,12 @@ namespace ASCOM.GeminiTelescope
 
             if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseDHCP", ""), out m_UseDHCP))
                 m_UseDHCP = true;
+
+            if (!bool.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UseUDP", ""), out m_UDP))
+                m_UDP = true;
+
+            if (!int.TryParse(Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "UDPPort", ""), out m_UDPPort))
+                m_UDPPort = 11110;
 
             m_GeminiDHCPName = Profile.GetValue(SharedResources.TELESCOPE_PROGRAM_ID, "GeminiDHCPName", "");
 
@@ -2429,7 +2464,7 @@ namespace ASCOM.GeminiTelescope
 
                 Trace.Info(2, "Clients=", m_Clients);
 
-                if (EthernetPort || !m_SerialPort.IsOpen)
+                if (!GeminiHardware.Instance.IsEthernetConnected && !m_SerialPort.IsOpen)
                 {
                     Trace.Info(2, "SerialPort.IsOpen", "false");
 
@@ -2453,7 +2488,7 @@ namespace ASCOM.GeminiTelescope
                             m_SerialPort.Open();
 
                             m_SerialPort.DtrEnable = true;
-                            m_SerialPort.Encoding = Encoding.GetEncoding("Latin1");
+                            m_SerialPort.Encoding = m_BinaryEncoding;
                             Trace.Info(2, "After Port.Open");
                         }
                         catch (Exception e)
@@ -2473,14 +2508,14 @@ namespace ASCOM.GeminiTelescope
                     {
                         try
                         {
-//                            ConnectToEthernet();
+                            GeminiHardware.Instance.ConnectToEthernet();
                         }
                         catch (Exception e)
                         {
                             m_Clients -= 1;
                             Trace.Except(e);
-                            GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Ethernet comm error connecting " + m_ComPort + ":" + e.Message);
-                            if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.ConnectionFailed + e.Message);
+                            GeminiError.LogSerialError(SharedResources.TELESCOPE_DRIVER_NAME, "Ethernet comm error connecting " + m_ComPort + ": " + e.Message);
+                            if (OnError != null) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.ConnectionFailed + " " + e.Message);
                             m_Connected = false;
                             throw e;    //rethrow the exception
                         }
@@ -2652,7 +2687,7 @@ namespace ASCOM.GeminiTelescope
 
             if (sRes == null)
             {
-                if (!m_ScanCOMPorts || !HuntForGemini(null)) return false;
+                if (EthernetPort || !m_ScanCOMPorts || !HuntForGemini(null)) return false;
                 Transmit("\x6");
                 ci = new CommandItem("\x6", 10000, true);
                 sRes = GetCommandResult(ci,false);
@@ -2745,11 +2780,14 @@ namespace ASCOM.GeminiTelescope
         /// 
         /// <returns></returns>
         internal bool HuntForGemini(string one_port)
-        {            
+        {
+            if (EthernetPort) return false;
+
             Trace.Enter("HuntForGemini", m_SerialPort.PortName, m_SerialPort.BaudRate);
             
             m_AllowErrorNotify = false;
 
+            
             try
             {
                 if (m_SerialPort.IsOpen) m_SerialPort.Close();
@@ -2781,7 +2819,7 @@ namespace ASCOM.GeminiTelescope
                         {
                             m_SerialPort.Open();
                             m_SerialPort.DtrEnable = true;
-                            m_SerialPort.Encoding = Encoding.GetEncoding("Latin1");
+                            m_SerialPort.Encoding = m_BinaryEncoding;
 
                             if (m_SerialPort.IsOpen)
                             {
@@ -2876,10 +2914,19 @@ namespace ASCOM.GeminiTelescope
 
                         //Transmit(":Q#"); // stop all slews, in case we are in the middle of one
 
-                        Trace.Info(2, "Closing serial port");
-                        if (m_SerialPort!=null) m_SerialPort.Close();
-                        Trace.Info(2, "Serial port closed");
+                        if (m_SerialPort != null)
+                        {
+                            Trace.Info(2, "Closing serial port");
+                            m_SerialPort.Close();
+                            Trace.Info(2, "Serial port closed");
+                        }
 
+                        if (EthernetPort)
+                        {
+                            Trace.Info(2, "Closing Ethernet connection");
+                            GeminiHardware.Instance.DisconnectToEthernet();
+                            Trace.Info(2, "Closed Ethernet connection");
+                        }
                         m_BackgroundWorker = null;
 
                         Trace.Info(2, "Closing pass-through port");
@@ -2922,6 +2969,8 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        static int MaxLength = 0;
+
         /// <summary>
         /// Process queued up commands in the sequence queued.
         /// </summary>
@@ -2946,8 +2995,19 @@ namespace ASCOM.GeminiTelescope
                         // remove up to x commands at a time
                         int cnt = Math.Min(MaxCommands, m_CommandQueue.Count);
 
-                        commands = new object[cnt]; // m_CommandQueue.ToArray();
-                        for (int i = 0; i < cnt; ++i) commands[i] = m_CommandQueue.Dequeue();
+                        //if (EthernetPort && UDP)
+                        //{
+                        //    cnt++;
+                        //    commands = new object[cnt]; // m_CommandQueue.ToArray();
+                        //    for (int i = 0; i < cnt-1; ++i) commands[i] = m_CommandQueue.Dequeue();
+                        //    commands[cnt - 1] = new  CommandItem(":CE*", 1000, true);
+
+                        //}
+                        //else
+                        {
+                            commands = new object[cnt]; // m_CommandQueue.ToArray();
+                            for (int i = 0; i < cnt; ++i) commands[i] = m_CommandQueue.Dequeue();
+                        }
                     }
                 }
 
@@ -2958,7 +3018,7 @@ namespace ASCOM.GeminiTelescope
                         string all_commands = String.Empty;
 
                         bool bNeedStatusUpdate = false;
-
+                        bool bReturnExpected = false;   // true if at least one of the commands in this packet has a return value
 
                         foreach (CommandItem ci in commands)
                         {
@@ -2980,6 +3040,9 @@ namespace ASCOM.GeminiTelescope
 
                         DiscardInBuffer();
 
+                        if (all_commands.Length >= MaxLength) MaxLength = all_commands.Length;
+
+
                         Trace.Info(2, "Transmitting commands", all_commands);
 
                         int startTime = System.Environment.TickCount;
@@ -2995,8 +3058,11 @@ namespace ASCOM.GeminiTelescope
                             // wait for the result whether or not the caller wants it
                             // otherwise delayed result from a previous command
                             // can be falsely returned for a later request:
+                            bool retValue = false;
 
-                            string result = GetCommandResult(ci);
+                            string result = GetCommandResult(ci, ref retValue);
+
+                            bReturnExpected |= retValue;
 
                             Trace.Info(4, "Result", result);
 
@@ -3015,6 +3081,9 @@ namespace ASCOM.GeminiTelescope
                                 Trace.Info(4, "Status Update requested");
                             }
                         }
+
+                        if (!bReturnExpected && GeminiLevel >= 5)
+                            GeminiHardware.Instance.GetSyncOnEmptyReturn();
 
                         if (bNeedStatusUpdate || (DateTime.Now - m_LastUpdate).TotalMilliseconds > SharedResources.GEMINI_POLLING_INTERVAL)
                         {
@@ -3385,6 +3454,19 @@ namespace ASCOM.GeminiTelescope
             Trace.Exit("UpdatePolledVariables");
         }
 
+
+
+        /// <summary>
+        /// called when none of the commands in the last command string
+        /// produce a result (ie, no resulting packet expected)
+        /// Primarily used for UDP ACK packet check with Gemini5
+        /// </summary>
+        /// <returns></returns>
+        internal virtual bool GetSyncOnEmptyReturn()
+        {
+            return true;
+        }
+
         /// <summary>
         /// After a timeout error, resync with the mount
         ///  by waiting for a proper response to ^G command
@@ -3398,17 +3480,20 @@ namespace ASCOM.GeminiTelescope
 
             Trace.Enter("Resync");
 
-            if (m_SerialPort.IsOpen)
+            if (m_SerialPort.IsOpen || GeminiHardware.Instance.UDP_client!=null)
             {
                 lock (m_CommandQueue)
                 {
+                    if (!m_SerialPort.IsOpen)
+                        GeminiHardware.Instance.ResyncEthernet();
+
                     string sRes = null;
                     int count = 3;
                     do
                     {
                         try
                         {
-                            m_SerialPort.DiscardOutBuffer();
+                            DiscardOutBuffer();
                             DiscardInBuffer();
 
                             Transmit("\x6");
@@ -3446,13 +3531,18 @@ namespace ASCOM.GeminiTelescope
                     else
                         Trace.Info(2, "Didn't get a sync, giving up!");
 
-                    m_SerialPort.DiscardOutBuffer();
+                    DiscardOutBuffer();
                     DiscardInBuffer();
                 }
             }
             Trace.Exit("Resync");
         }
 
+        internal string GetCommandResult(CommandItem command)
+        {
+            bool bReturn = false;
+            return GetCommandResult(command, ref bReturn);
+        }
 
         /// <summary>
         /// Wait for a proper response from Gemini for a given command. Command has already been sent.
@@ -3460,9 +3550,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         /// <param name="command">actual command sent to Gemini</param>
         /// <returns>result received from Gemini, or null if no result, timeout, or bad result received</returns>
-        internal string GetCommandResult(CommandItem command)
+        internal string GetCommandResult(CommandItem command, ref bool bReturn )
         {
-            return GetCommandResult(command, true);
+            return GetCommandResult(command, true, ref bReturn);
         }
 
         /// <summary>
