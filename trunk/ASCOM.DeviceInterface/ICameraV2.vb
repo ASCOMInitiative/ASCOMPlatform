@@ -1,4 +1,6 @@
 ﻿Imports System.Runtime.InteropServices
+
+
 'Imports ASCOM.Conform
 
 '-----------------------------------------------------------------------
@@ -7,11 +9,15 @@
 ''' <summary>
 ''' Defines the ICamera Interface
 ''' </summary>
-<Guid("972CEBC6-0EBE-4efc-99DD-CC5293FDE77B"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
-Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
+    <Guid ("972CEBC6-0EBE-4efc-99DD-CC5293FDE77B"), ComVisible (True),
+        InterfaceType (ComInterfaceType.InterfaceIsIDispatch)>
+Public Interface ICameraV2
+    'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     'Inherits IAscomDriver
     'Inherits IDeviceControl
+
 #Region "Common Methods"
+
     'IAscomDriver Methods
 
     ''' <summary>
@@ -19,7 +25,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' You can also read the property to check whether it is connected.
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
+    ''' <exception cref="NotConnectedException">Thrown if the connection attempt was not successful.</exception>
     Property Connected() As Boolean
 
     ''' <summary>
@@ -27,7 +33,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' For Camera devices, the string shall not exceed 68 characters (for compatibility with FITS headers).
     ''' </summary>
     ''' <value>The description.</value>
-    ''' <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
+    ''' <exception cref="DriverException">Must throw exception if description unavailable</exception>
     ReadOnly Property Description() As String
 
     ''' <summary>
@@ -109,7 +115,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <exception cref="ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients 
     ''' of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to 
     ''' perform an action that it does not support.</exception>
-    Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+    Function Action (ByVal ActionName As String, ByVal ActionParameters As String) As String
 
     ''' <summary>
     ''' Returns the list of action names supported by this driver.
@@ -127,6 +134,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
     ''' the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
     ''' </remarks>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     ReadOnly Property SupportedActions() As ArrayList
 
     ''' <summary>
@@ -139,7 +147,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' If set to <c>false</c> then protocol framing characters may be added prior to transmission.
     ''' </param>
     ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
-    Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False)
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+    Sub CommandBlind (ByVal Command As String, Optional ByVal Raw As Boolean = False)
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and waits for a boolean response.
@@ -154,7 +163,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' Returns the interpreted boolean response received from the device.
     ''' </returns>
     ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
-    Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+    Function CommandBool (ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean
 
     ''' <summary>
     ''' Transmits an arbitrary string to the device and waits for a string response.
@@ -169,7 +179,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' Returns the string response received from the device.
     ''' </returns>
     ''' <remarks>This is only available for the Camera Interface Version 2</remarks>
-    Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+    Function CommandString (ByVal Command As String, Optional ByVal Raw As Boolean = False) As String
 
     ''' <summary>
     ''' Dispose the late-bound interface, if needed. Will release it via COM
@@ -182,6 +193,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
 #End Region
 
 #Region "Camera V1 methods"
+
     ''' <summary>
     ''' Aborts the current exposure, if any, and returns the camera to Idle state.
     ''' </summary>
@@ -193,6 +205,9 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <item><description>Must NOT throw an exception if the camera is already idle.</description></item>
     ''' </list>
     ''' </remarks>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+    ''' <exception cref="InvalidOperationException">Thrown if abort is not currently possible (e.g. during download).</exception>
+    ''' <exception cref="DriverException">Thrown if a communications error occurs, or if the abort fails.</exception>
     Sub AbortExposure()
 
     ''' <summary>
@@ -256,6 +271,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance can abort exposure; otherwise, <c>false</c>.
     ''' </value>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     ReadOnly Property CanAbortExposure() As Boolean
 
     ''' <summary>
@@ -278,6 +294,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance can get cooler power; otherwise, <c>false</c>.
     ''' </value>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     ReadOnly Property CanGetCoolerPower() As Boolean
 
     ''' <summary>
@@ -290,6 +307,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance can pulse guide; otherwise, <c>false</c>.
     ''' </value>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     ReadOnly Property CanPulseGuide() As Boolean
 
     ''' <summary>
@@ -303,6 +321,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance can set CCD temperature; otherwise, <c>false</c>.
     ''' </value>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     ReadOnly Property CanSetCCDTemperature() As Boolean
 
     ''' <summary>
@@ -384,6 +403,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <value>
     ''' 	<c>true</c> if this instance has shutter; otherwise, <c>false</c>.
     ''' </value>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     ReadOnly Property HasShutter() As Boolean
 
     ''' <summary>
@@ -559,7 +579,8 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <param name="Duration">The duration.</param>
     ''' <exception cref="MethodNotImplementedException">PulseGuide command is unsupported</exception>
     ''' <exception cref=" DriverException">PulseGuide command is unsuccessful</exception>
-    Sub PulseGuide(ByVal Direction As GuideDirections, ByVal Duration As Integer)
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
+    Sub PulseGuide (ByVal Direction As GuideDirections, ByVal Duration As Integer)
 
     ''' <summary>
     ''' Sets the camera cooler setpoint in degrees Celsius, and returns the current setpoint.
@@ -576,6 +597,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <exception cref="InvalidValueException">Must throw an InvalidValueException if an attempt is made to set a value is outside the 
     ''' camera's valid termperature setpoint range.</exception>
     ''' <exception cref="PropertyNotImplementedException">Must throw exception if <see cref="CanSetCCDTemperature" /> is False.</exception>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     Property SetCCDTemperature() As Double
 
     ''' <summary>
@@ -594,7 +616,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <see cref="BinY" />, <see cref="StartX" />, <see cref="StartY" />, or <see cref="StartExposure">Duration</see> parameters are invalid.</exception>
     ''' <exception cref=" InvalidOperationException"><see cref="CanAsymmetricBin" /> is False and <see cref="BinX" /> != <see cref="BinY" /></exception>
     ''' <exception cref="NotConnectedException">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
-    Sub StartExposure(ByVal Duration As Double, ByVal Light As Boolean)
+    Sub StartExposure (ByVal Duration As Double, ByVal Light As Boolean)
 
     ''' <summary>
     ''' Sets the subframe start position for the X axis (0 based) and returns the current value.
@@ -603,6 +625,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' If binning is active, value is in binned pixels.
     ''' </remarks>
     ''' <value>The start X.</value>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     Property StartX() As Integer
 
     ''' <summary>
@@ -612,6 +635,7 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' If binning is active, value is in binned pixels.
     ''' </remarks>
     ''' <value>The start Y.</value>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     Property StartY() As Integer
 
     ''' <summary>
@@ -624,9 +648,11 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' <exception cref="NotConnectedException">Must throw an exception if the camera or connection has an error condition</exception>
     ''' <exception cref="DriverException">Must throw an exception if for any reason no image readout will be available.</exception>
     Sub StopExposure()
+
 #End Region
 
 #Region "ICameraV2 methods"
+
     'ICameraV2 members
 
     ''' <summary>
@@ -717,13 +743,11 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ReadOnly Property ExposureResolution As Double
 
     ''' <summary>
-    ''' Fast readout mode
+    ''' Gets or sets Fast Readout Mode
     ''' </summary>
-    ''' <value>True sets fast readout mode, false sets normal mode</value>
-    ''' <returns>True when the current readout mode is fast and false when the readout mode is normal.</returns>
-    ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if <see cref="CanFastReadout" /> returns False.</exception>
+    ''' <value><c>true</c> for fast readout mode, <c>false</c> for normal mode</value>
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected and a connection is required to obtain this information.</exception>
+    ''' <exception cref="PropertyNotImplementedException">Thrown if <see cref="CanFastReadout" /> is <c>false</c>.</exception>
     ''' <remarks>Must thrown an exception if no <see cref="Connected">connection</see> is established to the camera. Must throw 
     ''' an exception if <see cref="CanFastReadout" /> returns False.
     ''' <para>Many cameras have a "fast mode" intended for use in focusing. When set to True, the camera will operate in Fast mode; when 
@@ -1577,6 +1601,6 @@ Public Interface ICameraV2 'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     ''' the driver is aware of the capabilities of the specific camera model.</para>
     ''' </remarks>
     ReadOnly Property SensorType As SensorType
-#End Region
 
+#End Region
 End Interface
