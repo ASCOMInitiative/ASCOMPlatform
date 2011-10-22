@@ -55,7 +55,15 @@ Friend Class ChooserForm
             ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
             Try 'Get the list of drivers of this device type
                 m_Drivers = ProfileStore.EnumKeys(m_sDeviceType & " Drivers") ' Get Key-Class pairs
+                'Now list the drivers 
+                For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
+                    TL.LogMessage("ChooserForm Load", "Found ProgID: " & Driver.Key.ToString & ", Description: @" & Driver.Value.ToString & "@")
+                    If Driver.Value = "" Then
+                        TL.LogMessage("ChooserForm Load", "  ***** Description missing for ProgID: " & Driver.Key.ToString)
+                    End If
+                Next
             Catch ex1 As Exception
+                TL.LogMessageCrLf("ChooserForm Load", "Exception: " & ex1.ToString)
                 'Ignore any exceptions from this call e.g. if there are no devices of that type installed just create an empty list
                 m_Drivers = New Generic.SortedList(Of String, String)
             End Try
@@ -185,9 +193,14 @@ Friend Class ChooserForm
         cb = Me.cbDriverSelector ' Convenient shortcut
 
         'Find ProgID corresponding to description
-        For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
-            If LCase(de.Value.ToString) = LCase(cb.SelectedItem.ToString) Then sProgID = de.Key.ToString
+        For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
+            If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
+                If LCase(Driver.Key.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
+            Else 'Description is present
+                If LCase(Driver.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
+            End If
         Next
+        TL.LogMessage("PropertiesClick", "ProgID:" & sProgID)
         Try
             ' Mechanic to revert to Platform 5 behaviour in the event that Activator.CreateInstance has unforseen consequqnces
             Try : UseCreateObject = RegistryCommonCode.GetBool(CHOOSER_USE_CREATEOBJECT, CHOOSER_USE_CREATEOBJECT_DEFAULT) : Catch : End Try
@@ -246,10 +259,21 @@ Friend Class ChooserForm
         cb = Me.cbDriverSelector ' Convenient shortcut
 
         'Find ProgID corresponding to description
-        For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
-            If LCase(de.Value.ToString) = LCase(cb.SelectedItem.ToString) Then m_sResult = de.Key.ToString
+        For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
+            TL.LogMessage("OK Click", "Processing ProgID: " & Driver.Key.ToString & ", Description: @" & Driver.Value.ToString & "@")
+            If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
+                If LCase(Driver.Key.ToString) = LCase(cb.SelectedItem.ToString) Then
+                    sProgID = Driver.Key.ToString
+                    TL.LogMessage("OK Click", "  Description is missing... selecting ProgID: " & sProgID)
+                End If
+            Else
+                If LCase(Driver.Value.ToString) = LCase(cb.SelectedItem.ToString) Then
+                    m_sResult = Driver.Key.ToString
+                    TL.LogMessage("OK Click", "  Description is present... selecting ProgID: " & sProgID)
+                End If
+            End If
         Next
-
+        TL.LogMessage("OK Click", "Returning ProgID: " & sProgID)
         Me.Hide()
     End Sub
 
@@ -260,8 +284,12 @@ Friend Class ChooserForm
         If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
 
             'Find ProgID corresponding to description
-            For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
-                If LCase(de.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = de.Key.ToString
+            For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
+                If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
+                    If LCase(Driver.Key.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
+                Else 'Description is present
+                    If LCase(Driver.Value.ToString) = LCase(Me.cbDriverSelector.SelectedItem.ToString) Then sProgID = Driver.Key.ToString
+                End If
             Next
             TL.LogMessage("DriverSelected", "ProgID:" & sProgID & ", Bitness: " & ApplicationBits.ToString)
             DriverIsCompatible = VersionCode.DriverCompatibilityMessage(sProgID, ApplicationBits, TL) 'Get compatibility warning message, if any
