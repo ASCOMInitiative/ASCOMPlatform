@@ -470,7 +470,7 @@ Module VersionCode
     End Function
 
     ''' <summary>
-    ''' Return a message when a driver is not compatible with the requested 32/64bit application type. Returns anempty string if the driver is compatible
+    ''' Return a message when a driver is not compatible with the requested 32/64bit application type. Returns an empty string if the driver is compatible
     ''' </summary>
     ''' <param name="ProgID">ProgID of the driver to be assessed</param>
     ''' <param name="RequiredBitness">Application bitness for which application compatibility should be tested</param>
@@ -483,6 +483,8 @@ Module VersionCode
         Dim RK, RKInprocServer32 As RegistryKey, CLSID, InprocFilePath, CodeBase As String
         Dim RK32 As RegistryKey = Nothing
         Dim RK64 As RegistryKey = Nothing
+        Dim AssemblyFullName As String, LoadedAssembly As Assembly
+        Dim peKind As PortableExecutableKinds, machine As ImageFileMachine, Modules() As [Module]
 
         ProfileStore = New RegistryAccess("DriverCompatibilityMessage") 'Get access to the profile store
 
@@ -514,7 +516,81 @@ Module VersionCode
                         CodeBase = RKInprocServer32.GetValue("CodeBase", "").ToString 'Get the codebase if present to override the default value
                         If CodeBase <> "" Then InprocFilePath = CodeBase
 
-                        If (InprocFilePath <> "") And (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We do have a path to the server and it is a dll
+                        If (Trim(InprocFilePath).ToUpper = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
+                            'If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assmbly name, 
+                            TL.LogMessage("DriverCompatibility", "     Found MSCOREE.DLL")
+
+                            AssemblyFullName = RKInprocServer32.GetValue("Assembly", "").ToString 'Get the full name
+                            TL.LogMessage("DriverCompatibility", "     Found full name: " & AssemblyFullName)
+                            If AssemblyFullName <> "" Then 'We did get an assembly full name so now try and load it to the reflection only context
+                                Try
+                                    LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName)
+                                    'OK that wen't well so we have an MSIL version!
+                                    InprocFilePath = LoadedAssembly.CodeBase 'Get the codebase for testing below
+                                    TL.LogMessage("DriverCompatibilityMSIL", "     Found file path: " & InprocFilePath)
+                                    TL.LogMessage("DriverCompatibilityMSIL", "     Found full name: " & LoadedAssembly.FullName & " ")
+                                    Modules = LoadedAssembly.GetLoadedModules()
+                                    Modules(0).GetPEKind(peKind, machine)
+                                    If (peKind And PortableExecutableKinds.Required32Bit) <> 0 Then TL.LogMessage("DriverCompatibilityMSIL", "     Kind Required32bit")
+                                    If (peKind And PortableExecutableKinds.PE32Plus) <> 0 Then TL.LogMessage("DriverCompatibilityMSIL", "     Kind PE32Plus")
+                                    If (peKind And PortableExecutableKinds.ILOnly) <> 0 Then TL.LogMessage("DriverCompatibilityMSIL", "     Kind ILOnly")
+                                    If (peKind And PortableExecutableKinds.NotAPortableExecutableImage) <> 0 Then TL.LogMessage("DriverCompatibilityMSIL", "     Kind Not PE Executable")
+
+                                Catch ex As IOException
+                                    'That failed so try to load an x86 version
+                                    TL.LogMessageCrLf("DriverCompatibility", "Could not find file, trying x86 version - " & ex.Message)
+
+                                    Try
+                                        LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName & ", processorArchitecture=x86")
+                                        'OK that wen't well so we have an x86 only version!
+                                        InprocFilePath = LoadedAssembly.CodeBase 'Get the codebase for testing below
+                                        TL.LogMessage("DriverCompatibilityX86", "     Found file path: " & InprocFilePath)
+                                        Modules = LoadedAssembly.GetLoadedModules()
+                                        Modules(0).GetPEKind(peKind, machine)
+                                        If (peKind And PortableExecutableKinds.Required32Bit) <> 0 Then TL.LogMessage("DriverCompatibilityX86", "     Kind Required32bit")
+                                        If (peKind And PortableExecutableKinds.PE32Plus) <> 0 Then TL.LogMessage("DriverCompatibilityX86", "     Kind PE32Plus")
+                                        If (peKind And PortableExecutableKinds.ILOnly) <> 0 Then TL.LogMessage("DriverCompatibilityX86", "     Kind ILOnly")
+                                        If (peKind And PortableExecutableKinds.NotAPortableExecutableImage) <> 0 Then TL.LogMessage("DriverCompatibilityX86", "     Kind Not PE Executable")
+
+                                    Catch ex1 As IOException
+                                        'That failed so try to load an x64 version
+                                        TL.LogMessageCrLf("DriverCompatibilityX64", "Could not find file, trying x64 version - " & ex.Message)
+
+                                        Try
+                                            LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName & ", processorArchitecture=x64")
+                                            'OK that wen't well so we have an x64 only version!
+                                            InprocFilePath = LoadedAssembly.CodeBase 'Get the codebase for testing below
+                                            TL.LogMessage("DriverCompatibilityX64", "     Found file path: " & InprocFilePath)
+                                            Modules = LoadedAssembly.GetLoadedModules()
+                                            Modules(0).GetPEKind(peKind, machine)
+                                            If (peKind And PortableExecutableKinds.Required32Bit) <> 0 Then TL.LogMessage("DriverCompatibilityX64", "     Kind Required32bit")
+                                            If (peKind And PortableExecutableKinds.PE32Plus) <> 0 Then TL.LogMessage("DriverCompatibilityX64", "     Kind PE32Plus")
+                                            If (peKind And PortableExecutableKinds.ILOnly) <> 0 Then TL.LogMessage("DriverCompatibilityX64", "     Kind ILOnly")
+                                            If (peKind And PortableExecutableKinds.NotAPortableExecutableImage) <> 0 Then TL.LogMessage("DriverCompatibilityX64", "     Kind Not PE Executable")
+
+                                        Catch ex2 As Exception
+                                            'Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
+                                            TL.LogMessageCrLf("DriverCompatibilityX64", ex1.ToString)
+                                        End Try
+
+                                    Catch ex1 As Exception
+                                        'Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
+                                        TL.LogMessageCrLf("DriverCompatibilityX32", ex1.ToString)
+                                    End Try
+
+                                Catch ex As Exception
+                                    'Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
+                                    TL.LogMessageCrLf("DriverCompatibility", ex.ToString)
+                                End Try
+                            Else
+                                'No Assembly entry so we can't load the assembly, we'll just have to take a chance!
+                                InprocFilePath = "" 'Set to null to bypass tests
+                                TL.LogMessage("DriverCompatibility", "     Set InprocFilePath to null string")
+                            End If
+                        End If
+
+                        If (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We have a path to the server and it is a dll
+                            ' We have an assembly or other technology DLL, outside the GAC, in the file system
                             Try
                                 InProcServer = New PEReader(InprocFilePath) 'Get hold of the executable so we can determine its characteristics
                                 InprocServerBitness = InProcServer.BitNess
@@ -598,7 +674,81 @@ Module VersionCode
                         CodeBase = RKInprocServer32.GetValue("CodeBase", "").ToString 'Get the codebase if present to override the default value
                         If CodeBase <> "" Then InprocFilePath = CodeBase
 
-                        If (InprocFilePath <> "") And (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We do have a path to the server and it is a dll
+                        If (Trim(InprocFilePath).ToUpper = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
+                            'If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assmbly name, 
+                            TL.LogMessage("DriverCompatibility", "     Found MSCOREE.DLL")
+
+                            AssemblyFullName = RKInprocServer32.GetValue("Assembly", "").ToString 'Get the full name
+                            TL.LogMessage("DriverCompatibility", "     Found full name: " & AssemblyFullName)
+                            If AssemblyFullName <> "" Then 'We did get an assembly full name so now try and load it to the reflection only context
+                                Try
+                                    LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName)
+                                    'OK that wen't well so we have an MSIL version!
+                                    InprocFilePath = LoadedAssembly.CodeBase 'Get the codebase for testing below
+                                    TL.LogMessage("DriverCompatibilityMSIL", "     Found file path: " & InprocFilePath)
+                                    TL.LogMessage("DriverCompatibilityMSIL", "     Found full name: " & LoadedAssembly.FullName & " ")
+                                    Modules = LoadedAssembly.GetLoadedModules()
+                                    Modules(0).GetPEKind(peKind, machine)
+                                    If (peKind And PortableExecutableKinds.Required32Bit) <> 0 Then TL.LogMessage("DriverCompatibilityMSIL", "     Kind Required32bit")
+                                    If (peKind And PortableExecutableKinds.PE32Plus) <> 0 Then TL.LogMessage("DriverCompatibilityMSIL", "     Kind PE32Plus")
+                                    If (peKind And PortableExecutableKinds.ILOnly) <> 0 Then TL.LogMessage("DriverCompatibilityMSIL", "     Kind ILOnly")
+                                    If (peKind And PortableExecutableKinds.NotAPortableExecutableImage) <> 0 Then TL.LogMessage("DriverCompatibilityMSIL", "     Kind Not PE Executable")
+
+                                Catch ex As IOException
+                                    'That failed so try to load an x86 version
+                                    TL.LogMessageCrLf("DriverCompatibility", "Could not find file, trying x86 version - " & ex.Message)
+
+                                    Try
+                                        LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName & ", processorArchitecture=x86")
+                                        'OK that wen't well so we have an x86 only version!
+                                        InprocFilePath = LoadedAssembly.CodeBase 'Get the codebase for testing below
+                                        TL.LogMessage("DriverCompatibilityX86", "     Found file path: " & InprocFilePath)
+                                        Modules = LoadedAssembly.GetLoadedModules()
+                                        Modules(0).GetPEKind(peKind, machine)
+                                        If (peKind And PortableExecutableKinds.Required32Bit) <> 0 Then TL.LogMessage("DriverCompatibilityX86", "     Kind Required32bit")
+                                        If (peKind And PortableExecutableKinds.PE32Plus) <> 0 Then TL.LogMessage("DriverCompatibilityX86", "     Kind PE32Plus")
+                                        If (peKind And PortableExecutableKinds.ILOnly) <> 0 Then TL.LogMessage("DriverCompatibilityX86", "     Kind ILOnly")
+                                        If (peKind And PortableExecutableKinds.NotAPortableExecutableImage) <> 0 Then TL.LogMessage("DriverCompatibilityX86", "     Kind Not PE Executable")
+
+                                    Catch ex1 As IOException
+                                        'That failed so try to load an x64 version
+                                        TL.LogMessageCrLf("DriverCompatibilityX64", "Could not find file, trying x64 version - " & ex.Message)
+
+                                        Try
+                                            LoadedAssembly = Assembly.ReflectionOnlyLoad(AssemblyFullName & ", processorArchitecture=x64")
+                                            'OK that wen't well so we have an x64 only version!
+                                            InprocFilePath = LoadedAssembly.CodeBase 'Get the codebase for testing below
+                                            TL.LogMessage("DriverCompatibilityX64", "     Found file path: " & InprocFilePath)
+                                            Modules = LoadedAssembly.GetLoadedModules()
+                                            Modules(0).GetPEKind(peKind, machine)
+                                            If (peKind And PortableExecutableKinds.Required32Bit) <> 0 Then TL.LogMessage("DriverCompatibilityX64", "     Kind Required32bit")
+                                            If (peKind And PortableExecutableKinds.PE32Plus) <> 0 Then TL.LogMessage("DriverCompatibilityX64", "     Kind PE32Plus")
+                                            If (peKind And PortableExecutableKinds.ILOnly) <> 0 Then TL.LogMessage("DriverCompatibilityX64", "     Kind ILOnly")
+                                            If (peKind And PortableExecutableKinds.NotAPortableExecutableImage) <> 0 Then TL.LogMessage("DriverCompatibilityX64", "     Kind Not PE Executable")
+
+                                        Catch ex2 As Exception
+                                            'Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
+                                            TL.LogMessageCrLf("DriverCompatibilityX64", ex1.ToString)
+                                        End Try
+
+                                    Catch ex1 As Exception
+                                        'Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
+                                        TL.LogMessageCrLf("DriverCompatibilityX32", ex1.ToString)
+                                    End Try
+
+                                Catch ex As Exception
+                                    'Ignore exceptions here and leave MSCOREE.DLL as the InprocFilePath, this will fail below and generate an "incompatible driver" message
+                                    TL.LogMessageCrLf("DriverCompatibility", ex.ToString)
+                                End Try
+                            Else
+                                'No Assembly entry so we can't load the assembly, we'll just have to take a chance!
+                                InprocFilePath = "" 'Set to null to bypass tests
+                                TL.LogMessage("DriverCompatibility", "     Set InprocFilePath to null string")
+                            End If
+                        End If
+
+                        If (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We do have a path to the server and it is a dll
+                            ' We have an assembly or other technology DLL, outside the GAC, in the file system
                             Try
                                 InProcServer = New PEReader(InprocFilePath) 'Get hold of the executable so we can determine its characteristics
                                 If InProcServer.BitNess = Bitness.Bits64 Then '64bit only driver executable
