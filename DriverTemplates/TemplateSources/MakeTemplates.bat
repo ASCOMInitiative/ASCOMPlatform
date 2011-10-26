@@ -1,3 +1,3 @@
 @Echo off
-MakeAscomTemplates.exe ".." "ASCOM 6 Templates"
+MakeAscomTemplates.exe ".." "TemplateSources"
 pause
