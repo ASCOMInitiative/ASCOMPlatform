@@ -212,6 +212,7 @@ function writesubmenu() {
     case 7: // FAQs
         SubMenuOutput += "<h3>Detailed FAQ Answers</h3>";
         SubMenuOutput += "<ul class=\"treeview\">";
+	    SubMenuOutput += "<li><a href=\"Platform5.5only.htm\">Driver for Platform 5 Only?</a></li>";
 	    SubMenuOutput += "<li><a href=\"SoftwareVictory.htm\">Correcting for Problems</a></li>";
 	    SubMenuOutput += "<li><a href=\"TheSky.htm\">Working With TheSky</a></li>";
 	    SubMenuOutput += "<li><a href=\"POTH.htm\">Using POTH</a></li>";
