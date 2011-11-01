@@ -381,6 +381,10 @@ namespace ASCOM.Simulator
                 case SlewType.SlewNone:
                     if (tracking)
                     {
+                        // apply the ra and dec offset rates
+                        // rates are in arc seconds per second
+                        rightAscension += (rightAscensionRate / 3600) * SharedResources.TIMER_INTERVAL;
+                        declination += (declinationRate / 3600) * SharedResources.TIMER_INTERVAL;
                         CalculateAltAz();
                     }
                     else
