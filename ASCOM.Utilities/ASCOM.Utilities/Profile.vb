@@ -222,6 +222,7 @@ Public Class Profile
     ''' <param name="DescriptiveName">Descriptive name of the device</param>
     ''' <remarks>Does nothing if already registered, so safe to call on driver load.</remarks>
     Public Sub Register(ByVal DriverID As String, ByVal DescriptiveName As String) Implements IProfile.Register
+        Dim CurrentDescription As String
         'Register a driver
         If Not Me.IsRegistered(DriverID) Then
             TL.LogMessage("Register", "Registering " & DriverID)
@@ -229,7 +230,13 @@ Public Class Profile
             ProfileStore.WriteProfile(MakeKey(DriverID, ""), "", DescriptiveName)
             LastDriverID = "" 'Clear this value so that the next next IsRegistered test doesn't use a now invalid cached value
         Else
-            TL.LogMessage("Register", DriverID & " already registered")
+            'ASCOM-306 - Added code to refresh description if it is missing
+            CurrentDescription = GetValue(DriverID, "", "", "")
+            TL.LogMessage("Register", DriverID & " is already registered with description: """ & CurrentDescription & """")
+            If (CurrentDescription = "") And (DescriptiveName <> "") Then ' Description is missing so write the new one if given
+                TL.LogMessage("Register", "Description is missing and new value is supplied so refreshing with: """ & DescriptiveName & """")
+                ProfileStore.WriteProfile(MakeKey(DriverID, ""), "", DescriptiveName)
+            End If
         End If
     End Sub
 
