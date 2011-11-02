@@ -117,9 +117,15 @@ End Function
 
 Public Sub Register(ByVal DriverID As String, ByVal DescriptiveName As String)
 Attribute Register.VB_Description = "Register the driver with the given DriverID and friendly name. Does nothing if already registered, so safe to call on driver load."
-
-    If Not Me.IsRegistered(DriverID) Then
+    Dim CurrentDescription As String
+    If Not Me.IsRegistered(DriverID) Then ' Driver is not registered
         Reg.WriteProfile MakeKey(DriverID, ""), "", DescriptiveName, ERR_SOURCE_PROFILE
+    'ASCOM-306 - Added this Else clause
+    Else ' Driver is registered so check whether the description is still present
+        CurrentDescription = GetValue(DriverID, "")
+            If (CurrentDescription = "") And (DescriptiveName <> "") Then ' Description is missing so write the new one if given
+            Reg.WriteProfile MakeKey(DriverID, ""), "", DescriptiveName, ERR_SOURCE_PROFILE
+        End If
     End If
     
 End Sub
