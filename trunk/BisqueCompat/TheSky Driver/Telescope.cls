@@ -163,6 +163,7 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 '                   so features dependent on them are not implemented for
 '                   TheSky 5.
 ' 11-Jan-11 rbd     5.2.7 - Fix the TheSky 5 fix! Silly typo.
+' 11-Nov-11 cdr     Change to PulseGuide as suggested by Matthew Bisque
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -1126,14 +1127,17 @@ Public Sub PulseGuide(ByVal Direction As GuideDirections, _
         End Select
         m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, RaRate, DecRate
         SleepEx dur, True
-        Select Case Direction
-        Case GuideDirections.guideNorth, GuideDirections.guideSouth
-            ' set rate to 0
-            m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, 0&, 0&
-        Case GuideDirections.guideEast, GuideDirections.guideWest
-            ' turn tracking on
-            m_SkyTele.SetTracking m_SkyTele.IsTracking, 1&, 0&, 0&
-        End Select
+        ' change suggested by Matthew Bisque
+        m_SkyTele.SetTracking 1, 1&, 0&, 0&
+        
+'        Select Case Direction
+'        Case GuideDirections.guideNorth, GuideDirections.guideSouth
+'            ' set rate to 0
+'            m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, 0&, 0&
+'        Case GuideDirections.guideEast, GuideDirections.guideWest
+'            ' turn tracking on
+'            m_SkyTele.SetTracking m_SkyTele.IsTracking, 1&, 0&, 0&
+'        End Select
     Else
         ' turn guiding off (rbd ???)
         m_SkyTele.SetTracking m_SkyTele.IsTracking, 1&, 0&, 0&
