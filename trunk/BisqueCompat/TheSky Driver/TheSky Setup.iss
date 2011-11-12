@@ -10,11 +10,12 @@
 ;                     fix TheSky 5 compatibility. Cosmetics.
 ; Bob Denny (5.2.7) - Dang it, one more fix for TheSky 5.
 ; Chris R   (5.2.8) - Change to guiding as suggested by Matthew Bisque
+; Chris R	(5.2.9) - Another change suggested by MB
 ;
 [Setup]
 AppName=ASCOM TheSky Telescope Driver
-AppVerName=ASCOM TheSky Telescope Driver 5.2.8
-AppVersion=5.2.8
+AppVerName=ASCOM TheSky Telescope Driver 5.2.9
+AppVersion=5.2.9
 AppPublisher=Bob Denny <rdenny@dc3.com>
 AppPublisherURL=mailto:rdenny@dc3.com
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -24,7 +25,7 @@ DefaultDirName={cf}\ASCOM\Telescope
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir=.
-OutputBaseFilename=TheSkyTelescope(5.2.8)Setup
+OutputBaseFilename=TheSkyTelescope(5.2.9)Setup
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
