@@ -165,6 +165,7 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 ' 11-Jan-11 rbd     5.2.7 - Fix the TheSky 5 fix! Silly typo.
 ' 11-Nov-11 cdr     Change to PulseGuide as suggested by Matthew Bisque
 ' 12-Nov-11 cdr     More change suggested by MB
+' 15-Nov-11 cdr     5.2.10 stop dec guide AND start tracking.
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -1106,6 +1107,8 @@ Public Sub PulseGuide(ByVal Direction As GuideDirections, _
     CheckConnected
     If Duration > 10 Then
         Dim RaRate As Double, DecRate As Double
+        RaRate = 0
+        DecRate = 0
         Dim Rate As Double, dur As Long
         ' avoid short guide times by setting the guide time to 100 millisecs and reducing the rate
         ' try a maximum rate of 50% sidereal
@@ -1126,23 +1129,15 @@ Public Sub PulseGuide(ByVal Direction As GuideDirections, _
         Case GuideDirections.guideWest
             RaRate = -Rate
         End Select
-        m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, RaRate, DecRate
+        m_SkyTele.SetTracking 1, 0&, RaRate, DecRate
         SleepEx dur, True
-        ' change suggested by Matthew Bisque
+        Select Case Direction
+        Case GuideDirections.guideNorth, GuideDirections.guideSouth
+            ' set dec rate to 0
+            m_SkyTele.SetTracking 1, 0&, 0&, 0&
+        End Select
+        ' resume tracking
         m_SkyTele.SetTracking 1, 1&, 0&, 0&
-        
-'        Select Case Direction
-'        Case GuideDirections.guideNorth, GuideDirections.guideSouth
-'            ' set rate to 0
-'            m_SkyTele.SetTracking m_SkyTele.IsTracking, 0&, 0&, 0&
-'        Case GuideDirections.guideEast, GuideDirections.guideWest
-'            ' turn tracking on
-'            m_SkyTele.SetTracking m_SkyTele.IsTracking, 1&, 0&, 0&
-'        End Select#=
-' another change suggested by MB
-'    Else
-'        ' turn guiding off (rbd ???)
-'        m_SkyTele.SetTracking m_SkyTele.IsTracking, 1&, 0&, 0&
     End If
 
 End Sub
