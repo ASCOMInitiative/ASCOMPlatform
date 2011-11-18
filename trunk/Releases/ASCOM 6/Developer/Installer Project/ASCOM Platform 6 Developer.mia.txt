@@ -385,7 +385,7 @@ else
     Install Files ..\..\..\..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Developer Documentation
     Set Variable PROGRESS to 70
-    Install Files ..\..\..\..\Help\Help\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Output\Developer\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Active Scripting Help to $TARGETDIR$\Developer Documentation\Script56.chm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\ASCOM Developer Help to $TARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Creating Driver Installers with Inno to $TARGETDIR$\Developer Documentation\DriverInstallers.html

@@ -2087,7 +2087,7 @@ FALSE
 FALSE
 FALSE
 {55908527-B59D-42B1-9D10-42D039566565}
-..\..\..\..\Help\Help\PlatformDeveloperHelp.chm
+..\..\..\..\Help\Output\Developer\PlatformDeveloperHelp.chm
 FALSE|
 $TARGETDIR$\Developer Documentation
 FALSE

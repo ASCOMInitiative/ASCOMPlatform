@@ -4213,7 +4213,7 @@ FALSE
 FALSE
 FALSE
 {19EBDE0A-13C6-4ACB-A5E6-4009D367AB6D}
-..\..\..\..\Help\Help\PlatformHelp.chm
+..\..\..\..\Help\Output\Platform\PlatformHelp.chm
 FALSE|
 $TARGETDIR$\Docs
 FALSE
