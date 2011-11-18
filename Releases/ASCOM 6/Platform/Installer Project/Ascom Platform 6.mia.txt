@@ -790,7 +790,7 @@ else
     Install Files ..\Files\ASCOM.ico to $COMMONFILES$\ASCOM\Platform
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Compatible Software (web).url to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Drivers and Downloads (web).url to $TARGETDIR$\Docs
-    Install Files ..\..\..\..\Help\Help\PlatformHelp.chm to $TARGETDIR$\Docs
+    Install Files ..\..\..\..\Help\Output\Platform\PlatformHelp.chm to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Support (web).url to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\ASCOM_Users_Guide.pdf to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
