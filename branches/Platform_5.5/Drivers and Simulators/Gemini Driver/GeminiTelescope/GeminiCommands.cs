@@ -253,6 +253,7 @@ namespace ASCOM.GeminiTelescope
                 Commands.Remove(">222:");
                 Commands.Remove(">411:");
                 Commands.Remove(">412:");
+                Commands.Add(":u", new GeminiCommand(GeminiCommand.ResultType.NoResult, 0));
             }
         }
 

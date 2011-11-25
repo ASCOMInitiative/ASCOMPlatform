@@ -86,6 +86,7 @@
             this.txtRA.ForeColor = System.Drawing.Color.White;
             this.txtRA.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.txtRA.Name = "txtRA";
+            this.txtRA.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.txtRA.Enter += new System.EventHandler(this.txtRA_Enter);
             // 
             // txtDEC
@@ -99,6 +100,7 @@
             this.txtDEC.ForeColor = System.Drawing.Color.White;
             this.txtDEC.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.txtDEC.Name = "txtDEC";
+            this.txtDEC.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.txtDEC.Enter += new System.EventHandler(this.txtDEC_Enter);
             // 
             // label3

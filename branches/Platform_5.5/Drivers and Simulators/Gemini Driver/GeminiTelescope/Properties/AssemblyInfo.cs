@@ -21,8 +21,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.29.0")]
-[assembly: AssemblyFileVersion("1.0.29.0")]
+[assembly: AssemblyVersion("1.0.30.0")]
+[assembly: AssemblyFileVersion("1.0.30.0")]
 
 [assembly: ComVisibleAttribute(false)]
 [assembly: GuidAttribute("8F70BCD4-C978-4ecb-9D8E-C74A481B6B17")]

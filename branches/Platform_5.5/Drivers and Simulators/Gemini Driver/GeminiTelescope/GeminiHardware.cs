@@ -528,6 +528,13 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
+        private bool m_DoublePrecision = false;
+
+        internal bool DoublePrecision
+        {
+            get { return m_DoublePrecision; }
+            set { m_DoublePrecision = value; }
+        }
 
         internal System.Threading.AutoResetEvent m_WaitForCommand;
         internal System.Threading.AutoResetEvent m_DataReceived;
@@ -2606,14 +2613,14 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        internal void SendStartUpCommands()
+        internal virtual void SendStartUpCommands()
         {
             Trace.Enter("SendStartUpCommands");
             // check that the precision is set to high, if not, set it:
             string precision = DoCommandResult(":P", MAX_TIMEOUT, false);
             Trace.Info(2, "Current precision", precision);
 
-            if (precision != "HIGH PRECISION")
+            if (!DoublePrecision && precision != "HIGH PRECISION")
             {
                 Trace.Info(2, "Setting HIGH PRECISION");
                 DoCommandResult(":U", MAX_TIMEOUT, false);
@@ -3906,9 +3913,9 @@ namespace ASCOM.GeminiTelescope
                 // compute civil time using whole hours only, since Gemini doesn't take fractions:
                 DateTime civil = value + TimeSpan.FromHours(utc_offset_hours);
 
-                string localTime = civil.ToString("HH:mm:ss");
                 string localDate = civil.ToString("MM/dd/yy");
                 result = DoCommandResult(":SC" + localDate, MAX_TIMEOUT, false);
+                string localTime = (DoublePrecision? civil.ToString("HH:mm:ss.fff") : civil.ToString("HH:mm:ss"));
                 result = DoCommandResult(":SL" + localTime, MAX_TIMEOUT, false);
             }
         }
@@ -3920,7 +3927,7 @@ namespace ASCOM.GeminiTelescope
         public void SetLatitude(double Latitude)
         {         
             m_Latitude = Latitude;
-            string latitudedddmm = m_Util.DegreesToDM(Latitude, "*", "");
+            string latitudedddmm = (DoublePrecision? DegreesToDMS(Latitude) : m_Util.DegreesToDM(Latitude, "*", ""));
             string result = DoCommandResult(":St" + latitudedddmm, MAX_TIMEOUT, false);
             if (result == null || result != "1")
                 throw new ASCOM.Utilities.Exceptions.InvalidValueException("Latitidue not set");
@@ -3933,7 +3940,7 @@ namespace ASCOM.GeminiTelescope
         public void SetLongitude(double Longitude)
         {
             m_Longitude = Longitude;
-            string longitudedddmm = m_Util.DegreesToDM(-Longitude, "*", "");  // Gemini has the reverse notion of longitude sign: + for West, - for East
+            string longitudedddmm = (DoublePrecision? DegreesToDMS(-Longitude) : m_Util.DegreesToDM(-Longitude, "*", ""));  // Gemini has the reverse notion of longitude sign: + for West, - for East
             string result = DoCommandResult(":Sg" + longitudedddmm, MAX_TIMEOUT, false);
             if (result == null || result != "1")
                 throw new ASCOM.Utilities.Exceptions.InvalidValueException("Longitude not set");
@@ -4009,9 +4016,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void SyncToEquatorialCoords(double ra, double dec)
         {
-            string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), 
+            string[] cmd = { ":Sr" + HoursToHMS(ra), 
                              ":ON" + GetTargetName(),
-                             ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+                             ":Sd" + DegreesToDMS(dec), "" };
             TargetName = null;
 
             if (m_AdditionalAlign)
@@ -4049,9 +4056,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void AlignToEquatorialCoords(double ra, double dec)
         {
-            string[] cmd = { ":Sr" + m_Util.HoursToHMS(ra, ":", ":", ""), 
+            string[] cmd = { ":Sr" + HoursToHMS(ra), 
                              ":ON" + GetTargetName(),
-                             ":Sd" + m_Util.DegreesToDMS(dec, ":", ":", ""), "" };
+                             ":Sd" + DegreesToDMS(dec), "" };
             TargetName = null;
 
             if (m_AdditionalAlign)
@@ -4166,9 +4173,9 @@ namespace ASCOM.GeminiTelescope
         public void SlewEquatorial()
         {
 
-            string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), 
+            string[] cmd = { ":Sr" + HoursToHMS(TargetRightAscension), 
                              ":ON" + GetTargetName(),
-                             ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS"};
+                             ":Sd" + DegreesToDMS(TargetDeclination), ":MS"};
 
             TargetName = null;
 
@@ -4200,9 +4207,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void SlewEquatorialAsync()
         {
-            string[] cmd = { ":Sr" + m_Util.HoursToHMS(TargetRightAscension, ":", ":", ""), 
+            string[] cmd = { ":Sr" + HoursToHMS(TargetRightAscension), 
                              ":ON" + GetTargetName(),
-                             ":Sd" + m_Util.DegreesToDMS(TargetDeclination, ":", ":", ""), ":MS" };
+                             ":Sd" + DegreesToDMS(TargetDeclination), ":MS" };
 
             TargetName = null;
 
@@ -4234,9 +4241,9 @@ namespace ASCOM.GeminiTelescope
 
         public void SyncHorizonCoordinates(double azimuth, double altitude)
         {
-            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(azimuth, ":", ":", ""), 
+            string[] cmd = { ":Sz" + DegreesToDMS(azimuth), 
                              ":ON" + GetTargetName(),
-                             ":Sa" + m_Util.DegreesToDMS(altitude, ":", ":", ""), "" };
+                             ":Sa" + DegreesToDMS(altitude), "" };
 
             TargetName = null;
 
@@ -4277,9 +4284,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void SlewHorizon()
         {
-            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), 
+            string[] cmd = { ":Sz" + DegreesToDMS(TargetAzimuth), 
                              ":ON" + GetTargetName(),
-                             ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
+                             ":Sa" + DegreesToDMS(TargetAltitude), ":MA" };
 
             TargetName = null;
 
@@ -4307,9 +4314,9 @@ namespace ASCOM.GeminiTelescope
         /// </summary>
         public void SlewHorizonAsync()
         {
-            string[] cmd = { ":Sz" + m_Util.DegreesToDMS(TargetAzimuth, ":", ":", ""), 
+            string[] cmd = { ":Sz" + DegreesToDMS(TargetAzimuth), 
                              ":ON" + GetTargetName(),
-                             ":Sa" + m_Util.DegreesToDMS(TargetAltitude, ":", ":", ""), ":MA" };
+                             ":Sa" + DegreesToDMS(TargetAltitude), ":MA" };
 
             TargetName = null;
 
@@ -4633,6 +4640,21 @@ namespace ASCOM.GeminiTelescope
             return true;
         }
 
+        internal string DegreesToDMS(double deg)
+        {
+            if (DoublePrecision)
+                return deg.ToString("0.000000");
+            else
+                return m_Util.DegreesToDMS(deg, ":", ":", "");
+        }
+
+        internal string HoursToHMS(double hours)
+        {
+            if (DoublePrecision)
+                return hours.ToString("0.000000");
+            else
+                return m_Util.HoursToHMS(hours, ":", ":", "");
+        }
         #endregion
 
 

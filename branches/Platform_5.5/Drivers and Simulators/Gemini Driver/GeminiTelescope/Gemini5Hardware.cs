@@ -77,7 +77,14 @@ namespace ASCOM.GeminiTelescope
         {
         }
 
-
+        internal override void SendStartUpCommands()
+        {
+            Trace.Info(2, "Setting DOUBLE PRECISION");
+            DoCommandResult(":u", MAX_TIMEOUT, false);
+            DoublePrecision = true;
+            base.SendStartUpCommands();
+            //Setting double-precision mode:
+        }
 
         public void ResyncEthernet()
         {
