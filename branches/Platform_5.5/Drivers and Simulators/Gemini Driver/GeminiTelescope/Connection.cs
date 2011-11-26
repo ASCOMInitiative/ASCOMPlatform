@@ -77,10 +77,10 @@ namespace ASCOM.GeminiTelescope
             {
                 Trace.Info(2, "RetransmitUDP:try", trynbr, last_cmd);
 
-                if (m_AllowErrorNotify)
-                {
-                    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection lost...Retrying");
-                }
+                //if (m_AllowErrorNotify)
+                //{
+                //    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection lost...Retrying");
+                //}
 
                 if (trynbr > 0)
                 {
@@ -132,20 +132,21 @@ namespace ASCOM.GeminiTelescope
                         // got a proper response, return it!
                         if (cmd_res != null)
                         {
-                            if (m_AllowErrorNotify)
-                            {
-                                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection re-established!");
-                            }
+                            //if (m_AllowErrorNotify)
+                            //{
+                            //    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection re-established!");
+                            //}
                             return cmd_res;
                         }
                         System.Threading.Thread.Sleep(500); // wait a little and retry again
                     }
                     else
                     {
-                        if (m_AllowErrorNotify)
-                        {
-                            if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection re-established!");
-                        }
+                        //if (m_AllowErrorNotify)
+                        //{
+                        //    if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, "Connection re-established!");
+                        //}
+
                         // Success! Received a matching packet from Gemini. Return the contents as the request result:
                         string s = m_BinaryEncoding.GetString(UDP_buff, 8, UDP_len_lastdatagram - 9);
                         Trace.Info(2, "RetransmitUDP:Received", s);
@@ -154,6 +155,7 @@ namespace ASCOM.GeminiTelescope
                 }
             }
 
+            Trace.Exit("RetransmitUDP", "Failed to retransmit!");
             return null;    // no luck, give up.
         }
 
