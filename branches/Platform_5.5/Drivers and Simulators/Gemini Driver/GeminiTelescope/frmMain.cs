@@ -1242,9 +1242,10 @@ namespace ASCOM.GeminiTelescope
         {
             frmAdvancedSettings parametersForm = new frmAdvancedSettings();
 
+            if (parametersForm == null || parametersForm.IsDisposed) return;
 
             DialogResult ans = parametersForm.ShowDialog(this);
-
+            
             if (ans == DialogResult.OK)
             {
 

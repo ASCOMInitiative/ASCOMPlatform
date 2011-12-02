@@ -57,6 +57,7 @@ namespace ASCOM.GeminiTelescope
         internal string RetransmitUDP()
         {
             Trace.Enter("RetransmitUDP");
+            if (!this.Connected) return null;    //no resync if we are not already connected
 
             // if no previous packet, don't resync
             if (UDP_len_lastdatagram == 0)
@@ -823,10 +824,10 @@ wait_again:
             if (m_TotalErrors == 0)
                 m_FirstErrorTick = System.Environment.TickCount;
 
-            if (m_FirstErrorTick + SharedResources.MAXIMUM_ERROR_INTERVAL < System.Environment.TickCount)
+            if (m_FirstErrorTick + SharedResources.MAXIMUM_ERROR_INTERVAL/5 < System.Environment.TickCount)
             {
                 m_FirstErrorTick = System.Environment.TickCount;
-                m_TotalErrors = 0;
+                if (OnError != null && m_Connected) OnError(SharedResources.TELESCOPE_DRIVER_NAME, Resources.EthernetError);
             }
 
             if (++m_TotalErrors > SharedResources.MAXIMUM_ERRORS)

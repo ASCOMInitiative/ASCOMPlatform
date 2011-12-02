@@ -100,7 +100,7 @@ namespace ASCOM.GeminiTelescope
             }
         }
 
-        public ASCOM.Utilities.Util m_Util;
+        public MyUtility m_Util;
         public ASCOM.Astrometry.Transform.Transform  m_Transform;
 
         // culture used to store ASCOM profile data:
@@ -978,7 +978,10 @@ namespace ASCOM.GeminiTelescope
         public void Initialize()
         {
             m_Profile = new ASCOM.Utilities.Profile();
-            m_Util = new ASCOM.Utilities.Util();
+            m_Util = new MyUtility();
+
+            m_Util.CurrentCulture = m_GeminiCulture;    //set culture for string to number and back conversions
+
             m_Transform = new ASCOM.Astrometry.Transform.Transform();
 
             m_SerialPort = new SerialPort();
@@ -995,7 +998,7 @@ namespace ASCOM.GeminiTelescope
 
             m_SerialPort.DataReceived += new SerialDataReceivedEventHandler(m_SerialPort_DataReceived);
             m_DataReceived = new System.Threading.AutoResetEvent(false);
-
+        
             Trace.Exit(0, "GeminiHardware");
         }
 
@@ -2414,6 +2417,7 @@ namespace ASCOM.GeminiTelescope
             {            
                 m_AbortConnect.Set();
                 m_SerialTimeoutExpired.Set();
+                m_DataReceived.Set();
             }
         }
 
@@ -2476,6 +2480,8 @@ namespace ASCOM.GeminiTelescope
                     Trace.Info(2, "SerialPort.IsOpen", "false");
 
                     m_AbortConnect.Reset();
+                    m_SerialErrorOccurred.Reset();
+                    m_SerialTimeoutExpired.Reset();
 
                     GetProfileSettings();
 
@@ -2686,11 +2692,20 @@ namespace ASCOM.GeminiTelescope
             
             CommandItem ci = new CommandItem("\x6", 500, true); // quick timeout, don't want to hang up the user for too long
             string sRes = GetCommandResult(ci, false);
+            if (m_AbortConnect.WaitOne(0))
+            {
+                return false;
+            }
 
             int timeout = (m_ScanCOMPorts ? 2000 : 600000); // if not scanning, wait for 10 minutes (the user can stop it at any time, and this may be needed for bluetooth stack connection)
             Transmit("\x6");
             ci = new CommandItem("\x6", timeout, true);
             sRes = GetCommandResult(ci, false);
+
+            if (m_AbortConnect.WaitOne(0))
+            {
+                return false;
+            }
 
             if (sRes == null)
             {
@@ -2699,6 +2714,12 @@ namespace ASCOM.GeminiTelescope
                 ci = new CommandItem("\x6", 10000, true);
                 sRes = GetCommandResult(ci,false);
             }
+
+            if (m_AbortConnect.WaitOne(0))
+            {
+                return false;
+            }
+
 
             Trace.Info(2, "^G result", sRes);
 
@@ -4643,7 +4664,7 @@ namespace ASCOM.GeminiTelescope
         internal string DegreesToDMS(double deg)
         {
             if (DoublePrecision)
-                return deg.ToString("0.000000");
+                return deg.ToString("0.000000", m_GeminiCulture);
             else
                 return m_Util.DegreesToDMS(deg, ":", ":", "");
         }
@@ -4651,12 +4672,294 @@ namespace ASCOM.GeminiTelescope
         internal string HoursToHMS(double hours)
         {
             if (DoublePrecision)
-                return hours.ToString("0.000000");
+                return hours.ToString("0.000000", m_GeminiCulture);
             else
                 return m_Util.HoursToHMS(hours, ":", ":", "");
         }
         #endregion
 
+
+    }
+
+    public class MyUtility : ASCOM.Utilities.Util
+    {
+        private System.Globalization.CultureInfo m_CurrCulture = Application.CurrentCulture;
+        private System.Globalization.CultureInfo m_AppCulture = Application.CurrentCulture;
+
+        bool bNeedCulture = false;
+
+        public System.Globalization.CultureInfo CurrentCulture
+        {
+            get
+            {
+                return m_CurrCulture;
+            }
+
+            set
+            {
+                m_CurrCulture = value;
+                m_AppCulture = Application.CurrentCulture;
+                bNeedCulture = (m_CurrCulture.NumberFormat.NumberDecimalSeparator != m_AppCulture.NumberFormat.NumberDecimalSeparator);
+            }
+        }
+
+        new public string DegreesToDM(double Degrees)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDM(Degrees);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string DegreesToDM(double Degrees, string DegDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDM(Degrees, DegDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string DegreesToDM(double Degrees, string DegDelim, string MinDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDM(Degrees, DegDelim, MinDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string DegreesToDM(double Degrees, string DegDelim, string MinDelim, int MinDecimalDigits)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDM(Degrees, DegDelim, MinDelim, MinDecimalDigits);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToDMS(double Degrees)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDMS(Degrees);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string DegreesToDMS(double Degrees, string DegDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDMS(Degrees, DegDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToDMS(double Degrees, string DegDelim, string MinDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDMS(Degrees, DegDelim, MinDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToDMS(double Degrees, string DegDelim, string MinDelim, string SecDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDMS(Degrees, DegDelim, MinDelim, SecDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToDMS(double Degrees, string DegDelim, string MinDelim, string SecDelim, int SecDecimalDigits)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToDMS(Degrees, DegDelim, MinDelim, SecDelim, SecDecimalDigits);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string DegreesToHM(double Degrees)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHM(Degrees);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToHM(double Degrees, string HrsDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHM(Degrees, HrsDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToHM(double Degrees, string HrsDelim, string MinDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHM(Degrees, HrsDelim, MinDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToHM(double Degrees, string HrsDelim, string MinDelim, int MinDecimalDigits)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHM(Degrees, HrsDelim, MinDelim, MinDecimalDigits);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToHMS(double Degrees)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHMS(Degrees);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToHMS(double Degrees, string HrsDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHMS(Degrees, HrsDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToHMS(double Degrees, string HrsDelim, string MinDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHMS(Degrees, HrsDelim, MinDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public string DegreesToHMS(double Degrees, string HrsDelim, string MinDelim, string SecDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHMS(Degrees, HrsDelim, MinDelim, SecDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string DegreesToHMS(double Degrees, string HrsDelim, string MinDelim, string SecDelim, int SecDecimalDigits)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.DegreesToHMS(Degrees, HrsDelim, MinDelim, SecDelim, SecDecimalDigits);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+        }
+
+        new public double DMSToDegrees(string DMS)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            double res = base.DMSToDegrees(DMS);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public double HMSToDegrees(string HMS)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            double res = base.HMSToDegrees(HMS);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public double HMSToHours(string HMS)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            double res = base.HMSToHours(HMS);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHM(double Hours)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHM(Hours);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHM(double Hours, string HrsDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHM(Hours, HrsDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHM(double Hours, string HrsDelim, string MinDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHM(Hours, HrsDelim, MinDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHM(double Hours, string HrsDelim, string MinDelim, int MinDecimalDigits)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHM(Hours, HrsDelim, MinDelim, MinDecimalDigits);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHMS(double Hours)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHMS(Hours);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHMS(double Hours, string HrsDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHMS(Hours, HrsDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHMS(double Hours, string HrsDelim, string MinDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHMS(Hours, HrsDelim, MinDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHMS(double Hours, string HrsDelim, string MinDelim, string SecDelim)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHMS(Hours, HrsDelim, MinDelim, SecDelim);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
+
+        new public string HoursToHMS(double Hours, string HrsDelim, string MinDelim, string SecDelim, int SecDecimalDigits)
+        {
+            if (bNeedCulture) Application.CurrentCulture = m_CurrCulture;
+            string res = base.HoursToHMS(Hours, HrsDelim, MinDelim, SecDelim, SecDecimalDigits);
+            if (bNeedCulture) Application.CurrentCulture = m_AppCulture;
+            return res;
+
+        }
 
     }
 }

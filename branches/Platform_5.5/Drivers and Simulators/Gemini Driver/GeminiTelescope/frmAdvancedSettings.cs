@@ -59,6 +59,13 @@ namespace ASCOM.GeminiTelescope
 
             if (props.SyncWithGemini(false))    // read all the properties from the mount
                 this.Text = Cap + " " + Resources.SettingsFromGemini;
+            else
+            {
+                MessageBox.Show(Resources.EthernetError, SharedResources.TELESCOPE_DRIVER_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+                this.UseWaitCursor = false;
+                return;
+            }
 
             this.geminiPropertiesBindingSource.Add(props);
 

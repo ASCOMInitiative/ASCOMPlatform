@@ -117,10 +117,12 @@ namespace ASCOM.GeminiTelescope
             try
             {
                 res = GeminiHardware.Instance.DoCommandResult(s, 2000, false);
+                if (res == null) throw new TimeoutException();
             }
             catch
             {
-                return null;
+                throw new TimeoutException();
+                //return null;
             }
             return res;
         }
@@ -243,6 +245,7 @@ namespace ASCOM.GeminiTelescope
             get
             {
                 string res = get_PropAsync(":GL");
+                res = GeminiHardware.Instance.m_Util.HoursToHMS(GeminiHardware.Instance.m_Util.HMSToHours(res), ":", ":");
                 return res;
             }
         }
@@ -1422,6 +1425,8 @@ namespace ASCOM.GeminiTelescope
 
             if (ps.Length != 0) incr = 100.0 / ps.Length;
 
+            bool bSuccess = true;
+
             foreach (PropertyInfo p in ps)
             {
                 string name = p.Name;
@@ -1449,12 +1454,14 @@ namespace ASCOM.GeminiTelescope
                 catch (Exception ex)
                 {
                     GeminiHardware.Instance.Trace.Except(ex);
+                    bSuccess = false;
+                    break;
                 }
             }
 
             frmProgress.HideProgress();
             GeminiHardware.Instance.Trace.Exit("GeminiProps:SyncWithGemini", write);
-            return true;
+            return bSuccess;
         }
 
 

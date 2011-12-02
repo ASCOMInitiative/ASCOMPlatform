@@ -89,14 +89,14 @@ namespace ASCOM.GeminiTelescope
         public void ResyncEthernet()
         {
             Trace.Enter(2, "ResyncEthernet");
-            if (UDP)
+            if (UDP && this.Connected)
             {
                 try
                 {
                     if (UDP_client != null)
                     {
                         UDP_client.Close();
-                        UDP_client = null;
+                        //UDP_client = null;
                     }
                     UDP_client = new UdpClient(UDPPort);
                 }
@@ -170,7 +170,9 @@ namespace ASCOM.GeminiTelescope
                 }
 
                 Trace.Info(2, "UDP IP address", addr.ToString());
-              
+
+                DisconnectToEthernet();
+
                 UDP_endpoint = new IPEndPoint(addr, UDPPort);
                 UDP_client = new UdpClient(UDPPort);
                 Trace.Info(2, "Initialized UDP endpoint and client");
