@@ -7,12 +7,8 @@
 using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using ASCOM.Conform;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Globalization;
 
 namespace ASCOM.DriverAccess
 {

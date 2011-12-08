@@ -223,11 +223,6 @@
       <Name>ASCOM.DeviceInterface</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.IConform\ASCOM.IConform\ASCOM.IConform.vbproj">
-      <Project>{44999847-A7B6-462D-B663-FE988D98E317}</Project>
-      <Name>ASCOM.IConform</Name>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>

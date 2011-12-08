@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ASCOM.Conform;
 using ASCOM.Utilities;
 using System.Collections;
 using System.Globalization;
