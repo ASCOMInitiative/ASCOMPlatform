@@ -54,8 +54,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver Templates", "Driver 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Dependencies", "External Dependencies", "{351942DD-A33B-40F1-B71F-224E7D5B4E7B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Moq", "Moq", "{D202E935-5ADA-4769-A4D8-4A915B4267FA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StyleCop", "StyleCop", "{7814C016-C363-4A04-B095-27A5B33AA783}"
 	ProjectSection(SolutionItems) = preProject
 		External Dependencies\StyleCop\v4.3\Microsoft.SourceAnalysis.Targets = External Dependencies\StyleCop\v4.3\Microsoft.SourceAnalysis.Targets
@@ -80,8 +78,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Patterns and Practices", "P
 		Drivers and Simulators\Guidelines for Driver Developers.docx = Drivers and Simulators\Guidelines for Driver Developers.docx
 		Patterns and Practices\Sandcastle MAML Guide.chm = Patterns and Practices\Sandcastle MAML Guide.chm
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xUnit", "xUnit", "{74D351E3-1E5A-451D-AA70-D3FA28CF1F54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomActions", "CustomActions\CustomActions.csproj", "{C9BD6FCB-97C7-4096-B917-6E59B6E2C684}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -189,6 +185,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.SettingsProviderSample.CSharp", "ASCOM.SettingsProvider\ASCOM.SettingsProviderSample.CSharp\ASCOM.SettingsProviderSample.CSharp.csproj", "{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Internal.Extensions", "ASCOM.Internal.Extensions\ASCOM.Internal.Extensions.csproj", "{F9268CC9-3FA4-4DAB-962C-0FF3638E9D9F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A988E5C6-35C1-42D1-B153-DBF9A4170952}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -858,6 +860,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{58CDF527-08F5-4850-8561-33EFA733D87C} = {9A54CA39-AB72-45B4-B09F-63679076D040}
 		{F1B91A53-8136-4D7A-A0E8-412AEF6B0F2C} = {9A54CA39-AB72-45B4-B09F-63679076D040}
+		{A988E5C6-35C1-42D1-B153-DBF9A4170952} = {9A54CA39-AB72-45B4-B09F-63679076D040}
 		{0B492F73-66F9-460E-BD84-A6CB1FC588C6} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{E100639A-B65F-4B34-A733-D6344AF2EF46} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{6BEFC49D-C3F3-4119-9ACD-B8133E14E2D6} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
@@ -904,9 +907,7 @@ Global
 		{8D28213E-D3D5-482C-A35F-E0BB6A4265BC} = {F319D614-A93C-4952-9D75-4230DB9896B8}
 		{20CD9164-D5BF-4DA5-A248-EC6B81830610} = {F319D614-A93C-4952-9D75-4230DB9896B8}
 		{6E5A18A3-EA09-4D55-ABC8-A7AEAC3DDA2D} = {02FC4179-0ADE-45D2-9C78-52F74FF6156C}
-		{D202E935-5ADA-4769-A4D8-4A915B4267FA} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{7814C016-C363-4A04-B095-27A5B33AA783} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
-		{74D351E3-1E5A-451D-AA70-D3FA28CF1F54} = {351942DD-A33B-40F1-B71F-224E7D5B4E7B}
 		{908A13CE-4C6D-4546-AD52-AB958FF46C5B} = {7814C016-C363-4A04-B095-27A5B33AA783}
 		{70FDA2DE-A36D-45A0-812F-E5357AC7A8D2} = {29B3E411-4259-4315-85A7-3063F31A282A}
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6} = {29B3E411-4259-4315-85A7-3063F31A282A}
@@ -919,13 +920,13 @@ Global
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal
