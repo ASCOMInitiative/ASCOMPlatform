@@ -282,7 +282,11 @@ Public Class Serial
                 SerialProfile = Nothing
             End If
             If Not m_Port Is Nothing Then 'Clean up the port
-                Try : m_Port.Dispose() : Catch : End Try
+                Try
+                    '[ASCOM-310] remove our delegate from the serial port.
+                    RemoveHandler m_Port.PinChanged, AddressOf PinChangedEventHandler
+                    m_Port.Dispose()
+                Catch : End Try
                 m_Port = Nothing
             End If
             If Not Logger Is Nothing Then 'Clean up the logger
@@ -476,6 +480,7 @@ Public Class Serial
                     If Not My.Computer.Ports.SerialPortNames.Contains(m_PortName) Then Throw New Exceptions.InvalidValueException("Requested COM Port does not exist: " & m_PortName)
                     If m_Port Is Nothing Then
                         m_Port = New System.IO.Ports.SerialPort(m_PortName)
+                        AddHandler m_Port.PinChanged, AddressOf PinChangedEventHandler  '[ASCOM-310]
                     Else
                         m_Port.PortName = m_PortName 'Peter Added in RC7
                     End If
@@ -1607,6 +1612,71 @@ Public Class Serial
         'Allows a driver to include its own comments in the serial log
         Logger.LogMessage(Caller, Message)
     End Sub
+#End Region
+
+#Region "Additional properties by user request" '[ASCOM-310] 
+    ''' <summary>
+    ''' Gets the state of the CTS (Clear To Send) pin.
+    ''' </summary>
+    ''' <value>
+    '''   <c>true</c> if clear to send; otherwise, <c>false</c>.
+    ''' </value>
+
+    Public ReadOnly Property CtsHolding As Boolean
+        Get
+            Return m_Port.CtsHolding
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Gets the state of the CD (Carrier Detect) pin.
+    ''' </summary>
+    ''' <value>
+    '''   <c>true</c> if carrier detected; otherwise, <c>false</c>.
+    ''' </value>
+    Public ReadOnly Property CDHolding As Boolean
+        Get
+            Return m_Port.CDHolding
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Gets the state of the DSR (Data Set ready) pin.
+    ''' </summary>
+    ''' <value>
+    '''   <c>true</c> if the Data Set is ready; otherwise, <c>false</c>.
+    ''' </value>
+    Public ReadOnly Property DsrHolding As Boolean
+        Get
+            Return m_Port.DsrHolding
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Occurs when a signalling pin changes at the serial port.
+    ''' </summary>
+    Public Event PinChanged As System.IO.Ports.SerialPinChangedEventHandler
+
+    ''' <summary>
+    ''' Raises the <see cref="E:PinChanged" /> event.
+    ''' </summary>
+    ''' <param name="e">The <see cref="System.IO.Ports.SerialPinChangedEventArgs" /> instance containing the event data.</param>
+    Protected Overridable Sub OnPinChanged(ByVal e As SerialPinChangedEventArgs)
+        RaiseEvent PinChanged(Me, e)
+    End Sub
+
+    ''' <summary>
+    ''' Handles the <see cref="SerialPort.PinChanged"/> event from the underlying 
+    ''' <see cref="SerialPort"/> instance and trombones it to the subscribers.
+    ''' </summary>
+    ''' <param name="sender">The sender.</param>
+    ''' <param name="e">The <see cref="System.IO.Ports.SerialPinChangedEventArgs" /> instance containing the event data.</param>
+    Private Sub PinChangedEventHandler(ByVal sender As Object, ByVal e As SerialPinChangedEventArgs)
+        If Not Me.disposed Then
+            OnPinChanged(e)
+        End If
+    End Sub
+
 #End Region
 
 #Region "Support Code"

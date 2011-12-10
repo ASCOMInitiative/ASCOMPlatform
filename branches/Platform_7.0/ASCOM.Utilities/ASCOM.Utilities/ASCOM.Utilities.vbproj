@@ -225,6 +225,7 @@
     <None Include="..\..\ASCOM.snk">
       <Link>ASCOM.snk</Link>
     </None>
+    <None Include="Serial.cd" />
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
       <Generator>SettingsSingleFileGenerator</Generator>
