@@ -164,8 +164,8 @@ namespace ASCOM.GeminiTelescope
         void Instance_OnDisplayChanged()
         {    
             string display = GeminiHardware.Instance.DoCommandResult(":OO", GeminiHardware.Instance.MAX_TIMEOUT, false);
-            if (string.IsNullOrEmpty(display) || display.Trim()=="")
-                display = GeminiHardware.Instance.DoCommandResult(":Oo", GeminiHardware.Instance.MAX_TIMEOUT, false); 
+            //if (string.IsNullOrEmpty(display) || display.Trim()=="")
+            //    display = GeminiHardware.Instance.DoCommandResult(":Oo", GeminiHardware.Instance.MAX_TIMEOUT, false); 
             
             if (!string.IsNullOrEmpty(display) && display.Trim()!="")
                 OnInfo("Gemini Controller", display);

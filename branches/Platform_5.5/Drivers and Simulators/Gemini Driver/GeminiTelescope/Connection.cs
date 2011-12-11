@@ -165,7 +165,7 @@ namespace ASCOM.GeminiTelescope
 
             UDP_buff = (UDP_buff==UDP_datagram1? UDP_datagram2 : UDP_datagram1);
             Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
-            Trace.Info(2, "TransmitUDP packet#, cmd", PacketCount, s);
+            Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, s);
 
             PacketCount++;
             Array.Copy(m_BinaryEncoding.GetBytes(s), 0, UDP_buff, 8, s.Length);
@@ -178,7 +178,7 @@ namespace ASCOM.GeminiTelescope
         {
             UDP_buff = (UDP_buff == UDP_datagram1 ? UDP_datagram2 : UDP_datagram1);
             Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, UDP_buff, 0, 4);
-            Trace.Info(2, "TransmitUDP packet#, cmd", PacketCount, cmd);
+            Trace.Info(0, "TransmitUDP packet#, cmd", PacketCount, cmd);
             PacketCount++; 
             Array.Copy(cmd, 0, UDP_buff, 8, cmd.Length);
             UDP_len_lastdatagram = cmd.Length + 8;
@@ -197,7 +197,7 @@ namespace ASCOM.GeminiTelescope
         private int UDPSendNACK()
         {
             Array.Copy(System.BitConverter.GetBytes(PacketCount), 0, rbuff, 0, 4);
-            Trace.Info(2, "ReTransmitUDP packet#, cmd", PacketCount);
+            Trace.Info(0, "ReTransmitUDP packet#, cmd", PacketCount);
             rbuff[8] = 0x15;
             GeminiHardware.Instance.UDP_client.Send(rbuff, 9, GeminiHardware.Instance.UDP_endpoint);
             return PacketCount++;
@@ -511,6 +511,11 @@ wait_again:
                         EthernetResult += res;
                 }
 
+                Trace.Info(0, "Ethernet Received", command.m_Command);
+
+                bool bNeedChecksum = (command.m_Command[0] == '<' || command.m_Command[0] == '>');
+
+
                 switch (gemini_result)
                 {
                     // a specific number of characters expected as the return value
@@ -523,7 +528,7 @@ wait_again:
                         result = ReadNumberE(1); ;  // check if first character is 1, and return if it is, no hash expected
                         if (result != "1")
                         {
-                            result += ReadToE('#');
+                            result += ReadToE('#', bNeedChecksum);
                             if (command.m_Raw) //Raw should return the full string including #
                                 result += "#";
                         }
@@ -534,7 +539,7 @@ wait_again:
                         result = ReadNumberE(1);
                         if (result != "0")
                         {
-                            result += ReadToE('#');
+                            result += ReadToE('#', bNeedChecksum);
                             if (command.m_Raw) //Raw should return the full string including #
                                 result += "#";
                         }
@@ -542,7 +547,7 @@ wait_again:
 
                     // string terminated by '#'
                     case GeminiCommand.ResultType.HashChar:
-                        result = ReadToE('#');
+                        result = ReadToE('#', bNeedChecksum);
                         if (command.m_Raw) //Raw should return the full string including #
                             result += "#";
                         break;
@@ -552,9 +557,9 @@ wait_again:
                         result = ReadNumberE(1);
                         if (result != "0")
                         {
-                            result += ReadToE('#');
+                            result += ReadToE('#', bNeedChecksum);
                             if (command.m_Raw) result += '#';
-                            result += ReadToE('#');
+                            result += ReadToE('#', bNeedChecksum);
                             if (command.m_Raw) result += '#';
                         }
                         break;
@@ -973,7 +978,7 @@ wait_again:
         /// </summary>
         /// <param name="terminate"></param>
         /// <returns></returns>
-        private string ReadToE(char terminate)
+        private string ReadToE(char terminate, bool bNative)
         {
             StringBuilder res = new StringBuilder();
 
@@ -994,14 +999,24 @@ wait_again:
                     // otherwise consider it part of a binary stream meant for the passthrough port
                     if ((int)c >= 0x80 && (c != 223 || res.Length == 0)) outp.Append(c);
                     else
+                    {
                         res.Append(c);
+                    }
                 }
                 else
                 {
                     if (outp.Length > 0 && (m_PassThroughPort != null && m_PassThroughPort.PortActive))
                         m_PassThroughPort.PassStringToPort(outp);
+
+                    // this is the case where a checksum character is the same as the terminator. CHeck
+                    // that the next character, if available is also a terminator, and then add it to the
+                    // result:
+                    if (bNative && EthernetResult.Length  > 0 && EthernetResult[0]==terminate)
+                        continue;
+
                     return res.ToString();
                 }
+
             }
             if (m_SerialTimeoutExpired.WaitOne(0))
             {

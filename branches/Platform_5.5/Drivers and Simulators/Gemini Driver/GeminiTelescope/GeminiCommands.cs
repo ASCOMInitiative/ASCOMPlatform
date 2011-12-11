@@ -233,9 +233,9 @@ namespace ASCOM.GeminiTelescope
         public static void GeminiCommandsL5()
         {
             // if we didn't add these L5 commands yet, do this now
-            if (!Commands.ContainsKey(">97:"))
+            if (!Commands.ContainsKey(":OO"))
             {
-                Commands.Add(">97:", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 6));
+                //Commands.Add("<97:", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 6));
                 Commands.Remove("<226:");    //delete custom implementation used for L4 mounts, this is implemented in firmware in L5
                 Commands.Add(":GW", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
                 Commands.Add(":Gw", new GeminiCommand(GeminiCommand.ResultType.NumberofChars, 1));
