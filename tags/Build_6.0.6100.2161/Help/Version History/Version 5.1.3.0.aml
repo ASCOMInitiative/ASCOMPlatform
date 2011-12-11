@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6c2d0f0d-6460-494e-9c1f-08545fcff623" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        	
+    	<introduction>
+            <para>Version 5.1.3.0</para>
+    	</introduction>
+    	
+    	<section address="Components.NET">
+      		<title>.NET Components</title>
+      		<content>
+    	    	<sections>
+          			<section address="Changes.NET">
+              			<title>Changes</title>
+              			<content>
+      						<list class="bullet">
+ 		 						<listItem>Profile tracing is now configurable through the Chooser menu and is defaulted off</listItem>
+ 		 						<listItem>Created Profile Explorer - for manual profile store viewing and editing</listItem>
+ 		 						<listItem>Added utilities section to Help to describe tracing and Profile Explorer</listItem>
+ 		 						<listItem>Improved messages in Profile log</listItem>
+ 		 					</list>
+              			</content>
+          			</section>
+          			
+          			<section address="IssuesFixed.NET">
+              			<title>Issues Fixed</title>
+              			<content>
+      						<list class="bullet">
+  		 						<listItem>Fixed issue in Profile where attempt to write a value of Nothing, as distinct 
+  		 						from empty string, threw an error. The original VB6 Profile component handles this by 
+  		 						transparently translating Nothing to empty string. HelperNET now has the same behaviour 
+  		 						but includes a warning in the Profile and XMLAccess logs.</listItem>
+	  						</list>
+              			</content>
+          			</section>
+          			
+      			</sections>
+			</content>
+    	</section>
+    	
+    	<section address="ComponentsCOM">
+      		<title>COM Components</title>
+      		<content>
+    	    	<sections>
+          			<section address="ChangesCOM">
+              			<title>Changes</title>
+              			<content>
+      						<list class="bullet">
+ 		 						<listItem>Profile tracing is now configurable through the Chooser menu and is defaulted off</listItem>
+ 		 						<listItem>Improved messages in Profile log</listItem>
+				  			</list>
+              			</content>
+          			</section>
+          			
+          			<section address="IssuesFixedCOM">
+              			<title>Issues Fixed</title>
+              			<content>
+      						<list class="bullet">
+  								<listItem>None.</listItem>
+	  						</list>
+              			</content>
+          			</section>
+          			
+          			<section address="CommentsCOM">
+              			<title>Comments</title>
+              			<content>
+      						<list class="bullet">
+  								<listItem>The COM interface is unchanged and remains binary compatible with Platform 5</listItem>
+	  						</list>
+              			</content>
+          			</section>
+          			
+      			</sections>
+			</content>
+    	</section>
+    	
+  		<section address="ToDo">
+      		<title>ToDo...</title>
+      		<content>
+      			<list class="bullet">
+ 			 		<listItem>None.</listItem>
+	  			</list>
+      		</content>
+    	</section>
+
+  </developerConceptualDocument>
+</topic>
