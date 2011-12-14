@@ -171,8 +171,25 @@
       </FormatSettings>
       <UsingsSettings />
       <Naming2>
-        <EventHandlerPatternLong>$object$_On$event$</EventHandlerPatternLong>
+        <EventHandlerPatternLong>$object$_$event$</EventHandlerPatternLong>
         <EventHandlerPatternShort>$event$Handler</EventHandlerPatternShort>
+        <OverrideDefaultSettings>True</OverrideDefaultSettings>
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="TypesAndNamespaces" />
+        <PredefinedRule Inspect="True" Prefix="I" Suffix="" Style="AaBb" ElementKind="Interfaces" />
+        <PredefinedRule Inspect="True" Prefix="T" Suffix="" Style="AaBb" ElementKind="TypeParameters" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="MethodPropertyEvent" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="Locals" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="LocalConstants" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="Parameters" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PublicFields" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="aaBb" ElementKind="PrivateInstanceFields" />
+        <PredefinedRule Inspect="True" Prefix="_" Suffix="" Style="aaBb" ElementKind="PrivateStaticFields" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Constants" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PrivateConstants" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="StaticReadonly" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PrivateStaticReadonly" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="EnumMember" />
+        <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Other" />
       </Naming2>
     </CSharp>
     <HTML>
@@ -217,34 +234,21 @@
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PrivateConstants" />
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="StaticReadonly" />
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PrivateStaticReadonly" />
-      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="EnumMember" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="EnumMember">
+        <ExtraRule Prefix="" Suffix="" Style="AA_BB" />
+      </PredefinedRule>
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Other" />
       <UserRule Inspect="True" Prefix="" Suffix="" Style="aaBb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="MSpec local">
-        <ElementKinds>
-          <Kind Name="Machine.Specifications_Local" />
-        </ElementKinds>
+        <ElementKinds />
       </UserRule>
       <UserRule Inspect="True" Prefix="With_" Suffix="" Style="aa_bb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="MSpec context base class">
-        <ElementKinds>
-          <Kind Name="Machine.Specifications_ContextBase" />
-        </ElementKinds>
+        <ElementKinds />
       </UserRule>
       <UserRule Inspect="True" Prefix="When_" Suffix="" Style="aa_bb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="MSpec context">
-        <ElementKinds>
-          <Kind Name="Machine.Specifications_Context" />
-        </ElementKinds>
+        <ElementKinds />
       </UserRule>
       <UserRule Inspect="True" Prefix="" Suffix="" Style="aa_bb" StaticnessKind="Static, Instance" AccessRight="Private, Protected, ProtectedInternal, Internal, Public" Description="MSpec default naming">
-        <ElementKinds>
-          <Kind Name="Machine.Specifications_Behavior" />
-          <Kind Name="Machine.Specifications_Context" />
-          <Kind Name="Machine.Specifications_ContextBase" />
-          <Kind Name="Machine.Specifications_Specification" />
-          <Kind Name="Machine.Specifications_SupportingField" />
-          <Kind Name="Machine.Specifications_Field" />
-          <Kind Name="Machine.Specifications_Constant" />
-          <Kind Name="Machine.Specifications_Local" />
-        </ElementKinds>
+        <ElementKinds />
       </UserRule>
     </Naming2>
   </CodeStyleSettings>
