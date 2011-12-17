@@ -16,7 +16,7 @@ namespace CameraTest
     public partial class Form1 : Form
     {
         private Camera oCamera;     // camera object
-        private string CameraID;    // camera ID string
+        private string cameraId;    // camera ID string
         private Bitmap img;         // bitmap for the image
         private Array iarr;         // array for the image
         // start position of the image
@@ -34,41 +34,38 @@ namespace CameraTest
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void btnChoose_Click(object sender, EventArgs e)
         {
-            if (oCamera == null || oCamera.Connected == false)
+            if (oCamera != null && oCamera.Connected) return;
+            try
             {
-                try
-                {
-                    CameraID = Camera.Choose(CameraID);
-                    lblCameraName.Text = CameraID;
-                }
-                catch (Exception ex)
-                {
-                    String msg = ex.Message;
-                    if (ex.InnerException != null)
-                        msg += " - " + ex.InnerException.Message;
-                    MessageBox.Show("Choose failed with error " + msg);
-                }
+                cameraId = Camera.Choose(cameraId);
+                lblCameraName.Text = cameraId;
+            }
+            catch (Exception ex)
+            {
+                String msg = ex.Message;
+                if (ex.InnerException != null)
+                    msg += " - " + ex.InnerException.Message;
+                MessageBox.Show(string.Format("Choose failed with error {0}", msg));
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            if (btnConnect.Text == "Connect")
+            if (btnConnect.Text == @"Connect")
             {
-                if (! String.IsNullOrEmpty(CameraID))
+                if (! String.IsNullOrEmpty(cameraId))
                 {
                     try
                     {
-                        oCamera = new Camera(CameraID);
-                        oCamera.Connected = true;
+                        oCamera = new Camera(cameraId) {Connected = true};
                     }
                     catch (Exception ex)
                     {
                         String msg = ex.Message;
                         if (ex.InnerException != null)
                             msg += " - " + ex.InnerException.Message;
-                        MessageBox.Show("Connect failed with error " + msg);
+                        MessageBox.Show(string.Format("Connect failed with error {0}", msg));
                     }
                 }
             }
@@ -79,7 +76,7 @@ namespace CameraTest
             if (oCamera.Connected)
             {
                 timer1.Enabled = true;
-                btnConnect.Text = "Disconnect";
+                btnConnect.Text = @"Disconnect";
                 ShowParameters();
                 numBinY.Value = 1;
                 numBinX.Value = 1;
@@ -87,13 +84,13 @@ namespace CameraTest
                 numStartY.Value = 0;
                 numNumX.Value = oCamera.CameraXSize;
                 numNumY.Value = oCamera.CameraYSize;
-                this.Text = "Camera Test - " + oCamera.Description;
+                this.Text = string.Format("Camera Test - {0}", oCamera.Description);
             }
             else
             {
                 timer1.Enabled = false;
-                btnConnect.Text = "Connect";
-                this.Text = "Camera Test - No Camera";
+                btnConnect.Text = @"Connect";
+                this.Text = @"Camera Test - No Camera";
             }
         }
 
@@ -255,18 +252,16 @@ namespace CameraTest
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void chkCoolerOn_CheckedChanged(object sender, EventArgs e)
         {
-            if (CheckConnected)
+            if (!CheckConnected) return;
+            try
             {
-                try
-                {
-                    oCamera.CoolerOn = chkCoolerOn.Checked;
-                    if (oCamera.CoolerOn)
-                        oCamera.SetCCDTemperature = (double)numericUpDownSetCCDTemperature.Value;
-                }
-                catch (Exception ex)
-                {
-                    tsError.Text = "CoolerOn error: " +  ex.Message;
-                }
+                oCamera.CoolerOn = chkCoolerOn.Checked;
+                if (oCamera.CoolerOn)
+                    oCamera.SetCCDTemperature = (double)numericUpDownSetCCDTemperature.Value;
+            }
+            catch (Exception ex)
+            {
+                tsError.Text = string.Format("CoolerOn error: {0}", ex.Message);
             }
         }
 
@@ -279,7 +274,7 @@ namespace CameraTest
             }
         }
 
-        private decimal LastExposure;
+        private decimal lastExposure;
 
         private void numExposure_ValueChanged(object sender, EventArgs e)
         {
@@ -288,15 +283,13 @@ namespace CameraTest
 
         private void btnFullFrame_Click(object sender, EventArgs e)
         {
-            if (CheckConnected)
-            {
-                numBinY.Value = 1;
-                numBinX.Value = 1;
-                numStartX.Value = 0;
-                numStartY.Value = 0;
-                numNumX.Value = oCamera.CameraXSize;
-                numNumY.Value = oCamera.CameraYSize;
-            }
+            if (!CheckConnected) return;
+            numBinY.Value = 1;
+            numBinX.Value = 1;
+            numStartX.Value = 0;
+            numStartY.Value = 0;
+            numNumX.Value = oCamera.CameraXSize;
+            numNumY.Value = oCamera.CameraYSize;
         }
 
         private void numBinX_ValueChanged(object sender, EventArgs e)
@@ -313,26 +306,24 @@ namespace CameraTest
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if (CheckConnected)
+            if (!CheckConnected) return;
+            tsError.Text = "";
+            try
             {
-                tsError.Text = "";
-                try
-                {
-                    oCamera.StartX = (int)numStartX.Value;
-                    oCamera.StartY = (int)numStartY.Value;
-                    oCamera.NumX = (int)numNumX.Value;
-                    oCamera.NumY = (int)numNumY.Value;
-                    oCamera.BinX = (short)numBinX.Value;
-                    oCamera.BinY = (short)(checkBoxSameBins.Checked ? numBinX.Value: numBinY.Value);
-                    bool light = (oCamera.HasShutter) ? !checkBoxDarkFrame.Checked : true;
-                    oCamera.StartExposure((double)numExposure.Value, light);
-                    ExposureTimer.Enabled = true;
-                    imageControl.Change += new ImageControl.ChangeHandler(imageControl_Change);
-                }
-                catch (Exception ex)
-                {
-                    tsError.Text = "Start Error: " + ex.Message;
-                }
+                oCamera.StartX = (int)numStartX.Value;
+                oCamera.StartY = (int)numStartY.Value;
+                oCamera.NumX = (int)numNumX.Value;
+                oCamera.NumY = (int)numNumY.Value;
+                oCamera.BinX = (short)numBinX.Value;
+                oCamera.BinY = (short)(checkBoxSameBins.Checked ? numBinX.Value: numBinY.Value);
+                bool light = !(oCamera.HasShutter) || !checkBoxDarkFrame.Checked;
+                oCamera.StartExposure((double)numExposure.Value, light);
+                ExposureTimer.Enabled = true;
+                imageControl.Change += imageControl_Change;
+            }
+            catch (Exception ex)
+            {
+                tsError.Text = string.Format("Start Error: {0}", ex.Message);
             }
         }
 
@@ -344,10 +335,10 @@ namespace CameraTest
 
             // generate gamma LUT
             gamma = new int[256];
-            double g = (double)imageControl.Gamma.Value;
+            var g = (double)imageControl.Gamma.Value;
             for (int i = 0; i < 256; i++)
             {
-                gamma[i] = (byte)(Math.Pow((double)i / 256.0, g) * 256.0);
+                gamma[i] = (byte)(Math.Pow(i / 256.0, g) * 256.0);
             }
 
             int stepX = 1;
@@ -355,7 +346,7 @@ namespace CameraTest
 
             unsafe
             {
-                DisplayProcess displayProcess = new DisplayProcess(MonochromeProcess);
+                DisplayProcess displayProcess = MonochromeProcess;
                 int width = iarr.GetLength(0);
                 int height = iarr.GetLength(1);
                 int stepH = 1;
@@ -368,32 +359,30 @@ namespace CameraTest
                         case ASCOM.DeviceInterface.SensorType.Monochrome:
                             break;
                         case ASCOM.DeviceInterface.SensorType.RGGB:
-                            displayProcess = new DisplayProcess(RGGBProcess);
+                            displayProcess = RggbProcess;
                             stepX = 2;
                             stepY = 2;
                             break;
                         case ASCOM.DeviceInterface.SensorType.CMYG:
-                            displayProcess = new DisplayProcess(CMYGProcess);
+                            displayProcess = CmygProcess;
                             stepX = 2;
                             stepY = 2;
                             break;
                         case ASCOM.DeviceInterface.SensorType.LRGB:
-                            displayProcess = new DisplayProcess(LRGBProcess);
+                            displayProcess = LrgbProcess;
                             stepX = 4;
                             stepY = 4;
                             stepH = 2;
                             stepW = 2;
                             break;
                         case ASCOM.DeviceInterface.SensorType.CMYG2:
-                            displayProcess = new DisplayProcess(CMYG2Process);
+                            displayProcess = Cmyg2Process;
                             stepX = 2;
                             stepY = 4;
                             stepH = 2;
                             break;
                         case ASCOM.DeviceInterface.SensorType.Color:
-                            displayProcess = new DisplayProcess(ColourProcess);
-                            break;
-                        default:
+                            displayProcess = ColourProcess;
                             break;
                     }
                     width /= (stepX/stepW);
@@ -415,7 +404,7 @@ namespace CameraTest
                 try
                 {
                     // pointer to locked bitmap data
-                    byte* imgPtr = (byte*)(data.Scan0);
+                    var imgPtr = (byte*)(data.Scan0);
                     // black level
                     blackLevel = (int)imageControl.MinValue;
                     // scale, white-black
@@ -471,20 +460,20 @@ namespace CameraTest
         private unsafe void MonochromeProcess(int x, int y, byte* imgPtr)
         {
             int k = Convert.ToInt32(iarr.GetValue(x, y), CultureInfo.InvariantCulture);
-            loadRGB(k, k, k, imgPtr);
+            LoadRgb(k, k, k, imgPtr);
         }
 
-        private unsafe void RGGBProcess(int x, int y, byte* imgPtr)
+        private unsafe void RggbProcess(int x, int y, byte* imgPtr)
         {
             int r = Convert.ToInt32(iarr.GetValue(x + x0, y + y0), CultureInfo.InvariantCulture);
             int g = Convert.ToInt32(iarr.GetValue(x + x0, y + y1), CultureInfo.InvariantCulture);
             int b = Convert.ToInt32(iarr.GetValue(x + x1, y + y1), CultureInfo.InvariantCulture);
             g += Convert.ToInt32(iarr.GetValue(x + x1, y + y0), CultureInfo.InvariantCulture);
             g /= 2;
-            loadRGB(r, g, b, imgPtr);
+            LoadRgb(r, g, b, imgPtr);
         }
 
-        private unsafe void CMYGProcess(int x, int h, byte* imgPtr)
+        private unsafe void CmygProcess(int x, int h, byte* imgPtr)
         {
             // get the cmyg values
             int y = Convert.ToInt32(iarr.GetValue(x + x0, h + y0), CultureInfo.InvariantCulture);
@@ -495,10 +484,10 @@ namespace CameraTest
             int r = y + m - c;
             int b = c + m - y;
             g += (c + y - m);
-            loadRGB(r, g/2, b, imgPtr);
+            LoadRgb(r, g/2, b, imgPtr);
         }
 
-        private unsafe void CMYG2Process(int x, int h, byte* imgPtr)
+        private unsafe void Cmyg2Process(int x, int h, byte* imgPtr)
         {
             // get the cmyg values for the top pixel
             int g = Convert.ToInt32(iarr.GetValue(x + x0, h + y0), CultureInfo.InvariantCulture);
@@ -509,7 +498,7 @@ namespace CameraTest
             int r = y + m - c;
             int b = c + m - y;
             g += (c + y - m);
-            loadRGB(r, g/2, b, imgPtr);
+            LoadRgb(r, g/2, b, imgPtr);
             // and the bottom pixel
             m = Convert.ToInt32(iarr.GetValue(x + x0, h + y2), CultureInfo.InvariantCulture);
             g = Convert.ToInt32(iarr.GetValue(x + x1, h + y2), CultureInfo.InvariantCulture);
@@ -519,10 +508,10 @@ namespace CameraTest
             r = y + m - c;
             b = c + m - y;
             g += (c + y - m);
-            loadRGB(r, g/2, b, imgPtr + stride);
+            LoadRgb(r, g/2, b, imgPtr + stride);
         }
 
-        private unsafe void LRGBProcess(int x, int y, byte* imgPtr)
+        private unsafe void LrgbProcess(int x, int y, byte* imgPtr)
         {
             // convert a 4 x 4 grid of input pixels to a 2 x2 grid of output pixels
             // get the lrgb values
@@ -533,11 +522,11 @@ namespace CameraTest
             int g = Convert.ToInt32(iarr.GetValue(x + x0, y + y3), CultureInfo.InvariantCulture);
             g += Convert.ToInt32(iarr.GetValue(x + x2, y + y1), CultureInfo.InvariantCulture);
             int b = l - r - g;
-            loadRGB(r/2, g/2, b/2, imgPtr);     // top left
+            LoadRgb(r/2, g/2, b/2, imgPtr);     // top left
             l = Convert.ToInt32(iarr.GetValue(x + x2, y + y0), CultureInfo.InvariantCulture);
             l += Convert.ToInt32(iarr.GetValue(x + x3, y + y1), CultureInfo.InvariantCulture);
             b = l - r - g;
-            loadRGB(r/2, g/2, b/2, imgPtr+3);     // top right
+            LoadRgb(r/2, g/2, b/2, imgPtr+3);     // top right
             l = Convert.ToInt32(iarr.GetValue(x + x0, y + y2), CultureInfo.InvariantCulture);
             l += Convert.ToInt32(iarr.GetValue(x + x1, y + y3), CultureInfo.InvariantCulture);
             g = Convert.ToInt32(iarr.GetValue(x + x1, y + y2), CultureInfo.InvariantCulture);
@@ -545,11 +534,11 @@ namespace CameraTest
             b = Convert.ToInt32(iarr.GetValue(x + x3, y + y2), CultureInfo.InvariantCulture);
             b += Convert.ToInt32(iarr.GetValue(x + x2, y + y3), CultureInfo.InvariantCulture);
             r = l - g - b;
-            loadRGB(r/2, g/2, b/2, imgPtr+stride);     // bottom left
+            LoadRgb(r/2, g/2, b/2, imgPtr+stride);     // bottom left
             l = Convert.ToInt32(iarr.GetValue(x + x2, y + y2), CultureInfo.InvariantCulture);
             l += Convert.ToInt32(iarr.GetValue(x + x3, y + y3), CultureInfo.InvariantCulture);
             r = l - b - g;
-            loadRGB(r/2, g/2, b/2, imgPtr+stride+3);     // bottom right
+            LoadRgb(r/2, g/2, b/2, imgPtr+stride+3);     // bottom right
         }
 
         private unsafe void ColourProcess(int w, int h, byte* imgPtr)
@@ -558,10 +547,10 @@ namespace CameraTest
             int r = Convert.ToInt32(iarr.GetValue(w, h, 0), CultureInfo.InvariantCulture);
             int g = Convert.ToInt32(iarr.GetValue(w, h, 1), CultureInfo.InvariantCulture);
             int b = Convert.ToInt32(iarr.GetValue(w, h, 2), CultureInfo.InvariantCulture);
-            loadRGB(r, g, b, imgPtr);
+            LoadRgb(r, g, b, imgPtr);
         }
 
-        private unsafe void loadRGB(int r, int g, int b, byte *imgPtr)
+        private unsafe void LoadRgb(int r, int g, int b, byte *imgPtr)
         {
             // convert 16 bit signed to 16 bit unsigned
             if (r < 0) r += 65535;
@@ -595,10 +584,9 @@ namespace CameraTest
                 }
                 catch (Exception ex)
                 {
-                    if (ex.InnerException != null)
-                        MessageBox.Show("Inner " + ex.InnerException.Message);
-                    else
-                        MessageBox.Show("Error " + ex.Message);
+                    MessageBox.Show(ex.InnerException != null
+                                        ? string.Format("Inner {0}", ex.InnerException.Message)
+                                        : string.Format("Error {0}", ex.Message));
                 } 
                 finally
                 {
@@ -608,95 +596,95 @@ namespace CameraTest
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
-        private void ExposureTimer_Tick(object sender, EventArgs e)
+        private void ExposureTimerTick(object sender, EventArgs e)
         {
-            if (CheckConnected)
+            if (!CheckConnected) return;
+            if (oCamera.ImageReady)
             {
-                if (oCamera.ImageReady)
+                try
                 {
-                    try
+                    if (chkVariant.Checked)
                     {
-                        if (chkVariant.Checked)
+                        var oArr = (Array)oCamera.ImageArrayVariant;
+                        // cast the array to int
+                        if (oCamera.SensorType == ASCOM.DeviceInterface.SensorType.Color)
                         {
-                            Array oArr = (Array)oCamera.ImageArrayVariant;
-                            // cast the array to int
-                            if (oCamera.SensorType == ASCOM.DeviceInterface.SensorType.Color)
+                            // generate a 3 plane colour image array
+                            iarr = new int[oArr.GetLength(0), oArr.GetLength(1), 3];
+                            for (int i = 0; i < iarr.GetLength(0); i++)
                             {
-                                // generate a 3 plane colour image array
-                                iarr = new int[oArr.GetLength(0), oArr.GetLength(1), 3];
-                                for (int i = 0; i < iarr.GetLength(0); i++)
+                                for (int j = 0; j < iarr.GetLength(1); j++)
                                 {
-                                    for (int j = 0; j < iarr.GetLength(1); j++)
-                                    {
-                                        iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 0), CultureInfo.InvariantCulture), i, j, 0);
-                                        iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 1), CultureInfo.InvariantCulture), i, j, 1);
-                                        iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 2), CultureInfo.InvariantCulture), i, j, 2);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // generate a 2 plane monochrome or bayer image array
-                                iarr = new int[oArr.GetLength(0), oArr.GetLength(1)];
-                                for (int i = 0; i < iarr.GetLength(0); i++)
-                                {
-                                    for (int j = 0; j < iarr.GetLength(1); j++)
-                                    {
-                                        iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j), CultureInfo.InvariantCulture), i, j);
-                                    }
+                                    iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 0), CultureInfo.InvariantCulture), i, j, 0);
+                                    iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 1), CultureInfo.InvariantCulture), i, j, 1);
+                                    iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j, 2), CultureInfo.InvariantCulture), i, j, 2);
                                 }
                             }
                         }
                         else
                         {
-                            iarr = (Array)oCamera.ImageArray;
+                            // generate a 2 plane monochrome or bayer image array
+                            iarr = new int[oArr.GetLength(0), oArr.GetLength(1)];
+                            for (int i = 0; i < iarr.GetLength(0); i++)
+                            {
+                                for (int j = 0; j < iarr.GetLength(1); j++)
+                                {
+                                    iarr.SetValue(Convert.ToInt32(oArr.GetValue(i, j), CultureInfo.InvariantCulture), i, j);
+                                }
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        toolStripStatusLabel1.Text = "ImageArray(Variant) failed " + ex.Message;
-                    }
-                    int Max = 0, Min = 0;
-                    double Mean = 0;
-                    ImageParameters(ref Min, ref Max, ref Mean);
-                    if (chkAuto.Checked)
-                    {
-                        imageControl.Minimum = Min;
-                        imageControl.Maximum = Max;
-                        imageControl.MinValue = Min;
-                        imageControl.MaxValue = Max;
                     }
                     else
                     {
-                        imageControl.Maximum = oCamera.MaxADU;
-                        imageControl.Minimum = 0;
+                        iarr = (Array)oCamera.ImageArray;
                     }
-                    txtExposureDuration.Text = (oCamera.LastExposureDuration).ToString(CultureInfo.InvariantCulture);
-                    txtExposureStartTime.Text = oCamera.LastExposureStartTime;
-                    ShowImage();
-                    imageControl.Histogram(histogram);
-                    //toolStripSplitButton1.Text = "Image OK";
-                    ExposureTimer.Enabled = false;
+                }
+                catch (Exception ex)
+                {
+                    toolStripStatusLabel1.Text = string.Format("ImageArray(Variant) failed {0}", ex.Message);
+                }
+                int max = 0, min = 0;
+                double mean = 0;
+                ImageParameters(ref min, ref max, ref mean);
+                if (chkAuto.Checked)
+                {
+                    imageControl.Minimum = min;
+                    imageControl.Maximum = max;
+                    imageControl.MinValue = min;
+                    imageControl.MaxValue = max;
                 }
                 else
                 {
-                    try
-                    {
-                        toolStripProgressBar.Value = oCamera.PercentCompleted;
-                    }
-                    catch{}
+                    imageControl.Maximum = oCamera.MaxADU;
+                    imageControl.Minimum = 0;
+                }
+                txtExposureDuration.Text = (oCamera.LastExposureDuration).ToString(CultureInfo.InvariantCulture);
+                txtExposureStartTime.Text = oCamera.LastExposureStartTime;
+                ShowImage();
+                imageControl.Histogram(histogram);
+                //toolStripSplitButton1.Text = "Image OK";
+                ExposureTimer.Enabled = false;
+            }
+            else
+            {
+                try
+                {
+                    toolStripProgressBar.Value = oCamera.PercentCompleted;
+                }
+                catch
+                {
+                    toolStripProgressBar.Text = @"No Data";
                 }
             }
         }
 
-        private void ImageParameters(ref int Min, ref int Max, ref double Mean)
+        private void ImageParameters(ref int min, ref int max, ref double mean)
         {
             if (iarr == null) return;
 
             decimal sum = 0;
-            decimal sumsq = 0;
-            int max = 0;
-            int min = oCamera.MaxADU;
+            max = 0;
+            min = oCamera.MaxADU;
             int num = 0;
             unsafe
             {
@@ -705,7 +693,7 @@ namespace CameraTest
                     // 3 plane colour image
                     fixed (int* pArr = (int[,,])iarr)
                     {
-                        int* pA = (int*)pArr;
+                        var pA = pArr;
 
                         for (int i = 0; i < iarr.Length; i++)
                         {
@@ -715,7 +703,6 @@ namespace CameraTest
                             if (max < v) max = v;
                             if (min > v) min = v;
                             sum += *pA;
-                            sumsq += v * v;
                             num++;
                             pA++;
                         }
@@ -726,7 +713,7 @@ namespace CameraTest
                     // 1 plane monochrome or bayered image
                     fixed (int* pArr = (int[,])iarr)
                     {
-                        int* pA = (int*)pArr;
+                        var pA = pArr;
 
                         for (int i = 0; i < iarr.GetLength(0) * iarr.GetLength(1); i++)
                         {
@@ -736,7 +723,6 @@ namespace CameraTest
                             if (max < v) max = v;
                             if (min > v) min = v;
                             sum += *pA;
-                            sumsq += v * v;
                             num++;
                             pA++;
                         }
@@ -747,9 +733,7 @@ namespace CameraTest
             //double sd = Math.Sqrt((double)var);
             if (min < 0) min = 0;
             if (max > oCamera.MaxADU) max = oCamera.MaxADU;
-            Max = max;
-            Min = min;
-            Mean = (int)(sum / num);
+            mean = (int)(sum / num);
             MakeHistogram(min, max);
         }
 
@@ -772,7 +756,7 @@ namespace CameraTest
                             {
                                 int v = *pA++;
                                 if (v < 0) v = 65536 + v;
-                                int idx = (int)((v - min) * s);
+                                var idx = (int)((v - min) * s);
                                 if (idx >= 0 && idx <= 255)
                                     histogram[idx]++;
                             }
@@ -786,13 +770,11 @@ namespace CameraTest
                             {
                                 int v = *pA++;
                                 if (v < 0) v = 65536 + v;
-                                int idx = (int)((v - min) * s);
+                                var idx = (int)((v - min) * s);
                                 if (idx >= 0 && idx <= 255)
                                     histogram[idx]++;
                             }
                         }
-                        break;
-                    default:
                         break;
 	            } 
 
@@ -832,12 +814,12 @@ namespace CameraTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            CameraID = Settings.Default.CameraID;
-            lblCameraName.Text = CameraID;
+            cameraId = Settings.Default.CameraID;
+            lblCameraName.Text = cameraId;
             this.Location = Settings.Default.Location;
             this.Size = Settings.Default.WindowSize;
             splitContainer1.SplitterDistance = Settings.Default.Dividerleft;
-            LastExposure = numExposure.Value;
+            lastExposure = numExposure.Value;
             checkBoxSameBins.Checked = Settings.Default.SameBins;
         }
 
@@ -847,7 +829,7 @@ namespace CameraTest
             {
                 oCamera.Connected = false;
             }
-            Settings.Default.CameraID = CameraID;
+            Settings.Default.CameraID = cameraId;
             Settings.Default.Location=this.Location;
             Settings.Default.Dividerleft = splitContainer1.SplitterDistance;
             Settings.Default.WindowSize = this.Size;
@@ -858,19 +840,16 @@ namespace CameraTest
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void btnAbort_Click(object sender, EventArgs e)
         {
-            if (CheckConnected)
+            if (!CheckConnected) return;
+            try
             {
-                try
-                {
-                    oCamera.AbortExposure();
-                }
-                catch (Exception ex)
-                {
-                    if (ex.InnerException != null)
-                        MessageBox.Show("Inner " + ex.InnerException.Message);
-                    else
-                        MessageBox.Show("Error " + ex.Message);
-                }
+                oCamera.AbortExposure();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException != null
+                                    ? string.Format("Inner {0}", ex.InnerException.Message)
+                                    : string.Format("Error {0}", ex.Message));
             }
         }
 
@@ -881,7 +860,7 @@ namespace CameraTest
 
             Graphics g = e.Graphics;
             //g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            PointF[] pts = new PointF[3];
+            var pts = new PointF[3];
             int t = splitContainer1.Panel2.AutoScrollPosition.Y;
             int l = splitContainer1.Panel2.AutoScrollPosition.X;
             int bx = oCamera.BinX;
@@ -905,7 +884,10 @@ namespace CameraTest
                 splitContainer1.Panel2.AutoScrollMinSize = new Size((int)(img.Width * zoom * oCamera.BinX), (int)(img.Height * zoom * oCamera.BinY));
                 splitContainer1.Panel2.Invalidate();
             }
-            catch { }
+            catch
+            {
+                splitContainer1.Panel2.Text = @"Error";
+            }
         }
 
         private void splitContainer1_Panel2_MouseDown(object sender, MouseEventArgs e)
@@ -954,7 +936,7 @@ namespace CameraTest
             decimal val = numExposure.Value;
             decimal resolution = (oCamera.InterfaceVersion >= 2) ? (decimal)oCamera.ExposureResolution : 0.001M;
 
-            if (val >= LastExposure)
+            if (val >= lastExposure)
             {
                 if (val > 1.0M)
                 {
@@ -1006,18 +988,16 @@ namespace CameraTest
                     //numExposure.DecimalPlaces = 0;
                 }
             }
-            LastExposure = numExposure.Value;
+            lastExposure = numExposure.Value;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (iarr != null)
+            if (iarr == null) return;
+            DialogResult ret = saveFileDialog.ShowDialog();
+            if (ret == DialogResult.OK)
             {
-                DialogResult ret = saveFileDialog.ShowDialog();
-                if (ret == DialogResult.OK)
-                {
-                    SaveToFits(saveFileDialog.FileName);
-                }
+                SaveToFits(saveFileDialog.FileName);
             }
         }
 
@@ -1037,9 +1017,9 @@ namespace CameraTest
         private void SaveToFits(string filepath)
         {
             // get the data in the right form
-            Array imageData = (Array)ArrayFuncs.Flatten(oCamera.ImageArray);
-            double bZero = 0;
-            double bScale = 1.0;
+            var imageData = (Array)ArrayFuncs.Flatten(oCamera.ImageArray);
+            const double bZero = 0;
+            const double bScale = 1.0;
             if (oCamera.MaxADU <= 65535)
             {
                 //bZero = 32768;
@@ -1075,7 +1055,10 @@ namespace CameraTest
             {
                 imageHdu.AddValue("CCD_TEMP", oCamera.CCDTemperature, "sensor temperature in degrees C");  // TODO sate this at the start of exposure . Absent if temperature is not available.
             }
-            finally{}
+            catch(Exception)
+            {
+                imageHdu.Info();
+            }
             if (oCamera.CanSetCCDTemperature)
                 imageHdu.AddValue("SET-TEMP", oCamera.SetCCDTemperature, "CCD temperature setpoint in degrees C");
             // OBJECT – name or catalog number of object being imaged
@@ -1095,13 +1078,13 @@ namespace CameraTest
             imageHdu.AddValue("SBSTDVER", "SBFITSEXT Version 1.0", "version of the SBIG FITS extensions supported");
 
             // save it
-            Fits fitsImage = new Fits();
+            var fitsImage = new Fits();
             fitsImage.AddHDU(imageHdu);
             FileStream fs = null;
             try
             {
                 fs = new FileStream(filepath, FileMode.Create);
-                using (BufferedDataStream bds = new BufferedDataStream(fs))
+                using (var bds = new BufferedDataStream(fs))
                 {
                     fs = null;
                     fitsImage.Write(bds);
@@ -1122,11 +1105,9 @@ namespace CameraTest
 
         private void buttonAction_Click(object sender, EventArgs e)
         {
-            if (oCamera != null && oCamera.InterfaceVersion >= 2 && comboBoxSupportedActions.Items.Count > 0)
-            {
-                string ret = oCamera.Action(comboBoxSupportedActions.Text, textBoxActionParameters.Text);
-                textBoxActionParameters.Text = ret;
-            }
+            if (oCamera == null || oCamera.InterfaceVersion < 2 || comboBoxSupportedActions.Items.Count <= 0) return;
+            string ret = oCamera.Action(comboBoxSupportedActions.Text, textBoxActionParameters.Text);
+            textBoxActionParameters.Text = ret;
         }
 
         private void checkBoxDarkFrame_CheckedChanged(object sender, EventArgs e)
