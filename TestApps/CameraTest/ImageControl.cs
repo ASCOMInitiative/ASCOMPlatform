@@ -143,80 +143,72 @@ namespace CameraTest
 
         private void pnlSlider_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                pnlLoc = e.X;   // save current mouse position
-                pnlPos = e.X * 3 / pnlSlider.Width; // 0 to 2 gives position within slider
-            }
+            if (e.Button != MouseButtons.Left) return;
+            pnlLoc = e.X;   // save current mouse position
+            pnlPos = e.X * 3 / pnlSlider.Width; // 0 to 2 gives position within slider
         }
 
         private void pnlSlider_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                int dx = e.X - pnlLoc;
-                int lp = pnlSlider.Left;
-                int rp = this.Width - (pnlSlider.Left + pnlSlider.Width); // distance of rhs of slider from right of range
+            if (e.Button != MouseButtons.Left) return;
+            int dx = e.X - pnlLoc;
+            int lp = pnlSlider.Left;
+            int rp = this.Width - (pnlSlider.Left + pnlSlider.Width); // distance of rhs of slider from right of range
 
-                switch (pnlPos)
-                {
-                    case (0):
-                        // left side, move left edge
+            switch (pnlPos)
+            {
+                case (0):
+                    // left side, move left edge
+                    if (lp >= -dx)
+                    {
+                        lp += dx;
+                        numMinimum.Value = numMinimum.Minimum + lp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
+                    }
+                    break;
+                case (1):
+                    // middle, move the lot
+                    if (dx >= 0)
+                    {
+                        // move left, increasing values, so check the right edge
+                        if (rp >= dx)
+                        {
+                            lp += dx;
+                            rp -= dx;
+                            numMinimum.Value = numMinimum.Minimum + lp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
+                            numMaximum.Value = numMaximum.Maximum - rp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
+                        }
+                    }
+                    else
+                    {
+                        // move right, check the left edge
                         if (lp >= -dx)
                         {
                             lp += dx;
-                            numMinimum.Value = numMinimum.Minimum + lp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
-                        }
-                        break;
-                    case (1):
-                        // middle, move the lot
-                        if (dx >= 0)
-                        {
-                            // move left, increasing values, so check the right edge
-                            if (rp >= dx)
-                            {
-                                lp += dx;
-                                rp -= dx;
-                                numMinimum.Value = numMinimum.Minimum + lp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
-                                numMaximum.Value = numMaximum.Maximum - rp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
-                            }
-                        }
-                        else
-                        {
-                            // move right, check the left edge
-                            if (lp >= -dx)
-                            {
-                                lp += dx;
-                                rp -= dx;
-                                numMinimum.Value = numMinimum.Minimum + lp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
-                                numMaximum.Value = numMaximum.Maximum - rp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
-                            }
-                        }
-                        break;
-                    case (2):
-                        // right side, move right edge
-                        if (rp >= dx)
-                        {
                             rp -= dx;
+                            numMinimum.Value = numMinimum.Minimum + lp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
                             numMaximum.Value = numMaximum.Maximum - rp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
                         }
-                        pnlLoc = e.X;
-                        break;
-                    default:
-                        break;
-                }
-                pnlSlider.Left = lp;
-                pnlSlider.Width = this.Width - (rp + lp);
+                    }
+                    break;
+                case (2):
+                    // right side, move right edge
+                    if (rp >= dx)
+                    {
+                        rp -= dx;
+                        numMaximum.Value = numMaximum.Maximum - rp * (numMaximum.Maximum - numMinimum.Minimum) / this.Width;
+                    }
+                    pnlLoc = e.X;
+                    break;
             }
+            pnlSlider.Left = lp;
+            pnlSlider.Width = this.Width - (rp + lp);
         }
 
         private void SetSliders()
         {
-            if (numMaximum.Maximum > numMinimum.Minimum)
-            {
-                pnlSlider.Left = (int)(this.Width * (numMinimum.Value - numMinimum.Minimum) / (numMaximum.Maximum - numMinimum.Minimum));
-                pnlSlider.Width = (int)(this.Width * (numMaximum.Value - numMinimum.Value) / (numMaximum.Maximum - numMinimum.Minimum));
-            }
+            if (numMaximum.Maximum <= numMinimum.Minimum) return;
+            pnlSlider.Left = (int)(this.Width * (numMinimum.Value - numMinimum.Minimum) / (numMaximum.Maximum - numMinimum.Minimum));
+            pnlSlider.Width = (int)(this.Width * (numMaximum.Value - numMinimum.Value) / (numMaximum.Maximum - numMinimum.Minimum));
         }
 
         private void PictSlider_Load(object sender, EventArgs e)
@@ -225,7 +217,7 @@ namespace CameraTest
             //lblGamma.Left = Gamma.Left - lblGamma.Width;
         }
 
-        private Bitmap bmp = new Bitmap(256, 1, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+        private readonly Bitmap bmp = new Bitmap(256, 1, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
         /// <summary>
         /// Set the colour scale, allowing for the gamma setting
@@ -236,15 +228,15 @@ namespace CameraTest
             {
                 double v = i / 255.0;
                 v = Math.Pow(v, (double)Gamma.Value);
-                int j = (int)(v * 255);
+                var j = (int)(v * 255);
                 bmp.SetPixel(i, 0, Color.FromArgb(j, j, j));
             }
             pnlSlider.BackgroundImage = bmp;
             pnlSlider.Invalidate();
         }
-        private int[] histogram = new int[256];
-        private int max = 0;
-        private bool logScale = false;
+        private readonly int[] histogram = new int[256];
+        private int max;
+        private bool logScale;
 
         private void DrawHistogram()
         {
@@ -259,9 +251,9 @@ namespace CameraTest
 
             Graphics g = pnlHistogram.CreateGraphics();
             Color colour = Color.Black;
-            using (SolidBrush sb = new SolidBrush(colour))
+            using (var sb = new SolidBrush(colour))
             {
-                using (Pen myPen = new Pen(sb, 1))
+                using (var myPen = new Pen(sb, 1))
                 {
                     //The width of the pen is given by the XUnit for the control.
                     int h = pnlHistogram.Height, w = pnlHistogram.Width;
@@ -270,7 +262,7 @@ namespace CameraTest
                     if (logScale) sy = (float)(h / Math.Log10(max));
                     for (int i = 0; i < histogram.Length; i++)
                     {
-                        int x = (int)(i * sx);
+                        var x = (int)(i * sx);
                         // set the colour
                         if (x < pnlSlider.Left)
                         {
@@ -284,7 +276,7 @@ namespace CameraTest
                         {
                             double v = (double)(x - pnlSlider.Left) / pnlSlider.Width;
                             v = Math.Pow(v, (double)Gamma.Value);
-                            int j = (int)(v * 255);
+                            var j = (int)(v * 255);
                             myPen.Color = Color.FromArgb(j, j, j);
                         }
 
@@ -307,21 +299,17 @@ namespace CameraTest
 
         private void numMaximum_ValueChanged(object sender, EventArgs e)
         {
-            if (numMaximum.Maximum > numMinimum.Minimum)
-            {
-                pnlSlider.Width = (int)(this.Width * (numMaximum.Value - numMinimum.Value) / (numMaximum.Maximum - numMinimum.Minimum));
-                pnlSlider.Left = (int)(this.Width * numMinimum.Value / (numMaximum.Maximum - numMinimum.Minimum));
-                //Change(this, e);
-            }
+            if (numMaximum.Maximum <= numMinimum.Minimum) return;
+            pnlSlider.Width = (int)(this.Width * (numMaximum.Value - numMinimum.Value) / (numMaximum.Maximum - numMinimum.Minimum));
+            pnlSlider.Left = (int)(this.Width * numMinimum.Value / (numMaximum.Maximum - numMinimum.Minimum));
+            //Change(this, e);
         }
 
         private void numMinimum_ValueChanged(object sender, EventArgs e)
         {
-            if (numMaximum.Maximum > numMinimum.Minimum)
-            {
-                pnlSlider.Left = (int)(this.Width * numMinimum.Value / (numMaximum.Maximum - numMinimum.Minimum));
-                pnlSlider.Width = (int)(this.Width * (numMaximum.Value - numMinimum.Value) / (numMaximum.Maximum - numMinimum.Minimum));
-            }
+            if (numMaximum.Maximum <= numMinimum.Minimum) return;
+            pnlSlider.Left = (int)(this.Width * numMinimum.Value / (numMaximum.Maximum - numMinimum.Minimum));
+            pnlSlider.Width = (int)(this.Width * (numMaximum.Value - numMinimum.Value) / (numMaximum.Maximum - numMinimum.Minimum));
             //Change(this, e);
         }
 
@@ -332,7 +320,8 @@ namespace CameraTest
         /// <param name="e"></param>
         private void numUpDown_KeyUpDown(object sender, KeyEventArgs e)
         {
-            NumericUpDown nud = sender as NumericUpDown;
+            var nud = sender as NumericUpDown;
+            if (nud == null) throw new ArgumentNullException("sender");
             switch (e.Modifiers)
             {
 

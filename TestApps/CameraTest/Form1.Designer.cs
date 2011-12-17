@@ -669,7 +669,7 @@ namespace CameraTest
             // 
             // ExposureTimer
             // 
-            this.ExposureTimer.Tick += new System.EventHandler(this.ExposureTimer_Tick);
+            this.ExposureTimer.Tick += new System.EventHandler(this.ExposureTimerTick);
             // 
             // splitContainer1
             // 
