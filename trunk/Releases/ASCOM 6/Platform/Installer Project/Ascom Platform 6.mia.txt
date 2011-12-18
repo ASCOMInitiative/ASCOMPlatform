@@ -306,6 +306,12 @@ end
 Convert Variable REPAIR to UPPER case
 Convert Variable REMOVE to UPPER case
 if Variable REMOVE Equals TRUE
+  Set Variable ABORT to FALSE
+  Display Dialog: ConfirmRemove, wait for dialog to return (modal)
+  if Variable ABORT Equals TRUE
+    Write into Text File $SETUPLOG$ from Value Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
+    Terminate Installation
+  end
   MessageBalloon: ASCOM Platform Maintenance, Removing Platform 6...
   Set Variable REPAIR to FALSE
 end

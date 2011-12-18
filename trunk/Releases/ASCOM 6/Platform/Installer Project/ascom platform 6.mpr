@@ -1,6 +1,8 @@
 ASCOM Platform 6.mia
 componentstree.dfm
 componentstree.dfm.miaf
+confirmremove.dfm
+confirmremove.dfm.miaf
 destination.dfm
 destination.dfm.miaf
 finish.dfm
@@ -136,6 +138,12 @@ $
 
 
 B
+
+
+
+
+
+
 
 
 
@@ -1432,7 +1440,7 @@ ASCOM Platform 6 -SP1 RC1
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{40D0FF97-B6C6-4AF7-AA6B-74122FB264B2}
+{20043319-9C08-489B-8DF3-D2F2AEE66A66}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
