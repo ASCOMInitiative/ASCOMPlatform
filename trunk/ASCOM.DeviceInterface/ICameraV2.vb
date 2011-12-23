@@ -872,7 +872,7 @@ Public Interface ICameraV2
     ''' <para>Please see <see cref="ReadoutModes" /> for additional information.</para>
     ''' <para>This is only available for the Camera Interface Version 2</para>
     ''' </remarks>
-    ReadOnly Property ReadoutMode As Short
+    Property ReadoutMode As Short
 
     ''' <summary>
     ''' List of available readout modes, Interface Version 2 only
