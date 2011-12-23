@@ -834,6 +834,7 @@ namespace ASCOM.DriverAccess
         public short ReadoutMode
         {
             get { return Convert.ToInt16(_memberFactory.CallMember(1, "ReadoutMode", new Type[] {}, new object[] {})); }
+            set { _memberFactory.CallMember(2, "ReadoutMode", new Type[] {}, new object[] {value}); }
         }
 
         /// <summary>
