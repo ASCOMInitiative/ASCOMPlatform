@@ -54,6 +54,7 @@
 // 12-Oct-11	rbd		0.9.5 - Hack for MaxPoint which reports CanSetTracking
 //						true for scopes that cannot do this. Reverse sense
 //						of read-me popup for clarity.
+// 04-Jan-12	rbd		1.0.1 - Release. No changes.
 //========================================================================
 
 #include "StdAfx.h"
@@ -1650,7 +1651,9 @@ static void switchThreadIf()
 static IDispatch *get_dispatch(void)
 {
 	IDispatch *pDisp;
+#ifndef NDEBUG
 	DWORD tid = GetCurrentThreadId();
+#endif
 
 	if(FAILED(CoGetInterfaceAndReleaseStream(_pMarshalStream, IID_IDispatch, (LPVOID *)&pDisp)))
 		drvFail("Failed to unmarshal dispatch pointer", NULL, true);
