@@ -1,22 +1,22 @@
 ; Installer for ASCOM Mount driver for X2
 ;
 ; ** WARNING **
-; THIS USES THE DEBUG BUILD!!!
+; THIS USES THE DEBUG BUILD!!! IT IS INTENTIONAL.
 ;
 [Setup]
-AppName=X2 Mount Driver BETA for ASCOM Telescopes
-AppVersion=0.9.5
+AppName=X2 Mount Driver for ASCOM Telescopes
+AppVersion=1.0.1
 AppPublisher=ASCOM Initiative
 AppPublisherURL=http://ascom-standards.org/
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
 AppUpdatesURL=http://ascom-standards.org/
-VersionInfoVersion=1.0.0
+VersionInfoVersion=1.0.1
 MinVersion=0,5.0.2195sp4
 CreateAppDir=no
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir=.
-OutputBaseFilename=X2AscomTelescope(0.9.5)Setup
+OutputBaseFilename=X2AscomTelescope(1.0.1)Setup
 Compression=lzma
 SolidCompression=yes
 WizardImageFile="WizardImage.bmp"

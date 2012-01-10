@@ -26,6 +26,7 @@
 //						be reflected in TheSky X UI, you must return
 //						-1000.0 for Ra and Dec rates in addition to false
 //						for bTracking.
+// 04-Jan-12	rbd		1.0.1 - Release. No changes.
 //========================================================================
 
 #include "StdAfx.h"

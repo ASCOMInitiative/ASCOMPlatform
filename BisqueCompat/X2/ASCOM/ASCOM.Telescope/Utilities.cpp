@@ -20,6 +20,7 @@
 // 22-Apr-11	rbd		Initial edit, taken from TeleAPI/ASCOM plugin
 // 12-Jul-11	rbd		0.9.3 - Log exceptions to TheSky X's comm log
 // 12-Oct-11	rbd		0.9.5 - Improve error reporting in DrvFail.
+// 04-Jan-12	rbd		1.0.1 - Release. No changes.
 //========================================================================
 #include "StdAfx.h"
 
@@ -133,7 +134,6 @@ void drvFail(char *msg, EXCEPINFO *ei, bool bCloseConn)
 	bool handled = false;
 	char buf[4096];
 
-	//TODO Remove this awful hack when MaxPoint is fixed!!
 	if(!_bDoingInit)
 	{
 		if(ei != NULL)

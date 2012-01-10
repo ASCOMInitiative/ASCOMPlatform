@@ -53,7 +53,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,9,5,0
+ FILEVERSION 1,0,1,0
  PRODUCTVERSION 6,0,0,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
@@ -69,10 +69,10 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "Test version"
+            VALUE "Comments", "Release version"
             VALUE "CompanyName", "ASCOM Initiative"
             VALUE "FileDescription", "X2 mount plugin for ASCOM telescope drivers"
-            VALUE "FileVersion", "0.9.5"
+            VALUE "FileVersion", "1.0.1"
             VALUE "InternalName", "ASCOM.Telescope"
             VALUE "OriginalFilename", "ASCOM.Telescope.dll"
             VALUE "ProductName", "ASCOM Platform"
