@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections;
 
-namespace $safeprojectname$
+namespace ASCOM.$safeprojectname$
 {
 
 	#region C# Definition of IClassFactory

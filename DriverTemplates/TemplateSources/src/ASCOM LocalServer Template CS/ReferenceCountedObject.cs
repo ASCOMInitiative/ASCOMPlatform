@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace $safeprojectname$
+namespace ASCOM.$safeprojectname$
 {
 	[ComVisible(false)]
 	public class ReferenceCountedObjectBase
