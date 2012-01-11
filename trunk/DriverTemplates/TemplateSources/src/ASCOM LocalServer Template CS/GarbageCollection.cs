@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace $safeprojectname$
+namespace ASCOM.$safeprojectname$
 {
 	/// <summary>
 	/// Summary description for GarbageCollection.

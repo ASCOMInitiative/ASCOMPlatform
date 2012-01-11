@@ -16,9 +16,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ASCOM
+using ASCOM;
 
-namespace $safeprojectname$
+namespace ASCOM.$safeprojectname$
 {
     /// <summary>
     /// The resources shared by all drivers and devices, in this example it's a serial port with a shared SendMessage method
@@ -98,8 +98,6 @@ namespace $safeprojectname$
             {
                 lock (lockObject)
                 {
-                    if (SharedSerial.Connected == value)
-                        return;
                     if (value)
                     {
                         if (s_z == 0)

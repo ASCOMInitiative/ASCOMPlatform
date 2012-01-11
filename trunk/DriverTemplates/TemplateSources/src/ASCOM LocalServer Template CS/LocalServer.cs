@@ -1,5 +1,5 @@
 //
-// $safeprojectname$ Local COM Server
+// ASCOM.$safeprojectname$ Local COM Server
 //
 // This is the core of a managed COM Local Server, capable of serving
 // multiple instances of multiple interfaces, within a single
@@ -27,7 +27,7 @@ using System.Security.Principal;
 using System.Diagnostics;
 using ASCOM;
 
-namespace $safeprojectname$
+namespace ASCOM.$safeprojectname$
 {
 	public static class Server
 	{

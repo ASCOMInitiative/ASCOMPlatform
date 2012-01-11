@@ -1,6 +1,6 @@
 using System;
 
-namespace $safeprojectname$
+namespace ASCOM.$safeprojectname$
 {
 	partial class frmMain
 	{
