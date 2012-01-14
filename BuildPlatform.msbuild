@@ -1,0 +1,43 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Required Import to use MSBuild Community Tasks -->
+
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  <Import Project=".\External Dependencies\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+
+  <PropertyGroup>
+    <SandCastleHFBCmd>$(SHFBROOT)SandcastleBuilderConsole.exe</SandCastleHFBCmd>
+    <SandCastleHFBProject>Help\ASCOMPlatform.shfb</SandCastleHFBProject>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <MIAPath>$(InstallAwareRoot)</MIAPath>
+    <MIABuild>$(MIAPath)\miabuild.exe</MIABuild>
+  </PropertyGroup>
+
+ <Target Name="Build">
+    <!--
+      Create a few registry keys to represent a minimal ASCOM Profile Store.
+      This enables drivers to register themselves during the build process without hitting
+      a ProfileNotFound exception.
+    -->
+    <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="PlatformVersion" Value="6.0" />
+    <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="SerTraceFile" Value="C:\\SerialTraceAuto.txt" />
+
+    <!-- Create global AssemblyVersion attributes serived from teh TeamCity build number.-->
+    <AssemblyInfo CodeLanguage="CS" OutputFile="AssemblyVersionInfo.cs" AssemblyFileVersion="$(BUILD_NUMBER)" />
+    <AssemblyInfo CodeLanguage="VB" OutputFile="AssemblyVersionInfo.vb" AssemblyFileVersion="$(BUILD_NUMBER)" />
+    
+    <MSBuild Projects="ASCOM Platform VS2010.sln" Targets="Clean" Properties="Configuration=Release" />
+
+    <MSBuild Projects="ASCOM Platform VS2010.sln" Targets="Build" Properties="Configuration=Release" />
+
+    <MSBuild Projects="Help\ASCOMPlatform.shfbproj" Properties="Configuration=Release" />
+
+    <Exec Command='"$(MIABuild)" "Releases\ASCOM 6\Platform\Installer Project\ASCOM Platform 6.mpr" /r' />
+ 
+   <Exec Command='"$(MIABuild)" "Releases\ASCOM 6\Developer\Installer Project\ASCOM Platform 6 Developer.mpr" /r' />
+ 
+  </Target>
+</Project>
