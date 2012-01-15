@@ -36,11 +36,6 @@
     <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;
-                                 $(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
-  </ItemGroup>
-
   <!-- Main build target for this build -->
   <Target Name="Build">
 
@@ -115,6 +110,10 @@
 
     <!-- Copy the installers back to the build root directory -->
     <Sleep Milliseconds="1000" />
+    <ItemGroup>
+      <PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;
+                                   $(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
+    </ItemGroup>
     <Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
   </Target>
 </Project>
