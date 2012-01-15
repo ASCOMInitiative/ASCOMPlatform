@@ -1,0 +1,120 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Required Import to use MSBuild Community Tasks -->
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+
+  <PropertyGroup>
+    <!-- Directory in which to export the latest ASCOM codebase from Subversion-->
+    <CheckoutDirectory>$(MSBuildProjectDirectory)\Export</CheckoutDirectory>
+
+    <!-- Subversion URL from which to make the export -->
+    <RepositoryPath>https://ascom.svn.sourceforge.net/svnroot/ascom/trunk</RepositoryPath>
+
+    <!-- Registry location for the user's Subversion login credentials -->
+    <SecurityCredentialsLocation>HKEY_CURRENT_USER\Software\ASCOM\Build</SecurityCredentialsLocation>
+
+    <!-- Current Platform version -->
+    <PlatformVersion>6.0</PlatformVersion>
+
+    <!-- Base date from which the number of days is calculated to give the build version number (should stay at Jan 1 2011 - it's good till at least 2019) -->
+    <BuildBaseDate>January 1,2011</BuildBaseDate>
+
+    <!-- Location of the Installaware build executable -->
+    <MIABuild>miabuild.exe</MIABuild>
+
+    <!-- Names and locations of solution and project files used by this build script-->
+    <PlatformVSSolution>ASCOM Platform VS2010.sln</PlatformVSSolution>
+    <PlatformHelpProject>Help\ASCOMPlatform.shfbproj</PlatformHelpProject>
+    <DeveloperHelpProject>Help\ASCOMDeveloper.shfbproj</DeveloperHelpProject>
+    <PlatformInstallerDirectory>Releases\ASCOM 6\Platform\Installer Project</PlatformInstallerDirectory>
+    <DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
+    <PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
+    <DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
+  </PropertyGroup>
+
+  <!-- Item group for the installers that are created by the build process -->
+  <ItemGroup>
+    <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;
+                                 $(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
+  </ItemGroup>
+
+  <!-- Main build target for this build -->
+  <Target Name="Build">
+
+    <Message Text="Checkout directory: $(CheckoutDirectory)" />
+
+    <!-- Read the Subversion logon credentials fromn the registry -->
+    <RegistryRead KeyName="$(SecurityCredentialsLocation)" ValueName="SubversionUserName">
+      <Output TaskParameter="Value" PropertyName="SubversionUserName" />
+    </RegistryRead>
+    <Message Text="Subversion User Name: $(SubversionUserName)"/>
+
+    <RegistryRead KeyName="$(SecurityCredentialsLocation)" ValueName="SubversionPassword">
+      <Output TaskParameter="Value" PropertyName="SubversionPassword" />
+    </RegistryRead>
+    <Message Text="Subversion Password: $(SubversionPassword)" />
+
+    <!-- Clean up any previous installer versions and the checkout directory -->
+    <RemoveDir Directories="$(CheckoutDirectory)" />
+    <Delete Files="@(OldPlatformInstallers)" />
+
+    <!-- Export a fresh copy of the Platform source -->
+    <SvnExport RepositoryPath="$(RepositoryPath)"
+               Username = "$(SubversionUserName)"
+               Password = "$(SubversionPassword)"
+               LocalPath="$(CheckoutDirectory)">
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnExport>
+    <Message Text="Revision: $(Revision)"/>
+
+    <!-- Create a few registry keys to represent a minimal ASCOM Profile Store. -->
+    <!-- This enables drivers to register themselves during the build process without hitting a ProfileNotFound exception.-->
+    <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="PlatformVersion" Value="$(PlatformVersion)" />
+    <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="SerTraceFile" Value="C:\\SerialTraceAuto.txt" />
+
+    <!-- Create the build version string. Format: Platform-Major.PlatformMinor.HoursSince1Jan2011.SVNCheckoutVersion-->
+    <!-- Retrieve the number of build days since 1 January 2011 -->
+    <Version BuildType="Automatic" RevisionType="Automatic" StartDate="$(BuildBaseDate)">
+      <Output TaskParameter="Build" PropertyName="Build" />
+    </Version>
+    <Message Text="Build: $(Build)"/>
+    <!-- Calculate the number of build hours from the number of build days.-->
+    <Math.Multiple Numbers="$(Build);24">
+      <Output TaskParameter="Result" PropertyName="BuildHours" />
+    </Math.Multiple>
+
+    <!-- Retrieve the current hour on the build machine. -->
+    <Time>
+      <Output TaskParameter="Hour" PropertyName="Hour" />
+    </Time>
+    <Message Text="Current Hour: $(Hour)" />
+
+    <!-- Calculate the build hour from the number of hours to this build day plus the curent hour on the build machine. -->
+    <Math.Add Numbers="$(BuildHours);$(Hour)">
+      <Output TaskParameter="Result" PropertyName="BuildHours" />
+    </Math.Add>
+
+    <!-- Create global AssemblyVersion attributes from the build hours and revision numbers.-->
+    <AssemblyInfo CodeLanguage="CS" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" AssemblyFileVersion="$(PlatformVersion).$(BuildHours).$(Revision)" />
+    <AssemblyInfo CodeLanguage="VB" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" AssemblyFileVersion="$(PlatformVersion).$(BuildHours).$(Revision)" />
+
+    <!-- Clean the solution (just in case executables get committed to SVN) and build from scratch.-->
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release" />
+
+    <!-- Build the help files.-->
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release" />
+
+    <!-- Build the installers.-->
+    <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
+    <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
+
+    <!-- Copy the installers back to the build root directory -->
+    <Sleep Milliseconds="1000" />
+    <Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
+  </Target>
+</Project>
