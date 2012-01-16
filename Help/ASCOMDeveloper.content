@@ -6,6 +6,7 @@
   <Topic id="3d17234a-c873-4f65-af0f-52f182081a44" visible="True" title="ASCOM Platform for .NET Developers" />
   <Topic id="e7734c14-0562-4010-b0c9-ddb5055cd318" visible="True" title="ASCOM Platform for COM Developers" />
   <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" title="Version History">
+    <Topic id="6e5a0102-2a1d-4b4d-8cbd-59d2076e5c7d" visible="True" />
     <Topic id="6c2d0f0d-6460-494e-9c1f-08545fcff623" visible="True" title="Version 6.0" />
     <Topic id="1fe76099-cb79-4c76-bb26-55d4e7305a3d" visible="True" />
     <Topic id="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" visible="True" title="Version 5.5" />

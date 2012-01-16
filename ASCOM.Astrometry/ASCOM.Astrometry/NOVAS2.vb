@@ -3,7 +3,7 @@
 
 'Version 5.5.6 is identical to the component shipped with Platform 5.5. except that the location of the support
 'files has been updated to match the new ASCOM\Astrometry Platform 6 location and the code is now able to find the copy
-'in the 32bit part of the file system when running on a 64bit system. There are no interface or funciton changes in this version.
+'in the 32bit part of the file system when running on a 64bit system. There are no interface or function changes in this version.
 
 Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities
@@ -37,6 +37,9 @@ Namespace NOVAS
     ''' either a 32 or 64 bit compiled version of the unmodified C code from ther USNO web site. The .NET code
     ''' does not carry out calculations itself, it simply handles any interface presentation differences
     ''' and calls the relevant 32 or 64bit code according to its environment.</para>
+    ''' <para><b>Note: </b> This class only supports Earth in the XXXXPlanet classes, which is a consequence of the implementation 
+    ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+    ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.</para>
     ''' </remarks>
     <ComVisible(False)> _
     Public Class NOVAS2 'Static classes cannot be exposed through COM
@@ -141,7 +144,11 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.
         ''' </pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         Public Shared Function AppPlanet(ByVal tjd As Double, _
                                               ByRef ss_object As BodyDescription, _
                                               ByRef earth As BodyDescription, _
@@ -170,7 +177,11 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.
         ''' </pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         Public Shared Function TopoPlanet(ByVal tjd As Double, _
                                                ByRef ss_object As BodyDescription, _
                                                ByRef earth As BodyDescription, _
@@ -252,7 +263,11 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.
         ''' </pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         Public Shared Function VirtualPlanet(ByVal tjd As Double, _
                                                       ByRef ss_object As BodyDescription, _
                                                       ByRef earth As BodyDescription, _
@@ -280,7 +295,11 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.
         ''' </pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         Public Shared Function LocalPlanet(ByVal tjd As Double, _
                                                     ByRef ss_object As BodyDescription, _
                                                     ByRef earth As BodyDescription, _
@@ -331,7 +350,11 @@ Namespace NOVAS
         ''' <returns><pre>
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.</pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         Public Shared Function AstroPlanet(ByVal tjd As Double, _
                                                     ByRef ss_object As BodyDescription, _
                                                     ByRef earth As BodyDescription, _

@@ -17,6 +17,7 @@ Namespace NOVAS
     ''' <href>http://www.usno.navy.mil/help/astronomy-help</href> as this provides evidence to USNO that justifies further 
     ''' improvements and developments of NOVAS capabilities.
     ''' </para>
+    ''' <para><b>Note: </b>This class is now deprecated, please use NOVAS31 instead.</para>
     '''  </remarks>
     <Guid("74F604BD-6106-40ac-A821-B32F80BF3FED"), _
         ClassInterface(ClassInterfaceType.None), _

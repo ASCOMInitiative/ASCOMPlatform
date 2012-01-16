@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6e5a0102-2a1d-4b4d-8cbd-59d2076e5c7d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+      	<section address="ChangesSP1">
+    		<title>Key Changes in 6.0 SP1 - For Everyone</title>
+      		<content>
+				<list class="bullet">
+	      			<listItem>Add build version to the install log</listItem>
+					<listItem>During uninstall, request that the user seeks help before uninstalling and reinstalling the Platform, 
+					since this usually doesn't fix issues.</listItem>
+					<listItem>Improve backward compatibility when installers are renamed before execution</listItem>
+	  			</list>
+            </content>
+		</section>
+          			
+    	<section address="KeyChangesin6.0SP1Dev">
+	     	<title>Key Changes in 6.0 SP1 - For Developers</title>
+	      	<content>
+	      		<list class="bullet">
+	     			<listItem>Added  transform ALT/AZ to RA/DEC to ASCOM.Astrometry.Transform</listItem>
+					<listItem>Added USNO NOVAS3.1 to the Astrometry namespace</listItem>
+					<listItem>Driver assemblies located in the Global Assembly Cache are now supported</listItem>
+					<listItem>Document how to migrate from the Astro32 DLL and provide extra features to support easy migration</listItem>
+					<listItem>Util.JulianDate - Clarify that the returned date is based on Terrestrial Time</listItem>
+					<listItem>ICameraV2 - Make ReadoutMode Read-Write instead of Read-Only to meet the interface specification</listItem>
+  				</list>
+      		</content>
+   		</section>
+   		
+        <section address="IssuesFixed">
+           	<title>Issues Fixed</title>
+            <content>
+      			<list class="bullet">
+					<listItem>TrackingRates enumeration in Telescope template does not work correctly in an out-of-proc com service</listItem>
+					<listItem>LocalServer Template - Prevent exit if references to served objects</listItem>
+					<listItem>Telescope.NET simulator does not do RA/Dec rate offsets</listItem>
+					<listItem>[The Platform 5 compatibility Client Toolkit does not fully implement interface ASCOM.Interfaces.ISwitch</listItem>
+					<listItem>Missing Intellisense in developer install</listItem>
+					<listItem>nFOCUS Installers missing from ForcePlatformVersion</listItem>
+					<listItem>Correct missing DeltaT value in Transform internal calculations</listItem>
+					<listItem>Transform AzimuthTopocentric and ElevationTopocentric methods to not return current values on repeated calls</listItem>
+					<listItem>LocalServer template doesn't expand correctly</listItem>
+					<listItem>DriverAccess.Telescope returns an empty AxisRates object for a .NET ITelescopeV2 driver</listItem>
+					<listItem>DriverAccess does not handle exceptions properly for Platform 5 .NET in-process drivers</listItem>
+					<listItem>Use of System Restore can prevent the Platform installer from running</listItem>
+					<listItem>The Platform Installer final dialog says that everything was successful even when UninstallASCOM or FinaliseInstall fail</listItem>
+					<listItem>Chooser won't select driver if the description is blank or missing</listItem>
+					<listItem>Profile.Register does not refresh a missing driver description if the driver is already registered</listItem>
+					<listItem>Updated NOVAS2 help to record that it cannot create ephemeris predictions for Planets except Earth.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+        <section address="BreakingChanges">
+           	<title>Breaking Changes (For Developers)</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>None.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+  </developerConceptualDocument>
+</topic>

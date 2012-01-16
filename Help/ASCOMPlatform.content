@@ -3,6 +3,7 @@
   <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" />
   <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
   <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" title="Version History">
+    <Topic id="6e5a0102-2a1d-4b4d-8cbd-59d2076e5c7d" visible="True" />
     <Topic id="6c2d0f0d-6460-494e-9c1f-08545fcff623" visible="True" title="Version 6.0" />
     <Topic id="1fe76099-cb79-4c76-bb26-55d4e7305a3d" visible="True" />
     <Topic id="c904b112-d671-4c56-a6eb-1f8d7c3d4c4b" visible="True" title="Version 5.5" />
