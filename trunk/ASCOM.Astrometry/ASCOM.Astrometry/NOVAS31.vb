@@ -5,11 +5,11 @@ Imports ASCOM.Utilities.Exceptions
 Namespace NOVAS
 
     ''' <summary>
-    ''' NOVAS3: Class presenting the contents of the USNO NOVAS 3 library published December 2009. 
+    ''' NOVAS31: Class presenting the contents of the USNO NOVAS 3.1 library published December 2010. 
     ''' NOVAS was developed by the Astronomical Applications department of the United States Naval 
     ''' Observatory.
     ''' </summary>
-    ''' <remarks>If you wish to explore or utilise NOVAS3 please see USNO's extensive help document "NOVAS 3.1 Users Guide" 
+    ''' <remarks>If you wish to explore or utilise NOVAS3.1 please see USNO's extensive help document "NOVAS 3.1 Users Guide" 
     ''' (NOVAS C3.1 Guide.pdf) included in the ASCOM Platform Docs start menu folder. The latest revision is also available on the USNO web site at
     ''' <href>http://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas</href>
     ''' in the "C Edition of NOVAS" link. 

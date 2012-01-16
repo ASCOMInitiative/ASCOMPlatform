@@ -1154,7 +1154,11 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.
         ''' </pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         <DispId(3)> Function AppPlanet(ByVal tjd As Double, _
                                           ByRef ss_object As BodyDescription, _
                                           ByRef earth As BodyDescription, _
@@ -1177,7 +1181,11 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.
         ''' </pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         <DispId(4)> Function TopoPlanet(ByVal tjd As Double, _
                                            ByRef ss_object As BodyDescription, _
                                            ByRef earth As BodyDescription, _
@@ -1244,7 +1252,11 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.
         ''' </pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         <DispId(7)> Function VirtualPlanet(ByVal tjd As Double, _
                                                   ByRef ss_object As BodyDescription, _
                                                   ByRef earth As BodyDescription, _
@@ -1267,7 +1279,11 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.
         ''' </pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         <DispId(8)> Function LocalPlanet(ByVal tjd As Double, _
                                                 ByRef ss_object As BodyDescription, _
                                                 ByRef earth As BodyDescription, _
@@ -1308,7 +1324,11 @@ Namespace NOVAS
         ''' <returns><pre>
         '''  0...Everything OK.
         ''' >0...See error description in function 'ephemeris'.</pre></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' <b>Note: </b>This function only supports Earth, which is a consequence of the implementation 
+        ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
+        ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
+        ''' </remarks>
         <DispId(10)> Function AstroPlanet(ByVal tjd As Double, _
                                                 ByRef ss_object As BodyDescription, _
                                                 ByRef earth As BodyDescription, _
@@ -1888,9 +1908,11 @@ End Namespace
 Namespace NOVAS
 
     ''' <summary>
-    ''' Interface to the NOVAS2 component
+    ''' Interface to the NOVAS3 component
     ''' </summary>
-    ''' <remarks>Implemented by the NOVAS2COM component</remarks>
+    ''' <remarks>Implemented by the NOVAS3 component
+    ''' <para><b>Note: </b>This interface is now deprecated, please use INOVAS31 instead.</para>
+    '''</remarks>
     <Guid("5EF15982-D79E-42f7-B20B-E83232E2B86B"), ComVisible(True)> _
     Public Interface INOVAS3
 
@@ -3413,9 +3435,9 @@ End Namespace
 Namespace NOVAS
 
     ''' <summary>
-    ''' Interface to the NOVAS2 component
+    ''' Interface to the NOVAS31 component
     ''' </summary>
-    ''' <remarks>Implemented by the NOVAS2COM component</remarks>
+    ''' <remarks>Implemented by the NOVAS31 component</remarks>
     <Guid("A9C1E5CF-2AA4-404D-B16A-79F5C8B1062F"), ComVisible(True)> _
     Public Interface INOVAS31
 
