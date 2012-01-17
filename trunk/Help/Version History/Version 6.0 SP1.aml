@@ -34,7 +34,7 @@
 					<listItem>TrackingRates enumeration in Telescope template does not work correctly in an out-of-proc com service</listItem>
 					<listItem>LocalServer Template - Prevent exit if references to served objects</listItem>
 					<listItem>Telescope.NET simulator does not do RA/Dec rate offsets</listItem>
-					<listItem>[The Platform 5 compatibility Client Toolkit does not fully implement interface ASCOM.Interfaces.ISwitch</listItem>
+					<listItem>The Platform 5 compatibility Client Toolkit does not fully implement interface ASCOM.Interfaces.ISwitch</listItem>
 					<listItem>Missing Intellisense in developer install</listItem>
 					<listItem>nFOCUS Installers missing from ForcePlatformVersion</listItem>
 					<listItem>Correct missing DeltaT value in Transform internal calculations</listItem>
