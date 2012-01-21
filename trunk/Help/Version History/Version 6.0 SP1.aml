@@ -28,28 +28,38 @@
    		</section>
    		
         <section address="IssuesFixed">
-           	<title>Issues Fixed</title>
+           	<title>Issues Fixed - Platform</title>
             <content>
       			<list class="bullet">
 					<listItem>TrackingRates enumeration in Telescope template does not work correctly in an out-of-proc com service</listItem>
-					<listItem>LocalServer Template - Prevent exit if references to served objects</listItem>
 					<listItem>Telescope.NET simulator does not do RA/Dec rate offsets</listItem>
 					<listItem>The Platform 5 compatibility Client Toolkit does not fully implement interface ASCOM.Interfaces.ISwitch</listItem>
-					<listItem>Missing Intellisense in developer install</listItem>
 					<listItem>nFOCUS Installers missing from ForcePlatformVersion</listItem>
 					<listItem>Correct missing DeltaT value in Transform internal calculations</listItem>
 					<listItem>Transform AzimuthTopocentric and ElevationTopocentric methods to not return current values on repeated calls</listItem>
-					<listItem>LocalServer template doesn't expand correctly</listItem>
 					<listItem>DriverAccess.Telescope returns an empty AxisRates object for a .NET ITelescopeV2 driver</listItem>
 					<listItem>DriverAccess does not handle exceptions properly for Platform 5 .NET in-process drivers</listItem>
 					<listItem>Use of System Restore can prevent the Platform installer from running</listItem>
 					<listItem>The Platform Installer final dialog says that everything was successful even when UninstallASCOM or FinaliseInstall fail</listItem>
 					<listItem>Chooser won't select driver if the description is blank or missing</listItem>
 					<listItem>Profile.Register does not refresh a missing driver description if the driver is already registered</listItem>
-					<listItem>Updated NOVAS2 help to record that it cannot create ephemeris predictions for Planets except Earth.</listItem>
 				</list>
    			</content>
    		</section>
+
+        <section address="IssuesFixed">
+           	<title>Issues Fixed - Development</title>
+            <content>
+      			<list class="bullet">
+					<listItem>LocalServer Template - Prevent exit if references to served objects</listItem>
+					<listItem>Missing Intellisense in developer install</listItem>
+					<listItem>LocalServer template doesn't expand correctly</listItem>
+					<listItem>Updated NOVAS2 help to record that it cannot create ephemeris predictions for Planets except Earth.</listItem>
+					<listItem>Updated Driver Install Script Generator to create templates that test for existance of Platform 6 rather than Platform 5.5.</listItem>
+				</list>
+   			</content>
+   		</section>
+
 
         <section address="BreakingChanges">
            	<title>Breaking Changes (For Developers)</title>
