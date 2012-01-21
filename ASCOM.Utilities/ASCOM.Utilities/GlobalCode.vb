@@ -858,8 +858,8 @@ Module AscomSharedCode
                 End If
 
                 ' If the current file matches a forced file name then return the required Platform version
-                ' use the length of the forced name for the match.
-                If String.Equals(UCase(ForcedFileNameKey), UCase(ModuleFileName.Substring(0, ForcedFileNameKey.Length))) Then
+                ' 6.0 SP1 Check now uses StartsWith in order to catch situations where people rename the installer after download
+                If UCase(ModuleFileName).StartsWith(UCase(ForcedFileNameKey)) Then
                     ConditionPlatformVersion = ForcedFileName.Value
                     If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Matched file: """ & ModuleFileName & """ """ & ForcedFileNameKey & """")
                 End If
