@@ -859,9 +859,11 @@ Module AscomSharedCode
 
                 ' If the current file matches a forced file name then return the required Platform version
                 ' 6.0 SP1 Check now uses StartsWith in order to catch situations where people rename the installer after download
-                If UCase(ModuleFileName).StartsWith(UCase(ForcedFileNameKey)) Then
-                    ConditionPlatformVersion = ForcedFileName.Value
-                    If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Matched file: """ & ModuleFileName & """ """ & ForcedFileNameKey & """")
+                If ForcedFileNameKey <> "" Then ' Ignore the empty string "Default" value name
+                    If UCase(ModuleFileName).StartsWith(UCase(ForcedFileNameKey)) Then
+                        ConditionPlatformVersion = ForcedFileName.Value
+                        If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Matched file: """ & ModuleFileName & """ """ & ForcedFileNameKey & """")
+                    End If
                 End If
             Next
 
