@@ -23,6 +23,8 @@
 					<listItem>Document how to migrate from the Astro32 DLL and provide extra features to support easy migration</listItem>
 					<listItem>Util.JulianDate - Clarify that the returned date is based on Terrestrial Time</listItem>
 					<listItem>ICameraV2 - Make ReadoutMode Read-Write instead of Read-Only to meet the interface specification</listItem>
+					<listItem>Exception handling in common device methods is now consistently documented in the Developer Help 
+					and only refers to ASCOM defined exceptions.</listItem>
   				</list>
       		</content>
    		</section>
