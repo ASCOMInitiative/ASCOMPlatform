@@ -132,7 +132,7 @@ Source: "%srcp%\%rdmf%"; DestDir: "{app}"; Flags: isreadme
 [CODE]
 //
 // Before the installer UI appears, verify that the (prerequisite)
-// ASCOM Platform 5.5 or greater is installed, including both Helper
+// ASCOM Platform 6.0 or greater is installed, including both Helper
 // components. Utility is required for all types (COM and .NET)!
 //
 function InitializeSetup(): Boolean;
@@ -153,12 +153,12 @@ begin
       MsgBox('The ASCOM Utilities object has failed to load, this indicates that the ASCOM Platform has not been installed correctly', mbInformation, MB_OK);
    end;
    try
-      if (U.IsMinimumRequiredVersion(5,5)) then	// this will work in all locales
+      if (U.IsMinimumRequiredVersion(6.0)) then	// this will work in all locales
          Result := TRUE;
    except
    end;
    if(not Result) then
-      MsgBox('The ASCOM Platform 5.5 or greater is required for this driver.', mbInformation, MB_OK);
+      MsgBox('The ASCOM Platform 6.0 or greater is required for this driver.', mbInformation, MB_OK);
 end;
 
 %coms%//
