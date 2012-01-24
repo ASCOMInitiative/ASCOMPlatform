@@ -249,6 +249,7 @@ namespace ASCOM.DriverAccess
             }
         }
 
+        /// <summary>
         /// The interface version number that this device supports. Should return 2 for this interface version.
         /// </summary>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
@@ -365,18 +366,22 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Transmits an arbitrary string to the device and does not wait for a response.
-        /// Optionally, protocol framing characters may be added to the string before transmission.
+        /// Returns the list of action names supported by this driver.
         /// </summary>
-        /// <param name="Command">The literal command string to be transmitted.</param>
-        /// <param name="Raw">
-        /// if set to <c>true</c> the string is transmitted 'as-is'.
-        /// If set to <c>false</c> then protocol framing characters may be added prior to transmission.
-        /// </param>
-        /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-        /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
+        /// <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-        /// <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+        /// <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a 
+        /// <see cref="ASCOM.PropertyNotImplementedException" />.
+        /// <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
+        /// Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
+        /// the <see cref="Action">Action</see> method.</para>
+        ///<para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
+        /// determine whether a particular action is supported. This is easily done through the Contains method. Since the
+        /// collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 
+        /// about hom many members are in the collection. </para>
+        /// <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
+        /// the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+        /// </remarks>
         public ArrayList SupportedActions
         {
             get
@@ -415,9 +420,9 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
         /// <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
-        public void CommandBlind(string command, bool raw)
+        public void CommandBlind(string Command, bool Raw)
         {
-            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { command, raw });
+            memberFactory.CallMember(3, "CommandBlind", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         /// <summary>
@@ -436,9 +441,9 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
         /// <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
-        public bool CommandBool(string command, bool raw)
+        public bool CommandBool(string Command, bool Raw)
         {
-            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { command, raw });
+            return (bool)memberFactory.CallMember(3, "CommandBool", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         /// <summary>
@@ -457,9 +462,9 @@ namespace ASCOM.DriverAccess
         /// <exception cref="NotConnectedException">If the driver is not connected.</exception>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
         /// <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
-        public string CommandString(string command, bool raw)
+        public string CommandString(string Command, bool Raw)
         {
-            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { command, raw });
+            return (string)memberFactory.CallMember(3, "CommandString", new Type[] { typeof(string), typeof(bool) }, new object[] { Command, Raw });
         }
 
         #endregion
