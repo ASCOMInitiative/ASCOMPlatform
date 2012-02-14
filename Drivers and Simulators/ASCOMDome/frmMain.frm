@@ -200,6 +200,7 @@ Attribute VB_Exposed = False
 ' 2005/02/14 dbg     Added V2 SideOfPier checking and improved status display
 ' 2006/04/10 dbg     Corrected sign convention error for pier offset parameters
 ' 2008/01/01 dbg     Version 5.0.0
+' 2012/02/14 cdr     Version 5.3.0 use destination side of pier for slews
 ' -----------------------------------------------------------------------------
 
 Option Explicit
@@ -671,7 +672,7 @@ Public Sub UpdateStatus()
 End Sub
 
 ' Called whenever the telescope position is changed
-Public Sub UpdateTelescopeStatus(ByVal RA As Double, ByVal dec As Double, ByVal IsGoTo As Boolean)
+Public Sub UpdateTelescopeStatus(ByVal RA As Double, ByVal dec As Double, ByVal isGoTo As Boolean)
     ScopeRA = RA
     ScopeDec = dec
     GotRADec = True
@@ -679,9 +680,9 @@ Public Sub UpdateTelescopeStatus(ByVal RA As Double, ByVal dec As Double, ByVal 
     ' If it was a goto command, then start the dome rotating immediately; otherwise
     ' we wait for the next 10 second update (prevents jerky dome rotation if telescope
     ' is manually slewed)
-    If IsGoTo Then
+    If isGoTo Then
         ' Calculate new dome alt/az
-        CalcDomeAltAzWithFlipping
+        CalcDomeAltAzWithFlipping True
     
         ' Restart poll timer
         PollCount = 0
@@ -740,7 +741,7 @@ Private Sub Timer1_Timer()
     
 End Sub
 
-Private Sub CalcDomeAltAzWithFlipping()
+Private Sub CalcDomeAltAzWithFlipping(Optional isGoTo As Boolean = False)
     Dim IsV2 As Boolean
     Dim SideOfPier As PierSide
     IsV2 = False
@@ -749,7 +750,11 @@ Private Sub CalcDomeAltAzWithFlipping()
     On Error GoTo JustDoIt
     If ScopeIsConnected Then
         If TheScope.InterfaceVersion > 1 Then
-            SideOfPier = TheScope.SideOfPier
+            If isGoTo Then
+                SideOfPier = TheScope.DestinationSideOfPier(ScopeRA, ScopeDec)
+            Else
+                SideOfPier = TheScope.SideOfPier
+            End If
             IsV2 = True
         End If
     End If

@@ -78,7 +78,7 @@ Public Sub CalcDomeAltAz(ByVal IsV2 As Boolean, ByVal SideOfPier As PierSide)
 
 End Sub
 
-Function SiderealTime() As Double
+Private Function SiderealTime() As Double
     ' Get UT from the operating system (assumes time zone set correctly)
     Dim SysTime As SYSTEMTIME
     GetSystemTime SysTime
