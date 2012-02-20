@@ -27,6 +27,9 @@
 //						-1000.0 for Ra and Dec rates in addition to false
 //						for bTracking.
 // 04-Jan-12	rbd		1.0.1 - Release. No changes.
+// 17-Feb-12	rbd		1.0.2 - Assure that changes to tracking rate offsets
+//						happen only while tracking is on. Change tracking
+//						state only if really needed.
 //========================================================================
 
 #include "StdAfx.h"
@@ -318,9 +321,9 @@ int	X2Mount::raDec(double& ra, double& dec, const bool& bCached)
 {
 	int iRes = SB_OK;
 
-	if(!_bScopeActive)	{								// No scope hookup?
-		ra = dec = 0.0;			
-		return(ERR_COMMNOLINK);							// Forget this
+	if(!_bScopeActive)	{							// No scope hookup?
+		ra = dec = 0.0;
+		return(ERR_COMMNOLINK);						// Forget this
 	}
 
 	__try {
@@ -434,18 +437,27 @@ int X2Mount::setTrackingRates( const bool& bTrackingOn, const bool& bIgnoreRates
 		return(ERR_COMMNOLINK);						// Forget this
 	if(!_bScopeCanSetTracking)
 		return(ERR_NOT_IMPL);
-
+	bool bIsTracking = GetTracking();
+	//
 	// Assuming that if it can set rates, can turn tracking on and off for sure
+	// Here, we make sure that changes to the rates only happens when tracking is
+	// on, so we turn it on then set rates, and if turning off, first set 0 rates
+	// then turn the tracking off afterward.
+	//
 	__try {
-		SetTracking(bTrackingOn);
+		if (!bIsTracking && bTrackingOn) {
+			SetTracking(true);
+			bIsTracking = true;						// In case turning on tracking AND setting offsets!!
+		}
 		//
 		// This is a hack for TheSky X. If the rates are 0,0 and yet bIgnoreRates
 		// is true, still set the 0,0 rates. We do this because choosing No for 
 		// the set rate doesn't even call us. The only way to get rid of an offset 
 		// is to choose a star and select SetTracking Rates for 0,0 and then click
-		// Yes.
+		// Yes. Do not do this if tracking is already off, again to prevent errors
+		// from the ASCOM driver.
 		//
-		if (!bIgnoreRates || (dRaRateArcSecPerSec == 0.0 && dDecRateArcSecPerSec == 0.0))
+		if (bIsTracking && (!bIgnoreRates || (dRaRateArcSecPerSec == 0.0 && dDecRateArcSecPerSec == 0.0)))
 		{
 			if(_bScopeCanSetTrackRates)
 			{
@@ -463,6 +475,12 @@ int X2Mount::setTrackingRates( const bool& bTrackingOn, const bool& bIgnoreRates
 				iRes = ERR_NOT_IMPL;
 			}
 		}
+		//
+		// This now FOLLOWS the rate settings, since (at least) the AP driver doesn't
+		// like the rates being changed (even to 0) when tracking is off.
+		//
+		if (bIsTracking && !bTrackingOn)
+			SetTracking(false);
 
 	} __except(EXCEPTION_EXECUTE_HANDLER) {
 		iRes = ERR_COMMNOLINK;
@@ -472,6 +490,11 @@ int X2Mount::setTrackingRates( const bool& bTrackingOn, const bool& bIgnoreRates
 
 /*!Return the current tracking rates.  A special case for mounts that can set rates, but not read them...
    So the TheSkyX's user interface can know this, set bTrackSidereal=false and both rates to -1000.0*/
+// -- Above from SB --
+// If you just return bTrackingOn = false, TheSKy X will still show "Tracking at Sidereal Rate"
+// You must also return -1000.0 for the offsets in order for it to show just "Connected".
+// TODO - Find out how to make it show "Tracking Off"... I've seen this in screen shots.
+//
 int X2Mount::trackingRates( bool& bTrackingOn, double& dRaRateArcSecPerSec, double& dDecRateArcSecPerSec)
 {
 	int iRes = SB_OK;								// Assume success
