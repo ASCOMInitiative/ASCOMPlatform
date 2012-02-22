@@ -21,7 +21,7 @@ Namespace AstroUtils
 #Region "New and IDisposable Support"
         Sub New()
             TL = New TraceLogger("", "AstroUtils")
-            TL.Enabled = True
+            TL.Enabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
             Utl = New Util
             Nov31 = New NOVAS.NOVAS31
             TL.LogMessage("New", "AstroUtils created Utilities component OK")
