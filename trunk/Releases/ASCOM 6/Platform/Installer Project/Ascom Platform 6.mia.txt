@@ -38,8 +38,8 @@ if Variable RECOMMENDEDUPGRADE Equals TRUE
   Comment: Set Variable PREREQ to TRUE
   Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Removal
 end
-Include Script: checknet2sp2
-Include Script: checknet3sp2
+Comment: Include Script: checknet2sp2
+Comment: Include Script: checknet3sp2
 Include Script: checknet351
 [compiler end]
 [END REGION]
@@ -52,16 +52,6 @@ if Variable PREREQ not Equals FALSE
     Terminate Installation
   end
   if Variable WIZARD Equals NEXT
-    Comment: Check for .NET 2 SP2
-    if Variable NET2SP2 Equals FALSE
-      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
-      Terminate Installation
-    end
-    Comment: Check for .NET 3 SP2
-    if Variable NET3SP2 Equals FALSE
-      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
-      Terminate Installation
-    end
     Comment: Check for .NET 3.5 SP1
     if Variable NET351 Equals FALSE
       MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
@@ -96,8 +86,14 @@ Set Variable COMMONFILES64 to
 Set Variable WIN64MODE to 
 Set Variable PROGRAMDATA to 
 Get System Setting Windows in 64 bit Mode into WIN64MODE
+ 
+Comment: Set up values for OS version information
+Set Variable OSCURRENTVERSION to 
+Set Variable OSEDITIONID to 
+Set Variable OSPRODUCTNAME to 
+Set Variable OSCURRENTBUILD to 
+Set Variable OSCSDVERSION to 
 Get Exact OS Level into OPSYS
-Comment: MessageBalloon: Win 64Mode, Win64Mode is $WIN64MODE$$NEWLINE$IsVista is $ISVISTA$
  
 Comment: Initialise to a null value that will access the correct portion of the registry on a 32bit OS
 Set Variable REGASM64 to 
@@ -130,6 +126,13 @@ Get Folder Location Taskbar->Quick Launch Directory into QUICKLAUNCHDIR
 Get Folder Location WWW->WWWRoot into WWWROOTDIR
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
 Set Variable REGASM to $FRAMEWORKROOT$v2.0.50727\RegAsm.exe
+ 
+Comment: Read OS type information from registry
+Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CurrentVersion into OSCURRENTVERSION
+Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\EditionID into OSEDITIONID
+Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName into OSPRODUCTNAME
+Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CurrentBuild into OSCURRENTBUILD
+Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CSDVersion into OSCSDVERSION
  
 Comment: Determine if Acrobat is installed
 Set Variable ACROBATKEY to 
@@ -167,7 +170,18 @@ Comment: Correct presentation for Win 7
 if Variable OPSYS Equals SEVEN
   Set Variable OPSYS to 7
 end
+Comment: Check for presence of Windows 8
+if Variable OPSYS Equals UNKNOWN
+  if Variable OSCURRENTVERSION Equals 6.2
+    Set Variable OPSYS to 8
+  end
+end
 Write into Text File $SETUPLOG$ from Value OS: Windows $OPSYS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Product Name:  $OSPRODUCTNAME$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Edition:  $OSEDITIONID$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Service Pack:  $OSCSDVERSION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Version:  $OSCURRENTVERSION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Build:  $OSCURRENTBUILD$ (at end of file)
 if Variable WIN64MODE Equals TRUE
   Write into Text File $SETUPLOG$ from Value Architecture: 64bit (at end of file)
 else
