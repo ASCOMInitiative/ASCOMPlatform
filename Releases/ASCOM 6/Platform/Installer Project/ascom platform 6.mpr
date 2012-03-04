@@ -127,17 +127,31 @@ $
 
 
 
-
-
-
-
-
-
-
-
-
-
 B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1440,7 +1454,7 @@ ASCOM Platform 6 -SP1
 ASCOM Platform 6 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{1F2F7AC7-92FA-4590-AAD0-0C67352308D6}
+{D89C8284-884C-47A2-A851-E9CF877427BA}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
@@ -1469,8 +1483,6 @@ FALSE
 FALSE
 FALSE
 
-checknet2sp2.mia
-checknet3sp2.mia
 checknet351.mia
 checkmsi31.mia
 setupmsi31.mia
