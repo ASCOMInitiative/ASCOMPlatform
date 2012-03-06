@@ -90,6 +90,8 @@ namespace ASCOM.DriverAccess
         /// <para>The FocuserV1 interface was the only interface to name its <i>"Connect"</i> method "Link" all others named 
         /// their <i>"Connect"</i> method as "Connected". All interfaces including Focuser now have a <see cref="AscomDriver.Connected" /> method and this is 
         /// the recommended method to use to <i>"Connect"</i> to Focusers exposing the V2 and later interfaces.</para>
+        /// <para>Applications using DriverAccess can always use Connected because DriverAccess implements Connected using the Link property for V1 drivers but
+        /// applications that call the driver directly should check the InterfaceVersion property and call Link for V1 drivers.</para>
         /// </remarks>
         public bool Link
         {
