@@ -15,7 +15,12 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</remarks>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
+    ''' <para><b>Note.</b></para>
+    ''' <para>The Connected property is not implemented in Version 1 drivers; these use the <see cref="Link"></see>
+    ''' property and will raise a Not Implemented exception for this property. Version 2 drivers must implement both Connected and Link.
+    ''' Applications should check that InterfaceVersion returns 2 or more before using Connected.</para>
+    ''' </remarks>
     Property Connected() As Boolean
 
     ''' <summary>
