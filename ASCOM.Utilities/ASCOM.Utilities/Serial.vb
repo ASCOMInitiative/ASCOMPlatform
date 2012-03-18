@@ -187,7 +187,7 @@ Public Class Serial
     Private TextEncoding As System.Text.Encoding
     Private m_SerTraceFile As String = SERIAL_DEFAULT_FILENAME 'Set the default trace file name
 
-    Private SerialProfile As registryAccess = Nothing
+    Private SerialProfile As RegistryAccess = Nothing
     Private ForcedCOMPorts As Generic.SortedList(Of String, String)
     Private IgnoredCOMPorts As Generic.SortedList(Of String, String)
 
@@ -212,6 +212,13 @@ Public Class Serial
     Private Const SERIALPORT_DEFAULT_HANDSHAKE As SerialHandshake = SerialHandshake.None
     Private Const SERIALPORT_DEFAULT_PARITY As SerialParity = SerialParity.None
     Private Const SERIALPORT_DEFAULT_STOPBITS As SerialStopBits = SerialStopBits.One
+
+    '18/3/12 Peter - Experimental change in behaviour of read routines that may address serial issues with some drivers, added at Chris Rowland's suggestion
+    'This new switch is initialised in the state that the Platform has been using since Platform 5.5
+    'The new behaviour is enabled by creating a ReadPolling value in the COMPortSettings key with the contents True, anything else results in normal behaviour
+    Private Const SERIALPORT_DEFAULT_POLLING As Boolean = False
+    Private Const SERIAL_READ_POLLING As String = "ReadPolling"
+    Private UseReadPolling As Boolean = SERIALPORT_DEFAULT_POLLING
 
 #Region "New and IDisposable Support"
     Sub New()
@@ -420,18 +427,22 @@ Public Class Serial
             Dim b, ForcedRTS, ForcedDTR As Boolean
 
             'Foorce RTS if required
-            buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & m_PortName, "RTSEnable")
+            buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & "\" & m_PortName, "RTSEnable")
             If Boolean.TryParse(buf, b) Then
                 m_RTSEnable = b
                 ForcedRTS = True
             End If
 
             'Force DTR if required
-            buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & m_PortName, "DTREnable")
+            buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & "\" & m_PortName, "DTREnable")
             If Boolean.TryParse(buf, b) Then
                 m_DTREnable = b
                 ForcedDTR = True
             End If
+
+            'Force Read Polling if required
+            buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS, SERIAL_READ_POLLING)
+            If Boolean.TryParse(buf, b) Then UseReadPolling = b
 
             Try
                 Logger.LogMessage("Set Connected To", Connecting.ToString)
@@ -448,6 +459,11 @@ Public Class Serial
                     Logger.LogMessage("Set Connected", "Transmission format - Bits: " & m_DataBits & _
                                       " Parity: " & [Enum].GetName(m_Parity.GetType, m_Parity) & _
                                       " Stop bits: " & [Enum].GetName(m_StopBits.GetType, m_StopBits))
+                    If UseReadPolling Then
+                        Logger.LogMessage("Set Connected", "Reading COM Port through Read Polling")
+                    Else
+                        Logger.LogMessage("Set Connected", "Reading COM port through Interrupt Handling")
+                    End If
                     SerPorts = AvailableCOMPorts ' This causes a log of available COM port entries to be written on Connect = True
                 End If
 
@@ -1685,6 +1701,15 @@ Public Class Serial
         Dim StartTime As Date, RxByte As Byte, RxBytes(10) As Byte
         StartTime = Now
         If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadByte ")
+        If UseReadPolling Then
+            While (m_Port.BytesToRead = 0)
+                If (Now - StartTime).TotalMilliseconds > m_ReceiveTimeout Then
+                    Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "ReadByte timed out waitng for a byte to read, throwing TimeoutException")
+                    Throw New TimeoutException("Serial port timed out waiting to read a byte")
+                End If
+                Thread.Sleep(1)
+            End While
+        End If
         RxByte = CByte(m_Port.ReadByte)
         If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "ReadByte returning result - " & RxByte.ToString)
         Return RxByte
@@ -1694,6 +1719,15 @@ Public Class Serial
         Dim StartTime As Date, RxChar As Char, RxChars(10) As Char
         StartTime = Now
         If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadChar ")
+        If UseReadPolling Then
+            While (m_Port.BytesToRead = 0)
+                If (Now - StartTime).TotalMilliseconds > m_ReceiveTimeout Then
+                    Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "ReadByte timed out waitng for a character to read, throwing TimeoutException")
+                    Throw New TimeoutException("Serial port timed out waiting to read a character")
+                End If
+                Thread.Sleep(1)
+            End While
+        End If
         RxChar = Chr(m_Port.ReadByte)
         If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "ReadChar returning result - " & RxChar)
         Return RxChar
