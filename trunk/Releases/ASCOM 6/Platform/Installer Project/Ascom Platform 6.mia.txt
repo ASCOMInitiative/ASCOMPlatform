@@ -92,7 +92,7 @@ Set Variable OSCURRENTVERSION to
 Set Variable OSEDITIONID to 
 Set Variable OSPRODUCTNAME to 
 Set Variable OSCURRENTBUILD to 
-Set Variable OSCSDVERSION to 
+Set Variable OSBUILDLABEL to 
 Get Exact OS Level into OPSYS
  
 Comment: Initialise to a null value that will access the correct portion of the registry on a 32bit OS
@@ -132,7 +132,7 @@ Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CurrentVersi
 Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\EditionID into OSEDITIONID
 Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName into OSPRODUCTNAME
 Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CurrentBuild into OSCURRENTBUILD
-Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CSDVersion into OSCSDVERSION
+Read Registry Key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\BuildLabEx into OSBUILDLABEL
  
 Comment: Determine if Acrobat is installed
 Set Variable ACROBATKEY to 
@@ -179,9 +179,9 @@ end
 Write into Text File $SETUPLOG$ from Value OS: Windows $OPSYS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Product Name:  $OSPRODUCTNAME$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Edition:  $OSEDITIONID$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Service Pack:  $OSCSDVERSION$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Version:  $OSCURRENTVERSION$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Build:  $OSCURRENTBUILD$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Build Label:  $OSBUILDLABEL$ (at end of file)
 if Variable WIN64MODE Equals TRUE
   Write into Text File $SETUPLOG$ from Value Architecture: 64bit (at end of file)
 else
