@@ -379,13 +379,15 @@ Install Files
 Install Files
 Install Files
 Install Files
-Set Variable
-Install Files
-Install Files
-Install Files
 Install Files
 Set Variable
 Install Files
+Install Files
+Install Files
+Install Files
+Set Variable
+Install Files
+Create Shortcut
 Create Shortcut
 Create Shortcut
 Create Shortcut
@@ -881,6 +883,7 @@ $
 {3D28BCA6-C090-4A19-8A97-3F7AF9F945C3}
 {0B757607-DE34-4DAD-8DCC-2B15B92029A6}
 {371E786E-2B25-4957-9BD2-FF05346AE7E8}
+{E14565AE-B959-4E7B-92DB-E05A6E67237B}
 {4418C2EF-7588-4FD8-BDD6-24D17ECE81BF}
 {015DCB13-A2B4-4532-BF7D-CC3227524753}
 {5F79957F-2BA8-466C-A302-F36AB90B0807}
@@ -899,6 +902,7 @@ $
 {AADE4209-5063-4EEE-9F91-A5922F3D1FCA}
 {ADD53AAB-8DB2-492F-8649-6C2DC33DAC6F}
 {6164BBCC-8F3C-4A2D-9975-22D1625D32A2}
+{EB7F500E-2C93-4FB9-B5BB-76332590EFE5}
 {E4908A1B-BF68-4E04-9935-C889916AC793}
 {ACBBA184-E349-40FD-A1BE-4AE88D234DB4}
 {22BEB51E-76A8-4F0D-B618-F4C15C80AE1C}
@@ -2554,6 +2558,19 @@ FALSE
 FALSE
 FALSE
 FALSE
+{E14565AE-B959-4E7B-92DB-E05A6E67237B}
+..\..\..\..\Help\Platform Supporting Documents\Introduction to Developing ASCOM Drivers.pdf
+FALSE|
+$TARGETDIR$\Developer Documentation
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {0A98BEA1-FC88-4DEE-BF1C-9704CDFE3822}
 INSTALLCACHEEXISTS
 $INSTALLCACHEDIRECTORY$
@@ -2740,6 +2757,16 @@ $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 {C0C5F2ED-0110-404A-9237-569424D511C2}
 $TARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
 How to Migrate from Astro32
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{EB7F500E-2C93-4FB9-B5BB-76332590EFE5}
+$TARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
+Introduction to Developing ASCOM Drivers
 $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
@@ -3687,6 +3714,8 @@ C
 
 
 
+
+
 C
 
 
@@ -3706,6 +3735,8 @@ C
 
 
 $
+
+
 
 
 
