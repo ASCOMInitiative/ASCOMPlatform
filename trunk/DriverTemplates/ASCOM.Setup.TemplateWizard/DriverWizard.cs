@@ -1,51 +1,50 @@
-﻿
+﻿// Template Wizard to perform unique ASCOM subsititutions and file manipulations when creating driver templates
 
 namespace ASCOM.Setup
 {
-	using System;
-	using System.Collections.Generic;
-	using Microsoft.VisualStudio.TemplateWizard;
-	using System.Windows.Forms;
-	using EnvDTE;
-	using EnvDTE80;
-	using System.IO;
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.VisualStudio.TemplateWizard;
+    using System.Windows.Forms;
+    using EnvDTE;
+    using EnvDTE80;
+    using System.IO;
     //using ASCOM.Internal;
 
-	public class DriverWizard : IWizard
-	{
-		private DeviceDriverForm inputForm;
-        //private const string csAscom = "ASCOM.";
-        //private const string csDeviceIdFormat = "ASCOM.{0}.{1}";
+    public class DriverWizard : IWizard
+    {
+        private DeviceDriverForm inputForm;
 
-		// These Guids are placeholder Guids. Wherever they are used in the template project, they'll be replaced with new
-		// values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
-		private const string csTemplateAssemblyGuid = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
-		private const string csTemplateInterfaceGuid = "3A02C211-FA08-4747-B0BD-4B00EB159297";
-		private const string csTemplateRateGuid = "AD6248B3-3F51-4FFF-B62B-E3E942DD817E";
-		private const string csTemplateAxisRatesGuid = "99DB28A6-0132-43BF-91C0-D723124813C8";
-		private const string csTemplateTrackingRatesGuid = "49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB";
+        // These Guids are placeholder Guids. Wherever they are used in the template project, they'll be replaced with new
+        // values when the template is expanded. THE TEMPLATE PROJECTS MUST USE THESE GUIDS.
+        private const string csTemplateAssemblyGuid = "28D679BA-2AF1-4557-AE15-C528C5BF91E0";
+        private const string csTemplateInterfaceGuid = "3A02C211-FA08-4747-B0BD-4B00EB159297";
+        private const string csTemplateRateGuid = "AD6248B3-3F51-4FFF-B62B-E3E942DD817E";
+        private const string csTemplateAxisRatesGuid = "99DB28A6-0132-43BF-91C0-D723124813C8";
+        private const string csTemplateTrackingRatesGuid = "49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB";
 
-		// Private properties
-		private string DeviceClass { get; set; }
-		private string DeviceName { get; set; }
+        // Private properties
+        private string DeviceClass { get; set; }
+        private string DeviceName { get; set; }
         private string DeviceInterface { get; set; }
         private string DeviceId { get; set; }
         private string InterfaceVersion { get; set; }
-		private string Namespace { get; set; }
+        private string Namespace { get; set; }
 
-		// This method is called before opening any item that 
-		// has the OpenInEditor attribute.
-		public void BeforeOpeningFile(ProjectItem projectItem)
-		{
-			Diagnostics.Enter();
-			Diagnostics.Exit();
-		}
+        private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "TemplateWizard");
 
-		public void ProjectFinishedGenerating(Project project)
-		{
-			Diagnostics.Enter();
-			// Iterate through the project items and 
-			// remove any files that begin with the word "Placeholder".
+        // This method is called before opening any item that has the OpenInEditor attribute.
+        public void BeforeOpeningFile(ProjectItem projectItem)
+        {
+            Diagnostics.Enter();
+            Diagnostics.Exit();
+        }
+
+        public void ProjectFinishedGenerating(Project project)
+        {
+            Diagnostics.Enter();
+            // Iterate through the project items and 
+            // remove any files that begin with the word "Placeholder".
             // and the Rates class unless it's the Telescope class
             // done this way to avoid removing items from inside a foreach loop
             List<string> rems = new List<string>();
@@ -64,37 +63,143 @@ namespace ASCOM.Setup
                 //MessageBox.Show("Deleting " + item);
                 project.ProjectItems.Item(item).Delete();
             }
-            // removed because it messes up the project name
-            //project.Name = String.Format(csDeviceIdFormat, DeviceId, DeviceClass);
-			Diagnostics.Exit();
-		}
 
-		// This method is only called for item templates,
-		// not for project templates.
-		public void ProjectItemFinishedGenerating(ProjectItem projectItem)
-		{
-			Diagnostics.Enter();
-			Diagnostics.Exit();
-		}
+            // Special handling for VB and C# driver template projects to add the interface implementation to the core driver code
+            try
+            {
+                TL.Enabled = true;
+                // Check the name of each item in the project and execute if this is a driver template project (contains Driver.vb or Driver.cs)
+                foreach (ProjectItem projectItem in project.ProjectItems)
+                {
+                    TL.LogMessage("ProjectFinishedGenerating", "Item name: " + projectItem.Name);
+                    if ((projectItem.Name.ToUpper() == "DRIVER.CS") | (projectItem.Name.ToUpper() == "DRIVER.VB"))
+                    {
+                        // This is a driver template
+                        // Get the filename and directory of the Driver.xx file
+                        string directory = Path.GetDirectoryName(projectItem.FileNames[1].ToString());
+                        TL.LogMessage("ProjectFinishedGenerating", "File name: " + projectItem.FileNames[1].ToString() + ", Directory: " + directory);
+                        TL.LogMessage("ProjectFinishedGenerating", "Found " + projectItem.Name);
 
-		// This method is called after the project is created.
-		public void RunFinished()
-		{
-			Diagnostics.Enter();
-			// Remove all device-specific files that do not match the created DeviceClass.
+                        projectItem.Open(); // Open the item for editing
+                        TL.LogMessage("ProjectFinishedGenerating", "Done Open");
+
+                        Document itemDocument = projectItem.Document; // Get the open file's document object
+                        TL.LogMessage("ProjectFinishedGenerating", "Created Document");
+
+                        itemDocument.Activate(); // Make this the current document
+                        TL.LogMessage("ProjectFinishedGenerating", "Activated Document");
+
+                        TextSelection documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                        TL.LogMessage("ProjectFinishedGenerating", "Created Selection object");
+
+                        const string insertionPoint = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item
+                        documentSelection.FindText(insertionPoint, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", "Done EndOfDocument");
+
+                        // Create the name of the device interface file to be inserted
+                        string insertFile = directory + "\\Device" + this.DeviceClass + Path.GetExtension(projectItem.Name);
+                        TL.LogMessage("ProjectFinishedGenerating", "Opening file: " + insertFile);
+
+                        documentSelection.InsertFromFile(insertFile); // Insert the required file at the current selection point
+                        TL.LogMessage("ProjectFinishedGenerating", "Done InsertFromFile");
+
+                        // Remove the top lines of the inserted file until we get to #Region
+                        // These lines are only there to make the file error free in the template develpment project and are not required here
+                        documentSelection.SelectLine(); // Select the current line
+                        TL.LogMessage("ProjectFinishedGenerating", "Selected initial line: " + documentSelection.Text);
+                        while (!documentSelection.Text.ToUpper().Contains("#REGION"))
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", "Deleting line: " + documentSelection.Text);
+                            documentSelection.Delete(); // Delete the current line
+                            documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                        }
+
+                        // Find the end of file marker that came from the inserted file
+                        const string endOfInsertFile = "//ENDOFINSERTEDFILE";
+                        documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+
+                        // Delete the marker line and the last line from the inserted file
+                        for (int i = 1; i < 3; i++)
+                        {
+                            TL.LogMessage("ProjectFinishedGenerating", "Removing end line " + i.ToString());
+                            documentSelection.SelectLine();
+                            documentSelection.Delete();
+                        }
+
+                        // Reformat the document to make it look pretty
+                        documentSelection.SelectAll();
+                        TL.LogMessage("ProjectFinishedGenerating", "Done SelectAll");
+                        documentSelection.SmartFormat();
+                        TL.LogMessage("ProjectFinishedGenerating", "Done SmartFormat");
+
+                        documentSelection.MoveToLineAndOffset(1, 1); // Move to the top of the file
+                        TL.LogMessage("ProjectFinishedGenerating", "Done MoveToLineAndOffset");
+
+                        itemDocument.Save(); // Save the edited file readyfor use!
+                        TL.LogMessage("ProjectFinishedGenerating", "Done Save");
+
+                    }
+
+                }
+
+                // Iterate through the project items and remove any files that begin with the word "Device". 
+                // These are the partial device implementations that are merged in to create a complete device driver template by the code above
+                // They are not required in the final project
+
+                // Done this way to avoid removing items from inside a foreach loop
+                rems = new List<string>();
+                foreach (ProjectItem item in project.ProjectItems)
+                {
+                    if (item.Name.StartsWith("Device", StringComparison.OrdinalIgnoreCase))
+                    {
+                        //MessageBox.Show("adding " + item.Name);
+                        rems.Add(item.Name);
+                    }
+                }
+                foreach (string item in rems)
+                {
+                    //MessageBox.Show("Deleting " + item);
+                    project.ProjectItems.Item(item).Delete();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("Exception", ex.ToString()); // Log any error message
+                MessageBox.Show(ex.ToString(), "Template Wizrad Error", MessageBoxButtons.OK, MessageBoxIcon.Error); // Show an error message
+            }
+
+            TL.Enabled = false;
+
+            Diagnostics.Exit();
+        }
+
+        // This method is only called for item templates,
+        // not for project templates.
+        public void ProjectItemFinishedGenerating(ProjectItem projectItem)
+        {
+            Diagnostics.Enter();
+            Diagnostics.Exit();
+        }
+
+        // This method is called after the project is created.
+        public void RunFinished()
+        {
+            Diagnostics.Enter();
+            // Remove all device-specific files that do not match the created DeviceClass.
             //List<FileInfo> deviceSpecificFiles = GetDeviceSpecificFiles();
             //foreach (var file in deviceSpecificFiles)
             //{
             //    // ToDo: implement this!
             //    throw new NotImplementedException();
             //}
-			Diagnostics.Exit();
-		}
+            Diagnostics.Exit();
+        }
 
-		/// <summary>
-		/// Gets a list of the device specific files in the current directory.
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Gets a list of the device specific files in the current directory.
+        /// </summary>
+        /// <returns></returns>
         //private List<FileInfo> GetDeviceSpecificFiles()
         //{
         //    string[] allFiles = Directory.GetFiles(Directory.GetCurrentDirectory());
@@ -115,71 +220,91 @@ namespace ASCOM.Setup
         //    return deviceSpecificFiles;
         //}
 
-		public void RunStarted(object automationObject,
-			Dictionary<string, string> replacementsDictionary,
-			WizardRunKind runKind, object[] customParams)
-		{
-			Diagnostics.Enter();
-			try
-			{
-				// Display a form to the user. The form collects 
-				// input for the custom message.
-				inputForm = new DeviceDriverForm();
-				inputForm.ShowDialog();
+        public void RunStarted(object automationObject,
+            Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
+        {
+            Diagnostics.Enter();
+            DialogResult dialogResult = DialogResult.Cancel;
+            try
+            {
+                // Display a form to the user. The form collects 
+                // input for the custom message.
+                inputForm = new DeviceDriverForm();
+                dialogResult = inputForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Form Exception: " + ex.ToString());
+            }
 
-				// Save user inputs.
-				DeviceId = inputForm.DeviceId;
-				DeviceName = inputForm.DeviceName;
-				DeviceClass = inputForm.DeviceClass;
+            if (dialogResult != DialogResult.OK) throw new WizardCancelledException("The wizard has been cancelled");
+
+            try
+            {
+
+                // Save user inputs.
+                DeviceId = inputForm.DeviceId;
+                DeviceName = inputForm.DeviceName;
+                DeviceClass = inputForm.DeviceClass;
                 DeviceInterface = inputForm.DeviceInterface;
                 InterfaceVersion = inputForm.InterfaceVersion;
-				Namespace = inputForm.Namespace;
-				inputForm.Dispose();
-				inputForm = null;
+                Namespace = inputForm.Namespace;
+                TL.Enabled = true;
+                TL.LogMessage("DeviceId", DeviceId);
+                TL.LogMessage("DeviceName", DeviceName);
+                TL.LogMessage("DeviceClass", DeviceClass);
+                TL.LogMessage("DeviceInterface", DeviceInterface);
+                TL.LogMessage("InterfaceVersion", InterfaceVersion);
+                TL.LogMessage("Namespace", Namespace);
 
-				// Add custom parameters.
-				replacementsDictionary.Add("$deviceid$", DeviceId);
-				replacementsDictionary.Add("$deviceclass$", DeviceClass);
-				replacementsDictionary.Add("$devicename$", DeviceName);
-				replacementsDictionary.Add("$namespace$", Namespace);
-				replacementsDictionary["$projectname$"] = DeviceId;
-				replacementsDictionary["$safeprojectname$"] = DeviceId;
-				replacementsDictionary.Add("TEMPLATEDEVICENAME", DeviceName);
-				replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
-				replacementsDictionary.Add("ITEMPLATEDEVICEINTERFACE", DeviceInterface);
-				replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
-				replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion);
+                inputForm.Dispose();
+                inputForm = null;
+
+                // Add custom parameters.
+                replacementsDictionary.Add("$deviceid$", DeviceId);
+                replacementsDictionary.Add("$deviceclass$", DeviceClass);
+                replacementsDictionary.Add("$devicename$", DeviceName);
+                replacementsDictionary.Add("$namespace$", Namespace);
+                replacementsDictionary["$projectname$"] = DeviceId;
+                replacementsDictionary["$safeprojectname$"] = DeviceId;
+                replacementsDictionary.Add("TEMPLATEDEVICENAME", DeviceName);
+                replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
+                replacementsDictionary.Add("ITEMPLATEDEVICEINTERFACE", DeviceInterface);
+                replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
+                replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion);
                 // create and replace guids
-				replacementsDictionary.Add(csTemplateAssemblyGuid, Guid.NewGuid().ToString());
-				replacementsDictionary.Add(csTemplateInterfaceGuid, Guid.NewGuid().ToString());
-				replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
-				replacementsDictionary.Add(csTemplateAxisRatesGuid, Guid.NewGuid().ToString());
-				replacementsDictionary.Add(csTemplateTrackingRatesGuid, Guid.NewGuid().ToString());
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString());
-			}
-			Diagnostics.Exit();
-		}
+                replacementsDictionary.Add(csTemplateAssemblyGuid, Guid.NewGuid().ToString());
+                replacementsDictionary.Add(csTemplateInterfaceGuid, Guid.NewGuid().ToString());
+                replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
+                replacementsDictionary.Add(csTemplateAxisRatesGuid, Guid.NewGuid().ToString());
+                replacementsDictionary.Add(csTemplateTrackingRatesGuid, Guid.NewGuid().ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Form result setup exception: " + ex.ToString());
+            }
 
-		// This method is only called for item templates,
-		// not for project templates.
-		public bool ShouldAddProjectItem(string filePath)
-		{
-			return true;
-		}
+            Diagnostics.Exit();
+        }
+
+        // This method is only called for item templates,
+        // not for project templates.
+        public bool ShouldAddProjectItem(string filePath)
+        {
+            return true;
+        }
 
 #if DEBUG
-		void DumpCodeModel(Project project)
-		{
-			MessageBox.Show("Attach to process now", "Debug");
-			ProjectItem item = project.ProjectItems.Item("Driver.cs");
-			FileCodeModel fcm = item.FileCodeModel;
-			CodeClass codeClass = (CodeClass2)fcm.CodeElements.Item(DeviceClass);
-			// Implement the I<DeviceClass> interface on the driver class. Does not insert method stubs.
-			codeClass.AddImplementedInterface("ASCOM.Interface.I" + DeviceClass, 0);
-		}
+        void DumpCodeModel(Project project)
+        {
+            MessageBox.Show("Attach to process now", "Debug");
+            ProjectItem item = project.ProjectItems.Item("Driver.cs");
+            FileCodeModel fcm = item.FileCodeModel;
+            CodeClass codeClass = (CodeClass2)fcm.CodeElements.Item(DeviceClass);
+            // Implement the I<DeviceClass> interface on the driver class. Does not insert method stubs.
+            codeClass.AddImplementedInterface("ASCOM.Interface.I" + DeviceClass, 0);
+        }
 #endif
 
 

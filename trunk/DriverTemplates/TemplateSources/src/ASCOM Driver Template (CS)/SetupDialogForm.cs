@@ -15,11 +15,13 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		{
 			InitializeComponent();
             textBox1.Text = Properties.Settings.Default.CommPort;
+            chkTrace.Checked = Properties.Settings.Default.Trace;
 		}
 
 		private void cmdOK_Click(object sender, EventArgs e)
 		{
             Properties.Settings.Default.CommPort = textBox1.Text;
+            Properties.Settings.Default.Trace = chkTrace.Checked;
 			Close();
 		}
 

@@ -21,6 +21,7 @@
 // --------------------------------------------------------------------------------
 //
 
+
 // This is used to define code in the template that is specific to one class implementation
 // unused code canbe deleted and this definition removed.
 #define TEMPLATEDEVICECLASS
@@ -38,147 +39,80 @@ using System.Collections;
 
 namespace ASCOM.TEMPLATEDEVICENAME
 {
-	//
-	// Your driver's DeviceID is ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
-	//
-	// The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
-	// The ClassInterface/None addribute prevents an empty interface called
-	// _TEMPLATEDEVICENAME from being created and used as the [default] interface
-	//
-    // TODO right click on ITEMPLATEDEVICEINTERFACE and select "Implement Interface" to
-    // generate the property amd method definitions for the driver.
+    //
+    // Your driver's DeviceID is ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
+    //
+    // The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
+    // The ClassInterface/None addribute prevents an empty interface called
+    // _TEMPLATEDEVICENAME from being created and used as the [default] interface
     //
     // TODO Replace the not implemented exceptions with code to implement the function or
     // throw the appropriate ASCOM exception.
     //
 
-	/// <summary>
-	/// ASCOM TEMPLATEDEVICECLASS Driver for TEMPLATEDEVICENAME.
-	/// </summary>
-	[Guid("3A02C211-FA08-4747-B0BD-4B00EB159297")]
-	[ClassInterface(ClassInterfaceType.None)]
-	public class TEMPLATEDEVICECLASS : ITEMPLATEDEVICEINTERFACE
-	{
-		/// <summary>
-		/// ASCOM DeviceID (COM ProgID) for this driver.
-		/// The DeviceID is used by ASCOM applications to load the driver at runtime.
-		/// </summary>
-		private static string driverID = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS";
-		// TODO Change the descriptive string for your driver then remove this line
-		/// <summary>
-		/// Driver description that displays in the ASCOM Chooser.
-		/// </summary>
-		private static string driverDescription = "ASCOM TEMPLATEDEVICECLASS Driver for TEMPLATEDEVICENAME.";
+    /// <summary>
+    /// ASCOM TEMPLATEDEVICECLASS Driver for TEMPLATEDEVICENAME.
+    /// </summary>
+    [Guid("3A02C211-FA08-4747-B0BD-4B00EB159297")]
+    [ClassInterface(ClassInterfaceType.None)]
+    public class TEMPLATEDEVICECLASS : ITEMPLATEDEVICEINTERFACE
+    {
+        /// <summary>
+        /// ASCOM DeviceID (COM ProgID) for this driver.
+        /// The DeviceID is used by ASCOM applications to load the driver at runtime.
+        /// </summary>
+        private static string driverID = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS";
+        // TODO Change the descriptive string for your driver then remove this line
+        /// <summary>
+        /// Driver description that displays in the ASCOM Chooser.
+        /// </summary>
+        private static string driverDescription = "ASCOM TEMPLATEDEVICECLASS Driver for TEMPLATEDEVICENAME.";
 
-#if Telescope
-        //
-        // Driver private data (rate collections) for the telescope driver only.
-        // This can be removed for other driver types
-        //
-        private readonly AxisRates[] _axisRates;
-#endif
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TEMPLATEDEVICENAME"/> class.
-		/// Must be public for COM registration.
-		/// </summary>
-		public TEMPLATEDEVICECLASS()
-		{
-#if Telescope
-            // the rates constructors are only needed for the telescope class
-            // This can be removed for other driver types
-            _axisRates = new AxisRates[3];
-            _axisRates[0] = new AxisRates(TelescopeAxes.axisPrimary);
-            _axisRates[1] = new AxisRates(TelescopeAxes.axisSecondary);
-            _axisRates[2] = new AxisRates(TelescopeAxes.axisTertiary);
-#endif
+        /// <summary>
+        /// Private variable to hold the connected state
+        /// </summary>
+        private bool connected;
+
+        /// <summary>
+        /// Private variable to hold an ASCOM Utilities object
+        /// </summary>
+        private Util util;
+
+        /// <summary>
+        /// Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
+        /// </summary>
+        private TraceLogger tl;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TEMPLATEDEVICENAME"/> class.
+        /// Must be public for COM registration.
+        /// </summary>
+        public TEMPLATEDEVICECLASS()
+        {
+
+            connected = false; // Initialise connected to false
+            util = new Util(); //Initialise util object
+            tl = new TraceLogger("", "TEMPLATEDEVICENAME");
+            tl.Enabled = Properties.Settings.Default.Trace;
+
             //TODO: Implement your additional construction here
-		}
+        }
 
-		#region ASCOM Registration
-		//
-		// Register or unregister driver for ASCOM. This is harmless if already
-		// registered or unregistered. 
-		//
-		/// <summary>
-		/// Register or unregister the driver with the ASCOM Platform.
-		/// This is harmless if the driver is already registered/unregistered.
-		/// </summary>
-		/// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
-		private static void RegUnregASCOM(bool bRegister)
-		{
-            using (var P = new ASCOM.Utilities.Profile())
-            {
-                P.DeviceType = "TEMPLATEDEVICECLASS";
-                if (bRegister)
-                {
-                    P.Register(driverID, driverDescription);
-                }
-                else
-                {
-                    P.Unregister(driverID);
-                }
-            }
-		}
 
-		/// <summary>
-		/// This function registers the driver with the ASCOM Chooser and
-		/// is called automatically whenever this class is registered for COM Interop.
-		/// </summary>
-		/// <param name="t">Type of the class being registered, not used.</param>
-		/// <remarks>
-		/// This method typically runs in two distinct situations:
-		/// <list type="numbered">
-		/// <item>
-		/// In Visual Studio, when the project is successfully built.
-		/// For this to work correctly, the option <c>Register for COM Interop</c>
-		/// must be enabled in the project settings.
-		/// </item>
-		/// <item>During setup, when the installer registers the assembly for COM Interop.</item>
-		/// </list>
-		/// This technique should mean that it is never necessary to manually register a driver with ASCOM.
-		/// </remarks>
-		[ComRegisterFunction]
-		public static void RegisterASCOM(Type t)
-		{
-			RegUnregASCOM(true);
-		}
+        //
+        // PUBLIC COM INTERFACE ITEMPLATEDEVICEINTERFACE IMPLEMENTATION
+        //
 
-		/// <summary>
-		/// This function unregisters the driver from the ASCOM Chooser and
-		/// is called automatically whenever this class is unregistered from COM Interop.
-		/// </summary>
-		/// <param name="t">Type of the class being registered, not used.</param>
-		/// <remarks>
-		/// This method typically runs in two distinct situations:
-		/// <list type="numbered">
-		/// <item>
-		/// In Visual Studio, when the project is cleaned or prior to rebuilding.
-		/// For this to work correctly, the option <c>Register for COM Interop</c>
-		/// must be enabled in the project settings.
-		/// </item>
-		/// <item>During uninstall, when the installer unregisters the assembly from COM Interop.</item>
-		/// </list>
-		/// This technique should mean that it is never necessary to manually unregister a driver from ASCOM.
-		/// </remarks>
-		[ComUnregisterFunction]
-		public static void UnregisterASCOM(Type t)
-		{
-			RegUnregASCOM(false);
-		}
-		#endregion
+        #region Common properties and methods.
 
-		//
-		// PUBLIC COM INTERFACE ITEMPLATEDEVICEINTERFACE IMPLEMENTATION
-		//
-
-		/// <summary>
-		/// Displays the Setup Dialog form.
-		/// If the user clicks the OK button to dismiss the form, then
-		/// the new settings are saved, otherwise the old values are reloaded.
+        /// <summary>
+        /// Displays the Setup Dialog form.
+        /// If the user clicks the OK button to dismiss the form, then
+        /// the new settings are saved, otherwise the old values are reloaded.
         /// THIS IS THE ONLY PLACE WHERE SHOWING USER INTERFACE IS ALLOWED!
-		/// </summary>
-		public void SetupDialog()
-		{
+        /// </summary>
+        public void SetupDialog()
+        {
             // consider only showing the setup dialog if not connected
             // or call a different dialog if connected
             if (IsConnected)
@@ -194,14 +128,15 @@ namespace ASCOM.TEMPLATEDEVICENAME
                 }
                 Properties.Settings.Default.Reload();
             }
-		}
+        }
 
-
-        #region common properties and methods. All set to no action
-
-        public System.Collections.ArrayList SupportedActions
+        public ArrayList SupportedActions
         {
-            get { return new ArrayList(); }
+            get 
+            {
+                tl.LogMessage("SupportedActions", "Get - Returning empty arraylist");
+                return new ArrayList(); 
+            }
         }
 
         public string Action(string actionName, string actionParameters)
@@ -237,43 +172,63 @@ namespace ASCOM.TEMPLATEDEVICENAME
             throw new ASCOM.MethodNotImplementedException("CommandString");
         }
 
-        #endregion
-
-        #region public properties and methods
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            // Clean up the tracelogger and util objects
+            tl.Enabled = false;
+            tl.Dispose();
+            tl = null;
+            util.Dispose();
+            util = null;
         }
 
         public bool Connected
         {
-            get { return IsConnected; }
+            get 
+            {
+                tl.LogMessage("Connected", "Get - " + IsConnected.ToString());
+                return IsConnected; 
+            }
             set
             {
+                tl.LogMessage("Connected", "Set - " + value.ToString());
                 if (value == IsConnected)
                     return;
 
                 if (value)
                 {
+                    connected = false;
                     // TODO connect to the device
                     string comPort = Properties.Settings.Default.CommPort;
                 }
                 else
                 {
+                    connected = true;
                     // TODO disconnect from the device
                 }
-                throw new System.NotImplementedException();
             }
         }
 
         public string Description
         {
-            get { return driverDescription; }
+            // TODO customise this device description
+            get 
+            {
+                tl.LogMessage("Description", "Get - " + driverDescription);
+                return driverDescription; 
+            }
         }
 
         public string DriverInfo
         {
-            get { throw new ASCOM.PropertyNotImplementedException("DriverInfo", false); }
+            get 
+            {
+                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                // TODO customise this driver description
+                string driverInfo = "Information about the driver itself. Version: " + String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
+                tl.LogMessage("DriverInfo", "Get - " + driverInfo);
+                return driverInfo; 
+            }
         }
 
         public string DriverVersion
@@ -281,21 +236,37 @@ namespace ASCOM.TEMPLATEDEVICENAME
             get
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
+                string driverVersion = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
+                tl.LogMessage("DriverVersion", "Get - " + driverVersion);
+                return driverVersion;
             }
         }
 
         public short InterfaceVersion
         {
             // set by the driver wizard
-            get { return TEMPLATEINTERFACEVERSION; }
+            get 
+            {
+                tl.LogMessage("InterfaceVersion", "Get - " + "TEMPLATEINTERFACEVERSION");
+                return Convert.ToInt16("TEMPLATEINTERFACEVERSION"); 
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                string name = "Short driver name - please customise";
+                tl.LogMessage("Name", "Get - " + name);
+                return name;
+            }
         }
 
         #endregion
 
-        #region private properties and methods
+        #region Private properties and methods
         // here are some useful properties and methods that can be used as required
-        // to help with
+        // to help with driver development
 
         /// <summary>
         /// Returns true if there is a valid connection to the driver hardware
@@ -305,7 +276,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             get
             {
                 // TODO check that the driver hardware connection exists and is connected to the hardware
-                return false;
+                return connected;
             }
         }
 
@@ -320,6 +291,82 @@ namespace ASCOM.TEMPLATEDEVICENAME
                 throw new ASCOM.NotConnectedException(message);
             }
         }
-        #endregion  
+
+        #region ASCOM Registration
+        //
+        // Register or unregister driver for ASCOM. This is harmless if already
+        // registered or unregistered. 
+        //
+        /// <summary>
+        /// Register or unregister the driver with the ASCOM Platform.
+        /// This is harmless if the driver is already registered/unregistered.
+        /// </summary>
+        /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
+        private static void RegUnregASCOM(bool bRegister)
+        {
+            using (var P = new ASCOM.Utilities.Profile())
+            {
+                P.DeviceType = "TEMPLATEDEVICECLASS";
+                if (bRegister)
+                {
+                    P.Register(driverID, driverDescription);
+                }
+                else
+                {
+                    P.Unregister(driverID);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This function registers the driver with the ASCOM Chooser and
+        /// is called automatically whenever this class is registered for COM Interop.
+        /// </summary>
+        /// <param name="t">Type of the class being registered, not used.</param>
+        /// <remarks>
+        /// This method typically runs in two distinct situations:
+        /// <list type="numbered">
+        /// <item>
+        /// In Visual Studio, when the project is successfully built.
+        /// For this to work correctly, the option <c>Register for COM Interop</c>
+        /// must be enabled in the project settings.
+        /// </item>
+        /// <item>During setup, when the installer registers the assembly for COM Interop.</item>
+        /// </list>
+        /// This technique should mean that it is never necessary to manually register a driver with ASCOM.
+        /// </remarks>
+        [ComRegisterFunction]
+        public static void RegisterASCOM(Type t)
+        {
+            RegUnregASCOM(true);
+        }
+
+        /// <summary>
+        /// This function unregisters the driver from the ASCOM Chooser and
+        /// is called automatically whenever this class is unregistered from COM Interop.
+        /// </summary>
+        /// <param name="t">Type of the class being registered, not used.</param>
+        /// <remarks>
+        /// This method typically runs in two distinct situations:
+        /// <list type="numbered">
+        /// <item>
+        /// In Visual Studio, when the project is cleaned or prior to rebuilding.
+        /// For this to work correctly, the option <c>Register for COM Interop</c>
+        /// must be enabled in the project settings.
+        /// </item>
+        /// <item>During uninstall, when the installer unregisters the assembly from COM Interop.</item>
+        /// </list>
+        /// This technique should mean that it is never necessary to manually unregister a driver from ASCOM.
+        /// </remarks>
+        [ComUnregisterFunction]
+        public static void UnregisterASCOM(Type t)
+        {
+            RegUnregASCOM(false);
+        }
+        #endregion
+
+        #endregion
+
+        //INTERFACECODEINSERTIONPOINT
     }
 }
