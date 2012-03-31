@@ -44,7 +44,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>true</RegisterForComInterop>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -76,6 +76,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceCamera.cs" />
+    <Compile Include="DeviceDome.cs" />
+    <Compile Include="DeviceFilterWheel.cs" />
+    <Compile Include="DeviceFocuser.cs" />
+    <Compile Include="DeviceRotator.cs" />
+    <Compile Include="DeviceSafetyMonitor.cs" />
     <Compile Include="Driver.cs" />
     <Compile Include="PlaceholderInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,6 +116,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceTelescope.cs" />
     <None Include="app.config" />
     <None Include="ASCOM.png" />
     <None Include="ASCOMDriverTemplate.snk" />

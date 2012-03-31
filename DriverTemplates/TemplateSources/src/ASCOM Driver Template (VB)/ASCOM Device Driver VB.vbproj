@@ -88,6 +88,13 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceCamera.vb" />
+    <Compile Include="DeviceDome.vb" />
+    <Compile Include="DeviceFilterWheel.vb" />
+    <Compile Include="DeviceFocuser.vb" />
+    <Compile Include="DeviceRotator.vb" />
+    <Compile Include="DeviceSafetyMonitor.vb" />
+    <Compile Include="DeviceTelescope.vb" />
     <Compile Include="PlaceholderInterface.vb" />
     <Compile Include="Driver.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -141,7 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ASCOM.png" />
-    <Content Include="ReadMe.htm" />
+    <Content Include="ReadMe.htm">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -19,10 +19,17 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.ico">ASCOM.ico</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.png">ASCOM.png</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="ASCOMDriverTemplate.snk">ASCOMDriverTemplate.snk</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceCamera.cs">DeviceCamera.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceDome.cs">DeviceDome.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceFilterWheel.cs">DeviceFilterWheel.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceFocuser.cs">DeviceFocuser.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceRotator.cs">DeviceRotator.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceSafetyMonitor.cs">DeviceSafetyMonitor.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceTelescope.cs">DeviceTelescope.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Rates.cs">Rates.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderInterface.cs">PlaceholderInterface.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="ASCOMDriverTemplate.snk">ASCOMDriverTemplate.snk</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>

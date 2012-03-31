@@ -22,13 +22,14 @@ Partial Class SetupDialogForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.OK_Button = New System.Windows.Forms.Button
-        Me.Cancel_Button = New System.Windows.Forms.Button
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox
-        Me.label2 = New System.Windows.Forms.Label
-        Me.textBox1 = New System.Windows.Forms.TextBox
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.OK_Button = New System.Windows.Forms.Button()
+        Me.Cancel_Button = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.label2 = New System.Windows.Forms.Label()
+        Me.textBox1 = New System.Windows.Forms.TextBox()
+        Me.chkTrace = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -106,6 +107,16 @@ Partial Class SetupDialogForm
         Me.textBox1.TabIndex = 6
         Me.textBox1.Text = Global.ASCOM.TEMPLATEDEVICENAME.My.MySettings.Default.CommPort
         '
+        'chkTrace
+        '
+        Me.chkTrace.AutoSize = True
+        Me.chkTrace.Location = New System.Drawing.Point(76, 123)
+        Me.chkTrace.Name = "chkTrace"
+        Me.chkTrace.Size = New System.Drawing.Size(69, 17)
+        Me.chkTrace.TabIndex = 8
+        Me.chkTrace.Text = "Trace on"
+        Me.chkTrace.UseVisualStyleBackColor = True
+        '
         'SetupDialogForm
         '
         Me.AcceptButton = Me.OK_Button
@@ -113,6 +124,7 @@ Partial Class SetupDialogForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(359, 229)
+        Me.Controls.Add(Me.chkTrace)
         Me.Controls.Add(Me.label2)
         Me.Controls.Add(Me.textBox1)
         Me.Controls.Add(Me.PictureBox1)
@@ -138,5 +150,6 @@ Partial Class SetupDialogForm
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Private WithEvents label2 As System.Windows.Forms.Label
     Private WithEvents textBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents chkTrace As System.Windows.Forms.CheckBox
 
 End Class

@@ -31,17 +31,24 @@
 ' This definition is used to select code that's only applicable for one device type
 #Const Device = "TEMPLATEDEVICECLASS"
 
-Imports ASCOM.Utilities
+Imports ASCOM
 Imports ASCOM.DeviceInterface
+Imports ASCOM.Utilities
+Imports System
+Imports System.Collections
+Imports System.Collections.Generic
+Imports System.Globalization
+Imports System.Runtime.InteropServices
+Imports System.Text
 
 <Guid("3A02C211-FA08-4747-B0BD-4B00EB159297")> _
 <ClassInterface(ClassInterfaceType.None)> _
 Public Class TEMPLATEDEVICECLASS
-    '	==========
-    ' Early-bind interface implemented by this driver
-    ' TODO set the cursor to the end of the "Implements ITEMPLATEDEVICEINTERFACE" line
-    ' and press Return.  This will implement the missing interface members for TEMPLATEDEVICECLASS
-    '
+
+    ' The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS
+    ' The ClassInterface/None addribute prevents an empty interface called
+    ' _TEMPLATEDEVICENAME from being created and used as the [default] interface
+
     ' TODO Replace the not implemented exceptions with code to implement the function or
     ' throw the appropriate ASCOM exception.
     '
@@ -53,59 +60,28 @@ Public Class TEMPLATEDEVICECLASS
     Private Shared driverID As String = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS"
     Private Shared driverDescription As String = "TEMPLATEDEVICENAME TEMPLATEDEVICECLASS"
 
-#If Device = Telescope Then
-    '
-    ' Driver private data (rate collections), only used with the Telescope class
-    '
-    Private m_AxisRates(2) As AxisRates
-#End If
+    Private b_connected As Boolean ' Private variable to hold the connected state
+    Private m_util As Util ' Private variable to hold an ASCOM Utilities object
+    Private TL As TraceLogger ' Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
 
     '
     ' Constructor - Must be public for COM registration!
     '
     Public Sub New()
-#If Device = Telescope Then
-        ' this is only required for the telescope class, it can be deleted from the sources for the other classes
-        m_AxisRates(0) = New AxisRates(TelescopeAxes.axisPrimary)
-        m_AxisRates(1) = New AxisRates(TelescopeAxes.axisSecondary)
-        m_AxisRates(2) = New AxisRates(TelescopeAxes.axisTertiary)
-#End If
+
+        b_connected = False ' Initialise connected to false
+        m_util = New Util() ' Initialise util object
+        TL = New TraceLogger("", "TEMPLATEDEVICENAME")
+        TL.Enabled = My.MySettings.Default.Trace
+
         ' TODO Implement your additional construction here
     End Sub
 
-#Region "ASCOM Registration"
-
-    Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
-
-        Using P As New Profile() With {.DeviceType = "TEMPLATEDEVICECLASS"}
-            If bRegister Then
-                P.Register(driverID, driverDescription)
-            Else
-                P.Unregister(driverID)
-            End If
-        End Using
-
-    End Sub
-
-    <ComRegisterFunction()> _
-    Public Shared Sub RegisterASCOM(ByVal T As Type)
-
-        RegUnregASCOM(True)
-
-    End Sub
-
-    <ComUnregisterFunction()> _
-    Public Shared Sub UnregisterASCOM(ByVal T As Type)
-
-        RegUnregASCOM(False)
-
-    End Sub
-
-#End Region
     '
     ' PUBLIC COM INTERFACE ITEMPLATEDEVICEINTERFACE IMPLEMENTATION
     '
 
+#Region "Common properties and methods"
     ''' <summary>
     ''' Displays the Setup Dialog form.
     ''' If the user clicks the OK button to dismiss the form, then
@@ -131,6 +107,7 @@ Public Class TEMPLATEDEVICECLASS
 
     Public ReadOnly Property SupportedActions() As ArrayList Implements ITEMPLATEDEVICEINTERFACE.SupportedActions
         Get
+            TL.LogMessage("SupportedActions", "Get - Returning empty arraylist")
             Return New ArrayList()
         End Get
     End Property
@@ -167,49 +144,78 @@ Public Class TEMPLATEDEVICECLASS
 
     Public Property Connected() As Boolean Implements ITEMPLATEDEVICEINTERFACE.Connected
         Get
+            TL.LogMessage("Connected", "Get - " & IsConnected.ToString())
             Return IsConnected
         End Get
-        Set(ByVal value As Boolean)
-            If (value = IsConnected) Then
+        Set(value As Boolean)
+            TL.LogMessage("Connected", "Set - " & value.ToString())
+            If value = IsConnected Then
                 Return
             End If
 
-            If (value) Then
+            If value Then
+                b_connected = False
                 ' TODO connect to the device
-                Dim comPort As String = My.Settings.CommPort
+                Dim comPort As String = My.MySettings.Default.CommPort
             Else
                 ' TODO disconnect from the device
-                Throw New System.NotImplementedException()
+                b_connected = True
             End If
         End Set
-    End Property
-
-    Public ReadOnly Property DriverVersion() As String Implements ITEMPLATEDEVICEINTERFACE.DriverVersion
-        Get
-            ' Get our own assembly and report its version number
-            Return Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2)
-        End Get
-    End Property
-
-    Public ReadOnly Property InterfaceVersion() As Short Implements ITEMPLATEDEVICEINTERFACE.InterfaceVersion
-        Get
-            Return TEMPLATEINTERFACEVERSION
-        End Get
     End Property
 
     Public ReadOnly Property Description As String Implements ITEMPLATEDEVICEINTERFACE.Description
         Get
             ' this pattern seems to be needed to allow a public property to return a private field
             Dim d As String = driverDescription
+            TL.LogMessage("Description", "Get - " + d)
             Return d
         End Get
     End Property
 
     Public ReadOnly Property DriverInfo As String Implements ITEMPLATEDEVICEINTERFACE.DriverInfo
         Get
-            Throw New PropertyNotImplementedException("DriverInfo", False)
+            Dim m_version As Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version
+            ' TODO customise this driver description
+            Dim s_driverInfo As String = "Information about the driver itself. Version: " + m_version.Major.ToString() + "." + m_version.Minor.ToString()
+            TL.LogMessage("DriverInfo", "Get - " + s_driverInfo)
+            Return s_driverInfo
         End Get
     End Property
+
+    Public ReadOnly Property DriverVersion() As String Implements ITEMPLATEDEVICEINTERFACE.DriverVersion
+        Get
+            ' Get our own assembly and report its version number
+            TL.LogMessage("DriverVersion", "Get - " + Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2))
+            Return Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2)
+        End Get
+    End Property
+
+    Public ReadOnly Property InterfaceVersion() As Short Implements ITEMPLATEDEVICEINTERFACE.InterfaceVersion
+        Get
+            TL.LogMessage("InterfaceVersion", "Get - " + "TEMPLATEINTERFACEVERSION")
+            Return TEMPLATEINTERFACEVERSION
+        End Get
+    End Property
+
+    Public ReadOnly Property Name As String Implements ITEMPLATEDEVICEINTERFACE.Name
+        Get
+            Dim s_name As String = "Short driver name - please customise"
+            TL.LogMessage("Name", "Get - " + s_name)
+            Return s_name
+        End Get
+    End Property
+
+    Public Sub Dispose() Implements ITEMPLATEDEVICEINTERFACE.Dispose
+        ' Clean up the tracelogger and util objects
+        TL.Enabled = False
+        TL.Dispose()
+        TL = Nothing
+        m_util.Dispose()
+        m_util = Nothing
+    End Sub
+
+#End Region
 
 #Region "private properties and methods"
     ' here are some useful properties and methods that can be used as required
@@ -221,7 +227,7 @@ Public Class TEMPLATEDEVICECLASS
     Private ReadOnly Property IsConnected As Boolean
         Get
             ' TODO check that the driver hardware connection exists and is connected to the hardware
-            Return False
+            Return b_connected
         End Get
     End Property
 
@@ -235,7 +241,37 @@ Public Class TEMPLATEDEVICECLASS
         End If
     End Sub
 
+#Region "ASCOM Registration"
+
+    Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
+
+        Using P As New Profile() With {.DeviceType = "TEMPLATEDEVICECLASS"}
+            If bRegister Then
+                P.Register(driverID, driverDescription)
+            Else
+                P.Unregister(driverID)
+            End If
+        End Using
+
+    End Sub
+
+    <ComRegisterFunction()> _
+    Public Shared Sub RegisterASCOM(ByVal T As Type)
+
+        RegUnregASCOM(True)
+
+    End Sub
+
+    <ComUnregisterFunction()> _
+    Public Shared Sub UnregisterASCOM(ByVal T As Type)
+
+        RegUnregASCOM(False)
+
+    End Sub
+
 #End Region
 
-End Class
+#End Region
 
+    '//INTERFACECODEINSERTIONPOINT
+End Class
