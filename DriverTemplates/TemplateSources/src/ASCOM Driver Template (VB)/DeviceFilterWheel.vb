@@ -12,24 +12,40 @@ Class DeviceFilerWheel
     Private TL As New TraceLogger()
 
 #Region "IFilerWheel Implementation"
+    Private fwOffsets As Integer() = New Integer(3) {0, 0, 0, 0} 'class level variable to hold focus offsets
     Public ReadOnly Property FocusOffsets() As Integer() Implements IFilterWheelV2.FocusOffsets
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            For Each fwOffset As Integer In fwOffsets ' Write filter offsets to the log
+                TL.LogMessage("FocusOffsets Get", fwOffset.ToString())
+            Next
+
+            Return fwOffsets
         End Get
     End Property
 
+    Private fwNames As String() = New String(3) {"Red", "Green", "Blue", "Clear"} 'class level variable to hold the filter names
     Public ReadOnly Property Names As String() Implements IFilterWheelV2.Names
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            For Each fwName As String In fwNames ' Write filter names to the log
+                TL.LogMessage("Names Get", fwName)
+            Next
+
+            Return fwNames
         End Get
     End Property
 
+    Private fwPosition As Short = 0 'class level variable to retain the current filterwheel position
     Public Property Position() As Short Implements IFilterWheelV2.Position
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("Position Get", fwPosition.ToString())
+            Return fwPosition
         End Get
         Set(value As Short)
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("Position Set", value.ToString())
+            If ((value < 0) Or (value > fwNames.Length - 1)) Then
+                Throw New InvalidValueException("Position", value.ToString(), "0 to " & (fwNames.Length - 1).ToString())
+            End If
+            fwPosition = value
         End Set
     End Property
 

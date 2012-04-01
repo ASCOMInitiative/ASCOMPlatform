@@ -60,8 +60,8 @@ Public Class TEMPLATEDEVICECLASS
     Private Shared driverID As String = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS"
     Private Shared driverDescription As String = "TEMPLATEDEVICENAME TEMPLATEDEVICECLASS"
 
-    Private b_connected As Boolean ' Private variable to hold the connected state
-    Private m_util As Util ' Private variable to hold an ASCOM Utilities object
+    Private connectedState As Boolean ' Private variable to hold the connected state
+    Private utilities As Util ' Private variable to hold an ASCOM Utilities object
     Private TL As TraceLogger ' Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
 
     '
@@ -69,12 +69,16 @@ Public Class TEMPLATEDEVICECLASS
     '
     Public Sub New()
 
-        b_connected = False ' Initialise connected to false
-        m_util = New Util() ' Initialise util object
         TL = New TraceLogger("", "TEMPLATEDEVICENAME")
         TL.Enabled = My.MySettings.Default.Trace
+        TL.LogMessage("TEMPLATEDEVICECLASS", "Starting initialisation")
 
-        ' TODO Implement your additional construction here
+        connectedState = False ' Initialise connected to false
+        utilities = New Util() ' Initialise util object
+
+        'TODO: Implement your additional construction here
+
+        TL.LogMessage("TEMPLATEDEVICECLASS", "Completed initialisation")
     End Sub
 
     '
@@ -107,7 +111,7 @@ Public Class TEMPLATEDEVICECLASS
 
     Public ReadOnly Property SupportedActions() As ArrayList Implements ITEMPLATEDEVICEINTERFACE.SupportedActions
         Get
-            TL.LogMessage("SupportedActions", "Get - Returning empty arraylist")
+            TL.LogMessage("SupportedActions Get", "Returning empty arraylist")
             Return New ArrayList()
         End Get
     End Property
@@ -144,22 +148,22 @@ Public Class TEMPLATEDEVICECLASS
 
     Public Property Connected() As Boolean Implements ITEMPLATEDEVICEINTERFACE.Connected
         Get
-            TL.LogMessage("Connected", "Get - " & IsConnected.ToString())
+            TL.LogMessage("Connected Get", IsConnected.ToString())
             Return IsConnected
         End Get
         Set(value As Boolean)
-            TL.LogMessage("Connected", "Set - " & value.ToString())
+            TL.LogMessage("Connected Set", value.ToString())
             If value = IsConnected Then
                 Return
             End If
 
             If value Then
-                b_connected = False
+                connectedState = True
                 ' TODO connect to the device
                 Dim comPort As String = My.MySettings.Default.CommPort
             Else
                 ' TODO disconnect from the device
-                b_connected = True
+                connectedState = False
             End If
         End Set
     End Property
@@ -168,7 +172,7 @@ Public Class TEMPLATEDEVICECLASS
         Get
             ' this pattern seems to be needed to allow a public property to return a private field
             Dim d As String = driverDescription
-            TL.LogMessage("Description", "Get - " + d)
+            TL.LogMessage("Description Get", d)
             Return d
         End Get
     End Property
@@ -178,7 +182,7 @@ Public Class TEMPLATEDEVICECLASS
             Dim m_version As Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version
             ' TODO customise this driver description
             Dim s_driverInfo As String = "Information about the driver itself. Version: " + m_version.Major.ToString() + "." + m_version.Minor.ToString()
-            TL.LogMessage("DriverInfo", "Get - " + s_driverInfo)
+            TL.LogMessage("DriverInfo Get", s_driverInfo)
             Return s_driverInfo
         End Get
     End Property
@@ -186,14 +190,14 @@ Public Class TEMPLATEDEVICECLASS
     Public ReadOnly Property DriverVersion() As String Implements ITEMPLATEDEVICEINTERFACE.DriverVersion
         Get
             ' Get our own assembly and report its version number
-            TL.LogMessage("DriverVersion", "Get - " + Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2))
+            TL.LogMessage("DriverVersion Get", Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2))
             Return Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString(2)
         End Get
     End Property
 
     Public ReadOnly Property InterfaceVersion() As Short Implements ITEMPLATEDEVICEINTERFACE.InterfaceVersion
         Get
-            TL.LogMessage("InterfaceVersion", "Get - " + "TEMPLATEINTERFACEVERSION")
+            TL.LogMessage("InterfaceVersion Get", "TEMPLATEINTERFACEVERSION")
             Return TEMPLATEINTERFACEVERSION
         End Get
     End Property
@@ -201,7 +205,7 @@ Public Class TEMPLATEDEVICECLASS
     Public ReadOnly Property Name As String Implements ITEMPLATEDEVICEINTERFACE.Name
         Get
             Dim s_name As String = "Short driver name - please customise"
-            TL.LogMessage("Name", "Get - " + s_name)
+            TL.LogMessage("Name Get", s_name)
             Return s_name
         End Get
     End Property
@@ -211,8 +215,8 @@ Public Class TEMPLATEDEVICECLASS
         TL.Enabled = False
         TL.Dispose()
         TL = Nothing
-        m_util.Dispose()
-        m_util = Nothing
+        utilities.Dispose()
+        utilities = Nothing
     End Sub
 
 #End Region
@@ -227,7 +231,7 @@ Public Class TEMPLATEDEVICECLASS
     Private ReadOnly Property IsConnected As Boolean
         Get
             ' TODO check that the driver hardware connection exists and is connected to the hardware
-            Return b_connected
+            Return connectedState
         End Get
     End Property
 

@@ -12,25 +12,47 @@ class DeviceFilerWheel
     Util util = new Util(); TraceLogger tl = new TraceLogger();
 
     #region IFilerWheel Implementation
+    private int[] fwOffsets = new int[4] { 0, 0, 0, 0 }; //class level variable to hold focus offsets
     public int[] FocusOffsets
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get 
+        {
+            foreach (int fwOffset in fwOffsets) // Write filter offsets to the log
+            {
+                tl.LogMessage("FocusOffsets Get", fwOffset.ToString());
+            }
+
+            return fwOffsets; 
+        }
     }
 
+    private string[] fwNames = new string[4] { "Red", "Green", "Blue", "Clear" }; //class level variable to hold the filter names
     public string[] Names
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            foreach (string fwName in fwNames) // Write filter names to the log
+            {
+                tl.LogMessage("Names Get", fwName);
+            }
+
+            return fwNames;
+        }
     }
 
+    private short fwPosition = 0; // class level variable to retain the current filterwheel position
     public short Position
     {
         get
         {
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Position Get", fwPosition.ToString());
+            return fwPosition;
         }
         set
         {
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Position Set", value.ToString());
+            if ((value < 0) | (value > fwNames.Length - 1)) throw new InvalidValueException("Position", value.ToString(), "0 to " + (fwNames.Length - 1).ToString());
+            fwPosition = value;
         }
     }
 
