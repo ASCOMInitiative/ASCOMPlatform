@@ -71,12 +71,12 @@ namespace ASCOM.TEMPLATEDEVICENAME
         /// <summary>
         /// Private variable to hold the connected state
         /// </summary>
-        private bool connected;
+        private bool connectedState;
 
         /// <summary>
         /// Private variable to hold an ASCOM Utilities object
         /// </summary>
-        private Util util;
+        private Util utilities;
 
         /// <summary>
         /// Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
@@ -90,12 +90,16 @@ namespace ASCOM.TEMPLATEDEVICENAME
         public TEMPLATEDEVICECLASS()
         {
 
-            connected = false; // Initialise connected to false
-            util = new Util(); //Initialise util object
             tl = new TraceLogger("", "TEMPLATEDEVICENAME");
             tl.Enabled = Properties.Settings.Default.Trace;
+            tl.LogMessage("TEMPLATEDEVICECLASS", "Starting initialisation");
+
+            connectedState = false; // Initialise connected to false
+            utilities = new Util(); //Initialise util object
 
             //TODO: Implement your additional construction here
+
+            tl.LogMessage("TEMPLATEDEVICECLASS", "Completed initialisation");
         }
 
 
@@ -132,10 +136,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public ArrayList SupportedActions
         {
-            get 
+            get
             {
-                tl.LogMessage("SupportedActions", "Get - Returning empty arraylist");
-                return new ArrayList(); 
+                tl.LogMessage("SupportedActions Get", "Returning empty arraylist");
+                return new ArrayList();
             }
         }
 
@@ -178,32 +182,32 @@ namespace ASCOM.TEMPLATEDEVICENAME
             tl.Enabled = false;
             tl.Dispose();
             tl = null;
-            util.Dispose();
-            util = null;
+            utilities.Dispose();
+            utilities = null;
         }
 
         public bool Connected
         {
-            get 
+            get
             {
-                tl.LogMessage("Connected", "Get - " + IsConnected.ToString());
-                return IsConnected; 
+                tl.LogMessage("Connected Get", IsConnected.ToString());
+                return IsConnected;
             }
             set
             {
-                tl.LogMessage("Connected", "Set - " + value.ToString());
+                tl.LogMessage("Connected Set", value.ToString());
                 if (value == IsConnected)
                     return;
 
                 if (value)
                 {
-                    connected = false;
+                    connectedState = true;
                     // TODO connect to the device
                     string comPort = Properties.Settings.Default.CommPort;
                 }
                 else
                 {
-                    connected = true;
+                    connectedState = false;
                     // TODO disconnect from the device
                 }
             }
@@ -212,22 +216,22 @@ namespace ASCOM.TEMPLATEDEVICENAME
         public string Description
         {
             // TODO customise this device description
-            get 
+            get
             {
-                tl.LogMessage("Description", "Get - " + driverDescription);
-                return driverDescription; 
+                tl.LogMessage("Description Get", driverDescription);
+                return driverDescription;
             }
         }
 
         public string DriverInfo
         {
-            get 
+            get
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 // TODO customise this driver description
                 string driverInfo = "Information about the driver itself. Version: " + String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
-                tl.LogMessage("DriverInfo", "Get - " + driverInfo);
-                return driverInfo; 
+                tl.LogMessage("DriverInfo Get", driverInfo);
+                return driverInfo;
             }
         }
 
@@ -237,7 +241,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 string driverVersion = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
-                tl.LogMessage("DriverVersion", "Get - " + driverVersion);
+                tl.LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
         }
@@ -245,10 +249,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
         public short InterfaceVersion
         {
             // set by the driver wizard
-            get 
+            get
             {
-                tl.LogMessage("InterfaceVersion", "Get - " + "TEMPLATEINTERFACEVERSION");
-                return Convert.ToInt16("TEMPLATEINTERFACEVERSION"); 
+                tl.LogMessage("InterfaceVersion Get", "TEMPLATEINTERFACEVERSION");
+                return Convert.ToInt16("TEMPLATEINTERFACEVERSION");
             }
         }
 
@@ -257,7 +261,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             get
             {
                 string name = "Short driver name - please customise";
-                tl.LogMessage("Name", "Get - " + name);
+                tl.LogMessage("Name Get", name);
                 return name;
             }
         }
@@ -276,7 +280,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             get
             {
                 // TODO check that the driver hardware connection exists and is connected to the hardware
-                return connected;
+                return connectedState;
             }
         }
 
