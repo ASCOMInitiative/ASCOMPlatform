@@ -12,130 +12,209 @@ class DeviceDome
     Util util = new Util(); TraceLogger tl = new TraceLogger();
 
     #region IDome Implementation
+
+    private bool domeShutterState = false; // Variable to hold the open/closed status of the shutter, true = Open
+
     public void AbortSlew()
     {
-        throw new ASCOM.MethodNotImplementedException();
+        // This is a mandatory parameter but we have no action to take in this simple driver
+        tl.LogMessage("AbortSlew", "Completed");
     }
 
     public double Altitude
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("Altitude", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException();
+        }
     }
 
     public bool AtHome
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("AtHome", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException();
+        }
     }
 
     public bool AtPark
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("AtPark", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException();
+        }
     }
 
     public double Azimuth
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("Azimuth", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException();
+        }
     }
 
     public bool CanFindHome
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanFindHome Get", false.ToString());
+            return false;
+        }
     }
 
     public bool CanPark
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanPark Get", false.ToString());
+            return false;
+        }
     }
 
     public bool CanSetAltitude
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanSetAltitude Get", false.ToString());
+            return false;
+        }
     }
 
     public bool CanSetAzimuth
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanSetAzimuth Get", false.ToString());
+            return false;
+        }
     }
 
     public bool CanSetPark
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanSetPark Get", false.ToString());
+            return false;
+        }
     }
 
     public bool CanSetShutter
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanSetShutter Get", true.ToString());
+            return true;
+        }
     }
 
     public bool CanSlave
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanSlave Get", false.ToString());
+            return false;
+        }
     }
 
     public bool CanSyncAzimuth
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanSyncAzimuth Get", false.ToString());
+            return false;
+        }
     }
 
     public void CloseShutter()
     {
-        throw new ASCOM.MethodNotImplementedException();
+        tl.LogMessage("CloseShutter", "Shutter has been closed");
+        domeShutterState = false;
     }
 
     public void FindHome()
     {
+        tl.LogMessage("FindHome", "Not implemented");
         throw new ASCOM.MethodNotImplementedException();
     }
 
     public void OpenShutter()
     {
-        throw new ASCOM.MethodNotImplementedException();
+        tl.LogMessage("OpenShutter", "Shutter has been opened");
+        domeShutterState = true;
     }
 
     public void Park()
     {
+        tl.LogMessage("Park", "Not implemented");
         throw new ASCOM.MethodNotImplementedException();
     }
 
     public void SetPark()
     {
+        tl.LogMessage("SetPark", "Not implemented");
         throw new ASCOM.MethodNotImplementedException();
     }
 
     public ShutterState ShutterStatus
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanSyncAzimuth Get", false.ToString());
+            if (domeShutterState)
+            {
+                tl.LogMessage("ShutterStatus", ShutterState.shutterOpen.ToString());
+                return ShutterState.shutterOpen;
+            }
+            else
+            {
+                tl.LogMessage("ShutterStatus", ShutterState.shutterClosed.ToString());
+                return ShutterState.shutterClosed;
+            }
+        }
     }
 
     public bool Slaved
     {
         get
         {
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Slaved Get", false.ToString());
+            return false;
         }
         set
         {
+            tl.LogMessage("Slaved Get", "not implemented");
             throw new ASCOM.PropertyNotImplementedException();
         }
     }
 
     public void SlewToAltitude(double Altitude)
     {
+        tl.LogMessage("SlewToAltitude", "Not implemented");
         throw new ASCOM.MethodNotImplementedException();
     }
 
     public void SlewToAzimuth(double Azimuth)
     {
+        tl.LogMessage("SlewToAzimuth", "Not implemented");
         throw new ASCOM.MethodNotImplementedException();
     }
 
     public bool Slewing
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("Slewing Get", false.ToString());
+            return false;
+        }
     }
 
     public void SyncToAzimuth(double Azimuth)
     {
+        tl.LogMessage("SyncToAzimuth", "Not implemented");
         throw new ASCOM.MethodNotImplementedException();
     }
 

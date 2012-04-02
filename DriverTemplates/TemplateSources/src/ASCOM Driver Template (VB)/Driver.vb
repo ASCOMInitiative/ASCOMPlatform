@@ -32,6 +32,8 @@
 #Const Device = "TEMPLATEDEVICECLASS"
 
 Imports ASCOM
+Imports ASCOM.Astrometry
+Imports ASCOM.Astrometry.AstroUtils
 Imports ASCOM.DeviceInterface
 Imports ASCOM.Utilities
 Imports System
@@ -62,6 +64,7 @@ Public Class TEMPLATEDEVICECLASS
 
     Private connectedState As Boolean ' Private variable to hold the connected state
     Private utilities As Util ' Private variable to hold an ASCOM Utilities object
+    Private astroUtilities As AstroUtils
     Private TL As TraceLogger ' Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
 
     '
@@ -75,6 +78,7 @@ Public Class TEMPLATEDEVICECLASS
 
         connectedState = False ' Initialise connected to false
         utilities = New Util() ' Initialise util object
+        astroUtilities = New AstroUtils 'Initialise new astro utiliites object
 
         'TODO: Implement your additional construction here
 
@@ -217,6 +221,8 @@ Public Class TEMPLATEDEVICECLASS
         TL = Nothing
         utilities.Dispose()
         utilities = Nothing
+        astroUtilities.Dispose()
+        astroUtilities = Nothing
     End Sub
 
 #End Region

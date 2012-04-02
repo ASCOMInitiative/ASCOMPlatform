@@ -14,7 +14,11 @@ class DeviceSafetyMonitor
     #region ISafetyMonitor Implementation
     public bool IsSafe
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("IsSafe Get", "true");
+            return true;
+        }
     }
 
     #endregion

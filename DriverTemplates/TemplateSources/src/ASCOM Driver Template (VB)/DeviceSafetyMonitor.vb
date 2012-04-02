@@ -14,7 +14,8 @@ Class DeviceSafetyMonitor
 #Region "ISafetyMonitor Implementation"
     Public ReadOnly Property IsSafe() As Boolean Implements ISafetyMonitor.IsSafe
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("IsSafe Get", "True")
+            Return True
         End Get
     End Property
 
