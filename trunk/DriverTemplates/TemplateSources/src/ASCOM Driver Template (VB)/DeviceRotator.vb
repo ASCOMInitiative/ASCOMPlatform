@@ -5,40 +5,52 @@
 Imports ASCOM.DeviceInterface
 Imports ASCOM
 Imports ASCOM.Utilities
+Imports ASCOM.Astrometry.AstroUtils
 
 Class DeviceRotator
     Implements IRotatorV2
     Private m_util As New Util()
     Private TL As New TraceLogger()
+    Private astroUtilities As New AstroUtils()
 
 #Region "IRotator Implementation"
+
+    Private rotatorPosition As Single = 0 ' Absolute position angle of the rotator 
+
     Public ReadOnly Property CanReverse() As Boolean Implements IRotatorV2.CanReverse
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CanReverse Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public Sub Halt() Implements IRotatorV2.Halt
-        Throw New ASCOM.PropertyNotImplementedException()
+        Throw New ASCOM.MethodNotImplementedException()
     End Sub
 
     Public ReadOnly Property IsMoving() As Boolean Implements IRotatorV2.IsMoving
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("IsMoving Get", False.ToString()) ' This rotator has instantaneous movement
+            Return False
         End Get
     End Property
 
     Public Sub Move(Position As Single) Implements IRotatorV2.Move
-        Throw New ASCOM.MethodNotImplementedException()
+        TL.LogMessage("Move", Position.ToString()) ' Move by this amount
+        rotatorPosition += Position
+        rotatorPosition = astroUtilities.Range(rotatorPosition, 0.0, True, 360.0, False) ' Ensure value is in the range 0.0..359.9999...
     End Sub
 
     Public Sub MoveAbsolute(Position As Single) Implements IRotatorV2.MoveAbsolute
-        Throw New ASCOM.MethodNotImplementedException()
+        TL.LogMessage("MoveAbsolute", Position.ToString()) ' Move to this position
+        rotatorPosition = Position
+        rotatorPosition = astroUtilities.Range(rotatorPosition, 0.0, True, 360.0, False) ' Ensure value is in the range 0.0..359.9999...
     End Sub
 
     Public ReadOnly Property Position() As Single Implements IRotatorV2.Position
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("Position Get", rotatorPosition.ToString()) ' This rotator has instantaneous movement
+            Return rotatorPosition
         End Get
     End Property
 
@@ -59,7 +71,8 @@ Class DeviceRotator
 
     Public ReadOnly Property TargetPosition() As Single Implements IRotatorV2.TargetPosition
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("TargetPosition Get", rotatorPosition.ToString()) ' This rotator has instantaneous movement
+            Return rotatorPosition
         End Get
     End Property
 

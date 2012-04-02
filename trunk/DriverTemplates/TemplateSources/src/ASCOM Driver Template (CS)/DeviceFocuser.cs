@@ -11,79 +11,125 @@ class DeviceFocuser
 {
     Util util = new Util(); TraceLogger tl = new TraceLogger();
 
+    private bool Connected // Dummy Connected method because this is referenced in the Link method
+    {
+        get { return false; }
+        set { }
+    }
+
     #region IFocuser Implementation
+
+    private int focuserPosition = 0; // Class level variable to hold the current focuser position
+    private const int focuserSteps = 10000;
+
     public bool Absolute
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get 
+        {
+            tl.LogMessage("Absolute Get", true.ToString());
+            return true; // This is an absolute focuser
+        } 
     }
 
     public void Halt()
     {
+        tl.LogMessage("Halt", "Not implemented");
         throw new ASCOM.MethodNotImplementedException();
     }
 
     public bool IsMoving
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get 
+        {
+            tl.LogMessage("IsMoving Get", false.ToString());
+            return false; // This focuser always moves instantaneously so no need for IsMoving ever to be True
+        }
     }
 
     public bool Link
     {
         get
         {
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Link Get", this.Connected.ToString());
+            return this.Connected; // Direct function to the connected method, the Link method is just here for backwards compatibility
         }
         set
         {
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Link Set", value.ToString());
+            this.Connected = value; // Direct function to the connected method, the Link method is just here for backwards compatibility
         }
     }
 
     public int MaxIncrement
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get {
+            tl.LogMessage("MaxIncrement Get", focuserSteps.ToString());
+            return focuserSteps; // Maximum change in one move
+        }
     }
 
     public int MaxStep
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get 
+        {
+            tl.LogMessage("MaxStep Get", focuserSteps.ToString());
+            return focuserSteps; // Maximum extent of the focuser, so position range is 0 to 10,000
+        } 
     }
 
     public void Move(int Position)
     {
-        throw new ASCOM.MethodNotImplementedException();
+        tl.LogMessage("Move", Position.ToString());
+        focuserPosition = Position; // Set the focuser position
     }
 
     public int Position
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get 
+        {
+            return focuserPosition; // Return the focuser position
+        } 
     }
 
     public double StepSize
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get 
+        {
+            tl.LogMessage("StepSize Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException(); 
+        }
     }
 
     public bool TempComp
     {
         get
         {
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("TempComp Get", false.ToString());
+            return false;
         }
         set
         {
+            tl.LogMessage("TempComp Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException();
         }
     }
 
     public bool TempCompAvailable
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get 
+        {
+            tl.LogMessage("TempCompAvailable Get", false.ToString());
+            return false; // Temperature compensation is not available in this driver
+        }
     }
 
     public double Temperature
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get 
+        {
+            tl.LogMessage("Temperature Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException(); 
+        }
     }
 
     #endregion

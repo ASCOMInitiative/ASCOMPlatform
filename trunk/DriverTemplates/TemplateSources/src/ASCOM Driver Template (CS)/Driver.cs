@@ -32,6 +32,8 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 using ASCOM;
+using ASCOM.Astrometry;
+using ASCOM.Astrometry.AstroUtils;
 using ASCOM.Utilities;
 using ASCOM.DeviceInterface;
 using System.Globalization;
@@ -79,6 +81,11 @@ namespace ASCOM.TEMPLATEDEVICENAME
         private Util utilities;
 
         /// <summary>
+        /// Private variable to hold an ASCOM AstroUtilities object
+        /// </summary>
+        private AstroUtils astroUtilities;
+
+        /// <summary>
         /// Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
         /// </summary>
         private TraceLogger tl;
@@ -96,7 +103,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
             connectedState = false; // Initialise connected to false
             utilities = new Util(); //Initialise util object
-
+            astroUtilities = new AstroUtils(); // Initialise astro utilities object
             //TODO: Implement your additional construction here
 
             tl.LogMessage("TEMPLATEDEVICECLASS", "Completed initialisation");
@@ -184,6 +191,8 @@ namespace ASCOM.TEMPLATEDEVICENAME
             tl = null;
             utilities.Dispose();
             utilities = null;
+                    astroUtilities.Dispose();
+                    astroUtilities = null;
         }
 
         public bool Connected

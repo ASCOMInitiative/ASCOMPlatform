@@ -13,286 +13,355 @@ Class DeviceCamera
     Private TL As New TraceLogger()
 
 #Region "ICamera Implementation"
+
+    Private Const ccdWidth As Integer = 1394
+    Private Const ccdHeight As Integer = 1040
+    Private Const pixelSize As Double = 6.45
+    Private cameraNumX As Integer = ccdWidth
+    Private cameraNumY As Integer = ccdHeight
+    Private cameraStartX As Integer = 0
+    Private cameraStartY As Integer = 0
+    Private exposureStart As DateTime = DateTime.MinValue
+    Private cameraLastExposureDuration As Double = 0.0
+    Private cameraImageReady As Boolean = False
+    Private cameraImageArray As Integer(,)
+    Private cameraImageArrayVariant As Object(,)
+
     Public Sub AbortExposure() Implements ICameraV2.AbortExposure
         Throw New MethodNotImplementedException()
     End Sub
 
     Public ReadOnly Property BayerOffsetX() As Short Implements ICameraV2.BayerOffsetX
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("AbortExposure", "Not implemented")
+            Throw New MethodNotImplementedException("AbortExposure")
         End Get
     End Property
 
     Public ReadOnly Property BayerOffsetY() As Short Implements ICameraV2.BayerOffsetY
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("BayerOffsetY", False)
         End Get
     End Property
 
     Public Property BinX() As Short Implements ICameraV2.BinX
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("BinX Get", "1")
+            Return 1
         End Get
         Set(value As Short)
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("BinX Set", value.ToString())
+            If (Not (value = 1)) Then Throw New ASCOM.InvalidValueException("BinX", value.ToString(), "1") ' Only 1 is valid in this simple template
         End Set
     End Property
 
     Public Property BinY() As Short Implements ICameraV2.BinY
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("BinY Get", "1")
+            Return 1
         End Get
         Set(value As Short)
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("BinY Set", value.ToString())
+            If (Not (value = 1)) Then Throw New ASCOM.InvalidValueException("BinY", value.ToString(), "1") ' Only 1 is valid in this simple template
         End Set
     End Property
 
     Public ReadOnly Property CCDTemperature() As Double Implements ICameraV2.CCDTemperature
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("CCDTemperature", False)
         End Get
     End Property
 
     Public ReadOnly Property CameraState() As CameraStates Implements ICameraV2.CameraState
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CameraState Get", CameraStates.cameraIdle.ToString())
+            Return CameraStates.cameraIdle
         End Get
     End Property
 
     Public ReadOnly Property CameraXSize() As Integer Implements ICameraV2.CameraXSize
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CameraXSize Get", ccdWidth.ToString())
+            Return ccdWidth
         End Get
     End Property
 
     Public ReadOnly Property CameraYSize() As Integer Implements ICameraV2.CameraYSize
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CameraYSize Get", ccdHeight.ToString())
+            Return ccdHeight
         End Get
     End Property
 
     Public ReadOnly Property CanAbortExposure() As Boolean Implements ICameraV2.CanAbortExposure
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CanAbortExposure Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public ReadOnly Property CanAsymmetricBin() As Boolean Implements ICameraV2.CanAsymmetricBin
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CanAsymmetricBin Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public ReadOnly Property CanFastReadout() As Boolean Implements ICameraV2.CanFastReadout
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CanFastReadout Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public ReadOnly Property CanGetCoolerPower() As Boolean Implements ICameraV2.CanGetCoolerPower
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CanGetCoolerPower Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public ReadOnly Property CanPulseGuide() As Boolean Implements ICameraV2.CanPulseGuide
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CanPulseGuide Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public ReadOnly Property CanSetCCDTemperature() As Boolean Implements ICameraV2.CanSetCCDTemperature
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CanSetCCDTemperature Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public ReadOnly Property CanStopExposure() As Boolean Implements ICameraV2.CanStopExposure
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("CanStopExposure Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public Property CoolerOn() As Boolean Implements ICameraV2.CoolerOn
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("CoolerOn", False)
         End Get
         Set(value As Boolean)
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("CoolerOn", True)
         End Set
     End Property
 
     Public ReadOnly Property CoolerPower() As Double Implements ICameraV2.CoolerPower
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("CoolerPower", False)
         End Get
     End Property
 
     Public ReadOnly Property ElectronsPerADU() As Double Implements ICameraV2.ElectronsPerADU
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("ElectronsPerADU", False)
         End Get
     End Property
 
     Public ReadOnly Property ExposureMax() As Double Implements ICameraV2.ExposureMax
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("ExposureMax", False)
         End Get
     End Property
 
     Public ReadOnly Property ExposureMin() As Double Implements ICameraV2.ExposureMin
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("ExposureMin", False)
         End Get
     End Property
 
     Public ReadOnly Property ExposureResolution() As Double Implements ICameraV2.ExposureResolution
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("ExposureResolution", False)
         End Get
     End Property
 
     Public Property FastReadout() As Boolean Implements ICameraV2.FastReadout
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("FastReadout", False)
         End Get
         Set(value As Boolean)
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("FastReadout", True)
         End Set
     End Property
 
     Public ReadOnly Property FullWellCapacity() As Double Implements ICameraV2.FullWellCapacity
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("FullWellCapacity", False)
         End Get
     End Property
 
     Public Property Gain() As Short Implements ICameraV2.Gain
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("Gain", False)
         End Get
         Set(value As Short)
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("Gain", True)
         End Set
     End Property
 
     Public ReadOnly Property GainMax() As Short Implements ICameraV2.GainMax
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("GainMax", False)
         End Get
     End Property
 
     Public ReadOnly Property GainMin() As Short Implements ICameraV2.GainMin
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("GainMin", False)
         End Get
     End Property
 
     Public ReadOnly Property Gains() As ArrayList Implements ICameraV2.Gains
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("Gains", False)
         End Get
     End Property
 
     Public ReadOnly Property HasShutter() As Boolean Implements ICameraV2.HasShutter
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("HasShutter Get", False.ToString())
+            Return False
         End Get
     End Property
 
     Public ReadOnly Property HeatSinkTemperature() As Double Implements ICameraV2.HeatSinkTemperature
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("HeatSinkTemperature", False)
         End Get
     End Property
 
     Public ReadOnly Property ImageArray() As Object Implements ICameraV2.ImageArray
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            If (Not cameraImageReady) Then
+                TL.LogMessage("ImageArray Get", "Throwing InvalidOperationException because of a call to ImageArray before the first image has been taken!")
+                Throw New ASCOM.InvalidOperationException("Call to ImageArray before the first image has been taken!")
+            End If
+
+            ReDim cameraImageArray(cameraNumX - 1, cameraNumY - 1)
+            Return cameraImageArray
         End Get
     End Property
 
     Public ReadOnly Property ImageArrayVariant() As Object Implements ICameraV2.ImageArrayVariant
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            If (Not cameraImageReady) Then
+                TL.LogMessage("ImageArrayVariant Get", "Throwing InvalidOperationException because of a call to ImageArrayVariant before the first image has been taken!")
+                Throw New ASCOM.InvalidOperationException("Call to ImageArrayVariant before the first image has been taken!")
+            End If
+
+            ReDim cameraImageArrayVariant(cameraNumX - 1, cameraNumY - 1)
+            For i As Integer = 0 To cameraImageArray.GetLength(1) - 1
+                For j As Integer = 0 To cameraImageArray.GetLength(0) - 1
+                    cameraImageArrayVariant(j, i) = cameraImageArray(j, i)
+                Next
+            Next
+
+            Return cameraImageArrayVariant
         End Get
     End Property
 
     Public ReadOnly Property ImageReady() As Boolean Implements ICameraV2.ImageReady
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("ImageReady Get", cameraImageReady.ToString())
+            Return cameraImageReady
         End Get
     End Property
 
     Public ReadOnly Property IsPulseGuiding() As Boolean Implements ICameraV2.IsPulseGuiding
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("IsPulseGuiding", False)
         End Get
     End Property
 
     Public ReadOnly Property LastExposureDuration() As Double Implements ICameraV2.LastExposureDuration
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            If (Not cameraImageReady) Then
+                TL.LogMessage("LastExposureDuration Get", "Throwing InvalidOperationException because of a call to LastExposureDuration before the first image has been taken!")
+                Throw New ASCOM.InvalidOperationException("Call to LastExposureDuration before the first image has been taken!")
+            End If
+            TL.LogMessage("LastExposureDuration Get", cameraLastExposureDuration.ToString())
+            Return cameraLastExposureDuration
         End Get
     End Property
 
     Public ReadOnly Property LastExposureStartTime() As String Implements ICameraV2.LastExposureStartTime
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            If (Not cameraImageReady) Then
+                TL.LogMessage("LastExposureStartTime Get", "Throwing InvalidOperationException because of a call to LastExposureStartTime before the first image has been taken!")
+                Throw New ASCOM.InvalidOperationException("Call to LastExposureStartTime before the first image has been taken!")
+            End If
+            Dim exposureStartString As String = exposureStart.ToString("yyyy-MM-ddTHH:mm:ss")
+            TL.LogMessage("LastExposureStartTime Get", exposureStartString.ToString())
+            Return exposureStartString
         End Get
     End Property
 
     Public ReadOnly Property MaxADU() As Integer Implements ICameraV2.MaxADU
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("MaxADU Get", "20000")
+            Return 20000
         End Get
     End Property
 
     Public ReadOnly Property MaxBinX() As Short Implements ICameraV2.MaxBinX
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("MaxBinX Get", "1")
+            Return 1
         End Get
     End Property
 
     Public ReadOnly Property MaxBinY() As Short Implements ICameraV2.MaxBinY
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("MaxBinY Get", "1")
+            Return 1
         End Get
     End Property
 
     Public Property NumX() As Integer Implements ICameraV2.NumX
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("NumX Get", cameraNumX.ToString())
+            Return cameraNumX
         End Get
         Set(value As Integer)
-            Throw New ASCOM.PropertyNotImplementedException()
+            cameraNumX = value
+            TL.LogMessage("NumX set", value.ToString())
         End Set
     End Property
 
     Public Property NumY() As Integer Implements ICameraV2.NumY
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("NumY Get", cameraNumY.ToString())
+            Return cameraNumY
         End Get
         Set(value As Integer)
-            Throw New ASCOM.PropertyNotImplementedException()
+            cameraNumY = value
+            TL.LogMessage("NumY set", value.ToString())
         End Set
     End Property
 
     Public ReadOnly Property PercentCompleted() As Short Implements ICameraV2.PercentCompleted
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("PercentCompleted", False)
         End Get
     End Property
 
     Public ReadOnly Property PixelSizeX() As Double Implements ICameraV2.PixelSizeX
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("PixelSizeX Get", pixelSize.ToString())
+            Return pixelSize
         End Get
     End Property
 
     Public ReadOnly Property PixelSizeY() As Double Implements ICameraV2.PixelSizeY
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("PixelSizeY Get", pixelSize.ToString())
+            Return pixelSize
         End Get
     End Property
 
@@ -302,64 +371,79 @@ Class DeviceCamera
 
     Public Property ReadoutMode() As Short Implements ICameraV2.ReadoutMode
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("ReadoutMode", False)
         End Get
         Set(value As Short)
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("ReadoutMode", True)
         End Set
     End Property
 
     Public ReadOnly Property ReadoutModes() As ArrayList Implements ICameraV2.ReadoutModes
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("ReadoutModes", False)
         End Get
     End Property
 
     Public ReadOnly Property SensorName() As String Implements ICameraV2.SensorName
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("SensorName", False)
         End Get
     End Property
 
     Public ReadOnly Property SensorType() As SensorType Implements ICameraV2.SensorType
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("")
         End Get
     End Property
 
     Public Property SetCCDTemperature() As Double Implements ICameraV2.SetCCDTemperature
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("SetCCDTemperature", False)
         End Get
         Set(value As Double)
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("SetCCDTemperature", True)
         End Set
     End Property
 
     Public Sub StartExposure(Duration As Double, Light As Boolean) Implements ICameraV2.StartExposure
-        Throw New ASCOM.MethodNotImplementedException()
+        If (Duration < 0.0) Then Throw New InvalidValueException("StartExposure", Duration.ToString(), "0.0 upwards")
+        If (cameraNumX > ccdWidth) Then Throw New InvalidValueException("StartExposure", cameraNumX.ToString(), ccdWidth.ToString())
+        If (cameraNumY > ccdHeight) Then Throw New InvalidValueException("StartExposure", cameraNumY.ToString(), ccdHeight.ToString())
+        If (cameraStartX > ccdWidth) Then Throw New InvalidValueException("StartExposure", cameraStartX.ToString(), ccdWidth.ToString())
+        If (cameraStartY > ccdHeight) Then Throw New InvalidValueException("StartExposure", cameraStartY.ToString(), ccdHeight.ToString())
+
+        cameraLastExposureDuration = Duration
+        exposureStart = DateTime.Now
+        System.Threading.Thread.Sleep(Duration * 1000) ' Sleep for the duration to simulate exposure 
+        TL.LogMessage("StartExposure", Duration.ToString() + " " + Light.ToString())
+        cameraImageReady = True
     End Sub
 
     Public Property StartX() As Integer Implements ICameraV2.StartX
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("StartX Get", cameraStartX.ToString())
+            Return cameraStartX
         End Get
         Set(value As Integer)
-            Throw New ASCOM.PropertyNotImplementedException()
+            cameraStartX = value
+            TL.LogMessage("StartX set", value.ToString())
         End Set
     End Property
 
     Public Property StartY() As Integer Implements ICameraV2.StartY
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("StartY Get", cameraStartY.ToString())
+            Return cameraStartY
         End Get
         Set(value As Integer)
-            Throw New ASCOM.PropertyNotImplementedException()
+            cameraStartY = value
+            TL.LogMessage("StartY set", value.ToString())
         End Set
     End Property
 
     Public Sub StopExposure() Implements ICameraV2.StopExposure
-        Throw New ASCOM.MethodNotImplementedException()
+        TL.LogMessage("StopExposure", "Not implemented")
+        Throw New MethodNotImplementedException("StopExposure")
     End Sub
 
 #End Region

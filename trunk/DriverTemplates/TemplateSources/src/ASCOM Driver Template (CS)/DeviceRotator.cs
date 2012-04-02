@@ -6,40 +6,60 @@ using ASCOM.DeviceInterface;
 using System;
 using ASCOM;
 using ASCOM.Utilities;
+using ASCOM.Astrometry.AstroUtils;
 
 class DeviceRotator
 {
-    Util util = new Util(); TraceLogger tl = new TraceLogger();
+    Util util = new Util(); TraceLogger tl = new TraceLogger(); AstroUtils astroUtilities = new AstroUtils();
 
     #region IRotator Implementation
+
+    private float rotatorPosition = 0; // Absolute position angle of the rotator 
+
     public bool CanReverse
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("CanReverse Get", false.ToString());
+            return false;
+        }
     }
 
     public void Halt()
     {
-        throw new ASCOM.PropertyNotImplementedException();
+        throw new ASCOM.MethodNotImplementedException("Halt");
     }
 
     public bool IsMoving
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("IsMoving Get", false.ToString()); // This rotator has instantaneous movement
+            return false;
+        }
     }
 
     public void Move(float Position)
     {
-        throw new ASCOM.MethodNotImplementedException();
+        tl.LogMessage("Move", Position.ToString()); // Move by this amount
+        rotatorPosition += Position;
+        rotatorPosition = (float) astroUtilities.Range(rotatorPosition, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
     }
 
     public void MoveAbsolute(float Position)
     {
-        throw new ASCOM.MethodNotImplementedException();
+        tl.LogMessage("MoveAbsolute", Position.ToString()); // Move to this position
+        rotatorPosition = Position;
+        rotatorPosition = (float)astroUtilities.Range(rotatorPosition, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
     }
 
     public float Position
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("Position Get", rotatorPosition.ToString()); // This rotator has instantaneous movement
+            return rotatorPosition;
+        }
     }
 
     public bool Reverse
@@ -61,7 +81,11 @@ class DeviceRotator
 
     public float TargetPosition
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("TargetPosition Get", rotatorPosition.ToString()); // This rotator has instantaneous movement
+            return rotatorPosition;
+        }
     }
 
     #endregion

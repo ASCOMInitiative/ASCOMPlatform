@@ -13,29 +13,34 @@ Class DeviceTelescope
 
 #Region "ITelescope Implementation"
     Public Sub AbortSlew() Implements ITelescopeV3.AbortSlew
+        TL.LogMessage("AbortSlew", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("AbortSlew")
     End Sub
 
     Public ReadOnly Property AlignmentMode() As AlignmentModes Implements ITelescopeV3.AlignmentMode
         Get
+            TL.LogMessage("AlignmentMode Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("AlignmentMode", False)
         End Get
     End Property
 
     Public ReadOnly Property Altitude() As Double Implements ITelescopeV3.Altitude
         Get
+            TL.LogMessage("Altitude", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("Altitude", False)
         End Get
     End Property
 
     Public ReadOnly Property ApertureArea() As Double Implements ITelescopeV3.ApertureArea
         Get
+            TL.LogMessage("ApertureArea Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("ApertureArea", False)
         End Get
     End Property
 
     Public ReadOnly Property ApertureDiameter() As Double Implements ITelescopeV3.ApertureDiameter
         Get
+            TL.LogMessage("ApertureDiameter Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("ApertureDiameter", False)
         End Get
     End Property
@@ -61,6 +66,7 @@ Class DeviceTelescope
 
     Public ReadOnly Property Azimuth() As Double Implements ITelescopeV3.Azimuth
         Get
+            TL.LogMessage("Azimuth Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("Azimuth", False)
         End Get
     End Property
@@ -206,19 +212,23 @@ Class DeviceTelescope
             Return declination
         End Get
         Set(value As Double)
+            TL.LogMessage("DeclinationRate Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("DeclinationRate", True)
         End Set
     End Property
 
     Public Function DestinationSideOfPier(RightAscension As Double, Declination As Double) As PierSide Implements ITelescopeV3.DestinationSideOfPier
+        TL.LogMessage("DestinationSideOfPier Get", "Not implemnted")
         Throw New ASCOM.PropertyNotImplementedException("DestinationSideOfPier", False)
     End Function
 
     Public Property DoesRefraction() As Boolean Implements ITelescopeV3.DoesRefraction
         Get
+            TL.LogMessage("DoesRefraction Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("DoesRefraction", False)
         End Get
         Set(value As Boolean)
+            TL.LogMessage("DoesRefraction Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("DoesRefraction", True)
         End Set
     End Property
@@ -232,48 +242,58 @@ Class DeviceTelescope
     End Property
 
     Public Sub FindHome() Implements ITelescopeV3.FindHome
+        TL.LogMessage("FindHome", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("FindHome")
     End Sub
 
     Public ReadOnly Property FocalLength() As Double Implements ITelescopeV3.FocalLength
         Get
+            TL.LogMessage("FocalLength Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("FocalLength", False)
         End Get
     End Property
 
     Public Property GuideRateDeclination() As Double Implements ITelescopeV3.GuideRateDeclination
         Get
+            TL.LogMessage("GuideRateDeclination Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("GuideRateDeclination", False)
         End Get
         Set(value As Double)
+            TL.LogMessage("GuideRateDeclination Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("GuideRateDeclination", True)
         End Set
     End Property
 
     Public Property GuideRateRightAscension() As Double Implements ITelescopeV3.GuideRateRightAscension
         Get
+            TL.LogMessage("GuideRateRightAscension Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("GuideRateRightAscension", False)
         End Get
         Set(value As Double)
+            TL.LogMessage("GuideRateRightAscension Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("GuideRateRightAscension", True)
         End Set
     End Property
 
     Public ReadOnly Property IsPulseGuiding() As Boolean Implements ITelescopeV3.IsPulseGuiding
         Get
+            TL.LogMessage("IsPulseGuiding Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("IsPulseGuiding", False)
         End Get
     End Property
 
     Public Sub MoveAxis(Axis As TelescopeAxes, Rate As Double) Implements ITelescopeV3.MoveAxis
+        TL.LogMessage("MoveAxis", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("MoveAxis")
     End Sub
 
     Public Sub Park() Implements ITelescopeV3.Park
+        TL.LogMessage("Park", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("Park")
     End Sub
 
     Public Sub PulseGuide(Direction As GuideDirections, Duration As Integer) Implements ITelescopeV3.PulseGuide
+        TL.LogMessage("PulseGuide", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("PulseGuide")
     End Sub
 
@@ -292,19 +312,23 @@ Class DeviceTelescope
             Return rightAscensionRate__1
         End Get
         Set(value As Double)
+            TL.LogMessage("AbortSlew Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("RightAscensionRate", True)
         End Set
     End Property
 
     Public Sub SetPark() Implements ITelescopeV3.SetPark
+        TL.LogMessage("SetPark", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SetPark")
     End Sub
 
     Public Property SideOfPier() As PierSide Implements ITelescopeV3.SideOfPier
         Get
+            TL.LogMessage("SideOfPier Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SideOfPier", False)
         End Get
         Set(value As PierSide)
+            TL.LogMessage("SideOfPier Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SideOfPier", True)
         End Set
     End Property
@@ -319,96 +343,118 @@ Class DeviceTelescope
 
     Public Property SiteElevation() As Double Implements ITelescopeV3.SiteElevation
         Get
+            TL.LogMessage("SiteElevation Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SiteElevation", False)
         End Get
         Set(value As Double)
+            Throw New ASCOM.PropertyNotImplementedException("SiteElevation", True)
             Throw New ASCOM.PropertyNotImplementedException("SiteElevation", True)
         End Set
     End Property
 
     Public Property SiteLatitude() As Double Implements ITelescopeV3.SiteLatitude
         Get
+            TL.LogMessage("SiteLatitude Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SiteLatitude", False)
         End Get
         Set(value As Double)
+            TL.LogMessage("SiteLatitude Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SiteLatitude", True)
         End Set
     End Property
 
     Public Property SiteLongitude() As Double Implements ITelescopeV3.SiteLongitude
         Get
+            TL.LogMessage("SiteLongitude Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SiteLongitude", False)
         End Get
         Set(value As Double)
+            TL.LogMessage("SiteLongitude Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SiteLongitude", True)
         End Set
     End Property
 
     Public Property SlewSettleTime() As Short Implements ITelescopeV3.SlewSettleTime
         Get
+            TL.LogMessage("SlewSettleTime Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SlewSettleTime", False)
         End Get
         Set(value As Short)
+            TL.LogMessage("SlewSettleTime Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("SlewSettleTime", True)
         End Set
     End Property
 
     Public Sub SlewToAltAz(Azimuth As Double, Altitude As Double) Implements ITelescopeV3.SlewToAltAz
+        TL.LogMessage("SlewToAltAz", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SlewToAltAz")
     End Sub
 
     Public Sub SlewToAltAzAsync(Azimuth As Double, Altitude As Double) Implements ITelescopeV3.SlewToAltAzAsync
+        TL.LogMessage("SlewToAltAzAsync", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SlewToAltAzAsync")
     End Sub
 
     Public Sub SlewToCoordinates(RightAscension As Double, Declination As Double) Implements ITelescopeV3.SlewToCoordinates
+        TL.LogMessage("SlewToCoordinates", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SlewToCoordinates")
     End Sub
 
     Public Sub SlewToCoordinatesAsync(RightAscension As Double, Declination As Double) Implements ITelescopeV3.SlewToCoordinatesAsync
+        TL.LogMessage("SlewToCoordinatesAsync", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SlewToCoordinatesAsync")
     End Sub
 
     Public Sub SlewToTarget() Implements ITelescopeV3.SlewToTarget
+        TL.LogMessage("SlewToTarget", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SlewToTarget")
     End Sub
 
     Public Sub SlewToTargetAsync() Implements ITelescopeV3.SlewToTargetAsync
+        TL.LogMessage("    Public Sub SlewToTargetAsync() Implements ITelescopeV3.SlewToTargetAsync", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SlewToTargetAsync")
     End Sub
 
     Public ReadOnly Property Slewing() As Boolean Implements ITelescopeV3.Slewing
         Get
+            TL.LogMessage("Slewing Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("Slewing", False)
         End Get
     End Property
 
     Public Sub SyncToAltAz(Azimuth As Double, Altitude As Double) Implements ITelescopeV3.SyncToAltAz
+        TL.LogMessage("SyncToAltAz", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SyncToAltAz")
     End Sub
 
     Public Sub SyncToCoordinates(RightAscension As Double, Declination As Double) Implements ITelescopeV3.SyncToCoordinates
+        TL.LogMessage("SyncToCoordinates", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SyncToCoordinates")
     End Sub
 
     Public Sub SyncToTarget() Implements ITelescopeV3.SyncToTarget
+        TL.LogMessage("SyncToTarget", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("SyncToTarget")
     End Sub
 
     Public Property TargetDeclination() As Double Implements ITelescopeV3.TargetDeclination
         Get
+            TL.LogMessage("TargetDeclination Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("TargetDeclination", False)
         End Get
         Set(value As Double)
+            TL.LogMessage("TargetDeclination Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("TargetDeclination", True)
         End Set
     End Property
 
     Public Property TargetRightAscension() As Double Implements ITelescopeV3.TargetRightAscension
         Get
+            TL.LogMessage("TargetRightAscension Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("TargetRightAscension", False)
         End Get
         Set(value As Double)
+            TL.LogMessage("TargetRightAscension Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("TargetRightAscension", True)
         End Set
     End Property
@@ -420,15 +466,18 @@ Class DeviceTelescope
             Return tracking__1
         End Get
         Set(value As Boolean)
+            TL.LogMessage("AbortSlew Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("Tracking", True)
         End Set
     End Property
 
     Public Property TrackingRate() As DriveRates Implements ITelescopeV3.TrackingRate
         Get
+            TL.LogMessage("TrackingRate Get", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("TrackingRate", False)
         End Get
         Set(value As DriveRates)
+            TL.LogMessage("TrackingRate Set", "Not implemnted")
             Throw New ASCOM.PropertyNotImplementedException("TrackingRate", True)
         End Set
     End Property
@@ -456,6 +505,7 @@ Class DeviceTelescope
     End Property
 
     Public Sub Unpark() Implements ITelescopeV3.Unpark
+        TL.LogMessage("AbortSlew", "Not implemnted")
         Throw New ASCOM.MethodNotImplementedException("Unpark")
     End Sub
 
