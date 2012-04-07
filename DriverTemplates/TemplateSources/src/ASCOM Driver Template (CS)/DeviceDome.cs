@@ -9,7 +9,8 @@ using ASCOM.Utilities;
 
 class DeviceDome
 {
-    Util util = new Util(); TraceLogger tl = new TraceLogger();
+    Util util = new Util();
+    TraceLogger tl = new TraceLogger();
 
     #region IDome Implementation
 
@@ -25,8 +26,8 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("Altitude", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Altitude Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Altitude", false);
         }
     }
 
@@ -34,8 +35,8 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("AtHome", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("AtHome Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("AtHome", false);
         }
     }
 
@@ -43,8 +44,8 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("AtPark", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("AtPark Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("AtPark", false);
         }
     }
 
@@ -52,8 +53,8 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("Azimuth", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Azimuth Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Azimuth", false);
         }
     }
 
@@ -138,7 +139,7 @@ class DeviceDome
     public void FindHome()
     {
         tl.LogMessage("FindHome", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException();
+        throw new ASCOM.MethodNotImplementedException("FindHome");
     }
 
     public void OpenShutter()
@@ -150,13 +151,13 @@ class DeviceDome
     public void Park()
     {
         tl.LogMessage("Park", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException();
+        throw new ASCOM.MethodNotImplementedException("Park");
     }
 
     public void SetPark()
     {
         tl.LogMessage("SetPark", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException();
+        throw new ASCOM.MethodNotImplementedException("SetPark");
     }
 
     public ShutterState ShutterStatus
@@ -186,21 +187,21 @@ class DeviceDome
         }
         set
         {
-            tl.LogMessage("Slaved Get", "not implemented");
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Slaved Set", "not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Slaved", true);
         }
     }
 
     public void SlewToAltitude(double Altitude)
     {
         tl.LogMessage("SlewToAltitude", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException();
+        throw new ASCOM.MethodNotImplementedException("SlewToAltitude");
     }
 
     public void SlewToAzimuth(double Azimuth)
     {
         tl.LogMessage("SlewToAzimuth", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException();
+        throw new ASCOM.MethodNotImplementedException("SlewToAzimuth");
     }
 
     public bool Slewing
@@ -215,7 +216,7 @@ class DeviceDome
     public void SyncToAzimuth(double Azimuth)
     {
         tl.LogMessage("SyncToAzimuth", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException();
+        throw new ASCOM.MethodNotImplementedException("SyncToAzimuth");
     }
 
     #endregion

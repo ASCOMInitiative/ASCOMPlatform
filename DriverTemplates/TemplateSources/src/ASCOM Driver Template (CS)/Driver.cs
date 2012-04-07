@@ -63,12 +63,17 @@ namespace ASCOM.TEMPLATEDEVICENAME
         /// ASCOM DeviceID (COM ProgID) for this driver.
         /// The DeviceID is used by ASCOM applications to load the driver at runtime.
         /// </summary>
-        private static string driverID = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS";
+        internal static string driverID = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS";
         // TODO Change the descriptive string for your driver then remove this line
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
         private static string driverDescription = "ASCOM TEMPLATEDEVICECLASS Driver for TEMPLATEDEVICENAME.";
+
+        internal static string comPortProfileName = "COM Port"; // Constants used for Profile persistence
+        internal static string traceLevelProfileName = "Trace Level";
+        internal static string comPortDefault = "COM1";
+        internal static string traceLevelDefault = "false";
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -81,7 +86,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
         private Util utilities;
 
         /// <summary>
-        /// Private variable to hold an ASCOM AstroUtilities object
+        /// Private variable to hold an ASCOM AstroUtilities object to provide the Range method
         /// </summary>
         private AstroUtils astroUtilities;
 
@@ -91,14 +96,20 @@ namespace ASCOM.TEMPLATEDEVICENAME
         private TraceLogger tl;
 
         /// <summary>
+        /// Private variable to hold Profile object for persisting driver settings to the ASCOM profile
+        /// </summary>
+        private Profile driverProfile;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TEMPLATEDEVICENAME"/> class.
         /// Must be public for COM registration.
         /// </summary>
         public TEMPLATEDEVICECLASS()
         {
-
+            driverProfile = new Profile();
+            driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
             tl = new TraceLogger("", "TEMPLATEDEVICENAME");
-            tl.Enabled = Properties.Settings.Default.Trace;
+            tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceLevelProfileName, "", traceLevelDefault));
             tl.LogMessage("TEMPLATEDEVICECLASS", "Starting initialisation");
 
             connectedState = false; // Initialise connected to false
@@ -152,7 +163,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public string Action(string actionName, string actionParameters)
         {
-            throw new ASCOM.MethodNotImplementedException("Action");
+            throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
         }
 
         public void CommandBlind(string command, bool raw)
@@ -191,8 +202,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
             tl = null;
             utilities.Dispose();
             utilities = null;
-                    astroUtilities.Dispose();
-                    astroUtilities = null;
+            astroUtilities.Dispose();
+            astroUtilities = null;
+            driverProfile.Dispose();
+            driverProfile = null;
         }
 
         public bool Connected
@@ -212,7 +225,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
                 {
                     connectedState = true;
                     // TODO connect to the device
-                    string comPort = Properties.Settings.Default.CommPort;
+                    string comPort = driverProfile.GetValue(driverID, comPortProfileName, "", comPortDefault);
                 }
                 else
                 {
@@ -277,6 +290,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         #endregion
 
+        //INTERFACECODEINSERTIONPOINT
         #region Private properties and methods
         // here are some useful properties and methods that can be used as required
         // to help with driver development
@@ -306,7 +320,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
         }
 
         #region ASCOM Registration
-        //
+
         // Register or unregister driver for ASCOM. This is harmless if already
         // registered or unregistered. 
         //
@@ -376,10 +390,10 @@ namespace ASCOM.TEMPLATEDEVICENAME
         {
             RegUnregASCOM(false);
         }
-        #endregion
 
         #endregion
 
-        //INTERFACECODEINSERTIONPOINT
+        #endregion
+
     }
 }

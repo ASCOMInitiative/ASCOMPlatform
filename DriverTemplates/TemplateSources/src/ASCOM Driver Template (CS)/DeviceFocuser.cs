@@ -9,7 +9,8 @@ using ASCOM.Utilities;
 
 class DeviceFocuser
 {
-    Util util = new Util(); TraceLogger tl = new TraceLogger();
+    Util util = new Util();
+    TraceLogger tl = new TraceLogger();
 
     private bool Connected // Dummy Connected method because this is referenced in the Link method
     {
@@ -24,22 +25,22 @@ class DeviceFocuser
 
     public bool Absolute
     {
-        get 
+        get
         {
             tl.LogMessage("Absolute Get", true.ToString());
             return true; // This is an absolute focuser
-        } 
+        }
     }
 
     public void Halt()
     {
         tl.LogMessage("Halt", "Not implemented");
-        throw new ASCOM.MethodNotImplementedException();
+        throw new ASCOM.MethodNotImplementedException("Halt");
     }
 
     public bool IsMoving
     {
-        get 
+        get
         {
             tl.LogMessage("IsMoving Get", false.ToString());
             return false; // This focuser always moves instantaneously so no need for IsMoving ever to be True
@@ -62,7 +63,8 @@ class DeviceFocuser
 
     public int MaxIncrement
     {
-        get {
+        get
+        {
             tl.LogMessage("MaxIncrement Get", focuserSteps.ToString());
             return focuserSteps; // Maximum change in one move
         }
@@ -70,11 +72,11 @@ class DeviceFocuser
 
     public int MaxStep
     {
-        get 
+        get
         {
             tl.LogMessage("MaxStep Get", focuserSteps.ToString());
             return focuserSteps; // Maximum extent of the focuser, so position range is 0 to 10,000
-        } 
+        }
     }
 
     public void Move(int Position)
@@ -85,18 +87,18 @@ class DeviceFocuser
 
     public int Position
     {
-        get 
+        get
         {
             return focuserPosition; // Return the focuser position
-        } 
+        }
     }
 
     public double StepSize
     {
-        get 
+        get
         {
             tl.LogMessage("StepSize Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException(); 
+            throw new ASCOM.PropertyNotImplementedException("StepSize", false);
         }
     }
 
@@ -110,13 +112,13 @@ class DeviceFocuser
         set
         {
             tl.LogMessage("TempComp Set", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException();
+            throw new ASCOM.PropertyNotImplementedException("TempComp", false);
         }
     }
 
     public bool TempCompAvailable
     {
-        get 
+        get
         {
             tl.LogMessage("TempCompAvailable Get", false.ToString());
             return false; // Temperature compensation is not available in this driver
@@ -125,10 +127,10 @@ class DeviceFocuser
 
     public double Temperature
     {
-        get 
+        get
         {
             tl.LogMessage("Temperature Get", "Not implemented");
-            throw new ASCOM.PropertyNotImplementedException(); 
+            throw new ASCOM.PropertyNotImplementedException("Temperature", false);
         }
     }
 

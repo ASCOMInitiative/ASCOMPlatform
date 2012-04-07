@@ -25,7 +25,7 @@ Class DeviceFocuser
 
     Public Sub Halt() Implements IFocuserV2.Halt
         TL.LogMessage("Halt", "Not implemented")
-        Throw New ASCOM.MethodNotImplementedException()
+        Throw New ASCOM.MethodNotImplementedException("Halt")
     End Sub
 
     Public ReadOnly Property IsMoving() As Boolean Implements IFocuserV2.IsMoving
@@ -74,7 +74,7 @@ Class DeviceFocuser
     Public ReadOnly Property StepSize() As Double Implements IFocuserV2.StepSize
         Get
             TL.LogMessage("StepSize Get", "Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("StepSize", False)
         End Get
     End Property
 
@@ -85,7 +85,7 @@ Class DeviceFocuser
         End Get
         Set(value As Boolean)
             TL.LogMessage("TempComp Set", "Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("TempComp", True)
         End Set
     End Property
 
@@ -99,7 +99,7 @@ Class DeviceFocuser
     Public ReadOnly Property Temperature() As Double Implements IFocuserV2.Temperature
         Get
             TL.LogMessage("Temperature Get", "Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("Temperature", False)
         End Get
     End Property
 

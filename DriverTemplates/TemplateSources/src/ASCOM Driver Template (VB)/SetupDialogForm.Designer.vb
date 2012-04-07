@@ -100,12 +100,10 @@ Partial Class SetupDialogForm
         '
         'textBox1
         '
-        Me.textBox1.DataBindings.Add(New System.Windows.Forms.Binding("Text", Global.ASCOM.TEMPLATEDEVICENAME.My.MySettings.Default, "CommPort", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.textBox1.Location = New System.Drawing.Point(76, 96)
         Me.textBox1.Name = "textBox1"
         Me.textBox1.Size = New System.Drawing.Size(158, 20)
         Me.textBox1.TabIndex = 6
-        Me.textBox1.Text = Global.ASCOM.TEMPLATEDEVICENAME.My.MySettings.Default.CommPort
         '
         'chkTrace
         '

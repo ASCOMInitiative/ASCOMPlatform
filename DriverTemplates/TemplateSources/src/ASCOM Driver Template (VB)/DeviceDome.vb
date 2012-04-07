@@ -22,29 +22,29 @@ Class DeviceDome
 
     Public ReadOnly Property Altitude() As Double Implements IDomeV2.Altitude
         Get
-            TL.LogMessage("Altitude", "Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("Altitude Get", "Not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("Altitude", False)
         End Get
     End Property
 
     Public ReadOnly Property AtHome() As Boolean Implements IDomeV2.AtHome
         Get
             TL.LogMessage("AtHome", "Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("AtHome", False)
         End Get
     End Property
 
     Public ReadOnly Property AtPark() As Boolean Implements IDomeV2.AtPark
         Get
             TL.LogMessage("AtPark", "Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("AtPark", False)
         End Get
     End Property
 
     Public ReadOnly Property Azimuth() As Double Implements IDomeV2.Azimuth
         Get
             TL.LogMessage("Azimuth", "Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException()
+            Throw New ASCOM.PropertyNotImplementedException("Azimuth", False)
         End Get
     End Property
 
@@ -111,7 +111,7 @@ Class DeviceDome
 
     Public Sub FindHome() Implements IDomeV2.FindHome
         TL.LogMessage("FindHome", "Not implemented")
-        Throw New ASCOM.MethodNotImplementedException()
+        Throw New ASCOM.MethodNotImplementedException("FindHome")
     End Sub
 
     Public Sub OpenShutter() Implements IDomeV2.OpenShutter
@@ -121,12 +121,12 @@ Class DeviceDome
 
     Public Sub Park() Implements IDomeV2.Park
         TL.LogMessage("Park", "Not implemented")
-        Throw New ASCOM.MethodNotImplementedException()
+        Throw New ASCOM.MethodNotImplementedException("Park")
     End Sub
 
     Public Sub SetPark() Implements IDomeV2.SetPark
         TL.LogMessage("SetPark", "Not implemented")
-        Throw New ASCOM.MethodNotImplementedException()
+        Throw New ASCOM.MethodNotImplementedException("SetPark")
     End Sub
 
     Public ReadOnly Property ShutterStatus() As ShutterState Implements IDomeV2.ShutterStatus
@@ -148,19 +148,19 @@ Class DeviceDome
             Return False
         End Get
         Set(value As Boolean)
-            TL.LogMessage("Slaved Get", "not implemented")
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("Slaved Set", "not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("Slaved", True)
         End Set
     End Property
 
     Public Sub SlewToAltitude(Altitude As Double) Implements IDomeV2.SlewToAltitude
         TL.LogMessage("SlewToAltitude", "Not implemented")
-        Throw New ASCOM.MethodNotImplementedException()
+        Throw New ASCOM.MethodNotImplementedException("SlewToAltitude")
     End Sub
 
     Public Sub SlewToAzimuth(Azimuth As Double) Implements IDomeV2.SlewToAzimuth
         TL.LogMessage("SlewToAzimuth", "Not implemented")
-        Throw New ASCOM.MethodNotImplementedException()
+        Throw New ASCOM.MethodNotImplementedException("SlewToAzimuth")
     End Sub
 
     Public ReadOnly Property Slewing() As Boolean Implements IDomeV2.Slewing
@@ -172,7 +172,7 @@ Class DeviceDome
 
     Public Sub SyncToAzimuth(Azimuth As Double) Implements IDomeV2.SyncToAzimuth
         TL.LogMessage("SyncToAzimuth", "Not implemented")
-        Throw New ASCOM.MethodNotImplementedException()
+        Throw New ASCOM.MethodNotImplementedException("SyncToAzimuth")
     End Sub
 
 #End Region

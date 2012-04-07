@@ -9,7 +9,8 @@ using ASCOM.Utilities;
 
 class DeviceSafetyMonitor
 {
-    Util util = new Util(); TraceLogger tl = new TraceLogger();
+    Util util = new Util();
+    TraceLogger tl = new TraceLogger();
 
     #region ISafetyMonitor Implementation
     public bool IsSafe

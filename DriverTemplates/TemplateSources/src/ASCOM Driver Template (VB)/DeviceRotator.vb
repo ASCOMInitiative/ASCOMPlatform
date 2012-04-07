@@ -25,7 +25,8 @@ Class DeviceRotator
     End Property
 
     Public Sub Halt() Implements IRotatorV2.Halt
-        Throw New ASCOM.MethodNotImplementedException()
+        TL.LogMessage("Halt", "Not implemented")
+        Throw New ASCOM.MethodNotImplementedException("Halt")
     End Sub
 
     Public ReadOnly Property IsMoving() As Boolean Implements IRotatorV2.IsMoving
@@ -56,16 +57,19 @@ Class DeviceRotator
 
     Public Property Reverse() As Boolean Implements IRotatorV2.Reverse
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("Reverse Get", "Not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("Reverse", False)
         End Get
         Set(value As Boolean)
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("Reverse Set", "Not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("Reverse", True)
         End Set
     End Property
 
     Public ReadOnly Property StepSize() As Single Implements IRotatorV2.StepSize
         Get
-            Throw New ASCOM.PropertyNotImplementedException()
+            TL.LogMessage("StepSize Get", "Not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("StepSize", False)
         End Get
     End Property
 

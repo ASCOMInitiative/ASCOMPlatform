@@ -32,6 +32,8 @@ namespace ASCOM.Setup
         private string Namespace { get; set; }
 
         private ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "TemplateWizard");
+        private DTE2 myDTE;
+        private ProjectItem myProjectItem;
 
         // This method is called before opening any item that has the OpenInEditor attribute.
         public void BeforeOpeningFile(ProjectItem projectItem)
@@ -74,6 +76,7 @@ namespace ASCOM.Setup
                     TL.LogMessage("ProjectFinishedGenerating", "Item name: " + projectItem.Name);
                     if ((projectItem.Name.ToUpper() == "DRIVER.CS") | (projectItem.Name.ToUpper() == "DRIVER.VB"))
                     {
+                        myProjectItem = projectItem; // Save the driver item
                         // This is a driver template
                         // Get the filename and directory of the Driver.xx file
                         string directory = Path.GetDirectoryName(projectItem.FileNames[1].ToString());
@@ -94,7 +97,7 @@ namespace ASCOM.Setup
 
                         const string insertionPoint = "//INTERFACECODEINSERTIONPOINT"; // Find the insertion point in the Driver.xx item
                         documentSelection.FindText(insertionPoint, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
-                        TL.LogMessage("ProjectFinishedGenerating", "Done EndOfDocument");
+                        TL.LogMessage("ProjectFinishedGenerating", "Done INTERFACECODEINSERTIONPOINT FindText:" + documentSelection.Text);
 
                         // Create the name of the device interface file to be inserted
                         string insertFile = directory + "\\Device" + this.DeviceClass + Path.GetExtension(projectItem.Name);
@@ -109,7 +112,7 @@ namespace ASCOM.Setup
                         TL.LogMessage("ProjectFinishedGenerating", "Selected initial line: " + documentSelection.Text);
                         while (!documentSelection.Text.ToUpper().Contains("#REGION"))
                         {
-                            TL.LogMessage("ProjectFinishedGenerating", "Deleting line: " + documentSelection.Text);
+                            TL.LogMessage("ProjectFinishedGenerating", "Deleting start line: " + documentSelection.Text);
                             documentSelection.Delete(); // Delete the current line
                             documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
                         }
@@ -117,13 +120,17 @@ namespace ASCOM.Setup
                         // Find the end of file marker that came from the inserted file
                         const string endOfInsertFile = "//ENDOFINSERTEDFILE";
                         documentSelection.FindText(endOfInsertFile, (int)vsFindOptions.vsFindOptionsMatchWholeWord);
+                        TL.LogMessage("ProjectFinishedGenerating", "Done ENDOFINSERTEDFILE FindText:" + documentSelection.Text);
 
-                        // Delete the marker line and the last line from the inserted file
-                        for (int i = 1; i < 3; i++)
+                        // Delete the marker line and the last 2 lines from the inserted file
+                        documentSelection.SelectLine();
+                        TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
+                        while (!documentSelection.Text.ToUpper().Contains("#REGION"))
                         {
-                            TL.LogMessage("ProjectFinishedGenerating", "Removing end line " + i.ToString());
-                            documentSelection.SelectLine();
-                            documentSelection.Delete();
+                            TL.LogMessage("ProjectFinishedGenerating", "Deleting end line: " + documentSelection.Text);
+                            documentSelection.Delete(); // Delete the current line
+                            documentSelection.SelectLine(); // Select the new current line ready to test on the next loop 
+                            TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
                         }
 
                         // Reformat the document to make it look pretty
@@ -132,11 +139,10 @@ namespace ASCOM.Setup
                         documentSelection.SmartFormat();
                         TL.LogMessage("ProjectFinishedGenerating", "Done SmartFormat");
 
-                        documentSelection.MoveToLineAndOffset(1, 1); // Move to the top of the file
-                        TL.LogMessage("ProjectFinishedGenerating", "Done MoveToLineAndOffset");
-
                         itemDocument.Save(); // Save the edited file readyfor use!
                         TL.LogMessage("ProjectFinishedGenerating", "Done Save");
+                        itemDocument.Close(vsSaveChanges.vsSaveChangesYes);
+                        TL.LogMessage("ProjectFinishedGenerating", "Done Close");
 
                     }
 
@@ -158,17 +164,18 @@ namespace ASCOM.Setup
                 }
                 foreach (string item in rems)
                 {
-                    //MessageBox.Show("Deleting " + item);
+                    TL.LogMessage("ProjectFinishedGenerating", "Deleting file: " + item);
                     project.ProjectItems.Item(item).Delete();
                 }
 
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf("Exception", ex.ToString()); // Log any error message
-                MessageBox.Show(ex.ToString(), "Template Wizrad Error", MessageBoxButtons.OK, MessageBoxIcon.Error); // Show an error message
+                TL.LogMessageCrLf("ProjectFinishedGenerating Exception", ex.ToString()); // Log any error message
+                MessageBox.Show(ex.ToString(), "ProjectFinishedGenerating Wizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error); // Show an error message
             }
 
+            TL.LogMessage("ProjectFinishedGenerating", "End");
             TL.Enabled = false;
 
             Diagnostics.Exit();
@@ -185,15 +192,52 @@ namespace ASCOM.Setup
         // This method is called after the project is created.
         public void RunFinished()
         {
-            Diagnostics.Enter();
-            // Remove all device-specific files that do not match the created DeviceClass.
-            //List<FileInfo> deviceSpecificFiles = GetDeviceSpecificFiles();
-            //foreach (var file in deviceSpecificFiles)
-            //{
-            //    // ToDo: implement this!
-            //    throw new NotImplementedException();
-            //}
-            Diagnostics.Exit();
+            try
+            {
+                // The interface implmentation inserted in the ProjectFinishedGenerating event has its Region twistie open
+                // This code is to close the interface implmentation twistie so that the region appears like the common methods and support code twisties
+                
+                TL.Enabled = true;
+                TL.LogMessage("RunFinished", "Start");
+
+                Diagnostics.Enter();
+                myProjectItem.Open(); // Open the item for editing
+                TL.LogMessage("RunFinished", "Done Open");
+
+                Document itemDocument = myProjectItem.Document; // Get the open file's document object
+                TL.LogMessage("RunFinished", "Created Document");
+
+                itemDocument.Activate(); // Make this the current document
+                TL.LogMessage("RunFinished", "Activated Document");
+
+                TextSelection documentSelection = (TextSelection)itemDocument.Selection; // Create a document selection
+                TL.LogMessage("RunFinished", "Created Selection object");
+
+                documentSelection.StartOfDocument(); // GO to the top of the document
+                TL.LogMessage("RunFinished", "Done StartOfDocument Region");
+
+                string pattern = "[Rr]egion \"*I" + DeviceClass; // Cerate a regular expression string that works for region in both VB and C#
+                TL.LogMessage("","RegEx search pattern: " + pattern);
+                if (documentSelection.FindText(pattern,(int)vsFindOptions.vsFindOptionsRegularExpression)) // Search for the interface implemnetation start of region 
+                {
+                    // Found the interface implementation region so toggle its twistie closed
+                    documentSelection.SelectLine();
+                    TL.LogMessage("RunFinished", "Found region I" + DeviceClass + " - " + documentSelection.Text); // Log the line actuall found
+                    myDTE.ExecuteCommand("Edit.ToggleOutliningExpansion"); // Toggle the twistie closed
+                    TL.LogMessage("RunFinished", "Done ToggleOutliningExpansion Region");
+                }
+
+                itemDocument.Close(vsSaveChanges.vsSaveChangesYes); // SAve changes and close the file
+                TL.LogMessage("RunFinished", "Done Save");
+                TL.LogMessage("RunFinished", "End");
+                Diagnostics.Exit();
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf(" RunFinished Exception", ex.ToString()); // Log any error message
+                MessageBox.Show(ex.ToString(), "RunFinished Wizard Error", MessageBoxButtons.OK, MessageBoxIcon.Error); // Show an error message
+            }
+
         }
 
         /// <summary>
@@ -225,6 +269,9 @@ namespace ASCOM.Setup
             WizardRunKind runKind, object[] customParams)
         {
             Diagnostics.Enter();
+
+            myDTE = (DTE2)automationObject;
+
             DialogResult dialogResult = DialogResult.Cancel;
             try
             {
@@ -306,6 +353,7 @@ namespace ASCOM.Setup
             codeClass.AddImplementedInterface("ASCOM.Interface.I" + DeviceClass, 0);
         }
 #endif
+
 
 
     }

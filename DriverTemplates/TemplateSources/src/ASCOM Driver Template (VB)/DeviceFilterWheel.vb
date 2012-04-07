@@ -11,8 +11,11 @@ Class DeviceFilerWheel
     Private m_util As New Util()
     Private TL As New TraceLogger()
 
-#Region "IFilerWheel Implementation"
+#Region "IFilterWheel Implementation"
     Private fwOffsets As Integer() = New Integer(3) {0, 0, 0, 0} 'class level variable to hold focus offsets
+    Private fwNames As String() = New String(3) {"Red", "Green", "Blue", "Clear"} 'class level variable to hold the filter names
+    Private fwPosition As Short = 0 'class level variable to retain the current filterwheel position
+
     Public ReadOnly Property FocusOffsets() As Integer() Implements IFilterWheelV2.FocusOffsets
         Get
             For Each fwOffset As Integer In fwOffsets ' Write filter offsets to the log
@@ -23,7 +26,6 @@ Class DeviceFilerWheel
         End Get
     End Property
 
-    Private fwNames As String() = New String(3) {"Red", "Green", "Blue", "Clear"} 'class level variable to hold the filter names
     Public ReadOnly Property Names As String() Implements IFilterWheelV2.Names
         Get
             For Each fwName As String In fwNames ' Write filter names to the log
@@ -34,7 +36,6 @@ Class DeviceFilerWheel
         End Get
     End Property
 
-    Private fwPosition As Short = 0 'class level variable to retain the current filterwheel position
     Public Property Position() As Short Implements IFilterWheelV2.Position
         Get
             TL.LogMessage("Position Get", fwPosition.ToString())
@@ -43,6 +44,7 @@ Class DeviceFilerWheel
         Set(value As Short)
             TL.LogMessage("Position Set", value.ToString())
             If ((value < 0) Or (value > fwNames.Length - 1)) Then
+                TL.LogMessage("Position Set", "Throwing InvalidValueException")
                 Throw New InvalidValueException("Position", value.ToString(), "0 to " & (fwNames.Length - 1).ToString())
             End If
             fwPosition = value

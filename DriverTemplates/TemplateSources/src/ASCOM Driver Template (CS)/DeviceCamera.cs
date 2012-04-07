@@ -10,14 +10,16 @@ using ASCOM.Utilities;
 
 class DeviceCamera
 {
-    Util util = new Util(); TraceLogger tl = new TraceLogger();
+    Util util = new Util();
+    TraceLogger tl = new TraceLogger();
 
     #region ICamera Implementation
 
-    private const int ccdWidth = 1394;
+    private const int ccdWidth = 1394; // Constants to define the ccd pixel dimenstions
     private const int ccdHeight = 1040;
-    private const double pixelSize = 6.45;
-    private int cameraNumX = ccdWidth;
+    private const double pixelSize = 6.45; // Constant for the pixel physical dimension
+
+    private int cameraNumX = ccdWidth; // Initialise variables to hold values required for functionality tested by Conform
     private int cameraNumY = ccdHeight;
     private int cameraStartX = 0;
     private int cameraStartY = 0;
@@ -35,12 +37,20 @@ class DeviceCamera
 
     public short BayerOffsetX
     {
-        get { throw new ASCOM.PropertyNotImplementedException("BayerOffsetX", false); }
+        get
+        {
+            tl.LogMessage("BayerOffsetX Get Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("BayerOffsetX", false);
+        }
     }
 
     public short BayerOffsetY
     {
-        get { throw new ASCOM.PropertyNotImplementedException("BayerOffsetX", true); }
+        get
+        {
+            tl.LogMessage("BayerOffsetY Get Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("BayerOffsetX", true);
+        }
     }
 
     public short BinX
@@ -73,7 +83,11 @@ class DeviceCamera
 
     public double CCDTemperature
     {
-        get { throw new ASCOM.PropertyNotImplementedException("CCDTemperature", false); }
+        get
+        {
+            tl.LogMessage("CCDTemperature Get Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("CCDTemperature", false);
+        }
     }
 
     public CameraStates CameraState
@@ -170,81 +184,123 @@ class DeviceCamera
     {
         get
         {
+            tl.LogMessage("CoolerOn Get Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("CoolerOn", false);
         }
         set
         {
+            tl.LogMessage("CoolerOn Set Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("CoolerOn", true);
         }
     }
 
     public double CoolerPower
     {
-        get { throw new ASCOM.PropertyNotImplementedException("CoolerPower", false); }
+        get
+        {
+            tl.LogMessage("CoolerPower Get Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("CoolerPower", false);
+        }
     }
 
     public double ElectronsPerADU
     {
-        get { throw new ASCOM.PropertyNotImplementedException("ElectronsPerADU", false); }
+        get
+        {
+            tl.LogMessage("ElectronsPerADU Get Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("ElectronsPerADU", false);
+        }
     }
 
     public double ExposureMax
     {
-        get { throw new ASCOM.PropertyNotImplementedException("ExposureMax", false); }
+        get
+        {
+            tl.LogMessage("ExposureMax Get Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("ExposureMax", false);
+        }
     }
 
     public double ExposureMin
     {
-        get { throw new ASCOM.PropertyNotImplementedException("ExposureMin", false); }
+        get
+        {
+            tl.LogMessage("ExposureMin Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("ExposureMin", false);
+        }
     }
 
     public double ExposureResolution
     {
-        get { throw new ASCOM.PropertyNotImplementedException("ExposureResolution", false); }
+        get
+        {
+            tl.LogMessage("ExposureResolution Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("ExposureResolution", false);
+        }
     }
 
     public bool FastReadout
     {
         get
         {
+            tl.LogMessage("FastReadout Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("FastReadout", false);
         }
         set
         {
+            tl.LogMessage("FastReadout Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("FastReadout", true);
         }
     }
 
     public double FullWellCapacity
     {
-        get { throw new ASCOM.PropertyNotImplementedException("FullWellCapacity", false); }
+        get
+        {
+            tl.LogMessage("FullWellCapacity Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("FullWellCapacity", false);
+        }
     }
 
     public short Gain
     {
         get
         {
+            tl.LogMessage("Gain Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("Gain", false);
         }
         set
         {
+            tl.LogMessage("Gain Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("Gain", true);
         }
     }
 
     public short GainMax
     {
-        get { throw new ASCOM.PropertyNotImplementedException("GainMax", false); }
+        get
+        {
+            tl.LogMessage("GainMax Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("GainMax", false);
+        }
     }
 
     public short GainMin
     {
-        get { throw new ASCOM.PropertyNotImplementedException("GainMin", true); }
+        get
+        {
+            tl.LogMessage("GainMin Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("GainMin", true);
+        }
     }
 
     public ArrayList Gains
     {
-        get { throw new ASCOM.PropertyNotImplementedException("Gains", true); }
+        get
+        {
+            tl.LogMessage("Gains Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Gains", true);
+        }
     }
 
     public bool HasShutter
@@ -258,7 +314,11 @@ class DeviceCamera
 
     public double HeatSinkTemperature
     {
-        get { throw new ASCOM.PropertyNotImplementedException("HeatSinkTemperature", false); }
+        get
+        {
+            tl.LogMessage("HeatSinkTemperature Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("HeatSinkTemperature", false);
+        }
     }
 
     public object ImageArray
@@ -310,7 +370,11 @@ class DeviceCamera
 
     public bool IsPulseGuiding
     {
-        get { throw new ASCOM.PropertyNotImplementedException("IsPulseGuiding", false); }
+        get
+        {
+            tl.LogMessage("IsPulseGuiding Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("IsPulseGuiding", false);
+        }
     }
 
     public double LastExposureDuration
@@ -399,7 +463,11 @@ class DeviceCamera
 
     public short PercentCompleted
     {
-        get { throw new ASCOM.PropertyNotImplementedException("PercentCompleted", false); }
+        get
+        {
+            tl.LogMessage("PercentCompleted Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("PercentCompleted", false);
+        }
     }
 
     public double PixelSizeX
@@ -422,6 +490,7 @@ class DeviceCamera
 
     public void PulseGuide(GuideDirections Direction, int Duration)
     {
+        tl.LogMessage("PulseGuide", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("PulseGuide");
     }
 
@@ -429,37 +498,53 @@ class DeviceCamera
     {
         get
         {
+            tl.LogMessage("ReadoutMode Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
         }
         set
         {
+            tl.LogMessage("ReadoutMode Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("ReadoutMode", true);
         }
     }
 
     public ArrayList ReadoutModes
     {
-        get { throw new ASCOM.PropertyNotImplementedException("ReadoutModes", false); }
+        get
+        {
+            tl.LogMessage("ReadoutModes Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("ReadoutModes", false);
+        }
     }
 
     public string SensorName
     {
-        get { throw new ASCOM.PropertyNotImplementedException("SensorName", false); }
+        get
+        {
+            tl.LogMessage("SensorName Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("SensorName", false);
+        }
     }
 
     public SensorType SensorType
     {
-        get { throw new ASCOM.PropertyNotImplementedException("SensorType", false); }
+        get
+        {
+            tl.LogMessage("SensorType Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("SensorType", false);
+        }
     }
 
     public double SetCCDTemperature
     {
         get
         {
+            tl.LogMessage("SetCCDTemperature Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SetCCDTemperature", false);
         }
         set
         {
+            tl.LogMessage("SetCCDTemperature Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SetCCDTemperature", true);
         }
     }
@@ -489,7 +574,7 @@ class DeviceCamera
         set
         {
             cameraStartX = value;
-            tl.LogMessage("StartX set", value.ToString());
+            tl.LogMessage("StartX Set", value.ToString());
         }
     }
 

@@ -9,12 +9,13 @@ using ASCOM.Utilities;
 
 class DeviceTelescope
 {
-    Util util = new Util(); TraceLogger tl = new TraceLogger();
+    Util utilities = new Util();
+    TraceLogger tl = new TraceLogger();
 
     #region ITelescope Implementation
     public void AbortSlew()
     {
-        tl.LogMessage("AbortSlew", "Not implemnted");
+        tl.LogMessage("AbortSlew", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("AbortSlew");
     }
 
@@ -22,7 +23,7 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("AlignmentMode Get", "Not implemnted");
+            tl.LogMessage("AlignmentMode Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("AlignmentMode", false);
         }
     }
@@ -31,7 +32,7 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("Altitude", "Not implemnted");
+            tl.LogMessage("Altitude", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("Altitude", false);
         }
     }
@@ -40,7 +41,7 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("ApertureArea Get", "Not implemnted");
+            tl.LogMessage("ApertureArea Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("ApertureArea", false);
         }
     }
@@ -49,7 +50,7 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("ApertureDiameter Get", "Not implemnted");
+            tl.LogMessage("ApertureDiameter Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("ApertureDiameter", false);
         }
     }
@@ -82,7 +83,7 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("Azimuth Get", "Not implemnted");
+            tl.LogMessage("Azimuth Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("Azimuth", false);
         }
     }
@@ -248,7 +249,7 @@ class DeviceTelescope
         get
         {
             double declination = 0.0;
-            tl.LogMessage("Declination", "Get - " + util.DegreesToDMS(declination, ":", ":"));
+            tl.LogMessage("Declination", "Get - " + utilities.DegreesToDMS(declination, ":", ":"));
             return declination;
         }
     }
@@ -263,14 +264,14 @@ class DeviceTelescope
         }
         set
         {
-            tl.LogMessage("DeclinationRate Set", "Not implemnted");
+            tl.LogMessage("DeclinationRate Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("DeclinationRate", true);
         }
     }
 
     public PierSide DestinationSideOfPier(double RightAscension, double Declination)
     {
-        tl.LogMessage("DestinationSideOfPier Get", "Not implemnted");
+        tl.LogMessage("DestinationSideOfPier Get", "Not implemented");
         throw new ASCOM.PropertyNotImplementedException("DestinationSideOfPier", false);
     }
 
@@ -278,12 +279,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("DoesRefraction Get", "Not implemnted");
+            tl.LogMessage("DoesRefraction Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("DoesRefraction", false);
         }
         set
         {
-            tl.LogMessage("DoesRefraction Set", "Not implemnted");
+            tl.LogMessage("DoesRefraction Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("DoesRefraction", true);
         }
     }
@@ -300,7 +301,7 @@ class DeviceTelescope
 
     public void FindHome()
     {
-        tl.LogMessage("FindHome", "Not implemnted");
+        tl.LogMessage("FindHome", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("FindHome");
     }
 
@@ -308,7 +309,7 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("FocalLength Get", "Not implemnted");
+            tl.LogMessage("FocalLength Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("FocalLength", false);
         }
     }
@@ -317,12 +318,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("GuideRateDeclination Get", "Not implemnted");
+            tl.LogMessage("GuideRateDeclination Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("GuideRateDeclination", false);
         }
         set
         {
-            tl.LogMessage("GuideRateDeclination Set", "Not implemnted");
+            tl.LogMessage("GuideRateDeclination Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("GuideRateDeclination", true);
         }
     }
@@ -331,12 +332,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("GuideRateRightAscension Get", "Not implemnted");
+            tl.LogMessage("GuideRateRightAscension Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("GuideRateRightAscension", false);
         }
         set
         {
-            tl.LogMessage("GuideRateRightAscension Set", "Not implemnted");
+            tl.LogMessage("GuideRateRightAscension Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("GuideRateRightAscension", true);
         }
     }
@@ -345,26 +346,26 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("IsPulseGuiding Get", "Not implemnted");
+            tl.LogMessage("IsPulseGuiding Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("IsPulseGuiding", false);
         }
     }
 
     public void MoveAxis(TelescopeAxes Axis, double Rate)
     {
-        tl.LogMessage("MoveAxis", "Not implemnted");
+        tl.LogMessage("MoveAxis", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("MoveAxis");
     }
 
     public void Park()
     {
-        tl.LogMessage("Park", "Not implemnted");
+        tl.LogMessage("Park", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("Park");
     }
 
     public void PulseGuide(GuideDirections Direction, int Duration)
     {
-        tl.LogMessage("PulseGuide", "Not implemnted");
+        tl.LogMessage("PulseGuide", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("PulseGuide");
     }
 
@@ -373,7 +374,7 @@ class DeviceTelescope
         get
         {
             double rightAscension = 0.0;
-            tl.LogMessage("RightAscension", "Get - " + util.HoursToHMS(rightAscension));
+            tl.LogMessage("RightAscension", "Get - " + utilities.HoursToHMS(rightAscension));
             return rightAscension;
         }
     }
@@ -388,14 +389,14 @@ class DeviceTelescope
         }
         set
         {
-            tl.LogMessage("AbortSlew Set", "Not implemnted");
+            tl.LogMessage("RightAscensionRate Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("RightAscensionRate", true);
         }
     }
 
     public void SetPark()
     {
-        tl.LogMessage("SetPark", "Not implemnted");
+        tl.LogMessage("SetPark", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SetPark");
     }
 
@@ -403,12 +404,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("SideOfPier Get", "Not implemnted");
+            tl.LogMessage("SideOfPier Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SideOfPier", false);
         }
         set
         {
-            tl.LogMessage("SideOfPier Set", "Not implemnted");
+            tl.LogMessage("SideOfPier Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SideOfPier", true);
         }
     }
@@ -417,7 +418,7 @@ class DeviceTelescope
     {
         get
         {
-            double siderealTime = (18.697374558 + 24.065709824419081 * (util.DateLocalToJulian(DateTime.Now) - 2451545.0)) % 24.0;
+            double siderealTime = (18.697374558 + 24.065709824419081 * (utilities.DateLocalToJulian(DateTime.Now) - 2451545.0)) % 24.0;
             tl.LogMessage("SiderealTime", "Get - " + siderealTime.ToString());
             return siderealTime;
         }
@@ -427,12 +428,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("SiteElevation Get", "Not implemnted");
+            tl.LogMessage("SiteElevation Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SiteElevation", false);
         }
         set
         {
-            tl.LogMessage("SiteElevation Set", "Not implemnted");
+            tl.LogMessage("SiteElevation Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SiteElevation", true);
         }
     }
@@ -441,12 +442,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("SiteLatitude Get", "Not implemnted");
+            tl.LogMessage("SiteLatitude Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SiteLatitude", false);
         }
         set
         {
-            tl.LogMessage("SiteLatitude Set", "Not implemnted");
+            tl.LogMessage("SiteLatitude Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SiteLatitude", true);
         }
     }
@@ -455,12 +456,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("SiteLongitude Get", "Not implemnted");
+            tl.LogMessage("SiteLongitude Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SiteLongitude", false);
         }
         set
         {
-            tl.LogMessage("SiteLongitude Set", "Not implemnted");
+            tl.LogMessage("SiteLongitude Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SiteLongitude", true);
         }
     }
@@ -469,49 +470,49 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("SlewSettleTime Get", "Not implemnted");
+            tl.LogMessage("SlewSettleTime Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SlewSettleTime", false);
         }
         set
         {
-            tl.LogMessage("SlewSettleTime Set", "Not implemnted");
+            tl.LogMessage("SlewSettleTime Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("SlewSettleTime", true);
         }
     }
 
     public void SlewToAltAz(double Azimuth, double Altitude)
     {
-        tl.LogMessage("SlewToAltAz", "Not implemnted");
+        tl.LogMessage("SlewToAltAz", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SlewToAltAz");
     }
 
     public void SlewToAltAzAsync(double Azimuth, double Altitude)
     {
-        tl.LogMessage("SlewToAltAzAsync", "Not implemnted");
+        tl.LogMessage("SlewToAltAzAsync", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SlewToAltAzAsync");
     }
 
     public void SlewToCoordinates(double RightAscension, double Declination)
     {
-        tl.LogMessage("SlewToCoordinates", "Not implemnted");
+        tl.LogMessage("SlewToCoordinates", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SlewToCoordinates");
     }
 
     public void SlewToCoordinatesAsync(double RightAscension, double Declination)
     {
-        tl.LogMessage("SlewToCoordinatesAsync", "Not implemnted");
+        tl.LogMessage("SlewToCoordinatesAsync", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SlewToCoordinatesAsync");
     }
 
     public void SlewToTarget()
     {
-        tl.LogMessage("SlewToTarget", "Not implemnted");
+        tl.LogMessage("SlewToTarget", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SlewToTarget");
     }
 
     public void SlewToTargetAsync()
     {
-        tl.LogMessage("SlewToTargetAsync", "Not implemnted");
+        tl.LogMessage("SlewToTargetAsync", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SlewToTargetAsync");
     }
 
@@ -519,26 +520,26 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("Slewing Get", "Not implemnted");
+            tl.LogMessage("Slewing Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("Slewing", false);
         }
     }
 
     public void SyncToAltAz(double Azimuth, double Altitude)
     {
-        tl.LogMessage("SyncToAltAz", "Not implemnted");
+        tl.LogMessage("SyncToAltAz", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SyncToAltAz");
     }
 
     public void SyncToCoordinates(double RightAscension, double Declination)
     {
-        tl.LogMessage("SyncToCoordinates", "Not implemnted");
+        tl.LogMessage("SyncToCoordinates", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SyncToCoordinates");
     }
 
     public void SyncToTarget()
     {
-        tl.LogMessage("SyncToTarget", "Not implemnted");
+        tl.LogMessage("SyncToTarget", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("SyncToTarget");
     }
 
@@ -546,12 +547,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("TargetDeclination Get", "Not implemnted");
+            tl.LogMessage("TargetDeclination Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("TargetDeclination", false);
         }
         set
         {
-            tl.LogMessage("TargetDeclination Set", "Not implemnted");
+            tl.LogMessage("TargetDeclination Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("TargetDeclination", true);
         }
     }
@@ -560,12 +561,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("TargetRightAscension Get", "Not implemnted");
+            tl.LogMessage("TargetRightAscension Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("TargetRightAscension", false);
         }
         set
         {
-            tl.LogMessage("TargetRightAscension Set", "Not implemnted");
+            tl.LogMessage("TargetRightAscension Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("TargetRightAscension", true);
         }
     }
@@ -580,7 +581,7 @@ class DeviceTelescope
         }
         set
         {
-            tl.LogMessage("AbortSlew Set", "Not implemnted");
+            tl.LogMessage("Tracking Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("Tracking", true);
         }
     }
@@ -589,12 +590,12 @@ class DeviceTelescope
     {
         get
         {
-            tl.LogMessage("TrackingRate Get", "Not implemnted");
+            tl.LogMessage("TrackingRate Get", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("TrackingRate", false);
         }
         set
         {
-            tl.LogMessage("TrackingRate Set", "Not implemnted");
+            tl.LogMessage("TrackingRate Set", "Not implemented");
             throw new ASCOM.PropertyNotImplementedException("TrackingRate", true);
         }
     }
@@ -623,14 +624,14 @@ class DeviceTelescope
         }
         set
         {
-            tl.LogMessage("AbortSlew Set", "Not implemnted");
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("UTCDate Set", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("UTCDate", true);
         }
     }
 
     public void Unpark()
     {
-        tl.LogMessage("AbortSlew", "Not implemnted");
+        tl.LogMessage("Unpark", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("Unpark");
     }
 
