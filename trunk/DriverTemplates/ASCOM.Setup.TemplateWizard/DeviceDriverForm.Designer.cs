@@ -47,6 +47,9 @@
             // 
             // cbDeviceClass
             // 
+            this.cbDeviceClass.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cbDeviceClass.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbDeviceClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDeviceClass.FormattingEnabled = true;
             this.cbDeviceClass.Items.AddRange(new object[] {
             "Camera",
@@ -64,7 +67,7 @@
             this.cbDeviceClass.Sorted = true;
             this.cbDeviceClass.TabIndex = 2;
             this.toolTip.SetToolTip(this.cbDeviceClass, "The DeviceClass specifies the general type of device\r\nand determines which interf" +
-                    "ace the driver must implement.\r\nThis field is required.");
+        "ace the driver must implement.\r\nThis field is required.");
             this.cbDeviceClass.SelectedIndexChanged += new System.EventHandler(this.cbDeviceClass_SelectedIndexChanged);
             // 
             // label1
@@ -84,7 +87,7 @@
             this.txtDeviceName.Size = new System.Drawing.Size(174, 20);
             this.txtDeviceName.TabIndex = 4;
             this.toolTip.SetToolTip(this.txtDeviceName, "Specifies the unique name for the driver. This field must\r\nbe completed and shoul" +
-                    "d reflect the device model\r\nname or number.\r\nExample: LX200");
+        "d reflect the device model\r\nname or number.\r\nExample: LX200");
             this.txtDeviceName.TextChanged += new System.EventHandler(this.txtDeviceName_TextChanged);
             this.txtDeviceName.Validating += new System.ComponentModel.CancelEventHandler(this.txtDeviceName_Validating);
             this.txtDeviceName.Validated += new System.EventHandler(this.txtDeviceName_Validated);
@@ -151,7 +154,6 @@
             // 
             // btnCreate
             // 
-            this.btnCreate.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnCreate.Location = new System.Drawing.Point(181, 143);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(75, 23);

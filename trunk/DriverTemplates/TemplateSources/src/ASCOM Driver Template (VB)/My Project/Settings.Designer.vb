@@ -53,30 +53,6 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("COM1")>  _
-        Public Property CommPort() As String
-            Get
-                Return CType(Me("CommPort"),String)
-            End Get
-            Set
-                Me("CommPort") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property Trace() As Boolean
-            Get
-                Return CType(Me("Trace"),Boolean)
-            End Get
-            Set
-                Me("Trace") = value
-            End Set
-        End Property
     End Class
 End Namespace
 

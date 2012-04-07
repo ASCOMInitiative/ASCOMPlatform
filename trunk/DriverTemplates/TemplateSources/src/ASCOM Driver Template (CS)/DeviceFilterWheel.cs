@@ -9,24 +9,27 @@ using ASCOM.Utilities;
 
 class DeviceFilerWheel
 {
-    Util util = new Util(); TraceLogger tl = new TraceLogger();
+    Util util = new Util();
+    TraceLogger tl = new TraceLogger();
 
     #region IFilerWheel Implementation
     private int[] fwOffsets = new int[4] { 0, 0, 0, 0 }; //class level variable to hold focus offsets
+    private string[] fwNames = new string[4] { "Red", "Green", "Blue", "Clear" }; //class level variable to hold the filter names
+    private short fwPosition = 0; // class level variable to retain the current filterwheel position
+
     public int[] FocusOffsets
     {
-        get 
+        get
         {
             foreach (int fwOffset in fwOffsets) // Write filter offsets to the log
             {
                 tl.LogMessage("FocusOffsets Get", fwOffset.ToString());
             }
 
-            return fwOffsets; 
+            return fwOffsets;
         }
     }
 
-    private string[] fwNames = new string[4] { "Red", "Green", "Blue", "Clear" }; //class level variable to hold the filter names
     public string[] Names
     {
         get
@@ -40,7 +43,6 @@ class DeviceFilerWheel
         }
     }
 
-    private short fwPosition = 0; // class level variable to retain the current filterwheel position
     public short Position
     {
         get
@@ -51,7 +53,11 @@ class DeviceFilerWheel
         set
         {
             tl.LogMessage("Position Set", value.ToString());
-            if ((value < 0) | (value > fwNames.Length - 1)) throw new InvalidValueException("Position", value.ToString(), "0 to " + (fwNames.Length - 1).ToString());
+            if ((value < 0) | (value > fwNames.Length - 1))
+            {
+                tl.LogMessage("", "Throwing InvalidValueException - Position: " + value.ToString() + ", Range: 0 to " + (fwNames.Length - 1).ToString());
+                throw new InvalidValueException("Position", value.ToString(), "0 to " + (fwNames.Length - 1).ToString());
+            }
             fwPosition = value;
         }
     }

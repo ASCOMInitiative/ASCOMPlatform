@@ -14,10 +14,11 @@ Class DeviceCamera
 
 #Region "ICamera Implementation"
 
-    Private Const ccdWidth As Integer = 1394
+    Private Const ccdWidth As Integer = 1394 ' Constants to define the ccd pixel dimenstions
     Private Const ccdHeight As Integer = 1040
-    Private Const pixelSize As Double = 6.45
-    Private cameraNumX As Integer = ccdWidth
+    Private Const pixelSize As Double = 6.45 ' Constant for the pixel physical dimension
+
+    Private cameraNumX As Integer = ccdWidth ' Initialise variables to hold values required for functionality tested by Conform
     Private cameraNumY As Integer = ccdHeight
     Private cameraStartX As Integer = 0
     Private cameraStartY As Integer = 0
@@ -28,18 +29,20 @@ Class DeviceCamera
     Private cameraImageArrayVariant As Object(,)
 
     Public Sub AbortExposure() Implements ICameraV2.AbortExposure
-        Throw New MethodNotImplementedException()
+        TL.LogMessage("AbortExposure", "Not implemented")
+        Throw New MethodNotImplementedException("AbortExposure")
     End Sub
 
     Public ReadOnly Property BayerOffsetX() As Short Implements ICameraV2.BayerOffsetX
         Get
-            TL.LogMessage("AbortExposure", "Not implemented")
-            Throw New MethodNotImplementedException("AbortExposure")
+            TL.LogMessage("BayerOffsetX Get", "Not implemented")
+            Throw New PropertyNotImplementedException("BayerOffsetX", False)
         End Get
     End Property
 
     Public ReadOnly Property BayerOffsetY() As Short Implements ICameraV2.BayerOffsetY
         Get
+            TL.LogMessage("BayerOffsetY Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("BayerOffsetY", False)
         End Get
     End Property
@@ -51,7 +54,10 @@ Class DeviceCamera
         End Get
         Set(value As Short)
             TL.LogMessage("BinX Set", value.ToString())
-            If (Not (value = 1)) Then Throw New ASCOM.InvalidValueException("BinX", value.ToString(), "1") ' Only 1 is valid in this simple template
+            If (Not (value = 1)) Then
+                TL.LogMessage("BinX Set", "Value out of range, throwing InvalidValueException")
+                Throw New ASCOM.InvalidValueException("BinX", value.ToString(), "1") ' Only 1 is valid in this simple template
+            End If
         End Set
     End Property
 
@@ -62,12 +68,16 @@ Class DeviceCamera
         End Get
         Set(value As Short)
             TL.LogMessage("BinY Set", value.ToString())
-            If (Not (value = 1)) Then Throw New ASCOM.InvalidValueException("BinY", value.ToString(), "1") ' Only 1 is valid in this simple template
+            If (Not (value = 1)) Then
+                TL.LogMessage("BinX Set", "Value out of range, throwing InvalidValueException")
+                Throw New ASCOM.InvalidValueException("BinY", value.ToString(), "1") ' Only 1 is valid in this simple template
+            End If
         End Set
     End Property
 
     Public ReadOnly Property CCDTemperature() As Double Implements ICameraV2.CCDTemperature
         Get
+            TL.LogMessage("CCDTemperature Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("CCDTemperature", False)
         End Get
     End Property
@@ -144,81 +154,96 @@ Class DeviceCamera
 
     Public Property CoolerOn() As Boolean Implements ICameraV2.CoolerOn
         Get
+            TL.LogMessage("CoolerOn Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("CoolerOn", False)
         End Get
         Set(value As Boolean)
+            TL.LogMessage("CoolerOn Set", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("CoolerOn", True)
         End Set
     End Property
 
     Public ReadOnly Property CoolerPower() As Double Implements ICameraV2.CoolerPower
         Get
+            TL.LogMessage("AbortExposure Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("CoolerPower", False)
         End Get
     End Property
 
     Public ReadOnly Property ElectronsPerADU() As Double Implements ICameraV2.ElectronsPerADU
         Get
+            TL.LogMessage("ElectronsPerADU Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("ElectronsPerADU", False)
         End Get
     End Property
 
     Public ReadOnly Property ExposureMax() As Double Implements ICameraV2.ExposureMax
         Get
+            TL.LogMessage("ExposureMax Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("ExposureMax", False)
         End Get
     End Property
 
     Public ReadOnly Property ExposureMin() As Double Implements ICameraV2.ExposureMin
         Get
+            TL.LogMessage("ExposureMin Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("ExposureMin", False)
         End Get
     End Property
 
     Public ReadOnly Property ExposureResolution() As Double Implements ICameraV2.ExposureResolution
         Get
+            TL.LogMessage("ExposureResolution Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("ExposureResolution", False)
         End Get
     End Property
 
     Public Property FastReadout() As Boolean Implements ICameraV2.FastReadout
         Get
+            TL.LogMessage("FastReadout Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("FastReadout", False)
         End Get
         Set(value As Boolean)
+            TL.LogMessage("FastReadout Set", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("FastReadout", True)
         End Set
     End Property
 
     Public ReadOnly Property FullWellCapacity() As Double Implements ICameraV2.FullWellCapacity
         Get
+            TL.LogMessage("FullWellCapacity Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("FullWellCapacity", False)
         End Get
     End Property
 
     Public Property Gain() As Short Implements ICameraV2.Gain
         Get
+            TL.LogMessage("Gain Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("Gain", False)
         End Get
         Set(value As Short)
+            TL.LogMessage("Gain Set", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("Gain", True)
         End Set
     End Property
 
     Public ReadOnly Property GainMax() As Short Implements ICameraV2.GainMax
         Get
+            TL.LogMessage("GainMax Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("GainMax", False)
         End Get
     End Property
 
     Public ReadOnly Property GainMin() As Short Implements ICameraV2.GainMin
         Get
+            TL.LogMessage("GainMin Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("GainMin", False)
         End Get
     End Property
 
     Public ReadOnly Property Gains() As ArrayList Implements ICameraV2.Gains
         Get
+            TL.LogMessage("Gains Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("Gains", False)
         End Get
     End Property
@@ -232,6 +257,7 @@ Class DeviceCamera
 
     Public ReadOnly Property HeatSinkTemperature() As Double Implements ICameraV2.HeatSinkTemperature
         Get
+            TL.LogMessage("HeatSinkTemperature Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("HeatSinkTemperature", False)
         End Get
     End Property
@@ -275,6 +301,7 @@ Class DeviceCamera
 
     Public ReadOnly Property IsPulseGuiding() As Boolean Implements ICameraV2.IsPulseGuiding
         Get
+            TL.LogMessage("IsPulseGuiding Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("IsPulseGuiding", False)
         End Get
     End Property
@@ -347,6 +374,7 @@ Class DeviceCamera
 
     Public ReadOnly Property PercentCompleted() As Short Implements ICameraV2.PercentCompleted
         Get
+            TL.LogMessage("PercentCompleted Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("PercentCompleted", False)
         End Get
     End Property
@@ -366,41 +394,49 @@ Class DeviceCamera
     End Property
 
     Public Sub PulseGuide(Direction As GuideDirections, Duration As Integer) Implements ICameraV2.PulseGuide
-        Throw New ASCOM.MethodNotImplementedException()
+        TL.LogMessage("PulseGuide", "Not implemented - " & Direction.ToString)
+        Throw New ASCOM.MethodNotImplementedException("Direction")
     End Sub
 
     Public Property ReadoutMode() As Short Implements ICameraV2.ReadoutMode
         Get
+            TL.LogMessage("ReadoutMode Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("ReadoutMode", False)
         End Get
         Set(value As Short)
+            TL.LogMessage("ReadoutMode Set", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("ReadoutMode", True)
         End Set
     End Property
 
     Public ReadOnly Property ReadoutModes() As ArrayList Implements ICameraV2.ReadoutModes
         Get
+            TL.LogMessage("ReadoutModes Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("ReadoutModes", False)
         End Get
     End Property
 
     Public ReadOnly Property SensorName() As String Implements ICameraV2.SensorName
         Get
+            TL.LogMessage("SensorName Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("SensorName", False)
         End Get
     End Property
 
     Public ReadOnly Property SensorType() As SensorType Implements ICameraV2.SensorType
         Get
-            Throw New ASCOM.PropertyNotImplementedException("")
+            TL.LogMessage("SensorType Get", "Not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("SensorType", False)
         End Get
     End Property
 
     Public Property SetCCDTemperature() As Double Implements ICameraV2.SetCCDTemperature
         Get
+            TL.LogMessage("SetCCDTemperature Get", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("SetCCDTemperature", False)
         End Get
         Set(value As Double)
+            TL.LogMessage("SetCCDTemperature Set", "Not implemented")
             Throw New ASCOM.PropertyNotImplementedException("SetCCDTemperature", True)
         End Set
     End Property

@@ -36,6 +36,7 @@ Imports ASCOM.Astrometry
 Imports ASCOM.Astrometry.AstroUtils
 Imports ASCOM.DeviceInterface
 Imports ASCOM.Utilities
+
 Imports System
 Imports System.Collections
 Imports System.Collections.Generic
@@ -59,21 +60,29 @@ Public Class TEMPLATEDEVICECLASS
     '
     ' Driver ID and descriptive string that shows in the Chooser
     '
-    Private Shared driverID As String = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS"
+    Friend Shared driverID As String = "ASCOM.TEMPLATEDEVICENAME.TEMPLATEDEVICECLASS"
     Private Shared driverDescription As String = "TEMPLATEDEVICENAME TEMPLATEDEVICECLASS"
+
+    Friend Shared comPortProfileName As String = "COM Port" 'Constants used for Profile persistence
+    Friend Shared traceLevelProfileName As String = "Trace Level"
+    Friend Shared comPortDefault As String = "COM1"
+    Friend Shared traceLevelDefault As String = "False"
 
     Private connectedState As Boolean ' Private variable to hold the connected state
     Private utilities As Util ' Private variable to hold an ASCOM Utilities object
-    Private astroUtilities As AstroUtils
+    Private astroUtilities As AstroUtils ' Private variable to hold an AstroUtils object to provide the Range method
     Private TL As TraceLogger ' Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
+    Private driverProfile As Profile ' Private variable to hold Profile object for persisting driver settings to the ASCOM profile
 
     '
     ' Constructor - Must be public for COM registration!
     '
     Public Sub New()
 
+        driverProfile = New Profile()
+        driverProfile.DeviceType = "TEMPLATEDEVICECLASS"
         TL = New TraceLogger("", "TEMPLATEDEVICENAME")
-        TL.Enabled = My.MySettings.Default.Trace
+        TL.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceLevelProfileName, "", traceLevelDefault))
         TL.LogMessage("TEMPLATEDEVICECLASS", "Starting initialisation")
 
         connectedState = False ' Initialise connected to false
@@ -121,7 +130,7 @@ Public Class TEMPLATEDEVICECLASS
     End Property
 
     Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ITEMPLATEDEVICEINTERFACE.Action
-        Throw New MethodNotImplementedException("Action")
+        Throw New ActionNotImplementedException("Action " & ActionName & " is not supported by this driver")
     End Function
 
     Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ITEMPLATEDEVICEINTERFACE.CommandBlind
@@ -164,7 +173,7 @@ Public Class TEMPLATEDEVICECLASS
             If value Then
                 connectedState = True
                 ' TODO connect to the device
-                Dim comPort As String = My.MySettings.Default.CommPort
+                Dim comPort As String = driverProfile.GetValue(driverID, comPortProfileName, "", comPortDefault)
             Else
                 ' TODO disconnect from the device
                 connectedState = False
@@ -227,7 +236,8 @@ Public Class TEMPLATEDEVICECLASS
 
 #End Region
 
-#Region "private properties and methods"
+    '//INTERFACECODEINSERTIONPOINT
+#Region "Private properties and methods"
     ' here are some useful properties and methods that can be used as required
     ' to help with
 
@@ -283,5 +293,4 @@ Public Class TEMPLATEDEVICECLASS
 
 #End Region
 
-    '//INTERFACECODEINSERTIONPOINT
 End Class

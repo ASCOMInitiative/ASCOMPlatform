@@ -22,29 +22,5 @@ namespace ASCOM.TEMPLATEDEVICENAME.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("COM1")]
-        public string CommPort {
-            get {
-                return ((string)(this["CommPort"]));
-            }
-            set {
-                this["CommPort"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Trace {
-            get {
-                return ((bool)(this["Trace"]));
-            }
-            set {
-                this["Trace"] = value;
-            }
-        }
     }
 }

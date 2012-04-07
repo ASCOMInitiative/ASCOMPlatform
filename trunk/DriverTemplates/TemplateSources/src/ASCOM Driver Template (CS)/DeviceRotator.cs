@@ -10,7 +10,9 @@ using ASCOM.Astrometry.AstroUtils;
 
 class DeviceRotator
 {
-    Util util = new Util(); TraceLogger tl = new TraceLogger(); AstroUtils astroUtilities = new AstroUtils();
+    Util util = new Util();
+    TraceLogger tl = new TraceLogger();
+    AstroUtils astroUtilities = new AstroUtils();
 
     #region IRotator Implementation
 
@@ -27,6 +29,7 @@ class DeviceRotator
 
     public void Halt()
     {
+        tl.LogMessage("Halt", "Not implemented");
         throw new ASCOM.MethodNotImplementedException("Halt");
     }
 
@@ -43,7 +46,7 @@ class DeviceRotator
     {
         tl.LogMessage("Move", Position.ToString()); // Move by this amount
         rotatorPosition += Position;
-        rotatorPosition = (float) astroUtilities.Range(rotatorPosition, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
+        rotatorPosition = (float)astroUtilities.Range(rotatorPosition, 0.0, true, 360.0, false); // Ensure value is in the range 0.0..359.9999...
     }
 
     public void MoveAbsolute(float Position)
@@ -66,17 +69,23 @@ class DeviceRotator
     {
         get
         {
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Reverse Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Reverse", false);
         }
         set
         {
-            throw new ASCOM.PropertyNotImplementedException();
+            tl.LogMessage("Reverse Set", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("Reverse", true);
         }
     }
 
     public float StepSize
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            tl.LogMessage("StepSize Get", "Not implemented");
+            throw new ASCOM.PropertyNotImplementedException("StepSize", false);
+        }
     }
 
     public float TargetPosition

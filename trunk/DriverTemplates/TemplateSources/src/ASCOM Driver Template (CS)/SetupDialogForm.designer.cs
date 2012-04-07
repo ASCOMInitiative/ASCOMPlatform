@@ -90,7 +90,6 @@ namespace ASCOM.TEMPLATEDEVICENAME
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(158, 20);
             this.textBox1.TabIndex = 4;
-            this.textBox1.Text = global::ASCOM.TEMPLATEDEVICENAME.Properties.Settings.Default.CommPort;
             // 
             // label2
             // 
@@ -130,6 +129,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TEMPLATEDEVICENAME Setup";
+            this.FormClosed +=new System.Windows.Forms.FormClosedEventHandler(SetupDialogForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
