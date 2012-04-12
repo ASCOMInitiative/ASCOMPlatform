@@ -129,7 +129,6 @@ namespace ASCOM.TEMPLATEDEVICENAME
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TEMPLATEDEVICENAME Setup";
-            this.FormClosed +=new System.Windows.Forms.FormClosedEventHandler(SetupDialogForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

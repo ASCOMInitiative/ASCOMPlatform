@@ -13,29 +13,20 @@ namespace ASCOM.TEMPLATEDEVICENAME
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
-        Profile driverProfile;
         public SetupDialogForm()
         {
             InitializeComponent();
-            // Retrieve current values of user settings from the ASCOM Profile 
-            driverProfile = new Profile();
-            driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
-            textBox1.Text = driverProfile.GetValue(TEMPLATEDEVICECLASS.driverID, TEMPLATEDEVICECLASS.comPortProfileName, "", TEMPLATEDEVICECLASS.comPortDefault);
-            chkTrace.Checked = Convert.ToBoolean(driverProfile.GetValue(TEMPLATEDEVICECLASS.driverID, TEMPLATEDEVICECLASS.traceLevelProfileName, "", TEMPLATEDEVICECLASS.traceLevelDefault));
-        }
-
-        private void SetupDialogForm_FormClosed(Object sender, FormClosedEventArgs e) // Form closed event handler
-        {
-            driverProfile.Dispose();
-            driverProfile = null;
+            // Initialise current values of user settings from the ASCOM Profile 
+            textBox1.Text = TEMPLATEDEVICECLASS.comPort;
+            chkTrace.Checked = TEMPLATEDEVICECLASS.traceState;
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
         {
-            // Persist new values of user settings to the ASCOM profile
-            driverProfile.WriteValue(TEMPLATEDEVICECLASS.driverID, TEMPLATEDEVICECLASS.comPortProfileName, textBox1.Text);
-            driverProfile.WriteValue(TEMPLATEDEVICECLASS.driverID, TEMPLATEDEVICECLASS.traceLevelProfileName, chkTrace.Checked.ToString());
-            Close();
+            // Place any validation constraint checks here
+
+            TEMPLATEDEVICECLASS.comPort = textBox1.Text; // Update the state variables with results from the dialogue
+            TEMPLATEDEVICECLASS.traceState = chkTrace.Checked;
         }
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler

@@ -71,9 +71,12 @@ namespace ASCOM.TEMPLATEDEVICENAME
         private static string driverDescription = "ASCOM TEMPLATEDEVICECLASS Driver for TEMPLATEDEVICENAME.";
 
         internal static string comPortProfileName = "COM Port"; // Constants used for Profile persistence
-        internal static string traceLevelProfileName = "Trace Level";
         internal static string comPortDefault = "COM1";
-        internal static string traceLevelDefault = "false";
+        internal static string traceStateProfileName = "Trace Level";
+        internal static string traceStateDefault = "false";
+
+        internal static string comPort; // Variables to hold the currrent device configuration
+        internal static bool traceState;
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -96,20 +99,15 @@ namespace ASCOM.TEMPLATEDEVICENAME
         private TraceLogger tl;
 
         /// <summary>
-        /// Private variable to hold Profile object for persisting driver settings to the ASCOM profile
-        /// </summary>
-        private Profile driverProfile;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="TEMPLATEDEVICENAME"/> class.
         /// Must be public for COM registration.
         /// </summary>
         public TEMPLATEDEVICECLASS()
         {
-            driverProfile = new Profile();
-            driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
+            ReadProfile(); // Read device configuration from the ASCOM Profile store
+
             tl = new TraceLogger("", "TEMPLATEDEVICENAME");
-            tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceLevelProfileName, "", traceLevelDefault));
+            tl.Enabled = traceState;
             tl.LogMessage("TEMPLATEDEVICECLASS", "Starting initialisation");
 
             connectedState = false; // Initialise connected to false
@@ -145,10 +143,8 @@ namespace ASCOM.TEMPLATEDEVICENAME
                 var result = F.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    Properties.Settings.Default.Save();
-                    return;
+                    WriteProfile(); // Persist device configuration values to the ASCOM Profile store
                 }
-                Properties.Settings.Default.Reload();
             }
         }
 
@@ -204,8 +200,6 @@ namespace ASCOM.TEMPLATEDEVICENAME
             utilities = null;
             astroUtilities.Dispose();
             astroUtilities = null;
-            driverProfile.Dispose();
-            driverProfile = null;
         }
 
         public bool Connected
@@ -224,12 +218,13 @@ namespace ASCOM.TEMPLATEDEVICENAME
                 if (value)
                 {
                     connectedState = true;
+                    tl.LogMessage("Connected Set", "Connecting to port " + comPort);
                     // TODO connect to the device
-                    string comPort = driverProfile.GetValue(driverID, comPortProfileName, "", comPortDefault);
                 }
                 else
                 {
                     connectedState = false;
+                    tl.LogMessage("Connected Set", "Disconnecting from port " + comPort);
                     // TODO disconnect from the device
                 }
             }
@@ -294,30 +289,6 @@ namespace ASCOM.TEMPLATEDEVICENAME
         #region Private properties and methods
         // here are some useful properties and methods that can be used as required
         // to help with driver development
-
-        /// <summary>
-        /// Returns true if there is a valid connection to the driver hardware
-        /// </summary>
-        private bool IsConnected
-        {
-            get
-            {
-                // TODO check that the driver hardware connection exists and is connected to the hardware
-                return connectedState;
-            }
-        }
-
-        /// <summary>
-        /// Use this function to throw an exception if we aren't connected to the hardware
-        /// </summary>
-        /// <param name="message"></param>
-        private void CheckConnected(string message)
-        {
-            if (!IsConnected)
-            {
-                throw new ASCOM.NotConnectedException(message);
-            }
-        }
 
         #region ASCOM Registration
 
@@ -392,6 +363,57 @@ namespace ASCOM.TEMPLATEDEVICENAME
         }
 
         #endregion
+
+        /// <summary>
+        /// Returns true if there is a valid connection to the driver hardware
+        /// </summary>
+        private bool IsConnected
+        {
+            get
+            {
+                // TODO check that the driver hardware connection exists and is connected to the hardware
+                return connectedState;
+            }
+        }
+
+        /// <summary>
+        /// Use this function to throw an exception if we aren't connected to the hardware
+        /// </summary>
+        /// <param name="message"></param>
+        private void CheckConnected(string message)
+        {
+            if (!IsConnected)
+            {
+                throw new ASCOM.NotConnectedException(message);
+            }
+        }
+
+        /// <summary>
+        /// Read the device configuration from the ASCOM Profile store
+        /// </summary>
+        internal void ReadProfile()
+        {
+            using (Profile driverProfile = new Profile())
+            {
+                driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
+                traceState = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
+                comPort = driverProfile.GetValue(driverID, comPortProfileName, string.Empty, comPortDefault);
+            }
+        }
+
+        /// <summary>
+        /// Write the device configuration to the  ASCOM  Profile store
+        /// </summary>
+        internal void WriteProfile()
+        {
+            using (Profile driverProfile = new Profile())
+            {
+                driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
+                driverProfile.WriteValue(driverID, traceStateProfileName, traceState.ToString());
+                driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString());
+            }
+
+        }
 
         #endregion
 
