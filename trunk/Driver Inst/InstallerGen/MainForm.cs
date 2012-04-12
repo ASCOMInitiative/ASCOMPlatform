@@ -241,6 +241,7 @@ namespace ASCOM.InstallerGen
 			tBuf = tBuf.Replace("%cid1%", classId);
 			tBuf = tBuf.Replace("%cid2%", classId2);
 			tBuf = tBuf.Replace("%rs32%", (this.cbDriverTechnology.Text.StartsWith("In-process COM") ? ";AfterInstall: RegASCOM(); Flags: regserver" : ";AfterInstall: RegASCOM()"));
+            tBuf = tBuf.Replace("%appid%", Guid.NewGuid().ToString());
 			// DEPENDS ON txtTechnologyTypes! Cheesy, but this is a quickie anyway
 			tBuf = CondLine(tBuf, "coms", this.cbDriverTechnology.Text.Contains("COM"));
 			tBuf = CondLine(tBuf, "cdll", this.cbDriverTechnology.Text.StartsWith("In-process"));

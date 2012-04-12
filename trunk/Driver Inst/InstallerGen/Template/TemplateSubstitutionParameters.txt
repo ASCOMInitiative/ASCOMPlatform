@@ -27,3 +27,4 @@
 ;   %nasm%    "true" means driver is a .NET assembly (in-proc)
 ;   %nlcs%    "true" means driver is a .NET local server (exe)
 ;   $srce%    "true" means add option to install driver sources from "Source" subfolder
+;   %appid%   New unique GUID to act as the AppID
