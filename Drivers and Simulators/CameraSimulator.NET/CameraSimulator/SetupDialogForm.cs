@@ -72,6 +72,7 @@ namespace ASCOM.Simulator
             this.comboBoxSensorType.SelectedIndex = (int)theCamera.sensorType;
             this.textBoxBayerOffsetX.Text = theCamera.bayerOffsetX.ToString(CultureInfo.CurrentCulture);
             this.textBoxBayerOffsetY.Text = theCamera.bayerOffsetY.ToString(CultureInfo.CurrentCulture);
+            this.checkBoxOmitOddBins.Checked = theCamera.omitOddBins;
 
             this.checkBoxHasCooler.Checked = theCamera.hasCooler;
             this.checkBoxCanSetCCDTemperature.Checked = theCamera.canSetCcdTemperature;
@@ -121,6 +122,7 @@ namespace ASCOM.Simulator
             camera.sensorType = (SensorType)this.comboBoxSensorType.SelectedIndex;
             camera.bayerOffsetX = short.Parse(this.textBoxBayerOffsetX.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             camera.bayerOffsetY = short.Parse(this.textBoxBayerOffsetY.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
+            camera.omitOddBins = this.checkBoxOmitOddBins.Checked;
 
             camera.hasCooler = this.checkBoxHasCooler.Checked;
             camera.canSetCcdTemperature = this.checkBoxCanSetCCDTemperature.Checked;

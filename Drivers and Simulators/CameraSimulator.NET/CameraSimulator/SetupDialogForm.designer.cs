@@ -87,6 +87,7 @@ namespace ASCOM.Simulator
             this.groupBoxGuiding = new System.Windows.Forms.GroupBox();
             this.checkBoxCanPulseGuide = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxOmitOddBins = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -102,7 +103,7 @@ namespace ASCOM.Simulator
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(392, 290);
+            this.cmdOK.Location = new System.Drawing.Point(392, 313);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -114,7 +115,7 @@ namespace ASCOM.Simulator
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(392, 320);
+            this.cmdCancel.Location = new System.Drawing.Point(392, 343);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -138,6 +139,7 @@ namespace ASCOM.Simulator
             // 
             // groupBoxCCD
             // 
+            this.groupBoxCCD.Controls.Add(this.checkBoxOmitOddBins);
             this.groupBoxCCD.Controls.Add(this.textBoxCameraYSize);
             this.groupBoxCCD.Controls.Add(this.textBoxCameraXSize);
             this.groupBoxCCD.Controls.Add(this.textBoxMaxBinY);
@@ -158,7 +160,7 @@ namespace ASCOM.Simulator
             this.groupBoxCCD.Controls.Add(this.label2);
             this.groupBoxCCD.Location = new System.Drawing.Point(4, 126);
             this.groupBoxCCD.Name = "groupBoxCCD";
-            this.groupBoxCCD.Size = new System.Drawing.Size(146, 217);
+            this.groupBoxCCD.Size = new System.Drawing.Size(146, 246);
             this.groupBoxCCD.TabIndex = 4;
             this.groupBoxCCD.TabStop = false;
             this.groupBoxCCD.Text = "CCD";
@@ -197,7 +199,7 @@ namespace ASCOM.Simulator
             // 
             // textBoxSensorName
             // 
-            this.textBoxSensorName.Location = new System.Drawing.Point(47, 135);
+            this.textBoxSensorName.Location = new System.Drawing.Point(47, 161);
             this.textBoxSensorName.Name = "textBoxSensorName";
             this.textBoxSensorName.Size = new System.Drawing.Size(90, 20);
             this.textBoxSensorName.TabIndex = 24;
@@ -206,7 +208,7 @@ namespace ASCOM.Simulator
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(3, 138);
+            this.label13.Location = new System.Drawing.Point(3, 164);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(35, 13);
             this.label13.TabIndex = 23;
@@ -214,7 +216,7 @@ namespace ASCOM.Simulator
             // 
             // textBoxBayerOffsetY
             // 
-            this.textBoxBayerOffsetY.Location = new System.Drawing.Point(126, 191);
+            this.textBoxBayerOffsetY.Location = new System.Drawing.Point(126, 217);
             this.textBoxBayerOffsetY.Name = "textBoxBayerOffsetY";
             this.textBoxBayerOffsetY.Size = new System.Drawing.Size(18, 20);
             this.textBoxBayerOffsetY.TabIndex = 22;
@@ -223,7 +225,7 @@ namespace ASCOM.Simulator
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(112, 194);
+            this.label15.Location = new System.Drawing.Point(112, 220);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(17, 13);
             this.label15.TabIndex = 21;
@@ -231,7 +233,7 @@ namespace ASCOM.Simulator
             // 
             // textBoxBayerOffsetX
             // 
-            this.textBoxBayerOffsetX.Location = new System.Drawing.Point(88, 191);
+            this.textBoxBayerOffsetX.Location = new System.Drawing.Point(88, 217);
             this.textBoxBayerOffsetX.Name = "textBoxBayerOffsetX";
             this.textBoxBayerOffsetX.Size = new System.Drawing.Size(18, 20);
             this.textBoxBayerOffsetX.TabIndex = 20;
@@ -240,13 +242,13 @@ namespace ASCOM.Simulator
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(4, 194);
+            this.label14.Location = new System.Drawing.Point(4, 220);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(84, 13);
             this.label14.TabIndex = 19;
             this.label14.Text = "Bayer Offset   X:";
             this.toolTip1.SetToolTip(this.label14, "Set the offset in X and Y pixels to the first pixel in the Bayer array. For camer" +
-                    "as with a colour filter array only.");
+        "as with a colour filter array only.");
             // 
             // comboBoxSensorType
             // 
@@ -259,7 +261,7 @@ namespace ASCOM.Simulator
             "CMYG",
             "CMYG2",
             "LRGB"});
-            this.comboBoxSensorType.Location = new System.Drawing.Point(47, 161);
+            this.comboBoxSensorType.Location = new System.Drawing.Point(47, 187);
             this.comboBoxSensorType.Name = "comboBoxSensorType";
             this.comboBoxSensorType.Size = new System.Drawing.Size(90, 21);
             this.comboBoxSensorType.TabIndex = 16;
@@ -268,7 +270,7 @@ namespace ASCOM.Simulator
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(3, 164);
+            this.label12.Location = new System.Drawing.Point(3, 190);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(31, 13);
             this.label12.TabIndex = 15;
@@ -277,7 +279,7 @@ namespace ASCOM.Simulator
             // checkBoxHasShutter
             // 
             this.checkBoxHasShutter.AutoSize = true;
-            this.checkBoxHasShutter.Location = new System.Drawing.Point(5, 112);
+            this.checkBoxHasShutter.Location = new System.Drawing.Point(6, 135);
             this.checkBoxHasShutter.Name = "checkBoxHasShutter";
             this.checkBoxHasShutter.Size = new System.Drawing.Size(82, 17);
             this.checkBoxHasShutter.TabIndex = 14;
@@ -596,7 +598,7 @@ namespace ASCOM.Simulator
             // 
             this.groupBox2.Controls.Add(this.buttonSetImageFile);
             this.groupBox2.Controls.Add(this.checkBoxApplyNoise);
-            this.groupBox2.Location = new System.Drawing.Point(331, 193);
+            this.groupBox2.Location = new System.Drawing.Point(331, 215);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(124, 88);
             this.groupBox2.TabIndex = 9;
@@ -623,7 +625,7 @@ namespace ASCOM.Simulator
             this.checkBoxApplyNoise.TabIndex = 0;
             this.checkBoxApplyNoise.Text = "Apply Noise";
             this.toolTip1.SetToolTip(this.checkBoxApplyNoise, "Check this to apply noise to the simulated image.  The amount of noise will vary " +
-                    "depending on the CCD temperature, exposure time and image brightness.");
+        "depending on the CCD temperature, exposure time and image brightness.");
             this.checkBoxApplyNoise.UseVisualStyleBackColor = true;
             // 
             // cameraBindingSource
@@ -644,7 +646,7 @@ namespace ASCOM.Simulator
             this.checkBoxInterfaceVersion.TabIndex = 10;
             this.checkBoxInterfaceVersion.Text = "Interface Version 2";
             this.toolTip1.SetToolTip(this.checkBoxInterfaceVersion, "Check this if the camera simulates a Version 2 camera. If unchecked the V2 parame" +
-                    "ters will raise a not implemented error.");
+        "ters will raise a not implemented error.");
             this.checkBoxInterfaceVersion.UseVisualStyleBackColor = true;
             this.checkBoxInterfaceVersion.CheckedChanged += new System.EventHandler(this.checkBoxInterfaceVersion_CheckedChanged);
             // 
@@ -667,14 +669,26 @@ namespace ASCOM.Simulator
             this.checkBoxCanPulseGuide.TabIndex = 0;
             this.checkBoxCanPulseGuide.Text = "Can Pulse Guide";
             this.toolTip1.SetToolTip(this.checkBoxCanPulseGuide, "Check this if the camera can accept pulse guide commands. They will have no effec" +
-                    "t.");
+        "t.");
             this.checkBoxCanPulseGuide.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOmitOddBins
+            // 
+            this.checkBoxOmitOddBins.AutoSize = true;
+            this.checkBoxOmitOddBins.Location = new System.Drawing.Point(6, 112);
+            this.checkBoxOmitOddBins.Name = "checkBoxOmitOddBins";
+            this.checkBoxOmitOddBins.Size = new System.Drawing.Size(93, 17);
+            this.checkBoxOmitOddBins.TabIndex = 29;
+            this.checkBoxOmitOddBins.Text = "Omit Odd Bins";
+            this.toolTip1.SetToolTip(this.checkBoxOmitOddBins, "Throw NotImplementedExceptions for odd bin values of 3 or greater. This has no ef" +
+        "fect unless MaxBinX and MaxBinY are 4 or greater.");
+            this.checkBoxOmitOddBins.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(461, 353);
+            this.ClientSize = new System.Drawing.Size(461, 376);
             this.Controls.Add(this.groupBoxGuiding);
             this.Controls.Add(this.checkBoxInterfaceVersion);
             this.Controls.Add(this.groupBox2);
@@ -773,5 +787,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.GroupBox groupBoxGuiding;
         private System.Windows.Forms.CheckBox checkBoxCanPulseGuide;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox checkBoxOmitOddBins;
 	}
 }
