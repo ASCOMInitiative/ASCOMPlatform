@@ -64,25 +64,26 @@ Public Class TEMPLATEDEVICECLASS
     Private Shared driverDescription As String = "TEMPLATEDEVICENAME TEMPLATEDEVICECLASS"
 
     Friend Shared comPortProfileName As String = "COM Port" 'Constants used for Profile persistence
-    Friend Shared traceLevelProfileName As String = "Trace Level"
+    Friend Shared traceStateProfileName As String = "Trace Level"
     Friend Shared comPortDefault As String = "COM1"
-    Friend Shared traceLevelDefault As String = "False"
+    Friend Shared traceStateDefault As String = "False"
+
+    Friend Shared comPort As String ' Variables to hold the currrent device configuration
+    Friend Shared traceState As Boolean
 
     Private connectedState As Boolean ' Private variable to hold the connected state
     Private utilities As Util ' Private variable to hold an ASCOM Utilities object
     Private astroUtilities As AstroUtils ' Private variable to hold an AstroUtils object to provide the Range method
     Private TL As TraceLogger ' Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
-    Private driverProfile As Profile ' Private variable to hold Profile object for persisting driver settings to the ASCOM profile
 
     '
     ' Constructor - Must be public for COM registration!
     '
     Public Sub New()
 
-        driverProfile = New Profile()
-        driverProfile.DeviceType = "TEMPLATEDEVICECLASS"
+        ReadProfile() ' Read device configuration from the ASCOM Profile store
         TL = New TraceLogger("", "TEMPLATEDEVICENAME")
-        TL.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceLevelProfileName, "", traceLevelDefault))
+        TL.Enabled = traceState
         TL.LogMessage("TEMPLATEDEVICECLASS", "Starting initialisation")
 
         connectedState = False ' Initialise connected to false
@@ -115,10 +116,8 @@ Public Class TEMPLATEDEVICECLASS
         Using F As SetupDialogForm = New SetupDialogForm()
             Dim result As System.Windows.Forms.DialogResult = F.ShowDialog()
             If result = DialogResult.OK Then
-                My.MySettings.Default.Save()
-                Exit Sub
+                WriteProfile() ' Persist device configuration values to the ASCOM Profile store
             End If
-            My.MySettings.Default.Reload()
         End Using
     End Sub
 
@@ -172,11 +171,12 @@ Public Class TEMPLATEDEVICECLASS
 
             If value Then
                 connectedState = True
+                TL.LogMessage("Connected Set", "Connecting to port " + comPort)
                 ' TODO connect to the device
-                Dim comPort As String = driverProfile.GetValue(driverID, comPortProfileName, "", comPortDefault)
             Else
-                ' TODO disconnect from the device
                 connectedState = False
+                TL.LogMessage("Connected Set", "Disconnecting from port " + comPort)
+                ' TODO disconnect from the device
             End If
         End Set
     End Property
@@ -241,26 +241,6 @@ Public Class TEMPLATEDEVICECLASS
     ' here are some useful properties and methods that can be used as required
     ' to help with
 
-    ''' <summary>
-    ''' Returns true if there is a valid connection to the driver hardware
-    ''' </summary>
-    Private ReadOnly Property IsConnected As Boolean
-        Get
-            ' TODO check that the driver hardware connection exists and is connected to the hardware
-            Return connectedState
-        End Get
-    End Property
-
-    ''' <summary>
-    ''' Use this function to throw an exception if we aren't connected to the hardware
-    ''' </summary>
-    ''' <param name="message"></param>
-    Private Sub CheckConnected(ByVal message As String)
-        If Not IsConnected Then
-            Throw New NotConnectedException(message)
-        End If
-    End Sub
-
 #Region "ASCOM Registration"
 
     Private Shared Sub RegUnregASCOM(ByVal bRegister As Boolean)
@@ -290,6 +270,49 @@ Public Class TEMPLATEDEVICECLASS
     End Sub
 
 #End Region
+
+    ''' <summary>
+    ''' Returns true if there is a valid connection to the driver hardware
+    ''' </summary>
+    Private ReadOnly Property IsConnected As Boolean
+        Get
+            ' TODO check that the driver hardware connection exists and is connected to the hardware
+            Return connectedState
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Use this function to throw an exception if we aren't connected to the hardware
+    ''' </summary>
+    ''' <param name="message"></param>
+    Private Sub CheckConnected(ByVal message As String)
+        If Not IsConnected Then
+            Throw New NotConnectedException(message)
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Read the device configuration from the ASCOM Profile store
+    ''' </summary>
+    Friend Sub ReadProfile()
+        Using driverProfile As New Profile()
+            driverProfile.DeviceType = "TEMPLATEDEVICECLASS"
+            traceState = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, String.Empty, traceStateDefault))
+            comPort = driverProfile.GetValue(driverID, comPortProfileName, String.Empty, comPortDefault)
+        End Using
+    End Sub
+
+    ''' <summary>
+    ''' Write the device configuration to the  ASCOM  Profile store
+    ''' </summary>
+    Friend Sub WriteProfile()
+        Using driverProfile As New Profile()
+            driverProfile.DeviceType = "TEMPLATEDEVICECLASS"
+            driverProfile.WriteValue(driverID, traceStateProfileName, traceState.ToString())
+            driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString())
+        End Using
+
+    End Sub
 
 #End Region
 

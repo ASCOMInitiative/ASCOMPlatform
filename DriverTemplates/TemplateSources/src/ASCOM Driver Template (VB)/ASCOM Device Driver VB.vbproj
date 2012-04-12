@@ -113,7 +113,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Rates.vb" />
-    <Compile Include="Settings.vb" />
     <Compile Include="SetupDialogForm.Designer.vb">
       <DependentUpon>SetupDialogForm.vb</DependentUpon>
     </Compile>

@@ -38,7 +38,6 @@
       </Folder>
       <ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderInterface.vb">PlaceholderInterface.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Settings.vb">Settings.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.vb">SetupDialogForm.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.Designer.vb">SetupDialogForm.Designer.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.resx">SetupDialogForm.resx</ProjectItem>

@@ -41,7 +41,6 @@
         <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.bmp">ASCOM.bmp</ProjectItem>
       </Folder>
       <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Settings.cs">Settings.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.cs">SetupDialogForm.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.designer.cs">SetupDialogForm.designer.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.resx">SetupDialogForm.resx</ProjectItem>
