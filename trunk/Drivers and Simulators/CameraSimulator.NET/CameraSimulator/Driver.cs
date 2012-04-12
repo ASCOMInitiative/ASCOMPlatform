@@ -36,11 +36,11 @@ namespace ASCOM.Simulator
 {
     /// <summary>
     /// Your driver's ID is ASCOM.Simulator.Camera
-	/// The Guid attribute sets the CLSID for ASCOM.Simulator.Camera
-	/// The ClassInterface/None attribute prevents an empty interface called
-	/// _Camera from being created and used as the [default] interface
+    /// The Guid attribute sets the CLSID for ASCOM.Simulator.Camera
+    /// The ClassInterface/None attribute prevents an empty interface called
+    /// _Camera from being created and used as the [default] interface
     /// </summary>
-	[Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None),ComVisible(true)]
+    [Guid("12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe"), ClassInterface(ClassInterfaceType.None), ComVisible(true)]
     public class Camera : ICameraV2
     {
         #region profile string constants
@@ -72,6 +72,7 @@ namespace ASCOM.Simulator
         private const string STR_ImagePath = "ImageFile";
         private const string STR_ApplyNoise = "ApplyNoise";
         private const string STR_CanPulseGuide = "CanPulseGuide";
+        private const string STR_OmitOddBins = "OmitOddBins";
         #endregion
 
         #region internal properties
@@ -153,10 +154,11 @@ namespace ASCOM.Simulator
         internal string imagePath;
         internal bool applyNoise;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private float[,,] imageData;    // room for a 3 plane colour image
+        private float[, ,] imageData;    // room for a 3 plane colour image
         private bool darkFrame;
+        internal bool omitOddBins; // True if bins of 3, 5, 7 etc. should throw NotImplementedExceptions
 
-        internal bool connected=false;
+        internal bool connected = false;
         internal CameraStates cameraState = CameraStates.cameraIdle;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
@@ -164,9 +166,9 @@ namespace ASCOM.Simulator
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
         private object[,] imageArrayVariant;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private int[,,] imageArrayColour;
+        private int[, ,] imageArrayColour;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
-        private object[,,] imageArrayVariantColour;
+        private object[, ,] imageArrayVariantColour;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         private string lastError = string.Empty;
 
@@ -182,36 +184,36 @@ namespace ASCOM.Simulator
 
         #endregion
 
-		#region Camera Constructor
-		//
-		// Driver ID and descriptive string that shows in the Chooser
-		//
+        #region Camera Constructor
+        //
+        // Driver ID and descriptive string that shows in the Chooser
+        //
         private static string s_csDriverID = "ASCOM.Simulator.Camera";
-		// TODO Change the descriptive string for your driver then remove this line
-		private static string s_csDriverDescription = "Camera V2 simulator";
+        // TODO Change the descriptive string for your driver then remove this line
+        private static string s_csDriverDescription = "Camera V2 simulator";
         /// <summary>
         /// Initializes a new instance of the <see cref="Camera"/> class.
         /// Must be public for COM registration!
         /// </summary>
-		public Camera()
-		{
-			// TODO Implement your additional construction here
+        public Camera()
+        {
+            // TODO Implement your additional construction here
             InitialiseSimulator();
             log = new TraceLogger(null, "Camera Simulator");
             log.Enabled = false;
             log.LogMessage("Constructor", "Done");
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region ASCOM Registration
-		//
-		// Register or unregister driver for ASCOM. This is harmless if already
-		// registered or unregistered. 
-		//
-		private static void RegUnregASCOM(bool bRegister)
-		{
-			using (Profile P = new Profile())
+        #region ASCOM Registration
+        //
+        // Register or unregister driver for ASCOM. This is harmless if already
+        // registered or unregistered. 
+        //
+        private static void RegUnregASCOM(bool bRegister)
+        {
+            using (Profile P = new Profile())
             {
                 P.DeviceType = "Camera";					//  Requires Helper 5.0.3 or later
                 if (bRegister)
@@ -224,20 +226,20 @@ namespace ASCOM.Simulator
                 }
                 catch (Exception) { }
             }
-		}
+        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "t"), ComRegisterFunction]
-		private static void RegisterASCOM(Type t)
-		{
-			RegUnregASCOM(true);
-		}
+        private static void RegisterASCOM(Type t)
+        {
+            RegUnregASCOM(true);
+        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "t"), ComUnregisterFunction]
-		private static void UnregisterASCOM(Type t)
-		{
-			RegUnregASCOM(false);
-		}
-		#endregion
+        private static void UnregisterASCOM(Type t)
+        {
+            RegUnregASCOM(false);
+        }
+        #endregion
 
         public void Dispose()
         {
@@ -248,7 +250,7 @@ namespace ASCOM.Simulator
         }
 
         //
-		// PUBLIC COM INTERFACE ICamera IMPLEMENTATION
+        // PUBLIC COM INTERFACE ICamera IMPLEMENTATION
         //
 
         #region Common Methods
@@ -289,12 +291,12 @@ namespace ASCOM.Simulator
             if (this.supportedActions.Contains(ActionName))
             {
                 switch (ActionName)
-	            {
+                {
                     case "SetFanSpeed":
                         int fanMode;
                         if (int.TryParse(ActionParameters, out fanMode))
                         {
-                            if (fanMode >= 0 && fanMode <=3)
+                            if (fanMode >= 0 && fanMode <= 3)
                             {
                                 this.fanMode = fanMode;
                                 return string.Empty;
@@ -306,7 +308,7 @@ namespace ASCOM.Simulator
                         return this.fanMode.ToString();
                     default:
                         break;
-	            }
+                }
             }
             // failed to find this supported action
             throw new MethodNotImplementedException("Action-" + ActionName);
@@ -318,15 +320,15 @@ namespace ASCOM.Simulator
 
 
         /// <summary>
-		/// Aborts the current exposure, if any, and returns the camera to Idle state.
-		/// Must throw exception if camera is not idle and abort is
-		///  unsuccessful (or not possible, e.g. during download).
-		/// Must throw exception if hardware or communications error
-		///  occurs.
-		/// Must NOT throw an exception if the camera is already idle.
-		/// </summary>
-		public void AbortExposure()
-		{
+        /// Aborts the current exposure, if any, and returns the camera to Idle state.
+        /// Must throw exception if camera is not idle and abort is
+        ///  unsuccessful (or not possible, e.g. during download).
+        /// Must throw exception if hardware or communications error
+        ///  occurs.
+        /// Must NOT throw an exception if the camera is already idle.
+        /// </summary>
+        public void AbortExposure()
+        {
             if (!this.connected)
                 throw new NotConnectedException("Can't abort exposure when not connected");
             if (!this.canAbortExposure)
@@ -351,107 +353,119 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Sets the binning factor for the X axis.  Also returns the current value.  Should
-		/// default to 1 when the camera link is established.  Note:  driver does not check
-		/// for compatible subframe values when this value is set; rather they are checked
-		/// upon StartExposure.
-		/// </summary>
-		/// <value>BinX sets/gets the X binning value</value>
-		/// <exception>Must throw an exception for illegal binning values</exception>
-		public short BinX
-		{
-			get
-			{
+        /// <summary>
+        /// Sets the binning factor for the X axis.  Also returns the current value.  Should
+        /// default to 1 when the camera link is established.  Note:  driver does not check
+        /// for compatible subframe values when this value is set; rather they are checked
+        /// upon StartExposure.
+        /// </summary>
+        /// <value>BinX sets/gets the X binning value</value>
+        /// <exception>Must throw an exception for illegal binning values</exception>
+        public short BinX
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BinX when not connected");
                 return this.binX;
-			}
-			set
-			{
+            }
+            set
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set BinX when not connected");
                 if (value > this.maxBinX || value < 1)
                     throw new InvalidValueException("BinX", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.MaxBinX));
-				this.binX = value;
+
+                if ((maxBinX >= 4) & omitOddBins & ((value % 2) > 0) & (value >= 3)) // Must be an odd value of 3 or greater when maxbin is 4 or greater
+                {
+                    throw new InvalidValueException("BinX", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", this.MaxBinX));
+                }
+
+                this.binX = value;
                 if (!this.canAsymmetricBin)
                     this.binY = value;
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Sets the binning factor for the Y axis  Also returns the current value.  Should
-		/// default to 1 when the camera link is established.  Note:  driver does not check
-		/// for compatible subframe values when this value is set; rather they are checked
-		/// upon StartExposure.
-		/// </summary>
-		/// <exception>Must throw an exception for illegal binning values</exception>
-		public short BinY
-		{
-			get
-			{
+        /// <summary>
+        /// Sets the binning factor for the Y axis  Also returns the current value.  Should
+        /// default to 1 when the camera link is established.  Note:  driver does not check
+        /// for compatible subframe values when this value is set; rather they are checked
+        /// upon StartExposure.
+        /// </summary>
+        /// <exception>Must throw an exception for illegal binning values</exception>
+        public short BinY
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BinY when not connected");
                 return this.binY;
-			}
-			set
-			{
+            }
+            set
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set BinY when not connected");
                 if (value > this.maxBinY || value < 1)
                     throw new InvalidValueException("BinY", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.MaxBinY));
-				this.binY = value;
+
+                if ((maxBinY >= 4) & omitOddBins & ((value % 2) > 0) & (value >= 3)) // Must be an odd value of 3 or greater when maxbin is 4 or greater
+                {
+                    throw new InvalidValueException("BinY", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", this.MaxBinY));
+                }
+
+                this.binY = value;
                 if (!this.canAsymmetricBin)
                     this.binX = value;
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Returns the current CCD temperature in degrees Celsius. Only valid if
-		/// CanControlTemperature is True.
-		/// </summary>
-		/// <exception>Must throw exception if data unavailable.</exception>
-		public double CCDTemperature
-		{
+        /// <summary>
+        /// Returns the current CCD temperature in degrees Celsius. Only valid if
+        /// CanControlTemperature is True.
+        /// </summary>
+        /// <exception>Must throw exception if data unavailable.</exception>
+        public double CCDTemperature
+        {
             get
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read the CCD temperature when not connected");
                 return this.ccdTemperature;
             }
-		}
+        }
 
-		/// <summary>
-		/// Returns one of the following status information:
-		/// <list type="bullet">
-		///  <listheader>
-		///   <description>Value  State          Meaning</description>
-		///  </listheader>
-		///  <item>
-		///   <description>0      CameraIdle      At idle state, available to start exposure</description>
-		///  </item>
-		///  <item>
-		///   <description>1      CameraWaiting   Exposure started but waiting (for shutter, trigger,
-		///                        filter wheel, etc.)</description>
-		///  </item>
-		///  <item>
-		///   <description>2      CameraExposing  Exposure currently in progress</description>
-		///  </item>
-		///  <item>
-		///   <description>3      CameraReading   CCD array is being read out (digitized)</description>
-		///  </item>
-		///  <item>
-		///   <description>4      CameraDownload  Downloading data to PC</description>
-		///  </item>
-		///  <item>
-		///   <description>5      CameraError     Camera error condition serious enough to prevent
-		///                        further operations (link fail, etc.).</description>
-		///  </item>
-		/// </list>
-		/// </summary>
-		/// <exception cref="System.Exception">Must return an exception if the camera status is unavailable.</exception>
-		public CameraStates CameraState
-		{
+        /// <summary>
+        /// Returns one of the following status information:
+        /// <list type="bullet">
+        ///  <listheader>
+        ///   <description>Value  State          Meaning</description>
+        ///  </listheader>
+        ///  <item>
+        ///   <description>0      CameraIdle      At idle state, available to start exposure</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>1      CameraWaiting   Exposure started but waiting (for shutter, trigger,
+        ///                        filter wheel, etc.)</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>2      CameraExposing  Exposure currently in progress</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>3      CameraReading   CCD array is being read out (digitized)</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>4      CameraDownload  Downloading data to PC</description>
+        ///  </item>
+        ///  <item>
+        ///   <description>5      CameraError     Camera error condition serious enough to prevent
+        ///                        further operations (link fail, etc.).</description>
+        ///  </item>
+        /// </list>
+        /// </summary>
+        /// <exception cref="System.Exception">Must return an exception if the camera status is unavailable.</exception>
+        public CameraStates CameraState
+        {
             get
             {
                 if (!this.connected)
@@ -459,58 +473,58 @@ namespace ASCOM.Simulator
                 log.LogMessage("CameraState", this.cameraState.ToString());
                 return this.cameraState;
             }
-		}
+        }
 
-		/// <summary>
-		/// Returns the width of the CCD camera chip in unbinned pixels.
-		/// </summary>
-		/// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
-		public int CameraXSize
-		{
-			get
-            { 
+        /// <summary>
+        /// Returns the width of the CCD camera chip in unbinned pixels.
+        /// </summary>
+        /// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
+        public int CameraXSize
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read the camera Xsize when not connected");
                 return this.cameraXSize;
             }
-		}
+        }
 
-		/// <summary>
-		/// Returns the height of the CCD camera chip in unbinned pixels.
-		/// </summary>
-		/// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
-		public int CameraYSize
-		{
-			get
-            { 
+        /// <summary>
+        /// Returns the height of the CCD camera chip in unbinned pixels.
+        /// </summary>
+        /// <exception cref="System.Exception">Must throw exception if the value is not known</exception>
+        public int CameraYSize
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read the camera Ysize when not connected");
                 return this.cameraYSize;
             }
-		}
+        }
 
-		/// <summary>
-		/// Returns True if the camera can abort exposures; False if not.
-		/// </summary>
-		public bool CanAbortExposure
-		{
-			get 
-            { 
+        /// <summary>
+        /// Returns True if the camera can abort exposures; False if not.
+        /// </summary>
+        public bool CanAbortExposure
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read CanAbortExposure when not connected");
-                return this.canAbortExposure; 
+                return this.canAbortExposure;
             }
-		}
+        }
 
-		/// <summary>
-		/// If True, the camera can have different binning on the X and Y axes, as
-		/// determined by BinX and BinY. If False, the binning must be equal on the X and Y
-		/// axes.
-		/// </summary>
-		/// <exception cref="System.Exception">Must throw exception if the value is not known (n.b. normally only
-		///            occurs if no link established and camera must be queried)</exception>
-		public bool CanAsymmetricBin
-		{
+        /// <summary>
+        /// If True, the camera can have different binning on the X and Y axes, as
+        /// determined by BinX and BinY. If False, the binning must be equal on the X and Y
+        /// axes.
+        /// </summary>
+        /// <exception cref="System.Exception">Must throw exception if the value is not known (n.b. normally only
+        ///            occurs if no link established and camera must be queried)</exception>
+        public bool CanAsymmetricBin
+        {
             get
             {
                 if (!this.connected)
@@ -519,9 +533,9 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// If True, the camera's cooler power setting can be read.
-		/// </summary>
+        /// <summary>
+        /// If True, the camera's cooler power setting can be read.
+        /// </summary>
         public bool CanGetCoolerPower
         {
             get
@@ -532,23 +546,23 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Returns True if the camera can send autoguider pulses to the telescope mount;
-		/// False if not.  (Note: this does not provide any indication of whether the
-		/// autoguider cable is actually connected.)
-		/// </summary>
-		public bool CanPulseGuide
-		{
-			get { return this.canPulseGuide; }
-		}
+        /// <summary>
+        /// Returns True if the camera can send autoguider pulses to the telescope mount;
+        /// False if not.  (Note: this does not provide any indication of whether the
+        /// autoguider cable is actually connected.)
+        /// </summary>
+        public bool CanPulseGuide
+        {
+            get { return this.canPulseGuide; }
+        }
 
-		/// <summary>
-		/// If True, the camera's cooler setpoint can be adjusted. If False, the camera
-		/// either uses open-loop cooling or does not have the ability to adjust temperature
-		/// from software, and setting the TemperatureSetpoint property has no effect.
-		/// </summary>
-		public bool CanSetCCDTemperature
-		{
+        /// <summary>
+        /// If True, the camera's cooler setpoint can be adjusted. If False, the camera
+        /// either uses open-loop cooling or does not have the ability to adjust temperature
+        /// from software, and setting the TemperatureSetpoint property has no effect.
+        /// </summary>
+        public bool CanSetCCDTemperature
+        {
             get
             {
                 if (!this.connected)
@@ -557,54 +571,54 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Some cameras support StopExposure, which allows the exposure to be terminated
-		/// before the exposure timer completes, but will still read out the image.  Returns
-		/// True if StopExposure is available, False if not.
-		/// </summary>
-		/// <exception cref=" System.Exception">not supported</exception>
-		/// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
-		public bool CanStopExposure
-		{
+        /// <summary>
+        /// Some cameras support StopExposure, which allows the exposure to be terminated
+        /// before the exposure timer completes, but will still read out the image.  Returns
+        /// True if StopExposure is available, False if not.
+        /// </summary>
+        /// <exception cref=" System.Exception">not supported</exception>
+        /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
+        public bool CanStopExposure
+        {
             get
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read CanStopExposure when not connected");
                 return this.canStopExposure;
             }
-		}
+        }
 
-		/// <summary>
-		/// Controls the link between the driver and the camera. Set True to enable the
-		/// link. Set False to disable the link (this does not switch off the cooler).
-		/// You can also read the property to check whether it is connected.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
-		public bool Connected
-		{
-			get
-			{
-				return this.connected;
-			}
-			set
-			{
+        /// <summary>
+        /// Controls the link between the driver and the camera. Set True to enable the
+        /// link. Set False to disable the link (this does not switch off the cooler).
+        /// You can also read the property to check whether it is connected.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if unsuccessful.</exception>
+        public bool Connected
+        {
+            get
+            {
+                return this.connected;
+            }
+            set
+            {
                 if (value)
                     ReadImageFile();
                 this.connected = value;
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Turns on and off the camera cooler, and returns the current on/off state.
-		/// Warning: turning the cooler off when the cooler is operating at high delta-T
-		/// (typically >20C below ambient) may result in thermal shock.  Repeated thermal
-		/// shock may lead to damage to the sensor or cooler stack.  Please consult the
-		/// documentation supplied with the camera for further information.
-		/// </summary>
-		/// <exception cref=" System.Exception">not supported</exception>
-		/// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
-		public bool CoolerOn
-		{
+        /// <summary>
+        /// Turns on and off the camera cooler, and returns the current on/off state.
+        /// Warning: turning the cooler off when the cooler is operating at high delta-T
+        /// (typically >20C below ambient) may result in thermal shock.  Repeated thermal
+        /// shock may lead to damage to the sensor or cooler stack.  Please consult the
+        /// documentation supplied with the camera for further information.
+        /// </summary>
+        /// <exception cref=" System.Exception">not supported</exception>
+        /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
+        public bool CoolerOn
+        {
             get
             {
                 if (!this.connected)
@@ -613,8 +627,8 @@ namespace ASCOM.Simulator
                     throw new PropertyNotImplementedException("CoolerOn", false);
                 return this.coolerOn;
             }
-			set
-			{
+            set
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set CoolerOn when not connected");
                 if (!this.hasCooler)
@@ -632,8 +646,8 @@ namespace ASCOM.Simulator
                         coolerTimer.Enabled = true;
                     }
                 }
-			}
-		}
+            }
+        }
 
         /// <summary>
         /// Adjust the ccd temperature and power once a second
@@ -648,15 +662,15 @@ namespace ASCOM.Simulator
             // increase temperature by 2 deg per sec at a differential of 40
             this.ccdTemperature += (this.heatSinkTemperature - this.ccdTemperature) / 20.0;
         }
-        
+
         /// <summary>
-		/// Returns the present cooler power level, in percent.  Returns zero if CoolerOn is
-		/// False.
-		/// </summary>
-		/// <exception cref=" System.Exception">not supported</exception>
-		/// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
-		public double CoolerPower
-		{
+        /// Returns the present cooler power level, in percent.  Returns zero if CoolerOn is
+        /// False.
+        /// </summary>
+        /// <exception cref=" System.Exception">not supported</exception>
+        /// <exception cref=" System.Exception">an error condition such as link failure is present</exception>
+        public double CoolerPower
+        {
             get
             {
                 if (!this.connected)
@@ -667,15 +681,15 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Returns a description of the camera model, such as manufacturer and model
-		/// number. Any ASCII characters may be used. The string shall not exceed 68
-		/// characters (for compatibility with FITS headers).
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
-		public string Description
-		{
-			get 
+        /// <summary>
+        /// Returns a description of the camera model, such as manufacturer and model
+        /// number. Any ASCII characters may be used. The string shall not exceed 68
+        /// characters (for compatibility with FITS headers).
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if description unavailable</exception>
+        public string Description
+        {
+            get
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read Description when not connected");
@@ -684,16 +698,16 @@ namespace ASCOM.Simulator
                 else
                     return string.Format(CultureInfo.CurrentCulture, "Simulated {0} camera {1}", this.sensorType, this.sensorName);
             }
-		}
+        }
 
-		/// <summary>
-		/// Returns the gain of the camera in photoelectrons per A/D unit. (Some cameras have
-		/// multiple gain modes; these should be selected via the SetupDialog and thus are
-		/// static during a session.)
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public double ElectronsPerADU
-		{
+        /// <summary>
+        /// Returns the gain of the camera in photoelectrons per A/D unit. (Some cameras have
+        /// multiple gain modes; these should be selected via the SetupDialog and thus are
+        /// static during a session.)
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public double ElectronsPerADU
+        {
             get
             {
                 if (!this.connected)
@@ -702,28 +716,28 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Reports the full well capacity of the camera in electrons, at the current camera
-		/// settings (binning, SetupDialog settings, etc.)
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public double FullWellCapacity
-		{
+        /// <summary>
+        /// Reports the full well capacity of the camera in electrons, at the current camera
+        /// settings (binning, SetupDialog settings, etc.)
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public double FullWellCapacity
+        {
             get
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read FullWellCapacity when not connected");
                 return this.fullWellCapacity;
             }
-		}
+        }
 
-		/// <summary>
-		/// If True, the camera has a mechanical shutter. If False, the camera does not have
-		/// a shutter.  If there is no shutter, the StartExposure command will ignore the
-		/// Light parameter.
-		/// </summary>
-		public bool HasShutter
-		{
+        /// <summary>
+        /// If True, the camera has a mechanical shutter. If False, the camera does not have
+        /// a shutter.  If there is no shutter, the StartExposure command will ignore the
+        /// Light parameter.
+        /// </summary>
+        public bool HasShutter
+        {
             get
             {
                 if (!this.connected)
@@ -732,13 +746,13 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Returns the current heat sink temperature (called "ambient temperature" by some
-		/// manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public double HeatSinkTemperature
-		{
+        /// <summary>
+        /// Returns the current heat sink temperature (called "ambient temperature" by some
+        /// manufacturers) in degrees Celsius. Only valid if CanControlTemperature is True.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public double HeatSinkTemperature
+        {
             get
             {
                 if (!this.connected)
@@ -749,22 +763,22 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Returns a safearray of int of size NumX * NumY containing the pixel values from
-		/// the last exposure. The application must inspect the Safearray parameters to
-		/// determine the dimensions. Note: if NumX or NumY is changed after a call to
-		/// StartExposure it will have no effect on the size of this array. This is the
-		/// preferred method for programs (not scripts) to download images since it requires
-		/// much less memory.
-		///
-		/// For color or multispectral cameras, will produce an array of NumX * NumY *
-		/// NumPlanes.  If the application cannot handle multispectral images, it should use
-		/// just the first plane.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public object ImageArray
-		{
-			get 
+        /// <summary>
+        /// Returns a safearray of int of size NumX * NumY containing the pixel values from
+        /// the last exposure. The application must inspect the Safearray parameters to
+        /// determine the dimensions. Note: if NumX or NumY is changed after a call to
+        /// StartExposure it will have no effect on the size of this array. This is the
+        /// preferred method for programs (not scripts) to download images since it requires
+        /// much less memory.
+        ///
+        /// For color or multispectral cameras, will produce an array of NumX * NumY *
+        /// NumPlanes.  If the application cannot handle multispectral images, it should use
+        /// just the first plane.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public object ImageArray
+        {
+            get
             {
                 log.LogMessage("ImageArray", "get");
                 if (!this.connected)
@@ -777,25 +791,25 @@ namespace ASCOM.Simulator
                 else
                     return this.imageArray;
             }
-		}
+        }
 
-		/// <summary>
-		/// Returns a safearray of Variant of size NumX * NumY containing the pixel values
-		/// from the last exposure. The application must inspect the Safearray parameters to
-		/// determine the dimensions. Note: if NumX or NumY is changed after a call to
-		/// StartExposure it will have no effect on the size of this array. This property
-		/// should only be used from scripts due to the extremely high memory utilization on
-		/// large image arrays (26 bytes per pixel). Pixels values should be in Short, int,
-		/// or Double format.
-		///
-		/// For color or multispectral cameras, will produce an array of NumX * NumY *
-		/// NumPlanes.  If the application cannot handle multispectral images, it should use
-		/// just the first plane.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        /// <summary>
+        /// Returns a safearray of Variant of size NumX * NumY containing the pixel values
+        /// from the last exposure. The application must inspect the Safearray parameters to
+        /// determine the dimensions. Note: if NumX or NumY is changed after a call to
+        /// StartExposure it will have no effect on the size of this array. This property
+        /// should only be used from scripts due to the extremely high memory utilization on
+        /// large image arrays (26 bytes per pixel). Pixels values should be in Short, int,
+        /// or Double format.
+        ///
+        /// For color or multispectral cameras, will produce an array of NumX * NumY *
+        /// NumPlanes.  If the application cannot handle multispectral images, it should use
+        /// just the first plane.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
         public object ImageArrayVariant
-		{
+        {
             get
             {
                 if (!this.connected)
@@ -831,16 +845,16 @@ namespace ASCOM.Simulator
                     return imageArrayVariant;
                 }
             }
-		}
+        }
 
-		/// <summary>
-		/// If True, there is an image from the camera available. If False, no image
-		/// is available and attempts to use the ImageArray method will produce an
-		/// exception.
-		/// </summary>
-		/// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
-		public bool ImageReady
-		{
+        /// <summary>
+        /// If True, there is an image from the camera available. If False, no image
+        /// is available and attempts to use the ImageArray method will produce an
+        /// exception.
+        /// </summary>
+        /// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
+        public bool ImageReady
+        {
             get
             {
                 if (!this.connected)
@@ -850,29 +864,29 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// If True, pulse guiding is in progress. Required if the PulseGuide() method
-		/// (which is non-blocking) is implemented. See the PulseGuide() method.
-		/// </summary>
-		/// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
-		public bool IsPulseGuiding
-		{
-			get
+        /// <summary>
+        /// If True, pulse guiding is in progress. Required if the PulseGuide() method
+        /// (which is non-blocking) is implemented. See the PulseGuide() method.
+        /// </summary>
+        /// <exception cref=" System.Exception">hardware or communications link error has occurred.</exception>
+        public bool IsPulseGuiding
+        {
+            get
             {
                 if (!this.canPulseGuide)
                     throw new ASCOM.PropertyNotImplementedException("IsPulseGuiding", false);
                 return this.isPulseGuidingRa || this.isPulseGuidingDec;
             }
-		}
+        }
 
-		/// <summary>
-		/// Reports the actual exposure duration in seconds (i.e. shutter open time).  This
-		/// may differ from the exposure time requested due to shutter latency, camera timing
-		/// precision, etc.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
-		public double LastExposureDuration
-		{
+        /// <summary>
+        /// Reports the actual exposure duration in seconds (i.e. shutter open time).  This
+        /// may differ from the exposure time requested due to shutter latency, camera timing
+        /// precision, etc.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
+        public double LastExposureDuration
+        {
             get
             {
                 if (!this.connected)
@@ -883,13 +897,13 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Reports the actual exposure start in the FITS-standard
-		/// CCYY-MM-DDThh:mm:ss[.sss...] format.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
-		public string LastExposureStartTime
-		{
+        /// <summary>
+        /// Reports the actual exposure start in the FITS-standard
+        /// CCYY-MM-DDThh:mm:ss[.sss...] format.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if not supported or no exposure has been taken</exception>
+        public string LastExposureStartTime
+        {
             get
             {
                 if (!this.connected)
@@ -898,29 +912,29 @@ namespace ASCOM.Simulator
                     throw new NotConnectedException("Can't read LastExposureStartTime when no image is ready");
                 return this.lastExposureStartTime;
             }
-		}
+        }
 
-		/// <summary>
-		/// Reports the maximum ADU value the camera can produce.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public int MaxADU
-		{
+        /// <summary>
+        /// Reports the maximum ADU value the camera can produce.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public int MaxADU
+        {
             get
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read MaxADU when not connected");
                 return this.maxADU;
             }
-		}
+        }
 
-		/// <summary>
-		/// If AsymmetricBinning = False, returns the maximum allowed binning factor. If
-		/// AsymmetricBinning = True, returns the maximum allowed binning factor for the X axis.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public short MaxBinX
-		{
+        /// <summary>
+        /// If AsymmetricBinning = False, returns the maximum allowed binning factor. If
+        /// AsymmetricBinning = True, returns the maximum allowed binning factor for the X axis.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public short MaxBinX
+        {
             get
             {
                 if (!this.connected)
@@ -929,13 +943,13 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// If AsymmetricBinning = False, equals MaxBinX. If AsymmetricBinning = True,
-		/// returns the maximum allowed binning factor for the Y axis.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public short MaxBinY
-		{
+        /// <summary>
+        /// If AsymmetricBinning = False, equals MaxBinX. If AsymmetricBinning = True,
+        /// returns the maximum allowed binning factor for the Y axis.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public short MaxBinY
+        {
             get
             {
                 if (!this.connected)
@@ -944,55 +958,55 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Sets the subframe width. Also returns the current value.  If binning is active,
-		/// value is in binned pixels.  No error check is performed when the value is set.
-		/// Should default to CameraXSize.
-		/// </summary>
-		public int NumX
-		{
-			get
-			{
+        /// <summary>
+        /// Sets the subframe width. Also returns the current value.  If binning is active,
+        /// value is in binned pixels.  No error check is performed when the value is set.
+        /// Should default to CameraXSize.
+        /// </summary>
+        public int NumX
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read NumX when not connected");
                 return this.numX;
-			}
-			set
-			{
+            }
+            set
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set NumX when not connected");
                 this.numX = value;
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Sets the subframe height. Also returns the current value.  If binning is active,
-		/// value is in binned pixels.  No error check is performed when the value is set.
-		/// Should default to CameraYSize.
-		/// </summary>
-		public int NumY
-		{
-			get
-			{
+        /// <summary>
+        /// Sets the subframe height. Also returns the current value.  If binning is active,
+        /// value is in binned pixels.  No error check is performed when the value is set.
+        /// Should default to CameraYSize.
+        /// </summary>
+        public int NumY
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read NumY when not connected");
                 return this.numY;
             }
-			set
-			{
+            set
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set NumY when not connected");
                 this.numY = value;
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Returns the width of the CCD chip pixels in microns, as provided by the camera
-		/// driver.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public double PixelSizeX
-		{
+        /// <summary>
+        /// Returns the width of the CCD chip pixels in microns, as provided by the camera
+        /// driver.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public double PixelSizeX
+        {
             get
             {
                 if (!this.connected)
@@ -1001,13 +1015,13 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Returns the height of the CCD chip pixels in microns, as provided by the camera
-		/// driver.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
-		public double PixelSizeY
-		{
+        /// <summary>
+        /// Returns the height of the CCD chip pixels in microns, as provided by the camera
+        /// driver.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if data unavailable.</exception>
+        public double PixelSizeY
+        {
             get
             {
                 if (!this.connected)
@@ -1016,29 +1030,29 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// This method returns only after the move has completed.
-		///
-		/// symbolic Constants
-		/// The (symbolic) values for GuideDirections are:
-		/// Constant     Value      Description
-		/// --------     -----      -----------
-		/// guideNorth     0        North (+ declination/elevation)
-		/// guideSouth     1        South (- declination/elevation)
-		/// guideEast      2        East (+ right ascension/azimuth)
-		/// guideWest      3        West (+ right ascension/azimuth)
-		///
-		/// Note: directions are nominal and may depend on exact mount wiring.  guideNorth
-		/// must be opposite guideSouth, and guideEast must be opposite guideWest.
-		/// </summary>
-		/// <param name="Direction">Direction of guide command</param>
-		/// <param name="Duration">Duration of guide in milliseconds</param>
-		/// <exception cref=" System.Exception">PulseGuide command is unsupported</exception>
-		/// <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
-		public void PulseGuide(GuideDirections Direction, int Duration)
-		{
-            if (! this.canPulseGuide)
-			    throw new ASCOM.MethodNotImplementedException("PulseGuide");
+        /// <summary>
+        /// This method returns only after the move has completed.
+        ///
+        /// symbolic Constants
+        /// The (symbolic) values for GuideDirections are:
+        /// Constant     Value      Description
+        /// --------     -----      -----------
+        /// guideNorth     0        North (+ declination/elevation)
+        /// guideSouth     1        South (- declination/elevation)
+        /// guideEast      2        East (+ right ascension/azimuth)
+        /// guideWest      3        West (+ right ascension/azimuth)
+        ///
+        /// Note: directions are nominal and may depend on exact mount wiring.  guideNorth
+        /// must be opposite guideSouth, and guideEast must be opposite guideWest.
+        /// </summary>
+        /// <param name="Direction">Direction of guide command</param>
+        /// <param name="Duration">Duration of guide in milliseconds</param>
+        /// <exception cref=" System.Exception">PulseGuide command is unsupported</exception>
+        /// <exception cref=" System.Exception">PulseGuide command is unsuccessful</exception>
+        public void PulseGuide(GuideDirections Direction, int Duration)
+        {
+            if (!this.canPulseGuide)
+                throw new ASCOM.MethodNotImplementedException("PulseGuide");
 
             // very simple implementation, starts a timer that turns isPulseGuiding off when it elapses
             // consider calculating and applying a shift to the image
@@ -1072,38 +1086,38 @@ namespace ASCOM.Simulator
                 default:
                     break;
             }
-		}
+        }
 
-        private void  pulseGuideRaTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void pulseGuideRaTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             this.isPulseGuidingRa = false;
         }
 
-        private void  pulseGuideDecTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void pulseGuideDecTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             this.isPulseGuidingDec = false;
         }
-        
+
         /// <summary>
-		/// Sets the camera cooler setpoint in degrees Celsius, and returns the current
-		/// setpoint.
-		/// Note:  camera hardware and/or driver should perform cooler ramping, to prevent
-		/// thermal shock and potential damage to the CCD array or cooler stack.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw exception if command not successful.</exception>
-		/// <exception cref=" System.Exception">Must throw exception if CanSetCCDTemperature is False.</exception>
-		public double SetCCDTemperature
-		{
-			get
-			{
+        /// Sets the camera cooler setpoint in degrees Celsius, and returns the current
+        /// setpoint.
+        /// Note:  camera hardware and/or driver should perform cooler ramping, to prevent
+        /// thermal shock and potential damage to the CCD array or cooler stack.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw exception if command not successful.</exception>
+        /// <exception cref=" System.Exception">Must throw exception if CanSetCCDTemperature is False.</exception>
+        public double SetCCDTemperature
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read SetCCDTemperature when not connected");
                 if (!this.canSetCcdTemperature)
                     throw new PropertyNotImplementedException(STR_SetCCDTemperature, false);
                 return this.setCcdTemperature;
             }
-			set
-			{
+            set
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set SetCCDTemperature when not connected");
                 if (!this.canSetCcdTemperature)
@@ -1112,19 +1126,19 @@ namespace ASCOM.Simulator
                     throw new InvalidValueException("SetCCDTemperature", value.ToString(CultureInfo.InvariantCulture), "-50 to 20");
                 this.setCcdTemperature = value;
                 // does this turn cooling on?
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Launches a configuration dialog box for the driver.  The call will not return
-		/// until the user clicks OK or cancel manually.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
-		public void SetupDialog()
-		{
+        /// <summary>
+        /// Launches a configuration dialog box for the driver.  The call will not return
+        /// until the user clicks OK or cancel manually.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw an exception if Setup dialog is unavailable.</exception>
+        public void SetupDialog()
+        {
             if (this.connected)
                 throw new NotConnectedException("Can't set the CCD properties when connected");
-			using (SetupDialogForm F = new SetupDialogForm())
+            using (SetupDialogForm F = new SetupDialogForm())
             {
                 F.InitProperties(this);
                 F.ShowDialog();
@@ -1143,62 +1157,62 @@ namespace ASCOM.Simulator
         /// <exception cref=" System.Exception">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
         public void StartExposure(double Duration, bool Light)
-		{
+        {
             if (!this.connected)
                 throw new NotConnectedException("Can't set StartExposure when not connected");
             // check the duration, light frames only
-            if ( ! Light && (Duration > this.exposureMax || Duration < this.exposureMin))
+            if (!Light && (Duration > this.exposureMax || Duration < this.exposureMin))
             {
-                this.lastError="Incorrect exposure duration";
+                this.lastError = "Incorrect exposure duration";
                 throw new ASCOM.InvalidValueException("StartExposure Duration",
                                                      Duration.ToString(CultureInfo.InvariantCulture),
                                                      string.Format(CultureInfo.InvariantCulture, "{0} to {1}", this.exposureMax, this.exposureMin));
             }
             //  binning tests
-            if ((this.binX > this.MaxBinX) || (this.BinX < 1) )
+            if ((this.binX > this.MaxBinX) || (this.BinX < 1))
             {
-                this.lastError="Incorrect bin X factor";
+                this.lastError = "Incorrect bin X factor";
                 throw new ASCOM.InvalidValueException("StartExposure BinX",
                                                     this.binX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}",this.maxBinX));
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.maxBinX));
             }
-            if ((this.binY > this.MaxBinY) || (this.BinY < 1) )
+            if ((this.binY > this.MaxBinY) || (this.BinY < 1))
             {
-                this.lastError="Incorrect bin Y factor";
+                this.lastError = "Incorrect bin Y factor";
                 throw new ASCOM.InvalidValueException("StartExposure BinY",
                                                     this.binY.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}",this.maxBinY));
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.maxBinY));
             }
             // check the start position is in range
             // start is in binned pixels
             if (this.startX < 0 || this.startX * this.binX > this.cameraXSize)
             {
-                this.lastError="Incorrect Start X position";
+                this.lastError = "Incorrect Start X position";
                 throw new ASCOM.InvalidValueException("StartExposure StartX",
                                                     this.startX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}",cameraXSize/this.binX));
+                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / this.binX));
             }
             if (this.startY < 0 || this.startY * this.binY > this.cameraYSize)
             {
-                this.lastError="Incorrect Start X position";
+                this.lastError = "Incorrect Start X position";
                 throw new ASCOM.InvalidValueException("StartExposure StartX",
                                                     this.startX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}",cameraXSize/this.binX));
+                                                    string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / this.binX));
             }
             // check that the acquisition is at least 1 pixel in size and fits in the camera area
-            if (this.numX < 1 || (this.numX + this.startX ) * this.binX > this.cameraXSize)
+            if (this.numX < 1 || (this.numX + this.startX) * this.binX > this.cameraXSize)
             {
-                this.lastError="Incorrect Num X value";
+                this.lastError = "Incorrect Num X value";
                 throw new ASCOM.InvalidValueException("StartExposure NumX",
                                                     this.numX.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}",cameraXSize/this.binX));
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraXSize / this.binX));
             }
-            if (this.numY < 1 || (this.numY + this.startY ) * this.binY > this.cameraYSize)
+            if (this.numY < 1 || (this.numY + this.startY) * this.binY > this.cameraYSize)
             {
-                this.lastError="Incorrect Num Y value";
+                this.lastError = "Incorrect Num Y value";
                 throw new ASCOM.InvalidValueException("StartExposure NumY",
                                                     this.numY.ToString(CultureInfo.InvariantCulture),
-                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}",cameraYSize/this.binY));
+                                                    string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraYSize / this.binY));
             }
 
             log.LogStart("StartExposure", "Duration " + Duration.ToString("F3"));
@@ -1227,9 +1241,9 @@ namespace ASCOM.Simulator
             this.exposureDuration = Duration;
             this.exposureTimer.Enabled = true;
             log.LogFinish(" started");
-		}
+        }
 
-        private void  exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             this.exposureTimer.Enabled = false;
             this.lastExposureDuration = (DateTime.Now - this.exposureStartTime).TotalSeconds;
@@ -1240,30 +1254,30 @@ namespace ASCOM.Simulator
             log.LogMessage("ExposureTimer_Elapsed", "done");
         }
 
-		/// <summary>
-		/// Sets the subframe start position for the X axis (0 based). Also returns the
-		/// current value.  If binning is active, value is in binned pixels.
-		/// </summary>
-		public int StartX
-		{
-			get
-			{
+        /// <summary>
+        /// Sets the subframe start position for the X axis (0 based). Also returns the
+        /// current value.  If binning is active, value is in binned pixels.
+        /// </summary>
+        public int StartX
+        {
+            get
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read StartX when not connected");
                 return this.startX;
             }
-			set
-			{
+            set
+            {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set StartX when not connected");
                 this.startX = value;
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Sets the subframe start position for the Y axis (0 based). Also returns the
-		/// current value.  If binning is active, value is in binned pixels.
-		/// </summary>
+        /// <summary>
+        /// Sets the subframe start position for the Y axis (0 based). Also returns the
+        /// current value.  If binning is active, value is in binned pixels.
+        /// </summary>
         public int StartY
         {
             get
@@ -1280,16 +1294,16 @@ namespace ASCOM.Simulator
             }
         }
 
-		/// <summary>
-		/// Stops the current exposure, if any.  If an exposure is in progress, the readout
-		/// process is initiated.  Ignored if readout is already in process.
-		/// </summary>
-		/// <exception cref=" System.Exception">Must throw an exception if CanStopExposure is False</exception>
-		/// <exception cref=" System.Exception">Must throw an exception if no exposure is in progress</exception>
-		/// <exception cref=" System.Exception">Must throw an exception if the camera or link has an error condition</exception>
-		/// <exception cref=" System.Exception">Must throw an exception if for any reason no image readout will be available.</exception>
-		public void StopExposure()
-		{
+        /// <summary>
+        /// Stops the current exposure, if any.  If an exposure is in progress, the readout
+        /// process is initiated.  Ignored if readout is already in process.
+        /// </summary>
+        /// <exception cref=" System.Exception">Must throw an exception if CanStopExposure is False</exception>
+        /// <exception cref=" System.Exception">Must throw an exception if no exposure is in progress</exception>
+        /// <exception cref=" System.Exception">Must throw an exception if the camera or link has an error condition</exception>
+        /// <exception cref=" System.Exception">Must throw an exception if for any reason no image readout will be available.</exception>
+        public void StopExposure()
+        {
             if (!this.connected)
                 throw new NotConnectedException("Can't stop exposure when not connected");
             if (!this.canStopExposure)
@@ -1315,9 +1329,9 @@ namespace ASCOM.Simulator
                     // these states are this where it isn't possible to stop an exposure 
                     throw new ASCOM.InvalidOperationException("StopExposure not possible if not exposing");
             }
-		}
+        }
 
-		#endregion
+        #endregion
 
         #region ICameraV2 properties
 
@@ -1333,7 +1347,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.InvalidOperationException("Not if interfaceVersion is 1") ;
+                    throw new System.InvalidOperationException("Not if interfaceVersion is 1");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BayerOffsetX when not connected");
                 return this.bayerOffsetX;
@@ -1646,7 +1660,7 @@ namespace ASCOM.Simulator
                     throw new System.InvalidOperationException("Not if interfaceVersion is 1");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutMode when not connected");
-                if (this.readoutModes == null || this.readoutModes.Count  < 1)
+                if (this.readoutModes == null || this.readoutModes.Count < 1)
                     throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
                 return this.readoutMode;
             }
@@ -1744,6 +1758,7 @@ namespace ASCOM.Simulator
                 this.hasShutter = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_HasShutter, string.Empty, "false"), CultureInfo.InvariantCulture);
                 this.sensorName = profile.GetValue(s_csDriverID, STR_SensorName, string.Empty, "");
                 this.sensorType = (SensorType)Convert.ToInt32(profile.GetValue(s_csDriverID, STR_SensorType, string.Empty, "0"), CultureInfo.InvariantCulture);
+                this.omitOddBins = Convert.ToBoolean(profile.GetValue(s_csDriverID, STR_OmitOddBins, string.Empty, "false"), CultureInfo.InvariantCulture);
 
                 this.bayerOffsetX = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetX, string.Empty, "0"), CultureInfo.InvariantCulture);
                 this.bayerOffsetY = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_BayerOffsetY, string.Empty, "0"), CultureInfo.InvariantCulture);
@@ -1807,6 +1822,7 @@ namespace ASCOM.Simulator
                 profile.WriteValue(s_csDriverID, STR_SensorType, ((int)this.sensorType).ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_BayerOffsetX, this.bayerOffsetX.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_BayerOffsetY, this.bayerOffsetY.ToString(CultureInfo.InvariantCulture));
+                profile.WriteValue(s_csDriverID, STR_OmitOddBins, this.omitOddBins.ToString(CultureInfo.InvariantCulture));
 
                 profile.WriteValue(s_csDriverID, STR_HasCooler, this.hasCooler.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_CanSetCCDTemperature, this.canSetCcdTemperature.ToString(CultureInfo.InvariantCulture));
@@ -1864,8 +1880,8 @@ namespace ASCOM.Simulator
             this.binY = 1;
             this.numX = this.cameraXSize;
             this.numY = this.cameraYSize;
-            
-            this.cameraState= CameraStates.cameraIdle;
+
+            this.cameraState = CameraStates.cameraIdle;
             this.coolerOn = false;
             this.coolerPower = 0;
             this.heatSinkTemperature = 20;
@@ -1889,7 +1905,7 @@ namespace ASCOM.Simulator
 
             double readNoise = 3;
             // dark current 1 ADU/sec at 0C doubling for every 5C increase
-            double darkCurrent = Math.Pow(2,this.ccdTemperature/5);
+            double darkCurrent = Math.Pow(2, this.ccdTemperature / 5);
             darkCurrent *= this.lastExposureDuration;
             // add read noise, should be in quadrature
             darkCurrent += readNoise;
@@ -1937,7 +1953,7 @@ namespace ASCOM.Simulator
                 p *= R.NextDouble();
             }
             while (p > L);
-            return Math.Min(k-1, this.maxADU);
+            return Math.Min(k - 1, this.maxADU);
         }
 
         /// <summary>
@@ -1948,17 +1964,17 @@ namespace ASCOM.Simulator
         /// <returns></returns>
         private double BoxMuller(double m, double s)
         {
-	        double xa, xb, w, ya;
-	        do 
+            double xa, xb, w, ya;
+            do
             {
-		        xa = 2.0 * R.NextDouble() - 1.0;
-		        xb = 2.0 * R.NextDouble() - 1.0;
-		        w = xa * xa + xb * xb;
-	        } while ( w >= 1.0 );
+                xa = 2.0 * R.NextDouble() - 1.0;
+                xb = 2.0 * R.NextDouble() - 1.0;
+                w = xa * xa + xb * xb;
+            } while (w >= 1.0);
 
-	        w = Math.Sqrt( (-2.0 * Math.Log( w ) ) / w );
-	        ya = xa * w;
-	        return( m + ya * s );
+            w = Math.Sqrt((-2.0 * Math.Log(w)) / w);
+            ya = xa * w;
+            return (m + ya * s);
         }
 
         private int NoNoise(double value)
@@ -2083,11 +2099,11 @@ namespace ASCOM.Simulator
                 y2 = (y0 + 2) & (stepY - 1);
                 y3 = (y0 + 3) & (stepY - 1);
 
-                int w = Math.Min(this.cameraXSize, bmp.Width*stepX);
+                int w = Math.Min(this.cameraXSize, bmp.Width * stepX);
                 int h = Math.Min(this.cameraYSize, bmp.Height * stepY);
-                for (int y = 0; y < h; y+=stepY)
+                for (int y = 0; y < h; y += stepY)
                 {
-                    for (int x = 0; x < w; x+=stepX)
+                    for (int x = 0; x < w; x += stepX)
                     {
                         getData(x, y);
                     }
@@ -2106,7 +2122,7 @@ namespace ASCOM.Simulator
         }
         private void RGGBData(int x, int y)
         {
-            Color px = bmp.GetPixel(x/2, y/2);
+            Color px = bmp.GetPixel(x / 2, y / 2);
             imageData[x + x0, y + y0, 0] = px.R;      // red
             imageData[x + x1, y + y0, 0] = px.G;      // green
             imageData[x + x0, y + y1, 0] = px.G;      // green
@@ -2114,7 +2130,7 @@ namespace ASCOM.Simulator
         }
         private void CMYGData(int x, int y)
         {
-            Color px = bmp.GetPixel(x/2, y/2);
+            Color px = bmp.GetPixel(x / 2, y / 2);
             imageData[x + x0, y + y0, 0] = (px.R + px.G) / 2;       // yellow
             imageData[x + x1, y + y0, 0] = (px.G + px.B) / 2;       // cyan
             imageData[x + x0, y + y1, 0] = px.G;                    // green
@@ -2122,12 +2138,12 @@ namespace ASCOM.Simulator
         }
         private void CMYG2Data(int x, int y)
         {
-            Color px = bmp.GetPixel(x/2, y/2);
+            Color px = bmp.GetPixel(x / 2, y / 2);
             imageData[x + x0, y + y0, 0] = (px.G);
             imageData[x + x1, y + y0, 0] = (px.B + px.R) / 2;      // magenta
             imageData[x + x0, y + y1, 0] = (px.G + px.B) / 2;      // cyan
             imageData[x + x1, y + y1, 0] = (px.R + px.G) / 2;      // yellow
-            px = bmp.GetPixel(x / 2, (y/2) + 1);
+            px = bmp.GetPixel(x / 2, (y / 2) + 1);
             imageData[x + x0, y + y2, 0] = (px.B + px.R) / 2;      // magenta
             imageData[x + x1, y + y2, 0] = (px.G);
             imageData[x + x0, y + y3, 0] = (px.G + px.B) / 2;      // cyan
@@ -2135,22 +2151,22 @@ namespace ASCOM.Simulator
         }
         private void LRGBData(int x, int y)
         {
-            Color px = bmp.GetPixel(x/2, y/2);
+            Color px = bmp.GetPixel(x / 2, y / 2);
             imageData[x + x0, y + y0, 0] = px.GetBrightness() * 255;
             imageData[x + x1, y + y0, 0] = (px.R);
             imageData[x + x0, y + y1, 0] = (px.R);
             imageData[x + x1, y + y1, 0] = px.GetBrightness() * 255;
-            px = bmp.GetPixel((x/2)+ 1, y/2);
+            px = bmp.GetPixel((x / 2) + 1, y / 2);
             imageData[x + x2, y + y0, 0] = px.GetBrightness() * 255;
             imageData[x + x3, y + y0, 0] = (px.G);
             imageData[x + x2, y + y1, 0] = (px.G);
             imageData[x + x3, y + y1, 0] = px.GetBrightness() * 255;
-            px = bmp.GetPixel(x/2, (y/2)+1);
+            px = bmp.GetPixel(x / 2, (y / 2) + 1);
             imageData[x + x0, y + y2, 0] = px.GetBrightness() * 255;
             imageData[x + x1, y + y2, 0] = (px.G);
             imageData[x + x0, y + y3, 0] = (px.G);
             imageData[x + x1, y + y3, 0] = px.GetBrightness() * 255;
-            px = bmp.GetPixel((x/2)+1, (y/2)+1);
+            px = bmp.GetPixel((x / 2) + 1, (y / 2) + 1);
             imageData[x + x2, y + y2, 0] = px.GetBrightness() * 255;
             imageData[x + x3, y + y2, 0] = (px.B);
             imageData[x + x2, y + y3, 0] = (px.B);
