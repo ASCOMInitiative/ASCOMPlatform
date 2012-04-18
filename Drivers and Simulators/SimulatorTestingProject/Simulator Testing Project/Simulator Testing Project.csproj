@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Simulator_Testing_Project</RootNamespace>
     <AssemblyName>Simulator Testing Project</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -64,11 +64,11 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -95,14 +95,9 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Focus Simulator 2010\FocuserSimulatorDriver\FocuserSimulatorDriver.csproj">
-      <Project>{81091BA8-725D-465D-AC6B-A36912B73AA7}</Project>
-      <Name>FocuserSimulatorDriver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SafetyMonitor Simulator\SafetyMonitorSimulatorDriver.csproj">
-      <Project>{6D940101-25F1-45F1-8356-3E4D1CD1385D}</Project>
-      <Name>SafetyMonitorSimulatorDriver</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
