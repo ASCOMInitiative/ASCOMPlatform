@@ -96,6 +96,8 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="CSharpFITS_v1.1, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\CSharpFITS_v1.1.dll</HintPath>
@@ -185,16 +187,6 @@
     <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
       <Link>CustomDictionary.xml</Link>
     </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
-      <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
-      <Name>ASCOM.DeviceInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj">
-      <Project>{3B6C23F5-C590-4385-86BB-98B604B565BA}</Project>
-      <Name>ASCOM.DriverAccess</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
