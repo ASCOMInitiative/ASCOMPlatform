@@ -171,8 +171,8 @@ namespace CameraTest
                 labelSensorType.Text = (oCamera.SensorType).ToString();
                 labelBayerOffsetX.Text = oCamera.BayerOffsetX.ToString(CultureInfo.CurrentCulture);
                 labelBayerOffsetY.Text = Convert.ToString(oCamera.BayerOffsetY, CultureInfo.CurrentCulture);
-                //labelDriverVersion.Text = oCamera.DriverVersion;
-                //labelDriverName.Text = oCamera.Name;
+                labelDriverVersion.Text = oCamera.DriverVersion;
+                labelDriverName.Text = oCamera.Name;
                 //DriverInfo - long
                 numExposure.Minimum = (decimal)oCamera.ExposureMin;
                 numExposure.Maximum = (decimal)oCamera.ExposureMax;
@@ -185,17 +185,17 @@ namespace CameraTest
                 }
 
                 // Check for Supported Actions
-                //ArrayList supportedActions = oCamera.SupportedActions;
-                //if (supportedActions.Count > 0)
-                //{
-                //    groupBoxSupportedActions.Visible = true;
-                //    comboBoxSupportedActions.Items.Clear();
-                //    foreach (var item in supportedActions)
-                //    {
-                //        comboBoxSupportedActions.Items.Add(item);
-                //    }
-                //}
-                //else
+                ArrayList supportedActions = oCamera.SupportedActions;
+                if (supportedActions.Count > 0)
+                {
+                    groupBoxSupportedActions.Visible = true;
+                    comboBoxSupportedActions.Items.Clear();
+                    foreach (var item in supportedActions)
+                    {
+                        comboBoxSupportedActions.Items.Add(item);
+                    }
+                }
+                else
                     groupBoxSupportedActions.Visible = false;
             }
             else
