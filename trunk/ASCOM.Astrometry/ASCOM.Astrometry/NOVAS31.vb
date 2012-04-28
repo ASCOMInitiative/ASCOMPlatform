@@ -1,6 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Environment
 Imports ASCOM.Utilities.Exceptions
+Imports ASCOM.Utilities
 
 Namespace NOVAS
 
@@ -31,11 +32,18 @@ Namespace NOVAS
 
         Private Const NOVAS_DLL_LOCATION As String = "\ASCOM\Astrometry" 'This is appended to the Common Files path
         Private Const RACIO_FILE As String = "\cio_ra.bin" 'Name of the RA of CIO binary data file
+        Private TL As TraceLogger
+        Private Utl As Util
 
 #Region "New and IDisposable"
         Sub New()
             Dim rc As Boolean, rc1 As Short, CommonProgramFilesPath As String, DENumber As Short
             Dim ReturnedPath As New System.Text.StringBuilder(260)
+
+            TL = New TraceLogger("", "NOVAS31")
+            TL.Enabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
+
+            Utl = New Util
 
             'Find the root location of the common files directory containing the ASCOM support files.
             'On a 32bit system this is \Program Files\Common Files
@@ -55,6 +63,7 @@ Namespace NOVAS
             ' Open the ephemerides file and set its applicable date range
             rc1 = Ephem_Open(CommonProgramFilesPath & NOVAS_DLL_LOCATION & "\" & JPL_EPHEM_FILE_NAME, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE, DENumber)
             If rc1 > 0 Then Throw New HelperException("Unable to open ephemeris file: " & GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & "\" & JPL_EPHEM_FILE_NAME & ", RC: " & rc1)
+            TL.LogMessage("New", "initialised OK")
         End Sub
 
         Private disposedValue As Boolean = False        ' To detect redundant calls
@@ -64,6 +73,16 @@ Namespace NOVAS
             If Not Me.disposedValue Then
                 If disposing Then
                     ' Free other state (managed objects).
+
+                    If Not (Utl Is Nothing) Then
+                        Utl.Dispose()
+                        Utl = Nothing
+                    End If
+                    If Not (TL Is Nothing) Then
+                        TL.Enabled = False
+                        TL.Dispose()
+                        TL = Nothing
+                    End If
                 End If
                 ' Free your own state (unmanaged objects) and set large fields to null.
                 Try : Ephem_Close() : Catch : End Try ' Close the ephemeris file if its open
@@ -392,12 +411,30 @@ Namespace NOVAS
                                   ByVal Accuracy As Accuracy, _
                                   ByRef Ra As Double, _
                                   ByRef Dec As Double) As Short Implements INOVAS31.AstroStar
-
-            If Is64Bit() Then
-                Return AstroStar64(JdTt, Star, Accuracy, Ra, Dec)
-            Else
-                Return AstroStar32(JdTt, Star, Accuracy, Ra, Dec)
-            End If
+            Dim rc As Short
+            Try
+                TL.LogMessage("AstroStar", "JD Accuracy:        " & JdTt & " " & Accuracy.ToString)
+                TL.LogMessage("AstroStar", "  Star.RA:          " & Utl.HoursToHMS(Star.RA, ":", ":", "", 3))
+                TL.LogMessage("AstroStar", "  Dec:              " & Utl.DegreesToDMS(Star.Dec, ":", ":", "", 3))
+                TL.LogMessage("AstroStar", "  Catalog:          " & Star.Catalog)
+                TL.LogMessage("AstroStar", "  Parallax:         " & Star.Parallax)
+                TL.LogMessage("AstroStar", "  ProMoDec:         " & Star.ProMoDec)
+                TL.LogMessage("AstroStar", "  ProMoRA:          " & Star.ProMoRA)
+                TL.LogMessage("AstroStar", "  RadialVelocity:   " & Star.RadialVelocity)
+                TL.LogMessage("AstroStar", "  StarName:         " & Star.StarName)
+                TL.LogMessage("AstroStar", "  StarNumber:       " & Star.StarNumber)
+                If Is64Bit() Then
+                    rc = AstroStar64(JdTt, Star, Accuracy, Ra, Dec)
+                    TL.LogMessage("AstroStar", "  64bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                    Return rc
+                Else
+                    rc = AstroStar32(JdTt, Star, Accuracy, Ra, Dec)
+                    TL.LogMessage("AstroStar", "  32bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                    Return rc
+                End If
+            Catch ex As Exception
+                TL.LogMessageCrLf("AstroStar", "Exception: " & ex.ToString)
+            End Try
         End Function
 
         ''' <summary>
@@ -892,11 +929,29 @@ Namespace NOVAS
                                    ByRef Az As Double, _
                                    ByRef RaR As Double, _
                                    ByRef DecR As Double) Implements INOVAS31.Equ2Hor
-            If Is64Bit() Then
-                Equ2Hor64(Jd_Ut1, DeltT, Accuracy, xp, yp, Location, Ra, Dec, RefOption, Zd, Az, RaR, DecR)
-            Else
-                Equ2Hor32(Jd_Ut1, DeltT, Accuracy, xp, yp, Location, Ra, Dec, RefOption, Zd, Az, RaR, DecR)
-            End If
+            Try
+
+                TL.LogMessage("Equ2Hor", "JD Accuracy RA DEC:     " & Jd_Ut1 & " " & Accuracy.ToString & " " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                TL.LogMessage("Equ2Hor", "  DeltaT:               " & DeltT)
+                TL.LogMessage("Equ2Hor", "  xp:                   " & xp)
+                TL.LogMessage("Equ2Hor", "  yp:                   " & yp)
+                TL.LogMessage("Equ2Hor", "  Refraction:           " & RefOption.ToString)
+                TL.LogMessage("Equ2Hor", "  Location.Height:      " & Location.Height)
+                TL.LogMessage("Equ2Hor", "  Location.Latitude:    " & Location.Latitude)
+                TL.LogMessage("Equ2Hor", "  Location.Longitude:   " & Location.Longitude)
+                TL.LogMessage("Equ2Hor", "  Location.Pressure:    " & Location.Pressure)
+                TL.LogMessage("Equ2Hor", "  Location.Temperature: " & Location.Temperature)
+                If Is64Bit() Then
+                    Equ2Hor64(Jd_Ut1, DeltT, Accuracy, xp, yp, Location, Ra, Dec, RefOption, Zd, Az, RaR, DecR)
+                    TL.LogMessage("Equ2Hor", "  64bit - RA Dec: " & Utl.HoursToHMS(RaR, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DecR, ":", ":", "", 3))
+                Else
+                    Equ2Hor32(Jd_Ut1, DeltT, Accuracy, xp, yp, Location, Ra, Dec, RefOption, Zd, Az, RaR, DecR)
+                    TL.LogMessage("Equ2Hor", "  32bit - RA Dec: " & Utl.HoursToHMS(RaR, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DecR, ":", ":", "", 3))
+                End If
+            Catch ex As Exception
+                TL.LogMessageCrLf("Equ2Hor", "Exception: " & ex.ToString)
+            End Try
+
         End Sub
 
         ''' <summary>
@@ -2026,11 +2081,36 @@ Namespace NOVAS
                                         ByVal Accuracy As Accuracy, _
                                         ByRef Ra As Double, _
                                         ByRef Dec As Double) As Short Implements INOVAS31.TopoStar
-            If Is64Bit() Then
-                Return TopoStar64(JdTt, DeltaT, Star, Position, Accuracy, Ra, Dec)
-            Else
-                Return TopoStar32(JdTt, DeltaT, Star, Position, Accuracy, Ra, Dec)
-            End If
+
+            Dim rc As Short
+            Try
+                TL.LogMessage("TopoStar", "JD Accuracy:            " & JdTt & " " & Accuracy.ToString)
+                TL.LogMessage("TopoStar", "  Star.RA:              " & Utl.HoursToHMS(Star.RA, ":", ":", "", 3))
+                TL.LogMessage("TopoStar", "  Dec:                  " & Utl.DegreesToDMS(Star.Dec, ":", ":", "", 3))
+                TL.LogMessage("TopoStar", "  Catalog:              " & Star.Catalog)
+                TL.LogMessage("TopoStar", "  Parallax:             " & Star.Parallax)
+                TL.LogMessage("TopoStar", "  ProMoDec:             " & Star.ProMoDec)
+                TL.LogMessage("TopoStar", "  ProMoRA:              " & Star.ProMoRA)
+                TL.LogMessage("TopoStar", "  RadialVelocity:       " & Star.RadialVelocity)
+                TL.LogMessage("TopoStar", "  StarName:             " & Star.StarName)
+                TL.LogMessage("TopoStar", "  StarNumber:           " & Star.StarNumber)
+                TL.LogMessage("TopoStar", "  Position.Height:      " & Position.Height)
+                TL.LogMessage("TopoStar", "  Position.Latitude:    " & Position.Latitude)
+                TL.LogMessage("TopoStar", "  Position.Longitude:   " & Position.Longitude)
+                TL.LogMessage("TopoStar", "  Position.Pressure:    " & Position.Pressure)
+                TL.LogMessage("TopoStar", "  Position.Temperature: " & Position.Temperature)
+                If Is64Bit() Then
+                    rc = TopoStar64(JdTt, DeltaT, Star, Position, Accuracy, Ra, Dec)
+                    TL.LogMessage("TopoStar", "  64bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                    Return rc
+                Else
+                    rc = TopoStar32(JdTt, DeltaT, Star, Position, Accuracy, Ra, Dec)
+                    TL.LogMessage("TopoStar", "  32bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                    Return rc
+                End If
+            Catch ex As Exception
+                TL.LogMessageCrLf("TopoStar", "Exception: " & ex.ToString)
+            End Try
         End Function
 
         ''' <summary>
