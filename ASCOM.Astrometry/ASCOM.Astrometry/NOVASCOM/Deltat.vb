@@ -81,100 +81,106 @@ Module DeltatCode
         Y = 2000.0 + (tjd - T0) / 365.25
 
         If (Y > TABEND) Then
-            '// Use polynomial given at http://sunearth.gsfc.nasa.gov/eclipse/SEcat5/deltatpoly.html
-            '// as retrtieved on 11-Jan-2009;
-            B = Y - 2000.0
-            ans = 62.62 + (B * (0.32217 + (B * 0.005589)))
-            Return (ans)
-            '//	    /* linear interpolation from table end; stern */
-            '//	    B = Y - TABEND;
-            '//	    ans = dt[TABSIZ-1] + B * (dt[TABSIZ-1]  - dt[TABSIZ-2]);
-            '//	    ans *= 0.01;
-            '//	    return(ans);
+
+            If (Y > 2011.75) And (Y < 2014) Then
+                ' Following intoduced by Peter Simpson. It is a 2nd order polynomial best fit to real DeltaT data from Q3 2011 to Q1 2012 together with projections
+                ' of deltat t from here http://maia.usno.navy.mil/ Historic values: http://maia.usno.navy.mil/ser7/deltat.data Predictions: http://maia.usno.navy.mil/ser7/deltat.preds
+                ' The analysis was performed on 28th April 2012 and creates values within 0.1 of a second of the projections to the end of 2013
+                ' The analysis spreadsheet is stored in the \NOVAS\DeltaT Predictions folder of the ASCOM source tree.
+                ans = (0.11155549 * Y * Y) - (448.55087851 * Y) + 450958.24151344
+                Return (ans)
+            Else
+                ' Following now superseded by above for 2012-13, this is left in for consistency with previous behaviour
+                ' Use polynomial given at http://sunearth.gsfc.nasa.gov/eclipse/SEcat5/deltatpoly.html
+                ' as retrtieved on 11-Jan-2009;
+                B = Y - 2000.0
+                ans = 62.92 + (B * (0.32217 + (B * 0.005589)))
+                Return (ans)
+            End If
         End If
 
-        If (Y < TABSTART) Then
-            If (Y >= 948.0) Then
-                '/* Stephenson and Morrison, stated domain is 948 to 1600:
-                ' * 25.5(centuries from 1800)^2 - 1.9159(centuries from 1955)^2
-                ' */
-                B = 0.01 * (Y - 2000.0)
-                ans = (23.58 * B + 100.3) * B + 101.6
-            Else
-                '/* Borkowski */
-                B = 0.01 * (Y - 2000.0) + 3.75
-                ans = 35.0 * B * B + 40.0
+            If (Y < TABSTART) Then
+                If (Y >= 948.0) Then
+                    '/* Stephenson and Morrison, stated domain is 948 to 1600:
+                    ' * 25.5(centuries from 1800)^2 - 1.9159(centuries from 1955)^2
+                    ' */
+                    B = 0.01 * (Y - 2000.0)
+                    ans = (23.58 * B + 100.3) * B + 101.6
+                Else
+                    '/* Borkowski */
+                    B = 0.01 * (Y - 2000.0) + 3.75
+                    ans = 35.0 * B * B + 40.0
+                End If
+                Return ans
             End If
-            Return ans
-        End If
 
-        '/* Besselian interpolation from tabulated values.
-        ' * See AA page K11.
-        ' */
+            '/* Besselian interpolation from tabulated values.
+            ' * See AA page K11.
+            ' */
 
-        '/* Index into the table. */
-        p = Floor(Y)
-        iy = CInt(p - TABSTART)            '// rbd - added cast
-        '/* Zeroth order estimate is value at start of year */
-        ans = dt(iy)
-        k = iy + 1
-        If (k >= TABSIZ) Then GoTo done ' /* No data, can't go on. */
+            '/* Index into the table. */
+            p = Floor(Y)
+            iy = CInt(p - TABSTART)            '// rbd - added cast
+            '/* Zeroth order estimate is value at start of year */
+            ans = dt(iy)
+            k = iy + 1
+            If (k >= TABSIZ) Then GoTo done ' /* No data, can't go on. */
 
-        '/* The fraction of tabulation interval */
-        p = Y - p
+            '/* The fraction of tabulation interval */
+            p = Y - p
 
-        '/* First order interpolated value */
-        ans += p * (dt(k) - dt(iy))
-        If ((iy - 1 < 0) Or (iy + 2 >= TABSIZ)) Then GoTo done ' /* can't do second differences */
+            '/* First order interpolated value */
+            ans += p * (dt(k) - dt(iy))
+            If ((iy - 1 < 0) Or (iy + 2 >= TABSIZ)) Then GoTo done ' /* can't do second differences */
 
-        '/* Make table of first differences */
-        k = iy - 2
-        For i = 0 To 4
-            If ((k < 0) Or (k + 1 >= TABSIZ)) Then
-                d(i) = 0
-            Else
-                d(i) = dt(k + 1) - dt(k)
-            End If
-            k += 1
-        Next
-        '/* Compute second differences */
-        For i = 0 To 3
-            d(i) = d(i + 1) - d(i)
-        Next
-        B = 0.25 * p * (p - 1.0)
-        ans += B * (d(1) + d(2))
-        If (iy + 2 >= TABSIZ) Then GoTo done
+            '/* Make table of first differences */
+            k = iy - 2
+            For i = 0 To 4
+                If ((k < 0) Or (k + 1 >= TABSIZ)) Then
+                    d(i) = 0
+                Else
+                    d(i) = dt(k + 1) - dt(k)
+                End If
+                k += 1
+            Next
+            '/* Compute second differences */
+            For i = 0 To 3
+                d(i) = d(i + 1) - d(i)
+            Next
+            B = 0.25 * p * (p - 1.0)
+            ans += B * (d(1) + d(2))
+            If (iy + 2 >= TABSIZ) Then GoTo done
 
-        '/* Compute third differences */
-        For i = 0 To 2
-            d(i) = d(i + 1) - d(i)
-        Next
-        B = 2.0 * B / 3.0
-        ans += (p - 0.5) * B * d(1)
-        If ((iy - 2 < 0) Or (iy + 3 > TABSIZ)) Then GoTo done
+            '/* Compute third differences */
+            For i = 0 To 2
+                d(i) = d(i + 1) - d(i)
+            Next
+            B = 2.0 * B / 3.0
+            ans += (p - 0.5) * B * d(1)
+            If ((iy - 2 < 0) Or (iy + 3 > TABSIZ)) Then GoTo done
 
-        '/* Compute fourth differences */
-        For i = 0 To 1
-            d(i) = d(i + 1) - d(i)
-        Next
-        B = 0.125 * B * (p + 1.0) * (p - 2.0)
-        ans += B * (d(0) + d(1))
+            '/* Compute fourth differences */
+            For i = 0 To 1
+                d(i) = d(i + 1) - d(i)
+            Next
+            B = 0.125 * B * (p + 1.0) * (p - 2.0)
+            ans += B * (d(0) + d(1))
 
 done:
-        '/* Astronomical Almanac table is corrected by adding the expression
-        ' *     -0.000091 (ndot + 26)(year-1955)^2  seconds
-        ' * to entries prior to 1955 (AA page K8), where ndot is the secular
-        ' * tidal term in the mean motion of the Moon.
-        ' *
-        ' * Entries after 1955 are referred to atomic time standards and
-        ' * are not affected by errors in Lunar or planetary theory.
-        ' */
-        ans *= 0.01
-        If (Y < 1955.0) Then
-            B = (Y - 1955.0)
-            ans += -0.000091 * (-25.8 + 26.0) * B * B
-        End If
-        Return ans
+            '/* Astronomical Almanac table is corrected by adding the expression
+            ' *     -0.000091 (ndot + 26)(year-1955)^2  seconds
+            ' * to entries prior to 1955 (AA page K8), where ndot is the secular
+            ' * tidal term in the mean motion of the Moon.
+            ' *
+            ' * Entries after 1955 are referred to atomic time standards and
+            ' * are not affected by errors in Lunar or planetary theory.
+            ' */
+            ans *= 0.01
+            If (Y < 1955.0) Then
+                B = (Y - 1955.0)
+                ans += -0.000091 * (-25.8 + 26.0) * B * B
+            End If
+            Return ans
 
     End Function
 End Module

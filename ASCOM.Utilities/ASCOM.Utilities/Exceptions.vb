@@ -55,7 +55,7 @@ Namespace Exceptions
         Guid("21AEDC6B-CC7F-4101-BC33-532DFEDEB7B5"), _
         ComVisible(True), _
         ClassInterface(ClassInterfaceType.None)> _
-        Public Class ProfileNotFoundException
+    Public Class ProfileNotFoundException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
@@ -99,7 +99,7 @@ Namespace Exceptions
        Guid("A9C2CF73-C139-4fae-B47B-36F18C49B527"), _
        ComVisible(True), _
        ClassInterface(ClassInterfaceType.None)> _
-           Public Class InvalidValueException
+    Public Class InvalidValueException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
@@ -146,7 +146,7 @@ Namespace Exceptions
        Guid("7A3CFD64-D7E3-48b0-BEB6-5696CF7599B3"), _
        ComVisible(True), _
        ClassInterface(ClassInterfaceType.None)> _
-           Public Class SerialPortInUseException
+    Public Class SerialPortInUseException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
@@ -192,7 +192,7 @@ Namespace Exceptions
         Guid("A38ABA4D-F872-4c2a-A19D-62DBBC761DD5"), _
         ComVisible(True), _
         ClassInterface(ClassInterfaceType.None)> _
-        Public Class ProfilePersistenceException
+    Public Class ProfilePersistenceException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
@@ -237,7 +237,7 @@ Namespace Exceptions
         Guid("0D2B7199-622D-4244-88C3-2577308F82E2"), _
         ComVisible(True), _
         ClassInterface(ClassInterfaceType.None)> _
-        Public Class DriverNotRegisteredException
+    Public Class DriverNotRegisteredException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
@@ -284,7 +284,7 @@ Namespace Exceptions
         Guid("00BC6F08-4277-47c3-9DBA-F80E02C5A448"), _
         ComVisible(True), _
         ClassInterface(ClassInterfaceType.None)> _
-        Public Class RestrictedAccessException
+    Public Class RestrictedAccessException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
@@ -329,7 +329,7 @@ Namespace Exceptions
         Guid("C893C94C-3D48-4068-8BCE-6CED6AEF2512"), _
         ComVisible(True), _
         ClassInterface(ClassInterfaceType.None)> _
-        Public Class ValueNotSetException
+    Public Class ValueNotSetException
         'Exception for Utilities component exceptions
         Inherits HelperException
 
