@@ -258,8 +258,9 @@ Public Class DiagnosticsForm
         MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
         MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
         MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
-        MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
         MenuThrowAbandonedMutexExceptions.Checked = GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT)
+        MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
+        MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
     End Sub
 
     Private Sub Status(ByVal Msg As String)
@@ -556,7 +557,7 @@ Public Class DiagnosticsForm
                 Try : ASCOMRegistryAccess.Dispose() : Catch : End Try 'Clean up registryaccess object
                 ASCOMRegistryAccess = Nothing
             End Try
-        btnLastLog.Enabled = True
+            btnLastLog.Enabled = True
 
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
@@ -6183,4 +6184,10 @@ Public Class DiagnosticsForm
         MenuThrowAbandonedMutexExceptions.Checked = Not MenuThrowAbandonedMutexExceptions.Checked 'Invert the selection
         SetName(ABANDONED_MUTEXT_TRACE, MenuThrowAbandonedMutexExceptions.Checked.ToString)
     End Sub
+
+    Private Sub MenuNovasTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuNovasTraceEnabled.Click
+        MenuNovasTraceEnabled.Checked = Not MenuNovasTraceEnabled.Checked 'Invert selection
+        SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
+    End Sub
+
 End Class

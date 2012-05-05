@@ -35,5 +35,6 @@
   <Topic id="98b612bf-f22c-428f-af22-7a77e9907b7f" visible="True" noFile="true" title="Developer Information">
     <Topic id="caf6b21d-755a-4f1c-891f-ce971a9a2f79" visible="True" title="Drivers and Multi-Threading" />
     <Topic id="d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc" visible="True" title="Which NOVAS?" />
+    <Topic id="732148ca-fc8a-4f0d-bc1d-8f5fe2907744" visible="True" />
   </Topic>
 </Topics>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="732148ca-fc8a-4f0d-bc1d-8f5fe2907744" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <section address="TimeRelationships">
+		<title>Time relationships</title>
+   		<content>
+      		<para>There are many time scales used in the world of astronomy but two are of particular interest:
+      		<ul>
+      			<bl>Universal Coordinated Time (UTC)</bl>
+      			<bl>Terrestrial Time (TT)</bl>
+      		</ul>
+      		
+      		</para>
+	      	<para></para>
+      	</content>
+    </section>
+  </developerConceptualDocument>
+</topic>

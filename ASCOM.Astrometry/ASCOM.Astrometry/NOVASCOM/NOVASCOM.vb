@@ -255,11 +255,14 @@ Namespace NOVASCOM
     ''' type (major or minor planet), number (for major and numbered minor planets), name (for unnumbered 
     ''' minor planets and comets), the ephemeris object to be used for orbital calculations, an optional 
     ''' ephemeris object to use for barycenter calculations, and an optional value for delta-T. 
+    ''' <para>The number values for major planets are 1 to 9 for Mercury to Pluto, 10 for Sun and 11 for Moon. The last two obviously 
+    ''' aren't planets, but this numbering is a NOVAS convention that enables us to retrieve useful information about these bodies.
+    ''' </para>
     ''' <para>The high-level NOVAS astrometric functions are implemented as methods of Planet: 
     ''' GetTopocentricPosition(), GetLocalPosition(), GetApparentPosition(), GetVirtualPosition(), 
     ''' and GetAstrometricPosition(). These methods operate on the properties of the Planet, and produce 
     ''' a PositionVector object. For example, to get the topocentric coordinates of a planet, create and 
-    ''' initialize a planet, create initialize and attach an ephemeris object, then call 
+    ''' initialize a planet then call 
     ''' Planet.GetTopocentricPosition(). The resulting PositionVector's right ascension and declination 
     ''' properties are the topocentric equatorial coordinates, at the same time, the (optionally 
     ''' refracted) alt-az coordinates are calculated, and are also contained within the returned 
@@ -293,7 +296,9 @@ Namespace NOVASCOM
         Private m_ephdisps(4), m_earthephdisps(4) As Integer
         Private m_earthephobj As IEphemeris
 
-        'Private TL As TraceLogger
+        Dim Nov31 As NOVAS31
+
+        'Private TL As TraceLogger, Utl As Util
 
         ''' <summary>
         ''' Create a new instance of the Plant class
@@ -309,9 +314,14 @@ Namespace NOVASCOM
             m_earthephobj.BodyType = BodyType.MajorPlanet
             m_earthephobj.Name = "Earth"
             m_earthephobj.Number = Body.Earth
-            'TL = New TraceLogger("", "NOVASCOM")
+
+            'TL = New TraceLogger("", "NOVASCOMPlanet")
             'TL.Enabled = True
             'TL.LogMessage("New", "Log started")
+            'Utl = New Util
+
+            Nov31 = New NOVAS31 ' Create a NOVAS31 object for hanbdling sun and moon calculations
+
         End Sub
         ''' <summary>
         ''' Planet delta-T
@@ -372,42 +382,58 @@ Namespace NOVASCOM
         Public Function GetApparentPosition(ByVal tjd As Double) As PositionVector Implements IPlanet.GetApparentPosition
             Dim tdb, peb(3), veb(3), pes(3), ves(3), t2, t3, lighttime, _
                 pos1(3), vel1(3), pos2(3), pos3(3), pos4(3), pos5(3), vec(8) As Double
-            Dim iter As Integer, pv As New PositionVector
+            Dim iter As Integer, pv As PositionVector
 
-            '//
-            '// This gets the barycentric terrestrial dynamical time (TDB).
-            '//
-            get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+            Dim Obj3 As Object3, RA, Dec, Dis As Double, rc As Integer
 
-            '//
-            '// Get position and velocity of planet wrt barycenter of solar system.
-            '//
+            Obj3 = New Object3
 
-            ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
+                Obj3.Number = CommonCode.NumberToBody(m_number)
+                Obj3.Type = ObjectType.MajorPlanetSunOrMoon
 
-            BaryToGeo(pos1, peb, pos2, lighttime)
-            t3 = tdb - lighttime
+                rc = Nov31.AppPlanet(tjd, Obj3, Accuracy.Full, RA, Dec, Dis) ' Get the apparent RA/Dec
+                Nov31.RaDec2Vector(RA, Dec, Dis, pos1) ' Convert to a vector
 
-            iter = 0
-            Do
-                t2 = t3
-                ephemeris_nov(m_ephobj, t2, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                pv = New PositionVector(pos1(0), pos1(1), pos1(2), RA, Dec, Dis, Dis / C) ' Create the position vector to return
+            Else
+                '//
+                '// This gets the barycentric terrestrial dynamical time (TDB).
+                '//
+                get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+
+                '//
+                '// Get position and velocity of planet wrt barycenter of solar system.
+                '//
+
+                ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+
                 BaryToGeo(pos1, peb, pos2, lighttime)
                 t3 = tdb - lighttime
-                iter += 1
-            Loop While ((Abs(t3 - t2) > 0.000001) And iter < 100)
 
-            '//
-            '// Finish apparent place computation.
-            '//
-            SunField(pos2, pes, pos3)
-            Aberration(pos3, veb, lighttime, pos4)
-            Precession(T0, pos4, tdb, pos5)
-            Nutate(tdb, NutationDirection.MeanToTrue, pos5, vec)
+                iter = 0
+                Do
+                    t2 = t3
+                    ephemeris_nov(m_ephobj, t2, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                    BaryToGeo(pos1, peb, pos2, lighttime)
+                    t3 = tdb - lighttime
+                    iter += 1
+                Loop While ((Abs(t3 - t2) > 0.000001) And iter < 100)
 
-            pv.x = vec(0)
-            pv.y = vec(1)
-            pv.z = vec(2)
+                '//
+                '// Finish apparent place computation.
+                '//
+                SunField(pos2, pes, pos3)
+                Aberration(pos3, veb, lighttime, pos4)
+                Precession(T0, pos4, tdb, pos5)
+                Nutate(tdb, NutationDirection.MeanToTrue, pos5, vec)
+
+                pv = New PositionVector
+                pv.x = vec(0)
+                pv.y = vec(1)
+                pv.z = vec(2)
+            End If
+
             Return pv
         End Function
 
@@ -424,65 +450,82 @@ Namespace NOVASCOM
             Dim iter As Integer
             'Dim earth As New bodystruct
             Dim RetVal As PositionVector
-            'Dim pebe(3), pese(3), vebe(3), vese(3) As Double
-            '//
-            '// Get position of the Earth wrt center of Sun and barycenter of the
-            '// solar system.
-            '//
-            '// This also gets the barycentric terrestrial dynamical time (TDB).
-            '//
-            'earth.name = "Earth"
-            'earth.number = Body.Earth
-            'earth.type = NOVAS2Net.BodyType.MajorPlanet
+            Dim Obj3 As Object3, RA, Dec, Dis As Double, rc As Integer
 
-            'hr = get_earth(tjd, earth, tdbe, pebe, vebe, pese, vese)
+            Obj3 = New Object3
 
-            get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
+                Obj3.Number = CommonCode.NumberToBody(m_number)
+                Obj3.Type = ObjectType.MajorPlanetSunOrMoon
 
-            'TL.LogMessage("GetAstrometricPosition", "tjd: " & tjd)
-            'TL.LogMessage("GetAstrometricPosition", "tdb: " & tdb & " " & tdbe)
-            'TL.LogMessage("GetAstrometricPosition", "get_earth peb(0): " & peb(0))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth peb(1): " & peb(1))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth peb(2): " & peb(2))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth veb(0): " & veb(0))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth veb(1): " & veb(1))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth veb(2): " & veb(2))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth pes(0): " & pes(0))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth pes(1): " & pes(1))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth pes(2): " & pes(2))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth ves(0): " & ves(0))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth ves(1): " & ves(1))
-            'TL.LogMessage("GetAstrometricPosition", "get_earth ves(2): " & ves(2))
+                rc = Nov31.AstroPlanet(tjd, Obj3, Accuracy.Full, RA, Dec, Dis) ' Get the astro RA/Dec
+                Nov31.RaDec2Vector(RA, Dec, Dis, pos1) ' Convert to a vector
 
-            '//
-            '// Get position and velocity of planet wrt barycenter of solar system.
-            '//
+                RetVal = New PositionVector(pos1(0), pos1(1), pos1(2), RA, Dec, Dis, Dis / C) ' Create the position vector to return
 
-            ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, _
-                          Origin.Barycentric, pos1, vel1)
-            'TL.LogMessage("GetAstrometricPosition", "tdb: " & tdb)
+            Else
 
-            BaryToGeo(pos1, peb, pos2, lighttime)
-            t3 = tdb - lighttime
 
-            iter = 0
-            Do
-                t2 = t3
-                ephemeris_nov(m_ephobj, t2, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                'Dim pebe(3), pese(3), vebe(3), vese(3) As Double
+                '//
+                '// Get position of the Earth wrt center of Sun and barycenter of the
+                '// solar system.
+                '//
+                '// This also gets the barycentric terrestrial dynamical time (TDB).
+                '//
+                'earth.name = "Earth"
+                'earth.number = Body.Earth
+                'earth.type = NOVAS2Net.BodyType.MajorPlanet
+
+                'hr = get_earth(tjd, earth, tdbe, pebe, vebe, pese, vese)
+
+                get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+
+                'TL.LogMessage("GetAstrometricPosition", "tjd: " & tjd)
+                'TL.LogMessage("GetAstrometricPosition", "tdb: " & tdb & " " & tdbe)
+                'TL.LogMessage("GetAstrometricPosition", "get_earth peb(0): " & peb(0))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth peb(1): " & peb(1))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth peb(2): " & peb(2))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth veb(0): " & veb(0))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth veb(1): " & veb(1))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth veb(2): " & veb(2))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth pes(0): " & pes(0))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth pes(1): " & pes(1))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth pes(2): " & pes(2))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth ves(0): " & ves(0))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth ves(1): " & ves(1))
+                'TL.LogMessage("GetAstrometricPosition", "get_earth ves(2): " & ves(2))
+
+                '//
+                '// Get position and velocity of planet wrt barycenter of solar system.
+                '//
+
+                ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, _
+                              Origin.Barycentric, pos1, vel1)
+                'TL.LogMessage("GetAstrometricPosition", "tdb: " & tdb)
+
                 BaryToGeo(pos1, peb, pos2, lighttime)
                 t3 = tdb - lighttime
-                iter += 1
-            Loop While ((Abs(t3 - t2) > 0.000001) And (iter < 100))
 
-            If (iter >= 100) Then Throw New Utilities.Exceptions.HelperException("Planet:GetAstrometricPoition ephemeris_nov did not converge in 100 iterations")
+                iter = 0
+                Do
+                    t2 = t3
+                    ephemeris_nov(m_ephobj, t2, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                    BaryToGeo(pos1, peb, pos2, lighttime)
+                    t3 = tdb - lighttime
+                    iter += 1
+                Loop While ((Abs(t3 - t2) > 0.000001) And (iter < 100))
 
-            '//
-            '// pos2 is astrometric place.
-            '//
-            RetVal = New PositionVector()
-            RetVal.x = pos2(0)
-            RetVal.y = pos2(1)
-            RetVal.z = pos2(2)
+                If (iter >= 100) Then Throw New Utilities.Exceptions.HelperException("Planet:GetAstrometricPoition ephemeris_nov did not converge in 100 iterations")
+
+                '//
+                '// pos2 is astrometric place.
+                '//
+                RetVal = New PositionVector()
+                RetVal.x = pos2(0)
+                RetVal.y = pos2(1)
+                RetVal.z = pos2(2)
+            End If
 
             Return RetVal
 
@@ -503,15 +546,16 @@ Namespace NOVASCOM
              vs(3), pos1(3), vel1(3), pos2(3), vel2(3), pos3(3), vec(3), _
              tdb, peb(3), veb(3), pes(3), ves(3), oblm, oblt, eqeq, psi, eps As Double
             Dim pv As PositionVector
+            Dim Obj3 As New Object3, OnSurf As New OnSurface, Ref3 As RefractionOption, rc As Short
+            Dim ra, rra, dec, rdec, az, zd, dist As Double
 
             '//
             '// Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
             '//
-            If m_bDTValid Then
-                ujd = tjd - m_deltat
-            Else
-                ujd = tjd - DeltaTCalc(tjd) / 86400.0
+            If Not m_bDTValid Then ' April 2012 - correced bug, deltat was not treated as seconds and also adapted to work with Novas31
+                m_deltat = DeltaTCalc(tjd)
             End If
+            ujd = tjd - m_deltat / 86400.0
 
             '//
             '// Get the observer's site info
@@ -531,67 +575,90 @@ Namespace NOVASCOM
             Catch ex As Exception
                 Throw New Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Height is not available")
             End Try
-            '//
-            '// Get position of Earth wrt the center of the Sun and the barycenter
-            '// of solar system.
-            '//
-            '// This also gets the barycentric terrestrial dynamical time (TDB).
-            '//
-            get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
 
-            EarthTilt(tdb, oblm, oblt, eqeq, psi, eps)
+            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
 
-            '//
-            '// Get position and velocity of observer wrt center of the Earth.
-            '//
-            SiderealTime(ujd, 0.0, eqeq, gast)
-            Terra(st, gast, pos1, vel1)
-            Nutate(tdb, NutationDirection.TrueToMean, pos1, pos2)
-            Precession(tdb, pos2, T0, pog)
+                OnSurf.Height = site.Height
+                OnSurf.Latitude = site.Latitude
+                OnSurf.Longitude = site.Longitude
+                OnSurf.Pressure = site.Pressure
+                OnSurf.Temperature = site.Temperature
 
-            Nutate(tdb, NutationDirection.TrueToMean, vel1, vel2)
-            Precession(tdb, vel2, T0, vog)
+                Obj3.Number = CommonCode.NumberToBody(m_number)
+                Obj3.Type = ObjectType.MajorPlanetSunOrMoon
 
-            '//
-            '// Get position and velocity of observer wrt barycenter of solar 
-            '// system and wrt center of the sun.
-            '//
-            For j = 0 To 2
-                pb(j) = peb(j) + pog(j)
-                vb(j) = veb(j) + vog(j)
-                ps(j) = pes(j) + pog(j)
-                vs(j) = ves(j) + vog(j)
-            Next
+                Ref3 = RefractionOption.NoRefraction
 
-            '//
-            '// Get position of planet wrt barycenter of solar system.
-            '//
-            ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                rc = Nov31.LocalPlanet(tjd, Obj3, m_deltat, OnSurf, Accuracy.Full, ra, dec, dist)
+                Nov31.Equ2Hor(ujd, m_deltat, Accuracy.Full, 0.0, 0.0, OnSurf, ra, dec, Ref3, zd, az, rra, rdec)
 
-            BaryToGeo(pos1, pb, pos2, lighttime)
-            t3 = tdb - lighttime
+                Nov31.RaDec2Vector(rra, rdec, dist, vec)
+                pv = New PositionVector(vec(0), vec(1), vec(2), rra, rdec, dist, dist / C, az, 90.0 - zd)
 
-            iter = 0
-            Do
-                t2 = t3
-                ephemeris_nov(m_ephobj, t2, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+            Else ' Some other planet
+
+                '//
+                '// Get position of Earth wrt the center of the Sun and the barycenter
+                '// of solar system.
+                '//
+                '// This also gets the barycentric terrestrial dynamical time (TDB).
+                '//
+                get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+
+                EarthTilt(tdb, oblm, oblt, eqeq, psi, eps)
+
+                '//
+                '// Get position and velocity of observer wrt center of the Earth.
+                '//
+                SiderealTime(ujd, 0.0, eqeq, gast)
+                Terra(st, gast, pos1, vel1)
+                Nutate(tdb, NutationDirection.TrueToMean, pos1, pos2)
+                Precession(tdb, pos2, T0, pog)
+
+                Nutate(tdb, NutationDirection.TrueToMean, vel1, vel2)
+                Precession(tdb, vel2, T0, vog)
+
+                '//
+                '// Get position and velocity of observer wrt barycenter of solar 
+                '// system and wrt center of the sun.
+                '//
+                For j = 0 To 2
+                    pb(j) = peb(j) + pog(j)
+                    vb(j) = veb(j) + vog(j)
+                    ps(j) = pes(j) + pog(j)
+                    vs(j) = ves(j) + vog(j)
+                Next
+
+                '//
+                '// Get position of planet wrt barycenter of solar system.
+                '//
+                ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+
                 BaryToGeo(pos1, pb, pos2, lighttime)
                 t3 = tdb - lighttime
-                iter += 1
-            Loop While ((Abs(t3 - t2) > 0.000001) And (iter < 100))
 
-            If (iter >= 100) Then Throw New Utilities.Exceptions.HelperException("Planet:GetLocalPoition ephemeris_nov did not converge in 100 iterations")
+                iter = 0
+                Do
+                    t2 = t3
+                    ephemeris_nov(m_ephobj, t2, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                    BaryToGeo(pos1, pb, pos2, lighttime)
+                    t3 = tdb - lighttime
+                    iter += 1
+                Loop While ((Abs(t3 - t2) > 0.000001) And (iter < 100))
 
-            '//
-            '// Finish local place calculation.
-            '//
-            SunField(pos2, ps, pos3)
-            Aberration(pos3, vb, lighttime, vec)
+                If (iter >= 100) Then Throw New Utilities.Exceptions.HelperException("Planet:GetLocalPoition ephemeris_nov did not converge in 100 iterations")
 
-            pv = New PositionVector
-            pv.x = vec(0)
-            pv.y = vec(1)
-            pv.z = vec(2)
+                '//
+                '// Finish local place calculation.
+                '//
+                SunField(pos2, ps, pos3)
+                Aberration(pos3, vb, lighttime, vec)
+
+                pv = New PositionVector
+                pv.x = vec(0)
+                pv.y = vec(1)
+                pv.z = vec(2)
+            End If
 
             Return pv
         End Function
@@ -615,14 +682,15 @@ Namespace NOVASCOM
             Dim ra, rra, dec, rdec, az, zd, dist As Double
             Dim wx As Boolean, pv As PositionVector
 
+            Dim Obj3 As New Object3, OnSurf As New OnSurface, Ref3 As RefractionOption, rc As Short
+
             '//
             '// Compute 'ujd', the UT1 Julian date corresponding to 'tjd'.
             '//
-            If m_bDTValid Then
-                ujd = tjd - m_deltat
-            Else
-                ujd = tjd - DeltaTCalc(tjd) / 86400.0
+            If Not m_bDTValid Then ' April 2012 - correced bug, deltat was not treated as seconds and also adapted to work with Novas31
+                m_deltat = DeltaTCalc(tjd)
             End If
+            ujd = tjd - m_deltat / 86400.0
 
             '//
             '// Get the observer's site info
@@ -643,115 +711,144 @@ Namespace NOVASCOM
                 Throw New Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Height is not available")
             End Try
 
-            '//
-            '// Compute position and velocity of the observer, on mean equator
-            '// and equinox of J2000.0, wrt the solar system barycenter and
-            '// wrt to the center of the Sun. 
-            '//
-            '// This also gets the barycentric terrestrial dynamical time (TDB).
-            '//
-            get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
 
-            EarthTilt(tdb, oblm, oblt, eqeq, psi, eps)
+                OnSurf.Height = site.Height
+                OnSurf.Latitude = site.Latitude
+                OnSurf.Longitude = site.Longitude
+                OnSurf.Pressure = site.Pressure
+                OnSurf.Temperature = site.Temperature
 
-            '//
-            '// Get position and velocity of observer wrt center of the Earth.
-            '//
-            SiderealTime(ujd, 0.0, eqeq, gast)
-            Terra(st, gast, pos1, vel1)
-            Nutate(tdb, NutationDirection.TrueToMean, pos1, pos2)
-            Precession(tdb, pos2, T0, pog)
+                Obj3.Number = CommonCode.NumberToBody(m_number)
+                Obj3.Type = ObjectType.MajorPlanetSunOrMoon
 
-            Nutate(tdb, NutationDirection.TrueToMean, vel1, vel2)
-            Precession(tdb, vel2, T0, vog)
+                If Refract Then
+                    Ref3 = RefractionOption.LocationRefraction
+                Else
+                    Ref3 = RefractionOption.NoRefraction
+                End If
 
-            '//
-            '// Get position and velocity of observer wrt barycenter of solar system
-            '// and wrt center of the sun.
-            '//
-            For j = 0 To 2
+                rc = Nov31.TopoPlanet(tjd, Obj3, m_deltat, OnSurf, Accuracy.Full, ra, dec, dist)
+                Nov31.Equ2Hor(ujd, m_deltat, Accuracy.Full, 0.0, 0.0, OnSurf, ra, dec, Ref3, zd, az, rra, rdec)
 
-                pob(j) = peb(j) + pog(j)
-                vob(j) = veb(j) + vog(j)
-                pos(j) = pes(j) + pog(j)
-            Next
+                Nov31.RaDec2Vector(rra, rdec, dist, vec)
+                pv = New PositionVector(vec(0), vec(1), vec(2), rra, rdec, dist, dist / C, az, 90.0 - zd)
 
-            '// 
-            '// Compute the apparent place of the planet using the position and
-            '// velocity of the observer.
-            '//
-            '// First, get the position of the planet wrt barycenter of solar system.
-            '//
-            ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+            Else ' Some other planet
 
-            BaryToGeo(pos1, pob, pos2, lighttime)
-            t3 = tdb - lighttime
 
-            iter = 0
-            Do
-                t2 = t3
-                ephemeris_nov(m_ephobj, t2, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                '//
+                '// Compute position and velocity of the observer, on mean equator
+                '// and equinox of J2000.0, wrt the solar system barycenter and
+                '// wrt to the center of the Sun. 
+                '//
+                '// This also gets the barycentric terrestrial dynamical time (TDB).
+                '//
+                get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+
+                EarthTilt(tdb, oblm, oblt, eqeq, psi, eps)
+
+                '//
+                '// Get position and velocity of observer wrt center of the Earth.
+                '//
+                SiderealTime(ujd, 0.0, eqeq, gast)
+                Terra(st, gast, pos1, vel1)
+                Nutate(tdb, NutationDirection.TrueToMean, pos1, pos2)
+                Precession(tdb, pos2, T0, pog)
+
+                Nutate(tdb, NutationDirection.TrueToMean, vel1, vel2)
+                Precession(tdb, vel2, T0, vog)
+
+                '//
+                '// Get position and velocity of observer wrt barycenter of solar system
+                '// and wrt center of the sun.
+                '//
+                For j = 0 To 2
+
+                    pob(j) = peb(j) + pog(j)
+                    vob(j) = veb(j) + vog(j)
+                    pos(j) = pes(j) + pog(j)
+                Next
+
+                '// 
+                '// Compute the apparent place of the planet using the position and
+                '// velocity of the observer.
+                '//
+                '// First, get the position of the planet wrt barycenter of solar system.
+                '//
+                ephemeris_nov(m_ephobj, tdb, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+
                 BaryToGeo(pos1, pob, pos2, lighttime)
                 t3 = tdb - lighttime
-                iter += 1
-            Loop While ((Abs(t3 - t2) > 0.000001) And (iter < 100))
 
-            If (iter >= 100) Then Throw New Utilities.Exceptions.HelperException("Planet:GetTopocentricPoition ephemeris_nov did not converge in 100 iterations")
+                iter = 0
+                Do
+                    t2 = t3
+                    ephemeris_nov(m_ephobj, t2, m_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                    BaryToGeo(pos1, pob, pos2, lighttime)
+                    t3 = tdb - lighttime
+                    iter += 1
+                Loop While ((Abs(t3 - t2) > 0.000001) And (iter < 100))
 
-            '//
-            '// Finish topocentric place calculation.
-            '//
-            SunField(pos2, pos, pos4)
-            Aberration(pos4, vob, lighttime, pos5)
-            Precession(T0, pos5, tdb, pos6)
-            Nutate(tdb, NutationDirection.MeanToTrue, pos6, vec)
+                If (iter >= 100) Then Throw New Utilities.Exceptions.HelperException("Planet:GetTopocentricPoition ephemeris_nov did not converge in 100 iterations")
 
-            '//
-            '// Calculate equatorial coordinates and distance
-            '//
-            Vector2RADec(vec, ra, dec) 'Get topo RA/Dec
-            dist = Sqrt(Pow(vec(0), 2.0) + Pow(vec(1), 2.0) + Pow(vec(2), 2.0)) 'And dist
+                '//
+                '// Finish topocentric place calculation.
+                '//
+                SunField(pos2, pos, pos4)
+                Aberration(pos4, vob, lighttime, pos5)
+                Precession(T0, pos5, tdb, pos6)
+                Nutate(tdb, NutationDirection.MeanToTrue, pos6, vec)
 
-            '//
-            '// Refract if requested
-            '//
-            ref = RefractionOption.NoRefraction 'Assume no refraction
-            If Refract Then
-                wx = True 'Assume site weather
-                Try
-                    st.Temperature = site.Temperature
-                Catch ex As Exception 'Value unset so use standard refraction option
-                    wx = False
-                End Try
-                Try
-                    st.Pressure = site.Pressure
-                Catch ex As Exception 'Value unset so use standard refraction option
-                    wx = False
-                End Try
-                If wx Then 'Set refraction option
-                    ref = RefractionOption.LocationRefraction
-                Else
-                    ref = RefractionOption.StandardRefraction
+                '//
+                '// Calculate equatorial coordinates and distance
+                '//
+                Vector2RADec(vec, ra, dec) 'Get topo RA/Dec
+                dist = Sqrt(Pow(vec(0), 2.0) + Pow(vec(1), 2.0) + Pow(vec(2), 2.0)) 'And dist
+
+                '//
+                '// Refract if requested
+                '//
+                ref = RefractionOption.NoRefraction 'Assume no refraction
+                If Refract Then
+                    wx = True 'Assume site weather
+                    Try
+                        st.Temperature = site.Temperature
+                    Catch ex As Exception 'Value unset so use standard refraction option
+                        wx = False
+                    End Try
+                    Try
+                        st.Pressure = site.Pressure
+                    Catch ex As Exception 'Value unset so use standard refraction option
+                        wx = False
+                    End Try
+                    If wx Then 'Set refraction option
+                        ref = RefractionOption.LocationRefraction
+                    Else
+                        ref = RefractionOption.StandardRefraction
+                    End If
                 End If
-            End If
-            '//
-            '// This calculates Alt/Az coordinates. If ref > 0 then it refracts
-            '// both the computed Alt/Az and the RA/Dec coordinates.
-            '//
-            If m_bDTValid Then
-                Equ2Hor(tjd, m_deltat, 0.0, 0.0, st, ra, dec, ref, zd, az, rra, rdec)
-            Else
-                Equ2Hor(tjd, DeltaTCalc(tjd), 0.0, 0.0, st, ra, dec, ref, zd, az, rra, rdec)
+                '//
+                '// This calculates Alt/Az coordinates. If ref > 0 then it refracts
+                '// both the computed Alt/Az and the RA/Dec coordinates.
+                '//
+                If m_bDTValid Then
+                    Equ2Hor(tjd, m_deltat, 0.0, 0.0, st, ra, dec, ref, zd, az, rra, rdec)
+                Else
+                    Equ2Hor(tjd, DeltaTCalc(tjd), 0.0, 0.0, st, ra, dec, ref, zd, az, rra, rdec)
+                End If
+
+                '//
+                '// If we refracted, we now must compute new cartesian components
+                '// Distance does not change...
+                '//
+                If (ref <> RefractionOption.NoRefraction) Then RADec2Vector(rra, rdec, dist, vec) 'If refracted, recompute New refracted vector
+
+                'Create a new positionvector with calculated values
+                pv = New PositionVector(vec(0), vec(1), vec(2), rra, rdec, dist, dist / C, az, (90.0 - zd))
+
             End If
 
-            '//
-            '// If we refracted, we now must compute new cartesian components
-            '// Distance does not change...
-            '//
-            If (ref <> RefractionOption.NoRefraction) Then RADec2Vector(rra, rdec, dist, vec) 'If refracted, recompute New refracted vector
-
-            'Create a new positionvector with calculated values
-            pv = New PositionVector(vec(0), vec(1), vec(2), rra, rdec, dist, dist / C, az, (90.0 - zd))
 
             Return pv
 
@@ -768,56 +865,73 @@ Namespace NOVASCOM
                 tdb, peb(3), veb(3), pes(3), ves(3), oblm, oblt, eqeq, psi, eps As Double
             Dim iter As Integer
             Dim pv As New PositionVector
-            '//
-            '// Get position nd velocity of Earth wrt barycenter of solar system.
-            '//
-            '//
-            '// This also gets the barycentric terrestrial dynamical time (TDB).
-            '//
-            get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+            Dim Obj3 As Object3, RA, Dec, Dis As Double, rc As Integer
 
-            EarthTilt(tdb, oblm, oblt, eqeq, psi, eps)
+            Obj3 = New Object3
 
-            '//
-            '// Get position and velocity of planet wrt barycenter of solar system.
-            '//
+            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
+                Obj3.Number = CommonCode.NumberToBody(m_number)
+                Obj3.Type = ObjectType.MajorPlanetSunOrMoon
 
-            Dim km_type As BodyType
-            Select Case m_type
-                Case BodyType.Comet
-                    km_type = BodyType.Comet
-                Case BodyType.MajorPlanet
-                    km_type = BodyType.MajorPlanet
-                Case BodyType.MinorPlanet
-                    km_type = BodyType.MinorPlanet
-            End Select
+                rc = Nov31.VirtualPlanet(tjd, Obj3, Accuracy.Full, RA, Dec, Dis) ' Get the astro RA/Dec
+                Nov31.RaDec2Vector(RA, Dec, Dis, pos1) ' Convert to a vector
 
-            ephemeris_nov(m_ephobj, tdb, km_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
-            BaryToGeo(pos1, peb, pos2, lighttime)
+                pv = New PositionVector(pos1(0), pos1(1), pos1(2), RA, Dec, Dis, Dis / C) ' Create the position vector to return
 
-            t3 = tdb - lighttime
+            Else
 
-            iter = 0
-            Do
-                t2 = t3
-                ephemeris_nov(m_ephobj, t2, km_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                '//
+                '// Get position nd velocity of Earth wrt barycenter of solar system.
+                '//
+                '//
+                '// This also gets the barycentric terrestrial dynamical time (TDB).
+                '//
+                get_earth_nov(m_earthephobj, tjd, tdb, peb, veb, pes, ves)
+
+                EarthTilt(tdb, oblm, oblt, eqeq, psi, eps)
+
+                '//
+                '// Get position and velocity of planet wrt barycenter of solar system.
+                '//
+
+                Dim km_type As BodyType
+                Select Case m_type
+                    Case BodyType.Comet
+                        km_type = BodyType.Comet
+                    Case BodyType.MajorPlanet
+                        km_type = BodyType.MajorPlanet
+                    Case BodyType.MinorPlanet
+                        km_type = BodyType.MinorPlanet
+                End Select
+
+                ephemeris_nov(m_ephobj, tdb, km_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
                 BaryToGeo(pos1, peb, pos2, lighttime)
+
                 t3 = tdb - lighttime
-                iter += 1
-            Loop While ((Abs(t3 - t2) > 0.000001) And (iter < 100))
 
-            If (iter >= 100) Then Throw New Utilities.Exceptions.HelperException("Planet:GetVirtualPoition ephemeris_nov did not converge in 100 iterations")
+                iter = 0
+                Do
+                    t2 = t3
+                    ephemeris_nov(m_ephobj, t2, km_type, m_number, m_name, Origin.Barycentric, pos1, vel1)
+                    BaryToGeo(pos1, peb, pos2, lighttime)
+                    t3 = tdb - lighttime
+                    iter += 1
+                Loop While ((Abs(t3 - t2) > 0.000001) And (iter < 100))
 
-            '//
-            '// Finish virtual place computation.
-            '//
-            SunField(pos2, pes, pos3)
+                If (iter >= 100) Then Throw New Utilities.Exceptions.HelperException("Planet:GetVirtualPoition ephemeris_nov did not converge in 100 iterations")
 
-            Aberration(pos3, veb, lighttime, vec)
+                '//
+                '// Finish virtual place computation.
+                '//
+                SunField(pos2, pes, pos3)
 
-            pv.x = vec(0)
-            pv.y = vec(1)
-            pv.z = vec(2)
+                Aberration(pos3, veb, lighttime, vec)
+
+                pv.x = vec(0)
+                pv.y = vec(1)
+                pv.z = vec(2)
+            End If
+
             Return pv
 
         End Function
@@ -842,16 +956,18 @@ Namespace NOVASCOM
         ''' <summary>
         ''' Planet number
         ''' </summary>
-        ''' <value>For major planets (Type=nvMajorPlanet), a PlanetNumber value. For minor planets 
-        ''' (Type=nvMinorPlanet), the number of the minor planet or 0 for unnumbered minor planet.</value>
+        ''' <value>For major planets (Type = <see cref="BodyType.MajorPlanet" />, a PlanetNumber value from 1 to 11. For minor planets 
+        ''' (Type = <see cref="BodyType.MinorPlanet" />, the number of the minor planet or 0 for unnumbered minor planet.</value>
         ''' <returns>Planet number</returns>
-        ''' <remarks>The major planet number is its number out from the sun starting with Mercury = 1</remarks>
+        ''' <remarks>The major planet number is its number out from the sun starting with Mercury = 1, ending at Pluto = 9. Planet 10 gives 
+        ''' values for the Sun and planet 11 gives values for the Moon</remarks>
         Public Property Number() As Integer Implements IPlanet.Number
             Get
                 Return m_number
             End Get
             Set(ByVal value As Integer)
-                If ((m_type = BodyType.MajorPlanet) And ((value < 0) Or (value > 11))) Then Throw New Utilities.Exceptions.InvalidValueException("Planet.Number MajorPlanet number is < 0 or > 11 - " & value)
+                ' April 2012 - corrected to disallow planet number 0
+                If ((m_type = BodyType.MajorPlanet) And ((value < 1) Or (value > 11))) Then Throw New Utilities.Exceptions.InvalidValueException("Planet.Number MajorPlanet number is < 1 or > 11 - " & value)
                 m_number = value
             End Set
         End Property
@@ -942,6 +1058,27 @@ Namespace NOVASCOM
             m_Az = Azimuth
             m_Alt = Altitude
             AzElOk = True
+        End Sub
+
+        Public Sub New(ByVal x As Double, _
+                               ByVal y As Double, _
+                               ByVal z As Double, _
+                               ByVal RA As Double, _
+                               ByVal DEC As Double, _
+                               ByVal Distance As Double, _
+                               ByVal Light As Double)
+            PosVec(0) = x
+            xOk = True
+            PosVec(1) = y
+            yOk = True
+            PosVec(2) = z
+            zOk = True
+            m_RA = RA
+            m_DEC = DEC
+            RADecOk = True
+            m_Dist = Distance
+            m_Light = Light
+            AzElOk = False
         End Sub
 
         ''' <summary>
@@ -2556,6 +2693,39 @@ Namespace NOVASCOM
 #End Region
 
     End Class
+#End Region
+
+#Region "Private Utiity code"
+    Module CommonCode
+        Friend Function NumberToBody(Number As Integer) As Body
+            Select Case Number
+                Case 1
+                    Return Body.Mercury
+                Case 2
+                    Return Body.Venus
+                Case 3
+                    Return Body.Earth
+                Case 4
+                    Return Body.Mars
+                Case 5
+                    Return Body.Jupiter
+                Case 6
+                    Return Body.Saturn
+                Case 7
+                    Return Body.Uranus
+                Case 8
+                    Return Body.Neptune
+                Case 9
+                    Return Body.Pluto
+                Case 10
+                    Return Body.Sun
+                Case 11
+                    Return Body.Moon
+                Case Else
+                    Throw New ASCOM.InvalidValueException("PlanetNumberToBody", Number.ToString, "1 to 11")
+            End Select
+        End Function
+    End Module
 #End Region
 
 End Namespace

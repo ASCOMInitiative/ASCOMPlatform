@@ -181,6 +181,18 @@ Namespace Transform
         ''' <param name="Elevation">Object's Elevation in degrees</param>
         ''' <remarks></remarks>
         <DispId(18)> Sub SetAzimuthElevation(Azimuth As Double, Elevation As Double)
+        ''' <summary>
+        ''' Sets or return the Julian date (terrestrial time) for which the transform will be made
+        ''' </summary>
+        ''' <value>Julian date (terrestrial time) of the transform</value>
+        ''' <returns>Terrestrial time Julian date that will be used by Transform or zero if the PC's current clock value will be used to calculate
+        ''' the Julian date.</returns>
+        ''' <remarks>This method was introduced in May 2012. Previously, Transform used the current date-time of the PC when calculating transforms; 
+        ''' this remains the default behaviour for backward compatibility.
+        ''' The inital value of this parameter is 0 which is a special value that forces Transform to replicate original behaviour by determining the  
+        ''' Julian date from the PC's current date and time. If this property is non zero, that terrestrial time Julian date is used in preference 
+        ''' to the value derrived from the PC's clock.</remarks>
+        <DispId(19)> Property JulianDateTT As Double
     End Interface
 End Namespace
 #End Region
@@ -5035,6 +5047,14 @@ Namespace AstroUtils
         ''' one of these values. This is impossible to handle as the algorithm will always violate one of the rules!</exception>
         ''' <remarks></remarks>
         Function Range(Value As Double, LowerBound As Double, LowerEqual As Boolean, UpperBound As Double, UpperEqual As Boolean) As Double
+        ''' <summary>
+        ''' Converts a calendar day, month, year to a modified Julian date
+        ''' </summary>
+        ''' <param name="Day">Integer day of ther month</param>
+        ''' <param name="Month">Integer month of the year</param>
+        ''' <param name="Year">Integer year</param>
+        ''' <returns>Double modified julian date</returns>
+        ''' <remarks></remarks>
         Function CalendarToMJD(Day As Integer, Month As Integer, Year As Integer) As Double
         ''' <summary>
         ''' Translates a modified Julian date to a VB ole automation date, presented as a double
@@ -5050,8 +5070,24 @@ Namespace AstroUtils
         ''' <returns>Date representing the modified Julian date</returns>
         ''' <remarks></remarks>
         Function MJDToDate(MJD As Double) As Date
-
+        ''' <summary>
+        ''' Returns a modified Julian date as a string formatted acording to the supplied presentation format
+        ''' </summary>
+        ''' <param name="MJD">Mofified julian date</param>
+        ''' <param name="PresentationFormat">Format representation</param>
+        ''' <returns>Date string</returns>
+        ''' <exception cref="FormatException">Thrown if the provided PresentationFormat is not valid.</exception>
+        ''' <remarks>This expects the standard Microsoft date and time formatting characters as described 
+        ''' in http://msdn.microsoft.com/en-us/library/362btx8f(v=VS.90).aspx
+        ''' </remarks>
         Function FormatMJD(MJD As Double, PresentationFormat As String) As String
+        ''' <summary>
+        ''' Proivides an estimates of DeltaUT1, the difference between UTC and UT1. DeltaUT1 = UT1 - UTC
+        ''' </summary>
+        ''' <param name="JulianDate">Julian date when DeltaUT is required</param>
+        ''' <returns>Double DeltaUT in seconds</returns>
+        ''' <remarks>DeltaUT varies only slowly, so the Julian date can be based on UTC, UT1 or Terrestrial Time.</remarks>
+        Function DeltaUT1(JulianDate As Double) As Double
 
     End Interface
 

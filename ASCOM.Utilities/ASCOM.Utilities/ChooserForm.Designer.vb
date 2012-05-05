@@ -48,8 +48,9 @@
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuSimulatorTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuDriverAccessTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         Me.MenuAstroUtilsTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuNovasTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -158,7 +159,7 @@
         '
         'MenuTrace
         '
-        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuAstroUtilsTraceEnabled})
+        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled})
         Me.MenuTrace.Name = "MenuTrace"
         Me.MenuTrace.Size = New System.Drawing.Size(48, 20)
         Me.MenuTrace.Text = "Trace"
@@ -234,6 +235,12 @@
         Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled"
         '
+        'MenuNovasTraceEnabled
+        '
+        Me.MenuNovasTraceEnabled.Name = "MenuNovasTraceEnabled"
+        Me.MenuNovasTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuNovasTraceEnabled.Text = "NOVAS (Partial) Trace Enabled"
+        '
         'ChooserForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -281,5 +288,6 @@
     Friend WithEvents MenuSimulatorTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuDriverAccessTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuAstroUtilsTraceEnabled As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuNovasTraceEnabled As System.Windows.Forms.ToolStripMenuItem
 #End Region
 End Class
