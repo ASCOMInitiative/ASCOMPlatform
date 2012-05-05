@@ -88,14 +88,24 @@
 		by the platform developers.</para>
 		
 		<para>A good way to get a feel for enum value names, from a COM perspective, is to use <hardware>Microsoft's
-		OLE/COM Object Viewer</hardware> to examine the supplied typelibs before stating to code your application.</para>
-		
-		
-      	
+		OLE/COM Object Viewer</hardware> to examine the supplied typelibs before stating to code your application.</para>     	
     </content>
       
     </section>
-    
+    <section address="KnownIssues">
+	    <title>Known Issues</title>
+	    <content>  	
+	   		<para>Full functionality of the NOVAS2 and NOVAS3 components is available through the .NET interface, 
+	   		however, recent testing (April 2012), has shown that <hardware>many methods are not accessible through 
+	   		COM interop</hardware> because a number of method parameters are passed by reference or
+	      	use structures that do not pass across the COM interface (this is a technical COM limitation, not an ASCOM limitation).</para>
+	      	<para>The commonly required astrometric / topocentric transformations are available in the Transform component, which is 
+	      	fully accessible through COM. Full exposure of the NOVAS components in a COM friendly fashion is a substantial piece of work
+	      	and will require specification of a very differnt interface to that of native NOVAS and that design and build task
+	      	has not yet been planned.</para>
+	    </content>
+    </section>
+   
     <relatedTopics>
   
     </relatedTopics>

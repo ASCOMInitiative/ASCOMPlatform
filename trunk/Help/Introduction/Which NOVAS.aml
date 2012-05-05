@@ -20,11 +20,11 @@
 		<title>Transform</title>
    		<content>
       		<para>This simple component is designed for the telescope or dome driver author who simply needs to convert
-      		between J2000 RA/DEC co-ordinates and local topocentric RA/DEC co-ordinates and vice-versa. 
-      		The topcentric co-ordinates are also expressed as azimuth and altitude and can optionally be corrected 
-      		for refraction.</para>
-	      	<para>The component is built on the established NOVAS2 supervisory library routines
-	      	</para>
+      		between J2000 RA/DEC co-ordinates and local topocentric RA/DEC and AZ/EL co-ordinates and vice-versa. 
+      		The Topocentric RA/DEC and AZ/EL coordinates can also be corrected for refraction effects.
+	      	The component is built on the established NOVAS3.1 supervisory library routines.</para>
+	      	<para>This component can be used directly by .NET based applications and is also exposed as a COM object to enable use 
+	      	by scripting and other languages.</para>
       	</content>
     </section>
   <section address="NOVASCOM">
@@ -37,6 +37,8 @@
       		<para>The component translates from J2000 to topocentric but not vice versa. It is built on the NOVAS2 
       		astrometric library routines and the Kepler planetary ephemerides component.
 	      	</para>
+	      	<para>This component can be used directly by .NET based applications and is also exposed as a COM object to enable use 
+	      	by scripting and other languages.</para>
       	</content>
     </section>
   <section address="NOVAS2">
@@ -50,21 +52,27 @@
 	      	<para>The calling interface is close to the original C interface and most calculated values are 
 	      	passed back through reference parameters.
 	      	</para>
-      	</content>
+      		<para>This component can be used directly by .NET based applications and is also exposed as a COM object to enable use 
+	      	by scripting and other languages. Full functionality is available through the .NET interface, however, recent testing (April 2012)
+	      	has shown that <hardware>many methods are not accessible through COM interop</hardware> because a number of parameters are passed by Reference or
+	      	use structures that do not pass across the COM interface (this is a technical COM limitation, not an ASCOM limitation).</para>
+</content>
     </section>
 
-  <section address="NOVAS2">
+  <section address="NOVAS3">
 		<title>NOVAS3</title>
    		<content>
       		<para>This component is a shell for the NOVAS 3 library released in December 2009 for demanding applications that require access to the fundamental routines
       		in the NOVAS3 library, the latest JPL DE421 planetary and lunar ephemerises or to calculations 
       		based on the IAU 2000 reference systems resolution. It contains a range of supervisory routines that provide access to high
       		level functions and an extensive range of intermediate and basic level routines dedicated to lower level
-      		astrometric functions.
-	      	</para>
+      		astrometric functions.</para>
 	      	<para>The calling interface is close to the original C interface and most calculated values are 
-	      	passed back through reference parameters.
-	      	</para>
+	      	passed back through reference parameters.</para>
+	      	<para>This component can be used directly by .NET based applications and is also exposed as a COM object to enable use 
+	      	by scripting and other languages. Full functionality is available through the .NET interface, however, recent testing (April 2012)
+	      	has shown that <hardware>many methods are not accessible through COM interop</hardware> because a number of method parameters are passed by Reference and
+	      	use structures that do not pass across the COM interface (this is a technical COM limitation, not an ASCOM limitation).</para>
       	</content>
     </section>
   

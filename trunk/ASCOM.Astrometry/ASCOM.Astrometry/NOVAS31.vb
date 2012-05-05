@@ -41,7 +41,7 @@ Namespace NOVAS
             Dim ReturnedPath As New System.Text.StringBuilder(260)
 
             TL = New TraceLogger("", "NOVAS31")
-            TL.Enabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
+            TL.Enabled = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
 
             Utl = New Util
 
@@ -356,11 +356,33 @@ Namespace NOVAS
                                 ByVal Accuracy As Accuracy, _
                                 ByRef Ra As Double, _
                                 ByRef Dec As Double) As Short Implements INOVAS31.AppStar
+
+            Dim rc As Short
+            Try
+                TL.LogMessage("AppStar", "JD Accuracy:        " & JdTt & " " & Accuracy.ToString)
+                TL.LogMessage("AppStar", "  Star.RA:          " & Utl.HoursToHMS(Star.RA, ":", ":", "", 3))
+                TL.LogMessage("AppStar", "  Dec:              " & Utl.DegreesToDMS(Star.Dec, ":", ":", "", 3))
+                TL.LogMessage("AppStar", "  Catalog:          " & Star.Catalog)
+                TL.LogMessage("AppStar", "  Parallax:         " & Star.Parallax)
+                TL.LogMessage("AppStar", "  ProMoDec:         " & Star.ProMoDec)
+                TL.LogMessage("AppStar", "  ProMoRA:          " & Star.ProMoRA)
+                TL.LogMessage("AppStar", "  RadialVelocity:   " & Star.RadialVelocity)
+                TL.LogMessage("AppStar", "  StarName:         " & Star.StarName)
+                TL.LogMessage("AppStar", "  StarNumber:       " & Star.StarNumber)
+            Catch ex As Exception
+                TL.LogMessageCrLf("AppStar", "Exception: " & ex.ToString)
+            End Try
+
             If Is64Bit() Then
-                Return AppStar64(JdTt, Star, Accuracy, Ra, Dec)
+                rc = AppStar64(JdTt, Star, Accuracy, Ra, Dec)
+                TL.LogMessage("AppStar", "  64bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                Return rc
             Else
-                Return AppStar32(JdTt, Star, Accuracy, Ra, Dec)
+                rc = AppStar32(JdTt, Star, Accuracy, Ra, Dec)
+                TL.LogMessage("AppStar", "  32bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                Return rc
             End If
+
         End Function
 
         ''' <summary>
@@ -423,18 +445,19 @@ Namespace NOVAS
                 TL.LogMessage("AstroStar", "  RadialVelocity:   " & Star.RadialVelocity)
                 TL.LogMessage("AstroStar", "  StarName:         " & Star.StarName)
                 TL.LogMessage("AstroStar", "  StarNumber:       " & Star.StarNumber)
-                If Is64Bit() Then
-                    rc = AstroStar64(JdTt, Star, Accuracy, Ra, Dec)
-                    TL.LogMessage("AstroStar", "  64bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
-                    Return rc
-                Else
-                    rc = AstroStar32(JdTt, Star, Accuracy, Ra, Dec)
-                    TL.LogMessage("AstroStar", "  32bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
-                    Return rc
-                End If
             Catch ex As Exception
                 TL.LogMessageCrLf("AstroStar", "Exception: " & ex.ToString)
             End Try
+
+            If Is64Bit() Then
+                rc = AstroStar64(JdTt, Star, Accuracy, Ra, Dec)
+                TL.LogMessage("AstroStar", "  64bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                Return rc
+            Else
+                rc = AstroStar32(JdTt, Star, Accuracy, Ra, Dec)
+                TL.LogMessage("AstroStar", "  32bit - Return Code: " & rc & ", RA Dec: " & Utl.HoursToHMS(Ra, ":", ":", "", 3) & " " & Utl.DegreesToDMS(Dec, ":", ":", "", 3))
+                Return rc
+            End If
         End Function
 
         ''' <summary>
@@ -941,16 +964,17 @@ Namespace NOVAS
                 TL.LogMessage("Equ2Hor", "  Location.Longitude:   " & Location.Longitude)
                 TL.LogMessage("Equ2Hor", "  Location.Pressure:    " & Location.Pressure)
                 TL.LogMessage("Equ2Hor", "  Location.Temperature: " & Location.Temperature)
-                If Is64Bit() Then
-                    Equ2Hor64(Jd_Ut1, DeltT, Accuracy, xp, yp, Location, Ra, Dec, RefOption, Zd, Az, RaR, DecR)
-                    TL.LogMessage("Equ2Hor", "  64bit - RA Dec: " & Utl.HoursToHMS(RaR, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DecR, ":", ":", "", 3))
-                Else
-                    Equ2Hor32(Jd_Ut1, DeltT, Accuracy, xp, yp, Location, Ra, Dec, RefOption, Zd, Az, RaR, DecR)
-                    TL.LogMessage("Equ2Hor", "  32bit - RA Dec: " & Utl.HoursToHMS(RaR, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DecR, ":", ":", "", 3))
-                End If
             Catch ex As Exception
                 TL.LogMessageCrLf("Equ2Hor", "Exception: " & ex.ToString)
             End Try
+
+            If Is64Bit() Then
+                Equ2Hor64(Jd_Ut1, DeltT, Accuracy, xp, yp, Location, Ra, Dec, RefOption, Zd, Az, RaR, DecR)
+                TL.LogMessage("Equ2Hor", "  64bit - RA Dec: " & Utl.HoursToHMS(RaR, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DecR, ":", ":", "", 3))
+            Else
+                Equ2Hor32(Jd_Ut1, DeltT, Accuracy, xp, yp, Location, Ra, Dec, RefOption, Zd, Az, RaR, DecR)
+                TL.LogMessage("Equ2Hor", "  32bit - RA Dec: " & Utl.HoursToHMS(RaR, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DecR, ":", ":", "", 3))
+            End If
 
         End Sub
 
@@ -1378,15 +1402,15 @@ Namespace NOVAS
         ''' <param name="Star">CatEntry3 structure containing the input data</param>
         ''' <remarks></remarks>
         Public Sub MakeCatEntry(ByVal StarName As String, _
-                                        ByVal Catalog As String, _
-                                        ByVal StarNum As Integer, _
-                                        ByVal Ra As Double, _
-                                        ByVal Dec As Double, _
-                                        ByVal PmRa As Double, _
-                                        ByVal PmDec As Double, _
-                                        ByVal Parallax As Double, _
-                                        ByVal RadVel As Double, _
-                                        ByRef Star As CatEntry3) Implements INOVAS31.MakeCatEntry
+                                ByVal Catalog As String, _
+                                ByVal StarNum As Integer, _
+                                ByVal Ra As Double, _
+                                ByVal Dec As Double, _
+                                ByVal PmRa As Double, _
+                                ByVal PmDec As Double, _
+                                ByVal Parallax As Double, _
+                                ByVal RadVel As Double, _
+                                ByRef Star As CatEntry3) Implements INOVAS31.MakeCatEntry
             If Is64Bit() Then
                 MakeCatEntry64(StarName, Catalog, StarNum, Ra, Dec, PmRa, PmDec, Parallax, RadVel, Star)
             Else
@@ -1404,8 +1428,8 @@ Namespace NOVAS
         ''' on a near-Earth spacecraft</param>
         ''' <remarks></remarks>
         Public Sub MakeInSpace(ByVal ScPos() As Double, _
-                                       ByVal ScVel() As Double, _
-                                       ByRef ObsSpace As InSpace) Implements INOVAS31.MakeInSpace
+                               ByVal ScVel() As Double, _
+                               ByRef ObsSpace As InSpace) Implements INOVAS31.MakeInSpace
             If Is64Bit() Then
                 MakeInSpace64(ArrToPosVec(ScPos), ArrToVelVec(ScVel), ObsSpace)
             Else
@@ -1431,10 +1455,10 @@ Namespace NOVAS
         ''' </pre></returns>
         ''' <remarks></remarks>
         Public Function MakeObject(ByVal Type As ObjectType, _
-                                           ByVal Number As Short, _
-                                           ByVal Name As String, _
-                                           ByVal StarData As CatEntry3, _
-                                           ByRef CelObj As Object3) As Short Implements INOVAS31.MakeObject
+                                   ByVal Number As Short, _
+                                   ByVal Name As String, _
+                                   ByVal StarData As CatEntry3, _
+                                   ByRef CelObj As Object3) As Short Implements INOVAS31.MakeObject
             Dim O3I As New Object3Internal, rc As Short
 
             If Is64Bit() Then
@@ -1517,11 +1541,11 @@ Namespace NOVAS
         ''' the surface of the Earth</param>
         ''' <remarks></remarks>
         Public Sub MakeObserverOnSurface(ByVal Latitude As Double, _
-                                                 ByVal Longitude As Double, _
-                                                 ByVal Height As Double, _
-                                                 ByVal Temperature As Double, _
-                                                 ByVal Pressure As Double, _
-                                                 ByRef ObsOnSurface As Observer) Implements INOVAS31.MakeObserverOnSurface
+                                         ByVal Longitude As Double, _
+                                         ByVal Height As Double, _
+                                         ByVal Temperature As Double, _
+                                         ByVal Pressure As Double, _
+                                         ByRef ObsOnSurface As Observer) Implements INOVAS31.MakeObserverOnSurface
             If Is64Bit() Then
                 MakeObserverOnSurface64(Latitude, Longitude, Height, Temperature, Pressure, ObsOnSurface)
             Else
@@ -1542,11 +1566,11 @@ Namespace NOVAS
         ''' observer on the surface of the Earth.</param>
         ''' <remarks></remarks>
         Public Sub MakeOnSurface(ByVal Latitude As Double, _
-                                         ByVal Longitude As Double, _
-                                         ByVal Height As Double, _
-                                         ByVal Temperature As Double, _
-                                         ByVal Pressure As Double, _
-                                         ByRef ObsSurface As OnSurface) Implements INOVAS31.MakeOnSurface
+                                 ByVal Longitude As Double, _
+                                 ByVal Height As Double, _
+                                 ByVal Temperature As Double, _
+                                 ByVal Pressure As Double, _
+                                 ByRef ObsSurface As OnSurface) Implements INOVAS31.MakeOnSurface
             If Is64Bit() Then
                 MakeOnSurface64(Latitude, Longitude, Height, Temperature, Pressure, ObsSurface)
             Else

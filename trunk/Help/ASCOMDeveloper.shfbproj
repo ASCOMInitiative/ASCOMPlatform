@@ -188,8 +188,16 @@
       <ImageId>ForceCOMPort</ImageId>
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
+    <Image Include="Developer Information\TimeRelationships.png">
+      <ImageId>TimeRelationships</ImageId>
+      <AlternateText>Time Relationships</AlternateText>
+    </Image>
     <Content Include="Scripts\script_manifold.js" />
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Developer Information\Time Relationships.aml" />
+    <None Include="Developer Information\Time Relationships.aml" />
+    <None Include="Introduction\Time Relationships.aml" />
+    <None Include="Introduction\Time Relationships.aml" />
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Examples\DriverAccess.aml" />

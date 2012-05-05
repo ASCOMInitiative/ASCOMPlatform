@@ -45,14 +45,15 @@ Partial Class DiagnosticsForm
         Me.MenuProfileTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuUtilTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuTimerTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuSimulatorTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuDriverAccessTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuNovasTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuAstroUtilsTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuThrowAbandonedMutexExceptions = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblAction = New System.Windows.Forms.Label()
         Me.btnLastLog = New System.Windows.Forms.Button()
-        Me.MenuAstroUtilsTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -159,7 +160,7 @@ Partial Class DiagnosticsForm
         '
         'mnuTrace
         '
-        Me.mnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeaveUnset, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTimerTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuThrowAbandonedMutexExceptions})
+        Me.mnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeaveUnset, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTimerTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuThrowAbandonedMutexExceptions})
         Me.mnuTrace.Name = "mnuTrace"
         Me.mnuTrace.Size = New System.Drawing.Size(48, 20)
         Me.mnuTrace.Text = "Trace"
@@ -219,12 +220,6 @@ Partial Class DiagnosticsForm
         Me.MenuTimerTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuTimerTraceEnabled.Text = "Timer Timer Enabled"
         '
-        'MenuTransformTraceEnabled
-        '
-        Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
-        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(280, 22)
-        Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
-        '
         'MenuSimulatorTraceEnabled
         '
         Me.MenuSimulatorTraceEnabled.Name = "MenuSimulatorTraceEnabled"
@@ -236,6 +231,24 @@ Partial Class DiagnosticsForm
         Me.MenuDriverAccessTraceEnabled.Name = "MenuDriverAccessTraceEnabled"
         Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(280, 22)
         Me.MenuDriverAccessTraceEnabled.Text = "DriverAccess Trace Enabled"
+        '
+        'MenuTransformTraceEnabled
+        '
+        Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
+        '
+        'MenuNovasTraceEnabled
+        '
+        Me.MenuNovasTraceEnabled.Name = "MenuNovasTraceEnabled"
+        Me.MenuNovasTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuNovasTraceEnabled.Text = "NOVAS (Partial) Trace Enabled"
+        '
+        'MenuAstroUtilsTraceEnabled
+        '
+        Me.MenuAstroUtilsTraceEnabled.Name = "MenuAstroUtilsTraceEnabled"
+        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(280, 22)
+        Me.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled"
         '
         'MenuThrowAbandonedMutexExceptions
         '
@@ -270,12 +283,6 @@ Partial Class DiagnosticsForm
         Me.btnLastLog.TabIndex = 7
         Me.btnLastLog.Text = "View Last Log"
         Me.btnLastLog.UseVisualStyleBackColor = True
-        '
-        'MenuAstroUtilsTraceEnabled
-        '
-        Me.MenuAstroUtilsTraceEnabled.Name = "MenuAstroUtilsTraceEnabled"
-        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(280, 22)
-        Me.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled"
         '
         'DiagnosticsForm
         '
@@ -332,5 +339,6 @@ Partial Class DiagnosticsForm
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuThrowAbandonedMutexExceptions As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuAstroUtilsTraceEnabled As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuNovasTraceEnabled As System.Windows.Forms.ToolStripMenuItem
 
 End Class

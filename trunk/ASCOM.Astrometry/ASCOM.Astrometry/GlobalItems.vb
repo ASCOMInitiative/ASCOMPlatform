@@ -17,6 +17,11 @@ Module GlobalItems
     Friend Const DEG2RAD As Double = 0.017453292519943295
     Friend Const RAD2DEG As Double = 57.295779513082323
 
+    'General constants
+    Friend Const TT_TAI_OFFSET As Double = 32.184 '32.184 seconds
+    Friend Const MJDBASE As Double = 2400000.5 'This is the offset of Modified Julian dates from true Julian dates
+    Friend Const SECPERDAY As Double = 86400.0
+
     Friend Const RACIO_DEFAULT_VALUE As Double = Double.NaN 'NOVAS3: Default value that if still present will indicate that this value was not updated
 End Module
 
