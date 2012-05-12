@@ -404,6 +404,14 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\NOVAS 3.1 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
     Install Files ..\..\..\..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf to $TARGETDIR$\Developer Documentation
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to Migrate from Astro32 to $TARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
+    Comment: Platform 6 SP2 Files
+    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js to $TARGETDIR$\Sample Scripts
+    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js to $TARGETDIR$\Sample Scripts
+    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-star.vbs to $TARGETDIR$\Sample Scripts
+    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs to $TARGETDIR$\Sample Scripts
+    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js to $TARGETDIR$\Sample Scripts
+    Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to $TARGETDIR$\Sample Scripts
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Sample script files to explorer.exe
     [END REGION]
     [DEFINE REGION: Driver installer]
     Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation

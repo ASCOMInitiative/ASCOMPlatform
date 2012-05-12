@@ -410,6 +410,7 @@ Namespace NOVASCOM
     ''' which correspond to the Type, Name, and Number properties of Novas.Planet. 
     ''' </para></remarks>
     <Guid("FF6DA248-BA2A-4a62-BA0A-AAD433EAAC85"), _
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
     ComVisible(True)> _
     Public Interface IEarth
         ''' <summary>
@@ -530,6 +531,7 @@ Namespace NOVASCOM
     ''' </para>
     '''</remarks>
     <Guid("CAE65556-EA7A-4252-BF28-D0E967AEF04D"), _
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
     ComVisible(True)> _
     Public Interface IPlanet
         ''' <summary>
@@ -553,7 +555,7 @@ Namespace NOVASCOM
         ''' <param name="site">The observing site</param>
         ''' <returns>PositionVector for the local place.</returns>
         ''' <remarks></remarks>
-        <DispId(3)> Function GetLocalPosition(ByVal tjd As Double, ByVal site As Site) As PositionVector
+        <DispId(3)> Function GetLocalPosition(ByVal tjd As Double, <MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site) As PositionVector
         ''' <summary>
         ''' Get a topocentric position for given time
         ''' </summary>
@@ -562,7 +564,7 @@ Namespace NOVASCOM
         ''' <param name="Refract">Apply refraction correction</param>
         ''' <returns>PositionVector for the topocentric place.</returns>
         ''' <remarks></remarks>
-        <DispId(4)> Function GetTopocentricPosition(ByVal tjd As Double, ByVal site As Site, ByVal Refract As Boolean) As PositionVector
+        <DispId(4)> Function GetTopocentricPosition(ByVal tjd As Double, <MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site, ByVal Refract As Boolean) As PositionVector
         ''' <summary>
         ''' Get a virtual position for given time
         ''' </summary>
@@ -634,6 +636,7 @@ Namespace NOVASCOM
     ''' <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any cartesian coordinate will cause the equatorial coordinates to be recalculated. 
     ''' </para></remarks>
     <Guid("A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA"), _
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
     ComVisible(True)> _
     Public Interface IPositionVector
         ''' <summary>
@@ -641,7 +644,7 @@ Namespace NOVASCOM
         ''' </summary>
         ''' <param name="vel">The velocity vector of the observer</param>
         ''' <remarks>The algorithm includes relativistic terms</remarks>
-        <DispId(1)> Sub Aberration(ByVal vel As VelocityVector)
+        <DispId(1)> Sub Aberration(<MarshalAs(UnmanagedType.IDispatch)> ByVal vel As VelocityVector)
         ''' <summary>
         ''' Adjust the position vector for precession of equinoxes between two given epochs
         ''' </summary>
@@ -659,7 +662,7 @@ Namespace NOVASCOM
         ''' <remarks></remarks>
         ''' <exception cref="Exceptions.ValueNotSetException">If the position vector x, y or z values has not been set</exception>
         ''' <exception cref="Exceptions.ValueNotAvailableException">If the supplied velocity vector does not have valid x, y and z components</exception>
-        <DispId(3)> Function ProperMotion(ByVal vel As VelocityVector, ByVal tjd1 As Double, ByVal tjd2 As Double) As Boolean
+        <DispId(3)> Function ProperMotion(<MarshalAs(UnmanagedType.IDispatch)> ByVal vel As VelocityVector, ByVal tjd1 As Double, ByVal tjd2 As Double) As Boolean
         ''' <summary>
         ''' Initialize the PositionVector from a Site object and Greenwich apparent sidereal time.
         ''' </summary>
@@ -669,7 +672,7 @@ Namespace NOVASCOM
         ''' <remarks>The GAST parameter must be for Greenwich, not local. The time is rotated through the 
         ''' site longitude. See SetFromSiteJD() for an equivalent method that takes UTC Julian Date and 
         ''' Delta-T (eliminating the need for calculating hyper-accurate GAST yourself).</remarks>
-        <DispId(4)> Function SetFromSite(ByVal site As Site, ByVal gast As Double) As Boolean
+        <DispId(4)> Function SetFromSite(<MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site, ByVal gast As Double) As Boolean
         ''' <summary>
         ''' Initialize the PositionVector from a Site object using UTC Julian date and Delta-T
         ''' </summary>
@@ -679,7 +682,7 @@ Namespace NOVASCOM
         ''' <returns>True if successful or throws an exception</returns>
         ''' <remarks>The Julian date must be UTC Julian date, not terrestrial.
         ''' </remarks>
-        <DispId(5)> Overloads Function SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double) As Boolean
+        <DispId(5)> Overloads Function SetFromSiteJD(<MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double) As Boolean
         ''' <summary>
         ''' Initialize the PositionVector from a Star object.
         ''' </summary>
@@ -687,7 +690,7 @@ Namespace NOVASCOM
         ''' <returns>True if successful or throws an exception</returns>
         ''' <remarks></remarks>
         ''' <exception cref="Exceptions.ValueNotAvailableException">If Parallax, RightAScension or Declination is not available in the supplied star object.</exception>
-        <DispId(6)> Function SetFromStar(ByVal star As Star) As Boolean
+        <DispId(6)> Function SetFromStar(<MarshalAs(UnmanagedType.IDispatch)> ByVal star As Star) As Boolean
         ''' <summary>
         ''' The azimuth coordinate (degrees, + east)
         ''' </summary>
@@ -774,7 +777,7 @@ Namespace NOVASCOM
         ''' "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
         ''' with delta_t set to 0.0 to achieve this effect.
         ''' </remarks>
-        Overloads Function SetFromSiteJD(ByVal site As Site, ByVal ujd As Double) As Boolean
+        Overloads Function SetFromSiteJD(<MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site, ByVal ujd As Double) As Boolean
     End Interface
 
     ''' <summary>
@@ -785,6 +788,7 @@ Namespace NOVASCOM
     ''' and the sea-level barmetric pressure. The latter two are used only for optional refraction corrections. 
     ''' Latitude and longitude are (common) geodetic, not geocentric. </remarks>
     <Guid("2414C071-8A5B-4d53-89BC-CAF30BA7123B"), _
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
     ComVisible(True)> _
     Public Interface ISite
         ''' <summary>
@@ -846,6 +850,7 @@ Namespace NOVASCOM
     ''' the returned PositionVector. <b>Note that Alt/Az is available in PositionVectors returned from calling 
     ''' GetTopocentricPosition().</b></para></remarks>
     <Guid("89145C95-9B78-494e-99FE-BD2EF4386096"), _
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
     ComVisible(True)> _
     Public Interface IStar
         ''' <summary>
@@ -895,7 +900,7 @@ Namespace NOVASCOM
         ''' <param name="site">A Site object representing the observing site</param>
         ''' <returns>PositionVector for the local place.</returns>
         ''' <remarks></remarks>
-        <DispId(5)> Function GetLocalPosition(ByVal tjd As Double, ByVal site As Site) As PositionVector
+        <DispId(5)> Function GetLocalPosition(ByVal tjd As Double, <MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site) As PositionVector
         ''' <summary>
         ''' Get a topocentric position for a given site and time
         ''' </summary>
@@ -904,7 +909,7 @@ Namespace NOVASCOM
         ''' <param name="Refract">True to apply atmospheric refraction corrections</param>
         ''' <returns>PositionVector for the topocentric place.</returns>
         ''' <remarks></remarks>
-        <DispId(6)> Function GetTopocentricPosition(ByVal tjd As Double, ByVal site As Site, ByVal Refract As Boolean) As PositionVector
+        <DispId(6)> Function GetTopocentricPosition(ByVal tjd As Double, <MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site, ByVal Refract As Boolean) As PositionVector
         ''' <summary>
         ''' Get a virtual position at a given time
         ''' </summary>
@@ -1003,6 +1008,7 @@ Namespace NOVASCOM
     ''' object the proper motions, distance and radial velocity are used, for a site, the velocity is that 
     ''' of the observer with respect to the Earth's center of mass. </remarks>
     <Guid("8DD80835-29C6-49d6-8E4D-8887B20E707E"), _
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
     ComVisible(True)> _
     Public Interface IVelocityVector
         ''' <summary>
@@ -1015,7 +1021,7 @@ Namespace NOVASCOM
         ''' of mass. The GAST parameter must be for Greenwich, not local. The time is rotated through 
         ''' the site longitude. See SetFromSiteJD() for an equivalent method that takes UTC Julian 
         ''' Date and optionally Delta-T (eliminating the need for calculating hyper-accurate GAST yourself). </remarks>
-        <DispId(1)> Function SetFromSite(ByVal site As Site, ByVal gast As Double) As Boolean
+        <DispId(1)> Function SetFromSite(<MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site, ByVal gast As Double) As Boolean
         ''' <summary>
         ''' Initialize the VelocityVector from a Site object using UTC Julian Date and Delta-T
         ''' </summary>
@@ -1025,7 +1031,7 @@ Namespace NOVASCOM
         ''' <returns>True if OK otherwise throws an exception</returns>
         ''' <remarks>The velocity vector is that of the observer with respect to the Earth's center 
         ''' of mass. The Julian date must be UTC Julian date, not terrestrial.</remarks>
-        <DispId(2)> Function SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double) As Boolean
+        <DispId(2)> Function SetFromSiteJD(<MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double) As Boolean
         ''' <summary>
         ''' Initialize the VelocityVector from a Star object.
         ''' </summary>
@@ -1034,7 +1040,7 @@ Namespace NOVASCOM
         ''' <remarks>The proper motions, distance and radial velocity are used in the velocity calculation. </remarks>
         ''' <exception cref="Exceptions.ValueNotAvailableException">If any of: Parallax, RightAscension, Declination, 
         ''' ProperMotionRA, ProperMotionDec or RadialVelocity are not available in the star object</exception>
-        <DispId(3)> Function SetFromStar(ByVal star As Star) As Boolean
+        <DispId(3)> Function SetFromStar(<MarshalAs(UnmanagedType.IDispatch)> ByVal star As Star) As Boolean
         ''' <summary>
         '''  Linear velocity along the declination direction (AU/day)
         ''' </summary>
@@ -1098,7 +1104,7 @@ Namespace NOVASCOM
         ''' "SetFromSiteJD(ByVal site As Site, ByVal ujd As Double, ByVal delta_t As Double)"
         ''' with delta_t set to 0.0 to achieve this effect.
         ''' </remarks>
-        Function SetFromSiteJD(ByVal site As Site, ByVal ujd As Double) As Boolean
+        Function SetFromSiteJD(<MarshalAs(UnmanagedType.IDispatch)> ByVal site As Site, ByVal ujd As Double) As Boolean
     End Interface
 
 End Namespace
@@ -5071,7 +5077,7 @@ Namespace AstroUtils
         ''' <remarks></remarks>
         Function MJDToDate(MJD As Double) As Date
         ''' <summary>
-        ''' Returns a modified Julian date as a string formatted acording to the supplied presentation format
+        ''' Returns a modified Julian date as a string formatted according to the supplied presentation format
         ''' </summary>
         ''' <param name="MJD">Mofified julian date</param>
         ''' <param name="PresentationFormat">Format representation</param>
@@ -5088,7 +5094,16 @@ Namespace AstroUtils
         ''' <returns>Double DeltaUT in seconds</returns>
         ''' <remarks>DeltaUT varies only slowly, so the Julian date can be based on UTC, UT1 or Terrestrial Time.</remarks>
         Function DeltaUT1(JulianDate As Double) As Double
-
+        ''' <summary>
+        ''' Returns a Julian date as a string formatted according to the supplied presentation format
+        ''' </summary>
+        ''' <param name="JD">Julian date</param>
+        ''' <param name="PresentationFormat">Format representation</param>
+        ''' <returns>Date as a string</returns>
+        ''' <remarks>This expects the standard Microsoft date and time formatting characters as described 
+        ''' in http://msdn.microsoft.com/en-us/library/362btx8f(v=VS.90).aspx
+        ''' </remarks>
+        Function FormatJD(JD As Double, PresentationFormat As String) As String
     End Interface
 
 End Namespace
