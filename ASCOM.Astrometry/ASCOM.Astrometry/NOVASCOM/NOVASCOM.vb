@@ -388,7 +388,7 @@ Namespace NOVASCOM
 
             Obj3 = New Object3
 
-            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
+            If (m_type = BodyType.MajorPlanet) And ((m_number = 10) Or (m_number = 11)) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
                 Obj3.Number = CommonCode.NumberToBody(m_number)
                 Obj3.Type = ObjectType.MajorPlanetSunOrMoon
 
@@ -451,10 +451,10 @@ Namespace NOVASCOM
             'Dim earth As New bodystruct
             Dim RetVal As PositionVector
             Dim Obj3 As Object3, RA, Dec, Dis As Double, rc As Integer
-
+            'TL.LogMessage("GetAstrometricPosition", "tjd: " & tjd & ", BodyType: " & m_type.ToString & ", Number: " & Number)
             Obj3 = New Object3
 
-            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
+            If (m_type = BodyType.MajorPlanet) And ((m_number = 10) Or (m_number = 11)) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
                 Obj3.Number = CommonCode.NumberToBody(m_number)
                 Obj3.Type = ObjectType.MajorPlanetSunOrMoon
 
@@ -576,7 +576,7 @@ Namespace NOVASCOM
                 Throw New Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Height is not available")
             End Try
 
-            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
+            If (m_type = BodyType.MajorPlanet) And ((m_number = 10) Or (m_number = 11)) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
 
                 OnSurf.Height = site.Height
                 OnSurf.Latitude = site.Latitude
@@ -711,7 +711,7 @@ Namespace NOVASCOM
                 Throw New Exceptions.ValueNotAvailableException("Star:GetTopocentricPosition Site.Height is not available")
             End Try
 
-            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
+            If (m_type = BodyType.MajorPlanet) And ((m_number = 10) Or (m_number = 11)) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
 
                 OnSurf.Height = site.Height
                 OnSurf.Latitude = site.Latitude
@@ -869,7 +869,7 @@ Namespace NOVASCOM
 
             Obj3 = New Object3
 
-            If (m_number = 10) Or (m_number = 11) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
+            If (m_type = BodyType.MajorPlanet) And ((m_number = 10) Or (m_number = 11)) Then ' Handle Sun and Moon through NOVAS31,all the rest by the original Bob Denny method
                 Obj3.Number = CommonCode.NumberToBody(m_number)
                 Obj3.Type = ObjectType.MajorPlanetSunOrMoon
 

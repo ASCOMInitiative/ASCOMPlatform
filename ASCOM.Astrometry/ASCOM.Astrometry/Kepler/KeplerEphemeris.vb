@@ -95,6 +95,8 @@ Namespace Kepler
             m_bTypeValid = False
             m_Name = "" 'Sentinel
             m_Type = Nothing
+            m_e.ptable.lon_tbl = New Double() {0.0} 'Initialise orbit arrays
+            m_e.ptable.lat_tbl = New Double() {0.0}
         End Sub
         ''' <summary>
         ''' Semi-major axis (AU)

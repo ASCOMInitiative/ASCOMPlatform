@@ -367,5 +367,32 @@ Namespace AstroUtils
             TL.LogMessage("DeltaUT", "Returning: " & DUT1 & " at Julian date: " & JulianDate)
             Return DUT1
         End Function
+
+        ''' <summary>
+        ''' Returns a Julian date as a string formatted according to the supplied presentation format
+        ''' </summary>
+        ''' <param name="JD">Julian date</param>
+        ''' <param name="PresentationFormat">Format representation</param>
+        ''' <returns>Date as a string</returns>
+        ''' <remarks>This expects the standard Microsoft date and time formatting characters as described 
+        ''' in http://msdn.microsoft.com/en-us/library/362btx8f(v=VS.90).aspx
+        ''' </remarks>
+        Public Function FormatJD(JD As Double, PresentationFormat As String) As String Implements IAstroUtils.FormatJD
+            Dim DaysSinceJ2000 As Double, J2000Date, ActualDate As Date, Retval As String
+
+            TL.LogMessage("FormatJD", "JD, PresentationFormat: " & JD & " " & PresentationFormat)
+
+            DaysSinceJ2000 = JD - J2000BASE
+
+            'J2000 corresponds to 2000 Jan 1st 12.00 midday
+            J2000Date = New Date(2000, 1, 1, 12, 0, 0)
+            ActualDate = J2000Date.AddDays(DaysSinceJ2000)
+            TL.LogMessage("FormatJD", "  DaysSinceJ2000, J2000Date, ActualDate: " & DaysSinceJ2000 & " " & J2000Date.ToString & " " & ActualDate.ToString)
+
+            Retval = Format(ActualDate, PresentationFormat)
+            TL.LogMessage("FormatJD", "  Result: " & Retval)
+
+            Return Retval
+        End Function
     End Class
 End Namespace
