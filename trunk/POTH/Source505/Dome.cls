@@ -835,7 +835,7 @@ Private Sub check_Az(Az As Double)
 
     If Az > 360 Or Az < -360 Then _
         Err.Raise SCODE_VAL_OUTOFRANGE, ERR_SOURCE, _
-            "Azimuth " & MSG_VAL_OUTOFRANGE
+            "Azimuth " & Az & " " & MSG_VAL_OUTOFRANGE
             
 End Sub
 
