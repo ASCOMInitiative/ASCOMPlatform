@@ -40,6 +40,7 @@ Attribute VB_Description = "ASCOM Dome Control Telescope Hub"
 ' 2003/09/03 rbd     Version 3.0.1 for Platform 3.0.1, add Binary compat.
 ' 2004/01/16 dbg     Added code to check for dome connected in Slewing property
 ' 2005/02/14 dbg     Added Telescope V2 support
+' 2012/05/06 cdr     InterfaceVersion should return a value even if not connected
 ' -----------------------------------------------------------------------------
 
 ' This module operates as a multiplexing ASCOM telescope hub
@@ -1207,7 +1208,7 @@ End Property
 
 ' V2
 Public Property Get InterfaceVersion() As Integer
-    If Not ScopeIsConnected Then Err.Raise SCODE_NOT_CONNECTED, ERR_SOURCE, MSG_NOT_CONNECTED
+    'If Not ScopeIsConnected Then Err.Raise SCODE_NOT_CONNECTED, ERR_SOURCE, MSG_NOT_CONNECTED
     On Error GoTo ErrorMsg
 
     ' Reports back the version from the actual driver, not the dome control panel
@@ -1215,8 +1216,10 @@ Public Property Get InterfaceVersion() As Integer
     Exit Sub
 
 ErrorMsg:
-    Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
-    Exit Sub
+    ' default to 1 if there's an error
+    InterfaceVersion = 1
+'    Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
+'    Exit Sub
 End Property
 
 ' V2

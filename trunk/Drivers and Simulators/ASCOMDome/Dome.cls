@@ -40,6 +40,7 @@ Attribute VB_Description = "ASCOM Dome Control Dome Hub"
 ' 2003/09/03 rbd     Version 3.0.1 for Platform 3.0.1, add Binary compat,
 '                    ShutterState enum defined here instead of by ref
 '                    from DomeSim.
+' 2012/05/06 cdr     InterfaceVersion should return a value even if not connected
 ' -----------------------------------------------------------------------------
 
 ' This module operates as a multiplexing ASCOM Dome hub
@@ -78,6 +79,8 @@ Public Sub AbortSlew()
     On Error GoTo ErrorMsg
     
     TheDome.AbortSlew
+    ' Conform seems to expect that Slaved is set to false
+    frmMain.SlaveCheck.Value = False
     Exit Sub
 
 ErrorMsg:
@@ -165,7 +168,7 @@ Public Property Get CanSetAzimuth() As Boolean
     If Not DomeIsConnected Then Err.Raise SCODE_NOT_CONNECTED, ERR_SOURCE, MSG_NOT_CONNECTED
     On Error GoTo ErrorMsg
     
-    CanSetAzimuth = TheDome.CanSetAzimuith
+    CanSetAzimuth = TheDome.CanSetAzimuth
     Exit Property
 
 ErrorMsg:
@@ -192,6 +195,11 @@ Public Property Get CanSetShutter() As Boolean
 
 ErrorMsg:
     Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
+End Property
+
+Public Property Get CanSlave() As Boolean
+    ' this is implemented by this driver
+    CanSlave = True
 End Property
 
 Public Property Get CanSyncAzimuth() As Boolean
@@ -299,14 +307,16 @@ ErrorMsg:
 End Sub
 
 Public Property Get InterfaceVersion() As Integer
-    If Not DomeIsConnected Then Err.Raise SCODE_NOT_CONNECTED, ERR_SOURCE, MSG_NOT_CONNECTED
+    'If Not DomeIsConnected Then Err.Raise SCODE_NOT_CONNECTED, ERR_SOURCE, MSG_NOT_CONNECTED
     On Error GoTo ErrorMsg
     
     InterfaceVersion = TheDome.InterfaceVersion
     Exit Property
 
 ErrorMsg:
-    Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
+    ' return 1 if there's an error
+    InterfaceVersion = 1
+'    Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
 End Property
 
 Public Property Get Name() As String
