@@ -15,6 +15,7 @@ Attribute VB_Name = "DomeHW"
 ' 15-Jun-03 jab     Initial edit
 ' 27-Jun-03 jab     Initial release
 ' 07-Sep-03 jab     Beta release - much more robust, getting ready for V2
+' 06-May-12 cdr     Use DomeControl class to determine the dome alt and Azm
 ' -----------------------------------------------------------------------------
 
 Option Explicit
@@ -204,7 +205,7 @@ Public Sub DomeCoord(SiderealTime As Double, _
         DomeAz As Double, DomeAlt As Double, SOP As PierSide)
     
     Dim HA As Double, Dec As Double     ' hour angle and Dec in Rad
-    Dim GEMOffset As Double
+'    Dim GEMOffset As Double
     Dim Alt As Double, Az As Double     ' return values
     
     DomeAz = INVALID_PARAMETER
@@ -214,28 +215,36 @@ Public Sub DomeCoord(SiderealTime As Double, _
         Exit Sub
     End If
     
-    ' calculate hour angle
+    ' calculate hour angle and Dec from the supplied values in Radians
     HA = HAScale(SiderealTime - ScopeRA) * HRS_RAD
     Dec = ScopeDec * DEG_RAD
     
     ' meridian flip
-    Select Case SOP
-        Case pierUnknown:    GEMOffset = 0#
-        Case pierEast:       GEMOffset = -g_iGEMOffset
-        Case pierWest:       GEMOffset = g_iGEMOffset
-    End Select
+'    Select Case SOP
+'        Case pierUnknown:    GEMOffset = 0#
+'        Case pierEast:       GEMOffset = -g_iGEMOffset
+'        Case pierWest:       GEMOffset = g_iGEMOffset
+'    End Select
         
     ' do the dome conversion, lots of math under here
-    CalcDomeAzAlt HA, Dec, g_dLatitude * DEG_RAD, _
-        -CDbl(g_iPosNS), CDbl(g_iPosEW), CDbl(g_iPosUD), _
-        GEMOffset, g_dRadius * 1000, _
-        Az, Alt
-   
-    DomeAz = Az * RAD_DEG
-    DomeAlt = Alt * RAD_DEG
-'    If Not g_show Is Nothing Then
-'        If g_show.chkOther.Value = 1 Then _
-'            g_show.TrafficLine " SOP in DomeCoord =" + CStr(SOP) + " DomeAzim " + CStr(DomeAz)
-'    End If
+'    CalcDomeAzAlt HA, Dec, g_dLatitude * DEG_RAD, _
+'        -CDbl(g_iPosNS), CDbl(g_iPosEW), CDbl(g_iPosUD), _
+'        GEMOffset, g_dRadius * 1000, _
+'        Az, Alt
+'
+'    DomeAz = Az * RAD_DEG
+'    DomeAlt = Alt * RAD_DEG
+    
+    ' dome conversion using DomeControl
+    Dim scopeAlt As Double, scopeAzm As Double
+    hadec_aa g_dLatitude * DEG_RAD, HA, Dec, scopeAlt, scopeAzm
+    scopeAzm = scopeAzm * RAD_DEG
+    scopeAlt = scopeAlt * RAD_DEG
+    
+    Dim dc As New DomeControl
+    dc.InitDome g_dRadius * 1000, CDbl(g_iGEMOffset), CDbl(g_iPosNS), CDbl(g_iPosEW), CDbl(g_iPosUD)
+    DomeAz = dc.DomeAzimuth(scopeAzm, scopeAlt, HA, (SOP = pierWest))
+    DomeAlt = dc.DomeAltitude
+    
 End Sub
 
