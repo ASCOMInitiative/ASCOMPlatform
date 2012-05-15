@@ -27,6 +27,7 @@ Attribute VB_Name = "DomeSyncWrapper"
 ' 2005/02/14 dbg     Improved sidereal time algorithm, V2 SideOfPier
 ' 2006/04/10 dbg     Corrected sign convention error for pier offset parameters
 ' 2008/01/10 dbg     Adjusted SideOfPier calculation, corrected for below pole condition
+' 2012/06/06 cdr     Use DomeControl class to get the dome target Altitude and Azimuth
 ' -----------------------------------------------------------------------------
 
 ' This module sets up parameters for DomeSync and handles
@@ -35,29 +36,20 @@ Attribute VB_Name = "DomeSyncWrapper"
 Option Explicit
 
 Public Sub CalcDomeAltAz(ByVal IsV2 As Boolean, ByVal SideOfPier As PierSide)
-    Dim Xdome0 As Double, Ydome0 As Double, Zdome0 As Double
-    Dim Rdome As Double, rDecAxis As Double
     Dim phi As Double
     Dim HArad As Double, DECrad As Double
-
-    ' Translate constants to DomeSync representation
-    Rdome = DomeRadius
-    phi = deg2rad(Latitude)
-    Xdome0 = -OffsetNorth
-    Ydome0 = OffsetEast
-    Zdome0 = OffsetHeight
-    rDecAxis = OffsetOptical
     
+    phi = degrad(Latitude)
     ' Calculate hour angle based on local sidereal time
-    HArad = deg2rad(15 * (SiderealTime() - ScopeRA))
+    HArad = hrrad(SiderealTime() - ScopeRA)
     If (HArad < -PI) Then HArad = HArad + PI * 2
     If (HArad > PI) Then HArad = HArad - PI * 2
-    DECrad = deg2rad(ScopeDec)
-
-    ' Calculate telescope alt/az for display purposes
+    DECrad = degrad(ScopeDec)
+    On Error GoTo Err
+    ' Calculate telescope alt/az
     hadec_aa phi, HArad, DECrad, ScopeAlt, ScopeAz
-    ScopeAlt = rad2deg(ScopeAlt)
-    ScopeAz = rad2deg(ScopeAz)
+    ScopeAlt = raddeg(ScopeAlt)
+    ScopeAz = raddeg(ScopeAz)
 
     ' Check for pole flipping
     Dim Flip As Boolean
@@ -69,20 +61,23 @@ Public Sub CalcDomeAltAz(ByVal IsV2 As Boolean, ByVal SideOfPier As PierSide)
         Flip = ScopeAz > 180
     End If
     
-    If Flip Then rDecAxis = -rDecAxis
-    
-    ' Now calculate dome position
-    CalcDomeAzAlt HArad, DECrad, deg2rad(Latitude), Xdome0, Ydome0, Zdome0, rDecAxis, Rdome, TargetAz, TargetAlt
-    TargetAz = rad2deg(TargetAz)
-    TargetAlt = rad2deg(TargetAlt)
-
+    ' use DomeControl class to determine the dome Alt Az
+    Dim dc As DomeControl
+    Set dc = New DomeControl
+    dc.InitDome DomeRadius, OffsetOptical, OffsetNorth, OffsetEast, -OffsetHeight
+    TargetAz = dc.DomeAzimuth(ScopeAz, ScopeAlt, raddeg(HArad), Not Flip)
+    TargetAlt = dc.DomeAltitude
+    Exit Sub
+Err:
+    LoadDLL "astro32.dll"
 End Sub
 
+' returns the local sidereal time in degrees
 Private Function SiderealTime() As Double
     ' Get UT from the operating system (assumes time zone set correctly)
     Dim SysTime As SYSTEMTIME
     GetSystemTime SysTime
-    Dim A, B, C, d, jd, jt, GMST As Double
+    Dim a, b, c, d, jd, jt, GMST As Double
     
     Dim Second As Double
     Second = SysTime.wSecond + SysTime.wMilliseconds / 1000
@@ -92,13 +87,13 @@ Private Function SiderealTime() As Double
         SysTime.wMonth = SysTime.wMonth + 12
     End If
     
-    A = Int(SysTime.wYear / 100)
-    B = 2 - A + Int(A / 4)
-    C = Int(365.25 * SysTime.wYear)
+    a = Int(SysTime.wYear / 100)
+    b = 2 - a + Int(a / 4)
+    c = Int(365.25 * SysTime.wYear)
     d = Int(30.6001 * (SysTime.wMonth + 1))
 
     ' Days since J2000.0
-    jd = B + C + d - 730550.5 + SysTime.wDay + (SysTime.wHour + SysTime.wMinute / 60# + SysTime.wSecond / 3600#) / 24#
+    jd = b + c + d - 730550.5 + SysTime.wDay + (SysTime.wHour + SysTime.wMinute / 60# + SysTime.wSecond / 3600#) / 24#
     
     ' julian centuries since J2000.0
     jt = jd / 36525#
