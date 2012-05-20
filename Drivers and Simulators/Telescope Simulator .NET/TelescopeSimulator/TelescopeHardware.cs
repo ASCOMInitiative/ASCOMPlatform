@@ -320,7 +320,7 @@ namespace ASCOM.Simulator
                 slewSpeedMedium = slewSpeedFast * 0.1;
                 slewSpeedSlow = slewSpeedFast * 0.02;
 
-                guideRateRightAscension = 15 * (1 / 3600) / SharedResources.SIDRATE;
+                guideRateRightAscension = 15.0 * (1.0 / 3600.0) / SharedResources.SIDRATE;
                 guideRateDeclination = guideRateRightAscension;
                 declinationRate = 0;
                 rightAscensionRate = 0;
