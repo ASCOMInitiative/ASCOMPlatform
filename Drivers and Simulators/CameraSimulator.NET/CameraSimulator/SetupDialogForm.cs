@@ -101,7 +101,7 @@ namespace ASCOM.Simulator
 
             this.checkBoxCanPulseGuide.Checked = theCamera.canPulseGuide;
 
-            this.checkBoxUseReadoutModes.Checked = theCamera.readoutModes != null;
+            this.checkBoxUseReadoutModes.Checked = theCamera.readoutModes.Count > 1;
 
             this.camera = theCamera;
         }
@@ -160,6 +160,10 @@ namespace ASCOM.Simulator
             if (this.checkBoxUseReadoutModes.Checked)
             {
                 camera.readoutModes = new ArrayList { "Raw Monochrome", "Live View", "Raw To Hard Drive" };
+            }
+            else
+            {
+                camera.readoutModes = new ArrayList { "Default" };
             }
         }
 

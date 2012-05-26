@@ -82,7 +82,6 @@ namespace ASCOM.Simulator
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.buttonSetImageFile = new System.Windows.Forms.Button();
             this.checkBoxApplyNoise = new System.Windows.Forms.CheckBox();
-            this.cameraBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.checkBoxInterfaceVersion = new System.Windows.Forms.CheckBox();
             this.groupBoxGuiding = new System.Windows.Forms.GroupBox();
@@ -90,6 +89,7 @@ namespace ASCOM.Simulator
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBoxReadoutModes = new System.Windows.Forms.GroupBox();
             this.checkBoxUseReadoutModes = new System.Windows.Forms.CheckBox();
+            this.cameraBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -97,9 +97,9 @@ namespace ASCOM.Simulator
             this.groupBoxExposure.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).BeginInit();
             this.groupBoxGuiding.SuspendLayout();
             this.groupBoxReadoutModes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -643,10 +643,6 @@ namespace ASCOM.Simulator
                     "depending on the CCD temperature, exposure time and image brightness.");
             this.checkBoxApplyNoise.UseVisualStyleBackColor = true;
             // 
-            // cameraBindingSource
-            // 
-            this.cameraBindingSource.DataSource = typeof(ASCOM.Simulator.Camera);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -702,12 +698,16 @@ namespace ASCOM.Simulator
             this.checkBoxUseReadoutModes.AutoSize = true;
             this.checkBoxUseReadoutModes.Location = new System.Drawing.Point(6, 19);
             this.checkBoxUseReadoutModes.Name = "checkBoxUseReadoutModes";
-            this.checkBoxUseReadoutModes.Size = new System.Drawing.Size(124, 17);
+            this.checkBoxUseReadoutModes.Size = new System.Drawing.Size(141, 17);
             this.checkBoxUseReadoutModes.TabIndex = 0;
-            this.checkBoxUseReadoutModes.Text = "Use Readout Modes";
+            this.checkBoxUseReadoutModes.Text = "Multiple Readout Modes";
             this.toolTip1.SetToolTip(this.checkBoxUseReadoutModes, "Check this if the camera can accept pulse guide commands. They will have no effec" +
                     "t.");
             this.checkBoxUseReadoutModes.UseVisualStyleBackColor = true;
+            // 
+            // cameraBindingSource
+            // 
+            this.cameraBindingSource.DataSource = typeof(ASCOM.Simulator.Camera);
             // 
             // SetupDialogForm
             // 
@@ -746,11 +746,11 @@ namespace ASCOM.Simulator
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).EndInit();
             this.groupBoxGuiding.ResumeLayout(false);
             this.groupBoxGuiding.PerformLayout();
             this.groupBoxReadoutModes.ResumeLayout(false);
             this.groupBoxReadoutModes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

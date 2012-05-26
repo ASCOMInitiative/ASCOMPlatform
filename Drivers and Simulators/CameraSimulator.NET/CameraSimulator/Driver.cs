@@ -1801,9 +1801,13 @@ namespace ASCOM.Simulator
                 }
 
                 gs = profile.GetValue(s_csDriverID, "ReadoutModes");
-                if (!string.IsNullOrEmpty(gs))
+                this.readoutModes = new ArrayList();
+                if (string.IsNullOrEmpty(gs))
                 {
-                    this.readoutModes = new ArrayList();
+                    this.readoutModes.Add("Default");
+                }
+                else
+                {
                     string[] rms = gs.Split(',');
                     foreach (var item in rms)
                     {
@@ -1881,7 +1885,7 @@ namespace ASCOM.Simulator
                     profile.DeleteValue(s_csDriverID, "GainMin");
                     profile.DeleteValue(s_csDriverID, "GainMax");
                 }
-                if (this.readoutModes == null)
+                if (this.readoutModes == null || this.readoutModes.Count <=1 )
                 {
                     profile.DeleteValue(s_csDriverID, "ReadoutModes");
                 }
