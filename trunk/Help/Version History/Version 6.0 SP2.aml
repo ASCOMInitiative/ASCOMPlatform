@@ -53,6 +53,8 @@
 					This function will primarily be of interest to those using scripting languages that lack this capability.</listItem>
 					<listItem>Added a set of scripting language code samples to developer documentation to illustrate access 
 					through COM.</listItem>
+					<listItem>Descriptions of the new ICameraV2 methods have been clarified and now indicate whether the method must be
+					implemented or whether it is persmissible for it to throw a NotImplemented exception.</listItem>
 				</list>
       		</content>
    		</section>
@@ -66,9 +68,9 @@
 					<listItem>Transform now always returns up to date values when result values are repeatedly read without changing 
 					input values e.g. when reading Azimuth or Elevation without changing the J2000 RA and Dec values. </listItem>
 					<listItem>Astrometry.NOVASCOM.Planet now produces accurate values when the DeltaT property is set.</listItem>
-					<listItem>Astrometry.NOVASCOM.Planet - fixed a marshalling issue that prevented use from scripting langauges 
+					<listItem>Astrometry.NOVASCOM.Planet - fixed a marshalling issue that prevented use from scripting languages 
 					through COM interop.</listItem>
-					<listItem>Astrometry.Kepler.Ephemeris  - fixed an initialisation issue in that prevented calaculation for minor 
+					<listItem>Astrometry.Kepler.Ephemeris - fixed an initialisation issue in that prevented calculation for minor 
 					planet bodies.</listItem>
 				</list>
    			</content>
@@ -113,7 +115,6 @@
  		 			has been removed. Exposure of early binding COM interop interfaces was unintentional; the core ASCOM team decided 
  		 			to revert to late binding for all interfaces in the original Platform 6 release. This has no impact on use of the
  		 			.NET components or use from scripting languages.</listItem>
-
 				</list>
    			</content>
    		</section>

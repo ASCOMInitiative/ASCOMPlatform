@@ -196,10 +196,20 @@
       <ImageId>TimeTypes</ImageId>
       <AlternateText>Time Types</AlternateText>
     </Image>
+    <Image Include="Developer Information\CameraV2 State Diagram.png">
+      <ImageId>CameraV2 State Diagram</ImageId>
+      <AlternateText>Camera V 2 State Diagram</AlternateText>
+      <CopyToMedia>True</CopyToMedia>
+    </Image>
     <Content Include="Scripts\script_manifold.js" />
     <Content Include="Introduction\Acknowledgements.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
+    <None Include="Developer Information\Time Relationships - Copy.aml" />
+    <None Include="Developer Information\Time Relationships - Copy.aml" />
+    <None Include="Developer Information\Camera States.aml" />
+    <None Include="Developer Information\Camera States.aml" />
+    <None Include="Developer Information\Camera States.aml" />
     <None Include="Version History\Version 6.0 SP2.aml" />
     <None Include="Version History\Version 6.0 SP2.aml" />
     <None Include="Introduction\Time Relationships.aml" />

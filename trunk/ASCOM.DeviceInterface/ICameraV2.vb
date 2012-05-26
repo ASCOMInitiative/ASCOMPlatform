@@ -8,6 +8,7 @@
 ''' <summary>
 ''' Defines the ICamera Interface
 ''' </summary>
+''' <remarks>The camera state diagram is shown here: <img src="../media/Camerav2 State Diagram.png"/></remarks>
     <Guid ("972CEBC6-0EBE-4efc-99DD-CC5293FDE77B"), ComVisible (True),
         InterfaceType (ComInterfaceType.InterfaceIsIDispatch)>
 Public Interface ICameraV2
@@ -206,12 +207,13 @@ Public Interface ICameraV2
     ''' Aborts the current exposure, if any, and returns the camera to Idle state.
     ''' </summary>
     ''' <remarks>
-    ''' <b>NOTES:</b>
+    ''' <p style="color:red"><b>Must be implemented</b></p>
+    ''' <para><b>NOTES:</b>
     ''' <list type="bullet">
     ''' <item><description>Must throw exception if camera is not idle and abort is unsuccessful (or not possible, e.g. during download).</description></item>
     ''' <item><description>Must throw exception if hardware or communications error occurs.</description></item>
     ''' <item><description>Must NOT throw an exception if the camera is already idle.</description></item>
-    ''' </list>
+    ''' </list> </para>
     ''' </remarks>
     ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
     ''' <exception cref="InvalidOperationException">Thrown if abort is not currently possible (e.g. during download).</exception>
@@ -568,7 +570,8 @@ Public Interface ICameraV2
     ''' Activates the Camera's mount control sytem to instruct the mount to move in a particular direction for a given period of time
     ''' </summary>
     ''' <remarks>
-    ''' This method returns only after the move has completed.
+    ''' <p style="color:red"><b>Can throw a not implemented exception</b></p>
+    ''' <para>This method returns only after the move has completed.</para>
     ''' <para>
     ''' The (symbolic) values for GuideDirections are:
     ''' <list type="bullet">
@@ -612,6 +615,7 @@ Public Interface ICameraV2
     ''' Starts an exposure. Use <see cref="ImageReady" /> to check when the exposure is complete.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented</b></p>
     ''' <para>A dark frame or bias exposure may be shorter than the V2 <see cref="ExposureMin" /> value and for a bias frame can be zero.
     ''' Check the value of <see cref="StartExposure">Light</see> and allow exposures down to 0 seconds 
     ''' if <see cref="StartExposure">Light</see> is False.  If the hardware will not
@@ -629,8 +633,9 @@ Public Interface ICameraV2
     ''' <summary>
     ''' Sets the subframe start position for the X axis (0 based) and returns the current value.
     ''' </summary>
-    ''' <remarks>
-    ''' If binning is active, value is in binned pixels.
+    ''' <remarks> 
+    ''' <p style="color:red"><b>Must be implemented</b></p>
+    ''' <para>If binning is active, value is in binned pixels.</para>
     ''' </remarks>
     ''' <value>The start X.</value>
     ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
@@ -650,9 +655,10 @@ Public Interface ICameraV2
     ''' Stops the current exposure, if any.
     ''' </summary>
     ''' <remarks>
-    ''' If an exposure is in progress, the readout process is initiated.  Ignored if readout is already in process.
+    ''' <p style="color:red"><b>Can throw a not implemented exception</b></p>
+    ''' <para>If an exposure is in progress, the readout process is initiated.  Ignored if readout is already in process.</para>
     ''' </remarks>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if CanStopExposure is False</exception>
+    ''' <exception cref="MethodNotImplementedException">Must throw an exception if CanStopExposure is False</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the camera or connection has an error condition</exception>
     ''' <exception cref="DriverException">Must throw an exception if for any reason no image readout will be available.</exception>
     Sub StopExposure()
@@ -664,15 +670,20 @@ Public Interface ICameraV2
     'ICameraV2 members
 
     ''' <summary>
-    ''' Bayer X offset index
+    ''' Returns the X offset of the Bayer matrix, as defined in <see cref="SensorType" />.
     ''' </summary>
     ''' <returns>The Bayer colour matrix X offset, as defined in <see cref="SensorType" />.</returns>
+    ''' <exception cref="PropertyNotImplementedException">Monochrome cameras must throw this exception, colour cameras must not.</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    ''' <remarks>Returns the X offset of the Bayer matrix, as defined in <see cref="SensorType" />. Value returned must be in the range 0 to M-1, 
-    ''' where M is the width of the Bayer matrix. The offset is relative to the 0,0 pixel in the sensor array, and does not change to 
-    ''' reflect subframe settings.
+    ''' <remarks><p style="color:red"><b>Must be implemented for monochrome cameras, optional for colour cameras</b></p>
+    ''' <para>Since monochrome cameras don't have a bayer colour matrix by definition, such cameras shold throw a <see cref="PropertyNotImplementedException" />.
+    ''' Colour cameras should always return a value and must not throw a <see cref="PropertyNotImplementedException" /></para>
+    ''' <para>The value returned must be in the range 0 to M-1 where M is the width of the Bayer matrix. The offset is relative to the 0,0 pixel in 
+    ''' the sensor array, and does not change to reflect subframe settings.</para>
+    ''' <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with 
+    ''' the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
     ''' <para>This is only available for the Camera Interface Version 2</para>
     ''' </remarks>
     ReadOnly Property BayerOffsetX As Short
@@ -680,11 +691,16 @@ Public Interface ICameraV2
     ''' <summary>
     ''' Returns the Y offset of the Bayer matrix, as defined in <see cref="SensorType" />.
     ''' </summary>
-    ''' <returns>The Bayer colour matrix Y offset.</returns>
+    ''' <returns>The Bayer colour matrix Y offset, as defined in <see cref="SensorType" />.</returns>
+    ''' <exception cref="PropertyNotImplementedException">Monochrome cameras must throw this exception, colour cameras must not.</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    ''' <remarks>The offset is relative to the 0,0 pixel in the sensor array, and does not change to reflect subframe settings. 
+    ''' <remarks><p style="color:red"><b>Must be implemented for monochrome cameras, optional for colour cameras</b></p>
+    ''' <para>Since monochrome cameras don't have a bayer colour matrix by definition, such cameras shold throw a <see cref="PropertyNotImplementedException" />.
+    ''' Colour cameras should always return a value and must not throw a <see cref="PropertyNotImplementedException" /></para>
+    ''' <para>The value returned must be in the range 0 to M-1 where M is the width of the Bayer matrix. The offset is relative to the 0,0 pixel in 
+    ''' the sensor array, and does not change to reflect subframe settings.</para>
     ''' <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with 
     ''' the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
     ''' <para>This is only available for the Camera Interface Version 2</para>
@@ -697,7 +713,8 @@ Public Interface ICameraV2
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     ''' <returns><c>true</c> when the camera supports a fast readout mode</returns>
-    ''' <remarks>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to 
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to 
     ''' ensure that the driver is aware of the capabilities of the specific camera model.
     ''' <para>This is only available for the Camera Interface Version 2</para>
     ''' </remarks>
@@ -710,7 +727,8 @@ Public Interface ICameraV2
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    ''' <remarks>It is recommended that this function be called only after 
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' It is recommended that this function be called only after 
     ''' a <see cref="Connected">connection</see> is established with the camera hardware, to ensure that the driver is aware of the capabilities of the 
     ''' specific camera model.
     ''' <para>This is only available for the Camera Interface Version 2</para>
@@ -724,7 +742,8 @@ Public Interface ICameraV2
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    ''' <remarks>This must be a non-zero number representing the shortest possible exposure time supported by the camera model.
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' This must be a non-zero number representing the shortest possible exposure time supported by the camera model.
     ''' <para>Please note that for bias frame acquisition an even shorter exposure may be possible; please see <see cref="StartExposure">StartExposure</see> 
     ''' for more information.</para>
     ''' <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to ensure 
@@ -740,10 +759,12 @@ Public Interface ICameraV2
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    ''' <remarks>This can be used, for example, to specify the resolution of a user interface "spin control" used to dial in the exposure time.
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' This can be used, for example, to specify the resolution of a user interface "spin control" used to dial in the exposure time.
     ''' <para>Please note that the Duration provided to <see cref="StartExposure">StartExposure</see> does not have to be an exact multiple of this number; 
     ''' the driver should choose the closest available value. Also in some cases the resolution may not be constant over the full range 
-    ''' of exposure times; in this case the smallest increment would be appropriate. </para>
+    ''' of exposure times; in this case the smallest increment would be appropriate. A value of 0.0 shall indicate that there is no minimum resulution
+    ''' except that imposed by the resolution of the double value itself.</para>
     ''' <para>It is recommended that this function be called only after a <see cref="Connected">connection</see> is established with the camera hardware, to ensure 
     ''' that the driver is aware of the capabilities of the specific camera model.</para>
     ''' <para>This is only available for the Camera Interface Version 2</para>
@@ -754,12 +775,14 @@ Public Interface ICameraV2
     ''' Gets or sets Fast Readout Mode
     ''' </summary>
     ''' <value><c>true</c> for fast readout mode, <c>false</c> for normal mode</value>
-    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected and a connection is required to obtain this information.</exception>
     ''' <exception cref="PropertyNotImplementedException">Thrown if <see cref="CanFastReadout" /> is <c>false</c>.</exception>
-    ''' <remarks>Must thrown an exception if no <see cref="Connected">connection</see> is established to the camera. Must throw 
-    ''' an exception if <see cref="CanFastReadout" /> returns False.
+    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected and a connection is required to obtain this information.</exception>
+    ''' <remarks><p style="color:red"><b>Must throw a PropertyNotImplementedException if CanFastReadout is <c>false</c> or 
+    ''' return a boolean value if CanFastReadout is <c>true</c>.</b></p>
+    ''' Must thrown an exception if no <see cref="Connected">connection</see> is established to the camera. Must throw 
+    ''' a <see cref="PropertyNotImplementedException" /> if <see cref="CanFastReadout" /> returns False.
     ''' <para>Many cameras have a "fast mode" intended for use in focusing. When set to True, the camera will operate in Fast mode; when 
-    ''' set False, the camera will operate normally. This property should default to False.</para>
+    ''' set False, the camera will operate normally. This property, if implemented, should default to <c>False</c>.</para>
     ''' <para>Please note that this function may in some cases interact with <see cref="ReadoutModes" />; for example, there may be modes where 
     ''' the Fast/Normal switch is meaningless. In this case, it may be preferable to use the <see cref="ReadoutModes" /> function to control 
     ''' fast/normal switching.</para>
@@ -773,11 +796,11 @@ Public Interface ICameraV2
     ''' </summary>
     ''' <value>Short integer index for the current camera gain in the <see cref="Gains" /> string array.</value>
     ''' <returns>Index into the Gains array for the selected camera gain</returns>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gain is not supported</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     ''' <exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gain is not supported</exception>
-    ''' <remarks>
+    ''' <remarks><p style="color:red"><b>Optional, can throw a PropertyNotImplementedException</b></p>
     ''' <see cref="Gain" /> can be used to adjust the gain setting of the camera, if supported. There are two typical usage scenarios:
     ''' <ul>
     ''' <li>DSLR Cameras - <see cref="Gains" /> will return a 0-based array of strings, which correspond to different gain settings such as 
@@ -797,10 +820,11 @@ Public Interface ICameraV2
     ''' </summary>
     ''' <value>Short integer representing the maximum gain value supported by the camera.</value>
     ''' <returns>The maximum gain value that this camera supports</returns>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if GainMax is not supported</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmax is not supported</exception>
-    ''' <remarks>When specifying the gain setting with an integer value, <see cref="GainMax" /> is used in conjunction with <see cref="GainMin" /> to 
+    ''' <remarks><p style="color:red"><b>Optional, can throw a PropertyNotImplementedException</b></p>
+    ''' When specifying the gain setting with an integer value, <see cref="GainMax" /> is used in conjunction with <see cref="GainMin" /> to 
     ''' specify the range of valid settings.
     ''' <para><see cref="GainMax" /> shall be greater than <see cref="GainMin" />. If either is available, then both must be available.</para>
     ''' <para>Please see <see cref="Gain" /> for more information.</para>
@@ -814,10 +838,11 @@ Public Interface ICameraV2
     ''' Minimum value of <see cref="Gain" />
     ''' </summary>
     ''' <returns>The minimum gain value that this camera supports</returns>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if GainMin is not supported</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
-    ''' <remarks>When specifying the gain setting with an integer value, <see cref="GainMin" /> is used in conjunction with <see cref="GainMax" /> to 
+    ''' <remarks><p style="color:red"><b>Optional, can throw a PropertyNotImplementedException</b></p>
+    ''' When specifying the gain setting with an integer value, <see cref="GainMin" /> is used in conjunction with <see cref="GainMax" /> to 
     ''' specify the range of valid settings.
     ''' <para><see cref="GainMax" /> shall be greater than <see cref="GainMin" />. If either is available, then both must be available.</para>
     ''' <para>Please see <see cref="Gain" /> for more information.</para>
@@ -831,10 +856,11 @@ Public Interface ICameraV2
     ''' Gains supported by the camera
     ''' </summary>
     ''' <returns>An ArrayList of gain names </returns>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if Gains is not supported</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
-    ''' <remarks><see cref="Gains" /> provides a 0-based array of available gain settings.  This is often used to specify ISO settings for DSLR cameras.  
+    ''' <remarks><p style="color:red"><b>Optional, can throw a PropertyNotImplementedException</b></p>
+    ''' <see cref="Gains" /> provides a 0-based array of available gain settings.  This is often used to specify ISO settings for DSLR cameras.  
     ''' Typically the application software will display the available gain settings in a drop list. The application will then supply 
     ''' the selected index to the driver via the <see cref="Gain" /> property. 
     ''' <para>The <see cref="Gain" /> setting may alternatively be specified using integer values; if this mode is used then <see cref="Gains" /> is invalid 
@@ -849,8 +875,10 @@ Public Interface ICameraV2
     ''' Percent conpleted, Interface Version 2 only
     ''' </summary>
     ''' <returns>A value between 0 and 100% indicating the completeness of this operation</returns>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if PercentCompleted is not supported</exception>
     ''' <exception cref="InvalidOperationException">Thrown when it is inappropriate to call <see cref="PercentCompleted" /></exception>
-    ''' <remarks>If valid, returns an integer between 0 and 100, where 0 indicates 0% progress (function just started) and 
+    ''' <remarks><p style="color:red"><b>Optional, can throw a PropertyNotImplementedException</b></p>
+    ''' If valid, returns an integer between 0 and 100, where 0 indicates 0% progress (function just started) and 
     ''' 100 indicates 100% progress (i.e. completion).
     ''' <para>At the discretion of the driver author, <see cref="PercentCompleted" /> may optionally be valid 
     ''' when <see cref="CameraState" /> is in any or all of the following 
@@ -873,7 +901,8 @@ Public Interface ICameraV2
     ''' <exception cref="InvalidValueException">Must throw an exception if set to an illegal or unavailable mode.</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ''' <remarks><see cref="ReadoutMode" /> is an index into the array <see cref="ReadoutModes" />, and selects the desired readout mode for the camera.  
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' <see cref="ReadoutMode" /> is an index into the array <see cref="ReadoutModes" />, and selects the desired readout mode for the camera.  
     ''' Defaults to 0 if not set.  Throws an exception if the selected mode is not available.
     ''' <para>It is strongly recommended, but not required, that driver authors make the 0-index mode suitable for standard imaging operations, 
     ''' since it is the default.</para>
@@ -886,11 +915,11 @@ Public Interface ICameraV2
     ''' List of available readout modes, Interface Version 2 only
     ''' </summary>
     ''' <returns>An ArrayList of readout mode names</returns>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ''' <remarks>This property provides an array of strings, each of which describes an available readout mode of the camera.  
-    ''' At least two strings must be present in the list. The user interface of a control application will typically present to the 
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' This property provides an array of strings, each of which describes an available readout mode of the camera.  
+    ''' At least one string must be present in the list. The user interface of a control application will typically present to the 
     ''' user a drop-list of modes.  The choice of available modes made available is entirely at the discretion of the driver author. 
     ''' Please note that if the camera has many different modes of operation, then the most commonly adjusted settings should be in 
     ''' <see cref="ReadoutModes" />; additional settings may be provided using <see cref="SetupDialog" />.
@@ -911,15 +940,22 @@ Public Interface ICameraV2
 
     ''' <summary>
     ''' Sensor name, Interface Version 2 only
+    ''' ## Mandatory must return an empty string if the sensor is unknown
     ''' </summary>
-    ''' <returns>The name of sensor used within the camera</returns>
+    ''' <returns>The name of the sensor used within the camera.</returns>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ''' <remarks>Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
-    ''' manufacturer data sheet, subject to the following rules. All letter shall be uppercase.  Spaces shall not be included.
-    ''' <para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, color/monochrome, 
-    ''' etc. shall not be included. For color sensors, if a suffix differentiates different Bayer matrix encodings, it shall be 
-    ''' included.</para>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' <para>Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
+    ''' manufacturer data sheet, subject to the following rules:
+    ''' <list type="bullet">
+    ''' <item>All letters shall be uppercase.</item>
+    ''' <item>Spaces shall not be included.</item>
+    ''' <item>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, color/monochrome, 
+    ''' etc. shall not be included.</item>
+    ''' <item>For color sensors, if a suffix differentiates different Bayer matrix encodings, it shall be included.</item>
+    ''' <item>The call shall return an empty string if the sensor name is not known.</item>
+    ''' </list>  </para>
     ''' <para>Examples:</para>
     ''' <list type="bullet">
     ''' <item><description>ICX285AL-F shall be reported as ICX285</description></item>
@@ -942,9 +978,10 @@ Public Interface ICameraV2
     ''' <returns>The <see cref="ASCOM.DeviceInterface.SensorType" /> enum value of the camera sensor</returns>
     ''' <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ''' active <see cref="Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    ''' <remarks>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
     ''' <para>This is only available for the Camera Interface Version 2</para>
-    ''' <para><see cref="SensorType" /> returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes.  
+    ''' <para><see cref="SensorType" /> returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes. If this value 
+    ''' cannot be determined by interrogating the camera, the appropriate value shall be set through the user setup dialogue. 
     ''' The following values are defined:</para>
     ''' <para>
     ''' <table style="width:76.24%;" cellspacing="0" width="76.24%">
@@ -1611,4 +1648,5 @@ Public Interface ICameraV2
     ReadOnly Property SensorType As SensorType
 
 #End Region
+
 End Interface
