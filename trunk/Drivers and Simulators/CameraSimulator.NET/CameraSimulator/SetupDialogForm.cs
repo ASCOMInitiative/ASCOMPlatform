@@ -101,6 +101,8 @@ namespace ASCOM.Simulator
 
             this.checkBoxCanPulseGuide.Checked = theCamera.canPulseGuide;
 
+            this.checkBoxUseReadoutModes.Checked = theCamera.readoutModes != null;
+
             this.camera = theCamera;
         }
 
@@ -154,6 +156,11 @@ namespace ASCOM.Simulator
                 camera.gainMax = short.Parse(textBoxGainMax.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             }
             camera.interfaceVersion = (short)(checkBoxInterfaceVersion.Checked ? 2 : 1);
+
+            if (this.checkBoxUseReadoutModes.Checked)
+            {
+                camera.readoutModes = new ArrayList { "Raw Monochrome", "Live View", "Raw To Hard Drive" };
+            }
         }
 
         private void buttonSetImageFile_Click(object sender, EventArgs e)
