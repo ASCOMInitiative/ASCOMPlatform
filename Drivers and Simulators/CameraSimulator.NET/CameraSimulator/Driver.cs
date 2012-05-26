@@ -202,6 +202,9 @@ namespace ASCOM.Simulator
             log = new TraceLogger(null, "Camera Simulator");
             log.Enabled = false;
             log.LogMessage("Constructor", "Done");
+
+            // Add some readout modes
+            readoutModes = new ArrayList() { "Raw Monochrome", "Live View", "Raw To Hard Drive"};
         }
 
         #endregion
@@ -1589,7 +1592,7 @@ namespace ASCOM.Simulator
                     throw new System.InvalidOperationException("Not if interfaceVersion is 1");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get Gains when not connected");
-                if (this.Gains == null || this.gains.Count == 0)
+                if (this.gains == null || this.gains.Count == 0)
                     throw new ASCOM.PropertyNotImplementedException("Gains", false);
                 return this.gains;
             }

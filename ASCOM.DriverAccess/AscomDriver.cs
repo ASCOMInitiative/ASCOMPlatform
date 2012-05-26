@@ -250,7 +250,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// The interface version number that this device supports. Should return 2 for this interface version.
+        /// The interface version number that this device supports.
         /// </summary>
         /// <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
         /// <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.

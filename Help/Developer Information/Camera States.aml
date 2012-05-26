@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="84ec64a2-c029-45fb-91ff-78ff3d683a0c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <section address="CameraStates">
+		<title>Camer States</title>
+   		<content>
+      		<para>The following diagram shows the state diagram for an ASCOM Camera, which will be reflected through the CameraState property. Two 
+      		"happy paths" are shown in green, corresponding to the normal successful paths through the camera states.
+      		
+				<list class="bullet">
+				  <listItem><legacyBold>Expose</legacyBold> - Initiated by StartExposure and ending with ImageReady = True</listItem>
+				  <listItem><legacyBold>Access</legacyBold> - Get a copy of the image created by the camera through ImageArray or ImageArrayVariant</listItem>
+				</list>		
+      		</para>
+	      	<para>Some of the states are shown as optional and it is not required that CameraState reflect these if your camera does not require them. Ideally
+	      	you should reflect these states when a significant time, say more than 500ms, will be spent in that state. There are also a number of
+	      	"unhappy paths" associated with AbortExposure and StopExposure, which should also be handled as shown.</para>
+			<para>
+				<mediaLink>
+					<image placement="center" xlink:href="CameraV2 State Diagram"/>
+				</mediaLink>
+			</para>
+      	</content>
+      </section>
+  </developerConceptualDocument>
+</topic>
