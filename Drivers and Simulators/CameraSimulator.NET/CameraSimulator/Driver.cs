@@ -203,8 +203,6 @@ namespace ASCOM.Simulator
             log.Enabled = false;
             log.LogMessage("Constructor", "Done");
 
-            // Add some readout modes
-            readoutModes = new ArrayList() { "Raw Monochrome", "Live View", "Raw To Hard Drive"};
         }
 
         #endregion
@@ -1643,6 +1641,8 @@ namespace ASCOM.Simulator
                     case CameraStates.cameraReading:
                     case CameraStates.cameraDownload:
                         return (short)(((DateTime.Now - this.exposureStartTime).TotalSeconds / this.exposureDuration) * 100);
+                    case CameraStates.cameraIdle:
+                        return (short)(imageReady ? 100 : 0);
                     default:
                         throw new ASCOM.InvalidOperationException("get PercentCompleted is not valid if the camera is not active");
                 }
@@ -1663,8 +1663,8 @@ namespace ASCOM.Simulator
                     throw new System.InvalidOperationException("Not if interfaceVersion is 1");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutMode when not connected");
-                if (this.readoutModes == null || this.readoutModes.Count < 1)
-                    throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
+                //if (this.readoutModes == null || this.readoutModes.Count < 1)
+                //    throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
                 return this.readoutMode;
             }
             set
@@ -1799,6 +1799,17 @@ namespace ASCOM.Simulator
                     this.gainMin = 0;
                     this.gainMax = (short)(this.gains.Count - 1);
                 }
+
+                gs = profile.GetValue(s_csDriverID, "ReadoutModes");
+                if (!string.IsNullOrEmpty(gs))
+                {
+                    this.readoutModes = new ArrayList();
+                    string[] rms = gs.Split(',');
+                    foreach (var item in rms)
+                    {
+                        this.readoutModes.Add(item);
+                    }
+                }
             }
         }
 
@@ -1869,6 +1880,22 @@ namespace ASCOM.Simulator
                     profile.DeleteValue(s_csDriverID, "Gains");
                     profile.DeleteValue(s_csDriverID, "GainMin");
                     profile.DeleteValue(s_csDriverID, "GainMax");
+                }
+                if (this.readoutModes == null)
+                {
+                    profile.DeleteValue(s_csDriverID, "ReadoutModes");
+                }
+                else
+                {
+                    // Readout Modes use string array
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    foreach (var item in this.readoutModes)
+                    {
+                        if (sb.Length > 0)
+                            sb.Append(",");
+                        sb.Append(item.ToString());
+                    }
+                    profile.WriteValue(s_csDriverID, "ReadoutModes", sb.ToString());
                 }
             }
         }

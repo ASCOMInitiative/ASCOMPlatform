@@ -34,6 +34,7 @@ namespace ASCOM.Simulator
             this.cmdCancel = new System.Windows.Forms.Button();
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.groupBoxCCD = new System.Windows.Forms.GroupBox();
+            this.checkBoxOmitOddBins = new System.Windows.Forms.CheckBox();
             this.textBoxCameraYSize = new System.Windows.Forms.TextBox();
             this.textBoxCameraXSize = new System.Windows.Forms.TextBox();
             this.textBoxMaxBinY = new System.Windows.Forms.TextBox();
@@ -87,7 +88,8 @@ namespace ASCOM.Simulator
             this.groupBoxGuiding = new System.Windows.Forms.GroupBox();
             this.checkBoxCanPulseGuide = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxOmitOddBins = new System.Windows.Forms.CheckBox();
+            this.groupBoxReadoutModes = new System.Windows.Forms.GroupBox();
+            this.checkBoxUseReadoutModes = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -97,6 +99,7 @@ namespace ASCOM.Simulator
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).BeginInit();
             this.groupBoxGuiding.SuspendLayout();
+            this.groupBoxReadoutModes.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
@@ -164,6 +167,18 @@ namespace ASCOM.Simulator
             this.groupBoxCCD.TabIndex = 4;
             this.groupBoxCCD.TabStop = false;
             this.groupBoxCCD.Text = "CCD";
+            // 
+            // checkBoxOmitOddBins
+            // 
+            this.checkBoxOmitOddBins.AutoSize = true;
+            this.checkBoxOmitOddBins.Location = new System.Drawing.Point(6, 112);
+            this.checkBoxOmitOddBins.Name = "checkBoxOmitOddBins";
+            this.checkBoxOmitOddBins.Size = new System.Drawing.Size(93, 17);
+            this.checkBoxOmitOddBins.TabIndex = 29;
+            this.checkBoxOmitOddBins.Text = "Omit Odd Bins";
+            this.toolTip1.SetToolTip(this.checkBoxOmitOddBins, "Throw NotImplementedExceptions for odd bin values of 3 or greater. This has no ef" +
+                    "fect unless MaxBinX and MaxBinY are 4 or greater.");
+            this.checkBoxOmitOddBins.UseVisualStyleBackColor = true;
             // 
             // textBoxCameraYSize
             // 
@@ -248,7 +263,7 @@ namespace ASCOM.Simulator
             this.label14.TabIndex = 19;
             this.label14.Text = "Bayer Offset   X:";
             this.toolTip1.SetToolTip(this.label14, "Set the offset in X and Y pixels to the first pixel in the Bayer array. For camer" +
-        "as with a colour filter array only.");
+                    "as with a colour filter array only.");
             // 
             // comboBoxSensorType
             // 
@@ -345,7 +360,7 @@ namespace ASCOM.Simulator
             this.groupBoxGainSettings.Controls.Add(this.radioButtonUseGains);
             this.groupBoxGainSettings.Location = new System.Drawing.Point(156, 91);
             this.groupBoxGainSettings.Name = "groupBoxGainSettings";
-            this.groupBoxGainSettings.Size = new System.Drawing.Size(161, 118);
+            this.groupBoxGainSettings.Size = new System.Drawing.Size(161, 114);
             this.groupBoxGainSettings.TabIndex = 5;
             this.groupBoxGainSettings.TabStop = false;
             this.groupBoxGainSettings.Text = "Gain Settings";
@@ -450,9 +465,9 @@ namespace ASCOM.Simulator
             this.groupBoxExposure.Controls.Add(this.label5);
             this.groupBoxExposure.Controls.Add(this.checkBoxCanStopExposure);
             this.groupBoxExposure.Controls.Add(this.checkBoxCanAbortExposure);
-            this.groupBoxExposure.Location = new System.Drawing.Point(156, 215);
+            this.groupBoxExposure.Location = new System.Drawing.Point(156, 257);
             this.groupBoxExposure.Name = "groupBoxExposure";
-            this.groupBoxExposure.Size = new System.Drawing.Size(161, 128);
+            this.groupBoxExposure.Size = new System.Drawing.Size(161, 115);
             this.groupBoxExposure.TabIndex = 7;
             this.groupBoxExposure.TabStop = false;
             this.groupBoxExposure.Text = "Exposure";
@@ -625,7 +640,7 @@ namespace ASCOM.Simulator
             this.checkBoxApplyNoise.TabIndex = 0;
             this.checkBoxApplyNoise.Text = "Apply Noise";
             this.toolTip1.SetToolTip(this.checkBoxApplyNoise, "Check this to apply noise to the simulated image.  The amount of noise will vary " +
-        "depending on the CCD temperature, exposure time and image brightness.");
+                    "depending on the CCD temperature, exposure time and image brightness.");
             this.checkBoxApplyNoise.UseVisualStyleBackColor = true;
             // 
             // cameraBindingSource
@@ -646,7 +661,7 @@ namespace ASCOM.Simulator
             this.checkBoxInterfaceVersion.TabIndex = 10;
             this.checkBoxInterfaceVersion.Text = "Interface Version 2";
             this.toolTip1.SetToolTip(this.checkBoxInterfaceVersion, "Check this if the camera simulates a Version 2 camera. If unchecked the V2 parame" +
-        "ters will raise a not implemented error.");
+                    "ters will raise a not implemented error.");
             this.checkBoxInterfaceVersion.UseVisualStyleBackColor = true;
             this.checkBoxInterfaceVersion.CheckedChanged += new System.EventHandler(this.checkBoxInterfaceVersion_CheckedChanged);
             // 
@@ -669,26 +684,37 @@ namespace ASCOM.Simulator
             this.checkBoxCanPulseGuide.TabIndex = 0;
             this.checkBoxCanPulseGuide.Text = "Can Pulse Guide";
             this.toolTip1.SetToolTip(this.checkBoxCanPulseGuide, "Check this if the camera can accept pulse guide commands. They will have no effec" +
-        "t.");
+                    "t.");
             this.checkBoxCanPulseGuide.UseVisualStyleBackColor = true;
             // 
-            // checkBoxOmitOddBins
+            // groupBoxReadoutModes
             // 
-            this.checkBoxOmitOddBins.AutoSize = true;
-            this.checkBoxOmitOddBins.Location = new System.Drawing.Point(6, 112);
-            this.checkBoxOmitOddBins.Name = "checkBoxOmitOddBins";
-            this.checkBoxOmitOddBins.Size = new System.Drawing.Size(93, 17);
-            this.checkBoxOmitOddBins.TabIndex = 29;
-            this.checkBoxOmitOddBins.Text = "Omit Odd Bins";
-            this.toolTip1.SetToolTip(this.checkBoxOmitOddBins, "Throw NotImplementedExceptions for odd bin values of 3 or greater. This has no ef" +
-        "fect unless MaxBinX and MaxBinY are 4 or greater.");
-            this.checkBoxOmitOddBins.UseVisualStyleBackColor = true;
+            this.groupBoxReadoutModes.Controls.Add(this.checkBoxUseReadoutModes);
+            this.groupBoxReadoutModes.Location = new System.Drawing.Point(158, 209);
+            this.groupBoxReadoutModes.Name = "groupBoxReadoutModes";
+            this.groupBoxReadoutModes.Size = new System.Drawing.Size(159, 46);
+            this.groupBoxReadoutModes.TabIndex = 12;
+            this.groupBoxReadoutModes.TabStop = false;
+            this.groupBoxReadoutModes.Text = "Readout Modes";
+            // 
+            // checkBoxUseReadoutModes
+            // 
+            this.checkBoxUseReadoutModes.AutoSize = true;
+            this.checkBoxUseReadoutModes.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxUseReadoutModes.Name = "checkBoxUseReadoutModes";
+            this.checkBoxUseReadoutModes.Size = new System.Drawing.Size(124, 17);
+            this.checkBoxUseReadoutModes.TabIndex = 0;
+            this.checkBoxUseReadoutModes.Text = "Use Readout Modes";
+            this.toolTip1.SetToolTip(this.checkBoxUseReadoutModes, "Check this if the camera can accept pulse guide commands. They will have no effec" +
+                    "t.");
+            this.checkBoxUseReadoutModes.UseVisualStyleBackColor = true;
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(461, 376);
+            this.Controls.Add(this.groupBoxReadoutModes);
             this.Controls.Add(this.groupBoxGuiding);
             this.Controls.Add(this.checkBoxInterfaceVersion);
             this.Controls.Add(this.groupBox2);
@@ -723,6 +749,8 @@ namespace ASCOM.Simulator
             ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).EndInit();
             this.groupBoxGuiding.ResumeLayout(false);
             this.groupBoxGuiding.PerformLayout();
+            this.groupBoxReadoutModes.ResumeLayout(false);
+            this.groupBoxReadoutModes.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -788,5 +816,7 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.CheckBox checkBoxCanPulseGuide;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox checkBoxOmitOddBins;
+        private System.Windows.Forms.GroupBox groupBoxReadoutModes;
+        private System.Windows.Forms.CheckBox checkBoxUseReadoutModes;
 	}
 }
