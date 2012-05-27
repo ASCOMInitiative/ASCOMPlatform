@@ -368,6 +368,9 @@ else
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 6\, $TARGETDIR$\Components\Platform6
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
+    Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 6\, $TARGETDIR$\Components\Platform6
+    Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
+    Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
     Set Variable PROGRESS to 50
     [END REGION]
     [DEFINE REGION: Developer Documentation]
