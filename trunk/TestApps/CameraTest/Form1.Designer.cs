@@ -93,10 +93,10 @@ namespace CameraTest
             this.labelDriverName = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.labelDriverVersion = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
+            this.labelBayerOsX = new System.Windows.Forms.Label();
             this.labelBayerOffsetY = new System.Windows.Forms.Label();
             this.labelBayerOffsetX = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
+            this.labelBayerOsY = new System.Windows.Forms.Label();
             this.groupBoxCameraParameters = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.lblMaxADU = new System.Windows.Forms.Label();
@@ -729,10 +729,10 @@ namespace CameraTest
             this.groupBoxV2.Controls.Add(this.labelDriverName);
             this.groupBoxV2.Controls.Add(this.label19);
             this.groupBoxV2.Controls.Add(this.labelDriverVersion);
-            this.groupBoxV2.Controls.Add(this.label20);
+            this.groupBoxV2.Controls.Add(this.labelBayerOsX);
             this.groupBoxV2.Controls.Add(this.labelBayerOffsetY);
             this.groupBoxV2.Controls.Add(this.labelBayerOffsetX);
-            this.groupBoxV2.Controls.Add(this.label18);
+            this.groupBoxV2.Controls.Add(this.labelBayerOsY);
             this.groupBoxV2.Location = new System.Drawing.Point(3, 428);
             this.groupBoxV2.Name = "groupBoxV2";
             this.groupBoxV2.Size = new System.Drawing.Size(156, 153);
@@ -823,14 +823,14 @@ namespace CameraTest
             this.labelDriverVersion.Size = new System.Drawing.Size(35, 13);
             this.labelDriverVersion.TabIndex = 29;
             // 
-            // label20
+            // labelBayerOsX
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(5, 16);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(78, 13);
-            this.label20.TabIndex = 11;
-            this.label20.Text = "Bayer Offset X:";
+            this.labelBayerOsX.AutoSize = true;
+            this.labelBayerOsX.Location = new System.Drawing.Point(5, 16);
+            this.labelBayerOsX.Name = "labelBayerOsX";
+            this.labelBayerOsX.Size = new System.Drawing.Size(78, 13);
+            this.labelBayerOsX.TabIndex = 11;
+            this.labelBayerOsX.Text = "Bayer Offset X:";
             // 
             // labelBayerOffsetY
             // 
@@ -850,14 +850,14 @@ namespace CameraTest
             this.labelBayerOffsetX.Size = new System.Drawing.Size(13, 14);
             this.labelBayerOffsetX.TabIndex = 9;
             // 
-            // label18
+            // labelBayerOsY
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(103, 16);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(17, 13);
-            this.label18.TabIndex = 3;
-            this.label18.Text = "Y:";
+            this.labelBayerOsY.AutoSize = true;
+            this.labelBayerOsY.Location = new System.Drawing.Point(103, 16);
+            this.labelBayerOsY.Name = "label1BayerOsY";
+            this.labelBayerOsY.Size = new System.Drawing.Size(17, 13);
+            this.labelBayerOsY.TabIndex = 3;
+            this.labelBayerOsY.Text = "Y:";
             // 
             // groupBoxCameraParameters
             // 
@@ -1356,10 +1356,10 @@ namespace CameraTest
         private System.Windows.Forms.CheckBox checkBoxDarkFrame;
         private System.Windows.Forms.Button buttonSetup;
         private System.Windows.Forms.GroupBox groupBoxV2;
-        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label labelBayerOsX;
         private System.Windows.Forms.Label labelBayerOffsetY;
         private System.Windows.Forms.Label labelBayerOffsetX;
-        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label labelBayerOsY;
         private System.Windows.Forms.CheckBox checkBoxCanFastReadout;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label labelSensorName;

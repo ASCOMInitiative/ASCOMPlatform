@@ -42,9 +42,9 @@ namespace ASCOM.Simulator
             this.textBoxSensorName = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.textBoxBayerOffsetY = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
+            this.labelBayerOffsetY = new System.Windows.Forms.Label();
             this.textBoxBayerOffsetX = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
+            this.labelBayerOffsetX = new System.Windows.Forms.Label();
             this.comboBoxSensorType = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
             this.checkBoxHasShutter = new System.Windows.Forms.CheckBox();
@@ -87,9 +87,9 @@ namespace ASCOM.Simulator
             this.groupBoxGuiding = new System.Windows.Forms.GroupBox();
             this.checkBoxCanPulseGuide = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBoxReadoutModes = new System.Windows.Forms.GroupBox();
             this.checkBoxUseReadoutModes = new System.Windows.Forms.CheckBox();
-            this.cameraBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.checkBoxCanFastReadout = new System.Windows.Forms.CheckBox();
+            this.groupBoxReadoutModes = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
             this.groupBoxGainSettings.SuspendLayout();
@@ -99,14 +99,13 @@ namespace ASCOM.Simulator
             this.groupBox2.SuspendLayout();
             this.groupBoxGuiding.SuspendLayout();
             this.groupBoxReadoutModes.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(392, 313);
+            this.cmdOK.Location = new System.Drawing.Point(385, 340);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -118,7 +117,7 @@ namespace ASCOM.Simulator
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(392, 343);
+            this.cmdCancel.Location = new System.Drawing.Point(385, 370);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -131,7 +130,7 @@ namespace ASCOM.Simulator
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(403, 9);
+            this.picASCOM.Location = new System.Drawing.Point(396, 9);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -150,9 +149,9 @@ namespace ASCOM.Simulator
             this.groupBoxCCD.Controls.Add(this.textBoxSensorName);
             this.groupBoxCCD.Controls.Add(this.label13);
             this.groupBoxCCD.Controls.Add(this.textBoxBayerOffsetY);
-            this.groupBoxCCD.Controls.Add(this.label15);
+            this.groupBoxCCD.Controls.Add(this.labelBayerOffsetY);
             this.groupBoxCCD.Controls.Add(this.textBoxBayerOffsetX);
-            this.groupBoxCCD.Controls.Add(this.label14);
+            this.groupBoxCCD.Controls.Add(this.labelBayerOffsetX);
             this.groupBoxCCD.Controls.Add(this.comboBoxSensorType);
             this.groupBoxCCD.Controls.Add(this.label12);
             this.groupBoxCCD.Controls.Add(this.checkBoxHasShutter);
@@ -237,14 +236,14 @@ namespace ASCOM.Simulator
             this.textBoxBayerOffsetY.TabIndex = 22;
             this.toolTip1.SetToolTip(this.textBoxBayerOffsetY, "Bayer Offset in Y");
             // 
-            // label15
+            // labelBayerOffsetY
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(112, 220);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(17, 13);
-            this.label15.TabIndex = 21;
-            this.label15.Text = "Y:";
+            this.labelBayerOffsetY.AutoSize = true;
+            this.labelBayerOffsetY.Location = new System.Drawing.Point(112, 220);
+            this.labelBayerOffsetY.Name = "labelBayerOffsetY";
+            this.labelBayerOffsetY.Size = new System.Drawing.Size(17, 13);
+            this.labelBayerOffsetY.TabIndex = 21;
+            this.labelBayerOffsetY.Text = "Y:";
             // 
             // textBoxBayerOffsetX
             // 
@@ -254,15 +253,15 @@ namespace ASCOM.Simulator
             this.textBoxBayerOffsetX.TabIndex = 20;
             this.toolTip1.SetToolTip(this.textBoxBayerOffsetX, "Bayer offset in X");
             // 
-            // label14
+            // labelBayerOffsetX
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(4, 220);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(84, 13);
-            this.label14.TabIndex = 19;
-            this.label14.Text = "Bayer Offset   X:";
-            this.toolTip1.SetToolTip(this.label14, "Set the offset in X and Y pixels to the first pixel in the Bayer array. For camer" +
+            this.labelBayerOffsetX.AutoSize = true;
+            this.labelBayerOffsetX.Location = new System.Drawing.Point(4, 220);
+            this.labelBayerOffsetX.Name = "labelBayerOffsetX";
+            this.labelBayerOffsetX.Size = new System.Drawing.Size(84, 13);
+            this.labelBayerOffsetX.TabIndex = 19;
+            this.labelBayerOffsetX.Text = "Bayer Offset   X:";
+            this.toolTip1.SetToolTip(this.labelBayerOffsetX, "Set the offset in X and Y pixels to the first pixel in the Bayer array. For camer" +
                     "as with a colour filter array only.");
             // 
             // comboBoxSensorType
@@ -281,6 +280,7 @@ namespace ASCOM.Simulator
             this.comboBoxSensorType.Size = new System.Drawing.Size(90, 21);
             this.comboBoxSensorType.TabIndex = 16;
             this.toolTip1.SetToolTip(this.comboBoxSensorType, "Set the sensor type, Monochrome for a monochrome camera.");
+            this.comboBoxSensorType.SelectedIndexChanged += new System.EventHandler(this.comboBoxSensorType_SelectedIndexChanged);
             // 
             // label12
             // 
@@ -465,7 +465,7 @@ namespace ASCOM.Simulator
             this.groupBoxExposure.Controls.Add(this.label5);
             this.groupBoxExposure.Controls.Add(this.checkBoxCanStopExposure);
             this.groupBoxExposure.Controls.Add(this.checkBoxCanAbortExposure);
-            this.groupBoxExposure.Location = new System.Drawing.Point(156, 257);
+            this.groupBoxExposure.Location = new System.Drawing.Point(156, 284);
             this.groupBoxExposure.Name = "groupBoxExposure";
             this.groupBoxExposure.Size = new System.Drawing.Size(161, 115);
             this.groupBoxExposure.TabIndex = 7;
@@ -613,9 +613,9 @@ namespace ASCOM.Simulator
             // 
             this.groupBox2.Controls.Add(this.buttonSetImageFile);
             this.groupBox2.Controls.Add(this.checkBoxApplyNoise);
-            this.groupBox2.Location = new System.Drawing.Point(331, 215);
+            this.groupBox2.Location = new System.Drawing.Point(323, 215);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(124, 88);
+            this.groupBox2.Size = new System.Drawing.Size(121, 76);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Simulation";
@@ -651,7 +651,7 @@ namespace ASCOM.Simulator
             // checkBoxInterfaceVersion
             // 
             this.checkBoxInterfaceVersion.AutoSize = true;
-            this.checkBoxInterfaceVersion.Location = new System.Drawing.Point(337, 103);
+            this.checkBoxInterfaceVersion.Location = new System.Drawing.Point(329, 141);
             this.checkBoxInterfaceVersion.Name = "checkBoxInterfaceVersion";
             this.checkBoxInterfaceVersion.Size = new System.Drawing.Size(115, 17);
             this.checkBoxInterfaceVersion.TabIndex = 10;
@@ -664,9 +664,9 @@ namespace ASCOM.Simulator
             // groupBoxGuiding
             // 
             this.groupBoxGuiding.Controls.Add(this.checkBoxCanPulseGuide);
-            this.groupBoxGuiding.Location = new System.Drawing.Point(331, 141);
+            this.groupBoxGuiding.Location = new System.Drawing.Point(323, 163);
             this.groupBoxGuiding.Name = "groupBoxGuiding";
-            this.groupBoxGuiding.Size = new System.Drawing.Size(124, 46);
+            this.groupBoxGuiding.Size = new System.Drawing.Size(121, 46);
             this.groupBoxGuiding.TabIndex = 11;
             this.groupBoxGuiding.TabStop = false;
             this.groupBoxGuiding.Text = "Guiding";
@@ -683,20 +683,10 @@ namespace ASCOM.Simulator
                     "t.");
             this.checkBoxCanPulseGuide.UseVisualStyleBackColor = true;
             // 
-            // groupBoxReadoutModes
-            // 
-            this.groupBoxReadoutModes.Controls.Add(this.checkBoxUseReadoutModes);
-            this.groupBoxReadoutModes.Location = new System.Drawing.Point(158, 209);
-            this.groupBoxReadoutModes.Name = "groupBoxReadoutModes";
-            this.groupBoxReadoutModes.Size = new System.Drawing.Size(159, 46);
-            this.groupBoxReadoutModes.TabIndex = 12;
-            this.groupBoxReadoutModes.TabStop = false;
-            this.groupBoxReadoutModes.Text = "Readout Modes";
-            // 
             // checkBoxUseReadoutModes
             // 
             this.checkBoxUseReadoutModes.AutoSize = true;
-            this.checkBoxUseReadoutModes.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxUseReadoutModes.Location = new System.Drawing.Point(3, 42);
             this.checkBoxUseReadoutModes.Name = "checkBoxUseReadoutModes";
             this.checkBoxUseReadoutModes.Size = new System.Drawing.Size(141, 17);
             this.checkBoxUseReadoutModes.TabIndex = 0;
@@ -705,15 +695,35 @@ namespace ASCOM.Simulator
                     "t.");
             this.checkBoxUseReadoutModes.UseVisualStyleBackColor = true;
             // 
-            // cameraBindingSource
+            // checkBoxCanFastReadout
             // 
-            this.cameraBindingSource.DataSource = typeof(ASCOM.Simulator.Camera);
+            this.checkBoxCanFastReadout.AutoSize = true;
+            this.checkBoxCanFastReadout.Location = new System.Drawing.Point(4, 19);
+            this.checkBoxCanFastReadout.Name = "checkBoxCanFastReadout";
+            this.checkBoxCanFastReadout.Size = new System.Drawing.Size(122, 17);
+            this.checkBoxCanFastReadout.TabIndex = 1;
+            this.checkBoxCanFastReadout.Text = "Can do Fast readout";
+            this.toolTip1.SetToolTip(this.checkBoxCanFastReadout, "Check this if the camera can accept pulse guide commands. They will have no effec" +
+                    "t.");
+            this.checkBoxCanFastReadout.UseVisualStyleBackColor = true;
+            this.checkBoxCanFastReadout.CheckedChanged += new System.EventHandler(this.checkBoxCanFastReadout_CheckedChanged);
+            // 
+            // groupBoxReadoutModes
+            // 
+            this.groupBoxReadoutModes.Controls.Add(this.checkBoxCanFastReadout);
+            this.groupBoxReadoutModes.Controls.Add(this.checkBoxUseReadoutModes);
+            this.groupBoxReadoutModes.Location = new System.Drawing.Point(158, 209);
+            this.groupBoxReadoutModes.Name = "groupBoxReadoutModes";
+            this.groupBoxReadoutModes.Size = new System.Drawing.Size(159, 69);
+            this.groupBoxReadoutModes.TabIndex = 12;
+            this.groupBoxReadoutModes.TabStop = false;
+            this.groupBoxReadoutModes.Text = "Readout Modes";
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(461, 376);
+            this.ClientSize = new System.Drawing.Size(454, 403);
             this.Controls.Add(this.groupBoxReadoutModes);
             this.Controls.Add(this.groupBoxGuiding);
             this.Controls.Add(this.checkBoxInterfaceVersion);
@@ -750,7 +760,6 @@ namespace ASCOM.Simulator
             this.groupBoxGuiding.PerformLayout();
             this.groupBoxReadoutModes.ResumeLayout(false);
             this.groupBoxReadoutModes.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cameraBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -788,9 +797,9 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.TextBox textBoxSensorName;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox textBoxBayerOffsetY;
-        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label labelBayerOffsetY;
         private System.Windows.Forms.TextBox textBoxBayerOffsetX;
-        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label labelBayerOffsetX;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox checkBoxApplyNoise;
         private System.Windows.Forms.TextBox textBoxMaxExposure;
@@ -800,7 +809,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.CheckBox checkBoxCanStopExposure;
         private System.Windows.Forms.CheckBox checkBoxCanAbortExposure;
         private System.Windows.Forms.CheckBox checkBoxHasCooler;
-        private System.Windows.Forms.BindingSource cameraBindingSource;
         private System.Windows.Forms.TextBox textBoxElectronsPerADU;
         private System.Windows.Forms.TextBox textBoxPixelSizeY;
         private System.Windows.Forms.TextBox textBoxPixelSizeX;
@@ -818,5 +826,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.CheckBox checkBoxOmitOddBins;
         private System.Windows.Forms.GroupBox groupBoxReadoutModes;
         private System.Windows.Forms.CheckBox checkBoxUseReadoutModes;
+        private System.Windows.Forms.CheckBox checkBoxCanFastReadout;
 	}
 }

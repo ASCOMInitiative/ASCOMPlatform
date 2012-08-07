@@ -169,8 +169,18 @@ namespace CameraTest
                 groupBoxV2.Visible = true;
                 labelSensorName.Text = oCamera.SensorName;
                 labelSensorType.Text = (oCamera.SensorType).ToString();
-                labelBayerOffsetX.Text = oCamera.BayerOffsetX.ToString(CultureInfo.CurrentCulture);
-                labelBayerOffsetY.Text = Convert.ToString(oCamera.BayerOffsetY, CultureInfo.CurrentCulture);
+                try
+                {
+                    labelBayerOffsetX.Text = oCamera.BayerOffsetX.ToString(CultureInfo.CurrentCulture);
+                    labelBayerOffsetY.Text = Convert.ToString(oCamera.BayerOffsetY, CultureInfo.CurrentCulture);
+                }
+                catch (ASCOM.NotImplementedException)
+                {
+                    labelBayerOsX.Enabled = 
+                        labelBayerOsY.Enabled =
+                        labelBayerOffsetX.Enabled =
+                        labelBayerOffsetY.Enabled = false;
+                }
                 labelDriverVersion.Text = oCamera.DriverVersion;
                 labelDriverName.Text = oCamera.Name;
                 //DriverInfo - long
@@ -357,29 +367,37 @@ namespace CameraTest
                     switch (oCamera.SensorType)
                     {
                         case ASCOM.DeviceInterface.SensorType.Monochrome:
+                            x0 = 0;
+                            y0 = 0;
                             break;
                         case ASCOM.DeviceInterface.SensorType.RGGB:
                             displayProcess = RggbProcess;
                             stepX = 2;
                             stepY = 2;
+                            SetBayerOffsets(2, 2);
                             break;
                         case ASCOM.DeviceInterface.SensorType.CMYG:
                             displayProcess = CmygProcess;
                             stepX = 2;
                             stepY = 2;
+                            SetBayerOffsets(2, 2);
                             break;
                         case ASCOM.DeviceInterface.SensorType.LRGB:
                             displayProcess = LrgbProcess;
+                            x0 = (oCamera.BayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
+                            y0 = (oCamera.BayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
                             stepX = 4;
                             stepY = 4;
                             stepH = 2;
                             stepW = 2;
+                            SetBayerOffsets(4, 4);
                             break;
                         case ASCOM.DeviceInterface.SensorType.CMYG2:
                             displayProcess = Cmyg2Process;
                             stepX = 2;
                             stepY = 4;
                             stepH = 2;
+                            SetBayerOffsets(2, 4);
                             break;
                         case ASCOM.DeviceInterface.SensorType.Color:
                             displayProcess = ColourProcess;
@@ -387,15 +405,6 @@ namespace CameraTest
                     }
                     width /= (stepX/stepW);
                     height /= (stepY/stepH);
-                    // set the bayer offsets
-                    x0 = (oCamera.BayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
-                    x1 = (x0 + 1) & (stepX - 1);
-                    x2 = (x0 + 2) & (stepX - 1);
-                    x3 = (x0 + 3) & (stepX - 1);
-                    y0 = (oCamera.BayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
-                    y1 = (y0 + 1) & (stepY - 1);
-                    y2 = (y0 + 2) & (stepY - 1);
-                    y3 = (y0 + 3) & (stepY - 1);
                 }
 
                 img = new Bitmap(width, height, PixelFormat.Format24bppRgb);
@@ -434,6 +443,19 @@ namespace CameraTest
             zoom = (float)Math.Pow(10, trkZoom.Value / 100.0);
             splitContainer1.Panel2.AutoScrollMinSize = new Size((int)(img.Width * zoom), (int)(img.Height * zoom));
             splitContainer1.Panel2.Invalidate();
+        }
+
+        unsafe private void SetBayerOffsets(int stepX, int stepY)
+        {
+            // set the bayer offsets
+            x0 = (oCamera.BayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
+            y0 = (oCamera.BayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
+            x1 = (x0 + 1) & (stepX - 1);
+            x2 = (x0 + 2) & (stepX - 1);
+            x3 = (x0 + 3) & (stepX - 1);
+            y1 = (y0 + 1) & (stepY - 1);
+            y2 = (y0 + 2) & (stepY - 1);
+            y3 = (y0 + 3) & (stepY - 1);
         }
 
         int[] gamma;
