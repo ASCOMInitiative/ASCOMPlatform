@@ -101,7 +101,15 @@ namespace ASCOM.Simulator
 
             this.checkBoxCanPulseGuide.Checked = theCamera.canPulseGuide;
 
-            this.checkBoxUseReadoutModes.Checked = theCamera.readoutModes.Count > 1;
+            this.checkBoxCanFastReadout.Checked = theCamera.canFastReadout;
+            if (theCamera.canFastReadout)
+            {
+                this.checkBoxUseReadoutModes.Enabled = false;
+            }
+            else
+            {
+                this.checkBoxUseReadoutModes.Checked = theCamera.readoutModes.Count > 1;
+            }
 
             this.camera = theCamera;
         }
@@ -157,6 +165,7 @@ namespace ASCOM.Simulator
             }
             camera.interfaceVersion = (short)(checkBoxInterfaceVersion.Checked ? 2 : 1);
 
+            camera.canFastReadout = this.checkBoxCanFastReadout.Checked;
             if (this.checkBoxUseReadoutModes.Checked)
             {
                 camera.readoutModes = new ArrayList { "Raw Monochrome", "Live View", "Raw To Hard Drive" };
@@ -191,6 +200,20 @@ namespace ASCOM.Simulator
             this.radioButtonNoGain.Enabled = checkBoxInterfaceVersion.Checked;
             this.radioButtonUseGains.Enabled = checkBoxInterfaceVersion.Checked;
             this.radioButtonUseMinAndMax.Enabled = checkBoxInterfaceVersion.Checked;
+        }
+
+        private void checkBoxCanFastReadout_CheckedChanged(object sender, EventArgs e)
+        {
+            this.checkBoxUseReadoutModes.Enabled = !(sender as CheckBox).Checked;
+        }
+
+        private void comboBoxSensorType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var si = (sender as ComboBox).SelectedItem as string;
+            labelBayerOffsetX.Enabled =
+                labelBayerOffsetY.Enabled =
+                textBoxBayerOffsetX.Enabled =
+                textBoxBayerOffsetY.Enabled = (si != "Monochrome" && si != "Color");
         }
 	}
 }
