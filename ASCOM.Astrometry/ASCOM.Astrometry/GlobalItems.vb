@@ -1,6 +1,33 @@
 ﻿Imports System.Runtime.InteropServices
 
 Module GlobalItems
+    ' Physical contants
+    Friend Const MOON_RADIUS As Double = 1737.0 ' km
+    Friend Const EARTH_RADIUS As Double = 6378.0 ' km
+    Friend Const SUN_RADIUS As Double = 696342.0 ' km
+    Friend Const MERCURY_RADIUS As Double = 2439.7 ' km
+    Friend Const VENUS_RADIUS As Double = 2439.7 ' km
+    Friend Const MARS_RADIUS As Double = 3396.2 ' km
+    Friend Const JUPITER_RADIUS As Double = 69911.0 ' km
+    Friend Const SATURN_RADIUS As Double = 6051.8 ' km
+    Friend Const NEPTUNE_RADIUS As Double = 24767.0 ' km
+    Friend Const URANUS_RADIUS As Double = 24973.0 ' km
+    Friend Const PLUTO_RADIUS As Double = 1153.0 ' km
+
+    ' Fixed event definitions
+    Friend Const SUN_RISE As Double = -50.0 / 60.0 ' Degrees
+    Friend Const CIVIL_TWIGHLIGHT As Double = -6.0 ' Degrees
+    Friend Const NAUTICAL_TWIGHLIGHT As Double = -12.0 ' Degrees
+    Friend Const AMATEUR_ASRONOMICAL_TWIGHLIGHT As Double = -15.0 ' Degrees
+    Friend Const ASTRONOMICAL_TWIGHLIGHT As Double = -18.0 ' Degrees
+
+    ' Conversion factors
+    Friend Const HOURS2DEG As Double = 15.0
+    Friend Const DEG2HOURS As Double = 1.0 / 15.0
+    Friend Const DEG2HOURSSOLSID As Double = 1.0 / 15.04107
+    Friend Const SECONDS2DAYS As Double = 1.0 / (60.0 * 60.0 * 24.0)
+    Friend Const AU2KILOMETRE As Double = 149597870.691
+
     'NOVAS.COM Constants
     Friend Const FN1 As Short = 1
     Friend Const FN0 As Short = 0
@@ -18,13 +45,43 @@ Module GlobalItems
     Friend Const RAD2DEG As Double = 57.295779513082323
 
     'General constants
+    Friend Const CURRENT_LEAP_SECONDS As Integer = 35 ' Current number of leap seconds, changed to 35 at 1st July 2012
     Friend Const TT_TAI_OFFSET As Double = 32.184 '32.184 seconds
     Friend Const MJDBASE As Double = 2400000.5 'This is the offset of Modified Julian dates from true Julian dates
     Friend Const SECPERDAY As Double = 86400.0
     Friend Const J2000BASE As Double = 2451545.0
 
     Friend Const RACIO_DEFAULT_VALUE As Double = Double.NaN 'NOVAS3: Default value that if still present will indicate that this value was not updated
+
+    'Profile store names
+    Friend Const ASTROMETRY_SUBKEY = "Astrometry"
+    Friend Const LEAP_SECONDS_VALUENAME = "Leap Seconds"
 End Module
+
+#Region "AstroUtil Enums and Structures"
+''' <summary>
+''' Type of event for which an ephemeris is required
+''' </summary>
+''' <remarks></remarks>
+<Guid("946C9620-B292-4807-9B75-FC828AB1700B"), _
+ComVisible(True)> _
+Public Enum EventType As Integer
+    SunRiseSunset = 0
+    MoonRiseMoonSet = 1
+    CivilTwilight = 2
+    NauticalTwilight = 3
+    AmateurAstronomicalTwilight = 4
+    AstronomicalTwilight = 5
+    MercuryRiseSet = 6
+    VenusRiseSet = 7
+    MarsRiseSet = 8
+    JupiterRiseSet = 9
+    SaturnRiseSet = 10
+    UranusRiseSet = 11
+    NeptuneRiseSet = 12
+    PlutoRiseSet = 13
+End Enum
+#End Region
 
 #Region "NOVAS2 Enums"
 ''' <summary>

@@ -5035,9 +5035,9 @@ Namespace AstroUtils
         <DispId(2)> Function ConditionHA(HA As Double) As Double
         <DispId(3)> Function DeltaT() As Double
         <DispId(4)> Function UnRefract(ByVal Location As OnSurface, ByVal RefOption As RefractionOption, ByVal ZdObs As Double) As Double
-        ReadOnly Property JulianDateUtc As Double
-        Function JulianDateTT(DeltaUT1 As Double) As Double
-        Function JulianDateUT1(DeltaUT1 As Double) As Double
+        <DispId(5)> ReadOnly Property JulianDateUtc As Double
+        <DispId(6)> Function JulianDateTT(DeltaUT1 As Double) As Double
+        <DispId(7)> Function JulianDateUT1(DeltaUT1 As Double) As Double
         ''' <summary>
         ''' Flexible routine to range a number between a lower and an higher bound. Switches control whether the ranged value can be equal to either the
         ''' lower or upper bounds.
@@ -5052,7 +5052,7 @@ Namespace AstroUtils
         ''' <exception cref="ASCOM.InvalidValueException">Thrown if LowerEqual and UpperEqual are both false and the ranged value equals
         ''' one of these values. This is impossible to handle as the algorithm will always violate one of the rules!</exception>
         ''' <remarks></remarks>
-        Function Range(Value As Double, LowerBound As Double, LowerEqual As Boolean, UpperBound As Double, UpperEqual As Boolean) As Double
+        <DispId(8)> Function Range(Value As Double, LowerBound As Double, LowerEqual As Boolean, UpperBound As Double, UpperEqual As Boolean) As Double
         ''' <summary>
         ''' Converts a calendar day, month, year to a modified Julian date
         ''' </summary>
@@ -5061,21 +5061,21 @@ Namespace AstroUtils
         ''' <param name="Year">Integer year</param>
         ''' <returns>Double modified julian date</returns>
         ''' <remarks></remarks>
-        Function CalendarToMJD(Day As Integer, Month As Integer, Year As Integer) As Double
+        <DispId(9)> Function CalendarToMJD(Day As Integer, Month As Integer, Year As Integer) As Double
         ''' <summary>
         ''' Translates a modified Julian date to a VB ole automation date, presented as a double
         ''' </summary>
         ''' <param name="MJD">Modified Julian date</param>
         ''' <returns>Date as a VB ole automation date</returns>
         ''' <remarks></remarks>
-        Function MJDToOADate(MJD As Double) As Double
+        <DispId(10)> Function MJDToOADate(MJD As Double) As Double
         ''' <summary>
         ''' Translates a modified Julian date to a date
         ''' </summary>
         ''' <param name="MJD">Modified Julian date</param>
         ''' <returns>Date representing the modified Julian date</returns>
         ''' <remarks></remarks>
-        Function MJDToDate(MJD As Double) As Date
+        <DispId(11)> Function MJDToDate(MJD As Double) As Date
         ''' <summary>
         ''' Returns a modified Julian date as a string formatted according to the supplied presentation format
         ''' </summary>
@@ -5086,14 +5086,14 @@ Namespace AstroUtils
         ''' <remarks>This expects the standard Microsoft date and time formatting characters as described 
         ''' in http://msdn.microsoft.com/en-us/library/362btx8f(v=VS.90).aspx
         ''' </remarks>
-        Function FormatMJD(MJD As Double, PresentationFormat As String) As String
+        <DispId(12)> Function FormatMJD(MJD As Double, PresentationFormat As String) As String
         ''' <summary>
         ''' Proivides an estimates of DeltaUT1, the difference between UTC and UT1. DeltaUT1 = UT1 - UTC
         ''' </summary>
         ''' <param name="JulianDate">Julian date when DeltaUT is required</param>
         ''' <returns>Double DeltaUT in seconds</returns>
         ''' <remarks>DeltaUT varies only slowly, so the Julian date can be based on UTC, UT1 or Terrestrial Time.</remarks>
-        Function DeltaUT1(JulianDate As Double) As Double
+        <DispId(13)> Function DeltaUT1(JulianDate As Double) As Double
         ''' <summary>
         ''' Returns a Julian date as a string formatted according to the supplied presentation format
         ''' </summary>
@@ -5103,7 +5103,112 @@ Namespace AstroUtils
         ''' <remarks>This expects the standard Microsoft date and time formatting characters as described 
         ''' in http://msdn.microsoft.com/en-us/library/362btx8f(v=VS.90).aspx
         ''' </remarks>
-        Function FormatJD(JD As Double, PresentationFormat As String) As String
+        <DispId(14)> Function FormatJD(JD As Double, PresentationFormat As String) As String
+        ''' <summary>
+        ''' Sets or returns the number of leap seconds used in ASCOM Astrometry functions
+        ''' </summary>
+        ''' <value>Integer number of seconds</value>
+        ''' <returns>Current number of leap seconds</returns>
+        ''' <remarks>The property value is stored in the ASCOM Profile under the name \Astrometry\Leap Seconds. Any change made to this property 
+        ''' will be persisted to the ASCOM Profile store and will be immediately availble to this and all future instances of AstroUtils.
+        ''' <para>The current value and any announced but not yet actioned change are listed 
+        ''' here: ftp://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat</para> </remarks>
+        <DispId(15)> Property LeapSeconds As Integer
+        ''' <summary>
+        ''' Function that returns a list of rise and set events of a particular type that occur on a particular day at a given latitude, longitude and time zone
+        ''' </summary>
+        ''' <param name="TypeofEvent">Type of event e.g. Sunrise or Astronomical twighlight</param>
+        ''' <param name="Day">Integer Day number</param>
+        ''' <param name="Month">Integer Month number</param>
+        ''' <param name="Year">Integer Year number</param>
+        ''' <param name="SiteLatitude">Site latitude</param>
+        ''' <param name="SiteLongitude">Site longitude (West of Greenwich is negative)</param>
+        ''' <param name="SiteTimeZone">Site time zone offset (West of Greenwich is negative)</param>
+        ''' <returns>An arraylist of event information (see Remarks for arraylist structure).
+        '''</returns>
+        ''' <exception cref="ASCOM.InvalidValueException">If the combination of day, month and year is invalid e.g. 31st September.</exception>
+        ''' <remarks>
+        ''' <para>The definitions of sunrise, sunset and the various twighlights that are used in this method are taken from the 
+        ''' <a href="http://aa.usno.navy.mil/faq/docs/RST_defs.php">US Naval Observatory Definitions</a>.
+        ''' </para>
+        ''' <para>The dynamics of the sun, Earth and Moon can result at some latitudes in days where there may be no, 1 or 2 rise or set events during 
+        ''' a 24 hour period; in consequence, results are returned in the flexible form of arraylist.</para>
+        ''' <para>The returned zero based arraylist has the following values:
+        ''' <list type="Bullet">
+        ''' <item>Arraylist(0)                              - Boolean - True if the body is above the event limit at midnight (the beginning of the 24 hour day), false if it is below the event limit</item>
+        ''' <item>Arraylist(1)                              - Integer - Number of rise events in this 24 hour period</item>
+        ''' <item>Arraylist(2)                              - Integer - Number of set events in this 24 hour period</item>
+        ''' <item>Arraylist(3) onwards                      - Double  - Values of rise events in hours </item>
+        ''' <item>Arraylist(3 + NumberOfRiseEvents) onwards - Double  - Values of set events in hours </item>
+        ''' </list></para>
+        ''' <para>If the number of rise events is zero the first double value will be the first set event. If the numbers of both rise and set events
+        ''' are zero, there will be no double values and the arraylist will just contain elements 0, 1 and 2, the above/below horizon flag and the integer count values.</para>
+        ''' <para>The algorithm employed in this method is taken from Astronomy on the Personal Computer (Montenbruck and Pfleger) pp 46..56, 
+        ''' Springer Fourth Edition 2000, Fourth Printing 2009. The day is divided into twelve two hour intervals and a quadratic equation is fitted
+        ''' to the altitudes at the beginning, middle and end of each interval. The resulting equation coefficients are then processed to determine 
+        ''' the number of roots within the interval (each of which corresponds to a rise or set event) and their sense (rise or set). 
+        ''' These results are are then aggregated over the day and the resultant list of values returned as the function result.
+        ''' </para>
+        ''' <para>High precision ephemeredes for the Sun, Moon and Earth and other planets from the JPL DE421 series are employed as delivered by the 
+        ''' ASCOM NOVAS 3.1 component rather than using the lower precision ephemeredes employed by Montenbruck and Pfleger.
+        ''' </para>
+        ''' <para><b>Accuracy</b> Whole year almanacs for Sunrise/Sunset, Moonrise/Moonset and the various twighlights every 5 degrees from the 
+        ''' North pole to the South Pole at a variety of longitudes, timezones and dates have been compared to data from
+        ''' the <a href="http://aa.usno.navy.mil/data/docs/RS_OneYear.php">US Naval Observatory Astronomical Data</a> web site. The RMS error has been found to be 
+        ''' better than 0.5 minute over the latitude range 80 degrees North to 80 degrees South and better than 5 minutes from 80 degrees to the relevant pole.
+        ''' Most returned values are within 1 minute of the USNO values although some very infrequent grazing event times at lattiudes from 67 to 90 degrees North and South can be up to 
+        ''' 10 minutes different.
+        ''' </para>
+        ''' <para>An Almanac program that creates a year's worth of information for a given event, lattitude, longitude and timezone is included in the 
+        ''' developer code examples elsewhere in this help file. This creates an output file with an almost identical format to that used by the USNO web site 
+        ''' and allows comprehensive checking of acccuracy for a given set of parameters.</para>
+        ''' </remarks>
+        <DispId(16)> Function EventTimes(TypeofEvent As EventType, Day As Integer, Month As Integer, Year As Integer, SiteLatitude As Double, SiteLongitude As Double, SiteTimeZone As Double) As ArrayList
+        ''' <summary>
+        ''' Returns the fraction of the Moon's surface that is illuminated 
+        ''' </summary>
+        ''' <param name="JD">Julian day (UTC) for which the Moon illumination is required</param>
+        ''' <returns>Percentage illumination of the Moon</returns>
+        ''' <remarks> The algorithm used is that given in Astronomical Algorithms (Second Edition, Corrected to August 2009) 
+        ''' Chapter 48 p345 by Jean Meeus (Willmann-Bell 1991). The Sun and Moon positions are calculated by high precision NOVAS 3.1 library using JPL DE 421 ephemeredes.
+        ''' </remarks>
+        <DispId(17)> Function MoonIllumination(JD As Double) As Double
+        ''' <summary>
+        ''' Returns the Moon phase as an angle
+        ''' </summary>
+        ''' <param name="JD">Julian day (UTC) for which the Moon phase is required</param>
+        ''' <returns>Moon phase as an angle between -180.0 amd +180.0 (see Remarks for further description)</returns>
+        ''' <remarks>To allow maximum freedom in displaying the Moon phase, this function returns the excess of the apparent geocentric longitude
+        ''' of the Moon over the apparent geocentric longitude of the Sun, expressed as an angle in the range -180.0 to +180.0 degrees.
+        ''' This definition is taken from Astronomical Algorithms (Second Edition, Corrected to August 2009) Chapter 49 p349
+        ''' by Jean Meeus (Willmann-Bell 1991).
+        ''' <para>The frequently used eight phase description for phases of the Moon can be easily constructed from the results of this function
+        ''' using logic similar to the following:
+        ''' <code>
+        '''Select Case MoonPhase
+        '''     Case -180.0 To -135.0
+        '''         Phase = "Full Moon"
+        '''     Case -135.0 To -90.0
+        '''         Phase = "Waning Gibbous"
+        '''     Case -90.0 To -45.0
+        '''         Phase = "Last Quarter"
+        '''     Case -45.0 To 0.0
+        '''         Phase = "Waning Crescent"
+        '''     Case 0.0 To 45.0
+        '''         Phase = "New Moon"
+        '''     Case 45.0 To 90.0
+        '''         Phase = "Waxing Crescent"
+        '''     Case 90.0 To 135.0
+        '''         Phase = "First Quarter"
+        '''     Case 135.0 To 180.0
+        '''         Phase = "Waxing Gibbous"
+        '''End Select
+        ''' </code></para>
+        ''' <para>Other representations can be easily constructed by changing the angle ranges and text descriptors as desired. The result range -180 to +180
+        ''' was chosen so that negative values represent the Moon waning and positive values represent the Moon waxing.</para>
+        '''</remarks>
+        <DispId(18)> Function MoonPhase(JD As Double) As Double
+
     End Interface
 
 End Namespace

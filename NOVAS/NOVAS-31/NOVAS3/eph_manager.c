@@ -321,8 +321,11 @@ short int ephem_close (void)
    if (EPHFILE)
    {
       error =  (short int) fclose (EPHFILE);
-      free (BUFFER);
-  	  EPHFILE = 0; //Peter Simpson - Added this so that the fclose in Ephem_Open wil not run if the file has been closed
+      // free (BUFFER);
+  	  // EPHFILE = 0; //Peter Simpson - Added this so that the fclose in Ephem_Open wil not run if the file has been closed
+	  // Replaced above two liones with Novas 3.1 Errata from http://aa.usno.navy.mil/software/novas/novas_faq.php 
+	  EPHFILE = NULL; // new line, reset pointer 
+      free (BUFFER); 
    }
    return error;
 }

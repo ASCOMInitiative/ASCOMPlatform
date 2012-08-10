@@ -8,7 +8,9 @@
 	      			<listItem>The Dome control panel now uses DestinationSideOfPier when determining the dome position for slews</listItem>
 					<listItem>The Camera simulator can now simulate cameras that are unable to operate at all intermediate Bin values 
 					between 1 and BinMax.</listItem>
-					<listItem>Small installer updates to recognise the Windows 8 consumer preview</listItem>
+					<listItem>Small installer updates to recognise Windows 8</listItem>
+					<listItem>The number of UTC leap seconds is now specified in the Astrometry key of the ASCOM Profile and can be updated by the user
+					whenever additional leap seconds are added without requiring an ASCOM Platform release.</listItem>
 	  			</list>
             </content>
 		</section>
@@ -17,7 +19,21 @@
 	     	<title>Key Changes in 6.0 SP2 - For Developers</title>
 	      	<content>
 	      		<list class="bullet">
-	     			<listItem>Added Chris Rowland's "Introduction to developing ASCOM drivers" to the developer install. </listItem>
+	      			<listItem>Added a new AstroUtils.Event method that provides rise and set times for Sun, Moon and the planets. In addition, the times
+	      			of Civil, Nautical and Astronomical twilight can be returned. Returned values are generally within 1 minute of those retured by 
+	      			the 
+		      			<externalLink>
+							<linkText>USNO Astronomical Data Site</linkText>
+							<linkAlternateText>USNO Astronomical Data Site</linkAlternateText>
+							<linkUri>http://aa.usno.navy.mil/data/docs/RS_OneYear.php</linkUri>
+							<linkTarget>_blank</linkTarget>
+						</externalLink>
+					for latitudes in the range 80N to 80S and within 5 minutes outside these latitudes. The returned event list can handle days 
+					when no, one or two rise or set events occur.</listItem>
+					<listItem>An alamanc program has been added to the Code Examples in the the Developer Components install. This generates a
+	      			year long almanac for any AstroUtils.Event event at a given latitude, longitude and timezone.</listItem>
+	     			<listItem>Added new methods AstroUtil.MoonIllumination and AstroUtil.MoonPhase.</listItem>
+	     			<listItem>Added Chris Rowland's "Introduction to developing ASCOM drivers" to the developer install.</listItem>
 					<listItem>Improved all drivers created through the template wizrad. These now pass Conform "out of the box"
 					and throw the correct ASCOM execptions instead of system exceptions. Comments have been improved and all
 					CanXXX capability properties return boolean values instead of exceptions.</listItem>
@@ -39,14 +55,13 @@
 					</listItem>
 					<listItem>Astrometry - the DeltaT function has been augmented to predict values in line with recent observation, it 
 					should now be good to the end of 2013 without further change</listItem>
-					<listItem>Support has been added to Terrestrial Time functions to allow for the leap second that will be introduced at
-					the end of June 2012</listItem>
+					<listItem>The Terrestrial Time functions now account for the leap second that was introduced at the end of June 2012</listItem>
 					<listItem>AstroUtils.JulianDateTT and AstroUtils.JulianDateUT1 will now use an internal approximation for DeltaUT1
 					if the supplied value is 0.0.</listItem>
 					<listItem>An independent trace option for NOVAS components has been added to the Trace menu. Currently only a few 
 					NOVAS 3.1 functions create trace output.</listItem>
 					<listItem>NOVASCOM.Planet now supports major planet numbers of 10=Sun and 11=Moon in line with the NOVAS convention.</listItem>
-					<listItem>A new developer section on timescales has been added to the help file.</listItem>
+					<listItem>A new entry on time scale relationships has been added to the Developer Information section of the help file.</listItem>
 					<listItem>Improved help description for the Focuser.Connected method saying that it is not available in 
 					focusers built to the IFocuser version 1 interface</listItem>
 					<listItem>AstroUtils.FormatJD - new function to format a Julian date using a supplied format descriptor.
@@ -72,6 +87,21 @@
 					through COM interop.</listItem>
 					<listItem>Astrometry.Kepler.Ephemeris - fixed an initialisation issue in that prevented calculation for minor 
 					planet bodies.</listItem>
+					<listItem>Incorporated NOVAS 3.1 errata from the
+						<externalLink>
+							<linkText>USNO NOVAS Support</linkText>
+							<linkAlternateText>USNO NOVAS Support</linkAlternateText>
+							<linkUri>http://aa.usno.navy.mil/software/novas/novas_faq.php</linkUri>
+							<linkTarget>_blank</linkTarget>
+						</externalLink>
+						web site.
+						<list class="bullet">
+							<listItem>Fixed a bug in the NOVAS 3.1 SideralTime function that appeared only when when the CIO method was selected</listItem>
+							<listItem>The original NOVAS source code contained a bug in EphemClose that prevented the ephemeris file from being reopened; 
+							a work round had already been incorporated in previous Platform releases. This has now been replaced with the official 
+							fix from the NOVAS team.</listItem>
+			  			</list>
+					</listItem>	
 				</list>
    			</content>
    		</section>
