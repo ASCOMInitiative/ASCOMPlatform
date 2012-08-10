@@ -137,6 +137,7 @@
     </Compile>
     <Compile Include="ChooserExamples.vb" />
     <Compile Include="EnvironmentExamples.vb" />
+    <Compile Include="EphemerisExamples.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -205,6 +206,11 @@
     <ProjectReference Include="..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

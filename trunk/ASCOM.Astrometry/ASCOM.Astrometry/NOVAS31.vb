@@ -6,7 +6,7 @@ Imports ASCOM.Utilities
 Namespace NOVAS
 
     ''' <summary>
-    ''' NOVAS31: Class presenting the contents of the USNO NOVAS 3.1 library published December 2010. 
+    ''' NOVAS31: Class presenting the contents of the USNO NOVAS 3.1 library. 
     ''' NOVAS was developed by the Astronomical Applications department of the United States Naval 
     ''' Observatory.
     ''' </summary>

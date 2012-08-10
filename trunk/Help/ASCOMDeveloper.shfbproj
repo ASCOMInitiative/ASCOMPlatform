@@ -210,6 +210,9 @@
     <None Include="Developer Information\Camera States.aml" />
     <None Include="Developer Information\Camera States.aml" />
     <None Include="Developer Information\Camera States.aml" />
+    <None Include="Examples\Almanac.aml" />
+    <None Include="Examples\Almanac.aml" />
+    <None Include="Examples\Copy of Transform.aml" />
     <None Include="Version History\Version 6.0 SP2.aml" />
     <None Include="Version History\Version 6.0 SP2.aml" />
     <None Include="Introduction\Time Relationships.aml" />

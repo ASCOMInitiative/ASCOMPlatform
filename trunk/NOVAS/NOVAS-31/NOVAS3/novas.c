@@ -3130,7 +3130,8 @@ short int sidereal_time (double jd_high, double jd_low,
    For mean sidereal time, subtract the equation of the equinoxes.
 */
 
-         ha_eq -= (eqeq / 240.0);
+         // ha_eq -= (eqeq / 240.0); Replaced with line below because of USNO Novas 3.1 Errata http://aa.usno.navy.mil/software/novas/novas_faq.php 
+		 ha_eq -= (eqeq / 3600.0);
 
          ha_eq = fmod (ha_eq, 360.0) / 15.0;
          if (ha_eq < 0.0)

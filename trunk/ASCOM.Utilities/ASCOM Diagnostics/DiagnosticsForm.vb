@@ -68,7 +68,7 @@ Public Class DiagnosticsForm
     Private NumberOfTicks As Integer
 
     Private Nov3 As ASCOM.Astrometry.NOVAS.NOVAS3, Nov31 As ASCOM.Astrometry.NOVAS.NOVAS31
-    Private AstroUtl As AstroUtils.AstroUtils
+    Private AstroUtil As AstroUtils.AstroUtils
     Private DeviceObject As Object ' Device test object
 
     Private LastLogFile As String ' Name of last diagnostics log file
@@ -208,7 +208,7 @@ Public Class DiagnosticsForm
             sw = New Stopwatch
 
             RefreshTraceItems() ' Get current values for the trace menu settings
-            AstroUtl = New AstroUtils.AstroUtils
+            AstroUtil = New AstroUtils.AstroUtils
             Nov3 = New NOVAS.NOVAS3
             Nov31 = New NOVAS.NOVAS31
             Me.BringToFront()
@@ -347,7 +347,6 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("RunningVersions", ex.ToString)
                 End Try
-
                 Try
                     ScanDrives() 'Scan PC drives and report information
                 Catch ex As Exception
@@ -525,6 +524,11 @@ Public Class DiagnosticsForm
                     SimulatorTests() : Action("")
                 Catch ex As Exception
                     LogException("SimulatorTests", ex.ToString)
+                End Try
+                Try
+                    AstroUtilsTests() : Action("")
+                Catch ex As Exception
+                    LogException("AstroUtilsTests", ex.ToString)
                 End Try
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
@@ -3312,7 +3316,7 @@ Public Class DiagnosticsForm
             OnSurface3.Pressure = Location.Pressure
             OnSurface3.Temperature = Location.Temperature
 
-            rc = Nov3.TopoStar(AstroUtl.JulianDateTT(0.0), AstroUtl.DeltaT, Cat3, OnSurface3, Accuracy.Full, RA, DEC)
+            rc = Nov3.TopoStar(AstroUtil.JulianDateTT(0.0), AstroUtil.DeltaT, Cat3, OnSurface3, Accuracy.Full, RA, DEC)
             TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Actual  : " & Util.HoursToHMS(T.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(T.DECTopocentric, ":", ":", "", 3))
             TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
             CompareDouble("TransformTest", Name & " Novas3 Topocentric RA", T.RATopocentric, RA, Tolerance)
@@ -4053,6 +4057,32 @@ Public Class DiagnosticsForm
         Dim ErrMsg As String
         If p_New = p_Orig Then
             If p_New.Length > 200 Then p_New = p_New.Substring(1, 200) & "..."
+            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
+            NMatches += 1
+        Else
+            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: """ & p_New & """, Expected: """ & p_Orig & """"
+            TL.LogMessageCrLf(p_Section, ErrMsg)
+            NNonMatches += 1
+            ErrorList.Add(p_Section & " - " & ErrMsg)
+        End If
+    End Sub
+
+    Private Sub CompareBoolean(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Boolean, ByVal p_Orig As Boolean)
+        Dim ErrMsg As String
+        If p_New = p_Orig Then
+            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
+            NMatches += 1
+        Else
+            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: """ & p_New & """, Expected: """ & p_Orig & """"
+            TL.LogMessageCrLf(p_Section, ErrMsg)
+            NNonMatches += 1
+            ErrorList.Add(p_Section & " - " & ErrMsg)
+        End If
+    End Sub
+
+    Private Sub CompareInteger(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Integer, ByVal p_Orig As Integer)
+        Dim ErrMsg As String
+        If p_New = p_Orig Then
             TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
             NMatches += 1
         Else
@@ -5635,25 +5665,6 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Private Sub btnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
-        End 'Close the program
-    End Sub
-
-    Private Sub ChooserToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserToolStripMenuItem1.Click
-        Dim Chooser As Object, Chosen As String
-        Dim ChooserType As Type
-
-        If ApplicationBits() = Bitness.Bits32 Then
-            'Chooser = CreateObject("DriverHelper.Chooser")
-            ChooserType = Type.GetTypeFromProgID("DriverHelper.Chooser")
-            Chooser = Activator.CreateInstance(ChooserType)
-            Chooser.DeviceType = "Telescope"
-            Chosen = Chooser.Choose("ScopeSim.Telescope")
-        Else
-            MsgBox("This component is 32bit only and cannot run on a 64bit system")
-        End If
-    End Sub
-
     Sub ScanSerial()
         Dim SerialRegKey As RegistryKey = Nothing, SerialDevices() As String
         Try
@@ -5809,28 +5820,6 @@ Public Class DiagnosticsForm
             RecursionLevel -= 1
         End Try
 
-    End Sub
-
-    Private Sub ChooserNETToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserNETToolStripMenuItem.Click
-        Dim Chooser As ASCOM.Utilities.Chooser, Chosen As String
-
-        Chooser = New ASCOM.Utilities.Chooser
-        Chooser.DeviceType = "Telescope"
-        Chosen = Chooser.Choose("ScopeSim.Telescope")
-        Chooser.Dispose()
-
-    End Sub
-
-    Private Sub ListAvailableCOMPortsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListAvailableCOMPortsToolStripMenuItem.Click
-        SerialForm.Visible = True
-    End Sub
-
-    Private Sub btnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
-        Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
-    End Sub
-
-    Private Sub ChooseAndConncectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConncectToDeviceToolStripMenuItem.Click
-        ConnectForm.Visible = True
     End Sub
 
     Private Sub ScanInstalledPlatform()
@@ -6084,6 +6073,177 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
+    Private Sub AstroUtilsTests()
+        Dim Events As RiseSet
+        Dim Nov31 As New NOVAS.NOVAS31
+
+        Try
+            Status("Running Astro Utilities functional tests")
+            TL.LogMessage("AstroUtilTests", "Creating ASCOM.Astrometry.AstroUtils.AstroUtils")
+            sw.Reset() : sw.Start()
+            AstroUtil = New ASCOM.Astrometry.AstroUtils.AstroUtils
+            TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
+
+            'Range Tests
+            CompareDouble("AstroUtilTests", "ConditionHA -12.0", AstroUtil.ConditionHA(-12.0), -12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 0.0", AstroUtil.ConditionHA(0.0), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 12.0", AstroUtil.ConditionHA(12.0), 12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA -13.0", AstroUtil.ConditionHA(-13.0), 11.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 13.0", AstroUtil.ConditionHA(13.0), -11.0, TOLERANCE_E6)
+
+            CompareDouble("AstroUtilTests", "ConditionRA 0.0", AstroUtil.ConditionRA(0.0), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 12.0", AstroUtil.ConditionRA(12.0), 12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 23.999", AstroUtil.ConditionRA(23.999), 23.999, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA -1.0", AstroUtil.ConditionRA(-1.0), 23.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 25.0", AstroUtil.ConditionRA(25.0), 1.0, TOLERANCE_E6)
+
+            CompareBoolean("AstroUtilTests", "DeltaUT", (AstroUtil.DeltaUT(AstroUtil.JulianDateTT(0.0)) >= -1.0) And (AstroUtil.DeltaUT(AstroUtil.JulianDateTT(0.0)) <= 1.0), True)
+            Events = GetEvents(ASCOM.Astrometry.EventType.SunRiseSunset, 5, 8, 2012, 51.0, -60.0, -5.0)
+
+            CompareBoolean("AstroUtilTests", "Events Sun Risen at Midnight", Events.RisenAtMidnight, False)
+            CompareInteger("AstroUtilTests", "Events Sun Rise Count", Events.RiseTime.Count, 1)
+            CompareInteger("AstroUtilTests", "Events Sun Set Count", Events.SetTime.Count, 1)
+            CompareDouble("AstroUtilTests", "Events Sun Rise", Events.RiseTime(0), 3.54149185233954, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(0), 18.6397113427123, TOLERANCE_E5)
+
+            Events = GetEvents(ASCOM.Astrometry.EventType.SunRiseSunset, 19, 3, 2012, -80.0, 85.0, 11.0)
+
+            CompareBoolean("AstroUtilTests", "Events Sun Risen at Midnight", Events.RisenAtMidnight, True)
+            CompareInteger("AstroUtilTests", "Events Sun Rise Count", Events.RiseTime.Count, 1)
+            CompareInteger("AstroUtilTests", "Events Sun Set Count", Events.SetTime.Count, 2)
+            CompareDouble("AstroUtilTests", "Events Sun Rise", Events.RiseTime(0), 10.9587287503168, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(0), 0.0368678512365008, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(1), 23.8850069460075, TOLERANCE_E5)
+
+            Events = GetEvents(ASCOM.Astrometry.EventType.MoonRiseMoonSet, 5, 8, 2012, 51.0, -60.0, -5.0)
+
+            CompareBoolean("AstroUtilTests", "Events Moon Risen at Midnight", Events.RisenAtMidnight, True)
+            CompareInteger("AstroUtilTests", "Events Moon Rise Count", Events.RiseTime.Count, 1)
+            CompareInteger("AstroUtilTests", "Events Moon Set Count", Events.SetTime.Count, 1)
+            CompareDouble("AstroUtilTests", "Events Moon Rise", Events.RiseTime(0), 19.6212523985916, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Events Moon Set", Events.SetTime(0), 7.84782661271154, TOLERANCE_E5)
+
+            Events = GetEvents(ASCOM.Astrometry.EventType.MoonRiseMoonSet, 15, 1, 2012, -80.0, 85.0, 11.0)
+
+            CompareBoolean("AstroUtilTests", "Events Moon Risen at Midnight", Events.RisenAtMidnight, False)
+            CompareInteger("AstroUtilTests", "Events Moon Rise Count", Events.RiseTime.Count, 2)
+            CompareInteger("AstroUtilTests", "Events Moon Set Count", Events.SetTime.Count, 1)
+            CompareDouble("AstroUtilTests", "Events Moon Rise", Events.RiseTime(0), 1.83185022577189, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Events Moon Rise", Events.RiseTime(1), 23.803310377656, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Events Moon Set", Events.SetTime(0), 20.2772693138778, TOLERANCE_E5)
+
+            Events = GetEvents(ASCOM.Astrometry.EventType.AstronomicalTwilight, 18, 5, 2012, 51.0, 0.0, 0.0)
+
+            CompareBoolean("AstroUtilTests", "Events Astronomical Twighlight Sun Risen at Midnight", Events.RisenAtMidnight, False)
+            CompareInteger("AstroUtilTests", "Events Astronomical Twighlight Start Count", Events.RiseTime.Count, 1)
+            CompareInteger("AstroUtilTests", "Events Astronomical Twighlight End Count", Events.SetTime.Count, 1)
+            CompareDouble("AstroUtilTests", "Events Astronomical Twighlight Start", Events.RiseTime(0), 1.01115193589165, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Events Astronomical Twighlight End", Events.SetTime(0), 22.9472021943943, TOLERANCE_E5)
+
+            CompareDouble("", "Moon Illumination", AstroUtil.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
+            CompareDouble("", "Moon Phase", AstroUtil.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)
+            TL.BlankLine()
+
+            Try
+                AstroUtil.Dispose()
+                TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils, Disposed OK")
+            Catch ex As Exception
+                LogException("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils: " & ex.ToString)
+            End Try
+            AstroUtil = Nothing
+            TL.LogMessage("AstroUtilTests", "Finished")
+            TL.BlankLine()
+
+        Catch ex As Exception
+            LogException("AstroUtilTests", "Exception: " & ex.ToString)
+        End Try
+
+    End Sub
+
+    Private Structure RiseSet
+        Public RisenAtMidnight As Boolean
+        Public RiseTime As Generic.List(Of Double)
+        Public SetTime As Generic.List(Of Double)
+    End Structure
+
+    Private Function GetEvents(TypeOfEvent As EventType, Day As Integer, Month As Integer, Year As Integer, Latitude As Double, Longitude As Double, TimeZone As Double) As RiseSet
+        Dim Events As ArrayList
+        Dim Retval As New RiseSet
+        Dim NumberOfRises, NumberOfSets As Integer
+
+        Events = AstroUtil.EventTimes(TypeOfEvent, Day, Month, Year, Latitude, Longitude, TimeZone)
+        Retval.RisenAtMidnight = CBool(Events(0))
+        Retval.RiseTime = New Generic.List(Of Double)
+        Retval.SetTime = New Generic.List(Of Double)
+
+
+        NumberOfRises = CInt(Events(1)) ' Retrieve the number of sunrises
+        NumberOfSets = CInt(Events(2)) ' Retrieve the number of sunsets
+
+        If (NumberOfRises > 0) Or (NumberOfSets > 0) Then ' Moon either rises or sets this day
+            Select Case NumberOfRises
+                Case 0 ' No sunrises so no action
+                Case 1 ' 1 sunrise so add the value
+                    Retval.RiseTime.Add(CDbl(Events(3)))
+                Case 2 ' 2 sunrises so add both values
+                    Retval.RiseTime.Add(CDbl(Events(3)))
+                    Retval.RiseTime.Add(CDbl(Events(4)))
+            End Select
+            Select Case NumberOfSets
+                Case 0 ' No sunsets so no action
+                Case 1 ' 1 sunset so add the value
+                    Retval.SetTime.Add(CDbl(Events(NumberOfRises + 3)))
+                Case 2 ' 2 sunsets so build up message lines 1 and 2
+                    Retval.SetTime.Add(CDbl(Events(NumberOfRises + 3)))
+                    Retval.SetTime.Add(CDbl(Events(NumberOfRises + 4)))
+            End Select
+        Else ' Moon neither rises or sets this day so no further action required here
+        End If
+        Return Retval
+    End Function
+
+#Region "Menu Code"
+    Private Sub btnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
+        End 'Close the program
+    End Sub
+
+    Private Sub ChooserToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserToolStripMenuItem1.Click
+        Dim Chooser As Object, Chosen As String
+        Dim ChooserType As Type
+
+        If ApplicationBits() = Bitness.Bits32 Then
+            'Chooser = CreateObject("DriverHelper.Chooser")
+            ChooserType = Type.GetTypeFromProgID("DriverHelper.Chooser")
+            Chooser = Activator.CreateInstance(ChooserType)
+            Chooser.DeviceType = "Telescope"
+            Chosen = Chooser.Choose("ScopeSim.Telescope")
+        Else
+            MsgBox("This component is 32bit only and cannot run on a 64bit system")
+        End If
+    End Sub
+
+    Private Sub ChooserNETToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserNETToolStripMenuItem.Click
+        Dim Chooser As ASCOM.Utilities.Chooser, Chosen As String
+
+        Chooser = New ASCOM.Utilities.Chooser
+        Chooser.DeviceType = "Telescope"
+        Chosen = Chooser.Choose("ScopeSim.Telescope")
+        Chooser.Dispose()
+
+    End Sub
+
+    Private Sub ListAvailableCOMPortsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListAvailableCOMPortsToolStripMenuItem.Click
+        SerialForm.Visible = True
+    End Sub
+
+    Private Sub btnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
+        Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
+    End Sub
+
+    Private Sub ChooseAndConncectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConncectToDeviceToolStripMenuItem.Click
+        ConnectForm.Visible = True
+    End Sub
+
     Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
         Dim ProfileStore As RegistryAccess
 
@@ -6189,5 +6349,6 @@ Public Class DiagnosticsForm
         MenuNovasTraceEnabled.Checked = Not MenuNovasTraceEnabled.Checked 'Invert selection
         SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
     End Sub
+#End Region
 
 End Class
