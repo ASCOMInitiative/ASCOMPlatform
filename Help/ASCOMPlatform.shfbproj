@@ -165,6 +165,8 @@
     </Image>
     <Content Include="Scripts\script_manifold.js" />
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Version History\Version 6.0 SP2.aml" />
+    <None Include="Version History\Version 6.0 SP2.aml" />
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
