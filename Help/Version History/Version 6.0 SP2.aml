@@ -87,6 +87,7 @@
 					through COM interop.</listItem>
 					<listItem>Astrometry.Kepler.Ephemeris - fixed an initialisation issue in that prevented calculation for minor 
 					planet bodies.</listItem>
+					<listItem>Fixed occasional installation failures due to the presence of non-standard permissions in the registry</listItem>
 					<listItem>Incorporated NOVAS 3.1 errata from the
 						<externalLink>
 							<linkText>USNO NOVAS Support</linkText>
