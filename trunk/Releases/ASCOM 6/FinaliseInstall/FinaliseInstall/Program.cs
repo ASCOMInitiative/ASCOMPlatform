@@ -11,6 +11,9 @@ using Microsoft.Win32;
 using System.Windows.Forms;
 using ASCOM.Utilities;
 using System.Management;
+using System.Security;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace ConsoleApplication1
 {
@@ -20,11 +23,79 @@ namespace ConsoleApplication1
         [DllImport("ole32.dll")]
         static extern int CLSIDFromProgID([MarshalAs(UnmanagedType.LPWStr)] string lpszProgID, out Guid pclsid);
 
-        static private Type tProfile;												// Late bound Helper.Profile
-        static private object oProfile;
-        static TraceLogger TL;
+        static private Type tProfile; // Late bound Helper.Profile type
+        static private object oProfile; // Late bound Helper.Profile
+        static private TraceLogger TL; // Trace logger
         private const string sMsgTitle = "ASCOM Platform 6 Install Finaliser";
-        static int ReturnCode = 0;
+        static private int ReturnCode = 0; // Code to return to the calling application
+
+        // SID constants for well known accounts and groups
+        private const string CreatorOwnerSID = "S-1-3-0";
+        private const string NTAuthoritySystemSID = "S-1-5-18";
+        private const string BuiltInAdministratorsSID = "S-1-5-32-544";
+        private const string BuiltInUsersSID = "S-1-5-32-545";
+
+        // Readonly and full registry access rights lists. These are as implemented by Windows after an "out of the box" install.
+        static private AccessRights FullRights = AccessRights.Query |
+                                                 AccessRights.SetKey |
+                                                 AccessRights.CreateSubKey |
+                                                 AccessRights.EnumSubkey |
+                                                 AccessRights.Notify |
+                                                 AccessRights.CreateLink |
+                                                 AccessRights.StandardDelete |
+                                                 AccessRights.StandardReadControl |
+                                                 AccessRights.StandardWriteDAC |
+                                                 AccessRights.StandardWriteOwner;
+
+        static private AccessRights ReadRights = AccessRights.Query |
+                                                 AccessRights.EnumSubkey |
+                                                 AccessRights.Notify |
+                                                 AccessRights.StandardReadControl;
+
+        /// <summary>
+        /// Enum containing all the possible registry access rights values. The buit-in RegistryRights enum only has a partial collection
+        /// and often returns values such as -1 or large positive and negative integer values when converted to a string
+        /// The Flags attribute ensures that the ToString operation returns an aggregate list of discrete values
+        /// </summary>
+        [Flags]
+        enum AccessRights : uint
+        {
+            Query = 1,
+            SetKey = 2,
+            CreateSubKey = 4,
+            EnumSubkey = 8,
+            Notify = 0x10,
+            CreateLink = 0x20,
+            Unknown40 = 0x40,
+            Unknown80 = 0x80,
+
+            Wow64_64Key = 0x100,
+            Wow64_32Key = 0x200,
+            Unknown400 = 0x400,
+            Unknown800 = 0x800,
+            Unknown1000 = 0x1000,
+            Unknown2000 = 0x2000,
+            Unknown4000 = 0x4000,
+            Unknown8000 = 0x8000,
+
+            StandardDelete = 0x10000,
+            StandardReadControl = 0x20000,
+            StandardWriteDAC = 0x40000,
+            StandardWriteOwner = 0x80000,
+            StandardSynchronize = 0x100000,
+            Unknown200000 = 0x200000,
+            Unknown400000 = 0x400000,
+            AuditAccess = 0x800000,
+
+            AccessSystemSecurity = 0x1000000,
+            MaximumAllowed = 0x2000000,
+            Unknown4000000 = 0x4000000,
+            Unknown8000000 = 0x8000000,
+            GenericAll = 0x10000000,
+            GenericExecute = 0x20000000,
+            GenericWrite = 0x40000000,
+            GenericRead = 0x80000000
+        }
 
         static int Main(string[] args)
         {
@@ -35,9 +106,50 @@ namespace ConsoleApplication1
 
                 LogMessage("FinaliseInstall", "Starting finalise process");
 
-                tProfile = Type.GetTypeFromProgID("DriverHelper.Profile");					// Late bound Helper.Profile
-                LogMessage("FinaliseInstall", "Successfully got type for DriverHelper.Profile");
-                oProfile = Activator.CreateInstance(tProfile);
+                try
+                {
+
+                    CheckHKCRPermissions(false); // Check that required pernissions are present on HKCR
+
+                    tProfile = Type.GetTypeFromProgID("DriverHelper.Profile"); // Create a late bound Helper.Profile
+                    if (tProfile == null) // Check whether the Type.GetTypeFromProgID method was successful
+                    {
+                        // Unable to get the Helper.Profile type, this usually occurs because of missing registry permissions on HKCR
+                        // Report the error, restore standard permissions and try again to get the type
+
+                        LogMessage("FinaliseInstall", "BAD - DriverHelper.Profile returned Type is null, attempting to fix registry permissions on HKCR!");
+                        CheckHKCRPermissions(true); // Fix any missing pernissions on HKCR
+                        LogMessage("FinaliseInstall", " ");
+                        LogMessage("FinaliseInstall", "Making check that new permissions are OK");
+                        CheckHKCRPermissions(false); // Confirm that the new permissions fix the issue
+                        tProfile = Type.GetTypeFromProgID("DriverHelper.Profile"); // Try again to create a late bound Helper.Profile
+
+                        if (tProfile == null)
+                        {
+                            // Bad news - again unable to create the type so log this as an error
+                            LogError("FinaliseInstall", "DriverHelper.Profile returned Type is still null on second attmept!");
+                        }
+                        else
+                        {
+                            // Good news, successful on second attempt, registry permissions fixes worked!
+                            LogMessage("FinaliseInstall", "Successfully got type for DriverHelper.Profile after fixing registry permissions");
+                            oProfile = Activator.CreateInstance(tProfile); // Create the Profile object
+                            LogMessage("FinaliseInstall", "Successfully created DriverHelper.Profile object");
+                        }
+
+                    }
+                    else // Got the type OK!
+                    {
+                        LogMessage("FinaliseInstall", "Successfully got type for DriverHelper.Profile");
+                        oProfile = Activator.CreateInstance(tProfile); // Create the Profile object
+                        LogMessage("FinaliseInstall", "Successfully created DriverHelper.Profile object");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SetReturnCode(6);
+                    LogError("FinaliseInstall", "Exception 6: " + ex.ToString());
+                }
 
                 //
                 // Force TypeLib linkages to PIAs (bug on repair & upgrades).
@@ -180,10 +292,10 @@ namespace ConsoleApplication1
                 }
                 catch { }
             }
-            catch(Exception ex) //Exception in top level routine
+            catch (Exception ex) //Exception in top level routine
             {
                 SetReturnCode(4);
-                LogMessage("FinaliseInstall", "Exception: " + ex.ToString());
+                LogError("FinaliseInstall", "Exception: " + ex.ToString());
             }
 
             return ReturnCode;
@@ -466,5 +578,327 @@ namespace ConsoleApplication1
 
         }
 
+        /// <summary>
+        /// Check and if required, fix permissions on HKEY_CLASSES_ROOT
+        /// </summary>
+        /// <param name="FixPermissions">True to fix missing permissions, flase just to check and report permission state</param>
+        protected static void CheckHKCRPermissions(bool FixPermissions)
+        {
+            try
+            {
+                LogMessage("CheckHKCRPermissions", "Starting HKCR permission check, FixPermissions: " + FixPermissions.ToString());
+
+                bool FoundCreatorOwnerGenericAccess = false;
+                bool FoundSystemGenericAccess = false;
+                bool FoundSystemSpecificAccess = false;
+                bool FoundAdministratorGenericAccess = false;
+                bool FoundAdministratorSpecificAccess = false;
+                bool FoundUserGenericAccess = false;
+                bool FoundUserSpecificAccess = false;
+                AccessRights Rights;
+
+                RegistrySecurity HKCRAccessControl = Registry.ClassesRoot.GetAccessControl();
+
+                //Iterate over the rule set and list them for Builtin users
+                foreach (RegistryAccessRule RegRule in HKCRAccessControl.GetAccessRules(true, true, typeof(NTAccount)))
+                {
+                    Rights = (AccessRights)RegRule.RegistryRights;
+
+                    LogMessage("CheckHKCRPermissions", "Found rule: " + RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + Rights.ToString() + " / " + (RegRule.IsInherited ? "Inherited" : "NotInherited") + " / " + RegRule.InheritanceFlags.ToString() + " / " + RegRule.PropagationFlags.ToString());
+
+                    // Allow CREATOR OWNER GenericAll / NotInherited / ContainerInherit / InheritOnly
+                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(CreatorOwnerSID).ToUpper()) &
+                         Rights == AccessRights.GenericAll & RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
+                         RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundCreatorOwnerGenericAccess = true;
+
+                    // Allow NT AUTHORITY\SYSTEM GenericAll / NotInherited / ContainerInherit / InheritOnly
+                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(NTAuthoritySystemSID).ToUpper()) &
+                         Rights == AccessRights.GenericAll & RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
+                         RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundSystemGenericAccess = true;
+
+                    // Allow NT AUTHORITY\SYSTEM Query, SetKey, CreateSubKey, EnumSubkey, Notify, CreateLink, StandardDelete, StandardReadControl, StandardWriteDAC, StandardWriteOwner / NotInherited / None / None
+                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(NTAuthoritySystemSID).ToUpper()) &
+                         Rights == FullRights &
+                         RegRule.InheritanceFlags == InheritanceFlags.None &
+                         RegRule.PropagationFlags == PropagationFlags.None) FoundSystemSpecificAccess = true;
+
+                    // Allow BUILTIN\Administrators GenericAll / NotInherited / ContainerInherit / InheritOnly
+                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(BuiltInAdministratorsSID).ToUpper()) &
+                         Rights == AccessRights.GenericAll & RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
+                         RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundAdministratorGenericAccess = true;
+
+                    // Allow BUILTIN\Administrators Query, SetKey, CreateSubKey, EnumSubkey, Notify, CreateLink, StandardDelete, StandardReadControl, StandardWriteDAC, StandardWriteOwner / NotInherited / None / None
+                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(BuiltInAdministratorsSID).ToUpper()) &
+                         Rights == FullRights &
+                         RegRule.InheritanceFlags == InheritanceFlags.None &
+                         RegRule.PropagationFlags == PropagationFlags.None) FoundAdministratorSpecificAccess = true;
+
+                    // Allow BUILTIN\Users GenericRead / NotInherited / ContainerInherit / InheritOnly
+                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(BuiltInUsersSID).ToUpper()) &
+                         Rights == AccessRights.GenericRead & RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
+                         RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundUserGenericAccess = true;
+
+                    // Allow BUILTIN\Users Query, EnumSubkey, Notify, StandardReadControl / NotInherited / None / None
+                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(BuiltInUsersSID).ToUpper()) &
+                         Rights == ReadRights &
+                         RegRule.InheritanceFlags == InheritanceFlags.None &
+                         RegRule.PropagationFlags == PropagationFlags.None) FoundUserSpecificAccess = true;
+
+                }
+                LogMessage("CheckHKCRPermissions", " ");
+
+                if (FoundCreatorOwnerGenericAccess) LogMessage("CheckHKCRPermissions", "OK - HKCR\\ does have CreatorOwnerGenericAccess");
+                else LogError("CheckHKCRPermissions", "HKCR\\ does not have CreatorOwnerGenericAccess!");
+
+                if (FoundSystemGenericAccess) LogMessage("CheckHKCRPermissions", "OK - HKCR\\ does have SystemGenericAccess");
+                else LogError("CheckHKCRPermissions", "HKCR\\ does not have SystemGenericAccess!");
+                if (FoundSystemSpecificAccess) LogMessage("CheckHKCRPermissions", "OK - HKCR\\ does have SystemSpecificAccess");
+                else LogError("CheckHKCRPermissions", "HKCR\\ does not have SystemSpecificAccess!");
+
+                if (FoundAdministratorGenericAccess) LogMessage("CheckHKCRPermissions", "OK - HKCR\\ does have AdministratorGenericAccess");
+                else LogError("CheckHKCRPermissions", "HKCR\\ does not have AdministratorGenericAccess!");
+                if (FoundAdministratorSpecificAccess) LogMessage("CheckHKCRPermissions", "OK - HKCR\\ does have AdministratorSpecificAccess");
+                else LogError("CheckHKCRPermissions", "HKCR\\ does not have AdministratorSpecificAccess!");
+
+                if (FoundUserGenericAccess) LogMessage("CheckHKCRPermissions", "OK - HKCR\\ does have UserGenericAccess");
+                else LogError("CheckHKCRPermissions", "HKCR\\ does not have UserGenericAccess!");
+                if (FoundUserSpecificAccess) LogMessage("CheckHKCRPermissions", "OK - HKCR\\ does have UserSpecificAccess");
+                else LogError("CheckHKCRPermissions", "HKCR\\ does not have UserSpecificAccess!");
+
+                LogMessage("CheckHKCRPermissions", " ");
+
+                if (FixPermissions)
+                {
+                    Stopwatch swLocal = null;
+
+                    try
+                    {
+                        swLocal = Stopwatch.StartNew();
+                        LogMessage("SetRegistryACL", "Fixing registry permissions");
+
+                        //Set a security ACL on the ASCOM Profile key giving the Users group Full Control of the key
+                        LogMessage("SetRegistryACL", "Creating security identifiers");
+                        SecurityIdentifier DomainSid = new SecurityIdentifier("S-1-0-0"); //Create a starting point domain SID
+
+                        //Create security identifiers for the various accounts to be passed to the new accessrule
+                        SecurityIdentifier BuiltinUsersIdentifier = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid);
+                        SecurityIdentifier AdministratorsIdentifier = new SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid, DomainSid);
+                        SecurityIdentifier CreatorOwnerIdentifier = new SecurityIdentifier(WellKnownSidType.CreatorOwnerSid, DomainSid);
+                        SecurityIdentifier SystemIdentifier = new SecurityIdentifier(WellKnownSidType.LocalSystemSid, DomainSid);
+
+                        LogMessage("SetRegistryACL", "Creating new ACL rules"); // Create the new access permission rules
+                        RegistryAccessRule CreatorOwnerGenericAccessRule = new RegistryAccessRule(CreatorOwnerIdentifier,
+                                                                                                  (RegistryRights)AccessRights.GenericAll,
+                                                                                                  InheritanceFlags.ContainerInherit,
+                                                                                                  PropagationFlags.InheritOnly,
+                                                                                                  AccessControlType.Allow);
+
+                        RegistryAccessRule SystemGenericAccessRule = new RegistryAccessRule(SystemIdentifier,
+                                                                                            (RegistryRights)AccessRights.GenericAll,
+                                                                                            InheritanceFlags.ContainerInherit,
+                                                                                            PropagationFlags.InheritOnly,
+                                                                                            AccessControlType.Allow);
+
+                        RegistryAccessRule SystemFullAccessRule = new RegistryAccessRule(SystemIdentifier,
+                                                                                         (RegistryRights)FullRights,
+                                                                                         InheritanceFlags.None,
+                                                                                         PropagationFlags.None,
+                                                                                         AccessControlType.Allow);
+
+                        RegistryAccessRule AdministratorsGenericAccessRule = new RegistryAccessRule(AdministratorsIdentifier,
+                                                                                                    (RegistryRights)AccessRights.GenericAll,
+                                                                                                    InheritanceFlags.ContainerInherit,
+                                                                                                    PropagationFlags.InheritOnly,
+                                                                                                    AccessControlType.Allow);
+
+                        RegistryAccessRule AdministratorsFullAccessRule = new RegistryAccessRule(AdministratorsIdentifier,
+                                                                                                 (RegistryRights)FullRights,
+                                                                                                 InheritanceFlags.None,
+                                                                                                 PropagationFlags.None,
+                                                                                                 AccessControlType.Allow);
+
+                        RegistryAccessRule BuiltinUsersGenericAccessRule = new RegistryAccessRule(BuiltinUsersIdentifier,
+                                                                                                  unchecked((RegistryRights)AccessRights.GenericRead),
+                                                                                                  InheritanceFlags.ContainerInherit,
+                                                                                                  PropagationFlags.InheritOnly,
+                                                                                                  AccessControlType.Allow);
+
+                        RegistryAccessRule BuiltinUsersReadAccessRule = new RegistryAccessRule(BuiltinUsersIdentifier,
+                                                                                               (RegistryRights)ReadRights,
+                                                                                               InheritanceFlags.None,
+                                                                                               PropagationFlags.None,
+                                                                                               AccessControlType.Allow);
+
+                        LogMessage("SetRegistryACL", "Retrieving current ACL rule");
+                        LogMessage("SetRegistryACL", " ");
+                        RegistrySecurity KeySec = Registry.ClassesRoot.GetAccessControl(); // Get existing ACL rules on the key 
+
+                        //Iterate over the rule set and list them
+                        foreach (RegistryAccessRule RegRule in KeySec.GetAccessRules(true, true, typeof(NTAccount)))
+                        {
+                            LogMessage("SetRegistryACL Before", RegRule.AccessControlType.ToString() + " " +
+                                                             RegRule.IdentityReference.ToString() + " " +
+                                                             ((AccessRights)RegRule.RegistryRights).ToString() + " " +
+                                                             RegRule.IsInherited.ToString() + " " +
+                                                             RegRule.InheritanceFlags.ToString() + " " +
+                                                             RegRule.PropagationFlags.ToString());
+                        }
+
+                        LogMessage("SetRegistryACL", "Adding new ACL rules");
+                        LogMessage("SetRegistryACL", " ");
+
+                        // Remove old rules
+                        KeySec.PurgeAccessRules(CreatorOwnerIdentifier);
+                        KeySec.PurgeAccessRules(AdministratorsIdentifier);
+                        KeySec.PurgeAccessRules(BuiltinUsersIdentifier);
+                        KeySec.PurgeAccessRules(SystemIdentifier);
+
+                        //Add the new rules to the existing rules
+                        KeySec.AddAccessRule(CreatorOwnerGenericAccessRule);
+                        KeySec.AddAccessRule(SystemGenericAccessRule);
+                        KeySec.AddAccessRule(SystemFullAccessRule);
+                        KeySec.AddAccessRule(AdministratorsGenericAccessRule);
+                        KeySec.AddAccessRule(AdministratorsFullAccessRule);
+                        KeySec.AddAccessRule(BuiltinUsersGenericAccessRule);
+                        KeySec.AddAccessRule(BuiltinUsersReadAccessRule);
+
+                        //Iterate over the new rule set and list them
+                        foreach (RegistryAccessRule RegRule in KeySec.GetAccessRules(true, true, typeof(NTAccount)))
+                        {
+                            LogMessage("SetRegistryACL After", RegRule.AccessControlType.ToString() + " " +
+                                                            RegRule.IdentityReference.ToString() + " " +
+                                                            ((AccessRights)RegRule.RegistryRights).ToString() + " " +
+                                                            RegRule.IsInherited.ToString() + " " +
+                                                            RegRule.InheritanceFlags.ToString() + " " +
+                                                            RegRule.PropagationFlags.ToString());
+                        }
+
+                        LogMessage("SetRegistryACL", "Setting new ACL rule");
+                        Registry.ClassesRoot.SetAccessControl(KeySec); //Apply the new rules to the Profile key
+
+                        LogMessage("SetRegistryACL", "Rerieving new ruleset from key");
+
+                        // Retrieve the new ruleset and and list them
+                        foreach (RegistryAccessRule RegRule in Registry.ClassesRoot.GetAccessControl().GetAccessRules(true, true, typeof(NTAccount)))
+                        {
+                            LogMessage("SetRegistryACL New", RegRule.AccessControlType.ToString() + " " +
+                                                          RegRule.IdentityReference.ToString() + " " +
+                                                          ((AccessRights)RegRule.RegistryRights).ToString() + " " +
+                                                          RegRule.IsInherited.ToString() + " " +
+                                                          RegRule.InheritanceFlags.ToString() + " " +
+                                                          RegRule.PropagationFlags.ToString());
+                        }
+
+                        swLocal.Stop();
+                        LogMessage("SetRegistryACL", "ElapsedTime " + swLocal.ElapsedMilliseconds + " milliseconds");
+                        swLocal = null;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogMessage("SetRegistryACLException", ex.ToString());
+                    }
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                SetReturnCode(5);
+                LogError("CheckHKCRPermissions", "HKCR\\ does not exist. " + ex.ToString()); // Should never happen!
+            }
+            catch (SecurityException ex)
+            {
+                SetReturnCode(5);
+                LogError("CheckHKCRPermissions", "Security exception when accessing HKCR\\ " + ex.ToString()); // Should never happen!
+            }
+            catch (Exception ex)
+            {
+                SetReturnCode(5);
+                LogError("CheckHKCRPermissions", "Unexpected exception: " + ex.ToString());
+            }
+
+        }
+
+        /// <summary>
+        /// Returns the localised text name of the BUILTIN\Users group. This varies by locale so has to be derrived on the users system.
+        /// </summary>
+        /// <returns>Localised name of the BUILTIN\Users group</returns>
+        /// <remarks>This uses the WMI features and is pretty obscure - sorry, it was the only way I could find to do this! Peter</remarks>
+        protected static string GetBuiltInGroup(string DomainSID, string GroupSID)
+        {
+            ManagementObjectSearcher Searcher = default(ManagementObjectSearcher);
+            string Group = "Unknown";
+            // Initialise to some values
+            string Name = "Unknown";
+            PropertyDataCollection p = default(PropertyDataCollection);
+
+            //LogMessage("", "Start: " + DomainSID + " " + GroupSID);
+
+            try
+            {
+                //Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"), new WqlObjectQuery("Select * From Win32_Account "), null);
+                Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"),
+                    new WqlObjectQuery("Select * From Win32_Account Where SID = '" + DomainSID + "'"), null);
+                //new WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"), null);
+                //new WqlObjectQuery("Select * From Win32_Account"), null);
+
+                //LogMessage("GetBuiltInGroup", "Found " + Searcher.Get().Count + " entries");
+                int count = 0;
+                foreach (ManagementBaseObject wmiClass in Searcher.Get())
+                {
+                    count += 1;
+                    p = wmiClass.Properties;
+                    foreach (PropertyData pr in p)
+                    {
+                        if (pr.Name == "Name")
+                        {
+                            Group = pr.Value.ToString();
+                            //LogMessage("GetBuiltInGroup Name " + count, pr.Name + " = " + pr.Value.ToString());
+                        }
+                    }
+                }
+                Searcher.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogMessage("GetBuiltInUsers 1", ex.ToString());
+            }
+
+            try
+            {
+                Searcher = new ManagementObjectSearcher(new ManagementScope("\\\\localhost\\root\\cimv2"),
+                    new WqlObjectQuery("Select * From Win32_Group Where SID = '" + GroupSID + "'"), null);
+
+                foreach (ManagementBaseObject wmiClass in Searcher.Get())
+                {
+                    p = wmiClass.Properties;
+                    foreach (PropertyData pr in p)
+                    {
+                        if (pr.Name == "Name") Name = pr.Value.ToString();
+                    }
+                }
+                Searcher.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogMessage("GetBuiltInUsers 2", ex.ToString());
+            }
+            // LogMessage("GetBuiltInUsers", "Returning: " + Group + "\\" + Name);
+            return Group + "\\" + Name;
+        }
+
+        /// <summary>
+        /// Returns the localised text name of the requested account. This varies by locale so has to be derrived on the users system.
+        /// </summary>
+        /// <param name="AccountSID">SID of the account whose localised name is required</param>
+        /// <returns>Localised name of the account</returns>
+        /// <remarks>The SID shold be in a form similar to S-1-5-18</remarks>
+        protected static string GetLocalAccountName(string AccountSID)
+        {
+            SecurityIdentifier sid = new SecurityIdentifier(AccountSID);
+            NTAccount acct = (NTAccount)sid.Translate(typeof(NTAccount));
+            LogMessage("GetLocalAccountName", "SID: " + sid + ", Returning:" + acct.Value);
+            return acct.Value;
+        }
+
     }
+
 }

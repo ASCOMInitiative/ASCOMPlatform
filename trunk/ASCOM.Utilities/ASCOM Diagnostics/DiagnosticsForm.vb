@@ -6096,6 +6096,12 @@ Public Class DiagnosticsForm
             CompareDouble("AstroUtilTests", "ConditionRA 23.999", AstroUtil.ConditionRA(23.999), 23.999, TOLERANCE_E6)
             CompareDouble("AstroUtilTests", "ConditionRA -1.0", AstroUtil.ConditionRA(-1.0), 23.0, TOLERANCE_E6)
             CompareDouble("AstroUtilTests", "ConditionRA 25.0", AstroUtil.ConditionRA(25.0), 1.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 0.0", AstroUtil.Range(0.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 359.0", AstroUtil.Range(359.0, 0.0, True, 360.0, False), 359.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 -30.0", AstroUtil.Range(-30.0, 0.0, True, 360.0, False), 330.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 390.0", AstroUtil.Range(390.0, 0.0, True, 360.0, False), 30.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 360.0", AstroUtil.Range(360.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:360.0 360.0", AstroUtil.Range(360.0, 0.0, True, 360.0, True), 360.0, TOLERANCE_E6)
 
             CompareBoolean("AstroUtilTests", "DeltaUT", (AstroUtil.DeltaUT(AstroUtil.JulianDateTT(0.0)) >= -1.0) And (AstroUtil.DeltaUT(AstroUtil.JulianDateTT(0.0)) <= 1.0), True)
             Events = GetEvents(ASCOM.Astrometry.EventType.SunRiseSunset, 5, 8, 2012, 51.0, -60.0, -5.0)
@@ -6140,8 +6146,8 @@ Public Class DiagnosticsForm
             CompareDouble("AstroUtilTests", "Events Astronomical Twighlight Start", Events.RiseTime(0), 1.01115193589165, TOLERANCE_E5)
             CompareDouble("AstroUtilTests", "Events Astronomical Twighlight End", Events.SetTime(0), 22.9472021943943, TOLERANCE_E5)
 
-            CompareDouble("", "Moon Illumination", AstroUtil.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
-            CompareDouble("", "Moon Phase", AstroUtil.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Moon Illumination", AstroUtil.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Moon Phase", AstroUtil.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)
             TL.BlankLine()
 
             Try
