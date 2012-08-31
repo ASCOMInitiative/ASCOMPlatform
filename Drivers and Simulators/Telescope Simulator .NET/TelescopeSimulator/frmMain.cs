@@ -328,9 +328,7 @@ namespace ASCOM.Simulator
             }
             else
             {
-                
                 TelescopeHardware.SlewDirection = SlewDirection.SlewEast;
-                
             }
             if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
             {
@@ -356,13 +354,11 @@ namespace ASCOM.Simulator
             TelescopeHardware.SlewState = SlewType.SlewHandpad;
             if (TelescopeHardware.AlignmentMode == 0)
             {
-                TelescopeHardware.SlewDirection = SlewDirection.SlewRight;
+                TelescopeHardware.SlewDirection = SlewDirection.SlewLeft;
             }
             else
             {
-
                 TelescopeHardware.SlewDirection = SlewDirection.SlewWest;
-
             }
             if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
             {
