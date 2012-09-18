@@ -13,6 +13,7 @@
 // Date			Who	Vers	Description
 // -----------	---	-----	-------------------------------------------------------
 // 07-JUL-2009	rbt	1.0.0	Initial edit, from ASCOM Telescope Driver template
+// 18-SEP-2102  Rick Burke  Improved support for simulating pulse guiding
 // --------------------------------------------------------------------------------
 //
 
@@ -115,6 +116,10 @@ namespace ASCOM.Simulator
         private static double slewSpeedMedium;
         private static double slewSpeedSlow;
 
+		public static double guideDurationShort { get; private set; }
+		public static double guideDurationMedium { get; private set; }
+		public static double guideDurationLong { get; private set; }
+
         private static double slewSettleTime;
 
         private static bool southernHemisphere;
@@ -123,7 +128,9 @@ namespace ASCOM.Simulator
 
         public static bool isPulseGuidingRa;
         public static bool isPulseGuidingDec;
-        public static DateTime pulseGuideRaEndTime;
+		public static DateTime pulseGuideRaStartTime;
+		public static DateTime pulseGuideDecStartTime;
+		public static DateTime pulseGuideRaEndTime;
         public static DateTime pulseGuideDecEndTime;
 
 
@@ -319,6 +326,10 @@ namespace ASCOM.Simulator
                 slewSpeedFast = maximumSlewRate * SharedResources.TIMER_INTERVAL;
                 slewSpeedMedium = slewSpeedFast * 0.1;
                 slewSpeedSlow = slewSpeedFast * 0.02;
+
+				guideDurationShort = 0.8 * SharedResources.TIMER_INTERVAL * 1000.0;
+				guideDurationMedium = 2.0 * guideDurationShort;
+				guideDurationLong = 2.0 * guideDurationMedium;
 
                 guideRateRightAscension = 15.0 * (1.0 / 3600.0) / SharedResources.SIDRATE;
                 guideRateDeclination = guideRateRightAscension;
@@ -564,33 +575,75 @@ namespace ASCOM.Simulator
             {
                 // do pulse guiding
                 ChangePark(false);
-                if (pulseGuideRaEndTime >= DateTime.Now)
-                {
-                    SharedResources.TrafficLine(SharedResources.MessageType.Slew, "(PulseGuide in RA complete)");
-                    isPulseGuidingRa = false;
-                }
-                if (pulseGuideDecEndTime > DateTime.Now)
-                {
-                    SharedResources.TrafficLine(SharedResources.MessageType.Slew, "(PulseGuide in Dec complete)");
-                    isPulseGuidingDec = false;
-                }
 
-                double raRate;
+				double raRate;
                 if (tracking) raRate = rightAscensionRate;
                 else raRate = 15;
                 raRate = (raRate / SharedResources.SIDRATE) / 3600;
-                if (isPulseGuidingRa) raRate = raRate + (guideRateRightAscension / 15);
+
+				DateTime now = DateTime.Now;
+
+				if ( isPulseGuidingRa )
+				{
+					raRate = raRate + ( guideRateRightAscension / 15 );
+
+					DateTime endTime;
+					TimeSpan duration;
+
+					if ( DateTime.Compare( now, pulseGuideRaEndTime ) < 0 )
+					{
+						endTime = now;
+						duration = endTime - pulseGuideRaStartTime;
+						pulseGuideRaStartTime = now;
+					}
+					else
+					{
+						endTime = pulseGuideRaEndTime;
+						duration = endTime - pulseGuideRaStartTime;
+					}
+
+					rightAscension += raRate * duration.TotalSeconds;
+				}
 
                 double decRate = declinationRate / 3600;
-                if (isPulseGuidingDec) decRate += guideRateDeclination;
 
-                rightAscension += raRate * SharedResources.TIMER_INTERVAL;
-                declination += decRate * SharedResources.TIMER_INTERVAL;
+				if ( isPulseGuidingDec )
+				{
+					decRate += guideRateDeclination;
+
+					DateTime endTime;
+					TimeSpan duration;
+
+					if ( DateTime.Compare( now, pulseGuideDecEndTime ) < 0 )
+					{
+						endTime = now;
+						duration = endTime - pulseGuideDecStartTime;
+						pulseGuideDecStartTime = now;
+					}
+					else
+					{
+						endTime = pulseGuideDecEndTime;
+						duration = endTime - pulseGuideDecStartTime;
+					}
+
+					declination += decRate * duration.TotalSeconds;
+				}
 
                 declination = AstronomyFunctions.RangeDec(declination);
                 rightAscension = AstronomyFunctions.RangeRA(rightAscension);
 
-                CalculateAltAz();
+				if ( isPulseGuidingRa && pulseGuideRaEndTime <= now )
+				{
+					SharedResources.TrafficLine( SharedResources.MessageType.Slew, "(PulseGuide in RA complete)" );
+					isPulseGuidingRa = false;
+				}
+				if ( isPulseGuidingDec && pulseGuideDecEndTime <= now )
+				{
+					SharedResources.TrafficLine( SharedResources.MessageType.Slew, "(PulseGuide in Dec complete)" );
+					isPulseGuidingDec = false;
+				}
+
+				CalculateAltAz();
             }
 
             //Calculate Current SideOfPier

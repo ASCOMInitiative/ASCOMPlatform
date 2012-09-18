@@ -5,20 +5,23 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.Controls;
+using System.Diagnostics;
 
 namespace ASCOM.Simulator
 {
     public partial class FrmMain : Form
     {
+		private const double m_guideRate = 1.0; // 1 deg/sec
+
         delegate void SetTextCallback(string text);
 
         private Utilities.Util m_Util = new ASCOM.Utilities.Util();
+
         public FrmMain()
         {
             InitializeComponent(); 
             this.BringToFront();
             //this.BackColor = Color.Brown;
-
         }
         public void DoSetupDialog()
         {
@@ -244,6 +247,13 @@ namespace ASCOM.Simulator
 
         private void buttonSlew1_MouseDown(object sender, MouseEventArgs e)
         {
+			if ( this.radioButton2.Checked )
+			{
+				// Nothing to do for pulse guiding here.
+
+				return;
+			}
+
             TelescopeHardware.SlewState = SlewType.SlewHandpad;
             if (TelescopeHardware.AlignmentMode == 0)
             {
@@ -279,12 +289,62 @@ namespace ASCOM.Simulator
 
         private void buttonSlew1_MouseUp(object sender, MouseEventArgs e)
         {
-            TelescopeHardware.SlewState = SlewType.SlewNone;
+			if ( this.radioButton1.Checked )
+			{
+				TelescopeHardware.SlewState = SlewType.SlewNone;
+
+				return;
+			}
+
+			double duration = TelescopeHardware.guideDurationShort;
+
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                duration = TelescopeHardware.guideDurationMedium;
+            }
+            else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                duration = TelescopeHardware.guideDurationLong;
+            }
+
+			double guideRate = ( buttonSlew1.Text == "S" ) ? -m_guideRate : m_guideRate;
+			SetPulseGuideParms( guideRate, 0.0, duration );
         }
+
+		private void SetPulseGuideParms( double guideRateDec, double guideRateRa, double duration )
+		{
+			Debug.Assert( guideRateDec != 0.0 || guideRateRa != 0.0 );
+			Debug.Assert( !( guideRateDec != 0.0 && guideRateRa != 0.0 ) );
+
+			DateTime startTime = DateTime.Now;
+			DateTime endTime = startTime + TimeSpan.FromMilliseconds( duration );
+
+			if ( guideRateDec != 0.0 )
+			{
+				TelescopeHardware.GuideRateDeclination = guideRateDec;
+				TelescopeHardware.pulseGuideDecStartTime = startTime;
+				TelescopeHardware.pulseGuideDecEndTime = endTime;
+				TelescopeHardware.isPulseGuidingDec = true;
+			}
+			else
+			{
+				TelescopeHardware.GuideRateRightAscension = guideRateRa;
+				TelescopeHardware.pulseGuideRaStartTime = startTime;
+				TelescopeHardware.pulseGuideRaEndTime = endTime;
+				TelescopeHardware.isPulseGuidingRa = true;
+			}
+		}
 
         private void buttonSlew2_MouseDown(object sender, MouseEventArgs e)
         {
-            TelescopeHardware.SlewState = SlewType.SlewHandpad;
+			if ( this.radioButton2.Checked )
+			{
+				// Nothing to do for pulse guiding here.
+
+				return;
+			}
+
+			TelescopeHardware.SlewState = SlewType.SlewHandpad;
             if (TelescopeHardware.AlignmentMode == 0)
             {
                 TelescopeHardware.SlewDirection = SlewDirection.SlewDown;
@@ -316,12 +376,38 @@ namespace ASCOM.Simulator
 
         private void buttonSlew2_MouseUp(object sender, MouseEventArgs e)
         {
-            TelescopeHardware.SlewState = SlewType.SlewNone;
-        }
+			if ( this.radioButton1.Checked )
+			{
+				TelescopeHardware.SlewState = SlewType.SlewNone;
+
+				return;
+			}
+
+			double duration = TelescopeHardware.guideDurationShort;
+
+			if ( ( Control.ModifierKeys & Keys.Shift ) == Keys.Shift )
+			{
+				duration = TelescopeHardware.guideDurationMedium;
+			}
+			else if ( ( Control.ModifierKeys & Keys.Control ) == Keys.Control )
+			{
+				duration = TelescopeHardware.guideDurationLong;
+			}
+
+			double guideRate = ( buttonSlew1.Text == "S" ) ? m_guideRate : -m_guideRate;
+			SetPulseGuideParms( guideRate, 0.0, duration );
+		}
 
         private void buttonSlew3_MouseDown(object sender, MouseEventArgs e)
         {
-            TelescopeHardware.SlewState = SlewType.SlewHandpad;
+			if ( this.radioButton2.Checked )
+			{
+				// Nothing to do for pulse guiding here.
+
+				return;
+			}
+
+			TelescopeHardware.SlewState = SlewType.SlewHandpad;
             if (TelescopeHardware.AlignmentMode == 0)
             {
                 TelescopeHardware.SlewDirection = SlewDirection.SlewRight;
@@ -346,12 +432,38 @@ namespace ASCOM.Simulator
 
         private void buttonSlew3_MouseUp(object sender, MouseEventArgs e)
         {
-            TelescopeHardware.SlewState = SlewType.SlewNone;
-        }
+			if ( this.radioButton1.Checked )
+			{
+				TelescopeHardware.SlewState = SlewType.SlewNone;
+	
+				return;
+			}
+
+			double duration = TelescopeHardware.guideDurationShort;
+
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                duration = TelescopeHardware.guideDurationMedium;
+            }
+            else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                duration = TelescopeHardware.guideDurationLong;
+            }
+
+
+			SetPulseGuideParms( 0.0, m_guideRate, duration );
+		}
 
         private void buttonSlew4_MouseDown(object sender, MouseEventArgs e)
         {
-            TelescopeHardware.SlewState = SlewType.SlewHandpad;
+			if ( this.radioButton2.Checked )
+			{
+				// Nothing to do for pulse guiding here.
+
+				return;
+			}
+
+			TelescopeHardware.SlewState = SlewType.SlewHandpad;
             if (TelescopeHardware.AlignmentMode == 0)
             {
                 TelescopeHardware.SlewDirection = SlewDirection.SlewLeft;
@@ -376,8 +488,26 @@ namespace ASCOM.Simulator
 
         private void buttonSlew4_MouseUp(object sender, MouseEventArgs e)
         {
-            TelescopeHardware.SlewState = SlewType.SlewNone;
-        }
+			if ( this.radioButton1.Checked )
+			{
+				TelescopeHardware.SlewState = SlewType.SlewNone;
+
+				return;
+			}
+
+			double duration = TelescopeHardware.guideDurationShort;
+
+			if ( ( Control.ModifierKeys & Keys.Shift ) == Keys.Shift )
+			{
+				duration = TelescopeHardware.guideDurationMedium;
+			}
+			else if ( ( Control.ModifierKeys & Keys.Control ) == Keys.Control )
+			{
+				duration = TelescopeHardware.guideDurationLong;
+			}
+
+			SetPulseGuideParms( 0.0, -m_guideRate, duration );
+		}
 
         private void buttonSlew0_Click(object sender, EventArgs e)
         {
