@@ -1349,11 +1349,11 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("BayerOffsetX (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BayerOffsetX when not connected");
                 if (this.sensorType == DeviceInterface.SensorType.Monochrome)
-                    throw new NotImplementedException("BayerOffsetX is not available with a monochrome camera");
+                    throw new PropertyNotImplementedException("BayerOffsetX (Monochrome camera)", false);
                 return this.bayerOffsetX;
             }
         }
@@ -1370,11 +1370,11 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("BayerOffsetY (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BayerOffsetY when not connected");
                 if (this.sensorType == DeviceInterface.SensorType.Monochrome)
-                    throw new NotImplementedException("BayerOffsetY is not available with a monochrome camera");
+                    throw new PropertyNotImplementedException("BayerOffsetY (Monochrome camera)", false);
                 return this.bayerOffsetY;
             }
         }
@@ -1390,7 +1390,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("CanFastReadout (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't read CanFastReadout when not connected");
                 return this.canFastReadout;
@@ -1410,7 +1410,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("DriverInfo (Interface V1)", false);
                 String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 return (s_csDriverDescription + " - Version " + strVersion);
             }
@@ -1426,7 +1426,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("DriverVersion (Interface V1)");
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 return String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
             }
@@ -1441,7 +1441,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("ExposureMax (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureMax when not connected");
                 return this.exposureMax;
@@ -1457,7 +1457,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("ExposureMin (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureMin when not connected");
                 return this.exposureMin;
@@ -1473,7 +1473,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("ExposureResolution (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureResolution when not connected");
                 return this.exposureResolution;
@@ -1490,17 +1490,17 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("FastReadout (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't read FastReadout when not connected");
                 if (!this.canFastReadout)
-                    throw new ASCOM.PropertyNotImplementedException("FastReadout", false);
+                    throw new PropertyNotImplementedException("FastReadout", false);
                 return this.fastReadout;
             }
             set
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("FastReadout (Interface V1)", true);
                 if (!this.connected)
                     throw new NotConnectedException("Can't set FastReadout when not connected");
                 if (!this.canFastReadout)
@@ -1519,21 +1519,21 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("Gain (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get Gain when not connected");
                 if (this.gainMax <= this.gainMin)
-                    throw new ASCOM.PropertyNotImplementedException("Gain", false);
+                    throw new PropertyNotImplementedException("Gain", false);
                 return this.gain;
             }
             set
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("Gain (Interface V1)", true);
                 if (!this.connected)
                     throw new NotConnectedException("Can't set Gain when not connected");
                 if (this.gainMax <= this.gainMin)
-                    throw new ASCOM.PropertyNotImplementedException("Gain", true);
+                    throw new PropertyNotImplementedException("Gain", true);
                 if (value < this.gainMin || value > this.gainMax)
                     throw new ASCOM.InvalidValueException("Gain", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", this.gainMin, this.gainMax));
                 this.gain = value;
@@ -1550,13 +1550,13 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("GainMax (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get GainMax when not connected");
                 if (this.gainMax <= this.gainMin)
-                    throw new ASCOM.PropertyNotImplementedException("GainMax", false);
+                    throw new PropertyNotImplementedException("GainMax", false);
                 if (this.gains != null && this.gains.Count > 0)
-                    throw new ASCOM.InvalidOperationException("GainMax cannot be read if there is an array of Gains in use");
+                    throw new InvalidOperationException("GainMax cannot be read if there is an array of Gains in use");
                 return this.gainMax;
             }
         }
@@ -1571,13 +1571,13 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("GainMin (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get GainMin when not connected");
                 if (this.gainMax <= this.gainMin)
-                    throw new ASCOM.PropertyNotImplementedException("GainMin", false);
+                    throw new PropertyNotImplementedException("GainMin", false);
                 if (this.gains != null && this.gains.Count > 0)
-                    throw new ASCOM.InvalidOperationException("GainMin cannot be read if there is an array of Gains in use");
+                    throw new InvalidOperationException("GainMin cannot be read if there is an array of Gains in use");
                 return this.gainMin;
             }
         }
@@ -1592,11 +1592,11 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("Gains (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get Gains when not connected");
                 if (this.gains == null || this.gains.Count == 0)
-                    throw new ASCOM.PropertyNotImplementedException("Gains", false);
+                    throw new PropertyNotImplementedException("Gains", false);
                 return this.gains;
             }
         }
@@ -1619,7 +1619,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("Name (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get camera Name when not connected");
                 return "Sim " + this.SensorName;
@@ -1636,7 +1636,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("PercentCompleted (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get PercentCompleted when not connected");
                 switch (this.cameraState)
@@ -1665,27 +1665,27 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("ReadoutMode (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutMode when not connected");
                 //if (this.readoutModes == null || this.readoutModes.Count < 1)
                 //    throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
                 if (this.canFastReadout)
-                    throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
+                    throw new PropertyNotImplementedException("ReadoutMode", false);
                 return this.readoutMode;
             }
             set
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("ReadoutMode (Interface V1)", true);
                 if (!this.connected)
                     throw new NotConnectedException("Can't set ReadoutMode when not connected");
                 if (this.readoutModes == null || this.readoutModes.Count < 1)
-                    throw new ASCOM.PropertyNotImplementedException("ReadoutMode", true);
+                    throw new PropertyNotImplementedException("ReadoutMode", true);
                 if (this.canFastReadout)
-                    throw new ASCOM.PropertyNotImplementedException("ReadoutMode", true);
+                    throw new PropertyNotImplementedException("ReadoutMode", true);
                 if (value < 0 || value > this.readoutModes.Count - 1)
-                    throw new ASCOM.InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", 0, this.readoutModes.Count - 1));
+                    throw new InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", 0, this.readoutModes.Count - 1));
                 this.readoutMode = value;
             }
         }
@@ -1701,13 +1701,13 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("ReadoutModes (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutModes when not connected");
                 if (this.canFastReadout)
-                    throw new ASCOM.PropertyNotImplementedException("ReadoutModes", false);
+                    throw new PropertyNotImplementedException("ReadoutModes", false);
                 if (this.readoutModes == null || this.readoutModes.Count < 1)
-                    throw new ASCOM.PropertyNotImplementedException("ReadoutModes", false);
+                    throw new PropertyNotImplementedException("ReadoutModes", false);
                 return this.readoutModes;
             }
         }
@@ -1723,7 +1723,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("SensorName (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get SensorName when not connected");
                 return this.sensorName;
@@ -1740,7 +1740,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new System.NotImplementedException("Not available for interface Version 1");
+                    throw new PropertyNotImplementedException("SensorType (Interface V1)", false);
                 if (!this.connected)
                     throw new NotConnectedException("Can't get SensorType when not connected");
                 return this.sensorType;
@@ -1901,7 +1901,7 @@ namespace ASCOM.Simulator
 
                 profile.WriteValue(s_csDriverID, STR_CanFastReadout, this.canFastReadout.ToString(CultureInfo.InvariantCulture));
 
-                if (this.readoutModes == null || this.readoutModes.Count <=1 )
+                if (this.readoutModes == null || this.readoutModes.Count <= 1)
                 {
                     profile.DeleteValue(s_csDriverID, "ReadoutModes");
                 }
