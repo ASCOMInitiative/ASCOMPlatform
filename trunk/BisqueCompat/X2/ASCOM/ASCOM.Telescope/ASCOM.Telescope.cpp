@@ -59,7 +59,7 @@ X2Mount::X2Mount(const char* pszDriverSelection,
 
 	m_szIniKey  = "ASCOM_MOUNT";
 	m_pszDriverInfoDetailedInfo		= "ASCOM telescope driver adapter for X2";
-	m_dDriverInfoVersion			= 1.0;
+	m_dDriverInfoVersion			= 1.03;
 
 	//
 	// Because TheSky doesn't honor changes to X2 driver info and abstractions

@@ -55,6 +55,9 @@
 //						true for scopes that cannot do this. Reverse sense
 //						of read-me popup for clarity.
 // 04-Jan-12	rbd		1.0.1 - Release. No changes.
+// 17-Oct-12    pwgs    1.0.3 - Ensure that SideofPier value pierUnknown
+//                      is treated as "cannot supply SideOfPier", it was being
+//                      treated as "can supply SideOfPier".
 //========================================================================
 
 #include "StdAfx.h"
@@ -308,8 +311,14 @@ short InitScope(void)
 		// Determine if it reports SOP (pointing state)
 		//
 		__try {
-			get_integer(L"SideOfPier", true);					// *SILENT*
-			_bScopeCanSideOfPier = true;
+			if (get_integer(L"SideOfPier", true) == -1)         // *SILENT*
+			{
+				_bScopeCanSideOfPier = false;                   // Received pierUnknown (-1) so flag as cannot determine SideOfPier
+			}					
+			else
+			{
+				_bScopeCanSideOfPier = true;                    // Received pierEast or pierWest (0 or 1) so flag as can determine SideOfPier
+			}
 		} __except(EXCEPTION_EXECUTE_HANDLER) {
 			_bScopeCanSideOfPier = false;
 		}
