@@ -1332,19 +1332,20 @@ namespace ASCOM.Simulator
 
         private static void CheckVersionOne(string property, bool accessorSet)
         {
-            if (TelescopeHardware.VersionOneOnly)
-            {
-                SharedResources.TrafficEnd( property + " invalid in version 1");
-                throw new PropertyNotImplementedException(property, accessorSet);
-            }
+            CheckVersionOne(property);
+            //if (TelescopeHardware.VersionOneOnly)
+            //{
+            //    SharedResources.TrafficEnd( property + " invalid in version 1");
+            //    throw new PropertyNotImplementedException(property, accessorSet);
+            //}
         }
 
         private static void CheckVersionOne(string property)
         {
             if (TelescopeHardware.VersionOneOnly)
             {
-                SharedResources.TrafficEnd(property + " invalid in version 1");
-                throw new MethodNotImplementedException(property);
+                SharedResources.TrafficEnd(property + " is not implemented in version 1");
+                throw new System.NotImplementedException(property);
             }
         }
 
