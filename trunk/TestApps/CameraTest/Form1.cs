@@ -26,6 +26,10 @@ namespace CameraTest
         private decimal numX;
         private decimal numY;
 
+        // local copies of the bayer offsets
+        private int bayerOffsetX = 0;
+        private int bayerOffsetY = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -164,6 +168,8 @@ namespace CameraTest
             checkBoxDarkFrame.Enabled = oCamera.HasShutter;
 
             // set Camera Version 2 properties, the client should return this correctly, even for an unversioned driver.
+                    this.bayerOffsetX = oCamera.BayerOffsetX;
+                    this.bayerOffsetY = oCamera.BayerOffsetY;
             if (oCamera.InterfaceVersion >= 2)
             {
                 groupBoxV2.Visible = true;
@@ -171,10 +177,12 @@ namespace CameraTest
                 labelSensorType.Text = (oCamera.SensorType).ToString();
                 try
                 {
-                    labelBayerOffsetX.Text = oCamera.BayerOffsetX.ToString(CultureInfo.CurrentCulture);
-                    labelBayerOffsetY.Text = Convert.ToString(oCamera.BayerOffsetY, CultureInfo.CurrentCulture);
+                    this.bayerOffsetX = oCamera.BayerOffsetX;
+                    this.bayerOffsetY = oCamera.BayerOffsetY;
+                    labelBayerOffsetX.Text = this.bayerOffsetX.ToString(CultureInfo.CurrentCulture);
+                    labelBayerOffsetY.Text = Convert.ToString(this.bayerOffsetY, CultureInfo.CurrentCulture);
                 }
-                catch (ASCOM.NotImplementedException)
+                catch (ASCOM.PropertyNotImplementedException)
                 {
                     labelBayerOsX.Enabled = 
                         labelBayerOsY.Enabled =
@@ -384,8 +392,8 @@ namespace CameraTest
                             break;
                         case ASCOM.DeviceInterface.SensorType.LRGB:
                             displayProcess = LrgbProcess;
-                            x0 = (oCamera.BayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
-                            y0 = (oCamera.BayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
+                            x0 = (this.bayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
+                            y0 = (this.bayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
                             stepX = 4;
                             stepY = 4;
                             stepH = 2;
@@ -448,8 +456,8 @@ namespace CameraTest
         unsafe private void SetBayerOffsets(int stepX, int stepY)
         {
             // set the bayer offsets
-            x0 = (oCamera.BayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
-            y0 = (oCamera.BayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
+            x0 = (this.bayerOffsetX + oCamera.StartX * oCamera.BinX) & (stepX - 1);
+            y0 = (this.bayerOffsetY + oCamera.StartY * oCamera.BinY) & (stepY - 1);
             x1 = (x0 + 1) & (stepX - 1);
             x2 = (x0 + 2) & (stepX - 1);
             x3 = (x0 + 3) & (stepX - 1);

@@ -1349,11 +1349,11 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("BayerOffsetX (Interface V1)", false);
+                    throw new System.NotSupportedException("BayerOffsetX (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BayerOffsetX when not connected");
                 if (this.sensorType == DeviceInterface.SensorType.Monochrome)
-                    throw new PropertyNotImplementedException("BayerOffsetX (Monochrome camera)", false);
+                    throw new PropertyNotImplementedException("BayerOffsetX is not available with a monochrome camera", false);
                 return this.bayerOffsetX;
             }
         }
@@ -1370,11 +1370,11 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("BayerOffsetY (Interface V1)", false);
+                    throw new System.NotSupportedException("BayerOffsetY (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read BayerOffsetY when not connected");
                 if (this.sensorType == DeviceInterface.SensorType.Monochrome)
-                    throw new PropertyNotImplementedException("BayerOffsetY (Monochrome camera)", false);
+                    throw new PropertyNotImplementedException("BayerOffsetY is not available with a monochrome camera", false);
                 return this.bayerOffsetY;
             }
         }
@@ -1390,7 +1390,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("CanFastReadout (Interface V1)", false);
+                    throw new System.NotSupportedException("CanFastReadout (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read CanFastReadout when not connected");
                 return this.canFastReadout;
@@ -1410,7 +1410,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("DriverInfo (Interface V1)", false);
+                    throw new System.NotSupportedException("DriverInfo (not supported for Interface V1)");
                 String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 return (s_csDriverDescription + " - Version " + strVersion);
             }
@@ -1426,7 +1426,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("DriverVersion (Interface V1)");
+                    throw new System.NotSupportedException("DriverVersion (not supported for Interface V1)");
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 return String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
             }
@@ -1441,7 +1441,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("ExposureMax (Interface V1)", false);
+                    throw new System.NotSupportedException("ExposureMax (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureMax when not connected");
                 return this.exposureMax;
@@ -1457,7 +1457,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("ExposureMin (Interface V1)", false);
+                    throw new System.NotSupportedException("ExposureMin (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureMin when not connected");
                 return this.exposureMin;
@@ -1473,7 +1473,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("ExposureResolution (Interface V1)", false);
+                    throw new System.NotSupportedException("ExposureResolution (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read ExposureResolution when not connected");
                 return this.exposureResolution;
@@ -1490,7 +1490,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("FastReadout (Interface V1)", false);
+                    throw new System.NotSupportedException("FastReadout (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't read FastReadout when not connected");
                 if (!this.canFastReadout)
@@ -1500,7 +1500,7 @@ namespace ASCOM.Simulator
             set
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("FastReadout (Interface V1)", true);
+                    throw new System.NotSupportedException("FastReadout (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't set FastReadout when not connected");
                 if (!this.canFastReadout)
@@ -1519,7 +1519,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("Gain (Interface V1)", false);
+                    throw new System.NotSupportedException("Gain (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get Gain when not connected");
                 if (this.gainMax <= this.gainMin)
@@ -1529,7 +1529,7 @@ namespace ASCOM.Simulator
             set
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("Gain (Interface V1)", true);
+                    throw new System.NotSupportedException("Gain (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't set Gain when not connected");
                 if (this.gainMax <= this.gainMin)
@@ -1550,7 +1550,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("GainMax (Interface V1)", false);
+                    throw new System.NotSupportedException("GainMax (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get GainMax when not connected");
                 if (this.gainMax <= this.gainMin)
@@ -1571,7 +1571,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("GainMin (Interface V1)", false);
+                    throw new System.NotSupportedException("GainMin (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get GainMin when not connected");
                 if (this.gainMax <= this.gainMin)
@@ -1592,7 +1592,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("Gains (Interface V1)", false);
+                    throw new System.NotSupportedException("Gains (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get Gains when not connected");
                 if (this.gains == null || this.gains.Count == 0)
@@ -1619,7 +1619,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("Name (Interface V1)", false);
+                    throw new System.NotSupportedException("Name (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get camera Name when not connected");
                 return "Sim " + this.SensorName;
@@ -1636,7 +1636,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("PercentCompleted (Interface V1)", false);
+                    throw new System.NotSupportedException("PercentCompleted (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get PercentCompleted when not connected");
                 switch (this.cameraState)
@@ -1665,7 +1665,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("ReadoutMode (Interface V1)", false);
+                    throw new System.NotSupportedException("ReadoutMode (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutMode when not connected");
                 //if (this.readoutModes == null || this.readoutModes.Count < 1)
@@ -1677,7 +1677,7 @@ namespace ASCOM.Simulator
             set
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("ReadoutMode (Interface V1)", true);
+                    throw new System.NotSupportedException("ReadoutMode (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't set ReadoutMode when not connected");
                 if (this.readoutModes == null || this.readoutModes.Count < 1)
@@ -1701,7 +1701,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("ReadoutModes (Interface V1)", false);
+                    throw new System.NotSupportedException("ReadoutModes (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get ReadoutModes when not connected");
                 if (this.canFastReadout)
@@ -1723,7 +1723,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("SensorName (Interface V1)", false);
+                    throw new System.NotSupportedException("SensorName (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get SensorName when not connected");
                 return this.sensorName;
@@ -1740,7 +1740,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (interfaceVersion == 1)
-                    throw new PropertyNotImplementedException("SensorType (Interface V1)", false);
+                    throw new System.NotSupportedException("SensorType (not supported for Interface V1)");
                 if (!this.connected)
                     throw new NotConnectedException("Can't get SensorType when not connected");
                 return this.sensorType;
