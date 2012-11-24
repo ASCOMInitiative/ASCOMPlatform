@@ -1,0 +1,53 @@
+
+Subject:
+Re: [ASCOM] Guiding bug near the meridian
+From:
+"astrodanco" <astrodanco@yahoo.com>
+Date:
+9/5/2012 10:21 AM
+To:
+ASCOM-Talk@yahoogroups.com
+
+Bob, does this help any?
+
+Here's the documentation for this interface (driver side):
+
+http://www.bisque.com/x2standard/class_asymmetrical_equatorial_interface.html#ad422c0fa8649c453f8b943d152f678e1
+
+For third-party applications wanting to obtain Beyond the Pole information, see this documentation:
+
+http://www.bisque.com/scripttheskyx/classsky6_r_a_s_c_o_m_tele.html#a5b49d7170516e44b43023317edaa473d
+
+
+
+
+------------------------------------
+
+For more information see http://ASCOM-Standards.org/.
+
+To unsubscribe from this group, send an email FROM THE ACCOUNT YOU USED TO SUBSCRIBE(!) to:
+ASCOM-Talk-unsubscribe@yahoogroups.com
+
+Yahoo! Groups Links
+
+<*> To visit your group on the web, go to:
+    http://groups.yahoo.com/group/ASCOM-Talk/
+
+<*> Your email settings:
+    Individual Email | Traditional
+
+<*> To change settings online go to:
+    http://groups.yahoo.com/group/ASCOM-Talk/join
+    (Yahoo! ID required)
+
+<*> To change settings via email:
+    ASCOM-Talk-digest@yahoogroups.com 
+    ASCOM-Talk-fullfeatured@yahoogroups.com
+
+<*> To unsubscribe from this group, send an email to:
+    ASCOM-Talk-unsubscribe@yahoogroups.com
+
+<*> Your use of Yahoo! Groups is subject to:
+    http://docs.yahoo.com/info/terms/
+
+
