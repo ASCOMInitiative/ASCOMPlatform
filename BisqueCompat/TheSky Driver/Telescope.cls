@@ -12,7 +12,7 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
-'---------------------------------------------------------------------
+ '---------------------------------------------------------------------
 ' This work is licensed under the Creative Commons Attribution-No Derivative Works
 ' 3.0 License. To view a copy of this license, visit
 '         http://creativecommons.org/licenses/by-nd/3.0/
@@ -166,6 +166,7 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 ' 11-Nov-11 cdr     Change to PulseGuide as suggested by Matthew Bisque
 ' 12-Nov-11 cdr     More change suggested by MB
 ' 15-Nov-11 cdr     5.2.10 stop dec guide AND start tracking.
+' 15-Nov-12 cdr     5.2.11 try to fix trackingRates and AxisRates errors in Conform
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -175,45 +176,45 @@ Private Const POLL_TIX As Long = 2000
 Private Const SIDRATE As Double = 0.9972695677
 Private Const degrad As Double = 0.0174532925199
 
-Public Enum AlignmentModes
-    algUnknown = -1
-    algAltAz = 0
-    algPolar = 1
-    algGermanPolar = 2
-End Enum
+'Public Enum AlignmentModes
+'    algUnknown = -1
+'    algAltAz = 0
+'    algPolar = 1
+'    algGermanPolar = 2
+'End Enum
 
-Public Enum EquatorialSystem
-    equOther = 0
-    equLocalTopocentric = 1
-    equJ2000 = 2
-    equJ2050 = 3
-    equB1950 = 4
-End Enum
+'Public Enum EquatorialSystem
+'    equOther = 0
+'    equLocalTopocentric = 1
+'    equJ2000 = 2
+'    equJ2050 = 3
+'    equB1950 = 4
+'End Enum
     
-Public Enum GuideDirections
-    guideNorth = 0
-    guideSouth = 1
-    guideEast = 2
-    guideWest = 3
-End Enum
+'Public Enum GuideDirections
+'    guideNorth = 0
+'    guideSouth = 1
+'    guideEast = 2
+'    guideWest = 3
+'End Enum
 
-Public Enum DriveRates
-    driveSidereal = 0
-    driveLunar = 1
-    driveSolar = 2
-    driveKing = 3
-End Enum
+'Public Enum DriveRates
+'    driveSidereal = 0
+'    driveLunar = 1
+'    driveSolar = 2
+'    driveKing = 3
+'End Enum
 
-Public Enum TelescopeAxes
-    axisPrimary = 0
-    axisSecondary = 1
-    axisTertiary = 2
-End Enum
+'Public Enum TelescopeAxes
+'    axisPrimary = 0
+'    axisSecondary = 1
+'    axisTertiary = 2
+'End Enum
 
-Public Enum PierSide
-    pierEast = 0
-    pierWest = 1
-End Enum
+'Public Enum PierSide
+'    pierEast = 0
+'    pierWest = 1
+'End Enum
 
 Public Enum TheSkyType
     TheSky5 = 0
@@ -249,6 +250,11 @@ Private m_bTrackOffsets As Boolean
 Private m_bPulseGuide As Boolean
 Private m_bCanSetTracking As Boolean
 Private m_iAlignmentMode As AlignmentModes
+
+Private m_trackingRates As TrackingRates
+Private m_axisRates As AxisRates
+Private m_canGetPierSide As Boolean
+Private m_theSkyX_sky6RASCOMTele As Object      ' needed to get pier side
 
 Private Declare Function GetTickCount Lib "kernel32" () As Long
 Private Declare Sub SleepEx Lib "kernel32" (ByVal dwMilliseconds As Long, _
@@ -306,7 +312,7 @@ Private Sub Class_Initialize()
     buf = m_Profile.GetValue(ID, "AlignmentMode")   ' Default to algUnknown (maybe the default should be GermanPolar, for the Paramount?)
     Select Case buf
         Case "algUnknown"
-            m_iAlignmentMode = algUnknown
+            m_iAlignmentMode = -1
         Case "algAltAz"
             m_iAlignmentMode = algAltAz
         Case "algPolar"
@@ -314,8 +320,12 @@ Private Sub Class_Initialize()
         Case "algGermanPolar"
             m_iAlignmentMode = algGermanPolar
         Case Else
-            m_iAlignmentMode = algUnknown
+            m_iAlignmentMode = -1
     End Select
+    
+    buf = m_Profile.GetValue(ID, "CanGetPierSide")
+    If buf = "" Then buf = "False"
+    m_canGetPierSide = CBool(buf)
 
     Set m_Profile = Nothing                         ' Release Profile
     
@@ -333,6 +343,9 @@ Private Sub Class_Initialize()
     m_bCanSetTracking = True                        ' Assume tracking till we connect
     m_Util.LoadDLL App.Path & "\astro32.dll"        ' Assure this is loaded and available
 
+    Set m_trackingRates = New TrackingRates
+    m_trackingRates.Add DriveRates.driveSidereal
+    Set m_axisRates = New AxisRates
 End Sub
 
 Private Sub Class_Terminate()
@@ -347,7 +360,7 @@ Public Property Get AlignmentMode() As AlignmentModes
     ' bsk - if alignment mode is unknown, go ahead and return "NOT_IMPLEMENTED". That way
     ' if some app depends on the prior behavior somehow (unlikely, but hey, it could happen)
     ' we can revert back to the old way by changing the combobox.
-    If m_iAlignmentMode = algUnknown Then Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+    If m_iAlignmentMode = -1 Then Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Property AlignmentMode" & MSG_NOT_IMPLEMENTED
     
     AlignmentMode = m_iAlignmentMode
@@ -511,13 +524,15 @@ Public Property Get CanUnpark() As Boolean
 End Property
 
 Public Property Get Connected() As Boolean
-
+    If m_SkyTele Is Nothing Then
+        Connected = False
+        Exit Property
+    End If
     If m_SkyTele.IsConnected = 1 Then
         Connected = True
     Else
         Connected = False
     End If
-    
 End Property
 
 Public Property Let Connected(ByVal newVal As Boolean)
@@ -657,7 +672,6 @@ End Property
 
 
 Public Property Get DriverInfo() As String
-
     '
     ' Use the Project/Properties sheet, Make tab, to set these
     ' items. That way they will show in the Version tab of the
@@ -672,7 +686,6 @@ Public Property Get DriverInfo() As String
         DriverInfo = DriverInfo & vbCrLf & App.LegalCopyright
     If App.Comments <> "" Then _
         DriverInfo = DriverInfo & vbCrLf & App.Comments
-        
 End Property
 
 Public Property Get DriverVersion() As String
@@ -681,9 +694,9 @@ Public Property Get DriverVersion() As String
     
 End Property
 
-Public Property Get EquatorialSystem() As EquatorialSystem
+Public Property Get EquatorialSystem() As EquatorialCoordinateType
 
-    EquatorialSystem = equLocalTopocentric
+    EquatorialSystem = EquatorialCoordinateType.equLocalTopocentric
     
 End Property
 
@@ -695,17 +708,23 @@ Public Property Get FocalLength() As Double
 End Property
 
 Public Property Get GuideRateDeclination() As Double
-
     Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Property GuideRateDeclination" & MSG_NOT_IMPLEMENTED
+End Property
 
+Public Property Let GuideRateDeclination(ByVal RHS As Double)
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Property GuideRateDeclination" & MSG_NOT_IMPLEMENTED
 End Property
 
 Public Property Get GuideRateRightAscension() As Double
-
     Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Property GuideRateRightAscension" & MSG_NOT_IMPLEMENTED
+End Property
 
+Public Property Let GuideRateRightAscension(ByVal RHS As Double)
+    Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                "Property GuideRateRightAscension" & MSG_NOT_IMPLEMENTED
 End Property
 
 Public Property Get InterfaceVersion() As Integer
@@ -715,29 +734,21 @@ Public Property Get InterfaceVersion() As Integer
 End Property
 
 Public Property Get IsPulseGuiding() As Boolean
-
     If Not m_bPulseGuide Then
         Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                     "Property IsPulseGuiding" & MSG_NOT_IMPLEMENTED
     Else
         IsPulseGuiding = False                                        ' PulseGuide() is synchronous
     End If
-
-
-    
 End Property
 
 Public Property Get Name() As String
-
     Name = "TheSky"
-    
 End Property
 
 Public Property Get RightAscension() As Double
-    
     GetAndFixRaDec
     RightAscension = m_dRA
-    
 End Property
 
 Public Property Get RightAscensionRate() As Double
@@ -771,10 +782,52 @@ Public Property Let RightAscensionRate(ByVal newVal As Double)
 End Property
 
 Public Property Get SideOfPier() As PierSide
+    Dim sop As Integer
+    Dim bc As String    'leave a bread crumb trail
+'    On Error GoTo Err
+    bc = "start"
 
+    If m_eTheSkyType = TheSkyX And m_canGetPierSide Then
+        ' this is needed because TheSkyXAdaptor doesn't implement DoCommand.
+        If m_theSkyX_sky6RASCOMTele Is Nothing Then
+            bc = "create TheSkyX.sky6RASCOMTele"
+            Set m_theSkyX_sky6RASCOMTele = CreateObject("TheSkyX.sky6RASCOMTele")
+        End If
+        bc = "sendDoCommand"
+        m_theSkyX_sky6RASCOMTele.DoCommand 11, ""
+        bc = "DoCommandOutput"
+        sop = m_theSkyX_sky6RASCOMTele.DoCommandOutput
+        bc = "sop=" & sop
+        ' East (looking west) is 0
+        ' west (looking east) ia 1
+        ' http://www.bisque.com/x2standard/class_asymmetical_equatorial_interface.html
+        Select Case sop
+        Case 0
+            bc = "pierwest"
+            SideOfPier = pierWest
+        Case 1
+            bc = "piereast"
+            SideOfPier = pierEast
+        Case Else
+            bc = "else"
+            Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                        "Property PierSide returned " & sop & ", " & MSG_NOT_IMPLEMENTED
+        End Select
+        bc = "after end select"
+    Else
+        bc = "tst" & m_eTheSkyType & ",cgps" & m_canGetPierSide
+        Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
+                    "Property PierSide" & MSG_NOT_IMPLEMENTED
+    End If
+'Exit Property
+'
+'Err:
+'    MsgBox "Error in get SideOfPier " & bc & "-" & Err.Description
+End Property
+
+Public Property Let SideOfPier(ByVal RHS As PierSide)
     Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Property PierSide" & MSG_NOT_IMPLEMENTED
-    
 End Property
 
 Public Property Get SiderealTime() As Double
@@ -991,11 +1044,10 @@ Public Property Let TrackingRate(ByVal newVal As DriveRates)
         
 End Property
 
-Public Property Get TrackingRates() As Collection
-
-    Set TrackingRates = New Collection
-    TrackingRates.Add (DriveRates.driveSidereal)
-    
+Public Property Get TrackingRates() As Object
+'    Set TrackingRates = New Collection
+'    TrackingRates.Add (DriveRates.driveSidereal)
+    Set TrackingRates = m_trackingRates
 End Property
 
 Public Property Get UTCDate() As Date
@@ -1019,30 +1071,23 @@ Public Sub AbortSlew()
     
 End Sub
 
-Public Function AxisRates(ByVal Axis As TelescopeAxes) As Collection
-
-    Set AxisRates = New Collection
-
+Public Function AxisRates(ByVal Axis As TelescopeAxes) As Object
+'    Set AxisRates = New Collection
+    Set AxisRates = m_axisRates
 End Function
 
 Public Function CanMoveAxis(ByVal Axis As TelescopeAxes)
-
     CanMoveAxis = False
-    
 End Function
 
 Public Sub CommandBlind(ByVal Command As String)
-
     Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Method CommandBlind()" & MSG_NOT_IMPLEMENTED
-
 End Sub
 
 Public Function CommandBool(ByVal Command As String) As Boolean
-
     Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
                 "Method CommandBool()" & MSG_NOT_IMPLEMENTED
-
 End Function
 
 Public Function CommandString(ByVal Command As String) As String
@@ -1202,7 +1247,7 @@ Public Sub SetupDialog()
     buf = m_Profile.GetValue(ID, "AlignmentMode")    ' Default to algUnknown (maybe the default should be GermanPolar, for the Paramount?)
     Select Case buf
         Case "algUnknown"
-            m_iAlignmentMode = algUnknown
+            m_iAlignmentMode = -1
         Case "algAltAz"
             m_iAlignmentMode = algAltAz
         Case "algPolar"
@@ -1210,7 +1255,7 @@ Public Sub SetupDialog()
         Case "algGermanPolar"
             m_iAlignmentMode = algGermanPolar
         Case Else
-            m_iAlignmentMode = algUnknown
+            m_iAlignmentMode = -1
     End Select
     Set m_Profile = Nothing                         ' Release Profile
     
@@ -1329,11 +1374,17 @@ End Sub
 ' CheckConnected() - Raise an error if the scope is not connected
 '
 Private Sub CheckConnected()
-
-    If Not m_SkyTele.IsConnected = 1 Then _
+    If m_SkyTele Is Nothing Then
         Err.Raise SCODE_NOT_CONNECTED, _
                     ERR_SOURCE, _
                     MSG_NOT_CONNECTED
+        Exit Sub
+    End If
+    If Not m_SkyTele.IsConnected = 1 Then
+        Err.Raise SCODE_NOT_CONNECTED, _
+                    ERR_SOURCE, _
+                    MSG_NOT_CONNECTED
+    End If
 End Sub
 
 Private Sub GetAltAz()
