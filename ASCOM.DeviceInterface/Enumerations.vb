@@ -175,14 +175,17 @@ End Enum
 ''' </summary>
 ''' <remarks>
 '''	<para><c>Pier side</c> is a GEM-specific term that has historically caused much confusion. 
-''' As of Platform 6, the PierSide property is defined to refer to pointing state. Please see <see cref="ITelescopeV3.SideOfPier" />
-''' for much more information on this topic.</para>
+''' As of Platform 6, the PierSide property is defined to refer to the telescope pointing state. Please see <see cref="ITelescopeV3.SideOfPier" /> for 
+''' much more information on this topic.</para>
+''' <para>In order to support Dome slaving, where it is important to know on which side of the pier the mount is actually located, ASCOM has adopted the 
+''' convention that the Normal pointing state will be the state where the mount is on the East side of the pier, looking West with the counterweights below 
+''' the optical assembly.</para>
 ''' <para>Only used with telescope interface versions 2 and later.</para>
 ''' </remarks>
 <Guid("6F0E1F45-129A-4c3a-A3B0-3611AEDB33FB"), ComVisible(True)> _
 Public Enum PierSide ' ECD99531-A2CF-4b9f-91A0-35FE5D12B043
     ''' <summary>
-    ''' Normal pointing state
+    ''' Normal pointing state - Mount on the East side of pier (looking West)
     ''' </summary>
     pierEast = 0
 
@@ -192,7 +195,7 @@ Public Enum PierSide ' ECD99531-A2CF-4b9f-91A0-35FE5D12B043
     pierUnknown = -1
 
     ''' <summary>
-    ''' Through the pole pointing state
+    ''' Through the pole pointing state - Mount on the West side of pier (looking East)
     ''' </summary>
     pierWest = 1
 End Enum

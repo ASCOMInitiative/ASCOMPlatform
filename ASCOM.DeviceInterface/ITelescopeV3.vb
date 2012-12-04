@@ -739,10 +739,13 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis 
     ''' is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky codeclination (90 - sky declination).</para>
     ''' <para>Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian. 
-    ''' Choose one, and move your scope there. Once you're there, consider the two mechanical encoders zeroed. The two pointing states are, then:
+    ''' In order to support Dome slaving, where it is important to know which side of the pier the mount is actually on, ASCOM has adopted the 
+    ''' convention that the Normal pointing state will be the state where a German Equatorial mount is on the East side of the pier, looking West, with the 
+    ''' counterweights below the optical assembly and that <see cref="PierSide.pierEast"></see> will represent this pointing state.</para>
+    ''' <para>Move your scope to this position and consider the two mechanical encoders zeroed. The two pointing states are, then:
     ''' <list type="table">
-    ''' <item><term><b>Normal</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>
-    ''' <item><term><b>Beyond the pole</b></term><description>Where the mechanical Dec is in the range -180 deg to -90 deg or +90 deg to +180 deg.</description></item>
+    ''' <item><term><b>Normal (<see cref="PierSide.pierEast"></see>)</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>
+    ''' <item><term><b>Beyond the pole (<see cref="PierSide.pierWest"></see>)</b></term><description>Where the mechanical Dec is in the range -180 deg to -90 deg or +90 deg to +180 deg.</description></item>
     ''' </list>
     ''' </para>
     ''' <para>"Side of pier" is a "consequence" of the former definition, not something fundamental. 

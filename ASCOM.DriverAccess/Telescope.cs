@@ -837,10 +837,13 @@ namespace ASCOM.DriverAccess
         /// practical limitations, any point in the sky can be seen in two mechanical orientations. To get from one to the other the HA axis 
         /// is moved 180 deg and the Dec axis is moved through the pole a distance twice the sky codeclination (90 - sky declination).</para>
         /// <para>Mechanical zero HA/Dec will be one of the two ways of pointing at the intersection of the celestial equator and the local meridian. 
-        /// Choose one, and move your scope there. Once you're there, consider the two mechanical encoders zeroed. The two pointing states are, then:
+        /// In order to support Dome slaving, where it is important to know which side of the pier the mount is actually on, ASCOM has adopted the 
+        /// convention that the Normal pointing state will be the state where a German Equatorial mount is on the East side of the pier, looking West, with the 
+        /// counterweights below the optical assembly and that <see cref="PierSide.pierEast"></see> will represent this pointing state.</para>
+        /// <para>Move your scope to this position and consider the two mechanical encoders zeroed. The two pointing states are, then:
         /// <list type="table">
-        /// <item><term><b>Normal</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>
-        /// <item><term><b>Beyond the pole</b></term><description>Where the mechanical Dec is in the range -180 deg to -90 deg or +90 deg to +180 deg.</description></item>
+        /// <item><term><b>Normal (<see cref="PierSide.pierEast"></see>)</b></term><description>Where the mechanical Dec is in the range -90 deg to +90 deg</description></item>
+        /// <item><term><b>Beyond the pole (<see cref="PierSide.pierWest"></see>)</b></term><description>Where the mechanical Dec is in the range -180 deg to -90 deg or +90 deg to +180 deg.</description></item>
         /// </list>
         /// </para>
         /// <para>"Side of pier" is a "consequence" of the former definition, not something fundamental. 
@@ -1598,10 +1601,10 @@ namespace ASCOM.DriverAccess
 
         internal AxisRates(ASCOM.Interface.IAxisRates AxisRates, TraceLogger traceLogger)
         {
-               TL = traceLogger;
-               AxisRatesP5 = AxisRates;
-               this.Reset();
-               foreach (ASCOM.Interface.IRate Rate in AxisRates)
+            TL = traceLogger;
+            AxisRatesP5 = AxisRates;
+            this.Reset();
+            foreach (ASCOM.Interface.IRate Rate in AxisRates)
             {
                 if (!(TL == null)) TL.LogMessage("AxisRates Class P5 New", "Adding rate: - Minimum: " + Rate.Minimum + ", Maximum: " + Rate.Maximum);
                 //m_Rates.Add(new Rate(Rate.Minimum, Rate.Maximum));
@@ -1625,7 +1628,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public object Current
         {
-            get 
+            get
             {
                 return this[CurrentPosition];
             }
@@ -1639,8 +1642,8 @@ namespace ASCOM.DriverAccess
         {
             bool ReturnValue;
             if (CurrentPosition <= this.Count) CurrentPosition += 1;
-            
-            if (CurrentPosition > this.Count) ReturnValue =  false;
+
+            if (CurrentPosition > this.Count) ReturnValue = false;
             else ReturnValue = true;
             if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "MoveNext - Position: " + CurrentPosition + ", Return value: " + ReturnValue);
 
@@ -1686,8 +1689,8 @@ namespace ASCOM.DriverAccess
         /// <returns>IEnumerator object</returns>
         public IEnumerator GetEnumerator()
         {
-               if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Returning Enumerator - New object");
-               return this;
+            if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Returning Enumerator - New object");
+            return this;
         }
 
         /// <summary>
@@ -1718,7 +1721,7 @@ namespace ASCOM.DriverAccess
                     if (!(TL == null)) TL.LogMessage("AxisRates Class P5", "Exception: " + ex.ToString());
                 }
 
-                return new Rate(AxisRatesP5[index].Minimum ,AxisRatesP5[index].Maximum);
+                return new Rate(AxisRatesP5[index].Minimum, AxisRatesP5[index].Maximum);
             }
         }
 

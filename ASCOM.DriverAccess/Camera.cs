@@ -543,8 +543,8 @@ namespace ASCOM.DriverAccess
         /// <see cref="GuideDirections.guideNorth" /> must be opposite <see cref="GuideDirections.guideSouth" />, and 
         /// <see cref="GuideDirections.guideEast" /> must be opposite <see cref="GuideDirections.guideWest" />.</para>
         /// </remarks>
-        /// <param name="Direction">The direction.</param>
-        /// <param name="Duration">The duration.</param>
+        /// <param name="Direction">The direction of movement.</param>
+        /// <param name="Duration">The duration of movement in milli-seconds.</param>
         /// <exception cref="MethodNotImplementedException">PulseGuide command is unsupported</exception>
         /// <exception cref=" DriverException">PulseGuide command is unsuccessful</exception>
         public void PulseGuide(GuideDirections Direction, int Duration)

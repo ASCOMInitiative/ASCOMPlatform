@@ -70,6 +70,12 @@
 					through COM.</listItem>
 					<listItem>Descriptions of the new ICameraV2 methods have been clarified and now indicate whether the method must be
 					implemented or whether it is persmissible for it to throw a NotImplemented exception.</listItem>
+					<listItem>The Camera.PulseGuide description now specifies that the duration of movment should be expressed in 
+					milli-seconds.</listItem>
+					<listItem>The ASCOM convention for SideOfPier has be re-confirmed: that PierSide.pierEast, for a German
+					equatorial mount, is the pointing state where the mount is on the East side of the pier, looking West, with the 
+					counterweights below the optical assembly. This definition was lost from the SideOfPier and PierSide descriptions when the pointing state
+					text was added in the original Platform 6 release.</listItem>
 				</list>
       		</content>
    		</section>
