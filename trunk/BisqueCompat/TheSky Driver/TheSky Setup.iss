@@ -12,11 +12,12 @@
 ; Chris R   (5.2.8) - Change to guiding as suggested by Matthew Bisque
 ; Chris R	(5.2.9) - Another change suggested by MB
 ; Chris R   (5.2.11)- Change to using TrackingRates and AxisRates classes instead of generic collections
+; Chris R   (5.2.12)- swap the pier side state
 ;
 [Setup]
 AppName=ASCOM TheSky Telescope Driver
-AppVerName=ASCOM TheSky Telescope Driver 5.2.11
-AppVersion=5.2.11
+AppVerName=ASCOM TheSky Telescope Driver 5.2.12
+AppVersion=5.2.12
 AppPublisher=Bob Denny <rdenny@dc3.com>
 AppPublisherURL=mailto:rdenny@dc3.com
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
@@ -26,7 +27,7 @@ DefaultDirName={cf}\ASCOM\Telescope
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir=.
-OutputBaseFilename=TheSkyTelescope(5.2.11)Setup
+OutputBaseFilename=TheSkyTelescope(5.2.12)Setup
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
@@ -73,7 +74,7 @@ begin
    try               // Will catch all errors including missing reg data
       H := CreateOLEObject('DriverHelper.Util');  // Assure both are available
       H2 := CreateOleObject('DriverHelper2.Util');
-      if (H2.PlatformVersion >= 5.0) then
+      if (H2.PlatformVersion >= 5) then
          Result := TRUE;
    except
    end;

@@ -167,6 +167,7 @@ Attribute VB_Description = "ASCOM Telescope driver for Software Bisque TheSky"
 ' 12-Nov-11 cdr     More change suggested by MB
 ' 15-Nov-11 cdr     5.2.10 stop dec guide AND start tracking.
 ' 15-Nov-12 cdr     5.2.11 try to fix trackingRates and AxisRates errors in Conform
+' 04-Dec-12 cdr     5.2.12 swap side of pier values after discussion with the ASCOM group.
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -803,11 +804,11 @@ Public Property Get SideOfPier() As PierSide
         ' http://www.bisque.com/x2standard/class_asymmetical_equatorial_interface.html
         Select Case sop
         Case 0
-            bc = "pierwest"
-            SideOfPier = pierWest
-        Case 1
             bc = "piereast"
             SideOfPier = pierEast
+        Case 1
+            bc = "pierwest"
+            SideOfPier = pierWest
         Case Else
             bc = "else"
             Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
