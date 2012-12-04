@@ -7,15 +7,15 @@ Public Class EphemerisExamples
     Private Util As ASCOM.Utilities.Util
 
     Sub Example()
-        ' Creates an year long almanac for a particular event at a given location.
+        ' Create a year long almanac for a particular event at a given location.
 
-        ' At latitudes greater than 60N or 60S it is posisble for there to be two rse or sets in a given 24 hour day,
-        ' hence results are aggregfated into to EventTime lines. If, for a given day, all months have only 0 or 1 event
+        ' At latitudes greater than 60N or 60S it is posisble for there to be two rises or sets in a given 24 hour day,
+        ' hence results are aggregated into two EventTime lines. If, for a given day, all months have only 0 or 1 event
         ' only the first event times line is included. If any day has two events then the second event times line
         ' is included with the same day number as the first event times line.
 
         ' For some event types it is possible that no event of that type occurs, in which case the event time is represented 
-        ' as a blank space. At times of year when no events occur because a body is "always risen" or "always set", rise and set times
+        ' as a blank space. At times of year when no events occur, because a body is "always risen" or "always set", rise and set times
         ' are shown as "****" and "----" respectively.
 
         ' The expected output for Moon rising / setting using the parameters: Year=2012, Latitude=75N, Longitude=75W, TimeZone=-5h is given at 
