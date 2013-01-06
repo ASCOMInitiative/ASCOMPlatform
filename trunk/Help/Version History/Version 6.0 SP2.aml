@@ -32,9 +32,8 @@
 					when no, one or two rise or set events occur.</listItem>
 					<listItem>An alamanc program has been added to the Code Examples in the the Developer Components install. This generates a
 	      			year long almanac for any AstroUtils.Event event at a given latitude, longitude and timezone.</listItem>
-	     			<listItem>Added new methods AstroUtil.MoonIllumination and AstroUtil.MoonPhase.</listItem>
 	     			<listItem>Added Chris Rowland's "Introduction to developing ASCOM drivers" to the developer install.</listItem>
-					<listItem>Improved all drivers created through the template wizrad. These now pass Conform "out of the box"
+					<listItem>Improved all drivers created through the template wizard. These now pass Conform "out of the box"
 					and throw the correct ASCOM execptions instead of system exceptions. Comments have been improved and all
 					CanXXX capability properties return boolean values instead of exceptions.</listItem>
 					<listItem>The Inno installer template generator now creates installers that can uninstall earlier versions of themselves
@@ -56,16 +55,23 @@
 					<listItem>Astrometry - the DeltaT function has been augmented to predict values in line with recent observation, it 
 					should now be good to the end of 2013 without further change</listItem>
 					<listItem>The Terrestrial Time functions now account for the leap second that was introduced at the end of June 2012</listItem>
-					<listItem>AstroUtils.JulianDateTT and AstroUtils.JulianDateUT1 will now use an internal approximation for DeltaUT1
-					if the supplied value is 0.0.</listItem>
-					<listItem>An independent trace option for NOVAS components has been added to the Trace menu. Currently only a few 
+					<listItem> AstroUtils
+						<list class="bullet">
+			     			<listItem>Added new methods AstroUtil.MoonIllumination and AstroUtil.MoonPhase.</listItem>
+							<listItem>AstroUtils.JulianDateTT and AstroUtils.JulianDateUT1 will now use an internal approximation for DeltaUT1
+							if the supplied value is 0.0.</listItem>
+							<listItem>Added a new function AstroUtils.FormatJD to format a Julian date using a supplied format descriptor.
+							This function will primarily be of interest to those using scripting languages that lack this capability.</listItem>
+						</list>
+					</listItem>
+					<listItem>An independent trace option for NOVAS components has been added to the Trace menu. Currently only a few
 					NOVAS 3.1 functions create trace output.</listItem>
 					<listItem>NOVASCOM.Planet now supports major planet numbers of 10=Sun and 11=Moon in line with the NOVAS convention.</listItem>
 					<listItem>A new entry on time scale relationships has been added to the Developer Information section of the help file.</listItem>
+					<listItem>TraceLogger - added a new single parameter initialiser that selects automatic file name generation based on the 
+					supplied filetype parameter and immediately enables the logger, removing the need for a subsequent TraceLogger.Enabled = true; statement.</listItem>
 					<listItem>Improved help description for the Focuser.Connected method saying that it is not available in 
 					focusers built to the IFocuser version 1 interface</listItem>
-					<listItem>AstroUtils.FormatJD - new function to format a Julian date using a supplied format descriptor.
-					This function will primarily be of interest to those using scripting languages that lack this capability.</listItem>
 					<listItem>Added a set of scripting language code samples to developer documentation to illustrate access 
 					through COM.</listItem>
 					<listItem>Descriptions of the new ICameraV2 methods have been clarified and now indicate whether the method must be
@@ -94,6 +100,8 @@
 					<listItem>Astrometry.Kepler.Ephemeris - fixed an initialisation issue in that prevented calculation for minor 
 					planet bodies.</listItem>
 					<listItem>Fixed occasional installation failures due to the presence of non-standard permissions in the registry</listItem>
+					<listItem>DriverAccess, when used within an ASCOM client, now correctly handles hubs where DriverAccess has been used to present another driver. 
+					i.e. DriverAccess now recognises situations where it has already wrapped a driver response and removes that wrapping before processing it again.</listItem>
 					<listItem>Incorporated NOVAS 3.1 errata from the
 						<externalLink>
 							<linkText>USNO NOVAS Support</linkText>

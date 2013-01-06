@@ -515,72 +515,101 @@ namespace ASCOM.DriverAccess
             string value;
             string range;
 
+            // Deal with the possibilty that DriverAccess is being used in both driver and client so remove the outer 
+            // DriverAccessCOMException exception if present
+            if (e.InnerException is DriverAccessCOMException)
+            {
+                message = e.InnerException.InnerException.Message;
+                TL.LogMessageCrLf(memberName, "  *** Found DriverAccessCOMException so stripping this off and reprocessing through CheckDotNetExceptions: '" + message + "'");
+                TL.LogMessageCrLf(memberName, "  *** Inner exception is: " + e.InnerException.InnerException.GetType().Name);
+                try // Try and print out the Inner.Inner exception
+                {
+                    TL.LogMessageCrLf(memberName, "  *** InnerException.InnerException is: " + e.InnerException.InnerException.InnerException.GetType().Name);
+                }
+                catch (Exception ex)
+                {
+                    // Report buyt ignore this error, catch it later in CheckDotNetExceptions
+                    TL.LogMessageCrLf(memberName, "  *** Exception arose when accessing InnerException.InnerException: " + ex.ToString());
+                }
+
+                CheckDotNetExceptions(memberName + " inner exception", e.InnerException.InnerException);
+            }
+
             //Throw the appropriate exception based on the inner exception of the TargetInvocationException
-                if(e.InnerException is InvalidOperationException)
-                {
-                    message = e.InnerException.Message;
-                    TL.LogMessageCrLf(memberName, "  Throwing InvalidOperationException: '" + message + "'");
-                    throw new InvalidOperationException(message, e.InnerException);
-                }
-
-                if (e.InnerException is InvalidValueException)
-                {
-                    member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-                    value = (string)e.InnerException.GetType().InvokeMember("Value", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-                    range = (string)e.InnerException.GetType().InvokeMember("Range", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-
-                    TL.LogMessageCrLf(memberName, "  Throwing InvalidValueException: '" + member + "' '" + value + "' '" + range + "'");
-                    throw new InvalidValueException(member, value, range, e.InnerException);
-                }
-
-                if (e.InnerException is NotConnectedException)
-                {
-                    message = e.InnerException.Message;
-                    TL.LogMessageCrLf(memberName, "  Throwing NotConnectedException: '" + message + "'");
-                    throw new NotConnectedException(message, e.InnerException);
-                }
-
-                if (e.InnerException is ASCOM.NotImplementedException)
-                {
-                    member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-                    TL.LogMessageCrLf(memberName, "  Throwing NotImplementedException: '" + member + "'");
-                    throw new NotImplementedException(member, e.InnerException);
-                }
-
-                if (e.InnerException is ParkedException)
-                {
-                    message = e.InnerException.Message;
-
-                    TL.LogMessageCrLf(memberName, "  Throwing ParkedException: '" + message + "'");
-                    throw new ParkedException(message, e.InnerException);
-                }
-
-                if (e.InnerException is SlavedException)
+            if (e.InnerException is InvalidOperationException)
             {
-                    message = e.InnerException.Message;
-
-                    TL.LogMessageCrLf(memberName, "  Throwing SlavedException: '" + message + "'");
-                    throw new SlavedException(message, e.InnerException);
+                message = e.InnerException.Message;
+                TL.LogMessageCrLf(memberName, "  Throwing InvalidOperationException: '" + message + "'");
+                throw new InvalidOperationException(message, e.InnerException);
             }
 
-                if (e.InnerException is ValueNotSetException)
+            if (e.InnerException is InvalidValueException)
             {
-                    member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+                value = (string)e.InnerException.GetType().InvokeMember("Value", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+                range = (string)e.InnerException.GetType().InvokeMember("Range", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
 
-                    TL.LogMessageCrLf(memberName, "  Throwing ValueNotSetException: '" + member + "'");
-                    throw new ValueNotSetException(member, e.InnerException);
+                TL.LogMessageCrLf(memberName, "  Throwing InvalidValueException: '" + member + "' '" + value + "' '" + range + "'");
+                throw new InvalidValueException(member, value, range, e.InnerException);
             }
 
-                if (e.InnerException is DriverException)
+            if (e.InnerException is NotConnectedException)
             {
-                    message = e.InnerException.Message;
-                    int number = (int)e.InnerException.GetType().InvokeMember("Number", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
-
-                    TL.LogMessageCrLf(memberName, "  Throwing DriverException: '" + message + "' '" + number + "'");
-                    throw new DriverException(message, number, e.InnerException);
+                message = e.InnerException.Message;
+                TL.LogMessageCrLf(memberName, "  Throwing NotConnectedException: '" + message + "'");
+                throw new NotConnectedException(message, e.InnerException);
             }
 
-                // Default behaviour if its not one of the exceptions above
+            if (e.InnerException is ASCOM.NotImplementedException)
+            {
+                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+                TL.LogMessageCrLf(memberName, "  Throwing NotImplementedException: '" + member + "'");
+                throw new NotImplementedException(member, e.InnerException);
+            }
+
+            if (e.InnerException is ParkedException)
+            {
+                message = e.InnerException.Message;
+
+                TL.LogMessageCrLf(memberName, "  Throwing ParkedException: '" + message + "'");
+                throw new ParkedException(message, e.InnerException);
+            }
+
+            if (e.InnerException is SlavedException)
+            {
+                message = e.InnerException.Message;
+
+                TL.LogMessageCrLf(memberName, "  Throwing SlavedException: '" + message + "'");
+                throw new SlavedException(message, e.InnerException);
+            }
+
+            if (e.InnerException is ValueNotSetException)
+            {
+                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+
+                TL.LogMessageCrLf(memberName, "  Throwing ValueNotSetException: '" + member + "'");
+                throw new ValueNotSetException(member, e.InnerException);
+            }
+
+            if (e.InnerException is DriverException)
+            {
+                message = e.InnerException.Message;
+                int number = (int)e.InnerException.GetType().InvokeMember("Number", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+
+                TL.LogMessageCrLf(memberName, "  Throwing DriverException: '" + message + "' '" + number + "'");
+                throw new DriverException(message, number, e.InnerException);
+            }
+
+            if (e.InnerException is COMException)
+            {
+                message = e.InnerException.Message;
+                int number = (int)e.InnerException.GetType().InvokeMember("ErrorCode", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+
+                TL.LogMessageCrLf(memberName, "  Throwing DriverAccessCOMException: '" + message + "' '" + number + "'");
+                throw new DriverAccessCOMException(message, number, e.InnerException);
+            }
+
+            // Default behaviour if its not one of the exceptions above
             string defaultmessage = "CheckDotNetExceptions " + _strProgId + " " + memberName + " " + e.InnerException.ToString() + " (See Inner Exception for details)";
 
             TL.LogMessageCrLf(memberName, "  Throwing Default DriverException: '" + defaultmessage + "'");
