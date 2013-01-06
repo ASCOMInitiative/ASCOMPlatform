@@ -6081,29 +6081,29 @@ Public Class DiagnosticsForm
             Status("Running Astro Utilities functional tests")
             TL.LogMessage("AstroUtilTests", "Creating ASCOM.Astrometry.AstroUtils.AstroUtils")
             sw.Reset() : sw.Start()
-            AstroUtil = New ASCOM.Astrometry.AstroUtils.AstroUtils
+            Dim AstroUtil2 As New ASCOM.Astrometry.AstroUtils.AstroUtils
             TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
 
             'Range Tests
-            CompareDouble("AstroUtilTests", "ConditionHA -12.0", AstroUtil.ConditionHA(-12.0), -12.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionHA 0.0", AstroUtil.ConditionHA(0.0), 0.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionHA 12.0", AstroUtil.ConditionHA(12.0), 12.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionHA -13.0", AstroUtil.ConditionHA(-13.0), 11.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionHA 13.0", AstroUtil.ConditionHA(13.0), -11.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA -12.0", AstroUtil2.ConditionHA(-12.0), -12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 0.0", AstroUtil2.ConditionHA(0.0), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 12.0", AstroUtil2.ConditionHA(12.0), 12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA -13.0", AstroUtil2.ConditionHA(-13.0), 11.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionHA 13.0", AstroUtil2.ConditionHA(13.0), -11.0, TOLERANCE_E6)
 
-            CompareDouble("AstroUtilTests", "ConditionRA 0.0", AstroUtil.ConditionRA(0.0), 0.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionRA 12.0", AstroUtil.ConditionRA(12.0), 12.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionRA 23.999", AstroUtil.ConditionRA(23.999), 23.999, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionRA -1.0", AstroUtil.ConditionRA(-1.0), 23.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "ConditionRA 25.0", AstroUtil.ConditionRA(25.0), 1.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 0.0", AstroUtil.Range(0.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 359.0", AstroUtil.Range(359.0, 0.0, True, 360.0, False), 359.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 -30.0", AstroUtil.Range(-30.0, 0.0, True, 360.0, False), 330.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 390.0", AstroUtil.Range(390.0, 0.0, True, 360.0, False), 30.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:359.999 360.0", AstroUtil.Range(360.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
-            CompareDouble("AstroUtilTests", "Range 0:360.0 360.0", AstroUtil.Range(360.0, 0.0, True, 360.0, True), 360.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 0.0", AstroUtil2.ConditionRA(0.0), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 12.0", AstroUtil2.ConditionRA(12.0), 12.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 23.999", AstroUtil2.ConditionRA(23.999), 23.999, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA -1.0", AstroUtil2.ConditionRA(-1.0), 23.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "ConditionRA 25.0", AstroUtil2.ConditionRA(25.0), 1.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 0.0", AstroUtil2.Range(0.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 359.0", AstroUtil2.Range(359.0, 0.0, True, 360.0, False), 359.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 -30.0", AstroUtil2.Range(-30.0, 0.0, True, 360.0, False), 330.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 390.0", AstroUtil2.Range(390.0, 0.0, True, 360.0, False), 30.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:359.999 360.0", AstroUtil2.Range(360.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
+            CompareDouble("AstroUtilTests", "Range 0:360.0 360.0", AstroUtil2.Range(360.0, 0.0, True, 360.0, True), 360.0, TOLERANCE_E6)
 
-            CompareBoolean("AstroUtilTests", "DeltaUT", (AstroUtil.DeltaUT(AstroUtil.JulianDateTT(0.0)) >= -1.0) And (AstroUtil.DeltaUT(AstroUtil.JulianDateTT(0.0)) <= 1.0), True)
+            CompareBoolean("AstroUtilTests", "DeltaUT", (AstroUtil2.DeltaUT(AstroUtil2.JulianDateTT(0.0)) >= -1.0) And (AstroUtil2.DeltaUT(AstroUtil2.JulianDateTT(0.0)) <= 1.0), True)
             Events = GetEvents(ASCOM.Astrometry.EventType.SunRiseSunset, 5, 8, 2012, 51.0, -60.0, -5.0)
 
             CompareBoolean("AstroUtilTests", "Events Sun Risen at Midnight", Events.RisenAtMidnight, False)
@@ -6146,17 +6146,17 @@ Public Class DiagnosticsForm
             CompareDouble("AstroUtilTests", "Events Astronomical Twighlight Start", Events.RiseTime(0), 1.01115193589165, TOLERANCE_E5)
             CompareDouble("AstroUtilTests", "Events Astronomical Twighlight End", Events.SetTime(0), 22.9472021943943, TOLERANCE_E5)
 
-            CompareDouble("AstroUtilTests", "Moon Illumination", AstroUtil.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
-            CompareDouble("AstroUtilTests", "Moon Phase", AstroUtil.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Moon Illumination", AstroUtil2.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Moon Phase", AstroUtil2.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)
             TL.BlankLine()
 
             Try
-                AstroUtil.Dispose()
+                AstroUtil2.Dispose()
                 TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils, Disposed OK")
             Catch ex As Exception
                 LogException("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils: " & ex.ToString)
             End Try
-            AstroUtil = Nothing
+            AstroUtil2 = Nothing
             TL.LogMessage("AstroUtilTests", "Finished")
             TL.BlankLine()
 
