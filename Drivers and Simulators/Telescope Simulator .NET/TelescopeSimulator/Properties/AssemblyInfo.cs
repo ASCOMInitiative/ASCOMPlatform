@@ -9,7 +9,7 @@ using System.Resources;
 [assembly: AssemblyTitle("ASCOM TelescopeSimulator server")]
 [assembly: AssemblyDescription("ASCOM multi-interface server for TelescopeSimulator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2009, Robert Turner")]
+[assembly: AssemblyCopyright("Copyright © 2009, Robert Turner, Copyright © ASCOM Initiative 2013")]
 
 [assembly: ComVisibleAttribute(false)]
 

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM Exceptions")]
 [assembly: AssemblyDescription("Exception classes for use in ASCOM Drivers")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2013")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
