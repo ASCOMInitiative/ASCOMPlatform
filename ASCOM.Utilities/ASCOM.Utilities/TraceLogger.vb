@@ -66,6 +66,20 @@ Public Class TraceLogger
         mut = New System.Threading.Mutex
     End Sub
 
+    ''' <summary>
+    ''' Create and enable a new TraceLogger instance with automatic naming based on the supplied log file type
+    ''' </summary>
+    ''' <param name="LogFileType">String identifying the type of log e,g, Focuser, LX200, GEMINI, MoonLite, G11</param>
+    ''' <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
+    Public Sub New(ByVal LogFileType As String)
+        MyBase.New()
+        g_LogFileName = "" 'Set automatic filenames as default
+        g_LogFileType = LogFileType
+        g_LogFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
+        mut = New System.Threading.Mutex
+        g_Enabled = True ' Enable the log
+    End Sub
+
     ' IDisposable
     ''' <summary>
     ''' Disposes of the TraceLogger object
@@ -388,7 +402,7 @@ Public Class TraceLogger
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-        Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLoggerExtra.LogFinish
+    Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLoggerExtra.LogFinish
         Try
             GetTraceLoggerMutex("LogFinish", """" & Message & """")
             If Not g_LineStarted Then
@@ -465,7 +479,7 @@ Public Class TraceLogger
                     End If
                 Case 0 - 9, 11, 12, 14 - 31, Is > 126 ' All other non-printables should be translated
                     l_Msg = l_Msg & "[" & Right("00" & Hex(CharNo), 2) & "]"
-                Case Else'Everything else is printable and should be left as is
+                Case Else 'Everything else is printable and should be left as is
                     l_Msg = l_Msg & Mid(p_Msg, i, 1)
             End Select
             If CharNo < 32 Or CharNo > 126 Then
