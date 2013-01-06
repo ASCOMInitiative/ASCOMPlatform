@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM FilterWheelSim Server")]
 [assembly: AssemblyDescription("ASCOM multi-interface server for FilterWheelSim")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2009, Mark Crossley")]
+[assembly: AssemblyCopyright("Copyright © 2009, Mark Crossley Copyright © ASCOM Initiative 2013")]
 
 [assembly: ComVisibleAttribute(false)]
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).

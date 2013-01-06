@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("EraseTemplates")]
-[assembly: AssemblyCopyright("Copyright © ASCOM 2011")]
+[assembly: AssemblyCopyright("Copyright © ASCOM 2011, 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
