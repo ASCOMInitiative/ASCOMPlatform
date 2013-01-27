@@ -63,12 +63,14 @@ dt {
 	<div class="article">
 		<h3>Frequently Asked Questions</h3>
 		<dl style="margin-top: 0px; margin-bottom: 0px;">
+		    <dt>The ASCOM Platform installer is asking for the Microsoft .NET Framework. There are so many versions out there. Is 4.x "better" than 3.x? What should I do?</dt>
+			<dd>There has been confusion about getting the Microsoft .NET Framework installed. It is a pre-requisite to the ASCOM Platform. Please read the note for <a href="../FAQs/Plat6OnW7.htm">Windows 7</a> or <a href="../FAQs/Plat6OnXP.htm">Windows XP</a> as it applies to you.</dd>
 			<dt>The ASCOM Diagnostics program gives me the error &quot;Incompatible Driver				xxxxx. This 32 bit only driver won't work in a 64 bit 
 				application even though it is correctly registered as a 32bit COM 
 				driver. Please contact the driver author and request an updated driver.&quot;				Does this mean that the application I want to use will not work with 
 			this driver?</dt>
 			<dd>This will almost certainly not matter. Most astronomy applications are 
-				at present (Feb 2012) compiled as 32 bits and will work with 32 bit only <br />
+				at present (Jan 2013) compiled as 32 bits and will work with 32 bit only 
 				drivers, even on 64 bit versions of Windows.				You are seeing this because the ASCOM diagnostics program is doing a 
 				full check and is reporting this to help driver developers know of this 
 				potential problem. If you see the same error when you try to choose the 
