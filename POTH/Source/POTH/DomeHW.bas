@@ -170,7 +170,7 @@ End Sub
 ' slew dome to dome coords of specified scope RA, Dec
 Public Sub DomeSlew(ByVal RA As Double, ByVal Dec As Double, SOP As PierSide)
 
-    Dim Az As Double, Alt As Double
+    Dim Az As Double, alt As Double
     Dim doAlt As Boolean
     
     ' check for connected and valid scope coordinates
@@ -184,9 +184,9 @@ Public Sub DomeSlew(ByVal RA As Double, ByVal Dec As Double, SOP As PierSide)
 
     On Error Resume Next
     
-    DomeCoord ScopeST(), RA, Dec, Az, Alt, SOP
+    DomeCoord ScopeST(), RA, Dec, Az, alt, SOP
     
-    doAlt = g_bDomeSetAltitude And (Alt >= -90)
+    doAlt = g_bDomeSetAltitude And (alt >= -90)
     If doAlt And g_bDomeSetShutter Then _
         doAlt = doAlt And (g_Dome.ShutterStatus = shutterOpen)
             
@@ -194,7 +194,7 @@ Public Sub DomeSlew(ByVal RA As Double, ByVal Dec As Double, SOP As PierSide)
         g_Dome.SlewToAzimuth Az
         
     If doAlt Then _
-        g_Dome.SlewToAltitude Alt
+        g_Dome.SlewToAltitude alt
         
     On Error GoTo 0
 
@@ -204,9 +204,9 @@ Public Sub DomeCoord(SiderealTime As Double, _
         ScopeRA As Double, ScopeDec As Double, _
         DomeAz As Double, DomeAlt As Double, SOP As PierSide)
     
-    Dim HA As Double, Dec As Double     ' hour angle and Dec in Rad
+    Dim ha As Double, Dec As Double     ' hour angle and Dec in Rad
 '    Dim GEMOffset As Double
-    Dim Alt As Double, Az As Double     ' return values
+    Dim alt As Double, Az As Double     ' return values
     
     DomeAz = INVALID_PARAMETER
     DomeAlt = INVALID_PARAMETER
@@ -216,7 +216,7 @@ Public Sub DomeCoord(SiderealTime As Double, _
     End If
     
     ' calculate hour angle and Dec from the supplied values in Radians
-    HA = HAScale(SiderealTime - ScopeRA) * HRS_RAD
+    ha = HAScale(SiderealTime - ScopeRA) * HRS_RAD
     Dec = ScopeDec * DEG_RAD
     
     ' meridian flip
@@ -237,13 +237,13 @@ Public Sub DomeCoord(SiderealTime As Double, _
     
     ' dome conversion using DomeControl
     Dim scopeAlt As Double, scopeAzm As Double
-    hadec_aa g_dLatitude * DEG_RAD, HA, Dec, scopeAlt, scopeAzm
+    hadec_aa g_dLatitude * DEG_RAD, ha, Dec, scopeAlt, scopeAzm
     scopeAzm = scopeAzm * RAD_DEG
     scopeAlt = scopeAlt * RAD_DEG
     
     Dim dc As New DomeControl
-    dc.InitDome g_dRadius * 1000, CDbl(g_iGEMOffset), CDbl(g_iPosNS), CDbl(g_iPosEW), CDbl(g_iPosUD)
-    DomeAz = dc.DomeAzimuth(scopeAzm, scopeAlt, HA, (SOP = pierWest))
+    dc.InitDome g_dRadius * 1000, CDbl(g_iGEMOffset), CDbl(g_iPosNS), CDbl(g_iPosEW), CDbl(g_iPosUD), g_dLatitude, g_iGEMOffset > 0
+    DomeAz = dc.DomeAzimuth(scopeAzm, scopeAlt, ha * RAD_DEG, (SOP = pierWest))
     DomeAlt = dc.DomeAltitude
     
 End Sub

@@ -1,10 +1,11 @@
 ; ASCOM Install Script for POTH
 ; Jon Brewster
+; 5.0.7   DSync.bas replaced by DomeControl.cls by Chris Rowland
 
 [Setup]
 AppName=ASCOM POTH
-AppVerName=POTH 5.0.4
-AppVersion=5.0.4
+AppVerName=POTH 5.0.7
+AppVersion=5.0.7
 AppPublisher=Jon Brewster jon@brewsters.net
 AppPublisherURL=http://ascom-standards.org/
 AppSupportURL=http://ascom-standards.org/
@@ -14,7 +15,7 @@ DefaultDirName="{cf}\ASCOM\Telescope"
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir="."
-OutputBaseFilename="POTH 5-0-4 Setup"
+OutputBaseFilename="POTH 5-0-7 Setup"
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
@@ -47,8 +48,9 @@ Source: "astro32.dll"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
 Source: "AxisRates.cls"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
 Source: "Bug72T-sm.bmp"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
 Source: "Dome.cls"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
+Source: "DomeControl.cls"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
 Source: "DomeHW.bas"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
-Source: "Dsync.bas"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
+;Source: "Dsync.bas"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
 Source: "ErrorConstants.bas"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
 Source: "Focuser.cls"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
 Source: "FocuserHW.bas"; DestDir: "{app}\Source\POTH"; Tasks: SourceCode;
