@@ -30,7 +30,6 @@ Attribute VB_Name = "ErrorConstants"
 ' 25-Sep-03 jab     Finished new V2 spec support (V2 definition changed)
 ' 10-Jan-06 dpp     Focuser implementation
 ' 04-Jun-07 jab     New error for new startup refactoring
-' 10-May-12 cdr     Refactor error codes to keep Conform happy
 '---------------------------------------------------------------------
 
 Option Explicit
@@ -41,26 +40,25 @@ Public Const SCODE_NOT_IMPLEMENTED As Long = vbObjectError + &H400
 Public Const MSG_NOT_IMPLEMENTED As String = _
     " is not implemented by this driver."
 Public Const SCODE_DLL_LOADFAIL As Long = vbObjectError + &H401
-'    ' Error message for above generated at run time
-Public Const SCODE_NOT_CONNECTED As Long = vbObjectError + &H402
-Public Const MSG_NOT_CONNECTED As String = _
-    "The scope is not connected"
-Public Const SCODE_PROP_NOT_SET As Long = vbObjectError + &H403
-Public Const MSG_PROP_NOT_SET As String = _
-    "This property has not yet been set"
-Public Const SCODE_NO_TARGET_COORDS As Long = vbObjectError + &H404
-Public Const MSG_NO_TARGET_COORDS As String = _
-    "Target coordinates have not yet been set"
-Public Const SCODE_VAL_OUTOFRANGE As Long = vbObjectError + &H405
-Public Const MSG_VAL_OUTOFRANGE As String = _
-    "The property value is out of range"
-    
-Public Const SCODE_NO_DOME As Long = vbObjectError + &H406
-Public Const MSG_NO_DOME As String = _
-    "The dome is not open"
-Public Const SCODE_NO_SCOPE As Long = vbObjectError + &H407
+    ' Error message for above generated at run time
+Public Const SCODE_NO_SCOPE As Long = vbObjectError + &H402
 Public Const MSG_NO_SCOPE As String = _
     "The scope is not open"
+Public Const SCODE_NOT_CONNECTED As Long = vbObjectError + &H403
+Public Const MSG_NOT_CONNECTED As String = _
+    "The scope is not connected"
+Public Const SCODE_PROP_NOT_SET As Long = vbObjectError + &H404
+Public Const MSG_PROP_NOT_SET As String = _
+    "This property has not yet been set"
+Public Const SCODE_NO_TARGET_COORDS As Long = vbObjectError + &H405
+Public Const MSG_NO_TARGET_COORDS As String = _
+    "Target coordinates have not yet been set"
+Public Const SCODE_VAL_OUTOFRANGE As Long = vbObjectError + &H406
+Public Const MSG_VAL_OUTOFRANGE As String = _
+    "The property value is out of range"
+Public Const SCODE_NO_DOME As Long = vbObjectError + &H407
+Public Const MSG_NO_DOME As String = _
+    "The dome is not open"
 Public Const SCODE_DOME_NOT_CONNECTED As Long = vbObjectError + &H408
 Public Const MSG_DOME_NOT_CONNECTED As String = _
     "The dome is not connected"
