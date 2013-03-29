@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=ASCOM POTH
-AppVerName=POTH 5.0.7
-AppVersion=5.0.7
+AppVerName=POTH 5.0.8
+AppVersion=5.0.8
 AppPublisher=Jon Brewster jon@brewsters.net
 AppPublisherURL=http://ascom-standards.org/
 AppSupportURL=http://ascom-standards.org/
@@ -14,7 +14,7 @@ DefaultDirName={cf}\ASCOM\Telescope
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 OutputDir=.
-OutputBaseFilename=POTH 5-0-5 Setup
+OutputBaseFilename=POTH 5-0-8 Setup
 Compression=lzma
 SolidCompression=yes
 ; Put there by Platform if Driver Installer Support selected
@@ -35,7 +35,7 @@ Name: {cf}\ASCOM\Uninstall\Telescope\POTH
 Type: filesandordirs; Name: {app}\Source\POTH
 
 [Tasks]
- ; Name: SourceCode; Description: Install source code; Flags: unchecked
+ Name: SourceCode; Description: Install source code; Flags: unchecked
 
 [Files]
 Source: POTH.exe; DestDir: {app}; Flags: ignoreversion; BeforeInstall: Unregister('POTH.exe')
@@ -47,8 +47,9 @@ Source: astro32.dll; DestDir: {app}\Source\POTH; Tasks: SourceCode
 Source: AxisRates.cls; DestDir: {app}\Source\POTH; Tasks: SourceCode
 Source: Bug72T-sm.bmp; DestDir: {app}\Source\POTH; Tasks: SourceCode
 Source: Dome.cls; DestDir: {app}\Source\POTH; Tasks: SourceCode
+Source: DomeControl.cls; DestDir: {app}\Source\POTH; Tasks: SourceCode
 Source: DomeHW.bas; DestDir: {app}\Source\POTH; Tasks: SourceCode
-Source: Dsync.bas; DestDir: {app}\Source\POTH; Tasks: SourceCode
+;Source: Dsync.bas; DestDir: {app}\Source\POTH; Tasks: SourceCode
 Source: ErrorConstants.bas; DestDir: {app}\Source\POTH; Tasks: SourceCode
 Source: Focuser.cls; DestDir: {app}\Source\POTH; Tasks: SourceCode
 Source: FocuserHW.bas; DestDir: {app}\Source\POTH; Tasks: SourceCode
