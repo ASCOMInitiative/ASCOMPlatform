@@ -152,10 +152,11 @@ Public Class TrackingRates
     '		=========================
     Implements ITrackingRates
     Implements IEnumerable
+    Implements IEnumerator
     '		=========================
 
     Private m_TrackingRates(-1) As DriveRates           ' Empty array, but an array nonetheless
-
+    Private pos As Integer = -1
     '
     ' Default constructor - Friend prevents public creation
     ' of instances. Returned by Telescope.AxisRates.
@@ -198,6 +199,29 @@ Public Class TrackingRates
         End Get
     End Property
 
+#End Region
+
+#Region "IEnumerator members"
+    Public Function MoveNext() As Boolean Implements IEnumerator.MoveNext
+        pos = pos + 1
+        If pos >= m_TrackingRates.Length Then
+            Return False
+        End If
+        Return True
+    End Function
+
+    Public ReadOnly Property Current As Object Implements IEnumerator.Current
+        Get
+            If pos < 0 Or pos >= m_TrackingRates.Length Then
+                Throw New InvalidOperationException()
+            End If
+            Return m_TrackingRates(pos)
+        End Get
+    End Property
+
+    Public Sub Reset() Implements IEnumerator.Reset
+        pos = -1
+    End Sub
 #End Region
 
 End Class
