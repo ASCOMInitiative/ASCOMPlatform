@@ -34,8 +34,8 @@ Public Sub FocuserClean(clear As Boolean)
         g_lFocuserMaxIncrement = CLng(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMaxIncrement"))
         g_lFocuserMaxStep = CLng(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMaxStep"))
         g_dFocuserStepSizeInMicrons = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserStepSize"))
-        g_bFocuserAbsMove = CBool(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserAbsMove"))
-        g_bFocuserMoveMicrons = CBool(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMoveMicrons"))
+        g_bFocuserAbsMove = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserAbsMove"))
+        g_bFocuserMoveMicrons = val(g_FocuserProfile.GetValue(IDFOCUSER, "FocuserMoveMicrons"))
     End If
 
 End Sub
@@ -63,6 +63,7 @@ Public Sub FocuserCreate(ID As String)
             g_handBox.ErrorLEDFocuser True
         Else
             g_handBox.ErrorLEDFocuser False
+            g_handBox.ErrorLED False
         End If
         
         g_sFocuserName = "(None)"
@@ -70,6 +71,7 @@ Public Sub FocuserCreate(ID As String)
         On Error Resume Next
 
         ' Name property does not exist for focusers
+        ' Put in ReadFocuser() also if this ever changes
         '     g_sFocuserName = Trim(g_Focuser.Name)
         ' Just use leading part of ID (drop the ".Focuser")
 
@@ -130,7 +132,7 @@ Public Sub FocuserSave()
     g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxIncrement", Str(g_lFocuserMaxIncrement)
     g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxStep", Str(g_lFocuserMaxStep)
     g_FocuserProfile.WriteValue IDFOCUSER, "FocuserStepSize", Str(g_dFocuserStepSizeInMicrons)
-    g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", CStr(g_bFocuserAbsMove)
-    g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMoveMicrons", CStr(g_bFocuserMoveMicrons)
+    g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", CInt(g_bFocuserAbsMove)
+    g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMoveMicrons", CInt(g_bFocuserMoveMicrons)
 
 End Sub

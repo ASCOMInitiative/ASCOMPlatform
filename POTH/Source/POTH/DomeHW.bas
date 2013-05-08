@@ -71,6 +71,7 @@ Public Sub DomeCreate(ID As String)
             g_handBox.ErrorLEDDome True
         Else
             g_handBox.ErrorLEDDome False
+            g_handBox.ErrorLED False
         End If
         
         g_sDomeName = "(None)"

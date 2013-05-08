@@ -2,30 +2,31 @@ VERSION 5.00
 Begin VB.Form frmHandBox 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "POTH Handset"
-   ClientHeight    =   5325
+   Caption         =   "POTH"
+   ClientHeight    =   5310
    ClientLeft      =   45
    ClientTop       =   375
-   ClientWidth     =   6135
+   ClientWidth     =   5910
    Icon            =   "frmHandBox.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
-   ScaleHeight     =   5325
-   ScaleWidth      =   6135
+   ScaleHeight     =   5310
+   ScaleWidth      =   5910
    StartUpPosition =   3  'Windows Default
    Begin VB.Frame frmFocus 
       BackColor       =   &H00000000&
       BorderStyle     =   0  'None
       ForeColor       =   &H00FFFFFF&
       Height          =   4605
-      Left            =   4155
+      Left            =   3975
       TabIndex        =   51
       Top             =   660
-      Width           =   1965
+      Width           =   1920
       Begin VB.CommandButton cmdFocuserMove 
          Caption         =   "Move:"
          Height          =   450
-         Left            =   120
+         Left            =   165
          TabIndex        =   26
          ToolTipText     =   "Move focuser to value"
          Top             =   600
@@ -36,7 +37,7 @@ Begin VB.Form frmHandBox
          Caption         =   "Abs Move"
          ForeColor       =   &H00FFFFFF&
          Height          =   435
-         Left            =   1080
+         Left            =   1125
          TabIndex        =   29
          ToolTipText     =   "Toggle absolute / relative focusing for absolute focusers"
          Top             =   1500
@@ -45,7 +46,7 @@ Begin VB.Form frmHandBox
       Begin VB.CommandButton cmdFocuserResetPosition 
          Caption         =   "Zero"
          Height          =   450
-         Left            =   1165
+         Left            =   1215
          TabIndex        =   31
          ToolTipText     =   "Zero the relative focuser point"
          Top             =   2040
@@ -54,7 +55,7 @@ Begin VB.Form frmHandBox
       Begin VB.CommandButton cmdConnectFocuser 
          Caption         =   "Connect Focuser"
          Height          =   450
-         Left            =   120
+         Left            =   165
          TabIndex        =   30
          ToolTipText     =   "Take control of the focuser"
          Top             =   2040
@@ -63,7 +64,7 @@ Begin VB.Form frmHandBox
       Begin VB.CommandButton cmdFocuserIn 
          Caption         =   "In"
          Height          =   375
-         Left            =   555
+         Left            =   600
          TabIndex        =   32
          ToolTipText     =   "Move focuser in by last increment above"
          Top             =   3100
@@ -72,7 +73,7 @@ Begin VB.Form frmHandBox
       Begin VB.CommandButton cmdFocuserOut 
          Caption         =   "Out"
          Height          =   375
-         Left            =   555
+         Left            =   600
          TabIndex        =   34
          ToolTipText     =   "move focuser out by last increment above"
          Top             =   4160
@@ -83,7 +84,7 @@ Begin VB.Form frmHandBox
          Caption         =   "Temp Comp"
          ForeColor       =   &H00FFFFFF&
          Height          =   435
-         Left            =   120
+         Left            =   165
          TabIndex        =   28
          ToolTipText     =   "Toggle temperature compensation"
          Top             =   1500
@@ -92,7 +93,7 @@ Begin VB.Form frmHandBox
       Begin VB.CommandButton cmdFocuserHalt 
          Caption         =   "Halt"
          Height          =   450
-         Left            =   555
+         Left            =   600
          TabIndex        =   33
          ToolTipText     =   "Halt focuser movement"
          Top             =   3600
@@ -100,7 +101,7 @@ Begin VB.Form frmHandBox
       End
       Begin VB.TextBox txtFocuserMove 
          Height          =   315
-         Left            =   905
+         Left            =   945
          TabIndex        =   27
          ToolTipText     =   "In relative mode - increment, in absolute mode - position"
          Top             =   668
@@ -122,7 +123,7 @@ Begin VB.Form frmHandBox
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   255
-         Left            =   840
+         Left            =   885
          TabIndex        =   57
          Top             =   285
          Width           =   915
@@ -132,7 +133,7 @@ Begin VB.Form frmHandBox
          Caption         =   "Steps:"
          ForeColor       =   &H00FFFFFF&
          Height          =   225
-         Left            =   120
+         Left            =   165
          TabIndex        =   56
          Top             =   300
          Width           =   450
@@ -140,11 +141,12 @@ Begin VB.Form frmHandBox
       Begin VB.Shape shpFocuserError 
          BorderColor     =   &H00E0E0E0&
          BorderStyle     =   0  'Transparent
+         FillColor       =   &H000000FF&
          FillStyle       =   0  'Solid
          Height          =   135
-         Left            =   960
+         Left            =   1005
          Shape           =   3  'Circle
-         Top             =   1800
+         Top             =   1860
          Width           =   135
       End
       Begin VB.Label txtFocuserTemperature 
@@ -163,9 +165,9 @@ Begin VB.Form frmHandBox
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   255
-         Left            =   840
+         Left            =   885
          TabIndex        =   55
-         Top             =   1150
+         Top             =   1155
          Width           =   915
       End
       Begin VB.Label lblTemperature 
@@ -173,9 +175,9 @@ Begin VB.Form frmHandBox
          Caption         =   "Temp:"
          ForeColor       =   &H00FFFFFF&
          Height          =   195
-         Left            =   120
+         Left            =   165
          TabIndex        =   54
-         Top             =   1150
+         Top             =   1155
          Width           =   570
       End
       Begin VB.Label lblPosition 
@@ -183,7 +185,7 @@ Begin VB.Form frmHandBox
          Caption         =   "Microns:"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   120
+         Left            =   165
          TabIndex        =   53
          Top             =   0
          Width           =   675
@@ -204,7 +206,7 @@ Begin VB.Form frmHandBox
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   255
-         Left            =   840
+         Left            =   885
          TabIndex        =   52
          Top             =   0
          Width           =   915
@@ -215,10 +217,10 @@ Begin VB.Form frmHandBox
       BorderStyle     =   0  'None
       ForeColor       =   &H00FFFFFF&
       Height          =   4605
-      Left            =   2050
+      Left            =   1995
       TabIndex        =   46
       Top             =   660
-      Width           =   2105
+      Width           =   1980
       Begin VB.CheckBox chkSlave 
          BackColor       =   &H00000000&
          Caption         =   "Slave Dome"
@@ -456,6 +458,7 @@ Begin VB.Form frmHandBox
       Begin VB.Shape shpDomeError 
          BorderColor     =   &H00E0E0E0&
          BorderStyle     =   0  'Transparent
+         FillColor       =   &H000000FF&
          FillStyle       =   0  'Solid
          Height          =   135
          Left            =   960
@@ -499,7 +502,7 @@ Begin VB.Form frmHandBox
       List            =   "frmHandBox.frx":0939
       Style           =   2  'Dropdown List
       TabIndex        =   6
-      ToolTipText     =   "Amount to jog scope by"
+      ToolTipText     =   "Amount to jog scope by, or rate to move at"
       Top             =   3780
       Width           =   675
    End
@@ -637,6 +640,28 @@ Begin VB.Form frmHandBox
       Top             =   2190
       Width           =   765
    End
+   Begin VB.Frame frmMotion 
+      BackColor       =   &H00000000&
+      BorderStyle     =   0  'None
+      Enabled         =   0   'False
+      Height          =   1630
+      Left            =   0
+      TabIndex        =   58
+      Top             =   3675
+      Visible         =   0   'False
+      Width           =   135
+   End
+   Begin VB.Shape shpEast 
+      BorderColor     =   &H00E0E0E0&
+      BorderStyle     =   0  'Transparent
+      FillColor       =   &H0000FF00&
+      FillStyle       =   0  'Solid
+      Height          =   135
+      Left            =   1680
+      Shape           =   3  'Circle
+      Top             =   4140
+      Width           =   180
+   End
    Begin VB.Label lblSlewing 
       BackColor       =   &H00000000&
       Caption         =   "Slewing"
@@ -669,20 +694,10 @@ Begin VB.Form frmHandBox
       Top             =   4140
       Width           =   135
    End
-   Begin VB.Shape shpEast 
-      BorderColor     =   &H00E0E0E0&
-      BorderStyle     =   0  'Transparent
-      FillColor       =   &H0000FF00&
-      FillStyle       =   0  'Solid
-      Height          =   135
-      Left            =   1680
-      Shape           =   3  'Circle
-      Top             =   4140
-      Width           =   180
-   End
    Begin VB.Shape shpScopeError 
       BorderColor     =   &H00E0E0E0&
       BorderStyle     =   0  'Transparent
+      FillColor       =   &H000000FF&
       FillStyle       =   0  'Solid
       Height          =   135
       Left            =   960
@@ -690,9 +705,10 @@ Begin VB.Form frmHandBox
       Top             =   2520
       Width           =   135
    End
-   Begin VB.Shape ShpError 
+   Begin VB.Shape shpError 
       BorderColor     =   &H00E0E0E0&
       BorderStyle     =   0  'Transparent
+      FillColor       =   &H000000FF&
       FillStyle       =   0  'Solid
       Height          =   135
       Left            =   120
@@ -714,6 +730,7 @@ Begin VB.Form frmHandBox
       Alignment       =   1  'Right Justify
       Appearance      =   0  'Flat
       BackColor       =   &H00000000&
+      Caption         =   "--:--:--"
       BeginProperty Font 
          Name            =   "Courier"
          Size            =   9.75
@@ -744,6 +761,7 @@ Begin VB.Form frmHandBox
       Alignment       =   1  'Right Justify
       Appearance      =   0  'Flat
       BackColor       =   &H00000000&
+      Caption         =   "--:--:--"
       BeginProperty Font 
          Name            =   "Courier"
          Size            =   9.75
@@ -774,6 +792,7 @@ Begin VB.Form frmHandBox
       Alignment       =   1  'Right Justify
       Appearance      =   0  'Flat
       BackColor       =   &H00000000&
+      Caption         =   "--:--:--"
       BeginProperty Font 
          Name            =   "Courier"
          Size            =   9.75
@@ -814,6 +833,7 @@ Begin VB.Form frmHandBox
       Alignment       =   1  'Right Justify
       Appearance      =   0  'Flat
       BackColor       =   &H00000000&
+      Caption         =   "--:--:--"
       BeginProperty Font 
          Name            =   "Courier"
          Size            =   9.75
@@ -845,6 +865,7 @@ Begin VB.Form frmHandBox
       Alignment       =   1  'Right Justify
       Appearance      =   0  'Flat
       BackColor       =   &H00000000&
+      Caption         =   "--:--:--"
       BeginProperty Font 
          Name            =   "Courier"
          Size            =   9.75
@@ -892,6 +913,7 @@ Attribute VB_Exposed = False
 ' 10-Sep-06 jab     major changes to handle new focuser gui/functionality
 ' 11-Sep-06 jab     fixed some double / long conversion issues and an In/Out
 '                   stepsize bug
+' 11-Jun-11 jab     fixed window dimensions to be insensitive to border size
 ' -----------------------------------------------------------------------------
 Option Explicit
 
@@ -917,6 +939,10 @@ Private Sub Form_Load()
     Southern = False
     Mode = algPolar
     m_dlastST = EMPTY_PARAMETER
+    ErrorLED False
+    ErrorLEDScope False
+    ErrorLEDDome False
+    ErrorLEDFocuser False
     
     cbJog.ListIndex = 4
     cbJogDome.ListIndex = 1
@@ -1123,6 +1149,12 @@ End Sub
 
 Private Sub cmdSlew_MouseDown(Index As Integer, button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    Dim RateIndex As Long
+    Dim CBRate As Double
+    
+    If Not g_bConnected Then _
+        Exit Sub
+        
     ' sometimes if simulating SOP (weak driver), state can be ambiguous or wrong
     ' allow user to force state by using [alt] east or west
     If Shift = 4 Then
@@ -1139,6 +1171,47 @@ Private Sub cmdSlew_MouseDown(Index As Integer, button As Integer, Shift As Inte
         Exit Sub
     End If
     
+    ' stop scope now, don't wait for timer tick
+    If Index = 5 Then
+        ScopeAbortSlew
+        ScopeCoords g_bQuiet, True
+        Exit Sub
+    End If
+            
+    ' look for MoveAxis which gets handled now
+    If Index >= 1 And Index <= 4 Then
+        RateIndex = cbJog.ItemData(cbJog.ListIndex)
+        
+        ' maybe nothing really here...
+        If RateIndex = 0 Then
+            Exit Sub
+        
+        ' move axis are neg, jogs are positive
+        ElseIf RateIndex < 0 Then
+            CBRate = 0#
+            On Error Resume Next
+            CBRate = g_dAxisRates(Abs(RateIndex))
+            On Error GoTo 0
+            
+            ' did we really get one?
+            If CBRate > 0# Then
+                Select Case Index
+                    Case 1
+                        g_Scope.MoveAxis axisSecondary, CDbl(CBRate)
+                    Case 2
+                        g_Scope.MoveAxis axisSecondary, -CDbl(CBRate)
+                    Case 3
+                        g_Scope.MoveAxis axisPrimary, CDbl(CBRate)
+                    Case 4
+                        g_Scope.MoveAxis axisPrimary, -CDbl(CBRate)
+                End Select
+            End If
+            Exit Sub
+
+        End If
+    End If
+    
+    ' must be a jog request
 '    BtnState = index + (Shift * 8) + (button * 64)
     BtnState = Index
     
@@ -1242,7 +1315,6 @@ CatchUnpark:
             MsgBox "Error Unparking. " + Err.Description, vbExclamation
         Resume Next
 FinalUnpark:
-'            ParkCaption = True
         On Error GoTo 0
         
     Else
@@ -1259,7 +1331,6 @@ CatchPark:
             MsgBox "Error Parking. " + Err.Description, vbExclamation
         Resume Next
 FinalPark:
-'            ParkCaption = False
         On Error GoTo 0
         
     End If
@@ -1313,7 +1384,7 @@ Private Sub cmdTraffic_Click()
     If g_show Is Nothing Then _
         Set g_show = New frmShow
     
-    g_show.Caption = App.EXENAME & " ASCOM Traffic"
+    g_show.Caption = App.EXEName & " ASCOM Traffic"
     g_show.Show
     
 End Sub
@@ -1464,8 +1535,6 @@ Public Property Let ParkCaption(val As Boolean)
         shpPark.FillColor = &HFF00&
     End If
     
-    CheckEnable
-    
 End Property
 
 Public Property Let ParkDomeCaption(val As Boolean)
@@ -1579,6 +1648,86 @@ End Property
 ' ===============
 ' PUBLIC ROUTINES
 ' ===============
+
+Public Sub SetAxisRates()
+
+    Dim tRate As Variant
+    Dim discreet As Boolean
+    Dim SRate As Double
+    Dim i As Integer
+
+    Do While cbJog.ItemData(0) <= 0
+        cbJog.RemoveItem 0
+    Loop
+    
+    cbJog.AddItem "Jog", 0
+    cbJog.ItemData(0) = 0
+    
+    ' look for discreet first, if found only accept other discreets
+    ' if continous is found befor any discreet, then use it exclusively
+    If Not g_AxisRates Is Nothing Then
+        discreet = False
+        ReDim g_dAxisRates(g_AxisRates.Count + 5)
+        i = 1
+        
+        For Each tRate In g_AxisRates
+            If tRate.Minimum = tRate.Maximum And tRate.Minimum > 0 Then
+                discreet = True
+                cbJog.AddItem CStr(tRate.Minimum), 0
+                cbJog.ItemData(0) = -i
+                g_dAxisRates(i) = tRate.Minimum
+                i = i + 1
+                
+            ElseIf tRate.Minimum < tRate.Maximum And tRate.Minimum >= 0 And _
+                    Not discreet Then
+                
+                ' attempt a fast slew
+                SRate = 4#
+                If tRate.Minimum <= SRate And SRate <= tRate.Maximum Then
+                    cbJog.AddItem "-4deg/s", 0
+                    cbJog.ItemData(0) = -i
+                    g_dAxisRates(i) = SRate
+                    i = i + 1
+                End If
+                
+                ' attempt a half a degree slew rate
+                SRate = 0.5
+                If tRate.Minimum <= SRate And SRate <= tRate.Maximum Then
+                    cbJog.AddItem "-30'/s", 0
+                    cbJog.ItemData(0) = -i
+                    g_dAxisRates(i) = SRate
+                    i = i + 1
+                End If
+                
+                ' attempt a 1 arc min / sec centering rate
+                SRate = 1# / 60#
+                If tRate.Minimum <= SRate And SRate <= tRate.Maximum Then
+                    cbJog.AddItem "-1'/s", 0
+                    cbJog.ItemData(0) = -i
+                    g_dAxisRates(i) = SRate
+                    i = i + 1
+                End If
+                
+                ' attempt a guide rate
+                SRate = 15# * (1# / 3600#) / SIDRATE
+                If tRate.Minimum <= SRate And SRate <= tRate.Maximum Then
+                    cbJog.AddItem "-side", 0
+                    cbJog.ItemData(0) = -i
+                    g_dAxisRates(i) = SRate
+                    i = i + 1
+                End If
+                    
+                Exit For
+            End If
+        Next tRate
+    End If
+
+    If cbJog.ItemData(0) < 0 Then
+        cbJog.AddItem "Rate", 0
+        cbJog.ItemData(0) = 0
+    End If
+        
+End Sub
 
 Public Sub FocuserMoveCaption()
 
@@ -1732,9 +1881,13 @@ Public Sub CheckWin(force As Boolean)
     
 End Sub
 
-Public Sub ErrorLED()
+Public Sub ErrorLED(state As Boolean)
 
-    ShpError.FillColor = &HFF&
+    If state Then
+        shpError.FillColor = &HFF&
+    Else
+        shpError.FillColor = &H0&
+    End If
     
 End Sub
 
@@ -1791,12 +1944,14 @@ Public Sub Quiet()
 End Sub
 
 Public Sub CheckShutter()
-
+  
+    If Not g_bDomeConnected Then
+        txtShutter.Caption = "---.-"
+        Exit Sub
+    End If
+    
     On Error GoTo ErrorHandler
     
-    If Not g_bDomeConnected Or Not g_bDomeSetShutter Then
-        txtShutter.Caption = "---.-"
-    Else
         Select Case g_Dome.ShutterStatus
             Case shutterOpen:
                 ' could update this smarter ???
@@ -1815,13 +1970,18 @@ Public Sub CheckShutter()
             Case shutterError: txtShutter.Caption = "Unknown"
                 cmdOpenDome.Caption = "Close Dome"
         End Select
-    End If
 
     On Error GoTo 0
     Exit Sub
 
 ErrorHandler:
 
+    ' its only an error, if the dome shutter is setable
+    If Not g_bDomeSetShutter Then
+        txtShutter.Caption = "---.-"
+        Exit Sub
+    End If
+    
     txtShutter.Caption = "Error"
     cmdOpenDome.Caption = "Close Dome"
     
@@ -2024,35 +2184,34 @@ End Function
 
 ' what looks like the use of undeclared variables is really "Me."
 Private Sub WinMode()
-
+    
     m_bDomeMode = g_bDomeMode
     m_bFocusMode = g_bFocusMode
     
     If m_bDomeMode Then
-        Width = frmDome.Left + frmDome.Width
+        Width = Width - ScaleWidth + frmDome.Left + frmDome.Width
         frmDome.Visible = True
-        frmFocus.Left = Width
-        imgBrewster.Left = (Width - imgBrewster.Width) / 2
+        imgBrewster.Left = (ScaleWidth - imgBrewster.Width) / 2
     Else
-        Width = frmDome.Left      ' minimum width
-        frmDome.Visible = False      ' in case focuser needs to be there
-        frmFocus.Left = Width     ' in case focuser is not there
-        imgBrewster.Left = (Width - imgBrewster.Width) / 2
+        Width = Width - ScaleWidth + frmDome.Left      ' minimum width
+        frmDome.Visible = False        ' in case focuser needs to be there
+        imgBrewster.Left = (ScaleWidth - imgBrewster.Width) / 2
     End If
     
+    frmFocus.Left = ScaleWidth
     If m_bFocusMode Then
         Width = Width + frmFocus.Width    ' open up to see focuser controls
         frmFocus.Visible = True
-        imgBrewster.Left = (Width - imgBrewster.Width) / 2
+        imgBrewster.Left = (ScaleWidth - imgBrewster.Width) / 2
     Else
         frmFocus.Visible = False
     End If
     
     m_bMotionMode = g_bMotionControl
     If m_bMotionMode Then
-        Height = 5820
+        Height = Height - ScaleHeight + frmMotion.Top + frmMotion.Height
     Else
-        Height = 4200
+        Height = Height - ScaleHeight + frmMotion.Top
     End If
     
 End Sub
