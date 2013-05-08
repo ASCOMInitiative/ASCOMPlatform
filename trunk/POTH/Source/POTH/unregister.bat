@@ -1,6 +1,6 @@
+Set ASCOM=%CommonProgramFiles%\ASCOM\Telescope\
+Set Driver=POTH.exe
 
-"C:\Program Files\Common Files\ASCOM\Telescope\POTH.exe" /unregserver
-
-"POTH.exe" /unregserver
+If Exist "%ASCOM%%Driver%" "%ASCOM%%Driver%" /unregserver
 
 pause

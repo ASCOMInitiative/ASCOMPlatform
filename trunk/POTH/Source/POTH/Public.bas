@@ -21,6 +21,7 @@ Attribute VB_Name = "Public"
 ' 09-Sep-06 jab     added more focuser state to registry - bumped RegVe to 4.8
 ' 04-Jun-07 jab     Eliminate g_bRunExecutable, use App.StartMode directly, to
 '                   avoid startup problems with refactored initialization.
+' 03-Jun-11 jab     Added TimeNag
 ' -----------------------------------------------------------------------------
 
 Option Explicit
@@ -53,7 +54,7 @@ Public Const DESC As String = "POTH (Plain Old Telescope Handset)"
 
 ' registry version - only change if registry needs to change
 ' in an incompatible way - do not track program version
-Public Const RegVer As String = "5.2"
+Public Const RegVer As String = "6.0"
 
 ' parameter management constants
 Public Const INVALID_PARAMETER As Double = -10000#
@@ -107,6 +108,10 @@ Public g_iConnections As Integer
 Public g_iDomeConnections As Integer
 Public g_iFocuserConnections As Integer
 
+Public g_ErrNumber As Long                  ' used for passing connect errors
+Public g_ErrSource As String                ' used for passing connect errors
+Public g_ErrDescription As String           ' used for passing connect errors
+
 '----------------
 ' timer controls
 '----------------
@@ -147,6 +152,7 @@ Public g_bSimple As Boolean                 ' Only use simple commands
 Public g_bAtHome As Boolean
 Public g_bAtPark As Boolean
 Public g_SOP As PierSide
+Public g_bTimeNag As Boolean
 
 ' scope state
 Public g_iVersion As Integer
@@ -171,6 +177,9 @@ Public g_lSlewSettleTime As Long            ' Slew settle time, millisec
 Public g_lPulseGuideTix As Long             ' current end of pulse guide
 Public g_dMeridianDelay As Double           ' hour to delay where flip occurs
 Public g_dMeridianDelayEast As Double       ' hour to delay where flip occurs
+Public g_AxisRates As Object                ' collection of supported rates
+Public g_dAxisRates() As Double             ' array of rates found in the GUI
+Public g_dCurAxisRate As Double             ' current rate for MoveAxis
 
 ' scope geometry wrt dome
 Public g_dRadius As Double                  ' dome radius in m
@@ -192,6 +201,9 @@ Public g_bCanLatLong As Boolean
 Public g_bCanOptics As Boolean
 Public g_bCanSideOfPier As Boolean
 Public g_bCanSiderealTime As Boolean
+Public g_bCanSlewAltAz As Boolean
+Public g_bCanSlewAltAzAsync As Boolean
+Public g_bCanSyncAltAz As Boolean
 
 ' real can flags
 Public g_bCanFindHome As Boolean
@@ -204,12 +216,24 @@ Public g_bCanSetPierSide As Boolean
 Public g_bCanSetRightAscensionRate As Boolean
 Public g_bCanSetTracking As Boolean
 Public g_bCanSlew As Boolean
-Public g_bCanSlewAltAz As Boolean
-Public g_bCanSlewAltAzAsync As Boolean
 Public g_bCanSlewAsync As Boolean
 Public g_bCanSync As Boolean
-Public g_bCanSyncAltAz As Boolean
 Public g_bCanUnpark As Boolean
+
+' forced emulation flags
+Public g_bEmuAltAz As Boolean
+Public g_bEmuDateTime As Boolean
+Public g_bEmuDoesRefraction As Boolean
+Public g_bEmuElevation As Boolean
+Public g_bEmuEqu As Boolean
+Public g_bEmuEquSystem As Boolean
+Public g_bEmuLatLong As Boolean
+Public g_bEmuOptics As Boolean
+Public g_bEmuSideOfPier As Boolean
+Public g_bEmuSiderealTime As Boolean
+Public g_bEmuSlewAltAz As Boolean
+Public g_bEmuSlewAltAzAsync As Boolean
+Public g_bEmuSyncAltAz As Boolean
 
 '----------------
 ' dome variables

@@ -17,6 +17,7 @@ Begin VB.Form frmShow
    EndProperty
    Icon            =   "frmShow.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    PaletteMode     =   1  'UseZOrder
    ScaleHeight     =   7215
    ScaleWidth      =   5310

@@ -33,6 +33,86 @@ Public Enum slewingType
     slewFetch = 2
 End Enum
 
+Public Sub ScopeAbortSlew()
+
+    On Error Resume Next
+    
+    g_bMonSlewing = False   ' make sure Async doesn't get re-enabled
+    g_bAsyncSlewing = False ' make sure Slewing doesn't get cleared too soon
+    g_Scope.AbortSlew       ' ??? watch for failure
+    ScopeTracking trackRead
+    ScopeAtHome False, False
+    ScopeAtPark False, False
+    ScopeSlewing slewSet, False
+    g_bMonSlewing = True
+    If g_bSlaved Then
+        DomeAbortSlew
+        g_bSlaved = g_bDomeConnected    ' re-slave the dome (Halt unslaved)
+        g_handBox.Slave
+    End If
+
+    On Error GoTo 0
+    
+End Sub
+
+Public Sub ScopeAxis()
+
+    Dim PAR As Object
+    Dim SAR As Object
+    Dim PRate As Variant
+    Dim SRate As Variant
+    Dim i As Integer
+    Dim found As Boolean
+    
+    If g_bConnected Then
+        ' both axis must be movable
+        If g_iVersion < 2 Then _
+            Exit Sub
+        If (Not g_Scope.CanMoveAxis(0)) Or (Not g_Scope.CanMoveAxis(1)) Then _
+            Exit Sub
+        
+        ' get the rates
+        Set PAR = g_Scope.AxisRates(0)
+        Set SAR = g_Scope.AxisRates(1)
+        
+        ' number of rates must be the same
+        If PAR.Count <> SAR.Count Then _
+            Exit Sub
+        
+        ' all rates must be the same
+        For Each PRate In PAR
+            found = False
+            For Each SRate In SAR
+                If PRate.Minimum = SRate.Minimum And _
+                        PRate.Maximum = SRate.Maximum Then
+                    found = True
+                    Exit For
+                End If
+            Next SRate
+            If Not found Then _
+                Exit Sub        ' not found
+        Next PRate
+        
+        Set g_AxisRates = PAR   ' its a keeper
+        
+'        For i = 0 To PAR.Count - 1
+'            PRate = PAR(i).Item
+'            SRate = SAR(i).Item
+'            If PRate.Minimum <> SRate.Minimum Then _
+'                Exit Sub
+'            If PRate.Maximum <> SRate.Maximum Then _
+'                Exit Sub
+'        Next i
+    
+    Else
+        Set g_AxisRates = Nothing
+        g_dCurAxisRate = INVALID_PARAMETER
+    End If
+    
+    g_handBox.SetAxisRates
+
+End Sub
+
 Public Sub ScopeClean(clear As Boolean)
 
     g_bConnected = False
@@ -87,12 +167,28 @@ Public Sub ScopeClean(clear As Boolean)
         g_dMeridianDelayEast = val(g_Profile.GetValue(ID, "MeridianDelayEast"))
         g_eDoesRefraction = CLng(g_Profile.GetValue(ID, "DoesRefraction"))
         g_eEquSystem = CLng(g_Profile.GetValue(ID, "EquSystem"))
-        g_bAutoUnpark = CBool(g_Profile.GetValue(ID, "AutoUnpark"))
-        g_bBacklash = CBool(g_Profile.GetValue(ID, "Backlash"))
-        g_bSimple = CBool(g_Profile.GetValue(ID, "Simple"))
+        g_bAutoUnpark = val(g_Profile.GetValue(ID, "AutoUnpark"))
+        g_bBacklash = val(g_Profile.GetValue(ID, "Backlash"))
+        g_bSimple = val(g_Profile.GetValue(ID, "Simple"))
         If g_bSimple Then _
             g_bAutoUnpark = False
-        g_bQuiet = CBool(g_Profile.GetValue(ID, "QuietMode"))
+        g_bQuiet = val(g_Profile.GetValue(ID, "QuietMode"))
+        g_bTimeNag = val(g_Profile.GetValue(ID, "TimeNag"))
+    
+        ' retrieve emulation overrides
+        g_bEmuAltAz = val(g_Profile.GetValue(ID, "AltAz", "Emulate"))
+        g_bEmuDateTime = val(g_Profile.GetValue(ID, "DateTime", "Emulate"))
+        g_bEmuDoesRefraction = val(g_Profile.GetValue(ID, "DoesRefraction", "Emulate"))
+        g_bEmuElevation = val(g_Profile.GetValue(ID, "Elevation", "Emulate"))
+        g_bEmuEqu = val(g_Profile.GetValue(ID, "Equ", "Emulate"))
+        g_bEmuEquSystem = val(g_Profile.GetValue(ID, "EquSystem", "Emulate"))
+        g_bEmuLatLong = val(g_Profile.GetValue(ID, "LatLong", "Emulate"))
+        g_bEmuOptics = val(g_Profile.GetValue(ID, "Optics", "Emulate"))
+        g_bEmuSideOfPier = val(g_Profile.GetValue(ID, "SideOfPier", "Emulate"))
+        g_bEmuSiderealTime = val(g_Profile.GetValue(ID, "SiderealTime", "Emulate"))
+        g_bEmuSlewAltAz = val(g_Profile.GetValue(ID, "SlewAltAz", "Emulate"))
+        g_bEmuSlewAltAzAsync = val(g_Profile.GetValue(ID, "SlewAltAzAsync", "Emulate"))
+        g_bEmuSyncAltAz = val(g_Profile.GetValue(ID, "SyncAltAz", "Emulate"))
     End If
     
     g_dRightAscension = INVALID_PARAMETER
@@ -101,41 +197,8 @@ Public Sub ScopeClean(clear As Boolean)
     g_dAzimuth = INVALID_PARAMETER
     g_dTargetRA = INVALID_PARAMETER
     g_dTargetDec = INVALID_PARAMETER
-    
-End Sub
-
-Public Sub ScopeCreate(ID As String)
-  
-    If g_Scope Is Nothing Then
-    
-        If ID = "" Then _
-            Err.Raise SCODE_NO_SCOPE, ERR_SOURCE, _
-                "No Scope. " & MSG_NO_SCOPE
-                
-        
-        If Not g_bForceLate Then
-            On Error Resume Next
-            Set g_IScope = CreateObject(ID)
-            Set g_Scope = g_IScope
-            On Error GoTo 0
-        End If
-        
-        If g_Scope Is Nothing Then _
-            Set g_Scope = CreateObject(ID)
-        
-        If g_Scope Is Nothing Then
-            g_handBox.ErrorLEDScope True
-        Else
-            g_handBox.ErrorLEDScope False
-        End If
-        
-        g_sScopeName = "(None)"
-        
-        On Error Resume Next
-            g_sScopeName = Trim(g_Scope.Name)
-        On Error GoTo 0
-        
-    End If
+    g_dCurAxisRate = INVALID_PARAMETER
+    Set g_AxisRates = Nothing
     
 End Sub
 
@@ -151,24 +214,6 @@ ErrorHandler:
     If g_bConnected Then
         g_handBox.ErrorLEDScope True
         g_setupDlg.ConnectScope False
-    End If
-    
-    On Error GoTo 0
-    
-End Sub
-
-Public Sub ScopeDelete()
-      
-    On Error Resume Next
-    
-    If Not g_Scope Is Nothing Then
-        
-        If g_bConnected Then _
-            g_Scope.Connected = False
-        g_bConnected = False
-        Set g_Scope = Nothing
-        Set g_IScope = Nothing
-         
     End If
     
     On Error GoTo 0
@@ -227,6 +272,60 @@ Public Sub ScopeCoords(lost As Boolean, frcSOP As Boolean)
         
 End Sub
 
+Public Sub ScopeCreate(ID As String)
+  
+    If g_Scope Is Nothing Then
+    
+        If ID = "" Then _
+            Err.Raise SCODE_NO_SCOPE, ERR_SOURCE, _
+                "No Scope. " & MSG_NO_SCOPE
+                
+        
+        If Not g_bForceLate Then
+            On Error Resume Next
+            Set g_IScope = CreateObject(ID)
+            Set g_Scope = g_IScope
+            On Error GoTo 0
+        End If
+        
+        If g_Scope Is Nothing Then _
+            Set g_Scope = CreateObject(ID)
+        
+        If g_Scope Is Nothing Then
+            g_handBox.ErrorLEDScope True
+        Else
+            g_handBox.ErrorLEDScope False
+            g_handBox.ErrorLED False
+        End If
+        
+        g_sScopeName = "(None)"
+        
+        On Error Resume Next
+            g_sScopeName = Trim(g_Scope.Name)
+        On Error GoTo 0
+        
+    End If
+    
+End Sub
+
+Public Sub ScopeDelete()
+      
+    On Error Resume Next
+    
+    If Not g_Scope Is Nothing Then
+        
+        If g_bConnected Then _
+            g_Scope.Connected = False
+        g_bConnected = False
+        Set g_Scope = Nothing
+        Set g_IScope = Nothing
+         
+    End If
+    
+    On Error GoTo 0
+    
+End Sub
+
 Public Sub ScopeSave()
 
     g_Profile.WriteValue ID, "ScopeID", g_sScopeID
@@ -242,10 +341,25 @@ Public Sub ScopeSave()
     g_Profile.WriteValue ID, "MeridianDelayEast", Str(g_dMeridianDelayEast)
     g_Profile.WriteValue ID, "EquSystem", Str(g_eEquSystem)
     g_Profile.WriteValue ID, "DoesRefraction", Str(g_eDoesRefraction)
-    g_Profile.WriteValue ID, "AutoUnpark", CStr(g_bAutoUnpark)
-    g_Profile.WriteValue ID, "Backlash", CStr(g_bBacklash)
-    g_Profile.WriteValue ID, "Simple", CStr(g_bSimple)
-    g_Profile.WriteValue ID, "QuietMode", CStr(g_bQuiet)
+    g_Profile.WriteValue ID, "AutoUnpark", CInt(g_bAutoUnpark)
+    g_Profile.WriteValue ID, "Backlash", CInt(g_bBacklash)
+    g_Profile.WriteValue ID, "Simple", CInt(g_bSimple)
+    g_Profile.WriteValue ID, "QuietMode", CInt(g_bQuiet)
+    g_Profile.WriteValue ID, "TimeNag", CInt(g_bTimeNag)
+    
+    g_Profile.WriteValue ID, "AltAz", CInt(g_bEmuAltAz), "Emulate"
+    g_Profile.WriteValue ID, "DateTime", CInt(g_bEmuDateTime), "Emulate"
+    g_Profile.WriteValue ID, "DoesRefraction", CInt(g_bEmuDoesRefraction), "Emulate"
+    g_Profile.WriteValue ID, "Elevation", CInt(g_bEmuElevation), "Emulate"
+    g_Profile.WriteValue ID, "Equ", CInt(g_bEmuEqu), "Emulate"
+    g_Profile.WriteValue ID, "EquSystem", CInt(g_bEmuEquSystem), "Emulate"
+    g_Profile.WriteValue ID, "LatLong", CInt(g_bEmuLatLong), "Emulate"
+    g_Profile.WriteValue ID, "Optics", CInt(g_bEmuOptics), "Emulate"
+    g_Profile.WriteValue ID, "SideOfPier", CInt(g_bEmuSideOfPier), "Emulate"
+    g_Profile.WriteValue ID, "SiderealTime", CInt(g_bEmuSiderealTime), "Emulate"
+    g_Profile.WriteValue ID, "SlewAltAz", CInt(g_bEmuSlewAltAz), "Emulate"
+    g_Profile.WriteValue ID, "SlewAltAzAsync", CInt(g_bEmuSlewAltAzAsync), "Emulate"
+    g_Profile.WriteValue ID, "SyncAltAz", CInt(g_bEmuSyncAltAz), "Emulate"
     
 End Sub
 
@@ -273,7 +387,7 @@ End Function
 ' SOP we'll recalc.  frcSOP means we must have done a goto.
 Public Sub ScopeSOP(frcSOP As Boolean)
 
-    Dim HA As Double
+    Dim ha As Double
     Dim newVal As PierSide
     Dim out As String
     
@@ -291,11 +405,11 @@ Public Sub ScopeSOP(frcSOP As Boolean)
                 newVal = pierUnknown
             Else
                 
-                HA = HAScale(ScopeST() - g_dRightAscension)
+                ha = HAScale(ScopeST() - g_dRightAscension)
                 
-                If HA > g_dMeridianDelay And HA > -g_dMeridianDelayEast Then
+                If ha > g_dMeridianDelay And ha > -g_dMeridianDelayEast Then
                     newVal = pierEast
-                ElseIf HA < g_dMeridianDelay And HA < -g_dMeridianDelayEast Then
+                ElseIf ha < g_dMeridianDelay And ha < -g_dMeridianDelayEast Then
                     newVal = pierWest
                 Else
                     ' two valid ways to get here OR
@@ -409,7 +523,7 @@ End Sub
 Public Function ScopeDSOP(ByVal RightAscension As Double, _
                              ByVal Declination As Double) As PierSide
     
-    Dim HA As Double
+    Dim ha As Double
     Dim SOP As PierSide
     Dim out As String
     
@@ -426,26 +540,26 @@ Public Function ScopeDSOP(ByVal RightAscension As Double, _
         ' simulate (sometimes DSOP not supported, but there is no Can flag)
         If SOP = pierUnknown Then
             
-            HA = HAScale(ScopeST() - RightAscension)
+            ha = HAScale(ScopeST() - RightAscension)
             
             Select Case g_SOP
                 Case pierUnknown:
                     ' check for unambiguous cases
-                    If HA > g_dMeridianDelay And HA > -g_dMeridianDelayEast Then
+                    If ha > g_dMeridianDelay And ha > -g_dMeridianDelayEast Then
                         SOP = pierEast
-                    ElseIf HA < g_dMeridianDelay And HA < -g_dMeridianDelayEast Then
+                    ElseIf ha < g_dMeridianDelay And ha < -g_dMeridianDelayEast Then
                         SOP = pierWest
                     Else
                         ' ambiguous, leave as unknown
                     End If
                 Case pierEast:
-                    If HA < -g_dMeridianDelayEast Then
+                    If ha < -g_dMeridianDelayEast Then
                         SOP = pierWest
                     Else
                         SOP = pierEast
                     End If
                 Case pierWest:
-                    If HA > g_dMeridianDelay Then
+                    If ha > g_dMeridianDelay Then
                         SOP = pierEast
                     Else
                         SOP = pierWest
@@ -494,28 +608,6 @@ Public Function ScopeDSOP(ByVal RightAscension As Double, _
     ScopeDSOP = SOP
     
 End Function
-
-Public Sub ScopeAbortSlew()
-
-    On Error Resume Next
-    
-    g_bMonSlewing = False   ' make sure Async doesn't get re-enabled
-    g_bAsyncSlewing = False ' make sure Slewing doesn't get cleared too soon
-    g_Scope.AbortSlew       ' ??? watch for failure
-    ScopeTracking trackRead
-    ScopeAtHome False, False
-    ScopeAtPark False, False
-    ScopeSlewing slewSet, False
-    g_bMonSlewing = True
-    If g_bSlaved Then
-        DomeAbortSlew
-        g_bSlaved = g_bDomeConnected    ' re-slave the dome (Halt unslaved)
-        g_handBox.Slave
-    End If
-
-    On Error GoTo 0
-    
-End Sub
 
 Public Sub ScopeHome()
 
@@ -614,6 +706,7 @@ Public Sub ScopeAtPark(ByVal seed As Boolean, frc As Boolean)
     If seed <> g_bAtPark Then
         g_bAtPark = seed    ' set befor next call due to side effects
         g_handBox.ParkCaption = Not g_bAtPark
+        g_handBox.CheckEnable
     End If
           
 End Sub
@@ -666,6 +759,7 @@ Public Sub ScopePark()
     ' clean up after successful park
     ScopeAtPark True, False
     g_handBox.ParkCaption = Not g_bAtPark  ' get rid of "parking"
+    g_handBox.CheckEnable
     ScopeSlewing slewSet, False
     g_bMonSlewing = True
     
@@ -711,6 +805,7 @@ Public Sub ScopeUnpark()
     ScopeAtHome False, False
     ScopeAtPark False, False
     g_handBox.ParkCaption = Not g_bAtPark  ' get rid of "Un- Parking"
+    g_handBox.CheckEnable
     
     If Error Then
         g_handBox.cmdParkScope.Caption = "UnPark Error"

@@ -28,6 +28,8 @@ Attribute VB_Name = "Startup"
 '                   because object creation PUMPS EVENTS, allowing property
 '                   and method calls to be services before initialization
 '                   completes.
+' 03-Jun-11 jab     Added TimeNag
+' 11-Jun-11 jab     fixed window dimensions to be insensitive to border size
 ' -----------------------------------------------------------------------------
 
 Option Explicit
@@ -121,7 +123,7 @@ Sub DoStartupIf()
     ' get the registry format version so we can only update whats changed
     oldRegVer = 0#
     On Error Resume Next
-    oldRegVer = CDbl(g_Profile.GetValue(ID, "RegVer"))
+    oldRegVer = val(g_Profile.GetValue(ID, "RegVer"))
     On Error GoTo 0
     
     ' Persistent settings for the scope - Create on first start, or update
@@ -139,29 +141,29 @@ Sub DoStartupIf()
         g_Profile.WriteValue ID, "MeridianDelay", "0.0"
         g_Profile.WriteValue ID, "EquSystem", Str(equLocalTopocentric)
         g_Profile.WriteValue ID, "DoesRefraction", Str(refUnknown)
-        g_Profile.WriteValue ID, "AutoUnpark", "False"
+        g_Profile.WriteValue ID, "AutoUnpark", CInt(False)
         
         g_Profile.WriteValue ID, "Left", "100"
         g_Profile.WriteValue ID, "Top", "100"
-        g_Profile.WriteValue ID, "AdvancedSetup", "False"
-        g_Profile.WriteValue ID, "DomeMode", "False"
-        g_Profile.WriteValue ID, "MotionControl", "False"
+        g_Profile.WriteValue ID, "AdvancedSetup", CInt(False)
+        g_Profile.WriteValue ID, "DomeMode", CInt(False)
+        g_Profile.WriteValue ID, "MotionControl", CInt(False)
     End If
     
     If oldRegVer < 4.7 Then
-        g_Profile.WriteValue ID, "FocusMode", "False"
+        g_Profile.WriteValue ID, "FocusMode", "0"
     End If
     
     If oldRegVer < 4.9 Then
-        g_Profile.WriteValue ID, "QuietMode", "False"
+        g_Profile.WriteValue ID, "QuietMode", "0"
     End If
     
     If oldRegVer < 5# Then
-        g_Profile.WriteValue ID, "HAMode", False
+        g_Profile.WriteValue ID, "HAMode", CInt(False)
     End If
     
     If oldRegVer < 5.1 Then
-        g_Profile.WriteValue ID, "Backlash", False
+        g_Profile.WriteValue ID, "Backlash", CInt(False)
         
         ' To initialize the new east side delay negate the west side delay
         ' This will keep the same behavior as the single variable case
@@ -173,7 +175,27 @@ Sub DoStartupIf()
     End If
     
     If oldRegVer < 5.2 Then
-        g_Profile.WriteValue ID, "Simple", False
+        g_Profile.WriteValue ID, "Simple", CInt(False)
+    End If
+    
+    If oldRegVer < 5.3 Then
+        g_Profile.WriteValue ID, "AltAz", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "DateTime", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "DoesRefraction", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "Elevation", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "Equ", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "EquSystem", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "LatLong", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "Optics", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "SideOfPier", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "SiderealTime", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "SlewAltAz", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "SlewAltAzAsync", CInt(False), "Emulate"
+        g_Profile.WriteValue ID, "SyncAltAz", CInt(False), "Emulate"
+    End If
+    
+    If oldRegVer < 6# Then
+        g_Profile.WriteValue ID, "TimeNag", CInt(True)
     End If
     
     g_Profile.WriteValue ID, "RegVer", RegVer
@@ -208,15 +230,15 @@ Sub DoStartupIf()
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxIncrement", Str(EMPTY_PARAMETER)
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMaxStep", Str(EMPTY_PARAMETER)
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserStepSize", Str(EMPTY_PARAMETER)
-        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", "True"
-        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMoveMicrons", "False"
+        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserAbsMove", CInt(True)
+        g_FocuserProfile.WriteValue IDFOCUSER, "FocuserMoveMicrons", CInt(False)
     End If
         
     g_FocuserProfile.WriteValue IDFOCUSER, "RegVer", RegVer
     
     ' find out if we're forcing classic late binding
     ' be careful, this registry entry may not exist
-    If g_Profile.GetValue(ID, "ForceLate") = "True" Then
+    If CBool(g_Profile.GetValue(ID, "ForceLate")) Then
         g_bForceLate = True
     Else
         g_bForceLate = False
@@ -231,13 +253,13 @@ Sub DoStartupIf()
         
     g_sFocuserID = g_FocuserProfile.GetValue(IDFOCUSER, "FocuserID")
     g_sFocuserName = g_FocuserProfile.GetValue(IDFOCUSER, "FocuserName")
-      
+    
     ' set up any gui state
-    g_bSetupAdvanced = CBool(g_Profile.GetValue(ID, "AdvancedSetup"))
-    g_bDomeMode = CBool(g_Profile.GetValue(ID, "DomeMode"))
-    g_bFocusMode = CBool(g_Profile.GetValue(ID, "FocusMode"))
-    g_bMotionControl = CBool(g_Profile.GetValue(ID, "MotionControl"))
-    g_bHAMode = CBool(g_Profile.GetValue(ID, "HAMode"))
+    g_bSetupAdvanced = val(g_Profile.GetValue(ID, "AdvancedSetup"))
+    g_bDomeMode = val(g_Profile.GetValue(ID, "DomeMode"))
+    g_bFocusMode = val(g_Profile.GetValue(ID, "FocusMode"))
+    g_bMotionControl = val(g_Profile.GetValue(ID, "MotionControl"))
+    g_bHAMode = val(g_Profile.GetValue(ID, "HAMode"))
     g_handBox.Left = CLng(g_Profile.GetValue(ID, "Left")) * Screen.TwipsPerPixelX
     g_handBox.Top = CLng(g_Profile.GetValue(ID, "Top")) * Screen.TwipsPerPixelY
     
@@ -280,12 +302,12 @@ Sub DoStartupIf()
     g_handBox.Show
     
     ' get timers going
-    quiet_time_reset = 5 / TIMER_INTERVAL           ' check coords every 5 sec
+    quiet_time_reset = 5# / TIMER_INTERVAL           ' check coords every 5 sec
     quiet_time = 0
     
     slave_time = 0
     
-    temperature_time_reset = 2.5 / TIMER_INTERVAL   ' not persisted or resetable
+    temperature_time_reset = 2.5 / TIMER_INTERVAL    ' not persisted or resetable
     temperature_time = 0
     
     g_ltimerID = SetTimer(0, 0, TIMER_INTERVAL * 1000, AddressOf timer_tick)
@@ -318,11 +340,11 @@ Sub DoShutdown()
     FocuserDelete
     
     ' save GUI state
-    g_Profile.WriteValue ID, "AdvancedSetup", CStr(g_bSetupAdvanced)
-    g_Profile.WriteValue ID, "DomeMode", CStr(g_bDomeMode)
-    g_Profile.WriteValue ID, "FocusMode", CStr(g_bFocusMode)
-    g_Profile.WriteValue ID, "MotionControl", CStr(g_bMotionControl)
-    g_Profile.WriteValue ID, "HAMode", CStr(g_bHAMode)
+    g_Profile.WriteValue ID, "AdvancedSetup", CInt(g_bSetupAdvanced)
+    g_Profile.WriteValue ID, "DomeMode", CInt(g_bDomeMode)
+    g_Profile.WriteValue ID, "FocusMode", CInt(g_bFocusMode)
+    g_Profile.WriteValue ID, "MotionControl", CInt(g_bMotionControl)
+    g_Profile.WriteValue ID, "HAMode", CInt(g_bHAMode)
     
     ' save windowing state
     g_handBox.Visible = True
@@ -431,6 +453,8 @@ Sub timer_tick(ByVal hwnd As Long, _
             
             ' how far
             step = g_handBox.cbJog.ItemData(g_handBox.cbJog.ListIndex) / 60#
+            If step < 0# Then _
+                step = 0#                       ' neg means rate, should never get here...
             z = Cos(g_dDeclination * DEG_RAD) * 15#
             If z < 0.001 Then _
                 z = 0.001
@@ -806,7 +830,7 @@ ErrorHandler:
             Err.Source & " - " & Err.Description
     End If
 
-    g_handBox.ErrorLED
+    g_handBox.ErrorLED True
     ScopeConnected
     DomeConnected
     FocuserConnected
@@ -820,9 +844,9 @@ End Sub
 ' =============
 
 ' range the altitude parameter
-Public Function AltScale(ByVal Alt As Double) As Double
+Public Function AltScale(ByVal alt As Double) As Double
 
-    AltScale = Alt
+    AltScale = alt
     If AltScale > 90 Then _
         AltScale = 90
     If AltScale < 0 Then _
@@ -845,16 +869,16 @@ Public Function AzScale(ByVal Az As Double) As Double
 End Function
 
 ' range the azimuth parameter
-Public Function HAScale(ByVal HA As Double) As Double
+Public Function HAScale(ByVal ha As Double) As Double
 
-    While HA < -12
-        HA = HA + 24
+    While ha < -12
+        ha = ha + 24
     Wend
-    While HA >= 12
-        HA = HA - 24
+    While ha >= 12
+        ha = ha - 24
     Wend
     
-    HAScale = HA
+    HAScale = ha
 
 End Function
 
@@ -894,14 +918,14 @@ End Function
 '---------------------------------------------------------------------
 
 Public Sub calc_altaz(ByVal RA As Double, ByVal Dec As Double, _
-            Az As Double, Alt As Double)
+            Az As Double, alt As Double)
         
     Dim tAz As Double
     Dim tAlt As Double
 
     If (g_dLatitude < -90#) Or (g_dLongitude < -360#) Or _
             (RA < -24#) Or (Dec < -90#) Then
-        Alt = INVALID_PARAMETER
+        alt = INVALID_PARAMETER
         Az = INVALID_PARAMETER
         Exit Sub
     End If
@@ -911,7 +935,7 @@ Public Sub calc_altaz(ByVal RA As Double, ByVal Dec As Double, _
             ((RA - now_lst(g_dLongitude * DEG_RAD)) * HRS_RAD), _
              (Dec * DEG_RAD), tAlt, tAz
              
-    Alt = tAlt * RAD_DEG
+    alt = tAlt * RAD_DEG
     Az = 360# - (tAz * RAD_DEG)
     
 End Sub
@@ -922,7 +946,7 @@ End Sub
 '
 '---------------------------------------------------------------------
 
-Public Sub calc_radec(ByVal Az As Double, ByVal Alt As Double, _
+Public Sub calc_radec(ByVal Az As Double, ByVal alt As Double, _
         RA As Double, Dec As Double)
         
     Dim dHA As Double
@@ -930,14 +954,14 @@ Public Sub calc_radec(ByVal Az As Double, ByVal Alt As Double, _
     Dim tDec As Double
     
     If (g_dLatitude < -90#) Or (g_dLongitude < -360#) Or _
-            (Alt < -90#) Or (Az < -360#) Then
+            (alt < -90#) Or (Az < -360#) Then
         RA = INVALID_PARAMETER
         Dec = INVALID_PARAMETER
         Exit Sub
     End If
     
     aa_hadec (g_dLatitude * DEG_RAD), _
-            (Alt * DEG_RAD), _
+            (alt * DEG_RAD), _
             ((360# - Az) * DEG_RAD), _
             dHA, tDec
             

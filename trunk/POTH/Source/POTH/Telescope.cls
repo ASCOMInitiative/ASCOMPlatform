@@ -520,12 +520,20 @@ Public Property Let Connected(ByVal newVal As Boolean)
     ' only with a state change does anything happen
     If g_bConnected <> newVal Then
         If newVal Then
+            g_ErrNumber = 0
             g_setupDlg.ConnectScope False
             g_setupDlg.UpdateGlobals
             If g_bConnected Then
                 out = " (connected)"
             Else
-                out = " (error)"
+                ' failed, see if the error code is available
+                If g_ErrNumber = 0 Then
+                    Err.Raise SCODE_NOT_CONNECTED, ERR_SOURCE, _
+                        MSG_NOT_CONNECTED
+                Else
+                    Err.Raise g_ErrNumber, g_ErrSource, _
+                        g_ErrDescription
+                End If
             End If
         Else
             If App.StartMode = vbSModeStandalone Then

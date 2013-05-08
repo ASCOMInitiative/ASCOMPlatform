@@ -9,12 +9,22 @@ Begin VB.Form frmSetup
    ClientWidth     =   14175
    Icon            =   "frmSetup.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   9917.064
    ScaleMode       =   0  'User
    ScaleWidth      =   14175
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdResetCap 
+      Caption         =   "&Reset / Refresh"
+      Height          =   331
+      Left            =   1800
+      TabIndex        =   132
+      ToolTipText     =   "Bring up setup dialog for the dome driver"
+      Top             =   6659
+      Width           =   1455
+   End
    Begin VB.CheckBox chkSimple 
       BackColor       =   &H00000000&
       Caption         =   "&Simple Scope"
@@ -226,7 +236,7 @@ Begin VB.Form frmSetup
       Begin VB.CommandButton cmdFocuserSetup 
          Caption         =   "Setup"
          Height          =   375
-         Left            =   1080
+         Left            =   915
          TabIndex        =   43
          ToolTipText     =   "Bring up setup dialog for the focuser driver"
          Top             =   1320
@@ -235,7 +245,7 @@ Begin VB.Form frmSetup
       Begin VB.CommandButton cmdFocuserConnect 
          Caption         =   "Connect"
          Height          =   375
-         Left            =   1680
+         Left            =   1650
          TabIndex        =   42
          ToolTipText     =   "Take control of the focuser"
          Top             =   360
@@ -244,7 +254,7 @@ Begin VB.Form frmSetup
       Begin VB.CommandButton cmdFocuserChooser 
          Caption         =   "Choose Focuser"
          Height          =   375
-         Left            =   120
+         Left            =   165
          TabIndex        =   41
          ToolTipText     =   "Bring up list of focusers"
          Top             =   360
@@ -850,7 +860,7 @@ Begin VB.Form frmSetup
    End
    Begin VB.Frame frmScopeCap 
       BackColor       =   &H00000000&
-      Caption         =   "Scope Capabilities  (output only)"
+      Caption         =   "Scope Capabilities      "
       ForeColor       =   &H00FFFFFF&
       Height          =   3060
       Left            =   180
@@ -1134,7 +1144,7 @@ Begin VB.Form frmSetup
       End
       Begin VB.CheckBox chkCanSetPierSide 
          BackColor       =   &H00000000&
-         Caption         =   "Can Set Pier Side *"
+         Caption         =   "Can Set Pier Side"
          ForeColor       =   &H00FFFFFF&
          Height          =   195
          Left            =   1860
@@ -1377,6 +1387,11 @@ Attribute VB_Exposed = False
 ' 10-Jan-06 dpp     Focuser implementation
 ' 31-Aug-06 jab     new gui layout
 ' 10-Sep-06 jab     major changes to handle new focuser gui/functionality
+' 10-Jul-08 jab     added refresh of scope and focuser names on connect
+'                   as some devices tune up names on connect
+' 17-Nov-08 dpp     improve SiteLatitude/Longitude and UTC behaviour
+' 03-Jun-11 jab     Added TimeNag check
+' 11-Jun-11 jab     fixed window dimensions to be insensitive to border size
 ' -----------------------------------------------------------------------------
 Option Explicit
 
@@ -1425,7 +1440,7 @@ End Sub
 Private Sub Form_Clean _
         (cleanScope As Boolean, cleanDome As Boolean, cleanFocuser As Boolean)
     
-    Dim I As Integer
+    Dim i As Integer
         
     If cleanScope Then
         Me.Aperture = g_dAperture
@@ -1441,22 +1456,22 @@ Private Sub Form_Clean _
         chkSimple = IIf(g_bSimple, 1, 0)
         
         ' set DoesRefraction list item
-        For I = cbRefraction.ListCount - 1 To 0 Step -1
-            If cbRefraction.ItemData(I) = g_eDoesRefraction Then _
+        For i = cbRefraction.ListCount - 1 To 0 Step -1
+            If cbRefraction.ItemData(i) = g_eDoesRefraction Then _
                 Exit For
-        Next I
-        If I < 0 Then _
-            I = 0
-        cbRefraction.ListIndex = I
+        Next i
+        If i < 0 Then _
+            i = 0
+        cbRefraction.ListIndex = i
         
         ' set Equatorial Coordinates list item
-        For I = cbEquSystem.ListCount - 1 To 0 Step -1
-            If cbEquSystem.ItemData(I) = g_eEquSystem Then _
+        For i = cbEquSystem.ListCount - 1 To 0 Step -1
+            If cbEquSystem.ItemData(i) = g_eEquSystem Then _
                 Exit For
-        Next I
-        If I < 0 Then _
-            I = 0
-        cbEquSystem.ListIndex = I
+        Next i
+        If i < 0 Then _
+            i = 0
+        cbEquSystem.ListIndex = i
     End If
     
     If cleanDome Then
@@ -1506,6 +1521,7 @@ Private Sub cmdChooser_Click()
     End If
 
     If newScopeID <> g_sScopeID Then
+        ClearEmulation
         If Not g_Scope Is Nothing Then
             If g_bConnected Then _
                 cmdConnect_Click
@@ -1880,7 +1896,9 @@ Private Sub cmdUpdate_Click()
         Exit Sub
     If getElevation(True, False) = INVALID_PARAMETER Then _
         Exit Sub
-
+        
+    ' these shouldn;t error out, but just in case can still set UTC
+    On Error Resume Next
     val = getLatitude(True, True)
     val = getLongitude(True, True)
     val = getElevation(True, True)
@@ -1891,10 +1909,21 @@ Private Sub cmdUpdate_Click()
         
         On Error GoTo CatchUTC
             g_Scope.UTCDate = UTCDate
+            If g_bCanSiderealTime Then
+                val = g_Scope.SiderealTime
+                MsgBox _
+                    "New difference in Sidereal time is:" & vbCrLf & vbCrLf & _
+                    "    " & _
+                        Format((val - now_lst(g_dLongitude * DEG_RAD)) * 3600, "##0.0") & _
+                        " seconds", vbOKOnly
+            Else
+                ' MsgBox "Date has been updated", vbOKOnly
+                ' (the site changes do not report unless errors occur
+                ' so keep this consistent)
+            End If
         GoTo FinalUTC
 CatchUTC:
         MsgBox "Date/Time change error, proceeding.", vbExclamation
-        Resume Next
 FinalUTC:
         On Error GoTo 0
     
@@ -1931,6 +1960,22 @@ Private Sub cmdSetup_Click()
     ' refresh state in case scope data changed
     If g_bConnected Then _
         ReadScope True
+    
+    On Error GoTo 0
+    
+End Sub
+
+Private Sub cmdResetCap_Click()
+
+    ClearEmulation
+    
+    If g_Scope Is Nothing Or Not g_bConnected Then
+        Exit Sub
+    End If
+    
+    On Error Resume Next
+    
+    ReadScope True
     
     On Error GoTo 0
     
@@ -2887,14 +2932,12 @@ Private Sub ReadScope(prompt As Boolean)
     Dim tmpCompST As Double
     Dim tmpDoesRefraction As Boolean
     Dim tmpEquSystem As EquatorialCoordinateType
-    Dim I As Integer
+    Dim i As Integer
     Dim wasConnected As Boolean
     
     '---------------
     ' get connected
     '---------------
-    
-    On Error Resume Next
     
     ' do we have a scope?
     If g_Scope Is Nothing Then
@@ -2903,12 +2946,26 @@ Private Sub ReadScope(prompt As Boolean)
     End If
     
     ' keep track of old state, and attempt connection
-    If g_bConnected Then
-        wasConnected = True
-    Else
+    wasConnected = g_bConnected
+    On Error GoTo CatchConnect
+    If Not g_bConnected Then _
         g_Scope.Connected = True
-        wasConnected = False
+    GoTo FinalConnect
+CatchConnect:
+    If prompt Then
+        MsgBox "Error connecting to telescope." & vbCrLf & _
+            Hex(Err.Number) & " - " & Err.Source & vbCrLf & _
+            Err.Description, vbExclamation
+    Else
+        ' store connection error for retrieval by Connect API
+        g_ErrNumber = Err.Number
+        g_ErrSource = Err.Source
+        g_ErrDescription = Err.Description
     End If
+    Exit Sub
+FinalConnect:
+    g_ErrNumber = 0
+    On Error Resume Next
     
     ' retrieve current state
     g_bConnected = g_Scope.Connected
@@ -2992,6 +3049,10 @@ SimpleFinalCanEqu:
         On Error GoTo 0
     
     Else
+        
+        On Error Resume Next
+            g_sScopeName = Trim(g_Scope.Name)
+        On Error GoTo 0
         
         ' take care of AutoUnpark
         If (Not wasConnected) And (chkAutoUnpark = 1) Then
@@ -3191,13 +3252,13 @@ CatchEquSystem:
 FinalEquSystem:
         If g_bCanEquSystem Then
             ' set Equatorial Coordinates list item
-            For I = cbEquSystem.ListCount - 1 To 0 Step -1
-                If cbEquSystem.ItemData(I) = tmpEquSystem Then _
+            For i = cbEquSystem.ListCount - 1 To 0 Step -1
+                If cbEquSystem.ItemData(i) = tmpEquSystem Then _
                     Exit For
-            Next I
-            If I < 0 Then _
-                I = 0
-            cbEquSystem.ListIndex = I
+            Next i
+            If i < 0 Then _
+                i = 0
+            cbEquSystem.ListIndex = i
         End If
         On Error GoTo 0
         
@@ -3218,12 +3279,18 @@ FinalCanSiderealTime:
     
     tmpCompST = now_lst(tmpLongitude * DEG_RAD)
     
-    If tmpLongitude >= -360 And g_bCanSiderealTime Then
+    If g_bTimeNag And tmpLongitude >= -360 And g_bCanSiderealTime Then
         If Abs((tmpCompST - tmpSiderealTime) * 3600) > 15 Then
             If prompt Then _
-                MsgBox "Scope driver Sidereal Time and computer Sidereal Time" & _
-                    vbCrLf & "differ by more than 15 seconds." & vbCrLf & _
+                MsgBox _
+                    "Scope Sidereal time and computer Sidereal time differ by:" & vbCrLf & _
+                    vbCrLf & _
+                    "    " & _
+                        Format((tmpCompST - tmpSiderealTime) * 3600, "###.0") & _
+                        " seconds" & vbCrLf & _
+                    vbCrLf & _
                     "Recommend [Update Scope].", vbExclamation
+                    'DPP added info on difference Nov 2008
         End If
     End If
     
@@ -3232,6 +3299,8 @@ FinalCanSiderealTime:
             MsgBox "Will need a valid Latitude and Longitude to" & vbCrLf & _
                "operate Quiet mode.  Disabling Quiet mode.", vbExclamation
     End If
+    
+    ScopeAxis
     
     '-----------------------
     ' update all labels for
@@ -3290,6 +3359,8 @@ FinalCanSiderealTime:
     chkCanSyncAltAz = IIf(g_bCanSyncAltAz, 1, 0)
     chkCanUnpark = IIf(g_bCanUnpark, 1, 0)
     
+    txtChooser.Caption = g_sScopeName
+    
     '---------------
     ' get the state
     '---------------
@@ -3319,13 +3390,33 @@ End Sub
 
 Private Sub ReadDome(prompt As Boolean)
     
-    g_bDomeConnected = False
-    If g_Dome Is Nothing Then _
+    ' do we have a dome?
+    If g_Dome Is Nothing Then
+        g_bDomeConnected = False
         Exit Sub
-        
+    End If
+    
+    ' attempt connection
+    On Error GoTo CatchConnect
+    If Not g_bDomeConnected Then _
+        g_Dome.Connected = True
+    GoTo FinalConnect
+CatchConnect:
+    If prompt Then
+        MsgBox "Error connecting to dome." & vbCrLf & _
+        Hex(Err.Number) & " - " & Err.Source & vbCrLf & _
+        Err.Description, vbExclamation
+    Else
+        ' store connection error for retrieval by Connect API
+        g_ErrNumber = Err.Number
+        g_ErrSource = Err.Source
+        g_ErrDescription = Err.Description
+    End If
+    Exit Sub
+FinalConnect:
+    g_ErrNumber = 0
     On Error Resume Next
     
-    g_Dome.Connected = True
     g_bDomeConnected = g_Dome.Connected
     
     If Not g_bDomeConnected Then
@@ -3333,6 +3424,8 @@ Private Sub ReadDome(prompt As Boolean)
             MsgBox "Error connecting to dome.", vbExclamation
         Exit Sub
     End If
+    
+    g_sDomeName = Trim(g_Dome.Name)
         
     g_bDomeFindHome = g_Dome.CanFindHome
     g_bDomePark = g_Dome.CanPark
@@ -3352,20 +3445,42 @@ Private Sub ReadDome(prompt As Boolean)
     chkDomeSetPark = IIf(g_bDomeSetPark, 1, 0)
     chkDomeSetShutter = IIf(g_bDomeSetShutter, 1, 0)
     chkDomeSyncAzimuth = IIf(g_bDomeSyncAzimuth, 1, 0)
-        
+    
+    txtDomeChooser.Caption = g_sDomeName
+    
     On Error GoTo 0
     
 End Sub
 
 Private Sub ReadFocuser(prompt As Boolean)
 
-    g_bFocuserConnected = False
-    If g_Focuser Is Nothing Then _
+    ' do we have a focuser?
+    If g_Focuser Is Nothing Then
+        g_bFocuserConnected = False
         Exit Sub
-        
+    End If
+    
+    ' attempt connection
+    On Error GoTo CatchConnect
+    If Not g_bFocuserConnected Then _
+        g_Focuser.Link = True       'Connected is replaced by Link for Focuser
+    GoTo FinalConnect
+CatchConnect:
+    If prompt Then
+        MsgBox "Error connecting to focuser." & vbCrLf & _
+        Hex(Err.Number) & " - " & Err.Source & vbCrLf & _
+        Err.Description, vbExclamation
+    Else
+        ' store connection error for retrieval by Connect API
+        g_ErrNumber = Err.Number
+        g_ErrSource = Err.Source
+        g_ErrDescription = Err.Description
+    End If
+    Exit Sub
+FinalConnect:
+    g_ErrNumber = 0
     On Error Resume Next
     
-    g_Focuser.Link = True 'Connected is replaced by Link for Focuser
     g_bFocuserConnected = g_Focuser.Link
     
     If Not g_bFocuserConnected Then
@@ -3475,6 +3590,8 @@ Public Sub setDefaults(clear As Boolean)
     g_handBox.ParkCaption = Not g_bAtPark
     LEDHome g_bAtHome
     
+    ScopeAxis
+    
     g_handBox.CheckEnable
     
 End Sub
@@ -3530,6 +3647,12 @@ Public Sub setFocuserDefaults(clear As Boolean)
 End Sub
 
 Private Sub SetDeviceMode(DomeMode As Boolean, FocusMode As Boolean)
+
+    Dim OSpacing As Integer    ' outer spacing around the form
+    Dim ISpacing As Integer    ' inner spacing within the form
+    
+    OSpacing = frmOptics.Left
+    ISpacing = frmGeometry.Left - (frmOptics.Left + frmOptics.Width)
     
     If DomeMode Then
         Me.frmDomeCon.Visible = True
@@ -3538,12 +3661,9 @@ Private Sub SetDeviceMode(DomeMode As Boolean, FocusMode As Boolean)
         Me.frmDomeCap.Visible = True
         Me.lblDriverInfo.Visible = True
         Me.lblLastModified.Visible = True
-        Me.Width = 11100
+        Me.Width = Me.Width - Me.ScaleWidth + _
+            frmGeometry.Left + frmGeometry.Width + OSpacing
         Me.cmdDome.Caption = "<< No &Dome"
-        
-        Me.frmFocuserCon.Left = 11070
-        Me.frmFocuserStep.Left = 11070
-        Me.frmFocuserCap.Left = 11070
     Else
         Me.frmDomeCon.Visible = False
         Me.frmGeometry.Visible = False
@@ -3551,23 +3671,20 @@ Private Sub SetDeviceMode(DomeMode As Boolean, FocusMode As Boolean)
         Me.frmDomeCap.Visible = False
         Me.lblDriverInfo.Visible = False
         Me.lblLastModified.Visible = False
-        Me.Width = 6250
+        Me.Width = Me.Width - Me.ScaleWidth + _
+            frmOptics.Left + frmOptics.Width + OSpacing
         Me.cmdDome.Caption = "&Dome >>"
-        
-        Me.frmFocuserCon.Left = 6240
-        Me.frmFocuserStep.Left = 6240
-        Me.frmFocuserCap.Left = 6240
     End If
+    
+    Me.frmFocuserCon.Left = Me.ScaleWidth - OSpacing + ISpacing
+    Me.frmFocuserStep.Left = Me.ScaleWidth - OSpacing + ISpacing
+    Me.frmFocuserCap.Left = Me.ScaleWidth - OSpacing + ISpacing
     
     If FocusMode Then
         Me.frmFocuserCon.Visible = True
         Me.frmFocuserStep.Visible = True
         Me.frmFocuserCap.Visible = True
-        If DomeMode Then
-            Me.Width = Me.Width + 3100
-        Else
-            Me.Width = Me.Width + 3150
-        End If
+        Me.Width = Me.Width + frmFocuserStep.Width + ISpacing
         Me.cmdFocus.Caption = "<< No &Focus"
     Else
         Me.frmFocuserCon.Visible = False
@@ -3583,8 +3700,13 @@ End Sub
 
 Private Sub SetFormMode(Advanced As Boolean)
 
+    Dim OSpacing As Integer    ' outer spacing around the form
+    
+    OSpacing = frmOptics.Left
+    
     If Advanced Then
-        Me.Height = 10350
+        Me.Height = Me.Height - Me.ScaleHeight + _
+            Me.frmScopeCap.Top + Me.frmScopeCap.Height + OSpacing  ' old val 10350
         Me.cmdAdvanced.Caption = "<< B&asic"
         
         ' make sure tab stops are enabled
@@ -3596,7 +3718,8 @@ Private Sub SetFormMode(Advanced As Boolean)
         Me.frmGeometry.Enabled = True
         Me.frmSlaving.Enabled = True
     Else
-        Me.Height = 3675
+        Me.Height = Me.Height - Me.ScaleHeight + _
+            Me.lblLastModified.Top + Me.lblLastModified.Height + OSpacing  ' old val 3675
         Me.cmdAdvanced.Caption = "&Advanced >>"
         
         ' make sure tab stops are disabled
@@ -3617,4 +3740,686 @@ Private Sub picASCOM_Click()
 
     DisplayWebPage "http://ascom-standards.org/"
     
+End Sub
+
+Private Sub ClearEmulation()
+
+    g_bEmuAltAz = False
+    g_bEmuDateTime = False
+    g_bEmuDoesRefraction = False
+    g_bEmuElevation = False
+    g_bEmuEqu = False
+    g_bEmuEquSystem = False
+    g_bEmuLatLong = False
+    g_bEmuOptics = False
+    g_bEmuSideOfPier = False
+    g_bEmuSiderealTime = False
+    g_bEmuSlewAltAz = False
+    g_bEmuSlewAltAzAsync = False
+    g_bEmuSyncAltAz = False
+    
+    chkCanAltAz.ForeColor = &HFFFFFF
+    chkCanDateTime.ForeColor = &HFFFFFF
+    chkCanDoesRefraction.ForeColor = &HFFFFFF
+    chkCanElevation.ForeColor = &HFFFFFF
+    chkCanEqu.ForeColor = &HFFFFFF
+    chkCanEquSystem.ForeColor = &HFFFFFF
+    chkCanLatLong.ForeColor = &HFFFFFF
+    chkCanOptics.ForeColor = &HFFFFFF
+    chkCanSideOfPier.ForeColor = &HFFFFFF
+    chkCanSiderealTime.ForeColor = &HFFFFFF
+    chkCanSlewAltAz.ForeColor = &HFFFFFF
+    chkCanSlewAltAzAsync.ForeColor = &HFFFFFF
+    chkCanSyncAltAz.ForeColor = &HFFFFFF
+    
+End Sub
+
+Private Sub chkCanAltAz_Click()
+        
+    If chkCanAltAz.Value = 2 Or Not g_bConnected Then
+        chkCanAltAz.Value = 2
+        chkCanAltAz.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanAltAz.Value = 0 Then
+        If g_bCanAltAz Then
+            g_bEmuAltAz = True
+            g_bCanAltAz = False
+            chkCanAltAz.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanAltAz Then
+            If g_bEmuAltAz Then
+                g_bCanAltAz = False
+                chkCanAltAz.Value = 0
+                chkCanAltAz.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuAltAz And chkCanAltAz.ForeColor = &HFF Then
+                g_bCanAltAz = True
+                g_bEmuAltAz = False
+                chkCanAltAz.ForeColor = &HFFFFFF
+            Else
+                g_bEmuAltAz = False
+                chkCanAltAz.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanDateTime_Click()
+        
+    If chkCanDateTime.Value = 2 Or Not g_bConnected Then
+        chkCanDateTime.Value = 2
+        chkCanDateTime.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanDateTime.Value = 0 Then
+        If g_bCanDateTime Then
+            g_bEmuDateTime = True
+            g_bCanDateTime = False
+            chkCanDateTime.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanDateTime Then
+            If g_bEmuDateTime Then
+                g_bCanDateTime = False
+                chkCanDateTime.Value = 0
+                chkCanDateTime.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuDateTime And chkCanDateTime.ForeColor = &HFF Then
+                g_bCanDateTime = True
+                g_bEmuDateTime = False
+                chkCanDateTime.ForeColor = &HFFFFFF
+            Else
+                g_bEmuDateTime = False
+                chkCanDateTime.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanDoesRefraction_Click()
+        
+    If chkCanDoesRefraction.Value = 2 Or Not g_bConnected Then
+        chkCanDoesRefraction.Value = 2
+        chkCanDoesRefraction.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanDoesRefraction.Value = 0 Then
+        If g_bCanDoesRefraction Then
+            g_bEmuDoesRefraction = True
+            g_bCanDoesRefraction = False
+            chkCanDoesRefraction.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanDoesRefraction Then
+            If g_bEmuDoesRefraction Then
+                g_bCanDoesRefraction = False
+                chkCanDoesRefraction.Value = 0
+                chkCanDoesRefraction.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuDoesRefraction And chkCanDoesRefraction.ForeColor = &HFF Then
+                g_bCanDoesRefraction = True
+                g_bEmuDoesRefraction = False
+                chkCanDoesRefraction.ForeColor = &HFFFFFF
+            Else
+                g_bEmuDoesRefraction = False
+                chkCanDoesRefraction.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanSetGuideRates_Click()
+        
+    If chkCanSetGuideRates.Value = 2 Or Not g_bConnected Then
+        chkCanSetGuideRates.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSetGuideRates.Value <> IIf(g_bCanSetGuideRates, 1, 0) Then
+        chkCanSetGuideRates.Value = IIf(g_bCanSetGuideRates, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanElevation_Click()
+        
+    If chkCanElevation.Value = 2 Or Not g_bConnected Then
+        chkCanElevation.Value = 2
+        chkCanElevation.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanElevation.Value = 0 Then
+        If g_bCanElevation Then
+            g_bEmuElevation = True
+            g_bCanElevation = False
+            chkCanElevation.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanElevation Then
+            If g_bEmuElevation Then
+                g_bCanElevation = False
+                chkCanElevation.Value = 0
+                chkCanElevation.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuElevation And chkCanElevation.ForeColor = &HFF Then
+                g_bCanElevation = True
+                g_bEmuElevation = False
+                chkCanElevation.ForeColor = &HFFFFFF
+            Else
+                g_bEmuElevation = False
+                chkCanElevation.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanEqu_Click()
+        
+    If chkCanEqu.Value = 2 Or Not g_bConnected Then
+        chkCanEqu.Value = 2
+        chkCanEqu.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanEqu.Value = 0 Then
+        If g_bCanEqu Then
+            g_bEmuEqu = True
+            g_bCanEqu = False
+            chkCanEqu.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanEqu Then
+            If g_bEmuEqu Then
+                g_bCanEqu = False
+                chkCanEqu.Value = 0
+                chkCanEqu.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuEqu And chkCanEqu.ForeColor = &HFF Then
+                g_bCanEqu = True
+                g_bEmuEqu = False
+                chkCanEqu.ForeColor = &HFFFFFF
+            Else
+                g_bEmuEqu = False
+                chkCanEqu.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanEquSystem_Click()
+        
+    If chkCanEquSystem.Value = 2 Or Not g_bConnected Then
+        chkCanEquSystem.Value = 2
+        chkCanEquSystem.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanEquSystem.Value = 0 Then
+        If g_bCanEquSystem Then
+            g_bEmuEquSystem = True
+            g_bCanEquSystem = False
+            chkCanEquSystem.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanEquSystem Then
+            If g_bEmuEquSystem Then
+                g_bCanEquSystem = False
+                chkCanEquSystem.Value = 0
+                chkCanEquSystem.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuEquSystem And chkCanEquSystem.ForeColor = &HFF Then
+                g_bCanEquSystem = True
+                g_bEmuEquSystem = False
+                chkCanEquSystem.ForeColor = &HFFFFFF
+            Else
+                g_bEmuEquSystem = False
+                chkCanEquSystem.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanFindHome_Click()
+        
+    If chkCanFindHome.Value = 2 Or Not g_bConnected Then
+        chkCanFindHome.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanFindHome.Value <> IIf(g_bCanFindHome, 1, 0) Then
+        chkCanFindHome.Value = IIf(g_bCanFindHome, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanLatLong_Click()
+        
+    If chkCanLatLong.Value = 2 Or Not g_bConnected Then
+        chkCanLatLong.Value = 2
+        chkCanLatLong.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanLatLong.Value = 0 Then
+        If g_bCanLatLong Then
+            g_bEmuLatLong = True
+            g_bCanLatLong = False
+            chkCanLatLong.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanLatLong Then
+            If g_bEmuLatLong Then
+                g_bCanLatLong = False
+                chkCanLatLong.Value = 0
+                chkCanLatLong.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuLatLong And chkCanLatLong.ForeColor = &HFF Then
+                g_bCanLatLong = True
+                g_bEmuLatLong = False
+                chkCanLatLong.ForeColor = &HFFFFFF
+            Else
+                g_bEmuLatLong = False
+                chkCanLatLong.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanOptics_Click()
+        
+    If chkCanOptics.Value = 2 Or Not g_bConnected Then
+        chkCanOptics.Value = 2
+        chkCanOptics.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanOptics.Value = 0 Then
+        If g_bCanOptics Then
+            g_bEmuOptics = True
+            g_bCanOptics = False
+            chkCanOptics.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanOptics Then
+            If g_bEmuOptics Then
+                g_bCanOptics = False
+                chkCanOptics.Value = 0
+                chkCanOptics.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuOptics And chkCanOptics.ForeColor = &HFF Then
+                g_bCanOptics = True
+                g_bEmuOptics = False
+                chkCanOptics.ForeColor = &HFFFFFF
+            Else
+                g_bEmuOptics = False
+                chkCanOptics.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanPark_Click()
+        
+    If chkCanPark.Value = 2 Or Not g_bConnected Then
+        chkCanPark.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanPark.Value <> IIf(g_bCanPark, 1, 0) Then
+        chkCanPark.Value = IIf(g_bCanPark, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanPulseGuide_Click()
+        
+    If chkCanPulseGuide.Value = 2 Or Not g_bConnected Then
+        chkCanPulseGuide.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanPulseGuide.Value <> IIf(g_bCanPulseGuide, 1, 0) Then
+        chkCanPulseGuide.Value = IIf(g_bCanPulseGuide, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSetDeclinationRate_Click()
+        
+    If chkCanSetDeclinationRate.Value = 2 Or Not g_bConnected Then
+        chkCanSetDeclinationRate.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSetDeclinationRate.Value <> IIf(g_bCanSetDeclinationRate, 1, 0) Then
+        chkCanSetDeclinationRate.Value = IIf(g_bCanSetDeclinationRate, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSetPark_Click()
+        
+    If chkCanSetPark.Value = 2 Or Not g_bConnected Then
+        chkCanSetPark.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSetPark.Value <> IIf(g_bCanSetPark, 1, 0) Then
+        chkCanSetPark.Value = IIf(g_bCanSetPark, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSetPierSide_Click()
+        
+    If chkCanSetPierSide.Value = 2 Or Not g_bConnected Then
+        chkCanSetPierSide.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSetPierSide.Value <> IIf(g_bCanSetPierSide, 1, 0) Then
+        chkCanSetPierSide.Value = IIf(g_bCanSetPierSide, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSetRightAscensionRate_Click()
+        
+    If chkCanSetRightAscensionRate.Value = 2 Or Not g_bConnected Then
+        chkCanSetRightAscensionRate.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSetRightAscensionRate.Value <> IIf(g_bCanSetRightAscensionRate, 1, 0) Then
+        chkCanSetRightAscensionRate.Value = IIf(g_bCanSetRightAscensionRate, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSetTracking_Click()
+        
+    If chkCanSetTracking.Value = 2 Or Not g_bConnected Then
+        chkCanSetTracking.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSetTracking.Value <> IIf(g_bCanSetTracking, 1, 0) Then
+        chkCanSetTracking.Value = IIf(g_bCanSetTracking, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSideOfPier_Click()
+        
+    If chkCanSideOfPier.Value = 2 Or Not g_bConnected Then
+        chkCanSideOfPier.Value = 2
+        chkCanSideOfPier.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanSideOfPier.Value = 0 Then
+        If g_bCanSideOfPier Then
+            g_bEmuSideOfPier = True
+            g_bCanSideOfPier = False
+            chkCanSideOfPier.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanSideOfPier Then
+            If g_bEmuSideOfPier Then
+                g_bCanSideOfPier = False
+                chkCanSideOfPier.Value = 0
+                chkCanSideOfPier.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuSideOfPier And chkCanSideOfPier.ForeColor = &HFF Then
+                g_bCanSideOfPier = True
+                g_bEmuSideOfPier = False
+                chkCanSideOfPier.ForeColor = &HFFFFFF
+            Else
+                g_bEmuSideOfPier = False
+                chkCanSideOfPier.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanSiderealTime_Click()
+        
+    If chkCanSiderealTime.Value = 2 Or Not g_bConnected Then
+        chkCanSiderealTime.Value = 2
+        chkCanSiderealTime.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanSiderealTime.Value = 0 Then
+        If g_bCanSiderealTime Then
+            g_bEmuSiderealTime = True
+            g_bCanSiderealTime = False
+            chkCanSiderealTime.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanSiderealTime Then
+            If g_bEmuSiderealTime Then
+                g_bCanSiderealTime = False
+                chkCanSiderealTime.Value = 0
+                chkCanSiderealTime.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuSiderealTime And chkCanSiderealTime.ForeColor = &HFF Then
+                g_bCanSiderealTime = True
+                g_bEmuSiderealTime = False
+                chkCanSiderealTime.ForeColor = &HFFFFFF
+            Else
+                g_bEmuSiderealTime = False
+                chkCanSiderealTime.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanSlew_Click()
+        
+    If chkCanSlew.Value = 2 Or Not g_bConnected Then
+        chkCanSlew.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSlew.Value <> IIf(g_bCanSlew, 1, 0) Then
+        chkCanSlew.Value = IIf(g_bCanSlew, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSlewAltAz_Click()
+        
+    If chkCanSlewAltAz.Value = 2 Or Not g_bConnected Then
+        chkCanSlewAltAz.Value = 2
+        chkCanSlewAltAz.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanSlewAltAz.Value = 0 Then
+        If g_bCanSlewAltAz Then
+            g_bEmuSlewAltAz = True
+            g_bCanSlewAltAz = False
+            chkCanSlewAltAz.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanSlewAltAz Then
+            If g_bEmuSlewAltAz Then
+                g_bCanSlewAltAz = False
+                chkCanSlewAltAz.Value = 0
+                chkCanSlewAltAz.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuSlewAltAz And chkCanSlewAltAz.ForeColor = &HFF Then
+                g_bCanSlewAltAz = True
+                g_bEmuSlewAltAz = False
+                chkCanSlewAltAz.ForeColor = &HFFFFFF
+            Else
+                g_bEmuSlewAltAz = False
+                chkCanSlewAltAz.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanSlewAltAzAsync_Click()
+        
+    If chkCanSlewAltAzAsync.Value = 2 Or Not g_bConnected Then
+        chkCanSlewAltAzAsync.Value = 2
+        chkCanSlewAltAzAsync.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanSlewAltAzAsync.Value = 0 Then
+        If g_bCanSlewAltAzAsync Then
+            g_bEmuSlewAltAzAsync = True
+            g_bCanSlewAltAzAsync = False
+            chkCanSlewAltAzAsync.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanSlewAltAzAsync Then
+            If g_bEmuSlewAltAzAsync Then
+                g_bCanSlewAltAzAsync = False
+                chkCanSlewAltAzAsync.Value = 0
+                chkCanSlewAltAzAsync.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuSlewAltAzAsync And chkCanSlewAltAzAsync.ForeColor = &HFF Then
+                g_bCanSlewAltAzAsync = True
+                g_bEmuSlewAltAzAsync = False
+                chkCanSlewAltAzAsync.ForeColor = &HFFFFFF
+            Else
+                g_bEmuSlewAltAzAsync = False
+                chkCanSlewAltAzAsync.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanSlewAsync_Click()
+        
+    If chkCanSlewAsync.Value = 2 Or Not g_bConnected Then
+        chkCanSlewAsync.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSlewAsync.Value <> IIf(g_bCanSlewAsync, 1, 0) Then
+        chkCanSlewAsync.Value = IIf(g_bCanSlewAsync, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSync_Click()
+        
+    If chkCanSync.Value = 2 Or Not g_bConnected Then
+        chkCanSync.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanSync.Value <> IIf(g_bCanSync, 1, 0) Then
+        chkCanSync.Value = IIf(g_bCanSync, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
+End Sub
+
+Private Sub chkCanSyncAltAz_Click()
+        
+    If chkCanSyncAltAz.Value = 2 Or Not g_bConnected Then
+        chkCanSyncAltAz.Value = 2
+        chkCanSyncAltAz.ForeColor = &HFFFFFF
+        Exit Sub
+    End If
+    
+    If chkCanSyncAltAz.Value = 0 Then
+        If g_bCanSyncAltAz Then
+            g_bEmuSyncAltAz = True
+            g_bCanSyncAltAz = False
+            chkCanSyncAltAz.ForeColor = &HFF
+        End If
+    Else
+        If g_bCanSyncAltAz Then
+            If g_bEmuSyncAltAz Then
+                g_bCanSyncAltAz = False
+                chkCanSyncAltAz.Value = 0
+                chkCanSyncAltAz.ForeColor = &HFF
+            End If
+        Else
+            If g_bEmuSyncAltAz And chkCanSyncAltAz.ForeColor = &HFF Then
+                g_bCanSyncAltAz = True
+                g_bEmuSyncAltAz = False
+                chkCanSyncAltAz.ForeColor = &HFFFFFF
+            Else
+                g_bEmuSyncAltAz = False
+                chkCanSyncAltAz.Value = 0
+                MsgBox "Must remain simulated for this scope.", vbExclamation
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub chkCanUnPark_Click()
+        
+    If chkCanUnpark.Value = 2 Or Not g_bConnected Then
+        chkCanUnpark.Value = 2
+        Exit Sub
+    End If
+    
+    If chkCanUnpark.Value <> IIf(g_bCanUnpark, 1, 0) Then
+        chkCanUnpark.Value = IIf(g_bCanUnpark, 1, 0)
+        MsgBox "Can not be changed for this scope.", vbExclamation
+    End If
+
 End Sub
