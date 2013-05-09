@@ -238,7 +238,10 @@ Sub DoStartupIf()
     
     ' find out if we're forcing classic late binding
     ' be careful, this registry entry may not exist
-    If CBool(g_Profile.GetValue(ID, "ForceLate")) Then
+    Dim rx As String
+    rx = g_Profile.GetValue(ID, "ForceLate")
+    If rx = "" Then rx = "0"
+    If CBool(rx) Then
         g_bForceLate = True
     Else
         g_bForceLate = False
