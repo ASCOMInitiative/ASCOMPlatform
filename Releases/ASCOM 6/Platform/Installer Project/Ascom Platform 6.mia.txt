@@ -668,8 +668,8 @@ else
     Install Files ..\..\..\..\Pipe\Pipe.exe to $COMMONFILES$\ASCOM\Telescope
     Install Files ..\..\..\..\Pipe\PipeHubHelp.htm to $COMMONFILES$\ASCOM\Telescope
     Install Files ..\..\..\..\Pipe\Hub.exe to $COMMONFILES$\ASCOM\Telescope
-    Install Files ..\..\..\..\POTH\Source505\POTH.exe to $COMMONFILES$\ASCOM\Telescope
-    Install Files ..\..\..\..\POTH\Source505\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\POTH\Source\POTH\POTH.exe to $COMMONFILES$\ASCOM\Telescope
+    Install Files ..\..\..\..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
     [END REGION]
     [DEFINE REGION: Platform 5.5 files]
     Comment: Updated helpers that use Platform 5.5 support

@@ -6118,7 +6118,7 @@ Public Class DiagnosticsForm
             CompareInteger("AstroUtilTests", "Events Sun Rise Count", Events.RiseTime.Count, 1)
             CompareInteger("AstroUtilTests", "Events Sun Set Count", Events.SetTime.Count, 2)
             CompareDouble("AstroUtilTests", "Events Sun Rise", Events.RiseTime(0), 10.9587287503168, TOLERANCE_E5)
-            CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(0), 0.0368678512365008, TOLERANCE_E5)
+            CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(0), 0.0368674126801114, TOLERANCE_E5)
             CompareDouble("AstroUtilTests", "Events Sun Set", Events.SetTime(1), 23.8850069460075, TOLERANCE_E5)
 
             Events = GetEvents(ASCOM.Astrometry.EventType.MoonRiseMoonSet, 5, 8, 2012, 51.0, -60.0, -5.0)
