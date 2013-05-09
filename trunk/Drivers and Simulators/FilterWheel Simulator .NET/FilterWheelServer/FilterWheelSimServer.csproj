@@ -237,6 +237,7 @@
     <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
       <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
       <Name>ASCOM.Attributes</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
       <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
