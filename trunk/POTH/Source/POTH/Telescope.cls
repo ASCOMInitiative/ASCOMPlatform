@@ -1704,14 +1704,14 @@ Public Sub AbortSlew()
     
 End Sub
 
-Public Function AxisRates(ByVal Axis As TelescopeAxes) As Object
+Public Function AxisRates(ByVal axis As TelescopeAxes) As Object
 
     Dim out As String
     
     If Not g_show Is Nothing Then
         If g_show.chkCap.Value = 1 Then
             out = "unknown"
-            Select Case Axis
+            Select Case axis
                 Case axisPrimary:       out = "Primary"
                 Case axisSecondary:     out = "Secondary"
                 Case axisTertiary:      out = "Tertiary"
@@ -1725,7 +1725,7 @@ Public Function AxisRates(ByVal Axis As TelescopeAxes) As Object
     If g_iVersion < 2 Then
         Set AxisRates = g_AxisRatesEmpty
     Else
-        Set AxisRates = g_Scope.AxisRates(Axis)
+        Set AxisRates = g_Scope.AxisRates(axis)
     End If
 
     If Not g_show Is Nothing Then
@@ -1735,14 +1735,14 @@ Public Function AxisRates(ByVal Axis As TelescopeAxes) As Object
 
 End Function
 
-Public Function CanMoveAxis(ByVal Axis As TelescopeAxes) As Boolean
+Public Function CanMoveAxis(ByVal axis As TelescopeAxes) As Boolean
     
     Dim out As String
     
     If Not g_show Is Nothing Then
         If g_show.chkCap.Value = 1 Then
             out = "unknown"
-            Select Case Axis
+            Select Case axis
                 Case axisPrimary:       out = "Primary"
                 Case axisSecondary:     out = "Secondary"
                 Case axisTertiary:      out = "Tertiary"
@@ -1756,7 +1756,7 @@ Public Function CanMoveAxis(ByVal Axis As TelescopeAxes) As Boolean
     If g_iVersion < 2 Then
         CanMoveAxis = False
     Else
-        CanMoveAxis = g_Scope.CanMoveAxis(Axis)
+        CanMoveAxis = g_Scope.CanMoveAxis(axis)
     End If
 
     If Not g_show Is Nothing Then
@@ -1964,14 +1964,14 @@ Public Sub FindHome()
     
 End Sub
 
-Public Sub MoveAxis(ByVal Axis As TelescopeAxes, ByVal Rate As Double)
+Public Sub MoveAxis(ByVal axis As TelescopeAxes, ByVal Rate As Double)
     
     Dim out As String
     
     If Not g_show Is Nothing Then
         If g_show.chkSlew.Value = 1 Then
             out = "unknown"
-            Select Case Axis
+            Select Case axis
                 Case axisPrimary:       out = "Primary"
                 Case axisSecondary:     out = "Secondary"
                 Case axisTertiary:      out = "Tertiary"
@@ -1986,13 +1986,13 @@ Public Sub MoveAxis(ByVal Axis As TelescopeAxes, ByVal Rate As Double)
         Err.Raise SCODE_NOT_IMPLEMENTED, ERR_SOURCE, _
             "Method MoveAxis" & MSG_NOT_IMPLEMENTED
             
-    g_Scope.MoveAxis Axis, Rate
+    g_Scope.MoveAxis axis, Rate
+    ScopeSlewing slewFetch      ' CR update g_Slewing from the hardware
 
     If Not g_show Is Nothing Then
         If g_show.chkSlew.Value = 1 Then _
             g_show.TrafficEnd " (done)"
     End If
-
 End Sub
 
 Public Sub Park()
@@ -2507,12 +2507,12 @@ Private Property Get ITelescope_AtPark() As Boolean
     ITelescope_AtPark = AtPark
 End Property
 
-Private Function ITelescope_AxisRates(ByVal Axis As TelescopeAxes) As IAxisRates
+Private Function ITelescope_AxisRates(ByVal axis As TelescopeAxes) As IAxisRates
     '
     ' Note that this more or less "casts" our internal AxisRates
     ' object's interface to AxisRates.
     '
-    Set ITelescope_AxisRates = AxisRates(Axis)
+    Set ITelescope_AxisRates = AxisRates(axis)
 End Function
 
 Private Property Get ITelescope_Azimuth() As Double
@@ -2523,8 +2523,8 @@ Private Property Get ITelescope_CanFindHome() As Boolean
     ITelescope_CanFindHome = CanFindHome
 End Property
 
-Private Function ITelescope_CanMoveAxis(ByVal Axis As TelescopeAxes) As Boolean
-    ITelescope_CanMoveAxis = CanMoveAxis(Axis)
+Private Function ITelescope_CanMoveAxis(ByVal axis As TelescopeAxes) As Boolean
+    ITelescope_CanMoveAxis = CanMoveAxis(axis)
 End Function
 
 Private Property Get ITelescope_CanPark() As Boolean
@@ -2679,8 +2679,8 @@ Private Property Get ITelescope_IsPulseGuiding() As Boolean
     ITelescope_IsPulseGuiding = IsPulseGuiding
 End Property
 
-Private Sub ITelescope_MoveAxis(ByVal Axis As TelescopeAxes, ByVal Rate As Double)
-    MoveAxis Axis, Rate
+Private Sub ITelescope_MoveAxis(ByVal axis As TelescopeAxes, ByVal Rate As Double)
+    MoveAxis axis, Rate
 End Sub
 
 Private Property Get ITelescope_Name() As String
