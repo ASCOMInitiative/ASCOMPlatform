@@ -64,7 +64,7 @@ Public Sub CalcDomeAltAz(ByVal IsV2 As Boolean, ByVal SideOfPier As PierSide)
     ' use DomeControl class to determine the dome Alt Az
     Dim dc As DomeControl
     Set dc = New DomeControl
-    dc.InitDome DomeRadius, OffsetOptical, OffsetNorth, OffsetEast, -OffsetHeight
+    dc.InitDome DomeRadius, OffsetOptical, OffsetNorth, OffsetEast, -OffsetHeight, Latitude, IsGerman
     TargetAz = dc.DomeAzimuth(ScopeAz, ScopeAlt, raddeg(HArad), Not Flip)
     TargetAlt = dc.DomeAltitude
     Exit Sub
