@@ -52,8 +52,9 @@
 			      			value of 0.0.</ListItem>
 	  					</list>
 					</listItem>
-					<listItem>Astrometry - the DeltaT function has been augmented to predict values in line with recent observation, it 
-					should now be good to the end of 2013 without further change</listItem>
+					<listItem>Astrometry - The DeltaT function has been augmented to predict values in line with earth observations to March 2013 and 
+					the function now returns extrapolated values from April 2013 to December 2016. Taking account of USNO published uncertainty and 
+					model fitting error, returned values are expected to be accurate to ±0.1sec in 2013, ±0.2sec in 2014, ±0.4sec in 2015 and ±0.7sec in 2016.</listItem>
 					<listItem>The Terrestrial Time functions now account for the leap second that was introduced at the end of June 2012</listItem>
 					<listItem> AstroUtils
 						<list class="bullet">
@@ -117,6 +118,13 @@
 							fix from the NOVAS team.</listItem>
 			  			</list>
 					</listItem>	
+					<listItem>POTH
+						<list class="bullet">
+			     			<listItem>Upgraded to Jon Brewster's latest version - V6.</listItem>
+							<listItem>Fixed issue in locales where point is not the decimal separator.</listItem>
+							<listItem>Fixed issue where slewing state was not read from the scope after a MoveAxis command was sent.</listItem>
+						</list>
+					</listItem>
 				</list>
    			</content>
    		</section>
@@ -127,6 +135,7 @@
       			<list class="bullet">
 					<listItem>The Inno installer template generator created a test for the installed Platform version that only worked in countries where 
 					the decimal separator was the point "." character</listItem>
+					<listItem>The Telescope Templates now generate fully functioning TrackingRates classes that implement IEnumerable so that foreach loops work as expected.</listItem>
 				</list>
    			</content>
    		</section>
