@@ -30,7 +30,7 @@
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-12, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-13, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry.AstroUtils" isExposed="True">
         <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />

@@ -82,15 +82,15 @@ Module DeltatCode
 
         If (Y > TABEND) Then
 
-            If (Y > 2011.75) And (Y < 2014) Then
-                ' Following intoduced by Peter Simpson. It is a 2nd order polynomial best fit to real DeltaT data from Q3 2011 to Q1 2012 together with projections
+            If (Y > 2011.75) And (Y < 2017.0) Then
+                ' The analysis spreadsheets for this are stored in the \NOVAS\DeltaT Predictions folder of the ASCOM source tree.
+                ' Following intoduced by Peter Simpson. It is a 2nd order polynomial best fit to real DeltaT data from Q3 2011 to Q1 2013 together with projections
                 ' of deltat t from here http://maia.usno.navy.mil/ Historic values: http://maia.usno.navy.mil/ser7/deltat.data Predictions: http://maia.usno.navy.mil/ser7/deltat.preds
-                ' The analysis was performed on 28th April 2012 and creates values within 0.1 of a second of the projections to the end of 2013
-                ' The analysis spreadsheet is stored in the \NOVAS\DeltaT Predictions folder of the ASCOM source tree.
-                ans = (0.11155549 * Y * Y) - (448.55087851 * Y) + 450958.24151344
+                ' The analysis was performed on 6th June 2013 and creates values within 0.1 of a second of the projections to the end of 2016
+                ans = (0.0399479 * Y * Y) + (-160.454097 * Y) + 161185.37
                 Return (ans)
             Else
-                ' Following now superseded by above for 2012-13, this is left in for consistency with previous behaviour
+                ' Following now superseded by above for 2012-16, this is left in for consistency with previous behaviour
                 ' Use polynomial given at http://sunearth.gsfc.nasa.gov/eclipse/SEcat5/deltatpoly.html
                 ' as retrtieved on 11-Jan-2009;
                 B = Y - 2000.0
