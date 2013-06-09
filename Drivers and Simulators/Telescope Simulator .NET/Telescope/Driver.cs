@@ -1070,7 +1070,7 @@ namespace ASCOM.Simulator
         public void SyncToAltAz(double Azimuth, double Altitude)
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SyncToAltAz: ");
-            CheckCapability(TelescopeHardware.CanSync, "SyncToAltAz");
+            CheckCapability(TelescopeHardware.CanSyncAltAz, "SyncToAltAz");
             CheckRange(Azimuth, 0, 360, "SyncToAltAz", "Azimuth");
             CheckRange(Altitude, -90, 90, "SyncToAltAz", "Altitude");
             CheckParked("SyncToAltAz");

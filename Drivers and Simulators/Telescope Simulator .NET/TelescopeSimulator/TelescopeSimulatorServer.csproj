@@ -41,8 +41,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\..\Ascom.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -74,7 +75,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>..\..\..\Ascom.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
@@ -115,7 +116,16 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Ascom_Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.Controls, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -207,6 +217,7 @@
       <Link>CustomDictionary.xml</Link>
     </CodeAnalysisDictionary>
     <Content Include="ASCOM.png" />
+    <None Include="Ascom_Icon.ico" />
     <Content Include="ReadMe.htm" />
   </ItemGroup>
   <ItemGroup>
@@ -240,38 +251,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
-      <Project>{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}</Project>
-      <Name>ASCOM.Astrometry</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
-      <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
-      <Name>ASCOM.Attributes</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj">
-      <Project>{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}</Project>
-      <Name>ASCOM.Controls</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
-      <Project>{872EF2D6-AC89-4C15-AC84-6C69B040A843}</Project>
-      <Name>ASCOM.DeviceInterface</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
-      <Name>ASCOM.Utilities</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
-      <Name>ASCOM.Exceptions</Name>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

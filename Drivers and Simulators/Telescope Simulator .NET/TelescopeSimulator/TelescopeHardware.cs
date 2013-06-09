@@ -142,6 +142,7 @@ namespace ASCOM.Simulator
         private static DateTime settleTime;
 
         public static PierSide sideOfPier;
+        public static double haOffset = 1;      // amount a GEM mount can move past the meridian in hours
 
         private static bool connected;      //Keep track of the connection status of the hardware
 
@@ -373,6 +374,7 @@ namespace ASCOM.Simulator
                 CalculateRaDec();
             }
             siderealTime = AstronomyFunctions.LocalSiderealTime(longitude);
+            sideOfPier = SideOfPierRaDec(rightAscension, declination);
 
             s_wTimer.Start();
         }
@@ -392,6 +394,17 @@ namespace ASCOM.Simulator
                 case SlewType.SlewNone:
                     if (tracking)
                     {
+                        if (alignmentMode == AlignmentModes.algGermanPolar)
+                        {
+                            // check to ensure we aren't past the Ra limits on a GEM, dont move if we are
+                            var ha = AstronomyFunctions.HourAngle(rightAscension, longitude);
+                            if ((sideOfPier == PierSide.pierWest && ha > haOffset) ||
+                                (sideOfPier == PierSide.pierEast && ha < -12 + haOffset))
+                            {
+                                CalculateRaDec();
+                                break;
+                            }
+                        }
                         // apply the ra and dec offset rates
                         // rates are in arc seconds per second
                         rightAscension += (rightAscensionRate / 3600) * SharedResources.TIMER_INTERVAL;
@@ -555,16 +568,24 @@ namespace ASCOM.Simulator
                             azimuth = AstronomyFunctions.CalculateAzimuth(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
                             break;
                         case SlewDirection.SlewEast:
-                            rightAscension += step * (z / 15);    // Ra is in hours
-                            rightAscension = AstronomyFunctions.RangeRA(rightAscension);
-                            altitude = AstronomyFunctions.CalculateAltitude(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
-                            azimuth = AstronomyFunctions.CalculateAzimuth(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
+                            // avoid slewing a GEM past the ra limits
+                            if (PierLimitsNotReached(slewDirection))
+                            {
+                                rightAscension += step * (z / 15);    // Ra is in hours
+                                rightAscension = AstronomyFunctions.RangeRA(rightAscension);
+                                altitude = AstronomyFunctions.CalculateAltitude(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
+                                azimuth = AstronomyFunctions.CalculateAzimuth(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
+                            }
                             break;
                         case SlewDirection.SlewWest:
-                            rightAscension -= step * (z / 15);
-                            rightAscension = AstronomyFunctions.RangeRA(rightAscension);
-                            altitude = AstronomyFunctions.CalculateAltitude(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
-                            azimuth = AstronomyFunctions.CalculateAzimuth(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
+                            // avoid slewing a GEM past the ra limits
+                            if (PierLimitsNotReached(slewDirection))
+                            {
+                                rightAscension -= step * (z / 15);
+                                rightAscension = AstronomyFunctions.RangeRA(rightAscension);
+                                altitude = AstronomyFunctions.CalculateAltitude(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
+                                azimuth = AstronomyFunctions.CalculateAzimuth(rightAscension * SharedResources.HRS_RAD, declination * SharedResources.DEG_RAD, latitude * SharedResources.DEG_RAD, longitude * SharedResources.DEG_RAD);
+                            }
                             break;
                     }
                     break;
@@ -648,7 +669,7 @@ namespace ASCOM.Simulator
 
             //Calculate Current SideOfPier
             siderealTime = AstronomyFunctions.LocalSiderealTime(longitude);
-            sideOfPier = SideOfPierRaDec(rightAscension, declination);
+            //sideOfPier = SideOfPierRaDec(rightAscension, declination);
 
             // display the values
             TelescopeSimulator.m_MainForm.SiderealTime(siderealTime);
@@ -665,6 +686,43 @@ namespace ASCOM.Simulator
             else TelescopeSimulator.m_MainForm.lblHOME.ForeColor = Color.SaddleBrown;
             if (slewState == SlewType.SlewNone) TelescopeSimulator.m_MainForm.labelSlew.ForeColor = Color.SaddleBrown;
             else TelescopeSimulator.m_MainForm.labelSlew.ForeColor = Color.Red;
+        }
+
+
+        /// <summary>
+        /// checks the pier siide, azimuth and direction for a GEM and retuns false if the movement is
+        /// into the mount limit defined as 20 degrees past the meridian.
+        /// TODO, use hour angle rather than azimuth.  azmiuth will give strange results between the zenith and pole
+        /// </summary>
+        /// <param name="SlewDirection">The slew direction.</param>
+        /// <returns></returns>
+        private static bool PierLimitsNotReached(Simulator.SlewDirection SlewDirection)
+        {
+            if (alignmentMode != AlignmentModes.algGermanPolar)
+                return true;
+            var ha = AstronomyFunctions.HourAngle(rightAscension, longitude);
+            switch (sideOfPier)
+            {
+                case PierSide.pierEast:
+                    // looking West
+                    // allowed range -1 to 0 to +6 to +12 to -11
+                    // forbidden range -1 to -6 to -11
+                    if (SlewDirection == Simulator.SlewDirection.SlewEast && ha < -haOffset && ha > -haOffset - 1)
+                        return false;
+                    if (SlewDirection == Simulator.SlewDirection.SlewWest && ha > haOffset - 12  && ha < haOffset - 11)
+                        return false;
+                    break;
+                case PierSide.pierWest:
+                    // looking East
+                    // allowed range 1 to 0 to -6 to -12 to 11
+                    // forbidden range 1 to 6 to 11
+                    if (SlewDirection == Simulator.SlewDirection.SlewEast && ha < 12 - haOffset && ha > 11 - haOffset)
+                        return false;
+                    if (SlewDirection == Simulator.SlewDirection.SlewWest && ha > haOffset && ha < haOffset + 1)
+                        return false;
+                    break;
+            }
+            return true;
         }
 
         /// <summary>
@@ -1354,15 +1412,15 @@ namespace ASCOM.Simulator
             }
         }
 
-        public static ASCOM.DeviceInterface.PierSide SideOfPier(double azimuth)
-        {
-            if (alignmentMode != ASCOM.DeviceInterface.AlignmentModes.algGermanPolar)
-            {
-                return ASCOM.DeviceInterface.PierSide.pierUnknown;
-            }
-            if (azimuth >= 180) return ASCOM.DeviceInterface.PierSide.pierEast;
-            else return ASCOM.DeviceInterface.PierSide.pierWest;
-        }
+        //public static ASCOM.DeviceInterface.PierSide SideOfPier(double azimuth)
+        //{
+        //    if (alignmentMode != ASCOM.DeviceInterface.AlignmentModes.algGermanPolar)
+        //    {
+        //        return ASCOM.DeviceInterface.PierSide.pierUnknown;
+        //    }
+        //    if (azimuth >= 180) return ASCOM.DeviceInterface.PierSide.pierEast;
+        //    else return ASCOM.DeviceInterface.PierSide.pierWest;
+        //}
 
         public static void StartSlewRaDec(double rightAscension, double declination, bool doSideOfPier)
         {
@@ -1393,6 +1451,8 @@ namespace ASCOM.Simulator
             ChangePark(false);
 
             slewState = SlewType.SlewRaDec;
+            // determine the side of pier
+            sideOfPier = SideOfPierRaDec(rightAscension, declination);
         }
 
         public static void StartSlewAltAz(double altitude, double azimuth, bool doSideOfPier, SlewType slew)
@@ -1424,6 +1484,7 @@ namespace ASCOM.Simulator
             ChangePark(false);
 
             slewState = slew;
+            // TODO determine side of pier, will usng the azimuth be enough?
         }
 
         public static void Park()
