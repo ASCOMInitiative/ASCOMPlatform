@@ -10,7 +10,10 @@
 					between 1 and BinMax.</listItem>
 					<listItem>Small installer updates to recognise Windows 8</listItem>
 					<listItem>The number of UTC leap seconds is now specified in the Astrometry key of the ASCOM Profile and can be updated by the user
-					whenever additional leap seconds are added without requiring an ASCOM Platform release.</listItem>
+					whenever additional leap seconds are added without requiring an ASCOM Platform release. The value set by this Platform update takes 
+					account of the leap second introduced at the end of June 2012; no further change is expected to be required until 2014 or 2015.</listItem>
+					<listItem>The Telescope Simulator .NET is now more representative of real German equatorial mounts by tracking 1 hour beyond 
+					the meridian before flipping.</listItem>
 	  			</list>
             </content>
 		</section>
@@ -153,7 +156,7 @@
 							<listItem><legacyBold>Recommended</legacyBold> - Use the NOVASCOM components in the Astrometry.NOVASCOM namespace,
 							they are also fully COM compatible.</listItem>
 							<listItem>Create your own COM presentation component that encapsulates the NOVAS 3.1 functions that you require
-							and presents them in a COM compatible fashion to suit your needs. This comnponent can them be consumed by your 
+							and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your 
 							scripting application.</listItem>
 						</list>
 					</listItem>
