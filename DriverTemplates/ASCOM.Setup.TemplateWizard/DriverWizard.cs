@@ -196,11 +196,13 @@ namespace ASCOM.Setup
             {
                 // The interface implmentation inserted in the ProjectFinishedGenerating event has its Region twistie open
                 // This code is to close the interface implmentation twistie so that the region appears like the common methods and support code twisties
-                
+
                 TL.Enabled = true;
                 TL.LogMessage("RunFinished", "Start");
 
                 Diagnostics.Enter();
+                if (myProjectItem != null) // We do have a project item to work on
+                {
                 myProjectItem.Open(); // Open the item for editing
                 TL.LogMessage("RunFinished", "Done Open");
 
@@ -217,8 +219,8 @@ namespace ASCOM.Setup
                 TL.LogMessage("RunFinished", "Done StartOfDocument Region");
 
                 string pattern = "[Rr]egion \"*I" + DeviceClass; // Cerate a regular expression string that works for region in both VB and C#
-                TL.LogMessage("","RegEx search pattern: " + pattern);
-                if (documentSelection.FindText(pattern,(int)vsFindOptions.vsFindOptionsRegularExpression)) // Search for the interface implemnetation start of region 
+                TL.LogMessage("", "RegEx search pattern: " + pattern);
+                if (documentSelection.FindText(pattern, (int)vsFindOptions.vsFindOptionsRegularExpression)) // Search for the interface implemnetation start of region 
                 {
                     // Found the interface implementation region so toggle its twistie closed
                     documentSelection.SelectLine();
@@ -229,6 +231,11 @@ namespace ASCOM.Setup
 
                 itemDocument.Close(vsSaveChanges.vsSaveChangesYes); // SAve changes and close the file
                 TL.LogMessage("RunFinished", "Done Save");
+                }
+                else // No project item so just report this (happens when a test project is being created)
+                {
+                    TL.LogMessage("RunFinished", "Project item is null, no action taken");
+                }
                 TL.LogMessage("RunFinished", "End");
                 Diagnostics.Exit();
             }
@@ -264,9 +271,7 @@ namespace ASCOM.Setup
         //    return deviceSpecificFiles;
         //}
 
-        public void RunStarted(object automationObject,
-            Dictionary<string, string> replacementsDictionary,
-            WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             Diagnostics.Enter();
 
