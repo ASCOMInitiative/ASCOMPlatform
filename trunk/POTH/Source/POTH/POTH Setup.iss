@@ -8,95 +8,95 @@
 #define AppNameMedium "POTH"
 #define AppNameShort "POTH"
 #define AppSource "Source\POTH"
-#define AppVersion "6.0.2"
+#define AppVersion "6.0.3"
 
 [Setup]
 AppName={#AppName}
 AppVersion={#AppVersion}
-AppVerName="{#AppName} {#AppVersion}"
+AppVerName={#AppName} {#AppVersion}
 AppPublisher=Jon Brewster <jon@brewsters.net>
 AppPublisherURL=mailto:jon@brewsters.net
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
 AppUpdatesURL=http://ascom-standards.org/
 VersionInfoVersion=1.0.0
 MinVersion=0,5.0.2195sp4
-DefaultDirName="{cf}\ASCOM\Telescope"
+DefaultDirName={cf}\ASCOM\Telescope
 DisableDirPage=yes
 DisableProgramGroupPage=yes
-OutputDir="."
-OutputBaseFilename="{#AppNameMedium} ({#AppVersion}) Setup"
+OutputDir=.
+OutputBaseFilename={#AppNameMedium} ({#AppVersion}) Setup
 Compression=lzma/Max
 SolidCompression=true
 ; Put there by Platform if Driver Installer Support selected
-WizardImageFile="C:\Program Files\ASCOM\Platform 6 Developer Components\Installer Generator\Resources\WizardImage.bmp"
-LicenseFile= "C:\Program Files\ASCOM\Platform 6 Developer Components\Installer Generator\Resources\CreativeCommons.txt"
+WizardImageFile=C:\Program Files\ASCOM\Platform 6 Developer Components\Installer Generator\Resources\WizardImage.bmp
+LicenseFile=C:\Program Files\ASCOM\Platform 6 Developer Components\Installer Generator\Resources\CreativeCommons.txt
 ; {cf}\ASCOM\Uninstall\Telescope folder created by Platform, always
-UninstallFilesDir="{cf}\ASCOM\Uninstall\Telescope\{#AppNameMedium}"
+UninstallFilesDir={cf}\ASCOM\Uninstall\Telescope\{#AppNameMedium}
 
 [Languages]
-Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: english; MessagesFile: compiler:Default.isl
 
 [Dirs]
-Name: "{cf}\ASCOM\Uninstall\Telescope\{#AppNameMedium}"
+Name: {cf}\ASCOM\Uninstall\Telescope\{#AppNameMedium}
 ; TODO: Add subfolders below {app} as needed (e.g. Name: "{app}\MyFolder")
 
 [Icons]
-Name: "{userdesktop}\POTH"; Filename: "{app}\{#AppNameShort}.exe"; Tasks: DesktopIcons
-Name: "{userdesktop}\Uninstall POTH"; Filename: "{uninstallexe}"; Tasks: DesktopIcons
+Name: {userdesktop}\POTH; Filename: {app}\{#AppNameShort}.exe; Tasks: DesktopIcons
+Name: {userdesktop}\Uninstall POTH; Filename: {uninstallexe}; Tasks: DesktopIcons
 
 ;  Add an option to install the source files
 [Tasks]
-Name: SourceCode; Description: "Install the source files"; Flags: unchecked
-Name: DesktopIcons; Description: "Install the desktop icons"; Flags: unchecked
+Name: SourceCode; Description: Install the source files; Flags: unchecked
+Name: DesktopIcons; Description: Install the desktop icons; Flags: unchecked
 
 [Files]
-Source: "{#AppNameShort}.exe"; DestDir: "{app}"; Flags: ignoreversion; AfterInstall: RegASCOM()
+Source: {#AppNameShort}.exe; DestDir: {app}; Flags: ignoreversion; AfterInstall: RegASCOM()
 ; Require a read-me HTML to appear after installation, maybe driver's Help doc
-Source: "POTHHelp.htm"; DestDir: "{app}"; Flags: ignoreversion isreadme
+Source: POTHHelp.htm; DestDir: {app}; Flags: ignoreversion isreadme
 ; Optional source files (COM and .NET aware)
 ; Source: "*"; Excludes: *.zip,*.exe,*.dll, \bin\*, \obj\*; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode; Flags: recursesubdirs
-Source: "astro32.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "astro32.dll"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "AxisRates.cls"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "Bug72T-sm.bmp"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "Dome.cls"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "DomeHW.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "Domecontrol.cls"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "ErrorConstants.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "Focuser.cls"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "FocuserHW.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "frmHandBox.frm"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "frmHandBox.frx"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "frmSetup.frm"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "frmSetup.frx"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "frmShow.frm"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "frmShow.frx"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "hotlink.cur"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "IObjectSafety.idl"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "IObjectSafety.tlb"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "ObjectSafety.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "POTH Setup.iss"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "POTH.vbp"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "POTH.vbw"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "POTHHelp.htm"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "POTH-ref.exe"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "Public.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "Rate.cls"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "ReadMe.txt"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "register.bat"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "saturn.ico"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "saturnc.jpg"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "ScopeHW.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "Startup.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "Telescope.cls"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "TrackingRates.cls"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "unregister.bat"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
-Source: "WindowsAPI.bas"; DestDir: "{app}\{#AppSource}"; Tasks: SourceCode;
+Source: astro32.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: astro32.dll; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: AxisRates.cls; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: Bug72T-sm.bmp; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: Dome.cls; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: DomeHW.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: Domecontrol.cls; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: ErrorConstants.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: Focuser.cls; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: FocuserHW.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: frmHandBox.frm; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: frmHandBox.frx; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: frmSetup.frm; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: frmSetup.frx; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: frmShow.frm; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: frmShow.frx; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: hotlink.cur; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: IObjectSafety.idl; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: IObjectSafety.tlb; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: ObjectSafety.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: POTH Setup.iss; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: POTH.vbp; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: POTH.vbw; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: POTHHelp.htm; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: POTH-ref.exe; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: Public.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: Rate.cls; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: ReadMe.txt; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: register.bat; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: saturn.ico; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: saturnc.jpg; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: ScopeHW.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: Startup.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: Telescope.cls; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: TrackingRates.cls; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: unregister.bat; DestDir: {app}\{#AppSource}; Tasks: SourceCode
+Source: WindowsAPI.bas; DestDir: {app}\{#AppSource}; Tasks: SourceCode
 ; TODO: Add other files needed by your driver here (add subfolders above)
 
 ;Only if COM Local Server
 [Run]
-Filename: "{app}\{#AppNameShort}.exe"; Parameters: "/regserver"
+Filename: {app}\{#AppNameShort}.exe; Parameters: /regserver
 ; old ASCOM register code used prior to this script doing it directly
 ; Filename: "{app}\{#AppNameShort}.exe"; Parameters: "-r"
 
@@ -104,7 +104,7 @@ Filename: "{app}\{#AppNameShort}.exe"; Parameters: "/regserver"
 [UninstallRun]
 ; old ASCOM unregister code used prior to this script doing it directly
 ; Filename: "{app}\{#AppNameShort} Driver.exe"; Parameters: "-ur"
-Filename: "{app}\{#AppNameShort}.exe"; Parameters: "/unregserver"
+Filename: {app}\{#AppNameShort}.exe; Parameters: /unregserver
 
 ;  DCOM setup for COM local Server, needed for TheSky
 [Registry]
@@ -118,17 +118,17 @@ Filename: "{app}\{#AppNameShort}.exe"; Parameters: "/unregserver"
 
 ; set the DCOM access control for TheSky on the Telescope interface
 Root: HKCR; Subkey: CLSID\{#AppClsid1}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid1}
-Root: HKCR; Subkey: AppId\{#AppClsid1}; ValueType: string; ValueData: "{#AppName}"
+Root: HKCR; Subkey: AppId\{#AppClsid1}; ValueType: string; ValueData: {#AppName}
 Root: HKCR; Subkey: AppId\{#AppClsid1}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid1}
 Root: HKCR; Subkey: AppId\{#AppClsid1}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
 ; set the DCOM access control for TheSky on the Dome interface
 Root: HKCR; Subkey: CLSID\{#AppClsid2}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid2}
-Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: string; ValueData: "{#AppName}"
+Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: string; ValueData: {#AppName}
 Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid2}
 Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
 ; set the DCOM access control for TheSky on the Focuser interface
 Root: HKCR; Subkey: CLSID\{#AppClsid3}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid3}
-Root: HKCR; Subkey: AppId\{#AppClsid3}; ValueType: string; ValueData: "{#AppName}"
+Root: HKCR; Subkey: AppId\{#AppClsid3}; ValueType: string; ValueData: {#AppName}
 Root: HKCR; Subkey: AppId\{#AppClsid3}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid3}
 Root: HKCR; Subkey: AppId\{#AppClsid3}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
 ; set the DCOM key for the executable as a whole
@@ -139,7 +139,7 @@ Root: HKCR; Subkey: AppId\{#AppClsid2}; Flags: uninsdeletekey
 Root: HKCR; Subkey: AppId\{#AppClsid3}; Flags: uninsdeletekey
 Root: HKCR; Subkey: AppId\{#AppNameShort}.exe; Flags: uninsdeletekey
 
-[CODE]
+[Code]
 //
 // Before the installer UI appears, verify that the (prerequisite)
 // ASCOM Platform 6.0 or greater is installed, including both Helper
