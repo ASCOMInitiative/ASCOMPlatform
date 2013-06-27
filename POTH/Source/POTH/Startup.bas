@@ -218,7 +218,7 @@ Sub DoStartupIf()
     g_DomeProfile.WriteValue IDDOME, "RegVer", RegVer
     
     ' if we need to, then create initial persisted state for the focuser
-    If oldRegVer < "4.6" Then
+    If oldRegVer < 4.6 Then
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserID", "FocusSim.Focuser"
         g_FocuserProfile.WriteValue IDFOCUSER, "FocuserName", "FocusSim.Focuser"
         
