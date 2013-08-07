@@ -1139,6 +1139,11 @@ Public Sub Park()
         m_Util.WaitForMilliseconds 1000
     Loop
 PARK_DONE:
+    Resume PARK_CONT
+PARK_CONT:
+    If m_eTheSkyType = TheSkyX Then
+        Me.Connected = True
+    End If
 
 End Sub
 
