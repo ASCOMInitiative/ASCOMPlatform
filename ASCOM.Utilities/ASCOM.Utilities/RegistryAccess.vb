@@ -5,6 +5,7 @@ Imports System.Security.Principal
 Imports Microsoft.Win32
 Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions
+Imports System.Collections.Generic
 Imports System.IO
 Imports System.Xml
 Imports System.Xml.Serialization
@@ -23,6 +24,50 @@ Friend Class RegistryAccess
     Private disposedValue As Boolean = False        ' To detect redundant calls to IDisposable
 
     Private sw, swSupport As Stopwatch
+
+    ''' <summary>
+    ''' Enum containing all the possible registry access rights values. The buit-in RegistryRights enum only has a partial collection
+    ''' and often returns values such as -1 or large positive and negative integer values when converted to a string
+    ''' The Flags attribute ensures that the ToString operation returns an aggregate list of discrete values
+    ''' </summary>
+    <Flags()> _
+    Enum AccessRights
+        Query = 1
+        SetKey = 2
+        CreateSubKey = 4
+        EnumSubkey = 8
+        Notify = &H10
+        CreateLink = &H20
+        Unknown40 = &H40
+        Unknown80 = &H80
+
+        Wow64_64Key = &H100
+        Wow64_32Key = &H200
+        Unknown400 = &H400
+        Unknown800 = &H800
+        Unknown1000 = &H1000
+        Unknown2000 = &H2000
+        Unknown4000 = &H4000
+        Unknown8000 = &H8000
+
+        StandardDelete = &H10000
+        StandardReadControl = &H20000
+        StandardWriteDAC = &H40000
+        StandardWriteOwner = &H80000
+        StandardSynchronize = &H100000
+        Unknown200000 = &H200000
+        Unknown400000 = &H400000
+        AuditAccess = &H800000
+
+        AccessSystemSecurity = &H1000000
+        MaximumAllowed = &H2000000
+        Unknown4000000 = &H4000000
+        Unknown8000000 = &H8000000
+        GenericAll = &H10000000
+        GenericExecute = &H20000000
+        GenericWrite = &H40000000
+        GenericRead = &H80000000
+    End Enum
 
 #Region "New and IDisposable Support"
     Public Sub New()
@@ -573,6 +618,25 @@ Friend Class RegistryAccess
         swLocal = Nothing
     End Sub
 
+    Friend Sub ListRegistryACLs(Key As RegistryKey, Description As String)
+        Dim KeySec As RegistrySecurity, RuleCollection As AuthorizationRuleCollection
+
+        LogMessage("ListRegistryACLs", Description & ", Key: " & Key.Name)
+        KeySec = Key.GetAccessControl() ' Get existing ACL rules on the key 
+
+        RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules
+
+        For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
+            LogMessage("ListRegistryACLs", RegRule.AccessControlType.ToString() & " " & _
+                                           RegRule.IdentityReference.ToString() & " " & _
+                                           CType(RegRule.RegistryRights, AccessRights).ToString() & " " & _
+                                           IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() & " " & _
+                                           RegRule.InheritanceFlags.ToString() & " " & _
+                                           RegRule.PropagationFlags.ToString())
+        Next
+        TL.BlankLine()
+    End Sub
+
     Friend Sub SetRegistryACL() 'ByVal CurrentPlatformVersion As String)
         'Subroutine to control the migration of a Platform 5.5 profile to Platform 6
         Dim Values As New Generic.SortedList(Of String, String)
@@ -583,53 +647,85 @@ Friend Class RegistryAccess
 
         swLocal = Stopwatch.StartNew
 
-        LogMessage("SetRegistryACL", "Creating root key ""\""")
-        'Key = Registry.LocalMachine.CreateSubKey(REGISTRY_ROOT_KEY_NAME)
-        Key = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY)
-
         'Set a security ACL on the ASCOM Profile key giving the Users group Full Control of the key
+
         LogMessage("SetRegistryACL", "Creating security identifier")
         DomainSid = New SecurityIdentifier("S-1-0-0") 'Create a starting point domain SID
         Ident = New SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, DomainSid) 'Create a security Identifier for the BuiltinUsers Group to be passed to the new accessrule
 
-        LogMessage("SetRegistryACL", "Creating new ACL rule")
+        LogMessage("SetRegistryACL", "Creating FullControl ACL rule")
         RegAccessRule = New RegistryAccessRule(Ident, _
                                                RegistryRights.FullControl, _
                                                InheritanceFlags.ContainerInherit, _
                                                PropagationFlags.None, _
                                                AccessControlType.Allow) ' Create the new access permission rule
 
-        LogMessage("SetRegistryACL", "Retrieving current ACL rule")
+        ' List the ACLs on the standard registry keys before we do anything
+        TL.LogMessage("SetRegistryACL", "Listing base key ACLs")
+
+        If ApplicationBits() = Bitness.Bits64 Then
+            TL.LogMessage("SetRegistryACL", "Listing base key ACLs in 64bit mode")
+            ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT")
+            ListRegistryACLs(Registry.ClassesRoot.OpenSubKey("SOFTWARE"), "HKEY_CLASSES_ROOT\SOFTWARE")
+            ListRegistryACLs(Registry.ClassesRoot.OpenSubKey("SOFTWARE\Microsoft"), "HKEY_CLASSES_ROOT\SOFTWARE\Microsoft")
+            ListRegistryACLs(OpenSubKey(Registry.LocalMachine, "SOFTWARE", True, RegWow64Options.KEY_WOW64_64KEY), "HKEY_CLASSES_ROOT\SOFTWARE\Wow6432Node")
+            ListRegistryACLs(OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft", True, RegWow64Options.KEY_WOW64_32KEY), "HKEY_CLASSES_ROOT\SOFTWARE\Wow6432Node\Microsoft")
+        Else
+            TL.LogMessage("SetRegistryACL", "Listing base key ACLS in 32bit mode")
+            ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT")
+            ListRegistryACLs(Registry.ClassesRoot.OpenSubKey("SOFTWARE"), "HKEY_CLASSES_ROOT\SOFTWARE")
+            ListRegistryACLs(Registry.ClassesRoot.OpenSubKey("SOFTWARE\Microsoft"), "HKEY_CLASSES_ROOT\SOFTWARE\Microsoft")
+        End If
+
+        LogMessage("SetRegistryACL", "Creating root ASCOM key ""\""")
+        Key = OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, RegWow64Options.KEY_WOW64_32KEY) ' Always create the key in the 32bit portion of the registry for backward compatibility
+
+        LogMessage("SetRegistryACL", "Retrieving ASCOM key ACL rule")
         TL.BlankLine()
         KeySec = Key.GetAccessControl() ' Get existing ACL rules on the key 
 
         RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules
 
         For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
-            LogMessage("SecurityACL Before", RegRule.AccessControlType.ToString() & " " & _
+            LogMessage("SetRegistryACL Before", RegRule.AccessControlType.ToString() & " " & _
                                                 RegRule.IdentityReference.ToString() & " " & _
-                                                RegRule.RegistryRights.ToString() & " " & _
-                                                RegRule.IsInherited.ToString() & " " & _
+                                                CType(RegRule.RegistryRights, AccessRights).ToString() & " " & _
+                                                IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() & " " & _
                                                 RegRule.InheritanceFlags.ToString() & " " & _
                                                 RegRule.PropagationFlags.ToString())
         Next
 
-        LogMessage("SetRegistryACL", "Adding new ACL rule")
-        TL.BlankLine()
-        KeySec.AddAccessRule(RegAccessRule) 'Add the new rule to the existing rules
+        ' Ensure that the ACLs are canonical before writing them back.
+        ' key.GetAccessControl sometimes provides ACLs in a non-canonical format, which causes failure when we write them back - UGH!
 
+        TL.BlankLine()
+        If KeySec.AreAccessRulesCanonical Then
+            TL.LogMessage("SetRegistryACL", "Current access rules on the ASCOM profile key are canonical, no fix-up action required")
+        Else
+            TL.LogMessage("SetRegistryACL", "***** Current access rules on the ASCOM profile key are NOT canonical, fixing them")
+            CanonicalizeDacl(KeySec) ' Ensure that the ACLs are canonical
+            TL.LogMessage("SetRegistryACL", "Are Access Rules Canonical after fix: " & KeySec.AreAccessRulesCanonical)
+        End If
+        TL.BlankLine()
+
+        LogMessage("SetRegistryACL", "Adding new ACL rule")
+
+        KeySec.AddAccessRule(RegAccessRule) 'Add the new rule to the existing rules
+        TL.LogMessage("SetRegistryACL", "Are Access Rules Canonical after adding full access rule: " & KeySec.AreAccessRulesCanonical)
+        TL.BlankLine()
         RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules after adding the new one
 
         For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
-            LogMessage("SecurityACL After", RegRule.AccessControlType.ToString() & " " & _
+            LogMessage("SetRegistryACL After", RegRule.AccessControlType.ToString() & " " & _
                                                RegRule.IdentityReference.ToString() & " " & _
-                                               RegRule.RegistryRights.ToString() & " " & _
-                                               RegRule.IsInherited.ToString() & " " & _
+                                               CType(RegRule.RegistryRights, AccessRights).ToString() & " " & _
+                                               IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() & " " & _
                                                RegRule.InheritanceFlags.ToString() & " " & _
                                                RegRule.PropagationFlags.ToString())
         Next
 
-        LogMessage("SetRegistryACL", "Setting new ACL rule")
+        TL.BlankLine()
+        LogMessage("SetRegistryACL", "Applying new ACL rule to the Profile key")
         Key.SetAccessControl(KeySec) 'Apply the new rules to the Profile key
 
         LogMessage("SetRegistryACL", "Flushing key")
@@ -639,6 +735,109 @@ Friend Class RegistryAccess
 
         swLocal.Stop() : LogMessage("SetRegistryACL", "ElapsedTime " & swLocal.ElapsedMilliseconds & " milliseconds")
         swLocal = Nothing
+    End Sub
+
+    Friend Sub CanonicalizeDacl(objectSecurity As NativeObjectSecurity)
+
+        ' A canonical ACL must have ACES sorted according to the following order:
+        '   1. Access-denied on the object
+        '   2. Access-denied on a child or property
+        '   3. Access-allowed on the object
+        '   4. Access-allowed on a child or property
+        '   5. All inherited ACEs 
+        Dim descriptor As New RawSecurityDescriptor(objectSecurity.GetSecurityDescriptorSddlForm(AccessControlSections.Access))
+
+        Dim implicitDenyDacl As New List(Of CommonAce)()
+        Dim implicitDenyObjectDacl As New List(Of CommonAce)()
+        Dim inheritedDacl As New List(Of CommonAce)()
+        Dim implicitAllowDacl As New List(Of CommonAce)()
+        Dim implicitAllowObjectDacl As New List(Of CommonAce)()
+        Dim aceIndex As Int32 = 0
+        Dim newDacl As New RawAcl(descriptor.DiscretionaryAcl.Revision, descriptor.DiscretionaryAcl.Count)
+
+        If objectSecurity Is Nothing Then
+            Throw New ArgumentNullException("objectSecurity")
+        End If
+        If objectSecurity.AreAccessRulesCanonical Then
+            TL.LogMessage("CanonicalizeDacl", "Rules are already canonical, no action taken")
+            Return
+        End If
+
+        TL.BlankLine()
+        TL.LogMessage("CanonicalizeDacl", "***** Rules are not canonical, restructuring them *****")
+        TL.BlankLine()
+
+        For Each ace As CommonAce In descriptor.DiscretionaryAcl
+            If (ace.AceFlags And AceFlags.Inherited) = AceFlags.Inherited Then
+                inheritedDacl.Add(ace)
+                TL.LogMessage("CanonicalizeDacl", "Found Inherited Ace,                  " & IIf(ace.AceType = AceType.AccessAllowed, "Allow", "Deny").ToString() & ": " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+            Else
+                Select Case ace.AceType
+                    Case AceType.AccessAllowed
+                        implicitAllowDacl.Add(ace)
+                        TL.LogMessage("CanonicalizeDacl", "Found NotInherited Ace,               Allow: " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+                        Exit Select
+
+                    Case AceType.AccessDenied
+                        implicitDenyDacl.Add(ace)
+                        TL.LogMessage("CanonicalizeDacl", "Found NotInherited Ace,                Deny: " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+                        Exit Select
+
+                    Case AceType.AccessAllowedObject
+                        implicitAllowObjectDacl.Add(ace)
+                        TL.LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Object        Allow:" & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+                        Exit Select
+
+                    Case AceType.AccessDeniedObject
+                        implicitDenyObjectDacl.Add(ace)
+                        TL.LogMessage("CanonicalizeDacl", "Found NotInherited Ace, Object         Deny: " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+                        Exit Select
+                End Select
+            End If
+        Next
+
+        TL.BlankLine()
+        TL.LogMessage("CanonicalizeDacl", "Rebuilding in correct order...")
+        TL.BlankLine()
+
+        ' Rebuild the access list in the correct order
+        For Each ace As CommonAce In implicitDenyDacl
+            newDacl.InsertAce(aceIndex, ace)
+            TL.LogMessage("CanonicalizeDacl", "Adding NotInherited Deny Ace,         " & IIf(ace.AceType = AceType.AccessAllowed, "Allow", " Deny").ToString() & ": " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+            aceIndex += 1
+        Next
+
+        For Each ace As CommonAce In implicitDenyObjectDacl
+            newDacl.InsertAce(aceIndex, ace)
+            TL.LogMessage("CanonicalizeDacl", "Adding NotInherited Deny Object Ace,  " & IIf(ace.AceType = AceType.AccessAllowed, "Allow", " Deny").ToString() & ": " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+            aceIndex += 1
+        Next
+
+        For Each ace As CommonAce In implicitAllowDacl
+            newDacl.InsertAce(aceIndex, ace)
+            TL.LogMessage("CanonicalizeDacl", "Adding NotInherited Allow Ace,        " & IIf(ace.AceType = AceType.AccessAllowed, "Allow", " Deny").ToString() & ": " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+            aceIndex += 1
+        Next
+
+        For Each ace As CommonAce In implicitAllowObjectDacl
+            newDacl.InsertAce(aceIndex, ace)
+            TL.LogMessage("CanonicalizeDacl", "Adding NotInherited Allow Object Ace, " & IIf(ace.AceType = AceType.AccessAllowed, "Allow", " Deny").ToString() & ": " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+            aceIndex += 1
+        Next
+
+        For Each ace As CommonAce In inheritedDacl
+            newDacl.InsertAce(aceIndex, ace)
+            TL.LogMessage("CanonicalizeDacl", "Adding Inherited Ace,                 " & IIf(ace.AceType = AceType.AccessAllowed, "Allow", " Deny").ToString() & ": " & ace.SecurityIdentifier.Translate(Type.GetType("System.Security.Principal.NTAccount")).ToString() & " " & CType(ace.AccessMask, AccessRights).ToString().ToString() & " " & ace.AceFlags.ToString())
+            aceIndex += 1
+        Next
+
+        If aceIndex <> descriptor.DiscretionaryAcl.Count Then
+            System.Diagnostics.Debug.Fail("The DACL cannot be canonicalized since it would potentially result in a loss of information")
+            Return
+        End If
+
+        descriptor.DiscretionaryAcl = newDacl
+        objectSecurity.SetSecurityDescriptorSddlForm(descriptor.GetSddlForm(AccessControlSections.Access), AccessControlSections.Access)
     End Sub
 
     Private Sub Backup55()
