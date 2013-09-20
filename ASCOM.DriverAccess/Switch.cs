@@ -11,7 +11,7 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to Switch drivers
     /// </summary>
-    class Switch : AscomDriver, ISwitchV2
+    public class Switch : AscomDriver, ISwitchV2
     {
         private MemberFactory memberFactory;
 
