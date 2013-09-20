@@ -94,6 +94,7 @@
     <Compile Include="DeviceFocuser.vb" />
     <Compile Include="DeviceRotator.vb" />
     <Compile Include="DeviceSafetyMonitor.vb" />
+    <Compile Include="DeviceSwitch.vb" />
     <Compile Include="DeviceTelescope.vb" />
     <Compile Include="PlaceholderInterface.vb" />
     <Compile Include="Driver.vb" />

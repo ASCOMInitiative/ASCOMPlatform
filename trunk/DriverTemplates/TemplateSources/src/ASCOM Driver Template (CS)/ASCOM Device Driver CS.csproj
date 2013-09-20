@@ -82,6 +82,7 @@
     <Compile Include="DeviceFocuser.cs" />
     <Compile Include="DeviceRotator.cs" />
     <Compile Include="DeviceSafetyMonitor.cs" />
+    <Compile Include="DeviceSwitch.cs" />
     <Compile Include="Driver.cs" />
     <Compile Include="PlaceholderInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
