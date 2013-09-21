@@ -156,6 +156,7 @@
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="SafetyMonitor.cs" />
+    <Compile Include="Switch.cs" />
     <Compile Include="Telescope.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>

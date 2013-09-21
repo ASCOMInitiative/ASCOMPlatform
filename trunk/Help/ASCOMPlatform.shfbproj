@@ -22,7 +22,7 @@
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-12, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-13, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM" isExposed="False" />
       <Filter entryType="Namespace" fullName="System" isExposed="True">
@@ -165,6 +165,8 @@
     </Image>
     <Content Include="Scripts\script_manifold.js" />
     <Content Include="Introduction\Acknowledgements.aml" />
+    <None Include="Version History\Version 6.1.aml" />
+    <None Include="Version History\Version 6.1.aml" />
     <None Include="Version History\Version 6.0 SP3.aml" />
     <None Include="Version History\Version 6.0 SP3.aml" />
     <None Include="Version History\Version 6.0 SP2.aml" />
