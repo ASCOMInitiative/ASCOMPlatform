@@ -6,14 +6,14 @@
     <!-- Directory in which to export the latest ASCOM codebase from Subversion-->
     <CheckoutDirectory>$(MSBuildProjectDirectory)\Export</CheckoutDirectory>
 
-    <!-- Subversion URL from which to make the export -->
-    <RepositoryPath>https://ascom.svn.sourceforge.net/svnroot/ascom/trunk</RepositoryPath>
+    <!-- Subversion URL from which to make the export - Customise this line with your own login name in place of simpsonpwg -->
+    <RepositoryPath>svn://simpsonpwg@svn.code.sf.net/p/ascom/code/trunk</RepositoryPath>
 
     <!-- Registry location for the user's Subversion login credentials -->
     <SecurityCredentialsLocation>HKEY_CURRENT_USER\Software\ASCOM\Build</SecurityCredentialsLocation>
 
     <!-- Current Platform version -->
-    <PlatformVersion>6.0</PlatformVersion>
+    <PlatformVersion>6.1</PlatformVersion>
 
     <!-- Base date from which the number of days is calculated to give the build version number (should stay at Jan 1 2011 - it's good till at least 2019) -->
     <BuildBaseDate>January 1,2011</BuildBaseDate>
@@ -63,7 +63,7 @@
                LocalPath="$(CheckoutDirectory)">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnExport>
-    <Message Text="Revision: $(Revision)"/>
+    <Message Text="Revision Level: $(Revision)"/>
 
     <!-- Create a few registry keys to represent a minimal ASCOM Profile Store. -->
     <!-- This enables drivers to register themselves during the build process without hitting a ProfileNotFound exception.-->

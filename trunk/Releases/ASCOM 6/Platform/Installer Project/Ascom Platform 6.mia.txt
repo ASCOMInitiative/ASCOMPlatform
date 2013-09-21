@@ -949,7 +949,7 @@ else
       [DEFINE REGION: Registry Keys 64bit]
       Comment: Create registry keys
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\PlatformVersion, 6.0 (permanent)
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\PlatformVersion, 6.1 (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Camera Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Chooser\,  (permanent)
