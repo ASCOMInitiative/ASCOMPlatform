@@ -5844,7 +5844,7 @@ Public Class DiagnosticsForm
         End Try
         TL.BlankLine()
 
-        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, True, False)
+        GetInstalledComponent("Platform 6", PLATFORM_INSTALLER_PROPDUCT_CODE, True, True, True)
         GetInstalledComponent("Platform 6 Developer", DEVELOPER_INSTALLER_PROPDUCT_CODE, False, True, True)
 
         TL.BlankLine()
