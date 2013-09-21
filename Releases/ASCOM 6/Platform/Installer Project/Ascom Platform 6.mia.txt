@@ -826,7 +826,7 @@ else
       [DEFINE REGION: Registry Keys 32bit]
       Comment: Create registry keys
       Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, 6.0 (permanent)
+      Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, 6.1 (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
