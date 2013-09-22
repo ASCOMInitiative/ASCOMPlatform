@@ -109,8 +109,8 @@ namespace ASCOM.DriverAccess
         /// Setting an analogue switch to true will set it to its maximim value and
         /// setting it to false will set it to its minimum value.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="state"></param>
+        /// <param name="id">The number of the switch to set</param>
+        /// <param name="state">The required switch state</param>
         public void SetSwitch(short id, bool state)
         {
             memberFactory.CallMember(3, "SetSwitch", new Type[] { typeof(short), typeof(bool) }, new object[] { id, state });
