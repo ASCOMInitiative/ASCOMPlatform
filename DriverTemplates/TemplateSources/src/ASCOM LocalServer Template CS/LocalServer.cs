@@ -124,6 +124,7 @@ namespace ASCOM.$safeprojectname$
 		// Used to tell if started by COM or manually
         public static bool StartedByCOM { get; private set; }   // True if server started by COM (-embedding)
 
+
 		#region Server Lock, Object Counting, and AutoQuit on COM startup
 		// Returns the total number of objects alive currently.
 		public static int ObjectsCount
@@ -555,17 +556,17 @@ namespace ASCOM.$safeprojectname$
 						break;
 
 					case "-register":
-					case "/register":
+					case @"/register":
 					case "-regserver":											// Emulate VB6
-					case "/regserver":
+					case @"/regserver":
 						RegisterObjects();										// Register each served object
 						bRet = false;
 						break;
 
 					case "-unregister":
-					case "/unregister":
+					case @"/unregister":
 					case "-unregserver":										// Emulate VB6
-					case "/unregserver":
+					case @"/unregserver":
 						UnregisterObjects();									//Unregister each served object
 						bRet = false;
 						break;
@@ -620,16 +621,21 @@ namespace ASCOM.$safeprojectname$
 			// Start the message loop. This serializes incoming calls to our
 			// served COM objects, making this act like the VB6 equivalent!
 			//
-			Application.Run(s_MainForm);
+			try
+			{
+				Application.Run(s_MainForm);
+			}
+			finally
+			{
+				// Revoke the class factories immediately.
+				// Don't wait until the thread has stopped before
+				// we perform revocation!!!
+				RevokeClassFactories();
 
-			// Revoke the class factories immediately.
-			// Don't wait until the thread has stopped before
-			// we perform revocation!!!
-			RevokeClassFactories();
-
-			// Now stop the Garbage Collector thread.
-			GarbageCollector.StopThread();
-			GarbageCollector.WaitForThreadToStop();
+				// Now stop the Garbage Collector thread.
+				GarbageCollector.StopThread();
+				GarbageCollector.WaitForThreadToStop();
+			}
 		}
 		#endregion
 	}

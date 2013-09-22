@@ -26,6 +26,7 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceFocuser.cs">DeviceFocuser.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceRotator.cs">DeviceRotator.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceSafetyMonitor.cs">DeviceSafetyMonitor.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceSwitch.cs">DeviceSwitch.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceTelescope.cs">DeviceTelescope.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Rates.cs">Rates.cs</ProjectItem>

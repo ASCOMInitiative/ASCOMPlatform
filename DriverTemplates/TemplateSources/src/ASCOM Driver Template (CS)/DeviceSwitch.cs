@@ -182,7 +182,6 @@ class DeviceSwitch
         }
     }
 
-
     #endregion
 
     //ENDOFINSERTEDFILE
