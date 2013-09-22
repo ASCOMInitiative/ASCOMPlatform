@@ -195,101 +195,112 @@ Public Interface ISwitchV2
 
 #Region "Device Methods"
     ''' <summary>
-    ''' The number of switches managed by this driver. Switch numbers are 0 to MaxSwitch - 1
+    ''' The number of switches managed by this driver
     ''' </summary>
     ''' <returns>The number of switches managed by this driver</returns>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException</b></p> 
+    ''' <p>Switches are numbered from 0 to MaxSwitch - 1</p></remarks>
     ReadOnly Property MaxSwitch As Short
 
     ''' <summary>
-    ''' Return the name of switch n. This method is mandatory.
+    ''' Return the name of switch n.
     ''' </summary>
     ''' <param name="id">The switch number to return</param>
     ''' <returns>The name of the switch</returns>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
+    ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para></remarks>
     Function GetSwitchName(id As Short) As String
 
     ''' <summary>
-    ''' Sets a switch name to a specified value.  If the switch name cannot
-    ''' be set by the application this must return the MethodNetImplementedException.
+    ''' Set a switch's name to a specified value.
     ''' </summary>
     ''' <param name="id">The number of the switch whose name is to be set</param>
     ''' <param name="name">The name of the switch</param>
     ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception if the switch name can not be set by the application.</b></p>
+    ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para></remarks>
     Sub SetSwitchName(id As Short, name As String)
 
 #Region "boolean members"
     ''' <summary>
     ''' Return the state of switch n as a boolean
-    ''' an analogue switch will return true if the value is closer to the maximum than the minimum, otherwise false
     ''' </summary>
     ''' <param name="id">The switch number to return</param>
     ''' <returns>True or false</returns>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
+    ''' <para>An analogue switch will return true if is value is closer to the maximum than the minimum, otherwise false. </para>
+    ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para></remarks>
     Function GetSwitch(id As Short) As Boolean
 
     ''' <summary>
     ''' Sets a switch to the specified state, true or false.
-    ''' If the switch cannot be set then throws a MethodNotImplementedException.
-    ''' Setting an analogue switch to true will set it to its maximim value and
-    ''' setting it to false will set it to its minimum value.
     ''' </summary>
-    ''' <param name="ID">The number of the switch to set</param>
-    ''' <param name="State">The required switch state</param>
+    ''' <param name="id">The number of the switch to set</param>
+    ''' <param name="state">The required switch state</param>
     ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
+    ''' <para>Setting an analogue switch to true will set it to its maximum value and setting it to false will set it to its minimum value.</para>
+    ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para></remarks>
     Sub SetSwitch(id As Short, state As Boolean)
 #End Region
 
 #Region "Analogue members"
     ''' <summary>
     ''' Returns the maximum analogue value for this switch
-    ''' boolean switches must return 1.0
     ''' </summary>
     ''' <param name="id">The switch whose value should be returned</param>
     ''' <returns>The maximum value to which this switch can be set.</returns>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
+    ''' <para>Boolean switches must return 1.0 as their maximum value. Switches are numbered from 0 to MaxSwitch - 1.</para></remarks>
     Function MaxSwitchValue(id As Short) As Double
 
     ''' <summary>
     ''' Returns the minimum analogue value for this switch
-    ''' boolean switches must return 0.0
     ''' </summary>
     ''' <param name="id">The switch whose value should be returned</param>
     ''' <returns>The minimum value to which this switch can be set.</returns>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
+    ''' <para>Boolean switches must return 0.0 as their minimum value. Switches are numbered from 0 to MaxSwitch - 1.</para></remarks>
     Function MinSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' Returns the step size that this switch supports. This gives the difference between
-    ''' successive values of the switch.
-    ''' The number of values is ((MaxSwitchValue - MinSwitchValue) / SwitchStep) + 1
-    ''' boolean switches must return 1.0, giving two states.
+    ''' Returns the step size that this switch supports (the difference between successive values of the switch).
     ''' </summary>
-    ''' <param name="id">TThe switch whose value should be returned</param>
+    ''' <param name="id">The switch whose value should be returned</param>
     ''' <returns>The step size for this switch.</returns>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
+    ''' <para>Boolean switches must return 1.0, giving two states. Switches are numbered from 0 to MaxSwitch - 1.</para>
+    ''' <para>For any switch, the number of steps can be calculated as: ((MaxSwitchValue - MinSwitchValue) / SwitchStep) + 1,</para> </remarks>
     Function SwitchStep(id As Short) As Double
 
     ''' <summary>
-    ''' Returns the analogue switch value for switch id, boolean switches will return 1.0 or 0.0
+    ''' Returns the analogue switch value for switch id.
     ''' </summary>
-    ''' <param name="id">The switch whose value should be returned</param>
+    ''' <param name="id">The switch whose value should be returned.</param>
     ''' <returns>The analogue value for this switch.</returns>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
+    ''' <para>Boolean switches must return 0.0 or 1.0, giving two states. Switches are numbered from 0 to MaxSwitch - 1.</para></remarks>
     Function GetSwitchValue(id As Short) As Double
 
     ''' <summary>
     ''' Set the analogue value for this switch.
-    ''' If the switch cannot be set then throws a MethodNotImplementedException.
-    ''' If the value is not between the maximum and minimum then throws an InvalidValueException
-    ''' boolean switches will be set to true if the value is closer to the maximum than the minimum.
     ''' </summary>
     ''' <param name="id">The switch whose value should be set</param>
     ''' <param name="value">Value to be set between MinSwitchValue and MaxSwitchValue</param>
+    ''' <exception cref="InvalidValueException">If the value is not between the maximum and minimum.</exception>
     ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
-    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
+    ''' <para>If the value is not between the maximum and minimum then the method must throw an InvalidValueException. </para>
+    ''' <para>The switch's <see cref="GetSwitch"></see> value will be appear as true if the switch value is set closer to the maximum than the minimum, otheriwse false.</para> </remarks>
     Sub SetSwitchValue(id As Short, value As Double)
 
 #End Region
