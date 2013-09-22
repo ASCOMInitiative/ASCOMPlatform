@@ -56,6 +56,10 @@ namespace ASCOM.DriverAccess
         /// The number of switches managed by this driver. Switch numbers are 0 to
         /// MaxSwitch - 1
         /// </summary>
+        /// <summary>
+        /// The number of switches managed by this driver. Switch numbers are 0 to MaxSwitch - 1
+        /// </summary>
+        /// <returns>The number of switches managed by this driver</returns>
         public short MaxSwitch
         {
             get { return Convert.ToInt16(memberFactory.CallMember(1, "MaxSwitch", new Type[] { }, new object[] { })); }
@@ -117,11 +121,11 @@ namespace ASCOM.DriverAccess
         #region analogue members
 
         /// <summary>
-        /// returns the maximum value for this switch.
+        /// Returns the maximum value for this switch.
         /// boolean switches must return 1.0
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The switch whose value should be returned</param>
+        /// <returns>The maximum value to which this switch can be set.</returns>
         public double MaxSwitchValue(short id)
         {
             try { return (double)memberFactory.CallMember(3, "MaxSwitchValue", new Type[] { typeof(short) }, new object[] { id }); }
@@ -129,11 +133,11 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// returns the minimum value for this switch.
+        /// Returns the minimum value for this switch.
         /// boolean switches must return 0.0
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The switch whose value should be returned</param>
+        /// <returns>The minimum value to which this switch can be set.</returns>
         public double MinSwitchValue(short id)
         {
             try { return (double)memberFactory.CallMember(3, "MinSwitchValue", new Type[] { typeof(short) }, new object[] { id }); }
@@ -141,13 +145,13 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// returns the step size that this switch supports. This gives the difference between
+        /// Returns the step size that this switch supports. This gives the difference between
         /// successive values of the switch.
         /// The number of values is ((MaxSwitchValue - MinSwitchValue) / SwitchStep) + 1
         /// boolean switches must return 1.0, giving two states.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">TThe switch whose value should be returned</param>
+        /// <returns>The step size for this switch.</returns>
         public double SwitchStep(short id)
         {
             try { return (double)memberFactory.CallMember(3, "SwitchStep", new Type[] { typeof(short) }, new object[] { id }); }
@@ -155,11 +159,11 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// returns the analogue switch value for switch id
+        /// Returns the analogue switch value for switch id
         /// boolean switches will return 1.0 or 0.0
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The switch whose value should be returned</param>
+        /// <returns>The analogue value for this switch.</returns>
         public double GetSwitchValue(short id)
         {
             try
@@ -170,13 +174,13 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// set the analogue value for this switch.
+        /// Set the analogue value for this switch.
         /// If the switch cannot be set then throws a MethodNotImplementedException.
         /// If the value is not between the maximum and minimum then throws an InvalidValueException
         /// boolean switches will be set to true if the value is closer to the maximum than the minimum.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="value"></param>
+        /// <param name="id">The switch whose value should be set</param>
+        /// <param name="value">Value to be set between MinSwitchValue and MaxSwitchValue</param>
         public void SetSwitchValue(short id, double value)
         {
             try

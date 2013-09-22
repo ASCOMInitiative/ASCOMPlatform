@@ -195,9 +195,10 @@ Public Interface ISwitchV2
 
 #Region "Device Methods"
     ''' <summary>
-    ''' The number of switches managed by this driver. Switch numbers are 0 to
-    ''' MaxSwitch - 1
+    ''' The number of switches managed by this driver. Switch numbers are 0 to MaxSwitch - 1
     ''' </summary>
+    ''' <returns>The number of switches managed by this driver</returns>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
     ReadOnly Property MaxSwitch As Short
 
     ''' <summary>
@@ -205,6 +206,7 @@ Public Interface ISwitchV2
     ''' </summary>
     ''' <param name="id">The switch number to return</param>
     ''' <returns>The name of the switch</returns>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
     Function GetSwitchName(id As Short) As String
 
     ''' <summary>
@@ -213,6 +215,8 @@ Public Interface ISwitchV2
     ''' </summary>
     ''' <param name="id">The number of the switch whose name is to be set</param>
     ''' <param name="name">The name of the switch</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
     Sub SetSwitchName(id As Short, name As String)
 
 #Region "boolean members"
@@ -222,6 +226,7 @@ Public Interface ISwitchV2
     ''' </summary>
     ''' <param name="id">The switch number to return</param>
     ''' <returns>True or false</returns>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
     Function GetSwitch(id As Short) As Boolean
 
     ''' <summary>
@@ -232,52 +237,59 @@ Public Interface ISwitchV2
     ''' </summary>
     ''' <param name="ID">The number of the switch to set</param>
     ''' <param name="State">The required switch state</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
     Sub SetSwitch(id As Short, state As Boolean)
 #End Region
 
 #Region "Analogue members"
     ''' <summary>
-    ''' returns the maximum analogue value for this switch
+    ''' Returns the maximum analogue value for this switch
     ''' boolean switches must return 1.0
     ''' </summary>
-    ''' <param name="id"></param>
-    ''' <returns></returns>
+    ''' <param name="id">The switch whose value should be returned</param>
+    ''' <returns>The maximum value to which this switch can be set.</returns>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
     Function MaxSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' returns the minimum analogue value for this switch
+    ''' Returns the minimum analogue value for this switch
     ''' boolean switches must return 0.0
     ''' </summary>
-    ''' <param name="id"></param>
-    ''' <returns></returns>
+    ''' <param name="id">The switch whose value should be returned</param>
+    ''' <returns>The minimum value to which this switch can be set.</returns>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
     Function MinSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' returns the step size that this switch supports. This gives the difference between
+    ''' Returns the step size that this switch supports. This gives the difference between
     ''' successive values of the switch.
     ''' The number of values is ((MaxSwitchValue - MinSwitchValue) / SwitchStep) + 1
     ''' boolean switches must return 1.0, giving two states.
     ''' </summary>
-    ''' <param name="id"></param>
-    ''' <returns></returns>
+    ''' <param name="id">TThe switch whose value should be returned</param>
+    ''' <returns>The step size for this switch.</returns>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
     Function SwitchStep(id As Short) As Double
 
     ''' <summary>
-    ''' returns the analogue switch value for switch id
-    ''' boolean switches will return 1.0 or 0.0
+    ''' Returns the analogue switch value for switch id, boolean switches will return 1.0 or 0.0
     ''' </summary>
-    ''' <param name="id"></param>
-    ''' <returns></returns>
+    ''' <param name="id">The switch whose value should be returned</param>
+    ''' <returns>The analogue value for this switch.</returns>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> </remarks>
     Function GetSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' set the analogue value for this switch.
+    ''' Set the analogue value for this switch.
     ''' If the switch cannot be set then throws a MethodNotImplementedException.
     ''' If the value is not between the maximum and minimum then throws an InvalidValueException
     ''' boolean switches will be set to true if the value is closer to the maximum than the minimum.
     ''' </summary>
-    ''' <param name="id"></param>
-    ''' <param name="value"></param>
+    ''' <param name="id">The switch whose value should be set</param>
+    ''' <param name="value">Value to be set between MinSwitchValue and MaxSwitchValue</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> </remarks>
     Sub SetSwitchValue(id As Short, value As Double)
 
 #End Region
