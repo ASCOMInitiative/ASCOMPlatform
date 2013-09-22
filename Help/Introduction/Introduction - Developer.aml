@@ -5,6 +5,9 @@
     <section address="Introduction-Developers-Platform-6">
     	<title>Introduction - ASCOM-Platform 6 - ASCOM Driver and Application Developers</title>
       	<content>
+      	
+      	<para>Please see <link xlink:href="99a131c6-8a85-43e8-b98a-5fa81ed108ec" /> for information on the changes in 6.1.</para>
+      	
       	<para>This release builds on the architectural changes introduced in Plaform 5.5 and introduces a set of common methods that 
       	will be availabnle in all drivers. These have been based on the methods already implemented in the Telescope interface together
       	with methods agreed in the IDeviceControl interface discussion. The full list of members is given 
