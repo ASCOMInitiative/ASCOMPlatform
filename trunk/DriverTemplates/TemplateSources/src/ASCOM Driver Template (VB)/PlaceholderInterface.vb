@@ -439,6 +439,76 @@ Partial Public Class DeviceRotator
 
 End Class
 
+
+Partial Public Class DeviceSwitch
+    Public Sub Dispose() Implements ISwitchV2.Dispose
+    End Sub
+
+    Public Sub SetupDialog() Implements ISwitchV2.SetupDialog
+    End Sub
+
+    Public ReadOnly Property SupportedActions() As ArrayList Implements ISwitchV2.SupportedActions
+        Get
+            Return New ArrayList()
+        End Get
+    End Property
+
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements ISwitchV2.Action
+        Throw New MethodNotImplementedException("Action")
+    End Function
+
+    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements ISwitchV2.CommandBlind
+        Throw New MethodNotImplementedException("CommandBlind")
+    End Sub
+
+    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements ISwitchV2.CommandBool
+        Throw New MethodNotImplementedException("CommandBool")
+    End Function
+
+    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements ISwitchV2.CommandString
+        Throw New MethodNotImplementedException("CommandString")
+    End Function
+
+    Public Property Connected() As Boolean Implements ISwitchV2.Connected
+        Get
+            Return False
+        End Get
+        Set(value As Boolean)
+        End Set
+    End Property
+
+    Public ReadOnly Property Description As String Implements ISwitchV2.Description
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverInfo As String Implements ISwitchV2.DriverInfo
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverVersion() As String Implements ISwitchV2.DriverVersion
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property InterfaceVersion() As Short Implements ISwitchV2.InterfaceVersion
+        Get
+            Return 0
+        End Get
+    End Property
+
+    Public ReadOnly Property Name As String Implements ISwitchV2.Name
+        Get
+            Return ""
+        End Get
+    End Property
+
+End Class
+
 Partial Public Class DeviceSafetyMonitor
     Public Sub Dispose() Implements ISafetyMonitor.Dispose
     End Sub

@@ -8,15 +8,17 @@ Imports ASCOM.Utilities
 
 Class DeviceSwitch
     Implements ISwitchV2
+
     Private TL As New TraceLogger()
 
 #Region "ISwitchV2 Implementation"
+
     Dim numSwitches As Short
 
     ''' <summary>
     ''' The number of switches managed by this driver
     ''' </summary>
-    Public ReadOnly Property MaxSwitch As Short
+    Public ReadOnly Property MaxSwitch As Short Implements ISwitchV2.MaxSwitch
         Get
             TL.LogMessage("MaxSwitch Get", numSwitches.ToString())
             Return numSwitches
@@ -28,7 +30,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="id">The switch number to return</param>
     ''' <returns>The name of the switch</returns>
-    Public Function GetSwitchName(id As Short) As String
+    Public Function GetSwitchName(id As Short) As String Implements ISwitchV2.GetSwitchName
         Validate("GetSwitchName", id)
         TL.LogMessage("GetSwitchName", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("GetSwitchName")
@@ -39,7 +41,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="id">The number of the switch whose name is to be set</param>
     ''' <param name="name">The name of the switch</param>
-    Sub SetSwitchName(id As Short, name As String)
+    Sub SetSwitchName(id As Short, name As String) Implements ISwitchV2.SetSwitchName
         Validate("SetSwitchName", id)
         TL.LogMessage("SetSwitchName", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("SetSwitchName")
@@ -52,7 +54,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="id">The switch number to return</param>
     ''' <returns>True or false</returns>
-    Function GetSwitch(id As Short) As Boolean
+    Function GetSwitch(id As Short) As Boolean Implements ISwitchV2.GetSwitch
         Validate("GetSwitch", id)
         TL.LogMessage("GetSwitch", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("GetSwitch")
@@ -66,7 +68,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="ID">The number of the switch to set</param>
     ''' <param name="State">The required switch state</param>
-    Sub SetSwitch(id As Short, state As Boolean)
+    Sub SetSwitch(id As Short, state As Boolean) Implements ISwitchV2.SetSwitch
         Validate("SetSwitch", id)
         TL.LogMessage("SetSwitch", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("SetSwitch")
@@ -81,7 +83,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
-    Function MaxSwitchValue(id As Short) As Double
+    Function MaxSwitchValue(id As Short) As Double Implements ISwitchV2.MaxSwitchValue
         Validate("MaxSwitchValue", id)
         TL.LogMessage("MaxSwitchValue", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("MaxSwitchValue")
@@ -93,7 +95,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
-    Function MinSwitchValue(id As Short) As Double
+    Function MinSwitchValue(id As Short) As Double Implements ISwitchV2.MinSwitchValue
         Validate("MinSwitchValue", id)
         TL.LogMessage("MinSwitchValue", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("MinSwitchValue")
@@ -107,7 +109,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
-    Function SwitchStep(id As Short) As Double
+    Function SwitchStep(id As Short) As Double Implements ISwitchV2.SwitchStep
         Validate("SwitchStep", id)
         TL.LogMessage("SwitchStep", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("SwitchStep")
@@ -119,7 +121,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
-    Function GetSwitchValue(id As Short) As Double
+    Function GetSwitchValue(id As Short) As Double Implements ISwitchV2.GetSwitchValue
         Validate("GetSwitchValue", id)
         TL.LogMessage("GetSwitchValue", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("GetSwitchValue")
@@ -133,7 +135,7 @@ Class DeviceSwitch
     ''' </summary>
     ''' <param name="id"></param>
     ''' <param name="value"></param>
-    Sub SetSwitchValue(id As Short, value As Double)
+    Sub SetSwitchValue(id As Short, value As Double) Implements ISwitchV2.SetSwitchValue
         Validate("SetSwitchValue", id)
         If value < MinSwitchValue(id) Or value > MaxSwitchValue(id) Then
             Throw New InvalidValueException("", value.ToString(), String.Format("{0} to {1}", MinSwitchValue(id), MaxSwitchValue(id)))
