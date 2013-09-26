@@ -288,13 +288,20 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Reports if the switch is read only.
+        /// Gets the description of the specified switch. This is to allow a fuller description of
+        /// the switch to be returned, for example for a tool tip.
         /// </summary>
-        /// <param name="id">The switch id.</param>
-        /// <returns>
-        ///   <c>true</c> if [is read only] [the specified id]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsReadOnly(short id)
+        /// <param name="id">The number of the switch whose description is to be returned</param>
+        /// <returns></returns>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        public string GetSwitchDescription(short id)
+        {
+            Validate("IsReadOnly", id);
+            return switches[id].Description;
+        }
+
+        public bool GetSwitchReadOnly(short id)
         {
             Validate("IsReadOnly", id);
             return switches[id].ReadOnly;

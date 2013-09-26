@@ -22,6 +22,7 @@ namespace ASCOM.Simulator
         public string Name { get; set; }
         public bool ReadOnly { get; set; }
         public double Value { get; set; }
+        public string Description { get; set; }
         
         public LocalSwitch()
         {
@@ -66,6 +67,7 @@ namespace ASCOM.Simulator
             this.step = step;
             this.ReadOnly = readOnly;
             this.Value = value;
+            this.Description = name;
         }
 
         /// <summary>
@@ -84,6 +86,7 @@ namespace ASCOM.Simulator
             this.StepSize = Convert.ToDouble(profile.GetValue(driverId, "StepSize", subKey, "1"), CultureInfo.InvariantCulture);
             this.ReadOnly = Convert.ToBoolean(profile.GetValue(driverId, "ReadOnly", subKey, bool.FalseString), CultureInfo.InvariantCulture);
             this.Value = Convert.ToDouble(profile.GetValue(driverId, "Value", subKey, "0"), CultureInfo.InvariantCulture);
+            this.Description = profile.GetValue(driverId, "Description", subKey, this.Name);
         }
 
         /// <summary>
@@ -116,6 +119,7 @@ namespace ASCOM.Simulator
         {
             var subKey = "Switch" + id.ToString();
             profile.WriteValue(driverId, "Name", this.Name, subKey);
+            profile.WriteValue(driverId, "Description", this.Description, subKey);
             profile.WriteValue(driverId, "Minimum", this.Minimum.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "Maximum", this.Maximum.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "StepSize", this.StepSize.ToString(CultureInfo.InvariantCulture), subKey);
