@@ -11,7 +11,7 @@ class DeviceSwitch
 
     #region ISwitchV2 Implementation
 
-    private  short numSwitch;
+    private  short numSwitch = 0;
 
     /// <summary>
     /// The number of switches managed by this driver
@@ -35,6 +35,7 @@ class DeviceSwitch
     public string GetSwitchName(short id)
     {
         Validate("GetSwitchName", id);
+        tl.LogMessage("GetSwitchName", string.Format("GetSwitchName({0}) - not implemented", id));
         throw new MethodNotImplementedException("GetSwitchName");
     }
 
@@ -46,7 +47,32 @@ class DeviceSwitch
     public void SetSwitchName(short id, string name)
     {
         Validate("SetSwitchName", id);
+        tl.LogMessage("SetSwitchName", string.Format("SetSwitchName({0}) = {1} - not implemented", id, name));
         throw new MethodNotImplementedException("SetSwitchName");
+    }
+
+    /// <summary>
+    /// Gets the switch description.
+    /// </summary>
+    /// <param name="id">The id.</param>
+    /// <returns></returns>
+    public string GetSwitchDescription(short id)
+    {
+        Validate("GetSwitchDescription", id);
+        tl.LogMessage("GetSwitchDescription", string.Format("GetSwitchDescription({0}) - not implemented", id));
+        throw new MethodNotImplementedException("GetSwitchDescription");
+    }
+
+    /// <summary>
+    /// Gets the read only state for the switch.
+    /// </summary>
+    /// <param name="id">The id.</param>
+    /// <returns></returns>
+    public bool GetSwitchReadOnly(short id)
+    {
+        Validate("GetSwitchReadOnly", id);
+        tl.LogMessage("GetSwitchReadOnly", string.Format("GetSwitchReadOnly({0}) - not implemented", id));
+        throw new MethodNotImplementedException("GetSwitchReadOnly");
     }
 
     #region boolean switch members
@@ -62,6 +88,7 @@ class DeviceSwitch
     public bool GetSwitch(short id)
     {
         Validate("GetSwitch", id);
+        tl.LogMessage("GetSwitch", string.Format("GetSwitch({0}) - not implemented", id));
         throw new MethodNotImplementedException("GetSwitch");
     }
 
@@ -76,6 +103,7 @@ class DeviceSwitch
     public void SetSwitch(short id, bool state)
     {
         Validate("SetSwitch", id);
+        tl.LogMessage("SetSwitch", string.Format("SetSwitch({0}) = {1} - not implemented", id, state));
         throw new MethodNotImplementedException("SetSwitch");
     }
 
@@ -92,6 +120,7 @@ class DeviceSwitch
     public double MaxSwitchValue(short id)
     {
         Validate("MaxSwitchValue", id);
+        tl.LogMessage("MaxSwitchValue", string.Format("MaxSwitchValue({0}) - not implemented", id));
         throw new MethodNotImplementedException("MaxSwitchValue");
     }
 
@@ -104,6 +133,7 @@ class DeviceSwitch
     public double MinSwitchValue(short id)
     {
         Validate("MinSwitchValue", id);
+        tl.LogMessage("MinSwitchValue", string.Format("MinSwitchValue({0}) - not implemented", id));
         throw new MethodNotImplementedException("MinSwitchValue");
     }
 
@@ -118,6 +148,7 @@ class DeviceSwitch
     public double SwitchStep(short id)
     {
         Validate("SwitchStep", id);
+        tl.LogMessage("SwitchStep", string.Format("SwitchStep({0}) - not implemented", id));
         throw new MethodNotImplementedException("SwitchStep");
     }
 
@@ -130,6 +161,7 @@ class DeviceSwitch
     public double GetSwitchValue(short id)
     {
         Validate("GetSwitchValue", id);
+        tl.LogMessage("GetSwitchValue", string.Format("GetSwitchValue({0}) - not implemented", id));
         throw new MethodNotImplementedException("GetSwitchValue");
     }
 
@@ -144,6 +176,7 @@ class DeviceSwitch
     public void SetSwitchValue(short id, double value)
     {
         Validate("SetSwitchValue", id, value);
+        tl.LogMessage("SetSwitchValue", string.Format("SetSwitchValue({0}) = {1} - not implemented", id, value));
         throw new MethodNotImplementedException("SetSwitchValue");
     }
 
@@ -176,9 +209,12 @@ class DeviceSwitch
     private void Validate(string message, short id, double value)
     {
         Validate(message, id);
-        if (value < MinSwitchValue(id) || value > MaxSwitchValue(id))
+        var min = MinSwitchValue(id);
+        var max = MaxSwitchValue(id);
+        if (value < min || value > max)
         {
- 	        throw new InvalidValueException(message, value.ToString(), string.Format("Switch({0}) range {1} to {2}", id, MinSwitchValue(id), MaxSwitchValue(id)));
+            tl.LogMessage(message, string.Format("Value {1} for Switch {0} is out of the allowed range {2} to {3}", id, value,  min, max));
+ 	        throw new InvalidValueException(message, value.ToString(), string.Format("Switch({0}) range {1} to {2}", id, min, max));
         }
     }
 

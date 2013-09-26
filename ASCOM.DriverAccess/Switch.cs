@@ -56,9 +56,6 @@ namespace ASCOM.DriverAccess
         /// The number of switches managed by this driver. Switch numbers are 0 to
         /// MaxSwitch - 1
         /// </summary>
-        /// <summary>
-        /// The number of switches managed by this driver. Switch numbers are 0 to MaxSwitch - 1
-        /// </summary>
         /// <returns>The number of switches managed by this driver</returns>
         public short MaxSwitch
         {
@@ -72,6 +69,7 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// The name of the switch
         /// </returns>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public string GetSwitchName(short id)
         {
             return (string)memberFactory.CallMember(3, "GetSwitchName", new Type[] { typeof(short) }, new object[] { id });
@@ -83,9 +81,37 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="id">The number of the switch whose name is to be set</param>
         /// <param name="name">The name of the switch</param>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public void SetSwitchName(short id, string name)
         {
             memberFactory.CallMember(3, "SetSwitchName", new Type[] { typeof(short), typeof(string) }, new object[] { id, name });
+        }
+
+        /// <summary>
+        /// Gets the description of the specified switch. This is to allow a fuller description of
+        /// the switch to be returned, for example for a tool tip.
+        /// </summary>
+        /// <param name="id">The number of the switch whose description is to be returned</param>
+        /// <returns></returns>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        public string GetSwitchDescription(short id)
+        {
+            return (string)memberFactory.CallMember(3, "GetSwitchDescription", new Type[] { typeof(short) }, new object[] { id });
+        }
+
+        /// <summary>
+        /// Gets the read only property for the specified switch.
+        /// This is true if the switch cannot be set, for example a limit switch or a sensor.
+        /// </summary>
+        /// <param name="id">The number of the switch whose read only state is to be returned</param>
+        /// <returns></returns>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        public bool GetSwitchReadOnly(short id)
+        {
+            return (bool)memberFactory.CallMember(3, "GetSwitchReadOnly", new Type[] { typeof(short) }, new object[] { id });
         }
 
         #region boolean switch members
@@ -98,6 +124,7 @@ namespace ASCOM.DriverAccess
         /// <returns>
         /// True or false
         /// </returns>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public bool GetSwitch(short id)
         {
             return (bool)memberFactory.CallMember(3, "GetSwitch", new Type[] { typeof(short) }, new object[] { id });
@@ -111,6 +138,8 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="id">The number of the switch to set</param>
         /// <param name="state">The required switch state</param>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public void SetSwitch(short id, bool state)
         {
             memberFactory.CallMember(3, "SetSwitch", new Type[] { typeof(short), typeof(bool) }, new object[] { id, state });
@@ -125,7 +154,10 @@ namespace ASCOM.DriverAccess
         /// boolean switches must return 1.0
         /// </summary>
         /// <param name="id">The switch whose value should be returned</param>
-        /// <returns>The maximum value to which this switch can be set.</returns>
+        /// <returns>
+        /// The maximum value to which this switch can be set.
+        /// </returns>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public double MaxSwitchValue(short id)
         {
             try { return (double)memberFactory.CallMember(3, "MaxSwitchValue", new Type[] { typeof(short) }, new object[] { id }); }
@@ -137,7 +169,10 @@ namespace ASCOM.DriverAccess
         /// boolean switches must return 0.0
         /// </summary>
         /// <param name="id">The switch whose value should be returned</param>
-        /// <returns>The minimum value to which this switch can be set.</returns>
+        /// <returns>
+        /// The minimum value to which this switch can be set.
+        /// </returns>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public double MinSwitchValue(short id)
         {
             try { return (double)memberFactory.CallMember(3, "MinSwitchValue", new Type[] { typeof(short) }, new object[] { id }); }
@@ -151,7 +186,10 @@ namespace ASCOM.DriverAccess
         /// boolean switches must return 1.0, giving two states.
         /// </summary>
         /// <param name="id">TThe switch whose value should be returned</param>
-        /// <returns>The step size for this switch.</returns>
+        /// <returns>
+        /// The step size for this switch.
+        /// </returns>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public double SwitchStep(short id)
         {
             try { return (double)memberFactory.CallMember(3, "SwitchStep", new Type[] { typeof(short) }, new object[] { id }); }
@@ -163,7 +201,10 @@ namespace ASCOM.DriverAccess
         /// boolean switches will return 1.0 or 0.0
         /// </summary>
         /// <param name="id">The switch whose value should be returned</param>
-        /// <returns>The analogue value for this switch.</returns>
+        /// <returns>
+        /// The analogue value for this switch.
+        /// </returns>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public double GetSwitchValue(short id)
         {
             try
@@ -181,6 +222,9 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="id">The switch whose value should be set</param>
         /// <param name="value">Value to be set between MinSwitchValue and MaxSwitchValue</param>
+        /// <exception cref="T:ASCOM.InvalidValueException">If the value is not between the maximum and minimum.</exception>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public void SetSwitchValue(short id, double value)
         {
             try

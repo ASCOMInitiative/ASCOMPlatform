@@ -220,8 +220,28 @@ Public Interface ISwitchV2
     ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Can throw a not implemented exception if the switch name can not be set by the application.</b></p>
-    ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para></remarks>
+    ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para>
+    ''' </remarks>
     Sub SetSwitchName(id As Short, name As String)
+
+    ''' <summary>
+    ''' Gets the read only property for the specified switch.
+    ''' This is true if the switch cannot be set, for example a limit switch or a sensor.
+    ''' </summary>
+    ''' <param name="id">The number of the switch whose read only state is to be returned</param>
+    ''' <returns>The read only property of this switch</returns>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    Function GetSwitchReadOnly(id As Short) As Boolean
+
+    ''' <summary>
+    ''' Gets the description of the specified switch. This is to allow a fuller description of
+    ''' the switch to be returned, for example for a tool tip.
+    ''' </summary>
+    ''' <param name="id">The number of the switch whose description is to be returned</param><returns></returns>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    Function GetSwitchDescription(id As Short) As String
 
 #Region "boolean members"
     ''' <summary>

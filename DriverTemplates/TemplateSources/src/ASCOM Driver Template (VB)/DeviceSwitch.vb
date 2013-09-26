@@ -47,6 +47,32 @@ Class DeviceSwitch
         Throw New ASCOM.MethodNotImplementedException("SetSwitchName")
     End Sub
 
+    ''' <summary>
+    ''' Gets the description of the specified switch. This is to allow a fuller description of
+    ''' the switch to be returned, for example for a tool tip.
+    ''' </summary>
+    ''' <param name="id">The number of the switch whose description is to be returned</param><returns></returns>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    Public Function GetSwitchDescription(id As Short) As String Implements ISwitchV2.GetSwitchDescription
+        Validate("GetSwitchDescription", id)
+        TL.LogMessage("GetSwitchDescription", "Not Implemented")
+        Throw New ASCOM.MethodNotImplementedException("GetSwitchDescription")
+    End Function
+
+    ''' <summary>
+    ''' Gets the read only property for the specified switch.
+    ''' This is true if the switch cannot be set, for example a limit switch or a sensor.
+    ''' </summary>
+    ''' <param name="id">The number of the switch whose read only state is to be returned</param><returns></returns>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    Public Function GetSwitchReadOnly(id As Short) As Boolean Implements ISwitchV2.GetSwitchReadOnly
+        Validate("GetSwitchReadOnly", id)
+        TL.LogMessage("GetSwitchReadOnly", "Not Implemented")
+        Throw New ASCOM.MethodNotImplementedException("GetSwitchReadOnly")
+    End Function
+
 #Region "boolean members"
     ''' <summary>
     ''' Return the state of switch n as a boolean
