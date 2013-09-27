@@ -19,7 +19,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ApplicationIcon>Resources\ASCOM.ico</ApplicationIcon>
     <StartupObject>ASCOM.Simulator.FilterWheelSim</StartupObject>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -170,12 +170,15 @@
     </Compile>
     <EmbeddedResource Include="frmHandbox.resx">
       <DependentUpon>frmHandbox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSetupDialog.resx">
       <DependentUpon>frmSetupDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTraffic.resx">
       <DependentUpon>frmTraffic.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
