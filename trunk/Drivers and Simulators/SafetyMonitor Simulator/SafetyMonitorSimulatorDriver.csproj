@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ASCOM.Simulator</RootNamespace>
     <AssemblyName>ASCOM.Simulator.SafetyMonitor</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -113,6 +113,7 @@
     <EmbeddedResource Include="Resources\RedLED.bmp" />
     <EmbeddedResource Include="SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Resources\ASCOM.bmp" />
     <Content Include="ASCOM.ico" />

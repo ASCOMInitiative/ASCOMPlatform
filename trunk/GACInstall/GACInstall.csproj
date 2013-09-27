@@ -19,7 +19,7 @@
     <StartupObject>ASCOM.Internal.GACInstall.Program</StartupObject>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\ASCOM.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>

@@ -83,6 +83,10 @@ Comment
 Comment
 Set Variable
 Set Variable
+Comment
+Comment
+Set Variable
+Set Variable
 Set Variable
 Set Variable
 Get System Settings
@@ -98,6 +102,16 @@ Comment
 Comment
 Set Variable
 Set Variable
+Get Folder Location
+Get Folder Location
+Comment
+Read Registry
+Comment
+Set Variable
+Set Variable
+Comment
+Set Variable
+Set Variable
 If
 Set 64 Bit Mode
 Get Folder Location
@@ -124,8 +138,6 @@ Get Folder Location
 Get Folder Location
 Get Folder Location
 Get Folder Location
-Read Registry
-Set Variable
 Comment
 Comment
 Read Registry
@@ -187,6 +199,8 @@ Write to Text File
 Else
 Write to Text File
 End
+Write to Text File
+Write to Text File
 Write to Text File
 Write to Text File
 Write to Text File
@@ -706,26 +720,27 @@ Install Assembly
 Install Files
 Install Files
 Install Files
-Comment
-Install Assembly
 Install Files
 Comment
 Install Assembly
-Install Files
-Install Assembly
-Install Files
-Install Files
-Install Assembly
-Install Files
-Install Files
-Install Assembly
-Install Files
 Install Files
 Comment
 Install Assembly
 Install Files
 Install Assembly
 Install Files
+Install Files
+Install Assembly
+Install Files
+Install Files
+Install Assembly
+Install Files
+Install Files
+Comment
+Install Assembly
+Install Files
+Install Assembly
+Install Files
 Install Assembly
 Install Files
 Comment
@@ -733,6 +748,7 @@ Install Assembly
 Install Files
 Install Files
 Install Assembly
+Install Files
 Install Files
 Install Files
 Install Files
@@ -1161,9 +1177,12 @@ Write to Text File
 Set Variable
 Comment
 Register Assembly
+Run Program
+Write to Text File
 Register Assembly
 Register Assembly
-Register Assembly
+Run Program
+Write to Text File
 Run Program As
 Write to Text File
 If
@@ -1199,11 +1218,25 @@ Run Program As
 Write to Text File
 Set Variable
 Comment
+Run Program As
+Write to Text File
+Run Program As
+Write to Text File
+Run Program As
+Write to Text File
 Register Assembly
 Register Assembly
 Register Assembly
 Register Assembly
 Comment
+Run Program As
+Write to Text File
+Run Program As
+Write to Text File
+Run Program As
+Write to Text File
+Run Program As
+Write to Text File
 Register Assembly
 Register Assembly
 Register Assembly
@@ -1464,6 +1497,10 @@ $
 {8FC4E03B-0586-4B65-AA04-ABCB1B8BE10F}
 {FCD01A17-98D6-4BD1-A36C-D2C05D405AC2}
 {EF8C3DCA-4949-472A-904A-66795078DBCC}
+{C247CFE7-43F1-47DA-85B2-2CA98CB2E820}
+{F0126D3A-0E88-492A-8F31-5C9EC50C774A}
+{C5BC8AD2-C776-4F1E-AE30-0DEA452CB98F}
+{EA99AF74-0FAF-4432-8DE7-321C9B75D1A4}
 {C785C23D-0376-47D3-A5C1-C9C90EBBD53E}
 {B1BF96F2-BD5A-4EA6-8B2A-C7A58A4FD93B}
 {5672FF81-94F9-4E70-8327-D6E39BA44047}
@@ -1481,6 +1518,16 @@ $
 {6BAB8490-E3C5-40DD-BCC2-96E8674B9681}
 {85C660CD-6423-4009-806C-B3402429CB48}
 {AD66F172-8F28-4F8C-92A3-D2B504309AB9}
+{8DB9254D-9CE7-40A8-947D-6B80449A34A2}
+{CBF2A814-EB95-4BD7-86B5-F7EB84B3A4A7}
+{36B3D69E-5BC1-41DE-B2BF-608BC348A535}
+{9BFB2BD9-1F60-41DE-ABA1-DFFC0E1D00C9}
+{C30A19A9-0402-46C1-A546-30ED37F1E211}
+{F8255C73-FFAF-4BF4-AB9E-B70A758CCA8A}
+{2C2A48A4-10CF-4576-B366-A626547C6DEF}
+{618B9446-03E8-4643-B2E1-ACF6CBB6F325}
+{0D769506-A234-4A82-9D9B-597FD145FF39}
+{5BC1709C-5774-4F16-9CDC-75DC9782C129}
 {F03DA6D9-ED48-4D6E-A086-D3476E159062}
 {ED6C94C9-2F46-4A70-88E7-950BA4C4FE7D}
 {6776E866-1DA5-4F3D-9887-FB2AF6B869BD}
@@ -1509,8 +1556,6 @@ $
 {6B5C335A-6D97-4F60-9A4A-6D1F34C257E1}
 {7486E8B4-7C74-4DCB-9116-2C03C3253BFC}
 {F389B2C5-4DF9-4C71-BAB5-7761ECEEB198}
-{3B1E2BB5-391A-47E8-8128-A9856C0D9CC0}
-{F1BC1B97-C86F-44A1-BE5A-BBDC8771B89D}
 {5B1C6FE0-9CD0-4616-869E-ED493D961D1D}
 {F2E14CF5-14B9-44A7-81E0-3CAB58C76FE7}
 {309DC015-6BCB-4F82-AF79-4203B1C820DD}
@@ -1574,8 +1619,10 @@ $
 {6D6FBA0B-9519-4356-A296-416273DA3801}
 {A1B7F8E9-AB50-4403-9AA4-CA7251778CEB}
 {4E95B1BA-2B8C-4292-8E9E-9003E7D4332D}
+{12FAB622-979C-44CE-8C63-47C1F37C7220}
 {6DCC3BAD-22E8-436D-B22C-7C99D4A9502B}
 {91FB1AB9-5720-449B-B191-505ED3E24638}
+{B506C84D-E519-4C69-9802-66A5E1E30762}
 {67C5DBA6-985C-4778-A70D-43DD8C52261A}
 {44A870A8-5CB5-4BBF-BE82-D6A77EDE93BC}
 {DE5E3E16-C3F1-4C7E-86C7-47A04C08432F}
@@ -2088,6 +2135,7 @@ $
 {31E8132D-39CB-4775-9745-B4A83DA32CA2}
 {EF48DD6D-1694-45C4-816F-25FFDFF44FCC}
 {917ACA92-ECF0-4B21-B130-36915B903A04}
+{A788F9E5-FD89-49C9-B713-FD66C0742377}
 {8ADF3958-F7C7-4A77-9C80-9162DF259690}
 {2950CF53-03D7-40FB-BA17-776760F28FCF}
 {62CA9828-7965-4230-8DDD-F414A36FC99C}
@@ -2118,6 +2166,7 @@ $
 {06499D84-146D-4281-BF4E-85D8CC3CE5F8}
 {FB7544F7-0DF1-4087-BE4A-0CBF217ED8E6}
 {4387F179-ACFA-485B-999D-FCCA128C77C8}
+{466C6452-3964-4778-B6E2-D0794CFC5D57}
 {077217F9-6B53-4824-9A45-7289877393BC}
 {810DA89F-A7BF-4F16-BB66-BEACB713DC60}
 {866E280C-2CBB-4ED7-9383-27C83A7E4270}
@@ -2546,9 +2595,12 @@ $
 {C94ACC4E-C273-42A1-9669-02BCCAFE57B3}
 {85B837AD-3594-4E11-BE38-6DDA4D9BF402}
 {FBA38C2A-9C44-40A6-B1BD-20044E7B97FE}
-{B9D5F963-84A7-40AC-9249-F3064C64CBEA}
+{27200A12-A8BC-45C3-9284-EC267080F0D4}
+{5778CE2F-8FED-4E12-9A33-C54E93166A56}
 {003D8F52-6A9C-4567-948B-E1829A4F23DF}
 {66E4F6CA-EC71-43CC-B044-6623208A834F}
+{5647DEBF-A465-4BF3-A17A-E728E0F18641}
+{92898746-99DD-45C3-8D5A-1964637876D5}
 {528F1610-D3CE-448F-B52C-BC5CD1FD2305}
 {C4099052-6877-426F-9306-BB4B202AFDED}
 {7B4A4AC1-9E00-4D65-BE8C-E7BB9D4959DE}
@@ -2584,14 +2636,28 @@ $
 {B2E3B600-F8C0-4A4C-80C4-86DBF87DF86E}
 {10ED4D94-4646-4669-A62B-F6F8BB15821D}
 {F658291A-FF6B-41EC-B246-C383903C69CD}
+{C1E0D6F8-4CAA-4505-BBAC-03BAF690B078}
+{9557CA78-F3DE-41CB-B2F6-DD5C288E4EB4}
+{2D15C91F-462D-4930-B463-D56A9347077E}
+{7068B001-FF5B-48EE-BFBB-DE3717F6010C}
+{361F4092-47CA-481A-BA0E-4115A93C3731}
+{668B004C-E5E4-458C-B306-32EA5A87F0A6}
 {EA6F7500-BB6F-4DDC-9472-DE5FB1943EFF}
 {2C58F602-87BF-4B13-A035-83A3F6060D94}
 {206E1B18-A161-498F-9968-B748D3DDC934}
 {CF180575-7DFC-42AC-A95C-2AC503F1D898}
 {469D4C55-3205-41C3-ADE4-C470DFA5C5C8}
+{FF500047-0C39-4910-8EC4-47AA68860C91}
+{D3EE1519-10AE-44C6-AABA-9EBFFEB7CF10}
+{BD4BFB3C-8E0C-4B6C-B590-8C8C39E99ECC}
+{FC315B2C-C5B3-4D4B-A9DF-B3E0FB067F5A}
+{476347A5-2877-49D3-9356-A00CF93D39C8}
+{C48CECD1-3D66-44A2-9EC8-4229E0669D62}
+{E3A1766D-F4C5-4E41-8443-243C638EF110}
+{D5C8C5FF-2E88-4DB1-A5D1-070FA506477D}
 {3469CD81-C205-492B-8892-D6E39D4264D7}
-{D4A4E267-98B9-4301-A1FD-51707C471B6B}
 {080711C2-108F-4E3E-A141-96499A39A7A8}
+{8F36DFE1-C969-4540-9D03-FF538D768E39}
 {C5837AED-FDBB-4EB6-955F-6AA520702E2B}
 {2A82981B-5E91-49ED-BA0F-31D6F8623ACB}
 {3F6BFA92-CB86-4436-A821-C1C827C6A073}
@@ -2945,7 +3011,7 @@ Check whether Platform 5 is actually installed, only try and uninstall if presen
 {D7E679F1-3C4F-47AE-A828-B9661D2278B5}
 Set to a value that will access the 32bit portion of the registry on a 64bit OS
 {AD66F172-8F28-4F8C-92A3-D2B504309AB9}
-Initialise to a null value that will access the correct portion of the registry on a 32bit OS
+Initialise to a null value. These variables point at 32bit executables on both 32 and 64bit OS.
 {B1BF96F2-BD5A-4EA6-8B2A-C7A58A4FD93B}
 Set up values for a 64bit OS
 {9F7FC940-1C2D-43C5-81C0-A516844A52D2}
@@ -3066,6 +3132,16 @@ Read OS type information from registry
 Set up values for OS version information
 {92EFA058-7709-481F-9C2C-A357D0B88A61}
 
+{F0126D3A-0E88-492A-8F31-5C9EC50C774A}
+Set up values for a 32bit OS
+{C247CFE7-43F1-47DA-85B2-2CA98CB2E820}
+
+{C30A19A9-0402-46C1-A546-30ED37F1E211}
+Read the framework root value from the OS
+{2C2A48A4-10CF-4576-B366-A626547C6DEF}
+Set to a value that will access the 32bit portion of the registry on a 64bit OS
+{5BC1709C-5774-4F16-9CDC-75DC9782C129}
+Initialise to a null value. These variables point at 64bit executables on a 64bit OS.
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -3111,9 +3187,6 @@ TRUE
 {35AD4E3E-03E7-4DBE-AAB2-28BA41341BB8}
 NATIVE_ROLLBACK$MYAH$MYAH$FALSE
 FALSE
-{F1BC1B97-C86F-44A1-BE5A-BBDC8771B89D}
-REGASM$MYAH$MYAH$FALSE
-$FRAMEWORKROOT$v2.0.50727\RegAsm.exe
 {B343FA10-F617-4080-9A4C-A0AC5358B03A}
 SHORTCUTFILESALL
 $SHORTCUTFILES$
@@ -3254,10 +3327,10 @@ PROGRESS$MYAH$MYAH$FALSE
 0
 {D0E4C8E7-BBCD-4D46-A687-2EA6BB7DD0C7}
 NGEN64$MYAH$MYAH$FALSE
-$WINDIR$Microsoft.NET\Framework64\v2.0.50727\ngen.exe
+$WINDIR$Microsoft.NET\Framework64\v4.0.30319\ngen.exe
 {5E3BB1CB-77EE-412D-A1F1-1DC88F1CB83E}
 REGASM64$MYAH$MYAH$FALSE
-$WINDIR$Microsoft.NET\Framework64\v2.0.50727\regasm.exe
+$WINDIR$Microsoft.NET\Framework64\v4.0.30319\regasm.exe
 {623FF25B-17C6-45D2-ACA4-0A70F98C5CA5}
 WIN64MODE$MYAH$MYAH$FALSE
 
@@ -3411,6 +3484,24 @@ OPSYS$MYAH$MYAH$FALSE
 {B01994E0-CAE0-4F2E-9B8F-BBBB3E85B2BA}
 OSBUILDLABEL$MYAH$MYAH$FALSE
 
+{EA99AF74-0FAF-4432-8DE7-321C9B75D1A4}
+COMMONFILES32$MYAH$MYAH$FALSE
+
+{C5BC8AD2-C776-4F1E-AE30-0DEA452CB98F}
+PROGRAMFILES32$MYAH$MYAH$FALSE
+
+{CBF2A814-EB95-4BD7-86B5-F7EB84B3A4A7}
+NGEN32$MYAH$MYAH$FALSE
+
+{8DB9254D-9CE7-40A8-947D-6B80449A34A2}
+REGASM32$MYAH$MYAH$FALSE
+
+{0D769506-A234-4A82-9D9B-597FD145FF39}
+NGEN32$MYAH$MYAH$FALSE
+$FRAMEWORKROOT$v4.0.30319\ngen.exe
+{618B9446-03E8-4643-B2E1-ACF6CBB6F325}
+REGASM32$MYAH$MYAH$FALSE
+$FRAMEWORKROOT$v4.0.30319\regasm.exe
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -4212,6 +4303,14 @@ TRUE
 PROGRAMDATA
 15
 TRUE
+{9BFB2BD9-1F60-41DE-ABA1-DFFC0E1D00C9}
+COMMONFILES32
+20
+TRUE
+{36B3D69E-5BC1-41DE-B2BF-608BC348A535}
+PROGRAMFILES32
+20
+FALSE
 {2AAD830F-7B63-497D-9A5A-19F6E10861E1}
 CHECKSYSTEM
 25
@@ -5813,6 +5912,32 @@ FALSE
 FALSE
 FALSE
 FALSE
+{A788F9E5-FD89-49C9-B713-FD66C0742377}
+..\..\..\..\ASCOM.Utilities\ASCOM.Utilities.556\bin\Release\ASCOM.Utilities.dll
+FALSE|
+$COMMONFILES$\ASCOM\Platform\v5.5
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{466C6452-3964-4778-B6E2-D0794CFC5D57}
+..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry556\bin\Release\ASCOM.Astrometry.dll
+FALSE|
+$COMMONFILES$\ASCOM\Platform\v5.5
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {74C7A69B-8E34-4748-BFE0-F6B07F15BF93}
 INSTALLCACHEEXISTS
 $INSTALLCACHEDIRECTORY$
@@ -6099,6 +6224,18 @@ TRUE
 uninstall "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7"
 TRUE
 RC
+{27200A12-A8BC-45C3-9284-EC267080F0D4}
+$REGASM32$
+TRUE
+"$COMMONFILES$\ASCOM\Platform\v5.5\ASCOM.Astrometry.dll"
+TRUE
+RC
+{5647DEBF-A465-4BF3-A17A-E728E0F18641}
+$REGASM32$
+TRUE
+"$COMMONFILES$\ASCOM\Platform\v5.5\ASCOM.Utilities.dll"
+TRUE
+RC
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
 $UNINSTALLER$
 
@@ -6146,7 +6283,7 @@ TRUE
 {BFF84894-446B-4B92-AFF6-F5219C1018F9}
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7
+/c copy ASCOM.Attributes.pdb $WINDIR$\Microsoft.NET\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7
 1
 
 
@@ -6157,7 +6294,7 @@ TRUE
 {D5AC913D-FC84-4D27-BBC2-CFC8B965F92E}
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7
+/c copy ASCOM.Astrometry.pdb $WINDIR$\Microsoft.NET\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7
 1
 
 
@@ -6168,7 +6305,7 @@ TRUE
 {1D6E2AC2-5654-4204-BF7C-DFBEAF0CEC98}
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7
+/c copy ASCOM.Utilities.pdb $WINDIR$\Microsoft.NET\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7
 1
 
 
@@ -6251,6 +6388,83 @@ policy.1.1.ASCOM.Exceptions.dll
 
 
 GACINSTALLRC
+TRUE
+
+{C1E0D6F8-4CAA-4505-BBAC-03BAF690B078}
+$REGASM32$
+
+"$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll"
+1
+
+
+
+RC
+TRUE
+
+{2D15C91F-462D-4930-B463-D56A9347077E}
+$REGASM32$
+
+"$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll"
+1
+
+
+
+RC
+TRUE
+
+{361F4092-47CA-481A-BA0E-4115A93C3731}
+$REGASM32$
+
+"$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" 
+1
+
+
+
+RC
+TRUE
+
+{FF500047-0C39-4910-8EC4-47AA68860C91}
+$REGASM32$
+
+"$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase
+1
+
+
+
+RC
+TRUE
+
+{BD4BFB3C-8E0C-4B6C-B590-8C8C39E99ECC}
+$REGASM32$
+
+"$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase
+1
+
+
+
+RC
+TRUE
+
+{476347A5-2877-49D3-9356-A00CF93D39C8}
+$REGASM32$
+
+"$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase
+1
+
+
+
+RC
+TRUE
+
+{E3A1766D-F4C5-4E41-8443-243C638EF110}
+$REGASM32$
+
+"$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase
+1
+
+
+
+RC
 TRUE
 
 {0340B240-2C74-444A-A521-34C6C4F341EF}
@@ -6493,11 +6707,6 @@ $SHORTCUTFOLDER$\Tools
 
 |
 0|
-{3B1E2BB5-391A-47E8-8128-A9856C0D9CC0}
-FRAMEWORKROOT
-2
-SOFTWARE\Microsoft\.NETFramework
-InstallRoot
 {47CE09B1-E567-4B6B-A906-074B838DBF46}
 UNINSTALLER
 2
@@ -6548,6 +6757,11 @@ OSBUILDLABEL
 2
 SOFTWARE\Microsoft\Windows NT\CurrentVersion
 BuildLabEx
+{F8255C73-FFAF-4BF4-AB9E-B70A758CCA8A}
+FRAMEWORKROOT
+2
+SOFTWARE\Microsoft\.NETFramework
+InstallRoot
 {7653D287-A413-450E-A782-DF14170DA6EE}
 10
 2
@@ -8767,7 +8981,7 @@ FALSE
 TRUE
 {6DCC3BAD-22E8-436D-B22C-7C99D4A9502B}
 $SETUPLOG$
-RegAsm: $REGASM$
+RegAsm32: $REGASM32$
 FALSE
 TRUE
 {81D4F714-F031-4D54-8B0E-7EA386E20E75}
@@ -9108,6 +9322,61 @@ TRUE
 {D47FB4A0-39DB-44BD-9D77-C6CE529F2343}
 $SETUPLOG$
 Build Label:  $OSBUILDLABEL$
+FALSE
+TRUE
+{12FAB622-979C-44CE-8C63-47C1F37C7220}
+$SETUPLOG$
+FrameworkRoot: $FRAMEWORKROOT$ 
+FALSE
+TRUE
+{B506C84D-E519-4C69-9802-66A5E1E30762}
+$SETUPLOG$
+NGen32: $NGEN32$
+FALSE
+TRUE
+{5778CE2F-8FED-4E12-9A33-C54E93166A56}
+$SETUPLOG$
+$RC$ RegAsm32 - Astrometry 5.5.6
+FALSE
+TRUE
+{92898746-99DD-45C3-8D5A-1964637876D5}
+$SETUPLOG$
+$RC$ RegAsm32 - Utilities 5.5.6
+FALSE
+TRUE
+{9557CA78-F3DE-41CB-B2F6-DD5C288E4EB4}
+$SETUPLOG$
+$RC$ RegAsm32 - Astrometry
+FALSE
+TRUE
+{7068B001-FF5B-48EE-BFBB-DE3717F6010C}
+$SETUPLOG$
+$RC$ RegAsm32 - Exceptions
+FALSE
+TRUE
+{668B004C-E5E4-458C-B306-32EA5A87F0A6}
+$SETUPLOG$
+$RC$ RegAsm32 - Utilities
+FALSE
+TRUE
+{D3EE1519-10AE-44C6-AABA-9EBFFEB7CF10}
+$SETUPLOG$
+$RC$ RegAsm32 - Camera Simulator
+FALSE
+TRUE
+{FC315B2C-C5B3-4D4B-A9DF-B3E0FB067F5A}
+$SETUPLOG$
+$RC$ RegAsm32 - Focuser Simulator
+FALSE
+TRUE
+{C48CECD1-3D66-44A2-9EC8-4229E0669D62}
+$SETUPLOG$
+$RC$ RegAsm32 - SafetyMonitor Simulator
+FALSE
+TRUE
+{D5C8C5FF-2E88-4DB1-A5D1-070FA506477D}
+$SETUPLOG$
+$RC$ RegAsm32 - Dome Simulator
 FALSE
 TRUE
 {D1949693-A3EA-40AC-80A4-332F441BF441}
@@ -9743,8 +10012,6 @@ ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946f
 $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll|TRUE|TRUE
 {080711C2-108F-4E3E-A141-96499A39A7A8}
 $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll|TRUE|TRUE
-{D4A4E267-98B9-4301-A1FD-51707C471B6B}
-$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll|TRUE|TRUE
 {3469CD81-C205-492B-8892-D6E39D4264D7}
 $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll|TRUE|TRUE
 {206E1B18-A161-498F-9968-B748D3DDC934}
@@ -9757,8 +10024,6 @@ ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946f
 ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {003D8F52-6A9C-4567-948B-E1829A4F23DF}
 ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE
-{B9D5F963-84A7-40AC-9249-F3064C64CBEA}
-ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {FBA38C2A-9C44-40A6-B1BD-20044E7B97FE}
 ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {900551C1-C4DE-49AF-8662-65F0F35836ED}
@@ -9773,6 +10038,8 @@ ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|
 ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE|FALSE
 {B048D634-63BA-4CEB-B437-44B3C8025644}
 ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE|FALSE
+{8F36DFE1-C969-4540-9D03-FF538D768E39}
+$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll|TRUE|TRUE
 {6BAB8490-E3C5-40DD-BCC2-96E8674B9681}
 OPSYS
 TRUE
@@ -10008,25 +10275,12 @@ C
 
 
 
-C
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-C
 
 
 
@@ -10036,6 +10290,9 @@ C
 
 
 C
+
+
+
 
 
 
@@ -10068,6 +10325,30 @@ C
 
 
 
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
 C
 
 
@@ -10096,660 +10377,6 @@ C
 
 C
 C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -10906,6 +10533,72 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
 
 
@@ -10941,6 +10634,186 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
 
 
@@ -10982,12 +10855,439 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
 
 
 
 
 
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+C
+C
+C
+
+
+
+
+
+
+
+
+
+C
+C
+C
+C
 
 
 
@@ -11163,6 +11463,39 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
