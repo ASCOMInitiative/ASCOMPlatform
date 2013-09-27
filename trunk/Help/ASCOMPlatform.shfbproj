@@ -119,7 +119,7 @@
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
     </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
-    <FrameworkVersion>.NET 3.5</FrameworkVersion>
+    <FrameworkVersion>.NET 4.0.30319</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <MSHelpViewerSdkLinkType>None</MSHelpViewerSdkLinkType>
     <SyntaxFilters>Standard</SyntaxFilters>
