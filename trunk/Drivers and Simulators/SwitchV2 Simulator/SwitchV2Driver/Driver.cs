@@ -301,10 +301,10 @@ namespace ASCOM.Simulator
             return switches[id].Description;
         }
 
-        public bool GetSwitchReadOnly(short id)
+        public bool CanWrite(short id)
         {
-            Validate("IsReadOnly", id);
-            return switches[id].ReadOnly;
+            Validate("CanWrite", id);
+            return !switches[id].ReadOnly;
         }
 
         #region boolean switch members
@@ -536,16 +536,22 @@ namespace ASCOM.Simulator
         /// </summary>
         internal void ReadProfile()
         {
-            using (Profile driverProfile = new Profile())
+            using (Profile driverProfile = new Profile() { DeviceType = "Switch" })
             {
-                driverProfile.DeviceType = "Switch";
                 traceState = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
 
-                var numSwitch = Convert.ToInt16(driverProfile.GetValue(driverID, "NumSwitches", string.Empty, "0"));
                 switches = new List<LocalSwitch>();
-                for (short i = 0; i < numSwitch; i++)
+                int numSwitch;
+                if (int.TryParse(driverProfile.GetValue(driverID, "NumSwitches"), out numSwitch))
                 {
-                    switches.Add(new LocalSwitch(driverProfile, driverID, i));
+                    for (short i = 0; i < numSwitch; i++)
+                    {
+                        switches.Add(new LocalSwitch(driverProfile, driverID, i));
+                    }
+                }
+                else
+                {
+                    LoadDefaultSwitches();
                 }
             }
         }
@@ -555,9 +561,8 @@ namespace ASCOM.Simulator
         /// </summary>
         internal void WriteProfile()
         {
-            using (Profile driverProfile = new Profile())
+            using (Profile driverProfile = new Profile() { DeviceType = "Switch" })
             {
-                driverProfile.DeviceType = "Switch";
                 driverProfile.WriteValue(driverID, traceStateProfileName, traceState.ToString());
                 driverProfile.WriteValue(driverID, "NumSwitches", switches.Count.ToString());
                 int i = 0;
@@ -566,6 +571,21 @@ namespace ASCOM.Simulator
                     item.Save(driverProfile, driverID, i++);
                 }
             }
+        }
+
+        /// <summary>
+        /// Loads a default set of switches.
+        /// </summary>
+        private void LoadDefaultSwitches()
+        {
+            switches.Add(new LocalSwitch("Power1") { Description = "Generic power switch" });
+            switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch" });
+            switches.Add(new LocalSwitch("Light Box", 100, 0, 10, 0) { Description = "Light box , 0 to 100%" });
+            switches.Add(new LocalSwitch("Scope Parked") { Description = "Scope parked switch, true if parked", ReadOnly = true });
+            switches.Add(new LocalSwitch("Cloudy", 2, 1, 1, 0, true) { Description = "Cloud monitor: 0=clear, 1=light cloud, 2= heavy cloud" });
+            switches.Add(new LocalSwitch("Temperature", 30, -20, 0.1, 12, true) { Description = "Temperature in deg C" });
+            switches.Add(new LocalSwitch("Humidity", 100, 0, 1, 50, true) { Description = "Relative humidity %" });
+            switches.Add(new LocalSwitch("Raining") { Description = "Rain monitor, true if raining", ReadOnly = true });
         }
 
         #endregion

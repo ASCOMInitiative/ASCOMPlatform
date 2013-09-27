@@ -12,10 +12,6 @@ namespace ASCOM.Simulator
     /// </summary>
     public class LocalSwitch
     {
-        private double max;
-        private double min;
-        private double step;
-
         public double Minimum { get; set; }
         public double Maximum { get; set; }
         public double StepSize { get; set; }
@@ -23,7 +19,9 @@ namespace ASCOM.Simulator
         public bool ReadOnly { get; set; }
         public double Value { get; set; }
         public string Description { get; set; }
-        
+
+        #region constructors
+
         public LocalSwitch()
         {
             this.Maximum = 1.0;
@@ -62,9 +60,9 @@ namespace ASCOM.Simulator
         public LocalSwitch(string name, double max, double min, double step, double value, bool readOnly)
         {
             this.Name = name;
-            this.max = max;
-            this.min = min;
-            this.step = step;
+            this.Maximum = max;
+            this.Minimum = min;
+            this.StepSize = step;
             this.ReadOnly = readOnly;
             this.Value = value;
             this.Description = name;
@@ -88,6 +86,7 @@ namespace ASCOM.Simulator
             this.Value = Convert.ToDouble(profile.GetValue(driverId, "Value", subKey, "0"), CultureInfo.InvariantCulture);
             this.Description = profile.GetValue(driverId, "Description", subKey, this.Name);
         }
+        #endregion
 
         /// <summary>
         /// Sets the value with a check that the value is correct.
