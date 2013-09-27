@@ -64,15 +64,20 @@ class DeviceSwitch
     }
 
     /// <summary>
-    /// Gets the read only state for the switch.
+    /// Reports if the specified switch can be written to.
+    /// This is false if the switch cannot be written to, for example a limit switch or a sensor.
+    /// The default is true.
     /// </summary>
-    /// <param name="id">The id.</param>
-    /// <returns></returns>
-    public bool GetSwitchReadOnly(short id)
+    /// <param name="id">The number of the switch whose write state is to be returned</param><returns>
+    ///   <c>true</c> if the switch can be written to, otherwise <c>false</c>.
+    /// </returns>
+    /// <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    /// <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    public bool CanWrite(short id)
     {
-        Validate("GetSwitchReadOnly", id);
-        tl.LogMessage("GetSwitchReadOnly", string.Format("GetSwitchReadOnly({0}) - not implemented", id));
-        throw new MethodNotImplementedException("GetSwitchReadOnly");
+        Validate("CanWrite", id);
+        tl.LogMessage("CanWrite", string.Format("CanWrite({0}) - not implemented", id));
+        throw new MethodNotImplementedException("CanWrite");
     }
 
     #region boolean switch members

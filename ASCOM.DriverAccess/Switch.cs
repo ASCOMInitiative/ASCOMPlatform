@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------
 // <summary>Defines the Switch class.</summary>
 //-----------------------------------------------------------------------
-// 17-Sep-13  	cdr     6.1.0   Initial definition
+// 17-Sep-13  	cdr     6.0.0   Initial definition
 using System;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
@@ -102,16 +102,18 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Gets the read only property for the specified switch.
-        /// This is true if the switch cannot be set, for example a limit switch or a sensor.
+        /// Reports if the specified switch can be written to, default true.
+        /// This is false if the switch cannot be written to, for example a limit switch or a sensor.
         /// </summary>
-        /// <param name="id">The number of the switch whose read only state is to be returned</param>
-        /// <returns></returns>
-        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
-        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
-        public bool GetSwitchReadOnly(short id)
+        /// <param name="id">The number of the switch whose write state is to be returned</param>
+        /// <returns>
+        ///   <c>true</c> if the switch can be written to, otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="T:MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="T:InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        public bool CanWrite(short id)
         {
-            return (bool)memberFactory.CallMember(3, "GetSwitchReadOnly", new Type[] { typeof(short) }, new object[] { id });
+            return (bool)memberFactory.CallMember(3, "CanWrite", new Type[] { typeof(short) }, new object[] { id });
         }
 
         #region boolean switch members

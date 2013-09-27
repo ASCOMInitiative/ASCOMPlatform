@@ -61,16 +61,19 @@ Class DeviceSwitch
     End Function
 
     ''' <summary>
-    ''' Gets the read only property for the specified switch.
-    ''' This is true if the switch cannot be set, for example a limit switch or a sensor.
+    ''' Reports if the specified switch can be written to.
+    ''' This is false if the switch cannot be written to, for example a limit switch or a sensor.
+    ''' The default is true.
     ''' </summary>
-    ''' <param name="id">The number of the switch whose read only state is to be returned</param><returns></returns>
+    ''' <param name="id">The number of the switch whose write state is to be returned</param><returns>
+    '''   <c>true</c> if the switch can be set, otherwise <c>false</c>.
+    ''' </returns>
     ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
-    Public Function GetSwitchReadOnly(id As Short) As Boolean Implements ISwitchV2.GetSwitchReadOnly
-        Validate("GetSwitchReadOnly", id)
-        TL.LogMessage("GetSwitchReadOnly", "Not Implemented")
-        Throw New ASCOM.MethodNotImplementedException("GetSwitchReadOnly")
+    Public Function CanWrite(id As Short) As Boolean Implements ISwitchV2.CanWrite
+        Validate("CanWrite", id)
+        TL.LogMessage("CanWrite", "Default true")
+        Return True
     End Function
 
 #Region "boolean members"
