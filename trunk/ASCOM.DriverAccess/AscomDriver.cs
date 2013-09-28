@@ -23,6 +23,14 @@ namespace ASCOM.DriverAccess
 
         #region AscomDriver Constructors and Dispose
         /// <summary>
+        /// 
+        /// </summary>
+        public AscomDriver()
+        {
+        }
+               
+        
+        /// <summary>
         /// Creates a new instance of the <see cref="AscomDriver"/> class.
         /// </summary>
         /// <param name="deviceProgId">The prog id. of the device being created.</param>
