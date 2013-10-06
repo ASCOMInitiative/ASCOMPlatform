@@ -1112,31 +1112,31 @@ Public Class Util
         Select Case SuppliedArray.Rank
             Case 1
                 Dim OneDimArray() As T = CType(SuppliedObject, T())
-                ReDim ObjectArray1(SuppliedArray.GetLength(0))
+                ReDim ObjectArray1(SuppliedArray.GetLength(0) - 1)
                 TL.LogMessage("ProcessArray", "Array Rank 1: " & OneDimArray.GetLength(0))
                 Array.Copy(OneDimArray, ObjectArray1, OneDimArray.LongLength)
                 ReturnArray = ObjectArray1
             Case 2
                 Dim TwoDimArray(,) As T = CType(SuppliedObject, T(,))
-                ReDim ObjectArray2(TwoDimArray.GetLength(0), TwoDimArray.GetLength(1))
+                ReDim ObjectArray2(TwoDimArray.GetLength(0) - 1, TwoDimArray.GetLength(1) - 1)
                 TL.LogMessage("ProcessArray", "Array Rank 2: " & TwoDimArray.GetLength(0) & " x " & TwoDimArray.GetLength(1))
                 Array.Copy(TwoDimArray, ObjectArray2, TwoDimArray.LongLength)
                 ReturnArray = ObjectArray2
             Case 3
                 Dim ThreeDimArray(,,) As T = CType(SuppliedObject, T(,,))
-                ReDim ObjectArray3(ThreeDimArray.GetLength(0), ThreeDimArray.GetLength(1), ThreeDimArray.GetLength(2))
+                ReDim ObjectArray3(ThreeDimArray.GetLength(0) - 1, ThreeDimArray.GetLength(1) - 1, ThreeDimArray.GetLength(2) - 1)
                 TL.LogMessage("ProcessArray", "Array Rank 3: " & ThreeDimArray.GetLength(0) & " x " & ThreeDimArray.GetLength(1) & " x " & ThreeDimArray.GetLength(2))
                 Array.Copy(ThreeDimArray, ObjectArray3, ThreeDimArray.LongLength)
                 ReturnArray = ObjectArray3
             Case 4
                 Dim FourDimArray(,,,) As T = CType(SuppliedObject, T(,,,))
-                ReDim ObjectArray4(FourDimArray.GetLength(0), FourDimArray.GetLength(1), FourDimArray.GetLength(2), FourDimArray.GetLength(3))
+                ReDim ObjectArray4(FourDimArray.GetLength(0) - 1, FourDimArray.GetLength(1) - 1, FourDimArray.GetLength(2) - 1, FourDimArray.GetLength(3) - 1)
                 TL.LogMessage("ProcessArray", "Array Rank 4: " & FourDimArray.GetLength(0) & " x " & FourDimArray.GetLength(1) & " x " & FourDimArray.GetLength(2) & " x " & FourDimArray.GetLength(3))
                 Array.Copy(FourDimArray, ObjectArray4, FourDimArray.LongLength)
                 ReturnArray = ObjectArray4
             Case 5
                 Dim FiveDimArray(,,,,) As T = CType(SuppliedObject, T(,,,,))
-                ReDim ObjectArray5(FiveDimArray.GetLength(0), FiveDimArray.GetLength(1), FiveDimArray.GetLength(2), FiveDimArray.GetLength(3), FiveDimArray.GetLength(4))
+                ReDim ObjectArray5(FiveDimArray.GetLength(0) - 1, FiveDimArray.GetLength(1) - 1, FiveDimArray.GetLength(2) - 1, FiveDimArray.GetLength(3) - 1, FiveDimArray.GetLength(4) - 1)
                 TL.LogMessage("ProcessArray", "Array Rank 5: " & FiveDimArray.GetLength(0) & " x " & FiveDimArray.GetLength(1) & " x " & FiveDimArray.GetLength(2) & " x " & FiveDimArray.GetLength(3) & " x " & FiveDimArray.GetLength(4))
                 Array.Copy(FiveDimArray, ObjectArray5, FiveDimArray.LongLength)
                 ReturnArray = ObjectArray5
