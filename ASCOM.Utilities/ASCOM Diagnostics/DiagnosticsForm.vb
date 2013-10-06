@@ -72,6 +72,10 @@ Public Class DiagnosticsForm
     Private DeviceObject As Object ' Device test object
 
     Private LastLogFile As String ' Name of last diagnostics log file
+
+    Private Const ArrayCopySize As Integer = 2
+    Private IntArray1D(ArrayCopySize) As Integer, IntArray2D(ArrayCopySize, ArrayCopySize) As Integer, IntArray3D(ArrayCopySize, ArrayCopySize, ArrayCopySize) As Integer
+
 #End Region
 
 #Region "XML  test String"
@@ -4146,7 +4150,18 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 5.5", AscomUtil.IsMinimumRequiredVersion(5, 5).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 5.6", AscomUtil.IsMinimumRequiredVersion(5, 6).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.0", AscomUtil.IsMinimumRequiredVersion(6, 0).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.1", AscomUtil.IsMinimumRequiredVersion(6, 1).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.3", AscomUtil.IsMinimumRequiredVersion(6, 3).ToString, "False")
+            TL.BlankLine()
+
+            IntArray1D(ArrayCopySize - 1) = ArrayCopySize
+            IntArray2D(ArrayCopySize - 1, ArrayCopySize - 1) = ArrayCopySize
+            IntArray3D(ArrayCopySize - 1, ArrayCopySize - 1, ArrayCopySize - 1) = ArrayCopySize
+
+            CheckArray(IntArray1D)
+            CheckArray(IntArray2D)
+            CheckArray(IntArray3D)
+
             TL.BlankLine()
             If Is64Bit Then ' Run tests just on the new 64bit component
                 t = 30.123456789 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, ":").ToString, "30:07'")
@@ -4322,6 +4337,39 @@ Public Class DiagnosticsForm
         Catch ex As Exception
             LogException("UtilTests", "Exception: " & ex.ToString)
         End Try
+
+    End Sub
+
+    Private Sub CheckArray(InputObject As Object)
+        Dim InputArray, ReturnArray As Array
+        Dim ReturnObject As Object
+        Dim InputType, ReturnType As Type
+        Dim InputElementTypeName, ReturnElementTypeName As String
+
+        InputArray = CType(InputObject, Array)
+        InputType = InputArray.GetType
+        InputElementTypeName = InputType.GetElementType.Name
+        TL.LogMessage("UtilTests", "Input array Type: " & InputType.Name & ", Element Type: " & InputElementTypeName & ", Array Rank: " & InputArray.Rank & ", Array Length: " & InputArray.LongLength)
+
+        ReturnObject = AscomUtil.ArrayToVariantArray(InputObject)
+        ReturnArray = CType(ReturnObject, Array)
+        ReturnType = ReturnArray.GetType
+        ReturnElementTypeName = ReturnType.GetElementType.Name
+        TL.LogMessage("UtilTests", "Return array Type: " & ReturnType.Name & ", Element Type: " & ReturnElementTypeName & ", Array Rank: " & ReturnArray.Rank & ", Array Length: " & ReturnArray.LongLength)
+
+        CompareBoolean("UtilTests", "CheckArray", ReturnType.IsArray, True)
+        CompareInteger("UtilTests", "CheckArray", ReturnArray.Rank, InputArray.Rank)
+        Compare("UtilTests", "CheckArray", ReturnElementTypeName, GetType(Object).Name)
+
+        Select Case ReturnArray.Rank
+            Case 1 : CompareInteger("UtilTests", "CheckArray", ReturnArray(ArrayCopySize - 1), ArrayCopySize)
+            Case 2 : CompareInteger("UtilTests", "CheckArray", CType(ReturnArray(ArrayCopySize - 1, ArrayCopySize - 1), Int32), ArrayCopySize)
+            Case 3 : CompareInteger("UtilTests", "CheckArray", CType(ReturnArray(ArrayCopySize - 1, ArrayCopySize - 1, ArrayCopySize - 1), Int32), ArrayCopySize)
+            Case Else
+                LogError("UtilTests:CheckArray", "Returned array rank is outside expected range of 1..3: " & ReturnArray.Rank)
+        End Select
+
+        ReturnArray = CType(ReturnObject, Array)
 
     End Sub
 
