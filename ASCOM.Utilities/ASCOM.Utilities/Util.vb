@@ -305,7 +305,7 @@ Public Class Util
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
     <ComVisible(False)> _
-        Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtilExtra.DegreesToDMS
+    Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, DegDelim, MinDelim, SecDelim, 0)
     End Function
 
@@ -1014,6 +1014,141 @@ Public Class Util
     End Function
 
 #End Region
+
+    ''' <summary>
+    ''' Convert an array of .NET built-in types to an equivalent Variant arrray (array of .NET Objects)
+    ''' </summary>
+    ''' <param name="SuppliedObject">The array to convert to variant types</param>
+    ''' <returns>A Variant array</returns>
+    ''' <exception cref="InvalidValueException">If the supplied array contains elements of an unsuported Type.</exception>
+    ''' <exception cref="InvalidValueException">If the array rank is outside the range 1 to 5.</exception>
+    ''' <exception cref="InvalidValueException">If the supplied object is not an array.</exception>
+    ''' <remarks>This function will primarily be of use to Scripting Language programmers who need to convert Camera and Video ImageArrays from their native types to Variant types. If this is not done, 
+    ''' the scripting language will throw a type mismatch exception when it receives, for example, Int32 element types instead of the expected Variant types.
+    ''' <para>A VBScript Camera usage example is: Image = UTIL.ArrayToVariantArray(CAMERA.ImageArray) This example assumes that the camera and utilities objects have already been created with CreateObject statements.</para>
+    ''' <para>The supported .NET types are:
+    ''' <list type="bullet">
+    ''' <item><description>Int16</description></item>
+    ''' <item><description>Int32</description></item>
+    ''' <item><description>UInt16</description></item>
+    ''' <item><description>UInt32</description></item>
+    ''' <item><description>UInt64</description></item>
+    ''' <item><description>Byte</description></item>
+    ''' <item><description>SByte</description></item>
+    ''' <item><description>Single</description></item>
+    ''' <item><description>Double</description></item>
+    ''' <item><description>Boolean</description></item>
+    ''' <item><description>DateTime</description></item>
+    ''' <item><description>String</description></item>
+    ''' </list>
+    ''' </para>
+    ''' <para>The function supports arrays with 1 to 5 dimensions (Rank = 1 to 5). If the supplied array already contains elements of Variant type, it is returned as-is without any processing.</para></remarks>
+    Public Function ArrayToVariantArray(ByVal SuppliedObject As Object) As <MarshalAs(UnmanagedType.SafeArray, SafeArraySubtype:=VarEnum.VT_VARIANT)> Object Implements IUtil.ArrayToVariantArray
+        Dim ReturnObject As Object ' An object tp represent the Variant array
+        Dim TypeOfSuppliedObject, ArrayType As Type ' Variables to hold the Type of the Array and the Type of its elements
+        Dim SuppliedArray As Array ' Variable to hold the supplied array as an Array type (as opposed to Object)
+        Dim ElementTypeName As String ' Variable to hold the name of the type of elements in the array
+        Dim Sw As Stopwatch = New Stopwatch
+
+        Sw.Start()
+
+        Try
+            TypeOfSuppliedObject = SuppliedObject.GetType ' Get the Type of the supplied object
+
+            If TypeOfSuppliedObject.IsArray Then ' If the object is an array then process
+                SuppliedArray = CType(SuppliedObject, Array) 'Convert the Object to an Array type
+                ArrayType = SuppliedArray.GetType() ' Get the type of the array elements
+                ElementTypeName = ArrayType.GetElementType.Name
+                TL.LogMessage("ArrayToVariantArray", "Array Type: " & ArrayType.Name & ", Element Type: " & ElementTypeName & ", Array Rank: " & SuppliedArray.Rank)
+
+                Select Case ElementTypeName ' Compare the supplied element type with the list of support types
+                    Case GetType(Object).Name : ReturnObject = SuppliedObject ' Already a variant array so just return the original array
+                    Case GetType(Int16).Name : ReturnObject = ProcessArray(Of Int16)(SuppliedObject, SuppliedArray)
+                    Case GetType(Int32).Name : ReturnObject = ProcessArray(Of Int32)(SuppliedObject, SuppliedArray)
+                    Case GetType(Int64).Name : ReturnObject = ProcessArray(Of Int64)(SuppliedObject, SuppliedArray)
+                    Case GetType(UInt16).Name : ReturnObject = ProcessArray(Of UInt16)(SuppliedObject, SuppliedArray)
+                    Case GetType(UInt32).Name : ReturnObject = ProcessArray(Of UInt32)(SuppliedObject, SuppliedArray)
+                    Case GetType(UInt64).Name : ReturnObject = ProcessArray(Of UInt64)(SuppliedObject, SuppliedArray)
+                    Case GetType(Byte).Name : ReturnObject = ProcessArray(Of Byte)(SuppliedObject, SuppliedArray)
+                    Case GetType(SByte).Name : ReturnObject = ProcessArray(Of SByte)(SuppliedObject, SuppliedArray)
+                    Case GetType(Single).Name : ReturnObject = ProcessArray(Of Single)(SuppliedObject, SuppliedArray)
+                    Case GetType(Double).Name : ReturnObject = ProcessArray(Of Double)(SuppliedObject, SuppliedArray)
+                    Case GetType(Boolean).Name : ReturnObject = ProcessArray(Of Boolean)(SuppliedObject, SuppliedArray)
+                    Case GetType(DateTime).Name : ReturnObject = ProcessArray(Of DateTime)(SuppliedObject, SuppliedArray)
+                    Case GetType(String).Name : ReturnObject = ProcessArray(Of String)(SuppliedObject, SuppliedArray)
+
+                    Case Else ' We have a non-supported element type so throw an exception
+                        TL.LogMessage("ArrayToVariantArray", "Unsupported array type: " & ElementTypeName & ", throwing exception")
+                        Throw New ASCOM.InvalidValueException("Unsupported array type: " & ElementTypeName)
+                End Select
+            Else ' Not an array so throw an exception
+                TL.LogMessage("ArrayToVariantArray", "Supplied object is not an array, throwing exception")
+                Throw New ASCOM.InvalidValueException("Supplied object is not an array")
+            End If
+
+            Sw.Stop()
+            TL.LogMessage("ArrayToVariantArray", "Completed processing in " & Sw.Elapsed.TotalMilliseconds.ToString("0.0") & " milliseconds")
+
+            Return ReturnObject ' Return the variant array
+
+        Catch ex As Exception ' Catch any exceptions, log them and return to the calling application
+            TL.LogMessageCrLf("ArrayToVariantArray", "Exception: " & ex.ToString())
+            Throw
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Turns an array of type T into a variant array of Object
+    ''' </summary>
+    ''' <typeparam name="T">The type to convert to Variant</typeparam>
+    ''' <param name="SuppliedObject">The supplied array of Type T as an Object</param>
+    ''' <param name="SuppliedArray">The supplied array of Type T as an Array</param>
+    ''' <returns>The array with all elements represented as Variant objects</returns>
+    ''' <remarks>Works for 1 to 5 dimensional arrays of any Type</remarks>
+    Private Function ProcessArray(Of T)(SuppliedObject As Object, SuppliedArray As Array) As Object
+        Dim ReturnArray As Object
+        Dim ObjectArray1 As Object(), ObjectArray2 As Object(,), ObjectArray3 As Object(,,), ObjectArray4 As Object(,,,), ObjectArray5 As Object(,,,,)
+
+        Select Case SuppliedArray.Rank
+            Case 1
+                Dim OneDimArray() As T = CType(SuppliedObject, T())
+                ReDim ObjectArray1(SuppliedArray.GetLength(0))
+                TL.LogMessage("ProcessArray", "Array Rank 1: " & OneDimArray.GetLength(0))
+                Array.Copy(OneDimArray, ObjectArray1, OneDimArray.LongLength)
+                ReturnArray = ObjectArray1
+            Case 2
+                Dim TwoDimArray(,) As T = CType(SuppliedObject, T(,))
+                ReDim ObjectArray2(TwoDimArray.GetLength(0), TwoDimArray.GetLength(1))
+                TL.LogMessage("ProcessArray", "Array Rank 2: " & TwoDimArray.GetLength(0) & " x " & TwoDimArray.GetLength(1))
+                Array.Copy(TwoDimArray, ObjectArray2, TwoDimArray.LongLength)
+                ReturnArray = ObjectArray2
+            Case 3
+                Dim ThreeDimArray(,,) As T = CType(SuppliedObject, T(,,))
+                ReDim ObjectArray3(ThreeDimArray.GetLength(0), ThreeDimArray.GetLength(1), ThreeDimArray.GetLength(2))
+                TL.LogMessage("ProcessArray", "Array Rank 3: " & ThreeDimArray.GetLength(0) & " x " & ThreeDimArray.GetLength(1) & " x " & ThreeDimArray.GetLength(2))
+                Array.Copy(ThreeDimArray, ObjectArray3, ThreeDimArray.LongLength)
+                ReturnArray = ObjectArray3
+            Case 4
+                Dim FourDimArray(,,,) As T = CType(SuppliedObject, T(,,,))
+                ReDim ObjectArray4(FourDimArray.GetLength(0), FourDimArray.GetLength(1), FourDimArray.GetLength(2), FourDimArray.GetLength(3))
+                TL.LogMessage("ProcessArray", "Array Rank 4: " & FourDimArray.GetLength(0) & " x " & FourDimArray.GetLength(1) & " x " & FourDimArray.GetLength(2) & " x " & FourDimArray.GetLength(3))
+                Array.Copy(FourDimArray, ObjectArray4, FourDimArray.LongLength)
+                ReturnArray = ObjectArray4
+            Case 5
+                Dim FiveDimArray(,,,,) As T = CType(SuppliedObject, T(,,,,))
+                ReDim ObjectArray5(FiveDimArray.GetLength(0), FiveDimArray.GetLength(1), FiveDimArray.GetLength(2), FiveDimArray.GetLength(3), FiveDimArray.GetLength(4))
+                TL.LogMessage("ProcessArray", "Array Rank 5: " & FiveDimArray.GetLength(0) & " x " & FiveDimArray.GetLength(1) & " x " & FiveDimArray.GetLength(2) & " x " & FiveDimArray.GetLength(3) & " x " & FiveDimArray.GetLength(4))
+                Array.Copy(FiveDimArray, ObjectArray5, FiveDimArray.LongLength)
+                ReturnArray = ObjectArray5
+
+            Case Else
+                TL.LogMessage("ProcessArrayOfType", "Array rank is outside the range 1..5: " & SuppliedArray.Rank & ", throwing exception")
+                Throw New ASCOM.InvalidValueException("Array rank is outside the range 1..5: " & SuppliedArray.Rank)
+        End Select
+
+        Return ReturnArray
+    End Function
+
 
 #Region "Time Support Functions"
     '------------------------------------------------------------------------

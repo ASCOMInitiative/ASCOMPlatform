@@ -118,6 +118,7 @@
     <Compile Include="ISwitchV2.vb" />
     <Compile Include="ITelescopeV3.vb" />
     <Compile Include="ITrackingRates.vb" />
+    <Compile Include="IVideo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\AssemblyVersionInfo.vb">
       <Link>My Project\AssemblyVersionInfo.cs</Link>

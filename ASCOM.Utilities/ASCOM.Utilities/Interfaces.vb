@@ -564,6 +564,8 @@ Namespace Interfaces
         ''' <returns>Collection of Integers</returns>
         ''' <remarks></remarks>
         <DispId(26)> Function ToIntegerCollection(ByVal integerArray As Integer()) As ArrayList
+        '<MarshalAs(UnmanagedType.SafeArray, SafeArraySubtype:=VarEnum.VT_VARIANT)>
+        <DispId(27)> Function ArrayToVariantArray(ByVal array As Object) As <MarshalAs(UnmanagedType.SafeArray, SafeArraySubtype:=VarEnum.VT_VARIANT)> Object
 
     End Interface 'Interface to Utilities.Util
 

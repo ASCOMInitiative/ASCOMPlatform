@@ -1,6 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
-
-'Imports ASCOM.Conform
+Imports ASCOM
 
 '-----------------------------------------------------------------------
 ' <summary>Defines the ICamera Interface</summary>
@@ -9,8 +8,8 @@
 ''' Defines the ICamera Interface
 ''' </summary>
 ''' <remarks>The camera state diagram is shown here: <img src="../media/Camerav2 State Diagram.png"/></remarks>
-    <Guid ("972CEBC6-0EBE-4efc-99DD-CC5293FDE77B"), ComVisible (True),
-        InterfaceType (ComInterfaceType.InterfaceIsIDispatch)>
+<Guid("972CEBC6-0EBE-4efc-99DD-CC5293FDE77B"), ComVisible(True),
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch)>
 Public Interface ICameraV2
     'D95FBC6E-0705-458B-84C0-57E3295DBCCE
     'Inherits IAscomDriver
@@ -214,9 +213,9 @@ Public Interface ICameraV2
     ''' <item><description>Must NOT throw an exception if the camera is already idle.</description></item>
     ''' </list> </para>
     ''' </remarks>
-    ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
-    ''' <exception cref="InvalidOperationException">Thrown if abort is not currently possible (e.g. during download).</exception>
-    ''' <exception cref="DriverException">Thrown if a communications error occurs, or if the abort fails.</exception>
+    ''' <exception cref="T:ASCOM.NotConnectedException">Thrown if the driver is not connected.</exception>
+    ''' <exception cref="T:ASCOM.InvalidOperationException">Thrown if abort is not currently possible (e.g. during download).</exception>
+    ''' <exception cref="T:ASCOM.DriverException">Thrown if a communications error occurs, or if the abort fails.</exception>
     Sub AbortExposure()
 
     ''' <summary>
@@ -227,7 +226,7 @@ Public Interface ICameraV2
     ''' for compatible subframe values when this value is set; rather they are checked upon <see cref="StartExposure">StartExposure</see>.
     ''' </remarks>
     ''' <value>The X binning value</value>
-    ''' <exception cref="InvalidValueException">Must throw an exception for illegal binning values</exception>
+    ''' <exception cref="T:ASCOM.InvalidValueException">Must throw an exception for illegal binning values</exception>
     Property BinX() As Short
 
     ''' <summary>
@@ -601,7 +600,7 @@ Public Interface ICameraV2
     ''' <exception cref="MethodNotImplementedException">PulseGuide command is unsupported</exception>
     ''' <exception cref=" DriverException">PulseGuide command is unsuccessful</exception>
     ''' <exception cref="NotConnectedException">Thrown if the driver is not connected.</exception>
-    Sub PulseGuide (ByVal Direction As GuideDirections, ByVal Duration As Integer)
+    Sub PulseGuide(ByVal Direction As GuideDirections, ByVal Duration As Integer)
 
     ''' <summary>
     ''' Sets the camera cooler setpoint in degrees Celsius, and returns the current setpoint.
@@ -638,7 +637,7 @@ Public Interface ICameraV2
     ''' <see cref="BinY" />, <see cref="StartX" />, <see cref="StartY" />, or <see cref="StartExposure">Duration</see> parameters are invalid.</exception>
     ''' <exception cref=" InvalidOperationException"><see cref="CanAsymmetricBin" /> is <c>false</c> and <see cref="BinX" /> != <see cref="BinY" /></exception>
     ''' <exception cref="NotConnectedException">the exposure cannot be started for any reason, such as a hardware or communications error</exception>
-    Sub StartExposure (ByVal Duration As Double, ByVal Light As Boolean)
+    Sub StartExposure(ByVal Duration As Double, ByVal Light As Boolean)
 
     ''' <summary>
     ''' Sets the subframe start position for the X axis (0 based) and returns the current value.
