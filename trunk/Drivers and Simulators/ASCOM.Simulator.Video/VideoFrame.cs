@@ -23,7 +23,7 @@ using Simulator.VideoCameraImpl;
 
 namespace ASCOM.Simulator
 {
-	public class VideoFrame : IVideoFrame
+	public class VideoFrame : ASCOM.DeviceInterface.IVideoFrame
 	{
 		private long? frameNumber;
 		private string imageInfo;

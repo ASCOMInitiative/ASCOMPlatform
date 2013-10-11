@@ -189,7 +189,7 @@ HRESULT GetRGGBBayerBitmapPixels(long width, long height, long bpp, long* pixels
 	// Y = 2       G          B
 
 	// Possible conversion from the BIAS open source library
-	http://www.mip.informatik.uni-kiel.de/~wwwadmin/Software/Doc/BIAS/html/d5/d41/ImageConvert_8cpp_source.html
+	// http://www.mip.informatik.uni-kiel.de/~wwwadmin/Software/Doc/BIAS/html/d5/d41/ImageConvert_8cpp_source.html
 
 	return E_NOTIMPL;
 }
@@ -247,9 +247,9 @@ HRESULT GetMonochromePixelsFromBitmap(long width, long height, long bpp, long fl
 				currBitmapPixel = bitmapPixels - 3 * ((width - 1 - x) + width * (height - 1 - y));
 			}
 
-			*(currBitmapPixel) = pixVal;
-			*(currBitmapPixel + 1) = pixVal;
-			*(currBitmapPixel + 2) = pixVal;
+			*(currBitmapPixel) = (byte) pixVal;
+			*(currBitmapPixel + 1) = (byte) pixVal;
+			*(currBitmapPixel + 2) = (byte) pixVal;
 
 			ptrBuf-=4;
 		}
