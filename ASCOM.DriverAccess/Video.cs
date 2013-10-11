@@ -16,8 +16,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
-
-
 namespace ASCOM.DriverAccess
 {
     #region Video wrapper
@@ -149,18 +147,6 @@ namespace ASCOM.DriverAccess
             //{
             //return TargetInvocationShield(() =>
             //(IVideoFrame)comType.InvokeMember("LastVideoFrame", BindingFlags.GetProperty, (Binder)null, comObject, new object[0], CultureInfo.InvariantCulture));
-            //}
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public IVideoFrame LastVideoFrameImageArrayVariant
-        {
-            get { return (IVideoFrame)memberFactory.CallMember(1, "LastVideoFrameImageArrayVariant", new Type[0], new object[0]); }
-            //{
-            //return TargetInvocationShield(() =>
-            //(IVideoFrame)comType.InvokeMember("LastVideoFrameImageArrayVariant", BindingFlags.GetProperty, (Binder)null, comObject, new object[0], CultureInfo.InvariantCulture));
             //}
         }
 
