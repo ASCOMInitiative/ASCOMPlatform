@@ -130,9 +130,11 @@ namespace ASCOM.Simulator
 		#endregion
 
 		private VideoCamera camera;
+        private AviTools aviTools;
 
 		public Video()
 		{
+            aviTools = new AviTools();
 			Properties.Settings.Default.Reload();
 
 			camera = new VideoCamera();
@@ -516,7 +518,7 @@ namespace ASCOM.Simulator
 		{
 			get
 			{
-                return AviTools.GetUsedAviFourCC();
+                return aviTools.GetUsedAviFourCC();
 			}
 		}
 
