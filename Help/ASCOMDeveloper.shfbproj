@@ -19,16 +19,16 @@
     <HtmlHelpName>PlatformDeveloperHelp</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj" />
-      <DocumentationSource sourceFile="..\ASCOM.Attributes\ASCOM.Attributes.csproj" />
-      <DocumentationSource sourceFile="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj" />
-      <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
-      <DocumentationSource sourceFile="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" />
-      <DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
-      <DocumentationSource sourceFile="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj" />
-      <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
-      <DocumentationSource sourceFile="..\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml" />
-      <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
-    </DocumentationSources>
+<DocumentationSource sourceFile="..\ASCOM.Attributes\ASCOM.Attributes.csproj" />
+<DocumentationSource sourceFile="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj" />
+<DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
+<DocumentationSource sourceFile="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" />
+<DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
+<DocumentationSource sourceFile="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj" />
+<DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
+<DocumentationSource sourceFile="..\ASCOM.Utilities.Video\ASCOM.Utilities.Video.csproj" />
+<DocumentationSource sourceFile="..\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml" />
+<DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" /></DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
     <CopyrightText>Copyright &amp;#169%3b 2010-13, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
