@@ -81,16 +81,16 @@
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
     <TargetName>ASCOM.NativeVideo32</TargetName>
-    <OutDir>$(ProjectDir)\$(PlatformName)\$(Configuration)\</OutDir>
-    <IntDir>$(PlatformName)\$(Configuration)\Work\</IntDir>
+    <OutDir>$(ProjectDir)\$(Configuration)\$(PlatformName)\</OutDir>
+    <IntDir>$(Configuration)\$(PlatformName)\Work\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
     <TargetName>ASCOM.NativeVideo64</TargetName>
-    <OutDir>$(ProjectDir)$(PlatformName)\$(Configuration)\</OutDir>
-    <IntDir>$(PlatformName)\$(Configuration)\Work\</IntDir>
+    <OutDir>$(ProjectDir)$(Configuration)\$(PlatformName)\</OutDir>
+    <IntDir>$(Configuration)\$(PlatformName)\Work\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -154,7 +154,7 @@
       <ModuleDefinitionFile>BitmapUtils.def</ModuleDefinitionFile>
       <AdditionalDependencies>vfw32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <OutputFile>$(ProjectDir)\$(PlatformName)\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(ProjectDir)\$(Configuration)\$(PlatformName)\$(TargetName)$(TargetExt)</OutputFile>
       <ManifestFile>
       </ManifestFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -187,7 +187,7 @@
       <ManifestFile>
       </ManifestFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OutputFile>$(ProjectDir)\$(PlatformName)\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(ProjectDir)\$(Configuration)\$(PlatformName)\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
       <Command>

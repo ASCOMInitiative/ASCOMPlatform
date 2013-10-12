@@ -97,11 +97,11 @@
     <AssemblyInfo CodeLanguage="VB" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" AssemblyFileVersion="$(PlatformVersion).$(BuildHours).$(Revision)" />
 
     <!-- Clean the solution (just in case executables get committed to SVN) and build from scratch.-->
-    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release" />
-    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=Any CPU" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release;Platform=Any CPU" />
 	
-	<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Peter" />
-    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Peter" />
+	<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release 64bit;Platform=Any CPU" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release 64bit;Platform=Any CPU" />
 	
     <!-- Build the help files.-->
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />
