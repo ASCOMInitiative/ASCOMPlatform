@@ -20,44 +20,51 @@ using ASCOM.Utilities.Video;
 
 namespace ASCOM.Utilities.Video
 {
-	// NOTE: If this class is to be put in the same assemby as the video simulator then it can be marked internal. Otherwise we could use InternalsVisibleTo() attribute or something similar
+    // NOTE: If this class is to be put in the same assemby as the video simulator then it can be marked internal. Otherwise we could use InternalsVisibleTo() attribute or something similar
     public class AviTools
     {
-        public static void SetNewGamma(double newGamma)
+        private NativeHelpers nativeHelpers;
+
+        public AviTools()
         {
-            NativeHelpers.SetGamma(newGamma);
+            nativeHelpers = new NativeHelpers();
         }
 
-        public static void SetNewWhiteBalance(int newWhiteBalance)
+        public  void SetNewGamma(double newGamma)
         {
-            NativeHelpers.SetWhiteBalance(255 - newWhiteBalance);
+            nativeHelpers.SetGamma(newGamma);
         }
 
-        public static void ApplyGammaBrightness(int[,] pixelsIn, int[,] pixelsOut, int width, int height, short brightness)
+        public  void SetNewWhiteBalance(int newWhiteBalance)
         {
-            NativeHelpers.ApplyGammaBrightness(width, height, 8, pixelsIn, pixelsOut, brightness);
+            nativeHelpers.SetWhiteBalance(255 - newWhiteBalance);
         }
 
-        public static void InitFrameIntegration(int width, int height)
+        public  void ApplyGammaBrightness(int[,] pixelsIn, int[,] pixelsOut, int width, int height, short brightness)
         {
-            NativeHelpers.InitFrameIntegration(width, height, 8);
+            nativeHelpers.ApplyGammaBrightness(width, height, 8, pixelsIn, pixelsOut, brightness);
         }
 
-        public static void AddIntegrationFrame(int[,] pixelsIn)
+        public  void InitFrameIntegration(int width, int height)
         {
-            NativeHelpers.AddFrameForIntegration(pixelsIn);
+            nativeHelpers.InitFrameIntegration(width, height, 8);
         }
 
-        public static int[,] GetResultingIntegratedFrame(int width, int height)
+        public  void AddIntegrationFrame(int[,] pixelsIn)
+        {
+            nativeHelpers.AddFrameForIntegration(pixelsIn);
+        }
+
+        public  int[,] GetResultingIntegratedFrame(int width, int height)
         {
             int[,] rv = new int[height, width];
 
-            NativeHelpers.GetResultingIntegratedFrame(rv);
+            nativeHelpers.GetResultingIntegratedFrame(rv);
 
             return rv;
         }
 
-        public static string GetLastAviErrorMessage()
+        public  string GetLastAviErrorMessage()
         {
             string error = null;
             IntPtr buffer = IntPtr.Zero;
@@ -69,7 +76,7 @@ namespace ASCOM.Utilities.Video
                 Marshal.Copy(errorMessage, 0, buffer, errorMessage.Length);
                 Marshal.WriteByte(buffer + errorMessage.Length, 0); // terminating null
 
-                NativeHelpers.GetLastAviFileError(buffer);
+                nativeHelpers.GetLastAviFileError(buffer);
 
                 error = Marshal.PtrToStringAnsi(buffer);
 
@@ -87,40 +94,40 @@ namespace ASCOM.Utilities.Video
             return error;
         }
 
-        private static void TraceLastNativeError()
+        private  void TraceLastNativeError()
         {
             string error = GetLastAviErrorMessage();
 
             Trace.WriteLine(error, "VideoNativeException");
         }
 
-        public static void StartNewAviFile(string fileName, int width, int height, int bpp, double fps, bool showCompressionDialog)
+        public  void StartNewAviFile(string fileName, int width, int height, int bpp, double fps, bool showCompressionDialog)
         {
-            if (NativeHelpers.CreateNewAviFile(fileName, width, height, bpp, fps, showCompressionDialog) != 0)
+            if (nativeHelpers.CreateNewAviFile(fileName, width, height, bpp, fps, showCompressionDialog) != 0)
             {
                 TraceLastNativeError();
             }
         }
 
-        public static void AddAviVideoFrame(int[,] pixels)
+        public  void AddAviVideoFrame(int[,] pixels)
         {
-            if (NativeHelpers.AviFileAddFrame(pixels) != 0)
+            if (nativeHelpers.AviFileAddFrame(pixels) != 0)
             {
                 TraceLastNativeError();
             }
         }
 
-        public static void CloseAviFile()
+        public  void CloseAviFile()
         {
-            if (NativeHelpers.AviFileClose() != 0)
+            if (nativeHelpers.AviFileClose() != 0)
             {
                 TraceLastNativeError();
             }
         }
 
-        public static string GetUsedAviFourCC()
+        public  string GetUsedAviFourCC()
         {
-            uint fourcc = NativeHelpers.GetUsedAviCompression();
+            uint fourcc = nativeHelpers.GetUsedAviCompression();
 
             if (fourcc == 0)
                 return null;

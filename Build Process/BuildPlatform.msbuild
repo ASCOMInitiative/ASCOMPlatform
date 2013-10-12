@@ -99,7 +99,10 @@
     <!-- Clean the solution (just in case executables get committed to SVN) and build from scratch.-->
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release" />
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release" />
-
+	
+	<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Peter" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Peter" />
+	
     <!-- Build the help files.-->
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />
     <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release" />
