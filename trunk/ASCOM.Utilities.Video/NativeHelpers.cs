@@ -37,7 +37,7 @@ namespace ASCOM.Utilities.Video
         private const string VIDEOUTILS32_DLL_NAME = "ASCOM.NativeVideo32.dll";
         private const string VIDEOUTILS64_DLL_NAME = "ASCOM.NativeVideo64.dll";
 
-        private const string VIDEOUTILS_DLL_LOCATION = @"\ASCOM\VideoUtils"; //This is appended to the Common Files path
+        private const string VIDEOUTILS_DLL_LOCATION = @"\ASCOM\VideoUtilities"; //This is appended to the Common Files path
         private TraceLogger TL;
 
         private int rc;
