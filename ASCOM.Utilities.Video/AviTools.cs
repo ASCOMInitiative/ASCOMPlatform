@@ -42,7 +42,7 @@ namespace ASCOM.Utilities.Video
 
         public  void ApplyGammaBrightness(int[,] pixelsIn, int[,] pixelsOut, int width, int height, short brightness)
         {
-            nativeHelpers.ApplyGammaBrightness(width, height, 8, pixelsIn, pixelsOut, brightness);
+            nativeHelpers.ApplyGammaBrightness(width, height, 8, ref pixelsIn, ref pixelsOut, brightness);
         }
 
         public  void InitFrameIntegration(int width, int height)
@@ -52,14 +52,14 @@ namespace ASCOM.Utilities.Video
 
         public  void AddIntegrationFrame(int[,] pixelsIn)
         {
-            nativeHelpers.AddFrameForIntegration(pixelsIn);
+            nativeHelpers.AddFrameForIntegration(ref pixelsIn);
         }
 
         public  int[,] GetResultingIntegratedFrame(int width, int height)
         {
             int[,] rv = new int[height, width];
 
-            nativeHelpers.GetResultingIntegratedFrame(rv);
+            nativeHelpers.GetResultingIntegratedFrame(ref rv);
 
             return rv;
         }
