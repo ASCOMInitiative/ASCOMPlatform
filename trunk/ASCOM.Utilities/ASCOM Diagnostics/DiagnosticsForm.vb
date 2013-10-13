@@ -2,6 +2,7 @@
 Imports ASCOM.DeviceInterface
 Imports ASCOM.Internal
 Imports ASCOM.Utilities.Exceptions
+Imports ASCOM.Utilities.Video
 Imports Microsoft.Win32
 Imports System
 Imports System.Globalization
@@ -368,7 +369,6 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("ScanSerial", ex.ToString)
                 End Try
-
                 Try
                     ScanASCOMDrivers() : Action("") 'Report installed driver versions
                 Catch ex As Exception
@@ -533,6 +533,11 @@ Public Class DiagnosticsForm
                     AstroUtilsTests() : Action("")
                 Catch ex As Exception
                     LogException("AstroUtilsTests", ex.ToString)
+                End Try
+                Try
+                    VideoUtilsTests() : Action("")
+                Catch ex As Exception
+                    LogException("VideoUtilsTests", ex.ToString)
                 End Try
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
@@ -4112,6 +4117,26 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
+    Private Sub VideoUtilsTests()
+        Dim NH As Video.NativeHelpers
+        Dim rc As Integer
+        Dim frame(99, 99) As Integer
+        Try
+            TL.LogMessage("VideoUtilsTests", "Creating NativeHelpers")
+            NH = New NativeHelpers
+            TL.LogMessage("VideoUtilsTests", "Opening video file")
+            rc = NH.CreateNewAviFile("TestAVIFile.avi", 100, 100, 3, 25, False)
+            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Adding frame")
+            rc = NH.AviFileAddFrame(frame)
+            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Closing file")
+            rc = NH.AviFileClose
+            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", File closed")
+
+        Catch ex As Exception
+            LogException("VideoUtilTests", "Exception: " & ex.ToString)
+        End Try
+    End Sub
+
     Sub UtilTests()
         Dim t As Double
         Dim ts As String
@@ -6291,7 +6316,8 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub btnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
-        Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
+        'Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
+        Process.Start(LastLogFile) ' Open in the system's default text editor
     End Sub
 
     Private Sub ChooseAndConncectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConncectToDeviceToolStripMenuItem.Click

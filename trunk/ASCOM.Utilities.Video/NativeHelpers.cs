@@ -47,26 +47,32 @@ namespace ASCOM.Utilities.Video
 
         public NativeHelpers()
         {
-            bool rc = false;
-            string CommonProgramFilesPath = null;
-            System.Text.StringBuilder ReturnedPath = new System.Text.StringBuilder(260);
-
-            //Find the root location of the common files directory containing the ASCOM support files.
-            if (Is64Bit()) // 64bit application so find the 32bit folder location, usually Program Files (x86)\Common Files
-            {
-                CommonProgramFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86);
-            }
-            else //32bit application so just go with the .NET returned value usually, Program Files\Common Files
-            {
-                CommonProgramFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
-            }
-
-            //Add the ASCOM\.net directory to the DLL search path so that the NOVAS C 32 and 64bit DLLs can be found
-            rc = SetDllDirectory(CommonProgramFilesPath + VIDEOUTILS_DLL_LOCATION);
-
             TL = new TraceLogger("NativeHelpers");
             TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.TRACE_UTIL, GlobalConstants.TRACE_UTIL_DEFAULT);
+            try
+            {
+                bool rc = false;
+                string CommonProgramFilesPath = null;
+                System.Text.StringBuilder ReturnedPath = new System.Text.StringBuilder(260);
 
+                //Find the root location of the common files directory containing the ASCOM support files.
+                if (Is64Bit()) // 64bit application so find the 32bit folder location, usually Program Files (x86)\Common Files
+                {
+                    CommonProgramFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86);
+                }
+                else //32bit application so just go with the .NET returned value usually, Program Files\Common Files
+                {
+                    CommonProgramFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
+                }
+
+                //Add the ASCOM\.net directory to the DLL search path so that the NOVAS C 32 and 64bit DLLs can be found
+                rc = SetDllDirectory(CommonProgramFilesPath + VIDEOUTILS_DLL_LOCATION);
+                TL .LogMessage("NativeHelpers", "Created");
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("NativeHelpers ctor", ex.ToString());
+            }
         }
 
         private bool disposedValue = false;
@@ -93,7 +99,6 @@ namespace ASCOM.Utilities.Video
                 catch
                 {
                 }
-                // Close the ephemeris file if its open
             }
             this.disposedValue = true;
         }
@@ -102,7 +107,6 @@ namespace ASCOM.Utilities.Video
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-            ;
         }
 
         #endregion
@@ -190,7 +194,7 @@ namespace ASCOM.Utilities.Video
         {
             if (Is64Bit()) // 64bit call
             {
-                rc = GetBitmapBytes64( width,  height,  hBitmap, bitmapBytes);
+                rc = GetBitmapBytes64(width, height, hBitmap, bitmapBytes);
             }
             else // 32bit call
             {
@@ -203,7 +207,7 @@ namespace ASCOM.Utilities.Video
         {
             if (Is64Bit()) // 64bit call
             {
-                rc = InitFrameIntegration64( width,  height,  bpp);
+                rc = InitFrameIntegration64(width, height, bpp);
             }
             else // 32bit call
             {
@@ -242,7 +246,7 @@ namespace ASCOM.Utilities.Video
         {
             if (Is64Bit()) // 64bit call
             {
-                rc = CreateNewAviFile64( fileName,  width,  height,  bpp,  fps,  showCompressionDialog);
+                rc = CreateNewAviFile64(fileName, width, height, bpp, fps, showCompressionDialog);
             }
             else // 32bit call
             {
@@ -255,7 +259,7 @@ namespace ASCOM.Utilities.Video
         {
             if (Is64Bit()) // 64bit call
             {
-                rc = AviFileAddFrame64( pixels);
+                rc = AviFileAddFrame64(pixels);
             }
             else // 32bit call
             {
@@ -307,7 +311,7 @@ namespace ASCOM.Utilities.Video
         {
             if (Is64Bit()) // 64bit call
             {
-                rc = SetWhiteBalance64( newWhiteBalance);
+                rc = SetWhiteBalance64(newWhiteBalance);
             }
             else // 32bit call
             {
