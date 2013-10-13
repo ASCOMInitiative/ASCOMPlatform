@@ -331,6 +331,8 @@ else
   if Variable SELECTED Equals TRUE
     Write into Text File $SETUPLOG$ from Value Installing Developer Components (at end of file)
     [DEFINE REGION: Visual Studio references]
+    Comment: Platform 6.1 references
+    Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $TARGETDIR$\Components\Platform6
     Comment: Platform 6 references
     Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.dll to $TARGETDIR$\Components\Platform6
     Install Files ..\..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\ASCOM.Astrometry.xml to $TARGETDIR$\Components\Platform6
