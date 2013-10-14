@@ -134,10 +134,10 @@ namespace ASCOM.Simulator
 
 		public Video()
 		{
-            aviTools = new AviTools();
+			aviTools = new AviTools();
 			Properties.Settings.Default.Reload();
 
-			camera = new VideoCamera();
+			camera = new VideoCamera(aviTools);
 		}
 
 		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
@@ -518,7 +518,7 @@ namespace ASCOM.Simulator
 		{
 			get
 			{
-                return aviTools.GetUsedAviFourCC();
+				return aviTools.GetUsedAviFourCC() ?? string.Empty;
 			}
 		}
 
@@ -724,7 +724,7 @@ namespace ASCOM.Simulator
 		///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
 		///	<exception cref="T:ASCOM.InvalidValueException">Must throw an exception if not valid.</exception>
 		///	<exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gamma is not supported</exception>
-		public int Gamma
+		public short Gamma
 		{
 			get
 			{

@@ -68,10 +68,13 @@ namespace Simulator.VideoCameraImpl
 		private int[,] alteredPixels;
 
         private AviTools aviTools;
+	    private CameraImage cameraImage;
 
-		public VideoCamera()
+        public VideoCamera(AviTools aviTools)
 		{
-            aviTools = new AviTools();
+            this.aviTools = aviTools;
+            cameraImage = new CameraImage();
+
 			ReloadSimulatorSettings();
 
 			isConnected = false;
@@ -86,6 +89,7 @@ namespace Simulator.VideoCameraImpl
 		{
 			if (bitmapPlayer == null)
 				bitmapPlayer = new BitmapVideoPlayer(
+                    aviTools,
 					Settings.Default.UseEmbeddedVideoSource, 
 					Settings.Default.SourceBitmapFilesLocation, 
 					useBuffering ? bufferSize : 0);
@@ -254,7 +258,7 @@ namespace Simulator.VideoCameraImpl
             aviTools.SetNewGamma(gammaVal);
 		}
 
-		public int GetCurrentGamma()
+		public short GetCurrentGamma()
 		{
 			if (selectedDiscreteGammaIndex == -1)
 				return freeRangeGammaValue;
@@ -518,12 +522,14 @@ namespace Simulator.VideoCameraImpl
 				{
 					short brightness = (short)Math.Round(150 * ((double)currentGain / GetMaxGain()));
 
-                    aviTools.ApplyGammaBrightness(currentFrame, alteredPixels, bitmapPlayer.Width, bitmapPlayer.Height, brightness);
+					aviTools.ApplyGammaBrightness(currentFrame, alteredPixels, bitmapPlayer.Width, bitmapPlayer.Height, brightness);
+					cameraImage.SetImageArray(alteredPixels, bitmapPlayer.Width, bitmapPlayer.Height, SensorType.Monochrome);
 
 					cameraFrame = new VideoCameraFrame()
 					{
 						Pixels = alteredPixels,
-						FrameNumber = currentFrameNo
+						FrameNumber = currentFrameNo,
+						PreviewBitmapBytes = cameraImage.GetDisplayBitmapBytes()
 					};
 				}
 				else

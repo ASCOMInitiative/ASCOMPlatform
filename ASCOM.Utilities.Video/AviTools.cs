@@ -130,7 +130,7 @@ namespace ASCOM.Utilities.Video
             uint fourcc = nativeHelpers.GetUsedAviCompression();
 
             if (fourcc == 0)
-                return null;
+                return string.Empty;
             else
                 return string.Concat(
                     Convert.ToString((char)(fourcc & 0xFF)),

@@ -983,7 +983,7 @@ Public Interface IVideo
     '''	</ul>
     '''	<para>The driver must default <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/> to a valid value. </para>
     '''	</remarks>
-    Property Gamma() As Integer
+    Property Gamma() As Short
 
     ''' <summary>
     ''' Gammas supported by the camera
