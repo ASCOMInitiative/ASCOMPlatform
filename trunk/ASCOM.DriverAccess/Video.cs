@@ -406,7 +406,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// 
         /// </summary>
-        public int Gamma
+        public short Gamma
         {
             get { return (short)memberFactory.CallMember(1, "Gamma", new Type[0], new object[0]); }
             //{

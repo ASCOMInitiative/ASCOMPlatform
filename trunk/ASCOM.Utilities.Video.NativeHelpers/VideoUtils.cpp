@@ -283,7 +283,8 @@ HRESULT SetAviFileCompression(HBITMAP* bmp)
 {
 	AVICOMPRESSOPTIONS opts; 
 	ZeroMemory(&opts,sizeof(opts));
-	opts.fccHandler=mmioFOURCC('x','v','i','d');
+	// Use uncompressed by default
+	opts.fccHandler= mmioFOURCC('D','I','B',' '); //0x20424944
 
 	HRESULT rv = s_AviFile->compression(*bmp, &opts, s_ShowCompressionDialog, 0);
 	
