@@ -160,6 +160,7 @@ namespace ASCOM.Utilities.Video.DirectShowVideo
 
 		public virtual IVideoFrame LastVideoFrame
 		{
+            [DebuggerStepThrough]
 			get
 			{
 				AssertConnected();

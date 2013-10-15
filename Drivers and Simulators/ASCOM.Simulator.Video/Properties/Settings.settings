@@ -18,7 +18,7 @@
       <Value Profile="(Default)">0.033</Value>
     </Setting>
     <Setting Name="CameraType" Type="ASCOM.Simulator.Properties.SiumulatedCameraType" Scope="User">
-      <Value Profile="(Default)">AnalogueNonIntegrating</Value>
+      <Value Profile="(Default)">AnalogueIntegrating</Value>
     </Setting>
     <Setting Name="CameraFrameRate" Type="ASCOM.Simulator.Properties.AnalogueCameraFrameRate" Scope="User">
       <Value Profile="(Default)">PAL</Value>
@@ -48,7 +48,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Gammas" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">OFF#;LO#;HI</Value>
     </Setting>
     <Setting Name="SupportsGainRange" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

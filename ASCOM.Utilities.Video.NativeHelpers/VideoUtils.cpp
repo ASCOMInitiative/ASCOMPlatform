@@ -276,6 +276,8 @@ HRESULT CreateNewAviFile(LPCTSTR szFileName, long width, long height, long bpp, 
 
 	::CreateStreamOnHGlobal(NULL, TRUE, &s_pStream);
 
+	s_AddedFrames = 0;
+
 	return rv;
 }
 
@@ -285,6 +287,7 @@ HRESULT SetAviFileCompression(HBITMAP* bmp)
 	ZeroMemory(&opts,sizeof(opts));
 	// Use uncompressed by default
 	opts.fccHandler= mmioFOURCC('D','I','B',' '); //0x20424944
+	opts.dwFlags = AVICOMPRESSF_VALID;
 
 	HRESULT rv = s_AviFile->compression(*bmp, &opts, s_ShowCompressionDialog, 0);
 	
@@ -407,8 +410,8 @@ HRESULT AviFileAddFrame(long* pixels)
 			Gdiplus::Bitmap* pBitmap = Gdiplus::Bitmap::FromStream(s_pStream);
 			if (pBitmap->GetHBITMAP(Gdiplus::Color(255, 0, 0, 0), &hbmp) == Gdiplus::Ok)
 			{
-				if (s_AddedFrames == 0)
-					SetAviFileCompression(&hbmp);
+				// NOTE: No AVI compression supported in the Simulator
+				//if (s_AddedFrames == 0) SetAviFileCompression(&hbmp);
 
 				rv = s_AviFile->add_frame(hbmp);
 
