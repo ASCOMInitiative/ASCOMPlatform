@@ -79,121 +79,6 @@ Public Class DiagnosticsForm
 
 #End Region
 
-#Region "XML  test String"
-    Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf & _
-                                    "<ASCOMProfile>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName />" & vbCrLf & _
-                                    "    <DefaultValue>" & TestTelescopeDescription & "</DefaultValue>" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Results 1</Name>" & vbCrLf & _
-                                    "        <Data />" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Root Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in Root key</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Test Name Default</Name>" & vbCrLf & _
-                                    "        <Data>123456</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values />" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1\SubKey2</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue>Null Key in SubKey2</DefaultValue>" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2 Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2 Test Name1</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2a Test Name2a</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2a</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a\SubKey2b</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2b Test Name2b</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2b</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2c</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2c Test Name2c</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2c</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey3</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey3 Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value SubKey 3</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey4</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey4 Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value SubKey 4</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKeyDefault</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Test Name Default</Name>" & vbCrLf & _
-                                    "        <Data>123456</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "</ASCOMProfile>"
-#End Region
-
-    'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
-    <DllImport("shell32.dll")> _
-    Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
-        <Out()> ByVal lpszPath As System.Text.StringBuilder, _
-        ByVal nFolder As Integer, _
-        ByVal fCreate As Boolean) As Boolean
-    End Function
-
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Initialise form
         Dim MyVersion As Version
@@ -221,63 +106,6 @@ Public Class DiagnosticsForm
             EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
             MsgBox(ex.ToString)
         End Try
-    End Sub
-
-    ''' <summary>
-    ''' Refresh the trace menu items based on values stored in the user's registry
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub RefreshTraceItems()
-        Dim ProfileStore As RegistryAccess, TraceFileName As String
-        ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
-        TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
-        Select Case TraceFileName
-            Case "" 'Trace is disabled
-                MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
-                MenuUseTraceAutoFilenames.Checked = False
-                MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
-                MenuUseTraceManualFilename.Checked = False
-                MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
-                MenuSerialTraceEnabled.Enabled = True
-            Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
-                MenuUseTraceAutoFilenames.Checked = True
-                MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
-                MenuUseTraceManualFilename.Checked = False
-                MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                MenuSerialTraceEnabled.Enabled = True
-            Case Else 'Tracing using some other fixed filename
-                MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
-                MenuUseTraceAutoFilenames.Checked = False
-                MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
-                MenuUseTraceManualFilename.Checked = True
-                MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
-                MenuSerialTraceEnabled.Enabled = True
-        End Select
-
-        'Set Profile trace checked state on menu item 
-        MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
-        MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
-        MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
-        MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
-        MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
-        MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
-        MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
-        MenuThrowAbandonedMutexExceptions.Checked = GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT)
-        MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
-        MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
-    End Sub
-
-    Private Sub Status(ByVal Msg As String)
-        Application.DoEvents()
-        lblResult.Text = Msg
-        Application.DoEvents()
-    End Sub
-
-    Private Sub Action(ByVal Msg As String)
-        Application.DoEvents()
-        lblAction.Text = Msg
-        Application.DoEvents()
     End Sub
 
     Private Sub btnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
@@ -363,7 +191,6 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("ScanFrameworks", ex.ToString)
                 End Try
-
                 Try
                     ScanSerial() 'Report serial port information
                 Catch ex As Exception
@@ -4089,6 +3916,20 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
+    Private Sub CompareLongInteger(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Int64, ByVal p_Orig As Int64)
+        Dim ErrMsg As String
+        If p_New = p_Orig Then
+            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
+            NMatches += 1
+        Else
+            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: """ & p_New & """, Expected: """ & p_Orig & """"
+            TL.LogMessageCrLf(p_Section, ErrMsg)
+            NNonMatches += 1
+            ErrorList.Add(p_Section & " - " & ErrMsg)
+        End If
+    End Sub
+
+
     Private Sub CompareInteger(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Integer, ByVal p_Orig As Integer)
         Dim ErrMsg As String
         If p_New = p_Orig Then
@@ -4127,54 +3968,87 @@ Public Class DiagnosticsForm
         Dim bitmap As New Bitmap(100, 100, Imaging.PixelFormat.Format24bppRgb)
         Dim byteArray() As Byte
         Dim frameColour(100, 100, 3) As Integer
+
         Try
-            TL.LogMessage("VideoUtilsTests", "Creating NativeHelpers")
+            TL.LogMessage("VideoUtilsTests", "Creating NativeHelpers RC")
             NH = New NativeHelpers
-            TL.LogMessage("VideoUtilsTests", "Opening video file")
+
+            InitFrame2D(frame) ' Iniitalise the frame array
+            CompareLongInteger("VideoUtilsTests", "InitFrame CheckSum", CheckSum2DFrame(frame), 111088890000)
+
+            TL.LogMessage("VideoUtilsTests", "Opening video file RC")
             rc = NH.CreateNewAviFile("TestAVIFile.avi", 100, 100, 8, 25, False)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Video file opened")
+            CompareInteger("VideoUtilsTests", "CreateNewAviFile", rc, 0)
             rc = NH.InitFrameIntegration(100, 100, 8)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Initialising frame integration")
+            CompareInteger("VideoUtilsTests", "InitFrameIntegration RC", rc, 0)
             rc = NH.AddFrameForIntegration(frame)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Added frame for integration (1)")
+            CompareInteger("VideoUtilsTests", "AddFrameForIntegration RC", rc, 0)
             rc = NH.AddFrameForIntegration(frame)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Added frame for integration (2)")
+            CompareInteger("VideoUtilsTests", "AddFrameForIntegration RC", rc, 0)
             rc = NH.GetResultingIntegratedFrame(frameOut)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got integrated frame")
+            CompareInteger("VideoUtilsTests", "GetResultingIntegratedFrame RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetResultingIntegratedFrame CheckSum", CheckSum2DFrame(frameOut), 6366267148)
+
             rc = NH.SetWhiteBalance(50)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Set white balance")
+            CompareInteger("VideoUtilsTests", "SetWhiteBalance RC", rc, 0)
             rc = NH.SetGamma(0.45)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Set gamma")
+            CompareInteger("VideoUtilsTests", "SetGamma RC", rc, 0)
             rc = NH.ApplyGammaBrightness(100, 100, 8, frameOut, frameOut2, 42)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Applied gamma, white balance and brightness")
+            CompareInteger("VideoUtilsTests", "ApplyGammaBrightness RC", rc, 0)
             rc = NH.AviFileAddFrame(frameOut2)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Frame added to file")
+            CompareInteger("VideoUtilsTests", "AviFileAddFrame RC", rc, 0)
             codec = NH.GetUsedAviCompression()
-            TL.LogMessage("VideoUtilsTests", "Used codec is: " & codec.ToString("X"))
+            CompareInteger("VideoUtilsTests", "GetUsedAviCompression Codec", codec, 0)
             rc = NH.AviFileClose
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", File closed")
+            CompareInteger("VideoUtilsTests", "AviFileClose RC", rc, 0)
 
             byteArray = NH.GetBitmapBytes(bitmap)
-            TL.LogMessage("VideoUtilsTests", "Got byte content of a Bitmap. Returned " & byteArray.Length & " bytes")
+            CompareInteger("VideoUtilsTests", "GetBitmapBytes Length", byteArray.Length, 30055)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapBytes CheckSum", CheckSumByteArray(byteArray), 13006)
+
             Dim hBitmap As IntPtr = bitmap.GetHbitmap()
+            ClearByteArray(byteArray)
+            CompareInteger("VideoUtilsTests", "GetBitmapBytes Clear", CheckSumByteArray(byteArray), 0)
             rc = NH.GetBitmapBytes(100, 100, hBitmap, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got byte content of an HBITMAP")
+            CompareInteger("VideoUtilsTests", "GetBitmapBytes RC", rc, 0)
+            CompareInteger("VideoUtilsTests", "GetBitmapBytes Length", byteArray.Length, 30055)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapBytes CheckSum", CheckSumByteArray(byteArray), 13006)
+
             rc = NH.GetBitmapPixels(100, 100, 8, FlipMode.None, frame, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got bitmap bytes from monochrome frame using FlipMode.None")
+            CompareInteger("VideoUtilsTests", "GetBitmapPixels Monochrome FlipMode.None RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapBytes CheckSum", CheckSumByteArray(byteArray), 53216891806)
+
             rc = NH.GetBitmapPixels(100, 100, 8, FlipMode.FlipHorizontally, frame, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got bitmap bytes from monochrome frame using FlipMode.FlipHorizontally")
+            CompareInteger("VideoUtilsTests", "GetBitmapPixels Monochrome FlipMode.FlipHorizontally RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapBytes CheckSum", CheckSumByteArray(byteArray), 53218149598)
+
             rc = NH.GetBitmapPixels(100, 100, 8, FlipMode.FlipVertically, frame, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got bitmap bytes from monochrome frame using FlipMode.FlipVertically")
+            CompareInteger("VideoUtilsTests", "GetBitmapPixels Monochrome FlipMode.FlipHorizontally RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapBytes CheckSum", CheckSumByteArray(byteArray), 53216912219)
+
             rc = NH.GetBitmapPixels(100, 100, 8, FlipMode.FlipBoth, frame, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got bitmap bytes from monochrome frame using FlipMode.FlipBoth")
+            CompareInteger("VideoUtilsTests", "GetBitmapPixels Monochrome FlipMode.FlipHorizontally RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapBytes CheckSum", CheckSumByteArray(byteArray), 53218170011)
+
+            InitFrame3D(frameColour)
+            CompareLongInteger("VideoUtilsTests", "InitFrame3D frameColour", CheckSum3DFrame(frameColour), 888711120000)
+
             rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.None, frameColour, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got bitmap bytes from colour frame using FlipMode.None")
+            CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.None RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26404898591)
+
             rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipHorizontally, frameColour, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got bitmap bytes from colour frame using FlipMode.FlipHorizontally")
+            CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipHorizontally RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26412476543)
+
             rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipVertically, frameColour, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got bitmap bytes from colour frame using FlipMode.FlipVertically")
+            CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipVertically RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26404919004)
+
             rc = NH.GetColourBitmapPixels(100, 100, 8, FlipMode.FlipBoth, frameColour, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got bitmap bytes from colour frame using FlipMode.FlipBoth")
+            CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipBoth RC", rc, 0)
+            CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26412496956)
+
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.None, byteArray)
             TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got monochrome bitmap pixels from a bitmap using LumaConversionMode.R")
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.G, FlipMode.None, byteArray)
@@ -4217,6 +4091,109 @@ Public Class DiagnosticsForm
             LogException("VideoUtilTests", "Exception: " & ex.ToString)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Initialise a frame with a known set of values
+    ''' </summary>
+    ''' <param name="frame">The frame to initialise</param>
+    ''' <remarks></remarks>
+    Sub InitFrame2D(ByRef frame As Integer(,))
+        Dim i, j As Integer
+
+        For i = 0 To frame.GetUpperBound(0) - 1
+            For j = 0 To frame.GetUpperBound(1) - 1
+                frame(i, j) = i * j
+            Next
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Initialise a frame with a known set of values
+    ''' </summary>
+    ''' <param name="frame">The frame to initialise</param>
+    ''' <remarks></remarks>
+    Sub InitFrame3D(ByRef frame As Integer(,,))
+        Dim i, j, k As Integer
+
+        For i = 0 To frame.GetUpperBound(0) - 1
+            For j = 0 To frame.GetUpperBound(1) - 1
+                For k = 0 To frame.GetUpperBound(2) - 1
+                    frame(i, j, k) = i * j * k
+                Next
+            Next
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Initialise a byte array to 0
+    ''' </summary>
+    ''' <param name="byteArray">The byte array to initialise</param>
+    ''' <remarks></remarks>
+    Sub ClearByteArray(ByRef byteArray As Byte())
+        Dim i As Integer
+
+        For i = 0 To byteArray.LongLength - 1
+            byteArray(i) = 0
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Calculate a checksum for the supplied frame array
+    ''' </summary>
+    ''' <param name="frame">The frame to checksum</param>
+    ''' <returns>The checksum of the frame</returns>
+    ''' <remarks></remarks>
+    Function CheckSum2DFrame(frame As Integer(,)) As Int64
+        Dim sum As Int64
+
+        sum = 0
+        For i = 0 To frame.GetUpperBound(0) - 1
+            For j = 0 To frame.GetUpperBound(1) - 1
+                sum += Convert.ToInt64(frame(i, j)) * Convert.ToInt64(i + 1) * Convert.ToInt64(j + 1)
+            Next
+        Next
+
+        Return sum
+    End Function
+
+    ''' <summary>
+    ''' Calculate a checksum for the supplied frame array
+    ''' </summary>
+    ''' <param name="frame">The frame to checksum</param>
+    ''' <returns>The checksum of the frame</returns>
+    ''' <remarks></remarks>
+    Function CheckSum3DFrame(frame As Integer(,,)) As Int64
+        Dim sum As Int64
+
+        sum = 0
+        For i = 0 To frame.GetUpperBound(0) - 1
+            For j = 0 To frame.GetUpperBound(1) - 1
+                For k = 0 To frame.GetUpperBound(2) - 1
+                    sum += Convert.ToInt64(frame(i, j, k)) * Convert.ToInt64(i + 1) * Convert.ToInt64(j + 1) * Convert.ToInt64(k + 1)
+                Next
+            Next
+        Next
+
+        Return sum
+    End Function
+
+    ''' <summary>
+    ''' Calculate a checksum for the supplied byte array
+    ''' </summary>
+    ''' <param name="byteArray">The byte array to checksum</param>
+    ''' <returns>The checksum of the byte array</returns>
+    ''' <remarks></remarks>
+    Function CheckSumByteArray(byteArray As Byte()) As Int64
+        Dim sum As Int64
+
+        sum = 0
+        For i = 0 To byteArray.LongLength - 1
+            sum += Convert.ToInt64(byteArray(i)) * Convert.ToInt64(i + 1)
+        Next
+
+        Return sum
+    End Function
+
 
     Sub UtilTests()
         Dim t As Double
@@ -6362,7 +6339,122 @@ Public Class DiagnosticsForm
         Return Retval
     End Function
 
-#Region "Menu Code"
+#Region "XML  test String"
+    Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf & _
+                                    "<ASCOMProfile>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName />" & vbCrLf & _
+                                    "    <DefaultValue>" & TestTelescopeDescription & "</DefaultValue>" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Results 1</Name>" & vbCrLf & _
+                                    "        <Data />" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Root Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in Root key</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Test Name Default</Name>" & vbCrLf & _
+                                    "        <Data>123456</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values />" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1\SubKey2</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue>Null Key in SubKey2</DefaultValue>" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2 Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2 Test Name1</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2a Test Name2a</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2a</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a\SubKey2b</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2b Test Name2b</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2b</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2c</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey2c Test Name2c</Name>" & vbCrLf & _
+                                    "        <Data>Test Value in SubKey 2c</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey3</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey3 Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value SubKey 3</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKey4</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>SubKey4 Test Name</Name>" & vbCrLf & _
+                                    "        <Data>Test Value SubKey 4</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "  <SubKey>" & vbCrLf & _
+                                    "    <SubKeyName>SubKeyDefault</SubKeyName>" & vbCrLf & _
+                                    "    <DefaultValue />" & vbCrLf & _
+                                    "    <Values>" & vbCrLf & _
+                                    "      <Value>" & vbCrLf & _
+                                    "        <Name>Test Name Default</Name>" & vbCrLf & _
+                                    "        <Data>123456</Data>" & vbCrLf & _
+                                    "      </Value>" & vbCrLf & _
+                                    "    </Values>" & vbCrLf & _
+                                    "  </SubKey>" & vbCrLf & _
+                                    "</ASCOMProfile>"
+#End Region
+
+#Region "Menu and Utility Code"
+    'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
+    <DllImport("shell32.dll")> _
+    Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
+        <Out()> ByVal lpszPath As System.Text.StringBuilder, _
+        ByVal nFolder As Integer, _
+        ByVal fCreate As Boolean) As Boolean
+    End Function
+
     Private Sub btnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
         End 'Close the program
     End Sub
@@ -6510,6 +6602,64 @@ Public Class DiagnosticsForm
         MenuNovasTraceEnabled.Checked = Not MenuNovasTraceEnabled.Checked 'Invert selection
         SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
     End Sub
+
+    ''' <summary>
+    ''' Refresh the trace menu items based on values stored in the user's registry
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub RefreshTraceItems()
+        Dim ProfileStore As RegistryAccess, TraceFileName As String
+        ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
+        TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
+        Select Case TraceFileName
+            Case "" 'Trace is disabled
+                MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
+                MenuUseTraceAutoFilenames.Checked = False
+                MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
+                MenuUseTraceManualFilename.Checked = False
+                MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
+                MenuSerialTraceEnabled.Enabled = True
+            Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
+                MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
+                MenuUseTraceAutoFilenames.Checked = True
+                MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
+                MenuUseTraceManualFilename.Checked = False
+                MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                MenuSerialTraceEnabled.Enabled = True
+            Case Else 'Tracing using some other fixed filename
+                MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
+                MenuUseTraceAutoFilenames.Checked = False
+                MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
+                MenuUseTraceManualFilename.Checked = True
+                MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
+                MenuSerialTraceEnabled.Enabled = True
+        End Select
+
+        'Set Profile trace checked state on menu item 
+        MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
+        MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+        MenuTimerTraceEnabled.Checked = GetBool(TRACE_TIMER, TRACE_TIMER_DEFAULT)
+        MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
+        MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+        MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
+        MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
+        MenuThrowAbandonedMutexExceptions.Checked = GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT)
+        MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
+        MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
+    End Sub
+
+    Private Sub Status(ByVal Msg As String)
+        Application.DoEvents()
+        lblResult.Text = Msg
+        Application.DoEvents()
+    End Sub
+
+    Private Sub Action(ByVal Msg As String)
+        Application.DoEvents()
+        lblAction.Text = Msg
+        Application.DoEvents()
+    End Sub
+
 #End Region
 
 End Class
