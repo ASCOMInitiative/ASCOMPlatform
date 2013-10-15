@@ -388,7 +388,7 @@ namespace ASCOM.Utilities.Video
         [DllImport(VIDEOUTILS32_DLL_NAME, CallingConvention = CallingConvention.Cdecl, EntryPoint = "AddFrameForIntegration")]
         private static extern int AddFrameForIntegration32([In, Out] int[,] pixels);
 
-        [DllImport(VIDEOUTILS32_DLL_NAME, CallingConvention = CallingConvention.Cdecl, EntryPoint = "GetResultingIntegratedFrame32")]
+        [DllImport(VIDEOUTILS32_DLL_NAME, CallingConvention = CallingConvention.Cdecl, EntryPoint = "GetResultingIntegratedFrame")]
         private static extern int GetResultingIntegratedFrame32([In, Out] int[,] pixels);
 
         [DllImport(VIDEOUTILS32_DLL_NAME, CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateNewAviFile")]
@@ -477,7 +477,7 @@ namespace ASCOM.Utilities.Video
         [DllImport(VIDEOUTILS64_DLL_NAME, CallingConvention = CallingConvention.Cdecl, EntryPoint = "AddFrameForIntegration")]
         private static extern int AddFrameForIntegration64([In, Out] int[,] pixels);
 
-        [DllImport(VIDEOUTILS64_DLL_NAME, CallingConvention = CallingConvention.Cdecl, EntryPoint = "GetResultingIntegratedFrame64")]
+        [DllImport(VIDEOUTILS64_DLL_NAME, CallingConvention = CallingConvention.Cdecl, EntryPoint = "GetResultingIntegratedFrame")]
         private static extern int GetResultingIntegratedFrame64([In, Out] int[,] pixels);
 
         [DllImport(VIDEOUTILS64_DLL_NAME, CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateNewAviFile")]
