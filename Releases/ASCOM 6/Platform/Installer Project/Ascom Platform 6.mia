@@ -41,6 +41,8 @@ End
 Include Script
 Include Script
 Include Script
+Include Script
+Include Script
 Compiler Variable End
 Code Folding Region
 Comment
@@ -52,6 +54,11 @@ If
 Terminate Install
 End
 If
+Comment
+If
+MessageBox
+Terminate Install
+End
 Comment
 If
 MessageBox
@@ -1494,6 +1501,8 @@ $
 {78E703E3-454D-429E-819A-B699CE0EB3FA}
 {FE0B6A12-CD80-4EFB-B64F-FB70E4D2640E}
 {B621EE56-06D2-4E94-9E2F-D17A484CE577}
+{B3A63EAC-747A-4F97-BF88-F54F95D0EDFF}
+{1B97208B-2E3C-4048-9846-9E27A0F09C8B}
 {1674C2BE-521E-4249-86DB-3110D3CF0D5E}
 {7FC33D17-9111-4629-B650-736A8B56EED2}
 {6CBBC38C-C1CE-4858-9136-A4CB6AE3E1D7}
@@ -1510,6 +1519,11 @@ $
 {FD86E32E-9440-4916-BCCB-52BB33E3B229}
 {D6FFC7DE-D844-4496-9D97-60670BD26CF7}
 {A8BA6BEB-DC24-47FB-8B54-F315355FF156}
+{A5497748-D677-4584-939B-CB4F1647EC57}
+{DBE6525D-2C8C-4F7C-A643-098BFB2CCA52}
+{0B088C8E-2339-41E1-A38B-16535051A428}
+{BA3F5CC2-428C-43F7-967C-05E278F10895}
+{28523A38-D7E8-4A09-AF9C-80E4EC1197FD}
 {2BE4F970-32B0-4151-85C1-7D5F91D4A8A5}
 {1E1B96AD-4E7F-4C28-9606-C6C1B08EE558}
 {0DC0BACD-A2C2-4FA7-A233-97A3000516AA}
@@ -2967,7 +2981,7 @@ Facilitate removal of deselected setup features
 {856CEFF0-1618-4BFF-B79C-A4B302C66D25}
 Prevent rollback when repairing existing installation
 {537DCE72-E5A0-4FB9-BD73-2F668D591103}
-Check for .NET 3.5 SP1
+Check for .NET 4.0
 {045D4D3C-E49F-4751-A750-A4FFFB09EAA2}
 Find location of our uninstaller and run it
 {6CD7F93E-32C9-43E4-B571-968A85A73245}
@@ -3218,6 +3232,8 @@ Video utilities
 Video Simulator
 {ECF808AE-0B4A-4B3E-8CAD-DF3A0E000EB3}
 Video Utilities - Native Helpers
+{A5497748-D677-4584-939B-CB4F1647EC57}
+C++ Libraries 10.0 from Visual Studio 2010
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -3812,7 +3828,7 @@ CHECKSYSTEM
 TRUE
 TRUE
 {5866E278-31CA-44FF-B402-C89D77C56D69}
-NET351
+DOTNET40
 0
 FALSE
 FALSE
@@ -4136,6 +4152,11 @@ RC11
 0
 0
 TRUE
+{DBE6525D-2C8C-4F7C-A643-098BFB2CCA52}
+VC10_X86
+0
+FALSE
+FALSE
 {90829DD8-0835-4E22-9C27-A67324C55271}
 $TITLE$ Setup Error
 This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -4188,6 +4209,12 @@ An error has occured while finalising the installation, please save all logs in 
 User Guide
 Adobe Acrobat Reader does not appear to be installed on your $NEWLINE$system so we can not display the User Guide. $NEWLINE$$NEWLINE$Please install Acrobat Reader (its free) from www.adobe.com and $NEWLINE$access the guide from Start Menu / ASCOM Platform 6.
 0
+1
+
+{0B088C8E-2339-41E1-A38B-16535051A428}
+Pre-requisites
+We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+2
 1
 
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
@@ -10055,6 +10082,10 @@ checknet2sp2
 checkmsi31
 {15F37B1B-42F0-48FD-80BD-F6A01E995E9D}
 setupmsi31
+{B3A63EAC-747A-4F97-BF88-F54F95D0EDFF}
+checknet4
+{1B97208B-2E3C-4048-9846-9E27A0F09C8B}
+checkvc10_x86
 {BE6F0167-47F0-4C0A-B473-33DB75546DE3}
 SUCCESS
 TRUE
@@ -10401,6 +10432,13 @@ C
 
 C
 C
+C
+
+
+
+
+
+
 
 
 
@@ -11812,6 +11850,13 @@ C
 
 
 $
+
+
+
+
+
+
+
 
 
 
