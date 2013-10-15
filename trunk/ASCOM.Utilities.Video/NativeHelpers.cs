@@ -224,7 +224,7 @@ namespace ASCOM.Utilities.Video
             }
             else // 32bit call
             {
-                rc = AddFrameForIntegration64(pixels);
+                rc = AddFrameForIntegration32(pixels);
             }
             return rc;
         }

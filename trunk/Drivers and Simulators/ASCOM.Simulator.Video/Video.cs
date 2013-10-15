@@ -16,6 +16,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -384,6 +385,7 @@ namespace ASCOM.Simulator
 		/// <exception cref="T:ASCOM.InvalidOperationException">If called before any video frame has been taken</exception>	
 		public IVideoFrame LastVideoFrame
 		{
+            [DebuggerStepThrough]
 			get
 			{
 				AssertConnected();
@@ -394,7 +396,7 @@ namespace ASCOM.Simulator
 				{					
 					//return VideoFrame.FakeFrame(camera.ImageWidth, camera.ImageHeight);
 					VideoFrame rv = VideoFrame.CreateFrame(camera.ImageWidth, camera.ImageHeight, cameraFrame);
-					return rv;					
+					return rv;
 				}
 				else
 					throw new ASCOM.InvalidOperationException("No video frames are available.");

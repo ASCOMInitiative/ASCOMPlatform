@@ -12,7 +12,7 @@ namespace ASCOM.Simulator.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "10.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -85,7 +85,7 @@ namespace ASCOM.Simulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("AnalogueNonIntegrating")]
+        [global::System.Configuration.DefaultSettingValueAttribute("AnalogueIntegrating")]
         public global::ASCOM.Simulator.Properties.SiumulatedCameraType CameraType {
             get {
                 return ((global::ASCOM.Simulator.Properties.SiumulatedCameraType)(this["CameraType"]));
@@ -205,7 +205,7 @@ namespace ASCOM.Simulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("OFF#;LO#;HI")]
         public string Gammas {
             get {
                 return ((string)(this["Gammas"]));
