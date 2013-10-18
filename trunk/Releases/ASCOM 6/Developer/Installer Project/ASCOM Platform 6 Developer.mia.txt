@@ -446,7 +446,6 @@ else
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     Write into Text File $SETUPLOG$ from Value Installing Project Templates (at end of file)
-    Comment: Install Files ..\..\..\..\DriverTemplates\ASCOM 6 Driver Templates.vsi to $TARGETDIR$\Templates
     Install Files ..\..\..\..\DriverTemplates\TemplateSources\*.zip to $TARGETDIR$\Templates
     Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
@@ -474,23 +473,12 @@ else
   Set Variable RC to 
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
-    Comment: Test whether VS is installed by seeing whether the >VSI extention is mapped to the content installer. If not then ignore!
-    Read Registry Key HKCR\.vsi\ into VSIENTRY
-    Write into Text File $SETUPLOG$ from Value Template .vsi entry: $VSIENTRY$ (at end of file)
-    if Variable VSIENTRY not Equals 
-      Comment: Erase existing templates to avoid confirmation dialogs in VSI installer
-      Write into Text File $SETUPLOG$ from Value Erasing current templates (at end of file)
-      Run Program $SUPPORTDIR$\InstallTemplates.exe  (WAIT, get result into variable RC)
-      if Variable RC not Equals 0
-        MessageBox: Profile Migration, An error has occured during pre-installation template removal. $NEWLINE$This is not a serious issue but you may now see some dialogs in the template $NEWLINE$installer requesting confirmation to delete older template files.$NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
-      end
-      Write into Text File $SETUPLOG$ from Value Installing new templates (at end of file)
-      Run Program $TARGETDIR$\Templates\ASCOM 6 Driver Templates.vsi  (WAIT, get result into variable RC)
-      if Variable RC not Equals 0
-        MessageBox: VS Templates, The Visual Studio content installer indicated that it failed in some way: $NEWLINE$$NEWLINE$Return Code: $RC$$NEWLINE$$NEWLINE$Please report this on ASCOM-Talk.
-      end
-    else
-      MessageBalloon: Driver Templates, Visual Studio content installer is not installed, driver templates are located in the $TARGETDIR$\Templates folder.
+    Comment: Install templates
+    Write into Text File $SETUPLOG$ from Value Installing templates (at end of file)
+    Run Program $SUPPORTDIR$\InstallTemplates.exe  (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value Finished installing new templates - Return Code: $RC$ (at end of file)
+    if Variable RC not Equals 0
+      MessageBox: Install Templates, An error has occured during template installation. $NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
     end
   end
   Set Variable PROGRESS to 100

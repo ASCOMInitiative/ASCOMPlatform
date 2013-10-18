@@ -448,7 +448,6 @@ If
 Write to Text File
 Install Files
 Install Files
-Install Files
 Create Shortcut
 Comment
 Install Assembly
@@ -475,22 +474,11 @@ Set Variable
 Get Component State
 If
 Comment
-Read Registry
-Write to Text File
-If
-Comment
 Write to Text File
 Run Program
-If
-MessageBox
-End
 Write to Text File
-Run Program
 If
 MessageBox
-End
-Else
-MessageBalloon
 End
 End
 Set Variable
@@ -969,7 +957,6 @@ $
 {714F55EB-6C88-4B2F-8759-441196C9E87C}
 {7F88E6F8-44DC-4080-9D04-0948F7E59E90}
 {3C853666-602D-48CC-90FA-4D4A144B54A7}
-{380DCCBB-1B82-4247-B1C7-58AD14F7F7BA}
 {2A752E25-0E7E-4E13-B1D3-FB2305E2354C}
 {2481BBD9-6FCE-47E2-9952-DD8776769777}
 {84B03C40-6099-4728-97B9-02168416C613}
@@ -997,24 +984,13 @@ $
 {BFFE4FA2-11C9-465B-A428-56CE1070B32C}
 {1A87AB21-8F59-4DD6-853D-58FDB2CA65D1}
 {0B8592FE-41A0-45DE-9F92-DFB5F25B21CD}
-{23EC8A97-D013-416C-8529-4720BF4F22FB}
-{DF3D0667-A79B-4A99-AC0A-C2B4AD37F1CF}
-{48AEF790-EEAB-49E3-96FE-5D880381ED9B}
-{1B71CABE-C17F-4BD2-AC2F-FC644BF5B2DC}
 {671BE941-DCFA-4F83-B030-22BD98DAA5D8}
 {2BE77CA9-D44A-4B9F-8413-6FE18DC8877E}
 {4BD15AF0-8985-41AA-AFCA-D1D32EBD578F}
+{BB0750B1-B1F0-404E-96DA-B1883EC6677A}
 {2598C20D-7501-43AD-9C23-99C104046F40}
 {78E48656-9E8E-4F2C-9595-DA933B2ABA1C}
 {A14DD671-0E65-4616-A559-3DC3591BCC88}
-{95DA0E7F-B34A-43FB-9B78-FEDFACEF7A16}
-{F26D7990-7248-42E8-983D-ED40A4ABF441}
-{EA50AD56-C887-4A01-929D-5594E2837601}
-{14CFE70C-0ADE-403E-9BC6-E25752C70E51}
-{896DC79E-88F7-492E-8614-6B70FF13092C}
-{5F466AA2-DCFF-496F-8124-1EB74302455E}
-{7754AB5D-82D3-4305-A10E-CDD49DCF0301}
-{5D538C8E-5840-4CB0-A6BB-239A949E1121}
 {D3945548-FD82-4455-B68C-DE4785B84AF4}
 {E87AE336-374D-4C21-877A-6E222E464A67}
 {AA4F1E34-986D-48B0-ACD0-25CB39CF9F24}
@@ -1116,8 +1092,6 @@ Find location of our uninstaller and run it
 
 {2505375C-32E9-4A2C-AE1B-DDCA6114AE5F}
 Remove previous version (MSI install)
-{23EC8A97-D013-416C-8529-4720BF4F22FB}
-Test whether VS is installed by seeing whether the >VSI extention is mapped to the content installer. If not then ignore!
 {69DF2C82-E168-4ADD-963C-BA4102487851}
 Test whether VS is installed by seeing whether the >VSI extention is mapped to the content installer. If not then ignore!
 {BF70540B-FA52-4F0C-910C-88CC4BAA6716}
@@ -1125,7 +1099,7 @@ Run the VsiInstaller to install the templates, provided that it is present on th
 {BFC987E2-B8EE-45EF-8F90-22068F4D3883}
 
 {671BE941-DCFA-4F83-B030-22BD98DAA5D8}
-Erase existing templates to avoid confirmation dialogs in VSI installer
+Install templates
 {D9F1B5C5-1891-47E4-BD99-C39B6C599F6E}
 Remove previous message baloon
 {0FEE1D54-6464-43EF-9EA4-A493FD63D93B}
@@ -1573,16 +1547,6 @@ SELECTED
 0
 TRUE
 FALSE
-{EA50AD56-C887-4A01-929D-5594E2837601}
-RC
-0
-0
-TRUE
-{1B71CABE-C17F-4BD2-AC2F-FC644BF5B2DC}
-VSIENTRY
-0
-
-TRUE
 {2FE7696F-C592-4AE5-A6A0-8099F0101A9F}
 VSIENTRY
 0
@@ -1637,12 +1601,6 @@ Unable to uninstall old version of $TITLE$. Please uninstall it yourself using C
 2
 1
 
-{14CFE70C-0ADE-403E-9BC6-E25752C70E51}
-VS Templates
-The Visual Studio content installer indicated that it failed in some way: $NEWLINE$$NEWLINE$Return Code: $RC$$NEWLINE$$NEWLINE$Please report this on ASCOM-Talk.
-2
-1
-
 {780DC690-5E5F-4A40-9A7A-D30DFC4043C5}
 
 Remove: $REMOVE$ Success: $SUCCESS$
@@ -1656,8 +1614,8 @@ Repair: .$REPAIR$. Modify: .$MODIFY$. Remove: .$REMOVE$.
 1
 
 {78E48656-9E8E-4F2C-9595-DA933B2ABA1C}
-Profile Migration
-An error has occured during pre-installation template removal. $NEWLINE$This is not a serious issue but you may now see some dialogs in the template $NEWLINE$installer requesting confirmation to delete older template files.$NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
+Install Templates
+An error has occured during template installation. $NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
 2
 1
 
@@ -2304,19 +2262,6 @@ FALSE
 FALSE
 FALSE
 FALSE
-{380DCCBB-1B82-4247-B1C7-58AD14F7F7BA}
-..\..\..\..\DriverTemplates\ASCOM 6 Driver Templates.vsi
-FALSE|
-$TARGETDIR$\Templates
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
 {0B757607-DE34-4DAD-8DCC-2B15B92029A6}
 ..\..\..\..\Help\Platform Supporting Documents\ASCOM SideOfPier Behaviour.pdf
 FALSE|
@@ -2711,12 +2656,6 @@ FALSE
 INSTALLCACHEEXISTS
 $INSTALLCACHEDIRECTORY$
 FALSE
-{F26D7990-7248-42E8-983D-ED40A4ABF441}
-$TARGETDIR$\Templates\ASCOM 6 Driver Templates.vsi
-FALSE
-
-TRUE
-RC
 {4BD15AF0-8985-41AA-AFCA-D1D32EBD578F}
 $SUPPORTDIR$\InstallTemplates.exe
 TRUE
@@ -2928,11 +2867,6 @@ UNINSTALLER
 2
 SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}
 UninstallString
-{DF3D0667-A79B-4A99-AC0A-C2B4AD37F1CF}
-VSIENTRY
-0
-.vsi
-
 {9BAE20C0-9336-4BEA-AE0F-0B0C56D8029B}
 VSIENTRY
 0
@@ -3237,19 +3171,9 @@ $SETUPLOG$
 Installing Project Templates
 FALSE
 TRUE
-{48AEF790-EEAB-49E3-96FE-5D880381ED9B}
-$SETUPLOG$
-Template .vsi entry: $VSIENTRY$
-FALSE
-TRUE
 {2BE77CA9-D44A-4B9F-8413-6FE18DC8877E}
 $SETUPLOG$
-Erasing current templates
-FALSE
-TRUE
-{95DA0E7F-B34A-43FB-9B78-FEDFACEF7A16}
-$SETUPLOG$
-Installing new templates
+Installing templates
 FALSE
 TRUE
 {AA4F1E34-986D-48B0-ACD0-25CB39CF9F24}
@@ -3260,6 +3184,11 @@ TRUE
 {0F4B868C-8FB2-4961-9AA2-C6A772218A75}
 $SETUPLOG$
 
+FALSE
+TRUE
+{BB0750B1-B1F0-404E-96DA-B1883EC6677A}
+$SETUPLOG$
+Finished installing new templates - Return Code: $RC$
 FALSE
 TRUE
 {8D9468C1-B283-4383-993C-585A3436143D}
@@ -3386,11 +3315,6 @@ Uninstalling previous Developer Tools version...
 
 0
 10
-{7754AB5D-82D3-4305-A10E-CDD49DCF0301}
-Driver Templates
-Visual Studio content installer is not installed, driver templates are located in the $TARGETDIR$\Templates folder.
-1
-20
 {1769AA30-A747-435C-A18D-7E418479ADEF}
 OPSYS
 TRUE
@@ -3844,18 +3768,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -3919,18 +3831,6 @@ C
 
 
 $
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
