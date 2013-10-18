@@ -7,7 +7,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
 
-namespace EraseTemplates
+namespace InstallTemplates
 {
     class Program
     {
@@ -19,14 +19,20 @@ namespace EraseTemplates
             string VS2005TemplateDir = "";
             string VS2008TemplateDir = "";
             string VS2010TemplateDir = "";
+
+            string TemplateSourceDirectory = "";
+
             RegistryKey VSKey;
 
             try
             {
-                TL = new TraceLogger("", "EraseTemplates"); // Create a tracelogger so we can log what happens
+                TL = new TraceLogger("", "InstallTemplates"); // Create a tracelogger so we can log what happens
                 TL.Enabled = true;
 
-                LogMessage("EraseTemplates", "Removing old templates....");
+                LogMessage("InstallTemplates", "installing new templates....");
+
+                TemplateSourceDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\ASCOM\Platform 6 Developer Components\Templates";
+                LogMessage("InstallTemplates", "Template Source Directory: " + TemplateSourceDirectory);
 
                 VSKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\VisualStudio\8.0", false); //VS2005 path location
                 if (VSKey != null)
@@ -35,11 +41,11 @@ namespace EraseTemplates
                 }
                 if (VS2005TemplateDir == "") // Check whether it has been installed into the default location but not run yet!
                 {
-                    LogMessage("EraseTemplates", "VS2005 template directory not found, searching folder: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2005\Templates\ProjectTemplates");
+                    LogMessage("InstallTemplates", "VS2005 template directory not found, searching folder: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2005\Templates\ProjectTemplates");
                     if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2005\Templates\ProjectTemplates"))
                     {
                         VS2005TemplateDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2005\Templates\ProjectTemplates";
-                        LogMessage("EraseTemplates", "VS2005 template directory found: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2005\Templates\ProjectTemplates");
+                        LogMessage("InstallTemplates", "VS2005 template directory found: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2005\Templates\ProjectTemplates");
                     }
                 }
 
@@ -50,11 +56,11 @@ namespace EraseTemplates
                 }
                 if (VS2008TemplateDir == "") // Check whether it has been installed into the default location but not run yet!
                 {
-                    LogMessage("EraseTemplates", "VS2008 template directory not found, searching folder: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2008\Templates\ProjectTemplates");
+                    LogMessage("InstallTemplates", "VS2008 template directory not found, searching folder: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2008\Templates\ProjectTemplates");
                     if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2008\Templates\ProjectTemplates"))
                     {
                         VS2008TemplateDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2008\Templates\ProjectTemplates";
-                        LogMessage("EraseTemplates", "VS2008 template directory found: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2008\Templates\ProjectTemplates");
+                        LogMessage("InstallTemplates", "VS2008 template directory found: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2008\Templates\ProjectTemplates");
                     }
                 }
 
@@ -65,22 +71,22 @@ namespace EraseTemplates
                 }
                 if (VS2010TemplateDir == "") // Check whether it has been installed into the default location but not run yet!
                 {
-                    LogMessage("EraseTemplates", "VS2010 template directory not found, searching folder: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2010\Templates\ProjectTemplates");
+                    LogMessage("InstallTemplates", "VS2010 template directory not found, searching folder: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2010\Templates\ProjectTemplates");
                     if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2010\Templates\ProjectTemplates"))
                     {
                         VS2010TemplateDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2010\Templates\ProjectTemplates";
-                        LogMessage("EraseTemplates", "VS2010 template directory found: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2010\Templates\ProjectTemplates");
+                        LogMessage("InstallTemplates", "VS2010 template directory found: " + Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Visual Studio 2010\Templates\ProjectTemplates");
                     }
                 }
 
-                EraseTemplates("Visual Studio 2005", VS2005TemplateDir);
-                EraseTemplates("Visual Studio 2008", VS2008TemplateDir);
-                EraseTemplates("Visual Studio 2010", VS2010TemplateDir);
+                InstallTemplates("Visual Studio 2005", VS2005TemplateDir,TemplateSourceDirectory);
+                InstallTemplates("Visual Studio 2008", VS2008TemplateDir, TemplateSourceDirectory);
+                InstallTemplates("Visual Studio 2010", VS2010TemplateDir,TemplateSourceDirectory);
 
             }
             catch (Exception ex)
             {
-                LogError("EraseTemplates", ex.ToString());
+                LogError("InstallTemplates", ex.ToString());
                 ReturnCode = 1;
             }
 
@@ -95,7 +101,7 @@ namespace EraseTemplates
         {
             Console.WriteLine(logMessage);
             TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
-            EventLogCode.LogEvent("EraseTemplates", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.EraseTemplatesInfo, "");
+            EventLogCode.LogEvent("InstallTemplates", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.InstallTemplatesInfo, "");
         }
 
         //log error messages and send to screen when appropriate
@@ -103,7 +109,7 @@ namespace EraseTemplates
         {
             Console.WriteLine(logMessage);
             TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
-            EventLogCode.LogEvent("EraseTemplates", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.EraseTemplatesError, logMessage);
+            EventLogCode.LogEvent("InstallTemplates", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.InstallTemplatesError, logMessage);
         }
 
         /// <summary>
@@ -112,7 +118,7 @@ namespace EraseTemplates
         /// <param name="Name">Descriptive name of the Visual Studio release</param>
         /// <param name="TemplateBasePath">Base path to its location in the HKCU</param>
         /// <returns></returns>
-        static int EraseTemplates(string Name, string TemplateBasePath)
+        static int InstallTemplates(string Name, string TemplateBasePath, string TemplateSourceDirectory)
         {
             string Platform5VB = TemplateBasePath + @"\Visual Basic\"; // Set up expected paths
             string Platform5CSharp = TemplateBasePath + @"\Visual C#\";
@@ -121,12 +127,12 @@ namespace EraseTemplates
 
             if (TemplateBasePath == "")
             {
-                LogMessage("EraseTemplates", Name + " is not installed");
+                LogMessage("InstallTemplates", Name + " is not installed");
             }
             else
             {
-                LogMessage("EraseTemplates", Name + " VB Path: " + Platform5VB);
-                LogMessage("EraseTemplates", Name + " C# Path: " + Platform5CSharp);
+                LogMessage("InstallTemplates", Name + " VB Path: " + Platform5VB);
+                LogMessage("InstallTemplates", Name + " C# Path: " + Platform5CSharp);
 
                 FileDelete(Platform5CSharp, "ASCOM Camera Driver (C#).zip"); //Platform 5 C#
                 FileDelete(Platform5CSharp, "ASCOM Dome Driver (C#).zip");
@@ -189,6 +195,19 @@ namespace EraseTemplates
                     }
                 }
 
+                foreach (string item in Directory.GetFiles(TemplateSourceDirectory, "*.zip"))
+                {
+                    if (item.ToUpper().Contains("CS")) // CSharp item
+                    {
+                        File.Copy(item, Platform6CSharp + "\\" + Path.GetFileName(item), true);
+                        LogMessage("InstallTemplates", "Copying C# template: " + item + " as: " + Platform6CSharp + "\\" + Path.GetFileName(item));
+                    }
+                    if (item.ToUpper().Contains("VB")) // VBitem
+                    {
+                        File.Copy(item, Platform6VB + "\\" + Path.GetFileName(item), true);
+                        LogMessage("InstallTemplates", "Copying VB template: " + item + " as: " + Platform6CSharp + "\\" + Path.GetFileName(item));
+                    }
+                }
             }
 
             return 0;

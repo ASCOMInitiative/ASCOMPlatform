@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EraseTemplates")]
-[assembly: AssemblyDescription("Erases old Visual Studio templates installed by the VSI Installer")]
+[assembly: AssemblyTitle("InstallTemplates")]
+[assembly: AssemblyDescription("Installs new Visual Studio templates")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
-[assembly: AssemblyProduct("EraseTemplates")]
+[assembly: AssemblyProduct("InstallTemplates")]
 [assembly: AssemblyCopyright("Copyright © ASCOM 2011, 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

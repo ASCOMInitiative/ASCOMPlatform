@@ -30,6 +30,7 @@
     <PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
     <DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
     <MakeTemplatesExecutable>DriverTemplates\TemplateSources\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
+    <DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
   </PropertyGroup>
 
   <!-- Item group for the installers that are created by the build process -->
@@ -105,18 +106,18 @@
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release 64bit;Platform=Any CPU" />
 
     <!-- Make the VS Template zip files from their source files-->
-    <Exec Command='"$(MakeTemplatesExecutable)" ".." "TemplateSources"' />
+    <Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />
     
     <!-- Build the help files.-->
-    <!-- <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />-->
-    <!-- <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release" />-->
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release" />
 
     <!-- Build the installers.-->
-    <!-- <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />-->
-    <!-- <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />-->
+    <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
+    <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
 
     <!-- Copy the installers back to the build root directory -->
-    <!-- <Sleep Milliseconds="1000" />-->
+    <Sleep Milliseconds="1000" />
     <ItemGroup>
       <PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;
                                    $(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
