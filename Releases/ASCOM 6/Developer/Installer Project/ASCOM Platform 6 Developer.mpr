@@ -34,15 +34,16 @@ wizard.dfm.miaf
 $
 ASCOM.Exceptions.dll
 ASCOM.Exceptions.pdb
-EraseTemplates.exe
-EraseTemplates.pdb
 icon.ico
 Index.htm
+InstallTemplates.exe
+InstallTemplates.pdb
 MigrationSupport.dll
 MigrationSupport.pdb
 moon.bmp
 swoosh.avi
 $
+
 
 
 
@@ -584,7 +585,7 @@ ASCOM Platform 6.1 Developer Components
 ASCOM Platform 6.1 Developer Components Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{2A3E04B2-A7E7-4A54-8704-84C57C2F16BE}
+{2A25DFBB-F706-4F92-AB6A-ADF0A2226539}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk

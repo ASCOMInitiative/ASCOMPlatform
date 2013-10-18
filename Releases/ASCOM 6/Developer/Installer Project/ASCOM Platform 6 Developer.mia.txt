@@ -446,7 +446,8 @@ else
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     Write into Text File $SETUPLOG$ from Value Installing Project Templates (at end of file)
-    Install Files ..\..\..\..\DriverTemplates\ASCOM 6 Driver Templates.vsi to $TARGETDIR$\Templates
+    Comment: Install Files ..\..\..\..\DriverTemplates\ASCOM 6 Driver Templates.vsi to $TARGETDIR$\Templates
+    Install Files ..\..\..\..\DriverTemplates\TemplateSources\*.zip to $TARGETDIR$\Templates
     Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
     Comment: Support DLL for driver templates
@@ -479,7 +480,7 @@ else
     if Variable VSIENTRY not Equals 
       Comment: Erase existing templates to avoid confirmation dialogs in VSI installer
       Write into Text File $SETUPLOG$ from Value Erasing current templates (at end of file)
-      Run Program $SUPPORTDIR$\EraseTemplates.exe  (WAIT, get result into variable RC)
+      Run Program $SUPPORTDIR$\InstallTemplates.exe  (WAIT, get result into variable RC)
       if Variable RC not Equals 0
         MessageBox: Profile Migration, An error has occured during pre-installation template removal. $NEWLINE$This is not a serious issue but you may now see some dialogs in the template $NEWLINE$installer requesting confirmation to delete older template files.$NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
       end
