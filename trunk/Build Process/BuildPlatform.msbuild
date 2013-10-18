@@ -29,7 +29,7 @@
     <DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
     <PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
     <DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
-    <TemplateSourceExecutable>DriverTemplates\TemplateSources\MakeASCOMTemplates.exe</TemplateSourceExecutable>
+    <MakeTemplatesExecutable>DriverTemplates\TemplateSources\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
   </PropertyGroup>
 
   <!-- Item group for the installers that are created by the build process -->
@@ -105,7 +105,7 @@
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release 64bit;Platform=Any CPU" />
 
     <!-- Make the VS Template zip files from their source files-->
-    <!-- <Exec Command='"$(TemplateSourceExecutable)" ".." "TemplateSources"' />-->
+    <Exec Command='"$(MakeTemplatesExecutable)" ".." "TemplateSources"' />
     
     <!-- Build the help files.-->
     <!-- <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />-->
