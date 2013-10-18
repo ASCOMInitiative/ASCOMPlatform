@@ -168,199 +168,200 @@ Public Class DiagnosticsForm
                     TL.LogMessage("Diagnostics", "ERROR - Unexpected exception creating New RegistryAccess object, later steps will show errors")
                     LogException("Diagnostics", ex.ToString)
                 End Try
+                If False Then
+                    Try
+                        ScanInstalledPlatform()
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                Try
-                    ScanInstalledPlatform()
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    Try
+                        RunningVersions(TL) 'Log diagnostic information
+                    Catch ex As Exception
+                        LogException("RunningVersions", ex.ToString)
+                    End Try
+                    Try
+                        ScanDrives() 'Scan PC drives and report information
+                    Catch ex As Exception
+                        LogException("ScanDrives", ex.ToString)
+                    End Try
 
-                Try
-                    RunningVersions(TL) 'Log diagnostic information
-                Catch ex As Exception
-                    LogException("RunningVersions", ex.ToString)
-                End Try
-                Try
-                    ScanDrives() 'Scan PC drives and report information
-                Catch ex As Exception
-                    LogException("ScanDrives", ex.ToString)
-                End Try
+                    Try
+                        ScanFrameworks() 'Report on installed .NET Framework versions
+                    Catch ex As Exception
+                        LogException("ScanFrameworks", ex.ToString)
+                    End Try
+                    Try
+                        ScanSerial() 'Report serial port information
+                    Catch ex As Exception
+                        LogException("ScanSerial", ex.ToString)
+                    End Try
+                    Try
+                        ScanASCOMDrivers() : Action("") 'Report installed driver versions
+                    Catch ex As Exception
+                        LogException("ScanASCOMDrivers", ex.ToString)
+                    End Try
 
-                Try
-                    ScanFrameworks() 'Report on installed .NET Framework versions
-                Catch ex As Exception
-                    LogException("ScanFrameworks", ex.ToString)
-                End Try
-                Try
-                    ScanSerial() 'Report serial port information
-                Catch ex As Exception
-                    LogException("ScanSerial", ex.ToString)
-                End Try
-                Try
-                    ScanASCOMDrivers() : Action("") 'Report installed driver versions
-                Catch ex As Exception
-                    LogException("ScanASCOMDrivers", ex.ToString)
-                End Try
+                    Try
+                        ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
+                    Catch ex As Exception
+                        LogException("ScanDriverExceptions", ex.ToString)
+                    End Try
 
-                Try
-                    ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
-                Catch ex As Exception
-                    LogException("ScanDriverExceptions", ex.ToString)
-                End Try
+                    Try
+                        ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+                    Catch ex As Exception
+                        LogException("ScanProgramFiles", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
-                Catch ex As Exception
-                    LogException("ScanProgramFiles", ex.ToString)
-                End Try
+                    Try
+                        ScanProfile() : Action("") 'Report profile information
+                    Catch ex As Exception
+                        LogException("ScanProfile", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProfile() : Action("") 'Report profile information
-                Catch ex As Exception
-                    LogException("ScanProfile", ex.ToString)
-                End Try
+                    Try
+                        ScanRegistry() 'Scan Old ASCOM Registry Profile
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                Try
-                    ScanRegistry() 'Scan Old ASCOM Registry Profile
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    Try
+                        ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
+                    Catch ex As Exception
+                        LogException("ScanProfile55Files", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
-                Catch ex As Exception
-                    LogException("ScanProfile55Files", ex.ToString)
-                End Try
+                    Try
+                        ScanCOMRegistration() 'Report Com Registration
+                    Catch ex As Exception
+                        LogException("ScanCOMRegistration", ex.ToString)
+                    End Try
 
-                Try
-                    ScanCOMRegistration() 'Report Com Registration
-                Catch ex As Exception
-                    LogException("ScanCOMRegistration", ex.ToString)
-                End Try
+                    Try
+                        ScanForHelperHijacking()
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                Try
-                    ScanForHelperHijacking()
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    'Scan files on 32 and 64bit systems
+                    TL.LogMessage("Platform Files", "")
+                    ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
+                    Try
+                        Call ScanPlatformFiles(ASCOMPath) : Action("")
+                    Catch ex As Exception
+                        LogException("ScanPlatformFiles", ex.ToString)
+                    End Try
 
-                'Scan files on 32 and 64bit systems
-                TL.LogMessage("Platform Files", "")
-                ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
-                Try
-                    Call ScanPlatformFiles(ASCOMPath) : Action("")
-                Catch ex As Exception
-                    LogException("ScanPlatformFiles", ex.ToString)
-                End Try
+                    Try
+                        ScanDeveloperFiles()
+                    Catch ex As Exception
+                        LogException("ScanDeveloperFiles", ex.ToString)
+                    End Try
 
-                Try
-                    ScanDeveloperFiles()
-                Catch ex As Exception
-                    LogException("ScanDeveloperFiles", ex.ToString)
-                End Try
+                    'List GAC contents
+                    Try
+                        ScanGac()
+                    Catch ex As Exception
+                        LogException("ScanGac", ex.ToString)
+                    End Try
 
-                'List GAC contents
-                Try
-                    ScanGac()
-                Catch ex As Exception
-                    LogException("ScanGac", ex.ToString)
-                End Try
+                    'List setup files
+                    Try
+                        ScanLogs()
+                    Catch ex As Exception
+                        LogException("ScanLogs", ex.ToString)
+                    End Try
 
-                'List setup files
-                Try
-                    ScanLogs()
-                Catch ex As Exception
-                    LogException("ScanLogs", ex.ToString)
-                End Try
+                    'List Platform 6 install logs
+                    Try
+                        ScanPlatform6Logs()
+                    Catch ex As Exception
+                        LogException("ScanPlatform6Logs", ex.ToString)
+                    End Try
 
-                'List Platform 6 install logs
-                Try
-                    ScanPlatform6Logs()
-                Catch ex As Exception
-                    LogException("ScanPlatform6Logs", ex.ToString)
-                End Try
+                    'Scan registry security rights
+                    Try
+                        ScanRegistrySecurity()
+                    Catch ex As Exception
+                        LogException("ScanRegistrySecurity", ex.ToString)
+                    End Try
 
-                'Scan registry security rights
-                Try
-                    ScanRegistrySecurity()
-                Catch ex As Exception
-                    LogException("ScanRegistrySecurity", ex.ToString)
-                End Try
+                    'Scan event log messages
+                    Try
+                        ScanEventLog()
+                    Catch ex As Exception
+                        LogException("ScanEventLog", ex.ToString)
+                    End Try
 
-                'Scan event log messages
-                Try
-                    ScanEventLog()
-                Catch ex As Exception
-                    LogException("ScanEventLog", ex.ToString)
-                End Try
+                    'Scan for ASCOM Applications
+                    Try
+                        ScanApplications()
+                    Catch ex As Exception
+                        LogException("ScanApplications", ex.ToString)
+                    End Try
 
-                'Scan for ASCOM Applications
-                Try
-                    ScanApplications()
-                Catch ex As Exception
-                    LogException("ScanApplications", ex.ToString)
-                End Try
-
-                TL.BlankLine()
-                TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
-                TL.BlankLine()
-                TL.BlankLine()
-                Try
-                    'Functional tests
-                    UtilTests() : Action("")
-                Catch ex As Exception
-                    LogException("UtilTests", ex.ToString)
-                End Try
-                Try
-                    ProfileTests() : Action("")
-                Catch ex As Exception
-                    LogException("ProfileTests", ex.ToString)
-                End Try
-                Try
-                    TimerTests() : Action("")
-                Catch ex As Exception
-                    LogException("TimerTests", ex.ToString)
-                End Try
-                Try
-                    NovasComTests() : Action("")
-                Catch ex As Exception
-                    LogException("NovasComTests", ex.ToString)
-                End Try
-                Try
-                    KeplerTests() : Action("")
-                Catch ex As Exception
-                    LogException("KeplerTests", ex.ToString)
-                End Try
-                Try
-                    TransformTest() : Action("")
-                Catch ex As Exception
-                    LogException("TransformTest", ex.ToString)
-                End Try
-                Try
-                    NOVAS2Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS2Tests", ex.ToString)
-                End Try
-                Try
-                    NOVAS3Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS3Tests", ex.ToString)
-                End Try
-                Try
-                    NOVAS31Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS31Tests", ex.ToString)
-                End Try
-                Try
-                    SimulatorTests() : Action("")
-                Catch ex As Exception
-                    LogException("SimulatorTests", ex.ToString)
-                End Try
-                Try
-                    AstroUtilsTests() : Action("")
-                Catch ex As Exception
-                    LogException("AstroUtilsTests", ex.ToString)
-                End Try
+                    TL.BlankLine()
+                    TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
+                    TL.BlankLine()
+                    TL.BlankLine()
+                    Try
+                        'Functional tests
+                        UtilTests() : Action("")
+                    Catch ex As Exception
+                        LogException("UtilTests", ex.ToString)
+                    End Try
+                    Try
+                        ProfileTests() : Action("")
+                    Catch ex As Exception
+                        LogException("ProfileTests", ex.ToString)
+                    End Try
+                    Try
+                        TimerTests() : Action("")
+                    Catch ex As Exception
+                        LogException("TimerTests", ex.ToString)
+                    End Try
+                    Try
+                        NovasComTests() : Action("")
+                    Catch ex As Exception
+                        LogException("NovasComTests", ex.ToString)
+                    End Try
+                    Try
+                        KeplerTests() : Action("")
+                    Catch ex As Exception
+                        LogException("KeplerTests", ex.ToString)
+                    End Try
+                    Try
+                        TransformTest() : Action("")
+                    Catch ex As Exception
+                        LogException("TransformTest", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS2Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS2Tests", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS3Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS3Tests", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS31Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS31Tests", ex.ToString)
+                    End Try
+                    Try
+                        SimulatorTests() : Action("")
+                    Catch ex As Exception
+                        LogException("SimulatorTests", ex.ToString)
+                    End Try
+                    Try
+                        AstroUtilsTests() : Action("")
+                    Catch ex As Exception
+                        LogException("AstroUtilsTests", ex.ToString)
+                    End Try
+                End If
                 Try
                     VideoUtilsTests() : Action("")
                 Catch ex As Exception
@@ -4049,44 +4050,71 @@ Public Class DiagnosticsForm
             CompareInteger("VideoUtilsTests", "GetBitmapPixels Colour FlipMode.FlipBoth RC", rc, 0)
             CompareLongInteger("VideoUtilsTests", "GetBitmapPixels CheckSum", CheckSumByteArray(byteArray), 26412496956)
 
+            InitBitMap(bitmap)
+
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.None, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got monochrome bitmap pixels from a bitmap using LumaConversionMode.R")
+            CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap R CheckSum", CheckSum2DFrame(frameOut2), 7554559)
+            CompareLongInteger("VideoUtilsTests", "ByteArray R CheckSum", CheckSumByteArray(byteArray), 163723333)
+
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.G, FlipMode.None, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got monochrome bitmap pixels from a bitmap using LumaConversionMode.G")
+            CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap G CheckSum", CheckSum2DFrame(frameOut2), 14535572)
+            CompareLongInteger("VideoUtilsTests", "ByteArray G CheckSum", CheckSumByteArray(byteArray), 294949228)
+
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.B, FlipMode.None, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got monochrome bitmap pixels from a bitmap using LumaConversionMode.B")
+            CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap B CheckSum", CheckSum2DFrame(frameOut2), 23493433)
+            CompareLongInteger("VideoUtilsTests", "ByteArray B CheckSum", CheckSumByteArray(byteArray), 428153317)
+
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.GrayScale, FlipMode.None, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got monochrome bitmap pixels from a bitmap using LumaConversionMode.GrayScale")
+            CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap GrayScale CheckSum", CheckSum2DFrame(frameOut2), 16319054)
+            CompareLongInteger("VideoUtilsTests", "ByteArray GrayScale CheckSum", CheckSumByteArray(byteArray), 317929171)
+
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.FlipHorizontally, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got monochrome bitmap pixels from a bitmap using FlipMode.FlipHorizontally")
+            CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap FlipHorizontally CheckSum", CheckSum2DFrame(frameOut2), 7057805)
+            CompareLongInteger("VideoUtilsTests", "ByteArray FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 163358554)
+
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.FlipVertically, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got monochrome bitmap pixels from a bitmap using FlipMode.FlipVertically")
+            CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap FlipVertically CheckSum", CheckSum2DFrame(frameOut2), 7059917)
+            CompareLongInteger("VideoUtilsTests", "ByteArray FlipVertically CheckSum", CheckSumByteArray(byteArray), 175359397)
+
             frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.FlipBoth, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got monochrome bitmap pixels from a bitmap using FlipMode.FlipBoth")
+            CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap FlipBoth CheckSum", CheckSum2DFrame(frameOut2), 6219148)
+            CompareLongInteger("VideoUtilsTests", "ByteArray FlipBoth CheckSum", CheckSumByteArray(byteArray), 174994618)
+
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.None, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got colour bitmap pixels from a bitmap using FlipMode.None")
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipNone CheckSum", CheckSum3DFrame(frameColour), 55234894)
+            CompareLongInteger("VideoUtilsTests", "ByteArray CheckSum", CheckSumByteArray(byteArray), 295553892)
+
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipHorizontally, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got colour bitmap pixels from a bitmap using FlipMode.FlipHorizontally")
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipHorizontally CheckSum", CheckSum3DFrame(frameColour), 54805394)
+            CompareLongInteger("VideoUtilsTests", "ByteArray FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 295221231)
+
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipVertically, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got colour bitmap pixels from a bitmap using FlipMode.FlipVertically")
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipVertically CheckSum", CheckSum3DFrame(frameColour), 54831409)
+            CompareLongInteger("VideoUtilsTests", "ByteArray FlipVertically CheckSum", CheckSumByteArray(byteArray), 304432836)
+
             frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.FlipBoth, byteArray)
-            TL.LogMessage("VideoUtilsTests", "RC: " & rc.ToString("X") & ", Got colour bitmap pixels from a bitmap using FlipMode.FlipBoth")
+            CompareLongInteger("VideoUtilsTests", "GetColourPixelsFromBitmap FlipBoth CheckSum", CheckSum3DFrame(frameColour), 53990701)
+            CompareLongInteger("VideoUtilsTests", "ByteArray FlipBoth CheckSum", CheckSumByteArray(byteArray), 304100175)
+            frameColour = NH.GetColourPixelsFromBitmap(bitmap, FlipMode.None, byteArray)
+
             byteArray = NH.PrepareBitmapForDisplay(frameOut, 100, 100, FlipMode.None)
-            TL.LogMessage("VideoUtilsTests", "Got bitmap pixels from a monochrome frame using FlipMode.None")
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay None CheckSum", CheckSumByteArray(byteArray), 105141385513)
             byteArray = NH.PrepareBitmapForDisplay(frameOut, 100, 100, FlipMode.FlipHorizontally)
-            TL.LogMessage("VideoUtilsTests", "Got bitmap pixels from a monochrome frame using FlipMode.FlipHorizontally")
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 105136497235)
             byteArray = NH.PrepareBitmapForDisplay(frameOut, 100, 100, FlipMode.FlipVertically)
-            TL.LogMessage("VideoUtilsTests", "Got bitmap pixels from a monochrome frame using FlipMode.FlipVertically")
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipVertically CheckSum", CheckSumByteArray(byteArray), 105141405926)
             byteArray = NH.PrepareBitmapForDisplay(frameOut, 100, 100, FlipMode.FlipBoth)
-            TL.LogMessage("VideoUtilsTests", "Got bitmap pixels from a monochrome frame using FlipMode.FlipBoth")
-            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, 100, 100, FlipMode.None)
-            TL.LogMessage("VideoUtilsTests", "Got bitmap pixels from a colour frame using FlipMode.None")
-            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, 100, 100, FlipMode.FlipHorizontally)
-            TL.LogMessage("VideoUtilsTests", "Got bitmap pixels from a colour frame using FlipMode.FlipHorizontally")
-            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, 100, 100, FlipMode.FlipVertically)
-            TL.LogMessage("VideoUtilsTests", "Got bitmap pixels from a colour frame using FlipMode.FlipVertically")
-            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, 100, 100, FlipMode.FlipBoth)
-            TL.LogMessage("VideoUtilsTests", "Got bitmap pixels from a colour frame using FlipMode.FlipBoth")
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipBoth CheckSum", CheckSumByteArray(byteArray), 105136517648)
+
+            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.None)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay None CheckSum", CheckSumByteArray(byteArray), 243107340)
+            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipHorizontally)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 243407028)
+            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipVertically)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipVertically CheckSum", CheckSumByteArray(byteArray), 243130927)
+            byteArray = NH.PrepareColourBitmapForDisplay(frameColour, frameColour.GetUpperBound(0), frameColour.GetUpperBound(1), FlipMode.FlipBoth)
+            CompareLongInteger("VideoUtilsTests", "PrepareBitmapForDisplay FlipBoth CheckSum", CheckSumByteArray(byteArray), 243430615)
+
         Catch ex As Exception
             LogException("VideoUtilTests", "Exception: " & ex.ToString)
         End Try
@@ -4122,6 +4150,15 @@ Public Class DiagnosticsForm
                 Next
             Next
         Next
+    End Sub
+
+    ''' <summary>
+    ''' Initialise a new bitmap with the ASCOM icon
+    ''' </summary>
+    ''' <param name="bm">The bitmap to initialise</param>
+    ''' <remarks></remarks>
+    Sub InitBitMap(ByRef bm)
+        bm = New Bitmap(Me.Icon.ToBitmap())
     End Sub
 
     ''' <summary>
