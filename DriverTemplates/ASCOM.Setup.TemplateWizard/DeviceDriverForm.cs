@@ -255,6 +255,7 @@ namespace ASCOM.Setup
                     }
                 }
             }
+            cbDeviceClass.Items.Add("VideoUsingBaseClass");
         }
 
         private class ASCOMInterface
