@@ -204,13 +204,13 @@ namespace InstallTemplates
             {
                 if (item.ToUpper().Contains("CS")) // CSharp item
                 {
-                    File.Copy(item, Platform6CSharp + "\\" + Path.GetFileName(item), true);
+                    File.Copy(item, Platform6CSharp + Path.GetFileName(item), true);
                     LogMessage("InstallTemplates", "Copying C# template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
                 }
                 if (item.ToUpper().Contains("VB")) // VBitem
                 {
-                    File.Copy(item, Platform6VB + "\\" + Path.GetFileName(item), true);
-                    LogMessage("InstallTemplates", "Copying VB template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
+                    File.Copy(item, Platform6VB + Path.GetFileName(item), true);
+                    LogMessage("InstallTemplates", "Copying VB template: " + item + " as: " + Platform6VB + Path.GetFileName(item));
                 }
             }
 
