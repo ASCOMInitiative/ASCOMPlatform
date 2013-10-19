@@ -255,6 +255,10 @@ namespace ASCOM.Setup
                     }
                 }
             }
+            Type aiVbcType = asm.GetType("IVideo");
+            ASCOMInterface aivbc = new ASCOMInterface(aiVbcType.Name);
+
+            interfaceList.Add("VideoUsingBaseClass", aivbc);
             cbDeviceClass.Items.Add("VideoUsingBaseClass");
         }
 
