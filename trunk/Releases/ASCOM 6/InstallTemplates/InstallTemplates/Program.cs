@@ -174,6 +174,26 @@ namespace InstallTemplates
             LogMessage("InstallTemplates", "VB Path (Platform 6): " + Platform6VB);
             LogMessage("InstallTemplates", "C# Path (Platform 6): " + Platform6CSharp);
 
+            if (Directory.Exists(Platform6CSharp))
+            {
+                LogMessage("InstallTemplates", "Path: " + Platform6CSharp + " already exists");
+            }
+            else
+            {
+                LogMessage("InstallTemplates", "Path: " + Platform6CSharp + " does not exist, creating directory");
+                Directory.CreateDirectory(Platform6CSharp);
+            }
+
+            if (Directory.Exists(Platform6VB))
+            {
+                LogMessage("InstallTemplates", "Path: " + Platform6VB + " already exists");
+            }
+            else
+            {
+                LogMessage("InstallTemplates", "Path: " + Platform6VB + " does not exist, creating directory");
+                Directory.CreateDirectory(Platform6VB);
+            }
+
             FileDelete(Platform5CSharp, "ASCOM Camera Driver (C#).zip"); //Platform 5 C#
             FileDelete(Platform5CSharp, "ASCOM Dome Driver (C#).zip");
             FileDelete(Platform5CSharp, "ASCOM FilterWheel Driver (C#).zip");
@@ -228,12 +248,12 @@ namespace InstallTemplates
 
             try
             {
-                LogMessage("FileDelete", "  Deleting file: " + DeletePath + DeleteFile + " " + FileExists);
+                // LogMessage("FileDelete", "  Deleting file: " + DeletePath + DeleteFile + " " + FileExists);
                 if (FileExists) File.Delete(DeletePath + DeleteFile); // Only delete it if it exists!
             }
             catch (Exception ex)
             {
-                LogError("FileDelete", "  Exception Deleting file: " + DeletePath + DeleteFile + " " + ex.ToString());
+                LogError("FileDelete", "  Exception Deleting file: " + FileExists.ToString() + ", " + DeletePath + DeleteFile + " " + ex.ToString());
             }
         }
 
