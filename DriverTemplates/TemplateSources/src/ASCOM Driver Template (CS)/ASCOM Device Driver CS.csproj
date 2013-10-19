@@ -182,13 +182,13 @@
   <PropertyGroup>
     <PreBuildEvent>REM This project's references must be to GAC assemblies but there are none on the build machine!
 REM So we have to copy the DLLs locally in order to build successfully
-xcopy /y $(SolutionDir)ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\Ascom.Astrometry.dll $(OutDir)
-xcopy /y $(SolutionDir)ASCOM.Attributes\bin\Release\Ascom.Attributes.dll $(OutDir)
-xcopy /y $(SolutionDir)ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll $(OutDir)
-xcopy /y $(SolutionDir)ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll $(OutDir)
-xcopy /y $(SolutionDir)Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll $(OutDir)
-xcopy /y $(SolutionDir)ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll $(OutDir)
-xcopy /y $(SolutionDir)ASCOM.Utilities\ASCOM.Utilities\bin\Release.\ASCOM.Utilities.dll $(OutDir)
+xcopy /y "$(SolutionDir)ASCOM.Astrometry\ASCOM.Astrometry\bin\Release\Ascom.Astrometry.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)ASCOM.Attributes\bin\Release\Ascom.Attributes.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)ASCOM.Controls\ASCOM.Controls\bin\Release\ASCOM.Controls.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Interfaces\ASCOMExceptions\bin\Release\ASCOM.Exceptions.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)ASCOM.SettingsProvider\ASCOM.SettingsProvider\bin\Release\ASCOM.SettingsProvider.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)ASCOM.Utilities\ASCOM.Utilities\bin\Release.\ASCOM.Utilities.dll" "$(OutDir)"
 </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
