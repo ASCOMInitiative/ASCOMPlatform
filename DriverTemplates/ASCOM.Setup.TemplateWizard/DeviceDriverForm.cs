@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using ASCOM.Utilities;
 
 namespace ASCOM.Setup
 {
@@ -33,9 +34,14 @@ namespace ASCOM.Setup
         // key is the class name, value is the ASCOM interface properties
         Dictionary<string, ASCOMInterface> interfaceList;
 
+        TraceLogger TL;
+
         public DeviceDriverForm()
         {
             InitializeComponent();
+            TL = new TraceLogger("TemplateForm");
+            TL.Enabled = true;
+
             InitASCOMClasses();
             this.cbDeviceClass.SelectedIndex = 7; // Select Telescope as the default
         }
@@ -232,6 +238,7 @@ namespace ASCOM.Setup
         /// </summary>
         private void InitASCOMClasses()
         {
+            TL.LogMessage("InitASCOMClasses", "Started");
             interfaceList = new Dictionary<string, ASCOMInterface>();
             cbDeviceClass.Items.Clear();
             // get a list of the current interfaces
@@ -252,10 +259,12 @@ namespace ASCOM.Setup
                         ASCOMInterface ai = new ASCOMInterface(type.Name);
                         interfaceList.Add(ai.Name, ai);
                         cbDeviceClass.Items.Add(ai.Name);
+                        TL.LogMessage("InitASCOMClasses", "Added: " + ai.Name + " " + name + " " + type.Name + " " + type.Namespace.ToString() + " " + type.FullName);
                     }
                 }
             }
-            Type aiVbcType = asm.GetType("IVideo");
+            Type aiVbcType = asm.GetType("ASCOM.DeviceInterface.IVideo", true, true);
+
             ASCOMInterface aivbc = new ASCOMInterface(aiVbcType.Name);
 
             interfaceList.Add("VideoUsingBaseClass", aivbc);
