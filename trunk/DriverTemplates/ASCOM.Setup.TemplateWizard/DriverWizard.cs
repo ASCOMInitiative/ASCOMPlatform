@@ -321,7 +321,14 @@ namespace ASCOM.Setup
                 replacementsDictionary["$projectname$"] = DeviceId;
                 replacementsDictionary["$safeprojectname$"] = DeviceId;
                 replacementsDictionary.Add("TEMPLATEDEVICENAME", DeviceName);
-                replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
+                if (DeviceClass == "VideoUsingBaseClass") // Special handling for "VideoWithBaseClass" template because its file name is not the same as the device type "Video"
+                {
+                    replacementsDictionary.Add("TEMPLATEDEVICECLASS", "Video"); // This ensures that the class is named Video and not VideoWithBaseClass
+                }
+                else // ALl other templates process normally because the selected device name exatly matches the device type e.g. Telescope, Rotator etc.
+                {
+                    replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
+                }
                 replacementsDictionary.Add("ITEMPLATEDEVICEINTERFACE", DeviceInterface);
                 replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
                 replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion);

@@ -60,7 +60,9 @@
             "Rotator",
             "SafetyMonitor",
             "Switch",
-            "Telescope"});
+            "Telescope",
+            "Video",
+            "VideoUsingBaseClass"});
             this.cbDeviceClass.Location = new System.Drawing.Point(181, 36);
             this.cbDeviceClass.Name = "cbDeviceClass";
             this.cbDeviceClass.Size = new System.Drawing.Size(174, 21);
