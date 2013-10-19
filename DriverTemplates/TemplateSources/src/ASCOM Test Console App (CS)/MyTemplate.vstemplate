@@ -12,7 +12,7 @@
     <ProvideDefaultName>false</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Icon>__TemplateIcon.ico</Icon>
+    <Icon>_TemplateIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="ASCOM Test Console App (CS).csproj" File="ASCOM Test Console App (CS).csproj" ReplaceParameters="true">
