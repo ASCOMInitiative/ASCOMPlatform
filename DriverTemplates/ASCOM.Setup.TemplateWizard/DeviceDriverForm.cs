@@ -37,7 +37,7 @@ namespace ASCOM.Setup
         {
             InitializeComponent();
             InitASCOMClasses();
-            this.cbDeviceClass.SelectedIndex = 6; // Select Telescope as the default
+            this.cbDeviceClass.SelectedIndex = 7; // Select Telescope as the default
         }
 
         /// <summary>
