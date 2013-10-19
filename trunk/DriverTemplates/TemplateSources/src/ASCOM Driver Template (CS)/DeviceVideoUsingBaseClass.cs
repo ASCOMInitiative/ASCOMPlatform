@@ -5,7 +5,7 @@
 using ASCOM;
 using ASCOM.Utilities;
 
-class DeviceVideo
+class DeviceVideoUsingBaseClass
 {
     private TraceLogger tl = new TraceLogger();
 
