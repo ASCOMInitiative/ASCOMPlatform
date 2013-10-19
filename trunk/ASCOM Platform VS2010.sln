@@ -1419,7 +1419,6 @@ Global
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release 64bit|Win32.ActiveCfg = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release 64bit|x86.ActiveCfg = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{71BB4DA7-4092-416D-89FE-97CD15207371}.Release|Win32.ActiveCfg = Release|Any CPU
@@ -1628,13 +1627,13 @@ Global
 		{590966EA-FB61-4711-ADE7-424BCAD72C36} = {BB8C06AA-5266-421D-9629-DDCD6F89A6A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal
