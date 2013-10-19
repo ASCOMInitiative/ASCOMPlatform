@@ -12,7 +12,7 @@
     <ProvideDefaultName>false</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Icon>Ascom.ico</Icon>
+    <Icon>_TemplateIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Device Driver CS.csproj" ReplaceParameters="true">
