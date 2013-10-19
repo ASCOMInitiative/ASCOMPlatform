@@ -26,6 +26,8 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="DeviceSafetyMonitor.vb">DeviceSafetyMonitor.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="DeviceSwitch.vb">DeviceSwitch.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="DeviceTelescope.vb">DeviceTelescope.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="DeviceVideo.vb">DeviceVideo.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="DeviceVideoUsingBaseClass.vb">DeviceVideoUsingBaseClass.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.vb">Driver.vb</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Rates.vb">Rates.vb</ProjectItem>
       <Folder Name="My Project" TargetFolderName="My Project">
