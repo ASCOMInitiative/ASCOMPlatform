@@ -9,12 +9,8 @@ class DeviceVideo
 {
     private TraceLogger tl = new TraceLogger();
 
-    #region Video Implementation
+    #region IVideo Implementation
     // Video with base class implementation
-    #endregion
-
-    #region private methods
-    // Video with base class Private Methods
     #endregion
 
     //ENDOFINSERTEDFILE

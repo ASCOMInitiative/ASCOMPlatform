@@ -1,6 +1,15 @@
-Comment: Native Code Setup Engine 32 bit-64 bit Installer Project, overwrite newer files automatically
-Comment: Set Variable NATIVE_ENGINE to TRUE
-Comment: Set Variable NATIVE_OVERWRITE to TRUE
+Comment: ASCOM Platform installation script
+ 
+[DEFINE REGION: Set up log file]
+Comment: Define variables, create the directory and log file name.
+Set Variable SETUPLOG to 
+Get Folder Location My->My Documents into MYDOCUMENTS
+Get Free Space on C: into variable DISKSPACE
+ 
+Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
+Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
+Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
+[END REGION]
  
 [DEFINE REGION: Check Application Requirements]
 Get System Setting Administrator Rights into CHECKSYSTEM
@@ -26,6 +35,7 @@ end
 Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
+Set Variable VC10_X86 to 
 [compiler if Variable BUILDMODE not Equals PATCH]
 if Variable NEEDSUPGRADE Equals TRUE
   Comment: Uninstall via Windows Installer
@@ -38,30 +48,42 @@ if Variable RECOMMENDEDUPGRADE Equals TRUE
   Comment: Set Variable PREREQ to TRUE
   Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Removal
 end
-Comment: Include Script: checknet2sp2
-Comment: Include Script: checknet3sp2
-Comment: Include Script: checknet351
-Include Script: checknet4
+Include Script: checknet351
+Include Script: checknet4_x86
 Include Script: checkvc10_x86
+Include Script: checkvc10_x64
 [compiler end]
 [END REGION]
  
 [DEFINE REGION: Install Application Pre-Requisites]
 Comment: Install setup pre-requisites
 if Variable PREREQ not Equals FALSE
+  Comment: Create a single variable indicating whether any C++ 10 libraries need to be installed.
+  Set Variable VC10 to 
+  Set Variable VC10 to TRUE
+  if Variable VC10_X86 Equals FALSE
+    Set Variable VC10 to FALSE
+  end
+  if Variable VC10_X64 Equals FALSE
+    Set Variable VC10 to FALSE
+  end
+  if Variable DOTNET40_X86 Equals FALSE
+    Comment: If Framework 4 is missing then we don't need a message about 3.5 as well!
+    Set Variable NET351 to TRUE
+  end
   Display Dialog: prereq, wait for dialog to return (modal)
   if Variable WIZARD Equals CANCEL
     Terminate Installation
   end
   if Variable WIZARD Equals NEXT
     Comment: Check for .NET 4.0
-    if Variable DOTNET40 Equals FALSE
-      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+    if Variable DOTNET40_X86 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but you must install Framework 4 before continuing with this install.
       Terminate Installation
     end
-    Comment: C++ Libraries 10.0 from Visual Studio 2010
-    if Variable VC10_X86 Equals FALSE
-      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+    Comment: Check for .NET 3.5
+    if Variable NET351 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but you must enable Framework 3.5 before continuing with this install.
       Terminate Installation
     end
   end
@@ -76,16 +98,7 @@ end
  
 [DEFINE REGION: Define Setup Globals]
 Comment: Initialize Setup Globals
- 
-Comment: Set up the log file
-Set Variable SETUPLOG to 
 Set Variable ASCOMERROR to 
-Get Folder Location My->My Documents into MYDOCUMENTS
-Get Free Space on C: into variable DISKSPACE
- 
-Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
-Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
-Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
  
 Comment: Set up values for a 32bit OS
 Set Variable PROGRAMFILES32 to 
@@ -389,6 +402,9 @@ if Variable NEEDSUPGRADE Equals TRUE
 end
 [DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
 Include Script: setupmsi31
+Include Script: setupvc10_x86
+Include Script: setupvc10_x64
+Comment: Include Script: setupvc10_x86
  
 Comment: Clean up unwanted GAC assembly references left by bad native installer used during beta testing
 Delete Registry KEY HKLM\$GACREF$\ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL\*.*
