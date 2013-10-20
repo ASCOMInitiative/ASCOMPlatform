@@ -36,6 +36,7 @@ Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
 Set Variable VC10_X86 to 
+Set Variable DOTNET40CLIENT_X86 to 
 [compiler if Variable BUILDMODE not Equals PATCH]
 if Variable NEEDSUPGRADE Equals TRUE
   Comment: Uninstall via Windows Installer
@@ -49,7 +50,7 @@ if Variable RECOMMENDEDUPGRADE Equals TRUE
   Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Removal
 end
 Include Script: checknet351
-Include Script: checknet4_x86
+Include Script: checknet4client_x86
 Include Script: checkvc10_x86
 Include Script: checkvc10_x64
 [compiler end]
@@ -67,7 +68,7 @@ if Variable PREREQ not Equals FALSE
   if Variable VC10_X64 Equals FALSE
     Set Variable VC10 to FALSE
   end
-  if Variable DOTNET40_X86 Equals FALSE
+  if Variable DOTNET40CLIENT_X86 Equals FALSE
     Comment: If Framework 4 is missing then we don't need a message about 3.5 as well!
     Set Variable NET351 to TRUE
   end
@@ -77,7 +78,7 @@ if Variable PREREQ not Equals FALSE
   end
   if Variable WIZARD Equals NEXT
     Comment: Check for .NET 4.0
-    if Variable DOTNET40_X86 Equals FALSE
+    if Variable DOTNET40CLIENT_X86 Equals FALSE
       MessageBox: Pre-requisites, We are sorry but you must install Framework 4 before continuing with this install.
       Terminate Installation
     end
