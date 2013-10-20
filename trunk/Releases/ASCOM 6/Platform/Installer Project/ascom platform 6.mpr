@@ -134,7 +134,23 @@ $
 
 
 
-B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1529,7 +1545,7 @@ ASCOM Platform 6.1 - Beta 1
 ASCOM Platform 6.1 Installation - Beta 1
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{8231C6FD-032B-409F-950F-075E7F22801A}
+{3926700B-25E3-471A-89C5-651643D0B226}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
@@ -1560,8 +1576,12 @@ FALSE
 
 checkmsi31.mia
 setupmsi31.mia
-checknet4.mia
 checkvc10_x86.mia
+checkvc10_x64.mia
+setupvc10_x64.mia
+setupvc10_x86.mia
+checknet4_x86.mia
+checknet351.mia
 $
 FALSE
 
