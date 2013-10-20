@@ -40,7 +40,8 @@ namespace ASCOM.InstallerGen
 		private void cmdSave_Click(object sender, EventArgs e)
 		{
 			MakeIss();																	// Below
-			this.Dispose();
+            Properties.Settings.Default.Save();
+            this.Dispose();
 		}
 
 		private void cmdCancel_Click(object sender, EventArgs e)
