@@ -9,19 +9,28 @@ using System.IO;
 
 namespace InstallTemplates
 {
+    /// <summary>
+    /// Locate all Visual Studio template directories and install ASCOM templates in them, overwriting any current versions present.
+    /// </summary>
     class Program
     {
         static TraceLogger TL;
         static int ReturnCode = 0;
 
+        /// <summary>
+        /// Main program entry point
+        /// </summary>
+        /// <param name="args">Supplied parameters (not used in this program)</param>
+        /// <returns>0 for success, 1 for error</returns>
         static int Main(string[] args)
         {
-
-            string TemplateSourceDirectory = "";
-            Dictionary<string, string> vsTemplateDirectoryList = new Dictionary<string, string>();
+            Dictionary<string, string> vsTemplateDirectoryList; // Dictionary to hold the list of install directories holding templates
 
             try
             {
+                string TemplateSourceDirectory = "";
+                vsTemplateDirectoryList = new Dictionary<string, string>();
+
                 TL = new TraceLogger("", "InstallTemplates"); // Create a tracelogger so we can log what happens
                 TL.Enabled = true;
 
@@ -31,14 +40,14 @@ namespace InstallTemplates
                 LogMessage("InstallTemplates", "Template Source Directory: " + TemplateSourceDirectory);
 
                 // Search registry for template directories
-                vsTemplateDirectoryList = AddTemplateDirectories(vsTemplateDirectoryList, FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\VisualStudio"));
-                vsTemplateDirectoryList = AddTemplateDirectories(vsTemplateDirectoryList, FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\WDExpress"));
+                vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\VisualStudio"), vsTemplateDirectoryList);
+                vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInRegistry(Registry.CurrentUser, @"Software\Microsoft\WDExpress"), vsTemplateDirectoryList);
 
-                // Search file system for template directories
-                vsTemplateDirectoryList = AddTemplateDirectories(vsTemplateDirectoryList, FindTemplateDirectoriesInFileSystem(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Visual Studio*"));
+                // Search My Documents file system for template directories
+                vsTemplateDirectoryList = AddTemplateDirectories(FindTemplateDirectoriesInFileSystem(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Visual Studio*"), vsTemplateDirectoryList);
 
                 LogMessage("Main", " ");
-                foreach (KeyValuePair<string, string> templateDir in vsTemplateDirectoryList)
+                foreach (KeyValuePair<string, string> templateDir in vsTemplateDirectoryList) // Install new templates in every template directory on this machine
                 {
                     LogMessage("Main", "Installing templates in directory: " + templateDir.Key.ToString());
                     InstallTemplates(templateDir.Key.ToString(), TemplateSourceDirectory);
@@ -58,7 +67,13 @@ namespace InstallTemplates
             return ReturnCode;
         }
 
-        static private Dictionary<string, string> AddTemplateDirectories(Dictionary<string, string> overallList, List<string> additionList)
+        /// <summary>
+        /// Add new template directory values in the addition list to the overall list ensuring that each value is unique.
+        /// </summary>
+        /// <param name="additionList">A list containing newly discovered template directories</param>
+        /// <param name="overallList">The overall list of unique template install directories</param>
+        /// <returns>An updated dictionary of unique template directory values.</returns>
+        static private Dictionary<string, string> AddTemplateDirectories(List<string> additionList, Dictionary<string, string> overallList)
         {
             foreach (string templateDirectory in additionList)
             {
@@ -68,6 +83,12 @@ namespace InstallTemplates
             return overallList;
         }
 
+        /// <summary>
+        /// Scan a given directory for sub directories containing the search pattern, return entries where there is a template directory.
+        /// </summary>
+        /// <param name="searchDir">The base directory to search</param>
+        /// <param name="searchPattern">The pattern to search for</param>
+        /// <returns>A list of sub directories that match the pattern and that themselves contain template directroies</returns>
         static private List<string> FindTemplateDirectoriesInFileSystem(string searchDir, string searchPattern)
         {
             List<string> foundTempateDirectories = new List<string>();
@@ -102,6 +123,12 @@ namespace InstallTemplates
             return foundTempateDirectories;
         }
 
+        /// <summary>
+        /// Scan a given registry location for sub keys containing the search key, return entries where there is a template directory entry within that subkey.
+        /// </summary>
+        /// <param name="rKey">The base key to search from</param>
+        /// <param name="searchKey">The subkey name pattern to match</param>
+        /// <returns>A list of template directories found</returns>
         static private List<string> FindTemplateDirectoriesInRegistry(RegistryKey rKey, string searchKey)
         {
             RegistryKey VSKey = Registry.CurrentUser;
@@ -140,7 +167,11 @@ namespace InstallTemplates
             return foundTempateDirectories;
         }
 
-        //log messages and send to screen when appropriate
+        /// <summary>
+        /// Lof an informational message
+        /// </summary>
+        /// <param name="section">Name of the code section that the message is from </param>
+        /// <param name="logMessage">The message to record</param>
         static public void LogMessage(string section, string logMessage)
         {
             Console.WriteLine(logMessage);
@@ -148,7 +179,11 @@ namespace InstallTemplates
             EventLogCode.LogEvent("InstallTemplates", logMessage, EventLogEntryType.Information, GlobalConstants.EventLogErrors.InstallTemplatesInfo, "");
         }
 
-        //log error messages and send to screen when appropriate
+        /// <summary>
+        /// Log an error message
+        /// </summary>
+        /// <param name="section">Name of the code section that the message is from </param>
+        /// <param name="logMessage">The message to record</param>
         static public void LogError(string section, string logMessage)
         {
             Console.WriteLine(logMessage);
@@ -164,33 +199,35 @@ namespace InstallTemplates
         /// <returns></returns>
         static int InstallTemplates(string TemplateBasePath, string TemplateSourceDirectory)
         {
+            const string spaces = "    ";
+
             string Platform5VB = TemplateBasePath + @"\Visual Basic\"; // Set up expected paths
             string Platform5CSharp = TemplateBasePath + @"\Visual C#\";
             string Platform6VB = TemplateBasePath + @"\Visual Basic\ASCOM6\";
             string Platform6CSharp = TemplateBasePath + @"\Visual C#\ASCOM6\";
 
-            LogMessage("InstallTemplates", "VB Path (Platform 5): " + Platform5VB);
-            LogMessage("InstallTemplates", "C# Path (Platform 5): " + Platform5CSharp);
-            LogMessage("InstallTemplates", "VB Path (Platform 6): " + Platform6VB);
-            LogMessage("InstallTemplates", "C# Path (Platform 6): " + Platform6CSharp);
+            LogMessage("InstallTemplates", spaces + "VB Path (Platform 5): " + Platform5VB);
+            LogMessage("InstallTemplates", spaces + "C# Path (Platform 5): " + Platform5CSharp);
+            LogMessage("InstallTemplates", spaces + "VB Path (Platform 6): " + Platform6VB);
+            LogMessage("InstallTemplates", spaces + "C# Path (Platform 6): " + Platform6CSharp);
 
             if (Directory.Exists(Platform6CSharp))
             {
-                LogMessage("InstallTemplates", "Path: " + Platform6CSharp + " already exists");
+                LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " already exists");
             }
             else
             {
-                LogMessage("InstallTemplates", "Path: " + Platform6CSharp + " does not exist, creating directory");
+                LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " does not exist, creating directory");
                 Directory.CreateDirectory(Platform6CSharp);
             }
 
             if (Directory.Exists(Platform6VB))
             {
-                LogMessage("InstallTemplates", "Path: " + Platform6VB + " already exists");
+                LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " already exists");
             }
             else
             {
-                LogMessage("InstallTemplates", "Path: " + Platform6VB + " does not exist, creating directory");
+                LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " does not exist, creating directory");
                 Directory.CreateDirectory(Platform6VB);
             }
 
@@ -225,12 +262,12 @@ namespace InstallTemplates
                 if (item.ToUpper().Contains("CS")) // CSharp item
                 {
                     File.Copy(item, Platform6CSharp + Path.GetFileName(item), true);
-                    LogMessage("InstallTemplates", "Copying C# template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
+                    LogMessage("InstallTemplates", spaces + "Copying C# template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
                 }
                 if (item.ToUpper().Contains("VB")) // VBitem
                 {
                     File.Copy(item, Platform6VB + Path.GetFileName(item), true);
-                    LogMessage("InstallTemplates", "Copying VB template: " + item + " as: " + Platform6VB + Path.GetFileName(item));
+                    LogMessage("InstallTemplates", spaces + "Copying VB template: " + item + " as: " + Platform6VB + Path.GetFileName(item));
                 }
             }
 
