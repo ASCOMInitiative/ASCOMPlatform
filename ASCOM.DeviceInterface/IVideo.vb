@@ -18,86 +18,51 @@ Imports System.Runtime.InteropServices
 Imports System.Text
 Imports ASCOM.DeviceInterface
 Imports ASCOM
-
-#Region "IVideo Class Help"
-
-'Namespace ASCOM.DeviceInterface
-''' <summary>
-''' Defines the ASCOM <see cref="DeviceInterface.IVideo"/> and <see cref="DeviceInterface.IVideoFrame"/> interfaces for working with astronomical video cameras
-''' </summary>
-''' <remarks>
-''' The interfaces are designed with the following use cases in mind
-''' <list type="bullet">
-'''		<item><description>Instructing the camera to record a video file and save it on the file system</description></item>
-'''		<item><description>Occasionally obtaining individual video frames as the camera is running in order to help with focusing, frame rate adjustments, field identification and others.</description></item>
-'''	</list>
-''' <p>Video cameras, unlike standard CCD cameras, are used to save video files. It is not practical to try and display in realtime what the camera seas mostly for the following two reasons. Firstly the huge bandwidth 
-''' that will be required to transmit the images (25, 30 or sometimes more images per second) and seconly because of the performance impact on the driver and the hardware. Video is already very resource hungry
-''' and implementing a separate streaming in the driver for realtime viewing by a client will make the system even more demanding for resources (RAM and CPU) that could affect the integrity of the video record (e.g. result in dropped frames) which is not desired and should be avoided.</p>
-''' <p>Still the client will need to see what the camera is pointed to for example to work on the focusing so there is a need for viewing individual images produced by the video camera. This is done is by the client requesting
-''' a single individual frame from the camera and doing this as many times as necessary.</p>
-''' <p>There are broadly two types of video cameras regarding the way the images are captured by a computer - analogue and digital. Analogue cameras will usually require a video capture card and digital cameras will usually be connected to the computer via USB or FireWire port. 
-''' Analogue video cameras output frames with a fixed frame rate that cannot be changed while the digital video cameras can have a variable frame rate. When it comes to exposure duration there are again two types of analogue video cameras - integrating and non integrating. 
-''' The integrating video cameras have the shutter open for the duration of the exposure and after the exposure is completed they output the same video frame (the result from the exposure) with their supported frame rate and for the duration of another exposure. 
-''' Non integrating video cameras have a fixed exposure duration that cannot be changed. Some integrating video cameras also offer exposures shorter than the frame rate interval. In this case the shutter is only open for the corresponding exposure time and the remaining time
-''' for up to the frame rate duration the camera is not collecting light. Digital video cameras usually output a single frame for each exposure that they produce.</p>
-''' <p>The ASCOM video camera interfaces are designed to support all these types of video cameras - analogue, digital, integrating and non integrating.</p>
-''' </remarks>
-<System.Runtime.CompilerServices.CompilerGeneratedAttribute()> _
-Class NamespaceDoc
-End Class
-#End Region
-
 #Region "Enums"
 
 ''' <summary>
-''' ASCOM Video Camera supported frame rates
+''' ASCOM Video Camera supported frame rates.
 ''' </summary>
 <ComVisible(True)> _
 Public Enum VideoCameraFrameRate
     ''' <summary>
-    ''' This is a digital camera or system that supports variable frame rates
-    ''' </summary>
-    Digital = 0
-
-    ''' <summary>
-    ''' This is a video camera that supports variable frame rates
+    ''' This is a video camera that supports variable frame rates.
     ''' </summary>
     Variable = 0
 
     ''' <summary>
-    ''' 25 frames per second (fps) corresponding to a <b>PAL</b> (colour) or <b>CCIR</b> (black and white) video standard
+    ''' 25 frames per second (fps) corresponding to a <b>PAL</b> (colour) or <b>CCIR</b> (black and white) video standard.
     ''' </summary>
     PAL = 1
 
     ''' <summary>
-    ''' 29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b>b> (black and white) video standard
+    ''' 29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b>b> (black and white) video standard.
     ''' </summary>
     NTSC = 2
 End Enum
 
 ''' <summary>
-''' ASCOM Video Camera status values
+''' ASCOM Video Camera status values.
 ''' </summary>
 <ComVisible(True)> _
 Public Enum VideoCameraState
     ''' <summary>
-    ''' Camera status idle. The video camera expecting commands
+    ''' Camera status idle. The video camera expecting commands.
     ''' </summary>
     videoCameraIdle = 0
 
     ''' <summary>
-    ''' Camera status running. The video is receiving signal and video frames are available for viewing or recording 
+    ''' Camera status running. The video is receiving signal and video frames are available for viewing or recording.
     ''' </summary>
     videoCameraRunning = 1
 
     ''' <summary>
-    ''' Camera status recording. The video camera is recording video to the file system. Video frames are available for viewing
+    ''' Camera status recording. The video camera is recording video to the file system. Video frames are available for viewing.
     ''' </summary>
     videoCameraRecording = 2
 
     ''' <summary>
-    ''' Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a restart will be required to resolve the error condition
+    ''' Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a restart will be required to resolve the error condition.
     ''' </summary>
     videoCameraError = 3
 End Enum
@@ -106,8 +71,9 @@ End Enum
 #Region "IVideoFrame Interface"
 
 ''' <summary>
-''' Defines the IVideoFrame Interface
+''' Defines the IVideoFrame Interface.
 ''' </summary>
+''' <remarks>The video camera state diagram is shown here: <img src="../media/VideoCamera State Diagram.png"/></remarks>
 <Guid("EA1D5478-7263-43F8-B708-78783A48158C")> _
 <ComVisible(True)> _
 <InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
@@ -117,8 +83,6 @@ Public Interface IVideoFrame
     ''' </summary>
     ''' <remarks>
     ''' The application must inspect the Safearray parameters to determine the dimensions. 
-    ''' <para>The value will be only populated when the video frame has been obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame"/> property. When the video frame
-    ''' is obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant"/> property a NULL value must be returned. Do not throw an exception in this case.</para>
     ''' <para>For color or multispectral cameras, will produce an array of  <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
     ''' NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
     ''' <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixels in the array is the second pixels from the first horizontal row
@@ -132,8 +96,7 @@ Public Interface IVideoFrame
     '''' </summary>
     '''' <remarks>
     '''' <p style="color:red"><b>Must be implemented</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for 
-    '''' those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> or <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArrayVariant"/>
-    '''' but usually only adjust the video camera settings and then record a video file. 
+    '''' those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> but usually only adjust the video camera settings and then record a video file. 
     '''' <para>When a 24bit RGB image can be returned by the driver this should be the preferred format. </para>
     '''' </remarks>
     '''' <value>The preview bitmap image.</value>
@@ -144,7 +107,7 @@ Public Interface IVideoFrame
     ''' </summary>
     ''' <remarks>
     ''' The frame number of the first exposed frame may not be zero and is dependent on the device and/or the driver. The frame number increases with each acquired frame not with each requested frame by the client.
-    ''' Must return -1 if frame numbering is not supported
+    ''' Must return -1 if frame numbering is not supported.
     ''' </remarks>
     ''' <value>The frame number of the current video frame.</value>
     ReadOnly Property FrameNumber() As Long
@@ -156,14 +119,14 @@ Public Interface IVideoFrame
     ''' This may differ from the exposure time corresponding to the requested frame exposure due to shutter latency, camera timing precision, etc.
     ''' </remarks>
     ''' <value>The duration of the frame exposure.</value>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported.</exception>
     ReadOnly Property ExposureDuration() As Double
 
     ''' <summary>
     ''' Returns the actual exposure start time in the FITS-standard CCYY-MM-DDThh:mm:ss[.sss...] format, if supported.
     ''' </summary>
     ''' <value>The frame exposure start time.</value>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported.</exception>
     ReadOnly Property ExposureStartTime() As String
 
     ''' <summary>
@@ -181,7 +144,7 @@ End Interface
 #Region "IVideo Interface"
 
 ''' <summary>
-''' Defines the IVideo Interface
+''' Defines the IVideo Interface.
 ''' </summary>
 <Guid("00A394A5-BCB0-449D-A46B-81A02824ADC5")> _
 <ComVisible(True)> _
@@ -194,13 +157,13 @@ Public Interface IVideo
     ''' You can also read the property to check whether it is connected.
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-    ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</remarks>
     Property Connected() As Boolean
 
 
     ''' <summary>
-    ''' Returns a description of the device, such as manufacturer and modelnumber. Any ASCII characters may be used. 
+    ''' Returns a description of the device, such as manufacturer and model number. Any ASCII characters may be used. 
     ''' </summary>
     ''' <value>The description.</value>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
@@ -226,7 +189,7 @@ Public Interface IVideo
     ''' <summary>
     ''' A string containing only the major and minor version of the driver.
     ''' </summary>
-    ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented</b></p> This must be in the form "n.n".
     ''' It should not to be confused with the <see cref="P:ASCOM.DeviceInterface.IVideo.InterfaceVersion"/> property, which is the version of this specification supported by the 
     ''' driver.
@@ -237,7 +200,7 @@ Public Interface IVideo
     ''' <summary>
     ''' The interface version number that this device supports. Should return 2 for this interface version.
     ''' </summary>
-    ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
     ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
     ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
@@ -248,7 +211,7 @@ Public Interface IVideo
     ''' <summary>
     ''' The short name of the driver, for display purposes.
     ''' </summary>
-    ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
     ''' </remarks>
     ReadOnly Property Name() As String
@@ -262,7 +225,7 @@ Public Interface IVideo
     ''' Launches a configuration dialog box for the driver.  The call will not return
     ''' until the user clicks OK or cancel manually.
     ''' </summary>
-    ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
     ''' </remarks>
     Sub SetupDialog()
@@ -282,7 +245,7 @@ Public Interface IVideo
     ''' of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to 
     ''' perform an action that it does not support.</exception>
     ''' <exception cref="NotConnectedException">If the driver is not connected.</exception>
-    ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
     ''' <example>Suppose filter wheels start to appear with automatic wheel changers; new actions could 
     ''' be “FilterWheel:QueryWheels” and “FilterWheel:SelectWheel”. The former returning a 
     ''' formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate 
@@ -298,7 +261,7 @@ Public Interface IVideo
     ''' <para>
     ''' It is recommended that UniqueActionNames should be a maximum of 16 characters for legibility.
     ''' Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of 
-    ''' “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
+    ''' "General" will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
     ''' and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
     '''	<para>The names of all supported actions must bre returned in the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/> property.</para>
     ''' </remarks>
@@ -309,7 +272,7 @@ Public Interface IVideo
     ''' Returns the list of action names supported by this driver.
     ''' </summary>
     '''	<value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
-    '''	<exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    '''	<exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a 
     ''' <see cref="PropertyNotImplementedException"/>.
     ''' <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
@@ -354,7 +317,7 @@ Public Interface IVideo
     ''' The frame reate at which the camera is running. 
     ''' </summary>
     ''' <remarks>
-    ''' Analogue cameras run in one of the two fixes frame rates - 25fps for PAL video and 29.97fps for NTSC video. Digital cameras usually can run on variable framerate.
+    ''' Analogue cameras run in one of the two fixes frame rates - 25fps for PAL video and 29.97fps for NTSC video. Digital cameras usually can run at a variable framerate.
     ''' </remarks>
     ReadOnly Property FrameRate() As VideoCameraFrameRate
 
@@ -369,15 +332,15 @@ Public Interface IVideo
     ''' </remarks>
     ''' <value>The list of supported integration rates in seconds.</value>
     ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
-    ''' <exception cref="PropertyNotImplementedException">Must throw exception if camera supports only one integration rate (exposure) that cannot be changed.</exception>		
+    ''' <exception cref="PropertyNotImplementedException">Must throw exception if camera supports only one integration rate (exposure) that cannot be changed.</exception>
     ReadOnly Property SupportedIntegrationRates() As ArrayList
 
 
     ''' <summary>
-    '''	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/> array for the selected camera integration rate
+    '''	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/> array for the selected camera integration rate.
     '''	</summary>
     '''	<value>Integer index for the current camera integration rate in the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/> string array.</value>
-    '''	<returns>Index into the SupportedIntegrationRates array for the selected camera integration rate</returns>
+    '''	<returns>Index into the SupportedIntegrationRates array for the selected camera integration rate.</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''	<exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
@@ -391,21 +354,17 @@ Public Interface IVideo
 
 
     ''' <summary>
-    ''' Returns a <see cref="DeviceInterface.IVideoFrame"/> with its <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> property populated. 
+    ''' Returns an <see cref="DeviceInterface.IVideoFrame"/> with its <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> property populated. 
     ''' </summary>
-    ''' <remarks>
-    ''' The <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArrayVariant"/> property of the video frame will not be populated. Use the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant"/> property
-    ''' to obtain a video frame that has the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArrayVariant"/> populated.
-    ''' </remarks>
     ''' <value>The video frame.</value>
     ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
-    ''' <exception cref="InvalidOperationException">If called before any video frame has been taken</exception>	
+    ''' <exception cref="InvalidOperationException">If called before any video frame has been taken.</exception>
     ReadOnly Property LastVideoFrame() As IVideoFrame
 
     ''' <summary>
-    ''' Sensor name
+    ''' Sensor name.
     ''' </summary>
-    '''	<returns>The name of sensor used within the camera</returns>
+    '''	<returns>The name of sensor used within the camera.</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''	<remarks>Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
@@ -424,19 +383,17 @@ Public Interface IVideo
     '''	in place for color sensors.</para>
     '''	<para>It is recommended that this function be called only after a <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> is established with 
     '''	the camera hardware, to ensure that the driver is aware of the capabilities of the specific camera model.</para>
-    '''	<para>This is only available for the Camera Interface Version 2</para>
     '''	</remarks>
     ReadOnly Property SensorName() As String
 
     ''' <summary>
-    '''Type of colour information returned by the the camera sensor
+    '''Type of colour information returned by the the camera sensor.
     '''</summary>
     '''   <value></value>
     '''   <returns>The <see cref="DeviceInterface.SensorType"/> enum value of the camera sensor</returns>
     '''   <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''active <see cref="P:ASCOM.DeviceInterface.ICameraV2.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''   <remarks>
-    '''       <para>This is only available for the Camera Interface Version 2</para>
     '''       <para><see cref="P:ASCOM.DeviceInterface.ICameraV2.SensorType"/> returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes.  
     '''The following values are defined:</para>
     '''       <para>
@@ -746,26 +703,11 @@ Public Interface IVideo
     '''   </remarks>
     ReadOnly Property SensorType() As SensorType
 
-
-    ''' <summary>
-    '''	Returns the width of the video camera CCD chip in unbinned pixels.
-    '''	</summary>
-    '''	<value>The size of the camera X.</value>
-    '''	<exception cref="NotConnectedException">Must throw exception if the value is not known</exception>
-    ReadOnly Property CameraXSize() As Integer
-
-    ''' <summary>
-    '''	Returns the height of the video camera CCD chip in unbinned pixels.
-    '''	</summary>
-    '''	<value>The size of the camera Y.</value>
-    '''	<exception cref="NotConnectedException">Must throw exception if the value is not known</exception>
-    ReadOnly Property CameraYSize() As Integer
-
     ''' <summary>
     '''	Returns the width of the video frame in pixels.
     '''	</summary>
     '''	<value>The video frame width.</value>
-    '''	<exception cref="NotConnectedException">Must throw exception if the value is not known</exception>
+    '''	<exception cref="NotConnectedException">Must throw exception if the value is not known.</exception>
     ''' <remarks>
     ''' For analogue video cameras working via a frame grabber the dimensions of the video frames may be different than the dimension of the CCD chip
     ''' </remarks>
@@ -775,7 +717,7 @@ Public Interface IVideo
     '''	Returns the height of the video frame in pixels.
     '''	</summary>
     '''	<value>The video frame height.</value>
-    '''	<exception cref="NotConnectedException">Must throw exception if the value is not known</exception>
+    '''	<exception cref="NotConnectedException">Must throw exception if the value is not known.</exception>
     ''' <remarks>
     ''' For analogue video cameras working via a frame grabber the dimensions of the video frames may be different than the dimension of the CCD chip
     ''' </remarks>
@@ -784,26 +726,25 @@ Public Interface IVideo
     ''' <summary>
     '''	Returns the width of the CCD chip pixels in microns.
     '''	</summary>
-    '''	<value>The pixel size X.</value>
-    '''	<exception cref="NotImplementedException">Must throw exception if data unavailable.</exception>
+    '''	<value>The pixel size X if known.</value>
     ReadOnly Property PixelSizeX() As Double
 
     ''' <summary>
     '''	Returns the height of the CCD chip pixels in microns.
     '''	</summary>
-    '''	<value>The pixel size Y.</value>
-    '''	<exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
+    '''	<value>The pixel size Y if known.</value>
     ReadOnly Property PixelSizeY() As Double
 
     ''' <summary>
     '''	Reports the bit depth the camera can produce.
     '''	</summary>
-    '''	<value>The bit depth per pixel.</value>
+    '''	<value>The bit depth per pixel. Typical analogue videos are 8-bit while some digital cameras provide 12, 14 or 16-bit images.</value>
     '''	<exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property BitDepth() As Integer
 
     ''' <summary>
-    ''' Returns the video codec used to record the video file, e.g. XVID, DVSD, YUY2, HFYU etc. For AVI files this is usually the FourCC identifier of the codec. If no codec is used an empty string must be returned.
+    ''' Returns the video codec used to record the video file, e.g. XVID, DVSD, YUY2, HFYU etc. For AVI files this is usually the FourCC identifier of the codec. 
+    ''' If no codec is used an empty string must be returned.
     ''' </summary>
     ReadOnly Property VideoCodec() As String
 
@@ -816,10 +757,9 @@ Public Interface IVideo
     '''	The size of the video frame buffer. 
     '''	</summary>
     '''	<value>The size of the video frame buffer. </value>
-    '''	<remarks><p style="color:red"><b>Must be implemented</b></p> When retrieving video frames using the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame" /> and 
-    ''' <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant" /> properties the driver may use a buffer to queue the frames waiting to be read by 
-    ''' the client. This property returns the size of the buffer in frames or if no buffering is supported then the value of less than 2 should be returned. The size 
-    ''' of the buffer can be controlled by the end user from the driver setup dialog. 
+    '''	<remarks><p style="color:red"><b>Must be implemented</b></p> When retrieving video frames using the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame" /> property 
+    ''' the driver may use a buffer to queue the frames waiting to be read by the client. This property returns the size of the buffer in frames or 
+    ''' if no buffering is supported then the value of less than 2 should be returned. The size of the buffer can be controlled by the end user from the driver setup dialog. 
     '''	</remarks>
     ReadOnly Property VideoFramesBufferSize() As Integer
 
@@ -842,31 +782,31 @@ Public Interface IVideo
     Sub StopRecordingVideoFile()
 
     ''' <summary>
-    '''	Returns the current camera operational state
+    '''	Returns the current camera operational state.
     '''	</summary>
     '''	<remarks>
     '''	Returns one of the following status information:
     '''	<list type="bullet">
     '''		<listheader><description>Value  State           Meaning</description></listheader>
     '''		<item><description>0      CameraIdle      At idle state, camera is available for commands</description></item>
-    '''		<item><description>1      CameraBusy	  The camera is waiting for operation to complete. The camera is not responding to commands right now</description></item>
-    '''		<item><description>2      CameraRunning	  The camera is running and video frames are available for viewing and recording</description></item>
-    '''		<item><description>3      CameraRecording The camera is running and recording a video</description></item>
-    '''		<item><description>4      CameraError     Camera error condition serious enough to prevent further operations (connection fail, etc.).</description></item>
+    '''		<item><description>1      CameraRunning	  The camera is running and video frames are available for viewing and recording</description></item>
+    '''		<item><description>2      CameraRecording The camera is running and recording a video</description></item>
+    '''		<item><description>3      CameraError     Camera error condition serious enough to prevent further operations (connection fail, etc.).</description></item>
     '''	</list>
+    ''' <para>CameraIdle and CameraBusy are optional states. Free running cameras cannot be stopped and don't have a CameraIdle state. When those cameras are powered they immediately enter CameraRunning state. Some digital cameras or vdeo systems may suport operations that take longer to complete and may support a CameraBusy state.</para>
     '''	</remarks>
     '''	<value>The state of the camera.</value>
     '''	<exception cref="NotConnectedException">Must return an exception if the camera status is unavailable.</exception>
     ReadOnly Property CameraState() As VideoCameraState
 
     ''' <summary>
-    '''	Maximum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/>
+    '''	Maximum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/>.
     '''	</summary>
     '''	<value>Short integer representing the maximum gain value supported by the camera.</value>
     '''	<returns>The maximum gain value that this camera supports</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if GainMax is not supported</exception>
+    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if GainMax is not supported.</exception>
     '''	<remarks>When specifying the gain setting with an integer value, <see cref="P:ASCOM.DeviceInterface.IVideo.GainMax"/> is used in conjunction with <see cref="P:ASCOM.DeviceInterface.IVideo.GainMin"/> to 
     '''	specify the range of valid settings.
     '''	<para><see cref="P:ASCOM.DeviceInterface.IVideo.GainMax"/> shall be greater than <see cref="P:ASCOM.DeviceInterface.IVideo.GainMin"/>. If either is available, then both must be available.</para>
@@ -877,12 +817,12 @@ Public Interface IVideo
     ReadOnly Property GainMax() As Short
 
     ''' <summary>
-    '''	Minimum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/>
+    '''	Minimum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/>.
     '''	</summary>
     '''	<returns>The minimum gain value that this camera supports</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if GainMin is not supported</exception>
+    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if GainMin is not supported.</exception>
     '''	<remarks>When specifying the gain setting with an integer value, <see cref="P:ASCOM.DeviceInterface.IVideo.GainMin"/> is used in conjunction with <see cref="P:ASCOM.DeviceInterface.IVideo.GainMax"/> to 
     '''	specify the range of valid settings.
     '''	<para><see cref="P:ASCOM.DeviceInterface.IVideo.GainMax"/> shall be greater than <see cref="P:ASCOM.DeviceInterface.IVideo.GainMin"/>. If either is available, then both must be available.</para>
@@ -893,14 +833,14 @@ Public Interface IVideo
     ReadOnly Property GainMin() As Short
 
     ''' <summary>
-    '''	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.Gains"/> array for the selected camera gain
+    '''	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.Gains"/> array for the selected camera gain.
     '''	</summary>
     '''	<value>Short integer index for the current camera gain in the <see cref="P:ASCOM.DeviceInterface.IVideo.Gains"/> string array.</value>
     '''	<returns>Index into the Gains array for the selected camera gain</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''	<exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if gain is not supported</exception>
+    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if gain is not supported.</exception>
     '''	<remarks>
     '''	<see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/> can be used to adjust the gain setting of the camera, if supported. There are two typical usage scenarios:
     '''	<ul>
@@ -914,7 +854,7 @@ Public Interface IVideo
 
 
     ''' <summary>
-    ''' Gains supported by the camera
+    ''' Gains supported by the camera.
     '''	</summary>
     '''	<returns>An ArrayList of gain names or values</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
@@ -932,7 +872,7 @@ Public Interface IVideo
 
 
     ''' <summary>
-    '''	Maximum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/>
+    '''	Maximum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/>.
     '''	</summary>
     '''	<value>Short integer representing the maximum gamma value supported by the camera.</value>
     '''	<returns>The maximum gain value that this camera supports</returns>
@@ -949,12 +889,12 @@ Public Interface IVideo
     ReadOnly Property GammaMax() As Short
 
     ''' <summary>
-    '''	Minimum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/>
+    '''	Minimum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/>.
     '''	</summary>
     '''	<returns>The minimum gamma value that this camera supports</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if GammaMin is not supported</exception>
+    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if GammaMin is not supported.</exception>
     '''	<remarks>When specifying the gamma setting with an integer value, <see cref="P:ASCOM.DeviceInterface.IVideo.GammaMin"/> is used in conjunction with <see cref="P:ASCOM.DeviceInterface.IVideo.GammaMax"/> to 
     '''	specify the range of valid settings.
     '''	<para><see cref="P:ASCOM.DeviceInterface.IVideo.GammaMax"/> shall be greater than <see cref="P:ASCOM.DeviceInterface.IVideo.GammaMin"/>. If either is available, then both must be available.</para>
@@ -966,14 +906,14 @@ Public Interface IVideo
 
 
     ''' <summary>
-    '''	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> array for the selected camera gamma
+    '''	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> array for the selected camera gamma.
     '''	</summary>
     '''	<value>Short integer index for the current camera gamma in the <see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> string array.</value>
     '''	<returns>Index into the Gammas array for the selected camera gamma</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''	<exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if gamma is not supported</exception>
+    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if gamma is not supported.</exception>
     '''	<remarks>
     '''	<see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/> can be used to adjust the gamma setting of the camera, if supported. There are two typical usage scenarios:
     '''	<ul>
@@ -986,7 +926,7 @@ Public Interface IVideo
     Property Gamma() As Short
 
     ''' <summary>
-    ''' Gammas supported by the camera
+    ''' Gammas supported by the camera.
     '''	</summary>
     '''	<returns>An ArrayList of gamma names or values</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 

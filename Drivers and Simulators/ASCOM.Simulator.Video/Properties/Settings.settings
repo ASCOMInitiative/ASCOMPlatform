@@ -68,9 +68,6 @@
     <Setting Name="BufferSize" Type="System.Int16" Scope="User">
       <Value Profile="(Default)">32</Value>
     </Setting>
-    <Setting Name="ShowCompressionDialog" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="SupportsGammaRange" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>

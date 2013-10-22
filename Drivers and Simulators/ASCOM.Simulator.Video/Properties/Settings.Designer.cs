@@ -205,7 +205,7 @@ namespace ASCOM.Simulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("OFF#;LO#;HI")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Gammas {
             get {
                 return ((string)(this["Gammas"]));
@@ -284,18 +284,6 @@ namespace ASCOM.Simulator.Properties {
             }
             set {
                 this["BufferSize"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowCompressionDialog {
-            get {
-                return ((bool)(this["ShowCompressionDialog"]));
-            }
-            set {
-                this["ShowCompressionDialog"] = value;
             }
         }
         

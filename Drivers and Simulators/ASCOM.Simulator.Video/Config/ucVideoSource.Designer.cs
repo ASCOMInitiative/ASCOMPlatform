@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.cbxShowCompressionDialog = new System.Windows.Forms.CheckBox();
             this.pnlBufferingControls = new System.Windows.Forms.Panel();
             this.label17 = new System.Windows.Forms.Label();
             this.nudBufferSize = new System.Windows.Forms.NumericUpDown();
@@ -45,16 +44,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudBufferSize)).BeginInit();
             this.pnlUserBitmaps.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // cbxShowCompressionDialog
-            // 
-            this.cbxShowCompressionDialog.AutoSize = true;
-            this.cbxShowCompressionDialog.Location = new System.Drawing.Point(6, 223);
-            this.cbxShowCompressionDialog.Name = "cbxShowCompressionDialog";
-            this.cbxShowCompressionDialog.Size = new System.Drawing.Size(179, 17);
-            this.cbxShowCompressionDialog.TabIndex = 29;
-            this.cbxShowCompressionDialog.Text = "Show Video Compression Dialog";
-            this.cbxShowCompressionDialog.UseVisualStyleBackColor = true;
             // 
             // pnlBufferingControls
             // 
@@ -175,7 +164,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlText;
-            this.Controls.Add(this.cbxShowCompressionDialog);
             this.Controls.Add(this.pnlBufferingControls);
             this.Controls.Add(this.cbxBuffering);
             this.Controls.Add(this.pnlUserBitmaps);
@@ -196,8 +184,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.CheckBox cbxShowCompressionDialog;
-		private System.Windows.Forms.Panel pnlBufferingControls;
+        private System.Windows.Forms.Panel pnlBufferingControls;
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.NumericUpDown nudBufferSize;
 		private System.Windows.Forms.Label label16;

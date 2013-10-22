@@ -69,6 +69,27 @@ namespace ASCOM.Simulator.Properties
 			}
 		}
 
+        internal void ResetDefaults()
+        {
+            ResetCommonDefaults();
+
+            CameraType = SiumulatedCameraType.AnalogueIntegrating;
+            SupportedExposuresList = "0.04#;0.08#;0.16#;0.32#;0.64#;1.28#;2.56#;5.12#;10.24";
+            ExposureMin = 0.04;
+            ExposureMax = 0.04;
+            SensorName = "ICX285AL";
+            BitDepth = 8;
+            VideoFileFormat = "AVI";
+            GainMin = 0;
+            GainMax = 32;
+            Gains = "";
+            SupportsGainRange = true;
+            Gammas = "OFF#;LO#;HI";
+            GammaMin = 0;
+            GammaMax = 0;
+            SupportsGammaRange = false;
+        }
+
 		internal void Reset(SiumulatedCameraType cameraType)
 		{
 			switch(cameraType)
@@ -121,6 +142,9 @@ namespace ASCOM.Simulator.Properties
 			Gains = "";
 			SupportsGainRange = false;
 			Gammas = "";
+		    GammaMin = 0;
+            GammaMax = 0;
+            SupportsGammaRange = false;
 		}
 
 		private void ResetAnalogueIntegratingDefaults()
@@ -139,6 +163,7 @@ namespace ASCOM.Simulator.Properties
 			Gains = "";
 			SupportsGainRange = true;
 			Gammas = "OFF (1.00)#;LO (0.45)#;HI (0.35)";
+		    SupportsGammaRange = false;
 		}
 
 		private void ResetDigitalDefaults()
@@ -157,6 +182,7 @@ namespace ASCOM.Simulator.Properties
 			Gains = "";
 			SupportsGainRange = true;
 			Gammas = "MIN (3.0)#;OFF#;LO#;HI#;MAX (0.25)";
+            SupportsGammaRange = false;
 		}
 
 		private void ResetVideoSystemDefaults()
@@ -175,6 +201,7 @@ namespace ASCOM.Simulator.Properties
 			SupportsGainRange = false;
 			Gains = "0#;1#;2#;3#;4#;5#;6#;7#;8#;9#;10#;11#;12#;13#;14#;15#;16#;17#;18#;19#;20#;21#;22#;23#;24#;25#;26#;27#;";
 			Gammas = "MIN (3.0)#;OFF#;1.333#;LO#;HI#;MAX(0.25)";
+            SupportsGammaRange = false;
 		}
 	}
 }

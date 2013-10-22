@@ -439,28 +439,6 @@ namespace ASCOM.Simulator
 			get { return camera.SensorType; }
 		}
 
-		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if the value is not known</exception>
-		public int CameraXSize
-		{
-			get
-			{
-				AssertConnected();
-
-				return camera.ImageWidth;
-			}
-		}
-
-		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if the value is not known</exception>
-		public int CameraYSize
-		{
-			get
-			{
-				AssertConnected();
-
-				return camera.ImageHeight;
-			}
-		}
-
 		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
 		public double PixelSizeX
 		{
@@ -556,7 +534,7 @@ namespace ASCOM.Simulator
 					throw new InvalidOperationException("The current state of the video camera doesn't allow a recording operation to begin right now.");
 
 				if (Settings.Default.UseBuffering)
-					throw new DriverException("The IVideo Simulator only supports recording in a non-buffering mode.");
+					throw new DriverException("The IVideo Simulator doesn't support recording in buffering mode.");
 
 				string directory = Path.GetDirectoryName(PreferredFileName);
 
