@@ -234,9 +234,9 @@ namespace Simulator.VideoCameraImpl
 
 			try
 			{
-				using (MemoryStream decompressedData = new MemoryStream())
+				using (var decompressedData = new MemoryStream())
 				{
-					using (FileStream sourceFile = new FileStream(occultationVideoFileName, FileMode.Open))
+					using (var sourceFile = new FileStream(occultationVideoFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
 					using (var gzip = new GZipStream(sourceFile, CompressionMode.Decompress))
 					{
 						const int size = 4096;
@@ -666,10 +666,15 @@ namespace Simulator.VideoCameraImpl
 
 		public void StartRecording(string fileName, double fps, bool showCompressionDialog)
 		{
-			if (!isRecording)
-                aviTools.StartNewAviFile(fileName, width, height, 8, fps, showCompressionDialog);
+		    if (!isRecording)
+		    {
+                if (integration > 1)
+                    throw new DriverException("The IVideo Simulator doesn't support recording when camera is integrating.");
 
-			isRecording = true;
+		        aviTools.StartNewAviFile(fileName, width, height, 8, fps, showCompressionDialog);
+		    }
+
+		    isRecording = true;
 		}
 
 		public void StopRecording()

@@ -34,7 +34,8 @@ namespace ASCOM.Simulator
 		{
 			if (rbDriverDefaults.Checked)
 			{
-				Settings.Default.Reset();
+				Settings.Default.ResetDefaults();
+                Settings.Default.Save();
 			}
 			else
 			{

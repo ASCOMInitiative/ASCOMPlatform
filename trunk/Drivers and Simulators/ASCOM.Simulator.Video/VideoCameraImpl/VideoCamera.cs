@@ -571,7 +571,7 @@ namespace Simulator.VideoCameraImpl
 						throw new DriverException("Cannot determine FPS rate for video.");
 				}
 
-				bitmapPlayer.StartRecording(PreferredFileName, fps, Settings.Default.ShowCompressionDialog);
+                bitmapPlayer.StartRecording(PreferredFileName, fps, false);
 
 				cameraState = VideoCameraState.videoCameraRecording;
 

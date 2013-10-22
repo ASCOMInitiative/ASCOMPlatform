@@ -24,7 +24,6 @@ namespace ASCOM.Simulator.Config
 
 			cbxBuffering.Checked = Properties.Settings.Default.UseBuffering;
 			nudBufferSize.Value = Properties.Settings.Default.BufferSize;
-			cbxShowCompressionDialog.Checked = Properties.Settings.Default.ShowCompressionDialog;
 
 			pnlUserBitmaps.Enabled = !rbDriverDefaultSource.Checked;
 			pnlBufferingControls.Enabled = cbxBuffering.Checked;
@@ -57,8 +56,6 @@ namespace ASCOM.Simulator.Config
 			Properties.Settings.Default.UseBuffering = cbxBuffering.Checked;
 			if (Properties.Settings.Default.UseBuffering)
 				Properties.Settings.Default.BufferSize = (short)nudBufferSize.Value;
-
-			Properties.Settings.Default.ShowCompressionDialog = cbxShowCompressionDialog.Checked;
 		}
 
 		private bool ValidateBitmapFilesLocation()
