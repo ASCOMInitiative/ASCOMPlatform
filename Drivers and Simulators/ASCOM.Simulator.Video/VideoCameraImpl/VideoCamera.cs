@@ -436,7 +436,7 @@ namespace Simulator.VideoCameraImpl
 
 					case SiumulatedCameraType.Digital:
 					case SiumulatedCameraType.VideoSystem:
-						return VideoCameraFrameRate.Digital;
+						return VideoCameraFrameRate.Variable;
 
 					default:
 						throw new IndexOutOfRangeException();
@@ -564,7 +564,7 @@ namespace Simulator.VideoCameraImpl
 						fps = 29.97;
 						break;
 
-					case VideoCameraFrameRate.Digital:
+					case VideoCameraFrameRate.Variable:
 						throw new DriverException("The driver simulator can only save video files for simulated analogue video cameras.");
 
 					default:
