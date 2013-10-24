@@ -266,7 +266,7 @@ namespace ASCOM.Setup
             Type aiVbcType = asm.GetType("ASCOM.DeviceInterface.IVideo", true, true);
 
             ASCOMInterface aivbc = new ASCOMInterface(aiVbcType.Name);
-
+            aivbc.InterfaceName = "DirectShowVideoBase, Video";
             interfaceList.Add("VideoUsingBaseClass", aivbc);
             cbDeviceClass.Items.Add("VideoUsingBaseClass");
         }
@@ -274,7 +274,7 @@ namespace ASCOM.Setup
         private class ASCOMInterface
         {
             internal string Name { get; private set; }
-            internal string InterfaceName { get; private set; }
+            internal string InterfaceName { get; set; }
             internal string InterfaceVersion { get; set; }
 
             internal ASCOMInterface(string interfaceName)
