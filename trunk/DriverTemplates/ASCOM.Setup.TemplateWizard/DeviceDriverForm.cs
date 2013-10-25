@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using System.Diagnostics;
 using ASCOM.Utilities;
 
 namespace ASCOM.Setup
@@ -241,6 +242,17 @@ namespace ASCOM.Setup
             TL.LogMessage("InitASCOMClasses", "Started");
             interfaceList = new Dictionary<string, ASCOMInterface>();
             cbDeviceClass.Items.Clear();
+            try
+            {
+                string caller1 = new StackFrame(1, true).GetMethod().Name;
+                string caller2 = new StackFrame(2, true).GetMethod().Name;
+                TL.LogMessage("InitASCOMClasses", "Caller1: " + caller1 + ", Caller2: " + caller2);
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("InitASCOMClasses", "Exception: " + ex.ToString());
+            }
+
             // get a list of the current interfaces
             Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
             // look for the interfaces
@@ -266,7 +278,7 @@ namespace ASCOM.Setup
             Type aiVbcType = asm.GetType("ASCOM.DeviceInterface.IVideo", true, true);
 
             ASCOMInterface aivbc = new ASCOMInterface(aiVbcType.Name);
-            aivbc.InterfaceName = "DirectShowVideoBase, Video";
+            aivbc.InterfaceName = "DirectShowVideoBase, IVideo";
             interfaceList.Add("VideoUsingBaseClass", aivbc);
             cbDeviceClass.Items.Add("VideoUsingBaseClass");
         }
