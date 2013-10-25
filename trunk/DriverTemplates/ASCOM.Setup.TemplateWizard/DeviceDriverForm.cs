@@ -44,7 +44,6 @@ namespace ASCOM.Setup
             TL.Enabled = true;
 
             InitASCOMClasses();
-            this.cbDeviceClass.SelectedIndex = 7; // Select Telescope as the default
         }
 
         /// <summary>
@@ -298,6 +297,7 @@ namespace ASCOM.Setup
                         }
                     }
                 }
+                this.cbDeviceClass.SelectedIndex = 7; // Select Telescope as the default
             }
 
             if (new StackFrame(3, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.VideoUsingBaseClassWizard)) // Form called from VideoUsingBaseClass wizard
@@ -309,6 +309,8 @@ namespace ASCOM.Setup
                 aivbc.InterfaceName = "DirectShowVideoBase, IVideo";
                 interfaceList.Add("VideoUsingBaseClass", aivbc);
                 cbDeviceClass.Items.Add("VideoUsingBaseClass");
+
+                this.cbDeviceClass.SelectedIndex = 0; // Select VideoUsingBaseClass as the default
             }
         }
 
