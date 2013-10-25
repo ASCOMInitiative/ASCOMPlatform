@@ -264,49 +264,52 @@ namespace ASCOM.Setup
             cbDeviceClass.Items.Clear();
             try
             {
-
                 CheckType(1);
                 CheckType(2);
                 CheckType(3);
                 CheckType(4);
-                //CheckType(new StackFrame(5, true).GetMethod().GetType(), 5);
-                //CheckType(new StackFrame(6, true).GetMethod().GetType(), 6);
-
-
             }
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("InitASCOMClasses", "Exception: " + ex.ToString());
             }
 
-            // get a list of the current interfaces
-            Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-            // look for the interfaces
-            foreach (var type in asm.GetExportedTypes())
+            if (new StackFrame(3, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.DriverWizard)) // Form called from DriverWizard
             {
-                if (type.IsInterface)
+                // get a list of the current interfaces
+                Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                // look for the interfaces
+                foreach (var type in asm.GetExportedTypes())
                 {
-                    // only add those with the SetupDialog method,
-                    // so the extra telescope classes are not added
-                    var p = type.GetMethod("SetupDialog");
-                    if (p != null && p.Name == "SetupDialog")
+                    if (type.IsInterface)
                     {
-                        // get the class name by removing the leading I and the training Vn
-                        string name = type.Name.Substring(1);
-                        name = name.TrimEnd('1', '2', '3', '4', 'V');
-                        ASCOMInterface ai = new ASCOMInterface(type.Name);
-                        interfaceList.Add(ai.Name, ai);
-                        cbDeviceClass.Items.Add(ai.Name);
-                        TL.LogMessage("InitASCOMClasses", "Added: " + ai.Name + " " + name + " " + type.Name + " " + type.Namespace.ToString() + " " + type.FullName);
+                        // only add those with the SetupDialog method,
+                        // so the extra telescope classes are not added
+                        var p = type.GetMethod("SetupDialog");
+                        if (p != null && p.Name == "SetupDialog")
+                        {
+                            // get the class name by removing the leading I and the training Vn
+                            string name = type.Name.Substring(1);
+                            name = name.TrimEnd('1', '2', '3', '4', 'V');
+                            ASCOMInterface ai = new ASCOMInterface(type.Name);
+                            interfaceList.Add(ai.Name, ai);
+                            cbDeviceClass.Items.Add(ai.Name);
+                            TL.LogMessage("InitASCOMClasses", "Added: " + ai.Name + " " + name + " " + type.Name + " " + type.Namespace.ToString() + " " + type.FullName);
+                        }
                     }
                 }
             }
-            Type aiVbcType = asm.GetType("ASCOM.DeviceInterface.IVideo", true, true);
 
-            ASCOMInterface aivbc = new ASCOMInterface(aiVbcType.Name);
-            aivbc.InterfaceName = "DirectShowVideoBase, IVideo";
-            interfaceList.Add("VideoUsingBaseClass", aivbc);
-            cbDeviceClass.Items.Add("VideoUsingBaseClass");
+            if (new StackFrame(3, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.VideoUsingBaseClassWizard)) // Form called from VideoUsingBaseClass wizard
+            {
+                Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+                Type aiVbcType = asm.GetType("ASCOM.DeviceInterface.IVideo", true, true);
+
+                ASCOMInterface aivbc = new ASCOMInterface(aiVbcType.Name);
+                aivbc.InterfaceName = "DirectShowVideoBase, IVideo";
+                interfaceList.Add("VideoUsingBaseClass", aivbc);
+                cbDeviceClass.Items.Add("VideoUsingBaseClass");
+            }
         }
 
         private class ASCOMInterface
