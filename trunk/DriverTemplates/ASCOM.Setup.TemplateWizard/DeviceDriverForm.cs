@@ -237,7 +237,7 @@ namespace ASCOM.Setup
             StackFrame stack1 = new StackFrame(level, true);
             TL.LogMessage("CheckType", "Level: " + level + ", Type Name: " + stack1.GetMethod().Name + ", ReflectedType Name: " + stack1.GetMethod().ReflectedType.Name + ", ReflectedType Namespace: " + stack1.GetMethod().ReflectedType.Namespace);
 
-            Type type1 = stack1.GetMethod().GetType();
+            Type type1 = stack1.GetMethod().ReflectedType;
             TL.LogMessage("CheckType", "Method Type Name: " + type1.Name);
             if (type1 == typeof(ASCOM.Setup.VideoUsingBaseClassWizard))
             {
