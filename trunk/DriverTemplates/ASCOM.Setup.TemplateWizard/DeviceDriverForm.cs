@@ -273,7 +273,7 @@ namespace ASCOM.Setup
                 TL.LogMessageCrLf("InitASCOMClasses", "Exception: " + ex.ToString());
             }
 
-            if (new StackFrame(3, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.DriverWizard)) // Form called from DriverWizard
+            if (new StackFrame(2, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.DriverWizard)) // Form called from DriverWizard
             {
                 // get a list of the current interfaces
                 Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
@@ -300,7 +300,7 @@ namespace ASCOM.Setup
                 this.cbDeviceClass.SelectedIndex = 7; // Select Telescope as the default
             }
 
-            if (new StackFrame(3, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.VideoUsingBaseClassWizard)) // Form called from VideoUsingBaseClass wizard
+            if (new StackFrame(2, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.VideoUsingBaseClassWizard)) // Form called from VideoUsingBaseClass wizard
             {
                 Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
                 Type aiVbcType = asm.GetType("ASCOM.DeviceInterface.IVideo", true, true);
@@ -309,6 +309,7 @@ namespace ASCOM.Setup
                 aivbc.InterfaceName = "DirectShowVideoBase, IVideo";
                 interfaceList.Add("VideoUsingBaseClass", aivbc);
                 cbDeviceClass.Items.Add("VideoUsingBaseClass");
+                TL.LogMessage("InitASCOMClasses", "Added: VideoUsingBaseClass");
 
                 this.cbDeviceClass.SelectedIndex = 0; // Select VideoUsingBaseClass as the default
             }
