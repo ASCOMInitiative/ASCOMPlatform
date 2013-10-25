@@ -232,13 +232,13 @@ namespace ASCOM.Setup
             errorProvider.SetError(this.txtOrganizationName, String.Empty);
         }
 
-        private void CheckType(Type type1, int level)
+        private void CheckType(int level)
         {
-            TL.LogMessage("CheckType", "Level: " + level + ", Type: " + type1.Name + ", FullName: " + type1.FullName + ", Namespace: "+ type1.Namespace);
+            StackFrame stack1 = new StackFrame(level, true);
+            TL.LogMessage("CheckType", "Level: " + level + ", Type Name: " + stack1.GetMethod().Name + ", ReflectedType Name: " + stack1.GetMethod().ReflectedType.Name + ", ReflectedType Namespace: " + stack1.GetMethod().ReflectedType.Namespace);
 
-            string caller = new StackFrame(level, true).GetMethod().Name;
-            TL.LogMessage("CheckType", "Caller: " + caller);
-
+            Type type1 = stack1.GetMethod().GetType();
+            TL.LogMessage("CheckType", "Method Type Name: " + type1.Name);
             if (type1 == typeof(ASCOM.Setup.VideoUsingBaseClassWizard))
             {
                 TL.LogMessage("CheckType", "VideoUsingBaseClassWizard: Types match!!!");
@@ -265,10 +265,10 @@ namespace ASCOM.Setup
             try
             {
 
-                CheckType(new StackFrame(1, true).GetMethod().GetType(), 1);
-                CheckType(new StackFrame(2, true).GetMethod().GetType(), 2);
-                CheckType(new StackFrame(3, true).GetMethod().GetType(), 3);
-                CheckType(new StackFrame(4, true).GetMethod().GetType(), 4);
+                CheckType(1);
+                CheckType(2);
+                CheckType(3);
+                CheckType(4);
                 //CheckType(new StackFrame(5, true).GetMethod().GetType(), 5);
                 //CheckType(new StackFrame(6, true).GetMethod().GetType(), 6);
 
