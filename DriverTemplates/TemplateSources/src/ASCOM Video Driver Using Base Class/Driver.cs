@@ -59,7 +59,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
     /// </summary>
     [Guid("3A02C211-FA08-4747-B0BD-4B00EB159297")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Video : DirectShowVideoBase, IVideo
+    public class Video 
     {
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
