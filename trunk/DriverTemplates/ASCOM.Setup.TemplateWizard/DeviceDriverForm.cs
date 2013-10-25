@@ -247,6 +247,35 @@ namespace ASCOM.Setup
                 string caller1 = new StackFrame(1, true).GetMethod().Name;
                 string caller2 = new StackFrame(2, true).GetMethod().Name;
                 TL.LogMessage("InitASCOMClasses", "Caller1: " + caller1 + ", Caller2: " + caller2);
+                
+                Type type1 = new StackFrame(1, true).GetMethod().GetType();
+                TL.LogMessage("InitASCOMClasses", "Type1: " + type1.Name);
+
+                if (type1==typeof(ASCOM.Setup.VideoUsingBaseClassWizard))
+                {
+                    TL.LogMessage("InitASCOMClasses", "VideoUsingBaseClassWizard: Types match!!!");
+                }
+                else TL.LogMessage("InitASCOMClasses", "VideoUsingBaseClassWizard: Types don't match");
+                if (type1 == typeof(ASCOM.Setup.DriverWizard))
+                {
+                    TL.LogMessage("InitASCOMClasses", "DriverWizard: Types match!!!");
+                }
+                else TL.LogMessage("InitASCOMClasses", "DriverWizard: Types don't match");
+
+                Type type2 = new StackFrame(2, true).GetMethod().GetType();
+                TL.LogMessage("InitASCOMClasses", "Type2: " + type2.Name);
+
+                if (type2 == typeof(ASCOM.Setup.VideoUsingBaseClassWizard))
+                {
+                    TL.LogMessage("InitASCOMClasses", "VideoUsingBaseClassWizard: Types match!!!");
+                }
+                else TL.LogMessage("InitASCOMClasses", "VideoUsingBaseClassWizard: Types don't match");
+                if (type2 == typeof(ASCOM.Setup.DriverWizard))
+                {
+                    TL.LogMessage("InitASCOMClasses", "DriverWizard: Types match!!!");
+                }
+                else TL.LogMessage("InitASCOMClasses", "DriverWizard: Types don't match");
+        
             }
             catch (Exception ex)
             {
