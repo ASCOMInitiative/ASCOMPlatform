@@ -245,10 +245,12 @@ namespace ASCOM.Setup
 
             // Get an assembly reference to the DeviceInterfaces assembly
             Assembly DeviceInterfacesAssembly = Assembly.GetAssembly(typeof(DriveRates));
+            TL.LogMessage("InitASCOMClasses", "Found interface assembly: " + DeviceInterfacesAssembly.FullName);
             //Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
 
             // Get the calling type, this allows us to customise the list depending on which wizard called the form
             Type CallingType = new StackFrame(2, false).GetMethod().ReflectedType;
+            TL.LogMessage("InitASCOMClasses", "Found calling type: " + CallingType.FullName);
 
             // Add the relevant device types into the drop-down combo box.
             if (CallingType == typeof(ASCOM.Setup.DriverWizard)) // Form called from DriverWizard
@@ -270,7 +272,7 @@ namespace ASCOM.Setup
                             ASCOMInterface ai = new ASCOMInterface(type.Name);
                             interfaceList.Add(ai.Name, ai);
                             cbDeviceClass.Items.Add(ai.Name);
-                            TL.LogMessage("InitASCOMClasses", "Added: " + ai.Name + " " + name + " " + type.Name + " " + type.Namespace.ToString() + " " + type.FullName);
+                            TL.LogMessage("InitASCOMClasses", "Added device: " + ai.Name + " " + name + " " + type.Name + " " + type.Namespace.ToString() + " " + type.FullName);
                         }
                     }
                 }
@@ -285,7 +287,7 @@ namespace ASCOM.Setup
                 aivbc.InterfaceName = "DirectShowVideoBase, IVideo";
                 interfaceList.Add("VideoUsingBaseClass", aivbc);
                 cbDeviceClass.Items.Add("VideoUsingBaseClass");
-                TL.LogMessage("InitASCOMClasses", "Added: VideoUsingBaseClass");
+                TL.LogMessage("InitASCOMClasses", "Added device: VideoUsingBaseClass");
 
                 this.cbDeviceClass.SelectedIndex = 0; // Select VideoUsingBaseClass as the default
             }
