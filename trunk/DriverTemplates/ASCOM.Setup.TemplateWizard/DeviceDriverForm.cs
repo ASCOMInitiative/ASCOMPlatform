@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Diagnostics;
 using ASCOM.Utilities;
+using ASCOM.DeviceInterface;
 
 namespace ASCOM.Setup
 {
@@ -231,26 +232,6 @@ namespace ASCOM.Setup
             errorProvider.SetError(this.txtOrganizationName, String.Empty);
         }
 
-        private void CheckType(int level)
-        {
-            StackFrame stack1 = new StackFrame(level, true);
-            TL.LogMessage("CheckType", "Level: " + level + ", Type Name: " + stack1.GetMethod().Name + ", ReflectedType Name: " + stack1.GetMethod().ReflectedType.Name + ", ReflectedType Namespace: " + stack1.GetMethod().ReflectedType.Namespace);
-
-            Type type1 = stack1.GetMethod().ReflectedType;
-            TL.LogMessage("CheckType", "Method Type Name: " + type1.Name);
-            if (type1 == typeof(ASCOM.Setup.VideoUsingBaseClassWizard))
-            {
-                TL.LogMessage("CheckType", "VideoUsingBaseClassWizard: Types match!!!");
-            }
-            else TL.LogMessage("CheckType", "VideoUsingBaseClassWizard: Types don't match");
-            if (type1 == typeof(ASCOM.Setup.DriverWizard))
-            {
-                TL.LogMessage("CheckType", "DriverWizard: Types match!!!");
-            }
-            else TL.LogMessage("CheckType", "DriverWizard: Types don't match");
-            TL.BlankLine();
-        }
-
         /// <summary>
         /// Goes through the ASCOM.DeviceInterfaces assembly extracting the interfacces that implement drivers
         /// Use this information to build a list of interfaces with the associated class name and interfacce version
@@ -261,24 +242,20 @@ namespace ASCOM.Setup
             TL.LogMessage("InitASCOMClasses", "Started");
             interfaceList = new Dictionary<string, ASCOMInterface>();
             cbDeviceClass.Items.Clear();
-            try
-            {
-                CheckType(1);
-                CheckType(2);
-                CheckType(3);
-                CheckType(4);
-            }
-            catch (Exception ex)
-            {
-                TL.LogMessageCrLf("InitASCOMClasses", "Exception: " + ex.ToString());
-            }
 
-            if (new StackFrame(2, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.DriverWizard)) // Form called from DriverWizard
+            // Get an assembly reference to the DeviceInterfaces assembly
+            Assembly DeviceInterfacesAssembly = Assembly.GetAssembly(typeof(DriveRates));
+            //Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
+
+            // Get the calling type, this allows us to customise the list depending on which wizard called the form
+            Type CallingType = new StackFrame(2, false).GetMethod().ReflectedType;
+
+            // Add the relevant device types into the drop-down combo box.
+            if (CallingType == typeof(ASCOM.Setup.DriverWizard)) // Form called from DriverWizard
             {
                 // get a list of the current interfaces
-                Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
                 // look for the interfaces
-                foreach (var type in asm.GetExportedTypes())
+                foreach (var type in DeviceInterfacesAssembly.GetExportedTypes())
                 {
                     if (type.IsInterface)
                     {
@@ -302,8 +279,7 @@ namespace ASCOM.Setup
 
             if (new StackFrame(2, true).GetMethod().ReflectedType == typeof(ASCOM.Setup.VideoUsingBaseClassWizard)) // Form called from VideoUsingBaseClass wizard
             {
-                Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
-                Type aiVbcType = asm.GetType("ASCOM.DeviceInterface.IVideo", true, true);
+                Type aiVbcType = DeviceInterfacesAssembly.GetType("ASCOM.DeviceInterface.IVideo", true, true);
 
                 ASCOMInterface aivbc = new ASCOMInterface(aiVbcType.Name);
                 aivbc.InterfaceName = "DirectShowVideoBase, IVideo";
