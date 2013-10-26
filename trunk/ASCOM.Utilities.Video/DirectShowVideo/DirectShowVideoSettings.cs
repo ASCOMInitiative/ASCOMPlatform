@@ -7,11 +7,11 @@ using ASCOM.Utilities.Video;
 
 namespace ASCOM.Utilities.Video.DirectShowVideo
 {
-	public class Settings : System.Configuration.ApplicationSettingsBase
+	public class DirectShowVideoSettings : System.Configuration.ApplicationSettingsBase
 	{
-        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
+        private static DirectShowVideoSettings defaultInstance = ((DirectShowVideoSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new DirectShowVideoSettings())));
 
-        public static Settings Default
+        public static DirectShowVideoSettings Default
         {
             get
             {
@@ -19,9 +19,9 @@ namespace ASCOM.Utilities.Video.DirectShowVideo
             }
         }
 
-        static Settings()
+        static DirectShowVideoSettings()
         {
-            defaultInstance = (Settings)global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings());
+            defaultInstance = (DirectShowVideoSettings)global::System.Configuration.ApplicationSettingsBase.Synchronized(new DirectShowVideoSettings());
         }
 
         [global::System.Configuration.UserScopedSettingAttribute()]

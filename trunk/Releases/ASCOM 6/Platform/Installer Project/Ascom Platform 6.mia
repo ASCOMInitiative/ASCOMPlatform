@@ -459,6 +459,9 @@ Comment
 Code Folding Region
 If
 Comment
+Comment
+Comment
+Comment
 Write to Text File
 Set Variable
 Run Program As
@@ -861,6 +864,8 @@ Install Files
 Install Files
 Install Files
 Install Files
+Comment
+Install Assembly
 Code Folding Region
 Code Folding Region
 Comment
@@ -1395,6 +1400,7 @@ Generate Native Images
 Set Variable
 Generate Native Images
 Generate Native Images
+Generate Native Images
 If
 MessageBalloon
 Run Program
@@ -1413,6 +1419,8 @@ Set Variable
 Run Program
 Write to Text File
 Set Variable
+Run Program
+Write to Text File
 Run Program
 Write to Text File
 Set Variable
@@ -1936,6 +1944,9 @@ $
 {00B62771-F9DA-4050-BAA2-869A972C3131}
 {749C2488-919A-4B66-988F-54DCB6656E51}
 {F633712F-3236-44F8-A464-D0D6E72147D5}
+{AA0A9E98-4505-4CDF-BDCB-5E42BDE88405}
+{C018A183-FF56-47C3-B1C2-A7C4B17D5210}
+{1866E506-8094-49A4-A3E7-D817D70D863F}
 {DE10E5C1-4CF9-4732-9861-80FB87327F72}
 {7B61317B-013C-4700-8591-1E316592BE82}
 {E9DC0155-C3D6-4743-9B1A-377AEBA98DEA}
@@ -2338,6 +2349,8 @@ $
 {FFB2E090-49DC-4DFC-92C9-6D19EAA13CBA}
 {5DC0F9AC-2A6C-42F0-9659-8D84EDD5335D}
 {74637D1B-9953-477D-B248-37E61116F5FC}
+{EC0D8881-BA4D-4A84-A668-C5AA7B3FDDFB}
+{4B341083-A5ED-45AE-A172-4779AA52AD2A}
 {6C55828A-E20D-4893-9192-5A6FAF784400}
 {CD7873F1-AC8F-4CCF-8011-27292C19C5C7}
 {97E1885F-326F-49A8-96A2-DECDAB7F74A1}
@@ -2872,6 +2885,7 @@ $
 {4BEEEFAC-2158-4D7F-AEB3-8356522415CB}
 {5E7B557B-8132-4556-8900-F7E68B10DC00}
 {FC965DFE-3C01-48E2-8994-7396954A69CF}
+{F1DAFA27-C685-472B-8E21-1027C406859F}
 {B91D80B6-B966-4810-8CB0-2DDD18775014}
 {70B6DDE7-2528-4B0A-8AA3-30629DD8CBF6}
 {D381FB30-33B0-4198-9484-4161BCE5D608}
@@ -2892,6 +2906,8 @@ $
 {B9CB367B-31B6-4633-99E1-EB1B680C39C5}
 {E07899B6-9C14-4186-A220-1D0F523C372C}
 {85917D71-415E-4DDD-8EB2-019CC6B3FAE2}
+{87E1E056-5A77-42BD-9559-5158D553F222}
+{0CCB12AE-1F5C-4D75-9056-41655A865545}
 {B1212248-94DF-4B6D-B08F-B040E2521AB3}
 {9799B9BC-7694-40EC-AD01-44B41061805E}
 {C87100E3-69C0-4B38-92D5-BAFF6820110F}
@@ -3272,6 +3288,14 @@ Create a single variable indicating whether any C++ 10 libraries need to be inst
 If Framework 4 is missing then we don't need a message about 3.5 as well!
 {F55721C4-FF36-4744-B662-AFF556A3EEB8}
 Check for .NET 4.0
+{AA0A9E98-4505-4CDF-BDCB-5E42BDE88405}
+
+{C018A183-FF56-47C3-B1C2-A7C4B17D5210}
+DirectVideo is intentionally not uninstalled in case it was already present before the Platform was installed.
+{1866E506-8094-49A4-A3E7-D817D70D863F}
+
+{EC0D8881-BA4D-4A84-A668-C5AA7B3FDDFB}
+Direct Video 2005
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -6563,6 +6587,12 @@ TRUE
 /c MKDIR "$MYDOCUMENTS$\ASCOM"
 TRUE
 
+{87E1E056-5A77-42BD-9559-5158D553F222}
+$NGEN64$
+TRUE
+"DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f"
+TRUE
+RC
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
 $UNINSTALLER$
 
@@ -6610,7 +6640,7 @@ TRUE
 {BFF84894-446B-4B92-AFF6-F5219C1018F9}
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/c copy ASCOM.Attributes.pdb $WINDIR$\Microsoft.NET\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7
+/c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7
 1
 
 
@@ -6621,7 +6651,7 @@ TRUE
 {D5AC913D-FC84-4D27-BBC2-CFC8B965F92E}
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/c copy ASCOM.Astrometry.pdb $WINDIR$\Microsoft.NET\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7
+/c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7
 1
 
 
@@ -6632,7 +6662,7 @@ TRUE
 {1D6E2AC2-5654-4204-BF7C-DFBEAF0CEC98}
 $WINSYSDIR$\Cmd.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/c copy ASCOM.Utilities.pdb $WINDIR$\Microsoft.NET\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7
+/c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7
 1
 
 
@@ -9691,47 +9721,47 @@ FALSE
 TRUE
 {5778CE2F-8FED-4E12-9A33-C54E93166A56}
 $SETUPLOG$
-$RC$ RegAsm32 - Astrometry 5.5.6
+RC: $RC$ RegAsm32 - Astrometry 5.5.6
 FALSE
 TRUE
 {92898746-99DD-45C3-8D5A-1964637876D5}
 $SETUPLOG$
-$RC$ RegAsm32 - Utilities 5.5.6
+RC: $RC$ RegAsm32 - Utilities 5.5.6
 FALSE
 TRUE
 {9557CA78-F3DE-41CB-B2F6-DD5C288E4EB4}
 $SETUPLOG$
-$RC$ RegAsm32 - Astrometry
+RC: $RC$ RegAsm32 - Astrometry
 FALSE
 TRUE
 {7068B001-FF5B-48EE-BFBB-DE3717F6010C}
 $SETUPLOG$
-$RC$ RegAsm32 - Exceptions
+RC: $RC$ RegAsm32 - Exceptions
 FALSE
 TRUE
 {668B004C-E5E4-458C-B306-32EA5A87F0A6}
 $SETUPLOG$
-$RC$ RegAsm32 - Utilities
+RC: $RC$ RegAsm32 - Utilities
 FALSE
 TRUE
 {D3EE1519-10AE-44C6-AABA-9EBFFEB7CF10}
 $SETUPLOG$
-$RC$ RegAsm32 - Camera Simulator
+RC: $RC$ RegAsm32 - Camera Simulator
 FALSE
 TRUE
 {FC315B2C-C5B3-4D4B-A9DF-B3E0FB067F5A}
 $SETUPLOG$
-$RC$ RegAsm32 - Focuser Simulator
+RC: $RC$ RegAsm32 - Focuser Simulator
 FALSE
 TRUE
 {C48CECD1-3D66-44A2-9EC8-4229E0669D62}
 $SETUPLOG$
-$RC$ RegAsm32 - SafetyMonitor Simulator
+RC: $RC$ RegAsm32 - SafetyMonitor Simulator
 FALSE
 TRUE
 {D5C8C5FF-2E88-4DB1-A5D1-070FA506477D}
 $SETUPLOG$
-$RC$ RegAsm32 - Dome Simulator
+RC: $RC$ RegAsm32 - Dome Simulator
 FALSE
 TRUE
 {62D5F2F6-8A84-4E53-8A89-EE67ADE9C792}
@@ -9746,7 +9776,7 @@ FALSE
 TRUE
 {FA881B22-A80A-4A8F-B633-467B4A9D875D}
 $SETUPLOG$
-$RC$ RegAsm32 - Video Utilities
+RC: $RC$ RegAsm32 - Video Utilities
 FALSE
 TRUE
 {B0A8D7AF-C6BE-4D8B-BC11-C678D5B56156}
@@ -9767,6 +9797,11 @@ TRUE
 {6FA06F72-CC64-4DDB-941E-49FA78597383}
 $SETUPLOG$
 RC: $RC11$ RegAsm64 - Video Simulator
+FALSE
+TRUE
+{0CCB12AE-1F5C-4D75-9056-41655A865545}
+$SETUPLOG$
+RC: $RC$ NGen64 Install - DirectShowLib
 FALSE
 TRUE
 {D1949693-A3EA-40AC-80A4-332F441BF441}
@@ -9968,6 +10003,10 @@ TRUE
 ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll
 TRUE
 
+{4B341083-A5ED-45AE-A172-4779AA52AD2A}
+..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll
+TRUE
+
 {9F6EBC19-BF11-471A-A2E2-EFC05352F3DF}
 $SUPPORTDIR$\UninstallAscom.exe
 PLATFORMBUILDVERSION
@@ -10009,6 +10048,8 @@ ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946f
 ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE
 {98F37909-BB06-48F5-9286-0CD75D16C604}
 ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE
+{F1DAFA27-C685-472B-8E21-1027C406859F}
+DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f|TRUE
 {5177FF3C-C42D-4163-ACD1-BAF4DBE0F1C2}
 TRUE
 Check Application Requirements
@@ -11049,6 +11090,9 @@ C
 
 
 
+
+
+
 C
 
 
@@ -11644,17 +11688,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
 
 
 C
@@ -11667,31 +11700,6 @@ C
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
 
 
 
@@ -11729,6 +11737,44 @@ C
 
 
 
+C
+
+
+
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11758,6 +11804,9 @@ C
 C
 C
 C
+
+
+
 
 
 
@@ -11945,6 +11994,14 @@ C
 
 
 $
+
+
+
+
+
+
+
+
 
 
 
