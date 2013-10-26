@@ -80,7 +80,7 @@ namespace ASCOM.Utilities.Video.DirectShowVideo.VideoCaptureImpl
 
 		private CrossbarHelper crossbarHelper;
 
-		public DirectShowCapture(DirectShowVideoSettings settings)
+		public DirectShowCapture(Settings settings)
 		{
 			crossbarHelper = new CrossbarHelper(settings);
 		}

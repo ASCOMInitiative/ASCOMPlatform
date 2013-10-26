@@ -29,9 +29,9 @@ namespace ASCOM.Utilities.Video.DirectShowVideo.VideoCaptureImpl
 {
     internal class CrossbarHelper
     {
-	    private DirectShowVideoSettings settings;
+	    private Settings settings;
 
-		public CrossbarHelper(DirectShowVideoSettings settings)
+		public CrossbarHelper(Settings settings)
 		{
 			this.settings = settings;
 		}

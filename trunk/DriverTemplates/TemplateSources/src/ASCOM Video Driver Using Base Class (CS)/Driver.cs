@@ -27,6 +27,8 @@
 #define TEMPLATEDEVICECLASS
 
 using System;
+using System.Globalization;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -38,10 +40,6 @@ using ASCOM.Astrometry.AstroUtils;
 using ASCOM.Utilities;
 using ASCOM.Utilities.Video.DirectShowVideo;
 using ASCOM.DeviceInterface;
-
-using ASCOM.DeviceInterface;
-using System.Globalization;
-using System.Collections;
 
 namespace ASCOM.TEMPLATEDEVICENAME
 {
@@ -110,7 +108,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
         {
             Properties.Settings.Default.Reload();
 
-            base.Initialize((DirectShowVideoSettings) Properties.Settings.Default);
+            //base.Initialize((DirectShowVideoSettings) Properties.Settings.Default);
             ReadProfile(); // Read device configuration from the ASCOM Profile store
 
             tl = new TraceLogger("", "TEMPLATEDEVICENAME");

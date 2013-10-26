@@ -23,10 +23,10 @@ using ASCOM.Utilities.Video.DirectShowVideo;
  * the correct device profile.
  * **********************/
 
-namespace ASCOM.DirectShow.Properties
+namespace ASCOM.TEMPLATEDEVICENAME.Properties
 {
 	[SettingsProvider(typeof(ASCOM.SettingsProvider))]
-	[ASCOM.DeviceId("ASCOM.DirectShow.Video", DeviceName = "Video Capture")]
+    [ASCOM.DeviceId("ASCOM.TEMPLATEDEVICENAME.Video", DeviceName = "TEMPLATEDEVICENAME Video Driver")]
     internal sealed partial class Settings : System.Configuration.ApplicationSettingsBase
 	{
 	}

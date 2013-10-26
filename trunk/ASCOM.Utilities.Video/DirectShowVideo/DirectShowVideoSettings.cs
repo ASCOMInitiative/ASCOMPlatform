@@ -7,9 +7,24 @@ using ASCOM.Utilities.Video;
 
 namespace ASCOM.Utilities.Video.DirectShowVideo
 {
-	public class DirectShowVideoSettings : System.Configuration.ApplicationSettingsBase
+	public class Settings : System.Configuration.ApplicationSettingsBase
 	{
-		[global::System.Configuration.UserScopedSettingAttribute()]
+        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
+
+        public static Settings Default
+        {
+            get
+            {
+                return defaultInstance;
+            }
+        }
+
+        static Settings()
+        {
+            defaultInstance = (Settings)global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings());
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
 		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
 		[global::System.Configuration.DefaultSettingValueAttribute("")]
 		public string PreferredCaptureDevice

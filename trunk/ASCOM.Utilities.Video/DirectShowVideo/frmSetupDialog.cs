@@ -39,7 +39,7 @@ namespace ASCOM.Utilities.Video.DirectShowVideo
 	{
 		private string driverVersion;
 
-		public frmSetupDialog(DirectShowVideoSettings settings, string driverVersion)
+		public frmSetupDialog(Settings settings, string driverVersion)
 		{
 			InitializeComponent();
 

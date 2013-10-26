@@ -42,14 +42,14 @@ namespace ASCOM.Utilities.Video.DirectShowVideo
 	public abstract class DirectShowVideoBase
 	{
 		private VideoCaptureImpl.VideoCapture camera;
-		private DirectShowVideoSettings settings;
+		private Settings settings;
 
 		public DirectShowVideoBase()
 		{
 			camera = new VideoCaptureImpl.VideoCapture();
 		}
 
-		public void Initialize(DirectShowVideoSettings settings)
+		public void Initialize(Settings settings)
 		{
 			this.settings = settings;
 
