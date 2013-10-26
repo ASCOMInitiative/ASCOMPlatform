@@ -15,7 +15,7 @@
     <Icon>_TemplateIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Video Driver Using Base Class.csproj" ReplaceParameters="true">
+    <Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Video Driver Using Base Class (CS).csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.ico">ASCOM.ico</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOMDriverTemplate.snk">ASCOMDriverTemplate.snk</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
