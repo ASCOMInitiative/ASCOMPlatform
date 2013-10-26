@@ -282,7 +282,7 @@ namespace ASCOM.Setup
             {
                 // Display a form to the user. The form collects 
                 // input for the custom message.
-                inputForm = new DeviceDriverForm();
+                inputForm = new DeviceDriverForm(TL); // Pass our trace logger into the form so all Wizard trace goes into one file
                 dialogResult = inputForm.ShowDialog();
             }
             catch (Exception ex)

@@ -38,12 +38,10 @@ namespace ASCOM.Setup
 
         TraceLogger TL;
 
-        public DeviceDriverForm()
+        public DeviceDriverForm(TraceLogger TLSupplied)
         {
             InitializeComponent();
-            TL = new TraceLogger("TemplateForm");
-            TL.Enabled = true;
-
+            TL = TLSupplied; // Make sure we use the trace logger that has been created by the calling method
             InitASCOMClasses();
         }
 
@@ -246,7 +244,6 @@ namespace ASCOM.Setup
             // Get an assembly reference to the DeviceInterfaces assembly
             Assembly DeviceInterfacesAssembly = Assembly.GetAssembly(typeof(DriveRates));
             TL.LogMessage("InitASCOMClasses", "Found interface assembly: " + DeviceInterfacesAssembly.FullName);
-            //Assembly asm = Assembly.ReflectionOnlyLoad("ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7");
 
             // Get the calling type, this allows us to customise the list depending on which wizard called the form
             Type CallingType = new StackFrame(2, false).GetMethod().ReflectedType;
