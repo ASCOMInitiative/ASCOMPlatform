@@ -18,7 +18,7 @@ namespace ASCOM.Utilities.Video.DirectShowVideo
 		IBaseFilter theDevice = null;
 		IBaseFilter theCompressor = null;
 
-		private Settings settings;
+		private DirectShowVideoSettings settings;
 		private CrossbarHelper crossbarHelper;
 
 		public ucDirectShowVideoSettings()
@@ -26,7 +26,7 @@ namespace ASCOM.Utilities.Video.DirectShowVideo
 			InitializeComponent();
 		}
 
-		public void Initialize(Settings settings)
+		public void Initialize(DirectShowVideoSettings settings)
 		{
 			this.settings = settings;
 	

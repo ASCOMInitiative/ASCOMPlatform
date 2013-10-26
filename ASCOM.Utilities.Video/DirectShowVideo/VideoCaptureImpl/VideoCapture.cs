@@ -44,9 +44,9 @@ namespace ASCOM.Utilities.Video.DirectShowVideo.VideoCaptureImpl
 		private int imageWidth;
 		private int imageHeight;
 
-		private Settings settings;
+		private DirectShowVideoSettings settings;
 
-		public void Initialize(Settings settings)
+		public void Initialize(DirectShowVideoSettings settings)
 		{
 			this.settings = settings;
 			dsCapture = new DirectShowCapture(settings);
