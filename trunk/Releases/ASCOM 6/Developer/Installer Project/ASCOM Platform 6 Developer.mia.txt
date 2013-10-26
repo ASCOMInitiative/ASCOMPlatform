@@ -419,7 +419,9 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Sample script files to explorer.exe
     Comment: Platform 6.1 Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $TARGETDIR$\Developer Documentation
+    Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $TARGETDIR$\Developer Documentation
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Video Driver Developer Documentation to $TARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
+    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\ASCOM Settings Provider Documentation to $TARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
     [END REGION]
     [DEFINE REGION: Driver installer]
     Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation

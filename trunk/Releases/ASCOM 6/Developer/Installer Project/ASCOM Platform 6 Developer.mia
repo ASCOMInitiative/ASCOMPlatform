@@ -419,6 +419,8 @@ Install Files
 Create Shortcut
 Comment
 Install Files
+Install Files
+Create Shortcut
 Create Shortcut
 Code Folding Region
 Code Folding Region
@@ -933,7 +935,9 @@ $
 {871207C8-36DE-4D5E-905E-529B48FDB573}
 {96AD7446-2BBE-481F-837F-3020C7FF718C}
 {C550B1CA-B28D-432A-A5AE-407BD356A787}
+{1E59158E-BA84-4D76-827D-CC30F64F8A43}
 {85C67E31-AA84-4A75-98CB-79DC1C3444D7}
+{2D5DFE61-E46A-4914-86DC-7AD62BAAA426}
 {FFF5D8FD-CDA9-4FA6-8BA7-E922004CD2BB}
 {E7539521-EB47-427B-A918-2A2FCEB82449}
 {AF5ED094-3A84-465A-9907-D892C2D78EB4}
@@ -2673,6 +2677,19 @@ FALSE
 FALSE
 FALSE
 FALSE
+{1E59158E-BA84-4D76-827D-CC30F64F8A43}
+..\..\..\..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf
+FALSE|
+$TARGETDIR$\Developer Documentation
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {0A98BEA1-FC88-4DEE-BF1C-9704CDFE3822}
 INSTALLCACHEEXISTS
 $INSTALLCACHEDIRECTORY$
@@ -2883,6 +2900,16 @@ $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 {85C67E31-AA84-4A75-98CB-79DC1C3444D7}
 $TARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
 Video Driver Developer Documentation
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{2D5DFE61-E46A-4914-86DC-7AD62BAAA426}
+$TARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
+ASCOM Settings Provider Documentation
 $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
@@ -3846,6 +3873,8 @@ C
 
 
 
+
+
 C
 
 
@@ -3865,6 +3894,8 @@ C
 
 
 $
+
+
 
 
 
