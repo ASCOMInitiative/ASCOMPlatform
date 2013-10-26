@@ -21,6 +21,7 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOMDriverTemplate.snk">ASCOMDriverTemplate.snk</ProjectItem>
 	  <ProjectItem ReplaceParameters="false" TargetFileName="DirectShowLib-2005.dll">DirectShowLib-2005.dll</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
 	  <ProjectItem ReplaceParameters="true" TargetFileName="Settings.cs">Settings.cs</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
