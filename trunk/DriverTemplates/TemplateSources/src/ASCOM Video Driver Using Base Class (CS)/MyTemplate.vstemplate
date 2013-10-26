@@ -16,11 +16,16 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Video Driver Using Base Class (CS).csproj" ReplaceParameters="true">
+	  <ProjectItem ReplaceParameters="false" TargetFileName="app.config">app.config</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.ico">ASCOM.ico</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="ASCOMDriverTemplate.snk">ASCOMDriverTemplate.snk</ProjectItem>
+	  <ProjectItem ReplaceParameters="false" TargetFileName="DirectShowLib-2005.dll">DirectShowLib-2005.dll</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
+	  <ProjectItem ReplaceParameters="true" TargetFileName="Settings.cs">Settings.cs</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="false" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
       </Folder>
     </Project>
   </TemplateContent>
