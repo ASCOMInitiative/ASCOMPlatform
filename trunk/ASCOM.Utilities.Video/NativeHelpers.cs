@@ -20,7 +20,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using ASCOM.Utilities;
 using ASCOM.DeviceInterface;
-using ASCOM.Utilities.Video.DirectShowVideo;
 
 namespace ASCOM.Utilities.Video
 {

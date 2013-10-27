@@ -35,13 +35,126 @@ namespace ASCOM.Setup
         private DTE2 myDTE;
         private ProjectItem myProjectItem;
 
-        // This method is called before opening any item that has the OpenInEditor attribute.
+        /// <summary>
+        /// Runs custom wizard logic at the beginning of a template wizard run.
+        /// </summary>
+        /// <param name="automationObject"></param>
+        /// <param name="replacementsDictionary"></param>
+        /// <param name="runKind"></param>
+        /// <param name="customParams"></param>
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        {
+            Diagnostics.Enter();
+
+            myDTE = (DTE2)automationObject;
+
+            DialogResult dialogResult = DialogResult.Cancel;
+            try
+            {
+                // Display a form to the user. The form collects 
+                // input for the custom message.
+                inputForm = new DeviceDriverForm(TL); // Pass our trace logger into the form so all Wizard trace goes into one file
+                dialogResult = inputForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Form Exception: " + ex.ToString());
+            }
+
+            if (dialogResult != DialogResult.OK) throw new WizardCancelledException("The wizard has been cancelled");
+
+            try
+            {
+
+                // Save user inputs.
+                DeviceId = inputForm.DeviceId;
+                DeviceName = inputForm.DeviceName;
+                DeviceClass = inputForm.DeviceClass;
+                DeviceInterface = inputForm.DeviceInterface;
+                InterfaceVersion = inputForm.InterfaceVersion;
+                Namespace = inputForm.Namespace;
+                TL.Enabled = true;
+                TL.LogMessage("DeviceId", DeviceId);
+                TL.LogMessage("DeviceName", DeviceName);
+                TL.LogMessage("DeviceClass", DeviceClass);
+                TL.LogMessage("DeviceInterface", DeviceInterface);
+                TL.LogMessage("InterfaceVersion", InterfaceVersion);
+                TL.LogMessage("Namespace", Namespace);
+
+                inputForm.Dispose();
+                inputForm = null;
+
+                // Add custom parameters.
+                replacementsDictionary.Add("$deviceid$", DeviceId);
+                replacementsDictionary.Add("$deviceclass$", DeviceClass);
+                replacementsDictionary.Add("$devicename$", DeviceName);
+                replacementsDictionary.Add("$namespace$", Namespace);
+                replacementsDictionary["$projectname$"] = DeviceId;
+                replacementsDictionary["$safeprojectname$"] = DeviceId;
+                replacementsDictionary.Add("TEMPLATEDEVICENAME", DeviceName);
+                if (DeviceClass == "VideoUsingBaseClass") // Special handling for "VideoWithBaseClass" template because its file name is not the same as the device type "Video"
+                {
+                    replacementsDictionary.Add("TEMPLATEDEVICECLASS", "Video"); // This ensures that the class is named Video and not VideoWithBaseClass
+                }
+                else // ALl other templates process normally because the selected device name exatly matches the device type e.g. Telescope, Rotator etc.
+                {
+                    replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
+                }
+                replacementsDictionary.Add("ITEMPLATEDEVICEINTERFACE", DeviceInterface);
+                replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
+                replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion);
+                // create and replace guids
+                replacementsDictionary.Add(csTemplateAssemblyGuid, Guid.NewGuid().ToString());
+                replacementsDictionary.Add(csTemplateInterfaceGuid, Guid.NewGuid().ToString());
+                replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
+                replacementsDictionary.Add(csTemplateAxisRatesGuid, Guid.NewGuid().ToString());
+                replacementsDictionary.Add(csTemplateTrackingRatesGuid, Guid.NewGuid().ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Form result setup exception: " + ex.ToString());
+            }
+
+            Diagnostics.Exit();
+        }
+
+        /// <summary>
+        /// Indicates whether the specified project item should be added to the project.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        /// <remarks>This method is only called for item templates, not for project templates.</remarks>
+        public bool ShouldAddProjectItem(string filePath)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Runs custom wizard logic when a project item has finished generating.
+        /// </summary>
+        /// <param name="projectItem"></param>
+        /// <remarks>This method is only called for item templates, not for project templates.</remarks>
+        public void ProjectItemFinishedGenerating(ProjectItem projectItem)
+        {
+            Diagnostics.Enter();
+            Diagnostics.Exit();
+        }
+
+        /// <summary>
+        /// Runs custom wizard logic before opening an item in the template.
+        /// </summary>
+        /// <param name="projectItem"></param>
+        /// <remarks>This method is called before opening any item that has the OpenInEditor attribute.</remarks>
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
             Diagnostics.Enter();
             Diagnostics.Exit();
         }
 
+        /// <summary>
+        /// Runs custom wizard logic when a project has finished generating.
+        /// </summary>
+        /// <param name="project"></param>
         public void ProjectFinishedGenerating(Project project)
         {
             Diagnostics.Enter();
@@ -181,15 +294,9 @@ namespace ASCOM.Setup
             Diagnostics.Exit();
         }
 
-        // This method is only called for item templates,
-        // not for project templates.
-        public void ProjectItemFinishedGenerating(ProjectItem projectItem)
-        {
-            Diagnostics.Enter();
-            Diagnostics.Exit();
-        }
-
-        // This method is called after the project is created.
+        /// <summary>
+        /// Runs custom wizard logic when the wizard has completed all tasks.
+        /// </summary>
         public void RunFinished()
         {
             try
@@ -247,113 +354,6 @@ namespace ASCOM.Setup
 
         }
 
-        /// <summary>
-        /// Gets a list of the device specific files in the current directory.
-        /// </summary>
-        /// <returns></returns>
-        //private List<FileInfo> GetDeviceSpecificFiles()
-        //{
-        //    string[] allFiles = Directory.GetFiles(Directory.GetCurrentDirectory());
-        //    List<FileInfo> deviceSpecificFiles = new List<FileInfo>(allFiles.Length);
-        //    foreach (var file in allFiles)
-        //    {
-        //        try
-        //        {
-        //            var fileInfo = new FileInfo(file);
-        //            if (fileInfo.IsDeviceSpecific())
-        //                deviceSpecificFiles.Add(fileInfo);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Diagnostics.TraceError(ex);
-        //        }
-        //    }
-        //    return deviceSpecificFiles;
-        //}
-
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
-        {
-            Diagnostics.Enter();
-
-            myDTE = (DTE2)automationObject;
-
-            DialogResult dialogResult = DialogResult.Cancel;
-            try
-            {
-                // Display a form to the user. The form collects 
-                // input for the custom message.
-                inputForm = new DeviceDriverForm(TL); // Pass our trace logger into the form so all Wizard trace goes into one file
-                dialogResult = inputForm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Form Exception: " + ex.ToString());
-            }
-
-            if (dialogResult != DialogResult.OK) throw new WizardCancelledException("The wizard has been cancelled");
-
-            try
-            {
-
-                // Save user inputs.
-                DeviceId = inputForm.DeviceId;
-                DeviceName = inputForm.DeviceName;
-                DeviceClass = inputForm.DeviceClass;
-                DeviceInterface = inputForm.DeviceInterface;
-                InterfaceVersion = inputForm.InterfaceVersion;
-                Namespace = inputForm.Namespace;
-                TL.Enabled = true;
-                TL.LogMessage("DeviceId", DeviceId);
-                TL.LogMessage("DeviceName", DeviceName);
-                TL.LogMessage("DeviceClass", DeviceClass);
-                TL.LogMessage("DeviceInterface", DeviceInterface);
-                TL.LogMessage("InterfaceVersion", InterfaceVersion);
-                TL.LogMessage("Namespace", Namespace);
-
-                inputForm.Dispose();
-                inputForm = null;
-
-                // Add custom parameters.
-                replacementsDictionary.Add("$deviceid$", DeviceId);
-                replacementsDictionary.Add("$deviceclass$", DeviceClass);
-                replacementsDictionary.Add("$devicename$", DeviceName);
-                replacementsDictionary.Add("$namespace$", Namespace);
-                replacementsDictionary["$projectname$"] = DeviceId;
-                replacementsDictionary["$safeprojectname$"] = DeviceId;
-                replacementsDictionary.Add("TEMPLATEDEVICENAME", DeviceName);
-                if (DeviceClass == "VideoUsingBaseClass") // Special handling for "VideoWithBaseClass" template because its file name is not the same as the device type "Video"
-                {
-                    replacementsDictionary.Add("TEMPLATEDEVICECLASS", "Video"); // This ensures that the class is named Video and not VideoWithBaseClass
-                }
-                else // ALl other templates process normally because the selected device name exatly matches the device type e.g. Telescope, Rotator etc.
-                {
-                    replacementsDictionary.Add("TEMPLATEDEVICECLASS", DeviceClass);
-                }
-                replacementsDictionary.Add("ITEMPLATEDEVICEINTERFACE", DeviceInterface);
-                replacementsDictionary.Add("TEMPLATENAMESPACE", Namespace);
-                replacementsDictionary.Add("TEMPLATEINTERFACEVERSION", InterfaceVersion);
-                // create and replace guids
-                replacementsDictionary.Add(csTemplateAssemblyGuid, Guid.NewGuid().ToString());
-                replacementsDictionary.Add(csTemplateInterfaceGuid, Guid.NewGuid().ToString());
-                replacementsDictionary.Add(csTemplateRateGuid, Guid.NewGuid().ToString());
-                replacementsDictionary.Add(csTemplateAxisRatesGuid, Guid.NewGuid().ToString());
-                replacementsDictionary.Add(csTemplateTrackingRatesGuid, Guid.NewGuid().ToString());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Form result setup exception: " + ex.ToString());
-            }
-
-            Diagnostics.Exit();
-        }
-
-        // This method is only called for item templates,
-        // not for project templates.
-        public bool ShouldAddProjectItem(string filePath)
-        {
-            return true;
-        }
-
 #if DEBUG
         void DumpCodeModel(Project project)
         {
@@ -365,8 +365,6 @@ namespace ASCOM.Setup
             codeClass.AddImplementedInterface("ASCOM.Interface.I" + DeviceClass, 0);
         }
 #endif
-
-
 
     }
 }
