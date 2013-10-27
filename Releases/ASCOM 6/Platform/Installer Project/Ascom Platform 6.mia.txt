@@ -857,7 +857,7 @@ else
     Comment: Video Simulator
     Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
     Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.pdb to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
-    Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\DirectShowLib-2005.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
+    Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
     Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\Resources\simulator.pix to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\Resources
     Comment: Video Utilities - Native Helpers
     Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\Win32\ASCOM.NativeVideo32.dll to $COMMONFILES$\ASCOM\VideoUtilities
