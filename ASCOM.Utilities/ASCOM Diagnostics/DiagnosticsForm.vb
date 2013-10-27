@@ -4050,31 +4050,31 @@ Public Class DiagnosticsForm
 
             InitBitMap(bitmap)
 
-            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.None, byteArray)
+            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, LumaConversionMode.R, FlipMode.None, byteArray)
             CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap R CheckSum", CheckSum2DFrame(frameOut2), 7554559)
             CompareLongInteger("VideoUtilsTests", "ByteArray R CheckSum", CheckSumByteArray(byteArray), 163723333)
 
-            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.G, FlipMode.None, byteArray)
+            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, LumaConversionMode.G, FlipMode.None, byteArray)
             CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap G CheckSum", CheckSum2DFrame(frameOut2), 14535572)
             CompareLongInteger("VideoUtilsTests", "ByteArray G CheckSum", CheckSumByteArray(byteArray), 294949228)
 
-            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.B, FlipMode.None, byteArray)
+            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, LumaConversionMode.B, FlipMode.None, byteArray)
             CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap B CheckSum", CheckSum2DFrame(frameOut2), 23493433)
             CompareLongInteger("VideoUtilsTests", "ByteArray B CheckSum", CheckSumByteArray(byteArray), 428153317)
 
-            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.GrayScale, FlipMode.None, byteArray)
+            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, LumaConversionMode.GrayScale, FlipMode.None, byteArray)
             CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap GrayScale CheckSum", CheckSum2DFrame(frameOut2), 16319054)
             CompareLongInteger("VideoUtilsTests", "ByteArray GrayScale CheckSum", CheckSumByteArray(byteArray), 317929171)
 
-            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.FlipHorizontally, byteArray)
+            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, LumaConversionMode.R, FlipMode.FlipHorizontally, byteArray)
             CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap FlipHorizontally CheckSum", CheckSum2DFrame(frameOut2), 7057805)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipHorizontally CheckSum", CheckSumByteArray(byteArray), 163358554)
 
-            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.FlipVertically, byteArray)
+            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, LumaConversionMode.R, FlipMode.FlipVertically, byteArray)
             CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap FlipVertically CheckSum", CheckSum2DFrame(frameOut2), 7059917)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipVertically CheckSum", CheckSumByteArray(byteArray), 175359397)
 
-            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, DirectShowVideo.LumaConversionMode.R, FlipMode.FlipBoth, byteArray)
+            frameOut2 = NH.GetMonochromePixelsFromBitmap(bitmap, LumaConversionMode.R, FlipMode.FlipBoth, byteArray)
             CompareLongInteger("VideoUtilsTests", "GetMonochromePixelsFromBitmap FlipBoth CheckSum", CheckSum2DFrame(frameOut2), 6219148)
             CompareLongInteger("VideoUtilsTests", "ByteArray FlipBoth CheckSum", CheckSumByteArray(byteArray), 174994618)
 

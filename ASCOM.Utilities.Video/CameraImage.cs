@@ -17,10 +17,24 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using ASCOM.DeviceInterface;
-using ASCOM.Utilities.Video.DirectShowVideo;
 
 namespace ASCOM.Utilities.Video
 {
+    public enum VideoFrameLayout
+    {
+        Monochrome,
+        Color,
+        BayerRGGB
+    }
+
+    public enum LumaConversionMode
+    {
+        R = 0,
+        G = 1,
+        B = 2,
+        GrayScale = 3
+    }
+
     [Guid("BD925113-3B58-4C5F-984E-FBCE7C6A93BE")]
     [ComVisible(true)]
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]

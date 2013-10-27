@@ -170,7 +170,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="VideoUsingBaseClassWizard.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LocalServerForm.resx">
