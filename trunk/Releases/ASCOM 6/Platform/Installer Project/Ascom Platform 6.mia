@@ -6194,7 +6194,7 @@ FALSE
 FALSE
 FALSE
 {5CA3903C-12C9-4662-B52B-75F20A65B1C0}
-..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\DirectShowLib-2005.dll
+..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll
 FALSE|
 $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
 FALSE
