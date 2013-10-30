@@ -5,6 +5,14 @@
 ''' <summary>
 ''' Defines the ISwitchV2 Interface
 ''' </summary>
+''' <remarks>
+''' The Switch interface is used to define a number of 'switches'. A switch can be used to control something, such as a power switch
+''' or may be used to sense the state of something, such as a limit switch. Each switch has a CanWrite property, this is true if the
+''' switch can be written to or false if it can only be read.
+''' <para>In addition a switch may have multiple states, from two - a binary on/off switch - through those with a small
+''' number of states to those which have many states - an analogue switch</para>
+''' <para>An Analogue switch may be capable of changing and/or being set to a range of values, these are defined using the MinSwitchValue, MaxSwitchValue and StepSize methods.</para>
+''' </remarks>
 <Guid("71A6CA6B-A86B-4EBB-8DA3-6D91705177A3"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface ISwitchV2
 
@@ -205,7 +213,7 @@ Public Interface ISwitchV2
     ''' <summary>
     ''' Return the name of switch n.
     ''' </summary>
-    ''' <param name="id">The switch number to return</param>
+    ''' <param name="id">The switch number</param>
     ''' <returns>The name of the switch</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
@@ -217,7 +225,7 @@ Public Interface ISwitchV2
     ''' </summary>
     ''' <param name="id">The number of the switch whose name is to be set</param>
     ''' <param name="name">The name of the switch</param>
-    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="MethodNotImplementedException">If the switch name cannot be set in the application code.</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Can throw a not implemented exception if the switch name can not be set by the application.</b></p>
     ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para>
@@ -229,7 +237,6 @@ Public Interface ISwitchV2
     ''' the switch to be returned, for example for a tool tip.
     ''' </summary>
     ''' <param name="id">The number of the switch whose description is to be returned</param><returns></returns>
-    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
     ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para>
@@ -244,7 +251,6 @@ Public Interface ISwitchV2
     ''' <returns>
     '''   <c>true</c> if the switch can be written to, otherwise <c>false</c>.
     ''' </returns>
-    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
     ''' <para>Switches are numbered from 0 to MaxSwitch - 1</para>
@@ -278,19 +284,19 @@ Public Interface ISwitchV2
 
 #Region "Analogue members"
     ''' <summary>
-    ''' Returns the maximum analogue value for this switch
+    ''' Returns the maximum analogue value for this switch, this must be greater than <see cref="MinSwitchValue"/>.
     ''' </summary>
-    ''' <param name="id">The switch whose value should be returned</param>
-    ''' <returns>The maximum value to which this switch can be set.</returns>
+    ''' <param name="id">The switch whose maximum value should be returned</param>
+    ''' <returns>The maximum value to which this switch can be set or wich a read only switch will return.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
     ''' <para>Boolean switches must return 1.0 as their maximum value. Switches are numbered from 0 to MaxSwitch - 1.</para></remarks>
     Function MaxSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' Returns the minimum analogue value for this switch
+    ''' Returns the minimum analogue value for this switch, this must be less than <see cref="MaxSwitchValue"/>
     ''' </summary>
-    ''' <param name="id">The switch whose value should be returned</param>
+    ''' <param name="id">The switch whose minimum value should be returned</param>
     ''' <returns>The minimum value to which this switch can be set.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
@@ -305,14 +311,18 @@ Public Interface ISwitchV2
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
     ''' <para>Boolean switches must return 1.0, giving two states. Switches are numbered from 0 to MaxSwitch - 1.</para>
-    ''' <para>For any switch, the number of steps can be calculated as: ((MaxSwitchValue - MinSwitchValue) / SwitchStep) + 1,</para> </remarks>
+    ''' <para>For any switch, the number of steps can be calculated as:
+    ''' ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep"/>) + 1,</para>
+    ''' <para>The SwitchStep can be used to determine the way the switch is controlled and/or displayed, for example by setting the
+    ''' number of decimal places for a display.</para></remarks>
     Function SwitchStep(id As Short) As Double
 
     ''' <summary>
     ''' Returns the analogue switch value for switch id.
     ''' </summary>
     ''' <param name="id">The switch whose value should be returned.</param>
-    ''' <returns>The analogue value for this switch.</returns>
+    ''' <returns>The analogue value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
+    ''' <see cref="MaxSwitchValue"/> but values outside this range may be possible.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
     ''' <para>Boolean switches must return 0.0 or 1.0, giving two states. Switches are numbered from 0 to MaxSwitch - 1.</para></remarks>
@@ -326,9 +336,10 @@ Public Interface ISwitchV2
     ''' <exception cref="InvalidValueException">If the value is not between the maximum and minimum.</exception>
     ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+    ''' <exception cref="InvalidValueException">If value is outside the range <see cref="MinSwitchValue"/> to <see cref="MaxSwitchValue"/></exception>
     ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
     ''' <para>If the value is not between the maximum and minimum then the method must throw an InvalidValueException. </para>
-    ''' <para>The switch's <see cref="GetSwitch"></see> value will be appear as true if the switch value is set closer to the maximum than the minimum, otheriwse false.</para> </remarks>
+    ''' <para>The switch's boolean <see cref="GetSwitch"/> value will be appear as true if the switch value is set closer to the maximum than the minimum, otherwise false.</para> </remarks>
     Sub SetSwitchValue(id As Short, value As Double)
 
 #End Region

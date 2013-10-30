@@ -8,9 +8,18 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
+    {
     /// <summary>
-    /// Provides universal access to Switch drivers
+    /// Defines the ISwitchV2 Interface
     /// </summary>
+    /// <remarks>
+    /// The Switch interface is used to define a number of 'switches'. A switch can be used to control something, such as a power switch
+    /// or may be used to sense the state of something, such as a limit switch. Each switch has a CanWrite property, this is true if the
+    /// switch can be written to or false if it can only be read.
+    /// <para>In addition a switch may have multiple states, from two - a binary on/off switch - through those with a small
+    /// number of states to those which have many states - an analogue switch</para>
+    /// <para>An Analogue switch may be capable of changing and/or being set to a range of values, these are defined using the MinSwitchValue, MaxSwitchValue and StepSize methods.</para>
+    /// </remarks>
     public class Switch : AscomDriver, ISwitchV2
     {
         private MemberFactory memberFactory;
@@ -53,10 +62,13 @@ namespace ASCOM.DriverAccess
         #region ISwitchV2 members
 
         /// <summary>
-        /// The number of switches managed by this driver. Switch numbers are 0 to
-        /// MaxSwitch - 1
+        /// Return the name of switch n.
         /// </summary>
-        /// <returns>The number of switches managed by this driver</returns>
+        /// <param name="id">The switch number</param>
+        /// <returns>The name of the switch</returns>
+        /// <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
+        /// <para>Switches are numbered from 0 to MaxSwitch - 1</para></remarks>
         public short MaxSwitch
         {
             get { return Convert.ToInt16(memberFactory.CallMember(1, "MaxSwitch", new Type[] { }, new object[] { })); }
@@ -81,7 +93,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="id">The number of the switch whose name is to be set</param>
         /// <param name="name">The name of the switch</param>
-        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
+        /// <exception cref="MethodNotImplementedException">If the switch name cannot be set in the application code.</exception>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public void SetSwitchName(short id, string name)
         {
@@ -95,7 +107,7 @@ namespace ASCOM.DriverAccess
         /// <param name="id">The number of the switch whose description is to be returned</param>
         /// <returns></returns>
         /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented</exception>
-        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p></remarks>
         public string GetSwitchDescription(short id)
         {
             return (string)memberFactory.CallMember(3, "GetSwitchDescription", new Type[] { typeof(short) }, new object[] { id });
@@ -109,8 +121,8 @@ namespace ASCOM.DriverAccess
         /// <returns>
         ///   <c>true</c> if the switch can be written to, otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="T:MethodNotImplementedException">If the method is not implemented</exception>
-        /// <exception cref="T:InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        /// <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p></remarks>
         public bool CanWrite(short id)
         {
             return (bool)memberFactory.CallMember(3, "CanWrite", new Type[] { typeof(short) }, new object[] { id });
