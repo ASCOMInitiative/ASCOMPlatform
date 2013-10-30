@@ -8,7 +8,6 @@ using ASCOM.Utilities;
 
 namespace ASCOM.DriverAccess
 {
-    {
     /// <summary>
     /// Defines the ISwitchV2 Interface
     /// </summary>
