@@ -35,19 +35,84 @@ namespace ASCOM.Utilities.Video
         GrayScale = 3
     }
 
+    /// <summary>
+    /// Defines the ICameraImage interface. This is a helper interface to be used to work with ImageArray frames, including conversion of the image array to a displayable Bitmap.
+    /// </summary>
     [Guid("BD925113-3B58-4C5F-984E-FBCE7C6A93BE")]
     [ComVisible(true)]
     [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
     public interface ICameraImage
     {
+        /// <summary>
+        /// Sets the image array which is typically returned by <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/>.
+        /// </summary>
+        /// <param name="imageArray">The image array object.</param>
+        /// <param name="imageWidth">The width of the image contained in the image array data.</param>
+        /// <param name="imageHeight">The height of the image contained in the image array data.</param>
+        /// <param name="sensorType">The sensor type for which the image array data has been encoded.</param>
+        /// <exception cref="NotSupportedException">Throws this exception if the sensorType is not supported. Only <b>Monochrome</b> and <b>Color</b> sensor types are supported.</exception>
         void SetImageArray(object imageArray, int imageWidth, int imageHeight, SensorType sensorType);
+
+        /// <summary>
+        /// Returns the value of a single pixel from the image array of a Monochrome sensor.
+        /// </summary>
+        /// <param name="x">The X coordinate of the pixel starting from left.</param>
+        /// <param name="y">The Y coordinate of the pixel starting from top.</param>
+        /// <returns>The value of the specified pixel.</returns>
+        /// <exception cref="InvalidOperationException">Throws this exception if the image array data hasn't been set ot is not corresponding to a Monochrome sensor.</exception>
         int GetPixel(int x, int y);
+
+        /// <summary>
+        /// Returns the value of a single pixel from the image array of a Colour sensor.
+        /// </summary>
+        /// <param name="x">The X coordinate of the pixel starting from left.</param>
+        /// <param name="y">The Y coordinate of the pixel starting from top.</param>
+        /// <param name="plain">The colour plain from which the pixel needs to be returned. </param>
+        /// <returns>The value of the specified pixel.</returns>
+        /// <exception cref="InvalidOperationException">Throws this exception if the image array data hasn't been set ot is not corresponding to a Colour sensor.</exception>
 	    int GetPixel(int x, int y, int plain);
+
+        /// <summary>
+        /// Returns a display bitmap corresponding to the image array that has been set.
+        /// </summary>
+        /// <example> The following code can be used to create a Bitmap from the returned byte array
+        /// <code lang="cs">
+        /// using (var memStr = new MemoryStream(cameraImage.GetDisplayBitmapBytes()))
+        /// {
+        /// 	bmp = (Bitmap)Image.FromStream(memStr);
+        /// }
+        /// </code>
+        /// <code lang="VB">
+        /// Using memStr = New MemoryStream(cameraImage.GetDisplayBitmapBytes())
+        /// 	bmp = DirectCast(Image.FromStream(memStr), Bitmap)
+        /// End Using
+        /// </code>
+        /// </example>
+        /// <returns>Returns a byte array of the byte content of the 24bit RBG bitmap. The byte array also contains all relevant bitmap headers.</returns>
         byte[] GetDisplayBitmapBytes();
-		bool FlipHorizontaly { get; set; }
+
+
+        /// <summary>
+        /// Sets the desired horizontal image flip mode.
+        /// </summary>
+        /// <remarks>
+        /// Sets the desired horizontal image flip mode. By default no horizontal flipping is applied.
+        /// </remarks>
+		bool FlipHorizontally { get; set; }
+
+
+        /// <summary>
+        /// Sets the desired vertical image flip mode.
+        /// </summary>
+        /// <remarks>
+        /// Sets the desired vertical image flip mode. By default no vertical flipping is applied.
+        /// </remarks>
 		bool FlipVertically { get; set; }
     }
 
+    /// <summary>
+    /// The class implements the <see cref="T:ASCOM.Utilities.Video.ICameraImage"/> interface and also provides two additional methods for pure .NET clients.
+    /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.None)]
     [ComSourceInterfaces(typeof(ICameraImage))]
@@ -58,8 +123,8 @@ namespace ASCOM.Utilities.Video
         private object imageArray;
         private int[,] intPixelArray;
         private object[,] objPixelArray;
-	    private int[,,] intColourPixelArray;
-		private object[,,] objColourPixelArray;
+        private int[, ,] intColourPixelArray;
+        private object[, ,] objColourPixelArray;
         private int imageWidth;
         private int imageHeight;
         private SensorType sensorType;
@@ -73,7 +138,15 @@ namespace ASCOM.Utilities.Video
         {
            nativeHelpers = new NativeHelpers();
         }
-        
+
+        /// <summary>
+        /// Sets the image array which is typically returned by <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/>.
+        /// </summary>
+        /// <param name="imageArray">The image array object.</param>
+        /// <param name="imageWidth">The width of the image contained in the image array data.</param>
+        /// <param name="imageHeight">The height of the image contained in the image array data.</param>
+        /// <param name="sensorType">The sensor type for which the image array data has been encoded.</param>
+        /// <exception cref="NotSupportedException">Throws this exception if the sensorType is not supported. Only <b>Monochrome</b> and <b>Color</b> sensor types are supported.</exception>
         public void SetImageArray(object imageArray, int imageWidth, int imageHeight, SensorType sensorType)
         {
             this.imageArray = imageArray;
@@ -83,8 +156,8 @@ namespace ASCOM.Utilities.Video
 
             objPixelArray = null;
             intPixelArray = null;
-	        intColourPixelArray = null;
-	        objColourPixelArray = null;
+            intColourPixelArray = null;
+            objColourPixelArray = null;
 
             if (sensorType == SensorType.Monochrome)
             {
@@ -103,7 +176,7 @@ namespace ASCOM.Utilities.Video
                     return;
                 }
             }
-            else
+            else if (sensorType == SensorType.Color)
             {
                 // Color sensor type is represented as 3-dimentional array that can be either: [3, height, width], [width, height, 3]
                 if (imageArray is int[,,])
@@ -122,18 +195,30 @@ namespace ASCOM.Utilities.Video
                 }
             }
 
-            throw new ArgumentException();
+            throw new NotSupportedException("Only Monochrome and Color sensor types are supported.");
         }
 
-		public bool FlipHorizontaly { get; set; }
+        /// <summary>
+        /// Sets the desired horizontal image flip mode.
+        /// </summary>
+        /// <remarks>
+        /// Sets the desired horizontal image flip mode. By default no horizontal flipping is applied.
+        /// </remarks>
+        public bool FlipHorizontally { get; set; }
 
+        /// <summary>
+        /// Sets the desired vertical image flip mode.
+        /// </summary>
+        /// <remarks>
+        /// Sets the desired vertical image flip mode. By default no vertical flipping is applied.
+        /// </remarks>
 		public bool FlipVertically { get; set; }
 
 		private FlipMode GetFlipMode()
 		{
-			if (FlipHorizontaly && FlipVertically)
+            if (FlipHorizontally && FlipVertically)
 				return FlipMode.FlipBoth;
-			else if (FlipHorizontaly)
+            else if (FlipHorizontally)
 				return FlipMode.FlipHorizontally;
 			else if (FlipVertically)
 				return FlipMode.FlipVertically;
@@ -141,6 +226,23 @@ namespace ASCOM.Utilities.Video
 				return FlipMode.None;
 		}
 
+        /// <summary>
+        /// Returns a display bitmap corresponding to the image array that has been set.
+        /// </summary>
+        /// <example> The following code can be used to create a Bitmap from the returned byte array
+        /// <code lang="cs">
+        /// using (var memStr = new MemoryStream(cameraImage.GetDisplayBitmapBytes()))
+        /// {
+        /// 	bmp = (Bitmap)Image.FromStream(memStr);
+        /// }
+        /// </code>
+        /// <code lang="VB">
+        /// Using memStr = New MemoryStream(cameraImage.GetDisplayBitmapBytes())
+        /// 	bmp = DirectCast(Image.FromStream(memStr), Bitmap)
+        /// End Using
+        /// </code>
+        /// </example>
+        /// <returns>Returns a byte array of the byte content of the 24bit RBG bitmap. The byte array also contains all relevant bitmap headers.</returns>
 		public byte[] GetDisplayBitmapBytes()
         {
 			if (sensorType == SensorType.Monochrome)
@@ -148,7 +250,7 @@ namespace ASCOM.Utilities.Video
 				if (intPixelArray != null)
                     return nativeHelpers.PrepareBitmapForDisplay(intPixelArray, imageWidth, imageHeight, GetFlipMode());
 				else if (objPixelArray != null)
-                    return nativeHelpers.PrepareBitmapForDisplay(objPixelArray, imageWidth, imageHeight, GetFlipMode());				
+                    return nativeHelpers.PrepareBitmapForDisplay(objPixelArray, imageWidth, imageHeight, GetFlipMode());
 			}
 			else if (sensorType == SensorType.Color)
 			{
@@ -163,6 +265,13 @@ namespace ASCOM.Utilities.Video
             return null;
         }
 
+        /// <summary>
+        /// Returns the value of a single pixel from the image array of a Monochrome sensor.
+        /// </summary>
+        /// <param name="x">The X coordinate of the pixel starting from left.</param>
+        /// <param name="y">The Y coordinate of the pixel starting from top.</param>
+        /// <returns>The value of the specified pixel.</returns>
+        /// <exception cref="InvalidOperationException">Throws this exception if the image array data hasn't been set ot is not corresponding to a Monochrome sensor.</exception>
         public int GetPixel(int x, int y)
         {
             if (intPixelArray != null)
@@ -177,7 +286,7 @@ namespace ASCOM.Utilities.Video
                 if (isRowMajor)
                     return (int)objPixelArray[y, x];
                 else if (isColumnMajor)
-                    return (int)objPixelArray[x, y];                
+                    return (int)objPixelArray[x, y];
             }
 			else if (intColourPixelArray != null || objColourPixelArray != null)
 			{
@@ -187,6 +296,14 @@ namespace ASCOM.Utilities.Video
 			throw new InvalidOperationException();
         }
 
+        /// <summary>
+        /// Returns the value of a single pixel from the image array of a Colour sensor.
+        /// </summary>
+        /// <param name="x">The X coordinate of the pixel starting from left.</param>
+        /// <param name="y">The Y coordinate of the pixel starting from top.</param>
+        /// <param name="plain">The colour plain from which the pixel needs to be returned. </param>
+        /// <returns>The value of the specified pixel.</returns>
+        /// <exception cref="InvalidOperationException">Throws this exception if the image array data hasn't been set ot is not corresponding to a Colour sensor.</exception>
 	    public int GetPixel(int x, int y, int plain)
 	    {
 			if (intPixelArray != null || objPixelArray != null)
@@ -211,6 +328,15 @@ namespace ASCOM.Utilities.Video
 			throw new InvalidOperationException();
 	    }
 
+        /// <summary>
+        /// Returns and image array and preview bitmap bytes in the format defined by  <see cref="T:ASCOM.DeviceInterface.IVideoFrame"/>.
+        /// </summary>
+        /// <param name="bmp">The bitmap image to use as a source.</param>
+        /// <param name="sensorType">The type of the sensor to emulate. Only <b>Color</b> and <b>Monochrome</b> sensors are supported.</param>
+        /// <param name="conversionMode">When the specified <b>SensorType</b> is not a colour sensor, this is the mode to use to convert colour pixels to monochrome.</param>
+        /// <param name="bitmapBytes">The byte array of the corresponding preview bitmap.</param>
+        /// <returns>An array of int32 that represents the pixels of the bitmap.</returns>
+        /// <exception cref="NotSupportedException">Throws this exception if the requested sentor type is not supported..</exception>
 		public object GetImageArray(Bitmap bmp, SensorType sensorType, LumaConversionMode conversionMode, out byte[] bitmapBytes)
 		{
 			this.imageWidth = bmp.Width;
@@ -224,6 +350,11 @@ namespace ASCOM.Utilities.Video
 				throw new NotSupportedException(string.Format("Sensor type {0} is not currently supported.", sensorType));
 		}
 
+        /// <summary>
+        /// Returns the preview bitmap bytes of a given bitmap image.
+        /// </summary>
+        /// <param name="bmp">The bitmap image to use as a source.</param>
+        /// <returns>The preview bitmap bytes of the bitmap.</returns>
 		public byte[] GetBitmapBytes(Bitmap bmp)
 		{
             return nativeHelpers.GetBitmapBytes(bmp);

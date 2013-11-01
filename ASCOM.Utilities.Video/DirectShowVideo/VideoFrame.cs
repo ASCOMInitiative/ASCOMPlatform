@@ -31,21 +31,6 @@ using ASCOM.Utilities.Video.DirectShowVideo.VideoCaptureImpl;
 
 namespace ASCOM.Utilities.Video.DirectShowVideo
 {
-	public enum VideoFrameLayout
-	{
-		Monochrome,
-		Color,
-		BayerRGGB
-	}
-
-	public enum LumaConversionMode
-	{
-		R = 0,
-		G = 1,
-		B = 2,
-		GrayScale = 3
-	}
-	
 	internal class VideoFrame : IVideoFrame
 	{
 		private long? frameNumber;

@@ -46,6 +46,9 @@
         </Filter>
         <Filter entryType="Delegate" fullName="ASCOM.Utilities.Timer.TickEventHandler" filterName="Timer.TickEventHandler" isExposed="False" />
       </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities.Video" isExposed="True">
+        <Filter entryType="Class" fullName="ASCOM.Utilities.Video.AviTools" filterName="AviTools" isExposed="False"/>
+      </Filter>
       <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
       <Filter entryType="Namespace" fullName="System" isExposed="True">
         <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
@@ -201,6 +204,11 @@
       <AlternateText>Camera V 2 State Diagram</AlternateText>
       <CopyToMedia>True</CopyToMedia>
     </Image>
+    <Image Include="Developer Information\VideoCamera State Diagram.png">
+      <ImageId>VideoCamera State Diagram</ImageId>
+      <AlternateText>Video Camera State Diagram</AlternateText>
+      <CopyToMedia>True</CopyToMedia>
+    </Image>    
     <Content Include="Scripts\script_manifold.js" />
     <Content Include="Introduction\Acknowledgements.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
