@@ -62,7 +62,7 @@ Public Enum VideoCameraState
     videoCameraRecording = 2
 
     ''' <summary>
-    ''' Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a restart will be required to resolve the error condition.
+    ''' Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a reset will be required to resolve the error condition.
     ''' </summary>
     videoCameraError = 3
 End Enum
@@ -73,7 +73,6 @@ End Enum
 ''' <summary>
 ''' Defines the IVideoFrame Interface.
 ''' </summary>
-''' <remarks>The video camera state diagram is shown here: <img src="../media/VideoCamera State Diagram.png"/></remarks>
 <Guid("EA1D5478-7263-43F8-B708-78783A48158C")> _
 <ComVisible(True)> _
 <InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
@@ -85,29 +84,42 @@ Public Interface IVideoFrame
     ''' The application must inspect the Safearray parameters to determine the dimensions. 
     ''' <para>For color or multispectral cameras, will produce an array of  <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
     ''' NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
-    ''' <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixels in the array is the second pixels from the first horizontal row
+    ''' <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel in the array is the second pixel from the first horizontal row
     ''' and the second last pixel in the array is the second last pixels from the last horizontal row.</para>
+    ''' <para>In colour mode a two dimentional array is returned where the first plain is <b>R</b>, the second is <b>G</b> and third is <b>B</b>.</para>
     ''' </remarks>
     ''' <value>The image array.</value>
     ReadOnly Property ImageArray() As Object
 
-    '''' <summary>
-    '''' Returns a preview bitmap for the last video frame as an array of byte. 
-    '''' </summary>
-    '''' <remarks>
-    '''' <p style="color:red"><b>Must be implemented</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for 
-    '''' those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> but usually only adjust the video camera settings and then record a video file. 
-    '''' <para>When a 24bit RGB image can be returned by the driver this should be the preferred format. </para>
-    '''' </remarks>
-    '''' <value>The preview bitmap image.</value>
+    ''' <summary>
+    ''' Returns a preview bitmap for the last video frame as an array of byte. 
+    ''' </summary>
+    ''' <example> The following code can be used to create a Bitmap from the returned byte array
+    ''' <code lang="cs">
+    ''' using (var memStr = new MemoryStream(frame.PreviewBitmap))
+    ''' {
+    ''' 	bmp = (Bitmap)Image.FromStream(memStr);
+    ''' }
+    ''' </code>
+    ''' <code lang="VB">
+    ''' Using memStr = New MemoryStream(frame.PreviewBitmap)
+    ''' 	bmp = DirectCast(Image.FromStream(memStr), Bitmap)
+    ''' End Using
+    ''' </code>
+    ''' </example>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for 
+    ''' those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> but usually only adjust the video camera settings and then record a video file. 
+    ''' <para>When a 24bit RGB image can be returned by the driver this should be the preferred format. </para>
+    ''' </remarks>
+    ''' <value>The preview bitmap image.</value>
     ReadOnly Property PreviewBitmap() As Byte()
 
     ''' <summary>
     ''' Returns the frame number.
     ''' </summary>
-    ''' <remarks>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> 
     ''' The frame number of the first exposed frame may not be zero and is dependent on the device and/or the driver. The frame number increases with each acquired frame not with each requested frame by the client.
-    ''' Must return -1 if frame numbering is not supported.
     ''' </remarks>
     ''' <value>The frame number of the current video frame.</value>
     ReadOnly Property FrameNumber() As Long
@@ -198,12 +210,10 @@ Public Interface IVideo
 
 
     ''' <summary>
-    ''' The interface version number that this device supports. Should return 2 for this interface version.
+    ''' The interface version number that this device supports. Should return 1 for this interface version.
     ''' </summary>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
-    ''' If the driver raises an error, it is a V1 driver. V1 did not specify this property. A driver may also return a value of 1. 
-    ''' In other words, a raised error or a return value of 1 indicates that the driver is a V1 driver.
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
     ''' </remarks>
     ReadOnly Property InterfaceVersion() As Short
 
@@ -217,8 +227,10 @@ Public Interface IVideo
     ReadOnly Property Name() As String
 
     ''' <summary>
-    ''' The name of the video capture device when such a device is used. For analogue video this is usually the video capture card or dongle attached to the computer. 
+    ''' The name of the video capture device when such a device is used.
     ''' </summary>
+    ''' <remarks>For analogue video this is usually the video capture card or dongle attached to the computer.
+    ''' </remarks>
     ReadOnly Property VideoCaptureDeviceName() As String
 
     ''' <summary>
@@ -271,18 +283,17 @@ Public Interface IVideo
     ''' <summary>
     ''' Returns the list of action names supported by this driver.
     ''' </summary>
-    '''	<value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
-    '''	<exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> This method must return an empty arraylist if no actions are supported. Please do not throw a 
-    ''' <see cref="PropertyNotImplementedException"/>.
+    ''' <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="PropertyNotImplementedException"/>.</b></p> This method must return an empty arraylist if no actions are supported.
     ''' <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
-    ''' Returned action names may be in mixed case to enhance presentation but  will be recognized case insensitively in 
+    ''' Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
     ''' the <see cref="M:ASCOM.DeviceInterface.IVideo.Action(System.String,System.String)">Action</see> method.</para>
-    ''' <para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
+    '''<para>An array list collection has been selected as the vehicle for  action names in order to make it easier for clients to
     ''' determine whether a particular action is supported. This is easily done through the Contains method. Since the
     ''' collection is also ennumerable it is easy to use constructs such as For Each ... to operate on members without having to be concerned 
     ''' about hom many members are in the collection. </para>
-    '''	<para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
+    ''' <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
     ''' the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
     ''' </remarks>
     ReadOnly Property SupportedActions() As ArrayList
@@ -300,7 +311,7 @@ Public Interface IVideo
     ''' The maximum supported exposure (integration time) in seconds.
     ''' </summary>
     ''' <remarks>
-    ''' This value is for information purposes only. The exposure cannot be set directly in seconds, use <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> method to change the exposure. 
+    ''' This value is for information purposes only. The exposure cannot be set directly in seconds, use <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property to change the exposure. 
     ''' </remarks>
     ReadOnly Property ExposureMax() As Double
 
@@ -308,16 +319,18 @@ Public Interface IVideo
     ''' The minimum supported exposure (integration time) in seconds.
     ''' </summary>
     ''' <remarks>
-    ''' This value is for information purposes only. The exposure cannot be set directly in seconds, use <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> method to change the exposure. 
+    ''' This value is for information purposes only. The exposure cannot be set directly in seconds, use <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property to change the exposure. 
     ''' </remarks>
     ReadOnly Property ExposureMin() As Double
 
 
     ''' <summary>
-    ''' The frame reate at which the camera is running. 
+    ''' The frame rate at which the camera is running. 
     ''' </summary>
     ''' <remarks>
-    ''' Analogue cameras run in one of the two fixes frame rates - 25fps for PAL video and 29.97fps for NTSC video. Digital cameras usually can run at a variable framerate.
+    ''' Analogue cameras run in one of the two fixed frame rates - 25fps for PAL video and 29.97fps for NTSC video. 
+    ''' Digital cameras usually can run at a variable frame rate. This value is for information purposes only and cannot be set. The FrameRate has the same value during the entire operation of the device. 
+    ''' Changing the <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property may change the actual variable frame rate but cannot changethe return value of this property.
     ''' </remarks>
     ReadOnly Property FrameRate() As VideoCameraFrameRate
 
@@ -349,14 +362,14 @@ Public Interface IVideo
     '''	<see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> can be used to adjust the integration rate (exposure) of the camera, if supported. A 0-based array of strings - <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/>, 
     ''' which correspond to different discrete integration rate settings supported by the camera will be returned. <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> must be set to an integer in this range.
     '''	<para>The driver must default <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> to a valid value when integration rate is supported by the camera. </para>
-    '''	</remarks>				
+    '''	</remarks>
     Property IntegrationRate() As Integer
 
 
     ''' <summary>
     ''' Returns an <see cref="DeviceInterface.IVideoFrame"/> with its <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> property populated. 
     ''' </summary>
-    ''' <value>The video frame.</value>
+    ''' <value>The current video frame.</value>
     ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ''' <exception cref="InvalidOperationException">If called before any video frame has been taken.</exception>
     ReadOnly Property LastVideoFrame() As IVideoFrame
@@ -392,9 +405,9 @@ Public Interface IVideo
     '''   <value></value>
     '''   <returns>The <see cref="DeviceInterface.SensorType"/> enum value of the camera sensor</returns>
     '''   <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
-    '''active <see cref="P:ASCOM.DeviceInterface.ICameraV2.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
+    '''active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''   <remarks>
-    '''       <para><see cref="P:ASCOM.DeviceInterface.ICameraV2.SensorType"/> returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes.  
+    '''       <para><see cref="P:ASCOM.DeviceInterface.IVideo.SensorType"/> returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes.  
     '''The following values are defined:</para>
     '''       <para>
     '''           <table style="width:76.24%;" cellspacing="0" width="76.24%">
@@ -423,7 +436,7 @@ Public Interface IVideo
     '''                   <td style="padding-right: 10px; padding-left: 10px; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
     '''Colour</td>
     '''                   <td style="padding-right: 10px; padding-left: 10px; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
-    '''Camera produces color image directly, requiring not Bayer decoding</td>
+    '''Camera produces color image directly, requiring not Bayer decoding. The monochome pixels for the R, G and B channels are returned in this order in the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/>.</td>
     '''               </tr>
     '''               <tr>
     '''                   <td style="padding-right: 10px; padding-left: 10px; &#xA; border-left-color: #000000; border-left-style: Solid; &#xA; border-right-color: #000000; border-right-style: Solid; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
@@ -462,7 +475,6 @@ Public Interface IVideo
     '''       <para>Please note that additional values may be defined in future updates of the standard, as new Bayer matrices may be created 
     '''by sensor manufacturers in the future.  If this occurs, then a new enumeration value shall be defined. The pre-existing enumeration 
     '''values shall not change.
-    '''<para><see cref="P:ASCOM.DeviceInterface.ICameraV2.SensorType"/> can possibly change between exposures, for example if <see cref="P:ASCOM.DeviceInterface.ICameraV2.ReadoutMode">Camera.ReadoutMode</see> is changed, and should always be checked after each exposure.</para>
     '''<para>In the following definitions, R = red, G = green, B = blue, C = cyan, M = magenta, Y = yellow.  The Bayer matrix is 
     '''defined with X increasing from left to right, and Y increasing from top to bottom. The pattern repeats every N x M pixels for the 
     '''entire pixel array, where N is the height of the Bayer matrix, and M is the width.</para>
@@ -649,56 +661,7 @@ Public Interface IVideo
     '''               </tr>
     '''           </table>
     '''       </para>
-    '''       <para>The alignment of the array may be modified by <see cref="P:ASCOM.DeviceInterface.ICameraV2.BayerOffsetX"/> and <see cref="P:ASCOM.DeviceInterface.ICameraV2.BayerOffsetY"/>. 
-    '''The offset is measured from the 0,0 position in the sensor array to the upper left corner of the Bayer matrix table. 
-    '''Please note that the Bayer offset values are not affected by subframe settings.</para>
-    '''       <para>For example, if a CMYG2 sensor has a Bayer matrix offset as shown below, <see cref="P:ASCOM.DeviceInterface.ICameraV2.BayerOffsetX"/> is 0 and <see cref="P:ASCOM.DeviceInterface.ICameraV2.BayerOffsetY"/> is 1:</para>
-    '''       <para>
-    '''           <table style="width:41.254%;" cellspacing="0" width="41.254%">
-    '''               <col style="width: 10%;"></col>
-    '''               <col style="width: 10%;"></col>
-    '''               <col style="width: 10%;"></col>
-    '''               <tr valign="top" align="center">
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; background-color: #ffffff" width="10%">
-    '''                   </td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px;&#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; background-color: #00ffff;" width="10%">
-    '''                       <b>X = 0</b></td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; &#xA; background-color: #00ffff;" width="10%">
-    '''                       <b>X = 1</b></td>
-    '''               </tr>
-    '''               <tr valign="top" align="center">
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; background-color: #00ffff" width="10%">
-    '''                       <b>Y = 0</b></td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; " width="10%">G</td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; &#xA; border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; &#xA; " width="10%">M</td>
-    '''               </tr>
-    '''               <tr valign="top" align="center">
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; background-color: #00ffff;" width="10%">
-    '''                       <b>Y = 1</b></td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; " width="10%">
-    '''C</td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; &#xA; " width="10%">
-    '''Y</td>
-    '''               </tr>
-    '''               <tr valign="top" align="center">
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; background-color: #00ffff" width="10%">
-    '''                       <b>Y = 2</b></td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; " width="10%">
-    '''M</td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; border-top-color: #000000; border-top-style: Solid;  border-top-width: 1px; &#xA; border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; &#xA; " width="10%">
-    '''G</td>
-    '''               </tr>
-    '''               <tr valign="top" align="center">
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;&#xA; background-color: #00ffff;" width="10%">
-    '''                       <b>Y = 3</b></td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;&#xA; " width="10%">
-    '''C</td>
-    '''                   <td colspan="1" rowspan="1" style="width:10%; &#xA; border-top-color: #000000; border-top-style: Solid; border-top-width: 1px; &#xA; border-left-color: #000000; border-left-style: Solid; border-left-width: 1px; &#xA; border-right-color: #000000; border-right-style: Solid; border-right-width: 1px; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; border-bottom=width: 1px;&#xA; " width="10%">
-    '''Y</td>
-    '''               </tr>
-    '''           </table>
-    '''       </para>
-    '''       <para>It is recommended that this function be called only after a <see cref="P:ASCOM.DeviceInterface.ICameraV2.Connected">connection</see> is established with the camera hardware, to ensure that 
+    '''       <para>It is recommended that this function be called only after a <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> is established with the camera hardware, to ensure that 
     '''the driver is aware of the capabilities of the specific camera model.</para>
     '''   </remarks>
     ReadOnly Property SensorType() As SensorType
@@ -738,14 +701,16 @@ Public Interface IVideo
     ''' <summary>
     '''	Reports the bit depth the camera can produce.
     '''	</summary>
-    '''	<value>The bit depth per pixel. Typical analogue videos are 8-bit while some digital cameras provide 12, 14 or 16-bit images.</value>
+    '''	<value>The bit depth per pixel. Typical analogue videos are 8-bit while some digital cameras can provide 12, 14 or 16-bit images.</value>
     '''	<exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ReadOnly Property BitDepth() As Integer
 
     ''' <summary>
-    ''' Returns the video codec used to record the video file, e.g. XVID, DVSD, YUY2, HFYU etc. For AVI files this is usually the FourCC identifier of the codec. 
-    ''' If no codec is used an empty string must be returned.
+    ''' Returns the video codec used to record the video file.
     ''' </summary>
+    ''' <remarks>For AVI files this is usually the FourCC identifier of the codec- e.g. XVID, DVSD, YUY2, HFYU etc. 
+    ''' If the recorded video file doesn't use codecs an empty string must be returned.
+    ''' </remarks>
     ReadOnly Property VideoCodec() As String
 
     ''' <summary>
@@ -767,7 +732,7 @@ Public Interface IVideo
     ''' Starts recording a new video file.
     ''' </summary>
     ''' <param name="PreferredFileName">The file name requested by the client. Some systems may not allow the file name to be controlled directly and they should ignore this parameter.</param>
-    ''' <returns>The actual file name that is being recorded.</returns>
+    ''' <returns>The actual file name of the file that is being recorded.</returns>
     '''	<exception cref="NotConnectedException">Must throw exception if not connected.</exception>
     '''	<exception cref="InvalidOperationException">Must throw exception if the current camera state doesn't allow to begin recording a file.</exception>
     '''	<exception cref="DriverException">Must throw exception if there is any other problem as result of which the recording cannot begin.</exception>
@@ -793,7 +758,11 @@ Public Interface IVideo
     '''		<item><description>2      CameraRecording The camera is running and recording a video</description></item>
     '''		<item><description>3      CameraError     Camera error condition serious enough to prevent further operations (connection fail, etc.).</description></item>
     '''	</list>
-    ''' <para>CameraIdle and CameraBusy are optional states. Free running cameras cannot be stopped and don't have a CameraIdle state. When those cameras are powered they immediately enter CameraRunning state. Some digital cameras or vdeo systems may suport operations that take longer to complete and may support a CameraBusy state.</para>
+    ''' <para>CameraIdle and CameraBusy are optional states. Free running cameras cannot be stopped and don't have a CameraIdle state. When those cameras are powered they immediately enter CameraRunning state. 
+    ''' Some digital cameras or vdeo systems may suport operations that take longer to complete. Whlie those longer operations are running the camera will remain in the state it was before the operation started.</para>
+    ''' <para>The video camera state diagram is shown below: 
+    ''' 
+    ''' <img src="../media/VideoCamera State Diagram.png"/></para>
     '''	</remarks>
     '''	<value>The state of the camera.</value>
     '''	<exception cref="NotConnectedException">Must return an exception if the camera status is unavailable.</exception>
@@ -860,7 +829,7 @@ Public Interface IVideo
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''	<exception cref="PropertyNotImplementedException">Must throw an exception if Gains is not supported</exception>
-    '''	<remarks><see cref="P:ASCOM.DeviceInterface.IVideo.Gains"/> provides a 0-based array of available gain settings.  This is often used to specify ISO settings for DSLR cameras.  
+    '''	<remarks><see cref="P:ASCOM.DeviceInterface.IVideo.Gains"/> provides a 0-based array of available gain settings.
     '''	Typically the application software will display the available gain settings in a drop list. The application will then supply 
     '''	the selected index to the driver via the <see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/> property. 
     '''	<para>The <see cref="P:ASCOM.DeviceInterface.IVideo.Gain"/> setting may alternatively be specified using integer values; if this mode is used then <see cref="P:ASCOM.DeviceInterface.IVideo.Gains"/> is invalid 
@@ -932,7 +901,7 @@ Public Interface IVideo
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''	<exception cref="PropertyNotImplementedException">Must throw an exception if Gammas is not supported</exception>
-    '''	<remarks><see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> provides a 0-based array of available gamma settings.
+    '''	<remarks><see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> provides a 0-based array of available gamma settings. This list can contain the widely used values of <b>OFF</b>, <b>LO</b> and <b>HI</b> that correspond to gammas of <b>1.00</b>, <b>0.45</b> and <b>0.35</b> as well as other extended values.
     '''	Typically the application software will display the available gamma settings in a drop list. The application will then supply 
     '''	the selected index to the driver via the <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/> property. 
     '''	<para>The <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/> setting may alternatively be specified using integer values; if this mode is used then <see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> is invalid 
@@ -951,17 +920,18 @@ Public Interface IVideo
     ReadOnly Property CanConfigureDeviceProperties() As Boolean
 
     ''' <summary>
-    ''' Displays a device properties configuration dialog that allows the configuration of specialized settings such as White Balance or Sharpness for example.   
+    ''' Displays a device properties configuration dialog that allows the configuration of specialized settings.
     ''' </summary>
     '''	<exception cref="NotConnectedException">Must throw an exception if the camera is not connected.</exception>
-    '''	<exception cref="MethodNotImplementedException">Must throw an exception if the property is not supported.</exception>
+    '''	<exception cref="MethodNotImplementedException">Must throw an exception if the method is not supported.</exception>
     ''' <remarks>
-    ''' <para>The dialog could also provide buttons for cameras that can be controlled via on screen display of menues and a set of navigation buttons such as Up, Down, Left, Right and Enter. 
-    ''' This dialog is not intended to be used in unattended mode but can give greater control over video camera that provide more specialized features. The dialog may also allow 
-    ''' changing settings such as Gamma and Gain that can be also controlled directly via the <see cref="DeviceInterface.IVideo"/> interface. If a client software 
-    ''' displays the current Gamma and Gain it should update the values after this method has been called as those values for Gamma and Gain may have changed.</para>
-    ''' <para>To support automated and unattended control over the specialized device settings or functions available on this dialog the driver must also allow their control via <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/>. 
+    ''' <para>The dialog could also provide buttons for cameras that can be controlled via 'on screen display' menues and a set of navigation buttons such as Up, Down, Left, Right and Enter. 
+    ''' This dialog is not intended to be used in unattended mode but can give greater control over video cameras that provide special features. The dialog may also allow 
+    ''' changing standard <see cref="DeviceInterface.IVideo"/> interface settings such as Gamma and Gain. If a client software 
+    ''' displays any <see cref="DeviceInterface.IVideo"/> interface settings then it should take care to keep in sync the values changed by this method and those changed directly via the interface.</para>
+    ''' <para>To support automated and unattended control over the specialized device settings or functions available on this dialog the driver should also allow their control via <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/>. 
     ''' This dialog is meant to be used by the applications to allow the user to adjust specialized device settings when those applications don't specifically use the specialized settings in their functionality.</para>
+    ''' <para>Examples for specialized settings that could be supported are white balance and sharpness.</para>
     ''' </remarks>
     Sub ConfigureDeviceProperties()
 #End Region
