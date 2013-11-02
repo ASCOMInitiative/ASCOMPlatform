@@ -18,11 +18,13 @@ Imports System.Runtime.InteropServices
 Imports System.Text
 Imports ASCOM.DeviceInterface
 Imports ASCOM
+
 #Region "Enums"
 
 ''' <summary>
 ''' ASCOM Video Camera supported frame rates.
 ''' </summary>
+<Guid("AECD630C-3A08-46A2-96D3-33F3CF461CBB")> _
 <ComVisible(True)> _
 Public Enum VideoCameraFrameRate
     ''' <summary>
@@ -44,6 +46,7 @@ End Enum
 ''' <summary>
 ''' ASCOM Video Camera status values.
 ''' </summary>
+<Guid("84422451-5D8E-4F5A-9A81-8E197AABF79B")> _
 <ComVisible(True)> _
 Public Enum VideoCameraState
     ''' <summary>

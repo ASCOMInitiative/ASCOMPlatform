@@ -20,6 +20,8 @@ using ASCOM.DeviceInterface;
 
 namespace ASCOM.Utilities.Video
 {
+    [ComVisible(true)]
+    [Guid("289848FE-D368-4235-BBC6-42B4BCB66F66")]
     public enum VideoFrameLayout
     {
         Monochrome,
@@ -27,6 +29,8 @@ namespace ASCOM.Utilities.Video
         BayerRGGB
     }
 
+    [ComVisible(true)]
+    [Guid("6C02144E-641B-4E7D-9661-51FEFD48A068")]
     public enum LumaConversionMode
     {
         R = 0,
