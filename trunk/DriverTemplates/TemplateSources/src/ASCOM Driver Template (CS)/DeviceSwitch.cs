@@ -38,8 +38,8 @@ class DeviceSwitch
         tl.LogMessage("GetSwitchName", string.Format("GetSwitchName({0}) - not implemented", id));
         throw new MethodNotImplementedException("GetSwitchName");
         // or
-        tl.LogMessage("GetSwitchName", string.Format("GetSwitchName({0}) - default Switch{0}", id));
-        return "Switch" + id.ToString();
+        //tl.LogMessage("GetSwitchName", string.Format("GetSwitchName({0}) - default Switch{0}", id));
+        //return "Switch" + id.ToString();
     }
 
     /// <summary>
