@@ -36,7 +36,6 @@ using ASCOM;
 using ASCOM.Astrometry;
 using ASCOM.Astrometry.AstroUtils;
 using ASCOM.Utilities;
-using ASCOM.Utilities.Video.DirectShowVideo;
 using ASCOM.DeviceInterface;
 using System.Globalization;
 using System.Collections;

@@ -123,12 +123,14 @@ Get Exact OS Level into OPSYS
 Comment: Initialise to a null value. These variables point at 32bit executables on both 32 and 64bit OS.
 Set Variable REGASM32 to 
 Set Variable NGEN32 to 
+Set Variable FRAMEWORK2 to v2.0.50727
+Set Variable FRAMEWORK4 to v4.0.30319
 Get Folder Location System->Program Files Directory into PROGRAMFILES32
 Get Common Folder Location System->Program Files Directory into COMMONFILES32
 Comment: Read the framework root value from the OS
 Read Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\InstallRoot into FRAMEWORKROOT
 Comment: Set to a value that will access the 32bit portion of the registry on a 64bit OS
-Set Variable REGASM32 to $FRAMEWORKROOT$v4.0.30319\regasm.exe
+Set Variable REGASM32 to $FRAMEWORKROOT$$FRAMEWORK4$\regasm.exe
 Set Variable NGEN32 to $FRAMEWORKROOT$v4.0.30319\ngen.exe
 Comment: Initialise to a null value. These variables point at 64bit executables on a 64bit OS.
 Set Variable REGASM64 to 
@@ -139,7 +141,7 @@ if Variable WIN64MODE Equals TRUE
   Get Common Folder Location System->Program Files Directory into COMMONFILES64
   Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   Comment: Set to a value that will access the 32bit portion of the registry on a 64bit OS
-  Set Variable REGASM64 to $WINDIR$Microsoft.NET\Framework64\v4.0.30319\regasm.exe
+  Set Variable REGASM64 to $WINDIR$Microsoft.NET\Framework64\$FRAMEWORK4$\regasm.exe
   Set Variable NGEN64 to $WINDIR$Microsoft.NET\Framework64\v4.0.30319\ngen.exe
 end
  
@@ -501,6 +503,10 @@ if Variable REMOVE Equals TRUE
   Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
+  Comment: Unregister device interfaces assembly
+  Unregister assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+   
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value RC: $RC$ Unregister ASCOM Master Interfaces typelib (at end of file)
   Set Variable PROGRESS to 50
@@ -549,6 +555,11 @@ if Variable REMOVE Equals TRUE
     Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Utilities (at end of file)
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Video Utilities (at end of file)
+     
+    Comment: Unregister device interfaces assembly
+    Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.DeviceInterfaces.dll" (WAIT, get result into variable RC)
+     
+    Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Device Interfaces (at end of file)
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   end
    
@@ -850,10 +861,12 @@ else
     Install Files ..\..\..\..\CheckForUpdates.js to $TARGETDIR$\Tools
     [END REGION]
     [DEFINE REGION: Platform 6.1 Content]
+    Comment: Device Interfaces
+    Install Files ..\..\..\..\ASCOM.DeviceInterface\bin\Release\ASCOM.DeviceInterfaces.dll to $COMMONFILES$\ASCOM\Platform\v6.1
     Comment: Video utilities
     Install Assembly ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to Global Assembly Cache
     Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.pdb to $WINDIR$\Symbols\dll
-    Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $COMMONFILES$\ASCOM\Platform\v6
+    Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $COMMONFILES$\ASCOM\Platform\v6.1
     Comment: Video Simulator
     Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.dll to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
     Install Files ..\..\..\..\Drivers and Simulators\ASCOM.Simulator.Video\bin\Release\ASCOM.Simulator.Video.pdb to $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video
@@ -1192,7 +1205,6 @@ else
         Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Set Variable PROGRESS to 5
         Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Comment: Register assembly ASCOM.Exceptions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register the Platform 5 type libraries
         Set Variable PROGRESS to 10
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
@@ -1274,11 +1286,8 @@ else
         Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm32 - Exceptions (at end of file)
         Run Program $REGASM32$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll"  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm32 - Utilities (at end of file)
-        Run Program $REGASM32$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.Video.dll"  (WAIT, get result into variable RC)
+        Run Program $REGASM32$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll"  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm32 - Video Utilities (at end of file)
-        Comment: Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Comment: Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Comment: Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register in-process simulator DLL files with Codebase option
         Run Program $REGASM32$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC)
@@ -1289,10 +1298,11 @@ else
         Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm32 - SafetyMonitor Simulator (at end of file)
         Run Program $REGASM32$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm32 - Dome Simulator (at end of file)
-        Comment: Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
-        Comment: Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
-        Comment: Register assembly $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll, set the code base in the registry
-        Comment: Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
+         
+        Comment: Register Device Interfaces
+        Run Program $REGASM32$ /tlb "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.DeviceInterfaces.dll"  (WAIT, get result into variable RC)
+        Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm32 - Device Interfaces (at end of file)
+         
         Comment: Register these LocalServer drivers using the -register option
         Set Variable PROGRESS to 40
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
@@ -1319,6 +1329,7 @@ else
           Set Variable RC9 to 1000
           Set Variable RC10 to 1000
           Set Variable RC11 to 1000
+          Set Variable RC12 to 1000
           Comment: Register core components
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
           Write into Text File $SETUPLOG$ from Value RC: $RC1$ RegAsm64 - Astrometry (at end of file)
@@ -1329,6 +1340,11 @@ else
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC3)
           Write into Text File $SETUPLOG$ from Value RC: $RC3$ RegAsm64 - Video Utilities (at end of file)
           Set Variable PROGRESS to 50
+           
+          Comment: Register Device Interfaces
+          Run Program $REGASM64$ /tlb "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.DeviceInterfaces.dll" (WAIT, get result into variable RC12)
+          Write into Text File $SETUPLOG$ from Value RC: $RC12$ RegAsm64 - Device Interfaces (at end of file)
+           
           Comment: Register simulators
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
           Write into Text File $SETUPLOG$ from Value RC: $RC4$ RegAsm64 - Camera Simulator 6 (at end of file)
@@ -1342,37 +1358,41 @@ else
           Write into Text File $SETUPLOG$ from Value RC: $RC11$ RegAsm64 - Video Simulator (at end of file)
           Set Variable PROGRESS to 60
           if Variable RC1 not Equals 0
-            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
           else
             if Variable RC2 not Equals 0
-              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
             else
               if Variable RC3 not Equals 0
-                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
               else
                 if Variable RC4 not Equals 0
-                  MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                  MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
                 else
                   if Variable RC5 not Equals 0
-                    MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                    MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
                   else
                     if Variable RC6 not Equals 0
-                      MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                      MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
                     else
                       if Variable RC7 not Equals 0
-                        MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                        MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
                       else
                         if Variable RC8 not Equals 0
-                          MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                          MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
                         else
                           if Variable RC9 not Equals 0
-                            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                            MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
                           else
                             if Variable RC10 not Equals 0
-                              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$
+                              MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
                             else
                               if Variable RC11 not Equals 0
-                                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$
+                                MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
+                              else
+                                if Variable RC12 not Equals 0
+                                  MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
+                                end
                               end
                             end
                           end

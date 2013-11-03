@@ -295,7 +295,7 @@ namespace ASCOM.Setup
                         }
                     }
                 }
-                this.cbDeviceClass.SelectedIndex = 7; // Select Telescope as the default
+                this.cbDeviceClass.SelectedIndex = this.cbDeviceClass.FindString("Telescope"); // Select Telescope as the default
             }
 
             /* The following is left in as an example of how to introduce different handling for another Wizard type
