@@ -220,6 +220,7 @@ namespace InstallTemplates
                 LogMessage("InstallTemplates", spaces + "Path: " + Platform6CSharp + " does not exist, creating directory");
                 Directory.CreateDirectory(Platform6CSharp);
             }
+            CleanDirectory(Platform6CSharp); // Clean the C# directory
 
             if (Directory.Exists(Platform6VB))
             {
@@ -230,6 +231,7 @@ namespace InstallTemplates
                 LogMessage("InstallTemplates", spaces + "Path: " + Platform6VB + " does not exist, creating directory");
                 Directory.CreateDirectory(Platform6VB);
             }
+            CleanDirectory(Platform6VB); // Clean the C# directory
 
             FileDelete(Platform5CSharp + "ASCOM Camera Driver (C#).zip"); //Platform 5 C#
             FileDelete(Platform5CSharp + "ASCOM Dome Driver (C#).zip");
