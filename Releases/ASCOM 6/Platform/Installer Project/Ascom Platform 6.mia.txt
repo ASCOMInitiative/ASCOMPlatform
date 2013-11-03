@@ -1337,7 +1337,7 @@ else
           Write into Text File $SETUPLOG$ from Value RC: $RC2$ RegAsm64 - Exceptions (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
           Write into Text File $SETUPLOG$ from Value RC: $RC3$ RegAsm64 - Utilities (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC3)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC3)
           Write into Text File $SETUPLOG$ from Value RC: $RC3$ RegAsm64 - Video Utilities (at end of file)
           Set Variable PROGRESS to 50
            
