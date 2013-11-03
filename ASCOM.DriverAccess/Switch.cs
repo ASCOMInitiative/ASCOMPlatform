@@ -63,7 +63,6 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Return the name of switch n.
         /// </summary>
-        /// <param name="id">The switch number</param>
         /// <returns>The name of the switch</returns>
         /// <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
@@ -253,5 +252,6 @@ namespace ASCOM.DriverAccess
 
         #endregion
         #endregion
+
     }
 }

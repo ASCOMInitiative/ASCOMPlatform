@@ -231,31 +231,31 @@ namespace InstallTemplates
                 Directory.CreateDirectory(Platform6VB);
             }
 
-            FileDelete(Platform5CSharp, "ASCOM Camera Driver (C#).zip"); //Platform 5 C#
-            FileDelete(Platform5CSharp, "ASCOM Dome Driver (C#).zip");
-            FileDelete(Platform5CSharp, "ASCOM FilterWheel Driver (C#).zip");
-            FileDelete(Platform5CSharp, "ASCOM Focuser Driver (C#).zip");
-            FileDelete(Platform5CSharp, "ASCOM Rotator Driver (C#).zip");
-            FileDelete(Platform5CSharp, "ASCOM Switch Driver (C#).zip");
-            FileDelete(Platform5CSharp, "ASCOM Telescope Driver (C#).zip");
-            FileDelete(Platform5CSharp, "ASCOM Local Server (singleton).zip");
+            FileDelete(Platform5CSharp + "ASCOM Camera Driver (C#).zip"); //Platform 5 C#
+            FileDelete(Platform5CSharp + "ASCOM Dome Driver (C#).zip");
+            FileDelete(Platform5CSharp + "ASCOM FilterWheel Driver (C#).zip");
+            FileDelete(Platform5CSharp + "ASCOM Focuser Driver (C#).zip");
+            FileDelete(Platform5CSharp + "ASCOM Rotator Driver (C#).zip");
+            FileDelete(Platform5CSharp + "ASCOM Switch Driver (C#).zip");
+            FileDelete(Platform5CSharp + "ASCOM Telescope Driver (C#).zip");
+            FileDelete(Platform5CSharp + "ASCOM Local Server (singleton).zip");
 
-            FileDelete(Platform5VB, "ASCOM Camera Driver (VB).zip"); // Platform 5 VB
-            FileDelete(Platform5VB, "ASCOM Dome Driver (VB).zip");
-            FileDelete(Platform5VB, "ASCOM FilterWheel Driver (VB).zip");
-            FileDelete(Platform5VB, "ASCOM Focuser Driver (VB).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(2).zip"); //Remove copies introduced by a bad content file in Platform 5 Templates SP1
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(3).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(4).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(5).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(6).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(7).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(8).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(9).zip");
-            FileDelete(Platform5VB, "ASCOM Rotator Driver (VB)(10).zip");
-            FileDelete(Platform5VB, "ASCOM Switch Driver (VB).zip");
-            FileDelete(Platform5VB, "ASCOM Telescope Driver (VB).zip");
+            FileDelete(Platform5VB + "ASCOM Camera Driver (VB).zip"); // Platform 5 VB
+            FileDelete(Platform5VB + "ASCOM Dome Driver (VB).zip");
+            FileDelete(Platform5VB + "ASCOM FilterWheel Driver (VB).zip");
+            FileDelete(Platform5VB + "ASCOM Focuser Driver (VB).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(2).zip"); //Remove copies introduced by a bad content file in Platform 5 Templates SP1
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(3).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(4).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(5).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(6).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(7).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(8).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(9).zip");
+            FileDelete(Platform5VB + "ASCOM Rotator Driver (VB)(10).zip");
+            FileDelete(Platform5VB + "ASCOM Switch Driver (VB).zip");
+            FileDelete(Platform5VB + "ASCOM Telescope Driver (VB).zip");
 
             foreach (string item in Directory.GetFiles(TemplateSourceDirectory, "*.zip"))
             {
@@ -279,18 +279,39 @@ namespace InstallTemplates
         /// </summary>
         /// <param name="DeletePath">Path to the file to delete</param>
         /// <param name="DeleteFile">Name of the file to delete</param>
-        static void FileDelete(string DeletePath, string DeleteFile)
+        static void FileDelete(string DeleteFile)
         {
-            bool FileExists = File.Exists(DeletePath + DeleteFile);
+            bool FileExists = File.Exists(DeleteFile);
 
             try
             {
                 // LogMessage("FileDelete", "  Deleting file: " + DeletePath + DeleteFile + " " + FileExists);
-                if (FileExists) File.Delete(DeletePath + DeleteFile); // Only delete it if it exists!
+                if (FileExists) File.Delete(DeleteFile); // Only delete it if it exists!
             }
             catch (Exception ex)
             {
-                LogError("FileDelete", "  Exception Deleting file: " + FileExists.ToString() + ", " + DeletePath + DeleteFile + " " + ex.ToString());
+                LogError("FileDelete", "  Exception Deleting file: " + FileExists.ToString() + ", " + DeleteFile + " " + ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Erase all files in a directory
+        /// </summary>
+        /// <param name="DirectoryPath">Full path of the directory to clear</param>
+        static void CleanDirectory(string DirectoryPath)
+        {
+            if (Directory.Exists(DirectoryPath))
+            {
+                LogMessage("CleanDirectory", "Cleaning directory: " + DirectoryPath);
+                string[] directoryFiles = Directory.GetFiles(DirectoryPath);
+                foreach (string file in directoryFiles)
+                {
+                    FileDelete(file);
+                }
+            }
+            else
+            {
+                LogMessage("CleanDirectory", "Directory: " + DirectoryPath + " does not exist, no files to clean.");
             }
         }
 
