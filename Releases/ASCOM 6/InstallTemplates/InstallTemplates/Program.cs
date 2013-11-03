@@ -287,8 +287,16 @@ namespace InstallTemplates
 
             try
             {
-                // LogMessage("FileDelete", "  Deleting file: " + DeletePath + DeleteFile + " " + FileExists);
-                if (FileExists) File.Delete(DeleteFile); // Only delete it if it exists!
+
+                if (FileExists)
+                {
+                    LogMessage("FileDelete", "  Deleting file: " + DeleteFile);
+                    File.Delete(DeleteFile); // Only delete it if it exists!
+                }
+                else
+                {
+                    LogMessage("FileDelete", "  File: " + DeleteFile + " does not exist.");
+                }
             }
             catch (Exception ex)
             {
