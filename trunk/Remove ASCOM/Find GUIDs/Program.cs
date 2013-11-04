@@ -25,7 +25,7 @@ namespace FindGUIDs
                     if (args.Length > 0)
                     {
                         searchPath = args[0];
-                        outputFileName = args[0] + @"\Remove ASCOM\GUIDList.vb";
+                        outputFileName = args[0] + @"\Remove ASCOM\Remove ASCOM\GUIDList.vb";
                     }
 
                     TL.LogMessage("Main", "Search path: " + Path.GetFullPath(searchPath));
