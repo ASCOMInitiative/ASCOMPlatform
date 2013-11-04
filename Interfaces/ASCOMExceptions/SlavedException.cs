@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -8,6 +9,8 @@ namespace ASCOM
     ///   while the device was in slaved mode. This applies primarily to domes drivers.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("537BF13D-55E0-4C80-98EB-BE270E653E10")]
     public class SlavedException : DriverException
     {
         /// <summary>

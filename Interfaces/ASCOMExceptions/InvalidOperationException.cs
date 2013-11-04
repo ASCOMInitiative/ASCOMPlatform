@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -13,6 +14,8 @@ namespace ASCOM
     ///     Clearly, that is a judgement that you can only make given a specific scenario.</para>
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("64DC4F51-E5EB-4F28-A8B9-782F78A778FA")]
     public class InvalidOperationException : DriverException
     {
         const string csDefaultMessage = "The requested operation is not permitted at this time";

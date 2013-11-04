@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -12,6 +13,8 @@ namespace ASCOM
     ///   the two specific exceptions in a single catch() clause.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("46584278-AC16-4CFC-8878-09CA960AEABE")]
     public class NotImplementedException : DriverException
     {
         /// <summary>

@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -12,6 +13,8 @@ namespace ASCOM
     ///   had the invalid value and also the range of allowed values.
     /// </remarks>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("939B5C76-A502-4729-8786-0C1600445EFE")]
     public class InvalidValueException : DriverException
     {
         [NonSerialized] const string csMessage = "{0} set - '{1}' is an invalid value. The valid range is: {2}.";

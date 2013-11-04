@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -8,6 +9,8 @@ namespace ASCOM
     ///   device, but the device is disconnected.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("C22D9A81-63FA-4AC3-AD64-77B77D3CEB2B")]
     public class NotConnectedException : DriverException
     {
         [NonSerialized] const string csDefaultMessage = "Device is not connected";

@@ -41,6 +41,8 @@
   <!-- Main build target for this build -->
   <Target Name="Build">
 
+    <Sleep Milliseconds="2000" />
+
     <Message Text="Checkout directory: $(CheckoutDirectory)" />
 
     <!-- Read the Subversion logon credentials fromn the registry -->

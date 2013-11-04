@@ -9,6 +9,8 @@ namespace ASCOM
     /// the inner exception.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("06CC64FC-3833-48D5-BC54-82DF40CA3900")]
     public class DriverAccessCOMException : COMException
     {
         /// <summary>

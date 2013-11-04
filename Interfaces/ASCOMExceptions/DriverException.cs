@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -15,6 +16,8 @@ namespace ASCOM
     ///   <para>As good programming practice, the Message property should not be empty, so that users understand why the exception was thrown.</para>
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("B6EE3D18-CF56-42D3-AED5-B97ABF36B4EE")]
     public class DriverException : Exception
     {
         /// <summary>

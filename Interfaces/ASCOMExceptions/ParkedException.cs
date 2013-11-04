@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -8,6 +9,8 @@ namespace ASCOM
     ///   while the device was in a parked state.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("89EA7E2A-7C74-461C-ABD5-75EE3D46DA13")]
     public class ParkedException : DriverException
     {
         /// <summary>
