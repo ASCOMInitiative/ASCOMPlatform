@@ -1,7 +1,6 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Required Import to use MSBuild Community Tasks -->
   <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
-
   <PropertyGroup>
     <!-- Directory in which to export the latest ASCOM codebase from Subversion-->
     <CheckoutDirectory>$(MSBuildProjectDirectory)\Export</CheckoutDirectory>
@@ -42,6 +41,9 @@
   </ItemGroup>
   <!-- Main build target for this build -->
   <Target Name="Build">
+
+    <Exec Command="SLEEP 2000" IgnoreExitCode="true" />
+    
     <Message Text="Checkout directory: $(CheckoutDirectory)" />
 
     <!-- Read the Subversion logon credentials fromn the registry -->
@@ -105,7 +107,7 @@
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=FindGUIDs;Platform=Any CPU" />
 
     <!-- Run FindGUIDs to create the updated class in the RemoveASCOM project that contains the list of GUIDs used by the project -->
-    <Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\FindGUIDs.exe" "$(CheckoutDirectory)\$(FindGUIDsDirectory)" ' />
+    <Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\FindGUIDs.exe" "$(CheckoutDirectory)" ' />
 
     <!-- Build the main Platform after cleaning the solution (just in case executables get committed to SVN) -->
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=Any CPU" />
