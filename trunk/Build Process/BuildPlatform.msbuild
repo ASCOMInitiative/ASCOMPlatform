@@ -31,18 +31,17 @@
     <DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
     <MakeTemplatesExecutable>DriverTemplates\TemplateSources\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
     <DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
+    <FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\Release</FindGUIDsDirectory>
+    <RemoveASCOMExe>Remove ASCOM\Remove ASCOM\bin\Release\RemoveASCOM.exe</RemoveASCOMExe>
+    <RemoveASCOMPdb>Remove ASCOM\Remove ASCOM\bin\Release\RemoveASCOM.pdb</RemoveASCOMPdb>
   </PropertyGroup>
 
   <!-- Item group for the installers that are created by the build process -->
   <ItemGroup>
     <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe" />
   </ItemGroup>
-
   <!-- Main build target for this build -->
   <Target Name="Build">
-
-    <Sleep Milliseconds="2000" />
-
     <Message Text="Checkout directory: $(CheckoutDirectory)" />
 
     <!-- Read the Subversion logon credentials fromn the registry -->
@@ -100,11 +99,20 @@
     <AssemblyInfo CodeLanguage="CS" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" AssemblyFileVersion="$(PlatformVersion).$(BuildHours).$(Revision)" />
     <AssemblyInfo CodeLanguage="VB" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" AssemblyFileVersion="$(PlatformVersion).$(BuildHours).$(Revision)" />
 
-    <!-- Clean the solution (just in case executables get committed to SVN) and build from scratch.-->
+    <!-- Build FindGUIDs after cleaning the solution (just in case executables get committed to SVN) -->
+    <!-- This builds the GUIDList.vb file ready to be incorporated into RemoveASCOM when it is built as part of the Platform -->
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=FindGUIDs;Platform=Any CPU" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=FindGUIDs;Platform=Any CPU" />
+
+    <!-- Run FindGUIDs to create the updated class in the RemoveASCOM project that contains the list of GUIDs used by the project -->
+    <Exec Command='"$(FindGUIDsDirectory)\FindGUIDs.exe" "$(FindGUIDsDirectory)" "FindGUIDs"' />
+
+    <!-- Build the main Platform after cleaning the solution (just in case executables get committed to SVN) -->
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=Any CPU" />
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release;Platform=Any CPU" />
-	
-  	<MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release 64bit;Platform=Any CPU" />
+
+    <!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release 64bit;Platform=Any CPU" />
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release 64bit;Platform=Any CPU" />
 
     <!-- Make the VS Template zip files from their source files-->
@@ -121,9 +129,14 @@
     <!-- Copy the installers back to the build root directory -->
     <Sleep Milliseconds="1000" />
     <ItemGroup>
-      <PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;
-                                   $(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
+      <PlatformInstallers Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\Release\Single\*.exe;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\Release\Single\*.exe" />
     </ItemGroup>
     <Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
+
+    <!-- Copy the RemoveASCOM files back to the build root directory -->
+    <ItemGroup>
+      <RemoveASCOMFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
+    </ItemGroup>
+    <Copy SourceFiles="@(RemoveASCOMFiles)" DestinationFolder="$(MSBuildProjectDirectory)" />
   </Target>
 </Project>

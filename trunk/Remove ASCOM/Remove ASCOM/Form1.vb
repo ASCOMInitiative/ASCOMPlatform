@@ -76,11 +76,11 @@ Public Class Form1
                 TL.LogMessage("ForceRemove", "User said ""Yes""")
                 TL.BlankLine()
 
-                'RemoveInstallers()
-                'RemoveProfile()
-                'RemoveFiles()
-                'RemoveGAC()
-                'RemoveDekstopFilesAndLinks()
+                RemoveInstallers()
+                RemoveProfile()
+                RemoveFiles()
+                RemoveGAC()
+                RemoveDekstopFilesAndLinks()
                 RemoveGUIDs()
 
                 Status("Completed")
@@ -614,15 +614,15 @@ Public Class Form1
         Status("Removing GUIDs")
 
         For Each Guid As Generic.KeyValuePair(Of String, String) In GUIDList.Members(TL)
-            CleanGUID(Guid.Key)
+            CleanGUID(Guid.Key, Guid.Value)
         Next
         TL.LogMessage("RemoveGUIDs", "Completed")
     End Sub
 
 #Region "Support Routines"
 
-    Sub CleanGUID(GUIDKey As String)
-        TL.LogMessage("CleanGUID", "Cleaning GUID: " & GUIDKey)
+    Sub CleanGUID(GUIDKey As String, FileLocation As String)
+        TL.LogMessage("CleanGUID", "Cleaning GUID: " & GUIDKey & " in " & FileLocation)
         CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("CLSID", True), GUIDKey)
         CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("Interface", True), GUIDKey)
         CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("Record", True), GUIDKey)
