@@ -118,7 +118,7 @@ Public Interface ISwitchV2
     ''' Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of 
     ''' “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
     ''' and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-    ''' <para>The names of all supported actions must bre returned in the <see cref="SupportedActions"/> property.</para>
+    ''' <para>The names of all supported actions must be returned in the <see cref="SupportedActions"/> property.</para>
     ''' </remarks>
     Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String
 

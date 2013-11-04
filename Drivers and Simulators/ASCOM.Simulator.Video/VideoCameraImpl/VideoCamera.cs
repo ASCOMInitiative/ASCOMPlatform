@@ -60,7 +60,7 @@ namespace Simulator.VideoCameraImpl
 
 		public int selectedWhiteBalance = 0;
 
-		private VideoCameraState cameraState = VideoCameraState.videoCameraIdle;
+		private VideoCameraState cameraState = VideoCameraState.videoCameraError;
 
 		private bool useBuffering;
 		private int bufferSize;
@@ -114,7 +114,7 @@ namespace Simulator.VideoCameraImpl
 
 			if (bitmapPlayer != null)
 			{
-				cameraState = VideoCameraState.videoCameraIdle;
+				cameraState = VideoCameraState.videoCameraError;
 
 				bitmapPlayer.Stop();
 			}
