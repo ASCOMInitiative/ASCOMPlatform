@@ -50,24 +50,19 @@ End Enum
 <ComVisible(True)> _
 Public Enum VideoCameraState
     ''' <summary>
-    ''' Camera status idle. The video camera expecting commands.
-    ''' </summary>
-    videoCameraIdle = 0
-
-    ''' <summary>
     ''' Camera status running. The video is receiving signal and video frames are available for viewing or recording.
     ''' </summary>
-    videoCameraRunning = 1
+    videoCameraRunning = 0
 
     ''' <summary>
     ''' Camera status recording. The video camera is recording video to the file system. Video frames are available for viewing.
     ''' </summary>
-    videoCameraRecording = 2
+    videoCameraRecording = 1
 
     ''' <summary>
     ''' Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a reset will be required to resolve the error condition.
     ''' </summary>
-    videoCameraError = 3
+    videoCameraError = 2
 End Enum
 #End Region
 
@@ -145,13 +140,17 @@ Public Interface IVideoFrame
     ReadOnly Property ExposureStartTime() As String
 
     ''' <summary>
-    ''' Returns additional information associated with the video frame.
+    ''' Returns additional information associated with the video frame as a list of named variables.
     ''' </summary>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> This property must return an empty string if no additional video frame information is supported. Please do not throw a 
+    ''' <remarks><para>The returned object contains entries for each value. For each entry, the Key property is the value's name, and the Value property is the string value itself.</para>
+    ''' <p style="color:red"><b>Must be implemented</b></p> This property must return an empty list if no video frame metadata is provided. Please do not throw a 
     ''' <see cref="PropertyNotImplementedException"/>.
+    ''' <para>The Keys is a single word, or multiple words joined by underscore characters, that sensibly describes the variable. It is recommended that Keys 
+    ''' should be a maximum of 16 characters for legibility and all upper case.</para>
+    ''' <para>The KeyValuePair objects are instances of the <see cref="ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
     ''' </remarks>
-    ''' <value>A string in a well known format agreed by interested parties that represents any additional information associated with the video frame.</value>
-    ReadOnly Property ImageInfo() As String
+    ''' <value>An ArrayList of KeyValuePair objects.</value>
+    ReadOnly Property ImageMetadata() As ArrayList
 End Interface
 
 #End Region
@@ -173,7 +172,10 @@ Public Interface IVideo
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</remarks>
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
+    ''' <para>The driver must put the camera in a mode that will start producing a constant stream of video frames when a connection has been established. For example a digital camera that can 
+    ''' operate as both a CCD camera and a video camera must be set in a video mode before the call <b>Connected = true</b> returns.</para>
+    ''' </remarks>
     Property Connected() As Boolean
 
 
@@ -278,7 +280,7 @@ Public Interface IVideo
     ''' Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of 
     ''' "General" will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
     ''' and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-    '''	<para>The names of all supported actions must bre returned in the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/> property.</para>
+    '''	<para>The names of all supported actions must be returned in the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/> property.</para>
     ''' </remarks>
     Function Action(ActionName As String, ActionParameters As String) As String
 
@@ -756,10 +758,9 @@ Public Interface IVideo
     '''	Returns one of the following status information:
     '''	<list type="bullet">
     '''		<listheader><description>Value  State           Meaning</description></listheader>
-    '''		<item><description>0      CameraIdle      At idle state, camera is available for commands</description></item>
-    '''		<item><description>1      CameraRunning	  The camera is running and video frames are available for viewing and recording</description></item>
-    '''		<item><description>2      CameraRecording The camera is running and recording a video</description></item>
-    '''		<item><description>3      CameraError     Camera error condition serious enough to prevent further operations (connection fail, etc.).</description></item>
+    '''		<item><description>0      CameraRunning	  The camera is running and video frames are available for viewing and recording</description></item>
+    '''		<item><description>1      CameraRecording The camera is running and recording a video</description></item>
+    '''		<item><description>2      CameraError     Camera error condition serious enough to prevent further operations (connection fail, etc.).</description></item>
     '''	</list>
     ''' <para>CameraIdle and CameraBusy are optional states. Free running cameras cannot be stopped and don't have a CameraIdle state. When those cameras are powered they immediately enter CameraRunning state. 
     ''' Some digital cameras or vdeo systems may suport operations that take longer to complete. Whlie those longer operations are running the camera will remain in the state it was before the operation started.</para>

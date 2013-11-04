@@ -110,7 +110,7 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     ''' Should the same function and UniqueActionName be supported by more than one type of device, the reserved DeviceType of 
     ''' “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
     ''' and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
-    ''' <para>The names of all supported actions must bre returned in the <see cref="SupportedActions"/> property.</para>
+    ''' <para>The names of all supported actions must be returned in the <see cref="SupportedActions"/> property.</para>
     ''' </remarks>
     Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String
 

@@ -135,6 +135,14 @@
     </ItemGroup>
     <Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
 
+    <!-- Zip up the RemoveASCOM files and store the zip file in the build root directory -->
+    <Target Name="Zip">
+      <CreateItem Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" >
+        <Output ItemName="ZipFiles" TaskParameter="Include"/>
+      </CreateItem>
+      <Zip ZipFileName="RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)" Files="@(ZipFiles)" />
+    </Target>
+    
     <!-- Copy the RemoveASCOM files back to the build root directory -->
     <ItemGroup>
       <RemoveASCOMFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
