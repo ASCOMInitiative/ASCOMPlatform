@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -11,6 +12,8 @@ namespace ASCOM
     ///   that no default constructor is supplied. Throwing this requires the the method name.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("BBED286E-5814-4467-9471-A499DED13452")]
     public class MethodNotImplementedException : NotImplementedException
     {
         [NonSerialized] const string csMessage = "Method {0} is not implemented in this driver";

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -8,6 +9,8 @@ namespace ASCOM
     /// Exception thrown by a driver when it receives an unknown command through the Action method.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("6D6475A7-A6E0-4983-A4A8-EF7A8BCFFF1E")]
     public class ActionNotImplementedException : NotImplementedException
     {
         [NonSerialized] const string csMessage = "Action {0} is not implemented in this driver";

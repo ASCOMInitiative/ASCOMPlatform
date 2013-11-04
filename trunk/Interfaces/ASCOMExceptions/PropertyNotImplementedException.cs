@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -12,6 +13,8 @@ namespace ASCOM
     ///   property name and unimplemented accessor type to be supplied.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("EA016028-4929-4962-B768-3A4F33FC36A8")]
     public class PropertyNotImplementedException : NotImplementedException
     {
         [NonSerialized] const string csMessage = "Property {0} {1} is not implemented in this driver";

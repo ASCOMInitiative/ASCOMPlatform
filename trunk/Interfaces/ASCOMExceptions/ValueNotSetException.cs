@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM
 {
@@ -8,6 +9,8 @@ namespace ASCOM
     ///   Exception to report that no value has yet been set for this property.
     /// </summary>
     [Serializable]
+    [ComVisible(true)]
+    [Guid("6B8F457E-29D6-463D-841B-85C85A8E6A1F")]
     public class ValueNotSetException : DriverException
     {
         [NonSerialized] const string csMessage = "{0} get - no value has been set.";
