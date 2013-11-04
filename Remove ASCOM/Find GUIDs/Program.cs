@@ -63,7 +63,7 @@ namespace FindGUIDs
                                 if (m.Success)
                                 {
                                     TL.LogMessage("Main", "Match: " + m.Groups[2] + " in: " + file);
-                                    outputFile.WriteLine("        Try : guids.Add(\"" + m.Groups[2] + "\", \"\") :TL.LogMessage(\"GUIDLIst\",\"Added GUID: \" + \"" + m.Groups[2] + "\") : Catch ex As ArgumentException : TL.LogMessage(\"GUIDLIst\",\"Duplicate GUID: \" + \"" + m.Groups[2] + "\"):End Try");
+                                    outputFile.WriteLine("        Try : guids.Add(\"" + m.Groups[2] + "\", \"" + Path.GetFullPath(file) + "\") :TL.LogMessage(\"GUIDLIst\",\"Added GUID: \" + \"" + m.Groups[2] + "\") : Catch ex As ArgumentException : TL.LogMessage(\"GUIDLIst\",\"Duplicate GUID: \" + \"" + m.Groups[2] + "\"):End Try");
                                 }
                             }
                         }

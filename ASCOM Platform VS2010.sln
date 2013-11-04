@@ -1819,7 +1819,6 @@ Global
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D}.FindGUIDs|x86.ActiveCfg = FindGUIDs|x86
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D}.FindGUIDs|x86.Build.0 = FindGUIDs|x86
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D}.Release 64bit|Any CPU.ActiveCfg = Release|Any CPU
-		{779D544E-9B02-4D78-8AD8-F53C05975D6D}.Release 64bit|Any CPU.Build.0 = Release|Any CPU
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D}.Release 64bit|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D}.Release 64bit|Mixed Platforms.Build.0 = Release|Any CPU
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D}.Release 64bit|Win32.ActiveCfg = Release|Any CPU
@@ -1881,14 +1880,14 @@ Global
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.FindGUIDs|Win32.ActiveCfg = FindGUIDs|Any CPU
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.FindGUIDs|x86.ActiveCfg = FindGUIDs|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.FindGUIDs|x86.Build.0 = FindGUIDs|x86
-		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release 64bit|Any CPU.ActiveCfg = Release|x86
+		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release 64bit|Any CPU.ActiveCfg = Release|Any CPU
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release 64bit|Mixed Platforms.ActiveCfg = Release|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release 64bit|Mixed Platforms.Build.0 = Release|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release 64bit|Win32.ActiveCfg = Release|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release 64bit|x86.ActiveCfg = Release|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release 64bit|x86.Build.0 = Release|x86
-		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release|Any CPU.ActiveCfg = Release|x86
-		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release|Any CPU.Build.0 = Release|x86
+		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Release|Win32.ActiveCfg = Release|x86
@@ -1914,7 +1913,6 @@ Global
 		{70B98C71-DC6B-4DB3-937A-D2727D3210B3}.FindGUIDs|x86.ActiveCfg = FindGUIDs|x86
 		{70B98C71-DC6B-4DB3-937A-D2727D3210B3}.FindGUIDs|x86.Build.0 = FindGUIDs|x86
 		{70B98C71-DC6B-4DB3-937A-D2727D3210B3}.Release 64bit|Any CPU.ActiveCfg = Release|Any CPU
-		{70B98C71-DC6B-4DB3-937A-D2727D3210B3}.Release 64bit|Any CPU.Build.0 = Release|Any CPU
 		{70B98C71-DC6B-4DB3-937A-D2727D3210B3}.Release 64bit|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{70B98C71-DC6B-4DB3-937A-D2727D3210B3}.Release 64bit|Mixed Platforms.Build.0 = Release|Any CPU
 		{70B98C71-DC6B-4DB3-937A-D2727D3210B3}.Release 64bit|Win32.ActiveCfg = Release|Any CPU
@@ -2007,13 +2005,13 @@ Global
 		{70B98C71-DC6B-4DB3-937A-D2727D3210B3} = {E4DD4028-83D0-4CB8-AECA-B1894828E926}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 	EndGlobalSection
 EndGlobal
