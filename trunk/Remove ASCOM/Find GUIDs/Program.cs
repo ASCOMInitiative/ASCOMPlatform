@@ -10,18 +10,23 @@ namespace FindGUIDs
     partial class Program
     {
 
-        const string searchPath = @"..\..\..\..";
+        static string searchPath = @"..\..\..\..";
 
-        const string outputFileName = @"..\..\..\Remove ASCOM\GUIDList.vb";
+        static string outputFileName = @"..\..\..\Remove ASCOM\GUIDList.vb";
 
         static void Main(string[] args)
         {
 
-            using (TraceLogger TL = new TraceLogger("","FindGUIDs"))
+            using (TraceLogger TL = new TraceLogger("", "FindGUIDs"))
             {
                 try
                 {
                     TL.Enabled = true;
+                    if (args.Length > 0)
+                    {
+                        searchPath = args[0];
+                        outputFileName = args[0] + @"\Remove ASCOM\GUIDList.vb";
+                    }
 
                     TL.LogMessage("Main", "Search path: " + Path.GetFullPath(searchPath));
                     TL.LogMessage("Main", "Output file: " + Path.GetFullPath(outputFileName));
