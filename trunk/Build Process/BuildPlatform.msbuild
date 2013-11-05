@@ -31,13 +31,14 @@
     <MakeTemplatesExecutable>DriverTemplates\TemplateSources\MakeASCOMTemplates.exe</MakeTemplatesExecutable>
     <DriverTemplatesDirectory>DriverTemplates</DriverTemplatesDirectory>
     <FindGUIDsDirectory>Remove ASCOM\Find GUIDs\bin\Release</FindGUIDsDirectory>
-    <RemoveASCOMExe>Remove ASCOM\Remove ASCOM\bin\Release\RemoveASCOM.exe</RemoveASCOMExe>
-    <RemoveASCOMPdb>Remove ASCOM\Remove ASCOM\bin\Release\RemoveASCOM.pdb</RemoveASCOMPdb>
+    <RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\Release</RemoveASCOMDirectory>
+    <RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
+    <RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
   </PropertyGroup>
 
   <!-- Item group for the installers that are created by the build process -->
   <ItemGroup>
-    <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe" />
+    <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM.*" />
   </ItemGroup>
   <!-- Main build target for this build -->
   <Target Name="Build">
@@ -61,6 +62,8 @@
     <RemoveDir Directories="$(CheckoutDirectory)" />
     <Delete Files="@(OldPlatformInstallers)" />
 
+
+    
     <!-- Export a fresh copy of the Platform source -->
     <SvnExport RepositoryPath="$(RepositoryPath)"
                Username = "$(SubversionUserName)"
@@ -135,18 +138,11 @@
     </ItemGroup>
     <Copy SourceFiles="@(PlatformInstallers)" DestinationFolder="$(MSBuildProjectDirectory)" />
 
-    <!-- Zip up the RemoveASCOM files and store the zip file in the build root directory -->
-    <Target Name="Zip">
-      <CreateItem Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" >
-        <Output ItemName="ZipFiles" TaskParameter="Include"/>
-      </CreateItem>
-      <Zip ZipFileName="RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)" Files="@(ZipFiles)" />
-    </Target>
-    
-    <!-- Copy the RemoveASCOM files back to the build root directory -->
+    <!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
     <ItemGroup>
-      <RemoveASCOMFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
+      <ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
     </ItemGroup>
-    <Copy SourceFiles="@(RemoveASCOMFiles)" DestinationFolder="$(MSBuildProjectDirectory)" />
+    <Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
+
   </Target>
 </Project>
