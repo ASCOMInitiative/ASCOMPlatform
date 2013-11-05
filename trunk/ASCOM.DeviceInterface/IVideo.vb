@@ -84,7 +84,7 @@ Public Interface IVideoFrame
     ''' NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
     ''' <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel in the array is the second pixel from the first horizontal row
     ''' and the second last pixel in the array is the second last pixels from the last horizontal row.</para>
-    ''' <para>In colour mode a two dimentional array is returned where the first plain is <b>R</b>, the second is <b>G</b> and third is <b>B</b>.</para>
+    ''' <para>In colour mode a two dimentional array is returned where the first plane is <b>R</b>, the second is <b>G</b> and third is <b>B</b>.</para>
     ''' </remarks>
     ''' <value>The image array.</value>
     ReadOnly Property ImageArray() As Object

@@ -70,7 +70,7 @@ namespace Simulator.VideoCameraImpl
         private AviTools aviTools;
 	    private CameraImage cameraImage;
 
-        public VideoCamera(AviTools aviTools)
+        internal VideoCamera(AviTools aviTools)
 		{
             this.aviTools = aviTools;
             cameraImage = new CameraImage();
