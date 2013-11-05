@@ -88,10 +88,10 @@ namespace ASCOM.Utilities.Video
         /// </summary>
         /// <param name="x">The X coordinate of the pixel starting from left.</param>
         /// <param name="y">The Y coordinate of the pixel starting from top.</param>
-        /// <param name="plain">The colour plain from which the pixel needs to be returned. </param>
+        /// <param name="plane">The colour plane from which the pixel needs to be returned. </param>
         /// <returns>The value of the specified pixel.</returns>
         /// <exception cref="InvalidOperationException">Throws this exception if the image array data hasn't been set ot is not corresponding to a Colour sensor.</exception>
-        int GetPixel(int x, int y, int plain);
+        int GetPixel(int x, int y, int plane);
 
         /// <summary>
         /// Returns a display bitmap corresponding to the image array that has been set.
@@ -325,10 +325,10 @@ namespace ASCOM.Utilities.Video
         /// </summary>
         /// <param name="x">The X coordinate of the pixel starting from left.</param>
         /// <param name="y">The Y coordinate of the pixel starting from top.</param>
-        /// <param name="plain">The colour plain from which the pixel needs to be returned. </param>
+        /// <param name="plane">The colour plane from which the pixel needs to be returned. </param>
         /// <returns>The value of the specified pixel.</returns>
         /// <exception cref="InvalidOperationException">Throws this exception if the image array data hasn't been set ot is not corresponding to a Colour sensor.</exception>
-        public int GetPixel(int x, int y, int plain)
+        public int GetPixel(int x, int y, int plane)
         {
             if (intPixelArray != null || objPixelArray != null)
             {
@@ -337,16 +337,16 @@ namespace ASCOM.Utilities.Video
             else if (intColourPixelArray != null)
             {
                 if (isRowMajor)
-                    return intColourPixelArray[plain, y, x];
+                    return intColourPixelArray[plane, y, x];
                 else if (isColumnMajor)
-                    return intColourPixelArray[x, y, plain];
+                    return intColourPixelArray[x, y, plane];
             }
             else if (objColourPixelArray != null)
             {
                 if (isRowMajor)
-                    return (int)objColourPixelArray[plain, y, x];
+                    return (int)objColourPixelArray[plane, y, x];
                 else if (isColumnMajor)
-                    return (int)objColourPixelArray[x, y, plain];
+                    return (int)objColourPixelArray[x, y, plane];
             }
 
             throw new InvalidOperationException();

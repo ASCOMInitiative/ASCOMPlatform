@@ -79,7 +79,7 @@ namespace Simulator.VideoCameraImpl
 			allImagesPixels.Clear();
 		}
 
-		public BitmapVideoPlayer(AviTools aviTools, bool useEmbeddedVideo, string bitmapFilesLocation, int playbackBufferSize)
+		internal BitmapVideoPlayer(AviTools aviTools, bool useEmbeddedVideo, string bitmapFilesLocation, int playbackBufferSize)
 		{
 			this.aviTools = aviTools;
 			this.cameraImage = new CameraImage();
