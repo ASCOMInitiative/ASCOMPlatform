@@ -42,11 +42,14 @@
   </ItemGroup>
   <!-- Main build target for this build -->
   <Target Name="Build">
-
-    <!-- Wait until the previous Export directory has been removed by the batch file RMDIR command -->
-    <Sleep Milliseconds="4000" />
-
     <Message Text="Checkout directory: $(CheckoutDirectory)" />
+
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <!-- Wait until the previous directory removed has completed -->
+    <Sleep Milliseconds="4000" />
+    <!-- Try again just in case it didn't go fully first time... -->
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="4000" />
 
     <!-- Read the Subversion logon credentials fromn the registry -->
     <RegistryRead KeyName="$(SecurityCredentialsLocation)" ValueName="SubversionUserName">
@@ -60,10 +63,8 @@
     <Message Text="Subversion Password: $(SubversionPassword)" />
 
     <!-- Clean up any previous installer versions and the checkout directory -->
-    <RemoveDir Directories="$(CheckoutDirectory)" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
     <Delete Files="@(OldPlatformInstallers)" />
-
-
     
     <!-- Export a fresh copy of the Platform source -->
     <SvnExport RepositoryPath="$(RepositoryPath)"
