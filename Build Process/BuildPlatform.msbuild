@@ -43,8 +43,9 @@
   <!-- Main build target for this build -->
   <Target Name="Build">
 
-    <Exec Command="SLEEP 2000" IgnoreExitCode="true" />
-    
+    <!-- Wait until the previous Export directory has been removed by the batch file RMDIR command -->
+    <Sleep Milliseconds="4000" />
+
     <Message Text="Checkout directory: $(CheckoutDirectory)" />
 
     <!-- Read the Subversion logon credentials fromn the registry -->
