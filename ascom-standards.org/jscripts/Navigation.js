@@ -133,7 +133,7 @@ function writesubmenu() {
     case 2: // Downloads
     	SubMenuOutput += "<h3>Driver Downloads</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
-		SubMenuOutput += "<li><a href=\"CameraDrivers.htm\">Camera</a></li>";
+		SubMenuOutput += "<li><a href=\"CameraDrivers.htm\">Camera &amp; Video</a></li>";
 	    SubMenuOutput += "<li><a href=\"DomeDrivers.htm\">Dome &amp; Roof</a></li>";
 	    SubMenuOutput += "<li><a href=\"FilterWheelDrivers.htm\">Filter Wheels</a></li>";
 	    SubMenuOutput += "<li><a href=\"FocuserDrivers.htm\">Focuser</a></li>";
