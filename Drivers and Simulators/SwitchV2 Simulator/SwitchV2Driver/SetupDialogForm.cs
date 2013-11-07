@@ -13,23 +13,20 @@ namespace ASCOM.Simulator
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
-        private List<LocalSwitch> ls;
-
         public SetupDialogForm()
         {
             InitializeComponent();
             // Initialise current values of user settings from the ASCOM Profile 
             chkTrace.Checked = Switch.traceState;
-            ls = new List<LocalSwitch>();
             // get a copy of the switches for editing
-            ls.AddRange(Switch.switches);
-            var bl = new BindingList<LocalSwitch>(ls);
-            dataGridViewSwitches.DataSource = bl;
-            //dataGridViewSwitches.Rows.Clear();
-            //foreach (var item in Switch.switches)
-            //{
-            //    dataGridViewSwitches.Rows.Add(item.Name, item.Minimum, item.Maximum, item.StepSize, item.ReadOnly, item.Value);
-            //}
+            dataGridViewSwitches.Rows.Clear();
+            var i = 0;
+            foreach (var item in Switch.switches)
+            {
+                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Minimum, item.Maximum, item.StepSize, item.CanWrite, item.Value);
+                i++;
+            }
+            checkBoxSetupSimulator_CheckedChanged(null, null);
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
@@ -39,7 +36,17 @@ namespace ASCOM.Simulator
             Switch.traceState = chkTrace.Checked;
             Switch.switches.Clear();
             // update the switch list
-            Switch.switches.AddRange(ls);
+            foreach (DataGridViewRow row in dataGridViewSwitches.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+                var ls = new LocalSwitch(row.Cells);
+                string reason;
+                if (ls.IsValid(out reason))
+                {
+                    Switch.switches.Add(ls);
+                }
+            }
         }
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -100,6 +107,24 @@ namespace ASCOM.Simulator
             }
         }
 
+        private void InitRow(DataGridViewCellCollection cells)
+        {
+            // init the switch as a boolean read/write switch
+            InitCell(cells["colMin"], "0");
+            InitCell(cells["colMax"], "1");
+            InitCell(cells["colStep"], "1");
+            InitCell(cells["colCanWrite"], true);
+            InitCell(cells["colValue"], "0");
+        }
+
+        private void InitCell(DataGridViewCell cell, object obj)
+        {
+            if (cell.Value == null)
+            {
+                cell.Value = obj;
+            }
+        }
+
         /// <summary>
         /// checks that the numeric fields really contain a number
         /// </summary>
@@ -139,7 +164,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private void UpdateRowId()
         {
-            var n = ((BindingList<LocalSwitch>)dataGridViewSwitches.DataSource).Count;
+            var n = dataGridViewSwitches.Rows.Count;
             for (int i = 0; i < n; i++)
             {
                 if (i < this.dataGridViewSwitches.RowCount)
@@ -149,6 +174,7 @@ namespace ASCOM.Simulator
                         continue;
                     }
                     this.dataGridViewSwitches.Rows[i].Cells["colId"].Value = i.ToString();
+                    InitRow(this.dataGridViewSwitches.Rows[i].Cells);
                 }
             }
         }
@@ -157,9 +183,7 @@ namespace ASCOM.Simulator
         {
             var row = dataGridViewSwitches.Rows[e.RowIndex];
             if (row.IsNewRow) return;
- 
-            var ls = row.DataBoundItem as LocalSwitch;
-            if (ls == null) return;
+            var ls = new LocalSwitch(row.Cells);
             string reason;
             if (ls.IsValid(out reason))
             {
@@ -167,10 +191,40 @@ namespace ASCOM.Simulator
             }
             else
             {
-                e.Cancel = true;
                 row.ErrorText = "Switch parameters invalid: " + reason;
+                e.Cancel = true;
             }
         }
         #endregion
+
+        private void checkBoxSetupSimulator_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxSetupSimulator.Checked)
+            {
+                colMin.ReadOnly = false;
+                colMax.ReadOnly = false;
+                colStep.ReadOnly = false;
+                colCanWrite.ReadOnly = false;
+                colMax.DefaultCellStyle.BackColor = switchName.DefaultCellStyle.BackColor;
+                colMin.DefaultCellStyle.BackColor = switchName.DefaultCellStyle.BackColor;
+                colStep.DefaultCellStyle.BackColor = switchName.DefaultCellStyle.BackColor;
+                colCanWrite.DefaultCellStyle.BackColor = switchName.DefaultCellStyle.BackColor;
+                dataGridViewSwitches.AllowUserToAddRows = true;
+            }
+            else
+            {
+                colMin.ReadOnly = true;
+                colMax.ReadOnly = true;
+                colStep.ReadOnly = true;
+                colCanWrite.ReadOnly = true;
+                colMax.DefaultCellStyle.BackColor = SystemColors.Control;
+                colMin.DefaultCellStyle.BackColor = SystemColors.Control;
+                colStep.DefaultCellStyle.BackColor = SystemColors.Control;
+                colCanWrite.DefaultCellStyle.BackColor = SystemColors.Control;
+                dataGridViewSwitches.AllowUserToAddRows = false;
+            }
+            dataGridViewSwitches.Invalidate();
+            dataGridViewSwitches.Update();
+        }
     }
 }
