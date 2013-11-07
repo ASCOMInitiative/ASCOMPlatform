@@ -27,7 +27,7 @@ namespace ASCOM
             if (string.IsNullOrEmpty(id))
                 return;
             // create this device
-            ASCOM.DriverAccess.Switch device = new Switch(id);
+            Switch device = new Switch(id);
 #else
             // this can be replaced by this code, it avoids the chooser and creates the driver class directly.
             ASCOM.DriverAccess.Switch device = new ASCOM.DriverAccess.Switch("ASCOM.Simulator.Switch");

@@ -37,8 +37,10 @@ namespace ASCOM.Simulator
     /// ASCOM Switch Driver for Simulator.
     /// </summary>
     [Guid("602b2780-d8fe-438b-a11a-e45a8df6e7c8")]
+    [ProgId("ASCOM.Simulator.Switch")]
+    [ServedClassName("ASCOM SwitchV2 Simulator Driver")]
     [ClassInterface(ClassInterfaceType.None)]
-    public class Switch : ISwitchV2
+    public class Switch : ReferenceCountedObjectBase, ISwitchV2
     {
         /// <summary>
         /// ASCOM DeviceID (COM ProgID) for this driver.
@@ -71,6 +73,7 @@ namespace ASCOM.Simulator
         /// </summary>
         public Switch()
         {
+            driverID = Marshal.GenerateProgIdForType(this.GetType());
             ReadProfile(); // Read device configuration from the ASCOM Profile store
             tl = new TraceLogger("", "Simulator");
             tl.Enabled = traceState;
@@ -304,7 +307,7 @@ namespace ASCOM.Simulator
         public bool CanWrite(short id)
         {
             Validate("CanWrite", id);
-            return !switches[id].ReadOnly;
+            return switches[id].CanWrite;
         }
 
         #region boolean switch members
@@ -443,21 +446,21 @@ namespace ASCOM.Simulator
         /// This is harmless if the driver is already registered/unregistered.
         /// </summary>
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
-        private static void RegUnregASCOM(bool bRegister)
-        {
-            using (var P = new ASCOM.Utilities.Profile())
-            {
-                P.DeviceType = "Switch";
-                if (bRegister)
-                {
-                    P.Register(driverID, driverDescription);
-                }
-                else
-                {
-                    P.Unregister(driverID);
-                }
-            }
-        }
+        //private static void RegUnregASCOM(bool bRegister)
+        //{
+        //    using (var P = new ASCOM.Utilities.Profile())
+        //    {
+        //        P.DeviceType = "Switch";
+        //        if (bRegister)
+        //        {
+        //            P.Register(driverID, driverDescription);
+        //        }
+        //        else
+        //        {
+        //            P.Unregister(driverID);
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// This function registers the driver with the ASCOM Chooser and
@@ -476,11 +479,11 @@ namespace ASCOM.Simulator
         /// </list>
         /// This technique should mean that it is never necessary to manually register a driver with ASCOM.
         /// </remarks>
-        [ComRegisterFunction]
-        public static void RegisterASCOM(Type t)
-        {
-            RegUnregASCOM(true);
-        }
+        //[ComRegisterFunction]
+        //public static void RegisterASCOM(Type t)
+        //{
+        //    RegUnregASCOM(true);
+        //}
 
         /// <summary>
         /// This function unregisters the driver from the ASCOM Chooser and
@@ -499,11 +502,11 @@ namespace ASCOM.Simulator
         /// </list>
         /// This technique should mean that it is never necessary to manually unregister a driver from ASCOM.
         /// </remarks>
-        [ComUnregisterFunction]
-        public static void UnregisterASCOM(Type t)
-        {
-            RegUnregASCOM(false);
-        }
+        //[ComUnregisterFunction]
+        //public static void UnregisterASCOM(Type t)
+        //{
+        //    RegUnregASCOM(false);
+        //}
 
         #endregion
 
@@ -581,11 +584,11 @@ namespace ASCOM.Simulator
             switches.Add(new LocalSwitch("Power1") { Description = "Generic power switch" });
             switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch" });
             switches.Add(new LocalSwitch("Light Box", 100, 0, 10, 0) { Description = "Light box , 0 to 100%" });
-            switches.Add(new LocalSwitch("Scope Parked") { Description = "Scope parked switch, true if parked", ReadOnly = true });
-            switches.Add(new LocalSwitch("Cloudy", 2, 1, 1, 0, true) { Description = "Cloud monitor: 0=clear, 1=light cloud, 2= heavy cloud" });
-            switches.Add(new LocalSwitch("Temperature", 30, -20, 0.1, 12, true) { Description = "Temperature in deg C" });
-            switches.Add(new LocalSwitch("Humidity", 100, 0, 1, 50, true) { Description = "Relative humidity %" });
-            switches.Add(new LocalSwitch("Raining") { Description = "Rain monitor, true if raining", ReadOnly = true });
+            switches.Add(new LocalSwitch("Scope Parked") { Description = "Scope parked switch, true if parked", CanWrite = false });
+            switches.Add(new LocalSwitch("Cloudy", 2, 1, 1, 0, false) { Description = "Cloud monitor: 0=clear, 1=light cloud, 2= heavy cloud" });
+            switches.Add(new LocalSwitch("Temperature", 30, -20, 0.1, 12, false) { Description = "Temperature in deg C" });
+            switches.Add(new LocalSwitch("Humidity", 100, 0, 1, 50, false) { Description = "Relative humidity %" });
+            switches.Add(new LocalSwitch("Raining") { Description = "Rain monitor, true if raining", CanWrite = false });
         }
 
         #endregion

@@ -4,19 +4,23 @@ using System.Linq;
 using System.Text;
 using ASCOM.Utilities;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace ASCOM.Simulator
 {
     /// <summary>
     /// Local switch class
     /// </summary>
+    [ComVisible(false)]
     public class LocalSwitch
     {
+        private System.Windows.Forms.DataGridViewCellCollection dataGridViewCellCollection;
+
         public double Minimum { get; set; }
         public double Maximum { get; set; }
         public double StepSize { get; set; }
         public string Name { get; set; }
-        public bool ReadOnly { get; set; }
+        public bool CanWrite { get; set; }
         public double Value { get; set; }
         public string Description { get; set; }
 
@@ -26,6 +30,7 @@ namespace ASCOM.Simulator
         {
             this.Maximum = 1.0;
             this.StepSize = 1.0;
+            this.CanWrite = true;
         }
 
         /// <summary>
@@ -45,7 +50,7 @@ namespace ASCOM.Simulator
         /// <param name="minimum">The minimum.</param>
         /// <param name="stepSize">Size of the step.</param>
         /// <param name="value">The value.</param>
-        internal LocalSwitch(string name, double maximum, double minimum, double stepSize, double value) : this(name, maximum, minimum, stepSize, value, false)
+        internal LocalSwitch(string name, double maximum, double minimum, double stepSize, double value) : this(name, maximum, minimum, stepSize, value, true)
         {  }
 
         /// <summary>
@@ -55,15 +60,15 @@ namespace ASCOM.Simulator
         /// <param name="max">The max.</param>
         /// <param name="min">The min.</param>
         /// <param name="step">The step.</param>
-        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        /// <param name="canWrite">if set to <c>true</c> [read only].</param>
         /// <param name="value">The value.</param>
-        public LocalSwitch(string name, double max, double min, double step, double value, bool readOnly)
+        public LocalSwitch(string name, double max, double min, double step, double value, bool canWrite)
         {
             this.Name = name;
             this.Maximum = max;
             this.Minimum = min;
             this.StepSize = step;
-            this.ReadOnly = readOnly;
+            this.CanWrite = canWrite;
             this.Value = value;
             this.Description = name;
         }
@@ -82,9 +87,24 @@ namespace ASCOM.Simulator
             this.Minimum = Convert.ToDouble(profile.GetValue(driverId, "Minimum", subKey, "0"), CultureInfo.InvariantCulture);
             this.Maximum = Convert.ToDouble(profile.GetValue(driverId, "Maximum", subKey, "1"), CultureInfo.InvariantCulture);
             this.StepSize = Convert.ToDouble(profile.GetValue(driverId, "StepSize", subKey, "1"), CultureInfo.InvariantCulture);
-            this.ReadOnly = Convert.ToBoolean(profile.GetValue(driverId, "ReadOnly", subKey, bool.FalseString), CultureInfo.InvariantCulture);
+            this.CanWrite = Convert.ToBoolean(profile.GetValue(driverId, "CanWrite", subKey, bool.FalseString), CultureInfo.InvariantCulture);
             this.Value = Convert.ToDouble(profile.GetValue(driverId, "Value", subKey, "0"), CultureInfo.InvariantCulture);
             this.Description = profile.GetValue(driverId, "Description", subKey, this.Name);
+        }
+
+        internal LocalSwitch(System.Windows.Forms.DataGridViewCellCollection cells)
+        {
+            // TODO: Complete member initialization
+            this.Name = (string)cells["switchName"].Value;
+            this.Minimum = Convert.ToDouble(cells["colMin"].Value);
+            this.Maximum = Convert.ToDouble(cells["colMax"].Value);
+            this.StepSize = Convert.ToDouble(cells["colStep"].Value);
+            this.Value = Convert.ToDouble(cells["colValue"].Value);
+            this.CanWrite = Convert.ToBoolean(cells["colCanWrite"].Value);
+            if (cells["colDescription"].Value is string)
+            {
+                this.Description = (string)cells["colDescription"].Value;
+            }
         }
         #endregion
 
@@ -97,9 +117,9 @@ namespace ASCOM.Simulator
         /// <param name="message">The message.</param>
         internal void SetValue(double value, string message)
         {
-            if (this.ReadOnly)
+            if (!this.CanWrite)
             {
-                throw new MethodNotImplementedException(string.Format("{0} is read only", this.Name));
+                throw new MethodNotImplementedException(string.Format("{0} cannot be written", this.Name));
             }
             if (value < Minimum || value > Maximum)
             {
@@ -122,7 +142,7 @@ namespace ASCOM.Simulator
             profile.WriteValue(driverId, "Minimum", this.Minimum.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "Maximum", this.Maximum.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "StepSize", this.StepSize.ToString(CultureInfo.InvariantCulture), subKey);
-            profile.WriteValue(driverId, "ReadOnly", this.ReadOnly.ToString(CultureInfo.InvariantCulture), subKey);
+            profile.WriteValue(driverId, "CanWrite", this.CanWrite.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "Value", this.Value.ToString(CultureInfo.InvariantCulture), subKey);
         }
 
@@ -135,17 +155,32 @@ namespace ASCOM.Simulator
         /// </returns>
         internal bool IsValid(out string reason)
         {
-            if (Minimum >= Maximum)
+            return IsValid(this.Name, this.Maximum, this.Minimum, this.StepSize, this.Value, out reason);
+        }
+
+        internal static bool IsValid(string name, double max, double min, double step, double value, out string reason)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                reason = "No switch name is defined";
+                return false;
+            }
+            if (min >= max)
             {
                 reason = "Maximum not greater than Minimum";
                 return false;
             }
-            if ((Maximum - Minimum) / StepSize < 1)
+            if (step <= 0)
+            {
+                reason = "Step size must be greater than zero";
+                return false;
+            }
+            if ((max - min) / step < 1)
             {
                 reason = "Step size gives less than two positions";
                 return false;
             }
-            if (Value < Minimum || Value > Maximum)
+            if (value < min || value > max)
             {
                 reason = "Value not between Minimum and Maximum";
                 return false;
