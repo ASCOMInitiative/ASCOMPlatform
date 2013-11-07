@@ -61,10 +61,9 @@ namespace ASCOM.DriverAccess
         #region ISwitchV2 members
 
         /// <summary>
-        /// Return the name of switch n.
+        /// Return the number of switches managed by this driver
         /// </summary>
-        /// <returns>The name of the switch</returns>
-        /// <exception cref="InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
+        /// <returns>The number of switches</returns>
         /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
         /// <para>Switches are numbered from 0 to MaxSwitch - 1</para></remarks>
         public short MaxSwitch
