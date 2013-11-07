@@ -168,10 +168,10 @@ namespace ASCOM.Simulator
         /// The result of the last executed action, or <see cref="String.Empty"	/>
         /// if no action has yet been executed.
         /// </value>
-        public string LastResult
-        {
-            get { throw new MethodNotImplementedException("LastResult"); }
-        }
+        //public string LastResult
+        //{
+        //    get { throw new MethodNotImplementedException("LastResult"); }
+        //}
 
         void ISafetyMonitor.Dispose()
         {
