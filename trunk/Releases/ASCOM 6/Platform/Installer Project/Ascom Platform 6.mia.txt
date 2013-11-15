@@ -552,7 +552,10 @@ if Variable REMOVE Equals TRUE
   Write into Text File $SETUPLOG$ from Value Finished uninstalling Platform (at end of file)
 else
   [END REGION]
+   
   [DEFINE REGION: Perform First Time or Maintenance Installation]
+   
+  [DEFINE REGION: Uninstall previous Platforms]
   if Variable NATIVE_ENGINE Equals TRUE
     if Variable MAINTENANCE Equals TRUE
       if Variable MODIFY Equals TRUE
@@ -650,13 +653,19 @@ else
   end
   [OFFLINE CONTENT]
   Comment: TO-DO: Insert any additional install commands here
+  [END REGION]
+   
   [compiler if Variable BUILDMODE Equals PATCH]
   Apply Patch (get result into variable SUCCESS)
   [compiler else]
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
+     
+    Comment: ***** Start of Platform Installation *****
+    Comment: Create the main ASCOM folder in Common Files
     Create Folder $COMMONFILES$\ASCOM
+     
     [DEFINE REGION: Platform 5 files]
     Comment: Type libraries
     Install Files ..\..\..\..\Interfaces\Master Interfaces\AscomMasterInterfaces.tlb to $COMMONFILES$\ASCOM\Interface
@@ -697,6 +706,7 @@ else
     Install Files ..\..\..\..\POTH\Source\POTH\POTH.exe to $COMMONFILES$\ASCOM\Telescope
     Install Files ..\..\..\..\POTH\Source\POTH\POTHHelp.htm to $COMMONFILES$\ASCOM\Telescope
     [END REGION]
+     
     [DEFINE REGION: Platform 5.5 files]
     Comment: Updated helpers that use Platform 5.5 support
     Install Files ..\..\..\..\ASCOM.Utilities\VB6Helper\Helper.dll to $COMMONFILES$\ASCOM
@@ -722,6 +732,7 @@ else
       Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
     end
     [END REGION]
+     
     [DEFINE REGION: Platform 6 files]
     Comment: Install exceptions redirection policy
     Install Files ..\..\..\..\ASCOM Redirection Policies\policy.1.0.ASCOM.Exceptions.dll to $COMMONFILES$\ASCOM\Platform\v6.0
@@ -829,6 +840,7 @@ else
     Comment: Platform Update Checker
     Install Files ..\..\..\..\CheckForUpdates.js to $TARGETDIR$\Tools
     [END REGION]
+     
     [DEFINE REGION: Platform 6.1 files]
     Comment: Video utilities
     Install Assembly ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to Global Assembly Cache
@@ -846,7 +858,15 @@ else
     Install Files ..\..\..\..\ASCOM.Utilities.Video.NativeHelpers\Release\X64\ASCOM.NativeVideo64.pdb to $COMMONFILES$\ASCOM\VideoUtilities
     Comment: Direct Video 2005
     Install Assembly ..\..\..\..\Releases\ASCOM 6\Platform\Files\DirectShowLib\DirectShowLib-2005.dll to Global Assembly Cache
+    Comment: Switch V2 simulator
+    Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe to $COMMONFILES$\ASCOM\Switch\Switch V2
+    Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
+    Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Server.exe.config to $COMMONFILES$\ASCOM\Switch\Switch V2
+    Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll to $COMMONFILES$\ASCOM\Switch\Switch V2
+    Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
+    Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll.config to $COMMONFILES$\ASCOM\Switch\Switch V2
     [END REGION]
+     
     [DEFINE REGION: Platform 6 Content]
     Comment: Platform 6 Documents
     Install Files ..\Files\Help.ico to $COMMONFILES$\ASCOM\Platform
@@ -860,6 +880,7 @@ else
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Supported Devices (web).url to $TARGETDIR$\Docs
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\Bug72T-sm.jpg to $TARGETDIR$\Docs
     [END REGION]
+     
     [DEFINE REGION: Set Registry Keys]
     Comment: *** BEWARE *** All registry entries are duplicated with different locations for 32 and 64bit OS.
     Comment: *** BEWARE *** You must replicate any registry changes in BOTH sections, which should always be identical
@@ -1114,6 +1135,7 @@ else
       [END REGION]
     end
     [END REGION]
+     
     [DEFINE REGION: Create shortcuts]
     Comment: Menu shortcuts
     Comment: Install after main MSI install has run so we pick up correct icons from applicaitons
@@ -1147,6 +1169,7 @@ else
     Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
     Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
     [END REGION]
+     
     [DEFINE REGION: Additional clean-up when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
     Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
@@ -1154,17 +1177,20 @@ else
     Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\.net\GACInstall.exe (when installing)
     [END REGION]
+     
     Comment: Install in 64bit mode if we are running on a 64bit OS
     if Variable WIN64MODE Equals TRUE
       Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
     end
+     
+    Comment: Run the installation
     Apply Install (get result into variable SUCCESS)
-    Comment: MessageBalloon: , 
     Write into Text File $SETUPLOG$ from Value Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
     Write into Text File $SETUPLOG$ from Value  (at end of file)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL
         Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+         
         [DEFINE REGION: COM registrations]
         Comment: Register Platform 5 components
         Set Variable PROGRESS to 0
@@ -1262,6 +1288,8 @@ else
         Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
         Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Rotator Simulator 6 (at end of file)
+        Run Program $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe -register (WAIT, get result into variable RC)
+        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Switch V2 Simulator (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Telescope Simulator 6 (at end of file)
          
@@ -1395,21 +1423,14 @@ else
         end
         MessageBalloon: ASCOM Platform Maintenance, Finalising install
         [END REGION]
-        Comment: Tidy up COM registration (add AppID for DCOM etc.)
+         
+        Comment: Tidy up COM registration (add AppID for DCOM etc.) and finish
         Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value RC: $RC$ FinaliseInstall (at end of file)
         Set Variable PROGRESS to 100
         if Variable RC not Equals 0
           MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
           Set Variable ASCOMERROR to $RC$
-        end
-        Comment: Remove unwanted registry key from previous beta installers. Remove after final release
-        if Variable WIN64MODE Equals TRUE
-          Delete Registry KEY HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceCOMPorts\*.*
-          Delete Registry KEY HKLM\SOFTWARE\Wow6432Node\ASCOM\IgnoreCOMPorts\*.*
-        else
-          Delete Registry KEY HKLM\SOFTWARE\ASCOM\ForceCOMPorts\*.*
-          Delete Registry KEY HKLM\SOFTWARE\ASCOM\IgnoreCOMPorts\*.*
         end
         MessageBalloon: , 
       end
