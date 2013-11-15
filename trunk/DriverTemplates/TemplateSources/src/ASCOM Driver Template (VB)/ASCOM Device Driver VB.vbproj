@@ -100,7 +100,6 @@
     <Compile Include="DeviceSwitch.vb" />
     <Compile Include="DeviceTelescope.vb" />
     <Compile Include="DeviceVideo.vb" />
-    <Compile Include="DeviceVideoUsingBaseClass.vb" />
     <Compile Include="PlaceholderInterface.vb" />
     <Compile Include="Driver.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
