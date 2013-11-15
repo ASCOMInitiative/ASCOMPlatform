@@ -1,15 +1,11 @@
 Check Application Requirements
 Define Setup Globals
 Setup User Interview
-Perform Uninstallation
 Finish Setup
 Install Application Pre-Requisites
 Check Application Pre-Requisites
 Check/Install Application Pre-Requisites
-COM registrations
-Additional clean-up when uninstalling
 Platform 6 Content
-Platform 6 files
 Platform 5.5 files
 Platform 5 files
 Create shortcuts
@@ -19,3 +15,4 @@ Set Registry Keys
 Platform 6.1 files
 Set up log file
 Uninstall previous Platforms
+Perform Uninstallation
