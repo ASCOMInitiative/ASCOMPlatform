@@ -1234,29 +1234,30 @@ else
         Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value GACInstall Start time: $TIME$ (at end of file)
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - Utilities (at end of file)
+        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - Utilities (at end of file)
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
         end
         Set Variable PROGRESS to 30
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - DriverAccess Policy (at end of file)
+        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - DriverAccess Policy (at end of file)
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
         end
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - Astrometry Policy (at end of file)
+        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - Astrometry Policy (at end of file)
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
         end
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.0 (at end of file)
+        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - Exceptions Policy 1.0 (at end of file)
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
         end
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.1 (at end of file)
+        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - Exceptions Policy 1.1 (at end of file)
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
         end
@@ -1268,12 +1269,14 @@ else
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
         Set Variable PROGRESS to 35
+        Write into Text File $SETUPLOG$ from Value Completed Copy files: $TIME$ (at end of file)
          
         Comment: Register Platform 6 components
         Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value Completed Register GAC assemblies: $TIME$ (at end of file)
          
         Comment: Register in-process simulator DLL files with Codebase option
         Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
@@ -1281,6 +1284,7 @@ else
         Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll, set the code base in the registry
+        Write into Text File $SETUPLOG$ from Value Completed Register Simulator assemblies: $TIME$ (at end of file)
          
         Comment: Register these LocalServer drivers using the -register option
         Set Variable PROGRESS to 40
@@ -1292,6 +1296,7 @@ else
         Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Switch V2 Simulator (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Telescope Simulator 6 (at end of file)
+        Write into Text File $SETUPLOG$ from Value Completed Register Local Servers: $TIME$ (at end of file)
          
         Set Variable PROGRESS to 45
         Comment: Extra registration of 64bit components if on 64bit system
@@ -1320,6 +1325,7 @@ else
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC3)
           Write into Text File $SETUPLOG$ from Value RC: $RC3$ RegAsm64 - Video Utilities (at end of file)
           Set Variable PROGRESS to 50
+          Write into Text File $SETUPLOG$ from Value Completed Register 64bit core assemblies: $TIME$ (at end of file)
            
           Comment: Register simulators
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
@@ -1332,6 +1338,7 @@ else
           Write into Text File $SETUPLOG$ from Value RC: $RC10$ RegAsm64 - Dome Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC11)
           Write into Text File $SETUPLOG$ from Value RC: $RC11$ RegAsm64 - Video Simulator (at end of file)
+          Write into Text File $SETUPLOG$ from Value Completed Register 64bit Simulator assemblies: $TIME$ (at end of file)
           Set Variable PROGRESS to 60
           if Variable RC1 not Equals 0
             MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
@@ -1397,6 +1404,7 @@ else
         Generate Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Generate Native Images for assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Generate Native Images for assembly DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f
+        Write into Text File $SETUPLOG$ from Value Completed 32bit NGEN: $TIME$ (at end of file)
         if Variable WIN64MODE Equals TRUE
           MessageBalloon: ASCOM Platform Maintenance, Creating 64bit native images
           Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
@@ -1420,6 +1428,7 @@ else
           Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
           Set Variable PROGRESS to 95
+          Write into Text File $SETUPLOG$ from Value Completed 64bit NGEN: $TIME$ (at end of file)
         end
         MessageBalloon: ASCOM Platform Maintenance, Finalising install
         [END REGION]
