@@ -29,7 +29,6 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceSwitch.cs">DeviceSwitch.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="DeviceTelescope.cs">DeviceTelescope.cs</ProjectItem>
 	  <ProjectItem ReplaceParameters="false" TargetFileName="DeviceVideo.cs">DeviceVideo.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceVideoUsingBaseClass.cs">DeviceVideoUsingBaseClass.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Rates.cs">Rates.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderInterface.cs">PlaceholderInterface.cs</ProjectItem>
