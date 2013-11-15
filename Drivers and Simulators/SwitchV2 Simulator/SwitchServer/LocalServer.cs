@@ -259,7 +259,7 @@ namespace ASCOM.Simulator
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.Message,
+                    MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.ToString(),
                         "SwitchServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;
                 }
