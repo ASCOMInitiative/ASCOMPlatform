@@ -34,6 +34,7 @@
     <RemoveASCOMDirectory>Remove ASCOM\Remove ASCOM\bin\Release</RemoveASCOMDirectory>
     <RemoveASCOMExe>$(RemoveASCOMDirectory)\RemoveASCOM.exe</RemoveASCOMExe>
     <RemoveASCOMPdb>$(RemoveASCOMDirectory)\RemoveASCOM.pdb</RemoveASCOMPdb>
+    <RemoveASCOMTxt>$(RemoveASCOMDirectory)\GUIDList.txt</RemoveASCOMTxt>
   </PropertyGroup>
 
   <!-- Item group for the installers that are created by the build process -->
@@ -44,14 +45,36 @@
   <Target Name="Build">
     <Message Text="Checkout directory: $(CheckoutDirectory)" />
 
+    <!-- Remove the checkout directory to ensure a clean build, wait until the directory actually goes, -->
+	<!-- the command can complete before the contents are actually gone! -->
     <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-    <!-- Wait until the previous directory removed has completed -->
-    <Sleep Milliseconds="4000" />
-    <!-- Try again just in case it didn't go fully first time... -->
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'"  />
     <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-    <Sleep Milliseconds="4000" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
+    <Sleep Milliseconds="1000" Condition="'$(MSBuildLastTaskResult)' == 'False'" />
+	
+	<!-- Stop the build with an error if we can't clear the directory by this point -->
+    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="false" />
+		
+    <!-- Clean up any previous installer versions  -->
+    <Delete Files="@(OldPlatformInstallers)" />
 
-    <!-- Read the Subversion logon credentials fromn the registry -->
+    <!-- Read the Subversion logon credentials from the registry -->
     <RegistryRead KeyName="$(SecurityCredentialsLocation)" ValueName="SubversionUserName">
       <Output TaskParameter="Value" PropertyName="SubversionUserName" />
     </RegistryRead>
@@ -62,10 +85,6 @@
     </RegistryRead>
     <Message Text="Subversion Password: $(SubversionPassword)" />
 
-    <!-- Clean up any previous installer versions and the checkout directory -->
-    <RemoveDir Directories="$(CheckoutDirectory)" ContinueOnError="true" />
-    <Delete Files="@(OldPlatformInstallers)" />
-    
     <!-- Export a fresh copy of the Platform source -->
     <SvnExport RepositoryPath="$(RepositoryPath)"
                Username = "$(SubversionUserName)"
@@ -142,7 +161,7 @@
 
     <!-- Zip up the RemoveASCOM files and store the zip file in the build root directory ;$(CheckoutDirectory)\$(RemoveASCOMPdb) -->
     <ItemGroup>
-      <ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
+      <ZipFiles Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb);$(CheckoutDirectory)\$(RemoveASCOMTxt)" />
     </ItemGroup>
     <Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
