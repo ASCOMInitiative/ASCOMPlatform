@@ -413,7 +413,6 @@ namespace ASCOM.TEMPLATEDEVICENAME
                 driverProfile.WriteValue(driverID, traceStateProfileName, traceState.ToString());
                 driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString());
             }
-
         }
 
         #endregion

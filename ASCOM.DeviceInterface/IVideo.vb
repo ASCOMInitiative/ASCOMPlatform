@@ -12,11 +12,7 @@
 
 Imports System.Collections
 Imports System.Collections.Generic
-'Imports System.Drawing
-Imports System.Linq
 Imports System.Runtime.InteropServices
-Imports System.Text
-Imports ASCOM.DeviceInterface
 Imports ASCOM
 
 #Region "Enums"
@@ -328,7 +324,6 @@ Public Interface IVideo
     ''' </remarks>
     ReadOnly Property ExposureMin() As Double
 
-
     ''' <summary>
     ''' The frame rate at which the camera is running. 
     ''' </summary>
@@ -338,7 +333,6 @@ Public Interface IVideo
     ''' Changing the <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property may change the actual variable frame rate but cannot changethe return value of this property.
     ''' </remarks>
     ReadOnly Property FrameRate() As VideoCameraFrameRate
-
 
     ''' <summary>
     ''' Returns the list of integration rates supported by the video camera.
@@ -352,7 +346,6 @@ Public Interface IVideo
     ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ''' <exception cref="PropertyNotImplementedException">Must throw exception if camera supports only one integration rate (exposure) that cannot be changed.</exception>
     ReadOnly Property SupportedIntegrationRates() As ArrayList
-
 
     ''' <summary>
     '''	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedIntegrationRates"/> array for the selected camera integration rate.
@@ -369,7 +362,6 @@ Public Interface IVideo
     '''	<para>The driver must default <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> to a valid value when integration rate is supported by the camera. </para>
     '''	</remarks>
     Property IntegrationRate() As Integer
-
 
     ''' <summary>
     ''' Returns an <see cref="DeviceInterface.IVideoFrame"/> with its <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> property populated. 
@@ -825,7 +817,6 @@ Public Interface IVideo
     '''	</remarks>
     Property Gain() As Short
 
-
     ''' <summary>
     ''' Gains supported by the camera.
     '''	</summary>
@@ -842,7 +833,6 @@ Public Interface IVideo
     '''	to ensure that the driver is aware of the capabilities of the specific camera model.</para>
     '''	</remarks>
     ReadOnly Property Gains() As ArrayList
-
 
     ''' <summary>
     '''	Maximum value of <see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/>.
@@ -876,7 +866,6 @@ Public Interface IVideo
     '''	that the driver is aware of the capabilities of the specific camera model.</para>
     '''	</remarks>
     ReadOnly Property GammaMin() As Short
-
 
     ''' <summary>
     '''	Index into the <see cref="P:ASCOM.DeviceInterface.IVideo.Gammas"/> array for the selected camera gamma.
@@ -914,7 +903,6 @@ Public Interface IVideo
     '''	to ensure that the driver is aware of the capabilities of the specific camera model.</para>
     '''	</remarks>	
     ReadOnly Property Gammas() As ArrayList
-
 
     ''' <summary>
     ''' Returns True if the driver supports custom device properties configuration via the <see cref="M:ASCOM.DeviceInterface.IVideo.ConfigureDeviceProperties"/> method.
