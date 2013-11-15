@@ -14,8 +14,6 @@ namespace ASCOM.Simulator
     [ComVisible(false)]
     public class LocalSwitch
     {
-        private System.Windows.Forms.DataGridViewCellCollection dataGridViewCellCollection;
-
         public double Minimum { get; set; }
         public double Maximum { get; set; }
         public double StepSize { get; set; }
