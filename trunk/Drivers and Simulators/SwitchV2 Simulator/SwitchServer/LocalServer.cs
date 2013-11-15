@@ -257,6 +257,18 @@ namespace ASCOM.Simulator
                     // Just swallow the exception and continue to the next item.
                     continue;
                 }
+
+                catch (System.Reflection.ReflectionTypeLoadException ex)
+                {
+                    MessageBox.Show("ReflectionTypeLoadException: " + fi.Name + " - " + ex.ToString(), "SwitchServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+
+                    Exception[] loaderExceptions = ex.LoaderExceptions;
+                    foreach (Exception exception in loaderExceptions)
+                    {
+                        MessageBox.Show("ReflectionTypeLoadException: " + exception.ToString(), "SwitchServer", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    }
+                }
+
                 catch (Exception e)
                 {
                     MessageBox.Show("Failed to load served COM class assembly " + fi.Name + " - " + e.ToString(),
