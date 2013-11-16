@@ -182,17 +182,17 @@ End Test VC10_X64
 Not a 64bit OS
 {D0AAE04B-EB86-4EEC-9C10-E07257840E73}
 $SETUPLOG$
-VC 10 library (64 bit) not present
+$TIME$ CheckVC10(64) - VC 10 library (64 bit) not present
 FALSE
 TRUE
 {3CF3F4B5-106A-4A76-8481-B2D961D633A9}
 $SETUPLOG$
-VC 10 library (64 bit) found OK
+$TIME$ CheckVC10(64) - VC 10 library (64 bit) found OK
 FALSE
 TRUE
 {9F6CB60B-20E0-4288-9704-180295CD1DD2}
 $SETUPLOG$
-32 bit OS, skipping 64 bit VC 10 library check
+$TIME$ CheckVC10(64) - 32 bit OS, skipping 64 bit VC 10 library check
 FALSE
 TRUE
 {D809E646-CC50-4191-A3E7-E63A928F7B10}

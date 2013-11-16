@@ -1,6 +1,6 @@
 Comment: ASCOM Platform installation script
  
-[DEFINE REGION: Set up log file]
+[DEFINE REGION: Set up log file and display checking for pre-requisites dialogue.]
 Comment: Define variables, create the directory and log file name.
 Set Variable SETUPLOG to 
 Get Folder Location My->My Documents into MYDOCUMENTS
@@ -9,6 +9,9 @@ Get Free Space on C: into variable DISKSPACE
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
+Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ v$VERSION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+ 
 [END REGION]
  
 [DEFINE REGION: Check Application Requirements]
@@ -196,16 +199,14 @@ Comment: Get the build version into a variable so it can be written to the Profi
 Get File Version $SUPPORTDIR$\UninstallAscom.exe into Variable PLATFORMBUILDVERSION
  
 Comment: Create the start of the installation log
-Write into Text File $SETUPLOG$ from Value $TITLE$ v$VERSION$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Installed $DATE$ $TIME$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
-Write into Text File $SETUPLOG$ from Value Platform build: $PLATFORMBUILDVERSION$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Revision code: $REVISIONCODE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Platform build: $PLATFORMBUILDVERSION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Revision code: $REVISIONCODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 if Variable NATIVE_ENGINE Equals TRUE
-  Write into Text File $SETUPLOG$ from Value Installer mode: Native Engine (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installer mode: Native Engine (at end of file)
 else
-  Write into Text File $SETUPLOG$ from Value Installer mode: MSI Engine (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Installer mode: MSI Engine (at end of file)
 end
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Comment: Correct presentation for Win 7
@@ -218,45 +219,48 @@ if Variable OPSYS Equals UNKNOWN
     Set Variable OPSYS to 8
   end
 end
-Write into Text File $SETUPLOG$ from Value OS: Windows $OPSYS$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Product Name:  $OSPRODUCTNAME$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Edition:  $OSEDITIONID$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Version:  $OSCURRENTVERSION$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Build:  $OSCURRENTBUILD$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Build Label:  $OSBUILDLABEL$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ OS: Windows $OPSYS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Product Name:  $OSPRODUCTNAME$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Edition:  $OSEDITIONID$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Version:  $OSCURRENTVERSION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Build:  $OSCURRENTBUILD$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Build Label:  $OSBUILDLABEL$ (at end of file)
 if Variable WIN64MODE Equals TRUE
-  Write into Text File $SETUPLOG$ from Value Architecture: 64bit (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Architecture: 64bit (at end of file)
 else
-  Write into Text File $SETUPLOG$ from Value Architecture: 32bit (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Architecture: 32bit (at end of file)
 end
 Write into Text File $SETUPLOG$ from Value  (at end of file)
-Write into Text File $SETUPLOG$ from Value Win64Mode: $WIN64MODE$ (at end of file)
-Write into Text File $SETUPLOG$ from Value FrameworkRoot: $FRAMEWORKROOT$  (at end of file)
-Write into Text File $SETUPLOG$ from Value RegAsm32: $REGASM32$ (at end of file)
-Write into Text File $SETUPLOG$ from Value RegAsm64: $REGASM64$ (at end of file)
-Write into Text File $SETUPLOG$ from Value NGen32: $NGEN32$ (at end of file)
-Write into Text File $SETUPLOG$ from Value NGen64: $NGEN64$ (at end of file)
-Write into Text File $SETUPLOG$ from Value ProgramFiles: $PROGRAMFILES$ (at end of file)
-Write into Text File $SETUPLOG$ from Value CommonFiles: $COMMONFILES$ (at end of file)
-Write into Text File $SETUPLOG$ from Value Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
-Write into Text File $SETUPLOG$ from Value GAC Assembly Reference Path: $GACREF$ (at end of file)
-Write into Text File $SETUPLOG$ from Value ShortcutFiles: $SHORTCUTFILES$ (at end of file)
-Write into Text File $SETUPLOG$ from Value ShortcutFilesAll: $SHORTCUTFILESALL$ (at end of file)
-Write into Text File $SETUPLOG$ from Value DesktopDir: $DESKTOPDIR$ (at end of file)
-Write into Text File $SETUPLOG$ from Value DesktopDirAll: $DESKTOPDIRALL$ (at end of file)
-Write into Text File $SETUPLOG$ from Value ASCOMStartMenu: $ASCOMSTARTMENU$ (at end of file)
-Write into Text File $SETUPLOG$ from Value AllUsers: $ALLUSERS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Win64Mode: $WIN64MODE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ FrameworkRoot: $FRAMEWORKROOT$  (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ RegAsm32: $REGASM32$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ RegAsm64: $REGASM64$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ NGen32: $NGEN32$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ NGen64: $NGEN64$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ ProgramFiles: $PROGRAMFILES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ CommonFiles: $COMMONFILES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ GAC Assembly Reference Path: $GACREF$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFiles: $SHORTCUTFILES$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFilesAll: $SHORTCUTFILESALL$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ DesktopDir: $DESKTOPDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ DesktopDirAll: $DESKTOPDIRALL$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ ASCOMStartMenu: $ASCOMSTARTMENU$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ AllUsers: $ALLUSERS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 [END REGION]
  
 [DEFINE REGION: Setup User Interview]
+Comment: Hide the non-modal dialogue put up earlier while we check for pre-requisites.
+Hide Dialog
+ 
 if Variable MAINTENANCE Equals TRUE
-  Write into Text File $SETUPLOG$ from Value Mode: Maintenance (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Mode: Maintenance (at end of file)
   GoTo Label: Maintenance
 else
   [compiler if Variable BUILDMODE not Equals PATCH]
   Comment: First Time Install
-  Write into Text File $SETUPLOG$ from Value Mode: New Install (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Mode: New Install (at end of file)
   Set Variable TARGETDIR to $PROGRAMFILES$\ASCOM\Platform 6
   Set Variable STARTMENU to $TITLE$
   [compiler end]
@@ -368,7 +372,7 @@ if Variable REMOVE Equals TRUE
   Set Variable ABORT to FALSE
   Display Dialog: ConfirmRemove, wait for dialog to return (modal)
   if Variable ABORT Equals TRUE
-    Write into Text File $SETUPLOG$ from Value Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
     Terminate Installation
   end
   MessageBalloon: ASCOM Platform Maintenance, Removing Platform 6...
@@ -378,7 +382,7 @@ if Variable REPAIR Equals TRUE
   MessageBalloon: ASCOM Platform Maintenance, Repairing Platform 6...
   Set Variable REMOVE to FALSE
 end
-Write into Text File $SETUPLOG$ from Value Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
 [END REGION]
  
 [DEFINE REGION: Process (Un)Installation]
@@ -424,9 +428,9 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Comment: Find location of our uninstaller and run it
   Set Variable UNINSTALLER to 
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}\UninstallString into UNINSTALLER
-  Write into Text File $SETUPLOG$ from Value Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
-  Write into Text File $SETUPLOG$ from Value RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
   if Variable REMOVEOLD Equals ERROR
     MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
     Terminate Installation
@@ -447,30 +451,30 @@ Comment: Modify Target System
 [DEFINE REGION: Perform Uninstallation]
 if Variable REMOVE Equals TRUE
   Comment: Uninstall product
-  Write into Text File $SETUPLOG$ from Value Uninstalling platform (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling platform (at end of file)
   Set Variable PROGRESS to 0
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.Exceptions, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - removing policy.1.0.ASCOM.Exceptions (at end of file)
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.Exceptions.dll", startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - removing policy.1.0.ASCOM.Exceptions (at end of file)
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$ $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
   end
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.1.ASCOM.Exceptions, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - removing policy.1.1.ASCOM.Exceptions (at end of file)
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.1.ASCOM.Exceptions.dll", startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - removing policy.1.1.ASCOM.Exceptions (at end of file)
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$ $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
   end
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Utilities, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - removing policy.5.5.ASCOM.Utiliites (at end of file)
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - removing policy.5.5.ASCOM.Utiliites (at end of file)
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$ $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
   end
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.DriverAccess, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - removing policy.1.0.DriverAccess (at end of file)
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - removing policy.1.0.DriverAccess (at end of file)
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
   end
-  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Astrometry, startup in folder $COMMONFILES$\ASCOM\Platform\Internal (WAIT, get result into variable GACINSTALLRC)
-  Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ GACInstall - removing policy.5.5.Astrometry (at end of file)
+  Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - removing policy.5.5.Astrometry (at end of file)
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
   end
@@ -487,7 +491,7 @@ if Variable REMOVE Equals TRUE
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Comment: Unregister assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
-  Write into Text File $SETUPLOG$ from Value RC: $RC$ Unregister ASCOM Master Interfaces typelib (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Unregister ASCOM Master Interfaces typelib (at end of file)
   Set Variable PROGRESS to 50
    
   Comment: Remove 32bit native images
@@ -510,25 +514,25 @@ if Variable REMOVE Equals TRUE
     Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
     Set Variable PROGRESS to 85
     Run Program $NGEN64$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove DriverAccess (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove DriverAccess (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Astrometry 5.5.6.0 (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove Astrometry 5.5.6.0 (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Astrometry 6.0.0.0 (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove Astrometry 6.0.0.0 (at end of file)
     Set Variable PROGRESS to 90
     Run Program $NGEN64$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Utilities (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove Utilities (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove DeviceInterfaces (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove DeviceInterfaces (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen Remove Exceptions (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove Exceptions (at end of file)
     Set Variable PROGRESS to 95
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Astrometry (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm Unregister Astrometry (at end of file)
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Exceptions (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm Unregister Exceptions (at end of file)
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
-    Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister Utilities (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm Unregister Utilities (at end of file)
     Comment: Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.DeviceInterfaces.dll" (WAIT, get result into variable RC)
     Comment: Write into Text File $SETUPLOG$ from Value RC: $RC$ RegAsm Unregister DeviceInterfaces (at end of file)
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
@@ -540,16 +544,16 @@ if Variable REMOVE Equals TRUE
   Recursively Delete Files $COMMONFILES$\ASCOM\ASCOM.Simulator.SafetyMonitor.tlb
   MessageBalloon: ASCOM Platform Maintenance, Removing ASCOM Platform
   Apply Uninstall (get result into variable SUCCESS)
-  Write into Text File $SETUPLOG$ from Value Uninstall return code: $SUCCESS$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Uninstall return code: $SUCCESS$ (at end of file)
   if Variable SUCCESS not Equals ERROR
     if Variable SUCCESS not Equals CANCEL
       Remove Unpinned Assemblies
-      Write into Text File $SETUPLOG$ from Value Removing unpinned assemblies (at end of file)
+      Write into Text File $SETUPLOG$ from Value $TIME$ Removing unpinned assemblies (at end of file)
     end
   end
   Set Variable PROGRESS to 100
   MessageBalloon: , 
-  Write into Text File $SETUPLOG$ from Value Finished uninstalling Platform (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform (at end of file)
 else
   [END REGION]
    
@@ -583,19 +587,19 @@ else
   Does Folder Exist $INSTALLCACHEDIRECTORY$ (get result into variable INSTALLCACHEEXISTS)
   if Variable INSTALLCACHEEXISTS Equals TRUE
     Comment: Cache directory does exist so remove it
-    Write into Text File $SETUPLOG$ from Value Removing install cache found at $INSTALLCACHEDIRECTORY$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ Removing install cache found at $INSTALLCACHEDIRECTORY$ (at end of file)
     Recursively Delete Files $INSTALLCACHEDIRECTORY$
   else
-    Write into Text File $SETUPLOG$ from Value Install cache not found - $INSTALLCACHEDIRECTORY$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ Install cache not found - $INSTALLCACHEDIRECTORY$ (at end of file)
   end
   Set Variable NATIVE_ENGINE to FALSE
    
   Comment: Only try and remove Platform 5 and 5.5 if we are in initial install mode and not Repair or Maintain or Remove
-  Write into Text File $SETUPLOG$ from Value Native Engine Mode is: $NATIVE_ENGINE$ (at end of file)
+  Write into Text File $SETUPLOG$ from Value $TIME$ Native Engine Mode is: $NATIVE_ENGINE$ (at end of file)
   if Variable MAINTENANCE not Equals TRUE
     Comment: Only try and remove Platform 5 if we are not upgrading a previous Platform 6 install
     if Variable REQUIRESUPGRADE Equals FALSE
-      Write into Text File $SETUPLOG$ from Value Straight forward install - removing old Platform if it exists (at end of file)
+      Write into Text File $SETUPLOG$ from Value $TIME$ Straight forward install - removing old Platform if it exists (at end of file)
       Comment: Check for Platform 4.1
       Set Variable UNINSTALLER41 to 
       Set Variable PLATFORM4FOUND to FALSE
@@ -604,7 +608,7 @@ else
       if Variable UNINSTALLER41 not Equals 
         Set Variable PLATFORM4FOUND to TRUE
       end
-      Write into Text File $SETUPLOG$ from Value Platform 4.1 - $UNINSTALLER41$ (at end of file)
+      Write into Text File $SETUPLOG$ from Value $TIME$ Platform 4.1 - $UNINSTALLER41$ (at end of file)
       Comment: Check whether Platform 5 is actually installed, only try and uninstall if present! Test is presence of Platform 5 Uninstall string in registry
       Set Variable UNINSTALLER5A to 
       Set Variable PLATFORM5FOUND to FALSE
@@ -613,35 +617,35 @@ else
       if Variable UNINSTALLER5A not Equals 
         Set Variable PLATFORM5FOUND to TRUE
       end
-      Write into Text File $SETUPLOG$ from Value Platform 5A - $UNINSTALLER5A$ (at end of file)
+      Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5A - $UNINSTALLER5A$ (at end of file)
       Comment: Check for Platform 5b
       Set Variable UNINSTALLER5B to 
       Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{14C10725-0018-4534-AE5E-547C08B737B7}\UninstallString into UNINSTALLER5B
       if Variable UNINSTALLER5B not Equals 
         Set Variable PLATFORM5FOUND to TRUE
       end
-      Write into Text File $SETUPLOG$ from Value Platform 5B - $UNINSTALLER5B$ (at end of file)
+      Write into Text File $SETUPLOG$ from Value $TIME$ Platform 5B - $UNINSTALLER5B$ (at end of file)
       Comment: Run the uninstaller if either platform is found
       Set Variable RC to 999
       if Variable PLATFORM5FOUND Equals TRUE
         MessageBalloon: ASCOM Platform Maintenance, Removing Platform 5...
-        Write into Text File $SETUPLOG$ from Value Uninstalling Platform 5... (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 5... (at end of file)
         Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ UninstallASCOM  (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
         MessageBalloon: ASCOM Platform Maintenance, Installing Platform 6...
       else
         if Variable PLATFORM4FOUND Equals TRUE
           MessageBalloon: ASCOM Platform Maintenance, Removing Platform 4...
-          Write into Text File $SETUPLOG$ from Value Uninstalling Platform 4... (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 4... (at end of file)
           Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ UninstallASCOM  (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
           MessageBalloon: ASCOM Platform Maintenance, Installing Platform 6...
         else
           Comment: UninstallASCOM must run in order to set the correct security ACL on the ASCOM registry profile store
           MessageBalloon: ASCOM Platform Maintenance, Preparing ASCOM Profile Store...
-          Write into Text File $SETUPLOG$ from Value First time install, preparing ASCOM Profile Store (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ First time install, preparing ASCOM Profile Store (at end of file)
           Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ UninstallASCOM (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM (at end of file)
           MessageBalloon: ASCOM Platform Maintenance, First time install - Installing Platform 6...
         end
       end
@@ -887,7 +891,7 @@ else
     Comment: As of IA 10.10 you CANNOT use variables successfully to handle 32 and 64bit entries with just one statement, hence they are duplicated UGH!
     if Variable WIN64MODE not Equals TRUE
       Comment: This is a 32bit system so put in the normal 32bit registry location
-      Write into Text File $SETUPLOG$ from Value Installing 32bit Registry entries (at end of file)
+      Write into Text File $SETUPLOG$ from Value $TIME$ Installing 32bit Registry entries (at end of file)
       [DEFINE REGION: Registry Keys 32bit]
       Comment: Create registry keys
       Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
@@ -1011,7 +1015,7 @@ else
       [END REGION]
     else
       Comment: This is a 64bit system so put in the 32bit registry location on a 64bit system (Wow6432Node)
-      Write into Text File $SETUPLOG$ from Value Installing 64bit Registry entries (at end of file)
+      Write into Text File $SETUPLOG$ from Value $TIME$ Installing 64bit Registry entries (at end of file)
       [DEFINE REGION: Registry Keys 64bit]
       Comment: Create registry keys
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\,  (permanent)
@@ -1140,9 +1144,9 @@ else
     Comment: Menu shortcuts
     Comment: Install after main MSI install has run so we pick up correct icons from applicaitons
     Write into Text File $SETUPLOG$ from Value  (at end of file)
-    Write into Text File $SETUPLOG$ from Value Creating shortcuts (at end of file)
-    Write into Text File $SETUPLOG$ from Value DesktopFolder: $DESKTOPFOLDER$ (at end of file)
-    Write into Text File $SETUPLOG$ from Value ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
     Write into Text File $SETUPLOG$ from Value  (at end of file)
     Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
     Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
@@ -1175,7 +1179,7 @@ else
     Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
-    Delete Files $COMMONFILES$\ASCOM\.net\GACInstall.exe (when installing)
+    Delete Files $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\*.tlb (when uninstalling)
     [END REGION]
      
     Comment: Install in 64bit mode if we are running on a 64bit OS
@@ -1185,7 +1189,7 @@ else
      
     Comment: Run the installation
     Apply Install (get result into variable SUCCESS)
-    Write into Text File $SETUPLOG$ from Value Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
     Write into Text File $SETUPLOG$ from Value  (at end of file)
     if Variable SUCCESS not Equals ERROR
       if Variable SUCCESS not Equals CANCEL
@@ -1201,82 +1205,83 @@ else
         Comment: Register the Platform 5 type libraries
         Set Variable PROGRESS to 10
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ RegTLB - ASCOMMasterInterfaces (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - ASCOMMasterInterfaces (at end of file)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ RegTLB - Helper (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper (at end of file)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper2.tlb" (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ RegTLB - Helper2 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper2 (at end of file)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ RegTLB - IObjectSafety (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - IObjectSafety (at end of file)
         Set Variable PROGRESS to 15
         Comment: Register Platform 5 Simulators
         Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - ScopeSim (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ScopeSim (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\Hub.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Hub (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Hub (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\Pipe.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Pipe (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Pipe (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - POTH (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
         Set Variable PROGRESS to 20
         Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - DomeSim (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - DomeSim (at end of file)
         Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - ASCOMDome (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ASCOMDome (at end of file)
         Run Program $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - FilterWheelSim (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheelSim (at end of file)
         Run Program $COMMONFILES$\ASCOM\Focuser\FocusSim.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - FocusSim (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FocusSim (at end of file)
         Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - SwitchSim (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - SwitchSim (at end of file)
         Set Variable PROGRESS to 25
+         
         Comment: Register Platform 5.5 components
         Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Write into Text File $SETUPLOG$ from Value GACInstall Start time: $TIME$ (at end of file)
+         
+        Comment: Install policy files
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Utilities.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - Utilities (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Utilities (at end of file)
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
         end
         Set Variable PROGRESS to 30
-        Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - DriverAccess Policy (at end of file)
-        if Variable GACINSTALLRC not Equals 0
-          MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
-        end
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - Astrometry Policy (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Astrometry Policy (at end of file)
+        if Variable GACINSTALLRC not Equals 0
+          MessageBalloon: GACInstall, Astrometry install error RC: $GACINSTALLRC$
+        end
+        Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.DriverAccess.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - DriverAccess Policy (at end of file)
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
         end
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.0.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - Exceptions Policy 1.0 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.0 (at end of file)
         if Variable GACINSTALLRC not Equals 0
-          MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+          MessageBalloon: GACInstall, Exceptions 1.0 install error RC: $GACINSTALLRC$
         end
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.1.1.ASCOM.Exceptions.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
-        Write into Text File $SETUPLOG$ from Value RC: $GACINSTALLRC$ $TIME$ GACInstall - Exceptions Policy 1.1 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Exceptions Policy 1.1 (at end of file)
         if Variable GACINSTALLRC not Equals 0
-          MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
+          MessageBalloon: GACInstall, Exceptions 1.1 install error RC: $GACINSTALLRC$
         end
+         
         Comment: I'm sorry, I know this is an unforgiveable hack but I can't see any other way to have more than one pdb on the system. Peter
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Utilities.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Utilities\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Copy - Utilities 5.5.6 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Utilities 5.5.6 (at end of file)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Astrometry.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Astrometry\5.5.6.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Copy - Astrometry 5.5.6 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Astrometry 5.5.6 (at end of file)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
         Set Variable PROGRESS to 35
-        Write into Text File $SETUPLOG$ from Value Completed Copy files: $TIME$ (at end of file)
          
         Comment: Register Platform 6 components
         Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Write into Text File $SETUPLOG$ from Value Completed Register GAC assemblies: $TIME$ (at end of file)
          
         Comment: Register in-process simulator DLL files with Codebase option
         Register assembly $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll, set the code base in the registry
@@ -1284,19 +1289,17 @@ else
         Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll, set the code base in the registry
-        Write into Text File $SETUPLOG$ from Value Completed Register Simulator assemblies: $TIME$ (at end of file)
          
         Comment: Register these LocalServer drivers using the -register option
         Set Variable PROGRESS to 40
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
         Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Rotator Simulator 6 (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Rotator Simulator 6 (at end of file)
         Run Program $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe -register (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Switch V2 Simulator (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Switch V2 Simulator (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ Register - Telescope Simulator 6 (at end of file)
-        Write into Text File $SETUPLOG$ from Value Completed Register Local Servers: $TIME$ (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Telescope Simulator 6 (at end of file)
          
         Set Variable PROGRESS to 45
         Comment: Extra registration of 64bit components if on 64bit system
@@ -1317,28 +1320,26 @@ else
            
           Comment: Register core components
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
-          Write into Text File $SETUPLOG$ from Value RC: $RC1$ RegAsm64 - Astrometry (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC1$ RegAsm64 - Astrometry (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
-          Write into Text File $SETUPLOG$ from Value RC: $RC2$ RegAsm64 - Exceptions (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC2$ RegAsm64 - Exceptions (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
-          Write into Text File $SETUPLOG$ from Value RC: $RC3$ RegAsm64 - Utilities (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC3$ RegAsm64 - Utilities (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC3)
-          Write into Text File $SETUPLOG$ from Value RC: $RC3$ RegAsm64 - Video Utilities (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC3$ RegAsm64 - Video Utilities (at end of file)
           Set Variable PROGRESS to 50
-          Write into Text File $SETUPLOG$ from Value Completed Register 64bit core assemblies: $TIME$ (at end of file)
            
           Comment: Register simulators
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
-          Write into Text File $SETUPLOG$ from Value RC: $RC4$ RegAsm64 - Camera Simulator 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC4$ RegAsm64 - Camera Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
-          Write into Text File $SETUPLOG$ from Value RC: $RC5$ RegAsm64 - Focus Simulator 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC5$ RegAsm64 - Focus Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC6)
-          Write into Text File $SETUPLOG$ from Value RC: $RC6$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC6$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC10)
-          Write into Text File $SETUPLOG$ from Value RC: $RC10$ RegAsm64 - Dome Simulator 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC10$ RegAsm64 - Dome Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC11)
-          Write into Text File $SETUPLOG$ from Value RC: $RC11$ RegAsm64 - Video Simulator (at end of file)
-          Write into Text File $SETUPLOG$ from Value Completed Register 64bit Simulator assemblies: $TIME$ (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC11$ RegAsm64 - Video Simulator (at end of file)
           Set Variable PROGRESS to 60
           if Variable RC1 not Equals 0
             MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
@@ -1392,50 +1393,58 @@ else
         Comment: Install native images
         MessageBalloon: ASCOM Platform Maintenance, Creating 32bit native images
         Generate Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DeviceInterfaces 6 (at end of file)
         Generate Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Helper (at end of file)
         Generate Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Utilities 6 (at end of file)
         Generate Native Images for assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - VideoUtils 6.1 (at end of file)
         Set Variable PROGRESS to 65
         Generate Native Images for assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 5.5.6 (at end of file)
         Generate Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 6 (at end of file)
         Set Variable PROGRESS to 75
         Generate Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DriverAccess 6 (at end of file)
         Set Variable PROGRESS to 80
         Generate Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Helper2 1.0 (at end of file)
         Generate Native Images for assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Exceptions 6 (at end of file)
         Generate Native Images for assembly DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f
-        Write into Text File $SETUPLOG$ from Value Completed 32bit NGEN: $TIME$ (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DirectShowLib 2.1 (at end of file)
         if Variable WIN64MODE Equals TRUE
           MessageBalloon: ASCOM Platform Maintenance, Creating 64bit native images
           Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - DeviceInterfaces 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DeviceInterfaces 6 (at end of file)
           Set Variable PROGRESS to 85
           Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - DriverAccess 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DriverAccess 6 (at end of file)
           Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - Exceptions 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Exceptions 6 (at end of file)
           Set Variable PROGRESS to 88
           Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - Utilities 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Utilities 6 (at end of file)
           Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - Video Utilities (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Video Utilities (at end of file)
           Set Variable PROGRESS to 90
           Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - Astrometry 5.5.6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 5.5.6 (at end of file)
           Set Variable PROGRESS to 93
           Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - Astrometry 6 (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 6 (at end of file)
           Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
-          Write into Text File $SETUPLOG$ from Value RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
           Set Variable PROGRESS to 95
-          Write into Text File $SETUPLOG$ from Value Completed 64bit NGEN: $TIME$ (at end of file)
         end
         MessageBalloon: ASCOM Platform Maintenance, Finalising install
         [END REGION]
          
         Comment: Tidy up COM registration (add AppID for DCOM etc.) and finish
         Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
-        Write into Text File $SETUPLOG$ from Value RC: $RC$ FinaliseInstall (at end of file)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ FinaliseInstall (at end of file)
         Set Variable PROGRESS to 100
         if Variable RC not Equals 0
           MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
