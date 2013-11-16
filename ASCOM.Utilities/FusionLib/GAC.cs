@@ -826,7 +826,6 @@ namespace ASCOM.Internal
         /// <param name="dwFormatFlags"></param>
         /// <param name="ppIStream"></param>
         /// <param name="puliMaxSize"></param>
-        
         void CreateStream(
             uint dwFlags,
             [MarshalAs(UnmanagedType.LPWStr)] string pszStreamName,
