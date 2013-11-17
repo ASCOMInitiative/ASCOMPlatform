@@ -377,6 +377,7 @@ Public Interface IVideo
     '''	<returns>The name of sensor used within the camera.</returns>
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
+    '''	<exception cref="PropertyNotImplementedException">Must throw exception if not implemented.</exception>
     '''	<remarks>Returns the name (datasheet part number) of the sensor, e.g. ICX285AL.  The format is to be exactly as shown on 
     '''	manufacturer data sheet, subject to the following rules. All letter shall be uppercase.  Spaces shall not be included.
     '''	<para>Any extra suffixes that define region codes, package types, temperature range, coatings, grading, color/monochrome, 
@@ -687,12 +688,14 @@ Public Interface IVideo
     '''	Returns the width of the CCD chip pixels in microns.
     '''	</summary>
     '''	<value>The pixel size X if known.</value>
+    '''	<exception cref="PropertyNotImplementedException">Must throw exception if not implemented.</exception>
     ReadOnly Property PixelSizeX() As Double
 
     ''' <summary>
     '''	Returns the height of the CCD chip pixels in microns.
     '''	</summary>
     '''	<value>The pixel size Y if known.</value>
+    '''	<exception cref="PropertyNotImplementedException">Must throw exception if not implemented.</exception>
     ReadOnly Property PixelSizeY() As Double
 
     ''' <summary>

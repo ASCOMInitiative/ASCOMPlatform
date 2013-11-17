@@ -15,8 +15,8 @@ class DeviceVideo
 
     #region IVideo Implementation
 
-    private const int deviceWidth = 1394; // Constants to define the ccd pixel dimenstions
-    private const int deviceHeight = 1040;
+    private const int deviceWidth = 720; // Constants to define the ccd pixel dimenstions
+    private const int deviceHeight = 480;
     private const int bitDepth = 8;
     private const string videoFileFormat = "AVI";
 
@@ -31,7 +31,7 @@ class DeviceVideo
 
     public VideoCameraState CameraState
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get { return VideoCameraState.videoCameraError; }
     }
 
     public bool CanConfigureDeviceProperties
@@ -49,17 +49,25 @@ class DeviceVideo
 
     public double ExposureMax
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            // Standard NTSC frame duration
+            return 0.03337;
+        }
     }
 
     public double ExposureMin
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get
+        {
+            // Standard NTSC frame duration
+            return 0.03337;
+        }
     }
 
     public VideoCameraFrameRate FrameRate
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get { return VideoCameraFrameRate.NTSC; }
     }
 
     ///	<exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
@@ -202,11 +210,11 @@ class DeviceVideo
 
     public IVideoFrame LastVideoFrame
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get { throw new ASCOM.InvalidOperationException("There are no video frames available."); }
     }
 
     ///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
-    /// <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
+    /// <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw exception if not implemented.</exception>
     public double PixelSizeX
     {
 
@@ -217,7 +225,7 @@ class DeviceVideo
     }
 
     ///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
-    /// <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
+    /// <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw exception if not implemented.</exception>
     public double PixelSizeY
     {
 
@@ -229,7 +237,7 @@ class DeviceVideo
 
     ///	<exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     ///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
-    /// <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
+    /// <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw exception if not implemented.</exception>
     public string SensorName
     {
 
@@ -241,18 +249,18 @@ class DeviceVideo
 
     public SensorType SensorType
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get { return SensorType.Monochrome; }
     }
 
     public string StartRecordingVideoFile(string PreferredFileName)
     {
         tl.LogMessage("StartRecordingVideoFile", "Supplied file name: " + PreferredFileName);
-        return PreferredFileName;
+        throw new InvalidOperationException("Cannot start recording a video file right now.");
     }
 
     public void StopRecordingVideoFile()
     {
-        throw new ASCOM.PropertyNotImplementedException();
+        throw new InvalidOperationException("Cannot stop recording right now.");
     }
 
     /// <exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
@@ -268,12 +276,12 @@ class DeviceVideo
 
     public string VideoCaptureDeviceName
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get { return string.Empty; }
     }
 
     public string VideoCodec
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get { return string.Empty; }
     }
 
     public string VideoFileFormat
@@ -287,7 +295,7 @@ class DeviceVideo
 
     public int VideoFramesBufferSize
     {
-        get { throw new ASCOM.PropertyNotImplementedException(); }
+        get { return 0; }
     }
 
     public int Width
