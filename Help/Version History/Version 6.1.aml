@@ -5,7 +5,10 @@
     		<title>Key Changes in 6.1 - For Everyone</title>
       		<content>
 				<list class="bullet">
-	      			<listItem>TBC.</listItem>
+	      			<listItem>The Platform now supports ASCOM Video device drivers and clients and a Video simulator is included in the Platform install.</listItem>
+	      			<listItem>The Platform now provides an improved Switch interface that can read and control multi-position switches, digital rheostat like devices and sensors.</listItem>
+	      			<listItem>The Platform now requires .NET Framework 4.0 Client or above and the Visual C++ 10.0 libraries. The .NET Framework will need to be
+	      			installed before the Platform installer is run but the C++ libraries will be automatically installed by the Platform installer if required.</listItem>
 	  			</list>
             </content>
 		</section>
@@ -14,7 +17,11 @@
 	     	<title>Key Changes in 6.1 - For Developers</title>
 	      	<content>
 	      		<list class="bullet">
-	      			<listItem>TBC.</listItem>
+	      			<listItem>The IVideo interface has been added plus support for the DriverAccess, Driver Installer and Video driver templates.</listItem>
+	      			<listItem>A set of Video utiliites have been added to the Platform together with a video driver developer guide.</listItem>
+	      			<listItem>The ISwitch interface has been revised to ISwitchV2 and a new simulaotr and driver template updated to support the new features.</listItem>
+	      			<listItem>Although the Platform client applications have been transitioned to .NET 4, development of ASCOM clients and drivers
+	      			based on Framework 3.5 is still supported by the Platform.</listItem>
 				</list>
       		</content>
    		</section>
@@ -23,7 +30,7 @@
            	<title>Issues Fixed - Platform</title>
             <content>
       			<list class="bullet">
-					<listItem>TBC</listItem>
+					<listItem>None.</listItem>
 				</list>
    			</content>
    		</section>
@@ -32,7 +39,7 @@
            	<title>Issues Fixed - Developers</title>
             <content>
       			<list class="bullet">
-					<listItem>TBC.</listItem>
+					<listItem>None.</listItem>
 				</list>
    			</content>
    		</section>
