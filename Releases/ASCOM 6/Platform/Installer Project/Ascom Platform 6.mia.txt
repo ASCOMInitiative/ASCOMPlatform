@@ -425,6 +425,17 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable REMOVEOLD to 
   Set Variable ERROROLD to 
   Set Variable UNINSTALLCODE to 
+  Set Variable WINERRORUISTATE to 
+  Set Variable WINERRORUISTATENEW to 
+   
+  Comment: Save the Windows error reporting UI current state and turn eror reproting UI off
+  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI into WINERRORUISTATE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Windows error reporting UI state - $WINERRORUISTATE$ (at end of file)
+  Set Variable NATIVE_ENGINE to TRUE
+  Write Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI , 1 (permanent)
+  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI into WINERRORUISTATENEW
+  Set Variable NATIVE_ENGINE to FALSE
+  Write into Text File $SETUPLOG$ from Value $TIME$ New Windows error reporting UI state - $WINERRORUISTATENEW$ (at end of file)
    
   Comment: Find location of our uninstaller and run it
   Set Variable UNINSTALLER to 
@@ -432,19 +443,35 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
+   
+  Comment: Return the original state of WINERRORUISTATE
+  if Variable WINERRORUISTATE Equals 
+    Set Variable WINERRORUISTATE to 0
+  end
+  Set Variable NATIVE_ENGINE to TRUE
+  Write Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI , $WINERRORUISTATE$ (permanent)
+  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI into WINERRORUISTATENEW
+  Set Variable NATIVE_ENGINE to FALSE
+  Write into Text File $SETUPLOG$ from Value $TIME$ Final Windows error reporting UI state - $WINERRORUISTATENEW$ (at end of file)
+   
+  Comment: Now process the installer error code
   if Variable UNINSTALLCODE not Equals 0
     Comment: MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
     MessageBox: Unable to uninstall current Platform, The installer can't uninstall your current Platform. $NEWLINE$$NEWLINE$Please click the "No" button to terminate this installer or click the "Yes" button to clean up your system.$NEWLINE$$NEWLINE$Eror code: $UNINSTALLCODE$
     if Variable ERROROLD Equals YES
+      Write into Text File $SETUPLOG$ from Value $TIME$ ForcePlatform: User selected YES (at end of file)
       Comment: User selected YES so run the ForceRemove program
       Run Program $SUPPORTDIR$\RemoveAscom.exe  (WAIT, get result into variable ERROROLD)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $ERROROLD$ - RemoveASCOM (at end of file)
       if Variable ERROROLD Equals 99
         Comment: User ran ForceRemove but chose NOT to remove the Platform so give them a message and terminate the installer
+        Write into Text File $SETUPLOG$ from Value $TIME$ Terminating install. (at end of file)
         MessageBox: Unable to uninstall current Platform, You chose not to force Platform removal so this installer cannot continue and will now close when you click "OK".
         Terminate Installation
       end
     else
       Comment: User selected No so just terminate the installer.
+      Write into Text File $SETUPLOG$ from Value $TIME$ ForcePlatform: User selected NO - Terminating install. (at end of file)
       Terminate Installation
     end
   end
