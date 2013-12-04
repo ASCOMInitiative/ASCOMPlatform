@@ -205,7 +205,7 @@ namespace ASCOM.Simulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("OFF#;LO#;HI")]
         public string Gammas {
             get {
                 return ((string)(this["Gammas"]));

@@ -4,9 +4,9 @@
     	<section address="Intro61">
     		<title>Introduction</title>
       		<content>
-      			<para>The 6.1 update is primarily focused on devices, introducing a new Video interface and tools, whose development has been led by Hristo Pavolv, and 
-      			also enhancing the ISwitch interface, which has been led by Chris Rowland. Please see below for more information.</para>
-				<para>In line with all previous Platform installers, 6.1 is a cumulative release that contains all fixes and enhancements from previous Platforms.</para>
+      			<para>The 6.1 update is primarily focused on devices; introducing a new Video interface and tools, whose development was led by Hristo Pavlov, and 
+      			enhancing the ISwitch interface, which was led by Chris Rowland. Please see below for more information.</para>
+				<para>In line with previous Platform installers, 6.1 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs.</para>
             </content>
 		</section>
    	
@@ -30,10 +30,10 @@
 	      		<list class="bullet">
 	      			<listItem>The IVideo interface has been added plus support for the DriverAccess, Driver Installer and Video driver templates.</listItem>
 	      			<listItem>A set of Video utiliites have been added to the Platform together with a video driver developer guide.</listItem>
-	      			<listItem>The ISwitch interface has been revised to ISwitchV2 and a new simulaotr and driver template updated to support the new features.</listItem>
+	      			<listItem>The ISwitch interface has been revised to ISwitchV2 and a new simulator and driver template have been provided to support the new features.</listItem>
 	      			<listItem>Although the Platform client applications have been transitioned to .NET 4, development of ASCOM clients and drivers
 	      			based on Framework 3.5 is still supported by the Platform.</listItem>
-	      			<listItem>Device template icons have been tidied up and made consitent.</listItem>
+	      			<listItem>Device template icons have been tidied up and made consistent.</listItem>
 				</list>
       		</content>
    		</section>
