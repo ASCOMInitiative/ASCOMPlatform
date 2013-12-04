@@ -432,10 +432,21 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
-  if Variable UNINSTALLCODE not Equals 
+  if Variable UNINSTALLCODE not Equals 0
     Comment: MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
-    MessageBox: $TITLE$ Setup, The installer can't uninstall your current Platform. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$UNINSTALLCODE$
-    Terminate Installation
+    MessageBox: Unable to uninstall current Platform, The installer can't uninstall your current Platform. $NEWLINE$$NEWLINE$Please click the "No" button to terminate this installer or click the "Yes" button to clean up your system.$NEWLINE$$NEWLINE$Eror code: $UNINSTALLCODE$
+    if Variable ERROROLD Equals YES
+      Comment: User selected YES so run the ForceRemove program
+      Run Program $SUPPORTDIR$\RemoveAscom.exe  (WAIT, get result into variable ERROROLD)
+      if Variable ERROROLD Equals 99
+        Comment: User ran ForceRemove but chose NOT to remove the Platform so give them a message and terminate the installer
+        MessageBox: Unable to uninstall current Platform, You chose not to force Platform removal so this installer cannot continue and will now close when you click "OK".
+        Terminate Installation
+      end
+    else
+      Comment: User selected No so just terminate the installer.
+      Terminate Installation
+    end
   end
   Comment: if Variable REMOVEOLD Equals REBOOT
   Comment: MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.

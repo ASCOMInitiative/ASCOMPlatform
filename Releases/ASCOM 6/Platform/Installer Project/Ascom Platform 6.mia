@@ -435,7 +435,18 @@ Write to Text File
 If
 MessageBox
 MessageBox
+If
+Comment
+Run Program
+If
+Comment
+MessageBox
 Terminate Install
+End
+Else
+Comment
+Terminate Install
+End
 End
 If
 MessageBox
@@ -1929,7 +1940,18 @@ $
 {AA73F812-C5C9-4DDF-823E-872F5467DE94}
 {D153B6D5-BD0A-4419-B1D4-9DF64AF7D4AA}
 {4C6CD412-2A99-4E3B-BFBB-36A841EFCDAE}
+{6AA336F5-A99D-4E15-843E-CB4FE2190BA9}
+{8F69D54B-8317-4FD6-9078-BAE551B4D4C7}
+{4B8747DB-0504-4095-9D18-019EC4E1B304}
+{2C6CE91D-BCF2-4CBD-B121-ABF796231C36}
+{75A3E944-3EDA-406B-9026-370203468579}
+{8181717F-5E89-42D8-9995-C927654CFBF6}
+{AC3F0729-5884-4219-B9D2-23EB2DCDF0D4}
+{1B622C5B-A819-43AB-B2DF-3EB91BC8B940}
+{DD7D9655-8D9E-4280-8CC8-3F9DF59F1F20}
+{53ED6F4E-0C4D-4729-A343-C81E535DA197}
 {5738DAA6-C90B-499F-893F-30C44811FF66}
+{13930029-8B07-4B5D-B78A-4A0052113165}
 {50DC0274-52EF-4B1C-B8E5-05AC3CEB1918}
 {7B406B78-9E7B-4938-8A9C-B104394FEC06}
 {5D4E9F9E-8619-4BE6-9279-DE7FE84E319E}
@@ -3374,6 +3396,12 @@ Install policy files
 Hide the non-modal dialogue put up earlier while we check for pre-requisites.
 {5B7001BF-0DEE-4E8F-BAD1-597426321848}
 
+{8F69D54B-8317-4FD6-9078-BAE551B4D4C7}
+User selected YES so run the ForceRemove program
+{75A3E944-3EDA-406B-9026-370203468579}
+User ran ForceRemove but chose NOT to remove the Platform so give them a message and terminate the installer
+{53ED6F4E-0C4D-4729-A343-C81E535DA197}
+User selected No so just terminate the installer.
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -4031,7 +4059,7 @@ FALSE
 {AA73F812-C5C9-4DDF-823E-872F5467DE94}
 UNINSTALLCODE
 0
-
+0
 TRUE
 {322161C9-6055-4FD5-9776-C9311CC60558}
 RECOMMENDEDUPGRADE
@@ -4348,6 +4376,16 @@ GACINSTALLRC
 0
 0
 TRUE
+{6AA336F5-A99D-4E15-843E-CB4FE2190BA9}
+ERROROLD
+0
+YES
+FALSE
+{2C6CE91D-BCF2-4CBD-B121-ABF796231C36}
+ERROROLD
+0
+99
+FALSE
 {90829DD8-0835-4E22-9C27-A67324C55271}
 $TITLE$ Setup Error
 This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
@@ -4409,11 +4447,17 @@ We are sorry but you must install Framework 4 before continuing with this instal
 1
 
 {4C6CD412-2A99-4E3B-BFBB-36A841EFCDAE}
-$TITLE$ Setup
-The installer can't uninstall your current Platform. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$UNINSTALLCODE$
+Unable to uninstall current Platform
+The installer can't uninstall your current Platform. $NEWLINE$$NEWLINE$Please click the "No" button to terminate this installer or click the "Yes" button to clean up your system.$NEWLINE$$NEWLINE$Eror code: $UNINSTALLCODE$
 3
 4
-
+ERROROLD
+{8181717F-5E89-42D8-9995-C927654CFBF6}
+Unable to uninstall current Platform
+You chose not to force Platform removal so this installer cannot continue and will now close when you click "OK".
+0
+1
+ERROROLD
 {EAC1FFF4-CCCD-452E-886C-3AAFA5AC4558}
 welcome
 WIZARD
@@ -6738,6 +6782,12 @@ TRUE
 -register
 TRUE
 RC
+{4B8747DB-0504-4095-9D18-019EC4E1B304}
+$SUPPORTDIR$\RemoveAscom.exe
+TRUE
+
+TRUE
+ERROROLD
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
 $UNINSTALLER$
 
@@ -10881,6 +10931,17 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 C
 C
 C
@@ -11936,6 +11997,17 @@ C
 
 
 $
+
+
+
+
+
+
+
+
+
+
+
 
 
 
