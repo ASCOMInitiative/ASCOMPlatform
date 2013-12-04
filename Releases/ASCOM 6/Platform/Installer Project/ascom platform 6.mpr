@@ -47,11 +47,15 @@ MigrationSupport.pdb
 MigrationSupport.xml
 moon.bmp
 readme.rtf
+RemoveASCOM.exe
+RemoveASCOM.pdb
 Sleep.exe
 swoosh.avi
 UninstallAscom.exe
 UninstallAscom.pdb
 $
+
+
 
 
 
@@ -1644,7 +1648,7 @@ ASCOM Platform 6.1 - RC1
 ASCOM Platform 6.1 Installation - RC1
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{00EF589F-87A1-41AF-BC42-42F53088F9EA}
+{F58C0070-488C-4F20-BA5C-6530408979E4}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
