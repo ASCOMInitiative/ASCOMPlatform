@@ -7,6 +7,7 @@ Imports System.Globalization
 
 Public Class Form1
     Private TL As TraceLogger
+    Private PlatformRemoved As Boolean
 
     'Constants for use with SHGetSpecialFolderPath
     Const CSIDL_COMMON_STARTMENU As Integer = 22 ' 0x0016  
@@ -50,7 +51,8 @@ Public Class Form1
             MsgBox("Load Exception 2: " & ex.ToString)
         End Try
 
-        ' Set the default return code of "No action"
+        ' Iniitialise Platform removed variable and set default return code
+        PlatformRemoved = False
         Environment.ExitCode = 99
     End Sub
 
@@ -59,12 +61,19 @@ Public Class Form1
             TL.Enabled = False
             TL.Dispose()
             TL = Nothing
+
+            ' Set the return code depending on whether or not the user removed the Platform
+            If PlatformRemoved Then
+                Environment.ExitCode = 0
+            Else
+                Environment.ExitCode = 99
+            End If
         Catch
         End Try
     End Sub
 
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
-        End
+        Me.Close()
     End Sub
 #End Region
 
@@ -79,8 +88,9 @@ Public Class Form1
                 TL.LogMessage("ForceRemove", "User said ""Yes""")
                 TL.BlankLine()
 
-                ' Set the return code to 0 indicating that the user did remove the Platform unless overwritten by an error later in the code
-                Environment.ExitCode = 99
+                ' Flag that we did actually uninstall the Platform so that an appropriate return code can be returned.
+                PlatformRemoved = True
+
                 RemoveInstallers()
                 RemoveProfile()
                 RemoveFiles()
@@ -739,6 +749,7 @@ Public Class Form1
 
             startInfo = New ProcessStartInfo(processToRun)
             startInfo.Arguments = args
+            startInfo.ErrorDialog = False
 
             Dim StartTime As Date
             StartTime = Now

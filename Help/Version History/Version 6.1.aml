@@ -1,12 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="99a131c6-8a85-43e8-b98a-5fa81ed108ec" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    	<section address="Intro61">
+    		<title>Introduction</title>
+      		<content>
+      			<para>The 6.1 update is primarily focused on devices, introducing a new Video interface and tools, whose development has been led by Hristo Pavolv, and 
+      			also enhancing the ISwitch interface, which has been led by Chris Rowland. Please see below for more information.</para>
+				<para>In line with all previous Platform installers, 6.1 is a cumulative release that contains all fixes and enhancements from previous Platforms.</para>
+            </content>
+		</section>
+   	
     	<section address="Changes61">
     		<title>Key Changes in 6.1 - For Everyone</title>
       		<content>
 				<list class="bullet">
 	      			<listItem>The Platform now supports ASCOM Video device drivers and clients and a Video simulator is included in the Platform install.</listItem>
 	      			<listItem>The Platform now provides an improved Switch interface that can read and control multi-position switches, digital rheostat like devices and sensors.</listItem>
+	      			<listItem>The 6.1 installer will now clean up corrupted Platform installs if required, providing more reliable implementation. This capbility is 
+	      			based on the ForceRemove program that previously had to be run manually.</listItem>
 	      			<listItem>The Platform now requires .NET Framework 4.0 Client or above and the Visual C++ 10.0 libraries. The .NET Framework will need to be
 	      			installed before the Platform installer is run but the C++ libraries will be automatically installed by the Platform installer if required.</listItem>
 	  			</list>
@@ -22,6 +33,7 @@
 	      			<listItem>The ISwitch interface has been revised to ISwitchV2 and a new simulaotr and driver template updated to support the new features.</listItem>
 	      			<listItem>Although the Platform client applications have been transitioned to .NET 4, development of ASCOM clients and drivers
 	      			based on Framework 3.5 is still supported by the Platform.</listItem>
+	      			<listItem>Device template icons have been tidied up and made consitent.</listItem>
 				</list>
       		</content>
    		</section>

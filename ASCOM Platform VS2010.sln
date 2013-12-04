@@ -218,6 +218,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "RemoveASCOM", "Remove ASCOM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchServer", "Drivers and Simulators\SwitchV2 Simulator\SwitchServer\SwitchServer.csproj", "{D6AAFB5F-7D10-4517-99A1-49FA584E8CF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuppressWinErrors", "Releases\ASCOM 6\SuppressWinErrors\SuppressWinErrors.csproj", "{DD23E159-2FFB-40FE-B73D-E50653F8A17C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -1954,6 +1956,37 @@ Global
 		{D6AAFB5F-7D10-4517-99A1-49FA584E8CF4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D6AAFB5F-7D10-4517-99A1-49FA584E8CF4}.Release|Win32.ActiveCfg = Release|Any CPU
 		{D6AAFB5F-7D10-4517-99A1-49FA584E8CF4}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug Quick|Any CPU.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug Quick|Mixed Platforms.Build.0 = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug Quick|Win32.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug Quick|x86.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug Quick|x86.Build.0 = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Win32.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|x86.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|x86.Build.0 = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.FindGUIDs|Any CPU.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.FindGUIDs|Mixed Platforms.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.FindGUIDs|Mixed Platforms.Build.0 = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.FindGUIDs|Win32.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.FindGUIDs|x86.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.FindGUIDs|x86.Build.0 = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release 64bit|Any CPU.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release 64bit|Mixed Platforms.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release 64bit|Mixed Platforms.Build.0 = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release 64bit|Win32.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release 64bit|x86.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release 64bit|x86.Build.0 = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release|Any CPU.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release|Any CPU.Build.0 = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release|Mixed Platforms.Build.0 = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release|Win32.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release|x86.ActiveCfg = Release|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2027,6 +2060,7 @@ Global
 		{8D8F18F1-5298-49CC-9579-6C04568D9771} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 		{779D544E-9B02-4D78-8AD8-F53C05975D6D} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 		{D614CB03-20EC-47EB-94F6-A6E3C6F47ABA} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C} = {D360F204-4C59-4AE9-B39A-14E08568F8CC}
 		{8039598F-9011-4F55-A4A5-9260513F240D} = {1182E521-DF80-4E58-B832-4BDA451F84DE}
 		{D6AAFB5F-7D10-4517-99A1-49FA584E8CF4} = {1182E521-DF80-4E58-B832-4BDA451F84DE}
 		{CE1C4CD1-E730-4F08-A839-F181E414E5A0} = {A8D5E32F-E4BB-4737-AAC8-95427E1455FD}
@@ -2036,13 +2070,13 @@ Global
 		{70B98C71-DC6B-4DB3-937A-D2727D3210B3} = {E4DD4028-83D0-4CB8-AECA-B1894828E926}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
 		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal

@@ -137,7 +137,13 @@
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release;Platform=Any CPU" />
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release;Platform=Any CPU" />
 
-    <!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
+    <!-- Copy the ForceASCOM executables, that have just been built, to the installer main directory so that the latest versions are included in the installer -->
+    <ItemGroup>
+      <RemoveASCOMExecutables Include="$(CheckoutDirectory)\$(RemoveASCOMExe);$(CheckoutDirectory)\$(RemoveASCOMPdb)" />
+    </ItemGroup>
+    <Copy SourceFiles="@(RemoveASCOMExecutables)" DestinationFolder="$(CheckoutDirectory)\$(PlatformInstallerDirectory)" />
+
+	<!-- Build the 64bit executables after cleaning the solution (just in case executables get committed to SVN) -->
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=Release 64bit;Platform=Any CPU" />
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=Release 64bit;Platform=Any CPU" />
 
