@@ -50,10 +50,23 @@ readme.rtf
 RemoveASCOM.exe
 RemoveASCOM.pdb
 Sleep.exe
+SuppressWinErrors.exe
+SuppressWinErrors.pdb
 swoosh.avi
 UninstallAscom.exe
 UninstallAscom.pdb
 $
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1686,7 +1699,7 @@ ASCOM Platform 6.1 - RC1
 ASCOM Platform 6.1 Installation - RC1
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{465EFE3C-C392-4210-9001-760684AC7A58}
+{24A2FDDF-DAFF-4898-B259-7B019D4A2B16}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk

@@ -232,6 +232,9 @@ else
 end
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Win64Mode: $WIN64MODE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Setup Path: $SETUPPATH$  (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Support Directory: $SUPPORTDIR$  (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Temporary Directory: $TEMPDIR$  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ FrameworkRoot: $FRAMEWORKROOT$  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ RegAsm32: $REGASM32$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ RegAsm64: $REGASM64$ (at end of file)
@@ -427,14 +430,13 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable UNINSTALLCODE to 
   Set Variable WINERRORUISTATE to 
   Set Variable WINERRORUISTATENEW to 
+  Set Variable TERMINATEINSTALL to FALSE
    
   Comment: Save the Windows error reporting UI current state and turn eror reproting UI off
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI into WINERRORUISTATE
   Write into Text File $SETUPLOG$ from Value $TIME$ Windows error reporting UI state - $WINERRORUISTATE$ (at end of file)
-  Set Variable NATIVE_ENGINE to TRUE
-  Write Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI , 1 (permanent)
+  Run Program $SUPPORTDIR$\SuppressWinErrors.exe True (WAIT, get result into variable RC)
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI into WINERRORUISTATENEW
-  Set Variable NATIVE_ENGINE to FALSE
   Write into Text File $SETUPLOG$ from Value $TIME$ New Windows error reporting UI state - $WINERRORUISTATENEW$ (at end of file)
    
   Comment: Find location of our uninstaller and run it
@@ -444,16 +446,6 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
    
-  Comment: Return the original state of WINERRORUISTATE
-  if Variable WINERRORUISTATE Equals 
-    Set Variable WINERRORUISTATE to 0
-  end
-  Set Variable NATIVE_ENGINE to TRUE
-  Write Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI , $WINERRORUISTATE$ (permanent)
-  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI into WINERRORUISTATENEW
-  Set Variable NATIVE_ENGINE to FALSE
-  Write into Text File $SETUPLOG$ from Value $TIME$ Final Windows error reporting UI state - $WINERRORUISTATENEW$ (at end of file)
-   
   Comment: Now process the installer error code
   if Variable UNINSTALLCODE not Equals 0
     Comment: MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
@@ -461,19 +453,38 @@ if Variable REQUIRESUPGRADE Equals TRUE
     if Variable ERROROLD Equals YES
       Write into Text File $SETUPLOG$ from Value $TIME$ ForcePlatform: User selected YES (at end of file)
       Comment: User selected YES so run the ForceRemove program
+      Comment: Run Program $SUPPORTDIR$\RemoveAscom.exe  (WAIT, get result into variable ERROROLD)
       Run Program $SUPPORTDIR$\RemoveAscom.exe  (WAIT, get result into variable ERROROLD)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $ERROROLD$ - RemoveASCOM (at end of file)
+       
       if Variable ERROROLD Equals 99
         Comment: User ran ForceRemove but chose NOT to remove the Platform so give them a message and terminate the installer
         Write into Text File $SETUPLOG$ from Value $TIME$ Terminating install. (at end of file)
         MessageBox: Unable to uninstall current Platform, You chose not to force Platform removal so this installer cannot continue and will now close when you click "OK".
-        Terminate Installation
+        Set Variable TERMINATEINSTALL to TRUE
+      else
+        Comment: We've just forcibly removed the Platform and Profile store so now we must pretend that we are a first time install
+        Set Variable REQUIRESUPGRADE to FALSE
+        Write into Text File $SETUPLOG$ from Value $TIME$ Platform uninstaller run completed, (at end of file)
       end
     else
       Comment: User selected No so just terminate the installer.
       Write into Text File $SETUPLOG$ from Value $TIME$ ForcePlatform: User selected NO - Terminating install. (at end of file)
-      Terminate Installation
+      Set Variable TERMINATEINSTALL to TRUE
     end
+  end
+   
+  Comment: Return the original state of WINERRORUISTATE
+  if Variable WINERRORUISTATE Equals 
+    Set Variable WINERRORUISTATE to Remove
+  end
+  Run Program $SUPPORTDIR$\SuppressWinErrors.exe $WINERRORUISTATE$ (WAIT, get result into variable RC)
+  Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\DontShowUI into WINERRORUISTATENEW
+  Write into Text File $SETUPLOG$ from Value $TIME$ Final Windows error reporting UI state - $WINERRORUISTATENEW$ (at end of file)
+   
+  Comment: Terminate if required because of problems uninstalling a previous application
+  if Variable TERMINATEINSTALL Equals TRUE
+    Terminate Installation
   end
   Comment: if Variable REMOVEOLD Equals REBOOT
   Comment: MessageBox: $TITLE$ Setup, Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
