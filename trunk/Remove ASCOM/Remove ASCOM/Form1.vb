@@ -49,6 +49,9 @@ Public Class Form1
         Catch ex As Exception
             MsgBox("Load Exception 2: " & ex.ToString)
         End Try
+
+        ' Set the default return code of "No action"
+        Environment.ExitCode = 99
     End Sub
 
     Private Sub Form1_FormClosed(sender As Object, e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
@@ -76,6 +79,8 @@ Public Class Form1
                 TL.LogMessage("ForceRemove", "User said ""Yes""")
                 TL.BlankLine()
 
+                ' Set the return code to 0 indicating that the user did remove the Platform unless overwritten by an error later in the code
+                Environment.ExitCode = 99
                 RemoveInstallers()
                 RemoveProfile()
                 RemoveFiles()
