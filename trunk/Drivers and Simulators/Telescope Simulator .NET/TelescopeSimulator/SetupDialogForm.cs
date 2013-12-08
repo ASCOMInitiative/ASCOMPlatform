@@ -435,6 +435,15 @@ namespace ASCOM.Simulator
             TelescopeHardware.ParkAltitude = TelescopeHardware.Altitude;
             TelescopeHardware.ParkAzimuth = TelescopeHardware.Azimuth;
         }
+
+        private void SetupDialogForm_Load(object sender, EventArgs e)
+        {
+            // this bizarre sequence seems to be required to bring the setup dialog to the front.
+            this.TopMost = true;
+            this.Activate();
+            this.BringToFront();
+            this.TopMost = false;
+        }
     }
 
     [ComVisible(false)]
