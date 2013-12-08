@@ -49,6 +49,7 @@
             // 
             this.groupBox2.Controls.Add(this.rbVideoFrameRateNTSC);
             this.groupBox2.Controls.Add(this.rbVideoFrameRatePAL);
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.Window;
             this.groupBox2.Location = new System.Drawing.Point(9, 61);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(247, 48);
