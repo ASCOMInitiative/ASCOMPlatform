@@ -759,8 +759,8 @@ Public Interface IVideo
     '''	</list>
     ''' <para>CameraIdle and CameraBusy are optional states. Free running cameras cannot be stopped and don't have a CameraIdle state. When those cameras are powered they immediately enter CameraRunning state. 
     ''' Some digital cameras or vdeo systems may suport operations that take longer to complete. Whlie those longer operations are running the camera will remain in the state it was before the operation started.</para>
-    ''' <para>The video camera state diagram is shown below: 
-    ''' 
+    ''' <para>The video camera state diagram is shown below: </para>
+    ''' <para>
     ''' <img src="../media/VideoCamera State Diagram.png"/></para>
     '''	</remarks>
     '''	<value>The state of the camera.</value>

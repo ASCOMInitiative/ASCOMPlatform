@@ -5,7 +5,7 @@
     		<title>Introduction</title>
       		<content>
       			<para>The 6.1 update is primarily focused on devices; introducing a new Video interface and tools, whose development was led by Hristo Pavlov, and 
-      			enhancing the ISwitch interface, which was led by Chris Rowland. Please see below for more information.</para>
+      			enhancing the Switch interface, which was led by Chris Rowland. Please see below for more information.</para>
 				<para>In line with previous Platform installers, 6.1 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs.</para>
             </content>
 		</section>
