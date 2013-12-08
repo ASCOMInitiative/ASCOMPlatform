@@ -47,6 +47,7 @@
             this.groupBox1.Controls.Add(this.rbDigitalVideoCamera);
             this.groupBox1.Controls.Add(this.rbAnalogueIntegrating);
             this.groupBox1.Controls.Add(this.rbAnalogueNonIntegrating);
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.Window;
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(267, 156);
