@@ -85,7 +85,6 @@ namespace ASCOM.Simulator
             tl.LogMessage("Switch", "Completed initialisation");
         }
 
-
         //
         // PUBLIC COM INTERFACE ISwitchV2 IMPLEMENTATION
         //
@@ -131,29 +130,16 @@ namespace ASCOM.Simulator
 
         public void CommandBlind(string command, bool raw)
         {
-            //CheckConnected("CommandBlind");
-            // Call CommandString and return as soon as it finishes
-            //this.CommandString(command, raw);
-            // or
             throw new ASCOM.MethodNotImplementedException("CommandBlind");
         }
 
         public bool CommandBool(string command, bool raw)
         {
-            //CheckConnected("CommandBool");
-            //string ret = CommandString(command, raw);
-            // TODO decode the return string and return true or false
-            // or
             throw new ASCOM.MethodNotImplementedException("CommandBool");
         }
 
         public string CommandString(string command, bool raw)
         {
-            //CheckConnected("CommandString");
-            // it's a good idea to put all the low level communication with the device here,
-            // then all communication calls this function
-            // you need something to ensure that only one command is in progress at a time
-
             throw new ASCOM.MethodNotImplementedException("CommandString");
         }
 
@@ -207,7 +193,7 @@ namespace ASCOM.Simulator
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 // TODO customise this driver description
-                string driverInfo = "Information about the driver itself. Version: " + version.ToString();
+                string driverInfo = "Switch V2 Simulator, version: " + version.ToString();
                 tl.LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
@@ -260,6 +246,7 @@ namespace ASCOM.Simulator
         {
             get
             {
+                CheckConnected("MaxSwitch");
                 tl.LogMessage("MaxSwitch Get", switches.Count.ToString());
                 return (short)switches.Count;
             }
@@ -285,9 +272,14 @@ namespace ASCOM.Simulator
         /// <param name="name">The name of the switch</param>
         public void SetSwitchName(short id, string name)
         {
-            throw new MethodNotImplementedException("SetSwitchName");
-            //Validate("SetSwitchName", id);
-            //switches[id].Name = name;
+            // not sure if this should be set or not
+            //throw new MethodNotImplementedException("SetSwitchName");
+            Validate("SetSwitchName", id);
+            switches[id].Name = name;
+            using (Profile p = new Profile { DeviceType = "Switch" })
+            {
+                switches[id].Save(p, driverID, id);
+            }
         }
 
         /// <summary>
@@ -300,7 +292,7 @@ namespace ASCOM.Simulator
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to MaxSwitch - 1</exception>
         public string GetSwitchDescription(short id)
         {
-            Validate("IsReadOnly", id);
+            Validate("GetSwitchDescription", id);
             return switches[id].Description;
         }
 
@@ -414,15 +406,16 @@ namespace ASCOM.Simulator
         #endregion analogue members
         #endregion ISwitchV2 Implementation
 
-        #region private methods
+        #region Private properties and methods
 
         /// <summary>
-        /// Checks that the switch id is in range and throws an InvalidValueException if it isn't
+        /// Checks that we are connected and the switch id is in range and throws an InvalidValueException if it isn't
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="id">The id.</param>
         private void Validate(string message, short id)
         {
+            CheckConnected(message);
             if (id < 0 || id >= switches.Count)
             {
                 tl.LogMessage(message, string.Format("Switch {0} not available, range is 0 to {1}", id, switches.Count - 1));
@@ -430,11 +423,91 @@ namespace ASCOM.Simulator
             }
         }
 
-        #endregion private methods
+        /// <summary>
+        /// Returns true if there is a valid connection to the driver hardware
+        /// </summary>
+        private bool IsConnected
+        {
+            get
+            {
+                // TODO check that the driver hardware connection exists and is connected to the hardware
+                // simulator has no hardware
+                return connectedState;
+            }
+        }
 
-        #region Private properties and methods
-        // here are some useful properties and methods that can be used as required
-        // to help with driver development
+        /// <summary>
+        /// Use this function to throw an exception if we aren't connected to the hardware
+        /// </summary>
+        /// <param name="message"></param>
+        private void CheckConnected(string message)
+        {
+            if (!IsConnected)
+            {
+                throw new ASCOM.NotConnectedException(message);
+            }
+        }
+
+        /// <summary>
+        /// Read the device configuration from the ASCOM Profile store
+        /// </summary>
+        internal void ReadProfile()
+        {
+            using (Profile driverProfile = new Profile() { DeviceType = "Switch" })
+            {
+                traceState = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
+
+                switches = new List<LocalSwitch>();
+                int numSwitch;
+                if (int.TryParse(driverProfile.GetValue(driverID, "NumSwitches"), out numSwitch))
+                {
+                    for (short i = 0; i < numSwitch; i++)
+                    {
+                        switches.Add(new LocalSwitch(driverProfile, driverID, i));
+                    }
+                }
+                else
+                {
+                    LoadDefaultSwitches();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Write the device configuration to the  ASCOM  Profile store
+        /// </summary>
+        internal void WriteProfile()
+        {
+            using (Profile driverProfile = new Profile() { DeviceType = "Switch" })
+            {
+                driverProfile.WriteValue(driverID, traceStateProfileName, traceState.ToString());
+                driverProfile.WriteValue(driverID, "NumSwitches", switches.Count.ToString());
+                int i = 0;
+                foreach (var item in switches)
+                {
+                    item.Save(driverProfile, driverID, i++);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads a default set of switches.
+        /// </summary>
+        private void LoadDefaultSwitches()
+        {
+            switches.Add(new LocalSwitch("Power1") { Description = "Generic power switch" });
+            switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch" });
+            switches.Add(new LocalSwitch("Light Box", 100, 0, 10, 0) { Description = "Light box , 0 to 100%" });
+            switches.Add(new LocalSwitch("Flat Panel", 255, 0, 1, 0) { Description = "Flat panel , 0 to 255" });
+            switches.Add(new LocalSwitch("Scope Cover") { Description = "Scope cover control true is closed, false is open" });
+            switches.Add(new LocalSwitch("Scope Parked") { Description = "Scope parked switch, true if parked", CanWrite = false });
+            switches.Add(new LocalSwitch("Cloudy", 2, 0, 1, 0, false) { Description = "Cloud monitor: 0=clear, 1=light cloud, 2= heavy cloud" });
+            switches.Add(new LocalSwitch("Temperature", 30, -20, 0.1, 12, false) { Description = "Temperature in deg C" });
+            switches.Add(new LocalSwitch("Humidity", 100, 0, 1, 50, false) { Description = "Relative humidity %" });
+            switches.Add(new LocalSwitch("Raining") { Description = "Rain monitor, true if raining", CanWrite = false });
+        }
+
+        #endregion
 
         #region ASCOM Registration
 
@@ -509,89 +582,5 @@ namespace ASCOM.Simulator
         //}
 
         #endregion
-
-        /// <summary>
-        /// Returns true if there is a valid connection to the driver hardware
-        /// </summary>
-        private bool IsConnected
-        {
-            get
-            {
-                // TODO check that the driver hardware connection exists and is connected to the hardware
-                return connectedState;
-            }
-        }
-
-        /// <summary>
-        /// Use this function to throw an exception if we aren't connected to the hardware
-        /// </summary>
-        /// <param name="message"></param>
-        private void CheckConnected(string message)
-        {
-            if (!IsConnected)
-            {
-                throw new ASCOM.NotConnectedException(message);
-            }
-        }
-
-        /// <summary>
-        /// Read the device configuration from the ASCOM Profile store
-        /// </summary>
-        internal void ReadProfile()
-        {
-            using (Profile driverProfile = new Profile() { DeviceType = "Switch" })
-            {
-                traceState = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
-
-                switches = new List<LocalSwitch>();
-                int numSwitch;
-                if (int.TryParse(driverProfile.GetValue(driverID, "NumSwitches"), out numSwitch))
-                {
-                    for (short i = 0; i < numSwitch; i++)
-                    {
-                        switches.Add(new LocalSwitch(driverProfile, driverID, i));
-                    }
-                }
-                else
-                {
-                    LoadDefaultSwitches();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Write the device configuration to the  ASCOM  Profile store
-        /// </summary>
-        internal void WriteProfile()
-        {
-            using (Profile driverProfile = new Profile() { DeviceType = "Switch" })
-            {
-                driverProfile.WriteValue(driverID, traceStateProfileName, traceState.ToString());
-                driverProfile.WriteValue(driverID, "NumSwitches", switches.Count.ToString());
-                int i = 0;
-                foreach (var item in switches)
-                {
-                    item.Save(driverProfile, driverID, i++);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Loads a default set of switches.
-        /// </summary>
-        private void LoadDefaultSwitches()
-        {
-            switches.Add(new LocalSwitch("Power1") { Description = "Generic power switch" });
-            switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch" });
-            switches.Add(new LocalSwitch("Light Box", 100, 0, 10, 0) { Description = "Light box , 0 to 100%" });
-            switches.Add(new LocalSwitch("Scope Parked") { Description = "Scope parked switch, true if parked", CanWrite = false });
-            switches.Add(new LocalSwitch("Cloudy", 2, 1, 1, 0, false) { Description = "Cloud monitor: 0=clear, 1=light cloud, 2= heavy cloud" });
-            switches.Add(new LocalSwitch("Temperature", 30, -20, 0.1, 12, false) { Description = "Temperature in deg C" });
-            switches.Add(new LocalSwitch("Humidity", 100, 0, 1, 50, false) { Description = "Relative humidity %" });
-            switches.Add(new LocalSwitch("Raining") { Description = "Rain monitor, true if raining", CanWrite = false });
-        }
-
-        #endregion
-
     }
 }

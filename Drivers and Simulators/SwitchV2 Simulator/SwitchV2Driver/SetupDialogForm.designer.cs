@@ -33,6 +33,7 @@ namespace ASCOM.Simulator
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,16 +41,17 @@ namespace ASCOM.Simulator
             this.label2 = new System.Windows.Forms.Label();
             this.chkTrace = new System.Windows.Forms.CheckBox();
             this.dataGridViewSwitches = new System.Windows.Forms.DataGridView();
-            this.checkBoxSetupSimulator = new System.Windows.Forms.CheckBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.colId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.switchName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStep = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCanWrite = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkBoxSetupSimulator = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.labelVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSwitches)).BeginInit();
             this.SuspendLayout();
@@ -103,7 +105,7 @@ namespace ASCOM.Simulator
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(203, 55);
+            this.label2.Location = new System.Drawing.Point(153, 49);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(58, 13);
             this.label2.TabIndex = 5;
@@ -138,11 +140,11 @@ namespace ASCOM.Simulator
             this.colId,
             this.switchName,
             this.colDescription,
+            this.colValue,
             this.colMin,
             this.colMax,
             this.colStep,
-            this.colCanWrite,
-            this.colValue});
+            this.colCanWrite});
             this.dataGridViewSwitches.Location = new System.Drawing.Point(8, 71);
             this.dataGridViewSwitches.MultiSelect = false;
             this.dataGridViewSwitches.Name = "dataGridViewSwitches";
@@ -158,18 +160,6 @@ namespace ASCOM.Simulator
             this.dataGridViewSwitches.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridViewSwitches_RowsAdded);
             this.dataGridViewSwitches.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridViewSwitches_RowsRemoved);
             this.dataGridViewSwitches.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewSwitches_RowValidating);
-            // 
-            // checkBoxSetupSimulator
-            // 
-            this.checkBoxSetupSimulator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBoxSetupSimulator.AutoSize = true;
-            this.checkBoxSetupSimulator.Location = new System.Drawing.Point(118, 271);
-            this.checkBoxSetupSimulator.Name = "checkBoxSetupSimulator";
-            this.checkBoxSetupSimulator.Size = new System.Drawing.Size(103, 17);
-            this.checkBoxSetupSimulator.TabIndex = 8;
-            this.checkBoxSetupSimulator.Text = "Set up Simulator";
-            this.checkBoxSetupSimulator.UseVisualStyleBackColor = true;
-            this.checkBoxSetupSimulator.CheckedChanged += new System.EventHandler(this.checkBoxSetupSimulator_CheckedChanged);
             // 
             // colId
             // 
@@ -199,6 +189,17 @@ namespace ASCOM.Simulator
             this.colDescription.Name = "colDescription";
             this.colDescription.ToolTipText = "Set the Switch description";
             // 
+            // colValue
+            // 
+            this.colValue.DataPropertyName = "Value";
+            dataGridViewCellStyle3.NullValue = null;
+            this.colValue.DefaultCellStyle = dataGridViewCellStyle3;
+            this.colValue.HeaderText = "Value";
+            this.colValue.MaxInputLength = 255;
+            this.colValue.Name = "colValue";
+            this.colValue.ToolTipText = "Set the current switch value.";
+            this.colValue.Width = 40;
+            // 
             // colMin
             // 
             this.colMin.DataPropertyName = "Minimum";
@@ -220,8 +221,8 @@ namespace ASCOM.Simulator
             // colStep
             // 
             this.colStep.DataPropertyName = "StepSize";
-            dataGridViewCellStyle3.NullValue = null;
-            this.colStep.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.NullValue = null;
+            this.colStep.DefaultCellStyle = dataGridViewCellStyle4;
             this.colStep.HeaderText = "Step Size";
             this.colStep.MaxInputLength = 255;
             this.colStep.Name = "colStep";
@@ -238,22 +239,34 @@ namespace ASCOM.Simulator
             this.colCanWrite.ToolTipText = "The is unchecked for a switch cannot be set, i.e. a sensor.";
             this.colCanWrite.Width = 40;
             // 
-            // colValue
+            // checkBoxSetupSimulator
             // 
-            this.colValue.DataPropertyName = "Value";
-            dataGridViewCellStyle4.NullValue = null;
-            this.colValue.DefaultCellStyle = dataGridViewCellStyle4;
-            this.colValue.HeaderText = "Value";
-            this.colValue.MaxInputLength = 255;
-            this.colValue.Name = "colValue";
-            this.colValue.ToolTipText = "Set the current switch value.";
-            this.colValue.Width = 40;
+            this.checkBoxSetupSimulator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxSetupSimulator.AutoSize = true;
+            this.checkBoxSetupSimulator.Location = new System.Drawing.Point(288, 48);
+            this.checkBoxSetupSimulator.Name = "checkBoxSetupSimulator";
+            this.checkBoxSetupSimulator.Size = new System.Drawing.Size(103, 17);
+            this.checkBoxSetupSimulator.TabIndex = 8;
+            this.checkBoxSetupSimulator.Text = "Set up Simulator";
+            this.toolTip1.SetToolTip(this.checkBoxSetupSimulator, "Check this to allow the switch properties to be set up.");
+            this.checkBoxSetupSimulator.UseVisualStyleBackColor = true;
+            this.checkBoxSetupSimulator.CheckedChanged += new System.EventHandler(this.checkBoxSetupSimulator_CheckedChanged);
+            // 
+            // labelVersion
+            // 
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Location = new System.Drawing.Point(106, 272);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(45, 13);
+            this.labelVersion.TabIndex = 9;
+            this.labelVersion.Text = "Version:";
             // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(466, 298);
+            this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.checkBoxSetupSimulator);
             this.Controls.Add(this.dataGridViewSwitches);
             this.Controls.Add(this.chkTrace);
@@ -263,6 +276,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SetupDialogForm";
@@ -286,14 +300,15 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.CheckBox chkTrace;
         private System.Windows.Forms.DataGridView dataGridViewSwitches;
         private System.Windows.Forms.CheckBox checkBoxSetupSimulator;
+        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colId;
         private System.Windows.Forms.DataGridViewTextBoxColumn switchName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMin;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMax;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStep;
         private System.Windows.Forms.DataGridViewCheckBoxColumn colCanWrite;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colValue;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label labelVersion;
     }
 }

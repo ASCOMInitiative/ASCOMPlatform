@@ -24,7 +24,7 @@ namespace ASCOM.Simulator
 
         #region constructors
 
-        public LocalSwitch()
+        private LocalSwitch()
         {
             this.Maximum = 1.0;
             this.StepSize = 1.0;
@@ -74,10 +74,11 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalSwitch"/> class using
         /// data from the ASCOM profile.
+        /// defaults to a boolean switch named "Switchn" where n is the id.
         /// </summary>
         /// <param name="profile">The profile.</param>
-        /// <param name="driverId">The driver id.</param>
-        /// <param name="id">The id.</param>
+        /// <param name="driverId">The driver progId</param>
+        /// <param name="id">The switch number</param>
         internal LocalSwitch(Profile profile, string driverId, int id)
         {
             var subKey = "Switch" + id.ToString();
@@ -90,9 +91,14 @@ namespace ASCOM.Simulator
             this.Description = profile.GetValue(driverId, "Description", subKey, this.Name);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalSwitch"/> class.
+        /// from a row in the setupDialog dataGridView.
+        /// Depends on the column names being correct.
+        /// </summary>
+        /// <param name="cells">A row of cells from the setupDialog</param>
         internal LocalSwitch(System.Windows.Forms.DataGridViewCellCollection cells)
         {
-            // TODO: Complete member initialization
             this.Name = (string)cells["switchName"].Value;
             this.Minimum = Convert.ToDouble(cells["colMin"].Value);
             this.Maximum = Convert.ToDouble(cells["colMax"].Value);
@@ -117,7 +123,7 @@ namespace ASCOM.Simulator
         {
             if (!this.CanWrite)
             {
-                throw new MethodNotImplementedException(string.Format("{0} cannot be written", this.Name));
+                throw new ASCOM.MethodNotImplementedException(string.Format("{0} cannot be written", this.Name));
             }
             if (value < Minimum || value > Maximum)
             {
@@ -156,7 +162,26 @@ namespace ASCOM.Simulator
             return IsValid(this.Name, this.Maximum, this.Minimum, this.StepSize, this.Value, out reason);
         }
 
-        internal static bool IsValid(string name, double max, double min, double step, double value, out string reason)
+        /// <summary>
+        /// Determines whether the specified row of cells contains a valid LocalSwitch definition.
+        /// </summary>
+        /// <param name="cells">The cells.</param>
+        /// <param name="reason">The reason.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified cells is valid; otherwise, <c>false</c>.
+        /// </returns>
+        internal static bool IsValid(System.Windows.Forms.DataGridViewCellCollection cells, out string reason)
+        {
+            var name = (string)cells["switchName"].Value;
+            var minimum = Convert.ToDouble(cells["colMin"].Value);
+            var maximum = Convert.ToDouble(cells["colMax"].Value);
+            var stepSize = Convert.ToDouble(cells["colStep"].Value);
+            var value = Convert.ToDouble(cells["colValue"].Value);
+            var canWrite = Convert.ToBoolean(cells["colCanWrite"].Value);
+            return IsValid(name, maximum, minimum, stepSize, value, out reason);
+        }
+
+        private static bool IsValid(string name, double max, double min, double step, double value, out string reason)
         {
             if (string.IsNullOrEmpty(name))
             {

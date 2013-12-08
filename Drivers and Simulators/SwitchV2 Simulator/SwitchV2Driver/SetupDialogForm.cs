@@ -23,10 +23,11 @@ namespace ASCOM.Simulator
             var i = 0;
             foreach (var item in Switch.switches)
             {
-                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Minimum, item.Maximum, item.StepSize, item.CanWrite, item.Value);
+                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Value, item.Minimum, item.Maximum, item.StepSize, item.CanWrite);
                 i++;
             }
             checkBoxSetupSimulator_CheckedChanged(null, null);
+            labelVersion.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
@@ -40,11 +41,14 @@ namespace ASCOM.Simulator
             {
                 if (row.IsNewRow)
                     continue;
-                var ls = new LocalSwitch(row.Cells);
                 string reason;
-                if (ls.IsValid(out reason))
+                if (LocalSwitch.IsValid(row.Cells, out reason))
                 {
-                    Switch.switches.Add(ls);
+                    Switch.switches.Add(new LocalSwitch(row.Cells));
+                }
+                else
+                {
+                    row.ErrorText = "Invalid row contents: " + reason;
                 }
             }
         }
@@ -183,9 +187,8 @@ namespace ASCOM.Simulator
         {
             var row = dataGridViewSwitches.Rows[e.RowIndex];
             if (row.IsNewRow) return;
-            var ls = new LocalSwitch(row.Cells);
             string reason;
-            if (ls.IsValid(out reason))
+            if (LocalSwitch.IsValid(row.Cells, out reason))
             {
                 row.ErrorText = "";
             }
@@ -199,30 +202,18 @@ namespace ASCOM.Simulator
 
         private void checkBoxSetupSimulator_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxSetupSimulator.Checked)
-            {
-                colMin.ReadOnly = false;
-                colMax.ReadOnly = false;
-                colStep.ReadOnly = false;
-                colCanWrite.ReadOnly = false;
-                colMax.DefaultCellStyle.BackColor = switchName.DefaultCellStyle.BackColor;
-                colMin.DefaultCellStyle.BackColor = switchName.DefaultCellStyle.BackColor;
-                colStep.DefaultCellStyle.BackColor = switchName.DefaultCellStyle.BackColor;
-                colCanWrite.DefaultCellStyle.BackColor = switchName.DefaultCellStyle.BackColor;
-                dataGridViewSwitches.AllowUserToAddRows = true;
-            }
-            else
-            {
-                colMin.ReadOnly = true;
-                colMax.ReadOnly = true;
-                colStep.ReadOnly = true;
-                colCanWrite.ReadOnly = true;
-                colMax.DefaultCellStyle.BackColor = SystemColors.Control;
-                colMin.DefaultCellStyle.BackColor = SystemColors.Control;
-                colStep.DefaultCellStyle.BackColor = SystemColors.Control;
-                colCanWrite.DefaultCellStyle.BackColor = SystemColors.Control;
-                dataGridViewSwitches.AllowUserToAddRows = false;
-            }
+            dataGridViewSwitches.AllowUserToAddRows = checkBoxSetupSimulator.Checked;
+
+            colCanWrite.DefaultCellStyle.BackColor =
+            colMin.DefaultCellStyle.BackColor =
+            colMax.DefaultCellStyle.BackColor =
+            colStep.DefaultCellStyle.BackColor = checkBoxSetupSimulator.Checked ? switchName.DefaultCellStyle.BackColor:SystemColors.Control;
+
+            colMin.ReadOnly =
+            colMax.ReadOnly =
+            colStep.ReadOnly =
+            colCanWrite.ReadOnly = !checkBoxSetupSimulator.Checked;
+
             dataGridViewSwitches.Invalidate();
             dataGridViewSwitches.Update();
         }
