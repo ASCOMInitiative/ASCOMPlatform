@@ -27,6 +27,7 @@ Attribute VB_Description = "ASCOM Switch driver for Switch Simulator"
 ' 29-Jan-07 jab     Initial edit
 ' 02-Jun-07 jab     Added naming lables to the switches
 ' 06-Jun-07 jab     Added ISwitch
+' 08-Dec-13 cdr     force switch range to be 0 to maxSwitch - 1
 ' -----------------------------------------------------------------------------
 
 Option Explicit
@@ -193,7 +194,7 @@ Public Function GetSwitch(ByVal SID As Integer) As Boolean
     
     check_connected
     
-    If SID < (IIf(g_bZero, 0, 1)) Or SID > g_iMaxSwitch Then
+    If SID < 0 Or SID >= g_iMaxSwitch Then
         If Not g_show Is Nothing Then
             If g_show.chkActivity.Value = 1 Then _
                 g_show.TrafficEnd " (error, out of range)"
@@ -229,7 +230,7 @@ Public Function GetSwitchName(ByVal SID As Integer) As String
     
     check_connected
     
-    If SID < (IIf(g_bZero, 0, 1)) Or SID > g_iMaxSwitch Then
+    If SID < 0 Or SID >= g_iMaxSwitch Then
         If Not g_show Is Nothing Then
             If g_show.chkActivity.Value = 1 Then _
                 g_show.TrafficEnd " (error, out of range)"
@@ -258,7 +259,7 @@ Public Sub SetSwitch(ByVal SID As Integer, ByVal val As Boolean)
     
     check_connected
     
-    If SID < (IIf(g_bZero, 0, 1)) Or SID > g_iMaxSwitch Then
+    If SID < 0 Or SID >= g_iMaxSwitch Then
         If Not g_show Is Nothing Then
             If g_show.chkActivity.Value = 1 Then _
                 g_show.TrafficEnd " (error, out of range)"
@@ -295,7 +296,7 @@ Public Sub SetSwitchName(ByVal SID As Integer, ByVal val As String)
     
     check_connected
     
-    If SID < (IIf(g_bZero, 0, 1)) Or SID > g_iMaxSwitch Or Len(val) > 20 Then
+    If SID < 0 Or SID >= g_iMaxSwitch Or Len(val) > 20 Then
         If Not g_show Is Nothing Then
             If g_show.chkActivity.Value = 1 Then _
                 g_show.TrafficEnd " (error, out of range)"

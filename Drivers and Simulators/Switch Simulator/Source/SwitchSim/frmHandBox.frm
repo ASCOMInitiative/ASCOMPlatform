@@ -341,6 +341,7 @@ Attribute VB_Exposed = False
 ' --------- ---     --------------------------------------------------
 ' 29-Jan-07 jab     Initial edit
 ' 02-Jun-07 jab     Added naming lables to the switches
+' 08-Dec-13 cdr     force switch range to be 0 to maxSwitch - 1
 ' -----------------------------------------------------------------------------
 
 ' ======
@@ -377,7 +378,7 @@ Private Sub cmdToggle_Click(Index As Integer)
     Dim trueIndex As Integer
     Dim val As Boolean
     
-    trueIndex = Index + IIf(g_bZero, 0, 1)
+    trueIndex = Index
     
     val = Not g_bSwitchState(trueIndex)
 
@@ -419,7 +420,7 @@ Public Sub SetLED(val As Integer, state As Boolean)
 
     Dim trueIndex As Integer
     
-    trueIndex = val - IIf(g_bZero, 0, 1)
+    trueIndex = val
     If trueIndex >= 0 Then _
         shpLED(trueIndex).FillColor = IIf(state, &HFF&, &H0&)
     
@@ -429,7 +430,7 @@ Public Sub DisplayName(val As Integer)
 
     Dim trueIndex As Integer
     
-    trueIndex = val - IIf(g_bZero, 0, 1)
+    trueIndex = val
     If trueIndex >= 0 Then _
         cmdToggle(trueIndex).Caption = g_sSwitchName(val)
     
@@ -438,23 +439,20 @@ End Sub
 Public Sub Buttons()
 
     Dim i As Integer
-    Dim offset As Integer
     Dim CtoC As Long
 
     If (Not Visible) Or Not (WindowState = vbNormal) Then _
         Exit Sub
         
-    offset = IIf(g_bZero, 0, 1)
-        
-    For i = offset To (NUM_SWITCHES - 1)
+    For i = 0 To (NUM_SWITCHES - 1)
         DisplayName i
-        cmdToggle(i - offset).Enabled = (i <= g_iMaxSwitch)
+        cmdToggle(i).Enabled = (i < g_iMaxSwitch)
         SetLED i, g_bSwitchState(i)
     Next i
     
     CtoC = cmdToggle(1).Top - cmdToggle(0).Top
     Height = OrgHeight - _
-        CtoC * (NUM_SWITCHES - 1 - g_iMaxSwitch + IIf(g_bZero, 0, 1))
+        CtoC * (NUM_SWITCHES - g_iMaxSwitch)
     
 '    Height = cmdToggle(NUM_SWITCHES - 1).Top + Top - _
 '        CtoC * (NUM_SWITCHES - 2 - g_iMaxSwitch - IIf(g_bZero, 0, 1))

@@ -13,6 +13,7 @@ Attribute VB_Name = "Startup"
 ' --------- ---     --------------------------------------------------
 ' 29-Jan-07 jab     Initial edit
 ' 02-Jun-07 jab     Added naming lables to the switches
+' 08-Dec-13 cdr     force switch range to be 0 to maxSwitch - 1
 ' -----------------------------------------------------------------------------
 
 Option Explicit
@@ -46,7 +47,7 @@ Public g_iConnections As Integer
 
 Public g_bConnected As Boolean  ' Focuser is connected
 Public g_iMaxSwitch As Integer  ' Maximum valid switch number
-Public g_bZero As Boolean       ' Include switch zero
+'Public g_bZero As Boolean       ' Include switch zero - cdr now always true
 
 Public g_bCanGetSwitch(NUM_SWITCHES) As Boolean    ' allowed to "get" array
 Public g_bCanSetSwitch(NUM_SWITCHES) As Boolean    ' allowed to "set" array
@@ -115,7 +116,7 @@ Sub Main()
     If oldRegVer < 1.1 Then
         
         g_Profile.WriteValue ID, "MaxSwitch", CStr(8)
-        g_Profile.WriteValue ID, "Zero", "False"
+'        g_Profile.WriteValue ID, "Zero", "False"
         
         ' enable all other switches
         For i = 0 To (NUM_SWITCHES - 1)
@@ -139,7 +140,6 @@ Sub Main()
     g_Profile.WriteValue ID, "RegVer", RegVer
     
     g_iMaxSwitch = CInt(g_Profile.GetValue(ID, "MaxSwitch"))
-    g_bZero = CBool(g_Profile.GetValue(ID, "Zero"))
     
     For i = 0 To (NUM_SWITCHES - 1)
         g_bCanGetSwitch(i) = CBool(g_Profile.GetValue(ID, CStr(i), "CanGetSwitch"))
@@ -188,7 +188,6 @@ Sub DoShutdown()
     g_bConnected = False
     
     g_Profile.WriteValue ID, "MaxSwitch", CStr(g_iMaxSwitch)
-    g_Profile.WriteValue ID, "Zero", CStr(g_bZero)
     
     For i = 0 To (NUM_SWITCHES - 1)
         g_Profile.WriteValue ID, CStr(i), CStr(g_bCanGetSwitch(i)), "CanGetSwitch"
@@ -217,7 +216,6 @@ Sub DoSetup()
         .AllowUnload = False                        ' Assure not unloaded
         
         .cbMaxSwitch.ListIndex = g_iMaxSwitch
-        .chkZero.Value = IIf(g_bZero, 1, 0)
         
         For i = 0 To (NUM_SWITCHES - 1)
             .chkGet(i) = IIf(g_bCanGetSwitch(i), 1, 0)
@@ -235,7 +233,6 @@ Sub DoSetup()
         If .Result Then             ' Unless cancelled
         
             g_iMaxSwitch = .cbMaxSwitch.ListIndex
-            g_bZero = (.chkZero.Value = 1)
             
             For i = 0 To (NUM_SWITCHES - 1)
                 g_bCanGetSwitch(i) = (.chkGet(i) = 1)

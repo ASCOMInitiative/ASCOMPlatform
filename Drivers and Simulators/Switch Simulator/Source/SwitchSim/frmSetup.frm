@@ -104,6 +104,7 @@ Begin VB.Form frmSetup
       Left            =   4980
       TabIndex        =   19
       Top             =   1470
+      Visible         =   0   'False
       Width           =   1230
    End
    Begin VB.Frame Frame2 
@@ -576,6 +577,7 @@ Attribute VB_Exposed = False
 ' --------- ---     --------------------------------------------------
 ' 29-Jan-07 jab     Initial edit
 ' 02-Jun-07 jab     Added naming lables to the switches
+' 08-Dec-13 cdr     force switch range to be 0 to maxSwitch - 1
 ' -----------------------------------------------------------------------------
 
 Option Explicit
@@ -615,13 +617,13 @@ End Sub
 Private Sub cbMaxSwitch_Click()
     Dim i As Integer
 
-    chkGet(0).Enabled = (chkZero.Value = 1)
-    chkSet(0).Enabled = (chkZero.Value = 1)
+'    chkGet(0).Enabled = (chkZero.Value = 1)
+'    chkSet(0).Enabled = (chkZero.Value = 1)
     
-    For i = 1 To (NUM_SWITCHES - 1)
-        chkGet(i).Enabled = (i <= cbMaxSwitch.ListIndex)
-        chkSet(i).Enabled = (i <= cbMaxSwitch.ListIndex)
-        txtName(i).Enabled = (i <= cbMaxSwitch.ListIndex)
+    For i = 0 To (NUM_SWITCHES - 1)
+        chkGet(i).Enabled = (i < cbMaxSwitch.ListIndex)
+        chkSet(i).Enabled = (i < cbMaxSwitch.ListIndex)
+        txtName(i).Enabled = (i < cbMaxSwitch.ListIndex)
     Next i
     
 End Sub
