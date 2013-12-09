@@ -75,6 +75,7 @@ Public Interface IVideoFrame
     ''' Returns a safearray of int32 of size <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> containing the pixel values from the video frame. 
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' The application must inspect the Safearray parameters to determine the dimensions. 
     ''' <para>For color or multispectral cameras, will produce an array of  <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
     ''' NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
@@ -102,7 +103,7 @@ Public Interface IVideoFrame
     ''' </code>
     ''' </example>
     ''' <remarks>
-    ''' <p style="color:red"><b>Must be implemented</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for 
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for 
     ''' those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> but usually only adjust the video camera settings and then record a video file. 
     ''' <para>When a 24bit RGB image can be returned by the driver this should be the preferred format. </para>
     ''' </remarks>
@@ -112,7 +113,7 @@ Public Interface IVideoFrame
     ''' <summary>
     ''' Returns the frame number.
     ''' </summary>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> 
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> 
     ''' The frame number of the first exposed frame may not be zero and is dependent on the device and/or the driver. The frame number increases with each acquired frame not with each requested frame by the client.
     ''' </remarks>
     ''' <value>The frame number of the current video frame.</value>
@@ -125,22 +126,23 @@ Public Interface IVideoFrame
     ''' This may differ from the exposure time corresponding to the requested frame exposure due to shutter latency, camera timing precision, etc.
     ''' </remarks>
     ''' <value>The duration of the frame exposure.</value>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported.</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
     ReadOnly Property ExposureDuration() As Double
 
     ''' <summary>
     ''' Returns the actual exposure start time in the FITS-standard CCYY-MM-DDThh:mm:ss[.sss...] format, if supported.
     ''' </summary>
     ''' <value>The frame exposure start time.</value>
-    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported.</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
     ReadOnly Property ExposureStartTime() As String
 
     ''' <summary>
     ''' Returns additional information associated with the video frame as a list of named variables.
     ''' </summary>
-    ''' <remarks><para>The returned object contains entries for each value. For each entry, the Key property is the value's name, and the Value property is the string value itself.</para>
-    ''' <p style="color:red"><b>Must be implemented</b></p> This property must return an empty list if no video frame metadata is provided. Please do not throw a 
-    ''' <see cref="PropertyNotImplementedException"/>.
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
+    ''' <para>The returned object contains entries for each value. For each entry, the Key property is the value's name, and the Value property is the string value itself.</para>
+    '''  This property must return an empty list if no video frame metadata is provided.
     ''' <para>The Keys is a single word, or multiple words joined by underscore characters, that sensibly describes the variable. It is recommended that Keys 
     ''' should be a maximum of 16 characters for legibility and all upper case.</para>
     ''' <para>The KeyValuePair objects are instances of the <see cref="ASCOM.Utilities.KeyValuePair">KeyValuePair class</see></para>
@@ -168,7 +170,7 @@ Public Interface IVideo
     ''' </summary>
     ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
     ''' <para>The driver must put the camera in a mode that will start producing a constant stream of video frames when a connection has been established. For example a digital camera that can 
     ''' operate as both a CCD camera and a video camera must be set in a video mode before the call <b>Connected = true</b> returns.</para>
     ''' </remarks>
@@ -181,7 +183,7 @@ Public Interface IVideo
     ''' <value>The description.</value>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' </remarks>
     ReadOnly Property Description() As String
 
@@ -191,7 +193,7 @@ Public Interface IVideo
     ''' </summary>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
     ''' <remarks>
-    '''	<p style="color:red"><b>Must be implemented</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> This string may contain line endings and may be hundreds to thousands of characters long.
     ''' It is intended to display detailed information on the ASCOM driver, including version and copyright data.
     ''' See the <see cref="P:ASCOM.DeviceInterface.IVideo.Description"/> property for information on the device itself.
     ''' To get the driver version in a parseable string, use the <see cref="P:ASCOM.DeviceInterface.IVideo.DriverVersion"/> property.
@@ -203,7 +205,7 @@ Public Interface IVideo
     ''' A string containing only the major and minor version of the driver.
     ''' </summary>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> This must be in the form "n.n".
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> This must be in the form "n.n".
     ''' It should not to be confused with the <see cref="P:ASCOM.DeviceInterface.IVideo.InterfaceVersion"/> property, which is the version of this specification supported by the 
     ''' driver.
     ''' </remarks>
@@ -214,7 +216,7 @@ Public Interface IVideo
     ''' The interface version number that this device supports. Should return 1 for this interface version.
     ''' </summary>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' </remarks>
     ReadOnly Property InterfaceVersion() As Short
 
@@ -223,26 +225,9 @@ Public Interface IVideo
     ''' The short name of the driver, for display purposes.
     ''' </summary>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' </remarks>
     ReadOnly Property Name() As String
-
-    ''' <summary>
-    ''' The name of the video capture device when such a device is used.
-    ''' </summary>
-    ''' <remarks>For analogue video this is usually the video capture card or dongle attached to the computer.
-    ''' </remarks>
-    ReadOnly Property VideoCaptureDeviceName() As String
-
-    ''' <summary>
-    ''' Launches a configuration dialog box for the driver.  The call will not return
-    ''' until the user clicks OK or cancel manually.
-    ''' </summary>
-    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
-    ''' </remarks>
-    Sub SetupDialog()
-
 
     ''' <summary>
     ''' Invokes the specified device-specific action.
@@ -264,7 +249,7 @@ Public Interface IVideo
     ''' formatted list of wheel names and the second taking a wheel name and making the change, returning appropriate 
     ''' values to indicate success or failure.
     ''' </example>
-    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> 
+    ''' <remarks><p style="color:red"><b>May throw a MethodNotImplementedException if the device does not support any actions.</b></p> 
     ''' This method is intended for use in all current and future device types and to avoid name clashes, management of action names 
     ''' is important from day 1. A two-part naming convention will be adopted - <b>DeviceType:UniqueActionName</b> where:
     ''' <list type="bullet">
@@ -286,7 +271,7 @@ Public Interface IVideo
     ''' </summary>
     ''' <value>An ArrayList of strings (SafeArray collection) containing the names of supported actions.</value>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="PropertyNotImplementedException"/>.</b></p> This method must return an empty arraylist if no actions are supported.
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> This method must return an empty arraylist if no actions are supported.
     ''' <para>This is an aid to client authors and testers who would otherwise have to repeatedly poll the driver to determine its capabilities. 
     ''' Returned action names may be in mixed case to enhance presentation but  will be recognised case insensitively in 
     ''' the <see cref="M:ASCOM.DeviceInterface.IVideo.Action(System.String,System.String)">Action</see> method.</para>
@@ -308,10 +293,29 @@ Public Interface IVideo
 #End Region
 
 #Region "Device Members"
+
+    ''' <summary>
+    ''' The name of the video capture device when such a device is used.
+    ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not implemented.</exception>
+    ''' <remarks>For analogue video this is usually the video capture card or dongle attached to the computer.
+    ''' </remarks>
+    ReadOnly Property VideoCaptureDeviceName() As String
+
+    ''' <summary>
+    ''' Launches a configuration dialog box for the driver.  The call will not return
+    ''' until the user clicks OK or cancel manually.
+    ''' </summary>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
+    ''' </remarks>
+    Sub SetupDialog()
+
     ''' <summary>
     ''' The maximum supported exposure (integration time) in seconds.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' This value is for information purposes only. The exposure cannot be set directly in seconds, use <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property to change the exposure. 
     ''' </remarks>
     ReadOnly Property ExposureMax() As Double
@@ -320,6 +324,7 @@ Public Interface IVideo
     ''' The minimum supported exposure (integration time) in seconds.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' This value is for information purposes only. The exposure cannot be set directly in seconds, use <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property to change the exposure. 
     ''' </remarks>
     ReadOnly Property ExposureMin() As Double
@@ -328,6 +333,7 @@ Public Interface IVideo
     ''' The frame rate at which the camera is running. 
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' Analogue cameras run in one of the two fixed frame rates - 25fps for PAL video and 29.97fps for NTSC video. 
     ''' Digital cameras usually can run at a variable frame rate. This value is for information purposes only and cannot be set. The FrameRate has the same value during the entire operation of the device. 
     ''' Changing the <see cref="P:ASCOM.DeviceInterface.IVideo.IntegrationRate"/> property may change the actual variable frame rate but cannot changethe return value of this property.
@@ -369,6 +375,9 @@ Public Interface IVideo
     ''' <value>The current video frame.</value>
     ''' <exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
     ''' <exception cref="InvalidOperationException">If called before any video frame has been taken.</exception>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property LastVideoFrame() As IVideoFrame
 
     ''' <summary>
@@ -405,6 +414,7 @@ Public Interface IVideo
     '''   <exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''   <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     '''       <para><see cref="P:ASCOM.DeviceInterface.IVideo.SensorType"/> returns a value indicating whether the sensor is monochrome, or what Bayer matrix it encodes.  
     '''The following values are defined:</para>
     '''       <para>
@@ -670,6 +680,7 @@ Public Interface IVideo
     '''	<value>The video frame width.</value>
     '''	<exception cref="NotConnectedException">Must throw exception if the value is not known.</exception>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' For analogue video cameras working via a frame grabber the dimensions of the video frames may be different than the dimension of the CCD chip
     ''' </remarks>
     ReadOnly Property Width() As Integer
@@ -680,6 +691,7 @@ Public Interface IVideo
     '''	<value>The video frame height.</value>
     '''	<exception cref="NotConnectedException">Must throw exception if the value is not known.</exception>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' For analogue video cameras working via a frame grabber the dimensions of the video frames may be different than the dimension of the CCD chip
     ''' </remarks>
     ReadOnly Property Height() As Integer
@@ -703,11 +715,15 @@ Public Interface IVideo
     '''	</summary>
     '''	<value>The bit depth per pixel. Typical analogue videos are 8-bit while some digital cameras can provide 12, 14 or 16-bit images.</value>
     '''	<exception cref="NotConnectedException">Must throw exception if data unavailable.</exception>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property BitDepth() As Integer
 
     ''' <summary>
     ''' Returns the video codec used to record the video file.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">Must throw exception if not implemented.</exception>
     ''' <remarks>For AVI files this is usually the FourCC identifier of the codec- e.g. XVID, DVSD, YUY2, HFYU etc. 
     ''' If the recorded video file doesn't use codecs an empty string must be returned.
     ''' </remarks>
@@ -716,13 +732,16 @@ Public Interface IVideo
     ''' <summary>
     ''' Returns the file format of the recorded video file, e.g. AVI, MPEG, ADV etc.
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property VideoFileFormat() As String
 
     ''' <summary>
     '''	The size of the video frame buffer. 
     '''	</summary>
     '''	<value>The size of the video frame buffer. </value>
-    '''	<remarks><p style="color:red"><b>Must be implemented</b></p> When retrieving video frames using the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame" /> property 
+    '''	<remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p> When retrieving video frames using the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame" /> property 
     ''' the driver may use a buffer to queue the frames waiting to be read by the client. This property returns the size of the buffer in frames or 
     ''' if no buffering is supported then the value of less than 2 should be returned. The size of the buffer can be controlled by the end user from the driver setup dialog. 
     '''	</remarks>
@@ -733,6 +752,7 @@ Public Interface IVideo
     ''' </summary>
     ''' <param name="PreferredFileName">The file name requested by the client. Some systems may not allow the file name to be controlled directly and they should ignore this parameter.</param>
     ''' <returns>The actual file name of the file that is being recorded.</returns>
+    ''' <exception cref="MethodNotImplementedException">Must throw exception if not implemented.</exception>
     '''	<exception cref="NotConnectedException">Must throw exception if not connected.</exception>
     '''	<exception cref="InvalidOperationException">Must throw exception if the current camera state doesn't allow to begin recording a file.</exception>
     '''	<exception cref="DriverException">Must throw exception if there is any other problem as result of which the recording cannot begin.</exception>
@@ -741,6 +761,7 @@ Public Interface IVideo
     ''' <summary>
     ''' Stops the recording of a video file.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">Must throw exception if not implemented.</exception>
     '''	<exception cref="NotConnectedException">Must throw exception if not connected.</exception>
     '''	<exception cref="InvalidOperationException">Must throw exception if the current camera state doesn't allow to stop recording the file or no file is currently being recorded.</exception>
     '''	<exception cref="DriverException">Must throw exception if there is any other problem as result of which the recording cannot stop.</exception>
@@ -750,6 +771,7 @@ Public Interface IVideo
     '''	Returns the current camera operational state.
     '''	</summary>
     '''	<remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     '''	Returns one of the following status information:
     '''	<list type="bullet">
     '''		<listheader><description>Value  State           Meaning</description></listheader>
@@ -878,7 +900,7 @@ Public Interface IVideo
     '''	<exception cref="NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
     '''	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
     '''	<exception cref="InvalidValueException">Must throw an exception if not valid.</exception>
-    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if gamma is not supported.</exception>
+    '''	<exception cref="PropertyNotImplementedException">Must throw an exception if Gamma is not supported.</exception>
     '''	<remarks>
     '''	<see cref="P:ASCOM.DeviceInterface.IVideo.Gamma"/> can be used to adjust the gamma setting of the camera, if supported. There are two typical usage scenarios:
     '''	<ul>
@@ -910,7 +932,7 @@ Public Interface IVideo
     ''' <summary>
     ''' Returns True if the driver supports custom device properties configuration via the <see cref="M:ASCOM.DeviceInterface.IVideo.ConfigureDeviceProperties"/> method.
     ''' </summary>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> 
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' </remarks>
     ReadOnly Property CanConfigureDeviceProperties() As Boolean
 
@@ -918,7 +940,7 @@ Public Interface IVideo
     ''' Displays a device properties configuration dialog that allows the configuration of specialized settings.
     ''' </summary>
     '''	<exception cref="NotConnectedException">Must throw an exception if the camera is not connected.</exception>
-    '''	<exception cref="MethodNotImplementedException">Must throw an exception if the method is not supported.</exception>
+    '''	<exception cref="MethodNotImplementedException">Must throw an exception if not implemented.</exception>
     ''' <remarks>
     ''' <para>The dialog could also provide buttons for cameras that can be controlled via 'on screen display' menues and a set of navigation buttons such as Up, Down, Left, Right and Enter. 
     ''' This dialog is not intended to be used in unattended mode but can give greater control over video cameras that provide special features. The dialog may also allow 
