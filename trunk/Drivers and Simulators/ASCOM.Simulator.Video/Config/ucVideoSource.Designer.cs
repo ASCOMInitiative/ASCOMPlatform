@@ -59,6 +59,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
+            this.label17.ForeColor = System.Drawing.SystemColors.Window;
             this.label17.Location = new System.Drawing.Point(136, 12);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(38, 13);
@@ -80,6 +81,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.SystemColors.Window;
             this.label16.Location = new System.Drawing.Point(14, 12);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(59, 13);
@@ -89,6 +91,7 @@
             // cbxBuffering
             // 
             this.cbxBuffering.AutoSize = true;
+            this.cbxBuffering.ForeColor = System.Drawing.SystemColors.Window;
             this.cbxBuffering.Location = new System.Drawing.Point(6, 123);
             this.cbxBuffering.Name = "cbxBuffering";
             this.cbxBuffering.Size = new System.Drawing.Size(89, 17);
@@ -118,6 +121,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
+            this.label10.ForeColor = System.Drawing.SystemColors.Window;
             this.label10.Location = new System.Drawing.Point(24, 7);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(255, 13);
@@ -139,6 +143,7 @@
             // rbUserBitmaps
             // 
             this.rbUserBitmaps.AutoSize = true;
+            this.rbUserBitmaps.ForeColor = System.Drawing.SystemColors.Window;
             this.rbUserBitmaps.Location = new System.Drawing.Point(6, 23);
             this.rbUserBitmaps.Name = "rbUserBitmaps";
             this.rbUserBitmaps.Size = new System.Drawing.Size(152, 17);
@@ -150,6 +155,7 @@
             // 
             this.rbDriverDefaultSource.AutoSize = true;
             this.rbDriverDefaultSource.Checked = true;
+            this.rbDriverDefaultSource.ForeColor = System.Drawing.SystemColors.Window;
             this.rbDriverDefaultSource.Location = new System.Drawing.Point(6, 0);
             this.rbDriverDefaultSource.Name = "rbDriverDefaultSource";
             this.rbDriverDefaultSource.Size = new System.Drawing.Size(367, 17);

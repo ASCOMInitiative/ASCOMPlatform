@@ -57,6 +57,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.Window;
             this.label1.Location = new System.Drawing.Point(98, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 13);
@@ -80,6 +81,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.SystemColors.Window;
             this.label11.Location = new System.Drawing.Point(6, 6);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(49, 13);
@@ -106,6 +108,7 @@
             // rbDiscreteGain
             // 
             this.rbDiscreteGain.AutoSize = true;
+            this.rbDiscreteGain.ForeColor = System.Drawing.SystemColors.Window;
             this.rbDiscreteGain.Location = new System.Drawing.Point(6, 0);
             this.rbDiscreteGain.Name = "rbDiscreteGain";
             this.rbDiscreteGain.Size = new System.Drawing.Size(121, 17);
@@ -117,6 +120,7 @@
             // 
             this.rbGainRange.AutoSize = true;
             this.rbGainRange.Checked = true;
+            this.rbGainRange.ForeColor = System.Drawing.SystemColors.Window;
             this.rbGainRange.Location = new System.Drawing.Point(6, 171);
             this.rbGainRange.Name = "rbGainRange";
             this.rbGainRange.Size = new System.Drawing.Size(126, 17);

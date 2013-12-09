@@ -53,6 +53,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
+            this.label13.ForeColor = System.Drawing.SystemColors.Window;
             this.label13.Location = new System.Drawing.Point(94, 208);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(62, 13);
@@ -62,6 +63,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
+            this.label14.ForeColor = System.Drawing.SystemColors.Window;
             this.label14.Location = new System.Drawing.Point(2, 208);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(62, 13);
@@ -87,6 +89,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.SystemColors.Window;
             this.label7.Location = new System.Drawing.Point(2, 171);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(67, 13);
@@ -96,6 +99,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.Window;
             this.label2.Location = new System.Drawing.Point(219, 126);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(94, 13);
@@ -124,6 +128,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.SystemColors.Window;
             this.label6.Location = new System.Drawing.Point(3, 145);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(71, 13);
@@ -155,6 +160,7 @@
             // 
             this.rbAnalogueNonIntegrating.AutoSize = true;
             this.rbAnalogueNonIntegrating.Checked = true;
+            this.rbAnalogueNonIntegrating.ForeColor = System.Drawing.SystemColors.Window;
             this.rbAnalogueNonIntegrating.Location = new System.Drawing.Point(18, 25);
             this.rbAnalogueNonIntegrating.Name = "rbAnalogueNonIntegrating";
             this.rbAnalogueNonIntegrating.Size = new System.Drawing.Size(146, 17);
@@ -167,6 +173,7 @@
             // rbAnalogueIntegrating
             // 
             this.rbAnalogueIntegrating.AutoSize = true;
+            this.rbAnalogueIntegrating.ForeColor = System.Drawing.SystemColors.Window;
             this.rbAnalogueIntegrating.Location = new System.Drawing.Point(18, 48);
             this.rbAnalogueIntegrating.Name = "rbAnalogueIntegrating";
             this.rbAnalogueIntegrating.Size = new System.Drawing.Size(123, 17);
@@ -178,6 +185,7 @@
             // rbVideoSystem
             // 
             this.rbVideoSystem.AutoSize = true;
+            this.rbVideoSystem.ForeColor = System.Drawing.SystemColors.Window;
             this.rbVideoSystem.Location = new System.Drawing.Point(216, 48);
             this.rbVideoSystem.Name = "rbVideoSystem";
             this.rbVideoSystem.Size = new System.Drawing.Size(89, 17);
@@ -189,6 +197,7 @@
             // rbDigitalCamera
             // 
             this.rbDigitalCamera.AutoSize = true;
+            this.rbDigitalCamera.ForeColor = System.Drawing.SystemColors.Window;
             this.rbDigitalCamera.Location = new System.Drawing.Point(216, 25);
             this.rbDigitalCamera.Name = "rbDigitalCamera";
             this.rbDigitalCamera.Size = new System.Drawing.Size(54, 17);
@@ -213,6 +222,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.SystemColors.Window;
             this.label8.Location = new System.Drawing.Point(3, 98);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(51, 13);

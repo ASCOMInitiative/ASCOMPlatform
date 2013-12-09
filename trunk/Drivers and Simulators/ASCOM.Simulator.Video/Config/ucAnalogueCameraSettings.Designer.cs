@@ -39,6 +39,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.SystemColors.Window;
             this.label5.Location = new System.Drawing.Point(6, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(142, 13);
@@ -60,6 +61,7 @@
             // rbVideoFrameRateNTSC
             // 
             this.rbVideoFrameRateNTSC.AutoSize = true;
+            this.rbVideoFrameRateNTSC.ForeColor = System.Drawing.SystemColors.Window;
             this.rbVideoFrameRateNTSC.Location = new System.Drawing.Point(123, 20);
             this.rbVideoFrameRateNTSC.Name = "rbVideoFrameRateNTSC";
             this.rbVideoFrameRateNTSC.Size = new System.Drawing.Size(107, 17);
@@ -71,6 +73,7 @@
             // 
             this.rbVideoFrameRatePAL.AutoSize = true;
             this.rbVideoFrameRatePAL.Checked = true;
+            this.rbVideoFrameRatePAL.ForeColor = System.Drawing.SystemColors.Window;
             this.rbVideoFrameRatePAL.Location = new System.Drawing.Point(16, 20);
             this.rbVideoFrameRatePAL.Name = "rbVideoFrameRatePAL";
             this.rbVideoFrameRatePAL.Size = new System.Drawing.Size(83, 17);
