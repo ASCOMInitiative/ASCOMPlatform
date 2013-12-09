@@ -37,6 +37,7 @@
             // 
             // label1
             // 
+            this.label1.ForeColor = System.Drawing.SystemColors.Window;
             this.label1.Location = new System.Drawing.Point(24, 156);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(267, 79);
@@ -49,6 +50,7 @@
             // 
             this.rbDiscreteGamma.AutoSize = true;
             this.rbDiscreteGamma.Checked = true;
+            this.rbDiscreteGamma.ForeColor = System.Drawing.SystemColors.Window;
             this.rbDiscreteGamma.Location = new System.Drawing.Point(6, 0);
             this.rbDiscreteGamma.Name = "rbDiscreteGamma";
             this.rbDiscreteGamma.Size = new System.Drawing.Size(135, 17);
