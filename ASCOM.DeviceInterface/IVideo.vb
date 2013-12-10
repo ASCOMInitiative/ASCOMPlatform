@@ -183,7 +183,7 @@ Public Interface IVideo
     ''' <value>The description.</value>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-    ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
     ''' </remarks>
     ReadOnly Property Description() As String
 
