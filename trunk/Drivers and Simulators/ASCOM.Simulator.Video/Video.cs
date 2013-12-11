@@ -352,7 +352,7 @@ namespace ASCOM.Simulator
 			{				
 				AssertConnected();
 
-				if (Settings.Default.CameraType == SiumulatedCameraType.AnalogueNonIntegrating)
+				if (Settings.Default.CameraType == SimulatedCameraType.AnalogueNonIntegrating)
 					throw new PropertyNotImplementedException("The camera doesn't support integration rates.");
 
 				if (camera.SupportedIntegrationRates.Count == 1)

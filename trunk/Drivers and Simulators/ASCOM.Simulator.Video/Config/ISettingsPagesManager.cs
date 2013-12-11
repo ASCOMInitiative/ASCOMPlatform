@@ -8,6 +8,6 @@ namespace ASCOM.Simulator.Config
 {
 	public interface ISettingsPagesManager
 	{
-		void CameraTypeChanged(SiumulatedCameraType cameraType);
+		void CameraTypeChanged(SimulatedCameraType cameraType);
 	}
 }

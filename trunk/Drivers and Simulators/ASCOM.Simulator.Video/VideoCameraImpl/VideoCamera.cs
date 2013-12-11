@@ -133,7 +133,7 @@ namespace Simulator.VideoCameraImpl
 		{
 			get
 			{
-				if (Settings.Default.CameraType == SiumulatedCameraType.AnalogueNonIntegrating)
+				if (Settings.Default.CameraType == SimulatedCameraType.AnalogueNonIntegrating)
 				{
 					switch (Settings.Default.CameraFrameRate)
 					{
@@ -159,7 +159,7 @@ namespace Simulator.VideoCameraImpl
 
 		public void ChangeIntegrationRate(string NewIntegrationRate)
 		{
-			if (Settings.Default.CameraType != SiumulatedCameraType.AnalogueNonIntegrating)
+			if (Settings.Default.CameraType != SimulatedCameraType.AnalogueNonIntegrating)
 			{
 				if (!string.IsNullOrEmpty(NewIntegrationRate))
 				{
@@ -428,14 +428,14 @@ namespace Simulator.VideoCameraImpl
 			{
 				switch (Settings.Default.CameraType)
 				{
-					case SiumulatedCameraType.AnalogueIntegrating:
-					case SiumulatedCameraType.AnalogueNonIntegrating:
+					case SimulatedCameraType.AnalogueIntegrating:
+					case SimulatedCameraType.AnalogueNonIntegrating:
 						return Settings.Default.CameraFrameRate == AnalogueCameraFrameRate.PAL
 						       	? VideoCameraFrameRate.PAL
 						       	: VideoCameraFrameRate.NTSC;
 
-					case SiumulatedCameraType.Digital:
-					case SiumulatedCameraType.VideoSystem:
+					case SimulatedCameraType.Digital:
+					case SimulatedCameraType.VideoSystem:
 						return VideoCameraFrameRate.Variable;
 
 					default:
@@ -475,8 +475,8 @@ namespace Simulator.VideoCameraImpl
 			{
 				switch (Settings.Default.CameraType)
 				{
-					case SiumulatedCameraType.Digital:
-					case SiumulatedCameraType.VideoSystem:
+					case SimulatedCameraType.Digital:
+					case SimulatedCameraType.VideoSystem:
 						return Settings.Default.BitDepth;
 
 					default:
