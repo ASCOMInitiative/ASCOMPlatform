@@ -39,16 +39,16 @@ namespace ASCOM.Simulator
 			}
 			else
 			{
-				SiumulatedCameraType cameraType = SiumulatedCameraType.AnalogueNonIntegrating;
+				SimulatedCameraType cameraType = SimulatedCameraType.AnalogueNonIntegrating;
 
 				if (rbAnalogueNonIntegrating.Checked)
-					cameraType = SiumulatedCameraType.AnalogueNonIntegrating;
+					cameraType = SimulatedCameraType.AnalogueNonIntegrating;
 				else if (rbAnalogueIntegrating.Checked)
-					cameraType = SiumulatedCameraType.AnalogueIntegrating;
+					cameraType = SimulatedCameraType.AnalogueIntegrating;
 				else if (rbDigitalVideoCamera.Checked)
-					cameraType = SiumulatedCameraType.Digital;
+					cameraType = SimulatedCameraType.Digital;
 				else if (rbVideoSystem.Checked)
-					cameraType = SiumulatedCameraType.VideoSystem;
+					cameraType = SimulatedCameraType.VideoSystem;
 
 				Settings.Default.Reset(cameraType);
 				Settings.Default.Save();

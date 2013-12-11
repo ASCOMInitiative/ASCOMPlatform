@@ -17,7 +17,7 @@
     <Setting Name="ExposureMin" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.033</Value>
     </Setting>
-    <Setting Name="CameraType" Type="ASCOM.Simulator.Properties.SiumulatedCameraType" Scope="User">
+    <Setting Name="CameraType" Type="ASCOM.Simulator.Properties.SimulatedCameraType" Scope="User">
       <Value Profile="(Default)">AnalogueIntegrating</Value>
     </Setting>
     <Setting Name="CameraFrameRate" Type="ASCOM.Simulator.Properties.AnalogueCameraFrameRate" Scope="User">

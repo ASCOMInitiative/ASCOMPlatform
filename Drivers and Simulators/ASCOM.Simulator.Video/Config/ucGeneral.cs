@@ -38,19 +38,19 @@ namespace ASCOM.Simulator.Config
 
 			switch (Properties.Settings.Default.CameraType)
 			{
-				case SiumulatedCameraType.AnalogueNonIntegrating:
+				case SimulatedCameraType.AnalogueNonIntegrating:
 					rbAnalogueNonIntegrating.Checked = true;
 					break;
 
-				case SiumulatedCameraType.AnalogueIntegrating:
+				case SimulatedCameraType.AnalogueIntegrating:
 					rbAnalogueIntegrating.Checked = true;
 					break;
 
-				case SiumulatedCameraType.Digital:
+				case SimulatedCameraType.Digital:
 					rbDigitalCamera.Checked = true;
 					break;
 
-				case SiumulatedCameraType.VideoSystem:
+				case SimulatedCameraType.VideoSystem:
 					rbVideoSystem.Checked = true;
 					break;
 			}
@@ -68,16 +68,16 @@ namespace ASCOM.Simulator.Config
 			CameraTypeChanged();
 		}
 
-		private SiumulatedCameraType GetSelectedCameraType()
+		private SimulatedCameraType GetSelectedCameraType()
 		{
 			if (rbAnalogueNonIntegrating.Checked)
-				return SiumulatedCameraType.AnalogueNonIntegrating;
+				return SimulatedCameraType.AnalogueNonIntegrating;
 			else if (rbAnalogueIntegrating.Checked)
-				return SiumulatedCameraType.AnalogueIntegrating;
+				return SimulatedCameraType.AnalogueIntegrating;
 			else if (rbDigitalCamera.Checked)
-				return SiumulatedCameraType.Digital;
+				return SimulatedCameraType.Digital;
 			else if (rbVideoSystem.Checked)
-				return SiumulatedCameraType.VideoSystem;
+				return SimulatedCameraType.VideoSystem;
 
 			throw new IndexOutOfRangeException();
 		}
@@ -101,7 +101,7 @@ namespace ASCOM.Simulator.Config
 
 		private void CameraTypeChanged()
 		{
-			SiumulatedCameraType cameraType = GetSelectedCameraType();
+			SimulatedCameraType cameraType = GetSelectedCameraType();
 			if (settingsManager != null)
 				settingsManager.CameraTypeChanged(cameraType);
 

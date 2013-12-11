@@ -86,9 +86,9 @@ namespace ASCOM.Simulator.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("AnalogueIntegrating")]
-        public global::ASCOM.Simulator.Properties.SiumulatedCameraType CameraType {
+        public global::ASCOM.Simulator.Properties.SimulatedCameraType CameraType {
             get {
-                return ((global::ASCOM.Simulator.Properties.SiumulatedCameraType)(this["CameraType"]));
+                return ((global::ASCOM.Simulator.Properties.SimulatedCameraType)(this["CameraType"]));
             }
             set {
                 this["CameraType"] = value;

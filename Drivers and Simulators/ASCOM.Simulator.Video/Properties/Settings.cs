@@ -40,7 +40,7 @@ using Simulator.VideoCameraImpl;
 
 namespace ASCOM.Simulator.Properties
 {
-	public enum SiumulatedCameraType
+	public enum SimulatedCameraType
 	{
 		AnalogueNonIntegrating,
 		AnalogueIntegrating,
@@ -73,7 +73,7 @@ namespace ASCOM.Simulator.Properties
         {
             ResetCommonDefaults();
 
-            CameraType = SiumulatedCameraType.AnalogueIntegrating;
+            CameraType = SimulatedCameraType.AnalogueIntegrating;
             SupportedExposuresList = "0.04#;0.08#;0.16#;0.32#;0.64#;1.28#;2.56#;5.12#;10.24";
             ExposureMin = 0.04;
             ExposureMax = 0.04;
@@ -90,23 +90,23 @@ namespace ASCOM.Simulator.Properties
             SupportsGammaRange = false;
         }
 
-		internal void Reset(SiumulatedCameraType cameraType)
+		internal void Reset(SimulatedCameraType cameraType)
 		{
 			switch(cameraType)
 			{
-				case SiumulatedCameraType.AnalogueNonIntegrating:
+				case SimulatedCameraType.AnalogueNonIntegrating:
 					ResetAnalogueNonIntegratingDefaults();
 					break;
 
-				case SiumulatedCameraType.AnalogueIntegrating:
+				case SimulatedCameraType.AnalogueIntegrating:
 					ResetAnalogueIntegratingDefaults();
 					break;
 
-				case SiumulatedCameraType.Digital:
+				case SimulatedCameraType.Digital:
 					ResetDigitalDefaults();
 					break;
 
-				case SiumulatedCameraType.VideoSystem:
+				case SimulatedCameraType.VideoSystem:
 					ResetVideoSystemDefaults();
 					break;
 
@@ -130,7 +130,7 @@ namespace ASCOM.Simulator.Properties
 		{
 			ResetCommonDefaults();
 
-			CameraType = SiumulatedCameraType.AnalogueNonIntegrating;
+			CameraType = SimulatedCameraType.AnalogueNonIntegrating;
 			SupportedExposuresList = "0.04";
 			ExposureMin = 0.04;
 			ExposureMax = 0.04;
@@ -151,7 +151,7 @@ namespace ASCOM.Simulator.Properties
 		{
 			ResetCommonDefaults();
 
-			CameraType = SiumulatedCameraType.AnalogueIntegrating;
+			CameraType = SimulatedCameraType.AnalogueIntegrating;
 			SupportedExposuresList = "0.04#;0.08#;0.16#;0.32#;0.64#;1.28#;2.56#;5.12#;10.24";
 			ExposureMin = 0.04;
 			ExposureMax = 10.24;
@@ -170,7 +170,7 @@ namespace ASCOM.Simulator.Properties
 		{
 			ResetCommonDefaults();
 
-			CameraType = SiumulatedCameraType.Digital;
+			CameraType = SimulatedCameraType.Digital;
 			SupportedExposuresList = "0.033#;0.067#;0.133#;0.267#;0.533#;1#;2#;4#;8";
 			ExposureMin = 0.033;
 			ExposureMax = 8.0;
@@ -189,7 +189,7 @@ namespace ASCOM.Simulator.Properties
 		{
 			ResetCommonDefaults();
 
-			CameraType = SiumulatedCameraType.VideoSystem;
+			CameraType = SimulatedCameraType.VideoSystem;
 			SupportedExposuresList = "0.033#;0.067#;0.133#;0.267#;0.533#;1#;2#;4#;8";
 			ExposureMin = 0.033;
 			ExposureMax = 8.0;
