@@ -42,6 +42,7 @@ namespace ASCOM.Simulator
             this.pnlPropertyPage = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tvSettings = new System.Windows.Forms.TreeView();
+            this.lblVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
@@ -148,12 +149,21 @@ namespace ASCOM.Simulator
             this.tvSettings.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvSettings_BeforeSelect);
             this.tvSettings.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvSettings_AfterSelect);
             // 
+            // lblVersion
+            // 
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Location = new System.Drawing.Point(9, 374);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(0, 13);
+            this.lblVersion.TabIndex = 15;
+            // 
             // frmSetupDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlText;
             this.ClientSize = new System.Drawing.Size(671, 405);
+            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.pnlPropertyPage);
             this.Controls.Add(this.groupBox1);
@@ -186,5 +196,6 @@ namespace ASCOM.Simulator
 		private System.Windows.Forms.Panel pnlPropertyPage;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.TreeView tvSettings;
+        private System.Windows.Forms.Label lblVersion;
 	}
 }
