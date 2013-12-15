@@ -21,7 +21,7 @@
 				for a number of years and is provided for all operating systems that the Platform supports (Windows XP onwards). This change is to enable Platform components to take 
 				advantage of the new features that Framework 4 provides. The installer will warn you if your PC does not have the required support and will request that you install 
 				it before continuing with the installation.</para>
-				<para>The Platform now also requires Visual C++ 10.0 libraries and will install these for you if they are not already preosent on your PC.</para>
+				<para>The Platform now also requires Visual C++ 10.0 libraries and will install these for you if they are not already present on your PC.</para>
             </content>
 		</section>
    		
@@ -46,8 +46,8 @@
 	      			<listItem>The IVideo interface has been added plus support for the DriverAccess, Driver Installer and Video driver templates.</listItem>
 	      			<listItem>A set of Video utiliites have been added to the Platform together with a video driver developer guide.</listItem>
 	      			<listItem>The ISwitch interface has been revised to ISwitchV2 and a new simulator and driver template have been provided to support the new features.</listItem>
-	      			<listItem>The ASCOM driver templates are now installed by a custom installer which avoids the dialogues that used to appear from the Micorsoft content distribution tool. 
-	      			The templates are now also correctly installed on all Visual Studio Express editions.</listItem>
+	      			<listItem>The ASCOM driver templates are now installed by a custom installer which avoids the dialogues that used to appear from the Micorsoft content distribution tool.</listItem>
+	      			<listItem>The driver templates are now correctly installed on all Visual Studio Express editions as well as full Visual Studio editions.</listItem>
 	      			<listItem>Although the Platform client applications have been transitioned to .NET 4, development of ASCOM clients and drivers
 	      			based on Framework 3.5 is still supported by the Platform.</listItem>
 	      			<listItem>The device template icons have been tidied up and made consistent.</listItem>
