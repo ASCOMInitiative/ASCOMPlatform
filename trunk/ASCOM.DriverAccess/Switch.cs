@@ -17,7 +17,7 @@ namespace ASCOM.DriverAccess
     /// switch can be written to or false if it can only be read.
     /// <para>In addition a switch may have multiple states, from two - a binary on/off switch - through those with a small
     /// number of states to those which have many states - an analogue switch</para>
-    /// <para>An Analogue switch may be capable of changing and/or being set to a range of values, these are defined using the <see cref="MinSwitchValue"/>, <see cref="MaxSwitchValue"/> and <see cref="StepSize"/> methods.</para>
+    /// <para>An Analogue switch may be capable of changing and/or being set to a range of values, these are defined using the <see cref="MinSwitchValue"/>, <see cref="MaxSwitchValue"/> and <see cref="SwitchStep"/> methods.</para>
     /// </remarks>
     public class Switch : AscomDriver, ISwitchV2
     {
