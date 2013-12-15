@@ -24,7 +24,9 @@
     <PlatformVSSolution>ASCOM Platform VS2010.sln</PlatformVSSolution>
     <PlatformHelpProject>Help\ASCOMPlatform.shfbproj</PlatformHelpProject>
     <DeveloperHelpProject>Help\ASCOMDeveloper.shfbproj</DeveloperHelpProject>
-    <PlatformInstallerDirectory>Releases\ASCOM 6\Platform\Installer Project</PlatformInstallerDirectory>
+    <PlatformHelpDirectory>Help\Output\Platform</PlatformHelpDirectory>
+	<DeveloperHelpDirectory>Help\Output\Developer</DeveloperHelpDirectory>
+	<PlatformInstallerDirectory>Releases\ASCOM 6\Platform\Installer Project</PlatformInstallerDirectory>
     <DeveloperInstallerDirectory>Releases\ASCOM 6\Developer\Installer Project</DeveloperInstallerDirectory>
     <PlatformInstallerProject>$(PlatformInstallerDirectory)\ASCOM Platform 6.mpr</PlatformInstallerProject>
     <DeveloperInstallerProject>$(DeveloperInstallerDirectory)\ASCOM Platform 6 Developer.mpr</DeveloperInstallerProject>
@@ -41,6 +43,7 @@
   <ItemGroup>
     <OldPlatformInstallers Include="$(MSBuildProjectDirectory)\ASCOM*.exe;$(MSBuildProjectDirectory)\RemoveASCOM.*" />
   </ItemGroup>
+
   <!-- Main build target for this build -->
   <Target Name="Build">
     <Message Text="Checkout directory: $(CheckoutDirectory)" />
@@ -99,7 +102,7 @@
     <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="PlatformVersion" Value="$(PlatformVersion)" />
     <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="SerTraceFile" Value="C:\\SerialTraceAuto.txt" />
 
-    <!-- Create the build version string. Format: Platform-Major.PlatformMinor.HoursSince1Jan2011.SVNCheckoutVersion-->
+    <!-- Create the build version string. Format: Platform-Major.PlatformMinor.HoursSince1Jan2011.SVNCheckoutVersion -->
     <!-- Retrieve the number of build days since 1 January 2011 -->
     <Version BuildType="Automatic" RevisionType="Automatic" StartDate="$(BuildBaseDate)">
       <Output TaskParameter="Build" PropertyName="Build" />
@@ -154,7 +157,16 @@
     <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />
     <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release" />
 
-    <!-- Build the installers.-->
+    <!-- Add browser compatibility line to all the html files so that all browsers can read them on ASCOM-Talk -->
+    <ItemGroup>
+      <HTMLHelpFiles Include="$(CheckoutDirectory)\$(PlatformHelpDirectory)\*.html;$(CheckoutDirectory)\$(PlatformHelpDirectory)\html\*.htm;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\*.html;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\html\*.htm" />
+    </ItemGroup>
+    <FileUpdate Files="@(HTMLHelpFiles)" 
+		Regex="&lt;head&gt;" 
+		ReplacementText="&lt;head&gt;&lt;meta&#32;http-equiv&#61;&quot;X-UA-Compatible&quot;&#32;content&#61;&quot;IE&#61;5&quot;&#32;&#47;&gt;">
+	</FileUpdate>
+		
+	<!-- Build the installers -->
     <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
     <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
 
