@@ -14,13 +14,22 @@
     		<title>Platform Prerequisites</title>
       		<content>
 				<list class="bullet">
-	      			<listItem>.NET Framework 4.0 Client</listItem>
+	      			<listItem>.NET Framework 4 Client or .NET Framework 4 Full Installation or later</listItem>
 	      			<listItem>Visual C++ 10.0 libraries</listItem>
 	  			</list>
-				<para>Platform 6.1 now requires your PC to have .NET Framework 4 Client or later support, later versions are also fine. Framework 4 has been available 
+				<para>While previous Platforms required .NET Framework 3.5, Platform 6.1 requires that .NET Framework 4 or later is installed on your PC. Framework 4 has been available 
 				for a number of years and is provided for all operating systems that the Platform supports (Windows XP onwards). This change is to enable Platform components to take 
-				advantage of the new features that Framework 4 provides. The installer will warn you if your PC does not have the required support and will request that you install 
-				it before continuing with the installation.</para>
+				advantage of the new features that Framework 4 provides.</para>
+				<para>The installer will advise you if your PC does not have the required support and will request that you install
+				it before continuing with the installation. The framework can be downloaded from the
+					<externalLink>
+						<linkText>Microsoft Download Centre</linkText>
+						<linkAlternateText>http://www.microsoft.com/downloads</linkAlternateText>
+						<linkUri>http://www.microsoft.com/downloads</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>
+					please check under "Popular Downloads - Developer Tools" if Framework 4 is not otherwise listed.
+				</para>
 				<para>The Platform now also requires Visual C++ 10.0 libraries and will install these for you if they are not already present on your PC.</para>
             </content>
 		</section>
