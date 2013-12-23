@@ -33,5 +33,29 @@ namespace ASCOM.Simulator.Config
 				? AnalogueCameraFrameRate.PAL
 				: AnalogueCameraFrameRate.NTSC;
 		}
+
+		internal void SetVisibility(bool enabled)
+		{
+			if (enabled)
+			{
+				gpxFrameRate.ForeColor = SystemColors.Window;
+				rbVideoFrameRatePAL.ForeColor = SystemColors.Window;
+				rbVideoFrameRateNTSC.ForeColor = SystemColors.Window;
+				rbVideoFrameRatePAL.Enabled = true;
+				rbVideoFrameRateNTSC.Enabled = true;
+				lblDeviceName.ForeColor = SystemColors.Window;
+				tbxVideoCaptureDeviceName.Enabled = true;
+			}
+			else
+			{
+				gpxFrameRate.ForeColor = SystemColors.ControlDark;
+				rbVideoFrameRatePAL.ForeColor = SystemColors.ControlDark;
+				rbVideoFrameRateNTSC.ForeColor = SystemColors.ControlDark;
+				rbVideoFrameRatePAL.Enabled = false;
+				rbVideoFrameRateNTSC.Enabled = false;
+				lblDeviceName.ForeColor = SystemColors.ControlDark;
+				tbxVideoCaptureDeviceName.Enabled = false;
+			}
+		}
 	}
 }

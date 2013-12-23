@@ -25,8 +25,8 @@ namespace ASCOM.Simulator.Config
 			cbxBuffering.Checked = Properties.Settings.Default.UseBuffering;
 			nudBufferSize.Value = Properties.Settings.Default.BufferSize;
 
-			pnlUserBitmaps.Enabled = !rbDriverDefaultSource.Checked;
-			pnlBufferingControls.Enabled = cbxBuffering.Checked;
+			SetDriverDefaultSourceVisibility(!rbDriverDefaultSource.Checked);
+			SetBufferingVisibility(cbxBuffering.Checked);
 		}
 
 		internal override bool ValidateSettings()
@@ -68,7 +68,7 @@ namespace ASCOM.Simulator.Config
 				pathExists = Directory.Exists(fullPath);
 			}
 			catch { }
-			
+
 			if (!pathExists)
 			{
 				MessageBox.Show(
@@ -110,12 +110,42 @@ namespace ASCOM.Simulator.Config
 
 		private void rbDriverDefaultSource_CheckedChanged(object sender, EventArgs e)
 		{
-			pnlUserBitmaps.Enabled = !rbDriverDefaultSource.Checked;
+			SetDriverDefaultSourceVisibility(!rbDriverDefaultSource.Checked);
 		}
 
 		private void cbxBuffering_CheckedChanged(object sender, EventArgs e)
 		{
-			pnlBufferingControls.Enabled = cbxBuffering.Checked;
+			SetBufferingVisibility(cbxBuffering.Checked);
+		}
+
+		private void SetDriverDefaultSourceVisibility(bool enabled)
+		{
+			if (enabled)
+			{
+				pnlUserBitmaps.Enabled = true;
+				lblBmpLocation.ForeColor = Color.White;
+			}
+			else
+			{
+				lblBmpLocation.ForeColor = SystemColors.ControlDark;
+				pnlUserBitmaps.Enabled = false;
+			}
+		}
+
+		private void SetBufferingVisibility(bool enabled)
+		{
+			if (enabled)
+			{
+				nudBufferSize.Enabled = true;
+				lblBuff1.ForeColor = SystemColors.Window;
+				lblBuff2.ForeColor = SystemColors.Window;
+			}
+			else
+			{
+				lblBuff1.ForeColor = SystemColors.ControlDark;
+				lblBuff2.ForeColor = SystemColors.ControlDark;
+				nudBufferSize.Enabled = false;
+			}
 		}
 	}
 }

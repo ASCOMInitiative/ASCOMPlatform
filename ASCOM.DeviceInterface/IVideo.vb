@@ -34,7 +34,7 @@ Public Enum VideoCameraFrameRate
     PAL = 1
 
     ''' <summary>
-    ''' 29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b>b> (black and white) video standard.
+    ''' 29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b> (black and white) video standard.
     ''' </summary>
     NTSC = 2
 End Enum

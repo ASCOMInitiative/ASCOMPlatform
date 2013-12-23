@@ -35,5 +35,30 @@ namespace ASCOM.Simulator.Config
 				Properties.Settings.Default.GainMax = (short)nudMaxGain.Value;
 			}
 		}
+
+		private void SetGainRangeVisibility(bool enabled)
+		{
+			if (enabled)
+			{
+				lblMinGain.ForeColor = SystemColors.Window;
+				lblMaxGain.ForeColor = SystemColors.Window;
+				nudMinGain.Enabled = true;
+				nudMaxGain.Enabled = true;
+				pnlDiscreteGain.Enabled = false;
+			}
+			else
+			{
+				lblMinGain.ForeColor = SystemColors.ControlDark;
+				lblMaxGain.ForeColor = SystemColors.ControlDark;
+				nudMinGain.Enabled = false;
+				nudMaxGain.Enabled = false;
+				pnlDiscreteGain.Enabled = true;
+			}
+		}
+
+		private void rbGainRange_CheckedChanged(object sender, EventArgs e)
+		{
+			SetGainRangeVisibility(rbGainRange.Checked);
+		}
 	}
 }
