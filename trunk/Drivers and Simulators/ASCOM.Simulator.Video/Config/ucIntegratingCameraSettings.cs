@@ -29,5 +29,27 @@ namespace ASCOM.Simulator.Config
 			Properties.Settings.Default.ExposureMin = (double)nudMinExposureSec.Value;
 			Properties.Settings.Default.ExposureMax = (double)nudMaxExposureSec.Value;
 		}
+
+		internal void SetVisibility(bool enabled)
+		{
+			if (enabled)
+			{
+				lblSuppExps.ForeColor = SystemColors.Window;
+				lblMinExp.ForeColor = SystemColors.Window;
+				lblMaxExp.ForeColor = SystemColors.Window;
+				nudMinExposureSec.Enabled = true;
+				nudMaxExposureSec.Enabled = true;
+				tbxSupportedExposures.Enabled = true;
+			}
+			else
+			{
+				lblSuppExps.ForeColor = SystemColors.ControlDark;
+				lblMinExp.ForeColor = SystemColors.ControlDark;
+				lblMaxExp.ForeColor = SystemColors.ControlDark;
+				nudMinExposureSec.Enabled = false;
+				nudMaxExposureSec.Enabled = false;
+				tbxSupportedExposures.Enabled = false;
+			}
+		}
 	}
 }

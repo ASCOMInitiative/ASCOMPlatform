@@ -71,26 +71,9 @@ namespace ASCOM.Simulator
 
         private void CameraTypeChangedInternal(SimulatedCameraType cameraType)
         {
-            if (cameraType == SimulatedCameraType.AnalogueIntegrating || cameraType == SimulatedCameraType.AnalogueNonIntegrating)
-            {
-                m_ucAnalogueCameraSettings.Enabled = true;
-                m_ucAnalogueCameraSettings.BackColor = Color.Black;
-            }
-            else
-            {
-                m_ucAnalogueCameraSettings.BackColor = Color.FromKnownColor(KnownColor.ControlDark);
-                m_ucAnalogueCameraSettings.Enabled = false;
-            }
-            if (cameraType != SimulatedCameraType.AnalogueNonIntegrating)
-            {
-                m_ucIntegratingCameraSettings.Enabled = true;
-                m_ucIntegratingCameraSettings.BackColor = Color.Black;
-            }
-            else
-            {
-                m_ucIntegratingCameraSettings.BackColor = Color.FromKnownColor(KnownColor.ControlDark);
-                m_ucIntegratingCameraSettings.Enabled = false;
-            }
+			m_ucAnalogueCameraSettings.SetVisibility(cameraType == SimulatedCameraType.AnalogueIntegrating || cameraType == SimulatedCameraType.AnalogueNonIntegrating);
+
+			m_ucIntegratingCameraSettings.SetVisibility(cameraType != SimulatedCameraType.AnalogueNonIntegrating);
         }
 
         private void SetFormTitle(TreeNode currentNode)
@@ -160,7 +143,12 @@ namespace ASCOM.Simulator
             LoadSettings();
 
             tvSettings.SelectedNode = tvSettings.Nodes[0];
-            lblVersion.Text = string.Format("ver. {0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+            AssemblyFileVersionAttribute verAtt = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyFileVersionAttribute), true).SingleOrDefault() as AssemblyFileVersionAttribute;
+            if (verAtt != null)
+                lblVersion.Text = string.Format("ver.{0}", verAtt.Version);
+            else
+                lblVersion.Visible = false;
         }
 
         private void btnOK_Click(object sender, EventArgs e)
