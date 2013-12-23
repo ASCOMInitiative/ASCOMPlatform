@@ -427,7 +427,7 @@ HRESULT AviFileAddFrame(long* pixels)
 		}
 	}
 
-	::DeleteObject(bitmapPixels);
+	delete bitmapPixels;
 
 	return rv;
 }
