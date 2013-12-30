@@ -27,10 +27,13 @@ Partial Class Form1
         Me.txtWarning = New System.Windows.Forms.TextBox()
         Me.lblResult = New System.Windows.Forms.Label()
         Me.LblAction = New System.Windows.Forms.Label()
+        Me.cmbRemoveMode = New System.Windows.Forms.ComboBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'btnExit
         '
+        Me.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnExit.Location = New System.Drawing.Point(623, 437)
         Me.btnExit.Name = "btnExit"
         Me.btnExit.Size = New System.Drawing.Size(75, 23)
@@ -50,7 +53,7 @@ Partial Class Form1
         '
         'txtWarning
         '
-        Me.txtWarning.BackColor = System.Drawing.Color.Red
+        Me.txtWarning.BackColor = System.Drawing.Color.WhiteSmoke
         Me.txtWarning.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtWarning.ForeColor = System.Drawing.SystemColors.Window
         Me.txtWarning.Location = New System.Drawing.Point(12, 28)
@@ -59,9 +62,6 @@ Partial Class Form1
         Me.txtWarning.ReadOnly = True
         Me.txtWarning.Size = New System.Drawing.Size(686, 120)
         Me.txtWarning.TabIndex = 3
-        Me.txtWarning.Text = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "WARNING!" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "This tool will forcibly remove your entire ASCOM Platform including" & _
-    " your drivers and Profile." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Please use it only as a last resort, when normal u" & _
-    "ninstall fails!"
         Me.txtWarning.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lblResult
@@ -82,6 +82,23 @@ Partial Class Form1
         Me.LblAction.TabIndex = 5
         Me.LblAction.Text = "LblAction"
         '
+        'cmbRemoveMode
+        '
+        Me.cmbRemoveMode.FormattingEnabled = True
+        Me.cmbRemoveMode.Location = New System.Drawing.Point(235, 358)
+        Me.cmbRemoveMode.Name = "cmbRemoveMode"
+        Me.cmbRemoveMode.Size = New System.Drawing.Size(241, 21)
+        Me.cmbRemoveMode.TabIndex = 6
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(146, 361)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(83, 13)
+        Me.Label1.TabIndex = 7
+        Me.Label1.Text = "Removal Option"
+        '
         'Form1
         '
         Me.AcceptButton = Me.btnExit
@@ -89,13 +106,15 @@ Partial Class Form1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnExit
         Me.ClientSize = New System.Drawing.Size(710, 472)
+        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.cmbRemoveMode)
         Me.Controls.Add(Me.LblAction)
         Me.Controls.Add(Me.lblResult)
         Me.Controls.Add(Me.txtWarning)
         Me.Controls.Add(Me.btnRemove)
         Me.Controls.Add(Me.btnExit)
         Me.Name = "Form1"
-        Me.Text = "Remove ASCOM by Force!"
+        Me.Text = "Platform Recovery Tool"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -105,5 +124,7 @@ Partial Class Form1
     Friend WithEvents txtWarning As System.Windows.Forms.TextBox
     Friend WithEvents lblResult As System.Windows.Forms.Label
     Friend WithEvents LblAction As System.Windows.Forms.Label
+    Friend WithEvents cmbRemoveMode As System.Windows.Forms.ComboBox
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 
 End Class

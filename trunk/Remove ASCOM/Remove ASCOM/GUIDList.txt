@@ -3,6 +3,7 @@ This is a list of the GUIDs that will be removed by RemoveASCOM
 00A394A5-BCB0-449D-A46B-81A02824ADC5 defined in: E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb
 00BC6F08-4277-47c3-9DBA-F80E02C5A448 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
 031b8292-fc9b-4684-8faf-fa7e968db0ff defined in: E:\ASCOM\ASCOM.SettingsProvider\ASCOM.SettingsProviderSample.CSharp\Properties\AssemblyInfo.cs
+0517e476-3c3f-43fb-9ac2-c326a83dd405 defined in: E:\ASCOM\Releases\ASCOM 6\SuppressWinErrors\Properties\AssemblyInfo.cs
 0529dfc1-44d5-4e75-8014-56a4d831eddf defined in: E:\ASCOM\Dome\Driver.cs
 05f2ef53-c71e-4fbe-bcc3-2e62ee043d40 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\PublisherPolicy\Properties\AssemblyInfo.cs
 06BB25BA-6E75-4d1b-8BB4-BA629454AE38 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb

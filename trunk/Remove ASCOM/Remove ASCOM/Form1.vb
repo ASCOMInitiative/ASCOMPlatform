@@ -4,6 +4,7 @@ Imports System.IO
 Imports Microsoft.Win32
 Imports System.Text
 Imports System.Globalization
+Imports System.Text.RegularExpressions
 
 Public Class Form1
     Private TL As TraceLogger
@@ -20,35 +21,99 @@ Public Class Form1
     Const CSIDL_PROGRAM_FILES_COMMON = 43 ' 0x002b 
     Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44    ' 0x002c
 
-    <DllImport("kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)> _
-    Public Shared Function IsWow64Process(<[In]()> hProcess As IntPtr, <Out()> ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
-    End Function
-
     <DllImport("Shell32.dll")> _
     Private Shared Function SHGetSpecialFolderPath(<[In]()> hwndOwner As IntPtr, <Out()> lpszPath As StringBuilder, <[In]()> nFolder As Integer, <[In]()> fCreate As Integer) As Integer
     End Function
 
     Const PLATFORM6_INSTALL_KEY As String = "{8961E141-B307-4882-ABAD-77A3E76A40C1}"
 
-#Region "Form Load and Close"
-    Private Sub Form1_Load(sender As Object, e As System.EventArgs) Handles Me.Load
-        Try
-            LblAction.Text = ""
-            lblResult.Text = ""
-            'If Date.Now > Date.Parse("09/24/2011", CultureInfo.InvariantCulture).AddDays(7.0) Then
-            ' MsgBox("This application has expired, please post on ASCOM Talk (http://tech.groups.yahoo.com/group/ASCOM-Talk/messages) if you still need to remove your entire ASCOM Platform.", MsgBoxStyle.Critical, "Application Expired")
-            ' btnRemove.Enabled = False
-            ' End If
-        Catch ex As Exception
-            MsgBox("Load Exception 1: " & ex.ToString)
-        End Try
+    Const REMOVE_INSTALLER_COMBO_TEXT As String = "Platform and Installer only (Recommended)"
+    Dim REMOVE_INSTALLER_BACK_COLOUR As Color = Color.Yellow
+    Dim REMOVE_INSTALLER_FORE_COLOUR As Color = Color.Black
+    Const REMOVE_INSTALLER_TEXT As String = vbCrLf & "WARNING!" & vbCrLf & vbCrLf & _
+                                            "Proceeding will remove the ASCOM Platform and its installer." & vbCrLf & vbCrLf &
+                                            "If unsuccessful, use the """ & REMOVE_ALL_COMBO_TEXT & """ option as a last resort"
+    Const REMOVE_INSTALLER_CONFIRMATION_MESSAGE = "Are you sure you want to remove your ASCOM Platform?"
 
+    Const REMOVE_ALL_COMBO_TEXT As String = "Platform, Installer, Profile and 3rd Party Drivers"
+    Dim REMOVE_ALL_BACK_COLOUR As Color = Color.Red
+    Dim REMOVE_ALL_FORE_COLOUR As Color = Color.White
+    Const REMOVE_ALL_TEXT As String = vbCrLf & "WARNING!" & vbCrLf & vbCrLf & _
+                                      "This option will forcibly remove your entire ASCOM Platform including your drivers and Profile." & vbCrLf & vbCrLf & _
+                                      "Please use it only as a last resort."
+    Const REMOVE_ALL_CONFIRMATION_MESSAGE As String = "Are you sure you want to FORCE remove your entire ASCOM Platform, Profile and 3rd Party drivers?"
+    Const REMOVAL_COMPLETE_MESSAGE As String = "The current Platform has been removed, press OK to continue with new Platform installation"
+
+#Region "Event handlers"
+
+    ''' <summary>
+    ''' UPdate colours and text when tyhe type of removal is changed
+    ''' </summary>
+    ''' <param name="sender">Object creating the event</param>
+    ''' <param name="e">Event arguments</param>
+    ''' <remarks></remarks>
+    Private Sub cmbRemoveMode_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cmbRemoveMode.SelectedIndexChanged
+        Select Case cmbRemoveMode.SelectedItem
+            Case REMOVE_INSTALLER_COMBO_TEXT
+                txtWarning.BackColor = REMOVE_INSTALLER_BACK_COLOUR
+                txtWarning.ForeColor = REMOVE_INSTALLER_FORE_COLOUR
+                txtWarning.Text = REMOVE_INSTALLER_TEXT
+            Case REMOVE_ALL_COMBO_TEXT
+                txtWarning.BackColor = REMOVE_ALL_BACK_COLOUR
+                txtWarning.ForeColor = REMOVE_ALL_FORE_COLOUR
+                txtWarning.Text = REMOVE_ALL_TEXT
+            Case Else
+                MsgBox("Unrecognised cmbRemoveMode value: " & cmbRemoveMode.SelectedItem.ToString(), MsgBoxStyle.Critical)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' Effect Platform removal
+    ''' </summary>
+    ''' <param name="sender">Object creating the event</param>
+    ''' <param name="e">Event arguments</param>
+    ''' <remarks></remarks>
+    Private Sub btnRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnRemove.Click
+        TopLevelRemovalScript() ' Run the overall uninstallation script
+
+        If PlatformRemoved Then ' We did remove the Platform so display a message and close this program so that the new installer can continue
+            MessageBox.Show(REMOVAL_COMPLETE_MESSAGE, "RemoveASCOM", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Form load event handler
+    ''' </summary>
+    ''' <param name="sender">Object creating the event</param>
+    ''' <param name="e">Event arguments</param>
+    ''' <remarks></remarks>
+    Private Sub Form1_Load(sender As Object, e As System.EventArgs) Handles Me.Load
         Try
             TL = New TraceLogger("", "ForceRemove")
             TL.Enabled = True
             TL.LogMessage("ForceRemove", "Program started")
         Catch ex As Exception
-            MsgBox("Load Exception 2: " & ex.ToString)
+            MsgBox("TraceLogger Load Exception: " & ex.ToString)
+        End Try
+
+        Try
+            'Clear the update fields
+            LblAction.Text = ""
+            lblResult.Text = ""
+            TL.LogMessage("ForceRemove", "Update fields cleared")
+
+            'Initialise the removal options drop-down combo-box
+            cmbRemoveMode.Items.Clear()
+            cmbRemoveMode.Items.Add(REMOVE_INSTALLER_COMBO_TEXT)
+            cmbRemoveMode.Items.Add(REMOVE_ALL_COMBO_TEXT)
+            cmbRemoveMode.SelectedItem = REMOVE_INSTALLER_COMBO_TEXT ' This triggers a cmbRemoveMode_SelectedItemChanged event that paints the correct colours and text for the warning text box.
+            TL.LogMessage("ForceRemove", "Removal options combo box populated OK")
+            TL.LogMessage("ForceRemove", "Form loaded OK")
+
+        Catch ex As Exception
+            TL.LogMessageCrLf("Form Load Exception", ex.ToString)
+            Throw
         End Try
 
         ' Iniitialise Platform removed variable and set default return code
@@ -56,8 +121,15 @@ Public Class Form1
         Environment.ExitCode = 99
     End Sub
 
+    ''' <summary>
+    ''' Form close event handler
+    ''' </summary>
+    ''' <param name="sender">Object creating the event</param>
+    ''' <param name="e">Event arguments</param>
+    ''' <remarks></remarks>
     Private Sub Form1_FormClosed(sender As Object, e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         Try
+            TL.LogMessage("ForceRemove", "Form closed, program ending")
             TL.Enabled = False
             TL.Dispose()
             TL = Nothing
@@ -72,42 +144,78 @@ Public Class Form1
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Exit button event handler
+    ''' </summary>
+    ''' <param name="sender">Object creating the event</param>
+    ''' <param name="e">Event arguments</param>
+    ''' <remarks></remarks>
     Private Sub btnExit_Click(sender As System.Object, e As System.EventArgs) Handles btnExit.Click
         Me.Close()
     End Sub
+
 #End Region
 
-    Private Sub btnRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnRemove.Click
-        Dim dlgResult As MsgBoxResult
+#Region "Removal code"
+
+    Private Sub TopLevelRemovalScript()
+        Dim dlgResult As MsgBoxResult, dlgMessage As String = "WARNING: Uninitialised Message value!"
         Try
+            TL.LogMessage("ForceRemove", "Start of removal script")
+
             Status("")
             Action("")
-            dlgResult = MsgBox("Are you sure you want to FORCE remove your entire ASCOM Platform?", MsgBoxStyle.Critical Or MsgBoxStyle.YesNo, "Remove ASCOM")
-            TL.LogMessage("ForceRemove", "Are you sure you want to FORCE remove your entire ASCOM Platform?")
-            If dlgResult = MsgBoxResult.Yes Then
+
+            ' Obtain confirmation that Platform remval is required
+            Select Case cmbRemoveMode.SelectedItem
+                Case REMOVE_INSTALLER_COMBO_TEXT
+                    dlgMessage = REMOVE_INSTALLER_CONFIRMATION_MESSAGE
+                Case REMOVE_ALL_COMBO_TEXT
+                    dlgMessage = REMOVE_ALL_CONFIRMATION_MESSAGE
+                Case Else
+                    MsgBox("Unrecognised cmbRemoveMode value: " & cmbRemoveMode.SelectedItem.ToString(), MsgBoxStyle.Critical)
+            End Select
+
+            TL.LogMessage("ForceRemove", "Removal option: " & cmbRemoveMode.SelectedItem.ToString())
+
+            ' Display the confirmation dialogue box
+            dlgResult = MsgBox(dlgMessage, MsgBoxStyle.Exclamation Or MsgBoxStyle.YesNo, "Remove ASCOM")
+            TL.LogMessage("ForceRemove", dlgMessage)
+            If dlgResult = MsgBoxResult.Yes Then ' User said YES so proceed
                 TL.LogMessage("ForceRemove", "User said ""Yes""")
                 TL.BlankLine()
 
                 ' Flag that we did actually uninstall the Platform so that an appropriate return code can be returned.
                 PlatformRemoved = True
 
-                RemoveInstallers()
-                RemoveProfile()
-                RemoveFiles()
-                RemoveGAC()
-                RemoveDekstopFilesAndLinks()
-                RemoveGUIDs()
+                Select Case cmbRemoveMode.SelectedItem
+                    Case REMOVE_INSTALLER_COMBO_TEXT
+                        RemoveInstallers()
+                        RemovePlatformFiles()
+                        RemoveGAC()
+                        RemoveDekstopFilesAndLinks()
+                        RemoveGUIDs()
+                    Case REMOVE_ALL_COMBO_TEXT
+                        RemoveInstallers()
+                        RemoveProfile()
+                        RemovePlatformDirectories()
+                        RemoveGAC()
+                        RemoveDekstopFilesAndLinks()
+                        RemoveGUIDs()
+                    Case Else
+                        MsgBox("Unrecognised cmbRemoveMode value: " & cmbRemoveMode.SelectedItem.ToString(), MsgBoxStyle.Critical)
+                End Select
 
                 Status("Completed")
-                MsgBox("Platform has been removed", MsgBoxStyle.Information, "Remove ASCOM")
-            Else
+            Else ' User said NO so 
                 TL.LogMessage("ForceRemove", "User said ""No""")
             End If
             Action("")
         Catch ex As Exception
             TL.LogMessageCrLf("ForceRemove", "Exception: " & ex.ToString)
         End Try
-        TL.LogMessage("ForceRemove", "End of process")
+        TL.LogMessage("ForceRemove", "End of removal script")
+
     End Sub
 
     Private Sub RemoveInstallers()
@@ -129,6 +237,7 @@ Public Class Form1
 
         Try
             Status("Removing installer references")
+            Action("")
             TL.LogMessage("RemoveInstallers", "Started")
             TL.BlankLine()
 
@@ -217,7 +326,7 @@ Public Class Form1
 
             For Each Installer In InstallerKeys
                 Try
-                    'TL.LogMessage("RemoveInstallers", "Removing reference to: " & Installer.Key)
+                    Action("Removing registry key: " & Installer.Value)
                     Registry.LocalMachine.DeleteSubKeyTree(Installer.Value)
                     TL.LogMessage("RemoveInstallers", "Reference to " & Installer.Key & " - Removed OK")
                 Catch ex2 As ArgumentException
@@ -234,6 +343,7 @@ Public Class Form1
             For Each SubKey As String In SubKeys
                 Try
                     If SubKey.ToUpper.Contains("ASCOM PLATFORM") Then
+                        Action("Removing installer reference: " & SubKey)
                         TL.LogMessage("RemoveInstallers", "Removing Platform installer reference: " & SubKey)
                         RKey.DeleteSubKeyTree(SubKey)
                     End If
@@ -253,6 +363,7 @@ Public Class Form1
                     ProductDescription = RKey.OpenSubKey(SubKey).GetValue("ProductName", "Product description not present")
                     TL.LogMessage("RemoveInstallers", "Found Product: " & ProductDescription)
                     If ProductDescription.ToUpper.Contains("ASCOM PLATFORM") Then
+                        Action("Removing installer: " & ProductDescription)
                         TL.LogMessage("RemoveInstallers", "  Deleting: " & ProductDescription)
                         RKey.DeleteSubKeyTree(SubKey)
                     End If
@@ -270,7 +381,7 @@ Public Class Form1
     End Sub
 
     Private Sub RemoveProfile()
-        Dim RKey As RegistryKey
+        Dim RKey As RegistryKey, ASCOMDirectory As String
 
         Try
             Status("Removing RemoveProfile Entries")
@@ -311,119 +422,197 @@ Public Class Form1
                 TL.LogMessageCrLf("RemoveProfile", "Exception 3: " & ex3.ToString)
             End Try
 
+            TL.LogMessage("RemoveProfile", "Removing ASCOM 5.5 Profile Files")
+            Try
+                ASCOMDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) & "\ASCOM"
+                RemoveFilesRecurse(ASCOMDirectory)
+            Catch ex As Exception
+                TL.LogMessageCrLf("RemoveProfile", "Exception: " & ex.ToString)
+            End Try
+
             TL.LogMessage("RemoveProfile", "Completed")
+            TL.BlankLine()
+
         Catch ex As Exception
             TL.LogMessageCrLf("RemoveProfile", "Exception: " & ex.ToString)
         End Try
         TL.BlankLine()
     End Sub
 
-    Private Sub RemoveFiles()
+    ''' <summary>
+    ''' Remove specific Platform files only leaving the directory structure and 3rd party files intact.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub RemovePlatformFiles()
+        Dim regexInstallerVariables As Regex
+        Dim mVar As Match
+
+        Dim CommonFiles, CommonFiles64, TargetDirectory As String
+
+        TL.LogMessage("RemovePlatformFiles", "Started")
+        Status("Removing Platform files")
+        ' Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
+        '                                $COMMONFILES$\ASCOM\Platform\v6
+        ' Group within the matched line: <--CompVar-->
+        regexInstallerVariables = New Regex("\$(?<CompVar>[\w]*)\$.*", RegexOptions.IgnoreCase)
+
+        ' Set up variables once so they can be used many times
+        If Is64Bit() Then ' Set variables for when we are running on a 64bit OS
+            TargetDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & "\ASCOM"
+            CommonFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86)
+            CommonFiles64 = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles)
+
+            TL.LogMessage("RemovePlatformFiles", "This is a 64bit OS")
+            TL.LogMessage("RemovePlatformFiles", "TargetDirectory: " & TargetDirectory)
+            TL.LogMessage("RemovePlatformFiles", "CommonFiles: " & CommonFiles)
+            TL.LogMessage("RemovePlatformFiles", "CommonFiles64: " & CommonFiles64)
+        Else ' Set variables for when we are running on a 32bit OS
+            TargetDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\ASCOM"
+            CommonFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles)
+            CommonFiles64 = "Not set"
+
+            TL.LogMessage("RemovePlatformFiles", "This is a 32bit OS")
+            TL.LogMessage("RemovePlatformFiles", "TargetDirectory: " & TargetDirectory)
+            TL.LogMessage("RemovePlatformFiles", "CommonFiles: " & CommonFiles)
+            TL.LogMessage("RemovePlatformFiles", "CommonFiles64: " & CommonFiles64)
+        End If
+
+        ' Iterate of the list of files, convert compiler variables to real values on this system and remove the files
+        For Each fileFullName As String In DynamicLists.Files(TL)
+            Try
+                Action("Removing file: " & fileFullName)
+                TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
+                mVar = regexInstallerVariables.Match(fileFullName)
+                If mVar.Success Then ' We have found a compiler variable so process it
+                    Select Case mVar.Groups("CompVar").ToString().ToUpper()
+                        Case "TARGETDIR"
+                            fileFullName.Replace("$TARGETDIR$", TargetDirectory)
+                            DeleteFile(fileFullName)
+                        Case "COMMONFILES"
+                            fileFullName.Replace("$COMMONFILES$", CommonFiles)
+                            DeleteFile(fileFullName)
+                        Case "COMMONFILES64"
+                            If Is64Bit() Then
+                                fileFullName.Replace("$COMMONFILES64$", CommonFiles64)
+                                DeleteFile(fileFullName)
+                            Else
+                                TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable because this is a OS.")
+                            End If
+                        Case Else ' Unrecognised compiler variable so log an error
+                            TL.LogMessage("RemovePlatformFiles", "***** UNKNOWN Compiler Variable: " & mVar.Groups("CompVar").ToString() & " in file: " & fileFullName)
+                    End Select
+                Else
+                    TL.LogMessage("RemovePlatformFiles", "***** NO Compiler Variable in file: " & fileFullName)
+                End If
+                TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
+            Catch ex As Exception
+                TL.LogMessageCrLf("", "Exception: " & ex.ToString())
+            End Try
+        Next
+        TL.LogMessage("RemovePlatformFiles", "Completed")
+    End Sub
+
+    ''' <summary>
+    ''' Recursively removes all Platform directories and their contents regardless of whther the files are Platform or 3rd party provided.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub RemovePlatformDirectories()
         Dim Path As New StringBuilder(260), rc As Integer, ASCOMDirectory As String
         Dim DirInfo As DirectoryInfo, FileInfos() As FileInfo, DirInfos() As DirectoryInfo
         Dim Found As Boolean
 
         Try
-            Status("Removing files")
-            TL.LogMessage("RemoveFiles", "Started")
+            Status("Removing directories and files")
+            TL.LogMessage("RemoveDirectories", "Started")
 
             If Is64Bit() Then
                 Try
-                    TL.LogMessage("RemoveFiles", "Removing ASCOM 32bit Common Files from a 64bit OS")
+                    TL.LogMessage("RemoveDirectories", "Removing ASCOM 32bit Common Files from a 64bit OS")
                     rc = SHGetSpecialFolderPath(IntPtr.Zero, Path, CSIDL_PROGRAM_FILES_COMMONX86, 0)
                     ASCOMDirectory = Path.ToString() & "\ASCOM"
-                    TL.LogMessage("RemoveFiles", "  ASCOM directory: " & ASCOMDirectory)
+                    TL.LogMessage("RemoveDirectories", "  ASCOM directory: " & ASCOMDirectory)
                     RemoveFilesRecurse(ASCOMDirectory)
-                    TL.LogMessage("RemoveFiles", "  Removed OK")
+                    TL.LogMessage("RemoveDirectories", "  Removed OK")
                 Catch ex As DirectoryNotFoundException
-                    TL.LogMessage("RemoveFiles", "  Not present")
+                    TL.LogMessage("RemoveDirectories", "  Not present")
                 Catch ex As Exception
-                    TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
+                    TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
                 End Try
                 TL.BlankLine()
 
                 Try
-                    TL.LogMessage("RemoveFiles", "Removing ASCOM 64bit Common Files from a 64bit OS")
+                    TL.LogMessage("RemoveDirectories", "Removing ASCOM 64bit Common Files from a 64bit OS")
                     rc = SHGetSpecialFolderPath(IntPtr.Zero, Path, CSIDL_PROGRAM_FILES_COMMON, 0)
                     ASCOMDirectory = Path.ToString() & "\ASCOM"
-                    TL.LogMessage("RemoveFiles", "  ASCOM directory: " & ASCOMDirectory)
+                    TL.LogMessage("RemoveDirectories", "  ASCOM directory: " & ASCOMDirectory)
                     RemoveFilesRecurse(ASCOMDirectory)
-                    TL.LogMessage("RemoveFiles", "  Removed OK")
+                    TL.LogMessage("RemoveDirectories", "  Removed OK")
                 Catch ex As DirectoryNotFoundException
-                    TL.LogMessage("RemoveFiles", "  Not present")
+                    TL.LogMessage("RemoveDirectories", "  Not present")
                 Catch ex As Exception
-                    TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
+                    TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
                 End Try
                 TL.BlankLine()
 
                 Try
-                    TL.LogMessage("RemoveFiles", "Removing ASCOM 32bit Program Files from a 64bit OS")
+                    TL.LogMessage("RemoveDirectories", "Removing ASCOM 32bit Program Files from a 64bit OS")
                     rc = SHGetSpecialFolderPath(IntPtr.Zero, Path, CSIDL_PROGRAM_FILESX86, 0)
                     ASCOMDirectory = Path.ToString() & "\ASCOM"
-                    TL.LogMessage("RemoveFiles", "  ASCOM directory: " & ASCOMDirectory)
+                    TL.LogMessage("RemoveDirectories", "  ASCOM directory: " & ASCOMDirectory)
                     RemoveFilesRecurse(ASCOMDirectory)
-                    TL.LogMessage("RemoveFiles", "  Removed OK")
+                    TL.LogMessage("RemoveDirectories", "  Removed OK")
                 Catch ex As DirectoryNotFoundException
-                    TL.LogMessage("RemoveFiles", "  Not present")
+                    TL.LogMessage("RemoveDirectories", "  Not present")
                 Catch ex As Exception
-                    TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
+                    TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
                 End Try
                 TL.BlankLine()
 
                 Try
-                    TL.LogMessage("RemoveFiles", "Removing ASCOM 64bit Program Files from a 64bit OS")
+                    TL.LogMessage("RemoveDirectories", "Removing ASCOM 64bit Program Files from a 64bit OS")
                     rc = SHGetSpecialFolderPath(IntPtr.Zero, Path, CSIDL_PROGRAM_FILES, 0)
                     ASCOMDirectory = Path.ToString() & "\ASCOM"
-                    TL.LogMessage("RemoveFiles", "  ASCOM directory: " & ASCOMDirectory)
+                    TL.LogMessage("RemoveDirectories", "  ASCOM directory: " & ASCOMDirectory)
                     RemoveFilesRecurse(ASCOMDirectory)
-                    TL.LogMessage("RemoveFiles", "  Removed OK")
+                    TL.LogMessage("RemoveDirectories", "  Removed OK")
                 Catch ex As DirectoryNotFoundException
-                    TL.LogMessage("RemoveFiles", "  Not present")
+                    TL.LogMessage("RemoveDirectories", "  Not present")
                 Catch ex As Exception
-                    TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
+                    TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
                 End Try
                 TL.BlankLine()
             Else
                 Try
-                    TL.LogMessage("RemoveFiles", "Removing ASCOM Common Files from a 32 bit OS")
+                    TL.LogMessage("RemoveDirectories", "Removing ASCOM Common Files from a 32 bit OS")
                     rc = SHGetSpecialFolderPath(IntPtr.Zero, Path, CSIDL_PROGRAM_FILES_COMMON, 0)
                     ASCOMDirectory = Path.ToString() & "\ASCOM"
-                    TL.LogMessage("RemoveFiles", "  ASCOM directory: " & ASCOMDirectory)
+                    TL.LogMessage("RemoveDirectories", "  ASCOM directory: " & ASCOMDirectory)
                     RemoveFilesRecurse(ASCOMDirectory)
-                    TL.LogMessage("RemoveFiles", "  Removed OK")
+                    TL.LogMessage("RemoveDirectories", "  Removed OK")
                 Catch ex As DirectoryNotFoundException
-                    TL.LogMessage("RemoveFiles", "  Not present")
+                    TL.LogMessage("RemoveDirectories", "  Not present")
                 Catch ex As Exception
-                    TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
+                    TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
                 End Try
                 TL.BlankLine()
 
                 Try
-                    TL.LogMessage("RemoveFiles", "Removing ASCOM Program Files from a 32bit OS")
+                    TL.LogMessage("RemoveDirectories", "Removing ASCOM Program Files from a 32bit OS")
                     rc = SHGetSpecialFolderPath(IntPtr.Zero, Path, CSIDL_PROGRAM_FILES, 0)
                     ASCOMDirectory = Path.ToString() & "\ASCOM"
-                    TL.LogMessage("RemoveFiles", "  ASCOM directory: " & ASCOMDirectory)
+                    TL.LogMessage("RemoveDirectories", "  ASCOM directory: " & ASCOMDirectory)
                     RemoveFilesRecurse(ASCOMDirectory)
-                    TL.LogMessage("RemoveFiles", "  Removed OK")
+                    TL.LogMessage("RemoveDirectories", "  Removed OK")
                 Catch ex As DirectoryNotFoundException
-                    TL.LogMessage("RemoveFiles", "  Not present")
+                    TL.LogMessage("RemoveDirectories", "  Not present")
                 Catch ex As Exception
-                    TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
+                    TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
                 End Try
                 TL.BlankLine()
             End If
 
-            TL.LogMessage("RemoveFiles", "Removing ASCOM 5.5 Profile Files")
-            Try
-                ASCOMDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) & "\ASCOM"
-                RemoveFilesRecurse(ASCOMDirectory)
-            Catch ex As Exception
-                TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
-            End Try
-            TL.BlankLine()
-
             ' Remove any InstallAware install files remaining
-            TL.LogMessage("RemoveFiles", "Removing InstallAware Installer Files")
+            TL.LogMessage("RemoveDirectories", "Removing InstallAware Installer Files")
             Try
                 ASCOMDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
                 DirInfo = New DirectoryInfo(ASCOMDirectory) ' Get a directory info for the common application data directory
@@ -433,48 +622,47 @@ Public Class Form1
                 Try ' Get file details for each directory in this folder
                     For Each DirInfo In DirInfos
                         Try
-                            TL.LogMessageCrLf("RemoveFiles", "  Processing directory - " & "#" & DirInfo.Name & "#" & DirInfo.FullName & "#")
+                            TL.LogMessageCrLf("RemoveDirectories", "  Processing directory - " & "#" & DirInfo.Name & "#" & DirInfo.FullName & "#")
                             FileInfos = DirInfo.GetFiles ' Get the list of files in this directory
                             Found = False
                             For Each MyFile As FileInfo In FileInfos ' Now delete them
-                                TL.LogMessageCrLf("RemoveFiles", "  Processing file - " & "#" & MyFile.Name & "#" & MyFile.FullName & "#")
+                                TL.LogMessageCrLf("RemoveDirectories", "  Processing file - " & "#" & MyFile.Name & "#" & MyFile.FullName & "#")
 
                                 If MyFile.Name.ToUpper = PLATFORM6_INSTALL_KEY.ToUpper Then
                                     Found = True
-                                    TL.LogMessageCrLf("RemoveFiles", "  Found install directory directory - " & DirInfo.Name)
+                                    TL.LogMessageCrLf("RemoveDirectories", "  Found install directory directory - " & DirInfo.Name)
                                 End If
                             Next
                             If Found Then
-                                TL.LogMessageCrLf("RemoveFiles", "  Removing directory - " & DirInfo.FullName)
+                                TL.LogMessageCrLf("RemoveDirectories", "  Removing directory - " & DirInfo.FullName)
                                 RemoveFilesRecurse(DirInfo.FullName)
                             End If
                         Catch ex As UnauthorizedAccessException
-                            TL.LogMessage("RemoveFiles 2", "UnauthorizedAccessException for directory; " & DirInfo.FullName)
+                            TL.LogMessage("RemoveDirectories 2", "UnauthorizedAccessException for directory; " & DirInfo.FullName)
                         Catch ex As Exception
-                            TL.LogMessageCrLf("RemoveFiles 2", "Exception: " & ex.ToString)
+                            TL.LogMessageCrLf("RemoveDirectories 2", "Exception: " & ex.ToString)
                         End Try
-
                     Next
                 Catch ex As UnauthorizedAccessException
-                    TL.LogMessage("RemoveFiles", "UnauthorizedAccessException for directory; " & DirInfo.FullName)
+                    TL.LogMessage("RemoveDirectories", "UnauthorizedAccessException for directory; " & DirInfo.FullName)
                 Catch ex As Exception
-                    TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
+                    TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
                 End Try
 
             Catch ex As Exception
-                TL.LogMessageCrLf("RemoveFiles", "Exception: " & ex.ToString)
+                TL.LogMessageCrLf("RemoveDirectories", "Exception: " & ex.ToString)
             End Try
 
         Catch ex1 As Exception
-            TL.LogMessageCrLf("RemoveFiles", "Exception 1: " & ex1.ToString)
+            TL.LogMessageCrLf("RemoveDirectories", "Exception 1: " & ex1.ToString)
         End Try
 
-        TL.LogMessage("RemoveFiles", "Completed")
+        TL.LogMessage("RemoveDirectories", "Completed")
         TL.BlankLine()
     End Sub
 
     Private Sub RemoveGAC()
-        Dim pCache As IAssemblyCache, Outcome As REMOVE_OUTCOME
+        Dim pCache As IAssemblyCache, Outcome As RemoveOutcome
         Dim ae As IAssemblyEnum
         Dim an As IAssemblyName = Nothing
         Dim ASCOMAssemblyNames As Generic.SortedList(Of String, String)
@@ -628,21 +816,45 @@ Public Class Form1
         TL.LogMessage("RemoveGUIDs", "Started")
         Status("Removing GUIDs")
 
-        For Each Guid As Generic.KeyValuePair(Of String, String) In GUIDList.Members(TL)
+        For Each Guid As Generic.KeyValuePair(Of String, String) In DynamicLists.GUIDs(TL)
             CleanGUID(Guid.Key, Guid.Value)
         Next
         TL.LogMessage("RemoveGUIDs", "Completed")
     End Sub
 
+#End Region
+
 #Region "Support Routines"
 
-    Sub CleanGUID(GUIDKey As String, FileLocation As String)
+    ''' <summary>
+    ''' Delete a single file, reporting success or an exception
+    ''' </summary>
+    ''' <param name="FileName">Full path to the file to delete</param>
+    ''' <remarks></remarks>
+    Private Sub DeleteFile(FileName As String)
+        Dim TargetFile As FileInfo
+
+        Try
+            Action(FileName)
+            TargetFile = New FileInfo(FileName)
+            TargetFile.Attributes = FileAttributes.Normal
+            TargetFile.Delete()
+            TL.LogMessage("RemoveFile", "OK - " & FileName)
+        Catch ex As Exception
+            TL.LogMessageCrLf("RemoveFile", "ISSUE - " & FileName & ", Exception: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub CleanGUID(GUIDKey As String, FileLocation As String)
+        Action("Removing GUID: " & GUIDKey.ToString())
         TL.LogMessage("CleanGUID", "Cleaning GUID: " & GUIDKey & " in " & FileLocation)
+
         CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("CLSID", True), GUIDKey)
         CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("Interface", True), GUIDKey)
         CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("Record", True), GUIDKey)
         CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("AppID", True), GUIDKey)
         CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("TypeLib", True), GUIDKey)
+
         If Is64Bit() Then
             CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("Wow6432Node\CLSID", True), GUIDKey)
             CleanRegistryLocation(Registry.ClassesRoot.OpenSubKey("Wow6432Node\Interface", True), GUIDKey)
@@ -651,7 +863,7 @@ Public Class Form1
         End If
     End Sub
 
-    Sub CleanRegistryLocation(BaseKey As RegistryKey, GUIDSubKey As String)
+    Private Sub CleanRegistryLocation(BaseKey As RegistryKey, GUIDSubKey As String)
         Try
             GUIDSubKey = "{" & GUIDSubKey & "}"
             BaseKey.DeleteSubKeyTree(GUIDSubKey)
@@ -662,7 +874,6 @@ Public Class Form1
             TL.LogMessageCrLf("CleanRegistryLocation", ex.ToString())
         End Try
     End Sub
-
 
     Private Sub RemoveFilesRecurse(ByVal Folder As String)
         Dim DirInfo As DirectoryInfo
@@ -740,7 +951,7 @@ Public Class Form1
     End Function
 
     'run the uninstaller
-    Public Sub RunProcess(ByVal InstallerName As String, ByVal processToRun As String, ByVal args As String)
+    Private Sub RunProcess(ByVal InstallerName As String, ByVal processToRun As String, ByVal args As String)
         Dim startInfo As ProcessStartInfo, myProcess As Process
 
         Try
@@ -773,7 +984,7 @@ Public Class Form1
     End Sub
 
     'split the installer string and select the first argument, converting /I to /q /x
-    Public Shared Function SplitKey(keyToSplit As String) As String
+    Private Shared Function SplitKey(keyToSplit As String) As String
         Dim SplitChars() As Char = {" "}
         Dim s As String() = keyToSplit.Split(SplitChars)
         s(1) = s(1).Replace("/I", "/q /x ")

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
-namespace FindGUIDs
+namespace MakeDynamicLists
 {
     class Program
     {
@@ -22,9 +23,9 @@ namespace FindGUIDs
         {
             // Settings for use in the development environment, these are overriden by a command line argument in the build environment
             string developmentSearchPath = @"..\..\..\..";
-            string OutputPath = @"\Remove ASCOM\Remove ASCOM\";
-            string devlopmentPath = developmentSearchPath + OutputPath;
-            string outputClassFileName = @"GUIDList.vb";
+            string outputPath = @"\Remove ASCOM\Remove ASCOM\";
+            string devlopmentPath = developmentSearchPath + outputPath;
+            string outputClassFileName = @"DynamicLists.vb";
             string outputTextFileName = @"GUIDList.txt";
 
             // Construct the development environment values
@@ -34,20 +35,27 @@ namespace FindGUIDs
 
             // Storage for the GUIDs found and a suppression list of GUIDs that should be left undisturbed
             SortedList<string, string> guidList = new SortedList<string, string>();
-            List<string> suppressionList = new List<string>();
+            List<string> guidSuppressionList = new List<string>();
 
-            using (TraceLogger TL = new TraceLogger("", "FindGUIDs"))
+            // Storage for the list of files installed by the Platform
+            SortedSet<string> fileList = new SortedSet<string>();
+
+            using (TraceLogger TL = new TraceLogger("", "MakeDynamicLists"))
             {
+                TL.Enabled = true;
+
+                //
+                // Create the list of GUIDs created by the Platform
+                //
                 try
                 {
-                    TL.Enabled = true;
 
                     // Override the source and output paths if a command line search path is provided
                     if (args.Length > 0)
                     {
                         sourceSearchPath = args[0];
-                        outputClassFullFileName = args[0] + OutputPath + outputClassFileName;
-                        outputTextFullFileName = args[0] + OutputPath + outputTextFileName;
+                        outputClassFullFileName = args[0] + outputPath + outputClassFileName;
+                        outputTextFullFileName = args[0] + outputPath + outputTextFileName;
                     }
 
                     TL.LogMessage("Main", "Search path: " + Path.GetFullPath(sourceSearchPath));
@@ -55,13 +63,13 @@ namespace FindGUIDs
                     TL.LogMessage("Main", "Output text file: " + Path.GetFullPath(outputTextFullFileName));
 
                     // Add required items to the suppression list so that they are not deleted by RemoveASCOM when it runs
-                    suppressionList.Add("00000001-0000-0000-C000-000000000046");
-                    suppressionList.Add("00000002-0000-0000-C000-000000000046");
+                    guidSuppressionList.Add("00000001-0000-0000-C000-000000000046");
+                    guidSuppressionList.Add("00000002-0000-0000-C000-000000000046");
 
                     // Set up a regular expression for a GUID format e.g.:   Guid("0EF59E5C-2715-4E91-8A5E-38FE388B4F00")
                     // Regular expression groups within the matched GUID:    <-G1-><--------------G2------------------> 
                     // Group 2 picks out the GUID value inside the double quote characters. This is used as m.Groups[2] below
-                    Regex g = new Regex(@"(Guid\(\"")([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})""", RegexOptions.IgnoreCase);
+                    Regex regexGuid = new Regex(@"(Guid\(\"")([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})""", RegexOptions.IgnoreCase);
 
                     // Get a list of all the files with a .cs CSharp extension
                     List<string> files = new List<string>(Directory.GetFiles(sourceSearchPath, "*.cs*", SearchOption.AllDirectories));
@@ -80,13 +88,13 @@ namespace FindGUIDs
                             List<string> lines = new List<string>(File.ReadAllLines(file)); // Get all lines into a list
                             foreach (string line in lines) // Iterate over the list of lines
                             {
-                                Match m = g.Match(line); // Use the regular expression to search for a match
+                                Match m = regexGuid.Match(line); // Use the regular expression to search for a match
                                 if (m.Success) // We have found a GUID
                                 {
                                     try
                                     {
                                         // Check whether this a GUID to suppress
-                                        if (!suppressionList.Contains(m.Groups[2].ToString())) // Not suppressed
+                                        if (!guidSuppressionList.Contains(m.Groups[2].ToString())) // Not suppressed
                                         {
                                             guidList.Add(m.Groups[2].ToString(), Path.GetFullPath(file)); // Add the GUID to the found GUIDs list
                                             TL.LogMessage("Main", "Match: " + m.Groups[2] + " in: " + file);
@@ -104,7 +112,85 @@ namespace FindGUIDs
                             }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("Main", "Exception creating GUID list: " + ex.ToString());
+                }
 
+                string installerTextFileName = @"\Releases\ASCOM 6\Platform\Installer Project\Ascom Platform 6.mia.txt";
+                string installerTextFileFullName = developmentSearchPath + installerTextFileName;
+
+                // Override the source file name if a command line search path is provided
+                if (args.Length > 0)
+                {
+                    installerTextFileFullName = args[0] + installerTextFileName;
+                }
+
+                try
+                {
+
+                    // Set up a regular expression to pick out the file name and install path from an Installaware Install Files line
+                    //                                 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
+                    // Groups within the matched line:               <---------------------------------FileName-------------------------------->    <---------InstallPath---------> 
+                    Regex regexInstallFile = new Regex(@"\s*Install Files\s*(?<FileName>[\w\W]*) to (?<InstallPath>[\w\W]*)", RegexOptions.IgnoreCase);
+
+                    // Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
+                    //                                $COMMONFILES$\ASCOM\Platform\v6
+                    // Group within the matched line: <--CompVar-->
+                    Regex regexInstallerVariables = new Regex(@"\$(?<CompVar>[\w]*)\$.*", RegexOptions.IgnoreCase);
+
+                    TL.LogMessage("Main", "Reading file: " + installerTextFileFullName);
+
+                    List<string> lines = new List<string>(File.ReadAllLines(installerTextFileFullName)); // Get all lines into a list
+                    foreach (string line in lines) // Iterate over the list of lines
+                    {
+                        Match m = regexInstallFile.Match(line); // Use the regular expression to search for a match
+                        if (m.Success) // We have found an installed file
+                        {
+                            TL.LogMessage("Main", "Found installed file: " + m.Groups["FileName"].ToString() + " " + m.Groups["InstallPath"].ToString());
+
+                            // Now check whether it has a variable
+                            Match mVar = regexInstallerVariables.Match(m.Groups["InstallPath"].ToString());
+                            if (mVar.Success) // Yes, we have a compiler variable
+                            {
+                                switch (mVar.Groups["CompVar"].ToString().ToUpper()) // Check that the variable is recognised 
+                                {
+                                    case "TARGETDIR": // These are the recognised variables for files that should be cleaned up by RemoveASCOM
+                                    case "COMMONFILES":
+                                    case "COMMONFILES64":
+                                        TL.LogMessage("Main", "Found: " + mVar.Groups["CompVar"].ToString() + ", including this file");
+                                        string targetFullFileName = m.Groups["InstallPath"].ToString() + @"\" + Path.GetFileName(m.Groups["FileName"].ToString());
+                                        fileList.Add(targetFullFileName);
+                                        break;
+                                    case "WINSYSDIR": // These are the variables used where files should be left in place by RemoveASCOM
+                                    case "WINDIR":
+                                        TL.LogMessage("Main", "Found WINDIR or WINSYSDIR, ignoring this file");
+                                        break;
+                                    default: // Throw an error if a new variable is encountered so that it can be added to one of the preceeding groups.
+                                        TL.LogMessage("Main Error", "ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line);
+                                        MessageBox.Show("ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line,
+                                                        "MakeDynamicLists Build Environment Program", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                        Environment.Exit(1);
+                                        break;
+                                }
+                            }
+                        }
+                        else // This is not an "Install Files" line so ignore it
+                        {
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    TL.LogMessageCrLf("Main", "Exception reading installer text file: " + ex.ToString());
+                }
+
+                //
+                // Create the class file that will be used by the RemoveASCOM program
+                //
+                try
+                {
                     // Create the streamwriter to make the updated GUIDList class file and the readable txt file
                     StreamWriter outputTextFile = new StreamWriter(outputTextFullFileName);
                     StreamWriter outputClassFile = new StreamWriter(outputClassFullFileName);
@@ -112,43 +198,65 @@ namespace FindGUIDs
                     // Add the first lines of the GUID text list
                     outputTextFile.WriteLine(@"This is a list of the GUIDs that will be removed by RemoveASCOM");
                     outputTextFile.WriteLine(" ");
-                    
-                    // Add the first lines of the GUIDList Class
+
+                    // Add the first lines of the DynamicLists class
                     outputClassFile.WriteLine(@"' ***** WARNING ***** WARNING ***** WARNING *****");
                     outputClassFile.WriteLine(" ");
-                    outputClassFile.WriteLine(@"' This class is dynamically generated by the FindGUIDs Program.");
-                    outputClassFile.WriteLine(@"' Do not alter this class, alter the FindGUIDs program instead and your changes will appear when the next build is made.");
+                    outputClassFile.WriteLine(@"' This class is dynamically generated by the MakeDynamicLists Program.");
+                    outputClassFile.WriteLine(@"' Do not alter this class, alter the MakeDynamicLists program instead and your changes will appear when the next build is made.");
                     outputClassFile.WriteLine(" ");
                     outputClassFile.WriteLine("Imports System.Collections.Generic");
                     outputClassFile.WriteLine(" ");
-                    outputClassFile.WriteLine("Class GUIDList");
-                    outputClassFile.WriteLine("    Shared Function Members(TL as TraceLogger) As SortedList(Of String, String)");
-                    outputClassFile.WriteLine("        Dim guids As SortedList(Of String, String)");
-                    outputClassFile.WriteLine("        guids = New SortedList(Of String, String)");
+                    outputClassFile.WriteLine("Class DynamicLists");
+                    outputClassFile.WriteLine("");
 
-                    // Add the GUID lines in the list
+                    // Add the first lines of the GUIDs member
+                    outputClassFile.WriteLine("    Shared Function GUIDs(TL as TraceLogger) As SortedList(Of String, String)");
+                    outputClassFile.WriteLine("        Dim guidList As SortedList(Of String, String)");
+                    outputClassFile.WriteLine("        guidList = New SortedList(Of String, String)");
+
+                    // Add the GUIDs in the list
                     foreach (KeyValuePair<string, string> guid in guidList)
                     {
                         TL.LogMessage("Main", "Adding to class: " + guid.Key + " in: " + guid.Value);
-                        outputClassFile.WriteLine("        Try : guids.Add(\"" + guid.Key + "\", \"" + guid.Value + "\") :TL.LogMessage(\"GUIDLIst\",\"Added GUID: \" + \"" + guid.Key + "\") : Catch ex As ArgumentException : TL.LogMessage(\"GUIDLIst\",\"Duplicate GUID: \" + \"" + guid.Key + "\"):End Try");
+                        outputClassFile.WriteLine("        Try : guidList.Add(\"" + guid.Key + "\", \"" + guid.Value + "\") :TL.LogMessage(\"GUIDs\",\"Added GUID: \" + \"" + guid.Key + "\") : Catch ex As ArgumentException : TL.LogMessage(\"GUIDs\",\"Duplicate GUID: \" + \"" + guid.Key + "\"):End Try");
                         outputTextFile.WriteLine(guid.Key + " defined in: " + guid.Value);
                     }
 
-                    // Add the closgin lines of the class
-                    outputClassFile.WriteLine("        Return guids");
+                    // Add the closing lines of the GUIDs member
+                    outputClassFile.WriteLine("        Return guidList");
                     outputClassFile.WriteLine("    End Function");
+                    outputClassFile.WriteLine("");
+
+                    // Add the first lines of the Files member
+                    outputClassFile.WriteLine("    Shared Function Files(TL as TraceLogger) As SortedSet(Of String)");
+                    outputClassFile.WriteLine("        Dim fileList As SortedSet(Of String)");
+                    outputClassFile.WriteLine("        fileList = New SortedSet(Of String)");
+
+                    // Add the files in the list
+                    foreach (string file in fileList)
+                    {
+                        TL.LogMessage("Main", "Adding to class: " + file);
+                        outputClassFile.WriteLine("        Try : fileList.Add(\"" + file + "\") :TL.LogMessage(\"FileList\",\"Added file: \" + \"" + file + "\") : Catch ex As Exception : TL.LogMessage(\"FileList\",\"Duplicate GUID: \" + \"" + file + "\"):End Try");
+                    }
+
+                    // Add the closing lines of the Files member
+                    outputClassFile.WriteLine("        Return fileList");
+                    outputClassFile.WriteLine("    End Function");
+
+                    // Add the closing lines of the DynamicLists class
+                    outputClassFile.WriteLine("");
                     outputClassFile.WriteLine("End Class");
 
-                    // Close the file
+                    // Close the files
                     outputTextFile.Flush();
                     outputTextFile.Close();
                     outputClassFile.Flush();
                     outputClassFile.Close();
-
                 }
                 catch (Exception ex)
                 {
-                    TL.LogMessageCrLf("Main", "Exception: " + ex.ToString());
+                    TL.LogMessageCrLf("Main", "Exception writing class file: " + ex.ToString());
                 }
             }
 

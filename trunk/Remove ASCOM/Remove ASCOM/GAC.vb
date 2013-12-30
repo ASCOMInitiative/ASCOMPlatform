@@ -177,7 +177,7 @@ End Enum
 '''				for opaque references when you remove this.
 ''' </summary>
 <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Unicode)> _
-Public Structure FUSION_INSTALL_REFERENCE
+Public Structure FusionInstallReference
     Public cbSize As UInteger
     Public dwFlags As UInteger
     Public guidScheme As Guid
@@ -200,7 +200,7 @@ End Structure
 '''		ASSEMBLYINFO_FLAG__PAYLOADRESIDENT - Never set in the current version of the .NET Framework.
 ''' </summary>
 <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Unicode)> _
-Public Structure ASSEMBLY_INFO
+Public Structure AssemblyInfo
     Public cbAssemblyInfo As UInteger
     Public dwAssemblyFlags As UInteger
     Public uliAssemblySizeInKB As ULong
@@ -208,7 +208,7 @@ Public Structure ASSEMBLY_INFO
     Public cchBuf As UInteger
 End Structure
 
-Public Structure REMOVE_OUTCOME
+Public Structure RemoveOutcome
     Public ReturnCode As Integer
     Public Disposition As IASSEMBLYCACHE_UNINSTALL_DISPOSITION
 End Structure
@@ -446,8 +446,8 @@ Public Class AssemblyCache
 
 #End Region
 
-    Public Shared Function RemoveGAC(AssemblyName As String) As REMOVE_OUTCOME
-        Dim retval As New REMOVE_OUTCOME()
+    Public Shared Function RemoveGAC(AssemblyName As String) As RemoveOutcome
+        Dim retval As New RemoveOutcome()
 
         Dim pCache As IAssemblyCache = AssemblyCache.CreateAssemblyCache()
         ' Get an IAssemblyCache interface
@@ -496,7 +496,7 @@ Public Interface IAssemblyCache
     '''			in the GAC.
     '''	</remarks>
     <PreserveSig()> _
-    Function UninstallAssembly(dwFlags As UInteger, <MarshalAs(UnmanagedType.LPWStr)> pszAssemblyName As String, <MarshalAs(UnmanagedType.LPArray)> pRefData As FUSION_INSTALL_REFERENCE(), ByRef pulDisposition As IASSEMBLYCACHE_UNINSTALL_DISPOSITION) As Integer
+    Function UninstallAssembly(dwFlags As UInteger, <MarshalAs(UnmanagedType.LPWStr)> pszAssemblyName As String, <MarshalAs(UnmanagedType.LPArray)> pRefData As FusionInstallReference(), ByRef pulDisposition As IASSEMBLYCACHE_UNINSTALL_DISPOSITION) As Integer
 
     ''' <summary>
     ''' The IAssemblyCache::QueryAssemblyInfo method retrieves information about an assembly from the GAC. 
@@ -510,7 +510,7 @@ Public Interface IAssemblyCache
     ''' <param name="pAsmInfo"></param>
     ''' <returns></returns>
     <PreserveSig()> _
-    Function QueryAssemblyInfo(dwFlags As UInteger, <MarshalAs(UnmanagedType.LPWStr)> pszAssemblyName As String, ByRef pAsmInfo As ASSEMBLY_INFO) As Integer
+    Function QueryAssemblyInfo(dwFlags As UInteger, <MarshalAs(UnmanagedType.LPWStr)> pszAssemblyName As String, ByRef pAsmInfo As AssemblyInfo) As Integer
 
     ''' <summary>
     ''' Undocumented
@@ -546,7 +546,7 @@ Public Interface IAssemblyCache
     ''' without any application reference.</param>
     ''' <returns></returns>
     <PreserveSig()> _
-    Function InstallAssembly(dwFlags As UInteger, <MarshalAs(UnmanagedType.LPWStr)> pszManifestFilePath As String, <MarshalAs(UnmanagedType.LPArray)> pRefData As FUSION_INSTALL_REFERENCE()) As Integer
+    Function InstallAssembly(dwFlags As UInteger, <MarshalAs(UnmanagedType.LPWStr)> pszManifestFilePath As String, <MarshalAs(UnmanagedType.LPArray)> pRefData As FusionInstallReference()) As Integer
 End Interface
 
 
@@ -710,7 +710,7 @@ Public Interface IInstallReferenceItem
     ''' <param name="pvReserved">Must be null.</param>
     ''' <returns></returns>
     <PreserveSig()> _
-    Function GetReference(<MarshalAs(UnmanagedType.LPArray)> ByRef ppRefData As FUSION_INSTALL_REFERENCE(), dwFlags As UInteger, pvReserved As IntPtr) As Integer
+    Function GetReference(<MarshalAs(UnmanagedType.LPArray)> ByRef ppRefData As FusionInstallReference(), dwFlags As UInteger, pvReserved As IntPtr) As Integer
 End Interface
 
 
