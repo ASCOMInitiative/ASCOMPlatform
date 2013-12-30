@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FindGUIDs")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Make Dynamic Lists")]
+[assembly: AssemblyDescription("Makes dynamic lists of GUIDs and installed files from the Platform source. Is run only within the Build environment.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FindGUIDs")]
+[assembly: AssemblyCompany("ASCOM Initiative")]
+[assembly: AssemblyProduct("MakeDynamicLists")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
