@@ -151,6 +151,7 @@ namespace MakeDynamicLists
                     outputClassFile.WriteLine(@"' Do not alter this class, alter the MakeDynamicLists program instead and your changes will appear when the next build is made.");
                     outputClassFile.WriteLine(" ");
                     outputClassFile.WriteLine("Imports System.Collections.Generic");
+                    outputClassFile.WriteLine("Imports System.IO");
                     outputClassFile.WriteLine(" ");
                     outputClassFile.WriteLine("Class DynamicLists");
                     outputClassFile.WriteLine("");
@@ -182,7 +183,7 @@ namespace MakeDynamicLists
                     foreach (string file in platformFileList)
                     {
                         TL.LogMessage("Main", "Adding to class: " + file);
-                        outputClassFile.WriteLine("        Try : fileList.Add(\"" + file + "\") :TL.LogMessage(\"PlatformFiles\",\"Added file: \" + \"" + file + "\") : Catch ex As Exception : TL.LogMessage(\"PlatformFiles\",\"Exception: \" + ex.ToString()):End Try");
+                        outputClassFile.WriteLine("        Try : fileList.Add(\"" + file + "\") :TL.LogMessage(\"PlatformFiles\",\"Added file: " + file + "\") : Catch ex As Exception : TL.LogMessage(\"PlatformFiles\",\"Exception: \" + ex.ToString()):End Try");
                     }
 
                     // Add the closing lines of the PlatformFiles member
@@ -200,7 +201,7 @@ namespace MakeDynamicLists
                     foreach (string file in developerFileList)
                     {
                         TL.LogMessage("Main", "Adding to class: " + file);
-                        outputClassFile.WriteLine("        Try : fileList.Add(\"" + file + "\") :TL.LogMessage(\"DeveloperFiles\",\"Added file: \" + \"" + file + "\") : Catch ex As Exception : TL.LogMessage(\"DeveloperFiles\",\"Exception: \" + ex.ToString()):End Try");
+                        outputClassFile.WriteLine("        Try : fileList.Add(\"" + file + "\") :TL.LogMessage(\"DeveloperFiles\",\"Added file: " + file + "\") : Catch ex As Exception : TL.LogMessage(\"PlatformFiles\",\"Exception: \" + ex.ToString()):End Try");
                     }
 
                     // Add the closing lines of the DeveloperFiles member

@@ -880,7 +880,9 @@ Public Class Form1
             TargetFile = New FileInfo(FileName)
             TargetFile.Attributes = FileAttributes.Normal
             TargetFile.Delete()
-            TL.LogMessage("RemoveFile", "Removed OK - " & FileName)
+            TL.LogMessage("RemoveFile", "Removed OK: " & FileName)
+        Catch ex As FileNotFoundException
+            TL.LogMessage("RemoveFile", "Not found:  " + FileName)
         Catch ex As Exception
             TL.LogMessageCrLf("RemoveFile", "ISSUE - " & FileName & ", Exception: " & ex.ToString)
         End Try
