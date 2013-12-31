@@ -130,8 +130,8 @@
 
     <!-- Build FindGUIDs after cleaning the solution (just in case executables get committed to SVN) -->
     <!-- This builds the GUIDList.vb file ready to be incorporated into RemoveASCOM when it is built as part of the Platform -->
-    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=FindGUIDs;Platform=Any CPU" />
-    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=FindGUIDs;Platform=Any CPU" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Clean" Properties="Configuration=MakeDynamicLists;Platform=Any CPU" />
+    <MSBuild Projects="$(CheckoutDirectory)\$(PlatformVSSolution)" Targets="Build" Properties="Configuration=MakeDynamicLists;Platform=Any CPU" />
 
     <!-- Run FindGUIDs to create the updated class in the RemoveASCOM project that contains the list of GUIDs used by the project -->
     <Exec Command='"$(CheckoutDirectory)\$(FindGUIDsDirectory)\MakeDynamicLists.exe" "$(CheckoutDirectory)" ' />

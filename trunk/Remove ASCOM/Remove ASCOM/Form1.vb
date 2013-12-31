@@ -44,6 +44,8 @@ Public Class Form1
     Const REMOVE_ALL_CONFIRMATION_MESSAGE As String = "Are you sure you want to FORCE remove your entire ASCOM Platform, Profile and 3rd Party drivers?"
     Const REMOVAL_COMPLETE_MESSAGE As String = "The current Platform has been removed, press OK to continue with new Platform installation"
 
+    Const ASCOM_TARGET_DIRECTORY As String = "\ASCOM\Platform 6"
+
 #Region "Event handlers"
 
     ''' <summary>
@@ -459,7 +461,7 @@ Public Class Form1
 
         ' Set up variables once so they can be used many times
         If Is64Bit() Then ' Set variables for when we are running on a 64bit OS
-            TargetDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & "\ASCOM"
+            TargetDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & ASCOM_TARGET_DIRECTORY
             CommonFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86)
             CommonFiles64 = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles)
 
@@ -468,7 +470,7 @@ Public Class Form1
             TL.LogMessage("RemovePlatformFiles", "CommonFiles: " & CommonFiles)
             TL.LogMessage("RemovePlatformFiles", "CommonFiles64: " & CommonFiles64)
         Else ' Set variables for when we are running on a 32bit OS
-            TargetDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\ASCOM"
+            TargetDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & ASCOM_TARGET_DIRECTORY
             CommonFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles)
             CommonFiles64 = "Not set"
 
