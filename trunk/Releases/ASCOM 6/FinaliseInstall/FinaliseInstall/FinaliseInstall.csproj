@@ -70,12 +70,6 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\..\..\ASCOM.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FindGUIDs|x86'">
-    <OutputPath>bin\x86\FindGUIDs\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FindGUIDs|AnyCPU'">
-    <OutputPath>bin\FindGUIDs\</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
