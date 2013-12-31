@@ -31,7 +31,7 @@ Public Class Form1
     Dim REMOVE_INSTALLER_BACK_COLOUR As Color = Color.Yellow
     Dim REMOVE_INSTALLER_FORE_COLOUR As Color = Color.Black
     Const REMOVE_INSTALLER_TEXT As String = vbCrLf & "WARNING!" & vbCrLf & vbCrLf & _
-                                            "Proceeding will remove the ASCOM Platform and its installer." & vbCrLf & vbCrLf &
+                                            "This option will remove the ASCOM Platform and its installer." & vbCrLf & vbCrLf &
                                             "If unsuccessful, use the """ & REMOVE_ALL_COMBO_TEXT & """ option as a last resort"
     Const REMOVE_INSTALLER_CONFIRMATION_MESSAGE = "Are you sure you want to remove your ASCOM Platform?"
 
@@ -451,6 +451,7 @@ Public Class Form1
 
         TL.LogMessage("RemovePlatformFiles", "Started")
         Status("Removing Platform files")
+
         ' Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
         '                                $COMMONFILES$\ASCOM\Platform\v6
         ' Group within the matched line: <--CompVar-->
@@ -486,14 +487,14 @@ Public Class Form1
                 If mVar.Success Then ' We have found a compiler variable so process it
                     Select Case mVar.Groups("CompVar").ToString().ToUpper()
                         Case "TARGETDIR"
-                            fileFullName.Replace("$TARGETDIR$", TargetDirectory)
+                            fileFullName = fileFullName.Replace("$TARGETDIR$", TargetDirectory)
                             DeleteFile(fileFullName)
                         Case "COMMONFILES"
-                            fileFullName.Replace("$COMMONFILES$", CommonFiles)
+                            fileFullName = fileFullName.Replace("$COMMONFILES$", CommonFiles)
                             DeleteFile(fileFullName)
                         Case "COMMONFILES64"
                             If Is64Bit() Then
-                                fileFullName.Replace("$COMMONFILES64$", CommonFiles64)
+                                fileFullName = fileFullName.Replace("$COMMONFILES64$", CommonFiles64)
                                 DeleteFile(fileFullName)
                             Else
                                 TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable because this is a OS.")
@@ -839,7 +840,7 @@ Public Class Form1
             TargetFile = New FileInfo(FileName)
             TargetFile.Attributes = FileAttributes.Normal
             TargetFile.Delete()
-            TL.LogMessage("RemoveFile", "OK - " & FileName)
+            TL.LogMessage("RemoveFile", "Removed OK - " & FileName)
         Catch ex As Exception
             TL.LogMessageCrLf("RemoveFile", "ISSUE - " & FileName & ", Exception: " & ex.ToString)
         End Try
