@@ -131,9 +131,9 @@ namespace MakeDynamicLists
                 {
 
                     // Set up a regular expression to pick out the file name and install path from an Installaware Install Files line
-                    //                                 Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
-                    // Groups within the matched line:               <---------------------------------FileName-------------------------------->    <---------InstallPath---------> 
-                    Regex regexInstallFile = new Regex(@"\s*Install Files\s*(?<FileName>[\w\W]*) to (?<InstallPath>[\w\W]*)", RegexOptions.IgnoreCase);
+                    //                                 Comment: Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
+                    // Groups within the matched line: <Comment>              <---------------------------------FileName-------------------------------->    <---------InstallPath---------> 
+                    Regex regexInstallFile = new Regex(@"\s*(?<Comment>[\S]*)\s*Install Files\s*(?<FileName>[\S]*) to (?<InstallPath>[\S]*)", RegexOptions.IgnoreCase);
 
                     // Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
                     //                                $COMMONFILES$\ASCOM\Platform\v6
@@ -148,37 +148,45 @@ namespace MakeDynamicLists
                         Match m = regexInstallFile.Match(line); // Use the regular expression to search for a match
                         if (m.Success) // We have found an installed file
                         {
-                            TL.LogMessage("Main", "Found installed file: " + m.Groups["FileName"].ToString() + " " + m.Groups["InstallPath"].ToString());
-
-                            // Now check whether it has a variable
-                            Match mVar = regexInstallerVariables.Match(m.Groups["InstallPath"].ToString());
-                            if (mVar.Success) // Yes, we have a compiler variable
+                            if (!m.Groups["Comment"].ToString().ToUpper().Contains("COMMENT:")) // Process non comment lines
                             {
-                                switch (mVar.Groups["CompVar"].ToString().ToUpper()) // Check that the variable is recognised 
+                                TL.LogMessage("Main", "Found installed file: " + m.Groups["FileName"].ToString() + " " + m.Groups["InstallPath"].ToString());
+
+                                // Now check whether it has a variable
+                                Match mVar = regexInstallerVariables.Match(m.Groups["InstallPath"].ToString());
+                                if (mVar.Success) // Yes, we have a compiler variable
                                 {
-                                    case "TARGETDIR": // These are the recognised variables for files that should be cleaned up by RemoveASCOM
-                                    case "COMMONFILES":
-                                    case "COMMONFILES64":
-                                        TL.LogMessage("Main", "Found: " + mVar.Groups["CompVar"].ToString() + ", including this file");
-                                        string targetFullFileName = m.Groups["InstallPath"].ToString() + @"\" + Path.GetFileName(m.Groups["FileName"].ToString());
-                                        fileList.Add(targetFullFileName);
-                                        break;
-                                    case "WINSYSDIR": // These are the variables used where files should be left in place by RemoveASCOM
-                                    case "WINDIR":
-                                        TL.LogMessage("Main", "Found WINDIR or WINSYSDIR, ignoring this file");
-                                        break;
-                                    default: // Throw an error if a new variable is encountered so that it can be added to one of the preceeding groups.
-                                        TL.LogMessage("Main Error", "ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line);
-                                        MessageBox.Show("ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line,
-                                                        "MakeDynamicLists Build Environment Program", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                        Environment.Exit(1);
-                                        break;
+                                    switch (mVar.Groups["CompVar"].ToString().ToUpper()) // Check that the variable is recognised 
+                                    {
+                                        case "TARGETDIR": // These are the recognised variables for files that should be cleaned up by RemoveASCOM
+                                        case "COMMONFILES":
+                                        case "COMMONFILES64":
+                                            TL.LogMessage("Main", "Found: " + mVar.Groups["CompVar"].ToString() + ", including this file");
+                                            string targetFullFileName = m.Groups["InstallPath"].ToString() + @"\" + Path.GetFileName(m.Groups["FileName"].ToString());
+                                            fileList.Add(targetFullFileName);
+                                            break;
+                                        case "WINSYSDIR": // These are the variables used where files should be left in place by RemoveASCOM
+                                        case "WINDIR":
+                                            TL.LogMessage("Main", "Found WINDIR or WINSYSDIR, ignoring this file");
+                                            break;
+                                        default: // Throw an error if a new variable is encountered so that it can be added to one of the preceeding groups.
+                                            TL.LogMessage("Main Error", "ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line);
+                                            MessageBox.Show("ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line,
+                                                            "MakeDynamicLists Build Environment Program", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                            Environment.Exit(1);
+                                            break;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                TL.LogMessage("Main", "Ignoring comment line: " + line);
                             }
                         }
                         else // This is not an "Install Files" line so ignore it
                         {
                         }
+
                     }
                 }
                 catch (Exception ex)
