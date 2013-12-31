@@ -27,11 +27,15 @@ namespace MakeDynamicLists
             string devlopmentPath = developmentSearchPath + outputPath;
             string outputClassFileName = @"DynamicLists.vb";
             string outputTextFileName = @"GUIDList.txt";
+            string platformInstallerTextFileName = @"\Releases\ASCOM 6\Platform\Installer Project\Ascom Platform 6.mia.txt";
+            string developerInstallerTextFileName = @"\Releases\ASCOM 6\Developer\Installer Project\ASCOM Platform 6 Developer.mia.txt";
 
             // Construct the development environment values
             string sourceSearchPath = developmentSearchPath;
             string outputClassFullFileName = devlopmentPath + outputClassFileName;
             string outputTextFullFileName = devlopmentPath + outputTextFileName;
+            string platformInstallerTextFileFullName = developmentSearchPath + platformInstallerTextFileName;
+            string developerInstallerTextFileFullName = developmentSearchPath + developerInstallerTextFileName;
 
             // Storage for the GUIDs found and a suppression list of GUIDs that should be left undisturbed
             SortedList<string, string> guidList = new SortedList<string, string>();
@@ -56,6 +60,8 @@ namespace MakeDynamicLists
                         sourceSearchPath = args[0];
                         outputClassFullFileName = args[0] + outputPath + outputClassFileName;
                         outputTextFullFileName = args[0] + outputPath + outputTextFileName;
+                        platformInstallerTextFileFullName = args[0] + platformInstallerTextFileName;
+                        developerInstallerTextFileFullName = args[0] + developerInstallerTextFileName;
                     }
 
                     TL.LogMessage("Main", "Search path: " + Path.GetFullPath(sourceSearchPath));
@@ -117,15 +123,7 @@ namespace MakeDynamicLists
                 {
                     TL.LogMessageCrLf("Main", "Exception creating GUID list: " + ex.ToString());
                 }
-
-                string installerTextFileName = @"\Releases\ASCOM 6\Platform\Installer Project\Ascom Platform 6.mia.txt";
-                string installerTextFileFullName = developmentSearchPath + installerTextFileName;
-
-                // Override the source file name if a command line search path is provided
-                if (args.Length > 0)
-                {
-                    installerTextFileFullName = args[0] + installerTextFileName;
-                }
+                TL.BlankLine();
 
                 try
                 {
@@ -133,17 +131,21 @@ namespace MakeDynamicLists
                     // Set up a regular expression to pick out the file name and install path from an Installaware Install Files line
                     //                                 Comment: Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
                     // Groups within the matched line: <Comment>              <---------------------------------FileName-------------------------------->    <---------InstallPath---------> 
-                    Regex regexInstallFile = new Regex(@"\s*(?<Comment>[\S]*)\s*Install Files\s*(?<FileName>[\S]*) to (?<InstallPath>[\S]*)", RegexOptions.IgnoreCase);
+                    Regex regexInstallFile = new Regex(@"\s*(?<Comment>[\w\W]*)\sInstall Files\s*(?<FileName>[\w\W]*) to (?<InstallPath>[\w\W]*)", RegexOptions.IgnoreCase);
 
                     // Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
                     //                                $COMMONFILES$\ASCOM\Platform\v6
                     // Group within the matched line: <--CompVar-->
                     Regex regexInstallerVariables = new Regex(@"\$(?<CompVar>[\w]*)\$.*", RegexOptions.IgnoreCase);
 
-                    TL.LogMessage("Main", "Reading file: " + installerTextFileFullName);
+                    // Create the list of installer lines to be processed
+                    TL.LogMessage("Main", "Reading Platform installer file: " + platformInstallerTextFileFullName);
+                    List<string> lines = new List<string>(File.ReadAllLines(platformInstallerTextFileFullName)); // Get all Platform installer lines into a list
+                    TL.LogMessage("Main", "Adding developer installer file: " + developerInstallerTextFileFullName);
+                    lines.AddRange(File.ReadAllLines(developerInstallerTextFileFullName)); // Add the Developer installer lines as well
 
-                    List<string> lines = new List<string>(File.ReadAllLines(installerTextFileFullName)); // Get all lines into a list
-                    foreach (string line in lines) // Iterate over the list of lines
+                    // Iterate over the list of lines identifying "Install File" lines and recording them for use by the RemoveASCOM program
+                    foreach (string line in lines) 
                     {
                         Match m = regexInstallFile.Match(line); // Use the regular expression to search for a match
                         if (m.Success) // We have found an installed file
