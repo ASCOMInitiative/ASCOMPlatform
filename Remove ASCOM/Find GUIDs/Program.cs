@@ -41,8 +41,9 @@ namespace MakeDynamicLists
             SortedList<string, string> guidList = new SortedList<string, string>();
             List<string> guidSuppressionList = new List<string>();
 
-            // Storage for the list of files installed by the Platform
-            SortedSet<string> fileList = new SortedSet<string>();
+            // Storage for the lists of files installed by the Platform
+            SortedSet<string> platformFileList = new SortedSet<string>();
+            SortedSet<string> developerFileList = new SortedSet<string>();
 
             using (TraceLogger TL = new TraceLogger("", "MakeDynamicLists"))
             {
@@ -125,76 +126,10 @@ namespace MakeDynamicLists
                 }
                 TL.BlankLine();
 
-                try
-                {
-
-                    // Set up a regular expression to pick out the file name and install path from an Installaware Install Files line
-                    //                                 Comment: Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
-                    // Groups within the matched line: <Comment>              <---------------------------------FileName-------------------------------->    <---------InstallPath---------> 
-                    Regex regexInstallFile = new Regex(@"\s*(?<Comment>[\w\W]*)\sInstall Files\s*(?<FileName>[\w\W]*) to (?<InstallPath>[\w\W]*)", RegexOptions.IgnoreCase);
-
-                    // Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
-                    //                                $COMMONFILES$\ASCOM\Platform\v6
-                    // Group within the matched line: <--CompVar-->
-                    Regex regexInstallerVariables = new Regex(@"\$(?<CompVar>[\w]*)\$.*", RegexOptions.IgnoreCase);
-
-                    // Create the list of installer lines to be processed
-                    TL.LogMessage("Main", "Reading Platform installer file: " + platformInstallerTextFileFullName);
-                    List<string> lines = new List<string>(File.ReadAllLines(platformInstallerTextFileFullName)); // Get all Platform installer lines into a list
-                    TL.LogMessage("Main", "Adding developer installer file: " + developerInstallerTextFileFullName);
-                    lines.AddRange(File.ReadAllLines(developerInstallerTextFileFullName)); // Add the Developer installer lines as well
-
-                    // Iterate over the list of lines identifying "Install File" lines and recording them for use by the RemoveASCOM program
-                    foreach (string line in lines) 
-                    {
-                        Match m = regexInstallFile.Match(line); // Use the regular expression to search for a match
-                        if (m.Success) // We have found an installed file
-                        {
-                            if (!m.Groups["Comment"].ToString().ToUpper().Contains("COMMENT:")) // Process non comment lines
-                            {
-                                TL.LogMessage("Main", "Found installed file: " + m.Groups["FileName"].ToString() + " " + m.Groups["InstallPath"].ToString());
-
-                                // Now check whether it has a variable
-                                Match mVar = regexInstallerVariables.Match(m.Groups["InstallPath"].ToString());
-                                if (mVar.Success) // Yes, we have a compiler variable
-                                {
-                                    switch (mVar.Groups["CompVar"].ToString().ToUpper()) // Check that the variable is recognised 
-                                    {
-                                        case "TARGETDIR": // These are the recognised variables for files that should be cleaned up by RemoveASCOM
-                                        case "COMMONFILES":
-                                        case "COMMONFILES64":
-                                            TL.LogMessage("Main", "Found: " + mVar.Groups["CompVar"].ToString() + ", including this file");
-                                            string targetFullFileName = m.Groups["InstallPath"].ToString() + @"\" + Path.GetFileName(m.Groups["FileName"].ToString());
-                                            fileList.Add(targetFullFileName);
-                                            break;
-                                        case "WINSYSDIR": // These are the variables used where files should be left in place by RemoveASCOM
-                                        case "WINDIR":
-                                            TL.LogMessage("Main", "Found WINDIR or WINSYSDIR, ignoring this file");
-                                            break;
-                                        default: // Throw an error if a new variable is encountered so that it can be added to one of the preceeding groups.
-                                            TL.LogMessage("Main Error", "ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line);
-                                            MessageBox.Show("ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line,
-                                                            "MakeDynamicLists Build Environment Program", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                            Environment.Exit(1);
-                                            break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                TL.LogMessage("Main", "Ignoring comment line: " + line);
-                            }
-                        }
-                        else // This is not an "Install Files" line so ignore it
-                        {
-                        }
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    TL.LogMessageCrLf("Main", "Exception reading installer text file: " + ex.ToString());
-                }
+                // Create lists of "Install Files" lines in the Platform and Developer installer scripts
+                platformFileList = FindInstalledFiles(platformInstallerTextFileFullName, TL); // Lines from the Platform installer
+                developerFileList = FindInstalledFiles(developerInstallerTextFileFullName, TL); // Lines from the Developer installer.
+                TL.BlankLine();
 
                 //
                 // Create the class file that will be used by the RemoveASCOM program
@@ -238,24 +173,42 @@ namespace MakeDynamicLists
                     outputClassFile.WriteLine("    End Function");
                     outputClassFile.WriteLine("");
 
-                    // Add the first lines of the Files member
-                    outputClassFile.WriteLine("    Shared Function Files(TL as TraceLogger) As SortedSet(Of String)");
+                    // Add the first lines of the PlatformFiles member
+                    outputClassFile.WriteLine("    Shared Function PlatformFiles(TL as TraceLogger) As SortedSet(Of String)");
                     outputClassFile.WriteLine("        Dim fileList As SortedSet(Of String)");
                     outputClassFile.WriteLine("        fileList = New SortedSet(Of String)");
 
                     // Add the files in the list
-                    foreach (string file in fileList)
+                    foreach (string file in platformFileList)
                     {
                         TL.LogMessage("Main", "Adding to class: " + file);
-                        outputClassFile.WriteLine("        Try : fileList.Add(\"" + file + "\") :TL.LogMessage(\"FileList\",\"Added file: \" + \"" + file + "\") : Catch ex As Exception : TL.LogMessage(\"FileList\",\"Duplicate GUID: \" + \"" + file + "\"):End Try");
+                        outputClassFile.WriteLine("        Try : fileList.Add(\"" + file + "\") :TL.LogMessage(\"PlatformFiles\",\"Added file: \" + \"" + file + "\") : Catch ex As Exception : TL.LogMessage(\"PlatformFiles\",\"Exception: \" + ex.ToString()):End Try");
                     }
 
-                    // Add the closing lines of the Files member
+                    // Add the closing lines of the PlatformFiles member
                     outputClassFile.WriteLine("        Return fileList");
                     outputClassFile.WriteLine("    End Function");
+                    outputClassFile.WriteLine("");
+
+
+                    // Add the first lines of the DeveloperFiles member
+                    outputClassFile.WriteLine("    Shared Function DeveloperFiles(TL as TraceLogger) As SortedSet(Of String)");
+                    outputClassFile.WriteLine("        Dim fileList As SortedSet(Of String)");
+                    outputClassFile.WriteLine("        fileList = New SortedSet(Of String)");
+
+                    // Add the files in the list
+                    foreach (string file in developerFileList)
+                    {
+                        TL.LogMessage("Main", "Adding to class: " + file);
+                        outputClassFile.WriteLine("        Try : fileList.Add(\"" + file + "\") :TL.LogMessage(\"DeveloperFiles\",\"Added file: \" + \"" + file + "\") : Catch ex As Exception : TL.LogMessage(\"DeveloperFiles\",\"Exception: \" + ex.ToString()):End Try");
+                    }
+
+                    // Add the closing lines of the DeveloperFiles member
+                    outputClassFile.WriteLine("        Return fileList");
+                    outputClassFile.WriteLine("    End Function");
+                    outputClassFile.WriteLine("");
 
                     // Add the closing lines of the DynamicLists class
-                    outputClassFile.WriteLine("");
                     outputClassFile.WriteLine("End Class");
 
                     // Close the files
@@ -270,6 +223,83 @@ namespace MakeDynamicLists
                 }
             }
 
+        }
+
+        static SortedSet<string> FindInstalledFiles(string installerTextFileFullName, TraceLogger TL)
+        {
+            SortedSet<String> fileList; // Variable to hold the returned list of Install File lines
+
+            try
+            {
+                fileList = new SortedSet<string>(); // Create a SortedSet to hold the lines returned
+
+                // Set up a regular expression to pick out the file name and install path from an Installaware Install Files line
+                //                                 Comment: Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\bin\Release\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\Platform\v6
+                // Groups within the matched line: <Comment>              <---------------------------------FileName-------------------------------->    <---------InstallPath---------> 
+                Regex regexInstallFile = new Regex(@"\s*(?<Comment>[\w\W]*)\sInstall Files\s*(?<FileName>[\w\W]*) to (?<InstallPath>[\w\W]*)", RegexOptions.IgnoreCase);
+
+                // Set up a regular expression to pick out the compiler variable from the InstallPath part of an Installaware Install Files line
+                //                                $COMMONFILES$\ASCOM\Platform\v6
+                // Group within the matched line: <--CompVar-->
+                Regex regexInstallerVariables = new Regex(@"\$(?<CompVar>[\w]*)\$.*", RegexOptions.IgnoreCase);
+
+                // Create the list of installer lines to be processed
+                TL.LogMessage("FindInstalledFiles", "Reading installer file: " + installerTextFileFullName);
+                List<string> lines = new List<string>(File.ReadAllLines(installerTextFileFullName)); // Get all Platform installer lines into a list
+
+                // Iterate over the list of lines identifying "Install File" lines and recording them for use by the RemoveASCOM program
+                foreach (string line in lines)
+                {
+                    Match m = regexInstallFile.Match(line); // Use the regular expression to search for a match
+                    if (m.Success) // We have found an installed file
+                    {
+                        if (!m.Groups["Comment"].ToString().ToUpper().Contains("COMMENT:")) // Process non comment lines
+                        {
+                            TL.LogMessage("FindInstalledFiles", "Found installed file: " + m.Groups["FileName"].ToString() + " " + m.Groups["InstallPath"].ToString());
+
+                            // Now check whether it has a variable
+                            Match mVar = regexInstallerVariables.Match(m.Groups["InstallPath"].ToString());
+                            if (mVar.Success) // Yes, we have a compiler variable
+                            {
+                                switch (mVar.Groups["CompVar"].ToString().ToUpper()) // Check that the variable is recognised 
+                                {
+                                    case "TARGETDIR": // These are the recognised variables for files that should be cleaned up by RemoveASCOM
+                                    case "COMMONFILES":
+                                    case "COMMONFILES64":
+                                        TL.LogMessage("Main", "Found: " + mVar.Groups["CompVar"].ToString() + ", including this file");
+                                        string targetFullFileName = m.Groups["InstallPath"].ToString() + @"\" + Path.GetFileName(m.Groups["FileName"].ToString());
+                                        fileList.Add(targetFullFileName);
+                                        break;
+                                    case "WINSYSDIR": // These are the variables used where files should be left in place by RemoveASCOM
+                                    case "WINDIR":
+                                        TL.LogMessage("Main", "Found WINDIR or WINSYSDIR, ignoring this file");
+                                        break;
+                                    default: // Throw an error if a new variable is encountered so that it can be added to one of the preceeding groups.
+                                        TL.LogMessage("FindInstalledFiles", "ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line);
+                                        MessageBox.Show("ERROR - Found UNKNOWN COMPILER VARIABLE: " + mVar.Groups["CompVar"].ToString() + " in line: " + line,
+                                                        "MakeDynamicLists Build Environment Program", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                        Environment.Exit(1);
+                                        break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            TL.LogMessage("FindInstalledFiles", "Ignoring comment line: " + line);
+                        }
+                    }
+                    else // This is not an "Install Files" line so ignore it
+                    {
+                    }
+                }
+
+                return fileList;
+            }
+            catch (Exception ex)
+            {
+                TL.LogMessageCrLf("FindInstalledFiles", "Exception reading installer text file: " + ex.ToString());
+                return new SortedSet<string>();
+            }
         }
     }
 }

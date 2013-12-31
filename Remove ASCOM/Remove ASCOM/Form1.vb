@@ -44,7 +44,8 @@ Public Class Form1
     Const REMOVE_ALL_CONFIRMATION_MESSAGE As String = "Are you sure you want to FORCE remove your entire ASCOM Platform, Profile and 3rd Party drivers?"
     Const REMOVAL_COMPLETE_MESSAGE As String = "The current Platform has been removed, press OK to continue with new Platform installation"
 
-    Const ASCOM_TARGET_DIRECTORY As String = "\ASCOM\Platform 6"
+    Const ASCOM_TARGET_DIRECTORY_PLATFORM As String = "\ASCOM\Platform 6"
+    Const ASCOM_TARGET_DIRECTORY_DEVELOPER As String = "\ASCOM\Platform 6 Developer Components"
 
 #Region "Event handlers"
 
@@ -449,7 +450,7 @@ Public Class Form1
         Dim regexInstallerVariables As Regex
         Dim mVar As Match
 
-        Dim CommonFiles, CommonFiles64, TargetDirectory As String
+        Dim CommonFiles, CommonFiles64, TargetDirectoryPlatform, TargetDirectoryDeveloper As String
 
         TL.LogMessage("RemovePlatformFiles", "Started")
         Status("Removing Platform files")
@@ -461,27 +462,29 @@ Public Class Form1
 
         ' Set up variables once so they can be used many times
         If Is64Bit() Then ' Set variables for when we are running on a 64bit OS
-            TargetDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & ASCOM_TARGET_DIRECTORY
+            TargetDirectoryPlatform = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & ASCOM_TARGET_DIRECTORY_PLATFORM
+            TargetDirectoryDeveloper = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & ASCOM_TARGET_DIRECTORY_DEVELOPER
             CommonFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86)
             CommonFiles64 = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles)
 
             TL.LogMessage("RemovePlatformFiles", "This is a 64bit OS")
-            TL.LogMessage("RemovePlatformFiles", "TargetDirectory: " & TargetDirectory)
+            TL.LogMessage("RemovePlatformFiles", "TargetDirectory: " & TargetDirectoryPlatform)
             TL.LogMessage("RemovePlatformFiles", "CommonFiles: " & CommonFiles)
             TL.LogMessage("RemovePlatformFiles", "CommonFiles64: " & CommonFiles64)
         Else ' Set variables for when we are running on a 32bit OS
-            TargetDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & ASCOM_TARGET_DIRECTORY
+            TargetDirectoryPlatform = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & ASCOM_TARGET_DIRECTORY_PLATFORM
+            TargetDirectoryDeveloper = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & ASCOM_TARGET_DIRECTORY_DEVELOPER
             CommonFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles)
             CommonFiles64 = "Not set"
 
             TL.LogMessage("RemovePlatformFiles", "This is a 32bit OS")
-            TL.LogMessage("RemovePlatformFiles", "TargetDirectory: " & TargetDirectory)
+            TL.LogMessage("RemovePlatformFiles", "TargetDirectory: " & TargetDirectoryPlatform)
             TL.LogMessage("RemovePlatformFiles", "CommonFiles: " & CommonFiles)
             TL.LogMessage("RemovePlatformFiles", "CommonFiles64: " & CommonFiles64)
         End If
 
-        ' Iterate of the list of files, convert compiler variables to real values on this system and remove the files
-        For Each fileFullName As String In DynamicLists.Files(TL)
+        ' Iterate of the list of Platform files, convert compiler variables to real values on this system and remove the files
+        For Each fileFullName As String In DynamicLists.PlatformFiles(TL)
             Try
                 Action("Removing file: " & fileFullName)
                 TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
@@ -489,7 +492,7 @@ Public Class Form1
                 If mVar.Success Then ' We have found a compiler variable so process it
                     Select Case mVar.Groups("CompVar").ToString().ToUpper()
                         Case "TARGETDIR"
-                            fileFullName = fileFullName.Replace("$TARGETDIR$", TargetDirectory)
+                            fileFullName = fileFullName.Replace("$TARGETDIR$", TargetDirectoryPlatform)
                             DeleteFile(fileFullName)
                         Case "COMMONFILES"
                             fileFullName = fileFullName.Replace("$COMMONFILES$", CommonFiles)
@@ -512,6 +515,41 @@ Public Class Form1
                 TL.LogMessageCrLf("", "Exception: " & ex.ToString())
             End Try
         Next
+        TL.BlankLine()
+
+        ' Iterate of the list of Developer files, convert compiler variables to real values on this system and remove the files
+        For Each fileFullName As String In DynamicLists.DeveloperFiles(TL)
+            Try
+                Action("Removing file: " & fileFullName)
+                TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
+                mVar = regexInstallerVariables.Match(fileFullName)
+                If mVar.Success Then ' We have found a compiler variable so process it
+                    Select Case mVar.Groups("CompVar").ToString().ToUpper()
+                        Case "TARGETDIR"
+                            fileFullName = fileFullName.Replace("$TARGETDIR$", TargetDirectoryDeveloper)
+                            DeleteFile(fileFullName)
+                        Case "COMMONFILES"
+                            fileFullName = fileFullName.Replace("$COMMONFILES$", CommonFiles)
+                            DeleteFile(fileFullName)
+                        Case "COMMONFILES64"
+                            If Is64Bit() Then
+                                fileFullName = fileFullName.Replace("$COMMONFILES64$", CommonFiles64)
+                                DeleteFile(fileFullName)
+                            Else
+                                TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable because this is a OS.")
+                            End If
+                        Case Else ' Unrecognised compiler variable so log an error
+                            TL.LogMessage("RemovePlatformFiles", "***** UNKNOWN Compiler Variable: " & mVar.Groups("CompVar").ToString() & " in file: " & fileFullName)
+                    End Select
+                Else
+                    TL.LogMessage("RemovePlatformFiles", "***** NO Compiler Variable in file: " & fileFullName)
+                End If
+                TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
+            Catch ex As Exception
+                TL.LogMessageCrLf("", "Exception: " & ex.ToString())
+            End Try
+        Next
+
         TL.LogMessage("RemovePlatformFiles", "Completed")
     End Sub
 
