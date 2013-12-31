@@ -487,7 +487,7 @@ Public Class Form1
         For Each fileFullName As String In DynamicLists.PlatformFiles(TL)
             Try
                 Action("Removing file: " & fileFullName)
-                TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
+                'TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
                 mVar = regexInstallerVariables.Match(fileFullName)
                 If mVar.Success Then ' We have found a compiler variable so process it
                     Select Case mVar.Groups("CompVar").ToString().ToUpper()
@@ -502,7 +502,7 @@ Public Class Form1
                                 fileFullName = fileFullName.Replace("$COMMONFILES64$", CommonFiles64)
                                 DeleteFile(fileFullName)
                             Else
-                                TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable because this is a OS.")
+                                TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable: " & fileFullName)
                             End If
                         Case Else ' Unrecognised compiler variable so log an error
                             TL.LogMessage("RemovePlatformFiles", "***** UNKNOWN Compiler Variable: " & mVar.Groups("CompVar").ToString() & " in file: " & fileFullName)
@@ -510,7 +510,7 @@ Public Class Form1
                 Else
                     TL.LogMessage("RemovePlatformFiles", "***** NO Compiler Variable in file: " & fileFullName)
                 End If
-                TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
+                'TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
             Catch ex As Exception
                 TL.LogMessageCrLf("", "Exception: " & ex.ToString())
             End Try
@@ -521,7 +521,7 @@ Public Class Form1
         For Each fileFullName As String In DynamicLists.DeveloperFiles(TL)
             Try
                 Action("Removing file: " & fileFullName)
-                TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
+                'TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
                 mVar = regexInstallerVariables.Match(fileFullName)
                 If mVar.Success Then ' We have found a compiler variable so process it
                     Select Case mVar.Groups("CompVar").ToString().ToUpper()
@@ -536,7 +536,7 @@ Public Class Form1
                                 fileFullName = fileFullName.Replace("$COMMONFILES64$", CommonFiles64)
                                 DeleteFile(fileFullName)
                             Else
-                                TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable because this is a OS.")
+                                TL.LogMessage("RemovePlatformFiles", "Ignoring 64bit variable: " & fileFullName)
                             End If
                         Case Else ' Unrecognised compiler variable so log an error
                             TL.LogMessage("RemovePlatformFiles", "***** UNKNOWN Compiler Variable: " & mVar.Groups("CompVar").ToString() & " in file: " & fileFullName)
@@ -544,7 +544,7 @@ Public Class Form1
                 Else
                     TL.LogMessage("RemovePlatformFiles", "***** NO Compiler Variable in file: " & fileFullName)
                 End If
-                TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
+                'TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
             Catch ex As Exception
                 TL.LogMessageCrLf("", "Exception: " & ex.ToString())
             End Try
@@ -877,14 +877,18 @@ Public Class Form1
 
         Try
             Action(FileName)
-            TargetFile = New FileInfo(FileName)
-            TargetFile.Attributes = FileAttributes.Normal
-            TargetFile.Delete()
-            TL.LogMessage("RemoveFile", "Removed OK:           " & FileName)
+            If Path.GetFileNameWithoutExtension(FileName).IndexOfAny(Path.GetInvalidFileNameChars) = -1 Then ' The filename contains only valid characters
+                TargetFile = New FileInfo(FileName)
+                TargetFile.Attributes = FileAttributes.Normal
+                TargetFile.Delete()
+                TL.LogMessage("RemoveFile", "Removed OK:              " & FileName)
+            Else
+                TL.LogMessage("RemoveFile", "Invalid filename:        " & FileName)
+            End If
         Catch ex As DirectoryNotFoundException
-            TL.LogMessage("RemoveFile", "Directory not found:  " + FileName)
+            TL.LogMessage("RemoveFile", "Directory not found:     " + FileName)
         Catch ex As FileNotFoundException
-            TL.LogMessage("RemoveFile", "File not found:       " + FileName)
+            TL.LogMessage("RemoveFile", "File not found:          " + FileName)
         Catch ex As Exception
             TL.LogMessageCrLf("RemoveFile", "ISSUE - " & FileName & ", Exception: " & ex.ToString)
         End Try
