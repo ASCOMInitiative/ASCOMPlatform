@@ -680,7 +680,7 @@ namespace ASCOM.DriverAccess
         /// This method supports control of the mount about its mechanical axes.
         /// The telescope will start moving at the specified rate about the specified axis and continue indefinitely.
         /// This method can be called for each axis separately, and have them all operate concurrently at separate rates of motion. 
-        /// Set the rate for an axis to zero to stop the motionabout that axis.
+        /// Set the rate for an axis to zero to restore the motion about that axis to the rate set by the <see cref="Tracking"/> property.
         /// Tracking motion (if enabled, see note below) is suspended during this mode of operation. 
         /// <para>
         /// Raises an error if <see cref="AtPark" /> is true. 
@@ -698,7 +698,7 @@ namespace ASCOM.DriverAccess
         /// about any of its axes as a result of this method being called. 
         /// This can be used to simulate a handbox by initiating motion with the
         /// MouseDown event and stopping the motion with the MouseUp event.</description></item>
-        /// <item><description>When the motion is stopped the scope will be set to the previous 
+        /// <item><description>When the motion is stopped by setting the rate to zero the scope will be set to the previous 
         /// <see cref="TrackingRate" /> or to no movement, depending on the state of the <see cref="Tracking" /> property.</description></item>
         /// <item><description>It may be possible to implement satellite tracking by using the <see cref="MoveAxis" /> method to move the 
         /// scope in the required manner to track a satellite.</description></item>
