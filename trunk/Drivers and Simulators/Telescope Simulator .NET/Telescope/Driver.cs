@@ -971,6 +971,8 @@ namespace ASCOM.Simulator
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToAltAz: ");
             CheckCapability(TelescopeHardware.CanSlewAltAz, "SlewToAltAz");
+            CheckParked("SlewToAltAz");
+            CheckTracking(false, "SlewToAltAz");
             CheckRange(Azimuth, 0, 360, "SlewToltAz", "azimuth");
             CheckRange(Altitude, -90, 90, "SlewToAltAz", "Altitude");
 
@@ -988,7 +990,9 @@ namespace ASCOM.Simulator
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToAltAzAsync: ");
-            CheckCapability(TelescopeHardware.CanSlewAltAzAsync,"SlewToAltAzAsync");
+            CheckCapability(TelescopeHardware.CanSlewAltAzAsync, "SlewToAltAzAsync");
+            CheckParked("SlewToAltAz");
+            CheckTracking(false, "SlewToAltAzAsync");
             CheckRange(Azimuth, 0, 360, "SlewToAltAzAsync", "Azimuth");
             CheckRange(Altitude, -90, 90, "SlewToAltAzAsync", "Altitude");
 
@@ -1005,6 +1009,7 @@ namespace ASCOM.Simulator
             CheckRange(RightAscension, 0, 24, "SlewToCoordinates", "RightAscension");
             CheckRange(Declination, -90, 90, "SlewToCoordinates", "Declination");
             CheckParked("SlewToCoordinates");
+            CheckTracking(true, "SlewToCoordinates");
 
             SharedResources.TrafficStart(" RA " + m_Util.HoursToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
@@ -1024,6 +1029,7 @@ namespace ASCOM.Simulator
             CheckRange(RightAscension, 0, 24, "SlewToCoordinatesAsync", "RightAscension");
             CheckRange(Declination, -90, 90, "SlewToCoordinatesAsync", "Declination");
             CheckParked("SlewToCoordinatesAsync");
+            CheckTracking(true, "SlewToCoordinatesAsync");
 
             SharedResources.TrafficStart(" RA " + m_Util.HoursToHMS(RightAscension) + " DEC " + m_Util.DegreesToDMS(Declination));
 
@@ -1038,6 +1044,7 @@ namespace ASCOM.Simulator
             CheckRange(TelescopeHardware.TargetRightAscension, 0, 24, "SlewToTarget", "TargetRightAscension");
             CheckRange(TelescopeHardware.TargetDeclination, -90, 90, "SlewToTarget", "TargetDeclination");
             CheckParked("SlewToTarget");
+            CheckTracking(true, "SlewToTarget");
 
             TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
 
@@ -1055,6 +1062,7 @@ namespace ASCOM.Simulator
             CheckRange(TelescopeHardware.TargetRightAscension, 0, 24, "SlewToTargetAsync", "TargetRightAscension");
             CheckRange(TelescopeHardware.TargetDeclination, -90, 90, "SlewToTargetAsync", "TargetDeclination");
             CheckParked("SlewToTargetAsync");
+            CheckTracking(true, "SlewToTargetAsync");
             TelescopeHardware.StartSlewRaDec(TelescopeHardware.TargetRightAscension, TelescopeHardware.TargetDeclination, true);
         }
 
@@ -1074,6 +1082,7 @@ namespace ASCOM.Simulator
             CheckRange(Azimuth, 0, 360, "SyncToAltAz", "Azimuth");
             CheckRange(Altitude, -90, 90, "SyncToAltAz", "Altitude");
             CheckParked("SyncToAltAz");
+            CheckTracking(false, "SyncToAltAz");
 
             SharedResources.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
@@ -1093,6 +1102,7 @@ namespace ASCOM.Simulator
             CheckRange(RightAscension, 0, 24, "SyncToCoordinates", "RightAscension");
             CheckRange(Declination, -90, 90, "SyncToCoordinates", "Declination");
             CheckParked("SyncToCoordinates");
+            CheckTracking(true, "SyncToCoordinates");
 
             SharedResources.TrafficStart(string.Format(CultureInfo.CurrentCulture, " RA {0} DEC {1}", m_Util.HoursToHMS(RightAscension), m_Util.DegreesToDMS(Declination)));
 
@@ -1118,6 +1128,7 @@ namespace ASCOM.Simulator
             SharedResources.TrafficEnd(" RA " + m_Util.HoursToHMS(TelescopeHardware.TargetRightAscension) + " DEC " + m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
 
             CheckParked("SyncToTarget");
+            CheckTracking(true, "SyncToTarget");
 
             TelescopeHardware.ChangePark(false);
 
@@ -1374,6 +1385,20 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{0} not possible when parked", property));
                 throw new ParkedException(property);
+            }
+        }
+
+        /// <summary>
+        /// Checks the slew type and tracking state and raises an exception if they don't match.
+        /// </summary>
+        /// <param name="raDecSlew">if set to <c>true</c> this is a Ra Dec slew if  <c>false</c> an Alt Az slew.</param>
+        /// <param name="method">The method name.</param>
+        private static void CheckTracking(bool raDecSlew, string method)
+        {
+            if (raDecSlew != TelescopeHardware.Tracking)
+            {
+                SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{0} not possible when tracking is {1}", method, TelescopeHardware.Tracking));
+                throw new ASCOM.InvalidOperationException(string.Format("{0} is not allowed when tracking is {1}", method, TelescopeHardware.Tracking));
             }
         }
 
@@ -1717,7 +1742,7 @@ namespace ASCOM.Simulator
             }	// 1-based
         }
         #endregion
-
+        
         #region IEnumerator implementation
 
         public bool MoveNext()
