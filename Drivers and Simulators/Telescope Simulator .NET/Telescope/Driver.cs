@@ -1294,7 +1294,7 @@ namespace ASCOM.Simulator
             string ratesStr = string.Empty;
             foreach (Rate item in rates)
             {
-                if (rate >= item.Minimum && rate <= item.Maximum)
+                if (Math.Abs(rate) >= item.Minimum && Math.Abs(rate) <= item.Maximum)
                 {
                     return;
                 }
@@ -1302,17 +1302,6 @@ namespace ASCOM.Simulator
             }
             throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), ratesStr);
         }
-        //private static void CheckRate(double rate)
-        //{
-        //    // TODO add traffic reports for these exceptions
-        //    if (rate > 50.0)
-        //    if ((rate < 10.0) && (rate > 0.0))
-        //        throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-        //    if (rate < -50.0)
-        //        throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-        //    if ((rate > -10.0) && (rate < 0.0))
-        //        throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-        //}
 
         private static void CheckRange(double value, double min, double max, string propertyOrMethod, string valueName)
         {
