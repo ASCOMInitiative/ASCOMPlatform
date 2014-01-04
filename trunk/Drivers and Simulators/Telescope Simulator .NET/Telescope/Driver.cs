@@ -1491,15 +1491,15 @@ namespace ASCOM.Simulator
                 case TelescopeAxes.axisPrimary:
                     // TODO Initialize this array with any Primary axis rates that your driver may provide
                     // Example: m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) }
-                    m_Rates = new Rate[] { new Rate(0.0, maxRate/2), new Rate(maxRate/2, maxRate) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate/3), new Rate(maxRate/2, maxRate) };
                     break;
                 case TelescopeAxes.axisSecondary:
                     // TODO Initialize this array with any Secondary axis rates that your driver may provide
-                    m_Rates = new Rate[] { new Rate(0.0, maxRate/2), new Rate(maxRate/2, maxRate) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate/3), new Rate(maxRate/2, maxRate) };
                     break;
                 case TelescopeAxes.axisTertiary:
                     // TODO Initialize this array with any Tertiary axis rates that your driver may provide
-                    m_Rates = new Rate[] { new Rate(0.0, maxRate/2), new Rate(maxRate/2, maxRate) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate/3), new Rate(maxRate/2, maxRate) };
                     break;
             }
             pos = -1;
