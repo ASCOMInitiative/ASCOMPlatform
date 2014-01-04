@@ -1124,6 +1124,10 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="RightAscension">The corrected right ascension (hours). Copied to the TargetRightAscension property.</param>
         /// <param name="Declination">The corrected declination (degrees, positive North). Copied to the TargetDeclination property.</param>
+        /// <remarks>
+        /// This must be implemented if the <see cref="CanSync" /> property is True. Raises an error if matching fails. 
+        /// Raises an error if <see cref="AtPark" /> AtPark is True, or if <see cref="Tracking" /> is False. 
+        /// </remarks>
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
             memberFactory.CallMember(3, "SyncToCoordinates", new Type[] { typeof(double), typeof(double) }, new object[] { RightAscension, Declination });
