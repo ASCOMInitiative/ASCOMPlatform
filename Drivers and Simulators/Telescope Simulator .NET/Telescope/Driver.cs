@@ -675,7 +675,7 @@ namespace ASCOM.Simulator
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "MoveAxis {0} {1}:  ", Axis.ToString(), Rate));
             CheckVersionOne("MoveAxis");
-            CheckRate(Rate);
+            CheckRate(Axis, Rate);
 
             if (!CanMoveAxis(Axis))
                 throw new MethodNotImplementedException("CanMoveAxis " + Enum.GetName(typeof(TelescopeAxes), Axis));
@@ -1288,19 +1288,31 @@ namespace ASCOM.Simulator
         #endregion
 
         #region private methods
-
-        private static void CheckRate(double rate)
+        private void CheckRate(TelescopeAxes axis, double rate)
         {
-            // TODO add traffic reports for these exceptions
-            if (rate > 50.0)
-                throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-            if ((rate < 10.0) && (rate > 0.0))
-                throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-            if (rate < -50.0)
-                throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
-            if ((rate > -10.0) && (rate < 0.0))
-                throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+            IAxisRates rates = AxisRates(axis);
+            string ratesStr = string.Empty;
+            foreach (Rate item in rates)
+            {
+                if (rate >= item.Minimum && rate <= item.Maximum)
+                {
+                    return;
+                }
+                ratesStr = string.Format("{0}, {1} to {2}", ratesStr, item.Minimum, item.Maximum);
+            }
+            throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), ratesStr);
         }
+        //private static void CheckRate(double rate)
+        //{
+        //    // TODO add traffic reports for these exceptions
+        //    if (rate > 50.0)
+        //    if ((rate < 10.0) && (rate > 0.0))
+        //        throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+        //    if (rate < -50.0)
+        //        throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+        //    if ((rate > -10.0) && (rate < 0.0))
+        //        throw new InvalidValueException("MoveAxis", rate.ToString(CultureInfo.InvariantCulture), "-50 to -10, 0 and 10 to 50");
+        //}
 
         private static void CheckRange(double value, double min, double max, string propertyOrMethod, string valueName)
         {
@@ -1484,20 +1496,21 @@ namespace ASCOM.Simulator
             // to the constructor. Thus we switch() below, and each case should 
             // initialize the array for the rate for the selected axis.
             //
+            double maxRate = TelescopeHardware.MaximumSlewRate;
             switch (m_axis)
             {
                 case TelescopeAxes.axisPrimary:
                     // TODO Initialize this array with any Primary axis rates that your driver may provide
                     // Example: m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) }
-                    m_Rates = new Rate[] { new Rate(10.0, 30.2), new Rate(43.6, 50.0) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate/2), new Rate(maxRate/2, maxRate) };
                     break;
                 case TelescopeAxes.axisSecondary:
                     // TODO Initialize this array with any Secondary axis rates that your driver may provide
-                    m_Rates = new Rate[] { new Rate(10.0, 30.2), new Rate(43.6, 50.0) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate/2), new Rate(maxRate/2, maxRate) };
                     break;
                 case TelescopeAxes.axisTertiary:
                     // TODO Initialize this array with any Tertiary axis rates that your driver may provide
-                    m_Rates = new Rate[] { new Rate(10.0, 30.2), new Rate(43.6, 50.0) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate/2), new Rate(maxRate/2, maxRate) };
                     break;
             }
             pos = -1;
