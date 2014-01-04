@@ -978,6 +978,10 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Matches the scope's equatorial coordinates to the given equatorial coordinates.
     ''' </summary>
+    ''' <remarks>
+    ''' This must be implemented if the <see cref="CanSync" /> property is True. Raises an error if matching fails. 
+    ''' Raises an error if <see cref="AtPark" /> AtPark is True, or if <see cref="Tracking" /> is False. 
+    ''' </remarks>
     ''' <param name="RightAscension">The corrected right ascension (hours). Copied to the <see cref="TargetRightAscension" /> property.</param>
     ''' <param name="Declination">The corrected declination (degrees, positive North). Copied to the <see cref="TargetDeclination" /> property.</param>
     Sub SyncToCoordinates(ByVal RightAscension As Double, ByVal Declination As Double)
