@@ -36,7 +36,7 @@
 					</externalLink>
 					please check under "Popular Downloads - Developer Tools" if Framework 4 is not otherwise listed.
 				</para>
-				<para>The Platform now also requires Visual C++ 10.0 libraries and will install these for you if they are not already present on your PC.</para>
+				<para>The Platform now also requires Visual C++ 10.0 libraries and the installer will provide these if they are not already present on your PC.</para>
             </content>
 		</section>
    		
@@ -53,7 +53,7 @@
 	      			<listItem>Telescope Simulator for .NET
 						<list class="bullet">
 		      				<listItem>The default Axis Rates have been revised to create non-contiguous rate ranges of 0.0-16.7 and 25.0-50.0 degrees /second.</listItem>
-		      				<listItem>Additional tracking mode checks have been added to the Slew... and Sync... methods for test for unexpected behaviour such as 
+		      				<listItem>Additional tracking mode checks have been added to the Slew... and Sync... methods to test for unexpected behaviour such as 
 		      				slewing to RA/Dec with tracking disabled.</listItem>
 	  					</list>
 	      				
