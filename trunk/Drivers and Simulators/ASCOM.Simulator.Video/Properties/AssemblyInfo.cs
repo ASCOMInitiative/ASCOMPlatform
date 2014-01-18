@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Hristo Pavlov")]
 [assembly: AssemblyProduct("ASCOM Video driver Simulator")]
-[assembly: AssemblyCopyright("Copyright © 2012-2013 Hristo Pavlov")]
+[assembly: AssemblyCopyright("Copyright © 2012-2014 Hristo Pavlov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

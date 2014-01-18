@@ -448,12 +448,10 @@ if Variable REQUIRESUPGRADE Equals TRUE
    
   Comment: Now process the installer error code
   if Variable UNINSTALLCODE not Equals 0
-    Comment: MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
-    MessageBox: Unable to uninstall current Platform, The installer can't uninstall your current Platform. $NEWLINE$$NEWLINE$Please click the "No" button to terminate this installer or click the "Yes" button to clean up your system.$NEWLINE$$NEWLINE$Eror code: $UNINSTALLCODE$
+    MessageBox: Unable to uninstall current Platform, The installer can't uninstall your current Platform. $NEWLINE$$NEWLINE$Please click the "Yes" button to clean up your system or click the "No" button to terminate this installer.$NEWLINE$$NEWLINE$Eror code: $UNINSTALLCODE$
     if Variable ERROROLD Equals YES
       Write into Text File $SETUPLOG$ from Value $TIME$ ForcePlatform: User selected YES (at end of file)
       Comment: User selected YES so run the ForceRemove program
-      Comment: Run Program $SUPPORTDIR$\RemoveAscom.exe  (WAIT, get result into variable ERROROLD)
       Run Program $SUPPORTDIR$\RemoveAscom.exe  (WAIT, get result into variable ERROROLD)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $ERROROLD$ - RemoveASCOM (at end of file)
        

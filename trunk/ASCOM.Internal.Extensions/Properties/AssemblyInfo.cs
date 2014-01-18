@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM.Internal.Extensions")]
 [assembly: AssemblyDescription("Extension Methods (internal use only).")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2009 Timothy P. Long and TiGra Astronomy. Copyright © ASCOM Initiative 2013")]
+[assembly: AssemblyCopyright("Copyright © 2009 Timothy P. Long and TiGra Astronomy. Copyright © ASCOM Initiative 2014")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

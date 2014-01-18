@@ -10,7 +10,7 @@ using System.Resources;
 [assembly: AssemblyTitle("Telescope Simulator Driver")]
 [assembly: AssemblyDescription("ASCOM Telescope Simulator Driver for .Net")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2013")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2014")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

@@ -19,18 +19,19 @@
     <HtmlHelpName>PlatformDeveloperHelp</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj" />
-<DocumentationSource sourceFile="..\ASCOM.Attributes\ASCOM.Attributes.csproj" />
-<DocumentationSource sourceFile="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj" />
-<DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
-<DocumentationSource sourceFile="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" />
-<DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
-<DocumentationSource sourceFile="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj" />
-<DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
-<DocumentationSource sourceFile="..\ASCOM.Utilities.Video\ASCOM.Utilities.Video.csproj" />
-<DocumentationSource sourceFile="..\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml" />
-<DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\ASCOM.Attributes\ASCOM.Attributes.csproj" />
+      <DocumentationSource sourceFile="..\ASCOM.Controls\ASCOM.Controls\ASCOM.Controls.csproj" />
+      <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
+      <DocumentationSource sourceFile="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj" />
+      <DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" />
+      <DocumentationSource sourceFile="..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj" />
+      <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj" />
+      <DocumentationSource sourceFile="..\ASCOM.Utilities.Video\ASCOM.Utilities.Video.csproj" />
+      <DocumentationSource sourceFile="..\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryNamespaceDocs.xml" />
+      <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
+    </DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-13, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-14, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry.AstroUtils" isExposed="True">
         <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
@@ -47,7 +48,7 @@
         <Filter entryType="Delegate" fullName="ASCOM.Utilities.Timer.TickEventHandler" filterName="Timer.TickEventHandler" isExposed="False" />
       </Filter>
       <Filter entryType="Namespace" fullName="ASCOM.Utilities.Video" isExposed="True">
-        <Filter entryType="Class" fullName="ASCOM.Utilities.Video.AviTools" filterName="AviTools" isExposed="False"/>
+        <Filter entryType="Class" fullName="ASCOM.Utilities.Video.AviTools" filterName="AviTools" isExposed="False" />
       </Filter>
       <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
       <Filter entryType="Namespace" fullName="System" isExposed="True">
@@ -208,7 +209,7 @@
       <ImageId>VideoCamera State Diagram</ImageId>
       <AlternateText>Video Camera State Diagram</AlternateText>
       <CopyToMedia>True</CopyToMedia>
-    </Image>    
+    </Image>
     <Content Include="Scripts\script_manifold.js" />
     <Content Include="Introduction\Acknowledgements.aml" />
     <None Include="Developer Information\Time Relationships.aml" />

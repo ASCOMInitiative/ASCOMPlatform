@@ -449,11 +449,9 @@ Comment
 Comment
 If
 MessageBox
-MessageBox
 If
 Write to Text File
 Comment
-Run Program
 Run Program As
 Write to Text File
 Comment
@@ -1991,12 +1989,10 @@ $
 {3EFB0FA4-3566-42F6-980B-97D0BE89E4F2}
 {3E5876BE-C18E-46AB-8F36-752C48C28D3C}
 {AA73F812-C5C9-4DDF-823E-872F5467DE94}
-{D153B6D5-BD0A-4419-B1D4-9DF64AF7D4AA}
 {4C6CD412-2A99-4E3B-BFBB-36A841EFCDAE}
 {6AA336F5-A99D-4E15-843E-CB4FE2190BA9}
 {13E78707-968F-4CEC-ACCA-7CB6CB1F20E3}
 {8F69D54B-8317-4FD6-9078-BAE551B4D4C7}
-{4B8747DB-0504-4095-9D18-019EC4E1B304}
 {B6AD7213-B0DD-4287-91AC-F5A66873F41A}
 {C8918F3A-6B9E-4C14-AB55-C16A7F1BB912}
 {6C18D9AF-267B-48A9-9C75-9CDB73B4A8EC}
@@ -4543,12 +4539,6 @@ Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$
 2
 2
 REBOOTNOW
-{D153B6D5-BD0A-4419-B1D4-9DF64AF7D4AA}
-$TITLE$ Setup
-Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
-2
-1
-
 {AF657D58-3C22-48AD-AC62-6BFB63B314AC}
 Profile Migration
 An error has occured during Profile migration, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
@@ -4575,7 +4565,7 @@ We are sorry but you must install Framework 4 before continuing with this instal
 
 {4C6CD412-2A99-4E3B-BFBB-36A841EFCDAE}
 Unable to uninstall current Platform
-The installer can't uninstall your current Platform. $NEWLINE$$NEWLINE$Please click the "No" button to terminate this installer or click the "Yes" button to clean up your system.$NEWLINE$$NEWLINE$Eror code: $UNINSTALLCODE$
+The installer can't uninstall your current Platform. $NEWLINE$$NEWLINE$Please click the "Yes" button to clean up your system or click the "No" button to terminate this installer.$NEWLINE$$NEWLINE$Eror code: $UNINSTALLCODE$
 3
 4
 ERROROLD
@@ -6909,12 +6899,6 @@ TRUE
 -register
 TRUE
 RC
-{4B8747DB-0504-4095-9D18-019EC4E1B304}
-$SUPPORTDIR$\RemoveAscom.exe
-FALSE
-
-TRUE
-ERROROLD
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
 $UNINSTALLER$
 
@@ -11172,12 +11156,10 @@ C
 
 
 
-C
 
 
 
 
-C
 
 
 
@@ -12265,8 +12247,6 @@ C
 
 
 $
-
-
 
 
 
