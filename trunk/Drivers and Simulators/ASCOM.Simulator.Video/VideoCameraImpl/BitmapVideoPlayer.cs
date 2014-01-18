@@ -121,6 +121,20 @@ namespace Simulator.VideoCameraImpl
 
 			ownerForm = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
 			frmLoading = new frmLoadingImages();
+			if (ownerForm != null)
+			{
+				IntPtr prtTest;
+				try
+				{
+					prtTest = ownerForm.Handle;
+					int testVal = prtTest.ToInt32();
+				}
+				catch (System.InvalidOperationException)
+				{
+					// The ownerForm is running on a different thread so cannot use it
+					ownerForm = null;
+				}
+			}
 			frmLoading.Show(ownerForm);
 			frmLoading.Cursor = Cursors.WaitCursor;
 			frmLoading.Invalidate();
@@ -128,7 +142,7 @@ namespace Simulator.VideoCameraImpl
 			{
 				try
 				{
-					ownerForm.Parent = ownerForm;
+					frmLoading.Parent = ownerForm;
 				}
 				catch
 				{ }

@@ -235,7 +235,22 @@ namespace ASCOM.Simulator
 					ownerForm = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
 
 				setupDlg.StartPosition = FormStartPosition.CenterParent;
-				
+
+				if (ownerForm != null)
+				{
+					IntPtr prtTest;
+					try
+					{
+						prtTest = ownerForm.Handle;
+						int testVal = prtTest.ToInt32();
+					}
+					catch (System.InvalidOperationException)
+					{
+						// The ownerForm is running on a different thread so cannot use it
+						ownerForm = null;
+					}
+				}
+
 				if (setupDlg.ShowDialog(ownerForm) == DialogResult.OK)
 				{
 					Properties.Settings.Default.Save();
@@ -800,6 +815,21 @@ namespace ASCOM.Simulator
 				Form ownerForm = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
 
 				frmImageSettings.StartPosition = FormStartPosition.CenterParent;
+
+				if (ownerForm != null)
+				{
+					IntPtr prtTest;
+					try
+					{
+						prtTest = ownerForm.Handle;
+						int testVal = prtTest.ToInt32();
+					}
+					catch (System.InvalidOperationException)
+					{
+						// The ownerForm is running on a different thread so cannot use it
+						ownerForm = null;
+					}
+				}
 
 				frmImageSettings.Show(ownerForm);
 			}
