@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("ASCOM Device Interfaces for Platform 6")> 
 <Assembly: AssemblyCompany("ASCOM")> 
 <Assembly: AssemblyProduct("ASCOM.DeviceInterfaces.Platform6")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2010, 2013")> 
+<Assembly: AssemblyCopyright("Copyright © ASCOM 2010, 2014")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)> 

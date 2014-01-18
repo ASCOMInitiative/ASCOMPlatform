@@ -7,9 +7,15 @@
       			<para>The 6.1 update is primarily focused on devices; introducing a new Video interface and tools, whose development was led by Hristo Pavlov, and 
       			enhancing the Switch interface, which was led by Chris Rowland. Please see below for more information.</para>
 				<para>In line with previous Platform installers, 6.1 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs.</para>
+				<alert class="note">
+					<para><legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the the 
+					next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability">Deprecated Features</link> section below. Please will you review 
+					this and update your applications and drivers as advised; these changes are not scheduled for introduction until the second half of 2014 
+					at the earliest. In the meantime service packs will be issued as required to correct bugs.</para>
+				</alert>
             </content>
 		</section>
-   	
+  	
     	<section address="PreReqs">
     		<title>Platform Prerequisites</title>
       		<content>
@@ -111,5 +117,54 @@
 				</list>
    			</content>
    		</section>
-  </developerConceptualDocument>
+  		<section address="DeprecatedCapability">
+           	<title>Deprecated Capabilites (For Developers)</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>The following VB6 based simulators will be removed from the Platform at the next major update. These drivers were moved to a 
+ 		 			"bug-fix only" maintenance mode when Platform 6 was released and are becoming increasingly out of step with their .NET counterparts, which are fully integrated 
+ 		 			into the Platform code base.
+ 						<table>
+						  <tableHeader>
+						    <row>
+						      <entry><para>Simulator</para></entry>
+						      <entry><para>ProgID</para></entry>
+						      <entry><para>Replacement</para></entry>
+						    </row>
+						  </tableHeader>
+						  <row>
+						    <entry><para>Camera Simulator</para></entry>
+						    <entry><para>CCDSimulator.Camera</para></entry>
+							<entry><para>Replace use of the CCDSimulator.Camera ProgID with ASCOM.Simulator.Camera, which will invoke the "Camera V2 simulator</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Dome Simulator</para></entry>
+						    <entry><para>DomeSim.Telescope</para></entry>
+							<entry><para>Replace use of the DomeSim.Telescope ProgID with ASCOM.Simulator.Dome, which will invoke the "Dome Simulator .NET" driver.</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Filter Wheel Simulator</para></entry>
+						    <entry><para>FilterWheelSim.FilterWheel</para></entry>
+							<entry><para>Replace use of the FilterWheelSim.FilterWheel ProgID with ASCOM.Simulator.FilterWheel, which will invoke the "Filter Wheel Simulator [.NET]" driver.</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Focuser Simulator</para></entry>
+						    <entry><para>FocuserSim.Focuser</para></entry>
+							<entry><para>Replace use of the FocuserSim.Focuser ProgID with ASCOM.Simulator.Focuser, which will invoke the "ASCOM Simulator Focuser Driver" driver.</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Switch Simulator</para></entry>
+						    <entry><para>SwitchSim.Switch</para></entry>
+							<entry><para>Replace use of the SwitchSim.Switch ProgID with ASCOM.Simulator.Switch, which will invoke the "ASCOM SwitchV2 Simulator Driver" driver.</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Telescope Simulator</para></entry>
+						    <entry><para>ScopeSim.Telescope</para></entry>
+							<entry><para>Replace use of the ScopeSim.Telescope ProgID with ASCOM.Simulator.Telescope, which will invoke the "Telescope Simulator for .NET" driver.</para></entry>
+						  </row>
+						</table>
+		 			</listItem>
+				</list>
+   			</content>
+   		</section></developerConceptualDocument>
 </topic>

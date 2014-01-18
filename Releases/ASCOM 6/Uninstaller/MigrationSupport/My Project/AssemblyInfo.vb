@@ -12,7 +12,7 @@ Imports System.Runtime.CompilerServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
 <Assembly: AssemblyProduct("Migration Support")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2010, 2013")> 
+<Assembly: AssemblyCopyright("Copyright © ASCOM 2010, 2014")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM Client Toolkit")]
 [assembly: AssemblyDescription("Provides .NET programs easy access to ASCOM drivers")]
 [assembly: AssemblyConfiguration("Update for Platform 5.0")]
-[assembly: AssemblyCopyright("© Bear Creek Observatory, Copy without restriction, Copyright © ASCOM Initiative 2013")]
+[assembly: AssemblyCopyright("© Bear Creek Observatory, Copy without restriction, Copyright © ASCOM Initiative 2014")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
