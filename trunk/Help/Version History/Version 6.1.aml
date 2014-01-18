@@ -50,6 +50,14 @@
 	      			based on the ForceRemove program that previously had to be run manually.</listItem>
 	      			<listItem>The Platform now requires .NET Framework 4.0 Client or above and the Visual C++ 10.0 libraries. The .NET Framework will need to be
 	      			installed before the Platform installer is run but the C++ libraries will be automatically installed by the Platform installer if required.</listItem>
+	      			<listItem>Telescope Simulator for .NET
+						<list class="bullet">
+		      				<listItem>The default Axis Rates have been revised to create non-contiguous rate ranges of 0.0-16.7 and 25.0-50.0 degrees /second.</listItem>
+		      				<listItem>Additional tracking mode checks have been added to the Slew... and Sync... methods for test for unexpected behaviour such as 
+		      				slewing to RA/Dec with tracking disabled.</listItem>
+	  					</list>
+	      				
+	      			</listItem>
 	  			</list>
             </content>
 		</section>
