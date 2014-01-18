@@ -624,7 +624,7 @@ Public Class DiagnosticsForm
         Sim.InterfaceVersion = 3
         Sim.IsPlatform5 = False
         Sim.SixtyFourBit = True
-        Sim.AxisRates = New Double(,) {{10.0, 43.6}, {30.2, 50.0}}
+        Sim.AxisRates = New Double(,) {{0.0, 25.0}, {50.0 / 3.0, 50.0}}
         TestSimulator(Sim)
         Sim = Nothing
 
