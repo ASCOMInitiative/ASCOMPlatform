@@ -5320,7 +5320,7 @@ Public Class DiagnosticsForm
                                 TL.LogMessage("HelperHijacking", "OK, " & ProgID & " has not been hijacked")
                             End If
                         Else
-                            LogError("HelperHijacking", "Unable to find registrered CLSID\InprocServer32: " + CLSID & "InprocServer32")
+                            LogError("HelperHijacking", "Unable to find registered CLSID\InprocServer32: " + CLSID & "InprocServer32")
                         End If
                     Else 'CLSID value dfoes not exist
                         LogError("HelperHijacking", "Unable to find registered CLSID: " + CLSID)
@@ -5329,7 +5329,7 @@ Public Class DiagnosticsForm
                     LogError("HelperHijacking", "Unable to find ProgID\CLSID: " + ProgID & "\CLSID")
                 End If
             Else ' Cannot find ProgID so gve error message
-                LogError("HelperHijacking", "Unable to find registrered ProgID: " + ProgID)
+                LogError("HelperHijacking", "Unable to find registered ProgID: " + ProgID)
             End If
         Catch ex As Exception
             LogException("HelperHijacking", "Exception: " & ex.ToString)
@@ -6219,7 +6219,7 @@ Public Class DiagnosticsForm
                 End If
             Next
         Catch ex As DirectoryNotFoundException
-            TL.LogMessageCrLf("Driver", "Directory not present: " & Folder)
+            TL.LogMessageCrLf("RecurseASCOMDrivers", "Directory not present: " & Folder)
             Exit Sub
         Catch ex As Exception
             LogException("RecurseASCOMDrivers 1", "Exception: " & ex.ToString)
@@ -6233,7 +6233,7 @@ Public Class DiagnosticsForm
             Next
             Action("")
         Catch ex As DirectoryNotFoundException
-            TL.LogMessage("Driver", "Directory not present: " & Folder)
+            TL.LogMessage("RecurseASCOMDrivers", "Directory not present: " & Folder)
         Catch ex As Exception
             LogException("RecurseASCOMDrivers 2", "Exception: " & ex.ToString)
         End Try
