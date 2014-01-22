@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
-using ASCOM.DriverAccess;
 using System.Diagnostics;
 
 namespace ASCOM.DriverConnect
