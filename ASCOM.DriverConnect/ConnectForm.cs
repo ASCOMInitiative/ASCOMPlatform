@@ -230,6 +230,7 @@ namespace ASCOM.DriverConnect
         /// <param name="e"></param>
         private void btnConnect_Click(System.Object sender, System.EventArgs e)
         {
+            bool usedConnected = true;
 
             TL = new TraceLogger("", TRACE_LOGGER_NAME);
             TL.Enabled = true;
@@ -242,19 +243,37 @@ namespace ASCOM.DriverConnect
                 Type type = Type.GetTypeFromProgID(CurrentDevice);
                 dynamic driver = Activator.CreateInstance(type);
                 LogMsg("Connected", "Connecting to device");
-                driver.Connected = true;
+                if (CurrentDeviceType.ToUpper() == "FOCUSER")
+                {
+                    try
+                    {
+                        LogMsg("Connected", "Trying Connected");
+                        driver.Connected = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogMsg("Connected", "Trying Link: " + ex.Message);
+                        driver.Link = true;
+                        usedConnected = false;
+                    }
+                }
+                else
+                {
+                    driver.Connected = true;
+                }
+
                 LogMsg("", "");
 
                 try { LogMsg("Name", driver.Name); }
-                catch (Exception ex) { LogMsg("Name", "Property not available"); ex.ToString(); }
+                catch (Exception ex) { LogMsg("Name", "Property not available - " + ex.Message); ex.ToString(); }
                 try { LogMsg("Description", driver.Description); }
-                catch (Exception ex) { LogMsg("Description", "Property not available"); ex.ToString(); }
+                catch (Exception ex) { LogMsg("Description", "Property not available - " + ex.Message); ex.ToString(); }
                 try { LogMsg("DriverInfo", driver.DriverInfo); }
-                catch (Exception ex) { LogMsg("DriverInfo", "Property not available"); ex.ToString(); }
+                catch (Exception ex) { LogMsg("DriverInfo", "Property not available - " + ex.Message); ex.ToString(); }
                 try { LogMsg("DriverVersion", driver.DriverVersion); }
-                catch (Exception ex) { LogMsg("DriverVersion", "Property not available"); ex.ToString(); }
+                catch (Exception ex) { LogMsg("DriverVersion", "Property not available - " + ex.Message); ex.ToString(); }
                 try { LogMsg("InterfaceVersion", driver.InterfaceVersion.ToString()); }
-                catch (Exception ex) { LogMsg("InterfaceVersion", "Property not available"); ex.ToString(); }
+                catch (Exception ex) { LogMsg("InterfaceVersion", "Property not available - " + ex.Message); ex.ToString(); }
 
                 // Device specific commands
                 switch (CurrentDeviceType.ToUpper())
@@ -344,7 +363,8 @@ namespace ASCOM.DriverConnect
 
                 LogMsg("", "");
                 LogMsg("Connected", "Disconnecting from device");
-                driver.Connected = false;
+                if (usedConnected) driver.Connected = false;
+                else driver.Link = false;
 
                 LogMsg("Dispose", "Disposing of device");
                 try { driver.Dispose(); }
