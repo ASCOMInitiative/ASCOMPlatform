@@ -162,11 +162,6 @@
       <Name>ASCOM.DeviceInterface</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\ASCOM.DriverAccess\ASCOM.DriverAccess.csproj">
-      <Project>{3B6C23F5-C590-4385-86BB-98B604B565BA}</Project>
-      <Name>ASCOM.DriverAccess</Name>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
       <Name>ASCOM.Utilities</Name>
