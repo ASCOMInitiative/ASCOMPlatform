@@ -259,6 +259,7 @@
     <ProjectReference Include="..\..\ASCOM.Utilities.Video\ASCOM.Utilities.Video.csproj">
       <Project>{CE1C4CD1-E730-4F08-A839-F181E414E5A0}</Project>
       <Name>ASCOM.Utilities.Video</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
       <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
