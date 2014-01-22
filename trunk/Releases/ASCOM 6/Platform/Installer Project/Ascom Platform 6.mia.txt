@@ -856,6 +856,10 @@ else
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.pdb to $TARGETDIR$\Tools
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\bin\Release\ASCOM Diagnostics.xml to $TARGETDIR$\Tools
     Install Files ..\..\..\..\ASCOM.Utilities\ASCOM Diagnostics\Ceres.chby to $TARGETDIR$\Tools
+    Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect64
+    Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x64\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect64
+    Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.exe to $TARGETDIR$\Tools\DriverConnect32
+    Install Files ..\..\..\..\ASCOM.DriverConnect\bin\Release\x86\ASCOM.DriverConnect.pdb to $TARGETDIR$\Tools\DriverConnect32
     Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $WINDIR$\Symbols\dll
     Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.exe to $TARGETDIR$\Tools
     Install Files ..\..\..\..\ASCOM.Utilities\Profile Explorer\bin\Release\ProfileExplorer.pdb to $TARGETDIR$\Tools

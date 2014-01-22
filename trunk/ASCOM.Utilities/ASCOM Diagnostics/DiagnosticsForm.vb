@@ -24,6 +24,9 @@ Public Class DiagnosticsForm
     Private Const INST_INSTALL_LOCATION As String = "InstallLocation"
     Private Const INST_INSTALL_SOURCE As String = "InstallSource"
 
+    Private Const DRIVER_CONNECT_APPLICATION_64BIT = "\DriverConnect64\ASCOM.DriverConnect.exe"
+    Private Const DRIVER_CONNECT_APPLICATION_32BIT = "\DriverConnect32\ASCOM.DriverConnect.exe"
+
     Private Const COMPONENT_CATEGORIES = "Component Categories"
     Private Const ASCOM_ROOT_KEY As String = " (ASCOM Root Key)"
     Private Const TestTelescopeDescription As String = "This is a test telescope"
@@ -96,6 +99,14 @@ Public Class DiagnosticsForm
 
             btnLastLog.Enabled = False 'Disable last log button
             sw = New Stopwatch
+
+            If Environment.Is64BitOperatingSystem Then ' We are on a 64bit OS so make both 32 and 64bit Chooser forms available
+                ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Visible = True
+                ChooseAndConncectToDeviceToolStripMenuItem.Visible = True
+            Else ' We are on a 32bit OS so just make a 32bit Chooser form available
+                ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Visible = False
+                ChooseAndConncectToDeviceToolStripMenuItem.Visible = True
+            End If
 
             RefreshTraceItems() ' Get current values for the trace menu settings
             AstroUtil = New AstroUtils.AstroUtils
@@ -6529,7 +6540,31 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Sub ChooseAndConncectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConncectToDeviceToolStripMenuItem.Click
-        ConnectForm.Visible = True
+        'ConnectForm.Visible = True
+        Dim proc As Process, procStartInfo As ProcessStartInfo
+        Try
+            procStartInfo = New ProcessStartInfo(Application.StartupPath & DRIVER_CONNECT_APPLICATION_64BIT)
+            proc = New Process
+            proc.StartInfo = procStartInfo
+            proc.Start()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message.ToString() & " - " & Application.StartupPath & DRIVER_CONNECT_APPLICATION_64BIT, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+    End Sub
+
+    Private Sub ChooseAndConnectToDevice32BitApplicationToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Click
+        Dim proc As Process, procStartInfo As ProcessStartInfo
+
+        Try
+            procStartInfo = New ProcessStartInfo(Application.StartupPath & DRIVER_CONNECT_APPLICATION_32BIT)
+            proc = New Process
+            proc.StartInfo = procStartInfo
+            proc.Start()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message.ToString() & " - " & Application.StartupPath & DRIVER_CONNECT_APPLICATION_32BIT, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
     End Sub
 
     Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
