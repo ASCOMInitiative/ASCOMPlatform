@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports ASCOM
 '-----------------------------------------------------------------------
 ' <summary>Defines the IRotator Interface</summary>
 '-----------------------------------------------------------------------

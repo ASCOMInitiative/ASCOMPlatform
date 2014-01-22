@@ -56,7 +56,16 @@
 		      				<listItem>Additional tracking mode checks have been added to the Slew... and Sync... methods to test for unexpected behaviour such as 
 		      				slewing to RA/Dec with tracking disabled.</listItem>
 	  					</list>
-	      				
+	      			</listItem>
+	      			<listItem>Diagnostics - Choose Device Tool
+						<list class="bullet">
+		      				<listItem>This tool can now be started in either 32bit or 64bit modes on 64bit operating systems to provide emulation of both 32bit and 64bit clients.</listItem>
+		      				<listItem>The tool window is now resizable to cope with extensive Profile contents</listItem>
+		      				<listItem>The device Profile is now returned in plain rather than XML format.</listItem>
+		      				<listItem>Values from the common device methods are now reported for all device types.</listItem>
+		      				<listItem>The Connect capability now has a check box to control whether the device is Connected before the Setup dialogue is dispayed.</listItem>
+		      				<listItem>Selection of a new device type automatically selects the relevant simulator.</listItem>
+	  					</list>	      				
 	      			</listItem>
 	  			</list>
             </content>
