@@ -8,6 +8,7 @@
     Private _DriverVersion As String
     Private _Name As String
     Private _AxisRates As Double(,)
+    Private _AxisRatesRelative As Boolean
 
     Public Property ProgID As String
         Get
@@ -87,6 +88,14 @@
         End Get
         Set(ByVal value As Double(,))
             _AxisRates = value
+        End Set
+    End Property
+    Public Property AxisRatesRelative As Boolean
+        Get
+            Return _AxisRatesRelative
+        End Get
+        Set(ByVal value As Boolean)
+            _AxisRatesRelative = value
         End Set
     End Property
 End Class
