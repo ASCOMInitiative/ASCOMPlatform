@@ -27,7 +27,7 @@ namespace ASCOM.Simulator.Utils
 		{
 			lock (syncLock)
 			{
-				DebugTracing = new TraceSwitch("DebugTracing", "Determines the level of debug tracing", "Warning");
+				DebugTracing = new TraceSwitch("DebugTracing", "Determines the level of debug tracing", "Error");
 			}
 		}
 	}

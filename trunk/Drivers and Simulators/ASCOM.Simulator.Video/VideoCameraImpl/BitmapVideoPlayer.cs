@@ -79,6 +79,18 @@ namespace Simulator.VideoCameraImpl
 			allImagesPixels.Clear();
 		}
 
+		internal void BufferVideoInternal(IWin32Window frm, params object[] args)
+		{
+			bool useEmbeddedVideo = (bool) args[0];
+			string bitmapFilesLocation = (string)args[1];
+
+			if (useEmbeddedVideo)
+				BufferEmbeddedOccultationVideo(frm);
+			else
+				BufferVideoFrames(frm, bitmapFilesLocation);
+
+		}
+
 		internal BitmapVideoPlayer(AviTools aviTools, bool useEmbeddedVideo, string bitmapFilesLocation, int playbackBufferSize)
 		{
 			this.aviTools = aviTools;
@@ -89,10 +101,7 @@ namespace Simulator.VideoCameraImpl
 
 			if (!imagesBuffered)
 			{
-				if (useEmbeddedVideo)
-					BufferEmbeddedOccultationVideo();
-				else
-					BufferVideoFrames(bitmapFilesLocation);
+				UIThreadCaller.Invoke((frm, prms) => BufferVideoInternal(frm, prms), useEmbeddedVideo, bitmapFilesLocation);
 
 				imagesBuffered = true;
 			}
@@ -114,41 +123,14 @@ namespace Simulator.VideoCameraImpl
 			}
 		}
 
-		private frmLoadingImages OpenProgressForm()
+		private frmLoadingImages OpenProgressForm(IWin32Window ownerForm)
 		{
 			frmLoadingImages frmLoading = null;
-			Form ownerForm = null;
-
-			ownerForm = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
 			frmLoading = new frmLoadingImages();
-			if (ownerForm != null)
-			{
-				IntPtr prtTest;
-				try
-				{
-					prtTest = ownerForm.Handle;
-					int testVal = prtTest.ToInt32();
-				}
-				catch (System.InvalidOperationException)
-				{
-					// The ownerForm is running on a different thread so cannot use it
-					ownerForm = null;
-				}
-			}
 			frmLoading.Show(ownerForm);
 			frmLoading.Cursor = Cursors.WaitCursor;
 			frmLoading.Invalidate();
-			if (ownerForm != null)
-			{
-				try
-				{
-					frmLoading.Parent = ownerForm;
-				}
-				catch
-				{ }
-				ownerForm.Cursor = Cursors.WaitCursor;
-				ownerForm.Update();
-			}
+
 			Application.DoEvents();
 
 			return frmLoading;
@@ -168,10 +150,10 @@ namespace Simulator.VideoCameraImpl
 			}
 		}
 
-		private void BufferVideoFrames(string bitmapFilesLocation)
+		private void BufferVideoFrames(IWin32Window ownerForm, string bitmapFilesLocation)
 		{
 
-			frmLoadingImages frmLoading = OpenProgressForm();
+			frmLoadingImages frmLoading = OpenProgressForm(ownerForm);
 			try
 			{
 				string[] files = Directory.GetFiles(bitmapFilesLocation, "*.bmp");
@@ -237,14 +219,14 @@ namespace Simulator.VideoCameraImpl
 			
 		}
 
-		private void BufferEmbeddedOccultationVideo()
+		private void BufferEmbeddedOccultationVideo(IWin32Window ownerForm)
 		{
 			string occultationVideoFileName = Path.GetFullPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Resources\simulator.pix");
 
 			width = 320;
 			height = 264;
 
-			frmLoadingImages frmLoading = OpenProgressForm();
+			frmLoadingImages frmLoading = OpenProgressForm(ownerForm);
 
 			try
 			{

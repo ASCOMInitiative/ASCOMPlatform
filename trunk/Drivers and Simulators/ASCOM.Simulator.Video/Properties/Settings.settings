@@ -77,5 +77,8 @@
     <Setting Name="GammaMax" Type="System.Int16" Scope="User">
       <Value Profile="(Default)">256</Value>
     </Setting>
+    <Setting Name="TraceLevel" Type="System.Diagnostics.TraceLevel" Scope="User">
+      <Value Profile="(Default)">Error</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

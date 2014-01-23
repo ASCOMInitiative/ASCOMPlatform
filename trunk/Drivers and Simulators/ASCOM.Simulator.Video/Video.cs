@@ -139,6 +139,8 @@ namespace ASCOM.Simulator
 			Properties.Settings.Default.Reload();
 
 			camera = new VideoCamera(aviTools);
+
+			TraceSwitches.DebugTracing.Level = Properties.Settings.Default.TraceLevel;
 		}
 
 		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
@@ -225,31 +227,25 @@ namespace ASCOM.Simulator
 		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
 		public void SetupDialog()
 		{
+			UIThreadCaller.Invoke((frm, args) =>
+			{
+				SetupDialogInternal(frm);
+				TraceSwitches.DebugTracing.Level = Properties.Settings.Default.TraceLevel;
+			});
+		}
+
+		public void SetupDialogInternal(IWin32Window uiForm)
+		{
 			using (var setupDlg = new frmSetupDialog())
 			{
-				Form ownerForm = Application.OpenForms
+				IWin32Window ownerForm = Application.OpenForms
 					.Cast<Form>()
 					.FirstOrDefault(x => x != null && x.GetType().FullName == "ASCOM.Utilities.ChooserForm");
 
 				if (ownerForm == null)
-					ownerForm = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
+					ownerForm = uiForm;
 
 				setupDlg.StartPosition = FormStartPosition.CenterParent;
-
-				if (ownerForm != null)
-				{
-					IntPtr prtTest;
-					try
-					{
-						prtTest = ownerForm.Handle;
-						int testVal = prtTest.ToInt32();
-					}
-					catch (System.InvalidOperationException)
-					{
-						// The ownerForm is running on a different thread so cannot use it
-						ownerForm = null;
-					}
-				}
 
 				if (setupDlg.ShowDialog(ownerForm) == DialogResult.OK)
 				{
@@ -265,7 +261,7 @@ namespace ASCOM.Simulator
 		private void AssertConnected()
 		{
 			if (!camera.IsConnected)
-				throw new ASCOM.NotConnectedException();			
+				throw new ASCOM.NotConnectedException();
 		}
 
 		/// <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
@@ -784,6 +780,11 @@ namespace ASCOM.Simulator
 		{
 			AssertConnected();
 
+			UIThreadCaller.Invoke((frm, args) => ConfigureDevideProperiesInternal(frm));
+		}
+
+		private void ConfigureDevideProperiesInternal(IWin32Window ownerForm)
+		{
 			if (frmImageSettings != null)
 			{
 				try
@@ -795,7 +796,7 @@ namespace ASCOM.Simulator
 					try
 					{
 						frmImageSettings.Close();
-							
+
 					}
 					catch
 					{ }
@@ -810,32 +811,11 @@ namespace ASCOM.Simulator
 			{
 				frmImageSettings = new frmImageSettings();
 				frmImageSettings.Camera = camera;
-
-
-				Form ownerForm = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
-
 				frmImageSettings.StartPosition = FormStartPosition.CenterParent;
-
-				if (ownerForm != null)
-				{
-					IntPtr prtTest;
-					try
-					{
-						prtTest = ownerForm.Handle;
-						int testVal = prtTest.ToInt32();
-					}
-					catch (System.InvalidOperationException)
-					{
-						// The ownerForm is running on a different thread so cannot use it
-						ownerForm = null;
-					}
-				}
-
 				frmImageSettings.Show(ownerForm);
 			}
 			else
 				frmImageSettings.Show();
-
 		}
 	}
 }

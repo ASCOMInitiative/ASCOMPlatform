@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Linq;
@@ -29,7 +30,10 @@ namespace ASCOM.Simulator.Config
 			InitializeComponent();
 
 			cbxSensorType.Items.Clear();
-			cbxSensorType.Items.AddRange(Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Select(x => x.ToString()).ToArray());			
+			cbxSensorType.Items.AddRange(Enum.GetValues(typeof(SensorType)).Cast<SensorType>().Select(x => x.ToString()).ToArray());
+
+			bcxTraceLevel.Items.Clear();
+			bcxTraceLevel.Items.AddRange(Enum.GetValues(typeof(TraceLevel)).Cast<TraceLevel>().Select(x => x.ToString()).ToArray());
 		}
 
 		internal override void LoadSettings()
@@ -60,8 +64,13 @@ namespace ASCOM.Simulator.Config
 			string selectedSensor = Properties.Settings.Default.SensorType.ToString();
 
 			cbxSensorType.SelectedIndex = cbxSensorType.Items.IndexOf(selectedSensor);
+			if (cbxSensorType.SelectedIndex == -1) cbxSensorType.SelectedIndex = 0;
+
 			nudPixelSizeX.Value = (decimal)Properties.Settings.Default.PixelSizeX;
 			nudPixelSizeY.Value = (decimal)Properties.Settings.Default.PixelSizeY;
+
+			bcxTraceLevel.SelectedIndex = bcxTraceLevel.Items.IndexOf(Properties.Settings.Default.TraceLevel.ToString());
+			if (bcxTraceLevel.SelectedIndex == -1) bcxTraceLevel.SelectedIndex = 0;
 
 			SetBitDepthSelection(Properties.Settings.Default.BitDepth);
 
@@ -92,6 +101,11 @@ namespace ASCOM.Simulator.Config
 			Properties.Settings.Default.PixelSizeX = (double)nudPixelSizeX.Value;
 			Properties.Settings.Default.PixelSizeY = (double)nudPixelSizeY.Value;
 			Properties.Settings.Default.BitDepth = GetBitDepthSelection();
+			if (bcxTraceLevel.SelectedIndex == -1)
+				Properties.Settings.Default.TraceLevel = TraceLevel.Off;
+			else
+				Properties.Settings.Default.TraceLevel = (TraceLevel) bcxTraceLevel.SelectedIndex;
+
 		}
 
 		private void CameraTypeChanged(object sender, EventArgs e)
