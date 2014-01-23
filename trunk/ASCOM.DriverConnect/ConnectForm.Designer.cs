@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectForm));
             this.cmbDeviceType = new System.Windows.Forms.ComboBox();
             this.txtDevice = new System.Windows.Forms.TextBox();
             this.txtStatus = new System.Windows.Forms.TextBox();
@@ -140,6 +141,7 @@
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.txtDevice);
             this.Controls.Add(this.cmbDeviceType);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ConnectForm";
             this.Text = "ConnectForm";
             this.Load += new System.EventHandler(this.ConnectForm_Load);
