@@ -27,7 +27,7 @@ namespace ASCOM.Simulator.Utils
 		{
 			Form appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
 
-			if (appFormWithMessageLoop != null)
+			if (appFormWithMessageLoop != null && (Application.MessageLoop || hasOwnMessageLoop))
 			{
 				if (appFormWithMessageLoop.InvokeRequired)
 				{
@@ -40,25 +40,30 @@ namespace ASCOM.Simulator.Utils
 					action.Invoke(appFormWithMessageLoop, additionalParams);
 				}
 			}
-			else if (!Application.MessageLoop)
+			else if (!Application.MessageLoop && syncContext == null)
 			{
 				if (syncContext == null)
 				{
-					DebugTrace.TraceInfo("UIThreadCaller is creating an MessageLoop thread.");
+					DebugTrace.TraceInfo("UIThreadCaller is creating a MessageLoop thread.");
 					ThreadPool.QueueUserWorkItem(RunAppThread);
-					while (syncContext == null)
-						Thread.Sleep(10);
+					while (syncContext == null) Thread.Sleep(10);
 				}
 
 				if (syncContext != null)
 				{
 					DebugTrace.TraceInfo("Making UIThreadCaller call on an existing WindowsFormsSynchronizationContext.");
-					syncContext.Post(new SendOrPostCallback(delegate(object state) { action.Invoke(null, additionalParams); }), null);
+					bool callFinished = false;
+					syncContext.Post(new SendOrPostCallback(delegate(object state)
+						{
+							action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
+							callFinished = true;
+						}), null);
+					while (!callFinished) Thread.Sleep(10);
 				}
 				else
 				{
 					DebugTrace.TraceInfo("Making UIThreadCaller call directly.");
-					action.Invoke(null, additionalParams);
+					action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
 				}
 			}
 			else
@@ -72,17 +77,24 @@ namespace ASCOM.Simulator.Utils
 				if (syncContext != null)
 				{
 					DebugTrace.TraceInfo("Making UIThreadCaller call on an existing WindowsFormsSynchronizationContext.");
-					syncContext.Post(new SendOrPostCallback(delegate(object state) { action.Invoke(null, additionalParams); }), null);
+					bool callFinished = false;
+					syncContext.Post(new SendOrPostCallback(delegate(object state)
+					{
+						action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
+						callFinished = true;
+					}), null);
+					while (!callFinished) Thread.Sleep(10);
 				}
 				else
 				{
 					DebugTrace.TraceInfo("Making UIThreadCaller call directly.");
-					action.Invoke(null, additionalParams);
+					action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
 				}
 			}
 		}
 
 		private static WindowsFormsSynchronizationContext syncContext;
+		private static bool hasOwnMessageLoop = false;
 
 		private static void RunAppThread(object state)
 		{
@@ -91,7 +103,7 @@ namespace ASCOM.Simulator.Utils
 			ownMessageLoopMainForm.Width = 0;
 			ownMessageLoopMainForm.Height = 0;
 			ownMessageLoopMainForm.Load += ownerForm_Load;
-
+			
 			Application.Run(ownMessageLoopMainForm);
 
 			if (syncContext != null)
@@ -110,6 +122,8 @@ namespace ASCOM.Simulator.Utils
 
 			DebugTrace.TraceInfo("UIThreadCaller is creating new WindowsFormsSynchronizationContext on the newly created MessageLoop thread.");
 			syncContext = new WindowsFormsSynchronizationContext();
+
+			hasOwnMessageLoop = true;
 		}
 	}
 }
