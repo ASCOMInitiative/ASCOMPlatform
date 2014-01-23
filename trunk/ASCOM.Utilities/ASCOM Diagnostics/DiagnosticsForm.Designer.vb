@@ -30,7 +30,8 @@ Partial Class DiagnosticsForm
         Me.lblResult = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.mnuChooseDevice = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ChooseAndConncectToDeviceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ChooseAndConnectToDevice64bitApplicationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuTools = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChooserToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChooserNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -54,7 +55,6 @@ Partial Class DiagnosticsForm
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblAction = New System.Windows.Forms.Label()
         Me.btnLastLog = New System.Windows.Forms.Button()
-        Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -123,16 +123,22 @@ Partial Class DiagnosticsForm
         '
         'mnuChooseDevice
         '
-        Me.mnuChooseDevice.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChooseAndConncectToDeviceToolStripMenuItem, Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem})
+        Me.mnuChooseDevice.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ChooseAndConnectToDevice64bitApplicationToolStripMenuItem, Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem})
         Me.mnuChooseDevice.Name = "mnuChooseDevice"
         Me.mnuChooseDevice.Size = New System.Drawing.Size(97, 20)
         Me.mnuChooseDevice.Text = "Choose Device"
         '
-        'ChooseAndConncectToDeviceToolStripMenuItem
+        'ChooseAndConnectToDevice64bitApplicationToolStripMenuItem
         '
-        Me.ChooseAndConncectToDeviceToolStripMenuItem.Name = "ChooseAndConncectToDeviceToolStripMenuItem"
-        Me.ChooseAndConncectToDeviceToolStripMenuItem.Size = New System.Drawing.Size(336, 22)
-        Me.ChooseAndConncectToDeviceToolStripMenuItem.Text = "Choose and Connect to Device"
+        Me.ChooseAndConnectToDevice64bitApplicationToolStripMenuItem.Name = "ChooseAndConnectToDevice64bitApplicationToolStripMenuItem"
+        Me.ChooseAndConnectToDevice64bitApplicationToolStripMenuItem.Size = New System.Drawing.Size(336, 22)
+        Me.ChooseAndConnectToDevice64bitApplicationToolStripMenuItem.Text = "Choose and Connect to Device"
+        '
+        'ChooseAndConnectToDevice32bitApplicationToolStripMenuItem
+        '
+        Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Name = "ChooseAndConnectToDevice32bitApplicationToolStripMenuItem"
+        Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Size = New System.Drawing.Size(336, 22)
+        Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Text = "Choose and Connect to Device (32bit application)"
         '
         'mnuTools
         '
@@ -285,12 +291,6 @@ Partial Class DiagnosticsForm
         Me.btnLastLog.Text = "View Last Log"
         Me.btnLastLog.UseVisualStyleBackColor = True
         '
-        'ChooseAndConnectToDevice32bitApplicationToolStripMenuItem
-        '
-        Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Name = "ChooseAndConnectToDevice32bitApplicationToolStripMenuItem"
-        Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Size = New System.Drawing.Size(336, 22)
-        Me.ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Text = "Choose and Connect to Device (32bit application)"
-        '
         'DiagnosticsForm
         '
         Me.AcceptButton = Me.btnCOM
@@ -329,7 +329,7 @@ Partial Class DiagnosticsForm
     Friend WithEvents ListAvailableCOMPortsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnLastLog As System.Windows.Forms.Button
     Friend WithEvents mnuChooseDevice As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ChooseAndConncectToDeviceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ChooseAndConnectToDevice64bitApplicationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnuTrace As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnuLeaveUnset As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator

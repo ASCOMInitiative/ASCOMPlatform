@@ -102,10 +102,10 @@ Public Class DiagnosticsForm
 
             If Environment.Is64BitOperatingSystem Then ' We are on a 64bit OS so make both 32 and 64bit Chooser forms available
                 ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Visible = True
-                ChooseAndConncectToDeviceToolStripMenuItem.Visible = True
+                ChooseAndConnectToDevice64bitApplicationToolStripMenuItem.Visible = True
             Else ' We are on a 32bit OS so just make a 32bit Chooser form available
-                ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Visible = False
-                ChooseAndConncectToDeviceToolStripMenuItem.Visible = True
+                ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Visible = True
+                ChooseAndConnectToDevice64bitApplicationToolStripMenuItem.Visible = False
             End If
 
             RefreshTraceItems() ' Get current values for the trace menu settings
@@ -635,7 +635,8 @@ Public Class DiagnosticsForm
         Sim.InterfaceVersion = 3
         Sim.IsPlatform5 = False
         Sim.SixtyFourBit = True
-        Sim.AxisRates = New Double(,) {{0.0, 25.0}, {50.0 / 3.0, 50.0}}
+        Sim.AxisRates = New Double(,) {{0.0, 0.5}, {1.0 / 3.0, 1.0}} ' Axis rates relative to MaxRate
+        Sim.AxisRatesRelative = True
         TestSimulator(Sim)
         Sim = Nothing
 
@@ -648,7 +649,8 @@ Public Class DiagnosticsForm
         Sim.InterfaceVersion = 2
         Sim.IsPlatform5 = True
         Sim.SixtyFourBit = True
-        Sim.AxisRates = New Double(,) {{0.0}, {8.0}}
+        Sim.AxisRates = New Double(,) {{0.0}, {8.0}} ' Absolute axis rates
+        Sim.AxisRatesRelative = False
         TestSimulator(Sim)
         Sim = Nothing
 
@@ -777,6 +779,10 @@ Public Class DiagnosticsForm
 
     Private Sub TestSimulator(ByVal Sim As SimulatorDescriptor)
         Dim RetValString As String, DeviceAxisRates As Object, ct As Integer, DeviceType As Type
+        Dim prof As Profile, MaxSlewRate As Double
+
+        Const MAX_SLEW_RATE_PROFILE_NAME As String = "MaxSlewRate" ' Name of the Profile variable holding the maximum slew rate
+
         Try
             Status(Sim.Description)
 
@@ -785,7 +791,6 @@ Public Class DiagnosticsForm
             Else
                 Try
                     TL.LogMessage("TestSimulator", "CreateObject for Device: " & Sim.ProgID & " " & Sim.Description)
-                    'DeviceObject = CreateObject(Sim.ProgID)
                     DeviceType = Type.GetTypeFromProgID(Sim.ProgID)
                     DeviceObject = Activator.CreateInstance(DeviceType)
                     Select Case Sim.DeviceType
@@ -885,11 +890,23 @@ Public Class DiagnosticsForm
                             DeviceTest("Telescope", "TrackingRates")
                             DeviceAxisRates = DeviceTest("Telescope", "AxisRates")
                             Try
+                                ' The maximum slew rate is a user configurable value so we need to read it here in order to conduct slew rate value tests
+                                ' Get the maximum slew rate stored in the simulator Profile for use in relative rates tests
+                                prof = New Profile()
+
+                                MaxSlewRate = CDbl(prof.GetValue(Sim.ProgID, MAX_SLEW_RATE_PROFILE_NAME))
+                                prof.Dispose()
+
                                 ct = DeviceObject.InterfaceVersion()
                                 ct = 0
                                 For Each AxRte As Object In DeviceAxisRates
-                                    CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct), 0.000001)
-                                    CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct), 0.000001)
+                                    If Sim.AxisRatesRelative Then ' Relative axis rates so multiply the provided fractions of MaxRate by MaxRate
+                                        CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct) * MaxSlewRate, 0.000001)
+                                        CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct) * MaxSlewRate, 0.000001)
+                                    Else ' Abolute axis rates so test as given
+                                        CompareDouble("TestSimulator", "AxisRate Minimum", AxRte.Minimum, Sim.AxisRates(0, ct), 0.000001)
+                                        CompareDouble("TestSimulator", "AxisRate Maximum", AxRte.Maximum, Sim.AxisRates(1, ct), 0.000001)
+                                    End If
                                     ct += 1
                                 Next
                             Catch ex1 As COMException
@@ -6539,7 +6556,7 @@ Public Class DiagnosticsForm
         Process.Start(LastLogFile) ' Open in the system's default text editor
     End Sub
 
-    Private Sub ChooseAndConncectToDeviceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConncectToDeviceToolStripMenuItem.Click
+    Private Sub ChooseAndConncectToDevice64bitApplicationToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConnectToDevice64bitApplicationToolStripMenuItem.Click
         'ConnectForm.Visible = True
         Dim proc As Process, procStartInfo As ProcessStartInfo
         Try
