@@ -131,6 +131,12 @@ namespace Simulator.VideoCameraImpl
 			frmLoading.Cursor = Cursors.WaitCursor;
 			frmLoading.Invalidate();
 
+			if (frmLoading.Owner != null)
+			{
+				frmLoading.Owner.Cursor = Cursors.WaitCursor;
+				frmLoading.Owner.Update();
+			}
+
 			Application.DoEvents();
 
 			return frmLoading;
@@ -142,7 +148,7 @@ namespace Simulator.VideoCameraImpl
 			{
 				if (frmLoading.Owner != null)
 				{
-					frmLoading.Owner.Cursor = Cursors.WaitCursor;
+					frmLoading.Owner.Cursor = Cursors.Default;
 					frmLoading.Owner.Update();
 				}
 

@@ -35,7 +35,7 @@ namespace ASCOM.Simulator.Utils
 		{
 			lock (s_SyncLock)
 			{
-				s_TraceLogger = new TraceLogger();
+				s_TraceLogger = new TraceLogger("VideoSimulator");
 				s_TraceLogger.Enabled = true;
 			}
 		}
