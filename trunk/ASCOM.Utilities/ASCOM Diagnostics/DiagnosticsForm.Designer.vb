@@ -55,6 +55,7 @@ Partial Class DiagnosticsForm
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblAction = New System.Windows.Forms.Label()
         Me.btnLastLog = New System.Windows.Forms.Button()
+        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -188,14 +189,12 @@ Partial Class DiagnosticsForm
         Me.MenuUseTraceAutoFilenames.Name = "MenuUseTraceAutoFilenames"
         Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(280, 22)
         Me.MenuUseTraceAutoFilenames.Text = "Use Automatic Serial Trace Filenames"
-        Me.MenuUseTraceAutoFilenames.Visible = False
         '
         'MenuUseTraceManualFilename
         '
         Me.MenuUseTraceManualFilename.Name = "MenuUseTraceManualFilename"
         Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(280, 22)
         Me.MenuUseTraceManualFilename.Text = "Use a Manual Serial Trace Filename"
-        Me.MenuUseTraceManualFilename.Visible = False
         '
         'MenuSerialTraceEnabled
         '
@@ -348,5 +347,6 @@ Partial Class DiagnosticsForm
     Friend WithEvents MenuAstroUtilsTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuNovasTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ChooseAndConnectToDevice32bitApplicationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SerialTraceFileName As System.Windows.Forms.SaveFileDialog
 
 End Class

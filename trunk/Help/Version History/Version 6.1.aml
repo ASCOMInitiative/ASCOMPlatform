@@ -57,6 +57,9 @@
 		      				slewing to RA/Dec with tracking disabled.</listItem>
 	  					</list>
 	      			</listItem>
+	      			<listItem>Chooser - Enabling serial tracing through the Chooser menu has been made simpler by removing infrequently required options and by selecting automatic file naming by default. Operation 
+	      			is now simply through an on/off option similar to all the other types of trace. Manual serial trace file name selection and all other historic options can still be made 
+	      			through the Diagnostics Trace menu.</listItem>
 	      			<listItem>Diagnostics - Choose Device Tool
 						<list class="bullet">
 		      				<listItem>This tool can now be started in either 32bit or 64bit modes on 64bit operating systems to provide emulation of both 32bit and 64bit clients.</listItem>
