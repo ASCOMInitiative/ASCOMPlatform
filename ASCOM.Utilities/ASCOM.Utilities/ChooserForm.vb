@@ -123,24 +123,24 @@ Friend Class ChooserForm
             TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME)
             Select Case TraceFileName
                 Case "" 'Trace is disabled
-                    MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
-                    MenuUseTraceAutoFilenames.Checked = False
-                    MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
-                    MenuUseTraceManualFilename.Checked = False
+                    'MenuUseTraceAutoFilenames.Enabled = True 'Autofilenames are enabled but unchecked
+                    'MenuUseTraceAutoFilenames.Checked = False
+                    'MenuUseTraceManualFilename.Enabled = True 'Manual trace filename is enabled but unchecked
+                    'MenuUseTraceManualFilename.Checked = False
                     MenuSerialTraceEnabled.Checked = False 'The trace enabled flag is unchecked and disabled
-                    MenuSerialTraceEnabled.Enabled = False
+                    MenuSerialTraceEnabled.Enabled = True
                 Case SERIAL_AUTO_FILENAME 'Tracing is on using an automatic filename
-                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
-                    MenuUseTraceAutoFilenames.Checked = True
-                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
-                    MenuUseTraceManualFilename.Checked = False
+                    'MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and checked
+                    'MenuUseTraceAutoFilenames.Checked = True
+                    'MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is dis enabled and unchecked
+                    'MenuUseTraceManualFilename.Checked = False
                     MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
                     MenuSerialTraceEnabled.Enabled = True
                 Case Else 'Tracing using some other fixed filename
-                    MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
-                    MenuUseTraceAutoFilenames.Checked = False
-                    MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
-                    MenuUseTraceManualFilename.Checked = True
+                    'MenuUseTraceAutoFilenames.Enabled = False 'Autofilenames are disabled and unchecked
+                    'MenuUseTraceAutoFilenames.Checked = False
+                    'MenuUseTraceManualFilename.Enabled = False 'Manual trace filename is disabled enabled and checked
+                    'MenuUseTraceManualFilename.Checked = True
                     MenuSerialTraceEnabled.Checked = True 'The trace enabled flag is checked and enabled
                     MenuSerialTraceEnabled.Enabled = True
             End Select
@@ -149,7 +149,7 @@ Friend Class ChooserForm
             MenuProfileTraceEnabled.Checked = GetBool(TRACE_PROFILE, TRACE_PROFILE_DEFAULT)
             MenuUtilTraceEnabled.Checked = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
             MenuTransformTraceEnabled.Checked = GetBool(TRACE_TRANSFORM, TRACE_TRANSFORM_DEFAULT)
-            MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+            'MenuIncludeSerialTraceDebugInformation.Checked = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
             MenuSimulatorTraceEnabled.Checked = GetBool(SIMULATOR_TRACE, SIMULATOR_TRACE_DEFAULT)
             MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
             MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
@@ -353,14 +353,14 @@ Friend Class ChooserForm
         End Try
     End Sub
 
-    Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceAutoFilenames.Click
+    Private Sub MenuAutoTraceFilenames_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim ProfileStore As RegistryAccess
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
         'Auto filenames currently disabled, so enable them
-        MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
-        MenuUseTraceAutoFilenames.Enabled = False
-        MenuUseTraceManualFilename.Checked = False 'Unset the manual file flag
-        MenuUseTraceManualFilename.Enabled = False
+        'MenuUseTraceAutoFilenames.Checked = True 'Enable the auto tracename flag
+        'MenuUseTraceAutoFilenames.Enabled = False
+        'MenuUseTraceManualFilename.Checked = False 'Unset the manual file flag
+        'MenuUseTraceManualFilename.Enabled = False
         MenuSerialTraceEnabled.Enabled = True 'Set the trace enabled flag
         MenuSerialTraceEnabled.Checked = True 'Enable the trace enabled flag
         ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
@@ -368,7 +368,7 @@ Friend Class ChooserForm
         ProfileStore = Nothing
     End Sub
 
-    Private Sub MenuSerialTraceFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUseTraceManualFilename.Click
+    Private Sub MenuSerialTraceFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim ProfileStore As RegistryAccess
         Dim RetVal As System.Windows.Forms.DialogResult
 
@@ -382,10 +382,10 @@ Friend Class ChooserForm
                 MenuSerialTraceEnabled.Enabled = True
                 MenuSerialTraceEnabled.Checked = True
                 'Enable maual serial trace file flag
-                MenuUseTraceAutoFilenames.Checked = False
-                MenuUseTraceAutoFilenames.Enabled = False
-                MenuUseTraceManualFilename.Checked = True
-                MenuUseTraceManualFilename.Enabled = False
+                'MenuUseTraceAutoFilenames.Checked = False
+                'MenuUseTraceAutoFilenames.Enabled = False
+                'MenuUseTraceManualFilename.Checked = True
+                'MenuUseTraceManualFilename.Enabled = False
             Case Else 'Ignore everything else
 
         End Select
@@ -397,15 +397,14 @@ Friend Class ChooserForm
         Dim ProfileStore As RegistryAccess
 
         ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
-        MenuSerialTraceEnabled.Checked = False 'Uncheck the enabled flag, make it inaccessible and clear the trace file name
-        MenuSerialTraceEnabled.Enabled = False
-        ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, "")
 
-        'Enable the set trace options
-        MenuUseTraceManualFilename.Enabled = True
-        MenuUseTraceManualFilename.Checked = False
-        MenuUseTraceAutoFilenames.Enabled = True
-        MenuUseTraceAutoFilenames.Checked = False
+        If MenuSerialTraceEnabled.Checked Then ' Auto serial trace is on so turn it off
+            MenuSerialTraceEnabled.Checked = False
+            ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, "")
+        Else ' Auto serial trace is off so turn it on
+            MenuSerialTraceEnabled.Checked = True
+            ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SERIAL_AUTO_FILENAME)
+        End If
         ProfileStore.Dispose()
         ProfileStore = Nothing
     End Sub
@@ -426,9 +425,9 @@ Friend Class ChooserForm
         SetName(TRACE_TRANSFORM, MenuTransformTraceEnabled.Checked.ToString)
     End Sub
 
-    Private Sub MenuIncludeSerialTraceDebugInformation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuIncludeSerialTraceDebugInformation.Click
-        MenuIncludeSerialTraceDebugInformation.Checked = Not MenuIncludeSerialTraceDebugInformation.Checked 'Invert selection
-        SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)
+    Private Sub MenuIncludeSerialTraceDebugInformation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'MenuIncludeSerialTraceDebugInformation.Checked = Not MenuIncludeSerialTraceDebugInformation.Checked 'Invert selection
+        'SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)
     End Sub
 
     Private Sub MenuSimulatorTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSimulatorTraceEnabled.Click
