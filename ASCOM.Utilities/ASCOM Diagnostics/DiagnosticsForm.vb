@@ -6509,80 +6509,20 @@ Public Class DiagnosticsForm
                                     "</ASCOMProfile>"
 #End Region
 
-#Region "Menu and Utility Code"
-    'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
-    <DllImport("shell32.dll")> _
-    Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
-        <Out()> ByVal lpszPath As System.Text.StringBuilder, _
-        ByVal nFolder As Integer, _
-        ByVal fCreate As Boolean) As Boolean
-    End Function
-
-    Private Sub btnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
-        End 'Close the program
-    End Sub
-
-    Private Sub ChooserToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserToolStripMenuItem1.Click
-        Dim Chooser As Object, Chosen As String
-        Dim ChooserType As Type
-
-        If ApplicationBits() = Bitness.Bits32 Then
-            'Chooser = CreateObject("DriverHelper.Chooser")
-            ChooserType = Type.GetTypeFromProgID("DriverHelper.Chooser")
-            Chooser = Activator.CreateInstance(ChooserType)
-            Chooser.DeviceType = "Telescope"
-            Chosen = Chooser.Choose("ScopeSim.Telescope")
-        Else
-            MsgBox("This component is 32bit only and cannot run on a 64bit system")
-        End If
-    End Sub
-
-    Private Sub ChooserNETToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserNETToolStripMenuItem.Click
-        Dim Chooser As ASCOM.Utilities.Chooser, Chosen As String
-
-        Chooser = New ASCOM.Utilities.Chooser
-        Chooser.DeviceType = "Telescope"
-        Chosen = Chooser.Choose("ScopeSim.Telescope")
-        Chooser.Dispose()
-
-    End Sub
-
-    Private Sub ListAvailableCOMPortsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListAvailableCOMPortsToolStripMenuItem.Click
-        SerialForm.Visible = True
-    End Sub
+#Region "Button event handlers"
 
     Private Sub btnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
         'Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
         Process.Start(LastLogFile) ' Open in the system's default text editor
     End Sub
 
-    Private Sub ChooseAndConncectToDevice64bitApplicationToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConnectToDevice64bitApplicationToolStripMenuItem.Click
-        'ConnectForm.Visible = True
-        Dim proc As Process, procStartInfo As ProcessStartInfo
-        Try
-            procStartInfo = New ProcessStartInfo(Application.StartupPath & DRIVER_CONNECT_APPLICATION_64BIT)
-            proc = New Process
-            proc.StartInfo = procStartInfo
-            proc.Start()
-        Catch ex As Exception
-            MessageBox.Show(ex.Message.ToString() & " - " & Application.StartupPath & DRIVER_CONNECT_APPLICATION_64BIT, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
+    Private Sub btnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
+        End 'Close the program
     End Sub
 
-    Private Sub ChooseAndConnectToDevice32BitApplicationToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Click
-        Dim proc As Process, procStartInfo As ProcessStartInfo
+#End Region
 
-        Try
-            procStartInfo = New ProcessStartInfo(Application.StartupPath & DRIVER_CONNECT_APPLICATION_32BIT)
-            proc = New Process
-            proc.StartInfo = procStartInfo
-            proc.Start()
-        Catch ex As Exception
-            MessageBox.Show(ex.Message.ToString() & " - " & Application.StartupPath & DRIVER_CONNECT_APPLICATION_32BIT, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-    End Sub
+#Region "Serial menu event handlers"
 
     Private Sub MenuSerialTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuSerialTraceEnabled.Click
         Dim ProfileStore As RegistryAccess
@@ -6625,27 +6565,6 @@ Public Class DiagnosticsForm
         ProfileStore = Nothing
     End Sub
 
-    Private Sub MenuProfileTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuProfileTraceEnabled.Click
-        MenuProfileTraceEnabled.Checked = Not MenuProfileTraceEnabled.Checked 'Invert the selection
-        SetName(TRACE_XMLACCESS, MenuProfileTraceEnabled.Checked.ToString)
-        SetName(TRACE_PROFILE, MenuProfileTraceEnabled.Checked.ToString)
-    End Sub
-
-    Private Sub MenuUtilTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUtilTraceEnabled.Click
-        MenuUtilTraceEnabled.Checked = Not MenuUtilTraceEnabled.Checked 'Invert the selection
-        SetName(TRACE_UTIL, MenuUtilTraceEnabled.Checked.ToString)
-    End Sub
-
-    Private Sub MenuTimerTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTimerTraceEnabled.Click
-        MenuTimerTraceEnabled.Checked = Not MenuTimerTraceEnabled.Checked 'Invert the selection
-        SetName(TRACE_TIMER, MenuTimerTraceEnabled.Checked.ToString)
-    End Sub
-
-    Private Sub MenuTransformTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTransformTraceEnabled.Click
-        MenuTransformTraceEnabled.Checked = Not MenuTransformTraceEnabled.Checked 'Invert the selection
-        SetName(TRACE_TRANSFORM, MenuTransformTraceEnabled.Checked.ToString)
-    End Sub
-
     Private Sub MenuIncludeSerialTraceDebugInformation_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuIncludeSerialTraceDebugInformation.Click
         MenuIncludeSerialTraceDebugInformation.Checked = Not MenuIncludeSerialTraceDebugInformation.Checked 'Invert selection
         SetName(SERIAL_TRACE_DEBUG, MenuIncludeSerialTraceDebugInformation.Checked.ToString)
@@ -6656,6 +6575,43 @@ Public Class DiagnosticsForm
         SetName(SIMULATOR_TRACE, MenuSimulatorTraceEnabled.Checked.ToString)
     End Sub
 
+    Private Sub MenuUseTraceManualFilename_Click(sender As System.Object, e As System.EventArgs) Handles MenuUseTraceManualFilename.Click
+        Dim ProfileStore As RegistryAccess
+        Dim RetVal As System.Windows.Forms.DialogResult
+
+        ProfileStore = New RegistryAccess(ERR_SOURCE_CHOOSER) 'Get access to the profile store
+
+        ' Set up the manual serial trace file name entry dialogue
+        SerialTraceFileName.FileName = "SerialTrace.txt"
+        SerialTraceFileName.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+        SerialTraceFileName.FilterIndex = 1
+        SerialTraceFileName.RestoreDirectory = True
+        RetVal = SerialTraceFileName.ShowDialog() ' Show the dialogue and retrieve the result
+
+        Select Case RetVal ' Handle the outcome from the user
+            Case Windows.Forms.DialogResult.OK
+                'Save the reault
+                ProfileStore.WriteProfile("", SERIAL_FILE_NAME_VARNAME, SerialTraceFileName.FileName)
+                'Check and enable the serial trace enabled flag
+                MenuSerialTraceEnabled.Enabled = True
+                MenuSerialTraceEnabled.Checked = True
+                'Enable maual serial trace file flag
+                MenuUseTraceAutoFilenames.Checked = False
+                MenuUseTraceAutoFilenames.Enabled = False
+                MenuUseTraceManualFilename.Checked = True
+                MenuUseTraceManualFilename.Enabled = False
+            Case Else 'Ignore everything else
+
+        End Select
+
+        ProfileStore.Dispose()
+        ProfileStore = Nothing
+    End Sub
+
+#End Region
+
+#Region "Other menu event handlers"
+
     ''' <summary>
     ''' Refresh the trace menu items based on current values stored in the user's registry
     ''' </summary>
@@ -6664,30 +6620,6 @@ Public Class DiagnosticsForm
     ''' <remarks></remarks>
     Private Sub mnuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuTrace.DropDownOpening
         RefreshTraceItems()
-    End Sub
-
-    Private Sub MenuDriverAccessTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDriverAccessTraceEnabled.Click
-        MenuDriverAccessTraceEnabled.Checked = Not MenuDriverAccessTraceEnabled.Checked 'Invert the selection
-        SetName(DRIVERACCESS_TRACE, MenuDriverAccessTraceEnabled.Checked.ToString)
-    End Sub
-
-    Private Sub MenuAstroUtilsTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuAstroUtilsTraceEnabled.Click
-        MenuAstroUtilsTraceEnabled.Checked = Not MenuAstroUtilsTraceEnabled.Checked 'Invert the selection
-        SetName(ASTROUTILS_TRACE, MenuAstroUtilsTraceEnabled.Checked.ToString)
-    End Sub
-
-    Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
-        VersionForm.ShowDialog()
-    End Sub
-
-    Private Sub MenuThrowAbandonedMutexExceptions_Click(sender As System.Object, e As System.EventArgs) Handles MenuThrowAbandonedMutexExceptions.Click
-        MenuThrowAbandonedMutexExceptions.Checked = Not MenuThrowAbandonedMutexExceptions.Checked 'Invert the selection
-        SetName(ABANDONED_MUTEXT_TRACE, MenuThrowAbandonedMutexExceptions.Checked.ToString)
-    End Sub
-
-    Private Sub MenuNovasTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuNovasTraceEnabled.Click
-        MenuNovasTraceEnabled.Checked = Not MenuNovasTraceEnabled.Checked 'Invert selection
-        SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
     End Sub
 
     ''' <summary>
@@ -6734,6 +6666,120 @@ Public Class DiagnosticsForm
         MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
         MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
     End Sub
+
+    Private Sub ChooserToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserToolStripMenuItem1.Click
+        Dim Chooser As Object, Chosen As String
+        Dim ChooserType As Type
+
+        If ApplicationBits() = Bitness.Bits32 Then
+            'Chooser = CreateObject("DriverHelper.Chooser")
+            ChooserType = Type.GetTypeFromProgID("DriverHelper.Chooser")
+            Chooser = Activator.CreateInstance(ChooserType)
+            Chooser.DeviceType = "Telescope"
+            Chosen = Chooser.Choose("ScopeSim.Telescope")
+        Else
+            MsgBox("This component is 32bit only and cannot run on a 64bit system")
+        End If
+    End Sub
+
+    Private Sub ChooserNETToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserNETToolStripMenuItem.Click
+        Dim Chooser As ASCOM.Utilities.Chooser, Chosen As String
+
+        Chooser = New ASCOM.Utilities.Chooser
+        Chooser.DeviceType = "Telescope"
+        Chosen = Chooser.Choose("ScopeSim.Telescope")
+        Chooser.Dispose()
+
+    End Sub
+
+    Private Sub ListAvailableCOMPortsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListAvailableCOMPortsToolStripMenuItem.Click
+        SerialForm.Visible = True
+    End Sub
+
+    Private Sub ChooseAndConncectToDevice64bitApplicationToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConnectToDevice64bitApplicationToolStripMenuItem.Click
+        'ConnectForm.Visible = True
+        Dim proc As Process, procStartInfo As ProcessStartInfo
+        Try
+            procStartInfo = New ProcessStartInfo(Application.StartupPath & DRIVER_CONNECT_APPLICATION_64BIT)
+            proc = New Process
+            proc.StartInfo = procStartInfo
+            proc.Start()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message.ToString() & " - " & Application.StartupPath & DRIVER_CONNECT_APPLICATION_64BIT, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+    End Sub
+
+    Private Sub ChooseAndConnectToDevice32BitApplicationToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooseAndConnectToDevice32bitApplicationToolStripMenuItem.Click
+        Dim proc As Process, procStartInfo As ProcessStartInfo
+
+        Try
+            procStartInfo = New ProcessStartInfo(Application.StartupPath & DRIVER_CONNECT_APPLICATION_32BIT)
+            proc = New Process
+            proc.StartInfo = procStartInfo
+            proc.Start()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message.ToString() & " - " & Application.StartupPath & DRIVER_CONNECT_APPLICATION_32BIT, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+    End Sub
+
+    Private Sub MenuProfileTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuProfileTraceEnabled.Click
+        MenuProfileTraceEnabled.Checked = Not MenuProfileTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_XMLACCESS, MenuProfileTraceEnabled.Checked.ToString)
+        SetName(TRACE_PROFILE, MenuProfileTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuUtilTraceEnabled_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuUtilTraceEnabled.Click
+        MenuUtilTraceEnabled.Checked = Not MenuUtilTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_UTIL, MenuUtilTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuTimerTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTimerTraceEnabled.Click
+        MenuTimerTraceEnabled.Checked = Not MenuTimerTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_TIMER, MenuTimerTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuTransformTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTransformTraceEnabled.Click
+        MenuTransformTraceEnabled.Checked = Not MenuTransformTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_TRANSFORM, MenuTransformTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuDriverAccessTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDriverAccessTraceEnabled.Click
+        MenuDriverAccessTraceEnabled.Checked = Not MenuDriverAccessTraceEnabled.Checked 'Invert the selection
+        SetName(DRIVERACCESS_TRACE, MenuDriverAccessTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuAstroUtilsTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuAstroUtilsTraceEnabled.Click
+        MenuAstroUtilsTraceEnabled.Checked = Not MenuAstroUtilsTraceEnabled.Checked 'Invert the selection
+        SetName(ASTROUTILS_TRACE, MenuAstroUtilsTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub MenuThrowAbandonedMutexExceptions_Click(sender As System.Object, e As System.EventArgs) Handles MenuThrowAbandonedMutexExceptions.Click
+        MenuThrowAbandonedMutexExceptions.Checked = Not MenuThrowAbandonedMutexExceptions.Checked 'Invert the selection
+        SetName(ABANDONED_MUTEXT_TRACE, MenuThrowAbandonedMutexExceptions.Checked.ToString)
+    End Sub
+
+    Private Sub MenuNovasTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuNovasTraceEnabled.Click
+        MenuNovasTraceEnabled.Checked = Not MenuNovasTraceEnabled.Checked 'Invert selection
+        SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
+        VersionForm.ShowDialog()
+    End Sub
+
+#End Region
+
+#Region "Utility Code"
+
+    'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
+    <DllImport("shell32.dll")> _
+    Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
+        <Out()> ByVal lpszPath As System.Text.StringBuilder, _
+        ByVal nFolder As Integer, _
+        ByVal fCreate As Boolean) As Boolean
+    End Function
 
     Private Sub Status(ByVal Msg As String)
         Application.DoEvents()
