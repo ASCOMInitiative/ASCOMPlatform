@@ -26,6 +26,7 @@ namespace ASCOM.Simulator.Utils
 		public static void Invoke(CallInUIThreadCallback action, params object[] additionalParams)
 		{
 			Form appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
+			if (appFormWithMessageLoop == null) appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null);
 
 			if (appFormWithMessageLoop != null && (Application.MessageLoop || hasOwnMessageLoop))
 			{
@@ -40,7 +41,7 @@ namespace ASCOM.Simulator.Utils
 					action.Invoke(appFormWithMessageLoop, additionalParams);
 				}
 			}
-			else if (!Application.MessageLoop && syncContext == null)
+			else if ((!Application.MessageLoop || appFormWithMessageLoop == null) && syncContext == null)
 			{
 				if (syncContext == null)
 				{

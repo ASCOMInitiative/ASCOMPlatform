@@ -24,7 +24,7 @@
 
 #include <windows.h>
 
-HRESULT ApplyGammaBrightness(long width, long height, long bpp, long* pixels, int brightnes);
+HRESULT ApplyGammaBrightness(long width, long height, long bpp, long* pixels, short brightnes);
 HRESULT SetGamma(double gamma);
 HRESULT InitFrameIntegration(long width, long height);
 HRESULT AddFrameForIntegration(long* pixels);

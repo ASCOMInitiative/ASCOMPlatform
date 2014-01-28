@@ -72,7 +72,7 @@ void GetMinMaxValuesForBpp(int bpp, int* minValue, int* maxValue)
 		*maxValue = 0xFFFF;
 }
 
-HRESULT ApplyGammaBrightness(long width, long height, long bpp, long* pixelsIn, long* pixelsOut, int brightness)
+HRESULT ApplyGammaBrightness(long width, long height, long bpp, long* pixelsIn, long* pixelsOut, short brightness)
 {
 	int minValue, maxValue;
 	GetMinMaxValuesForBpp(bpp, &minValue, &maxValue);
