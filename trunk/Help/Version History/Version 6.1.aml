@@ -86,6 +86,7 @@
 	      			<listItem>Although the Platform client applications have been transitioned to .NET 4, development of ASCOM clients and drivers
 	      			based on Framework 3.5 is still supported by the Platform.</listItem>
 	      			<listItem>The device template icons have been tidied up and made consistent.</listItem>
+	      			<listItem>The driver installer generator now supports in-process .NET drivers targetted at Framework 4.</listItem>
 				</list>
       		</content>
    		</section>

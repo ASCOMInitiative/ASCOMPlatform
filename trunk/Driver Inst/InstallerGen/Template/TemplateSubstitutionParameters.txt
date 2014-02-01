@@ -16,6 +16,8 @@
 ;   %rs32%    If driver is COM DLL "AfterInstall: RegASCOM(); Flags: regserver" else ""
 ;   %cid1%    CLSID of driver's primary (or only) interface
 ;   %cid2%    CLSID of COM local server secondary interface
+;   %net32%   .NET Framework 32bit directory variable (Can target Framework 2 or 4 run time)
+;   %net64%   .NET Framework 64bit directory variable (Can target Framework 2 or 4 run time)
 ;
 ;   Special tokens: Appear at beginning of line, if false the line is omitted
 ;                   If true token is removed and line is substituted
