@@ -87,6 +87,7 @@ namespace ASCOM.InstallerGen
             if (DialogResult.OK != dlg.ShowDialog(this))
                 return;
             this.txtDriverFile.Text = Path.GetFileName(dlg.FileName);
+            driverExecutableFilePath = dlg.FileName; // Save the full path to the executable
             //UpdateUI();
         }
 
@@ -109,7 +110,6 @@ namespace ASCOM.InstallerGen
             if (DialogResult.OK != dlg.ShowDialog(this))
                 return;
             this.txtReadMeFile.Text = Path.GetFileName(dlg.FileName);
-            driverExecutableFilePath = dlg.FileName; // SAve the full path to the executable
             //UpdateUI();
         }
 
