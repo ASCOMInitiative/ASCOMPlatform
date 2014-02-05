@@ -407,12 +407,12 @@ namespace ASCOM.InstallerGen
             // llblInno
             // 
             this.llblInno.AutoSize = true;
-            this.llblInno.Location = new System.Drawing.Point(48, 79);
+            this.llblInno.Location = new System.Drawing.Point(12, 80);
             this.llblInno.Name = "llblInno";
-            this.llblInno.Size = new System.Drawing.Size(317, 13);
+            this.llblInno.Size = new System.Drawing.Size(323, 13);
             this.llblInno.TabIndex = 51;
             this.llblInno.TabStop = true;
-            this.llblInno.Text = "Inno Setup downloads (Inno Setup and QuickStart Pack required)";
+            this.llblInno.Text = "Inno Setup downloads (Unicode QuickStart Pack is recommended)";
             this.llblInno.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblInno_LinkClicked);
             // 
             // lblVersion
@@ -484,12 +484,12 @@ namespace ASCOM.InstallerGen
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 39);
+            this.label2.Location = new System.Drawing.Point(12, 44);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(301, 31);
+            this.label2.Size = new System.Drawing.Size(315, 31);
             this.label2.TabIndex = 56;
-            this.label2.Text = "Please do not change the graphics, we want the user experi- ence when installing " +
-    "drivers to be consistent.";
+            this.label2.Text = "Please do not change the graphics, we want the user experience when installing dr" +
+    "ivers to be consistent.";
             // 
             // label21
             // 
