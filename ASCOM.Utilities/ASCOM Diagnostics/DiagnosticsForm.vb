@@ -972,6 +972,8 @@ Public Class DiagnosticsForm
     Private Function DeviceTest(ByVal Device As String, ByVal Test As String) As Object
         Dim RetVal As Object = Nothing, SiderealTime, RetValDouble As Double, StartTime As Date
         Dim DeviceTrackingRates As Object
+        Dim FocuserMax, FocuserPosition As Integer, FocuserUpperPortion, FocuserTargetPosition As Integer
+
         Const PossibleDriveRates As String = "driveSidereal,driveKing,driveLunar,driveSolar"
 
         Action(Test)
@@ -1011,13 +1013,33 @@ Public Class DiagnosticsForm
                 Case "Focuser"
                     Select Case Test
                         Case "Move"
-                            DeviceObject.Move(30000)
+                            ' Find the larger of either 0 to Position or Position to MaxStep and then move to half of that
+                            ' Calculate the upper portion size, the lower portion size is given by Position
+                            ' 0.................................................Pos..........................Max
+                            '                 Lower Portion                               Upper Portion
+
+                            FocuserMax = DeviceObject.MaxStep
+                            FocuserPosition = DeviceObject.Position
+                            TL.LogMessage("DeviceTest", "Focuser Position: " & FocuserPosition & ", Focuser Maximum: " & FocuserMax)
+
+                            FocuserUpperPortion = FocuserMax - FocuserPosition
+
+                            If FocuserUpperPortion > FocuserPosition Then ' Upper portion is larger
+                                FocuserTargetPosition = FocuserPosition + CInt(FocuserUpperPortion / 2)
+                                TL.LogMessage("DeviceTest", "Moving upward to: " & FocuserTargetPosition.ToString())
+                                DeviceObject.Move(FocuserTargetPosition)
+                            Else ' Lower portion is larger
+                                FocuserTargetPosition = CInt(FocuserPosition / 2)
+                                TL.LogMessage("DeviceTest", "Moving downward to: " & FocuserTargetPosition.ToString())
+                                DeviceObject.Move(FocuserTargetPosition)
+                            End If
+
                             Do
                                 Thread.Sleep(200)
                                 Application.DoEvents()
-                                Action(Test & " " & DeviceObject.Position & " / 30000") 'Now.Subtract(StartTime).Seconds)
+                                Action(Test & " " & DeviceObject.Position & " / " & FocuserTargetPosition) 'Now.Subtract(StartTime).Seconds)
                             Loop Until Not DeviceObject.IsMoving
-                            CompareDouble("DeviceTest", Test, CDbl(DeviceObject.Position), 30000.0, 0.000001)
+                            CompareInteger("DeviceTest", Test, DeviceObject.Position, FocuserTargetPosition)
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select

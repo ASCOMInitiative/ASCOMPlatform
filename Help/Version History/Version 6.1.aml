@@ -95,7 +95,7 @@
            	<title>Issues Fixed - Platform</title>
             <content>
       			<list class="bullet">
-					<listItem>None.</listItem>
+					<listItem>Diagnostics will no longer fail focuser simulator tests if MaxStep has been changed from its "out of the box" value.</listItem>
 				</list>
    			</content>
    		</section>
