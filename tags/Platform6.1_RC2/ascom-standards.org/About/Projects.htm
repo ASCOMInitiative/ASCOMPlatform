@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head><!-- #BeginEditable "Title" -->
+<title>Projects in Progress</title><!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+		<h3>Project: ASCOM Video (started April 2012, status: Stable)</h3>
+		<p>The new ASCOM interface for video is now available for both video hardware vendors and client software vendors. This provisional standard is currently under development and thus is subject to evolutionary change. The standard can be installed as an SDK that contains the COM interfaces, an IVideo simulator and a client video software with source code in C# .NET. More information about the project can be found on the <a href="http://www.hristopavlov.net/ASCOM/" target="_blank">ASCOM Provisional Video Standard project page.</a> </p>
+		
+		<h4>How to install ASCOM Provisional Video SDK</h4>
+		<p>The installer is available from the project home page. Just download the ASCOM Provisional Video SDK installer via the link below, then run the it.</p>
+		<pre style="font-size: larger; text-align: center;"><a href="http://www.hristopavlov.net/ASCOM/ASCOMProvisionalVideoSDK.exe">http://www.hristopavlov.net/ASCOM/ASCOMProvisionalVideoSDK.exe</a></pre>
+
+		<h3>Project: ASCOM Platform 6</h3>
+		<p>The current generation of the ASCOM Platform provides compatibility with Windows 7 and Windows 8 enhanced security and 64-bit systems, greatly expanded support for .NET languages, some new device interfaces, and even more support for both drivers and astronomy applications. It contains  new simulators, updated Visual Studio driver templates, and much more. This huge project was first released in June 2011, and is now the standard for general use. Updates are provided as needed.</p>
+		<p>Most of you don't need to know what's going on inside the Platform. All you need to know is that it is a set of components that are used by ASCOM drivers and programs that work with ASCOM drivers. If you are a developer, or just want to know the details about the things that changed in Platform 6, here's a <a href="http://download.ascom-standards.org/docs/ASCOM6.pdf" target="_blank">detailed description of ASCOM Platform 6</a> (June 2011).</p>
+		<h4>How to upgrade to Platform 6</h4>
+		<p>The installer for Platform 6 has been designed to upgrade previous Platform installations (back through 4.1, and including Platform 6 Release Candidates) without your needing to uninstall. Just download the Platform 6 installer via the link below, then run the it.</p>
+		<pre style="font-size: larger; text-align: center;"><a href="http://download.ascom-standards.org/ASCOMPlatform6SP3.exe">http://download.ascom-standards.org/ASCOMPlatform6SP3.exe</a></pre>
+		<p>The developer components and help have been placed into a separate installer to create a cleaner Platform install and to allow them to be updated whenever required. There is no need to install these tools if you do not develop your own ASCOM client applications or drivers.</p>
+
+		<pre style="font-size: larger; text-align: center;"><a href="http://download.ascom-standards.org/ASCOMPlatform6DeveloperSP3.exe">http://download.ascom-standards.org/ASCOMPlatform6DeveloperSP3.exe</a></pre>
+
+		<h4>How to get help with problems and report bugs</h4>
+		<p>If you have a problem after upgrading from an older Platform or with a new installation, first post to the <a href="http://tech.groups.yahoo.com/group/ASCOM-Talk/" target="_blank">ASCOM Talk Forum</a> and ask for help. Try to supply enough info so that others can understand your problem (e.g., &quot;ASCOM is broken&quot; is insufficient). Have a look at <a href="../Support/Index.htm" target="_blank">How to Get Support</a> for details on reporting problems. <span class="underline">The Platform does not replace or modify any Windows components nor does it change settings for any program</span>. It is strictly a support package for ASCOM drivers and programs which use ASCOM drivers.</p>
+		<p>If you are reasonably certain that you have found a bug, you can report it. Have a look at The <a href="../Community/Index.htm" target="_blank">ASCOM Initiative Community</a> to see how the developer community operates. </p>
+		<h3>Project: ASCOM Integration with TheSky X (Sept 2013, now part of TheSky X)</h3>
+		<p>Thanks to <a href="http://www.bisque.com/" target="_new">Software Bisque</a>, as of September 2013 TheSky X Pro incorporates ASCOM compatibility for Mount, Dome, Focuser, Camera, FilterWheel, and Rotator as a standard feature. You do not need to install anything extra. TheSky X can use ASCOM drivers for any of the preceding classes of drivers.</p>
+		<p>As background, Software Bisque has implemented a <a href="http://www.bisque.com/x2standard/" target="_blank">cross-platform plugin architecture called X2</a> that provides interfacing with astronomical devices from TheSky X Pro. The ASCOM X2 Integration project  developed generic X2 drivers that convert from X2 to ASCOM, allowing TheSky X to take advantage of the many existing ASCOM drivers. The new X2 drivers  replace the old <a href="../FAQs/TheSky.htm#teleapi">TeleAPI</a>, FocusAPI, and DomeAPI plugins that are legacy from TheSky 6. For info on how ASCOM and TheSky interoperate, see our FAQ <a href="../FAQs/TheSky.htm" target="_blank">Working WIth TheSky</a>. The X2 interfaces provide a <span class="underline">much richer</span> set of capabilities, allowing TheSky X to take advantage of more features of devices via their ASCOM drivers.  There are X2 to ASCOM plugins available . Thanks to Evan Warkentine for most of these plugins, and to Bob Denny for the original mount plugin. Over the first part of 2013, Software Bisque and Evan Warkentine teamed up to merge these plugins into TheSky X so they are now a standard part of TheSky X.  </p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright © 1998-2012, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>

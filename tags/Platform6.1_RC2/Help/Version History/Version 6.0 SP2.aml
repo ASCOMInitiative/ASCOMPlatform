@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1e3bf165-13dc-4a16-8bff-5fdc0d3da1c7" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+      	<section address="ChangesSP2">
+    		<title>Key Changes in 6.0 SP2 - For Everyone</title>
+      		<content>
+				<list class="bullet">
+	      			<listItem>The Dome control panel now uses DestinationSideOfPier when determining the dome position for slews</listItem>
+					<listItem>The Camera simulator can now simulate cameras that are unable to operate at all intermediate Bin values 
+					between 1 and BinMax.</listItem>
+					<listItem>Small installer updates to recognise Windows 8</listItem>
+					<listItem>The number of UTC leap seconds is now specified in the Astrometry key of the ASCOM Profile and can be updated by the user
+					whenever additional leap seconds are added without requiring an ASCOM Platform release. The value set by this Platform update takes 
+					account of the leap second introduced at the end of June 2012; no further change is expected to be required until 2014 or 2015.</listItem>
+					<listItem>The Telescope Simulator .NET is now more representative of real German equatorial mounts by tracking 1 hour beyond 
+					the meridian before flipping.</listItem>
+	  			</list>
+            </content>
+		</section>
+   		
+    	<section address="KeyChangesin6.0SP2Dev">
+	     	<title>Key Changes in 6.0 SP2 - For Developers</title>
+	      	<content>
+	      		<list class="bullet">
+	      			<listItem>Added a new AstroUtils.Event method that provides rise and set times for Sun, Moon and the planets. In addition, the times
+	      			of Civil, Nautical and Astronomical twilight can be returned. Returned values are generally within 1 minute of those retured by 
+	      			the 
+		      			<externalLink>
+							<linkText>USNO Astronomical Data Site</linkText>
+							<linkAlternateText>USNO Astronomical Data Site</linkAlternateText>
+							<linkUri>http://aa.usno.navy.mil/data/docs/RS_OneYear.php</linkUri>
+							<linkTarget>_blank</linkTarget>
+						</externalLink>
+					for latitudes in the range 80N to 80S and within 5 minutes outside these latitudes. The returned event list can handle days 
+					when no, one or two rise or set events occur.</listItem>
+					<listItem>An alamanc program has been added to the Code Examples in the the Developer Components install. This generates a
+	      			year long almanac for any AstroUtils.Event event at a given latitude, longitude and timezone.</listItem>
+	     			<listItem>Added Chris Rowland's "Introduction to developing ASCOM drivers" to the developer install.</listItem>
+					<listItem>Improved all drivers created through the template wizard. These now pass Conform "out of the box"
+					and throw the correct ASCOM execptions instead of system exceptions. Comments have been improved and all
+					CanXXX capability properties return boolean values instead of exceptions.</listItem>
+					<listItem>The Inno installer template generator now creates installers that can uninstall earlier versions of themselves
+					when a new version is installed.</listItem>
+					<listItem>Transform
+			      		<list class="bullet">
+			      			<listItem>Upgraded from using NOVAS 2 components to using NOVAS 3.1 components internally. There is no external 
+			      			functional change, accuracy is slightly improved</listItem>
+			      			<listItem>The Refresh method is no longer required, values are always refreshed before presenting to 
+			      			the calling application. The Refresh method is retained for backwards compatibility but its 
+			      			use is now deprecated.</listItem>
+			      			<ListItem>A new Transform.JulianDateTT method has been added to allow the ephemeris time to be explicitly 
+			      			specified. When this is done, Transform will no longer use the PC clock to calculate the Terrestrial Time, 
+			      			instead, the supplied Terrestrial Time Julian date will be used. Transform's default behaviour is to use 
+			      			the PC clock and this behaviour can be restored after JulianDateTT has been used by setting a JulianDateTT 
+			      			value of 0.0.</ListItem>
+	  					</list>
+					</listItem>
+					<listItem>Astrometry - The DeltaT function has been augmented to predict values in line with earth observations to March 2013 and 
+					the function now returns extrapolated values from April 2013 to December 2016. Taking account of USNO published uncertainty and 
+					model fitting error, returned values are expected to be accurate to ±0.1sec in 2013, ±0.2sec in 2014, ±0.4sec in 2015 and ±0.7sec in 2016.</listItem>
+					<listItem>The Terrestrial Time functions now account for the leap second that was introduced at the end of June 2012</listItem>
+					<listItem> AstroUtils
+						<list class="bullet">
+			     			<listItem>Added new methods AstroUtil.MoonIllumination and AstroUtil.MoonPhase.</listItem>
+							<listItem>AstroUtils.JulianDateTT and AstroUtils.JulianDateUT1 will now use an internal approximation for DeltaUT1
+							if the supplied value is 0.0.</listItem>
+							<listItem>Added a new function AstroUtils.FormatJD to format a Julian date using a supplied format descriptor.
+							This function will primarily be of interest to those using scripting languages that lack this capability.</listItem>
+						</list>
+					</listItem>
+					<listItem>An independent trace option for NOVAS components has been added to the Trace menu. Currently only a few
+					NOVAS 3.1 functions create trace output.</listItem>
+					<listItem>NOVASCOM.Planet now supports major planet numbers of 10=Sun and 11=Moon in line with the NOVAS convention.</listItem>
+					<listItem>A new entry on time scale relationships has been added to the Developer Information section of the help file.</listItem>
+					<listItem>TraceLogger - added a new single parameter initialiser that selects automatic file name generation based on the 
+					supplied filetype parameter and immediately enables the logger, removing the need for a subsequent TraceLogger.Enabled = true; statement.</listItem>
+					<listItem>Improved help description for the Focuser.Connected method saying that it is not available in 
+					focusers built to the IFocuser version 1 interface</listItem>
+					<listItem>Added a set of scripting language code samples to developer documentation to illustrate access 
+					through COM.</listItem>
+					<listItem>Descriptions of the new ICameraV2 methods have been clarified and now indicate whether the method must be
+					implemented or whether it is persmissible for it to throw a NotImplemented exception.</listItem>
+					<listItem>The Camera.PulseGuide description now specifies that the duration of movment should be expressed in 
+					milli-seconds.</listItem>
+					<listItem>The ASCOM convention for SideOfPier has be re-confirmed: that PierSide.pierEast, for a German
+					equatorial mount, is the pointing state where the mount is on the East side of the pier, looking West, with the 
+					counterweights below the optical assembly. This definition was lost from the SideOfPier and PierSide descriptions when the pointing state
+					text was added in the original Platform 6 release.</listItem>
+				</list>
+      		</content>
+   		</section>
+
+        <section address="IssuesFixedPlatform">
+           	<title>Issues Fixed - Platform</title>
+            <content>
+      			<list class="bullet">
+					<listItem>AstroUtils trace was permanently wired on, it now respects the Trace switch</listItem>
+					<listItem>Transform computation accuracy has been improved for J2000 to Topocentric and reciprocal conversions.</listItem>
+					<listItem>Transform now always returns up to date values when result values are repeatedly read without changing 
+					input values e.g. when reading Azimuth or Elevation without changing the J2000 RA and Dec values. </listItem>
+					<listItem>Astrometry.NOVASCOM.Planet now produces accurate values when the DeltaT property is set.</listItem>
+					<listItem>Astrometry.NOVASCOM.Planet - fixed a marshalling issue that prevented use from scripting languages 
+					through COM interop.</listItem>
+					<listItem>Astrometry.Kepler.Ephemeris - fixed an initialisation issue in that prevented calculation for minor 
+					planet bodies.</listItem>
+					<listItem>Fixed occasional installation failures due to the presence of non-standard permissions in the registry</listItem>
+					<listItem>DriverAccess, when used within an ASCOM client, now correctly handles hubs where DriverAccess has been used to present another driver. 
+					i.e. DriverAccess now recognises situations where it has already wrapped a driver response and removes that wrapping before processing it again.</listItem>
+					<listItem>Incorporated NOVAS 3.1 errata from the
+						<externalLink>
+							<linkText>USNO NOVAS Support</linkText>
+							<linkAlternateText>USNO NOVAS Support</linkAlternateText>
+							<linkUri>http://aa.usno.navy.mil/software/novas/novas_faq.php</linkUri>
+							<linkTarget>_blank</linkTarget>
+						</externalLink>
+						web site.
+						<list class="bullet">
+							<listItem>Fixed a bug in the NOVAS 3.1 SideralTime function that appeared only when when the CIO method was selected</listItem>
+							<listItem>The original NOVAS source code contained a bug in EphemClose that prevented the ephemeris file from being reopened; 
+							a work round had already been incorporated in previous Platform releases. This has now been replaced with the official 
+							fix from the NOVAS team.</listItem>
+			  			</list>
+					</listItem>	
+					<listItem>POTH
+						<list class="bullet">
+			     			<listItem>Upgraded to Jon Brewster's latest version - V6.</listItem>
+							<listItem>Fixed issue in locales where point is not the decimal separator.</listItem>
+							<listItem>Fixed issue where slewing state was not read from the scope after a MoveAxis command was sent.</listItem>
+						</list>
+					</listItem>
+				</list>
+   			</content>
+   		</section>
+   		
+        <section address="IssuesFixedDeveloper">
+           	<title>Issues Fixed - Developers</title>
+            <content>
+      			<list class="bullet">
+					<listItem>The Inno installer template generator created a test for the installed Platform version that only worked in countries where 
+					the decimal separator was the point "." character</listItem>
+					<listItem>The Telescope Templates now generate fully functioning TrackingRates classes that implement IEnumerable so that foreach loops work as expected.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+       <section address="KnownIssuesDevelopment">
+           	<title>Known Limitations - Developers</title>
+            <content>
+      			<list class="bullet">
+					<listItem>The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully 
+					accessible through COM from scripting languages because a number of parameters are passed by reference or use 
+					structures that do not pass across the COM interface. Three workrounds have been established:
+		      			<list class="bullet">
+							<listItem><legacyBold>Recommended</legacyBold> - Use the Transform component in the ASCOM.Astrometry.Transform 
+							namespace, it is fully COM compatible.</listItem>
+							<listItem><legacyBold>Recommended</legacyBold> - Use the NOVASCOM components in the Astrometry.NOVASCOM namespace,
+							they are also fully COM compatible.</listItem>
+							<listItem>Create your own COM presentation component that encapsulates the NOVAS 3.1 functions that you require
+							and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your 
+							scripting application.</listItem>
+						</list>
+					</listItem>
+					</list>
+   			</content>
+   		</section>
+   		
+   		<section address="BreakingChanges">
+           	<title>Breaking Changes (For Developers)</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>The NOVASCOM component iterfaces are now exposed as COM late binding interfaces only, early binding support 
+ 		 			has been removed. Exposure of early binding COM interop interfaces was unintentional; the core ASCOM team decided 
+ 		 			to revert to late binding for all interfaces in the original Platform 6 release. This has no impact on use of the
+ 		 			.NET components or use from scripting languages.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+  </developerConceptualDocument>
+</topic>

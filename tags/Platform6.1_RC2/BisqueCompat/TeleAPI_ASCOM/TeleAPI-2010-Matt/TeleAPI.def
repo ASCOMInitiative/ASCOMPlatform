@@ -1,0 +1,16 @@
+LIBRARY	     TELEAPI
+
+DESCRIPTION  'TELEAPI DLL'
+
+EXPORTS
+	DllMain 				@19	
+	tapiGetDLLVersion		@20
+	tapiEstablishLink		@21	
+	tapiTerminateLink		@22
+	tapiGetRaDec			@23
+	tapiSetRaDec			@24
+	tapiGotoRaDec			@25
+	tapiIsGotoComplete		@26
+	tapiAbortGoto			@27
+	tapiSettings			@28
+	tapiPulseFocuser		@29		
