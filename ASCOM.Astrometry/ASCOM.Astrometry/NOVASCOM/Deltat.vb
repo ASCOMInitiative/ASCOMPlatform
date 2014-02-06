@@ -86,8 +86,9 @@ Module DeltatCode
                 ' The analysis spreadsheets for this are stored in the \NOVAS\DeltaT Predictions folder of the ASCOM source tree.
                 ' Following intoduced by Peter Simpson. It is a 2nd order polynomial best fit to real DeltaT data from Q3 2011 to Q1 2013 together with projections
                 ' of deltat t from here http://maia.usno.navy.mil/ Historic values: http://maia.usno.navy.mil/ser7/deltat.data Predictions: http://maia.usno.navy.mil/ser7/deltat.preds
-                ' The analysis was performed on 6th June 2013 and creates values within 0.1 of a second of the projections to the end of 2016
-                ans = (0.0399479 * Y * Y) + (-160.454097 * Y) + 161185.37
+                ' The analysis was performed on 6th February 2014 and creates values within 0.2 of a second of the projections to Q1 2016
+                ans = (0.00231189 * Y * Y) + (-8.85231952 * Y) + 8518.54
+
                 Return (ans)
             Else
                 ' Following now superseded by above for 2012-16, this is left in for consistency with previous behaviour
