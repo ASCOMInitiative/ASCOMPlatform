@@ -25,6 +25,15 @@
 					<listItem>ICameraV2 - Make ReadoutMode Read-Write instead of Read-Only to meet the interface specification</listItem>
 					<listItem>Exception handling in common device methods is now consistently documented in the Developer Help 
 					and only refers to ASCOM defined exceptions.</listItem>
+					<listItem>Added AstroUtils component to the Astrometry namespace. This contains useful basic routines to:
+			      		<list class="bullet">
+			     			<listItem>Condition hour angle, right ascension and declination into their standard ranges.</listItem>
+							<listItem>Condition any number into a given range</listItem>
+							<listItem>Provide an estimate of the current value of DeltaT</listItem>
+							<listItem>Provide the current Julian date on the Terrestrial Time timescale</listItem>
+							<listItem>Provide the current Julian date on the UT1 timescale</listItem>
+		  				</list>
+					</listItem>
   				</list>
       		</content>
    		</section>
