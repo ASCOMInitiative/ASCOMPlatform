@@ -196,6 +196,7 @@ function writesubmenu() {
         SubMenuOutput += "<h3>Driver Practical Issues</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 		SubMenuOutput += "<li><a href=\"DriverImpl.htm\">Driver Development</a></li>";
+		SubMenuOutput += "<li><a href=\"DevFor32And64Bits.htm\">Developing for 32/64-bits</a></li>";
 		SubMenuOutput += "<li><a href=\"Conformance.htm\">Conformance Testing</a></li>";
 		SubMenuOutput += "<li><a href=\"DriverDist.htm\">Creating an Installer</a></li>";
 		SubMenuOutput += "<li><a href=\"ReleaseTesting.htm\">Release Testing</a></li>";

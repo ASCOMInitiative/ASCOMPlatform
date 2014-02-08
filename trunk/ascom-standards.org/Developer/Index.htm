@@ -1,7 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
  
-<head><!-- #BeginEditable "Title" -->
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
 <title>Resources and Principles</title>
 <!-- #EndEditable -->
 
@@ -55,10 +63,11 @@
 	<p class="note">There is a lot of information here <span class="underline">and in the pages on the list to the left</span>. This information can save you time and frustration during your development. Please invest some time to check it out before getting heavily into your development.</p>
 	
 	<h3>Application Developer Resources</h3>
-	<p>If you're new to ASCOM, and you're an <i>application</i> developer (as opposed to a driver developer), check out the <a href="AppStart.htm">Getting Started</a> information. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">ASCOM .NET Client Toolkit</a>.</p>
+	<p>If you're new to ASCOM, and you're an <i>application</i> developer (as opposed to a driver developer), check out the <a href="AppStart.htm">Getting Started</a> information. which includes an <a href="AppStart.htm#video">excellent video showing the development of a complete program</a> for controlling any telescope using Visual Studio using Visual Basic .NET. Then, if you are developing your application in one of the Microsoft .NET languages, learn about the <a href="ClientToolkit.htm">ASCOM .NET Client Toolkit</a>.</p>
 
 	<h3>Driver Developer Resources</h3>
 	<p>Most of the driver developer tools are contained within the <a href="../Downloads/PlatDevComponents.htm">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
+	<p>YOu may benefit from watching <a href="DriverImpl.htm#video">Tom How's excellent video showing how to develop a driver</a> for a telescope control system using the popular Arduino microcontroller kit.</p>
 	
 	<h3><a name="download" id="download"></a>Developer Components (separate download)</h3>
 	<p class="note">Before embarking on driver development, you should have the <a href="../Downloads/PlatDevComponents.htm" target="_blank">ASCOM Platform Developer Components</a> installed on your system. Driver templates, most of the developer documentation, and the installer generator are included in the Developer Components installation.  The developer components are provided as a separate download from the Platform itself. </p>
@@ -76,6 +85,7 @@
 	<ul>
 		<li>Not understanding the driver-client architecture and that your driver will be used by many applications, some of which don't  yet exist</li>
 		<li>Using sources for another driver (or worse, one of the simulators) as a starting point (you start with other peoples' mistakes and the wrong design)</li>
+		<li>Developing for both 32-bit and 64-bit using &quot;any cpu&quot; in .NET, yet depending on an external library that is 32-bit only (C++ DLL for 32-bits etc.).</li>
 		<li>Giving a driver  a &quot;kitchen sink&quot; window that lets people &quot;control&quot; and &quot;tune&quot; your device. They just want it to work with <i>their</i> program.</li>
 		<li>Insisting on using C++ because that's the only language you know, but you know nothing about COM (bare metal C++ is <i>tough</i>)</li>
 		<li>Ignoring the support services provided by the Platform (Chooser, Profile, Serial, etc.) and rolling your own</li>
@@ -86,7 +96,7 @@
 	</div>
 &nbsp;<!-- #EndEditable --></div>
 <div id="footer">
-	Copyright © 1998-2012, The ASCOM Initiative. 
+	Copyright &copy; 1998-2014, The ASCOM Initiative. 
 	All rights reserved. </div>
 
 </body>
