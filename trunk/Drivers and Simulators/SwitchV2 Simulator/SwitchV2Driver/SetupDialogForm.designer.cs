@@ -60,7 +60,7 @@ namespace ASCOM.Simulator
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdOK.Location = new System.Drawing.Point(332, 266);
+            this.cmdOK.Location = new System.Drawing.Point(336, 264);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -72,7 +72,7 @@ namespace ASCOM.Simulator
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(397, 265);
+            this.cmdCancel.Location = new System.Drawing.Point(401, 263);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -93,7 +93,7 @@ namespace ASCOM.Simulator
             this.picASCOM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.picASCOM.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picASCOM.Image = global::ASCOM.Simulator.Properties.Resources.ASCOM;
-            this.picASCOM.Location = new System.Drawing.Point(408, 9);
+            this.picASCOM.Location = new System.Drawing.Point(412, 9);
             this.picASCOM.Name = "picASCOM";
             this.picASCOM.Size = new System.Drawing.Size(48, 56);
             this.picASCOM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -115,7 +115,7 @@ namespace ASCOM.Simulator
             // 
             this.chkTrace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkTrace.AutoSize = true;
-            this.chkTrace.Location = new System.Drawing.Point(8, 271);
+            this.chkTrace.Location = new System.Drawing.Point(8, 269);
             this.chkTrace.Name = "chkTrace";
             this.chkTrace.Size = new System.Drawing.Size(69, 17);
             this.chkTrace.TabIndex = 6;
@@ -151,7 +151,7 @@ namespace ASCOM.Simulator
             this.dataGridViewSwitches.RowHeadersWidth = 40;
             this.dataGridViewSwitches.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewSwitches.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataGridViewSwitches.Size = new System.Drawing.Size(448, 188);
+            this.dataGridViewSwitches.Size = new System.Drawing.Size(452, 186);
             this.dataGridViewSwitches.TabIndex = 7;
             this.toolTip1.SetToolTip(this.dataGridViewSwitches, "This is used to show and edit the switch properties. Set Up Simulator must be che" +
         "cked to allow the switch type properties to be changed.");
@@ -243,7 +243,7 @@ namespace ASCOM.Simulator
             // 
             this.checkBoxSetupSimulator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxSetupSimulator.AutoSize = true;
-            this.checkBoxSetupSimulator.Location = new System.Drawing.Point(288, 48);
+            this.checkBoxSetupSimulator.Location = new System.Drawing.Point(288, 46);
             this.checkBoxSetupSimulator.Name = "checkBoxSetupSimulator";
             this.checkBoxSetupSimulator.Size = new System.Drawing.Size(103, 17);
             this.checkBoxSetupSimulator.TabIndex = 8;
@@ -254,8 +254,9 @@ namespace ASCOM.Simulator
             // 
             // labelVersion
             // 
+            this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelVersion.AutoSize = true;
-            this.labelVersion.Location = new System.Drawing.Point(106, 272);
+            this.labelVersion.Location = new System.Drawing.Point(105, 270);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(45, 13);
             this.labelVersion.TabIndex = 9;
@@ -265,7 +266,7 @@ namespace ASCOM.Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 298);
+            this.ClientSize = new System.Drawing.Size(470, 296);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.checkBoxSetupSimulator);
             this.Controls.Add(this.dataGridViewSwitches);
@@ -275,7 +276,6 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
