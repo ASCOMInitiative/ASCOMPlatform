@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using ASCOM.Utilities;
 using ASCOM.Simulator;
+using System.Diagnostics;
 
 namespace ASCOM.Simulator
 {
@@ -27,7 +28,8 @@ namespace ASCOM.Simulator
                 i++;
             }
             checkBoxSetupSimulator_CheckedChanged(null, null);
-            labelVersion.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            FileVersionInfo FV = Process.GetCurrentProcess().MainModule.FileVersionInfo; //Get the name of the executable without path or file extension
+            labelVersion.Text = "Version: " + FV.FileVersion;
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
@@ -207,7 +209,7 @@ namespace ASCOM.Simulator
             colCanWrite.DefaultCellStyle.BackColor =
             colMin.DefaultCellStyle.BackColor =
             colMax.DefaultCellStyle.BackColor =
-            colStep.DefaultCellStyle.BackColor = checkBoxSetupSimulator.Checked ? switchName.DefaultCellStyle.BackColor:SystemColors.Control;
+            colStep.DefaultCellStyle.BackColor = checkBoxSetupSimulator.Checked ? switchName.DefaultCellStyle.BackColor : SystemColors.Control;
 
             colMin.ReadOnly =
             colMax.ReadOnly =

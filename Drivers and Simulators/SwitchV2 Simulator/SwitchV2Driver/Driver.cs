@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System.Diagnostics;
 
 namespace ASCOM.Simulator
 {
@@ -191,9 +192,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                // TODO customise this driver description
-                string driverInfo = "Switch V2 Simulator, version: " + version.ToString();
+                FileVersionInfo FV = Process.GetCurrentProcess().MainModule.FileVersionInfo; //Get the name of the executable without path or file extension
+                string driverInfo = "Switch V2 Simulator, version: " + FV.FileVersion;
                 tl.LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
@@ -203,8 +203,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                string driverVersion = version.ToString(2);
+                FileVersionInfo FV = Process.GetCurrentProcess().MainModule.FileVersionInfo; //Get the name of the executable without path or file extension
+                string driverVersion = FV.FileMajorPart.ToString() + "." + FV.FileMinorPart.ToString();
                 tl.LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
