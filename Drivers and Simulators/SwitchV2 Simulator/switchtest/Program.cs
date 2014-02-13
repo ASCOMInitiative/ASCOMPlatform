@@ -47,16 +47,32 @@ namespace ASCOM
             Console.WriteLine("Number " + device.MaxSwitch);
             for (short i = 0; i < device.MaxSwitch; i++)
             {
-                Console.WriteLine("Id {0}, Name {1}, Min {2}, max {3}, step {4}, value {5}, CanWrite {6}",
+                Console.Write("Id {0}, Name {1}, Min {2}, max {3}, step {4}",
                     i, device.GetSwitchName(i),
                     device.MinSwitchValue(i), device.MaxSwitchValue(i),
-                    device.SwitchStep(i), device.GetSwitchValue(i),
-                    device.CanWrite(i));
+                    device.SwitchStep(i));
+                if (isBoolean(device, i))
+                {
+                    Console.Write(", Value {0}", device.GetSwitch(i));
+                }
+                else
+                {
+                    Console.Write(", Value {0}", device.GetSwitchValue(i));
+                }
+                Console.WriteLine(", CanWrite {0}", device.CanWrite(i));
             }
 
             device.Connected = false;
             Console.WriteLine("Press Enter to finish");
             Console.ReadLine();
+        }
+
+        static bool isBoolean(Switch sw, short id)
+        {
+            if ((sw.MaxSwitchValue(id) - sw.MinSwitchValue(id)) / sw.SwitchStep(id) == 1)
+                return true;
+            else
+                return false;
         }
     }
 }
