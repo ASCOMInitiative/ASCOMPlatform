@@ -5,6 +5,7 @@
 //
 using System;
 using ASCOM.Utilities;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -40,9 +41,6 @@ namespace ASCOM.Simulator
         private static short _interfaceVersion = 2;
         private static string s_sProgID = "ASCOM.Simulator.Rotator";
 
-        private static Profile Profile;
-
-
 		//
 		// Sync object
 		//
@@ -53,8 +51,6 @@ namespace ASCOM.Simulator
 		//
 		static RotatorHardware()
 		{
-			Profile = new Profile();
-			Profile.DeviceType = "Rotator";
 			s_fPosition = 0.0F;
 			s_bConnected = false;
 			s_bMoving = false;
@@ -62,34 +58,31 @@ namespace ASCOM.Simulator
 		}
 
 		//
-		// Settings support
-		//
-		private static string GetSetting(string name, string defValue)
-		{
-			string s = Profile.GetValue(s_sProgID, name, "");
-			if (s == "") s = defValue;
-			return s;
-		}
-
-		//
 		// Initialize/finalize for server startup/shutdown
 		//
 		public static void Initialize()
 		{
-			s_fPosition = Convert.ToSingle(GetSetting("Position", "0.0"));
-			s_fTargetPosition = s_fPosition;
-			RotationRate = Convert.ToSingle(GetSetting("RotationRate", "3.0"));
-			s_bCanReverse = Convert.ToBoolean(GetSetting("CanReverse", "true"));
-			s_bReverse = Convert.ToBoolean(GetSetting("Reverse", "false"));
+            using (var profile = new Profile())
+            {
+                profile.DeviceType = "Rotator";
+                s_fPosition = Convert.ToSingle(profile.GetValue(s_sProgID, "Position", "", "0.0"), CultureInfo.InvariantCulture);
+                s_fTargetPosition = s_fPosition;
+                RotationRate = Convert.ToSingle(profile.GetValue(s_sProgID, "RotationRate", "", "3.0"), CultureInfo.InvariantCulture);
+                s_bCanReverse = Convert.ToBoolean(profile.GetValue(s_sProgID, "CanReverse", "", bool.TrueString));
+                s_bReverse = Convert.ToBoolean(profile.GetValue(s_sProgID, "Reverse", "", bool.FalseString));
+            }
 		}
 
 		public static void Finalize_()	// "Finalize" exists in parent
 		{
-			//s_Timer.Dispose();
-			Profile.WriteValue(s_sProgID, "Position", s_fPosition.ToString(), "");
-			Profile.WriteValue(s_sProgID, "RotationRate", RotationRate.ToString(), "");
-			Profile.WriteValue(s_sProgID, "CanReverse", s_bCanReverse.ToString(), "");
-			Profile.WriteValue(s_sProgID, "Reverse", s_bReverse.ToString(), "");
+            using (var profile = new Profile())
+            {
+                profile.DeviceType = "Rotator";
+                profile.WriteValue(s_sProgID, "Position", s_fPosition.ToString(CultureInfo.InvariantCulture), "");
+                profile.WriteValue(s_sProgID, "RotationRate", RotationRate.ToString(CultureInfo.InvariantCulture), "");
+                profile.WriteValue(s_sProgID, "CanReverse", s_bCanReverse.ToString(), "");
+                profile.WriteValue(s_sProgID, "Reverse", s_bReverse.ToString(), "");
+            }
 		}
 
 		//
@@ -152,10 +145,20 @@ namespace ASCOM.Simulator
 
         public static void SetupDialog()
         {
-            frmSetup form = new frmSetup();
             Initialize();
-            form.ShowDialog();
- 
+            using (frmSetup form = new frmSetup())
+            {
+                form.RotationRate = RotationRate;
+                form.CanReverse = CanReverse;
+                form.Reverse = Reverse;
+                form.UpdateInterval = s_iUpdateInterval;
+                if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    Reverse = form.Reverse;
+                    CanReverse = form.CanReverse;
+                    RotationRate = form.RotationRate;
+                }
+            }
         }
 
 	    public static float Position
@@ -279,15 +282,13 @@ namespace ASCOM.Simulator
 		//
 		private static void CheckConnected()
 		{
-			if (!s_bConnected) throw new DriverException("The rotator is not connected", 
-								unchecked(ErrorCodes.DriverBase + 2));
+			if (!s_bConnected) throw new NotConnectedException("The rotator is not connected");
 		}
 
 		private static void CheckAngle(float angle)
 		{
 			if (angle < 0.0F || angle >= 360.0F) 
-				throw new DriverException("Angle out of range, must be 0 <= angle < 360",
-								unchecked(ErrorCodes.DriverBase + 5));
+				throw new ASCOM.InvalidValueException("Angle out of range", angle.ToString(), "0 <= angle < 360");
 		}
 
 		private static void CheckMoving(bool bAssert)
