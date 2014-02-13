@@ -52,6 +52,7 @@ namespace ASCOM.Simulator
 		public Rotator()
         {
             driverID = Marshal.GenerateProgIdForType(this.GetType());
+            //System.Windows.Forms.MessageBox.Show("Test");       // allows time for attach to process
         }
 
 		//
@@ -64,27 +65,27 @@ namespace ASCOM.Simulator
         /// <exception cref="MethodNotImplementedException"></exception>
         public string Action(string actionName, string actionParameters)
         {
-            throw new MethodNotImplementedException("Action");
+            throw new ASCOM.ActionNotImplementedException(actionName);
         }
 
 	    public void CommandBlind(string command, bool raw)
 	    {
-            throw new MethodNotImplementedException("CommandBlind");
+            throw new ASCOM.MethodNotImplementedException("CommandBlind " + command);
 	    }
 
 	    public bool CommandBool(string command, bool raw)
 	    {
-            throw new MethodNotImplementedException("CommandBool");
+            throw new ASCOM.MethodNotImplementedException("CommandBool " + command);
 	    }
 
 	    public string CommandString(string command, bool raw)
 	    {
-            throw new MethodNotImplementedException("CommandString");
+            throw new ASCOM.MethodNotImplementedException("CommandString " + command);
 	    }
 
 	    public void Dispose()
 	    {
-            throw new MethodNotImplementedException("Dispose");
+            //throw new MethodNotImplementedException("Dispose");
 	    }
 
         /// <summary>

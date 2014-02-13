@@ -162,6 +162,7 @@
     <None Include="Resources\saturnc.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ASCOM.ico" />
     <Content Include="saturn.ico" />
   </ItemGroup>
   <ItemGroup>
