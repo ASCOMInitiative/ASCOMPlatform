@@ -91,7 +91,7 @@ class DeviceSwitch
 
     /// <summary>
     /// Return the state of switch n
-    /// an analogue switch will return true if the value is closer to the maximum than the minimum, otherwise false
+    /// a multi-value switch must throw a not implemented exception
     /// </summary>
     /// <param name="id">The switch number to return</param>
     /// <returns>
@@ -99,7 +99,7 @@ class DeviceSwitch
     /// </returns>
     public bool GetSwitch(short id)
     {
-        Validate("GetSwitch", id);
+        Validate("GetSwitch", id, true);
         tl.LogMessage("GetSwitch", string.Format("GetSwitch({0}) - not implemented", id));
         throw new MethodNotImplementedException("GetSwitch");
     }
@@ -107,14 +107,14 @@ class DeviceSwitch
     /// <summary>
     /// Sets a switch to the specified state
     /// If the switch cannot be set then throws a MethodNotImplementedException.
-    /// Setting an analogue switch to true will set it to its maximim value and
+    /// A multi-value switch must throw a not implemented exception
     /// setting it to false will set it to its minimum value.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="state"></param>
     public void SetSwitch(short id, bool state)
     {
-        Validate("SetSwitch", id);
+        Validate("SetSwitch", id, true);
         if (!CanWrite(id))
         {
             var str = string.Format("SetSwitch({0}) - Cannot Write", id);
@@ -181,25 +181,22 @@ class DeviceSwitch
 
     /// <summary>
     /// returns the analogue switch value for switch id
-    /// boolean switches will return 1.0 or 0.0
+    /// boolean switches must throw a not implemented exception
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     public double GetSwitchValue(short id)
     {
-        Validate("GetSwitchValue", id);
-        // boolean switch implementation, return 0 or 1
-        return GetSwitch(id) ? 1 : 0;
-        // or
-        //tl.LogMessage("GetSwitchValue", string.Format("GetSwitchValue({0}) - not implemented", id));
-        //throw new MethodNotImplementedException("GetSwitchValue");
+        Validate("GetSwitchValue", id, false);
+        tl.LogMessage("GetSwitchValue", string.Format("GetSwitchValue({0}) - not implemented", id));
+        throw new MethodNotImplementedException("GetSwitchValue");
     }
 
     /// <summary>
     /// set the analogue value for this switch.
     /// If the switch cannot be set then throws a MethodNotImplementedException.
     /// If the value is not between the maximum and minimum then throws an InvalidValueException
-    /// boolean switches will be set to true if the value is closer to the maximum than the minimum.
+    /// boolean switches must throw a not implemented exception.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="value"></param>
@@ -243,13 +240,31 @@ class DeviceSwitch
     /// <param name="value">The value.</param>
     private void Validate(string message, short id, double value)
     {
-        Validate(message, id);
+        Validate(message, id, false);
         var min = MinSwitchValue(id);
         var max = MaxSwitchValue(id);
         if (value < min || value > max)
         {
             tl.LogMessage(message, string.Format("Value {1} for Switch {0} is out of the allowed range {2} to {3}", id, value,  min, max));
  	        throw new InvalidValueException(message, value.ToString(), string.Format("Switch({0}) range {1} to {2}", id, min, max));
+        }
+    }
+
+    /// <summary>
+    /// Checks that the number of states for the switch is correct and throws a methodNotImplemented exception if not.
+    /// Boolean switches must have 2 states and multi-value switches more than 2.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="id"></param>
+    /// <param name="expectBoolean"></param>
+    private void Validate(string message, short id, bool expectBoolean)
+    {
+        Validate(message, id);
+        var ns = (int)(((MaxSwitchValue(id) - MinSwitchValue(id)) / SwitchStep(id)) + 1);
+        if ((expectBoolean && ns != 2) || (!expectBoolean && ns <= 2))
+        {
+            tl.LogMessage(message, string.Format("Switch {0} has the wriong number of states", id, ns));
+ 	        throw new MethodNotImplementedException(string.Format("{0}({1})", message, id));
         }
     }
 

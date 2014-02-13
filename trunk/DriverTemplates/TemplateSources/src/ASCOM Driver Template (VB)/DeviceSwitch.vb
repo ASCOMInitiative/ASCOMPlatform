@@ -79,12 +79,12 @@ Class DeviceSwitch
 #Region "boolean members"
     ''' <summary>
     ''' Return the state of switch n as a boolean
-    ''' an analogue switch will return true if the value is closer to the maximum than the minimum, otherwise false
+    ''' A multi-value switch must throw a MethodNotImplementedException.
     ''' </summary>
     ''' <param name="id">The switch number to return</param>
     ''' <returns>True or false</returns>
     Function GetSwitch(id As Short) As Boolean Implements ISwitchV2.GetSwitch
-        Validate("GetSwitch", id)
+        Validate("GetSwitch", id, True)
         TL.LogMessage("GetSwitch", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("GetSwitch")
     End Function
@@ -92,13 +92,12 @@ Class DeviceSwitch
     ''' <summary>
     ''' Sets a switch to the specified state, true or false.
     ''' If the switch cannot be set then throws a MethodNotImplementedException.
-    ''' Setting an analogue switch to true will set it to its maximim value and
-    ''' setting it to false will set it to its minimum value.
+    ''' A multi-value switch must throw a MethodNotImplementedException.
     ''' </summary>
     ''' <param name="ID">The number of the switch to set</param>
     ''' <param name="State">The required switch state</param>
     Sub SetSwitch(id As Short, state As Boolean) Implements ISwitchV2.SetSwitch
-        Validate("SetSwitch", id)
+        Validate("SetSwitch", id, True)
         TL.LogMessage("SetSwitch", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("SetSwitch")
     End Sub
@@ -146,12 +145,12 @@ Class DeviceSwitch
 
     ''' <summary>
     ''' returns the analogue switch value for switch id
-    ''' boolean switches will return 1.0 or 0.0
+    ''' boolean switches must throw a MethodNotImplementedException
     ''' </summary>
     ''' <param name="id"></param>
     ''' <returns></returns>
     Function GetSwitchValue(id As Short) As Double Implements ISwitchV2.GetSwitchValue
-        Validate("GetSwitchValue", id)
+        Validate("GetSwitchValue", id, False)
         TL.LogMessage("GetSwitchValue", "Not Implemented")
         Throw New ASCOM.MethodNotImplementedException("GetSwitchValue")
     End Function
@@ -160,12 +159,12 @@ Class DeviceSwitch
     ''' set the analogue value for this switch.
     ''' If the switch cannot be set then throws a MethodNotImplementedException.
     ''' If the value is not between the maximum and minimum then throws an InvalidValueException
-    ''' boolean switches will be set to true if the value is closer to the maximum than the minimum.
+    ''' boolean switches must throw a MethodNotImplementedException
     ''' </summary>
     ''' <param name="id"></param>
     ''' <param name="value"></param>
     Sub SetSwitchValue(id As Short, value As Double) Implements ISwitchV2.SetSwitchValue
-        Validate("SetSwitchValue", id)
+        Validate("SetSwitchValue", id, value)
         If value < MinSwitchValue(id) Or value > MaxSwitchValue(id) Then
             Throw New InvalidValueException("", value.ToString(), String.Format("{0} to {1}", MinSwitchValue(id), MaxSwitchValue(id)))
         End If
@@ -176,11 +175,50 @@ Class DeviceSwitch
 #End Region
 #End Region
 
+    ''' <summary>
+    ''' Checks that the switch id is in range and throws an InvalidValueException if it isn't
+    ''' </summary>
+    ''' <param name="message">The message.</param>
+    ''' <param name="id">The id.</param>
     Private Sub Validate(message As String, id As Short)
         If (id < 0 Or id >= numSwitches) Then
             Throw New ASCOM.InvalidValueException(message, id.ToString(), String.Format("0 to {0}", numSwitches - 1))
         End If
     End Sub
+
+    ''' <summary>
+    ''' Checks that the number of states for the switch is correct and throws a methodNotImplemented exception if not.
+    ''' Boolean switches must have 2 states and multi-value switches more than 2.
+    ''' </summary>
+    ''' <param name="message"></param>
+    ''' <param name="id"></param>
+    ''' <param name="expectBoolean"></param>
+    Private Sub Validate(message As String, id As Short, expectBoolean As Boolean)
+        Validate(message, id)
+        Dim ns As Integer = (((MaxSwitchValue(id) - MinSwitchValue(id)) / SwitchStep(id)) + 1)
+        If (expectBoolean And ns <> 2) Or (Not expectBoolean And ns <= 2) Then
+            TL.LogMessage(message, String.Format("Switch {0} has the wriong number of states", id, ns))
+            Throw New MethodNotImplementedException(String.Format("{0}({1})", message, id))
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Checks that the switch id and value are in range and throws an
+    ''' InvalidValueException if they are not.
+    ''' </summary>
+    ''' <param name="message">The message.</param>
+    ''' <param name="id">The id.</param>
+    ''' <param name="value">The value.</param>
+    Private Sub Validate(message As String, id As Short, value As Double)
+        Validate(message, id, False)
+        Dim min = MinSwitchValue(id)
+        Dim max = MaxSwitchValue(id)
+        If (value < min Or value > max) Then
+            TL.LogMessage(message, String.Format("Value {1} for Switch {0} is out of the allowed range {2} to {3}", id, value, min, max))
+            Throw New InvalidValueException(message, value.ToString(), String.Format("Switch({0}) range {1} to {2}", id, min, max))
+        End If
+    End Sub
+
 
     '//ENDOFINSERTEDFILE
 End Class
