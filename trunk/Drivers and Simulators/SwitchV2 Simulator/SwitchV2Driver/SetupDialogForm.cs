@@ -30,6 +30,9 @@ namespace ASCOM.Simulator
             checkBoxSetupSimulator_CheckedChanged(null, null);
             FileVersionInfo FV = Process.GetCurrentProcess().MainModule.FileVersionInfo; //Get the name of the executable without path or file extension
             labelVersion.Text = "Version: " + FV.FileVersion;
+            dataGridViewSwitches.PerformLayout();
+            this.Width = dataGridViewSwitches.Width + 28;
+            this.Height = dataGridViewSwitches.Height + 152;
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
@@ -205,6 +208,7 @@ namespace ASCOM.Simulator
         private void checkBoxSetupSimulator_CheckedChanged(object sender, EventArgs e)
         {
             dataGridViewSwitches.AllowUserToAddRows = checkBoxSetupSimulator.Checked;
+            dataGridViewSwitches.AllowUserToDeleteRows = checkBoxSetupSimulator.Checked;
 
             colCanWrite.DefaultCellStyle.BackColor =
             colMin.DefaultCellStyle.BackColor =
