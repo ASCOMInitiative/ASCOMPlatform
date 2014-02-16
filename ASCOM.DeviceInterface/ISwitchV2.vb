@@ -6,12 +6,17 @@
 ''' Defines the ISwitchV2 Interface
 ''' </summary>
 ''' <remarks>
-''' The Switch interface is used to define a number of 'switches'. A switch can be used to control something, such as a power switch
-''' or may be used to sense the state of something, such as a limit switch. Each switch has a CanWrite property, this is true if the
-''' switch can be written to or false if it can only be read.
-''' <para>In addition a switch may have multiple states, from two - a binary on/off switch - through those with a small
-''' number of states to those which have many states - an analogue switch</para>
-''' <para>An Analogue switch may be capable of changing and/or being set to a range of values, these are defined using the MinSwitchValue, MaxSwitchValue and StepSize methods.</para>
+''' The Switch interface is used to define a number of 'switch devices'. A switch device can be used to control something, such as a power switch
+''' or may be used to sense the state of something, such as a limit switch. Each device has a CanWrite property, this is true if
+''' it can be written to or false if it can only be read and so is a sensor.
+''' <para>In addition a switch device may have multiple states, from two - a binary on/off switch device - through those with a small
+''' number of states to those which have many states.</para>
+''' <para>A multi-state device may be capable of changing and/or being set to a range of values, these are defined using the
+''' MinSwitchValue, MaxSwitchValue and StepSize methods.</para>
+''' <para><b>Naming Conventions</b></para>
+''' <para>Each device handled by a Switch is known as a device or switch device for general cases, a controller device if it can alter the state of the device
+''' and a sensor device if it can only be read.</para>
+''' <para>Devices can be of two types, boolean if the device can only have two states, and multi-state if it can have more thn two values.</para>
 ''' </remarks>
 <Guid("71A6CA6B-A86B-4EBB-8DA3-6D91705177A3"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface ISwitchV2
@@ -203,156 +208,160 @@ Public Interface ISwitchV2
 
 #Region "Device Methods"
     ''' <summary>
-    ''' The number of switches managed by this driver
+    ''' The number of switch devices managed by this driver
     ''' </summary>
-    ''' <returns>The number of switches managed by this driver, in the range 0 to <see cref="MaxSwitch"/> - 1.</returns>
-    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException</b></p> 
-    ''' <p>Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1</p></remarks>
+    ''' <returns>The number of devices managed by this driver, in the range 0 to <see cref="MaxSwitch"/> - 1.</returns>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="PropertyNotImplementedException"/></b></p> 
+    ''' <p>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</p></remarks>
     ReadOnly Property MaxSwitch As Short
 
     ''' <summary>
-    ''' Return the name of switch n.
+    ''' Return the name of switch device n.
     ''' </summary>
-    ''' <param name="id">The switch number</param>
-    ''' <returns>The name of the switch</returns>
+    ''' <param name="id">The device number</param>
+    ''' <returns>The name of the device</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-    ''' <para>Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
+    ''' <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
     Function GetSwitchName(id As Short) As String
 
     ''' <summary>
-    ''' Set a switch's name to a specified value.
+    ''' Set a switch device name to a specified value.
     ''' </summary>
-    ''' <param name="id">The number of the switch whose name is to be set</param>
-    ''' <param name="name">The name of the switch</param>
-    ''' <exception cref="MethodNotImplementedException">If the switch name cannot be set in the application code.</exception>
+    ''' <param name="id">The number of the device whose name is to be set</param>
+    ''' <param name="name">The name of the device</param>
+    ''' <exception cref="MethodNotImplementedException">If the device name cannot be set in the application code.</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception if the switch name can not be set by the application.</b></p>
-    ''' <para>Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
+    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception if the device name can not be set by the application.</b></p>
+    ''' <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
     ''' </remarks>
     Sub SetSwitchName(id As Short, name As String)
 
     ''' <summary>
-    ''' Gets the description of the specified switch. This is to allow a fuller description of
-    ''' the switch to be returned, for example for a tool tip.
+    ''' Gets the description of the specified switch device. This is to allow a fuller description of
+    ''' the device to be returned, for example for a tool tip.
     ''' </summary>
-    ''' <param name="id">The number of the switch whose description is to be returned</param>
+    ''' <param name="id">The number of the device whose description is to be returned</param>
     ''' <returns>
-    '''   String giving the switch description.
+    '''   String giving the device description.
     ''' </returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-    ''' <para>Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
+    ''' <para>Decices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function GetSwitchDescription(id As Short) As String
 
     ''' <summary>
-    ''' Reports if the specified switch can be written to, default true.
-    ''' This is false if the switch cannot be written to, for example a limit switch or a sensor.
+    ''' Reports if the specified switch device can be written to, default true.
+    ''' This is false if the device cannot be written to, for example a limit switch or a sensor.
     ''' </summary>
-    ''' <param name="id">The number of the switch whose write state is to be returned</param>
+    ''' <param name="id">The number of the device whose write state is to be returned</param>
     ''' <returns>
-    '''   <c>true</c> if the switch can be written to, otherwise <c>false</c>.
+    '''   <c>true</c> if the device can be written to, otherwise <c>false</c>.
     ''' </returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-    ''' <para>Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
-    ''' <para>This is a Version 2 method, version 1 switches can be assumed to be writable.</para>
+    ''' <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para>
+    ''' <para>This is a Version 2 method, version 1 switch devices can be assumed to be writable.</para>
     ''' </remarks>
     Function CanWrite(id As Short) As Boolean
 
 #Region "boolean members"
     ''' <summary>
-    ''' Return the state of switch n as a boolean
+    ''' Return the state of switch device n as a boolean
     ''' </summary>
-    ''' <param name="id">The switch number to return</param>
+    ''' <param name="id">The device number to return</param>
     ''' <returns>True or false</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
+    ''' <exception cref="MethodNotImplementedException">If the device cannot be read or is a multi-state device.</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
-    ''' <para>An analogue switch should return true or false.</para>
-    ''' <para>Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
+    ''' <para>A multi-state device must throw an ASCOM.MethodNotImplementedException.</para>
+    ''' <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
     Function GetSwitch(id As Short) As Boolean
 
     ''' <summary>
-    ''' Sets a switch to the specified state, true or false.
+    ''' Sets a switch controller device to the specified state, true or false.
     ''' </summary>
-    ''' <param name="id">The number of the switch to set</param>
-    ''' <param name="state">The required switch state</param>
-    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <param name="id">The number of the controller to set</param>
+    ''' <param name="state">The required control state</param>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
+    ''' <exception cref="MethodNotImplementedException">If the controller cannot be written to (<see cref="CanWrite"/> is false),
+    ''' or the device is multi-state.</exception>
     ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-    ''' <para>Setting an analogue switch to true will set it to its maximum value and setting it to false will set it to its minimum value.</para>
-    ''' <para>Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
+    ''' <para>A multi-state device must throw an ASCOM.MethodNotImplementedException.</para>
+    ''' <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
     Sub SetSwitch(id As Short, state As Boolean)
 #End Region
 
 #Region "Analogue members"
     ''' <summary>
-    ''' Returns the maximum analogue value for this switch, this must be greater than <see cref="MinSwitchValue"/>.
+    ''' Returns the maximum value for this switch device, this must be greater than <see cref="MinSwitchValue"/>.
     ''' </summary>
-    ''' <param name="id">The switch whose maximum value should be returned</param>
-    ''' <returns>The maximum value to which this switch can be set or wich a read only switch will return.</returns>
+    ''' <param name="id">The device whose maximum value should be returned</param>
+    ''' <returns>The maximum value to which this device can be set or wich a read only sensor will return.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
-    ''' <para>Boolean switches must return 1.0 as their maximum value. Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an <see cref="ASCOM.MethodNotImplementedException"/></b></p> 
+    ''' <para>Boolean devices must return 1.0 as their maximum value. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function MaxSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' Returns the minimum analogue value for this switch, this must be less than <see cref="MaxSwitchValue"/>
+    ''' Returns the minimum analogue value for this switch device, this must be less than <see cref="MaxSwitchValue"/>
     ''' </summary>
-    ''' <param name="id">The switch whose minimum value should be returned</param>
-    ''' <returns>The minimum value to which this switch can be set.</returns>
+    ''' <param name="id">The device whose minimum value should be returned</param>
+    ''' <returns>The minimum value to which this device can be set or wich a read only sensor will return.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
-    ''' <para>Boolean switches must return 0.0 as their minimum value. Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <para>Boolean switches must return 0.0 as their minimum value. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function MinSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' Returns the step size that this switch supports (the difference between successive values of the switch).
+    ''' Returns the step size that this switch device supports (the difference between successive values of the device).
     ''' </summary>
-    ''' <param name="id">The switch whose value should be returned</param>
-    ''' <returns>The step size for this switch.</returns>
+    ''' <param name="id">The device whose value should be returned</param>
+    ''' <returns>The step size for this device.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-    ''' <para>Boolean switches must return 1.0, giving two states. Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <para>Boolean devices must return 1.0, giving two states. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>For any switch, the number of steps can be calculated as:
-    ''' ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep" />) + 1.</para>
-    ''' <para>The SwitchStep can be used to determine the way the switch is controlled and/or displayed, for example by setting the
-    ''' number of decimal places for a display.</para>
+    ''' ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep" />) + 1. This must be an integer,
+    ''' value 2 for a boolean device and more than 2 for a multi-state device.</para>
+    ''' <para>SwitchStep can be used to determine the way the device is controlled and/or displayed, for example by setting the
+    ''' number of decimal places or number of states for a display.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function SwitchStep(id As Short) As Double
 
     ''' <summary>
-    ''' Returns the analogue switch value for switch id.
+    ''' Returns the value for multi-state switch device id.
     ''' </summary>
-    ''' <param name="id">The switch whose value should be returned.</param>
+    ''' <param name="id">The device whose value should be returned.</param>
     ''' <returns>The analogue value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
     ''' <see cref="MaxSwitchValue"/> but values outside this range may be possible.</returns>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented, boolean devices must throw this.</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-    ''' <para>Boolean switches must return 0.0 or 1.0, giving two states. Switches are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <remarks><p style="color:red"><b>Must be implemented but may throw a <see cref="MethodNotImplementedException"/></b></p>
+    ''' <para>Boolean devices must throw a <see cref="MethodNotImplementedException" />. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function GetSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' Set the analogue value for this switch.
+    ''' Set the analogue value for this multi-state switch device.
     ''' </summary>
-    ''' <param name="id">The switch whose value should be set</param>
-    ''' <param name="value">Value to be set between MinSwitchValue and MaxSwitchValue</param>
-    ''' <exception cref="InvalidValueException">If the value is not between the maximum and minimum.</exception>
-    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <param name="id">The device whose value should be set</param>
+    ''' <param name="value">Value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <exception cref="InvalidValueException">If value is outside the range <see cref="MinSwitchValue"/> to <see cref="MaxSwitchValue"/></exception>
+    ''' <exception cref="MethodNotImplementedException">Boolean devices must throw this
+    '''  and multi-state switches will if <see cref="CanWrite"/> is false.</exception>
     ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
     ''' <para>If the value is not between the maximum and minimum then the method must throw an InvalidValueException. </para>
-    ''' <para>The switch's boolean <see cref="GetSwitch"/> value will be appear as true if the switch value is set closer to the maximum than the minimum, otherwise false.</para>
+    ''' <para>Boolean devices must throw a <see cref="MethodNotImplementedException"/>. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Sub SetSwitchValue(id As Short, value As Double)
