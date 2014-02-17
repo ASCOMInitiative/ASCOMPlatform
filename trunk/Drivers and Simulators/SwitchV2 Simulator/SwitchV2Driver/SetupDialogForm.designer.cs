@@ -41,9 +41,6 @@ namespace ASCOM.Simulator
             this.label2 = new System.Windows.Forms.Label();
             this.chkTrace = new System.Windows.Forms.CheckBox();
             this.dataGridViewSwitches = new System.Windows.Forms.DataGridView();
-            this.checkBoxSetupSimulator = new System.Windows.Forms.CheckBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.labelVersion = new System.Windows.Forms.Label();
             this.colId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.switchName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,6 +49,9 @@ namespace ASCOM.Simulator
             this.colMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStep = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCanWrite = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.checkBoxSetupSimulator = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.labelVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSwitches)).BeginInit();
             this.SuspendLayout();
@@ -150,7 +150,6 @@ namespace ASCOM.Simulator
             this.dataGridViewSwitches.Name = "dataGridViewSwitches";
             this.dataGridViewSwitches.RowHeadersWidth = 40;
             this.dataGridViewSwitches.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewSwitches.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dataGridViewSwitches.Size = new System.Drawing.Size(553, 186);
             this.dataGridViewSwitches.TabIndex = 7;
             this.toolTip1.SetToolTip(this.dataGridViewSwitches, "This is used to show and edit the switch properties. Set Up Simulator must be che" +
@@ -160,28 +159,6 @@ namespace ASCOM.Simulator
             this.dataGridViewSwitches.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridViewSwitches_RowsAdded);
             this.dataGridViewSwitches.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridViewSwitches_RowsRemoved);
             this.dataGridViewSwitches.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewSwitches_RowValidating);
-            // 
-            // checkBoxSetupSimulator
-            // 
-            this.checkBoxSetupSimulator.AutoSize = true;
-            this.checkBoxSetupSimulator.Location = new System.Drawing.Point(288, 46);
-            this.checkBoxSetupSimulator.Name = "checkBoxSetupSimulator";
-            this.checkBoxSetupSimulator.Size = new System.Drawing.Size(103, 17);
-            this.checkBoxSetupSimulator.TabIndex = 8;
-            this.checkBoxSetupSimulator.Text = "Set up Simulator";
-            this.toolTip1.SetToolTip(this.checkBoxSetupSimulator, "Check this to allow the switch properties to be set up.");
-            this.checkBoxSetupSimulator.UseVisualStyleBackColor = true;
-            this.checkBoxSetupSimulator.CheckedChanged += new System.EventHandler(this.checkBoxSetupSimulator_CheckedChanged);
-            // 
-            // labelVersion
-            // 
-            this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelVersion.AutoSize = true;
-            this.labelVersion.Location = new System.Drawing.Point(105, 270);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(45, 13);
-            this.labelVersion.TabIndex = 9;
-            this.labelVersion.Text = "Version:";
             // 
             // colId
             // 
@@ -262,6 +239,28 @@ namespace ASCOM.Simulator
             this.colCanWrite.ToolTipText = "The is unchecked for a switch cannot be set, i.e. a sensor.";
             this.colCanWrite.Width = 40;
             // 
+            // checkBoxSetupSimulator
+            // 
+            this.checkBoxSetupSimulator.AutoSize = true;
+            this.checkBoxSetupSimulator.Location = new System.Drawing.Point(288, 46);
+            this.checkBoxSetupSimulator.Name = "checkBoxSetupSimulator";
+            this.checkBoxSetupSimulator.Size = new System.Drawing.Size(103, 17);
+            this.checkBoxSetupSimulator.TabIndex = 8;
+            this.checkBoxSetupSimulator.Text = "Set up Simulator";
+            this.toolTip1.SetToolTip(this.checkBoxSetupSimulator, "Check this to allow the switch properties to be set up.");
+            this.checkBoxSetupSimulator.UseVisualStyleBackColor = true;
+            this.checkBoxSetupSimulator.CheckedChanged += new System.EventHandler(this.checkBoxSetupSimulator_CheckedChanged);
+            // 
+            // labelVersion
+            // 
+            this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Location = new System.Drawing.Point(105, 270);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(45, 13);
+            this.labelVersion.TabIndex = 9;
+            this.labelVersion.Text = "Version:";
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -280,7 +279,6 @@ namespace ASCOM.Simulator
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SetupDialogForm";
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Simulator Setup";
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).EndInit();
