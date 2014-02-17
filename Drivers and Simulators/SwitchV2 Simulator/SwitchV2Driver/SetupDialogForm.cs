@@ -30,10 +30,45 @@ namespace ASCOM.Simulator
             checkBoxSetupSimulator_CheckedChanged(null, null);
             FileVersionInfo FV = Process.GetCurrentProcess().MainModule.FileVersionInfo; //Get the name of the executable without path or file extension
             labelVersion.Text = "Version: " + FV.FileVersion;
-            dataGridViewSwitches.PerformLayout();
-            this.Width = dataGridViewSwitches.Width + 28;
-            this.Height = dataGridViewSwitches.Height + 152;
+
+            dataGridViewSwitches.ColumnWidthChanged += new DataGridViewColumnEventHandler(dataGridViewSwitches_ColumnWidthChanged);
+            dataGridViewSwitches.RowHeightChanged += new DataGridViewRowEventHandler(dataGridViewSwitches_RowHeightChanged);
+            dataGridViewSwitches.RowsAdded+=new DataGridViewRowsAddedEventHandler(dataGridViewSwitches_RowsAdded);
+            
+            ResizeForm();
+
         }
+
+        void dataGridViewSwitches_RowHeightChanged(object sender, DataGridViewRowEventArgs e)
+        {
+            ResizeForm();
+        }
+
+        void ResizeForm()
+        {
+            int height = 0;
+            foreach (DataGridViewRow row in dataGridViewSwitches.Rows)
+            {
+                height += row.Height;
+            }
+            height += dataGridViewSwitches.ColumnHeadersHeight;
+
+            int width = 0;
+            foreach (DataGridViewColumn col in dataGridViewSwitches.Columns)
+            {
+                width += col.Width;
+            }
+            width += dataGridViewSwitches.RowHeadersWidth;
+
+            this.Size = new Size(width + 37, height + 150);
+
+        }
+
+        void dataGridViewSwitches_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            ResizeForm();
+        }
+
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
         {
@@ -161,11 +196,13 @@ namespace ASCOM.Simulator
         private void dataGridViewSwitches_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             UpdateRowId();
+            ResizeForm();
         }
 
         private void dataGridViewSwitches_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
         {
             UpdateRowId();
+            ResizeForm();
         }
 
         /// <summary>
