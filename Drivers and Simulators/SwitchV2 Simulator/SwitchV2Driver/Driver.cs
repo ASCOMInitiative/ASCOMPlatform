@@ -316,6 +316,10 @@ namespace ASCOM.Simulator
         {
             Validate("GetSwitch", id, true);
             LocalSwitch sw = switches[id];
+            if (!sw.CanRead)
+            {
+                throw new MethodNotImplementedException(string.Format("device {0} cannot be read", id));
+            }
             // returns true if the value is closer to the maximum than the minimum
             return sw.Maximum - sw.Value <= sw.Value - sw.Minimum;
         }
@@ -385,6 +389,10 @@ namespace ASCOM.Simulator
         public double GetSwitchValue(short id)
         {
             Validate("GetSwitchValue", id, false);
+            if (!switches[id].CanRead)
+            {
+                throw new MethodNotImplementedException(string.Format("device {0} cannot be read", id));
+            }
             return switches[id].Value;
         }
 
@@ -553,7 +561,7 @@ namespace ASCOM.Simulator
         private void LoadDefaultSwitches()
         {
             switches.Add(new LocalSwitch("Power1") { Description = "Generic power switch" });
-            switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch" });
+            switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch", CanRead = false });
             switches.Add(new LocalSwitch("Light Box", 100, 0, 10, 0) { Description = "Light box , 0 to 100%" });
             switches.Add(new LocalSwitch("Flat Panel", 255, 0, 1, 0) { Description = "Flat panel , 0 to 255" });
             switches.Add(new LocalSwitch("Scope Cover") { Description = "Scope cover control true is closed, false is open" });

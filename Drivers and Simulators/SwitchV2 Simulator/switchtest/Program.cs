@@ -51,13 +51,21 @@ namespace ASCOM
                     i, device.GetSwitchName(i),
                     device.MinSwitchValue(i), device.MaxSwitchValue(i),
                     device.SwitchStep(i));
-                if (isBoolean(device, i))
+                try
                 {
-                    Console.Write(", Value {0}", device.GetSwitch(i));
+                    if (isBoolean(device, i))
+                    {
+                        Console.Write(", Value {0}", device.GetSwitch(i));
+                    }
+                    else
+                    {
+                        Console.Write(", Value {0}", device.GetSwitchValue(i));
+                    }
+
                 }
-                else
+                catch (ASCOM.MethodNotImplementedException)
                 {
-                    Console.Write(", Value {0}", device.GetSwitchValue(i));
+                    Console.Write(", Value unknown");
                 }
                 Console.WriteLine(", CanWrite {0}", device.CanWrite(i));
             }
