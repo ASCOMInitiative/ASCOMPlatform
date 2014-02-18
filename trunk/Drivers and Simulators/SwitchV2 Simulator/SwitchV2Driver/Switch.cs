@@ -19,6 +19,7 @@ namespace ASCOM.Simulator
         public double StepSize { get; set; }
         public string Name { get; set; }
         public bool CanWrite { get; set; }
+        public bool CanRead { get; set; }
         public double Value { get; set; }
         public string Description { get; set; }
 
@@ -29,6 +30,7 @@ namespace ASCOM.Simulator
             this.Maximum = 1.0;
             this.StepSize = 1.0;
             this.CanWrite = true;
+            this.CanRead = true;
         }
 
         /// <summary>
@@ -46,9 +48,10 @@ namespace ASCOM.Simulator
         /// <param name="name">The name.</param>
         /// <param name="maximum">The maximum.</param>
         /// <param name="minimum">The minimum.</param>
-        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="stepSize">step Size</param>
         /// <param name="value">The value.</param>
-        internal LocalSwitch(string name, double maximum, double minimum, double stepSize, double value) : this(name, maximum, minimum, stepSize, value, true)
+        internal LocalSwitch(string name, double maximum, double minimum, double stepSize, double value)
+            : this(name, maximum, minimum, stepSize, value, true)
         {  }
 
         /// <summary>
@@ -69,6 +72,7 @@ namespace ASCOM.Simulator
             this.CanWrite = canWrite;
             this.Value = value;
             this.Description = name;
+            this.CanRead = true;
         }
 
         /// <summary>
@@ -87,6 +91,7 @@ namespace ASCOM.Simulator
             this.Maximum = Convert.ToDouble(profile.GetValue(driverId, "Maximum", subKey, "1"), CultureInfo.InvariantCulture);
             this.StepSize = Convert.ToDouble(profile.GetValue(driverId, "StepSize", subKey, "1"), CultureInfo.InvariantCulture);
             this.CanWrite = Convert.ToBoolean(profile.GetValue(driverId, "CanWrite", subKey, bool.FalseString), CultureInfo.InvariantCulture);
+            this.CanRead = Convert.ToBoolean(profile.GetValue(driverId, "CanRead", subKey, bool.TrueString), CultureInfo.InvariantCulture);
             this.Value = Convert.ToDouble(profile.GetValue(driverId, "Value", subKey, "0"), CultureInfo.InvariantCulture);
             this.Description = profile.GetValue(driverId, "Description", subKey, this.Name);
         }
@@ -105,6 +110,7 @@ namespace ASCOM.Simulator
             this.StepSize = Convert.ToDouble(cells["colStep"].Value);
             this.Value = Convert.ToDouble(cells["colValue"].Value);
             this.CanWrite = Convert.ToBoolean(cells["colCanWrite"].Value);
+            this.CanRead = Convert.ToBoolean(cells["colCanRead"].Value);
             if (cells["colDescription"].Value is string)
             {
                 this.Description = (string)cells["colDescription"].Value;
@@ -147,6 +153,7 @@ namespace ASCOM.Simulator
             profile.WriteValue(driverId, "Maximum", this.Maximum.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "StepSize", this.StepSize.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "CanWrite", this.CanWrite.ToString(CultureInfo.InvariantCulture), subKey);
+            profile.WriteValue(driverId, "CanRead", this.CanRead.ToString(CultureInfo.InvariantCulture), subKey);
             profile.WriteValue(driverId, "Value", this.Value.ToString(CultureInfo.InvariantCulture), subKey);
         }
 
@@ -178,14 +185,25 @@ namespace ASCOM.Simulator
             var stepSize = Convert.ToDouble(cells["colStep"].Value);
             var value = Convert.ToDouble(cells["colValue"].Value);
             var canWrite = Convert.ToBoolean(cells["colCanWrite"].Value);
-            return IsValid(name, maximum, minimum, stepSize, value, out reason);
+            var canRead = Convert.ToBoolean(cells["colCanRead"].Value);
+            if (!IsValid(name, maximum, minimum, stepSize, value, out reason))
+            {
+                return false;
+            }
+            //if (!canRead && !canWrite)
+            //{
+            //    reason = "The device can be neither read nor written";
+            //    return false;
+            //}
+            reason = string.Empty;
+            return true;
         }
 
         private static bool IsValid(string name, double max, double min, double step, double value, out string reason)
         {
             if (string.IsNullOrEmpty(name))
             {
-                reason = "No switch name is defined";
+                reason = "No switch device name is defined";
                 return false;
             }
             if (min >= max)
@@ -200,9 +218,14 @@ namespace ASCOM.Simulator
             }
             if ((max - min) / step < 1)
             {
-                reason = "Step size gives less than two positions";
+                reason = "Step size gives less than two states";
                 return false;
             }
+            //if (Math.Abs(Math.IEEERemainder((max - min) / step, 1.0)) > step / 10)
+            //{
+            //    reason = "The number of states is not an integer.";
+            //    return false;
+            //}
             if (value < min || value > max)
             {
                 reason = "Value not between Minimum and Maximum";

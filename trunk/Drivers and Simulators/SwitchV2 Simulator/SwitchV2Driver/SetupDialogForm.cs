@@ -24,7 +24,7 @@ namespace ASCOM.Simulator
             var i = 0;
             foreach (var item in Switch.switches)
             {
-                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Value, item.Minimum, item.Maximum, item.StepSize, item.CanWrite);
+                dataGridViewSwitches.Rows.Add(i, item.Name, item.Description, item.Value, item.Minimum, item.Maximum, item.StepSize, item.CanWrite, item.CanRead);
                 i++;
             }
             checkBoxSetupSimulator_CheckedChanged(null, null);
@@ -33,7 +33,7 @@ namespace ASCOM.Simulator
 
             dataGridViewSwitches.ColumnWidthChanged += new DataGridViewColumnEventHandler(dataGridViewSwitches_ColumnWidthChanged);
             dataGridViewSwitches.RowHeightChanged += new DataGridViewRowEventHandler(dataGridViewSwitches_RowHeightChanged);
-            dataGridViewSwitches.RowsAdded+=new DataGridViewRowsAddedEventHandler(dataGridViewSwitches_RowsAdded);
+            dataGridViewSwitches.RowsAdded += new DataGridViewRowsAddedEventHandler(dataGridViewSwitches_RowsAdded);
             
             ResizeForm();
 
@@ -159,6 +159,7 @@ namespace ASCOM.Simulator
             InitCell(cells["colStep"], "1");
             InitCell(cells["colCanWrite"], true);
             InitCell(cells["colValue"], "0");
+            InitCell(cells["colCanRead"], true);
         }
 
         private void InitCell(DataGridViewCell cell, object obj)
@@ -248,6 +249,7 @@ namespace ASCOM.Simulator
             dataGridViewSwitches.AllowUserToDeleteRows = checkBoxSetupSimulator.Checked;
 
             colCanWrite.DefaultCellStyle.BackColor =
+            colCanRead.DefaultCellStyle.BackColor =
             colMin.DefaultCellStyle.BackColor =
             colMax.DefaultCellStyle.BackColor =
             colStep.DefaultCellStyle.BackColor = checkBoxSetupSimulator.Checked ? switchName.DefaultCellStyle.BackColor : SystemColors.Control;
@@ -255,7 +257,8 @@ namespace ASCOM.Simulator
             colMin.ReadOnly =
             colMax.ReadOnly =
             colStep.ReadOnly =
-            colCanWrite.ReadOnly = !checkBoxSetupSimulator.Checked;
+            colCanWrite.ReadOnly =
+            colCanRead.ReadOnly = !checkBoxSetupSimulator.Checked;
 
             dataGridViewSwitches.Invalidate();
             dataGridViewSwitches.Update();
