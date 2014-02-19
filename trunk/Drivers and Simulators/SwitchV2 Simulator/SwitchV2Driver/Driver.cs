@@ -318,7 +318,7 @@ namespace ASCOM.Simulator
             LocalSwitch sw = switches[id];
             if (!sw.CanRead)
             {
-                throw new MethodNotImplementedException(string.Format("device {0} cannot be read", id));
+                throw new MethodNotImplementedException(string.Format("device {0} cannot be read and", id));
             }
             // returns true if the value is closer to the maximum than the minimum
             return sw.Maximum - sw.Value <= sw.Value - sw.Minimum;
@@ -391,7 +391,7 @@ namespace ASCOM.Simulator
             Validate("GetSwitchValue", id, false);
             if (!switches[id].CanRead)
             {
-                throw new MethodNotImplementedException(string.Format("device {0} cannot be read", id));
+                throw new MethodNotImplementedException(string.Format("device {0} cannot be read and", id));
             }
             return switches[id].Value;
         }
@@ -449,12 +449,12 @@ namespace ASCOM.Simulator
             if ((expectBoolean && ns != 2))
             {
                 tl.LogMessage(message, string.Format("Boolean Switch {0} has the wrong number of states: {1}", id, ns));
-                throw new NotImplementedException(string.Format("{0}({1}): switch is not Boolean", message, id));
+                throw new MethodNotImplementedException(string.Format("{0}({1}): switch is not Boolean and", message, id));
             }
             if (!expectBoolean && ns <= 2)
             {
                 tl.LogMessage(message, string.Format("Multi-value Switch {0} has too few states {1}", id, ns));
-                throw new NotImplementedException((string.Format("{0}({1}): switch is not multi-value", message, id)));
+                throw new MethodNotImplementedException((string.Format("{0}({1}): switch is not multi-value and", message, id)));
             }
         }
 

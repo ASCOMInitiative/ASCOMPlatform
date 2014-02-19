@@ -129,7 +129,7 @@ namespace ASCOM.Simulator
         {
             if (!this.CanWrite)
             {
-                throw new ASCOM.MethodNotImplementedException(string.Format("{0} cannot be written", this.Name));
+                throw new ASCOM.MethodNotImplementedException(string.Format("{0} cannot be written and", this.Name));
             }
             if (value < Minimum || value > Maximum)
             {
