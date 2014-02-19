@@ -16,7 +16,7 @@ namespace ASCOM
     [Guid("BBED286E-5814-4467-9471-A499DED13452")]
     public class MethodNotImplementedException : NotImplementedException
     {
-        [NonSerialized] const string csMessage = "Method {0} is not implemented in this driver";
+        [NonSerialized] const string csMessage = "Method {0}";
         [NonSerialized] readonly string method = "Unknown";
 
         /// <summary>
