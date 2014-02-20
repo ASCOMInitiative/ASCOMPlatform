@@ -440,22 +440,23 @@ namespace ASCOM.Simulator
         private void Validate(string message, short id, bool expectBoolean)
         {
             Validate(message, id);
-            var ns = NumStates(id);
-            if (ns < 2)
+            if (NumStates(id) < 2)
             {
-                tl.LogMessage(message, string.Format("Switch {0} has the wrong number of states: {1}", id, ns));
-                throw new InvalidValueException(message, id.ToString(), string.Format("{0} states", ns));
+                tl.LogMessage(message, string.Format("Device {0} has too few states", id));
+                throw new InvalidValueException(message, id.ToString(), string.Format("{0} too few states", id));
             }
-            if ((expectBoolean && ns != 2))
+            if ((expectBoolean != IsBoolean(id)))
             {
-                tl.LogMessage(message, string.Format("Boolean Switch {0} has the wrong number of states: {1}", id, ns));
-                throw new MethodNotImplementedException(string.Format("{0}({1}): switch is not Boolean and", message, id));
+                var type =  expectBoolean ? "boolean" : "Multi-state";
+                tl.LogMessage(message, string.Format("{0} Switch {1} has the wrong number of states", type, id));
+                throw new NotImplementedException(string.Format("{0}({1}): switch is not {2}", message, id, type));
             }
-            if (!expectBoolean && ns <= 2)
-            {
-                tl.LogMessage(message, string.Format("Multi-value Switch {0} has too few states {1}", id, ns));
-                throw new MethodNotImplementedException((string.Format("{0}({1}): switch is not multi-value and", message, id)));
-            }
+        }
+
+        private int NumStates(short id)
+        {
+            var sw = switches[id];
+            return (int)((sw.Maximum - sw.Minimum) / sw.StepSize);
         }
 
         /// <summary>
@@ -502,15 +503,14 @@ namespace ASCOM.Simulator
         }
 
         /// <summary>
-        /// Returns the number of states the switch can have, boolean switches
-        /// must have 2, multi-value switches more than 2
+        /// Returns true if the device is boolean.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private int NumStates(short id)
+        private bool IsBoolean(short id)
         {
             var s = switches[id];
-            return (int)((s.Maximum - s.Minimum) / s.StepSize + 1);
+            return (s.Maximum == 1 && s.Minimum == 0 && s.StepSize == 1);
         }
 
         /// <summary>
