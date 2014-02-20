@@ -19,9 +19,11 @@ namespace ASCOM.DriverAccess
     /// number of states to those which have many states.</para>
     /// <para>A multi-state device may be capable of changing and/or being set to a range of values, these are defined using the
     /// <see cref="MinSwitchValue"/>, <see cref="MaxSwitchValue"/> and <see cref="SwitchStep"/> methods.</para>
+    /// <para>A boolean device must have <see cref="MaxSwitchValue"/> of 1.0, <see cref="MinSwitchValue"/> of 0.0 and <see cref="SwitchStep"/> of 1.0.
+    /// Different values specify a multi-state switch, even if it only has two states</para>
     /// <para><b>Naming Conventions</b></para>
-    /// <para>Each device handled by a Switch is known as a device or switch device for general cases, a controller device if it can alter the state of the device
-    /// and a sensor device if it can only be read.</para>
+    /// <para>Each device handled by a Switch is known as a device or switch device for general cases,
+    /// a controller device if it can alter the state of the device and a sensor device if it can only be read.</para>
     /// <para>Devices can be of two types, boolean if the device can only have two states, and multi-state if it can have more thn two values.</para>
     /// </remarks>
     public class Switch : AscomDriver, ISwitchV2
