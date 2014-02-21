@@ -306,7 +306,6 @@ namespace ASCOM.Simulator
 
         /// <summary>
         /// Return the state of switch n
-        /// an analogue switch will throw a notImplemented exception
         /// </summary>
         /// <param name="id">The switch number to return</param>
         /// <returns>
@@ -314,12 +313,8 @@ namespace ASCOM.Simulator
         /// </returns>
         public bool GetSwitch(short id)
         {
-            Validate("GetSwitch", id, true);
+            Validate("GetSwitch", id);
             LocalSwitch sw = switches[id];
-            if (!sw.CanRead)
-            {
-                throw new MethodNotImplementedException(string.Format("device {0} cannot be read and", id));
-            }
             // returns true if the value is closer to the maximum than the minimum
             return sw.Maximum - sw.Value <= sw.Value - sw.Minimum;
         }
@@ -327,13 +322,12 @@ namespace ASCOM.Simulator
         /// <summary>
         /// Sets a switch to the specified state
         /// If the switch cannot be set then throws a MethodNotImplementedException.
-        /// An analogue switch will throw a not implemented exception
         /// </summary>
         /// <param name="id"></param>
         /// <param name="state"></param>
         public void SetSwitch(short id, bool state)
         {
-            Validate("SetSwitch", id, true);
+            Validate("SetSwitch", id);
             LocalSwitch sw = switches[id];
             sw.SetValue(state ? sw.Maximum : sw.Minimum, "SetSwitch");
         }
@@ -388,11 +382,7 @@ namespace ASCOM.Simulator
         /// <returns></returns>
         public double GetSwitchValue(short id)
         {
-            Validate("GetSwitchValue", id, false);
-            if (!switches[id].CanRead)
-            {
-                throw new MethodNotImplementedException(string.Format("device {0} cannot be read and", id));
-            }
+            Validate("GetSwitchValue", id);
             return switches[id].Value;
         }
 
@@ -423,6 +413,12 @@ namespace ASCOM.Simulator
         private void Validate(string message, short id)
         {
             CheckConnected(message);
+
+            if (NumStates(id) < 2)
+            {
+                tl.LogMessage(message, string.Format("Device {0} has too few states", id));
+                throw new InvalidValueException(message, switches[id].Name, "too few states");
+            }
             if (id < 0 || id >= switches.Count)
             {
                 tl.LogMessage(message, string.Format("Switch {0} not available, range is 0 to {1}", id, switches.Count - 1));
@@ -430,33 +426,10 @@ namespace ASCOM.Simulator
             }
         }
 
-        /// <summary>
-        /// Check we are connected, that the switch id is valid and that the number of states is valid: 
-        /// 2 for a boolean and >2 for a multi-value switch
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="id"></param>
-        /// <param name="expectBoolean"></param>
-        private void Validate(string message, short id, bool expectBoolean)
-        {
-            Validate(message, id);
-            if (NumStates(id) < 2)
-            {
-                tl.LogMessage(message, string.Format("Device {0} has too few states", id));
-                throw new InvalidValueException(message, id.ToString(), string.Format("{0} too few states", id));
-            }
-            if ((expectBoolean != IsBoolean(id)))
-            {
-                var type =  expectBoolean ? "boolean" : "Multi-state";
-                tl.LogMessage(message, string.Format("{0} Switch {1} has the wrong number of states", type, id));
-                throw new NotImplementedException(string.Format("{0}({1}): switch is not {2}", message, id, type));
-            }
-        }
-
         private int NumStates(short id)
         {
             var sw = switches[id];
-            return (int)((sw.Maximum - sw.Minimum) / sw.StepSize);
+            return (int)((sw.Maximum - sw.Minimum) / sw.StepSize) + 1;
         }
 
         /// <summary>
@@ -468,7 +441,7 @@ namespace ASCOM.Simulator
         /// <param name="value"></param>
         private void Validate(string message, short id, double value)
         {
-            Validate(message, id, false);
+            Validate(message, id);
             var sw = switches[id];
             if (value < sw.Minimum || value > sw.Maximum)
             {
@@ -500,17 +473,6 @@ namespace ASCOM.Simulator
             {
                 throw new ASCOM.NotConnectedException(message);
             }
-        }
-
-        /// <summary>
-        /// Returns true if the device is boolean.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        private bool IsBoolean(short id)
-        {
-            var s = switches[id];
-            return (s.Maximum == 1 && s.Minimum == 0 && s.StepSize == 1);
         }
 
         /// <summary>
@@ -561,7 +523,7 @@ namespace ASCOM.Simulator
         private void LoadDefaultSwitches()
         {
             switches.Add(new LocalSwitch("Power1") { Description = "Generic power switch" });
-            switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch", CanRead = false });
+            switches.Add(new LocalSwitch("Power2") { Description = "Generic Power switch" });
             switches.Add(new LocalSwitch("Light Box", 100, 0, 10, 0) { Description = "Light box , 0 to 100%" });
             switches.Add(new LocalSwitch("Flat Panel", 255, 0, 1, 0) { Description = "Flat panel , 0 to 255" });
             switches.Add(new LocalSwitch("Scope Cover") { Description = "Scope cover control true is closed, false is open" });

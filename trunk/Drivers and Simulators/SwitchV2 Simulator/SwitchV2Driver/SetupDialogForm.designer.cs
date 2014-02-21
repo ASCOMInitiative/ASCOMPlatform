@@ -52,7 +52,6 @@ namespace ASCOM.Simulator
             this.colMax = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStep = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCanWrite = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colCanRead = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSwitches)).BeginInit();
             this.SuspendLayout();
@@ -145,8 +144,7 @@ namespace ASCOM.Simulator
             this.colMin,
             this.colMax,
             this.colStep,
-            this.colCanWrite,
-            this.colCanRead});
+            this.colCanWrite});
             this.dataGridViewSwitches.Location = new System.Drawing.Point(8, 71);
             this.dataGridViewSwitches.MultiSelect = false;
             this.dataGridViewSwitches.Name = "dataGridViewSwitches";
@@ -263,16 +261,6 @@ namespace ASCOM.Simulator
             this.colCanWrite.ToolTipText = "If this is unchecked the device value cannot be set, i.e. a sensor.";
             this.colCanWrite.Width = 40;
             // 
-            // colCanRead
-            // 
-            this.colCanRead.DataPropertyName = "CanRead";
-            this.colCanRead.HeaderText = "Can Read";
-            this.colCanRead.Name = "colCanRead";
-            this.colCanRead.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colCanRead.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.colCanRead.ToolTipText = "If this is unchecked the controller device value cannot be read.";
-            this.colCanRead.Width = 40;
-            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -320,6 +308,5 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.DataGridViewTextBoxColumn colMax;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStep;
         private System.Windows.Forms.DataGridViewCheckBoxColumn colCanWrite;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn colCanRead;
     }
 }
