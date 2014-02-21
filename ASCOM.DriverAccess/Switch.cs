@@ -15,16 +15,18 @@ namespace ASCOM.DriverAccess
     /// The Switch interface is used to define a number of 'switch devices'. A switch device can be used to control something, such as a power switch
     /// or may be used to sense the state of something, such as a limit switch. Each device has a CanWrite property, this is true if it
     /// can be written to or false if it can only be read and so is a sensor.
-    /// <para>In addition a switch device may have multiple states, from two - a binary on/off switch device - through those with a small
-    /// number of states to those which have many states.</para>
+    /// <para>A switch device may have multiple states, from two - a boolean on/off switch device - through those with a small
+    /// number of states to those which have many states. Devices with more than two states are referred to as multi-state devices.</para>
     /// <para>A multi-state device may be capable of changing and/or being set to a range of values, these are defined using the
     /// <see cref="MinSwitchValue"/>, <see cref="MaxSwitchValue"/> and <see cref="SwitchStep"/> methods.</para>
-    /// <para>A boolean device must have <see cref="MaxSwitchValue"/> of 1.0, <see cref="MinSwitchValue"/> of 0.0 and <see cref="SwitchStep"/> of 1.0.
-    /// Different values specify a multi-state switch, even if it only has two states</para>
+    /// <para>A boolean device must have <see cref="MaxSwitchValue"/> of 1.0, <see cref="MinSwitchValue"/> of 0.0 and <see cref="SwitchStep"/> of 1.0.</para>
+    /// <para>All switches must implement SetSwitch, GetSwitch, SetSwitchValue and GetSwitchValue regardless of the number of states.
+    /// For more information see the definition for each method.</para>
     /// <para><b>Naming Conventions</b></para>
     /// <para>Each device handled by a Switch is known as a device or switch device for general cases,
     /// a controller device if it can alter the state of the device and a sensor device if it can only be read.</para>
-    /// <para>Devices can be of two types, boolean if the device can only have two states, and multi-state if it can have more thn two values.</para>
+    /// <para>Devices are referred to as boolean if the device can only have two states, and multi-state if it can have more than two values.
+    /// These are treated the same in the interface definition.</para>
     /// </remarks>
     public class Switch : AscomDriver, ISwitchV2
     {
@@ -131,7 +133,8 @@ namespace ASCOM.DriverAccess
         ///   <c>true</c> if the device can be written to, otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="T:AASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
         /// <para>This method was first introduced in Version 2.</para>
         /// </remarks>
         public bool CanWrite(short id)
@@ -142,30 +145,35 @@ namespace ASCOM.DriverAccess
         #region boolean switch members
 
         /// <summary>
-        /// Return the state of boolean switch device id.
-        /// A multi-state device will throw the <see cref="T:ASCOM.MethodNotImplementedException"/>
+        /// Return the state of switch device id as a boolean.
         /// </summary>
         /// <param name="id">The switch number to return</param>
         /// <returns>
         /// True or false
         /// </returns>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the device cannot be read or is a multi-state device.</exception>
+        /// <exception cref="T:ASCOM.InvalidOperationException">If the device cannot be read.  It is strongly recommended that all devices return a valid value.</exception>
+        /// <remarks>
+        /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
+        /// <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minumum
+        /// and either true or false as specified by the driver developer for intermediate values.</para>
+        /// </remarks>
         public bool GetSwitch(short id)
         {
             return (bool)memberFactory.CallMember(3, "GetSwitch", new Type[] { typeof(short) }, new object[] { id });
         }
 
         /// <summary>
-        /// Sets a switch device to the specified state
+        /// Sets a switch controller device to the specified state
         /// If the device cannot be set then throws a <see cref="T:ASCOM.MethodNotImplementedException"/>.
-        /// A multi-state device will throw the <see cref="T:ASCOM.MethodNotImplementedException"/>.
         /// </summary>
         /// <param name="id">The number of the device to set</param>
-        /// <param name="state">The required boolean device state</param>
+        /// <param name="state">The required device state</param>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the device cannot be written to (<see cref="CanWrite"/> is false),
-        /// or if the device is multi-state.</exception>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the device cannot be written to (<see cref="CanWrite"/> is false).</exception>
+        /// <remarks>
+        /// <para>The value will be set to <see cref="MaxSwitchValue" /> if state is true and to <see cref="MinSwitchValue" /> if the state is False.</para>
+        /// </remarks>
         public void SetSwitch(short id, bool state)
         {
             memberFactory.CallMember(3, "SetSwitch", new Type[] { typeof(short), typeof(bool) }, new object[] { id, state });
@@ -212,7 +220,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns the step size that this switch device supports. This gives the difference between
+        /// Returns the step size that this device supports. This gives the difference between
         /// successive values of the device.
         /// The number of values is ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep"/>) + 1
         /// boolean switches must return 1.0, giving two states.
@@ -236,13 +244,12 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Returns the value for this multi-state switch device.
+        /// Returns the value for switch device id as a double.
         /// </summary>
         /// <param name="id">The device number whose value should be returned</param>
-        /// <returns>
-        /// The analogue value for this device.
-        /// </returns>
-        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented, boolean devices must throw this.</exception>
+        /// <returns>The value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
+        /// <see cref="MaxSwitchValue"/> but returned values outside this range should not cause an exception.</returns>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented. This is not recommended.</exception>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks>
         /// <para>This method was first introduced in Version 2.</para>
@@ -257,18 +264,17 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Set the analogue value for this multi-state switch device.
+        /// Set the value for this device as a double.
         /// If the switch cannot be set then throws a MethodNotImplementedException.
         /// If the value is not between the maximum and minimum then throws an InvalidValueException
-        /// boolean switches will be set to true if the value is closer to the maximum than the minimum.
         /// </summary>
         /// <param name="id">The switch number whose value should be set</param>
         /// <param name="value">Value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
         /// <exception cref="T:ASCOM.InvalidValueException">If the value is not between the maximum and minimum.</exception>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented, boolean devices will throw this
-        ///  and analogue switches will if <see cref="CanWrite"/> is false.</exception>
+        /// <exception cref="T:ASCOM.MethodNotImplementedException">If the method is not implemented, if <see cref="CanWrite"/> is false.</exception>
         /// <remarks>
+        /// <para>A value that is intermediate between the values specified by <see cref="SwitchStep"/> should be set to an achievable value.</para>
         /// <para>This method was first introduced in Version 2.</para>
         /// </remarks>
         public void SetSwitchValue(short id, double value)
