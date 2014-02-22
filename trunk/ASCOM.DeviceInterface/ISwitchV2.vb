@@ -6,21 +6,29 @@
 ''' Defines the ISwitchV2 Interface
 ''' </summary>
 ''' <remarks>
-''' The Switch interface is used to define a number of 'switch devices'. A switch device can be used to control something, such as a power switch
-''' or may be used to sense the state of something, such as a limit switch. Each device has a CanWrite property, this is true if
-''' it can be written to or false if the device can only be read.
-''' <para>A switch device can have multiple states, from two - a boolean on/off switch device - through those with a small
-''' number of states to those which have many states. Devices with more than two states are referred to as multi-state devices.</para>
-''' <para>A multi-state device may be capable of changing and/or being set to a range of values, these are defined using the
-''' MinSwitchValue, MaxSwitchValue and SwitchStep methods.</para>
-''' <para>A boolean device must have MaxSwitchValue of 1.0, MinSwitchValue of 0.0 and SwitchStep of 1.0</para>
-''' <para>All switches must implement SetSwitch, GetSwitch, SetSwitchValue and GetSwitchValue regardless of the number of states.
-''' For more information see the definition for each method.</para>
+''' <para>The Switch interface is used to define a number of 'switch devices'. A switch device can be used to control something, such as a power switch
+''' or may be used to sense the state of something, such as a limit switch.</para>
+''' <para>This SwitchV2 interface is an extension of the original Switch interface.  The changes allow devices to have more than two states and
+''' to distinguish between devices that are writable and those that are read only.</para>
+''' <para><b>Compatibility between Switch and SwitchV2 interfaces:</b></para>
+''' <list type="bullet"><item>Switch devices that implemented the original Switch interface and
+''' client applications that use the original interface will still work together.</item>
+''' <item>Client applications that implement the original
+''' Switch interface should still work with drivers that implement the new interface.</item>
+''' <item>Client applications that use the new features in this interface
+''' will not work with drivers that do not implement the new interface.</item>
+''' </list>
+''' <para>Each device has a CanWrite method, this is true if it can be written to or false if the device can only be read.</para>
+''' <para>The new MinSwitchValue, MaxSwitchValue and SwitchStep methods are used to define the range and values that a device can handle.
+''' This also defines the number of different values - states - that a device can have, from two for a traditional on-off switch, through
+''' those with a small number of states to those which have many states.</para>
+''' <para>The SetSwitchValue and GetSwitchValue methods are used to set and get the value of a device as a double.</para>
+''' <para>There is no fundamental difference between devices with different numbers of states.</para>
 ''' <para><b>Naming Conventions</b></para>
 ''' <para>Each device handled by a Switch is known as a device or switch device for general cases,
 ''' a controller device if it can alter the state of the device and a sensor device if it can only be read.</para>
-''' <para>Devices are referred to as boolean if the device can only have two states, and multi-state if it can have more than two values.
-''' These are treated the same in the interface definition.</para>
+''' <para>For convenience devices are referred to as boolean if the device can only have two states, and multi-state if it can have more than two values.
+''' <b>These are treated the same in the interface definition</b>.</para>
 ''' </remarks>
 <Guid("71A6CA6B-A86B-4EBB-8DA3-6D91705177A3"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface ISwitchV2
@@ -278,7 +286,8 @@ Public Interface ISwitchV2
     ''' <param name="id">The device number to return</param>
     ''' <returns>True or false</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
-    ''' <exception cref="InvalidOperationException">If the device cannot be read.  It is strongly recommended that all devices return a valid value.</exception>
+    ''' <exception cref="InvalidOperationException">If the state cannot be read. This is not recommended but it is not always possible to read
+    ''' the state from some hardware. Once the state has been set the last state set should be returned.</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
     ''' <para>All devices must implement this. A multi-state device will return true if the device is at the maximum value, false if the value is at the minumum
     ''' and either true or false as specified by the driver developer for intermediate values.</para>
@@ -293,7 +302,7 @@ Public Interface ISwitchV2
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <exception cref="MethodNotImplementedException">If the controller cannot be written to (<see cref="CanWrite"/> is false).</exception>
     ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p>
-    ''' <para>The value will be set to <see cref="MaxSwitchValue" /> if state is true and to <see cref="MinSwitchValue" /> if the state is False.</para>
+    ''' <para>The <see cref="GetSwitchValue"/> will be set to <see cref="MaxSwitchValue" /> if state is true and to <see cref="MinSwitchValue" /> if the state is False.</para>
     ''' <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</para></remarks>
     Sub SetSwitch(id As Short, state As Boolean)
 #End Region
@@ -303,10 +312,10 @@ Public Interface ISwitchV2
     ''' Returns the maximum value for this switch device, this must be greater than <see cref="MinSwitchValue"/>.
     ''' </summary>
     ''' <param name="id">The device whose maximum value should be returned</param>
-    ''' <returns>The maximum value to which this device can be set or wich a read only sensor will return.</returns>
+    ''' <returns>The maximum value to which this device can be set or which a read only sensor will return.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an <see cref="ASCOM.MethodNotImplementedException"/></b></p> 
-    ''' <para>Boolean devices must return 1.0 as their maximum value. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <para>Boolean devices should return 1.0. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function MaxSwitchValue(id As Short) As Double
@@ -315,10 +324,10 @@ Public Interface ISwitchV2
     ''' Returns the minimum analogue value for this switch device, this must be less than <see cref="MaxSwitchValue"/>
     ''' </summary>
     ''' <param name="id">The device whose minimum value should be returned</param>
-    ''' <returns>The minimum value to which this device can be set or wich a read only sensor will return.</returns>
+    ''' <returns>The minimum value to which this device can be set or which a read only sensor will return.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
-    ''' <para>Boolean switches must return 0.0 as their minimum value. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <para>Boolean devices should return 0.0. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function MinSwitchValue(id As Short) As Double
@@ -330,9 +339,9 @@ Public Interface ISwitchV2
     ''' <returns>The step size for this device.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-    ''' <para>Boolean devices must return 1.0, giving two states. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <para>Boolean devices should return 1.0. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>For any device, the number of steps can be calculated as:
-    ''' ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep" />) + 1. This must be an integer,
+    ''' ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep"/>) + 1. This must be an integer,
     ''' value 2 for a boolean device and more than 2 for a multi-state device.</para>
     ''' <para>SwitchStep can be used to determine the way the device is controlled and/or displayed, for example by setting the
     ''' number of decimal places or number of states for a display.</para>
@@ -345,8 +354,9 @@ Public Interface ISwitchV2
     ''' </summary>
     ''' <param name="id">The device whose value should be returned.</param>
     ''' <returns>The value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
-    ''' <see cref="MaxSwitchValue"/> but returned values outside this range should not cause an exception.</returns>
-    ''' <exception cref="MethodNotImplementedException">If the method is not implemented. This is not recommended.</exception>
+    ''' <see cref="MaxSwitchValue"/> but returned values outside this range may be possible.</returns>
+    ''' <exception cref="InvalidOperationException">If the value cannot be read. This is not recommended but it is not always possible to read
+    ''' the value from some hardware. Once the value has been set the last value set should be returned.</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException./></b></p>
     ''' <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
