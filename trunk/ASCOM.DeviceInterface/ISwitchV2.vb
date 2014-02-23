@@ -315,19 +315,19 @@ Public Interface ISwitchV2
     ''' <returns>The maximum value to which this device can be set or which a read only sensor will return.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an <see cref="ASCOM.MethodNotImplementedException"/></b></p> 
-    ''' <para>Boolean devices should return 1.0. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <para>Two state devices should return 1.0. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function MaxSwitchValue(id As Short) As Double
 
     ''' <summary>
-    ''' Returns the minimum analogue value for this switch device, this must be less than <see cref="MaxSwitchValue"/>
+    ''' Returns the minimum value for this switch device, this must be less than <see cref="MaxSwitchValue"/>
     ''' </summary>
     ''' <param name="id">The device whose minimum value should be returned</param>
     ''' <returns>The minimum value to which this device can be set or which a read only sensor will return.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p> 
-    ''' <para>Boolean devices should return 0.0. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <para>Two state devices should return 0.0. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function MinSwitchValue(id As Short) As Double
@@ -335,16 +335,17 @@ Public Interface ISwitchV2
     ''' <summary>
     ''' Returns the step size that this device supports (the difference between successive values of the device).
     ''' </summary>
-    ''' <param name="id">The device whose step size should be returned</param>
+    ''' <param name="id">The device whose step size should be returned.</param>
     ''' <returns>The step size for this device.</returns>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
-    ''' <para>Boolean devices should return 1.0. Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
-    ''' <para>For any device, the number of steps can be calculated as:
+    ''' <para>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1.</para>
+    ''' <para><see cref="SwitchStep"/> must be greater than zero, two state devices should return 1.0.</para>
+    ''' <para>The number of steps can be calculated as:
     ''' ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep"/>) + 1. This must be an integer,
     ''' value 2 for a boolean device and more than 2 for a multi-state device.</para>
-    ''' <para>SwitchStep can be used to determine the way the device is controlled and/or displayed, for example by setting the
-    ''' number of decimal places or number of states for a display.</para>
+    ''' <para>SwitchStep, MinSwitchValue and MaxSwitchValue can be used to determine the way the device is controlled and/or displayed,
+    ''' for example by setting the number of decimal places or number of states for a display.</para>
     ''' <para>This is a Version 2 method.</para>
     ''' </remarks>
     Function SwitchStep(id As Short) As Double
@@ -354,7 +355,7 @@ Public Interface ISwitchV2
     ''' </summary>
     ''' <param name="id">The device whose value should be returned.</param>
     ''' <returns>The value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
-    ''' <see cref="MaxSwitchValue"/> but returned values outside this range may be possible.</returns>
+    ''' <see cref="MaxSwitchValue"/>.</returns>
     ''' <exception cref="InvalidOperationException">If the value cannot be read. This is not recommended but it is not always possible to read
     ''' the value from some hardware. Once the value has been set the last value set should be returned.</exception>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
@@ -368,7 +369,7 @@ Public Interface ISwitchV2
     ''' Set the value for this device as a double.
     ''' </summary>
     ''' <param name="id">The device whose value should be set</param>
-    ''' <param name="value">Value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
+    ''' <param name="value">The value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
     ''' <exception cref="InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
     ''' <exception cref="InvalidValueException">If value is outside the range <see cref="MinSwitchValue"/> to <see cref="MaxSwitchValue"/></exception>
     ''' <exception cref="MethodNotImplementedException">If <see cref="CanWrite"/> is false.</exception>
