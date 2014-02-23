@@ -103,7 +103,7 @@ namespace ASCOM.DriverAccess
 
         /// <summary>
         /// Sets a switch device name to a specified value.  If the device name cannot
-        /// be set by the application this must return the <see cref="T:ASCOM.MethodNetImplementedException"/> .
+        /// be set by the application this must return the <see cref="T:ASCOM.MethodNotImplementedException"/> .
         /// </summary>
         /// <param name="id">The number of the device whose name is to be set</param>
         /// <param name="name">The name of the device</param>
@@ -201,7 +201,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks>
-        /// <para>Boolean devices should return 1.0 as their maximum value.</para>
+        /// <para>Two state devices should return 1.0 as their maximum value.</para>
         /// <para>This method was first introduced in Version 2.</para>
         /// </remarks>
         public double MaxSwitchValue(short id)
@@ -219,7 +219,7 @@ namespace ASCOM.DriverAccess
         /// </returns>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks>
-        /// <para>Boolean devices should return 0.0 as their minimum value.</para>
+        /// <para>Two state devices should return 0.0 as their minimum value.</para>
         /// <para>This method was first introduced in Version 2.</para>
         /// </remarks>
         public double MinSwitchValue(short id)
@@ -231,8 +231,6 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Returns the step size that this device supports. This gives the difference between
         /// successive values of the device.
-        /// The number of values is ((<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/>) / <see cref="SwitchStep"/>) + 1
-        /// boolean switches should return 1.0, giving two states.
         /// </summary>
         /// <param name="id">The device number whose value should be returned</param>
         /// <returns>
@@ -240,10 +238,11 @@ namespace ASCOM.DriverAccess
         /// </returns>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks>
-        /// <para>The number of states is determined from (<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/> ) / <see cref="SwitchStep"/> + 1
-        /// and must be an integer, value 2 for a boolean device and more than 2 for a multi-state device.</para>
-        /// <para>SwitchStep can be used to determine the way the device is controlled and/or displayed, for example by setting the
-        /// number of decimal places or number of states for a display.</para>
+        /// <para><see cref="SwitchStep"/> must be greater than zero, two state devices should return 1.0.</para>
+        /// <para>The number of states is determined from (<see cref="MaxSwitchValue"/> - <see cref="MinSwitchValue"/> ) / <see cref="SwitchStep"/> + 1,
+        /// this must be an integer, value 2 for a boolean device and more than 2 for a multi-state device.</para>
+        /// <para>SwitchStep, MinSwitchValue and MaxSwitchValue can be used to determine the way the device is controlled and/or displayed,
+        /// for example by setting the number of decimal places or number of states for a display.</para>
         /// <para>This method was first introduced in Version 2.</para>
         /// </remarks>
         public double SwitchStep(short id)
@@ -257,7 +256,7 @@ namespace ASCOM.DriverAccess
         /// </summary>
         /// <param name="id">The device number whose value should be returned</param>
         /// <returns>The value for this switch, this is expected to be between <see cref="MinSwitchValue"/> and
-        /// <see cref="MaxSwitchValue"/> but returned values outside this range may be possible.</returns>
+        /// <see cref="MaxSwitchValue"/>.</returns>
         /// <exception cref="T:ASCOM.InvalidOperationException">If the value cannot be read. This is not recommended but it is not always possible to read
         /// the value from some hardware. Once the value has been set the last value set should be returned.</exception>
         /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
@@ -275,8 +274,9 @@ namespace ASCOM.DriverAccess
 
         /// <summary>
         /// Set the value for this device as a double.
-        /// If the switch cannot be set then throws a MethodNotImplementedException.
-        /// If the value is not between the maximum and minimum then throws an InvalidValueException
+        /// If the switch cannot be set then throws a <see cref="T:ASCOM.MethodNotImplementedException"/>.
+        /// If the value is not between the <see cref="MaxSwitchValue"/> and <see cref="MinSwitchValue"/> then throws an
+        /// <see cref="T:ASCOM.InvalidValueException"/>.
         /// </summary>
         /// <param name="id">The switch number whose value should be set</param>
         /// <param name="value">Value to be set, between <see cref="MinSwitchValue"/> and <see cref="MaxSwitchValue"/></param>
