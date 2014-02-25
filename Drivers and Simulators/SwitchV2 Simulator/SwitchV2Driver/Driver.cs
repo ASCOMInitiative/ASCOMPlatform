@@ -412,17 +412,18 @@ namespace ASCOM.Simulator
         /// <param name="id">The id.</param>
         private void Validate(string message, short id)
         {
+            if (id < 0 || id >= switches.Count)
+            {
+                tl.LogMessage(message, string.Format("Switch {0} not available, range is 0 to {1}", id, switches.Count - 1));
+                throw new InvalidValueException(message, id.ToString(), string.Format("0 to {0}", switches.Count - 1));
+            }
+
             CheckConnected(message);
 
             if (NumStates(id) < 2)
             {
                 tl.LogMessage(message, string.Format("Device {0} has too few states", id));
                 throw new InvalidValueException(message, switches[id].Name, "too few states");
-            }
-            if (id < 0 || id >= switches.Count)
-            {
-                tl.LogMessage(message, string.Format("Switch {0} not available, range is 0 to {1}", id, switches.Count - 1));
-                throw new InvalidValueException(message, id.ToString(), string.Format("0 to {0}", switches.Count - 1));
             }
         }
 
