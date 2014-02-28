@@ -991,9 +991,9 @@ Public Class DiagnosticsForm
                 Case "Switch"
                     Select Case Test
                         Case "GetSwitch"
-                            Compare("DeviceTest", Test, DeviceObject.GetSwitch(1), "True")
+                            Compare("DeviceTest", Test, IIf(DeviceObject.GetSwitch(0), "OK", "OK").ToString(), "OK")
                         Case "GetSwitchName"
-                            Compare("DeviceTest", Test, DeviceObject.GetSwitchName(1), "1")
+                            Compare("DeviceTest", Test, String.IsNullOrEmpty(DeviceObject.GetSwitchName(0)).ToString(), "False")
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select

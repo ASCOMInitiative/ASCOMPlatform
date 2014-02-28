@@ -17,4 +17,4 @@
 ' 
 ' For local builds, the version is always 6.0.9999.9999, indicating an uncontrolled release.
 
-<Assembly: AssemblyFileVersion("6.0.9999.9999")> 
+<Assembly: AssemblyFileVersion("6.1.9999.9999")> 
