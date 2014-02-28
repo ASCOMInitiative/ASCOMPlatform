@@ -21,5 +21,5 @@
 
 using System.Reflection;
 // Revision and Build both set to 9999 indicates a private build on a developer's private workstation.
-[assembly: AssemblyFileVersion("6.0.9999.9999")]	    // Win32 File Version (not used by .NET)
+[assembly: AssemblyFileVersion("6.1.9999.9999")]	    // Win32 File Version (not used by .NET)
 
