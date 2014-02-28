@@ -63,13 +63,14 @@
 	      			<listItem>Diagnostics - Choose Device Tool
 						<list class="bullet">
 		      				<listItem>This tool can now be started in either 32bit or 64bit modes on 64bit operating systems to provide emulation of both 32bit and 64bit clients.</listItem>
-		      				<listItem>The tool window is now resizable to cope with extensive Profile contents</listItem>
+		      				<listItem>The main window is now resizable to cope with extensive Profile contents</listItem>
 		      				<listItem>The device Profile is now returned in plain rather than XML format.</listItem>
 		      				<listItem>Values from the common device methods are now reported for all device types.</listItem>
 		      				<listItem>The Connect capability now has a check box to control whether the device is Connected before the Setup dialogue is dispayed.</listItem>
 		      				<listItem>Selection of a new device type automatically selects the relevant simulator.</listItem>
 	  					</list>	      				
 	      			</listItem>
+	      			<listItem>The Delta T predictive algorithm has been updated with real data to January 2014.</listItem>
 	  			</list>
             </content>
 		</section>
@@ -87,6 +88,7 @@
 	      			based on Framework 3.5 is still supported by the Platform.</listItem>
 	      			<listItem>The device template icons have been tidied up and made consistent.</listItem>
 	      			<listItem>The driver installer generator now supports in-process .NET drivers targeted at Framework 4.</listItem>
+	      			<listItem>Cosmetic: Installation instructions for Inno in the Driver Install Script Generator - have been updated to match recent changes to the Inno installer.</listItem>
 				</list>
       		</content>
    		</section>
@@ -96,6 +98,8 @@
             <content>
       			<list class="bullet">
 					<listItem>Diagnostics will no longer fail focuser simulator tests if MaxStep has been changed from its "out of the box" value.</listItem>
+					<listItem>Cosmetic: PropertyNotImplementedException and MethodNotImplementedException no longer replicate the text "is not implementred in this driver".</listItem>
+					<listItem>Rotator setup dialogue now updates values correctly.</listItem>
 				</list>
    			</content>
    		</section>
