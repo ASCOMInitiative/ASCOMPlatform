@@ -99,7 +99,7 @@ class DeviceSwitch
     /// </returns>
     public bool GetSwitch(short id)
     {
-        Validate("GetSwitch", id, true);
+        Validate("GetSwitch", id);
         tl.LogMessage("GetSwitch", string.Format("GetSwitch({0}) - not implemented", id));
         throw new MethodNotImplementedException("GetSwitch");
     }
@@ -114,7 +114,7 @@ class DeviceSwitch
     /// <param name="state"></param>
     public void SetSwitch(short id, bool state)
     {
-        Validate("SetSwitch", id, true);
+        Validate("SetSwitch", id);
         if (!CanWrite(id))
         {
             var str = string.Format("SetSwitch({0}) - Cannot Write", id);
@@ -187,7 +187,7 @@ class DeviceSwitch
     /// <returns></returns>
     public double GetSwitchValue(short id)
     {
-        Validate("GetSwitchValue", id, false);
+        Validate("GetSwitchValue", id);
         tl.LogMessage("GetSwitchValue", string.Format("GetSwitchValue({0}) - not implemented", id));
         throw new MethodNotImplementedException("GetSwitchValue");
     }
@@ -240,7 +240,7 @@ class DeviceSwitch
     /// <param name="value">The value.</param>
     private void Validate(string message, short id, double value)
     {
-        Validate(message, id, false);
+        Validate(message, id);
         var min = MinSwitchValue(id);
         var max = MaxSwitchValue(id);
         if (value < min || value > max)
@@ -257,16 +257,16 @@ class DeviceSwitch
     /// <param name="message"></param>
     /// <param name="id"></param>
     /// <param name="expectBoolean"></param>
-    private void Validate(string message, short id, bool expectBoolean)
-    {
-        Validate(message, id);
-        var ns = (int)(((MaxSwitchValue(id) - MinSwitchValue(id)) / SwitchStep(id)) + 1);
-        if ((expectBoolean && ns != 2) || (!expectBoolean && ns <= 2))
-        {
-            tl.LogMessage(message, string.Format("Switch {0} has the wriong number of states", id, ns));
- 	        throw new MethodNotImplementedException(string.Format("{0}({1})", message, id));
-        }
-    }
+    //private void Validate(string message, short id, bool expectBoolean)
+    //{
+    //    Validate(message, id);
+    //    var ns = (int)(((MaxSwitchValue(id) - MinSwitchValue(id)) / SwitchStep(id)) + 1);
+    //    if ((expectBoolean && ns != 2) || (!expectBoolean && ns <= 2))
+    //    {
+    //        tl.LogMessage(message, string.Format("Switch {0} has the wriong number of states", id, ns));
+    //        throw new MethodNotImplementedException(string.Format("{0}({1})", message, id));
+    //    }
+    //}
 
     #endregion
 
