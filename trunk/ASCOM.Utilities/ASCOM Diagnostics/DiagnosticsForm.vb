@@ -4202,6 +4202,9 @@ Public Class DiagnosticsForm
         Catch ex As Exception
             LogException("VideoUtilTests", "Exception: " & ex.ToString)
         End Try
+
+        TL.BlankLine()
+
     End Sub
 
     ''' <summary>

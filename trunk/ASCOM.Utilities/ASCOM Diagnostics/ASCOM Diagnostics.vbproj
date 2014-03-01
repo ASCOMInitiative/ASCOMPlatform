@@ -234,6 +234,9 @@
       <Link>ASCOM.snk</Link>
     </None>
     <None Include="app.config" />
+    <None Include="Ceres.chby">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
