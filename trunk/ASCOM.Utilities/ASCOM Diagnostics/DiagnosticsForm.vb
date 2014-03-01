@@ -751,6 +751,18 @@ Public Class DiagnosticsForm
         Sim = Nothing
 
         Sim = New SimulatorDescriptor
+        Sim.ProgID = "ASCOM.Simulator.Switch"
+        Sim.Description = "Platform 6 Switch Simulator"
+        Sim.DeviceType = "Switch"
+        Sim.Name = "ASCOM Switch V2 Simulator"
+        Sim.DriverVersion = "6.1"
+        Sim.InterfaceVersion = 2
+        Sim.IsPlatform5 = False
+        Sim.SixtyFourBit = True
+        TestSimulator(Sim)
+        Sim = Nothing
+
+        Sim = New SimulatorDescriptor
         Sim.ProgID = "DomeSim.Dome"
         Sim.Description = "Dome Simulator"
         Sim.DeviceType = "Dome"
@@ -927,6 +939,16 @@ Public Class DiagnosticsForm
                             If Sim.IsPlatform5 Then
                                 DeviceTest("Switch", "GetSwitch")
                                 DeviceTest("Switch", "GetSwitchName")
+                            Else ' Is Platform v6.1
+                                DeviceTest("Switch", "MaxSwitch")
+                                DeviceTest("Switch", "CanWrite")
+                                DeviceTest("Switch", "GetSwitch")
+                                DeviceTest("Switch", "GetSwitchDescription")
+                                DeviceTest("Switch", "GetSwitchName")
+                                DeviceTest("Switch", "GetSwitchValue")
+                                DeviceTest("Switch", "MaxSwitchValue")
+                                DeviceTest("Switch", "MinSwitchValue")
+                                DeviceTest("Switch", "SwitchStep")
                             End If
                         Case "Dome"
                             DeviceTest("Dome", "OpenShutter")
@@ -990,10 +1012,24 @@ Public Class DiagnosticsForm
 
                 Case "Switch"
                     Select Case Test
+                        Case "MaxSwitch"
+                            CompareBoolean("DeviceTest", Test, DeviceObject.MaxSwitch > 0, True)
+                        Case "CanWrite"
+                            Compare("DeviceTest", Test, IIf(DeviceObject.CanWrite(0), "OK", "OK").ToString(), "OK")
                         Case "GetSwitch"
                             Compare("DeviceTest", Test, IIf(DeviceObject.GetSwitch(0), "OK", "OK").ToString(), "OK")
                         Case "GetSwitchName"
-                            Compare("DeviceTest", Test, String.IsNullOrEmpty(DeviceObject.GetSwitchName(0)).ToString(), "False")
+                            CompareBoolean("DeviceTest", Test, String.IsNullOrEmpty(DeviceObject.GetSwitchName(0)), False)
+                        Case "GetSwitchDescription"
+                            CompareBoolean("DeviceTest", Test, String.IsNullOrEmpty(DeviceObject.GetSwitchDescription(0)), False)
+                        Case "GetSwitchValue"
+                            CompareBoolean("DeviceTest", Test, IsNumeric(DeviceObject.GetSwitchValue(0)), True)
+                        Case "MaxSwitchValue"
+                            CompareBoolean("DeviceTest", Test, IsNumeric(DeviceObject.MaxSwitchValue(0)), True)
+                        Case "MinSwitchValue"
+                            CompareBoolean("DeviceTest", Test, IsNumeric(DeviceObject.MinSwitchValue(0)), True)
+                        Case "SwitchStep"
+                            CompareBoolean("DeviceTest", Test, IsNumeric(DeviceObject.SwitchStep(0)), True)
                         Case Else
                             LogException("DeviceTest", "Unknown Test: " & Test)
                     End Select
