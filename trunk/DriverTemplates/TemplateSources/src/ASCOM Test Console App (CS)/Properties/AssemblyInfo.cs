@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ASCOM Initiative")]
 [assembly: AssemblyProduct("TEMPLATEDEVICENAME")]
-[assembly: AssemblyCopyright("Copyright © Chris Rowland 2011")]
+[assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

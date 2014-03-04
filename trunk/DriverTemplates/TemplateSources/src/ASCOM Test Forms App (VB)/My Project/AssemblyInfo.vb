@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("ASCOM Initiative")> 
 <Assembly: AssemblyProduct("Driver Test Forms Application Template VB")> 
-<Assembly: AssemblyCopyright("Copyright © ASCOM 2011")> 
+<Assembly: AssemblyCopyright("Copyright © ASCOM 2014")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
