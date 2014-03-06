@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>Developing for 32- and 64-bits</title><!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>Developing for 32- and 64-bits</h3>
+	<p class="note">Running on a 64-bit Windows operating system does not mean all applications and ASCOM drivers are 64-bit. Virtually all astronomy applications run under the 32-bit subsystem, and use 32-bit drivers. They are unaware that they are running on a 64-bit system. This is a technical miracle from Microsoft.</p>
+	<p>The ASCOM architecture supports both 32- and 64-bit environments, however there is a great deal of confusion and old wives' tales surrounding this area. It's beyond the scope of this article to give general information on the 32- and 64-bit subsystems in Windows. What is important to driver writers, though, is that the implementation of COM (see <a href="../About/HowWorks.htm">How ASCOM Works</a>) is <span class="underline">separate</span> for 32- and 64-bit applications and drivers. In other words, a 32-bit application cannot use a 64-bit driver, and vice versa. Furthermore, a driver must register itself for COM in the subsystem (32- or 64-bit) for which it was developed. At present (January 2014) virtually all astronomy software is 32-bit, and virtually all of the drivers out there are also 32-bit. Thus, if your driver is 32-bit, that will probably be sufficient for now and into the near future. </p>
+	<h4>Developing with .NET: Universal 32- and 64-bit drivers</h4>
+	<p>By following the recommendations of the ASCOM Initiative and using either C# or Visual Basic .NET languages, you will be able to create a universal driver that will run under 32- and 64-bit environment with no extra effort on your part. Simply make sure your driver project targets &quot;Any CPU&quot;, and that you create an instance of it at least once from both a 32-bit and a 64-bit application. Note that the <a href="DriverDist.htm">ASCOM Driver Installer Tool</a> does not handle 64-bit registration. We hope to fix this in the future.</p>
+	<p class="note">NOTE: If your .NET driver depends on any external DLL that is 32- or 64-bit only, the driver will not be iuniversal. It will be limited to the environment needed by the dependency DLL(s). See below for a way to manage this.</p>
+	<h4>Using the .NET LocalServer to Produce a Universal Driver</h4>
+	<p>The .NET <a href="DriverImpl.htm#LocalServer">LocalServer pattern</a> (and template) produces an executable which serves instances of drivers. A single LocalServer can serve multiple instances of multiple drivers. It operates in its own process space, and is thus insulated from the bit-ness of the applications that use the drivers it serves. So you can develop a 32-bit-only driver (for example one which uses 32-bit only libraries etc.) and still be able to serve drivers to 64-bit applications. The LocalServer is more complex to use, but the template and its built-in help file should be sufficient for a skilled .NET developer.</p>
+	</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2014, The ASCOM Initiative. 
+All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>

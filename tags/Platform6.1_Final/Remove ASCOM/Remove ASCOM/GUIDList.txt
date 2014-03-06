@@ -1,0 +1,284 @@
+This is a list of the GUIDs that will be removed by RemoveASCOM
+ 
+00A394A5-BCB0-449D-A46B-81A02824ADC5 defined in: E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb
+00BC6F08-4277-47c3-9DBA-F80E02C5A448 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
+031b8292-fc9b-4684-8faf-fa7e968db0ff defined in: E:\ASCOM\ASCOM.SettingsProvider\ASCOM.SettingsProviderSample.CSharp\Properties\AssemblyInfo.cs
+0517e476-3c3f-43fb-9ac2-c326a83dd405 defined in: E:\ASCOM\Releases\ASCOM 6\SuppressWinErrors\Properties\AssemblyInfo.cs
+0529dfc1-44d5-4e75-8014-56a4d831eddf defined in: E:\ASCOM\Dome\Driver.cs
+05f2ef53-c71e-4fbe-bcc3-2e62ee043d40 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\PublisherPolicy\Properties\AssemblyInfo.cs
+06BB25BA-6E75-4d1b-8BB4-BA629454AE38 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb
+06CC64FC-3833-48D5-BC54-82DF40CA3900 defined in: E:\ASCOM\Interfaces\ASCOMExceptions\DriverAccessCOMException.cs
+0858c63c-55c3-4e3f-92ba-45342a88dae4 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\GACInstaller\Properties\AssemblyInfo.cs
+093dbafa-609b-4dbe-8080-5fb857efa903 defined in: E:\ASCOM\ASCOM Redirection Policies\ASCOM Redirection Policies\My Project\AssemblyInfo.vb
+09acdfb2-dd0f-4ee2-aa25-2795487fcd9e defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator .NET\TestSwitchSimulator\My Project\AssemblyInfo.vb
+0B8E6DC4-7451-4484-BE15-0D0727569FB8 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb
+0D2B7199-622D-4244-88C3-2577308F82E2 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
+0EF59E5C-2715-4E91-8A5E-38FE388B4F00 defined in: E:\ASCOM\Drivers and Simulators\SafetyMonitor Simulator\Driver.cs
+0EF9BC38-B790-4416-8FEF-E03758B6B630 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+114EBEC4-7887-4ab9-B750-98BB5F1C8A8F defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb
+12229c31-e7d6-49e8-9c5d-5d7ff05c3bfe defined in: E:\ASCOM\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Driver.cs
+12730163-A85C-44CA-95AB-9E92FD9B8364 defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\Driver.cs
+135265BA-25AC-4F43-95E5-80D0171E48FA defined in: E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs
+143068F6-ADC9-4751-AC39-924111396F0F defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+15737EA5-E4FA-40da-8BDA-B8CF96D89E43 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+1749d4be-3c6c-42b1-b7fd-d6277b0e791b defined in: E:\ASCOM\ASCOM.PowerShell.Cmdlets\ASCOMPowerShellCmdlets\Properties\AssemblyInfo.cs
+17D30DAA-C767-43fd-8AF4-5E149D5C771F defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb
+18458B04-7057-4169-B755-B6DB2405C0B0 defined in: E:\ASCOM\Drivers and Simulators\Rotator Simulator\RotatorDriver\Properties\AssemblyInfo.cs
+1aea1ff7-0290-4149-8c05-0aeb546294e5 defined in: E:\ASCOM\ASCOM.Controls\ASCOM.Controls.Demo\Properties\AssemblyInfo.cs
+1C7ABC95-8B63-475e-B5DB-D0CE7ADC436B defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb
+1D06B419-B330-42CA-BC41-992718C929F4 defined in: E:\ASCOM\Drivers and Simulators\ASCOM.Simulator.Video\Video.cs
+1F07419A-0C9E-4B90-8B62-FC8053E89EE2 defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\Driver.cs
+1f85051e-b2f3-4e08-811d-d1ab208da74f defined in: E:\ASCOM\ASCOM.Utilities\PreProcess404Files\My Project\AssemblyInfo.vb
+21AEDC6B-CC7F-4101-BC33-532DFEDEB7B5 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
+21b8916c-f28e-11d2-a473-00c04f8ef448 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+221C0BC0-110B-4129-85A0-18BB28579290 defined in: E:\ASCOM\ASCOM.Interfaces\IRate.cs
+23A8A279-FB8E-4b3c-8F2E-010AC0F98588 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb
+2414C071-8A5B-4d53-89BC-CAF30BA7123B defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+24C040F2-2FA5-4DA4-B87B-6C1101828D2A defined in: E:\ASCOM\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\FocuerDriver.cs
+25052f4e-415a-4f98-8e0c-6828c881ab01 defined in: E:\ASCOM\ASCOM.SettingsProvider\ASCOM.SettingsProvider\Properties\AssemblyInfo.cs
+25df0fc1-7f97-4070-add7-4b13bbfd7cb8 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+25F2ED0A-D0C1-403d-86B9-5F7CEBE97D87 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb
+26F6BD6C-5289-4aa1-B270-F3EA0EBEAFD7 defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+277380A5-6599-448f-9232-1C280073D3CD defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+28D679BA-2AF1-4557-AE15-C528C5BF91E0 defined in: E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Properties\AssemblyInfo.cs
+2B8FD76E-AF7E-4FAA-9FAC-4029E96129F4 defined in: E:\ASCOM\ASCOM.Interfaces\IAxisRates.cs
+2c5b21ae-63a8-4cf7-bf5f-b5846204f249 defined in: E:\ASCOM\NOVAS\Usno.Novas.TestConsoleApp\Properties\AssemblyInfo.cs
+2d3d0b3d-52e3-43f8-85db-df7bbd5e8998 defined in: E:\ASCOM\Drivers and Simulators\TrivialSwitch Simulator .NET\TrivialSimulator\Properties\AssemblyInfo.cs
+2d44189d-4504-41ee-88c9-b8f58ee97a02 defined in: E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Test Forms App (VB)\My Project\AssemblyInfo.vb
+2DC50060-2842-45ba-B486-C2CC4841BD26 defined in: E:\ASCOM\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\My Project\AssemblyInfo.vb
+2E7CEEE4-B5C6-4e9a-87F4-80445700D123 defined in: E:\ASCOM\ASCOM.DeviceInterface\IRate.vb
+2ec93463-b0c3-45e1-8364-327e96aea856 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+2F2B0413-1F83-4777-B3B4-38DE3C32DC6B defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Kepler\KeplerEphemeris.vb
+30D18B61-AECC-4C03-8759-E3EDD246F062 defined in: E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs
+32761e1b-f9a1-4000-99dc-10f5d3845caa defined in: E:\ASCOM\Drivers and Simulators\SimulatorTestingProject\Simulator Testing Project\Properties\AssemblyInfo.cs
+32914B41-41C3-4f68-A974-E9ABCE0BA03A defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+33A846B1-63EE-44B3-937C-5678E0F5B295 defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\NWaySwitch.cs
+347B5004-3662-42C0-96B8-3F8F6F0467D2 defined in: E:\ASCOM\Drivers and Simulators\Rotator Simulator\RotatorDriver\Driver.cs
+3503C303-B268-4da8-A0AA-CD6530B802AA defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb
+35C65270-9582-410d-93CB-A660C5C99D9D defined in: E:\ASCOM\ASCOM.DeviceInterface\ITrackingRates.vb
+3613EEEB-5563-47D8-B512-1D36D64CEEBB defined in: E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs
+36a016e8-062e-4b9f-bf05-3b7e7845ce72 defined in: E:\ASCOM\ASCOM.Utilities\Profile Explorer\My Project\AssemblyInfo.vb
+385AEDA1-3E8E-4bba-A50C-06B0FD2E0B6B defined in: E:\ASCOM\SampleLocalServer\SampleRotator\Properties\AssemblyInfo.cs
+394E0981-3344-4cff-8ABA-E19A775AAD29 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+3A02C211-FA08-4747-B0BD-4B00EB159297 defined in: E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Driver.cs
+3a22c443-4e46-4504-8cef-731095e51e1f defined in: E:\ASCOM\Drivers and Simulators\Gemini Driver\Focuser\Driver.cs
+3AC3E32A-EDCE-4234-AA50-CDB346851C5D defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+3c9fd70d-799e-4eb7-9ff7-59b7e97398da defined in: E:\ASCOM\Driver Inst\InstallerGen\Properties\AssemblyInfo.cs
+3D201554-007C-47e6-805D-F66D1CA35543 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+3e1da6ba-4e5a-4627-bd36-cfdc484bcaef defined in: E:\ASCOM\Interfaces\ASCOMExceptions\Properties\AssemblyInfo.cs
+3FA761EC-12F4-4757-8637-F0ABE5ECB9F7 defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+41244296-BED8-4AC9-AA24-D4E90C6C95FA defined in: E:\ASCOM\ASCOM.Utilities.Video\CameraImage.cs
+43234d78-8dfc-44b5-9d39-e18d568748c1 defined in: E:\ASCOM\Releases\ASCOM 6\Uninstaller\MigrationSupport\My Project\AssemblyInfo.vb
+43325B3A-8B34-48db-8028-9D8CED9FA9E2 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\ASCOMProfile.vb
+45EAC3DA-08FB-49E2-B852-114312933742 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+46584278-AC16-4CFC-8878-09CA960AEABE defined in: E:\ASCOM\Interfaces\ASCOMExceptions\NotImplementedException.cs
+46753368-42d1-424a-85fa-26eee8f4c178 defined in: E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs
+46AB7149-B2AF-4160-A2FD-17B8923CBADE defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+46ACFBCE-4EEE-496d-A4B6-7A5FDDD8F969 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb
+4876295B-6FCC-47c8-AEC9-CF39F1244AEB defined in: E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb
+49003324-8DE2-4986-BC7D-4D85E1C4CF6B defined in: E:\ASCOM\ASCOM.Interfaces\IRotator.cs
+49072a46-ff81-4647-ab82-6a535bd31f8f defined in: E:\ASCOM\CustomActions\Properties\AssemblyInfo.cs
+4959930F-0CDB-4324-A0E0-F60A351454B7 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+4987D641-7E8B-41b9-AE0D-FB232FBBC1F0 defined in: E:\ASCOM\SampleLocalServer\SampleRotator\Driver.cs
+49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB defined in: E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Rates.cs
+4b30b57f-d1d4-4a99-ad36-a8f466587c72 defined in: E:\ASCOM\Patterns and Practices\WiX.Bootstrapper.Test\Bootstrapper.Test.ConsoleApplication\Properties\AssemblyInfo.cs
+4bf5c72a-8491-49af-8668-626eac765e91 defined in: E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs
+4CFCC2FF-6348-4268-B481-E92BE3B30039 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb
+4f90225b-dcd5-4333-9d92-1cefc5585e8e defined in: E:\ASCOM\ASCOM.Interfaces\Properties\AssemblyInfo.cs
+524cdf63-174c-4291-a5c0-b16ddfc99e46 defined in: E:\ASCOM\ASCOM.Utilities.Video\Properties\AssemblyInfo.cs
+52f2cf34-8c59-4daa-8efa-0605cf4df51b defined in: E:\ASCOM\TestApps\CameraTest\Properties\AssemblyInfo.cs
+5325E96C-BD24-4470-A0F6-E917B05805E1 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+537BF13D-55E0-4C80-98EB-BE270E653E10 defined in: E:\ASCOM\Interfaces\ASCOMExceptions\SlavedException.cs
+53a321d1-8b60-4fb9-8c26-da012b764545 defined in: E:\ASCOM\ASCOM.Platform.UnitTest\Properties\AssemblyInfo.cs
+54A8F586-C7B7-4899-8AA1-6044BDE4ABFA defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+558F644F-E112-4e88-9D79-20063BB25C3E defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+55A24A18-02C8-47df-A048-2E0982E1E4FE defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb
+5679F94A-D4D1-40D3-A0F8-7CE61100A691 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstroUtils.vb
+56b1a988-7c0c-4aa2-8639-c3eb5a90226f defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+582dac66-e678-449f-aba6-6faaec8a9394 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+5849AF17-3590-42ff-900E-7544D45C9825 defined in: E:\ASCOM\ASCOM.DeviceInterface\My Project\AssemblyInfo.vb
+598cc9ed-9415-4d32-9dc2-df146c7a5ac8 defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchConsole\Properties\AssemblyInfo.cs
+5BBB931B-358C-40ac-921C-B48373F01348 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+5c53ff1c-b4f2-49d6-85ca-e7b3d249d12e defined in: E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Properties\AssemblyInfo.cs
+5E3A9439-A1A4-4d8d-8658-53E2470C69F6 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb
+5EDEE8B3-E223-4fb7-924F-4C56E8373380 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+5EE28FFB-39CD-4d23-BF62-11EE4C581681 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+5EF15982-D79E-42f7-B20B-E83232E2B86B defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+5FC578AC-C7E2-4F02-9478-BD459DC4981F defined in: E:\ASCOM\Drivers and Simulators\Focus Simulator 2010\FocuserSimulatorDriver\Properties\AssemblyInfo.cs
+602b2780-d8fe-438b-a11a-e45a8df6e7c8 defined in: E:\ASCOM\Drivers and Simulators\SwitchV2 Simulator\SwitchV2Driver\Driver.cs
+60E342F9-3CC3-4b98-8045-D61B5A7D974B defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+62a1ee21-0c62-4a4d-b9b5-10429b4afb71 defined in: E:\ASCOM\NOVAS\Usno.Novas.Test\Properties\AssemblyInfo.cs
+6320FEDA-8582-4048-988A-7D4DE7978C71 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+64A25FDD-3687-45e0-BEAF-18C361E5E340 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+64DC4F51-E5EB-4F28-A8B9-782F78A778FA defined in: E:\ASCOM\Interfaces\ASCOMExceptions\InvalidOperationException.cs
+64FEE414-176D-44d0-99DF-47621D9C377F defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Timer.vb
+676E4D8C-2CD1-4e63-B55A-B0A1C338C6CE defined in: E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb
+692FA48C-4A30-4543-8681-DA0733758F11 defined in: E:\ASCOM\ASCOM.DeviceInterface\IRotatorV2.vb
+694A65AE-7DB0-4BE6-99CA-C319AC044FAF defined in: E:\ASCOM\ASCOM.DeviceInterface\IToggleSwitch.vb
+69651C90-75F5-4f46-8D0F-22D186151D45 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+69CFE7E6-E64F-4045-8D0D-C61F50F31CAC defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\KeyValuePair.vb
+6ADE707E-1D7E-471a-94C9-F9FCC56755B1 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+6B8F457E-29D6-463D-841B-85C85A8E6A1F defined in: E:\ASCOM\Interfaces\ASCOMExceptions\ValueNotSetException.cs
+6BD93BA2-79C5-4077-9630-B7C6E30B2FDF defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb
+6C02144E-641B-4E7D-9661-51FEFD48A068 defined in: E:\ASCOM\ASCOM.Utilities.Video\CameraImage.cs
+6D6475A7-A6E0-4983-A4A8-EF7A8BCFFF1E defined in: E:\ASCOM\Interfaces\ASCOMExceptions\ActionNotImplementedException.cs
+6e391152-a698-44b6-bae7-d23438c50f2e defined in: E:\ASCOM\Drivers and Simulators\TrivialSwitch Simulator .NET\TrivialSimulator\Driver.cs
+6EA9EFD4-1783-4c6b-991C-9D4700A72A07 defined in: E:\ASCOM\Drivers and Simulators\SafetyMonitor Simulator .NET\Safety Monitor Simulator\My Project\AssemblyInfo.vb
+6F0E1F45-129A-4c3a-A3B0-3611AEDB33FB defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+6F38768E-C52D-41c7-9E0F-B8E4AFE341A7 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+703bbc0f-1c29-4e3b-857f-5e7d6082921a defined in: E:\ASCOM\ASCOM.DriverAccess\Properties\AssemblyInfo.cs
+70896ae0-b6c4-4303-a945-01219bf40bb4 defined in: E:\ASCOM\Drivers and Simulators\Dome Simulator .NET\Driver.vb
+717e4712-687d-44e4-bbea-69e36975b9a3 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM Diagnostics\My Project\AssemblyInfo.vb
+71A6CA6B-A86B-4EBB-8DA3-6D91705177A3 defined in: E:\ASCOM\ASCOM.DeviceInterface\ISwitchV2.vb
+74F604BD-6106-40ac-A821-B32F80BF3FED defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVAS3.vb
+756FD725-A6E2-436F-8C7A-67E358622027 defined in: E:\ASCOM\ASCOM.Interfaces\IFilterWheel.cs
+76E5F444-806B-4c72-9184-18CE21D350A7 defined in: E:\ASCOM\ASCOM.DeviceInterface\IAscomDriver.vb
+7722AE51-F475-4c69-8B35-B2EDBD297C66 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+779CD957-5502-4939-A661-EBEE9E1F485E defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Transform.vb
+78F157E4-D03D-4efb-8248-745F9C63A850 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb
+7A3CFD64-D7E3-48b0-BEB6-5696CF7599B3 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
+7DE239E3-D454-42F8-88F4-B371F328A26B defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\NWaySwitchSimulatorDriver\Properties\AssemblyInfo.cs
+7E2164AD-F002-4b30-98A1-BE1CEC954260 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb
+7e30c546-1a9a-4ed4-98d7-03eb167e2c9a defined in: E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs
+7f3582e3-9aa8-42ca-845c-2e6b13f362c1 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\My Project\AssemblyInfo.vb
+7fdf28d9-9887-4b7e-be36-7a4acb80a281 defined in: E:\ASCOM\DriverTemplates\ASCOM.Setup.TemplateWizard\Properties\AssemblyInfo.cs
+8021120a-7635-4793-a64e-93d26bf813cb defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator .NET\SwitchSimulatorDriver\My Project\AssemblyInfo.vb
+84422451-5D8E-4F5A-9A81-8E197AABF79B defined in: E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb
+84f0df4b-8d54-41d6-be96-1b8a3c98ef03 defined in: E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs
+867fafcd-7a54-4b6d-9360-1abaa662e6d8 defined in: E:\ASCOM\Remove ASCOM\Find GUIDs\Properties\AssemblyInfo.cs
+86931eac-1f52-4918-b6aa-7e9b0ff361bd defined in: E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs
+87752dfb-e91b-44d4-a49d-798121f78149 defined in: E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Test Console App (VB)\My Project\AssemblyInfo.vb
+87D14110-BEB7-43ff-991E-AAA11C44E5AF defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb
+880840E2-76E6-4036-AD8F-60A326D7F9DA defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Profile.vb
+8828511A-05C1-43c7-8970-00D23595930A defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb
+88CFA00C-DDD3-4b42-A1F0-9387E6823832 defined in: E:\ASCOM\ASCOM.DeviceInterface\IDomeV2.vb
+89145C95-9B78-494e-99FE-BD2EF4386096 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+8915DF3D-B055-4195-8D23-AAD7F58FDF3B defined in: E:\ASCOM\ASCOM.Interfaces\DomeEnumerations.cs
+89EA7E2A-7C74-461C-ABD5-75EE3D46DA13 defined in: E:\ASCOM\Interfaces\ASCOMExceptions\ParkedException.cs
+8AF165D8-251D-4214-9160-E43241FDB55C defined in: E:\ASCOM\ASCOM.Internal.Extensions\Properties\AssemblyInfo.cs
+8BBA934E-D874-48a2-A3E2-C842A7FFFB35 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+8bbbfc3b-a642-4c27-8de0-55130ff8fc92 defined in: E:\ASCOM\ASCOM Platform Examples\Examples\My Project\AssemblyInfo.vb
+8cedc215-ac4b-488b-93c0-a50a49cb2fb8 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+8D8B7043-49AA-40be-881F-0EC5D8E2213D defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb
+8D9E6EF5-CE9C-4ba9-8B24-C0FA5067D8FA defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+8DD80835-29C6-49d6-8E4D-8887B20E707E defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+8FD58EDE-DF7A-4fdc-9DEC-FD0B36424F5F defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVASCOM\NOVASCOM.vb
+8FFEAC07-F976-4fd8-8547-3DCFF25F5FA3 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+903D0C2C-CE3D-4e27-BD50-3B2C76B7EEE1 defined in: E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb
+90F92092-DD68-4AA5-845C-7061F328B73E defined in: E:\ASCOM\ASCOM.DeviceInterface\SafetyMonitor.vb
+9145faa9-a4b3-4311-a55a-35b7763d4d75 defined in: E:\ASCOM\DriverHelper2\VB.Net Test\VB.Net Test\My Project\AssemblyInfo.vb
+9289B6A5-CAF1-4da1-8A36-999BEBCDD5E9 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb
+92B19711-B44F-4642-9F96-5A20397B8FD1 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Serial.vb
+939B5C76-A502-4729-8786-0C1600445EFE defined in: E:\ASCOM\Interfaces\ASCOMExceptions\InvalidValueException.cs
+946C9620-B292-4807-9B75-FC828AB1700B defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+9591FC6A-3EF1-41ae-9FE1-FE0C76686A85 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+972CEBC6-0EBE-4efc-99DD-CC5293FDE77B defined in: E:\ASCOM\ASCOM.DeviceInterface\ICameraV2.vb
+979908fa-6eec-4aec-b59a-e6b01e22e51a defined in: E:\ASCOM\ASCOM.Attributes\Properties\AssemblyInfo.cs
+99c5f824-66cb-4fa4-ad22-2c93179f3d38 defined in: E:\ASCOM\InstallAwareHack\Properties\AssemblyInfo.cs
+99DB28A6-0132-43BF-91C0-D723124813C8 defined in: E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Rates.cs
+9AD852C3-A895-4f69-AEC0-C9CA44283FA0 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+9c916b40-9e2b-4f99-b3d9-a12bafe1466d defined in: E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Properties\AssemblyInfo.cs
+9DD2CBDB-D114-4576-8072-4ED79CD3571A defined in: E:\ASCOM\ASCOM.DeviceInterface\IRheostat.vb
+9E3AAEB4-D1CD-11D2-BAB9-00C04F8ECEAE defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+A007D146-AE3D-4754-98CA-199FEC03CF68 defined in: E:\ASCOM\ASCOM.DeviceInterface\ITelescopeV3.vb
+A088DB9B-E081-4339-996E-191EB9A80844 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\TraceLogger.vb
+A1D2C046-F7BC-474f-8D95-6E7B761DEECB defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+a1fb7459-56f0-4962-a34e-5ca3bbbd3018 defined in: E:\ASCOM\ASCOM.IConform\ASCOM.IConform\My Project\AssemblyInfo.vb
+A29FB43E-28C5-4ed0-8C8A-889DC7170A82 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
+A38ABA4D-F872-4c2a-A19D-62DBBC761DD5 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
+A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+a3fca333-0593-4b7a-b684-64c4fbe08700 defined in: E:\ASCOM\ASCOM.Utilities\MigrateProfile\My Project\AssemblyInfo.vb
+A5E797E1-2DC3-48DD-953C-08A3F34374A0 defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\Driver.cs
+A8B9A15E-0F01-46ce-AF6E-BEFD3CB9E2BC defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb
+A8CFEEE1-F27B-4a68-AF05-5F6CCE3F1257 defined in: E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb
+A9C1E5CF-2AA4-404D-B16A-79F5C8B1062F defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+A9C2CF73-C139-4fae-B47B-36F18C49B527 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
+ABE720E6-9C2C-47e9-8476-6CE5A3F994E2 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb
+AD6248B3-3F51-4FFF-B62B-E3E942DD817E defined in: E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Driver Template (CS)\Rates.cs
+AECD630C-3A08-46A2-96D3-33F3CF461CBB defined in: E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb
+AEFE0EA0-D013-46a9-B77D-6D0FDD661005 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+af5510b9-3108-4237-83da-ae70524aab7d defined in: E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs
+AF69D7CC-A59C-4fcc-BE17-C2F568957BFD defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+B02BEFFC-6373-441A-A4E3-9A82165E1A0F defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\ToggleSwitch.cs
+b02f9d65-fb77-4f7a-afa5-b391309f11c9 defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+B0C32247-9CF4-47bd-A5E4-FD430065CB4A defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+B1F24499-879F-4fa1-8FE1-C491741EBBF4 defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+B232CDBA-22CC-4596-84F9-23F99B2512FD defined in: E:\ASCOM\ASCOM.DeviceInterface\IDeviceControl.vb
+b377b2cb-f8f4-4bba-a013-3f0a7aebd6ef defined in: E:\ASCOM\NOVAS\NOVAS.Net\Properties\AssemblyInfo.cs
+B3E5FC9D-4D76-4f4b-8FF5-854A01DF413F defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\SwitchDevice.cs
+b51f66fe-1a27-4a79-8549-8791dcc1986e defined in: E:\ASCOM\Releases\ASCOM 6\Uninstaller\UninstallASCOM\Properties\AssemblyInfo.cs
+B5D6F255-2547-461D-9273-AD0C8FBD91D5 defined in: E:\ASCOM\Drivers and Simulators\SafetyMonitor Simulator\Properties\AssemblyInfo.cs
+B6EE3D18-CF56-42D3-AED5-B97ABF36B4EE defined in: E:\ASCOM\Interfaces\ASCOMExceptions\DriverException.cs
+B7203C35-B113-472D-9E5D-0602883AC835 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVAS31.vb
+B7A1F5A0-71B4-44f9-91E9-468697957D6B defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Chooser.vb
+B826412C-B56B-439D-86F9-D116E6EB052C defined in: E:\ASCOM\ASCOM.DeviceInterface\INWaySwitch.vb
+BBD1CD3C-5983-4584-96F9-E22AB0F8BB31 defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+BBED286E-5814-4467-9471-A499DED13452 defined in: E:\ASCOM\Interfaces\ASCOMExceptions\MethodNotImplementedException.cs
+BCB5C21D-B0EA-40D1-B36C-272456F44D01 defined in: E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs
+BD925113-3B58-4C5F-984E-FBCE7C6A93BE defined in: E:\ASCOM\ASCOM.Utilities.Video\CameraImage.cs
+bdc086a3-8b62-4994-b6ee-4299217a1347 defined in: E:\ASCOM\ASCOM.Utilities\EraseProfile\My Project\AssemblyInfo.vb
+BDDA4DFD-77F8-4bd2-ACC0-AF32B4F8B9C2 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb
+BE3C8C90-98F8-4B8B-8C12-C99C8CEC0B7F defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\ControllerDeviceState.cs
+BF98641E-FC63-451d-9310-63EFEFA1B28B defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+C22D9A81-63FA-4AC3-AD64-77B77D3CEB2B defined in: E:\ASCOM\Interfaces\ASCOMExceptions\NotConnectedException.cs
+C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC defined in: E:\ASCOM\ASCOM.Interfaces\IFocuser.cs
+C39A798C-53F7-460b-853F-DA5389B4324D defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+C3F04186-CD53-40fb-8B2A-B52BE955956D defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\NOVAS2COM.vb
+c5c6b4bf-4cba-447d-810a-b0013b0a77a5 defined in: E:\ASCOM\Drivers and Simulators\Gemini Driver\Focuser\Properties\AssemblyInfo.cs
+c7008f94-e3b9-4481-b720-3b56557860c6 defined in: E:\ASCOM\Drivers and Simulators\SwitchV2 Simulator\switchtest\Properties\AssemblyInfo.cs
+C7A1DA6D-91A4-4165-A647-1A40E2D4D5F8 defined in: E:\ASCOM\Drivers and Simulators\SafetyMonitor Simulator .NET\Safety Monitor Simulator\Driver.vb
+C839867F-E152-44e1-8356-2DB450329EDC defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+C893C94C-3D48-4068-8BCE-6CED6AEF2512 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb
+c9809d46-a7aa-4876-8631-47222a34707f defined in: E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs
+C9D7FD9C-1F22-47B3-88A3-2E3C5C5E9B94 defined in: E:\ASCOM\ASCOM.Interfaces\CameraEnumerations.cs
+CA653783-E47D-4e9d-9759-3B91BE0F4340 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb
+CAE65556-EA7A-4252-BF28-D0E967AEF04D defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
+cc3bdb91-8048-4d1e-8e10-e35858594154 defined in: E:\ASCOM\ASCOM.Utilities\FusionLib\Properties\AssemblyInfo.cs
+CCDA0D85-474A-4775-8105-1D513ADC3896 defined in: E:\ASCOM\ASCOM.Interfaces\IDome.cs
+CD193BC0-B4BC-11d2-9833-00C04FC31D2E defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+CD7AEAC0-1BFA-447e-A43E-62C231B0FC55 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+cf3c716d-b0a6-4511-ba79-860e63521fbe defined in: E:\ASCOM\Drivers and Simulators\ASCOM.Simulator.Video\Properties\AssemblyInfo.cs
+d0acdb0f-9c7e-4c53-abb7-576e9f2b8225 defined in: E:\ASCOM\Drivers and Simulators\Telescope Simulator .NET\Telescope\Driver.cs
+d0c60845-c28e-4d08-8cb4-4f10cbd04ceb defined in: E:\ASCOM\Releases\ASCOM 6\FinaliseInstall\FinaliseInstall\Properties\AssemblyInfo.cs
+D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb
+D40EB54D-0F0F-406d-B68F-C2A7984235BC defined in: E:\ASCOM\ASCOM.Interfaces\CameraEnumerations.cs
+d6707f49-0be2-49fa-899b-1975d91ecff4 defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator .NET\SwitchSimulatorDriver\Driver.vb
+D8C4C44C-5FE9-4848-93AE-0C8ED527753B defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\SwitchSimulatorDriver\Properties\AssemblyInfo.cs
+D95FBC6E-0705-458B-84C0-57E3295DBCCE defined in: E:\ASCOM\ASCOM.Interfaces\ICamera.cs
+D9998808-2DF0-4CA1-ADD6-CE592026C663 defined in: E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs
+DA182F18-4133-4d6f-A533-67306F48AC5C defined in: E:\ASCOM\ASCOM.DeviceInterface\Enumerations.vb
+dc03bf05-df2c-4ef4-8876-738c4b7bbdf1 defined in: E:\ASCOM\Remove ASCOM\Remove ASCOM\My Project\AssemblyInfo.vb
+DC98F1DF-315A-43EF-81F6-23F3DD461F58 defined in: E:\ASCOM\ASCOM.Interfaces\ITrackingRates.cs
+DCF3858D-D68E-45ed-8141-1C899B4B432A defined in: E:\ASCOM\ASCOM.DeviceInterface\IFilterWheelV2.vb
+DCFDCA25-F7DB-4b62-B8FF-50ABB4844E4E defined in: E:\ASCOM\ASCOM.DeviceInterface\IRateEnumerator.vb
+DF215CCF-2C25-48e5-A357-A8300C1EA027 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+DF41946E-EE14-40f7-AA66-DD8A92E36EF2 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Interfaces.vb
+e1108c19-e0bb-472e-8bb2-29263f331971 defined in: E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs
+e19176ff-b7de-427f-8d12-2ffece5ad0f2 defined in: E:\ASCOM\DriverTemplates\MakeASCOMTemplates\MakeASCOMTemplates\Properties\AssemblyInfo.cs
+E39480E6-9DBB-466e-9AA4-9D1B1EA8F849 defined in: E:\ASCOM\ASCOM.DeviceInterface\IAxisRates.vb
+E430C8A8-539E-4558-895D-A2F293D946E7 defined in: E:\ASCOM\ASCOM.DeviceInterface\IFocuserV2.vb
+E4C73BFB-9F18-494C-9A2C-D19AD5D8B55E defined in: E:\ASCOM\Drivers and Simulators\Switch Simulator 2010\RheostatSimulatorDriver\Properties\AssemblyInfo.cs
+e6c7b090-1f16-486f-bdba-d45785e9f6f1 defined in: E:\ASCOM\DriverTemplates\TemplateSources\src\ASCOM Test Forms App (CS)\Properties\AssemblyInfo.cs
+e707dcde-d1cd-11d2-bab9-00c04f8eceae defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\GAC.cs
+E861C6D8-B55B-494a-BC59-0F27F981CA98 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\Util.vb
+e91d0ec6-5dbb-471a-9119-4ae7102c34f2 defined in: E:\ASCOM\Releases\ASCOM 6\InstallTemplates\InstallTemplates\Properties\AssemblyInfo.cs
+EA016028-4929-4962-B768-3A4F33FC36A8 defined in: E:\ASCOM\Interfaces\ASCOMExceptions\PropertyNotImplementedException.cs
+EA1D5478-7263-43F8-B708-78783A48158C defined in: E:\ASCOM\ASCOM.DeviceInterface\IVideo.vb
+eba86e62-c384-4fe6-9d8a-1af33093fde2 defined in: E:\ASCOM\Drivers and Simulators\CameraSimulator.NET\CameraSimulator\Properties\AssemblyInfo.cs
+ECD99531-A2CF-4B9F-91A0-35FE5D12B043 defined in: E:\ASCOM\ASCOM.Interfaces\Telescope.Enumerations.cs
+ED02B64A-320F-47cd-90D9-3DF2DF07602D defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+EF0C67AD-A9D3-4F7B-A635-CD2095517633 defined in: E:\ASCOM\Drivers and Simulators\Gemini Driver\Telescope\Driver.cs
+ef68f42f-d9c6-4475-8910-619e1a77dce5 defined in: E:\ASCOM\Drivers and Simulators\SwitchV2 Simulator\SwitchV2Driver\Properties\AssemblyInfo.cs
+f0acf8ea-ddeb-4869-ae33-b25d4d6195b6 defined in: E:\ASCOM\ASCOM.Utilities\ASCOM.Utilities\VB6Support\VB6HelperSupport.vb
+f0fdf5df-22e7-483b-99ea-18bef18c234f defined in: E:\ASCOM\ASCOM Platform Examples\ASCOM.DriverAccess Example\Properties\AssemblyInfo.cs
+F10B748F-4F90-4acf-9EB0-76D50293E9A9 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+F18240B0-00CC-4ff7-9A94-AC835387F959 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\GlobalItems.vb
+f21984e0-ee4f-41a1-8582-057ae4e36d96 defined in: E:\ASCOM\Driver Helper\VB.Net Test\VB.Net Test\My Project\AssemblyInfo.vb
+f642a6f8-8c93-4154-9d18-8f1c652d7ce3 defined in: E:\ASCOM\Dome\Properties\AssemblyInfo.cs
+F6774C71-BA75-4400-B8DB-20960D373170 defined in: E:\ASCOM\ASCOM.IConform\ASCOM.IConform\IConform.vb
+f7bb7cea-c97d-4232-9050-b8ffe7b3630f defined in: E:\ASCOM\Drivers and Simulators\Rotator Simulator\RotatorConsoleTest\Properties\AssemblyInfo.cs
+F9043C88-F6F2-101A-A3C9-08002B2F49FC defined in: E:\ASCOM\Drivers and Simulators\FilterWheel Simulator .NET\FilterWheelDriver\Driver.vb
+F934C471-CFA7-478c-A25E-CED11236EF1A defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb
+fc0404ba-bf0d-4faf-bdd7-b7f1aa1f015d defined in: E:\ASCOM\ASCOM.DriverAccess.Platform5\SimpsonBitsPolicyStuff\PolicyInstaller\GACInstall Source\Backup\Properties\AssemblyInfo.cs
+FCE7DF74-B3AF-4ef6-AD7D-324B87492307 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\AstrometryExceptions.vb
+FF6DA248-BA2A-4a62-BA0A-AAD433EAAC85 defined in: E:\ASCOM\ASCOM.Astrometry\ASCOM.Astrometry\Interfaces.vb
