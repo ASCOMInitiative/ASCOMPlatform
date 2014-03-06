@@ -67,7 +67,7 @@
 
 	<h3>Driver Developer Resources</h3>
 	<p>Most of the driver developer tools are contained within the <a href="../Downloads/PlatDevComponents.htm">ASCOM Platform Developer Components</a>. Driver developers are strongly encouraged to use those tools. This is particularly true for driver developers who write in C# or VB.NET. <span class="underline">The Developer Components contain templates for all driver types in both C# and VB.NET</span>. Using these templates will save you heaps of effort and troubles.</p>
-	<p>YOu may benefit from watching <a href="DriverImpl.htm#video">Tom How's excellent video showing how to develop a driver</a> for a telescope control system using the popular Arduino microcontroller kit.</p>
+	<p>You may benefit from watching <a href="DriverImpl.htm#video">Tom How's excellent video showing how to develop a driver</a> for a telescope control system using the popular Arduino microcontroller kit.</p>
 	
 	<h3><a name="download" id="download"></a>Developer Components (separate download)</h3>
 	<p class="note">Before embarking on driver development, you should have the <a href="../Downloads/PlatDevComponents.htm" target="_blank">ASCOM Platform Developer Components</a> installed on your system. Driver templates, most of the developer documentation, and the installer generator are included in the Developer Components installation.  The developer components are provided as a separate download from the Platform itself. </p>
@@ -81,15 +81,15 @@
 	
 	<p>The interface specifications aren't the full story! There are some design principles that, if adhered-to, will maximize the chances that your driver will operate properly with a variety of client software. <span class="underline">The links on the left lead to information on each of these design principles</span>. </p>
 	<h3>Common Traps and Mistakes (mostly for driver developers)</h3>
-	<p>It probably seems unprofessional to start this section with what <i>not</i> to do, but we're just trying to save you time and pain. Over the last 10+ years we've seen the same mistakes repeated by driver developers enough times to rate being listed here. Hopefully a word to the wise is enough.</p>
+	<p>It probably seems unprofessional to start this section with what <i>not</i> to do, but we're just trying to save you time and pain. Over the last 12+ years we've seen the same mistakes repeated by driver developers enough times to rate being listed here. Hopefully a word to the wise is enough.</p>
 	<ul>
 		<li>Not understanding the driver-client architecture and that your driver will be used by many applications, some of which don't  yet exist</li>
 		<li>Using sources for another driver (or worse, one of the simulators) as a starting point (you start with other peoples' mistakes and the wrong design)</li>
 		<li>Developing for both 32-bit and 64-bit using &quot;any cpu&quot; in .NET, yet depending on an external library that is 32-bit only (C++ DLL for 32-bits etc.).</li>
 		<li>Giving a driver  a &quot;kitchen sink&quot; window that lets people &quot;control&quot; and &quot;tune&quot; your device. They just want it to work with <i>their</i> program.</li>
-		<li>Insisting on using C++ because that's the only language you know, but you know nothing about COM (bare metal C++ is <i>tough</i>)</li>
+		<li>Insisting on using C++ because that's the only language you know, but you know nothing about COM (bare metal COM in C++ is <i>tough</i>)</li>
 		<li>Ignoring the support services provided by the Platform (Chooser, Profile, Serial, etc.) and rolling your own</li>
-		<li>Asking users to run BAT files or double-click registry files to install your driver (instead of providing a real installer)</li>
+		<li>Asking users to run BAT files or double-click registry files to install your driver (instead of providing a real installer using our tools)</li>
 		<li>Exposing timing restrictions or other device quirks to driver clients (they don't want to do stuff just for your goofy device)</li>
 		<li>Including (and worse, installing) parts taken from the Platform as part of your driver or applicaition</li>
 	</ul>
