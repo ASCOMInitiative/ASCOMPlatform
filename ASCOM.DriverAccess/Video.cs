@@ -479,7 +479,7 @@ namespace ASCOM.DriverAccess
         ///	<value>The pixel size X if known.</value>
         public double PixelSizeX
         {
-            get { return (int)memberFactory.CallMember(1, "PixelSizeX", new Type[0], new object[0]); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "PixelSizeX", new Type[0], new object[0])); }
         }
 
         /// <summary>
@@ -488,7 +488,7 @@ namespace ASCOM.DriverAccess
         ///	<value>The pixel size Y if known.</value>
         public double PixelSizeY
         {
-            get { return (int)memberFactory.CallMember(1, "PixelSizeY", new Type[0], new object[0]); }
+            get { return Convert.ToDouble(memberFactory.CallMember(1, "PixelSizeY", new Type[0], new object[0])); }
         }
 
         /// <summary>
@@ -772,7 +772,7 @@ namespace ASCOM.DriverAccess
         /// <para>To support automated and unattended control over the specialized device settings or functions available on this dialog the driver should also allow their control via <see cref="P:ASCOM.DeviceInterface.IVideo.SupportedActions"/>. 
         /// This dialog is meant to be used by the applications to allow the user to adjust specialized device settings when those applications don't specifically use the specialized settings in their functionality.</para>
         /// <para>Examples for specialized settings that could be supported are white balance and sharpness.</para>
-            /// </remarks>
+        /// </remarks>
         public void ConfigureDeviceProperties()
         {
             memberFactory.CallMember(3, "ConfigureDeviceProperties", new Type[0], new object[0]);
