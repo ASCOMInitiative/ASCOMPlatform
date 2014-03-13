@@ -139,7 +139,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PreprocessorDefinitions>WIN32;_WINDLL;_DEBUG;_WINDOWS;_USRDLL;ASCOMVIDEOUTILS_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDLL;_WINDOWS;_USRDLL;ASCOMVIDEOUTILS_EXPORTS</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>
@@ -149,7 +149,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>BitmapUtils.def</ModuleDefinitionFile>
       <AdditionalDependencies>vfw32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -169,7 +169,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PreprocessorDefinitions>WIN32;_WINDLL;_DEBUG;_WINDOWS;_USRDLL;ASCOMVIDEOUTILS_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDLL;_WINDOWS;_USRDLL;ASCOMVIDEOUTILS_EXPORTS</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>
@@ -179,7 +179,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>BitmapUtils.def</ModuleDefinitionFile>
       <AdditionalDependencies>vfw32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
