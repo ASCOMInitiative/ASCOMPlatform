@@ -149,7 +149,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>BitmapUtils.def</ModuleDefinitionFile>
       <AdditionalDependencies>vfw32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -179,7 +179,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>BitmapUtils.def</ModuleDefinitionFile>
       <AdditionalDependencies>vfw32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
