@@ -72,16 +72,63 @@ End Enum
 <InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface IVideoFrame
     ''' <summary>
-    ''' Returns a safearray of int32 of size <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> containing the pixel values from the video frame. 
+    ''' Returns a safearray of int32 containing the pixel values from the video frame. The array could be one of: ImageArray[Pixels], ImageArray[Height, Width], ImageArray[NumPlane, Pixels] 
+    ''' or ImageArray[NumPlane, Height, Width].
     ''' </summary>
     ''' <remarks>
     ''' <p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>
-    ''' The application must inspect the Safearray parameters to determine the dimensions. 
-    ''' <para>For color or multispectral cameras, will produce an array of  <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
-    ''' NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
-    ''' <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel in the array is the second pixel from the first horizontal row
-    ''' and the second last pixel in the array is the second last pixels from the last horizontal row.</para>
-    ''' <para>In colour mode a two dimentional array is returned where the first plane is <b>R</b>, the second is <b>G</b> and third is <b>B</b>.</para>
+    ''' <para>The application must inspect the Safearray parameters to determine the dimensions and also the <see cref="P:ASCOM.DeviceInterface.IVideo.SensorType"/> to determine if the image is <b>Color</b> or not.
+    ''' The following table should be used to determine the format of the data:</para>
+    '''       <para>
+    '''           <table style="width:76.24%;" cellspacing="0" width="76.24%">
+    '''               <col style="width: 11.701%;"></col>
+    '''               <col style="width: 20.708%;"></col>
+    '''               <col style="width: 67.591%;"></col>
+    '''               <tr>
+    '''                   <td colspan="1" rowspan="1" style="width: 11.701%; padding-right: 10px; padding-left: 10px; &#xA; border-left-color: #000000; border-left-style: Solid; &#xA; border-top-color: #000000; border-top-style: Solid; &#xA; border-right-color: #000000; border-right-style: Solid;&#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; &#xA; background-color: #00ffff;" width="11.701%">
+    '''                       <b>Dimensions</b></td>
+    '''                   <td colspan="1" rowspan="1" style="width: 20.708%; padding-right: 10px; padding-left: 10px; &#xA; border-top-color: #000000; border-top-style: Solid; &#xA; border-right-style: Solid; border-right-color: #000000; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; &#xA; background-color: #00ffff;" width="20.708%">
+    '''                       <b>SensorType</b></td>
+    '''                   <td colspan="1" rowspan="1" style="width: 67.591%; padding-right: 10px; padding-left: 10px; &#xA; border-top-color: #000000; border-top-style: Solid; &#xA; border-right-style: Solid; border-right-color: #000000; &#xA; border-bottom-color: #000000; border-bottom-style: Solid; &#xA; border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; &#xA; background-color: #00ffff;" width="67.591%">
+    '''                       <b>Array Format</b></td>
+    '''               </tr>
+    '''               <tr>
+    '''                   <td>1; int[]</td>
+    '''                   <td><b>Monochrome</b>, <b>RGGB</b>, <b>CMYG</b>, <b>CMYG2</b>, <b>LRGB</b></td>
+    '''                   <td>A row major <b>ImageArray[Pixels]</b> of <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel in the array is the second pixel from the first horizontal row
+    ''' and the second last pixel in the array is the second last pixels from the last horizontal row.</td>
+    '''               </tr>
+    '''               <tr>
+    '''                   <td>1; int[]</td>
+    '''                   <td><b>Color</b></td>
+    '''                   <td><p style="color:red">Invalid configuration.</p></td>
+    '''               </tr>
+    '''               <tr>
+    '''                   <td>2; int[,]</td>
+    '''                   <td><b>Monochrome</b>, <b>RGGB</b>, <b>CMYG</b>, <b>CMYG2</b>, <b>LRGB</b></td>
+    '''                   <td><b>ImageArray[Height, Width]</b> of <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> x <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements.</td>
+    '''               </tr>
+    '''               <tr>
+    '''                   <td>2; int[,]</td>
+    '''                   <td><b>Color</b></td>
+    '''                   <td><b>ImageArray[NumPlane, Pixels]</b> of NumPlanes x <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The order of the three colour planes is 
+    ''' first is <b>R</b>, the second is <b>G</b> and third is <b>B</b>. The pixels in second dimension of the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixel is the second pixel from the first horizontal row
+    ''' and the second last pixel is the second last pixels from the last horizontal row.</td>
+    '''               </tr>
+    '''               <tr>
+    '''                   <td>3; int[,,]</td>
+    '''                   <td><b>Monochrome</b>, <b>RGGB</b>, <b>CMYG</b>, <b>CMYG2</b>, <b>LRGB</b></td>
+    '''                   <td><p style="color:red">Invalid configuration.</p></td>
+    '''               </tr>
+    '''               <tr>
+    '''                   <td>3; int[,,]</td>
+    '''                   <td><b>Color</b></td>
+    '''                   <td><b>ImageArray[NumPlane, Height, Width]</b> of NumPlanes x <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> x <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> elements. The order of the three colour planes is 
+    ''' first is <b>R</b>, the second is <b>G</b> and third is <b>B</b>.</td>
+    '''               </tr>
+    '''           </table>
+    '''        </para>
+    ''' <para>In <b>Color</b> SensorType mode, if the application cannot handle multispectral images, it should use just the first plane.</para>
     ''' </remarks>
     ''' <value>The image array.</value>
     ReadOnly Property ImageArray() As Object
