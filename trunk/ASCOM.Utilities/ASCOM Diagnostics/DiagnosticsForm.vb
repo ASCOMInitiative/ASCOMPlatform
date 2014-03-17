@@ -977,14 +977,14 @@ Public Class DiagnosticsForm
                             NMatches += 1
                     End Select
                     TL.LogMessage("TestSimulator", "Completed Device: " & Sim.ProgID & " OK")
-                    Try : DeviceObject.Dispose() : Catch : End Try
-                    Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try
-                    DeviceObject = Nothing
                 Catch ex As Exception
                     LogException("TestSimulator", "Exception: " & ex.ToString)
+                Finally
+                    Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try 'Always try and make sure we are properly tidied up!
+                    Try : DeviceObject.Dispose() : Catch : End Try
+                    DeviceObject = Nothing
                 End Try
             End If
-            Try : Marshal.ReleaseComObject(DeviceObject) : Catch : End Try 'Always try and make sure we are properly tidied up!
             TL.BlankLine()
         Catch ex1 As Exception
             LogException("TestSimulator", "Overall Exception: " & ex1.ToString)
