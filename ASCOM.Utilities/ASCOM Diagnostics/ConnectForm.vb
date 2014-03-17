@@ -99,9 +99,6 @@ Public Class ConnectForm
                     End Select
                     Connected = False
                     txtStatus.Text = "Disconnected OK"
-                    Try : Device.Dispose() : Catch : End Try
-                    Try : Marshal.ReleaseComObject(Device) : Catch : End Try
-                    Device = Nothing
                     btnConnect.Text = "Connect"
                     btnChoose.Enabled = True
                     If CurrentDevice <> "" Then btnProperties.Enabled = True
@@ -109,6 +106,10 @@ Public Class ConnectForm
                     cmbDeviceType.Enabled = True
                 Catch ex As Exception
                     txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
+                Finally
+                    Try : Device.Dispose() : Catch : End Try
+                    Try : Marshal.ReleaseComObject(Device) : Catch : End Try
+                    Device = Nothing
                 End Try
 
             Else 'Disconnected so connect
@@ -133,8 +134,13 @@ Public Class ConnectForm
                     cmbDeviceType.Enabled = False
                 Catch ex As Exception
                     txtStatus.Text = "Connect Failed..." & ex.Message & vbCrLf & vbCrLf & ex.ToString
+                    Try : Device.Dispose() : Catch dex As Exception
+                        txtStatus.AppendText(vbCrLf & "Dispose Failed..." & dex.Message & vbCrLf & vbCrLf & dex.ToString)
+                    End Try
+                    Try : Marshal.ReleaseComObject(Device) : Catch rex As Exception
+                        txtStatus.AppendText(vbCrLf & "Release Failed..." & rex.Message & vbCrLf & vbCrLf & rex.ToString)
+                    End Try
                 End Try
-
             End If
         Else
             txtStatus.Text = "Cannot connect, no device has been set"
