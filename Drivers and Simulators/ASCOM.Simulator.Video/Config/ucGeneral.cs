@@ -158,11 +158,10 @@ namespace ASCOM.Simulator.Config
 
 		private bool ValidateSensorType()
 		{
-			if ((SensorType)cbxSensorType.SelectedIndex != SensorType.Monochrome &&
-				(SensorType)cbxSensorType.SelectedIndex != SensorType.Color)
+			if ((SensorType)cbxSensorType.SelectedIndex != SensorType.Monochrome)
 			{
 				MessageBox.Show(
-					"Only Monochrome and Color sensor types are supported by the simulator.",
+					"Only Monochrome sensor type is supported by the simulator at the moment.",
 					"Video Simulator",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
