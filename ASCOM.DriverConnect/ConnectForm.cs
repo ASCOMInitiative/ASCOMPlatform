@@ -181,13 +181,14 @@ namespace ASCOM.DriverConnect
             txtStatus.Clear();
             TL = new TraceLogger("", TRACE_LOGGER_NAME);
             TL.Enabled = true;
+            dynamic driver = null;
 
             try
             {
                 LogMsg("Create", "Creating device");
 
                 Type type = Type.GetTypeFromProgID(CurrentDevice);
-                dynamic driver = Activator.CreateInstance(type);
+                driver = Activator.CreateInstance(type);
 
                 if (chkConnect.Checked)
                 {
@@ -204,18 +205,19 @@ namespace ASCOM.DriverConnect
                     LogMsg("Setup", "Opening setup dialogue");
                     driver.SetupDialog();
                 }
-
+            }
+            catch (Exception ex)
+            {
+                LogMsg("SetupError", ex.Message);
+            }
+            finally
+            {
                 LogMsg("Dispose", "Disposing of device");
                 try { driver.Dispose(); }
                 catch { }
                 try { Marshal.ReleaseComObject(driver); }
                 catch { }
                 LogMsg("Dispose", "Completed disposal of device");
-
-            }
-            catch (Exception ex)
-            {
-                LogMsg("SetupError", ex.Message);
             }
 
             TL.Enabled = false;
@@ -234,6 +236,7 @@ namespace ASCOM.DriverConnect
 
             TL = new TraceLogger("", TRACE_LOGGER_NAME);
             TL.Enabled = true;
+            dynamic driver = null;
 
             try
             {
@@ -241,7 +244,7 @@ namespace ASCOM.DriverConnect
 
                 LogMsg("Create", "Creating device");
                 Type type = Type.GetTypeFromProgID(CurrentDevice);
-                dynamic driver = Activator.CreateInstance(type);
+                driver = Activator.CreateInstance(type);
                 LogMsg("Connected", "Connecting to device");
                 if (CurrentDeviceType.ToUpper() == "FOCUSER")
                 {
@@ -365,17 +368,19 @@ namespace ASCOM.DriverConnect
                 LogMsg("Connected", "Disconnecting from device");
                 if (usedConnected) driver.Connected = false;
                 else driver.Link = false;
-
+            }
+            catch (Exception ex)
+            {
+                LogMsg("Error", ex.ToString());
+            }
+            finally
+            {
                 LogMsg("Dispose", "Disposing of device");
                 try { driver.Dispose(); }
                 catch { }
                 try { Marshal.ReleaseComObject(driver); }
                 catch { }
                 LogMsg("Dispose", "Completed disposal of device");
-            }
-            catch (Exception ex)
-            {
-                LogMsg("Error", ex.ToString());
             }
 
             TL.Enabled = false;
