@@ -464,7 +464,8 @@ Public Class Serial
                     Else
                         Logger.LogMessage("Set Connected", "Reading COM port through Interrupt Handling")
                     End If
-                    SerPorts = AvailableCOMPorts ' This causes a log of available COM port entries to be written on Connect = True
+                    ' CR remove this call to see if it helps with Bluetooth
+                    'SerPorts = AvailableCOMPorts ' This causes a log of available COM port entries to be written on Connect = True
                 End If
 
                 TData.SerialCommand = SerialCommandType.Connected
@@ -489,7 +490,8 @@ Public Class Serial
             '5.0.2 added port enumeration to log
             If TData.Connecting Then ' Trying to connect
                 If Not m_Connected Then
-                    If Not My.Computer.Ports.SerialPortNames.Contains(m_PortName) Then Throw New Exceptions.InvalidValueException("Requested COM Port does not exist: " & m_PortName)
+                    ' CR remove check on the serial port names to help with Bluetooth - maybe
+                    'If Not My.Computer.Ports.SerialPortNames.Contains(m_PortName) Then Throw New Exceptions.InvalidValueException("Requested COM Port does not exist: " & m_PortName)
                     If m_Port Is Nothing Then
                         m_Port = New System.IO.Ports.SerialPort(m_PortName)
                     Else
