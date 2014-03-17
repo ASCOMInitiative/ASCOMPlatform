@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d1cc108a-fbcd-43a3-91fa-1ddda1981968" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+       	<section address="ChangesSP3">
+    		<title>Key Changes in 6.0 SP3 - For Everyone</title>
+      		<content>
+				<list class="bullet">
+	      			<listItem>None.</listItem>
+	  			</list>
+            </content>
+		</section>
+   		
+    	<section address="KeyChangesin6.0SP3Dev">
+	     	<title>Key Changes in 6.0 SP3 - For Developers</title>
+	      	<content>
+	      		<list class="bullet">
+	      			<listItem>None.</listItem>
+				</list>
+      		</content>
+   		</section>
+
+        <section address="IssuesFixedPlatform">
+           	<title>Issues Fixed - Platform</title>
+            <content>
+      			<list class="bullet">
+					<listItem>POTH - Localisation issue in locales where point is not the decimal separator.</listItem>
+					<listItem>Installer will now cope with the rare cases where Windows installations have non-canonical registry ACLs.</listItem>
+				</list>
+   			</content>
+   		</section>
+   		
+        <section address="IssuesFixedDeveloper">
+           	<title>Issues Fixed - Developers</title>
+            <content>
+      			<list class="bullet">
+					<listItem>None.</listItem>
+				</list>
+   			</content>
+   		</section>
+
+       <section address="KnownIssuesDevelopment">
+           	<title>Known Limitations - Developers</title>
+            <content>
+      			<list class="bullet">
+					<listItem>The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully 
+					accessible through COM from scripting languages because a number of parameters are passed by reference or use 
+					structures that do not pass across the COM interface. Three workrounds have been established:
+		      			<list class="bullet">
+							<listItem><legacyBold>Recommended</legacyBold> - Use the Transform component in the ASCOM.Astrometry.Transform 
+							namespace, it is fully COM compatible.</listItem>
+							<listItem><legacyBold>Recommended</legacyBold> - Use the NOVASCOM components in the Astrometry.NOVASCOM namespace,
+							they are also fully COM compatible.</listItem>
+							<listItem>Create your own COM presentation component that encapsulates the NOVAS 3.1 functions that you require
+							and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your 
+							scripting application.</listItem>
+						</list>
+					</listItem>
+					</list>
+   			</content>
+   		</section>
+   		
+   		<section address="BreakingChanges">
+           	<title>Breaking Changes (For Developers)</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>None.</listItem>
+				</list>
+   			</content>
+   		</section>
+  </developerConceptualDocument>
+</topic>
