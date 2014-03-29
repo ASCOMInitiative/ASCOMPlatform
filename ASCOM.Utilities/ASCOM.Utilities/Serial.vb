@@ -518,29 +518,30 @@ Public Class Serial
                     'Open port for communication
                     m_Port.Open()
                     m_Connected = True
-                    Logger.LogMessage("Set Connected", "OK")
+                    Logger.LogMessage("ConnectedWorker", "OK")
                 Else
-                    Logger.LogMessage("Set Connected", "Already connected")
+                    Logger.LogMessage("ConnectedWorker", "Already connected")
                 End If
             Else ' Trying to disconnect
                 If m_Connected Then
                     m_Connected = False
                     m_Port.DiscardOutBuffer()
                     m_Port.DiscardInBuffer()
-                    Logger.LogStart("Set Connected", "Cleared buffers, ")
+                    Logger.LogStart("ConnectedWorker", "Cleared buffers, ")
                     m_Port.Close()
                     Logger.LogContinue("closed port, ")
                     m_Port.Dispose()
                     Logger.LogFinish("disposed OK")
                 Else
-                    Logger.LogMessage("Set Connected", "Already disconnected")
+                    Logger.LogMessage("ConnectedWorker", "Already disconnected")
                 End If
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("Set Connected", "EXCEPTION: ConnectedWorker - " & ex.Message & " " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("ConnectedWorker", "EXCEPTION: ConnectedWorker - " & ex.Message & " " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
 
     End Sub
@@ -767,35 +768,36 @@ Public Class Serial
 
         Try
             MyTransactionID = GetNextTransactionID("ClearBuffers")
-            If DebugTrace Then Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & " " & CurrentThread.ManagedThreadId & "Start")
+            If DebugTrace Then Logger.LogMessage("ClearBuffersWorker", FormatIDs(MyTransactionID) & " " & CurrentThread.ManagedThreadId & "Start")
             If GetSemaphore("ClearBuffers", MyTransactionID) Then
                 Try
                     If Not (m_Port Is Nothing) Then 'Ensure that ClearBuffers always succeeds for compatibility with MSCOMM32
                         If m_Port.IsOpen Then 'This test is required to maintain compatibility with the original MSCOMM32 control
                             m_Port.DiscardInBuffer()
                             m_Port.DiscardOutBuffer()
-                            Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "Completed")
+                            Logger.LogMessage("ClearBuffersWorker", FormatIDs(MyTransactionID) & "Completed")
                         Else
-                            Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "Command ignored as port is not open")
+                            Logger.LogMessage("ClearBuffersWorker", FormatIDs(MyTransactionID) & "Command ignored as port is not open")
                         End If
                     End If
                 Catch ex As Exception
-                    Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ClearBuffersWorker", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally
                     ReleaseSemaphore("ClearBuffers ", MyTransactionID)
                 End Try
             Else
-                Logger.LogMessage("ClearBuffers", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("ClearBuffersWorker", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 'Throw New SerialPortInUseException("Serial:Clearbuffers - unable to get serial port semaphore before timeout.")
                 Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
 
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("ClearBuffers", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("ClearBuffersWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
     End Sub
 
@@ -842,36 +844,37 @@ Public Class Serial
             Dim Received As String = ""
             Dim MyTransactionID As Long
             MyTransactionID = GetNextTransactionID("Receive")
-            If DebugTrace Then Logger.LogMessage("Receive", FormatIDs(MyTransactionID) & "Start")
+            If DebugTrace Then Logger.LogMessage("ReceiveWorker", FormatIDs(MyTransactionID) & "Start")
             If GetSemaphore("Receive", MyTransactionID) Then
                 Try
-                    If Not DebugTrace Then Logger.LogStart("Receive", FormatIDs(MyTransactionID) & "< ")
+                    If Not DebugTrace Then Logger.LogStart("ReceiveWorker", FormatIDs(MyTransactionID) & "< ")
                     Received = ReadChar("Receive", MyTransactionID)
                     Received = Received & m_Port.ReadExisting
                     If DebugTrace Then
-                        Logger.LogMessage("Receive", FormatIDs(MyTransactionID) & "< " & Received)
+                        Logger.LogMessage("ReceiveWorker", FormatIDs(MyTransactionID) & "< " & Received)
                     Else
                         Logger.LogFinish(Received)
                     End If
                 Catch ex As TimeoutException
-                    Logger.LogMessage("Receive", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ReceiveWorker", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
                 Catch ex As Exception
-                    Logger.LogMessage("Receive", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ReceiveWorker", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
                     ReleaseSemaphore("Receive", MyTransactionID)
                 End Try
                 TData.ResultString = Received
             Else
-                Logger.LogMessage("Receive", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("ReceiveWorker", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 Throw New SerialPortInUseException("Serial:Receive - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("Receive", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("ReceiveWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
     End Sub
 
@@ -915,35 +918,36 @@ Public Class Serial
 
         Try
             MyTransactionID = GetNextTransactionID("ReceiveByte")
-            If DebugTrace Then Logger.LogMessage("ReceiveByte", FormatIDs(MyTransactionID) & "Start")
+            If DebugTrace Then Logger.LogMessage("ReceiveByteWorker", FormatIDs(MyTransactionID) & "Start")
             If GetSemaphore("ReceiveByte", MyTransactionID) Then
                 Try
-                    If Not DebugTrace Then Logger.LogStart("ReceiveByte", FormatIDs(MyTransactionID) & "< ")
+                    If Not DebugTrace Then Logger.LogStart("ReceiveByteWorker", FormatIDs(MyTransactionID) & "< ")
                     RetVal = ReadByte("ReceiveByte", MyTransactionID)
                     If DebugTrace Then
-                        Logger.LogMessage("ReceiveByte", FormatIDs(MyTransactionID) & " " & Chr(RetVal), True)
+                        Logger.LogMessage("ReceiveByteWorker", FormatIDs(MyTransactionID) & " " & Chr(RetVal), True)
                     Else
                         Logger.LogFinish(Chr(RetVal), True)
                     End If
                 Catch ex As TimeoutException
-                    Logger.LogMessage("ReceiveByte", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ReceiveByteWorker", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)
                     Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
                 Catch ex As Exception
-                    Logger.LogMessage("ReceiveByte", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ReceiveByteWorker", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
                     ReleaseSemaphore("ReceiveByte", MyTransactionID)
                 End Try
                 TData.ResultByte = RetVal
             Else
-                Logger.LogMessage("ReceiveByte", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("ReceiveByteWorker", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 Throw New SerialPortInUseException("Serial:ReceiveByte - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("ReceiveByte", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("ReceiveByteWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
 
     End Sub
@@ -990,37 +994,38 @@ Public Class Serial
         Try
             'Return a fixed number of characters
             MyTransactionID = GetNextTransactionID("ReceiveCounted")
-            If DebugTrace Then Logger.LogMessage("ReceiveCounted", FormatIDs(MyTransactionID) & "Start - count: " & TData.Count.ToString)
+            If DebugTrace Then Logger.LogMessage("ReceiveCountedWorker", FormatIDs(MyTransactionID) & "Start - count: " & TData.Count.ToString)
             If GetSemaphore("ReceiveCounted", MyTransactionID) Then
                 Try
-                    If Not DebugTrace Then Logger.LogStart("ReceiveCounted " & TData.Count.ToString, FormatIDs(MyTransactionID) & "< ")
+                    If Not DebugTrace Then Logger.LogStart("ReceiveCountedWorker " & TData.Count.ToString, FormatIDs(MyTransactionID) & "< ")
                     For i = 1 To TData.Count
                         Received = Received & ReadChar("ReceiveCounted", MyTransactionID)
                     Next
                     If DebugTrace Then
-                        Logger.LogMessage("ReceiveCounted", FormatIDs(MyTransactionID) & "< " & Received)
+                        Logger.LogMessage("ReceiveCountedWorker", FormatIDs(MyTransactionID) & "< " & Received)
                     Else
                         Logger.LogFinish(Received)
                     End If
                 Catch ex As TimeoutException
-                    Logger.LogMessage("ReceiveCounted", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
+                    Logger.LogMessage("ReceiveCountedWorker", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
                     Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
                 Catch ex As Exception
-                    Logger.LogMessage("ReceiveCounted", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
+                    Logger.LogMessage("ReceiveCountedWorker", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
                     ReleaseSemaphore("ReceiveCounted", MyTransactionID)
                 End Try
                 TData.ResultString = Received
             Else
-                Logger.LogMessage("ReceiveCounted", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("ReceiveCountedWorker", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 Throw New SerialPortInUseException("ReceiveCounted - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("ReceiveCounted", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("ReceiveCountedWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
 
     End Sub
@@ -1076,41 +1081,42 @@ Public Class Serial
             TextEncoding = System.Text.Encoding.GetEncoding(1252)
 
             MyTransactionID = GetNextTransactionID("ReceiveCountedBinary ")
-            If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary ", FormatIDs(MyTransactionID) & "Start - count: " & TData.Count.ToString)
+            If DebugTrace Then Logger.LogMessage("ReceiveCountedBinaryWorker ", FormatIDs(MyTransactionID) & "Start - count: " & TData.Count.ToString)
 
             If GetSemaphore("ReceiveCountedBinary ", MyTransactionID) Then
                 Try
-                    If Not DebugTrace Then Logger.LogStart("ReceiveCountedBinary " & TData.Count.ToString, FormatIDs(MyTransactionID) & "< ")
+                    If Not DebugTrace Then Logger.LogStart("ReceiveCountedBinaryWorker " & TData.Count.ToString, FormatIDs(MyTransactionID) & "< ")
                     For i = 0 To TData.Count - 1
                         ReDim Preserve Received(i)
                         Received(i) = ReadByte("ReceiveCountedBinary ", MyTransactionID)
                     Next
                     If DebugTrace Then
-                        Logger.LogMessage("ReceiveCountedBinary ", FormatIDs(MyTransactionID) & "< " & TextEncoding.GetString(Received), True)
+                        Logger.LogMessage("ReceiveCountedBinaryWorker ", FormatIDs(MyTransactionID) & "< " & TextEncoding.GetString(Received), True)
                     Else
                         Logger.LogFinish(TextEncoding.GetString(Received), True)
                     End If
                 Catch ex As TimeoutException
-                    Logger.LogMessage("ReceiveCountedBinary ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(TextEncoding.GetString(Received)) & "EXCEPTION: " & ex.Message)
+                    Logger.LogMessage("ReceiveCountedBinaryWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(TextEncoding.GetString(Received)) & "EXCEPTION: " & ex.Message)
                     Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
                 Catch ex As Exception
-                    Logger.LogMessage("ReceiveCountedBinary ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(TextEncoding.GetString(Received)) & "EXCEPTION: " & ex.Message)
+                    Logger.LogMessage("ReceiveCountedBinaryWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(TextEncoding.GetString(Received)) & "EXCEPTION: " & ex.Message)
                     Throw
                 Finally
                     ReleaseSemaphore("ReceiveCountedBinary ", MyTransactionID)
                 End Try
                 TData.ResultByteArray = Received
             Else
-                Logger.LogMessage("ReceiveCountedBinary ", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("ReceiveCountedBinaryWorker ", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 'Throw New SerialPortInUseException("Serial:ReceiveCountedBinary - unable to get serial port semaphore before timeout.")
                 Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
 
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("ReceiveCountedBinary", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("ReceiveCountedBinaryWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
 
     End Sub
@@ -1159,13 +1165,13 @@ Public Class Serial
         Try
             'Return all characters up to and including a specified terminator string
             MyTransactionID = GetNextTransactionID("ReceiveTerminated ")
-            If DebugTrace Then Logger.LogMessage("ReceiveTerminated ", FormatIDs(MyTransactionID) & "Start - terminator: """ & TData.Terminator.ToString & """")
+            If DebugTrace Then Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(MyTransactionID) & "Start - terminator: """ & TData.Terminator.ToString & """")
             'Check for bad terminator string
             If TData.Terminator = "" Then Throw New InvalidValueException("ReceiveTerminated Terminator", "Null or empty string", "Character or character string")
 
             If GetSemaphore("ReceiveTerminated ", MyTransactionID) Then
                 Try
-                    If Not DebugTrace Then Logger.LogStart("ReceiveTerminated " & TData.Terminator.ToString, FormatIDs(MyTransactionID) & "< ")
+                    If Not DebugTrace Then Logger.LogStart("ReceiveTerminatedWorker " & TData.Terminator.ToString, FormatIDs(MyTransactionID) & "< ")
                     tLen = Len(TData.Terminator)
                     Do
                         Received = Received & ReadChar("ReceiveTerminated ", MyTransactionID) ' Build up the string one char at a time
@@ -1174,33 +1180,34 @@ Public Class Serial
                         End If
                     Loop Until Terminated
                     If DebugTrace Then
-                        Logger.LogMessage("ReceiveTerminated ", FormatIDs(MyTransactionID) & "< " & Received)
+                        Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(MyTransactionID) & "< " & Received)
                     Else
                         Logger.LogFinish(Received)
                     End If
                 Catch ex As InvalidValueException
-                    Logger.LogMessage("ReceiveTerminated ", FormatIDs(MyTransactionID) & "EXCEPTION - Terminator cannot be a null string")
+                    Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(MyTransactionID) & "EXCEPTION - Terminator cannot be a null string")
                     Throw
                 Catch ex As TimeoutException
-                    Logger.LogMessage("ReceiveTerminated ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
                 Catch ex As Exception
-                    Logger.LogMessage("ReceiveTerminated ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
                     ReleaseSemaphore("ReceiveTerminated ", MyTransactionID)
                 End Try
                 TData.ResultString = Received
             Else
-                Logger.LogMessage("ReceiveTerminated", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("ReceiveTerminatedWorker", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 Throw New SerialPortInUseException("Serial:ReceiveTerminated - unable to get serial port semaphore before timeout.")
             End If
 
         Catch ex As Exception
-            Try : Logger.LogMessage("ReceiveTerminated", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("ReceiveTerminatedWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
 
     End Sub
@@ -1257,13 +1264,13 @@ Public Class Serial
             Terminator = TextEncoding.GetString(TData.TerminatorBytes)
 
             MyTransactionID = GetNextTransactionID("ReceiveTerminatedBinary ")
-            If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary ", FormatIDs(MyTransactionID) & "Start - terminator: """ & Terminator.ToString & """")
+            If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(MyTransactionID) & "Start - terminator: """ & Terminator.ToString & """")
             'Check for bad terminator string
             If Terminator = "" Then Throw New InvalidValueException("ReceiveTerminatedBinary Terminator", "Null or empty string", "Character or character string")
 
             If GetSemaphore("ReceiveTerminatedBinary ", MyTransactionID) Then
                 Try
-                    If Not DebugTrace Then Logger.LogStart("ReceiveTerminatedBinary " & Terminator.ToString, FormatIDs(MyTransactionID) & "< ")
+                    If Not DebugTrace Then Logger.LogStart("ReceiveTerminatedBinaryWorker " & Terminator.ToString, FormatIDs(MyTransactionID) & "< ")
 
                     tLen = Len(Terminator)
                     Do
@@ -1273,34 +1280,35 @@ Public Class Serial
                         End If
                     Loop Until Terminated
                     If DebugTrace Then
-                        Logger.LogMessage("ReceiveTerminatedBinary ", FormatIDs(MyTransactionID) & "< " & Received, True)
+                        Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(MyTransactionID) & "< " & Received, True)
                     Else
                         Logger.LogFinish(Received, True)
                     End If
                 Catch ex As InvalidValueException
-                    Logger.LogMessage("ReceiveTerminatedBinary ", FormatIDs(MyTransactionID) & "EXCEPTION - Terminator cannot be a null string")
+                    Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(MyTransactionID) & "EXCEPTION - Terminator cannot be a null string")
                     Throw
                 Catch ex As TimeoutException
-                    Logger.LogMessage("ReceiveTerminatedBinary ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
                 Catch ex As Exception
-                    Logger.LogMessage("ReceiveTerminatedBinary ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
+                    Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally
                     ReleaseSemaphore("ReceiveTerminatedBinary ", MyTransactionID)
                 End Try
                 TData.ResultByteArray = TextEncoding.GetBytes(Received)
             Else
-                Logger.LogMessage("ReceiveTerminatedBinary ", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 'Throw New SerialPortInUseException("Serial:ReceiveTerminatedBinary - unable to get serial port semaphore before timeout.")
                 Throw New System.Runtime.InteropServices.COMException(TIMEOUT_MESSAGE, TIMEOUT_NUMBER)
 
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("ReceiveTerminatedBinary", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("ReceiveTerminatedBinaryWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
 
     End Sub
@@ -1321,8 +1329,7 @@ Public Class Serial
                 TData.TransmitString = Data
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf TransmitWorker, TData)
-                'WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                TData.ManualResetEvent.WaitOne(10000)
+                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("Transmit", "Completed: " & TData.Completed)
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 TData = Nothing
@@ -1345,24 +1352,24 @@ Public Class Serial
         Try
             'Send provided string to the serial port
             MyTransactionID = GetNextTransactionID("Transmit")
-            If DebugTrace Then Logger.LogMessage("Transmit", FormatIDs(MyTransactionID) & "> " & TData.TransmitString)
+            If DebugTrace Then Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "> " & TData.TransmitString)
             If GetSemaphore("Transmit", MyTransactionID) Then
                 Try
-                    If Not DebugTrace Then Logger.LogMessage("Transmit", FormatIDs(MyTransactionID) & "> " & TData.TransmitString)
+                    If Not DebugTrace Then Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "> " & TData.TransmitString)
                     m_Port.Write(TData.TransmitString)
-                    If DebugTrace Then Logger.LogMessage("Transmit", FormatIDs(MyTransactionID) & "Completed")
+                    If DebugTrace Then Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "Completed")
                 Catch ex As Exception
-                    Logger.LogMessage("Transmit", FormatIDs(MyTransactionID) & "Exception: " & ex.ToString)
+                    Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "Exception: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
                     ReleaseSemaphore("Transmit", MyTransactionID)
                 End Try
             Else
-                Logger.LogMessage("Transmit", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 Throw New SerialPortInUseException("Serial:Transmit - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("Transmit", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("TransmitWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
@@ -1413,28 +1420,29 @@ Public Class Serial
         Try
             MyTransactionID = GetNextTransactionID("TransmitBinary ")
             TxString = TextEncoding.GetString(TData.TransmitBytes)
-            If DebugTrace Then Logger.LogMessage("TransmitBinary ", FormatIDs(MyTransactionID) & "> " & TxString & " (HEX" & MakeHex(TxString) & ") ")
+            If DebugTrace Then Logger.LogMessage("TransmitBinaryWorker ", FormatIDs(MyTransactionID) & "> " & TxString & " (HEX" & MakeHex(TxString) & ") ")
 
             If GetSemaphore("TransmitBinary ", MyTransactionID) Then
                 Try
-                    If Not DebugTrace Then Logger.LogMessage("TransmitBinary", FormatIDs(MyTransactionID) & "> " & TxString & " (HEX" & MakeHex(TxString) & ") ")
+                    If Not DebugTrace Then Logger.LogMessage("TransmitBinaryWorker", FormatIDs(MyTransactionID) & "> " & TxString & " (HEX" & MakeHex(TxString) & ") ")
                     m_Port.Write(TData.TransmitBytes, 0, TData.TransmitBytes.Length)
-                    If DebugTrace Then Logger.LogMessage("TransmitBinary ", FormatIDs(MyTransactionID) & "Completed")
+                    If DebugTrace Then Logger.LogMessage("TransmitBinaryWorker ", FormatIDs(MyTransactionID) & "Completed")
                 Catch ex As Exception
-                    Logger.LogMessage("TransmitBinary ", FormatIDs(MyTransactionID) & "Exception: " & ex.ToString)
+                    Logger.LogMessage("TransmitBinaryWorker ", FormatIDs(MyTransactionID) & "Exception: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
                     ReleaseSemaphore("TransmitBinary ", MyTransactionID)
                 End Try
             Else
-                Logger.LogMessage("TransmitBinary ", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
+                Logger.LogMessage("TransmitBinaryWorker ", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
                 Throw New SerialPortInUseException("TransmitBinary - unable to get serial port semaphore before timeout.")
             End If
         Catch ex As Exception
-            Try : Logger.LogMessage("TransmitBinary", "Exception: " & ex.ToString) : Catch : End Try
+            Try : Logger.LogMessage("TransmitBinaryWorker", "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
 
     End Sub
@@ -1777,23 +1785,28 @@ Public Class Serial
 
 #Region "Threading Support"
     Private Sub WaitForThread(ByVal TData As ThreadData, ByVal MyTransactionID As Long)
-        If DebugTrace Then
-            LogMessage("WaitForThread", "Started")
-            Dim ts As New Stopwatch
-            LogMessage("WaitForThread", "After new stopwatch")
-            ts.Start()
-            LogMessage("WaitForThread", "After starting stopwatch")
-            Do
-                LogMessage("WaitForThread", "Before Sleep(1)")
-                Thread.Sleep(1)
-                LogMessage("WaitForThread", FormatIDs(MyTransactionID) & "Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
-            Loop Until TData.Completed
+        If True Then
+            If DebugTrace Then LogMessage("WaitForThread", "Started")
+            TData.ManualResetEvent.WaitOne(10000)
+            If DebugTrace Then LogMessage("WaitForThread", "Completed")
         Else
-            Do
-                Thread.Sleep(1)
-            Loop Until TData.Completed
+            If DebugTrace Then
+                LogMessage("WaitForThread", "Started")
+                Dim ts As New Stopwatch
+                LogMessage("WaitForThread", "After new stopwatch")
+                ts.Start()
+                LogMessage("WaitForThread", "After starting stopwatch")
+                Do
+                    LogMessage("WaitForThread", "Before Sleep(1)")
+                    Thread.Sleep(1)
+                    LogMessage("WaitForThread", FormatIDs(MyTransactionID) & "Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
+                Loop Until TData.Completed
+            Else
+                Do
+                    Thread.Sleep(1)
+                Loop Until TData.Completed
+            End If
         End If
-
     End Sub
 
     Private Enum SerialCommandType
