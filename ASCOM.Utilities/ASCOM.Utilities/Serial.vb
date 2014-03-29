@@ -420,7 +420,6 @@ Public Class Serial
         End Get
         Set(ByVal Connecting As Boolean)
             Dim TData As New ThreadData
-            Dim SerPorts As String()
             ' set the RTSEnable and DTREnable states from the registry,
             ' NOTE this overrides any other settings, but only if it's set.
             Dim buf As String
@@ -1320,8 +1319,10 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("Transmit", "Start")
                 TData.SerialCommand = SerialCommandType.Transmit
                 TData.TransmitString = Data
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf TransmitWorker, TData)
-                WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                'WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
+                TData.ManualResetEvent.WaitOne(10000)
                 If DebugTrace Then Logger.LogMessage("Transmit", "Completed: " & TData.Completed)
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 TData = Nothing
@@ -1365,6 +1366,7 @@ Public Class Serial
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
     End Sub
 
@@ -1839,6 +1841,7 @@ Public Class Serial
         'Control values
         Public SerialCommand As SerialCommandType
         Public Completed As Boolean
+        Public ManualResetEvent As ManualResetEvent
 
         'Management
         Public Connecting As Boolean
