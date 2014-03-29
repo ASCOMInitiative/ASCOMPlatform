@@ -469,6 +469,7 @@ Public Class Serial
 
                 TData.SerialCommand = SerialCommandType.Connected
                 TData.Connecting = Connecting
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ConnectedWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("Set Connected", "Completed: " & TData.Completed)
@@ -745,6 +746,7 @@ Public Class Serial
             If m_Connected Then 'Clear buffers as we are connected
                 If DebugTrace Then Logger.LogMessage("ClearBuffers", "Start")
                 TData.SerialCommand = SerialCommandType.ClearBuffers
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ClearBuffersWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("ClearBuffers", "Completed: " & TData.Completed)
@@ -819,6 +821,7 @@ Public Class Serial
             Try
                 If DebugTrace Then Logger.LogMessage("Receive", "Start")
                 TData.SerialCommand = SerialCommandType.Receive
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("Receive", "Completed: " & TData.Completed)
@@ -892,6 +895,7 @@ Public Class Serial
             Try
                 If DebugTrace Then Logger.LogMessage("ReceiveByte", "Start")
                 TData.SerialCommand = SerialCommandType.Receivebyte
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveByteWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("ReceiveByte", "Completed: " & TData.Completed)
@@ -968,6 +972,7 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveCounted
                 TData.Count = Count
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Completed: " & TData.Completed)
@@ -1050,6 +1055,7 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveCountedBinary
                 TData.Count = Count
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedBinaryWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Completed: " & TData.Completed)
@@ -1137,6 +1143,7 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveTerminated
                 TData.Terminator = Terminator
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Completed: " & TData.Completed)
@@ -1232,6 +1239,7 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveCounted
                 TData.TerminatorBytes = TerminatorBytes
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedBinaryWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Completed: " & TData.Completed)
@@ -1392,6 +1400,7 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("TransmitBinary", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveCounted
                 TData.TransmitBytes = Data
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf TransmitBinaryWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("TransmitBinary", "Completed: " & TData.Completed)
