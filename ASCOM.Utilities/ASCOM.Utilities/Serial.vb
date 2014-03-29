@@ -769,9 +769,9 @@ Public Class Serial
         Dim TData As ThreadData = DirectCast(TDataObject, ThreadData)
 
         Try
-            MyTransactionID = GetNextTransactionID("ClearBuffers")
+            MyTransactionID = GetNextTransactionID("ClearBuffersWorker")
             If DebugTrace Then Logger.LogMessage("ClearBuffersWorker", FormatIDs(MyTransactionID) & " " & CurrentThread.ManagedThreadId & "Start")
-            If GetSemaphore("ClearBuffers", MyTransactionID) Then
+            If GetSemaphore("ClearBuffersWorker", MyTransactionID) Then
                 Try
                     If Not (m_Port Is Nothing) Then 'Ensure that ClearBuffers always succeeds for compatibility with MSCOMM32
                         If m_Port.IsOpen Then 'This test is required to maintain compatibility with the original MSCOMM32 control
@@ -786,7 +786,7 @@ Public Class Serial
                     Logger.LogMessage("ClearBuffersWorker", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally
-                    ReleaseSemaphore("ClearBuffers ", MyTransactionID)
+                    ReleaseSemaphore("ClearBuffersWorker ", MyTransactionID)
                 End Try
             Else
                 Logger.LogMessage("ClearBuffersWorker", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
@@ -846,12 +846,12 @@ Public Class Serial
         Try
             Dim Received As String = ""
             Dim MyTransactionID As Long
-            MyTransactionID = GetNextTransactionID("Receive")
+            MyTransactionID = GetNextTransactionID("ReceiveWorker")
             If DebugTrace Then Logger.LogMessage("ReceiveWorker", FormatIDs(MyTransactionID) & "Start")
-            If GetSemaphore("Receive", MyTransactionID) Then
+            If GetSemaphore("ReceiveWorker", MyTransactionID) Then
                 Try
                     If Not DebugTrace Then Logger.LogStart("ReceiveWorker", FormatIDs(MyTransactionID) & "< ")
-                    Received = ReadChar("Receive", MyTransactionID)
+                    Received = ReadChar("ReceiveWorker", MyTransactionID)
                     Received = Received & m_Port.ReadExisting
                     If DebugTrace Then
                         Logger.LogMessage("ReceiveWorker", FormatIDs(MyTransactionID) & "< " & Received)
@@ -865,7 +865,7 @@ Public Class Serial
                     Logger.LogMessage("ReceiveWorker", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
-                    ReleaseSemaphore("Receive", MyTransactionID)
+                    ReleaseSemaphore("ReceiveWorker", MyTransactionID)
                 End Try
                 TData.ResultString = Received
             Else
@@ -921,12 +921,12 @@ Public Class Serial
         Dim RetVal As Byte, MyTransactionID As Long
 
         Try
-            MyTransactionID = GetNextTransactionID("ReceiveByte")
+            MyTransactionID = GetNextTransactionID("ReceiveByteWorker")
             If DebugTrace Then Logger.LogMessage("ReceiveByteWorker", FormatIDs(MyTransactionID) & "Start")
-            If GetSemaphore("ReceiveByte", MyTransactionID) Then
+            If GetSemaphore("ReceiveByteWorker", MyTransactionID) Then
                 Try
                     If Not DebugTrace Then Logger.LogStart("ReceiveByteWorker", FormatIDs(MyTransactionID) & "< ")
-                    RetVal = ReadByte("ReceiveByte", MyTransactionID)
+                    RetVal = ReadByte("ReceiveByteWorker", MyTransactionID)
                     If DebugTrace Then
                         Logger.LogMessage("ReceiveByteWorker", FormatIDs(MyTransactionID) & " " & Chr(RetVal), True)
                     Else
@@ -939,7 +939,7 @@ Public Class Serial
                     Logger.LogMessage("ReceiveByteWorker", FormatIDs(MyTransactionID) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
-                    ReleaseSemaphore("ReceiveByte", MyTransactionID)
+                    ReleaseSemaphore("ReceiveByteWorker", MyTransactionID)
                 End Try
                 TData.ResultByte = RetVal
             Else
@@ -998,13 +998,13 @@ Public Class Serial
         Dim MyTransactionID As Long
         Try
             'Return a fixed number of characters
-            MyTransactionID = GetNextTransactionID("ReceiveCounted")
+            MyTransactionID = GetNextTransactionID("ReceiveCountedWorker")
             If DebugTrace Then Logger.LogMessage("ReceiveCountedWorker", FormatIDs(MyTransactionID) & "Start - count: " & TData.Count.ToString)
-            If GetSemaphore("ReceiveCounted", MyTransactionID) Then
+            If GetSemaphore("ReceiveCountedWorker", MyTransactionID) Then
                 Try
                     If Not DebugTrace Then Logger.LogStart("ReceiveCountedWorker " & TData.Count.ToString, FormatIDs(MyTransactionID) & "< ")
                     For i = 1 To TData.Count
-                        Received = Received & ReadChar("ReceiveCounted", MyTransactionID)
+                        Received = Received & ReadChar("ReceiveCountedWorker", MyTransactionID)
                     Next
                     If DebugTrace Then
                         Logger.LogMessage("ReceiveCountedWorker", FormatIDs(MyTransactionID) & "< " & Received)
@@ -1018,7 +1018,7 @@ Public Class Serial
                     Logger.LogMessage("ReceiveCountedWorker", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.Message)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
-                    ReleaseSemaphore("ReceiveCounted", MyTransactionID)
+                    ReleaseSemaphore("ReceiveCountedWorker", MyTransactionID)
                 End Try
                 TData.ResultString = Received
             Else
@@ -1086,15 +1086,15 @@ Public Class Serial
         Try
             TextEncoding = System.Text.Encoding.GetEncoding(1252)
 
-            MyTransactionID = GetNextTransactionID("ReceiveCountedBinary ")
+            MyTransactionID = GetNextTransactionID("ReceiveCountedBinaryWorker ")
             If DebugTrace Then Logger.LogMessage("ReceiveCountedBinaryWorker ", FormatIDs(MyTransactionID) & "Start - count: " & TData.Count.ToString)
 
-            If GetSemaphore("ReceiveCountedBinary ", MyTransactionID) Then
+            If GetSemaphore("ReceiveCountedBinaryWorker ", MyTransactionID) Then
                 Try
                     If Not DebugTrace Then Logger.LogStart("ReceiveCountedBinaryWorker " & TData.Count.ToString, FormatIDs(MyTransactionID) & "< ")
                     For i = 0 To TData.Count - 1
                         ReDim Preserve Received(i)
-                        Received(i) = ReadByte("ReceiveCountedBinary ", MyTransactionID)
+                        Received(i) = ReadByte("ReceiveCountedBinaryWorker ", MyTransactionID)
                     Next
                     If DebugTrace Then
                         Logger.LogMessage("ReceiveCountedBinaryWorker ", FormatIDs(MyTransactionID) & "< " & TextEncoding.GetString(Received), True)
@@ -1108,7 +1108,7 @@ Public Class Serial
                     Logger.LogMessage("ReceiveCountedBinaryWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(TextEncoding.GetString(Received)) & "EXCEPTION: " & ex.Message)
                     Throw
                 Finally
-                    ReleaseSemaphore("ReceiveCountedBinary ", MyTransactionID)
+                    ReleaseSemaphore("ReceiveCountedBinaryWorker ", MyTransactionID)
                 End Try
                 TData.ResultByteArray = Received
             Else
@@ -1171,17 +1171,17 @@ Public Class Serial
         Dim MyTransactionID As Long
         Try
             'Return all characters up to and including a specified terminator string
-            MyTransactionID = GetNextTransactionID("ReceiveTerminated ")
+            MyTransactionID = GetNextTransactionID("ReceiveTerminatedWorker ")
             If DebugTrace Then Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(MyTransactionID) & "Start - terminator: """ & TData.Terminator.ToString & """")
             'Check for bad terminator string
             If TData.Terminator = "" Then Throw New InvalidValueException("ReceiveTerminated Terminator", "Null or empty string", "Character or character string")
 
-            If GetSemaphore("ReceiveTerminated ", MyTransactionID) Then
+            If GetSemaphore("ReceiveTerminatedWorker ", MyTransactionID) Then
                 Try
                     If Not DebugTrace Then Logger.LogStart("ReceiveTerminatedWorker " & TData.Terminator.ToString, FormatIDs(MyTransactionID) & "< ")
                     tLen = Len(TData.Terminator)
                     Do
-                        Received = Received & ReadChar("ReceiveTerminated ", MyTransactionID) ' Build up the string one char at a time
+                        Received = Received & ReadChar("ReceiveTerminatedWorker ", MyTransactionID) ' Build up the string one char at a time
                         If Len(Received) >= tLen Then ' Check terminator when string is long enough
                             If Right(Received, tLen) = TData.Terminator Then Terminated = True
                         End If
@@ -1201,7 +1201,7 @@ Public Class Serial
                     Logger.LogMessage("ReceiveTerminatedWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
-                    ReleaseSemaphore("ReceiveTerminated ", MyTransactionID)
+                    ReleaseSemaphore("ReceiveTerminatedWorker ", MyTransactionID)
                 End Try
                 TData.ResultString = Received
             Else
@@ -1271,18 +1271,18 @@ Public Class Serial
             TextEncoding = System.Text.Encoding.GetEncoding(1252)
             Terminator = TextEncoding.GetString(TData.TerminatorBytes)
 
-            MyTransactionID = GetNextTransactionID("ReceiveTerminatedBinary ")
+            MyTransactionID = GetNextTransactionID("ReceiveTerminatedBinaryWorker ")
             If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(MyTransactionID) & "Start - terminator: """ & Terminator.ToString & """")
             'Check for bad terminator string
             If Terminator = "" Then Throw New InvalidValueException("ReceiveTerminatedBinary Terminator", "Null or empty string", "Character or character string")
 
-            If GetSemaphore("ReceiveTerminatedBinary ", MyTransactionID) Then
+            If GetSemaphore("ReceiveTerminatedBinaryWorker ", MyTransactionID) Then
                 Try
                     If Not DebugTrace Then Logger.LogStart("ReceiveTerminatedBinaryWorker " & Terminator.ToString, FormatIDs(MyTransactionID) & "< ")
 
                     tLen = Len(Terminator)
                     Do
-                        Received = Received & ReadChar("ReceiveTerminatedBinary ", MyTransactionID) ' Build up the string one char at a time
+                        Received = Received & ReadChar("ReceiveTerminatedBinaryWorker ", MyTransactionID) ' Build up the string one char at a time
                         If Len(Received) >= tLen Then ' Check terminator when string is long enough
                             If Right(Received, tLen) = Terminator Then Terminated = True
                         End If
@@ -1302,7 +1302,7 @@ Public Class Serial
                     Logger.LogMessage("ReceiveTerminatedBinaryWorker ", FormatIDs(MyTransactionID) & " " & FormatRXSoFar(Received) & "EXCEPTION: " & ex.ToString)
                     Throw
                 Finally
-                    ReleaseSemaphore("ReceiveTerminatedBinary ", MyTransactionID)
+                    ReleaseSemaphore("ReceiveTerminatedBinaryWorker ", MyTransactionID)
                 End Try
                 TData.ResultByteArray = TextEncoding.GetBytes(Received)
             Else
@@ -1359,9 +1359,9 @@ Public Class Serial
         Dim MyTransactionID As Long
         Try
             'Send provided string to the serial port
-            MyTransactionID = GetNextTransactionID("Transmit")
+            MyTransactionID = GetNextTransactionID("TransmitWorker")
             If DebugTrace Then Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "> " & TData.TransmitString)
-            If GetSemaphore("Transmit", MyTransactionID) Then
+            If GetSemaphore("TransmitWorker", MyTransactionID) Then
                 Try
                     If Not DebugTrace Then Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "> " & TData.TransmitString)
                     m_Port.Write(TData.TransmitString)
@@ -1370,7 +1370,7 @@ Public Class Serial
                     Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "Exception: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
-                    ReleaseSemaphore("Transmit", MyTransactionID)
+                    ReleaseSemaphore("TransmitWorker", MyTransactionID)
                 End Try
             Else
                 Logger.LogMessage("TransmitWorker", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
@@ -1427,11 +1427,11 @@ Public Class Serial
         Dim TData As ThreadData = DirectCast(TDataObject, ThreadData)
         Dim TxString As String, MyTransactionID As Long ', MouseDown As String
         Try
-            MyTransactionID = GetNextTransactionID("TransmitBinary ")
+            MyTransactionID = GetNextTransactionID("TransmitBinaryWorker ")
             TxString = TextEncoding.GetString(TData.TransmitBytes)
             If DebugTrace Then Logger.LogMessage("TransmitBinaryWorker ", FormatIDs(MyTransactionID) & "> " & TxString & " (HEX" & MakeHex(TxString) & ") ")
 
-            If GetSemaphore("TransmitBinary ", MyTransactionID) Then
+            If GetSemaphore("TransmitBinaryWorker ", MyTransactionID) Then
                 Try
                     If Not DebugTrace Then Logger.LogMessage("TransmitBinaryWorker", FormatIDs(MyTransactionID) & "> " & TxString & " (HEX" & MakeHex(TxString) & ") ")
                     m_Port.Write(TData.TransmitBytes, 0, TData.TransmitBytes.Length)
@@ -1440,7 +1440,7 @@ Public Class Serial
                     Logger.LogMessage("TransmitBinaryWorker ", FormatIDs(MyTransactionID) & "Exception: " & ex.ToString)
                     Throw
                 Finally 'Ensure we release the semaphore whatever happens
-                    ReleaseSemaphore("TransmitBinary ", MyTransactionID)
+                    ReleaseSemaphore("TransmitBinaryWorker ", MyTransactionID)
                 End Try
             Else
                 Logger.LogMessage("TransmitBinaryWorker ", FormatIDs(MyTransactionID) & "Throwing SerialPortInUse exception")
