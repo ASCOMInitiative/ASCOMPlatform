@@ -1832,28 +1832,9 @@ Public Class Serial
 
 #Region "Threading Support"
     Private Sub WaitForThread(ByVal TData As ThreadData, ByVal MyTransactionID As Long)
-        If True Then
-            If DebugTrace Then LogMessage("WaitForThread", "Started")
-            TData.ManualResetEvent.WaitOne(10000)
-            If DebugTrace Then LogMessage("WaitForThread", "Completed")
-        Else
-            If DebugTrace Then
-                LogMessage("WaitForThread", "Started")
-                Dim ts As New Stopwatch
-                LogMessage("WaitForThread", "After new stopwatch")
-                ts.Start()
-                LogMessage("WaitForThread", "After starting stopwatch")
-                Do
-                    LogMessage("WaitForThread", "Before Sleep(1)")
-                    Thread.Sleep(1)
-                    LogMessage("WaitForThread", FormatIDs(MyTransactionID) & "Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
-                Loop Until TData.Completed
-            Else
-                Do
-                    Thread.Sleep(1)
-                Loop Until TData.Completed
-            End If
-        End If
+        If DebugTrace Then LogMessage("WaitForThread", "Started")
+        TData.ManualResetEvent.WaitOne(Timeout.Infinite)
+        If DebugTrace Then LogMessage("WaitForThread", "Completed")
     End Sub
 
     Private Enum SerialCommandType
