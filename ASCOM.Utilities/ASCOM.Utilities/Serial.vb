@@ -420,10 +420,14 @@ Public Class Serial
         End Get
         Set(ByVal Connecting As Boolean)
             Dim TData As New ThreadData
+            Dim TS As New Stopwatch
+
             ' set the RTSEnable and DTREnable states from the registry,
             ' NOTE this overrides any other settings, but only if it's set.
             Dim buf As String
             Dim b, ForcedRTS, ForcedDTR As Boolean
+
+            TS = Stopwatch.StartNew ' Initialise stopwatch
 
             'Foorce RTS if required
             buf = SerialProfile.GetProfile(SERIALPORT_COM_PORT_SETTINGS & "\" & m_PortName, "RTSEnable")
@@ -472,7 +476,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ConnectedWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("Set Connected", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("Set Connected", "Completed: " & TData.Completed & ", Duration: " & TS.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 TData = Nothing
 
@@ -742,6 +746,10 @@ Public Class Serial
     ''' <remarks></remarks>
     Public Sub ClearBuffers() Implements ISerial.ClearBuffers
         Dim TData As New ThreadData
+        Dim TS As New Stopwatch
+
+        TS = Stopwatch.StartNew ' Initialise stopwatch
+
         Try
             If m_Connected Then 'Clear buffers as we are connected
                 If DebugTrace Then Logger.LogMessage("ClearBuffers", "Start")
@@ -749,7 +757,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ClearBuffersWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("ClearBuffers", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("ClearBuffers", "Completed: " & TData.Completed & ", Duration: " & TS.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 TData = Nothing
             Else ' Not connected so ignore
@@ -817,6 +825,10 @@ Public Class Serial
         'Return all characters in the receive buffer
         Dim Result As String
         Dim TData As New ThreadData
+        Dim TS As New Stopwatch
+
+        TS = Stopwatch.StartNew ' Initialise stopwatch
+
         If m_Connected Then
             Try
                 If DebugTrace Then Logger.LogMessage("Receive", "Start")
@@ -824,7 +836,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("Receive", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("Receive", "Completed: " & TData.Completed & ", Duration: " & TS.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not (TData.LastException Is Nothing) Then Throw TData.LastException
                 Result = TData.ResultString
                 TData = Nothing
@@ -891,6 +903,10 @@ Public Class Serial
     ''' <remarks>Use this for 8-bit (binary data). If a timeout occurs, a TimeoutException is raised. </remarks>
     Public Function ReceiveByte() As Byte Implements ISerial.ReceiveByte
         Dim TData As New ThreadData, RetVal As Byte
+        Dim TS As New Stopwatch
+
+        TS = Stopwatch.StartNew ' Initialise stopwatch
+
         If m_Connected Then 'Process command
             Try
                 If DebugTrace Then Logger.LogMessage("ReceiveByte", "Start")
@@ -898,7 +914,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveByteWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("ReceiveByte", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("ReceiveByte", "Completed: " & TData.Completed & ", Duration: " & TS.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 RetVal = TData.ResultByte
                 TData = Nothing
@@ -967,6 +983,10 @@ Public Class Serial
     ''' <remarks>If a timeout occurs a TimeoutException is raised.</remarks>
     Public Function ReceiveCounted(ByVal Count As Integer) As String Implements ISerial.ReceiveCounted
         Dim TData As New ThreadData, RetVal As String
+        Dim TS As New Stopwatch
+
+        TS = Stopwatch.StartNew ' Initialise stopwatch
+
         If m_Connected Then 'Process command
             Try
                 If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Start")
@@ -975,7 +995,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Completed: " & TData.Completed & ", Duration: " & TS.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 RetVal = TData.ResultString
                 TData = Nothing
@@ -1050,6 +1070,10 @@ Public Class Serial
     Public Function ReceiveCountedBinary(ByVal Count As Integer) As Byte() Implements ISerial.ReceiveCountedBinary
         Dim Result As Byte()
         Dim TData As New ThreadData
+        Dim TS As New Stopwatch
+
+        TS = Stopwatch.StartNew ' Initialise stopwatch
+
         If m_Connected Then 'Process command
             Try
                 If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Start")
@@ -1058,7 +1082,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedBinaryWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Completed: " & TData.Completed & ", Duration: " & TS.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not (TData.LastException Is Nothing) Then Throw TData.LastException
                 Result = TData.ResultByteArray
                 TData = Nothing
@@ -1138,6 +1162,9 @@ Public Class Serial
     ''' <remarks>If a timeout occurs, a TimeoutException is raised.</remarks>
     Public Function ReceiveTerminated(ByVal Terminator As String) As String Implements ISerial.ReceiveTerminated
         Dim TData As New ThreadData, RetVal As String
+
+        ts = Stopwatch.StartNew ' Initialise stopwatch
+
         If m_Connected Then 'Process command
             Try
                 If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Start")
@@ -1146,7 +1173,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Completed: " & TData.Completed & ", Duration: " & ts.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 RetVal = TData.ResultString
                 TData = Nothing
@@ -1234,6 +1261,9 @@ Public Class Serial
         'Return all characters up to and including a specified terminator string
         Dim Result() As Byte
         Dim TData As New ThreadData
+
+        ts = Stopwatch.StartNew ' Initialise stopwatch
+
         If m_Connected Then 'Process command
             Try
                 If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Start")
@@ -1242,7 +1272,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedBinaryWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Completed: " & TData.Completed & ", Duration: " & ts.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not (TData.LastException Is Nothing) Then Throw TData.LastException
                 Result = TData.ResultByteArray
                 TData = Nothing
@@ -1330,6 +1360,9 @@ Public Class Serial
     ''' <remarks></remarks>
     Public Sub Transmit(ByVal Data As String) Implements ISerial.Transmit
         Dim TData As New ThreadData
+
+        ts = Stopwatch.StartNew ' Initialise stopwatch
+
         If m_Connected Then 'Process command
             Try
                 If DebugTrace Then Logger.LogMessage("Transmit", "Start")
@@ -1338,7 +1371,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf TransmitWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("Transmit", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("Transmit", "Completed: " & TData.Completed & ", Duration: " & ts.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not TData.LastException Is Nothing Then Throw TData.LastException
                 TData = Nothing
 
@@ -1395,6 +1428,9 @@ Public Class Serial
     Public Sub TransmitBinary(ByVal Data() As Byte) Implements ISerial.TransmitBinary
         Dim Result As String
         Dim TData As New ThreadData
+
+        ts = Stopwatch.StartNew ' Initialise stopwatch
+
         If m_Connected Then 'Process command
             Try
                 If DebugTrace Then Logger.LogMessage("TransmitBinary", "Start")
@@ -1403,7 +1439,7 @@ Public Class Serial
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf TransmitBinaryWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
-                If DebugTrace Then Logger.LogMessage("TransmitBinary", "Completed: " & TData.Completed)
+                If DebugTrace Then Logger.LogMessage("TransmitBinary", "Completed: " & TData.Completed & ", Duration: " & ts.Elapsed.TotalMilliseconds.ToString("0.0"))
                 If Not (TData.LastException Is Nothing) Then Throw TData.LastException
                 Result = TData.ResultString
                 TData = Nothing
@@ -1539,6 +1575,7 @@ Public Class Serial
             Try
                 If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Start")
                 TData.AvailableCOMPorts = PortNames
+                TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf AvailableCOMPortsWorker, TData)
                 WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                 If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Completed: " & TData.Completed)
@@ -1628,6 +1665,7 @@ Public Class Serial
             Try : SerPort.Dispose() : Catch : End Try 'Dispose of the COM port
             Try : SerPort = Nothing : Catch : End Try
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
         'This thread ends here so the calling WaitForThread releases the main thread to continue execution
     End Sub
