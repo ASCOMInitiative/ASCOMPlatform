@@ -54,7 +54,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ReadOnly Property DriverVersion() As String
 
     ''' <summary>
-    ''' The interface version number that this device supports. Should return 2 for this interface version.
+    ''' The interface version number that this device supports. Should return 3 for this interface version.
     ''' </summary>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented</b></p> Clients can detect legacy V1 drivers by trying to read ths property.
