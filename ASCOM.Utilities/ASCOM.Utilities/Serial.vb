@@ -498,6 +498,7 @@ Public Class Serial
                     'If Not My.Computer.Ports.SerialPortNames.Contains(m_PortName) Then Throw New Exceptions.InvalidValueException("Requested COM Port does not exist: " & m_PortName)
                     If m_Port Is Nothing Then
                         m_Port = New System.IO.Ports.SerialPort(m_PortName)
+                        If DebugTrace Then AddHandler m_Port.DataReceived, AddressOf DataReceivedEventHandler
                     Else
                         m_Port.PortName = m_PortName 'Peter Added in RC7
                     End If
@@ -1759,7 +1760,7 @@ Public Class Serial
     Private Function ReadByte(ByVal p_Caller As String, ByVal MyCallNumber As Long) As Byte
         Dim StartTime As Date, RxByte As Byte, RxBytes(10) As Byte
         StartTime = Now
-        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadByte ")
+        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadByte, using read polling: " & UseReadPolling)
         If UseReadPolling Then
             While (m_Port.BytesToRead = 0)
                 If (Now - StartTime).TotalMilliseconds > m_ReceiveTimeout Then
@@ -1777,7 +1778,7 @@ Public Class Serial
     Private Function ReadChar(ByVal p_Caller As String, ByVal MyCallNumber As Long) As Char
         Dim StartTime As Date, RxChar As Char, RxChars(10) As Char
         StartTime = Now
-        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadChar ")
+        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadChar, using read polling: " & UseReadPolling)
         If UseReadPolling Then
             While (m_Port.BytesToRead = 0)
                 If (Now - StartTime).TotalMilliseconds > m_ReceiveTimeout Then
@@ -1828,6 +1829,9 @@ Public Class Serial
         End Function
     End Class
 
+    Private Sub DataReceivedEventHandler(sender As Object, e As SerialDataReceivedEventArgs)
+        Logger.LogMessage("DataReceivedEventHandler", e.EventType.ToString & ", Number of bytes: " & m_Port.BytesToRead & ", Trigger level: " & m_Port.ReceivedBytesThreshold)
+    End Sub
 #End Region
 
 #Region "Threading Support"
