@@ -1746,7 +1746,13 @@ Public Class Serial
             If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(0) & "Entered GetNextCount ")
             CallCountSemaphore.WaitOne()
             If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(0) & "Got CallCountMutex")
-            CallCount += 1
+
+            If CallCount <> Long.MaxValue Then ' Normal case so just increment the counter
+                CallCount += 1
+            Else ' Somehow we have got to the maximum value of a Long variable so reset to zero and start the cycle again!
+                CallCount = 0
+            End If
+
             ReturnValue = CallCount
             CallCountSemaphore.Release()
             If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(ReturnValue) & "Released CallCountMutex")
@@ -1760,7 +1766,7 @@ Public Class Serial
     Private Function ReadByte(ByVal p_Caller As String, ByVal MyCallNumber As Long) As Byte
         Dim StartTime As Date, RxByte As Byte, RxBytes(10) As Byte
         StartTime = Now
-        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadByte, using read polling: " & UseReadPolling)
+        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadByte: " & UseReadPolling)
         If UseReadPolling Then
             While (m_Port.BytesToRead = 0)
                 If (Now - StartTime).TotalMilliseconds > m_ReceiveTimeout Then
@@ -1771,14 +1777,14 @@ Public Class Serial
             End While
         End If
         RxByte = CByte(m_Port.ReadByte)
-        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "ReadByte returning result - " & RxByte.ToString)
+        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "ReadByte returning result - """ & RxByte.ToString & """")
         Return RxByte
     End Function
 
     Private Function ReadChar(ByVal p_Caller As String, ByVal MyCallNumber As Long) As Char
         Dim StartTime As Date, RxChar As Char, RxChars(10) As Char
         StartTime = Now
-        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadChar, using read polling: " & UseReadPolling)
+        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "Entered ReadChar: " & UseReadPolling)
         If UseReadPolling Then
             While (m_Port.BytesToRead = 0)
                 If (Now - StartTime).TotalMilliseconds > m_ReceiveTimeout Then
@@ -1789,7 +1795,7 @@ Public Class Serial
             End While
         End If
         RxChar = Chr(m_Port.ReadByte)
-        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "ReadChar returning result - " & RxChar)
+        If DebugTrace Then Logger.LogMessage(p_Caller, FormatIDs(MyCallNumber) & "ReadChar returning result - """ & RxChar & """")
         Return RxChar
     End Function
 
@@ -1830,8 +1836,11 @@ Public Class Serial
     End Class
 
     Private Sub DataReceivedEventHandler(sender As Object, e As SerialDataReceivedEventArgs)
-        Logger.LogMessage("DataReceivedEventHandler", e.EventType.ToString & ", Number of bytes: " & m_Port.BytesToRead & ", Trigger level: " & m_Port.ReceivedBytesThreshold)
+        Dim EventType As SerialData
+        EventType = CType([Enum].Parse(GetType(SerialData), e.EventType.ToString), SerialData)
+        Logger.LogMessage("DataReceivedEventHandler", "Event type: " & EventType.ToString & ", Number of bytes: " & m_Port.BytesToRead & ", Trigger level: " & m_Port.ReceivedBytesThreshold)
     End Sub
+
 #End Region
 
 #Region "Threading Support"
