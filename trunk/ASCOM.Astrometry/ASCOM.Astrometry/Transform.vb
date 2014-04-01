@@ -144,6 +144,7 @@ Namespace Transform
                 TL.LogMessage("SiteLatitude Set", Utl.DegreesToDMS(value, ":", ":", "", 3))
             End Set
         End Property
+
         ''' <summary>
         ''' Gets or sets the site longitude
         ''' </summary>
@@ -162,6 +163,7 @@ Namespace Transform
                 TL.LogMessage("SiteLongitude Set", Utl.DegreesToDMS(value, ":", ":", "", 3))
             End Set
         End Property
+
         ''' <summary>
         ''' Gets or sets the site elevation above sea level
         ''' </summary>
@@ -180,6 +182,7 @@ Namespace Transform
                 TL.LogMessage("SiteElevation Set", value.ToString)
             End Set
         End Property
+
         ''' <summary>
         ''' Gets or sets the site ambient temperature
         ''' </summary>
@@ -198,6 +201,7 @@ Namespace Transform
                 TL.LogMessage("SiteTemperature Set", value.ToString)
             End Set
         End Property
+
         ''' <summary>
         ''' Gets or sets a flag indicating whether refraction is calculated for topocentric co-ordinates
         ''' </summary>
@@ -215,6 +219,7 @@ Namespace Transform
                 TL.LogMessage("Refraction Set", value.ToString)
             End Set
         End Property
+
         ''' <summary>
         ''' Causes the transform component to recalculate values derrived from the last Set command
         ''' </summary>
@@ -239,6 +244,7 @@ Namespace Transform
             DECJ2000Value = DEC
             TL.LogMessage("SetJ2000", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
         End Sub
+
         ''' <summary>
         ''' Sets the known apparent Right Ascension and Declination coordinates that are to be transformed
         ''' </summary>
@@ -252,6 +258,7 @@ Namespace Transform
             DECApparentValue = DEC
             TL.LogMessage("SetApparent", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
         End Sub
+
         '''<summary>
         ''' Sets the known local topocentric Right Ascension and Declination coordinates that are to be transformed
         ''' </summary>
@@ -265,6 +272,7 @@ Namespace Transform
             DECTopoValue = DEC
             TL.LogMessage("SetTopocentric", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
         End Sub
+
         ''' <summary>
         ''' Returns the Right Ascension in J2000 co-ordinates
         ''' </summary>
@@ -275,6 +283,7 @@ Namespace Transform
         ''' information in the last Set method used. E.g. topocentric values will be unavailable if the last Set was
         ''' a SetApparent and one of the Site properties has not been set.</exception>
         ''' <remarks></remarks>
+        ''' 
         ReadOnly Property RAJ2000() As Double Implements ITransform.RAJ2000
             Get
                 If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read RAJ2000 before SetJ2000 or SetTopocentric has been called")
@@ -304,6 +313,7 @@ Namespace Transform
                 Return DECJ2000Value
             End Get
         End Property
+
         ''' <summary>
         ''' Returns the Right Ascension in local topocentric co-ordinates
         ''' </summary>
@@ -323,6 +333,7 @@ Namespace Transform
                 Return RATopoValue
             End Get
         End Property
+
         ''' <summary>
         ''' Returns the Declination in local topocentric co-ordinates
         ''' </summary>
@@ -342,6 +353,7 @@ Namespace Transform
                 Return DECTopoValue
             End Get
         End Property
+
         ''' <summary>
         ''' Returns the Right Ascension in apparent co-ordinates
         ''' </summary>
@@ -360,6 +372,7 @@ Namespace Transform
                 Return RAApparentValue
             End Get
         End Property
+
         ''' <summary>
         ''' Returns the Declination in apparent co-ordinates
         ''' </summary>
@@ -628,8 +641,8 @@ Namespace Transform
             ct = 0
             Do
                 ct += 1
-                RAOld = RAApparentValue
-                DECOld = DECApparentValue
+                RAOld = RAJ2000Value
+                DECOld = DECJ2000Value
 
                 Cat3.RA = RAOld
                 Cat3.Dec = DECOld
