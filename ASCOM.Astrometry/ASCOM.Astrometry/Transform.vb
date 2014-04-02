@@ -254,8 +254,8 @@ Namespace Transform
         Sub SetApparent(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetApparent
             LastSetBy = SetBy.Apparent
             If (RA <> RAApparentValue) Or (DEC <> DECApparentValue) Then RequiresRecalculate = True
-            RAApparentValue = RA
-            DECApparentValue = DEC
+            RAApparentValue = ValidateRA("SetApparent", RA)
+            DECApparentValue = ValidateDec("SetApparent", DEC)
             TL.LogMessage("SetApparent", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
         End Sub
 
@@ -629,41 +629,43 @@ Namespace Transform
         End Sub
 
         Private Sub ApparentToJ2000()
-            Dim RAOld, DECOld, DeltaRA, DeltaDEC, RACalc, DECCalc As Double
-            Dim ct As Integer, rc As Short
-            Dim JNow As Double
-
+            'Dim RAOld, DECOld, DeltaRA, DeltaDEC, RACalc, DECCalc As Double
+            'Dim ct As Integer, rc As Short
+            'Dim JNow As Double
+            Dim rc As Short
             Sw.Reset() : Sw.Start()
-            JNow = Utl.JulianDate
+            'JNow = Utl.JulianDate
+            rc = Nov31.MeanStar(GetJDTT, RAApparentValue, DECApparentValue, Accuracy.Full, RAJ2000Value, DECJ2000Value)
 
-            RAJ2000Value = RAApparentValue
-            DECJ2000Value = DECApparentValue
-            ct = 0
-            Do
-                ct += 1
-                RAOld = RAJ2000Value
-                DECOld = DECJ2000Value
+            'RAJ2000Value = RAApparentValue
+            'DECJ2000Value = DECApparentValue
+            'ct = 0
+            'Do
+            'ct += 1
+            'RAOld = RAJ2000Value
+            'DECOld = DECJ2000Value
 
-                Cat3.RA = RAOld
-                Cat3.Dec = DECOld
-                Cat3.ProMoRA = 0.0
-                Cat3.ProMoDec = 0.0
-                Cat3.Parallax = 0.0
-                Cat3.RadialVelocity = 0.0
-                rc = Nov31.AppStar(GetJDTT, Cat3, Accuracy.Full, RACalc, DECCalc)
+            'Cat3.RA = RAOld
+            'Cat3.Dec = DECOld
+            'Cat3.ProMoRA = 0.0
+            'Cat3.ProMoDec = 0.0
+            'Cat3.Parallax = 0.0
+            'Cat3.RadialVelocity = 0.0
+            'rc = Nov31.AppStar(GetJDTT, Cat3, Accuracy.Full, RACalc, DECCalc)
 
-                DeltaRA = RACalc - RAOld
-                DeltaDEC = DECCalc - DECOld
+            'DeltaRA = RACalc - RAOld
+            'DeltaDEC = DECCalc - DECOld
 
-                If (DeltaRA < -12.0) Then DeltaRA = DeltaRA + 24.0
-                If (DeltaRA > 12.0) Then DeltaRA = DeltaRA - 24.0
+            'If (DeltaRA < -12.0) Then DeltaRA = DeltaRA + 24.0
+            'If (DeltaRA > 12.0) Then DeltaRA = DeltaRA - 24.0
 
-                RAJ2000Value = RAApparentValue - DeltaRA
-                DECJ2000Value = DECApparentValue - DeltaDEC
-                TL.LogMessage("  Iteration", "  " & ct.ToString & " " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3))
-            Loop Until (ct = 20) Or (Abs(RAOld - RAJ2000Value) < 1 / (24 * 60 * 60) And Abs(DECOld - DECJ2000Value) < 1 / (24 * 60 * 60))
+            'RAJ2000Value = RAApparentValue - DeltaRA
+            'DECJ2000Value = DECApparentValue - DeltaDEC
+            'TL.LogMessage("  Iteration", "  " & ct.ToString & " " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3))
+            'Loop Until (ct = 20) Or (Abs(RAOld - RAJ2000Value) < 1 / (24 * 60 * 60) And Abs(DECOld - DECJ2000Value) < 1 / (24 * 60 * 60))
             Sw.Stop()
-            TL.LogMessage("  Apparent To J2000", "  " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3) & ", " & ct & " iterations " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            'TL.LogMessage("  Apparent To J2000", "  " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3) & ", " & ct & " iterations " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  Apparent To J2000", "  " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
@@ -897,6 +899,14 @@ Namespace Transform
             TL.LogMessage("Versions", "System: " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
             TL.LogMessage("Versions", "Current: " & System.Environment.CurrentDirectory)
         End Sub
+
+        Private Function ValidateRA(Caller As String, RA As Double) As Double
+            If (RA < 0.0) Or (RA >= 24.0) Then Throw New InvalidValueException(Caller, RA.ToString(), "0 to 23.9999")
+        End Function
+
+        Private Function ValidateDec(Caller As String, Dec As Double) As Double
+            If (Dec < 0.0) Or (Dec > 90.0) Then Throw New InvalidValueException(Caller, Dec.ToString(), "0 to 90.0")
+        End Function
 
 #End Region
 
