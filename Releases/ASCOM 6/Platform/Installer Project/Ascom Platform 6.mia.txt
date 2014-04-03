@@ -1518,6 +1518,7 @@ Comment: End of Installation
 Hide Dialog
 Comment: Ensure that the variables are all upper case so that tests conducted within the dialogue fire correctly!
 Convert Variable SUCCESS to UPPER case
+Set Variable RUNAPP to FALSE
 Display Dialog: finish, wait for dialog to return (modal)
 if Variable SILENT Equals FALSE
   if Variable REBOOTCOMPUTER Equals TRUE

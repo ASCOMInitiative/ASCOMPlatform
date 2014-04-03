@@ -230,4 +230,49 @@ Namespace Exceptions
         End Sub
     End Class
 
+    ''' <summary>
+    ''' Exception thrown when an iterative Transform function fails to converge.
+    ''' </summary>
+    ''' <remarks></remarks>
+    <Serializable(), _
+    ComVisible(True), _
+    Guid("34102500-664A-4C9E-92A2-0F72D773AEAE"), _
+    ClassInterface(ClassInterfaceType.None)> _
+    Public Class ConvergenceFailureException
+        'Exception for Transform iteration convergence failure exceptions
+        Inherits HelperException
+
+        ''' <summary>
+        ''' Create a new exception with the message
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new exception with message 
+        ''' </summary>
+        ''' <param name="message">Message to be reported by the exception</param>
+        ''' <param name="inner">Exception to be reported as the inner exception</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ''' <summary>
+        ''' Serialise the exception
+        ''' </summary>
+        ''' <param name="info">Serialisation information</param>
+        ''' <param name="context">Serialisation context</param>
+        ''' <remarks></remarks>
+        Public Sub New( _
+                    ByVal info As System.Runtime.Serialization.SerializationInfo, _
+                    ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+
+
 End Namespace

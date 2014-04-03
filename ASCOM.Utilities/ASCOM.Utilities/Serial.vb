@@ -590,6 +590,7 @@ Public Class Serial
                     If DebugTrace Then Logger.LogMessage("ReceiveTimeout", "Start")
                     TData.SerialCommand = SerialCommandType.ReceiveTimeout
                     TData.TimeoutValue = value
+                    TData.ManualResetEvent = New ManualResetEvent(False)
                     ThreadPool.QueueUserWorkItem(AddressOf ReceiveTimeoutWorker, TData)
                     WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                     If DebugTrace Then Logger.LogMessage("ReceiveTimeout", "Completed: " & TData.Completed)
@@ -667,6 +668,7 @@ Public Class Serial
                     If DebugTrace Then Logger.LogMessage("ReceiveTimeoutMs", "Start")
                     TData.SerialCommand = SerialCommandType.ReceiveTimeoutMs
                     TData.TimeoutValueMs = value
+                    TData.ManualResetEvent = New ManualResetEvent(False)
                     ThreadPool.QueueUserWorkItem(AddressOf ReceiveTimeoutMsWorker, TData)
                     WaitForThread(TData, 0) ' Sleep this thread until serial operation is complete
                     If DebugTrace Then Logger.LogMessage("ReceiveTimeoutMs", "Completed: " & TData.Completed)
