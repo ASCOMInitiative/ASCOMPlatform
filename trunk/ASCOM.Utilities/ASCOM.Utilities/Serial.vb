@@ -643,6 +643,7 @@ Public Class Serial
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
 
     End Sub
@@ -721,6 +722,7 @@ Public Class Serial
             Try : TData.LastException = ex : Catch : End Try
         Finally
             Try : TData.Completed = True : Catch : End Try
+            Try : TData.ManualResetEvent.Set() : Catch : End Try
         End Try
     End Sub
 
@@ -1574,9 +1576,9 @@ Public Class Serial
             Next
 
             'Some ports aren't returned by the framework method so probe for them
-            TData.SerialCommand = SerialCommandType.AvailableCOMPorts
             Try
                 If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Start")
+                TData.SerialCommand = SerialCommandType.AvailableCOMPorts
                 TData.AvailableCOMPorts = PortNames
                 TData.ManualResetEvent = New ManualResetEvent(False)
                 ThreadPool.QueueUserWorkItem(AddressOf AvailableCOMPortsWorker, TData)
