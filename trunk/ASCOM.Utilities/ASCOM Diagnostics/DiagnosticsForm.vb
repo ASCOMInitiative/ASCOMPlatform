@@ -184,163 +184,164 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("ScanInstalledPlatform", ex.ToString)
                 End Try
+                If False Then
+                    Try
+                        RunningVersions(TL) 'Log diagnostic information
+                    Catch ex As Exception
+                        LogException("RunningVersions", ex.ToString)
+                    End Try
+                    Try
+                        ScanDrives() 'Scan PC drives and report information
+                    Catch ex As Exception
+                        LogException("ScanDrives", ex.ToString)
+                    End Try
 
-                Try
-                    RunningVersions(TL) 'Log diagnostic information
-                Catch ex As Exception
-                    LogException("RunningVersions", ex.ToString)
-                End Try
-                Try
-                    ScanDrives() 'Scan PC drives and report information
-                Catch ex As Exception
-                    LogException("ScanDrives", ex.ToString)
-                End Try
+                    Try
+                        ScanFrameworks() 'Report on installed .NET Framework versions
+                    Catch ex As Exception
+                        LogException("ScanFrameworks", ex.ToString)
+                    End Try
+                    Try
+                        ScanSerial() 'Report serial port information
+                    Catch ex As Exception
+                        LogException("ScanSerial", ex.ToString)
+                    End Try
+                    Try
+                        ScanASCOMDrivers() : Action("") 'Report installed driver versions
+                    Catch ex As Exception
+                        LogException("ScanASCOMDrivers", ex.ToString)
+                    End Try
 
-                Try
-                    ScanFrameworks() 'Report on installed .NET Framework versions
-                Catch ex As Exception
-                    LogException("ScanFrameworks", ex.ToString)
-                End Try
-                Try
-                    ScanSerial() 'Report serial port information
-                Catch ex As Exception
-                    LogException("ScanSerial", ex.ToString)
-                End Try
-                Try
-                    ScanASCOMDrivers() : Action("") 'Report installed driver versions
-                Catch ex As Exception
-                    LogException("ScanASCOMDrivers", ex.ToString)
-                End Try
+                    Try
+                        ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
+                    Catch ex As Exception
+                        LogException("ScanDriverExceptions", ex.ToString)
+                    End Try
 
-                Try
-                    ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
-                Catch ex As Exception
-                    LogException("ScanDriverExceptions", ex.ToString)
-                End Try
+                    Try
+                        ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+                    Catch ex As Exception
+                        LogException("ScanProgramFiles", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
-                Catch ex As Exception
-                    LogException("ScanProgramFiles", ex.ToString)
-                End Try
+                    Try
+                        ScanProfile() : Action("") 'Report profile information
+                    Catch ex As Exception
+                        LogException("ScanProfile", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProfile() : Action("") 'Report profile information
-                Catch ex As Exception
-                    LogException("ScanProfile", ex.ToString)
-                End Try
+                    Try
+                        ScanRegistry() 'Scan Old ASCOM Registry Profile
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                Try
-                    ScanRegistry() 'Scan Old ASCOM Registry Profile
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    Try
+                        ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
+                    Catch ex As Exception
+                        LogException("ScanProfile55Files", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
-                Catch ex As Exception
-                    LogException("ScanProfile55Files", ex.ToString)
-                End Try
+                    Try
+                        ScanCOMRegistration() 'Report Com Registration
+                    Catch ex As Exception
+                        LogException("ScanCOMRegistration", ex.ToString)
+                    End Try
 
-                Try
-                    ScanCOMRegistration() 'Report Com Registration
-                Catch ex As Exception
-                    LogException("ScanCOMRegistration", ex.ToString)
-                End Try
+                    Try
+                        ScanForHelperHijacking()
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                Try
-                    ScanForHelperHijacking()
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    'Scan files on 32 and 64bit systems
+                    TL.LogMessage("Platform Files", "")
+                    ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
+                    Try
+                        Call ScanPlatformFiles(ASCOMPath) : Action("")
+                    Catch ex As Exception
+                        LogException("ScanPlatformFiles", ex.ToString)
+                    End Try
 
-                'Scan files on 32 and 64bit systems
-                TL.LogMessage("Platform Files", "")
-                ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
-                Try
-                    Call ScanPlatformFiles(ASCOMPath) : Action("")
-                Catch ex As Exception
-                    LogException("ScanPlatformFiles", ex.ToString)
-                End Try
+                    Try
+                        ScanDeveloperFiles()
+                    Catch ex As Exception
+                        LogException("ScanDeveloperFiles", ex.ToString)
+                    End Try
 
-                Try
-                    ScanDeveloperFiles()
-                Catch ex As Exception
-                    LogException("ScanDeveloperFiles", ex.ToString)
-                End Try
+                    'List GAC contents
+                    Try
+                        ScanGac()
+                    Catch ex As Exception
+                        LogException("ScanGac", ex.ToString)
+                    End Try
 
-                'List GAC contents
-                Try
-                    ScanGac()
-                Catch ex As Exception
-                    LogException("ScanGac", ex.ToString)
-                End Try
+                    'List setup files
+                    Try
+                        ScanLogs()
+                    Catch ex As Exception
+                        LogException("ScanLogs", ex.ToString)
+                    End Try
 
-                'List setup files
-                Try
-                    ScanLogs()
-                Catch ex As Exception
-                    LogException("ScanLogs", ex.ToString)
-                End Try
+                    'List Platform 6 install logs
+                    Try
+                        ScanPlatform6Logs()
+                    Catch ex As Exception
+                        LogException("ScanPlatform6Logs", ex.ToString)
+                    End Try
 
-                'List Platform 6 install logs
-                Try
-                    ScanPlatform6Logs()
-                Catch ex As Exception
-                    LogException("ScanPlatform6Logs", ex.ToString)
-                End Try
+                    'Scan registry security rights
+                    Try
+                        ScanRegistrySecurity()
+                    Catch ex As Exception
+                        LogException("ScanRegistrySecurity", ex.ToString)
+                    End Try
 
-                'Scan registry security rights
-                Try
-                    ScanRegistrySecurity()
-                Catch ex As Exception
-                    LogException("ScanRegistrySecurity", ex.ToString)
-                End Try
+                    'Scan event log messages
+                    Try
+                        ScanEventLog()
+                    Catch ex As Exception
+                        LogException("ScanEventLog", ex.ToString)
+                    End Try
 
-                'Scan event log messages
-                Try
-                    ScanEventLog()
-                Catch ex As Exception
-                    LogException("ScanEventLog", ex.ToString)
-                End Try
+                    'Scan for ASCOM Applications
+                    Try
+                        ScanApplications()
+                    Catch ex As Exception
+                        LogException("ScanApplications", ex.ToString)
+                    End Try
 
-                'Scan for ASCOM Applications
-                Try
-                    ScanApplications()
-                Catch ex As Exception
-                    LogException("ScanApplications", ex.ToString)
-                End Try
-
-                TL.BlankLine()
-                TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
-                TL.BlankLine()
-                TL.BlankLine()
-                Try
-                    'Functional tests
-                    UtilTests() : Action("")
-                Catch ex As Exception
-                    LogException("UtilTests", ex.ToString)
-                End Try
-                Try
-                    ProfileTests() : Action("")
-                Catch ex As Exception
-                    LogException("ProfileTests", ex.ToString)
-                End Try
-                Try
-                    TimerTests() : Action("")
-                Catch ex As Exception
-                    LogException("TimerTests", ex.ToString)
-                End Try
-                Try
-                    NovasComTests() : Action("")
-                Catch ex As Exception
-                    LogException("NovasComTests", ex.ToString)
-                End Try
-                Try
-                    KeplerTests() : Action("")
-                Catch ex As Exception
-                    LogException("KeplerTests", ex.ToString)
-                End Try
+                    TL.BlankLine()
+                    TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
+                    TL.BlankLine()
+                    TL.BlankLine()
+                    Try
+                        'Functional tests
+                        UtilTests() : Action("")
+                    Catch ex As Exception
+                        LogException("UtilTests", ex.ToString)
+                    End Try
+                    Try
+                        ProfileTests() : Action("")
+                    Catch ex As Exception
+                        LogException("ProfileTests", ex.ToString)
+                    End Try
+                    Try
+                        TimerTests() : Action("")
+                    Catch ex As Exception
+                        LogException("TimerTests", ex.ToString)
+                    End Try
+                    Try
+                        NovasComTests() : Action("")
+                    Catch ex As Exception
+                        LogException("NovasComTests", ex.ToString)
+                    End Try
+                    Try
+                        KeplerTests() : Action("")
+                    Catch ex As Exception
+                        LogException("KeplerTests", ex.ToString)
+                    End Try
+                End If
                 Try
                     TransformTest() : Action("")
                 Catch ex As Exception
@@ -361,20 +362,27 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("NOVAS31Tests", ex.ToString)
                 End Try
+                If False Then
+                    Try
+                        SimulatorTests() : Action("")
+                    Catch ex As Exception
+                        LogException("SimulatorTests", ex.ToString)
+                    End Try
+                    Try
+                        AstroUtilsTests() : Action("")
+                    Catch ex As Exception
+                        LogException("AstroUtilsTests", ex.ToString)
+                    End Try
+                    Try
+                        VideoUtilsTests() : Action("")
+                    Catch ex As Exception
+                        LogException("VideoUtilsTests", ex.ToString)
+                    End Try
+                End If
                 Try
-                    SimulatorTests() : Action("")
+                    SOFATests() : Action("")
                 Catch ex As Exception
-                    LogException("SimulatorTests", ex.ToString)
-                End Try
-                Try
-                    AstroUtilsTests() : Action("")
-                Catch ex As Exception
-                    LogException("AstroUtilsTests", ex.ToString)
-                End Try
-                Try
-                    VideoUtilsTests() : Action("")
-                Catch ex As Exception
-                    LogException("VideoUtilsTests", ex.ToString)
+                    LogException("SOFATests", ex.ToString)
                 End Try
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
@@ -414,6 +422,216 @@ Public Class DiagnosticsForm
         End Try
         btnExit.Enabled = True ' Enable buttons during run
         btnCOM.Enabled = True
+    End Sub
+
+    Private Sub SOFATests()
+        Dim SOFA As SOFA.SOFA
+        Dim t1, t2, date1, date2 As Double, j As Integer
+        Dim rc, dc, pr, pd, px, rv, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob, eo As Double
+        Dim ri, di, a, u1, u2, ob1, ob2 As Double
+
+        Status("Testing SOFA")
+        TL.LogMessage("SOFATests", "Starting test")
+        SOFA = New SOFA.SOFA
+
+        'Af2a tests
+        j = SOFA.Af2a("-", 45, 13, 27.2, a)
+
+        CompareDouble("SOFATests", "Af2a", a, -0.78931157943136443, 0.000000000001)
+        CompareInteger("SOFATests", "Af2a-status", j, 0)
+
+        'Anp tests
+        CompareDouble("SOFATests", "Anp", SOFA.Anp(-0.1), 6.1831853071795866, 0.000000000001)
+
+        'Atci13 tests
+        rc = 2.71
+        dc = 0.174
+        pr = 0.00001
+        pd = 0.000005
+        px = 0.1
+        rv = 55.0
+        date1 = 2456165.5
+        date2 = 0.401182685
+
+        SOFA.CelestialToIntermediate(rc, dc, pr, pd, px, rv, date1, date2, ri, di, eo)
+
+        CompareDouble("SOFATests", "CelestialToIntermediate-r1", ri, 2.7101215729690389, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToIntermediate-r1", di, 0.17293713672182304, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToIntermediate-r1", eo, -0.0029006187126573756, 0.00000000000001)
+
+        'Atco13 tests
+        rc = 2.71
+        dc = 0.174
+        pr = 0.00001
+        pd = 0.000005
+        px = 0.1
+        rv = 55.0
+        utc1 = 2456384.5
+        utc2 = 0.969254051
+        dut1 = 0.1550675
+        elong = -0.527800806
+        phi = -1.2345856
+        hm = 2738.0
+        xp = 0.000000247230737
+        yp = 0.00000182640464
+        phpa = 731.0
+        tc = 12.8
+        rh = 0.59
+        wl = 0.55
+
+        j = SOFA.CelestialToObserved(rc, dc, pr, pd, px, rv, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob, eo)
+
+        CompareDouble("SOFATests", "CelestialToObserved-aob", aob, 0.0925177448535823, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToObserved-zob", zob, 1.4076614052567671, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToObserved-hob", hob, -0.092651544314031581, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToObserved-dob", dob, 0.17166265600755917, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToObserved-rob", rob, 2.7102604535030976, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToObserved-eo", eo, -0.0030205483548024128, 0.00000000000001)
+        CompareInteger("SOFATests", "CelestialToObserved-status", j, 0)
+
+        'Dtf2d tests
+
+        j = SOFA.Dtf2d("UTC", 1994, 6, 30, 23, 59, 60.13599, u1, u2)
+
+        CompareDouble("SOFATests", "Dtf2d", u1 + u2, 2449534.49999, 0.000001)
+        CompareInteger("SOFATests", "Dtf2d-status", j, 0)
+
+        'Eo06a tests
+        eo = SOFA.Eo06a(2400000.5, 53736.0)
+
+        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418337, 0.000000000000001)
+
+        'Atic13 tests
+        ri = 2.7101215729690389
+        di = 0.17293713672182304
+        date1 = 2456165.5
+        date2 = 0.401182685
+
+        SOFA.IntermediateToCelestial(ri, di, date1, date2, rc, dc, eo)
+
+        CompareDouble("SOFATests", "IntermediateToCelestial-rc", rc, 2.7101265045313747, 0.000000000001)
+        CompareDouble("SOFATests", "IntermediateToCelestial-dc", dc, 0.17406325376283424, 0.000000000001)
+        CompareDouble("SOFATests", "IntermediateToCelestial-eo", eo, -0.0029006187126573756, 0.00000000000001)
+
+        'Atio13 tests
+        ri = 2.7101215729690389
+        di = 0.17293713672182304
+        utc1 = 2456384.5
+        utc2 = 0.969254051
+        dut1 = 0.1550675
+        elong = -0.527800806
+        phi = -1.2345856
+        hm = 2738.0
+        xp = 0.000000247230737
+        yp = 0.00000182640464
+        phpa = 731.0
+        tc = 12.8
+        rh = 0.59
+        wl = 0.55
+
+        j = SOFA.IntermediateToObserved(ri, di, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob)
+
+        CompareDouble("SOFATests", "IntermediateToObserved-aob", aob, 0.0923395222479499, 0.000000000001)
+        CompareDouble("SOFATests", "IntermediateToObserved-zob", zob, 1.4077587045137225, 0.000000000001)
+        CompareDouble("SOFATests", "IntermediateToObserved-hob", hob, -0.092476198797820056, 0.000000000001)
+        CompareDouble("SOFATests", "IntermediateToObserved-dob", dob, 0.17176534357582651, 0.000000000001)
+        CompareDouble("SOFATests", "IntermediateToObserved-rob", rob, 2.7100851079868864, 0.000000000001)
+        CompareInteger("SOFATests", "IntermediateToObserved-status", j, 0)
+
+        'Atoc13 tests
+        utc1 = 2456384.5
+        utc2 = 0.969254051
+        dut1 = 0.1550675
+        elong = -0.527800806
+        phi = -1.2345856
+        hm = 2738.0
+        xp = 0.000000247230737
+        yp = 0.00000182640464
+        phpa = 731.0
+        tc = 12.8
+        rh = 0.59
+        wl = 0.55
+
+        ob1 = 2.7100851079868864
+        ob2 = 0.17176534357582651
+        j = SOFA.ObservedToCelestial("R", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
+        CompareDouble("SOFATests", "ObservedToCelestial-R-rc", rc, 2.7099567446610004, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToCelestial-R-dc", dc, 0.17416965008953986, 0.000000000001)
+        CompareInteger("SOFATests", "ObservedToCelestial-R-status", j, 0)
+
+        ob1 = -0.092476198797820056
+        ob2 = 0.17176534357582651
+        j = SOFA.ObservedToCelestial("H", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
+        CompareDouble("SOFATests", "ObservedToCelestial-H-rc", rc, 2.7099567446610004, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToCelestial-H-dc", dc, 0.17416965008953986, 0.000000000001)
+        CompareInteger("SOFATests", "ObservedToCelestial-H-status", j, 0)
+
+        ob1 = 0.0923395222479499
+        ob2 = 1.4077587045137225
+        j = SOFA.ObservedToCelestial("A", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
+        CompareDouble("SOFATests", "ObservedToCelestial-A-rc", rc, 2.7099567446610004, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToCelestial-A-dc", dc, 0.17416965008953986, 0.000000000001)
+        CompareInteger("SOFATests", "ObservedToCelestial-A-status", j, 0)
+
+        'Atoi13 tests
+        utc1 = 2456384.5
+        utc2 = 0.969254051
+        dut1 = 0.1550675
+        elong = -0.527800806
+        phi = -1.2345856
+        hm = 2738.0
+        xp = 0.000000247230737
+        yp = 0.00000182640464
+        phpa = 731.0
+        tc = 12.8
+        rh = 0.59
+        wl = 0.55
+
+        ob1 = 2.7100851079868864
+        ob2 = 0.17176534357582651
+        j = SOFA.ObservedToIntermediate("R", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001)
+        CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
+
+        ob1 = -0.092476198797820056
+        ob2 = 0.17176534357582651
+        j = SOFA.ObservedToIntermediate("H", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001)
+        CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
+
+        ob1 = 0.0923395222479499
+        ob2 = 1.4077587045137225
+        j = SOFA.ObservedToIntermediate("A", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001)
+        CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
+
+        ' TaiTT tests
+        j = SOFA.TaiTt(2453750.5, 0.892482639, t1, t2)
+        CompareDouble("SOFATests", "TaiTT-t1", t1, 2453750.5, 0.000001)
+        CompareDouble("SOFATests", "TaiTT-t2", t2, 0.892855139, 0.000000000001)
+        CompareInteger("SOFATests", "TaiTT-status", j, 0)
+
+        'Tf2a tests
+        j = SOFA.Tf2a("+", 4, 58, 20.2, a)
+
+        CompareDouble("SOFATests", "Tf2a", a, 1.3017392781895374, 0.000000000001)
+        CompareInteger("SOFATests", "Tf2a-status", j, 0)
+
+        'UtcTai tests
+        j = SOFA.UtcTai(2453750.5, 0.892100694, u1, u2)
+
+        CompareDouble("SOFATests", "UtcTai-u1", u1, 2453750.5, 0.000001)
+        CompareDouble("SOFATests", "UtcTai-u2", u2, 0.89248263844444442, 0.000000000001)
+        CompareInteger("SOFATests", "UtcTai-status", j, 0)
+
+        Status("")
+        Action("")
+
+        TL.BlankLine()
+
     End Sub
 
     Private Enum ApplicationList
@@ -4013,7 +4231,6 @@ Public Class DiagnosticsForm
             ErrorList.Add(p_Section & " - " & ErrMsg)
         End If
     End Sub
-
 
     Private Sub CompareInteger(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Integer, ByVal p_Orig As Integer)
         Dim ErrMsg As String

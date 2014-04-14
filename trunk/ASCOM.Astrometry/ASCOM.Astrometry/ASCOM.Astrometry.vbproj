@@ -155,6 +155,7 @@
     <Compile Include="NOVASCOM\Deltat.vb" />
     <Compile Include="NOVASCOM\Ephemeris.vb" />
     <Compile Include="NOVASCOM\NOVASCOM.vb" />
+    <Compile Include="SOFA.vb" />
     <Compile Include="Transform.vb" />
   </ItemGroup>
   <ItemGroup>
