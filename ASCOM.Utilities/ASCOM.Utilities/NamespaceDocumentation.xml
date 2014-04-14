@@ -112,7 +112,17 @@
         </p>
       </summary>
     </member>
-    
+
+    <member name="N:ASCOM.Astrometry.SOFA">
+      <summary>
+        <h2>ASCOM.Astrometry.SOFA Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains funcitonality based around SOFA (Standards of Fundamental Astronomy) routines in forms that are easily accessible from both 32bit and 64bit .NET and COM applications
+        </p>
+      </summary>
+    </member>
+
   </members>
 
 </doc>

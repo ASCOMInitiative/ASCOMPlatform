@@ -30,7 +30,7 @@ Namespace Transform
     Public Class Transform
         Implements ITransform, IDisposable
         Private disposedValue As Boolean = False        ' To detect redundant calls
-        Private Utl As Util, AstroUtl As AstroUtils.AstroUtils, Nov31 As NOVAS.NOVAS31
+        Private Utl As Util, AstroUtl As AstroUtils.AstroUtils, Nov31 As NOVAS.NOVAS31, SOFA As SOFA.SOFA
         Private RAJ2000Value, RATopoValue, DECJ2000Value, DECTopoValue, SiteElevValue, SiteLatValue, SiteLongValue, SiteTempValue As Double
         Private RAApparentValue, DECApparentValue, AzimuthTopoValue, ElevationTopoValue, JDTT As Double
         Private RefracValue, RequiresRecalculate As Boolean
@@ -41,6 +41,11 @@ Namespace Transform
 
         Private TL As TraceLogger
         Private Sw, SwRecalculate As Stopwatch
+
+        Private Const HOURS2RADIANS = Math.PI / 12.0
+        Private Const DEGREES2RADIANS = Math.PI / 180.0
+        Private Const RADIANS2HOURS = 12.0 / Math.PI
+        Private Const RADIANS2DEGREES = 180.0 / Math.PI
 
         Private Enum SetBy
             Never
@@ -62,6 +67,7 @@ Namespace Transform
             SwRecalculate = New Stopwatch
             AstroUtl = New AstroUtils.AstroUtils
             Nov31 = New NOVAS.NOVAS31
+            SOFA = New SOFA.SOFA
 
             Earth.Name = "Earth"
             Earth.Number = Body.Earth
@@ -456,8 +462,8 @@ Namespace Transform
         ''' the Julian date.</returns>
         ''' <remarks>This method was introduced in May 2012. Previously, Transform used the current date-time of the PC when calculating transforms; 
         ''' this remains the default behaviour for backward compatibility.
-        ''' The inital value of this parameter is 0 which is a special value that forces Transform to replicate original behaviour by determining the  
-        ''' Julian date from the PC's current date and time. If this property is non zero, that terrestrial time Julian date is used in preference 
+        ''' The inital value of this parameter is 0.0, which is a special value that forces Transform to replicate original behaviour by determining the  
+        ''' Julian date from the PC's current date and time. If this property is non zero, that particular terrestrial time Julian date is used in preference 
         ''' to the value derrived from the PC's clock.</remarks>
         Property JulianDateTT As Double Implements ITransform.JulianDateTT
             Get
@@ -480,6 +486,7 @@ Namespace Transform
 
         Private Sub J2000ToTopo()
             Dim rc As Short, RefracOption As RefractionOption, JulianDateUT1, JulianDateTT, DeltaT As Double
+            Dim aob, zob, hob, dob, rob, eo, RobEqHours, DobDegrees As Double
 
             If Double.IsNaN(SiteElevValue) Then Throw New Exceptions.TransformUninitialisedException("Site elevation has not been set")
             If Double.IsNaN(SiteLatValue) Then Throw New Exceptions.TransformUninitialisedException("Site latitude has not been set")
@@ -533,10 +540,32 @@ Namespace Transform
                           Utl.DegreesToDMS(ElevationTopoValue, ":", ":", "", 3) & ", " & _
                           FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
+            Sw.Reset() : Sw.Start()
+
+            If RefracValue Then ' Include refraction
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, GetJDUTCSofa, 0.0, AstroUtl.DeltaUT(Utl.JulianDate), _
+                                         SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000.0, SiteTempValue, 0.8, 0.57, aob, zob, hob, dob, rob, eo)
+            Else ' No refraction
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, GetJDUTCSofa, 0.0, AstroUtl.DeltaUT(Utl.JulianDate), _
+                                         SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, aob, zob, hob, dob, rob, eo)
+            End If
+
+            RobEqHours = SOFA.Anp(rob - eo) * RADIANS2HOURS ' // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
+            DobDegrees = dob * RADIANS2DEGREES ' Convert Dec from radians to degrees
+
+            TL.LogMessage("  J2000 To Topo", "  SOFA topocentric RA/DEC (including refraction if specified):  " & Utl.HoursToHMS(RobEqHours, ":", ":", "", 3) & " " & _
+              Utl.DegreesToDMS(DobDegrees, ":", ":", "", 3) & _
+              " Refraction: " & RefracValue.ToString & ", " & _
+              FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  J2000 To Topo", "  Azimuth/Elevation: " & Utl.DegreesToDMS(aob * RADIANS2DEGREES, ":", ":", "", 3) & " " & _
+                          Utl.DegreesToDMS(90.0 - zob * RADIANS2DEGREES, ":", ":", "", 3) & ", " & _
+                          FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  J2000 To Topo", "  DeltaUT1: " & AstroUtl.DeltaUT(Utl.JulianDate))
+
         End Sub
 
         Private Sub J2000ToApparent()
-            Dim rc As Short
+            Dim rc As Short, ri, di, eo, RiEqHours, DiDegrees As Double
             Sw.Reset() : Sw.Start()
 
             Cat3.Dec = DECJ2000Value
@@ -549,6 +578,13 @@ Namespace Transform
 
             Sw.Stop()
             TL.LogMessage("  J2000 To Apparent", "  RA/Dec Apparent: " & Utl.HoursToHMS(RAApparentValue, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECApparentValue, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+
+
+            SOFA.CelestialToIntermediate(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, GetJDTTSofa, 0.0, ri, di, eo)
+            RiEqHours = SOFA.Anp(ri - eo) * RADIANS2HOURS ' // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
+            DiDegrees = di * RADIANS2DEGREES ' Convert Dec from radians to degrees
+            TL.LogMessage("  J2000 To Apparent", "  SOFA Apparent:   " & Utl.HoursToHMS(RiEqHours, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DiDegrees, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+
         End Sub
 
         Private Sub TopoToJ2000()
@@ -630,6 +666,9 @@ Namespace Transform
                 TL.LogMessage("", "Iteration loop counter is 20 so routine failed to converge, throw an error to indicate this")
                 Throw New ASCOM.Astrometry.Exceptions.ConvergenceFailureException("Transform.TopoToJ2000 failed to converge after 20 iterations")
             End If
+
+
+
 
         End Sub
 
@@ -850,6 +889,39 @@ Namespace Transform
                 Retval = JDTT - (AstroUtl.DeltaT() / SECPERDAY) ' UT1 = TT - DeltaT
             End If
             TL.LogMessage("GetJDUT1", Retval.ToString)
+            Return Retval
+        End Function
+
+        Private Function GetJDUTCSofa() As Double
+            Dim Retval, utc1, utc2 As Double, Now As DateTime
+
+            If JDTT = 0.0 Then
+                Now = Date.UtcNow
+                If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Millisecond / 1000.0), utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+                Retval = utc1 + utc2
+            Else
+                Retval = JDTT - (AstroUtl.DeltaT() / SECPERDAY) ' UT1 = TT - DeltaT
+            End If
+            TL.LogMessage("GetJDUTCSofa", Retval.ToString)
+            Return Retval
+        End Function
+
+        Private Function GetJDTTSofa() As Double
+            Dim Retval, utc1, utc2, tai1, tai2, tt1, tt2 As Double, Now As DateTime
+
+            If JDTT = 0.0 Then
+                Now = Date.UtcNow
+
+                If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Millisecond / 1000.0), utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+
+                If (SOFA.UtcTai(utc1, utc2, tai1, tai2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Utctai - Bad return code")
+                If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Taitt - Bad return code")
+
+                Retval = tt1 + tt2
+            Else
+                Retval = JDTT
+            End If
+            TL.LogMessage("GetJDTTSofa", Retval.ToString)
             Return Retval
         End Function
 

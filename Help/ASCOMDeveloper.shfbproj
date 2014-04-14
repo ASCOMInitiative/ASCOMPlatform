@@ -34,30 +34,34 @@
     <CopyrightText>Copyright &amp;#169%3b 2010-14, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry.AstroUtils" isExposed="True">
-        <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
-      </Filter>
-      <Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
-        <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
-          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.GetSchema" filterName="GetSchema" isExposed="False" />
-          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.ReadXml" filterName="ReadXml" isExposed="False" />
-          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.WriteXml" filterName="WriteXml" isExposed="False" />
-        </Filter>
-        <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
-          <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
-        </Filter>
-        <Filter entryType="Delegate" fullName="ASCOM.Utilities.Timer.TickEventHandler" filterName="Timer.TickEventHandler" isExposed="False" />
-      </Filter>
-      <Filter entryType="Namespace" fullName="ASCOM.Utilities.Video" isExposed="True">
-        <Filter entryType="Class" fullName="ASCOM.Utilities.Video.AviTools" filterName="AviTools" isExposed="False" />
-      </Filter>
-      <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
-      <Filter entryType="Namespace" fullName="System" isExposed="True">
-        <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
-        <Filter entryType="Class" fullName="System.ValueType" filterName="ValueType" isExposed="False">
-          <Filter entryType="Method" fullName="System.ValueType.ToString" filterName="ToString" isExposed="True" />
-        </Filter>
-      </Filter>
-    </ApiFilter>
+  <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
+</Filter>
+<Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVAS" isExposed="True">
+  <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS2" filterName="INOVAS2" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS3" filterName="INOVAS3" isExposed="False" />
+  <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS31" filterName="INOVAS31" isExposed="False" />
+</Filter>
+<Filter entryType="Namespace" fullName="ASCOM.Astrometry.SOFA" isExposed="True">
+  <Filter entryType="Interface" fullName="ASCOM.Astrometry.SOFA.ISOFA" filterName="ISOFA" isExposed="False" />
+</Filter>
+<Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
+  <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
+    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.GetSchema" filterName="GetSchema" isExposed="False" />
+    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.ReadXml" filterName="ReadXml" isExposed="False" />
+    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.WriteXml" filterName="WriteXml" isExposed="False" />
+  </Filter>
+  <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
+    <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
+  </Filter>
+  <Filter entryType="Delegate" fullName="ASCOM.Utilities.Timer.TickEventHandler" filterName="Timer.TickEventHandler" isExposed="False" />
+</Filter>
+<Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
+<Filter entryType="Namespace" fullName="System" isExposed="True">
+  <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
+  <Filter entryType="Class" fullName="System.ValueType" filterName="ValueType" isExposed="False">
+    <Filter entryType="Method" fullName="System.ValueType.ToString" filterName="ToString" isExposed="True" />
+  </Filter>
+</Filter></ApiFilter>
     <PresentationStyle>vs2005</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
