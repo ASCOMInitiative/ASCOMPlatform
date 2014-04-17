@@ -93,7 +93,8 @@ namespace ASCOM.Internal.GACInstall
                 {
                     if (System.IO.File.Exists(filename))
                     {
-                        new System.EnterpriseServices.Internal.Publish().GacInstall(filename);
+                        Publish pub = new Publish();
+                        pub.GacInstall(filename);
                         return result;
                     }
                     else

@@ -30,9 +30,10 @@ Namespace Transform
     Public Class Transform
         Implements ITransform, IDisposable
         Private disposedValue As Boolean = False        ' To detect redundant calls
-        Private Utl As Util, AstroUtl As AstroUtils.AstroUtils, Nov31 As NOVAS.NOVAS31, SOFA As SOFA.SOFA
+        Private Utl As Util, AstroUtl As AstroUtils.AstroUtils, Nov31 As NOVAS.NOVAS31
+        Dim SOFA As SOFA.SOFA
         Private RAJ2000Value, RATopoValue, DECJ2000Value, DECTopoValue, SiteElevValue, SiteLatValue, SiteLongValue, SiteTempValue As Double
-        Private RAApparentValue, DECApparentValue, AzimuthTopoValue, ElevationTopoValue, JDTT As Double
+        Private RAApparentValue, DECApparentValue, AzimuthTopoValue, ElevationTopoValue, JulianDateTTValue As Double
         Private RefracValue, RequiresRecalculate As Boolean
         Private LastSetBy As SetBy
 
@@ -83,7 +84,7 @@ Namespace Transform
             RefracValue = False
             LastSetBy = SetBy.Never
             RequiresRecalculate = True
-            JDTT = 0 ' Initialise to a value that forces the current PC date time to be used in determining the TT Julian date of interest
+            JulianDateTTValue = 0 ' Initialise to a value that forces the current PC date time to be used in determining the TT Julian date of interest
             Call CheckGAC()
             TL.LogMessage("New", "NOVAS initialised OK")
         End Sub
@@ -467,10 +468,12 @@ Namespace Transform
         ''' to the value derrived from the PC's clock.</remarks>
         Property JulianDateTT As Double Implements ITransform.JulianDateTT
             Get
-                Return JDTT
+                Return JulianDateTTValue
             End Get
             Set(value As Double)
-                JDTT = value
+                JulianDateTTValue = value
+                RequiresRecalculate = True ' Force a recalculation because the Julian date has changed
+                TL.LogMessage("JulianDateTT Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateTTValue).ToString("dd/MM/yyyy HH:mm:ss.fff"))
             End Set
         End Property
 #End Region
@@ -485,8 +488,9 @@ Namespace Transform
         End Sub
 
         Private Sub J2000ToTopo()
-            Dim rc As Short, RefracOption As RefractionOption, JulianDateUT1, JulianDateTT, DeltaT As Double
+            Dim rc As Short, RefracOption As RefractionOption, JulianDateUT1, JulianDateTT, DeltaT, DeltaUT, JDUTCSofa As Double
             Dim aob, zob, hob, dob, rob, eo, RobEqHours, DobDegrees As Double
+            Dim AzMessage As String, JDUTCSofaDateTime As DateTime
 
             If Double.IsNaN(SiteElevValue) Then Throw New Exceptions.TransformUninitialisedException("Site elevation has not been set")
             If Double.IsNaN(SiteLatValue) Then Throw New Exceptions.TransformUninitialisedException("Site latitude has not been set")
@@ -509,9 +513,14 @@ Namespace Transform
             Cat3.RadialVelocity = 0.0
 
             JulianDateUT1 = GetJDUT1()
+            JDUTCSofa = GetJDUTCSofa()
             JulianDateTT = GetJDTT()
-            DeltaT = DeltaTCalc(GetJDUT1)
-            TL.LogMessage("  J2000 To Topo", "JD UT1, JD TT, DeltaT: " & JulianDateUT1 & " " & JulianDateTT & " " & DeltaT)
+            DeltaT = DeltaTCalc(JulianDateUT1)
+            DeltaUT = AstroUtl.DeltaUT(JulianDateUT1)
+
+            JDUTCSofaDateTime = Julian2DateTime(JDUTCSofa)
+
+            TL.LogMessage("  J2000 To Topo", "  JD UT1, JD TT, DeltaT, Date: " & JulianDateUT1 & " " & JulianDateTT & " " & DeltaT & " " & JDUTCSofaDateTime.ToString)
             'Get unrefracted topo RA and DEC
             rc = Nov31.TopoStar(JulianDateTT, DeltaT, Cat3, Location, Accuracy.Full, RATopoValue, DECTopoValue)
 
@@ -536,17 +545,17 @@ Namespace Transform
                           Utl.DegreesToDMS(DECTopoValue, ":", ":", "", 3) & _
                           " Refraction: " & RefracValue.ToString & ", " & _
                           FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
-            TL.LogMessage("  J2000 To Topo", "  Azimuth/Elevation: " & Utl.DegreesToDMS(AzimuthTopoValue, ":", ":", "", 3) & " " & _
+            AzMessage = "  Azimuth/Elevation: " & Utl.DegreesToDMS(AzimuthTopoValue, ":", ":", "", 3) & " " & _
                           Utl.DegreesToDMS(ElevationTopoValue, ":", ":", "", 3) & ", " & _
-                          FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+                          FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms"
 
             Sw.Reset() : Sw.Start()
 
             If RefracValue Then ' Include refraction
-                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, GetJDUTCSofa, 0.0, AstroUtl.DeltaUT(Utl.JulianDate), _
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DeltaUT, _
                                          SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000.0, SiteTempValue, 0.8, 0.57, aob, zob, hob, dob, rob, eo)
             Else ' No refraction
-                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, GetJDUTCSofa, 0.0, AstroUtl.DeltaUT(Utl.JulianDate), _
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DeltaUT, _
                                          SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, aob, zob, hob, dob, rob, eo)
             End If
 
@@ -557,15 +566,21 @@ Namespace Transform
               Utl.DegreesToDMS(DobDegrees, ":", ":", "", 3) & _
               " Refraction: " & RefracValue.ToString & ", " & _
               FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+
+            TL.LogMessage("  J2000 To Topo", AzMessage)
+
             TL.LogMessage("  J2000 To Topo", "  Azimuth/Elevation: " & Utl.DegreesToDMS(aob * RADIANS2DEGREES, ":", ":", "", 3) & " " & _
                           Utl.DegreesToDMS(90.0 - zob * RADIANS2DEGREES, ":", ":", "", 3) & ", " & _
                           FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
-            TL.LogMessage("  J2000 To Topo", "  DeltaUT1: " & AstroUtl.DeltaUT(Utl.JulianDate))
 
+            TL.LogMessage("  J2000 To Topo", "  Completed")
+            TL.BlankLine()
         End Sub
 
         Private Sub J2000ToApparent()
-            Dim rc As Short, ri, di, eo, RiEqHours, DiDegrees As Double
+            Dim rc As Short, ri, di, eo, RiEqHours, DiDegrees, JDTT As Double
+            Dim JDTTSofa As Double
+
             Sw.Reset() : Sw.Start()
 
             Cat3.Dec = DECJ2000Value
@@ -574,13 +589,16 @@ Namespace Transform
             Cat3.ProMoDec = 0.0
             Cat3.Parallax = 0.0
             Cat3.RadialVelocity = 0.0
-            rc = Nov31.AppStar(GetJDTT, Cat3, Accuracy.Full, RAApparentValue, DECApparentValue)
+
+            JDTT = GetJDTT()
+            JDTTSofa = GetJDTTSofa()
+
+            rc = Nov31.AppStar(JDTT, Cat3, Accuracy.Full, RAApparentValue, DECApparentValue)
 
             Sw.Stop()
             TL.LogMessage("  J2000 To Apparent", "  RA/Dec Apparent: " & Utl.HoursToHMS(RAApparentValue, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECApparentValue, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
-
-            SOFA.CelestialToIntermediate(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, GetJDTTSofa, 0.0, ri, di, eo)
+            SOFA.CelestialToIntermediate(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDTTSofa, 0.0, ri, di, eo)
             RiEqHours = SOFA.Anp(ri - eo) * RADIANS2HOURS ' // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
             DiDegrees = di * RADIANS2DEGREES ' Convert Dec from radians to degrees
             TL.LogMessage("  J2000 To Apparent", "  SOFA Apparent:   " & Utl.HoursToHMS(RiEqHours, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DiDegrees, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
@@ -598,6 +616,8 @@ Namespace Transform
             Dim ct As Integer, rc As Short, RefracOption As RefractionOption
             Dim JulianDate, JulianDateUT1, RARef, DecRef, AzRef, ElRef As Double
 
+            Dim RACelestrial, DecCelestial, JulianDateTTSofa, JulianDateUTCSofa As Double, RetCode As Integer
+
             If Double.IsNaN(SiteElevValue) Then Throw New Exceptions.TransformUninitialisedException("Site elevation has not been set")
             If Double.IsNaN(SiteLatValue) Then Throw New Exceptions.TransformUninitialisedException("Site latitude has not been set")
             If Double.IsNaN(SiteLongValue) Then Throw New Exceptions.TransformUninitialisedException("Site longitude has not been set")
@@ -611,8 +631,10 @@ Namespace Transform
 
             JulianDate = Utl.JulianDate
             JulianDateUT1 = GetJDUT1()
+            JulianDateUTCSofa = GetJDUTCSofa()
             JulianDateTT = GetJDTT()
-            DeltaT = DeltaTCalc(GetJDUT1)
+            JulianDateTTSofa = GetJDTTSofa()
+            DeltaT = DeltaTCalc(JulianDateUT1)
 
             TL.LogMessage("  Topo To J2000", "  Julian Date: " & JulianDate & ", JulianDateTT: " & JulianDateTT & ", DeltaT: " & DeltaT & ", CalculateAzEl: " & CalculateAzEl.ToString)
 
@@ -667,16 +689,31 @@ Namespace Transform
                 Throw New ASCOM.Astrometry.Exceptions.ConvergenceFailureException("Transform.TopoToJ2000 failed to converge after 20 iterations")
             End If
 
+            Sw.Reset() : Sw.Start()
+            If RefracValue Then ' Refraction is requuired
+                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JulianDateTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, 0.0, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000, SiteTempValue, 0.85, 0.57, RACelestrial, DecCelestial)
+            Else
+                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JulianDateTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, 0.0, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestrial, DecCelestial)
+            End If
 
-
+            RACelestrial = RACelestrial * RADIANS2HOURS
+            DecCelestial = DecCelestial * RADIANS2DEGREES
+            TL.LogMessage("  Topo To J2000 Sofa", "  " & Utl.HoursToHMS(RACelestrial, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DecCelestial, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
         Private Sub ApparentToJ2000()
-            Dim rc As Short, ErrorMessage As String
-
+            Dim rc As Short, ErrorMessage As String, JDTT, JDUT1 As Double
+            Dim JulianDateTTSofa, RACelestial, DecCelestial, JulianDateUTCSofa, eo As Double
             Sw.Reset() : Sw.Start()
-            rc = Nov31.MeanStar(GetJDTT, RAApparentValue, DECApparentValue, Accuracy.Full, RAJ2000Value, DECJ2000Value)
+
+
+            JDTT = GetJDTT()
+            JulianDateTTSofa = GetJDTTSofa()
+            JDUT1 = GetJDUT1()
+            JulianDateUTCSofa = GetJDUTCSofa()
+
+            rc = Nov31.MeanStar(JDTT, RAApparentValue, DECApparentValue, Accuracy.Full, RAJ2000Value, DECJ2000Value)
             If rc <> 0 Then
                 TL.LogMessage("ApparentToJ2000", "MeanStar bad return value: " & rc & ", RAApparentValue: " & RAApparentValue & ", DECApparentValue: " & DECApparentValue & ", RAJ2000Value: " & RAJ2000Value & ", DecJ2000Value: " & DECJ2000Value)
                 Select Case rc
@@ -691,6 +728,12 @@ Namespace Transform
             End If
             Sw.Stop()
             TL.LogMessage("  Apparent To J2000", "  " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+
+            Sw.Reset() : Sw.Start()
+            SOFA.IntermediateToCelestial(SOFA.Anp(RAApparentValue * HOURS2RADIANS + SOFA.Eo06a(JulianDateUTCSofa, 0.0)), DECApparentValue * DEGREES2RADIANS, JulianDateTTSofa, 0.0, RACelestial, DecCelestial, eo)
+            RACelestial = RACelestial * RADIANS2HOURS
+            DecCelestial = DecCelestial * RADIANS2DEGREES
+            TL.LogMessage("  Apparent To J2000 Sofa", "  " & Utl.HoursToHMS(RACelestial, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DecCelestial, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
@@ -871,57 +914,57 @@ Namespace Transform
         Private Function GetJDTT() As Double
             Dim Retval As Double
 
-            If JDTT = 0.0 Then
+            If JulianDateTTValue = 0.0 Then
                 Retval = AstroUtl.JulianDateTT(0.0)
             Else
-                Retval = JDTT
+                Retval = JulianDateTTValue
             End If
 
-            TL.LogMessage("GetJDTT", Retval.ToString)
+            TL.LogMessage("  GetJDTT", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString("dd/MM/yyyy HH:mm:ss.fff"))
             Return Retval
         End Function
 
         Private Function GetJDUT1() As Double
             Dim Retval As Double
-            If JDTT = 0.0 Then
+            If JulianDateTTValue = 0.0 Then
                 Retval = AstroUtl.JulianDateUT1(0.0)
             Else
-                Retval = JDTT - (AstroUtl.DeltaT() / SECPERDAY) ' UT1 = TT - DeltaT
+                Retval = JulianDateTTValue - (AstroUtl.DeltaT() / SECPERDAY) ' UT1 = TT - DeltaT
             End If
-            TL.LogMessage("GetJDUT1", Retval.ToString)
+            TL.LogMessage("  GetJDUT1", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString("dd/MM/yyyy HH:mm:ss.fff"))
             Return Retval
         End Function
 
         Private Function GetJDUTCSofa() As Double
             Dim Retval, utc1, utc2 As Double, Now As DateTime
 
-            If JDTT = 0.0 Then
+            If JulianDateTTValue = 0.0 Then
                 Now = Date.UtcNow
-                If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Millisecond / 1000.0), utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+                If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
                 Retval = utc1 + utc2
             Else
-                Retval = JDTT - (AstroUtl.DeltaT() / SECPERDAY) ' UT1 = TT - DeltaT
+                Retval = JulianDateTTValue - (AstroUtl.DeltaT() / SECPERDAY) ' UT1 = TT - DeltaT
             End If
-            TL.LogMessage("GetJDUTCSofa", Retval.ToString)
+            TL.LogMessage("  GetJDUTCSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString("dd/MM/yyyy HH:mm:ss.fff"))
             Return Retval
         End Function
 
         Private Function GetJDTTSofa() As Double
             Dim Retval, utc1, utc2, tai1, tai2, tt1, tt2 As Double, Now As DateTime
 
-            If JDTT = 0.0 Then
+            If JulianDateTTValue = 0.0 Then
                 Now = Date.UtcNow
 
-                If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Millisecond / 1000.0), utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+                If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
 
                 If (SOFA.UtcTai(utc1, utc2, tai1, tai2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Utctai - Bad return code")
                 If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Taitt - Bad return code")
 
                 Retval = tt1 + tt2
             Else
-                Retval = JDTT
+                Retval = JulianDateTTValue
             End If
-            TL.LogMessage("GetJDTTSofa", Retval.ToString)
+            TL.LogMessage("  GetJDTTSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString("dd/MM/yyyy HH:mm:ss.fff"))
             Return Retval
         End Function
 
@@ -968,6 +1011,60 @@ Namespace Transform
             Return Dec
         End Function
 
+        Public Function Julian2DateTime(m_JulianDate As Double) As DateTime
+            Dim L, N, I, J, JDLong As Long
+            Dim JDFraction, Remainder As Double
+            Dim Day, Month, Year, Hours, Minutes, Seconds, MilliSeconds As Integer
+            Dim dt As DateTime
+
+            Dim debug As Boolean = False
+
+            Try
+                If m_JulianDate > 2378507.5 Then ' 1/1/1800
+                    JDLong = CLng(Math.Floor(m_JulianDate))
+                    JDFraction = m_JulianDate - Math.Floor(m_JulianDate)
+                    If debug Then TL.LogMessage("ConvertFromJulian", "Initial: " & JDLong & " " & JDFraction)
+
+                    L = JDLong + 68569
+                    N = CLng((4 * L) \ 146097)
+                    L = L - CLng((146097 * N + 3) \ 4)
+                    I = CLng((4000 * (L + 1) \ 1461001))
+                    L = L - CLng((1461 * I) \ 4) + 31
+                    J = CLng((80 * L) \ 2447)
+                    Day = CInt(L - CLng((2447 * J) \ 80))
+                    L = CLng(J \ 11)
+                    Month = CInt(J + 2 - 12 * L)
+                    Year = CInt(100 * (N - 49) + I + L)
+
+                    If debug Then TL.LogMessage("ConvertFromJulian", "DMY: " & Day & " " & Month & " " & Year)
+
+                    JDFraction += (5.0 / (24.0 * 60.0 * 60.0 * 10000.0))
+
+                    If JDFraction >= 0.5 Then ' Allow for Julian days to start at 12:00 rather than 00:00
+                        If debug Then TL.LogMessage("ConvertFromJulian", "JDFraction >= 0.5: " & JDFraction)
+                        Day += 1
+                        JDFraction -= 0.5 '+ 4.9 / (24.0 * 60.0 * 60.0 * 10000.0) ' Add half a millisecond to get rounding correct
+                        If debug Then TL.LogMessage("ConvertFromJulian", "DMY: " & Day & " " & JDFraction)
+                    Else
+                        JDFraction += 0.5 '+ 4.9 / (24.0 * 60.0 * 60.0 * 10000.0)
+                    End If
+
+                    Hours = CInt(Int(JDFraction * 24.0)) : Remainder = (JDFraction * 24.0) - CDbl(Hours) : If debug Then TL.LogMessage("ConvertFromJulian", "Hours: " & Hours & " " & Remainder) 'Remainder as a fraction of an hour
+                    Minutes = CInt(Int(Remainder * 60.0)) : Remainder = (Remainder * 60.0) - CDbl(Minutes) : If debug Then TL.LogMessage("ConvertFromJulian", "Minutes: " & Minutes & " " & Remainder) 'Remainder as a fraction of a minute
+                    Seconds = CInt(Int(Remainder * 60.0)) : Remainder = (Remainder * 60.0) - CDbl(Seconds) : If debug Then TL.LogMessage("ConvertFromJulian", "Seconds: " & Seconds & " " & Remainder) 'Remainder as a fraction of a second
+                    MilliSeconds = CInt(Int(Remainder * 1000.0))
+
+                    If debug Then TL.LogMessage("ConvertFromJulian", JDLong & " " & JDFraction & " " & Day & " " & Hours & " " & Minutes & " " & Seconds & " " & MilliSeconds)
+                    dt = New DateTime(Year, Month, Day, Hours, Minutes, Seconds, MilliSeconds)
+                Else ' Early or invalid julian date so return a default value
+                    dt = New Date(1800, 1, 10) ' Return this as a default bad value
+                End If
+            Catch ex As Exception
+                TL.LogMessageCrLf("", "Exception: " & ex.ToString)
+                dt = New Date(1900, 1, 10) ' Return this as a default bad value
+            End Try
+            Return (dt)
+        End Function
 #End Region
 
     End Class
