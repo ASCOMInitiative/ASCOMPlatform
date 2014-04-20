@@ -166,6 +166,15 @@
 		ReplacementText="&lt;head&gt;&lt;meta&#32;http-equiv&#61;&quot;X-UA-Compatible&quot;&#32;content&#61;&quot;IE&#61;5&quot;&#32;&#47;&gt;">
 	</FileUpdate>
 		
+	<!-- Update the file version numbers in the InstallAware project files -->
+	<ItemGroup>
+      <IAProjetcFiles Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.mpr;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.mpr" />
+    </ItemGroup>
+    <FileUpdate Files="@(IAProjetcFiles)" 
+		Regex="$(PlatformVersion).9999.9999" 
+		ReplacementText="$(PlatformVersion).$(BuildHours).$(Revision)">
+	</FileUpdate>
+
 	<!-- Build the installers -->
     <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
     <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
