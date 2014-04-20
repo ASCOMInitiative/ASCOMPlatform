@@ -161,7 +161,7 @@ else
 end
  
 label: Welcome Dialog
-Display Dialog: welcome, wait for dialog to return (modal)
+Comment: Display Dialog: welcome, wait for dialog to return (modal)
 if Variable WIZARD Equals CANCEL
   GoTo Label: Main Install
 end

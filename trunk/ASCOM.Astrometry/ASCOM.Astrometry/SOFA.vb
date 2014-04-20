@@ -987,6 +987,37 @@ Namespace SOFA
         End Function
 
         ''' <summary>
+        ''' Time scale transformation:  International Atomic Time, TAI, to Coordinated Universal Time, UTC.
+        ''' </summary>
+        ''' <param name="tai1">TAI as a 2-part Julian Date (Note 1)</param>
+        ''' <param name="tai2">TAI as a 2-part Julian Date (Note 1)</param>
+        ''' <param name="utc1">UTC as a 2-part quasi Julian Date (Notes 1-3)</param>
+        ''' <param name="utc2">UTC as a 2-part quasi Julian Date (Notes 1-3)</param>
+        ''' <returns>Status: +1 = dubious year (Note 4), 0 = OK, -1 = unacceptable date</returns>
+        ''' <remarks>
+        ''' Notes:
+        ''' <list type="number">
+        ''' <item><description>tai1+tai2 is Julian Date, apportioned in any convenient way between the two arguments, for example where tai1 is the Julian Day Number and tai2 is the fraction of a day.  The returned utc1
+        ''' and utc2 form an analogous pair, except that a special convention is used, to deal with the problem of leap seconds - see the next note.</description></item>
+        ''' <item><description>JD cannot unambiguously represent UTC during a leap second unless special measures are taken.  The convention in the present function is that the JD day represents UTC days whether the
+        ''' length is 86399, 86400 or 86401 SI seconds.  In the 1960-1972 era there were smaller jumps (in either direction) each time the linear UTC(TAI) expression was changed, and these "mini-leaps are also included in the SOFA convention.</description></item>
+        ''' <item><description>The function iauD2dtf can be used to transform the UTC quasi-JD into calendar date and clock time, including UTC leap second handling.</description></item>
+        ''' <item><description>The warning status "dubious year" flags UTCs that predate the introduction of the time scale or that are too far in the future to be trusted.  See iauDat for further details.</description></item>
+        ''' </list>
+        ''' </remarks>
+        Public Function TaiUtc(tai1 As Double, tai2 As Double, ByRef utc1 As Double, ByRef utc2 As Double) As Integer Implements ISOFA.TaiUtc
+            Dim RetCode As Short
+
+            If Is64Bit() Then
+                RetCode = Taiutc64(tai1, tai2, utc1, utc2)
+            Else
+                RetCode = Taiutc32(tai1, tai2, utc1, utc2)
+            End If
+
+            Return Convert.ToInt32(RetCode)
+        End Function
+
+        ''' <summary>
         ''' Time scale transformation:  International Atomic Time, TAI, to Terrestrial Time, TT.
         ''' </summary>
         ''' <param name="tai1">TAI as a 2-part Julian Date</param>
@@ -1012,6 +1043,32 @@ Namespace SOFA
                 RetCode = Taitt64(tai1, tai2, tt1, tt2)
             Else
                 RetCode = Taitt32(tai1, tai2, tt1, tt2)
+            End If
+
+            Return Convert.ToInt32(RetCode)
+        End Function
+
+        ''' <summary>
+        ''' Time scale transformation:  Terrestrial Time, TT, to International Atomic Time, TAI.
+        ''' </summary>
+        ''' <param name="tt1">TT as a 2-part Julian Date</param>
+        ''' <param name="tt2">TT as a 2-part Julian Date</param>
+        ''' <param name="tai1">TAI as a 2-part Julian Date</param>
+        ''' <param name="tai2">TAI as a 2-part Julian Date</param>
+        ''' <returns>Status:  0 = OK</returns>
+        ''' <remarks>
+        ''' Note
+        ''' <list type="number">
+        ''' <item><description>tt1+tt2 is Julian Date, apportioned in any convenient way between the two arguments, for example where tt1 is the Julian Day Number and tt2 is the fraction of a day.  The returned tai1,tai2 follow suit.</description></item>
+        ''' </list>
+        ''' </remarks>
+        Public Function TtTai(tt1 As Double, tt2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer Implements ISOFA.TtTai
+            Dim RetCode As Short
+
+            If Is64Bit() Then
+                RetCode = Tttai64(tt1, tt2, tai1, tai2)
+            Else
+                RetCode = Tttai32(tt1, tt2, tai1, tai2)
             End If
 
             Return Convert.ToInt32(RetCode)
@@ -1240,6 +1297,13 @@ Namespace SOFA
                                        ByRef tt2 As Double) As Short
         End Function
 
+        <DllImport(SOFA32DLL, EntryPoint:="iauTttai")> _
+        Private Shared Function Tttai32(tt1 As Double,
+                                       tt2 As Double,
+                                       ByRef tai1 As Double,
+                                       ByRef tai2 As Double) As Short
+        End Function
+
         <DllImport(SOFA32DLL, EntryPoint:="iauTf2a")> _
         Private Shared Function Tf2a32(s As Char,
                                       ihour As Short,
@@ -1253,6 +1317,13 @@ Namespace SOFA
                                         utc2 As Double,
                                         ByRef tai1 As Double,
                                         ByRef tai2 As Double) As Short
+        End Function
+
+        <DllImport(SOFA32DLL, EntryPoint:="iautaiutc")> _
+        Private Shared Function Taiutc32(tai1 As Double,
+                                        tai2 As Double,
+                                        ByRef utc1 As Double,
+                                        ByRef utc2 As Double) As Short
         End Function
 
 #End Region
@@ -1407,6 +1478,13 @@ Namespace SOFA
                                        ByRef tt2 As Double) As Short
         End Function
 
+        <DllImport(SOFA64DLL, EntryPoint:="iauTttai")> _
+        Private Shared Function Tttai64(tt1 As Double,
+                                       tt2 As Double,
+                                       ByRef tai1 As Double,
+                                       ByRef tai2 As Double) As Short
+        End Function
+
         <DllImport(SOFA64DLL, EntryPoint:="iauTf2a")> _
         Private Shared Function Tf2a64(s As Char,
                                       ihour As Short,
@@ -1420,6 +1498,13 @@ Namespace SOFA
                                         utc2 As Double,
                                         ByRef tai1 As Double,
                                         ByRef tai2 As Double) As Short
+        End Function
+
+        <DllImport(SOFA64DLL, EntryPoint:="iauTaiutc")> _
+        Private Shared Function Taiutc64(tai1 As Double,
+                                        tai2 As Double,
+                                        ByRef utc1 As Double,
+                                        ByRef utc2 As Double) As Short
         End Function
 
 #End Region
