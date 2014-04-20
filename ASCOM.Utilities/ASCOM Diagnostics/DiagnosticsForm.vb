@@ -32,6 +32,8 @@ Public Class DiagnosticsForm
     Private Const TestTelescopeDescription As String = "This is a test telescope"
     Private Const RevisedTestTelescopeDescription As String = "Updated description for test telescope!!!"
     Private Const NewTestTelescopeDescription As String = "New description for test telescope!!!"
+    Private Const TOLERANCE_E3 As Double = 0.001 ' Used in evaluating precision match of double values
+    Private Const TOLERANCE_E4 As Double = 0.0001 ' Used in evaluating precision match of double values
     Private Const TOLERANCE_E5 As Double = 0.00001 ' Used in evaluating precision match of double values
     Private Const TOLERANCE_E6 As Double = 0.000001 ' Used in evaluating precision match of double values
     Private Const TOLERANCE_E7 As Double = 0.0000001 ' Used in evaluating precision match of double values
@@ -112,6 +114,7 @@ Public Class DiagnosticsForm
             AstroUtil = New AstroUtils.AstroUtils
             Nov3 = New NOVAS.NOVAS3
             Nov31 = New NOVAS.NOVAS31
+            AscomUtil = New ASCOM.Utilities.Util
             Me.BringToFront()
         Catch ex As Exception
             EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
@@ -179,169 +182,170 @@ Public Class DiagnosticsForm
                     TL.LogMessage("Diagnostics", "ERROR - Unexpected exception creating New RegistryAccess object, later steps will show errors")
                     LogException("Diagnostics", ex.ToString)
                 End Try
+
                 Try
                     ScanInstalledPlatform()
                 Catch ex As Exception
                     LogException("ScanInstalledPlatform", ex.ToString)
                 End Try
-                If False Then
-                    Try
-                        RunningVersions(TL) 'Log diagnostic information
-                    Catch ex As Exception
-                        LogException("RunningVersions", ex.ToString)
-                    End Try
-                    Try
-                        ScanDrives() 'Scan PC drives and report information
-                    Catch ex As Exception
-                        LogException("ScanDrives", ex.ToString)
-                    End Try
 
-                    Try
-                        ScanFrameworks() 'Report on installed .NET Framework versions
-                    Catch ex As Exception
-                        LogException("ScanFrameworks", ex.ToString)
-                    End Try
-                    Try
-                        ScanSerial() 'Report serial port information
-                    Catch ex As Exception
-                        LogException("ScanSerial", ex.ToString)
-                    End Try
-                    Try
-                        ScanASCOMDrivers() : Action("") 'Report installed driver versions
-                    Catch ex As Exception
-                        LogException("ScanASCOMDrivers", ex.ToString)
-                    End Try
+                Try
+                    RunningVersions(TL) 'Log diagnostic information
+                Catch ex As Exception
+                    LogException("RunningVersions", ex.ToString)
+                End Try
+                Try
+                    ScanDrives() 'Scan PC drives and report information
+                Catch ex As Exception
+                    LogException("ScanDrives", ex.ToString)
+                End Try
 
-                    Try
-                        ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
-                    Catch ex As Exception
-                        LogException("ScanDriverExceptions", ex.ToString)
-                    End Try
+                Try
+                    ScanFrameworks() 'Report on installed .NET Framework versions
+                Catch ex As Exception
+                    LogException("ScanFrameworks", ex.ToString)
+                End Try
+                Try
+                    ScanSerial() 'Report serial port information
+                Catch ex As Exception
+                    LogException("ScanSerial", ex.ToString)
+                End Try
+                Try
+                    ScanASCOMDrivers() : Action("") 'Report installed driver versions
+                Catch ex As Exception
+                    LogException("ScanASCOMDrivers", ex.ToString)
+                End Try
 
-                    Try
-                        ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
-                    Catch ex As Exception
-                        LogException("ScanProgramFiles", ex.ToString)
-                    End Try
+                Try
+                    ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
+                Catch ex As Exception
+                    LogException("ScanDriverExceptions", ex.ToString)
+                End Try
 
-                    Try
-                        ScanProfile() : Action("") 'Report profile information
-                    Catch ex As Exception
-                        LogException("ScanProfile", ex.ToString)
-                    End Try
+                Try
+                    ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+                Catch ex As Exception
+                    LogException("ScanProgramFiles", ex.ToString)
+                End Try
 
-                    Try
-                        ScanRegistry() 'Scan Old ASCOM Registry Profile
-                    Catch ex As Exception
-                        LogException("ScanInstalledPlatform", ex.ToString)
-                    End Try
+                Try
+                    ScanProfile() : Action("") 'Report profile information
+                Catch ex As Exception
+                    LogException("ScanProfile", ex.ToString)
+                End Try
 
-                    Try
-                        ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
-                    Catch ex As Exception
-                        LogException("ScanProfile55Files", ex.ToString)
-                    End Try
+                Try
+                    ScanRegistry() 'Scan Old ASCOM Registry Profile
+                Catch ex As Exception
+                    LogException("ScanInstalledPlatform", ex.ToString)
+                End Try
 
-                    Try
-                        ScanCOMRegistration() 'Report Com Registration
-                    Catch ex As Exception
-                        LogException("ScanCOMRegistration", ex.ToString)
-                    End Try
+                Try
+                    ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
+                Catch ex As Exception
+                    LogException("ScanProfile55Files", ex.ToString)
+                End Try
 
-                    Try
-                        ScanForHelperHijacking()
-                    Catch ex As Exception
-                        LogException("ScanInstalledPlatform", ex.ToString)
-                    End Try
+                Try
+                    ScanCOMRegistration() 'Report Com Registration
+                Catch ex As Exception
+                    LogException("ScanCOMRegistration", ex.ToString)
+                End Try
 
-                    'Scan files on 32 and 64bit systems
-                    TL.LogMessage("Platform Files", "")
-                    ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
-                    Try
-                        Call ScanPlatformFiles(ASCOMPath) : Action("")
-                    Catch ex As Exception
-                        LogException("ScanPlatformFiles", ex.ToString)
-                    End Try
+                Try
+                    ScanForHelperHijacking()
+                Catch ex As Exception
+                    LogException("ScanInstalledPlatform", ex.ToString)
+                End Try
 
-                    Try
-                        ScanDeveloperFiles()
-                    Catch ex As Exception
-                        LogException("ScanDeveloperFiles", ex.ToString)
-                    End Try
+                'Scan files on 32 and 64bit systems
+                TL.LogMessage("Platform Files", "")
+                ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
+                Try
+                    Call ScanPlatformFiles(ASCOMPath) : Action("")
+                Catch ex As Exception
+                    LogException("ScanPlatformFiles", ex.ToString)
+                End Try
 
-                    'List GAC contents
-                    Try
-                        ScanGac()
-                    Catch ex As Exception
-                        LogException("ScanGac", ex.ToString)
-                    End Try
+                Try
+                    ScanDeveloperFiles()
+                Catch ex As Exception
+                    LogException("ScanDeveloperFiles", ex.ToString)
+                End Try
 
-                    'List setup files
-                    Try
-                        ScanLogs()
-                    Catch ex As Exception
-                        LogException("ScanLogs", ex.ToString)
-                    End Try
+                'List GAC contents
+                Try
+                    ScanGac()
+                Catch ex As Exception
+                    LogException("ScanGac", ex.ToString)
+                End Try
 
-                    'List Platform 6 install logs
-                    Try
-                        ScanPlatform6Logs()
-                    Catch ex As Exception
-                        LogException("ScanPlatform6Logs", ex.ToString)
-                    End Try
+                'List setup files
+                Try
+                    ScanLogs()
+                Catch ex As Exception
+                    LogException("ScanLogs", ex.ToString)
+                End Try
 
-                    'Scan registry security rights
-                    Try
-                        ScanRegistrySecurity()
-                    Catch ex As Exception
-                        LogException("ScanRegistrySecurity", ex.ToString)
-                    End Try
+                'List Platform 6 install logs
+                Try
+                    ScanPlatform6Logs()
+                Catch ex As Exception
+                    LogException("ScanPlatform6Logs", ex.ToString)
+                End Try
 
-                    'Scan event log messages
-                    Try
-                        ScanEventLog()
-                    Catch ex As Exception
-                        LogException("ScanEventLog", ex.ToString)
-                    End Try
+                'Scan registry security rights
+                Try
+                    ScanRegistrySecurity()
+                Catch ex As Exception
+                    LogException("ScanRegistrySecurity", ex.ToString)
+                End Try
 
-                    'Scan for ASCOM Applications
-                    Try
-                        ScanApplications()
-                    Catch ex As Exception
-                        LogException("ScanApplications", ex.ToString)
-                    End Try
+                'Scan event log messages
+                Try
+                    ScanEventLog()
+                Catch ex As Exception
+                    LogException("ScanEventLog", ex.ToString)
+                End Try
 
-                    TL.BlankLine()
-                    TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
-                    TL.BlankLine()
-                    TL.BlankLine()
-                    Try
-                        'Functional tests
-                        UtilTests() : Action("")
-                    Catch ex As Exception
-                        LogException("UtilTests", ex.ToString)
-                    End Try
-                    Try
-                        ProfileTests() : Action("")
-                    Catch ex As Exception
-                        LogException("ProfileTests", ex.ToString)
-                    End Try
-                    Try
-                        TimerTests() : Action("")
-                    Catch ex As Exception
-                        LogException("TimerTests", ex.ToString)
-                    End Try
-                    Try
-                        NovasComTests() : Action("")
-                    Catch ex As Exception
-                        LogException("NovasComTests", ex.ToString)
-                    End Try
-                    Try
-                        KeplerTests() : Action("")
-                    Catch ex As Exception
-                        LogException("KeplerTests", ex.ToString)
-                    End Try
-                End If
+                'Scan for ASCOM Applications
+                Try
+                    ScanApplications()
+                Catch ex As Exception
+                    LogException("ScanApplications", ex.ToString)
+                End Try
+
+                TL.BlankLine()
+                TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
+                TL.BlankLine()
+                TL.BlankLine()
+                Try
+                    'Functional tests
+                    UtilTests() : Action("")
+                Catch ex As Exception
+                    LogException("UtilTests", ex.ToString)
+                End Try
+                Try
+                    ProfileTests() : Action("")
+                Catch ex As Exception
+                    LogException("ProfileTests", ex.ToString)
+                End Try
+                Try
+                    TimerTests() : Action("")
+                Catch ex As Exception
+                    LogException("TimerTests", ex.ToString)
+                End Try
+                Try
+                    NovasComTests() : Action("")
+                Catch ex As Exception
+                    LogException("NovasComTests", ex.ToString)
+                End Try
+                Try
+                    KeplerTests() : Action("")
+                Catch ex As Exception
+                    LogException("KeplerTests", ex.ToString)
+                End Try
+
                 Try
                     TransformTest() : Action("")
                 Catch ex As Exception
@@ -362,23 +366,22 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("NOVAS31Tests", ex.ToString)
                 End Try
-                If False Then
-                    Try
-                        SimulatorTests() : Action("")
-                    Catch ex As Exception
-                        LogException("SimulatorTests", ex.ToString)
-                    End Try
-                    Try
-                        AstroUtilsTests() : Action("")
-                    Catch ex As Exception
-                        LogException("AstroUtilsTests", ex.ToString)
-                    End Try
-                    Try
-                        VideoUtilsTests() : Action("")
-                    Catch ex As Exception
-                        LogException("VideoUtilsTests", ex.ToString)
-                    End Try
-                End If
+                Try
+                    SimulatorTests() : Action("")
+                Catch ex As Exception
+                    LogException("SimulatorTests", ex.ToString)
+                End Try
+                Try
+                    AstroUtilsTests() : Action("")
+                Catch ex As Exception
+                    LogException("AstroUtilsTests", ex.ToString)
+                End Try
+                Try
+                    VideoUtilsTests() : Action("")
+                Catch ex As Exception
+                    LogException("VideoUtilsTests", ex.ToString)
+                End Try
+
                 Try
                     SOFATests() : Action("")
                 Catch ex As Exception
@@ -428,7 +431,7 @@ Public Class DiagnosticsForm
         Dim SOFA As SOFA.SOFA
         Dim t1, t2, date1, date2 As Double, j As Integer
         Dim rc, dc, pr, pd, px, rv, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob, eo As Double
-        Dim ri, di, a, u1, u2, ob1, ob2 As Double
+        Dim ri, di, a, u1, u2, a1, a2, ob1, ob2 As Double
 
         Status("Testing SOFA")
         TL.LogMessage("SOFATests", "Starting test")
@@ -455,8 +458,8 @@ Public Class DiagnosticsForm
 
         SOFA.CelestialToIntermediate(rc, dc, pr, pd, px, rv, date1, date2, ri, di, eo)
 
-        CompareDouble("SOFATests", "CelestialToIntermediate-r1", ri, 2.7101215729690389, 0.000000000001)
-        CompareDouble("SOFATests", "CelestialToIntermediate-r1", di, 0.17293713672182304, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToIntermediate-r1", ri, 2.7101215729690389, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "CelestialToIntermediate-r1", di, 0.17293713672182304, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
         CompareDouble("SOFATests", "CelestialToIntermediate-r1", eo, -0.0029006187126573756, 0.00000000000001)
 
         'Atco13 tests
@@ -481,11 +484,11 @@ Public Class DiagnosticsForm
 
         j = SOFA.CelestialToObserved(rc, dc, pr, pd, px, rv, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob, eo)
 
-        CompareDouble("SOFATests", "CelestialToObserved-aob", aob, 0.0925177448535823, 0.000000000001)
-        CompareDouble("SOFATests", "CelestialToObserved-zob", zob, 1.4076614052567671, 0.000000000001)
-        CompareDouble("SOFATests", "CelestialToObserved-hob", hob, -0.092651544314031581, 0.000000000001)
-        CompareDouble("SOFATests", "CelestialToObserved-dob", dob, 0.17166265600755917, 0.000000000001)
-        CompareDouble("SOFATests", "CelestialToObserved-rob", rob, 2.7102604535030976, 0.000000000001)
+        CompareDouble("SOFATests", "CelestialToObserved-aob", aob, 0.0925177448535823, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "CelestialToObserved-zob", zob, 1.4076614052567671, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "CelestialToObserved-hob", hob, -0.092651544314031581, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "CelestialToObserved-dob", dob, 0.17166265600755917, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "CelestialToObserved-rob", rob, 2.7102604535030976, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
         CompareDouble("SOFATests", "CelestialToObserved-eo", eo, -0.0030205483548024128, 0.00000000000001)
         CompareInteger("SOFATests", "CelestialToObserved-status", j, 0)
 
@@ -509,8 +512,8 @@ Public Class DiagnosticsForm
 
         SOFA.IntermediateToCelestial(ri, di, date1, date2, rc, dc, eo)
 
-        CompareDouble("SOFATests", "IntermediateToCelestial-rc", rc, 2.7101265045313747, 0.000000000001)
-        CompareDouble("SOFATests", "IntermediateToCelestial-dc", dc, 0.17406325376283424, 0.000000000001)
+        CompareDouble("SOFATests", "IntermediateToCelestial-rc", rc, 2.7101265045313747, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "IntermediateToCelestial-dc", dc, 0.17406325376283424, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareDouble("SOFATests", "IntermediateToCelestial-eo", eo, -0.0029006187126573756, 0.00000000000001)
 
         'Atio13 tests
@@ -531,11 +534,11 @@ Public Class DiagnosticsForm
 
         j = SOFA.IntermediateToObserved(ri, di, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob)
 
-        CompareDouble("SOFATests", "IntermediateToObserved-aob", aob, 0.0923395222479499, 0.000000000001)
-        CompareDouble("SOFATests", "IntermediateToObserved-zob", zob, 1.4077587045137225, 0.000000000001)
-        CompareDouble("SOFATests", "IntermediateToObserved-hob", hob, -0.092476198797820056, 0.000000000001)
-        CompareDouble("SOFATests", "IntermediateToObserved-dob", dob, 0.17176534357582651, 0.000000000001)
-        CompareDouble("SOFATests", "IntermediateToObserved-rob", rob, 2.7100851079868864, 0.000000000001)
+        CompareDouble("SOFATests", "IntermediateToObserved-aob", aob, 0.0923395222479499, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "IntermediateToObserved-zob", zob, 1.4077587045137225, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "IntermediateToObserved-hob", hob, -0.092476198797820056, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "IntermediateToObserved-dob", dob, 0.17176534357582651, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "IntermediateToObserved-rob", rob, 2.7100851079868864, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
         CompareInteger("SOFATests", "IntermediateToObserved-status", j, 0)
 
         'Atoc13 tests
@@ -555,22 +558,22 @@ Public Class DiagnosticsForm
         ob1 = 2.7100851079868864
         ob2 = 0.17176534357582651
         j = SOFA.ObservedToCelestial("R", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
-        CompareDouble("SOFATests", "ObservedToCelestial-R-rc", rc, 2.7099567446610004, 0.000000000001)
-        CompareDouble("SOFATests", "ObservedToCelestial-R-dc", dc, 0.17416965008953986, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToCelestial-R-rc", rc, 2.7099567446610004, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToCelestial-R-dc", dc, 0.17416965008953986, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareInteger("SOFATests", "ObservedToCelestial-R-status", j, 0)
 
         ob1 = -0.092476198797820056
         ob2 = 0.17176534357582651
         j = SOFA.ObservedToCelestial("H", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
-        CompareDouble("SOFATests", "ObservedToCelestial-H-rc", rc, 2.7099567446610004, 0.000000000001)
-        CompareDouble("SOFATests", "ObservedToCelestial-H-dc", dc, 0.17416965008953986, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToCelestial-H-rc", rc, 2.7099567446610004, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToCelestial-H-dc", dc, 0.17416965008953986, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareInteger("SOFATests", "ObservedToCelestial-H-status", j, 0)
 
         ob1 = 0.0923395222479499
         ob2 = 1.4077587045137225
         j = SOFA.ObservedToCelestial("A", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
-        CompareDouble("SOFATests", "ObservedToCelestial-A-rc", rc, 2.7099567446610004, 0.000000000001)
-        CompareDouble("SOFATests", "ObservedToCelestial-A-dc", dc, 0.17416965008953986, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToCelestial-A-rc", rc, 2.7099567446610004, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToCelestial-A-dc", dc, 0.17416965008953986, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareInteger("SOFATests", "ObservedToCelestial-A-status", j, 0)
 
         'Atoi13 tests
@@ -590,22 +593,22 @@ Public Class DiagnosticsForm
         ob1 = 2.7100851079868864
         ob2 = 0.17176534357582651
         j = SOFA.ObservedToIntermediate("R", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
-        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001)
-        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
 
         ob1 = -0.092476198797820056
         ob2 = 0.17176534357582651
         j = SOFA.ObservedToIntermediate("H", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
-        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001)
-        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
 
         ob1 = 0.0923395222479499
         ob2 = 1.4077587045137225
         j = SOFA.ObservedToIntermediate("A", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
-        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001)
-        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
 
         ' TaiTT tests
@@ -614,13 +617,25 @@ Public Class DiagnosticsForm
         CompareDouble("SOFATests", "TaiTT-t2", t2, 0.892855139, 0.000000000001)
         CompareInteger("SOFATests", "TaiTT-status", j, 0)
 
-        'Tf2a tests
+        ' TaiUtc tests
+        j = SOFA.TaiUtc(2453750.5, 0.892482639, u1, u2)
+        CompareDouble("SOFATests", "TaiUtc-u1", u1, 2453750.5, 0.000001)
+        CompareDouble("SOFATests", "TaiUtc-u2", u2, 0.89210069455555552, 0.000000000001)
+        CompareInteger("SOFATests", "TaiUtc-status", j, 0)
+
+        ' Tf2a tests
         j = SOFA.Tf2a("+", 4, 58, 20.2, a)
 
         CompareDouble("SOFATests", "Tf2a", a, 1.3017392781895374, 0.000000000001)
         CompareInteger("SOFATests", "Tf2a-status", j, 0)
 
-        'UtcTai tests
+        ' TTTai tests
+        j = SOFA.TtTai(2453750.5, 0.892482639, a1, a2)
+        CompareDouble("SOFATests", "TtTai-a1", a1, 2453750.5, 0.000001)
+        CompareDouble("SOFATests", "TtTai-a2", a2, 0.892110139, 0.000000000001)
+        CompareInteger("SOFATests", "TtTai-status", j, 0)
+
+        ' UtcTai tests
         j = SOFA.UtcTai(2453750.5, 0.892100694, u1, u2)
 
         CompareDouble("SOFATests", "UtcTai-u1", u1, 2453750.5, 0.000001)
@@ -3022,45 +3037,45 @@ Public Class DiagnosticsForm
 
         NOVAS.NOVAS2.StarVectors(StarStruct, POS, VEL)
         NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
-        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, TOLERANCE_E9)
-        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
 
         NOVAS.NOVAS2.Precession(J2000, POS, u.JulianDate, POSNow)
         NOVAS.NOVAS2.Vector2RADec(POSNow, RANow, DECNow)
         RC = NOVAS.NOVAS2.TopoStar(JD, EarthBody, 0, StarStruct, LocationStruct, RANow, DECNow)
         Compare("Novas2Tests", "TopoStar RC", RC, 0)
-        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, TOLERANCE_E9)
-        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
 
         NOVAS.NOVAS2.RADec2Vector(StarRAJ2000, StarDecJ2000, 10000000000.0, POS)
         NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
-        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, TOLERANCE_E9)
-        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
 
         CompareDouble("Novas2Tests", "JulianDate", NOVAS.NOVAS2.JulianDate(2010, 12, 30, 9.0), TestJulianDate, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.AstroPlanet(JD, SunBody, EarthBody, RATarget, DECTarget, Distance)
         Compare("Novas2Tests", "AstroPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, TOLERANCE_E9)
-        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareDouble("Novas2Tests", "AstroPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.VirtualPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "VirtualPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, TOLERANCE_E9)
-        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareDouble("Novas2Tests", "VirtualPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.AppPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "AppPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, TOLERANCE_E9)
-        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareDouble("Novas2Tests", "AppPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.TopoPlanet(JD, SunBody, EarthBody, 0.0, LocationStruct, RANow, DECNow, Distance)
         Compare("Novas2Tests", "TopoPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, TOLERANCE_E9)
-        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, TOLERANCE_E9)
+        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareDouble("Novas2Tests", "TopoPlanet Dist", Distance, 0.983371860482251, TOLERANCE_E9)
         TL.BlankLine()
 
@@ -3391,17 +3406,17 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub TransformTest()
-        TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E9)
-        TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E9)
-        TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E9)
+        TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
+        TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
+        TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
         TL.BlankLine()
     End Sub
 
-    Sub TransformTest2000(ByVal Name As String, ByVal AstroRAString As String, ByVal AstroDECString As String, ByVal Tolerance As Double)
+    Sub TransformTest2000(ByVal Name As String, ByVal AstroRAString As String, ByVal AstroDECString As String, ByVal RATolerance As Double, DecTolerance As Double)
         Dim Util As New Util
         Dim AstroRA, AstroDEC As Double
         Dim SiteLat, SiteLong, SiteElev As Double
-        Dim T As Transform.Transform = New Transform.Transform
+        Dim TR As Transform.Transform = New Transform.Transform
         Dim Earth As New BodyDescription
         Dim tjd, RA, DEC As Double
         Dim star As New CatEntry
@@ -3419,11 +3434,11 @@ Public Class DiagnosticsForm
             SiteLong = 0.0 - (17.0 / 60.0) - (40.0 / 3600.0)
 
             'Set up Transform component
-            T.SiteElevation = 80.0
-            T.SiteLatitude = SiteLat
-            T.SiteLongitude = SiteLong
-            T.SiteTemperature = 10.0
-            T.Refraction = False
+            TR.SiteElevation = 80.0
+            TR.SiteLatitude = SiteLat
+            TR.SiteLongitude = SiteLong
+            TR.SiteTemperature = 10.0
+            TR.Refraction = False
 
             'Set up NOVAS parameters
             tjd = Util.JulianDate
@@ -3438,14 +3453,14 @@ Public Class DiagnosticsForm
             Location.Pressure = 1000
             Location.Temperature = 10
 
-            T.SetJ2000(AstroRA, AstroDEC)
+            TR.SetJ2000(AstroRA, AstroDEC)
             rc = NOVAS.NOVAS2.TopoStar(tjd, Earth, 0, star, Location, RA, DEC) ' Compare to the NOVAS 2 prediction
             TL.LogMessage("TransformTest", Name & ": Astrometric(" & Util.HoursToHMS(AstroRA, ":", ":", "", 3) & ", " & Util.DegreesToDMS(AstroDEC, ":", ":", "", 2) & _
                                                      ") Topocentric(" & Util.HoursToHMS(RA, ":", ":", "", 3) & " DEC: " & Util.DegreesToDMS(DEC, ":", ":", "", 2) & ")")
-            TL.LogMessage("TransformTest", Name & " RA/DEC Actual  : " & Util.HoursToHMS(T.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(T.DECTopocentric, ":", ":", "", 3))
+            TL.LogMessage("TransformTest", Name & " RA/DEC Actual  : " & Util.HoursToHMS(TR.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(TR.DECTopocentric, ":", ":", "", 3))
             TL.LogMessage("TransformTest", Name & " RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
-            CompareDouble("TransformTest", Name & " Topocentric RA", T.RATopocentric, RA, TOLERANCE_E5)
-            CompareDouble("TransformTest", Name & " Topocentric Dec", T.DECTopocentric, DEC, TOLERANCE_E5)
+            CompareDouble("TransformTest", Name & " Topocentric RA", TR.RATopocentric, RA, RATolerance, DoubleDisplayAs.HoursMinutesSeconds)
+            CompareDouble("TransformTest", Name & " Topocentric Dec", TR.DECTopocentric, DEC, DecTolerance, DoubleDisplayAs.DegreesMinutesSeconds)
 
             Cat3.RA = star.RA
             Cat3.Dec = star.Dec
@@ -3456,10 +3471,10 @@ Public Class DiagnosticsForm
             OnSurface3.Temperature = Location.Temperature
 
             rc = Nov3.TopoStar(AstroUtil.JulianDateTT(0.0), AstroUtil.DeltaT, Cat3, OnSurface3, Accuracy.Full, RA, DEC)
-            TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Actual  : " & Util.HoursToHMS(T.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(T.DECTopocentric, ":", ":", "", 3))
+            TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Actual  : " & Util.HoursToHMS(TR.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(TR.DECTopocentric, ":", ":", "", 3))
             TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
-            CompareDouble("TransformTest", Name & " Novas3 Topocentric RA", T.RATopocentric, RA, Tolerance)
-            CompareDouble("TransformTest", Name & " Novas3 Topocentric Dec", T.DECTopocentric, DEC, Tolerance)
+            CompareDouble("TransformTest", Name & " Novas3 Topocentric RA", TR.RATopocentric, RA, RATolerance, DoubleDisplayAs.HoursMinutesSeconds)
+            CompareDouble("TransformTest", Name & " Novas3 Topocentric Dec", TR.DECTopocentric, DEC, DecTolerance, DoubleDisplayAs.DegreesMinutesSeconds)
 
         Catch ex As Exception
             LogException("TransformTest2000 Exception", ex.ToString)
@@ -4245,15 +4260,71 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
+    Private Enum DoubleDisplayAs
+        Number
+        HoursMinutesSeconds
+        DegreesMinutesSeconds
+    End Enum
+
     Private Sub CompareDouble(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Double, ByVal p_Orig As Double, ByVal p_Tolerance As Double)
+        CompareDouble(p_Section, p_Name, p_New, p_Orig, p_Tolerance, DoubleDisplayAs.Number)
+    End Sub
+
+    Private Sub CompareDouble(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Double, ByVal p_Orig As Double, ByVal p_Tolerance As Double, p_DisplayAs As DoubleDisplayAs)
         Dim ErrMsg As String, Divisor As Double
+        Dim DisplayNew, DisplayOriginal, DisplayTolerance As String
+
         Divisor = p_Orig
         If Divisor = 0.0 Then Divisor = 1.0 'Deal withpossible divide by zero error
+
         If System.Math.Abs((p_New - p_Orig) / Divisor) < p_Tolerance Then
-            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New & " within tolerance of " & p_Tolerance)
+            Select Case p_DisplayAs
+                Case DoubleDisplayAs.DegreesMinutesSeconds
+                    DisplayNew = AscomUtil.DegreesToDMS(p_New, ":", ":", "", 3)
+                    DisplayTolerance = AscomUtil.DegreesToDMS(p_Tolerance, ":", ":", "", 3)
+                Case DoubleDisplayAs.HoursMinutesSeconds
+                    DisplayNew = AscomUtil.HoursToHMS(p_New, ":", ":", "", 3)
+                    DisplayTolerance = AscomUtil.HoursToHMS(p_Tolerance, ":", ":", "", 3)
+                Case DoubleDisplayAs.Number
+                    DisplayNew = p_New.ToString
+                    DisplayTolerance = p_Tolerance.ToString
+                Case Else
+                    ErrMsg = "The DoubleDisplayAs value: " & p_DisplayAs.ToString & " is not configured in Sub CompareDouble"
+                    TL.LogMessage(p_Section, ErrMsg)
+                    NNonMatches += 1
+                    ErrorList.Add(p_Section & " - " & ErrMsg)
+                    DisplayNew = p_New.ToString
+                    DisplayTolerance = p_Tolerance.ToString
+            End Select
+
+            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & DisplayNew & " within tolerance of " & DisplayTolerance)
             NMatches += 1
         Else
-            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: " & p_New.ToString & ", Expected: " & p_Orig.ToString & " within tolerance of " & p_Tolerance
+
+            Select Case p_DisplayAs
+                Case DoubleDisplayAs.DegreesMinutesSeconds
+                    DisplayNew = AscomUtil.DegreesToDMS(p_New, ":", ":", "", 3)
+                    DisplayOriginal = AscomUtil.DegreesToDMS(p_Orig, ":", ":", "", 3)
+                    DisplayTolerance = AscomUtil.DegreesToDMS(p_Tolerance, ":", ":", "", 3)
+                Case DoubleDisplayAs.HoursMinutesSeconds
+                    DisplayNew = AscomUtil.HoursToHMS(p_New, ":", ":", "", 3)
+                    DisplayOriginal = AscomUtil.HoursToHMS(p_Orig, ":", ":", "", 3)
+                    DisplayTolerance = AscomUtil.HoursToHMS(p_Tolerance, ":", ":", "", 3)
+                Case DoubleDisplayAs.Number
+                    DisplayNew = p_New.ToString
+                    DisplayOriginal = p_Orig.ToString
+                    DisplayTolerance = p_Tolerance.ToString
+                Case Else
+                    ErrMsg = "The DoubleDisplayAs value: " & p_DisplayAs.ToString & " is not configured in Sub CompareDouble"
+                    TL.LogMessage(p_Section, ErrMsg)
+                    NNonMatches += 1
+                    ErrorList.Add(p_Section & " - " & ErrMsg)
+                    DisplayNew = p_New.ToString
+                    DisplayOriginal = p_Orig.ToString
+                    DisplayTolerance = p_Tolerance.ToString
+            End Select
+
+            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: " & DisplayNew & ", Expected: " & DisplayOriginal & " within tolerance of " & DisplayTolerance
             TL.LogMessage(p_Section, ErrMsg)
             NNonMatches += 1
             ErrorList.Add(p_Section & " - " & ErrMsg)
@@ -4535,22 +4606,22 @@ Public Class DiagnosticsForm
         Return sum
     End Function
 
-
     Sub UtilTests()
         Dim t As Double
         Dim ts As String
         Dim HelperType As Type
         Dim i As Integer, Is64Bit As Boolean
+        Dim Utl As Util
 
         Const TestDate As Date = #6/1/2010 4:37:00 PM#
         Const TestJulianDate As Double = 2455551.0
 
         Try
+            Utl = New Util
             Is64Bit = (IntPtr.Size = 8) 'Create a simple variable to record whether or not we are 64bit
             Status("Running Utilities functional tests")
             TL.LogMessage("UtilTests", "Creating ASCOM.Utilities.Util")
             sw.Reset() : sw.Start()
-            AscomUtil = New ASCOM.Utilities.Util
             TL.LogMessage("UtilTests", "ASCOM.Utilities.Util Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
             If Not Is64Bit Then
                 TL.LogMessage("UtilTests", "Creating DriverHelper.Util")
@@ -4569,13 +4640,13 @@ Public Class DiagnosticsForm
             End If
             TL.BlankLine()
 
-            Compare("UtilTests", "IsMinimumRequiredVersion 5.0", AscomUtil.IsMinimumRequiredVersion(5, 0).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 5.4", AscomUtil.IsMinimumRequiredVersion(5, 4).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 5.5", AscomUtil.IsMinimumRequiredVersion(5, 5).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 5.6", AscomUtil.IsMinimumRequiredVersion(5, 6).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.0", AscomUtil.IsMinimumRequiredVersion(6, 0).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.1", AscomUtil.IsMinimumRequiredVersion(6, 1).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.3", AscomUtil.IsMinimumRequiredVersion(6, 3).ToString, "False")
+            Compare("UtilTests", "IsMinimumRequiredVersion 5.0", Utl.IsMinimumRequiredVersion(5, 0).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 5.4", Utl.IsMinimumRequiredVersion(5, 4).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 5.5", Utl.IsMinimumRequiredVersion(5, 5).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 5.6", Utl.IsMinimumRequiredVersion(5, 6).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.0", Utl.IsMinimumRequiredVersion(6, 0).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.1", Utl.IsMinimumRequiredVersion(6, 1).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.3", Utl.IsMinimumRequiredVersion(6, 3).ToString, "False")
             TL.BlankLine()
 
             IntArray1D(ArrayCopySize - 1) = ArrayCopySize
@@ -4588,139 +4659,139 @@ Public Class DiagnosticsForm
 
             TL.BlankLine()
             If Is64Bit Then ' Run tests just on the new 64bit component
-                t = 30.123456789 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, ":").ToString, "30:07'")
-                t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, ":", ":", "", 4).ToString, "60:59:15" & DecimalSeparator & "5556")
-                t = 50.123453456 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t).ToString, "03:20")
-                t = 70.763245689 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t).ToString, "04:43:03")
-                ts = "43:56:78" & DecimalSeparator & "2567" : Compare("UtilTests", "DMSToDegrees", AscomUtil.DMSToDegrees(ts).ToString, "43" & DecimalSeparator & "9550713055555")
-                ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", AscomUtil.HMSToDegrees(ts).ToString, "219" & DecimalSeparator & "845833333333")
-                ts = "14:37:23" : Compare("UtilTests", "HMSToHours", AscomUtil.HMSToHours(ts).ToString, "14" & DecimalSeparator & "6230555555556")
-                t = 15.567234086 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), "15:34")
-                t = 9.4367290317 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), "09:26:12")
+                t = 30.123456789 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, ":").ToString, "30:07'")
+                t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, ":", ":", "", 4).ToString, "60:59:15" & DecimalSeparator & "5556")
+                t = 50.123453456 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t).ToString, "03:20")
+                t = 70.763245689 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t).ToString, "04:43:03")
+                ts = "43:56:78" & DecimalSeparator & "2567" : Compare("UtilTests", "DMSToDegrees", Utl.DMSToDegrees(ts).ToString, "43" & DecimalSeparator & "9550713055555")
+                ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", Utl.HMSToDegrees(ts).ToString, "219" & DecimalSeparator & "845833333333")
+                ts = "14:37:23" : Compare("UtilTests", "HMSToHours", Utl.HMSToHours(ts).ToString, "14" & DecimalSeparator & "6230555555556")
+                t = 15.567234086 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t), "15:34")
+                t = 9.4367290317 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t), "09:26:12")
                 TL.BlankLine()
 
-                Compare("UtilTests", "Platform Version", AscomUtil.PlatformVersion.ToString, ASCOMRegistryAccess.GetProfile("", "PlatformVersion"))
+                Compare("UtilTests", "Platform Version", Utl.PlatformVersion.ToString, ASCOMRegistryAccess.GetProfile("", "PlatformVersion"))
                 TL.BlankLine()
 
-                Compare("UtilTests", "TimeZoneName", AscomUtil.TimeZoneName.ToString, GetTimeZoneName)
-                CompareDouble("UtilTests", "TimeZoneOffset", AscomUtil.TimeZoneOffset, -CDbl(TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours), 0.017) '1 minute tolerance
-                Compare("UtilTests", "UTCDate", AscomUtil.UTCDate.ToString, Date.UtcNow)
-                CompareDouble("UtilTests", "Julian date", AscomUtil.JulianDate, Date.UtcNow.ToOADate() + 2415018.5, 0.00002) '1 second tolerance
+                Compare("UtilTests", "TimeZoneName", Utl.TimeZoneName.ToString, GetTimeZoneName)
+                CompareDouble("UtilTests", "TimeZoneOffset", Utl.TimeZoneOffset, -CDbl(TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours), 0.017) '1 minute tolerance
+                Compare("UtilTests", "UTCDate", Utl.UTCDate.ToString, Date.UtcNow)
+                CompareDouble("UtilTests", "Julian date", Utl.JulianDate, Date.UtcNow.ToOADate() + 2415018.5, 0.00002) '1 second tolerance
                 TL.BlankLine()
 
-                Compare("UtilTests", "DateJulianToLocal", Format(AscomUtil.DateJulianToLocal(TestJulianDate).Subtract(TimeZone.CurrentTimeZone.GetUtcOffset(Now)), "dd MMM yyyy hh:mm:ss.ffff"), "20 " & AbbreviatedMonthNames(11) & " 2010 12:00:00.0000")
-                Compare("UtilTests", "DateJulianToUTC", Format(AscomUtil.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), "20 " & AbbreviatedMonthNames(11) & " 2010 12:00:00.0000")
-                Compare("UtilTests", "DateLocalToJulian", AscomUtil.DateLocalToJulian(TestDate.Add(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "2455349" & DecimalSeparator & "19236111")
-                Compare("UtilTests", "DateLocalToUTC", Format(AscomUtil.DateLocalToUTC(TestDate.Add(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "dd MMM yyyy hh:mm:ss.ffff"), "01 " & AbbreviatedMonthNames(5) & " 2010 04:37:00.0000")
-                Compare("UtilTests", "DateUTCToJulian", AscomUtil.DateUTCToJulian(TestDate).ToString, "2455349" & DecimalSeparator & "19236111")
-                Compare("UtilTests", "DateUTCToLocal", Format(AscomUtil.DateUTCToLocal(TestDate.Subtract(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "dd MMM yyyy hh:mm:ss.ffff"), "01 " & AbbreviatedMonthNames(5) & " 2010 04:37:00.0000")
+                Compare("UtilTests", "DateJulianToLocal", Format(Utl.DateJulianToLocal(TestJulianDate).Subtract(TimeZone.CurrentTimeZone.GetUtcOffset(Now)), "dd MMM yyyy hh:mm:ss.ffff"), "20 " & AbbreviatedMonthNames(11) & " 2010 12:00:00.0000")
+                Compare("UtilTests", "DateJulianToUTC", Format(Utl.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), "20 " & AbbreviatedMonthNames(11) & " 2010 12:00:00.0000")
+                Compare("UtilTests", "DateLocalToJulian", Utl.DateLocalToJulian(TestDate.Add(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "2455349" & DecimalSeparator & "19236111")
+                Compare("UtilTests", "DateLocalToUTC", Format(Utl.DateLocalToUTC(TestDate.Add(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "dd MMM yyyy hh:mm:ss.ffff"), "01 " & AbbreviatedMonthNames(5) & " 2010 04:37:00.0000")
+                Compare("UtilTests", "DateUTCToJulian", Utl.DateUTCToJulian(TestDate).ToString, "2455349" & DecimalSeparator & "19236111")
+                Compare("UtilTests", "DateUTCToLocal", Format(Utl.DateUTCToLocal(TestDate.Subtract(TimeZone.CurrentTimeZone.GetUtcOffset(Now))), "dd MMM yyyy hh:mm:ss.ffff"), "01 " & AbbreviatedMonthNames(5) & " 2010 04:37:00.0000")
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t), "43° 07'")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-"), "43-07'")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";"), "43-07;")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";", 3), "43-07" & DecimalSeparator & "434;")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t), "43° 07'")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, "-"), "43-07'")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, "-", ";"), "43-07;")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, "-", ";", 3), "43-07" & DecimalSeparator & "434;")
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t), "43° 07' 26""")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-"), "43-07' 26""")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";"), "43-07;26""")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#"), "43-07;26#")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#", 3), "43-07;26" & DecimalSeparator & "021#")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t), "43° 07' 26""")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, "-"), "43-07' 26""")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, "-", ";"), "43-07;26""")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, "-", ";", "#"), "43-07;26#")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, "-", ";", "#", 3), "43-07;26" & DecimalSeparator & "021#")
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t), "02:52")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-"), "02-52")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";"), "02-52;")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";", 3), "02-52" & DecimalSeparator & "496;")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t), "02:52")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t, "-"), "02-52")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t, "-", ";"), "02-52;")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t, "-", ";", 3), "02-52" & DecimalSeparator & "496;")
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t), "02:52:30")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-"), "02-52:30")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";"), "02-52;30")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#"), "02-52;30#")
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#", 3), "02-52;29" & DecimalSeparator & "735#")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t), "02:52:30")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t, "-"), "02-52:30")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t, "-", ";"), "02-52;30")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t, "-", ";", "#"), "02-52;30#")
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t, "-", ";", "#", 3), "02-52;29" & DecimalSeparator & "735#")
                 TL.BlankLine()
 
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), "03:07")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-"), "03-07")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";"), "03-07;")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";", 3), "03-07" & DecimalSeparator & "434;")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t), "03:07")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t, "-"), "03-07")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t, "-", ";"), "03-07;")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t, "-", ";", 3), "03-07" & DecimalSeparator & "434;")
                 TL.BlankLine()
 
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), "03:07:26")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-"), "03-07:26")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";"), "03-07;26")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#"), "03-07;26#")
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#", 3), "03-07;26" & DecimalSeparator & "021#")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t), "03:07:26")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-"), "03-07:26")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";"), "03-07;26")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";", "#"), "03-07;26#")
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";", "#", 3), "03-07;26" & DecimalSeparator & "021#")
             Else 'Run teststo compare original 32bit only and new 32/64bit capabale components
-                t = 30.123456789 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, ":").ToString, DrvHlpUtil.DegreesToDM(t, ":").ToString)
-                t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, ":", ":", "", 4).ToString, DrvHlpUtil.DegreesToDMS(t, ":", ":", "", 4).ToString)
-                t = 50.123453456 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t).ToString, DrvHlpUtil.DegreesToHM(t).ToString)
-                t = 70.763245689 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t).ToString, DrvHlpUtil.DegreesToHMS(t).ToString)
-                ts = "43:56:78" & DecimalSeparator & "2567" : Compare("UtilTests", "DMSToDegrees", AscomUtil.DMSToDegrees(ts).ToString, DrvHlpUtil.DMSToDegrees(ts).ToString)
-                ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", AscomUtil.HMSToDegrees(ts).ToString, DrvHlpUtil.HMSToDegrees(ts))
-                ts = "14:37:23" : Compare("UtilTests", "HMSToHours", AscomUtil.HMSToHours(ts).ToString, DrvHlpUtil.HMSToHours(ts))
-                t = 15.567234086 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), DrvHlpUtil.HoursToHM(t))
-                t = 9.4367290317 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), DrvHlpUtil.HoursToHMS(t))
+                t = 30.123456789 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, ":").ToString, DrvHlpUtil.DegreesToDM(t, ":").ToString)
+                t = 60.987654321 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, ":", ":", "", 4).ToString, DrvHlpUtil.DegreesToDMS(t, ":", ":", "", 4).ToString)
+                t = 50.123453456 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t).ToString, DrvHlpUtil.DegreesToHM(t).ToString)
+                t = 70.763245689 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t).ToString, DrvHlpUtil.DegreesToHMS(t).ToString)
+                ts = "43:56:78" & DecimalSeparator & "2567" : Compare("UtilTests", "DMSToDegrees", Utl.DMSToDegrees(ts).ToString, DrvHlpUtil.DMSToDegrees(ts).ToString)
+                ts = "14:39:23" : Compare("UtilTests", "HMSToDegrees", Utl.HMSToDegrees(ts).ToString, DrvHlpUtil.HMSToDegrees(ts))
+                ts = "14:37:23" : Compare("UtilTests", "HMSToHours", Utl.HMSToHours(ts).ToString, DrvHlpUtil.HMSToHours(ts))
+                t = 15.567234086 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t), DrvHlpUtil.HoursToHM(t))
+                t = 9.4367290317 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t), DrvHlpUtil.HoursToHMS(t))
                 TL.BlankLine()
 
-                Compare("UtilTests", "Platform Version", AscomUtil.PlatformVersion.ToString, g_Util2.PlatformVersion.ToString)
-                Compare("UtilTests", "SerialTrace", AscomUtil.SerialTrace, g_Util2.SerialTrace)
-                Compare("UtilTests", "Trace File", AscomUtil.SerialTraceFile, g_Util2.SerialTraceFile)
+                Compare("UtilTests", "Platform Version", Utl.PlatformVersion.ToString, g_Util2.PlatformVersion.ToString)
+                Compare("UtilTests", "SerialTrace", Utl.SerialTrace, g_Util2.SerialTrace)
+                Compare("UtilTests", "Trace File", Utl.SerialTraceFile, g_Util2.SerialTraceFile)
                 TL.BlankLine()
 
-                Compare("UtilTests", "TimeZoneName", AscomUtil.TimeZoneName.ToString, g_Util2.TimeZoneName.ToString)
-                CompareDouble("UtilTests", "TimeZoneOffset", AscomUtil.TimeZoneOffset, g_Util2.TimeZoneOffset, 0.017) '1 minute tolerance
-                Compare("UtilTests", "UTCDate", AscomUtil.UTCDate.ToString, g_Util2.UTCDate.ToString)
-                CompareDouble("UtilTests", "Julian date", AscomUtil.JulianDate, g_Util2.JulianDate, 0.00002) '1 second tolerance
+                Compare("UtilTests", "TimeZoneName", Utl.TimeZoneName.ToString, g_Util2.TimeZoneName.ToString)
+                CompareDouble("UtilTests", "TimeZoneOffset", Utl.TimeZoneOffset, g_Util2.TimeZoneOffset, 0.017) '1 minute tolerance
+                Compare("UtilTests", "UTCDate", Utl.UTCDate.ToString, g_Util2.UTCDate.ToString)
+                CompareDouble("UtilTests", "Julian date", Utl.JulianDate, g_Util2.JulianDate, 0.00002) '1 second tolerance
                 TL.BlankLine()
 
-                Compare("UtilTests", "DateJulianToLocal", Format(AscomUtil.DateJulianToLocal(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateJulianToLocal(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"))
-                Compare("UtilTests", "DateJulianToUTC", Format(AscomUtil.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"))
-                Compare("UtilTests", "DateLocalToJulian", AscomUtil.DateLocalToJulian(TestDate), g_Util2.DateLocalToJulian(TestDate))
-                Compare("UtilTests", "DateLocalToUTC", Format(AscomUtil.DateLocalToUTC(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateLocalToUTC(TestDate), "dd MMM yyyy hh:mm:ss.ffff"))
-                Compare("UtilTests", "DateUTCToJulian", AscomUtil.DateUTCToJulian(TestDate).ToString, g_Util2.DateUTCToJulian(TestDate).ToString)
-                Compare("UtilTests", "DateUTCToLocal", Format(AscomUtil.DateUTCToLocal(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateUTCToLocal(TestDate), "dd MMM yyyy hh:mm:ss.ffff"))
+                Compare("UtilTests", "DateJulianToLocal", Format(Utl.DateJulianToLocal(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateJulianToLocal(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"))
+                Compare("UtilTests", "DateJulianToUTC", Format(Utl.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateJulianToUTC(TestJulianDate), "dd MMM yyyy hh:mm:ss.ffff"))
+                Compare("UtilTests", "DateLocalToJulian", Utl.DateLocalToJulian(TestDate), g_Util2.DateLocalToJulian(TestDate))
+                Compare("UtilTests", "DateLocalToUTC", Format(Utl.DateLocalToUTC(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateLocalToUTC(TestDate), "dd MMM yyyy hh:mm:ss.ffff"))
+                Compare("UtilTests", "DateUTCToJulian", Utl.DateUTCToJulian(TestDate).ToString, g_Util2.DateUTCToJulian(TestDate).ToString)
+                Compare("UtilTests", "DateUTCToLocal", Format(Utl.DateUTCToLocal(TestDate), "dd MMM yyyy hh:mm:ss.ffff"), Format(g_Util2.DateUTCToLocal(TestDate), "dd MMM yyyy hh:mm:ss.ffff"))
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t), DrvHlpUtil.DegreesToDM(t))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-"), DrvHlpUtil.DegreesToDM(t, "-"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";"), DrvHlpUtil.DegreesToDM(t, "-", ";"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", AscomUtil.DegreesToDM(t, "-", ";", 3), DrvHlpUtil.DegreesToDM(t, "-", ";", 3))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t), DrvHlpUtil.DegreesToDM(t))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, "-"), DrvHlpUtil.DegreesToDM(t, "-"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, "-", ";"), DrvHlpUtil.DegreesToDM(t, "-", ";"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDM", Utl.DegreesToDM(t, "-", ";", 3), DrvHlpUtil.DegreesToDM(t, "-", ";", 3))
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t), DrvHlpUtil.DegreesToDMS(t))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-"), DrvHlpUtil.DegreesToDMS(t, "-"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";"), DrvHlpUtil.DegreesToDMS(t, "-", ";"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#"), DrvHlpUtil.DegreesToDMS(t, "-", ";", "#"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", AscomUtil.DegreesToDMS(t, "-", ";", "#", 3), DrvHlpUtil.DegreesToDMS(t, "-", ";", "#", 3))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t), DrvHlpUtil.DegreesToDMS(t))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, "-"), DrvHlpUtil.DegreesToDMS(t, "-"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, "-", ";"), DrvHlpUtil.DegreesToDMS(t, "-", ";"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, "-", ";", "#"), DrvHlpUtil.DegreesToDMS(t, "-", ";", "#"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToDMS", Utl.DegreesToDMS(t, "-", ";", "#", 3), DrvHlpUtil.DegreesToDMS(t, "-", ";", "#", 3))
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t), DrvHlpUtil.DegreesToHM(t))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-"), DrvHlpUtil.DegreesToHM(t, "-"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";"), DrvHlpUtil.DegreesToHM(t, "-", ";"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", AscomUtil.DegreesToHM(t, "-", ";", 3), DrvHlpUtil.DegreesToHM(t, "-", ";", 3))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t), DrvHlpUtil.DegreesToHM(t))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t, "-"), DrvHlpUtil.DegreesToHM(t, "-"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t, "-", ";"), DrvHlpUtil.DegreesToHM(t, "-", ";"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHM", Utl.DegreesToHM(t, "-", ";", 3), DrvHlpUtil.DegreesToHM(t, "-", ";", 3))
                 TL.BlankLine()
 
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t), DrvHlpUtil.DegreesToHMS(t))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-"), DrvHlpUtil.DegreesToHMS(t, "-"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";"), DrvHlpUtil.DegreesToHMS(t, "-", ";"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#"), DrvHlpUtil.DegreesToHMS(t, "-", ";", "#"))
-                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", AscomUtil.DegreesToHMS(t, "-", ";", "#", 3), DrvHlpUtil.DegreesToHMS(t, "-", ";", "#", 3))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t), DrvHlpUtil.DegreesToHMS(t))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t, "-"), DrvHlpUtil.DegreesToHMS(t, "-"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t, "-", ";"), DrvHlpUtil.DegreesToHMS(t, "-", ";"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t, "-", ";", "#"), DrvHlpUtil.DegreesToHMS(t, "-", ";", "#"))
+                t = 43.123894628 : Compare("UtilTests", "DegreesToHMS", Utl.DegreesToHMS(t, "-", ";", "#", 3), DrvHlpUtil.DegreesToHMS(t, "-", ";", "#", 3))
                 TL.BlankLine()
 
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t), DrvHlpUtil.HoursToHM(t))
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-"), DrvHlpUtil.HoursToHM(t, "-"))
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";"), DrvHlpUtil.HoursToHM(t, "-", ";"))
-                t = 3.123894628 : Compare("UtilTests", "HoursToHM", AscomUtil.HoursToHM(t, "-", ";", 3), DrvHlpUtil.HoursToHM(t, "-", ";", 3))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t), DrvHlpUtil.HoursToHM(t))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t, "-"), DrvHlpUtil.HoursToHM(t, "-"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t, "-", ";"), DrvHlpUtil.HoursToHM(t, "-", ";"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHM", Utl.HoursToHM(t, "-", ";", 3), DrvHlpUtil.HoursToHM(t, "-", ";", 3))
                 TL.BlankLine()
 
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t), DrvHlpUtil.HoursToHMS(t))
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-"), DrvHlpUtil.HoursToHMS(t, "-"))
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";"), DrvHlpUtil.HoursToHMS(t, "-", ";"))
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#"), DrvHlpUtil.HoursToHMS(t, "-", ";", "#"))
-                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", AscomUtil.HoursToHMS(t, "-", ";", "#", 3), DrvHlpUtil.HoursToHMS(t, "-", ";", "#", 3))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t), DrvHlpUtil.HoursToHMS(t))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-"), DrvHlpUtil.HoursToHMS(t, "-"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";"), DrvHlpUtil.HoursToHMS(t, "-", ";"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";", "#"), DrvHlpUtil.HoursToHMS(t, "-", ";", "#"))
+                t = 3.123894628 : Compare("UtilTests", "HoursToHMS", Utl.HoursToHMS(t, "-", ";", "#", 3), DrvHlpUtil.HoursToHMS(t, "-", ";", "#", 3))
             End If
             TL.BlankLine()
             Status("Running Utilities timing tests")
@@ -4740,11 +4811,12 @@ Public Class DiagnosticsForm
             TL.BlankLine()
 
             Try
-                AscomUtil.Dispose()
+                Utl.Dispose()
                 TL.LogMessage("UtilTests", "ASCOM.Utilities.Dispose, Disposed OK")
             Catch ex As Exception
                 LogException("UtilTests", "ASCOM.Utilities.Dispose Exception: " & ex.ToString)
             End Try
+
             If Not Is64Bit Then
                 Try
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(DrvHlpUtil)
@@ -4753,8 +4825,10 @@ Public Class DiagnosticsForm
                     LogException("UtilTests", "Helper Util.Release Exception: " & ex.ToString)
                 End Try
             End If
-            AscomUtil = Nothing
+
+            Utl = Nothing
             DrvHlpUtil = Nothing
+
             TL.LogMessage("UtilTests", "Finished")
             TL.BlankLine()
 
