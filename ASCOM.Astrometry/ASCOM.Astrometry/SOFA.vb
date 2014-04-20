@@ -22,12 +22,12 @@ Namespace SOFA
     ''' <item><description>Star space motion</description></item>
     ''' <item><description>Star catalogue conversion</description></item>
     ''' </list>
-    ''' <para><b>The class's functionality is provided by underlying DLLs compiled from unmodified original C source code distributed by SOFA but does not constitute software provided by and/or endorsed by SOFA.
+    ''' <para><b>The class's functionality is provided by underlying DLLs compiled from unmodified original C source code distributed by SOFA but the class does not constitute software provided by and/or endorsed by SOFA.
     ''' No change whatsoever has been made to the algorithms implemented by SOFA that realise IAU standards.</b> 
     ''' </para>
     ''' <para>SOFA provides a validation routine to confirm that the compiled library provides expected results. 32 and 64bit versions of this routine (SofaTestXX.exe and SofaTestXX-64.exe, where XX is the issue number) 
     ''' are included in this distribution and can be found in the Common Files\ASCOM\Astrometry directory. To run them open a command prompt in the Astrometry directory and enter the commands SofaTest10 /verbose and SofaTest10-64 /verbose.
-    ''' The susbset of these tests that is relevant to the astrometry routines presented in this component have also been incorporated in the ASCOM Diagnostics tool and expected operation of the SOFA routnines can be confirmed through this tool.</para>
+    ''' The susbset of these tests that is relevant to the routines presented in this component have also been incorporated in the ASCOM Diagnostics tool and expected operation of the SOFA routnines can be confirmed through this tool.</para>
     ''' <para>Further information on the full library of SOFA routines is available here: http://www.iausofa.org/ </para>
     ''' </remarks>
     <Guid("DF65E97B-ED0E-4F48-BBC9-4A8854C0EF6E"), ClassInterface(ClassInterfaceType.None), ComVisible(True)> _
