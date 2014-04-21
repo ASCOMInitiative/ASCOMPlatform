@@ -42,6 +42,7 @@ Helper.dll
 Helper2.dll
 icon.ico
 Index.htm
+MasterPlatformVersion.txt
 MigrationSupport.dll
 MigrationSupport.pdb
 MigrationSupport.xml
@@ -56,6 +57,17 @@ swoosh.avi
 UninstallAscom.exe
 UninstallAscom.pdb
 $
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1708,7 +1720,7 @@ ASCOM Platform 6.1 SP1 - RC1
 ASCOM Platform 6.1 SP1 Installation - RC1
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{B4BA090A-90CD-4CE9-92D8-32E9795E8CC6}
+{E9829354-EEE1-4A7F-A603-54709AAD862E}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk

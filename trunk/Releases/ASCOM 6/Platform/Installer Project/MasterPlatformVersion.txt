@@ -1,0 +1,24 @@
+6
+1
+1
+
+The first line of this file must contain the major Platform version number
+The second line of this file must contain the minor Platform version number
+The third line of this file must contain the service pack number starting with 0 for the initial release
+
+E.g for the initial release of Platform 6.0 the first three lines of this file would be:
+6
+0
+0
+
+While for service pack 2 of Platform 6.1 the first three lines would be:
+6
+1
+2
+
+When version numbers are constructed by the installer the subversion build number is added as the fourth version number component
+giving an overall format of MajorVersion.MinorVersion.ServicePack.SubversionCommitNumber
+
+This file is physically located at: YourCheckoutDirectory\Releases\ASCOM 6\Platform\Installer Project\MasterPlatformVersion.txt
+and is included as content in the installer itself, where it is read at install time on the user's machine to provide appropriate
+values to place in the the Profile store.

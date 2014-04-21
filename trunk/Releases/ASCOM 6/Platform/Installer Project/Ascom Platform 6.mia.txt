@@ -103,6 +103,9 @@ end
 [DEFINE REGION: Define Setup Globals]
 Comment: Initialize Setup Globals
 Set Variable ASCOMERROR to 
+Set Variable PLATFORMVERSIONMAJOR to 
+Set Variable PLATFORMVERSIONMINOR to 
+Set Variable PLATFORMVERSIONSPNUMBER to 
  
 Comment: Set up values for a 32bit OS
 Set Variable PROGRAMFILES32 to 
@@ -230,6 +233,12 @@ if Variable WIN64MODE Equals TRUE
 else
   Write into Text File $SETUPLOG$ from Value $TIME$ Architecture: 32bit (at end of file)
 end
+ 
+Comment: Read in the Platform major, minor and service pack numbers from the master file
+Read from Text File $SUPPORTDIR$\MasterPlatformVersion.txt into Variable PLATFORMVERSIONMAJOR
+Read from Text File $SUPPORTDIR$\MasterPlatformVersion.txt into Variable PLATFORMVERSIONMINOR
+Read from Text File $SUPPORTDIR$\MasterPlatformVersion.txt into Variable PLATFORMVERSIONSPNUMBER
+ 
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Win64Mode: $WIN64MODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Setup Path: $SETUPPATH$  (at end of file)
@@ -250,6 +259,8 @@ Write into Text File $SETUPLOG$ from Value $TIME$ DesktopDir: $DESKTOPDIR$ (at e
 Write into Text File $SETUPLOG$ from Value $TIME$ DesktopDirAll: $DESKTOPDIRALL$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ ASCOMStartMenu: $ASCOMSTARTMENU$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ AllUsers: $ALLUSERS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value  (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Platform Version: $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$.$PLATFORMVERSIONSPNUMBER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 [END REGION]
  
@@ -954,7 +965,7 @@ else
       [DEFINE REGION: Registry Keys 32bit]
       Comment: Create registry keys
       Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, 6.1 (permanent)
+      Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
@@ -1078,7 +1089,7 @@ else
       [DEFINE REGION: Registry Keys 64bit]
       Comment: Create registry keys
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\PlatformVersion, 6.1 (permanent)
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Camera Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Chooser\,  (permanent)
