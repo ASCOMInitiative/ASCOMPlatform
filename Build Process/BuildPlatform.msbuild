@@ -94,7 +94,7 @@
         </SvnExport>
         <Message Text="Revision Level: $(Revision)"/>
 
-        <!-- Get the Platform version numbers from the MasterPlatformVersion file -->
+        <!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export-->
         <ReadLinesFromFile File="$(VersionFile)" >
             <Output TaskParameter="Lines" 
 		    ItemName="VersionNumberList" />
@@ -105,8 +105,7 @@
 		    <PlatformMajor>$(PlatformNumber.Split(';')[0])</PlatformMajor>
 		    <PlatformMinor>$(PlatformNumber.Split(';')[1])</PlatformMinor>
 		    <PlatformServicePack>$(PlatformNumber.Split(';')[2])</PlatformServicePack>
-			<!-- Current Platform version -->
-			<PlatformVersion>$(PlatformMajor).$(PlatformMinor)</PlatformVersion>
+			<PlatformVersion>$(PlatformMajor).$(PlatformMinor)</PlatformVersion>	<!-- Current Platform version Major.Minor-->
         </PropertyGroup>
 	    <Message Text="Version numbers - Major: $(PlatformMajor), Minor: $(PlatformMinor), ServicePack: $(PlatformServicePack), MasterPlatformLevel: $(PlatformVersion)" />
 
@@ -115,7 +114,7 @@
         <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="PlatformVersion" Value="$(PlatformVersion)" />
         <RegistryWrite KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM" ValueName="SerTraceFile" Value="C:\\SerialTraceAuto.txt" />
 		
-        <!-- Create global AssemblyVersion attributes from the Platform version and revision numbers.-->
+        <!-- Create global AssemblyVersion attributes from the Platform version, service pack and revision numbers.-->
         <AssemblyInfo CodeLanguage="CS" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.cs" AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" />
         <AssemblyInfo CodeLanguage="VB" OutputFile="$(CheckoutDirectory)\AssemblyVersionInfo.vb" AssemblyFileVersion="$(PlatformVersion).$(PlatformServicePack).$(Revision)" />
 
@@ -144,11 +143,21 @@
         <!-- Make the VS Template zip files from their source files-->
         <Exec Command='"$(CheckoutDirectory)\$(MakeTemplatesExecutable)" "$(CheckoutDirectory)\$(DriverTemplatesDirectory)" "TemplateSources"' />
     
-        <!-- Build the help files.-->
+        <!-- Build the help files for Platform and Developer.-->
         <MSBuild Projects="$(CheckoutDirectory)\$(PlatformHelpProject)" Properties="Configuration=Release" />
         <MSBuild Projects="$(CheckoutDirectory)\$(DeveloperHelpProject)" Properties="Configuration=Release" />
+	    
+		<!-- Update the file version numbers in the InstallAware project files -->
+	    <ItemGroup>
+            <IAProjectFiles Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.mpr;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.mpr" />
+        </ItemGroup>	
+        <FileUpdate Files="@(IAProjectFiles)" 
+		    Encoding="ASCII"
+    		Regex="$(PlatformVersion).9999.9999" 
+		    ReplacementText="$(PlatformVersion).$(PlatformServicePack).$(Revision)">
+	    </FileUpdate>
 
-        <!-- Add browser compatibility line to all the html files so that all browsers can read them on ASCOM-Talk -->
+        <!-- Add browser compatibility line to all the html help files so that all browsers can read them on ASCOM-Talk -->
         <ItemGroup>
             <HTMLHelpFiles Include="$(CheckoutDirectory)\$(PlatformHelpDirectory)\*.html;$(CheckoutDirectory)\$(PlatformHelpDirectory)\html\*.htm;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\*.html;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\html\*.htm" />
         </ItemGroup>
@@ -157,16 +166,7 @@
 		    ReplacementText="&lt;head&gt;&lt;meta&#32;http-equiv&#61;&quot;X-UA-Compatible&quot;&#32;content&#61;&quot;IE&#61;5&quot;&#32;&#47;&gt;">
 	    </FileUpdate>
 		
-	    <!-- Update the file version numbers in the InstallAware project files -->
-	    <ItemGroup>
-            <IAProjetcFiles Include="$(CheckoutDirectory)\$(PlatformInstallerDirectory)\*.mpr;$(CheckoutDirectory)\$(DeveloperInstallerDirectory)\*.mpr" />
-        </ItemGroup>
-        <FileUpdate Files="@(IAProjetcFiles)" 
-    		Regex="$(PlatformVersion).9999.9999" 
-		    ReplacementText="$(PlatformVersion).$(PlatformServicePack).$(Revision)">
-	    </FileUpdate>
-
-	    <!-- Build the installers -->
+	    <!-- Build the InstallAware installers -->
         <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
         <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(DeveloperInstallerProject)" /r' />
 
@@ -184,4 +184,5 @@
         <Zip Files="@(ZipFiles)" ZipFileName="$(MSBuildProjectDirectory)\RemoveASCOM.zip" WorkingDirectory="$(CheckoutDirectory)\$(RemoveASCOMDirectory)"/>
 
   </Target>
+
 </Project>
