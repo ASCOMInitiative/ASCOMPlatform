@@ -29,7 +29,7 @@
     		<title>Key Changes in 6.1 - For Everyone</title>
       		<content>
 				<list class="bullet">
-	      			<listItem>Chooser - When the mouse pointer hovers over the <legacyBold>Properties...</legacyBold> button, Chooser now displays a tooltip desciping the button's purpose.</listItem>
+	      			<listItem>Chooser - When the mouse pointer hovers over the <legacyBold>Properties...</legacyBold> button, Chooser now displays a tooltip describing the button's purpose.</listItem>
 	      			<listItem>Chooser - When a driver is selected for the first time, the Chooser dialogue displays a more visible alert. This describes the need to 
 	      			check driver configuration before use and that the <legacyBold>OK</legacyBold> button will remain greyed out until this is done.</listItem>
 	  			</list>
@@ -46,7 +46,7 @@
     				<para>SOFA provides a validation routine to confirm that the compiled library provides expected results. 32 and 64bit versions of this routine (SofaTestXX.exe and 
     				SofaTestXX-64.exe, where XX is the issue number) are included in this distribution and can be found in the Common Files\ASCOM\Astrometry directory. To run them open 
     				a command prompt in the Astrometry directory and enter the commands SofaTest10 /verbose and SofaTest10-64 /verbose. The susbset of these tests that is relevant to 
-    				the routines presented in this component have also been incorporated in the ASCOM Diagnostics tool and expected operation of the SOFA routnines can also be confirmed through this tool.</para>
+    				the routines presented in this component have also been incorporated in the ASCOM Diagnostics tool and expected operation of the SOFA routines can also be confirmed through this tool.</para>
 	      			<para>The SOFA component has been introduced to provide a migration path from the NOVAS routines that have reliability issues when very close to the celestial poles. 
 	      			(Please see the notes on <link xlink:href="#DeprecatedCapability">Deprecated Components</link> below.)</para>
 	      			</listItem>
