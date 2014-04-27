@@ -13,12 +13,19 @@ Friend Class ChooserForm
     ' 21-Feb-09 pwgs    5.1.0 - Refactored for Utilities
     '---------------------------------------------------------------------
 
-    Private Const ALERT_TITLE As String = "ASCOM Chooser"
+    Private Const ALERT_MESSAGEBOX_TITLE As String = "ASCOM Chooser"
+    Private Const PROPERTIES_TOOLTIP_DISPLAY_TIME As Integer = 5000 ' Time to display the Properties tooltip (milliseconds)
+
+    Private Const TOOLTIP_PROPERTIES_TITLE As String = "Driver Setup"
+    Private Const TOOLTIP_PROPERTIES_MESSAGE As String = "Check or change driver Properties (configuration)"
+    Private Const TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE As String = "You must check driver configuration before first time use, please click the Properties... button." & vbCrLf & "The OK button will remain greyed out until this is done."
 
     Private m_sDeviceType, m_sResult, m_sStartSel, sProgID As String
     Private m_Drivers As Generic.SortedList(Of String, String)
-    Private WithEvents ToolTipMsg As ToolTip
+    Private WithEvents ToolTip64BitWarningMessage As ToolTip
+    Private ToolTipPropertiesMessage As ToolTip
     Private DriverIsCompatible As String = ""
+    Dim CurrentWarningTitle, CurrentWarningMesage As String
     Private TL As TraceLogger
 
     Private Sub ChooserForm_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
@@ -37,17 +44,19 @@ Friend Class ChooserForm
             'Create the trace logger
             TL = New TraceLogger("", "ChooserForm")
             TL.Enabled = GetBool(TRACE_UTIL, TRACE_UTIL_DEFAULT)
+            'TooltipTimer = New Timers.Timer(PROPERTIES_TOOLTIP_DISPLAY_TIME)
+            'DriverIsNotConfigured = False ' Set to a default value that ensures that the warning message will not be dispayed when the form is first loaded
 
-            'Configure the tooltip warning for driver compatibility messages
-            ToolTipMsg = New ToolTip()
-            ToolTipMsg.UseAnimation = True
-            ToolTipMsg.UseFading = False
-            ToolTipMsg.ToolTipIcon = ToolTipIcon.Warning
-            ToolTipMsg.AutoPopDelay = 5000
-            ToolTipMsg.InitialDelay = 0
-            ToolTipMsg.IsBalloon = False
-            ToolTipMsg.ReshowDelay = 0
-            ToolTipMsg.OwnerDraw = False
+            'Configure the tooltip warning for 32/64bit driver compatibility messages
+            ToolTip64BitWarningMessage = New ToolTip()
+
+            ' Configure the Properties button tooltip
+            ToolTipPropertiesMessage = New ToolTip()
+            ToolTipPropertiesMessage.IsBalloon = True
+            ToolTipPropertiesMessage.ToolTipIcon = ToolTipIcon.Info
+            ToolTipPropertiesMessage.UseFading = True
+            ToolTipPropertiesMessage.ToolTipTitle = TOOLTIP_PROPERTIES_TITLE
+            ToolTipPropertiesMessage.SetToolTip(cmdProperties, TOOLTIP_PROPERTIES_MESSAGE)
 
             ' Enumerate the available ASCOM scope drivers, and
             ' load their descriptions and ProgIDs into the
@@ -71,7 +80,7 @@ Friend Class ChooserForm
             'cbDriverSelector = Me.cbDriverSelector ' Handy shortcut
             cbDriverSelector.Items.Clear()
             If m_Drivers.Count = 0 Then
-                MsgBox("There are no ASCOM " & m_sDeviceType & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+                MsgBox("There are no ASCOM " & m_sDeviceType & " drivers installed.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
             Else
                 For Each de As Generic.KeyValuePair(Of String, String) In m_Drivers
                     Description = de.Value ' Set the device description
@@ -223,20 +232,21 @@ Friend Class ChooserForm
             End Try
 
             If bConnected Then
-                MsgBox("The device is already connected. Just click OK.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Information + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+                MsgBox("The device is already connected. Just click OK.", CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Information + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
             Else
                 Try
                     oDrv.SetupDialog()
                 Catch ex As Exception
-                    MsgBox("Driver setup method failed: """ & sProgID & """ " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+                    MsgBox("Driver setup method failed: """ & sProgID & """ " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
                     LogEvent("ChooserForm", "Driver setup method failed for driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserSetupFailed, ex.ToString)
                 End Try
             End If
 
             ProfileStore.WriteProfile("Chooser", sProgID & " Init", "True") ' Remember it has been initialized
             Me.cmdOK.Enabled = True
+            TooltipWarningsClear()
         Catch ex As Exception
-            MsgBox("Failed to load driver: """ & sProgID & """ " & ex.ToString, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+            MsgBox("Failed to load driver: """ & sProgID & """ " & ex.ToString, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
             LogEvent("ChooserForm", "Failed to load driver: """ & sProgID & """", Diagnostics.EventLogEntryType.Error, EventLogErrors.ChooserDriverFailed, ex.ToString)
         End Try
 
@@ -284,6 +294,8 @@ Friend Class ChooserForm
 
         If Me.cbDriverSelector.SelectedIndex >= 0 Then ' Something selected
 
+            TooltipWarningsClear() 'Hide any previous message
+
             'Find ProgID corresponding to description
             For Each Driver As Generic.KeyValuePair(Of String, String) In m_Drivers
                 If Driver.Value = "" Then 'Deal with the possibility that the description is missing, in which case use the ProgID as the identifier
@@ -298,18 +310,24 @@ Friend Class ChooserForm
             If DriverIsCompatible <> "" Then 'This is an incompatible driver
                 Me.cmdProperties.Enabled = False ' So prevent access!
                 Me.cmdOK.Enabled = False
-                WarningMessageShow()
+                TL.LogMessage("DriverSelected", "Showing incompatible driver message")
+                WarningMessageShow("Incompatible Driver (" & sProgID & ")", DriverIsCompatible)
             Else
-                WarningMessageHide() 'Hide any previous message
                 Me.cmdProperties.Enabled = True ' Turn on Properties
                 buf = ProfileStore.GetProfile("Chooser", sProgID & " Init")
                 If LCase(buf) = "true" Then
                     Me.cmdOK.Enabled = True ' This device has been initialized
+                    CurrentWarningMesage = ""
+                    TL.LogMessage("DriverSelected", "Driver is compatible and configured so no message")
                 Else
-                    Me.cmdOK.Enabled = False ' Never been initialized
+                    ' 19th April 2014 - Behaviour changed to ensure the the OK button is always enabled
+                    Me.cmdOK.Enabled = False ' Ensure OK is enabled
+                    TL.LogMessage("DriverSelected", "Showing first time configuration required message")
+                    WarningMessageShow(TOOLTIP_PROPERTIES_TITLE, TOOLTIP_PROPERTIES_FIRST_TIME_MESSAGE)
                 End If
             End If
         Else ' Nothing has been selected
+            TL.LogMessage("DriverSelected", "Nothing has been selected")
             Me.cmdProperties.Enabled = False
             Me.cmdOK.Enabled = False
         End If
@@ -318,23 +336,35 @@ Friend Class ChooserForm
         ProfileStore = Nothing
     End Sub
 
-    Sub WarningMessageShow()
-        If DriverIsCompatible <> "" Then
-            ToolTipMsg.ToolTipTitle = "Incompatible Driver (" & sProgID & ")" 'Set warning message tooltip title
-            If DriverIsCompatible.Contains(vbCrLf) Then
-                ToolTipMsg.Show(DriverIsCompatible, Me, 18, 35) 'Display at position for a two line message
-            Else
-                ToolTipMsg.Show(DriverIsCompatible, Me, 18, 50) 'Display at position for a one line message
-            End If
+    Private Sub WarningMessageShow(Title As String, Message As String)
+        TooltipWarningsClear()
+        ToolTip64BitWarningMessage.UseAnimation = True
+        ToolTip64BitWarningMessage.UseFading = False
+        ToolTip64BitWarningMessage.ToolTipIcon = ToolTipIcon.Warning
+        ToolTip64BitWarningMessage.AutoPopDelay = 5000
+        ToolTip64BitWarningMessage.InitialDelay = 0
+        ToolTip64BitWarningMessage.IsBalloon = False
+        ToolTip64BitWarningMessage.ReshowDelay = 0
+        ToolTip64BitWarningMessage.OwnerDraw = False
+        ToolTip64BitWarningMessage.ToolTipTitle = Title '"Incompatible Driver (" & sProgID & ")" 'Set warning message tooltip title
+        CurrentWarningTitle = Title
+        CurrentWarningMesage = Message
+
+        If Message.Contains(vbCrLf) Then
+            ToolTip64BitWarningMessage.Show(Message, Me, 18, 35) 'Display at position for a two line message
+        Else
+            ToolTip64BitWarningMessage.Show(Message, Me, 18, 50) 'Display at position for a one line message
         End If
     End Sub
 
-    Sub WarningMessageHide()
-        ToolTipMsg.RemoveAll()
+    Private Sub TooltipWarningsClear()
+        ToolTip64BitWarningMessage.RemoveAll()
+        CurrentWarningTitle = ""
+        CurrentWarningMesage = ""
     End Sub
 
-    Sub ChooserForm_ShowMove(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown, Me.Move
-        WarningMessageShow()
+    Private Sub ChooserForm_ShowMove(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Move
+        If CurrentWarningMesage <> "" Then WarningMessageShow(CurrentWarningTitle, CurrentWarningMesage)
     End Sub
 
     Private Sub ChooserForm_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Me.Paint
@@ -349,7 +379,7 @@ Friend Class ChooserForm
         Try
             Process.Start("http://ASCOM-Standards.org/")
         Catch ex As Exception
-            MsgBox("Unable to display ASCOM-Standards web site in your browser: " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_TITLE)
+            MsgBox("Unable to display ASCOM-Standards web site in your browser: " & ex.Message, CType(MsgBoxStyle.OkOnly + MsgBoxStyle.Exclamation + MsgBoxStyle.MsgBoxSetForeground, MsgBoxStyle), ALERT_MESSAGEBOX_TITLE)
         End Try
     End Sub
 

@@ -21,4 +21,7 @@ giving an overall format of MajorVersion.MinorVersion.ServicePack.SubversionComm
 
 This file is physically located at: YourCheckoutDirectory\Releases\ASCOM 6\Platform\Installer Project\MasterPlatformVersion.txt
 and is included as content in the installer itself, where it is read at install time on the user's machine to provide appropriate
-values to place in the the Profile store.
+values to place in the the Profile store. 
+
+The file is also used at build time to set the Installaware product version number, which is displayed when the installer exeutable 
+is right clicked and the details tab is selected.
