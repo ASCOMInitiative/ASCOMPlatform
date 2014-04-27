@@ -224,7 +224,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diagnostics", "Diagnostics"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DriverConnect", "ASCOM.DriverConnect\ASCOM.DriverConnect.csproj", "{E39CFF76-C086-425A-93FD-E60BA491D45C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MasterPlatform Version Number", "MasterPlatform Version Number", "{94891499-3A68-4E4D-B9E7-2F2B7A59A2AB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Master Platform Version Number", "Master Platform Version Number", "{94891499-3A68-4E4D-B9E7-2F2B7A59A2AB}"
 	ProjectSection(SolutionItems) = preProject
 		Releases\ASCOM 6\Platform\Installer Project\MasterPlatformVersion.txt = Releases\ASCOM 6\Platform\Installer Project\MasterPlatformVersion.txt
 	EndProjectSection

@@ -29,7 +29,9 @@
     		<title>Key Changes in 6.1 - For Everyone</title>
       		<content>
 				<list class="bullet">
-	      			<listItem>None.</listItem>
+	      			<listItem>Chooser - When the mouse pointer hovers over the <legacyBold>Properties...</legacyBold> button, Chooser now displays a tooltip desciping the button's purpose.</listItem>
+	      			<listItem>Chooser - When a driver is selected for the first time, the Chooser dialogue displays a more visible alert. This describes the need to 
+	      			check driver configuration before use and that the <legacyBold>OK</legacyBold> button will remain greyed out until this is done.</listItem>
 	  			</list>
             </content>
 		</section>
