@@ -40,10 +40,13 @@ Namespace Transform
         Private TL As TraceLogger
         Private Sw, SwRecalculate As Stopwatch
 
-        Private Const HOURS2RADIANS = Math.PI / 12.0
-        Private Const DEGREES2RADIANS = Math.PI / 180.0
-        Private Const RADIANS2HOURS = 12.0 / Math.PI
-        Private Const RADIANS2DEGREES = 180.0 / Math.PI
+        Private Const HOURS2RADIANS As Double = Math.PI / 12.0
+        Private Const DEGREES2RADIANS As Double = Math.PI / 180.0
+        Private Const RADIANS2HOURS As Double = 12.0 / Math.PI
+        Private Const RADIANS2DEGREES As Double = 180.0 / Math.PI
+        Private Const TWOPI As Double = 2.0 * Math.PI
+
+        Private Const DATE_FORMAT As String = "dd/MM/yyyy HH:mm:ss.fff"
 
         Private Enum SetBy
             Never
@@ -126,13 +129,13 @@ Namespace Transform
         Property SiteLatitude() As Double Implements ITransform.SiteLatitude
             Get
                 CheckSet("SiteLatitude", SiteLatValue, "Site latitude has not been set")
-                TL.LogMessage("SiteLatitude Get", Utl.DegreesToDMS(SiteLatValue, ":", ":", "", 3))
+                TL.LogMessage("SiteLatitude Get", FormatDec(SiteLatValue))
                 Return SiteLatValue
             End Get
             Set(ByVal value As Double)
                 If SiteLatValue <> value Then RequiresRecalculate = True
                 SiteLatValue = value
-                TL.LogMessage("SiteLatitude Set", Utl.DegreesToDMS(value, ":", ":", "", 3))
+                TL.LogMessage("SiteLatitude Set", FormatDec(value))
             End Set
         End Property
 
@@ -145,13 +148,13 @@ Namespace Transform
         Property SiteLongitude() As Double Implements ITransform.SiteLongitude
             Get
                 CheckSet("SiteLongitude", SiteLongValue, "Site longitude has not been set")
-                TL.LogMessage("SiteLongitude Get", Utl.DegreesToDMS(SiteLongValue, ":", ":", "", 3))
+                TL.LogMessage("SiteLongitude Get", FormatDec(SiteLongValue))
                 Return SiteLongValue
             End Get
             Set(ByVal value As Double)
                 If SiteLongValue <> value Then RequiresRecalculate = True
                 SiteLongValue = value
-                TL.LogMessage("SiteLongitude Set", Utl.DegreesToDMS(value, ":", ":", "", 3))
+                TL.LogMessage("SiteLongitude Set", FormatDec(value))
             End Set
         End Property
 
@@ -233,7 +236,7 @@ Namespace Transform
             If (RA <> RAJ2000Value) Or (DEC <> DECJ2000Value) Then RequiresRecalculate = True
             RAJ2000Value = RA
             DECJ2000Value = DEC
-            TL.LogMessage("SetJ2000", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
+            TL.LogMessage("SetJ2000", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
         ''' <summary>
@@ -247,7 +250,7 @@ Namespace Transform
             If (RA <> RAApparentValue) Or (DEC <> DECApparentValue) Then RequiresRecalculate = True
             RAApparentValue = ValidateRA("SetApparent", RA)
             DECApparentValue = ValidateDec("SetApparent", DEC)
-            TL.LogMessage("SetApparent", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
+            TL.LogMessage("SetApparent", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
         '''<summary>
@@ -261,7 +264,21 @@ Namespace Transform
             If (RA <> RATopoValue) Or (DEC <> DECTopoValue) Then RequiresRecalculate = True
             RATopoValue = RA
             DECTopoValue = DEC
-            TL.LogMessage("SetTopocentric", "RA: " & Utl.HoursToHMS(RA, ":", ":", "", 3) & ", DEC: " & Utl.DegreesToDMS(DEC, ":", ":", "", 3))
+            TL.LogMessage("SetTopocentric", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
+        End Sub
+
+        ''' <summary>
+        ''' Sets the topocentric azimuth and elevation
+        ''' </summary>
+        ''' <param name="Azimuth">Topocentric Azimuth in degrees</param>
+        ''' <param name="Elevation">Topocentric elevation in degrees</param>
+        ''' <remarks></remarks>
+        Sub SetAzimuthElevation(Azimuth As Double, Elevation As Double) Implements ITransform.SetAzimuthElevation
+            LastSetBy = SetBy.AzimuthElevation
+            RequiresRecalculate = True
+            AzimuthTopoValue = Azimuth
+            ElevationTopoValue = Elevation
+            TL.LogMessage("SetAzimuthElevation", "Azimuth: " & FormatDec(Azimuth) & ", Elevation: " & FormatDec(Elevation))
         End Sub
 
         ''' <summary>
@@ -277,10 +294,10 @@ Namespace Transform
         ''' 
         ReadOnly Property RAJ2000() As Double Implements ITransform.RAJ2000
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read RAJ2000 before SetJ2000 or SetTopocentric has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read RAJ2000 before a SetXX method has been called")
                 Recalculate()
                 CheckSet("RAJ2000", RAJ2000Value, "RA J2000 can not be derived from the information provided. Are site parameters set?")
-                TL.LogMessage("RAJ2000 Get", Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3))
+                TL.LogMessage("RAJ2000 Get", FormatRA(RAJ2000Value))
                 Return RAJ2000Value
             End Get
         End Property
@@ -297,10 +314,10 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property DecJ2000() As Double Implements ITransform.DECJ2000
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECJ2000 before SetJ2000 or SetTopocentric has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECJ2000 before a SetXX method has been called")
                 Recalculate()
                 CheckSet("DecJ2000", DECJ2000Value, "DEC J2000 can not be derived from the information provided. Are site parameters set?")
-                TL.LogMessage("DecJ2000 Get", Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3))
+                TL.LogMessage("DecJ2000 Get", FormatDec(DECJ2000Value))
                 Return DECJ2000Value
             End Get
         End Property
@@ -317,10 +334,10 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property RATopocentric() As Double Implements ITransform.RATopocentric
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read RATopocentric before SetJ2000 or SetTopocentric has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read RATopocentric before a SetXX method  has been called")
                 Recalculate()
                 CheckSet("RATopocentric", RATopoValue, "RA topocentric can not be derived from the information provided. Are site parameters set?")
-                TL.LogMessage("RATopocentric Get", Utl.HoursToHMS(RATopoValue, ":", ":", "", 3))
+                TL.LogMessage("RATopocentric Get", FormatRA(RATopoValue))
                 Return RATopoValue
             End Get
         End Property
@@ -337,10 +354,10 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property DECTopocentric() As Double Implements ITransform.DECTopocentric
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECTopocentric before SetJ2000 or SetTopocentric has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECTopocentric before a SetXX method has been called")
                 Recalculate()
                 CheckSet("DECTopocentric", DECTopoValue, "DEC topocentric can not be derived from the information provided. Are site parameters set?")
-                TL.LogMessage("DECTopocentric Get", Utl.DegreesToDMS(DECTopoValue, ":", ":", "", 3))
+                TL.LogMessage("DECTopocentric Get", FormatDec(DECTopoValue))
                 Return DECTopoValue
             End Get
         End Property
@@ -357,9 +374,9 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property RAApparent() As Double Implements ITransform.RAApparent
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECApparent before SetJ2000 or SetApparent has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECApparent before a SetXX method has been called")
                 Recalculate()
-                TL.LogMessage("RAApparent Get", Utl.HoursToHMS(RAApparentValue, ":", ":", "", 3))
+                TL.LogMessage("RAApparent Get", FormatRA(RAApparentValue))
                 Return RAApparentValue
             End Get
         End Property
@@ -376,9 +393,9 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property DECApparent() As Double Implements ITransform.DECApparent
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECApparent before SetJ2000 or SetApparent has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read DECApparent before a SetXX method has been called")
                 Recalculate()
-                TL.LogMessage("DECApparent Get", Utl.DegreesToDMS(DECApparentValue, ":", ":", "", 3))
+                TL.LogMessage("DECApparent Get", FormatDec(DECApparentValue))
                 Return DECApparentValue
             End Get
         End Property
@@ -395,11 +412,11 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property AzimuthTopocentric() As Double Implements ITransform.AzimuthTopocentric
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read AzimuthTopocentric before SetJ2000 or SetApparent has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read AzimuthTopocentric before a SetXX method has been called")
                 RequiresRecalculate = True 'Force a recalculation of Azimuth
                 Recalculate()
                 CheckSet("AzimuthTopocentric", AzimuthTopoValue, "Azimuth topocentric can not be derived from the information provided. Are site parameters set?")
-                TL.LogMessage("AzimuthTopocentric Get", Utl.DegreesToDMS(AzimuthTopoValue, ":", ":", "", 3))
+                TL.LogMessage("AzimuthTopocentric Get", FormatDec(AzimuthTopoValue))
                 Return AzimuthTopoValue
             End Get
         End Property
@@ -416,28 +433,14 @@ Namespace Transform
         ''' <remarks></remarks>
         ReadOnly Property ElevationTopocentric() As Double Implements ITransform.ElevationTopocentric
             Get
-                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read ElevationTopocentric before SetJ2000 or SetApparent has been called")
+                If LastSetBy = SetBy.Never Then Throw New Exceptions.TransformUninitialisedException("Attempt to read ElevationTopocentric before a SetXX method has been called")
                 RequiresRecalculate = True 'Force a recalculation of Elevation
                 Recalculate()
                 CheckSet("ElevationTopocentric", ElevationTopoValue, "Elevation topocentric can not be derived from the information provided. Are site parameters set?")
-                TL.LogMessage("ElevationTopocentric Get", Utl.DegreesToDMS(ElevationTopoValue, ":", ":", "", 3))
+                TL.LogMessage("ElevationTopocentric Get", FormatDec(ElevationTopoValue))
                 Return ElevationTopoValue
             End Get
         End Property
-
-        ''' <summary>
-        ''' Sets the topocentric azimuth and elevation
-        ''' </summary>
-        ''' <param name="Azimuth">Topocentric Azimuth in degrees</param>
-        ''' <param name="Elevation">Topocentric elevation in degrees</param>
-        ''' <remarks></remarks>
-        Sub SetAzimuthElevation(Azimuth As Double, Elevation As Double) Implements ITransform.SetAzimuthElevation
-            LastSetBy = SetBy.AzimuthElevation
-            RequiresRecalculate = True
-            AzimuthTopoValue = Azimuth
-            ElevationTopoValue = Elevation
-            TL.LogMessage("SetAzimuthElevation", "Azimuth: " & Utl.DegreesToDMS(Azimuth, ":", ":", "", 3) & ", Elevation: " & Utl.DegreesToDMS(Elevation, ":", ":", "", 3))
-        End Sub
 
         ''' <summary>
         ''' Sets or returns the Julian date on the Terrestrial Time timescale for which the transform will be made
@@ -448,7 +451,9 @@ Namespace Transform
         ''' this remains the default behaviour for backward compatibility.
         ''' The inital value of this parameter is 0.0, which is a special value that forces Transform to replicate original behaviour by determining the  
         ''' Julian date from the PC's current date and time. If this property is non zero, that particular terrestrial time Julian date is used in preference 
-        ''' to the value derrived from the PC's clock.</remarks>
+        ''' to the value derrived from the PC's clock.
+        ''' <para>Only one of JulianDateTT or JulianDateUTC needs to be set. Use whichever is more readily available, there is no
+        ''' need to set both values. Transform will use the last set value of either JulianDateTT or JulianDateUTC as the basis for its calculations.</para></remarks>
         Property JulianDateTT As Double Implements ITransform.JulianDateTT
             Get
                 Return JulianDateTTValue
@@ -464,7 +469,7 @@ Namespace Transform
                     If (SOFA.TaiUtc(tai1, tai2, utc1, utc2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "Taitt - Bad return code")
                     JulianDateUTCValue = utc1 + utc2
 
-                    TL.LogMessage("JulianDateTT Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateTTValue).ToString("dd/MM/yyyy HH:mm:ss.fff") & ", JDUTC: " & Julian2DateTime(JulianDateUTCValue).ToString("dd/MM/yyyy HH:mm:ss.fff"))
+                    TL.LogMessage("JulianDateTT Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateTTValue).ToString(DATE_FORMAT) & ", JDUTC: " & Julian2DateTime(JulianDateUTCValue).ToString(DATE_FORMAT))
                 Else ' Handle special case of 0.0
                     JulianDateUTCValue = 0.0
                     TL.LogMessage("JulianDateTT Set", "Calculations will now be based on PC the DateTime")
@@ -478,7 +483,7 @@ Namespace Transform
         ''' <value>Julian date (UTC) of the transform</value>
         ''' <returns>UTC Julian date that will be used by Transform or zero if the PC's current clock value will be used to calculate the Julian date.</returns>
         ''' <remarks>Introduced in April 2014 as an alternative to JulianDateTT. Only one of JulianDateTT or JulianDateUTC needs to be set. Use whichever is more readily available, there is no
-        ''' need to set both values. The last set value applies.</remarks>
+        ''' need to set both values. Transform will use the last set value of either JulianDateTT or JulianDateUTC as the basis for its calculations.</remarks>
         Property JulianDateUTC As Double Implements ITransform.JulianDateUTC
             Get
                 Return JulianDateUTCValue
@@ -494,7 +499,7 @@ Namespace Transform
                     If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("JulianDateUTC Set", "Taitt - Bad return code")
                     JulianDateTTValue = tt1 + tt2
 
-                    TL.LogMessage("JulianDateUTC Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateUTCValue).ToString("dd/MM/yyyy HH:mm:ss.fff") & ", JDTT: " & Julian2DateTime(JulianDateTTValue).ToString("dd/MM/yyyy HH:mm:ss.fff"))
+                    TL.LogMessage("JulianDateUTC Set", JulianDateTTValue.ToString & " " & Julian2DateTime(JulianDateUTCValue).ToString(DATE_FORMAT) & ", JDTT: " & Julian2DateTime(JulianDateTTValue).ToString(DATE_FORMAT))
                 Else ' Handle special case of 0.0
                     JulianDateTTValue = 0.0
                     TL.LogMessage("JulianDateUTC Set", "Calculations will now be based on PC the DateTime")
@@ -547,13 +552,13 @@ Namespace Transform
             AzimuthTopoValue = aob * RADIANS2DEGREES
             ElevationTopoValue = 90.0 - zob * RADIANS2DEGREES
 
-            TL.LogMessage("  J2000 To Topo", "  SOFA topocentric RA/DEC (including refraction if specified):  " & Utl.HoursToHMS(RATopoValue, ":", ":", "", 3) & " " & _
-              Utl.DegreesToDMS(DECTopoValue, ":", ":", "", 3) & _
+            TL.LogMessage("  J2000 To Topo", "  SOFA topocentric RA/DEC (including refraction if specified):  " & FormatRA(RATopoValue) & " " & _
+              FormatDec(DECTopoValue) & _
               " Refraction: " & RefracValue.ToString & ", " & _
               FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
-            TL.LogMessage("  J2000 To Topo", "  Azimuth/Elevation: " & Utl.DegreesToDMS(AzimuthTopoValue, ":", ":", "", 3) & " " & _
-                          Utl.DegreesToDMS(ElevationTopoValue, ":", ":", "", 3) & ", " & _
+            TL.LogMessage("  J2000 To Topo", "  Azimuth/Elevation: " & FormatDec(AzimuthTopoValue) & " " & _
+                          FormatDec(ElevationTopoValue) & ", " & _
                           FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
             TL.LogMessage("  J2000 To Topo", "  Completed")
@@ -566,13 +571,12 @@ Namespace Transform
 
             Sw.Reset() : Sw.Start()
             JDTTSofa = GetJDTTSofa()
-            'TL.LogMessage("  J2000 To Apparent", "  RA/Dec Apparent: " & Utl.HoursToHMS(RAApparentValue, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECApparentValue, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
             SOFA.CelestialToIntermediate(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDTTSofa, 0.0, ri, di, eo)
             RAApparentValue = SOFA.Anp(ri - eo) * RADIANS2HOURS ' // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
             DECApparentValue = di * RADIANS2DEGREES ' Convert Dec from radians to degrees
 
-            TL.LogMessage("  J2000 To Apparent", "  SOFA Apparent:   " & Utl.HoursToHMS(RAApparentValue, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECApparentValue, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  J2000 To Apparent", "  SOFA Apparent:   " & FormatRA(RAApparentValue) & " " & FormatDec(DECApparentValue) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
@@ -599,7 +603,7 @@ Namespace Transform
 
             RAJ2000Value = RACelestrial * RADIANS2HOURS
             DECJ2000Value = DecCelestial * RADIANS2DEGREES
-            TL.LogMessage("  Topo To J2000 Sofa", "  " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  Topo To J2000 Sofa", "  " & FormatRA(RAJ2000Value) & " " & FormatDec(DECJ2000Value) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
@@ -614,7 +618,7 @@ Namespace Transform
             SOFA.IntermediateToCelestial(SOFA.Anp(RAApparentValue * HOURS2RADIANS + SOFA.Eo06a(JulianDateUTCSofa, 0.0)), DECApparentValue * DEGREES2RADIANS, JulianDateTTSofa, 0.0, RACelestial, DecCelestial, eo)
             RAJ2000Value = RACelestial * RADIANS2HOURS
             DECJ2000Value = DecCelestial * RADIANS2DEGREES
-            TL.LogMessage("  Apparent To J2000 Sofa", "  " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & " " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  Apparent To J2000 Sofa", "  " & FormatRA(RAJ2000Value) & " " & FormatDec(DECJ2000Value) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
@@ -722,7 +726,7 @@ Namespace Transform
             RAJ2000Value = RACelestial * RADIANS2HOURS
             DECJ2000Value = DecCelestial * RADIANS2DEGREES
 
-            TL.LogMessage("  AzEl To J2000", "  SOFA RA: " & Utl.HoursToHMS(RAJ2000Value, ":", ":", "", 3) & ", Declination: " & Utl.DegreesToDMS(DECJ2000Value, ":", ":", "", 3))
+            TL.LogMessage("  AzEl To J2000", "  SOFA RA: " & FormatRA(RAJ2000Value) & ", Declination: " & FormatDec(DECJ2000Value))
 
             Sw.Stop()
             TL.BlankLine()
@@ -738,7 +742,7 @@ Namespace Transform
             Else
                 Retval = JulianDateUTCValue
             End If
-            TL.LogMessage("  GetJDUTCSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString("dd/MM/yyyy HH:mm:ss.fff"))
+            TL.LogMessage("  GetJDUTCSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString(DATE_FORMAT))
             Return Retval
         End Function
 
@@ -757,7 +761,7 @@ Namespace Transform
             Else
                 Retval = JulianDateTTValue
             End If
-            TL.LogMessage("  GetJDTTSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString("dd/MM/yyyy HH:mm:ss.fff"))
+            TL.LogMessage("  GetJDTTSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString(DATE_FORMAT))
             Return Retval
         End Function
 
@@ -766,32 +770,6 @@ Namespace Transform
             TL.LogMessage("CheckGAC", "Started")
             strPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase)
             TL.LogMessage("CheckGAC", "Assembly path: " & strPath)
-        End Sub
-
-        Private Sub RunningVersions(ByVal TL As TraceLogger)
-            Dim AssemblyNames() As AssemblyName
-            TL.LogMessage("Versions", "Utilities version: " & Assembly.GetExecutingAssembly.GetName.Version.ToString)
-            TL.LogMessage("Versions", "CLR version: " & System.Environment.Version.ToString)
-            AssemblyNames = Assembly.GetExecutingAssembly.GetReferencedAssemblies
-
-            'Get Operating system information
-            Dim OS As System.OperatingSystem = System.Environment.OSVersion
-            TL.LogMessage("Versions", "OS Version " & OS.Platform & " Service Pack: " & OS.ServicePack & " Full: " & OS.VersionString)
-            'Get file system information
-            Dim MachineName As String = System.Environment.MachineName
-            Dim ProcCount As Integer = System.Environment.ProcessorCount
-            Dim SysDir As String = System.Environment.SystemDirectory
-            Dim WorkSet As Long = System.Environment.WorkingSet
-            TL.LogMessage("Versions", "Machine name: " & MachineName & " Number of processors: " & ProcCount & " System directory: " & SysDir & " Working set size: " & WorkSet & " bytes")
-
-            'Get fully qualified paths to particular directories in a non OS specific way
-            'There are many more options in the SpecialFolders Enum than are shown here!
-            TL.LogMessage("Versions", "Application Data: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData))
-            TL.LogMessage("Versions", "Common Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles))
-            TL.LogMessage("Versions", "My Documents: " & System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-            TL.LogMessage("Versions", "Program Files: " & System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))
-            TL.LogMessage("Versions", "System: " & System.Environment.GetFolderPath(Environment.SpecialFolder.System))
-            TL.LogMessage("Versions", "Current: " & System.Environment.CurrentDirectory)
         End Sub
 
         Private Function ValidateRA(Caller As String, RA As Double) As Double
@@ -808,9 +786,9 @@ Namespace Transform
             Dim L, N, I, J, JDLong As Long
             Dim JDFraction, Remainder As Double
             Dim Day, Month, Year, Hours, Minutes, Seconds, MilliSeconds As Integer
-            Dim dt As DateTime
+            Dim Retval As DateTime
 
-            Dim debug As Boolean = False
+            Dim debug As Boolean = False ' Local flag to create some additional debug output
 
             Try
                 If m_JulianDate > 2378507.5 Then ' 1/1/1800
@@ -833,13 +811,14 @@ Namespace Transform
 
                     JDFraction += (5.0 / (24.0 * 60.0 * 60.0 * 10000.0))
 
-                    If JDFraction >= 0.5 Then ' Allow for Julian days to start at 12:00 rather than 00:00
+                    ' Allow for Julian days to start at 12:00 rather than 00:00  
+                    If JDFraction >= 0.5 Then ' After midnight so add 1 to the julian day and remove half a day from the day fraction
                         If debug Then TL.LogMessage("ConvertFromJulian", "JDFraction >= 0.5: " & JDFraction)
                         Day += 1
-                        JDFraction -= 0.5 '+ 4.9 / (24.0 * 60.0 * 60.0 * 10000.0) ' Add half a millisecond to get rounding correct
+                        JDFraction -= 0.5
                         If debug Then TL.LogMessage("ConvertFromJulian", "DMY: " & Day & " " & JDFraction)
-                    Else
-                        JDFraction += 0.5 '+ 4.9 / (24.0 * 60.0 * 60.0 * 10000.0)
+                    Else ' Before midnight so just add half a day 
+                        JDFraction += 0.5
                     End If
 
                     Hours = CInt(Int(JDFraction * 24.0)) : Remainder = (JDFraction * 24.0) - CDbl(Hours) : If debug Then TL.LogMessage("ConvertFromJulian", "Hours: " & Hours & " " & Remainder) 'Remainder as a fraction of an hour
@@ -848,16 +827,26 @@ Namespace Transform
                     MilliSeconds = CInt(Int(Remainder * 1000.0))
 
                     If debug Then TL.LogMessage("ConvertFromJulian", JDLong & " " & JDFraction & " " & Day & " " & Hours & " " & Minutes & " " & Seconds & " " & MilliSeconds)
-                    dt = New DateTime(Year, Month, Day, Hours, Minutes, Seconds, MilliSeconds)
+                    Retval = New DateTime(Year, Month, Day, Hours, Minutes, Seconds, MilliSeconds)
                 Else ' Early or invalid julian date so return a default value
-                    dt = New Date(1800, 1, 10) ' Return this as a default bad value
+                    Retval = New Date(1800, 1, 10) ' Return this as a default bad value
                 End If
             Catch ex As Exception
                 TL.LogMessageCrLf("", "Exception: " & ex.ToString)
-                dt = New Date(1900, 1, 10) ' Return this as a default bad value
+                Retval = New Date(1900, 1, 10) ' Return this as a default bad value
             End Try
-            Return (dt)
+
+            Return (Retval)
         End Function
+
+        Private Function FormatRA(RA As Double) As String
+            Return Utl.HoursToHMS(RA, ":", ":", "", 3)
+        End Function
+
+        Private Function FormatDec(Dec As Double) As String
+            Return Utl.DegreesToDMS(Dec, ":", ":", "", 3)
+        End Function
+
 #End Region
 
     End Class
