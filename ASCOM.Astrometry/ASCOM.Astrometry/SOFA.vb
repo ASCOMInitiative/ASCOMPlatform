@@ -1319,7 +1319,7 @@ Namespace SOFA
                                         ByRef tai2 As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iautaiutc")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauTaiutc")> _
         Private Shared Function Taiutc32(tai1 As Double,
                                         tai2 As Double,
                                         ByRef utc1 As Double,
