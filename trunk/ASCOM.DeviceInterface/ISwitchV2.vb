@@ -223,7 +223,7 @@ Public Interface ISwitchV2
     ''' <summary>
     ''' The number of switch devices managed by this driver
     ''' </summary>
-    ''' <returns>The number of devices managed by this driver, in the range 0 to <see cref="MaxSwitch"/> - 1.</returns>
+    ''' <returns>The number of devices managed by this driver.</returns>
     ''' <remarks><p style="color:red"><b>Must be implemented, must not throw a <see cref="PropertyNotImplementedException"/></b></p> 
     ''' <p>Devices are numbered from 0 to <see cref="MaxSwitch"/> - 1</p></remarks>
     ReadOnly Property MaxSwitch As Short
