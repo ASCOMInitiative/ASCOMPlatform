@@ -560,6 +560,20 @@ namespace ASCOM.DriverAccess
                 throw new NotConnectedException(message, e.InnerException);
             }
 
+            if (e.InnerException is ASCOM.PropertyNotImplementedException)
+            {
+                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+                TL.LogMessageCrLf(memberName, "  Throwing PropertyNotImplementedException: '" + member + "'");
+                throw new PropertyNotImplementedException(member, false, e.InnerException);
+            }
+
+            if (e.InnerException is ASCOM.MethodNotImplementedException)
+            {
+                member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
+                TL.LogMessageCrLf(memberName, "  Throwing MethodNotImplementedException: '" + member + "'");
+                throw new MethodNotImplementedException(member, e.InnerException);
+            }
+
             if (e.InnerException is ASCOM.NotImplementedException)
             {
                 member = (string)e.InnerException.GetType().InvokeMember("PropertyOrMethod", BindingFlags.Default | BindingFlags.GetProperty, null, e.InnerException, new object[] { }, CultureInfo.InvariantCulture);
