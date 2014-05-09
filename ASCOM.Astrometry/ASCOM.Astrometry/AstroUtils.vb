@@ -620,11 +620,18 @@ Namespace AstroUtils
             Return Retval
         End Function
 
+        ''' <summary>
+        ''' Returns the altitude of the body given the input parameters
+        ''' </summary>
+        ''' <param name="TypeOfEvent">Type of event to be calaculated</param>
+        ''' <param name="JD">UTC Julian date</param>
+        ''' <param name="Hour">Hour of Julian day</param>
+        ''' <param name="Latitude">Site Latitude</param>
+        ''' <param name="Longitude">Site Longitude</param>
+        ''' <returns>The altitude of the body (degrees)</returns>
+        ''' <remarks></remarks>
         Private Function BodyAltitude(TypeOfEvent As EventType, JD As Double, Hour As Double, Latitude As Double, Longitude As Double) As BodyInfo
-            ' returns the altitude of the moon given the
-            ' julian day number at midnight UT and the hour of the UT day,
-            ' the latitude and longitude of the observer
-            Dim Instant, Tau, Gmst As Double
+            Dim Instant, Tau, Gmst, DeltaT As Double
             Dim rc As Short
             Dim Obj3 As New ASCOM.Astrometry.Object3
             Dim Location As New ASCOM.Astrometry.OnSurface
@@ -634,6 +641,7 @@ Namespace AstroUtils
             Dim Retval As New BodyInfo
 
             Instant = JD + Hour / 24.0 ' Add the hour to the whole Julian day number
+            DeltaT = DeltaTCalc(JD)
 
             Select Case TypeOfEvent
                 Case EventType.MercuryRiseSet
@@ -666,14 +674,14 @@ Namespace AstroUtils
             Obs.OnSurf = Location
             Obs.Where = ASCOM.Astrometry.ObserverLocation.EarthGeoCenter
 
-            Nov31.Place(Instant + DeltaT() * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, SkyPosition)
+            Nov31.Place(Instant + DeltaT * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, SkyPosition)
             Retval.Distance = SkyPosition.Dis * AU2KILOMETRE ' Distance is in AU so save it in km
 
             rc = Nov31.SiderealTime(Instant, 0.0, DeltaT, ASCOM.Astrometry.GstType.GreenwichApparentSiderealTime, ASCOM.Astrometry.Method.EquinoxBased, ASCOM.Astrometry.Accuracy.Full, Gmst)
 
             Tau = HOURS2DEG * (Range(Gmst + Longitude * DEG2HOURS, 0, True, 24.0, False) - SkyPosition.RA) ' East longitude is  positive
             Retval.Altitude = Math.Asin(Math.Sin(Latitude * DEG2RAD) * Math.Sin(SkyPosition.Dec * DEG2RAD) + _
-                                     Math.Cos(Latitude * DEG2RAD) * Math.Cos(SkyPosition.Dec * DEG2RAD) * Math.Cos(Tau * DEG2RAD)) * RAD2DEG
+                                        Math.Cos(Latitude * DEG2RAD) * Math.Cos(SkyPosition.Dec * DEG2RAD) * Math.Cos(Tau * DEG2RAD)) * RAD2DEG
 
             Select Case TypeOfEvent
                 Case EventType.MercuryRiseSet
@@ -715,7 +723,9 @@ Namespace AstroUtils
             Dim Cat As New ASCOM.Astrometry.CatEntry3
             Dim SunPosition, MoonPosition As New ASCOM.Astrometry.SkyPos
             Dim Obs As New ASCOM.Astrometry.Observer
-            Dim Phi, Inc, k As Double
+            Dim Phi, Inc, k, DeltaT As Double
+
+            DeltaT = DeltaTCalc(JD)
 
             ' Calculate Moon RA, Dec and distance
             Obj3.Name = "Moon"
@@ -726,7 +736,7 @@ Namespace AstroUtils
             Obs.OnSurf = Location
             Obs.Where = ASCOM.Astrometry.ObserverLocation.EarthGeoCenter
 
-            Nov31.Place(JD + DeltaT() * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, MoonPosition)
+            Nov31.Place(JD + DeltaT * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, MoonPosition)
 
             'Calculate Sun RA, Dec and distance
             Obj3.Name = "Sun"
@@ -734,11 +744,11 @@ Namespace AstroUtils
             Obj3.Star = Cat
             Obj3.Type = ASCOM.Astrometry.ObjectType.MajorPlanetSunOrMoon
 
-            Nov31.Place(JD + DeltaT() * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, SunPosition)
+            Nov31.Place(JD + DeltaT * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, SunPosition)
 
             ' Calculate geocentriic elongation of the Moon
             Phi = Math.Acos(Math.Sin(SunPosition.Dec * DEG2RAD) * Math.Sin(MoonPosition.Dec * DEG2RAD) + _
-                          Math.Cos(SunPosition.Dec * DEG2RAD) * Math.Cos(MoonPosition.Dec * DEG2RAD) * Math.Cos((SunPosition.RA - MoonPosition.RA) * HOURS2DEG * DEG2RAD))
+                            Math.Cos(SunPosition.Dec * DEG2RAD) * Math.Cos(MoonPosition.Dec * DEG2RAD) * Math.Cos((SunPosition.RA - MoonPosition.RA) * HOURS2DEG * DEG2RAD))
 
             'Calculate the phase angle of the Moon
             Inc = Math.Atan2(SunPosition.Dis * Math.Sin(Phi), MoonPosition.Dis - SunPosition.Dis * Math.Cos(Phi))
@@ -789,7 +799,9 @@ Namespace AstroUtils
             Dim Cat As New ASCOM.Astrometry.CatEntry3
             Dim SunPosition, MoonPosition As New ASCOM.Astrometry.SkyPos
             Dim Obs As New ASCOM.Astrometry.Observer
-            Dim PositionAngle As Double
+            Dim PositionAngle, DeltaT As Double
+
+            DeltaT = DeltaTCalc(JD)
 
             ' Calculate Moon RA, Dec and distance
             Obj3.Name = "Moon"
@@ -800,7 +812,7 @@ Namespace AstroUtils
             Obs.OnSurf = Location
             Obs.Where = ASCOM.Astrometry.ObserverLocation.EarthGeoCenter
 
-            Nov31.Place(JD + DeltaT() * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, MoonPosition)
+            Nov31.Place(JD + DeltaT * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, MoonPosition)
 
             'Calculate Sun RA, Dec and distance
             Obj3.Name = "Sun"
@@ -808,9 +820,9 @@ Namespace AstroUtils
             Obj3.Star = Cat
             Obj3.Type = ASCOM.Astrometry.ObjectType.MajorPlanetSunOrMoon
 
-            Nov31.Place(JD + DeltaT() * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, SunPosition)
+            Nov31.Place(JD + DeltaT * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, SunPosition)
 
-            'Return the dfifference between the sun and moon RA's expressed as degrees from -180 to +180
+            'Return the difference between the sun and moon RA's expressed as degrees from -180 to +180
             PositionAngle = Range((MoonPosition.RA - SunPosition.RA) * HOURS2DEG, -180.0, False, 180.0, True)
 
             Return PositionAngle
