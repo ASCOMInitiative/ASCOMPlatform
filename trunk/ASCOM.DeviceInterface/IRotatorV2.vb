@@ -201,6 +201,9 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     ''' <returns>
     ''' True if the Rotator supports the <see cref="Reverse" /> method.
     ''' </returns>
+    ''' <remarks>
+    ''' <p style="color:red;margin-bottom:0"><b>Must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' </remarks>
     ReadOnly Property CanReverse() As Boolean
 
     ''' <summary>
@@ -214,6 +217,7 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     ''' Indicates whether the rotator is currently moving
     ''' </summary>
     ''' <returns>True if the Rotator is moving to a new position. False if the Rotator is stationary.</returns>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
     ''' <remarks>Rotation is asynchronous, that is, when the <see cref="Move">Move</see> method is called, it starts the rotation, then returns 
     ''' immediately. During rotation, <see cref="IsMoving" /> must be True, else it must be False.</remarks>
     ReadOnly Property IsMoving() As Boolean
@@ -221,15 +225,21 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     ''' <summary>
     ''' Causes the rotator to move Position degrees relative to the current <see cref="Position" /> value.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If Position is invalid.</exception>
     ''' <param name="Position">Relative position to move in degrees from current <see cref="Position" />.</param>
-    ''' <remarks>Calling <see cref="Move">Move</see> causes the <see cref="TargetPosition" /> property to change to the sum of the current angular position 
-    ''' and the value of the <see cref="Position" /> parameter (modulo 360 degrees), then starts rotation to <see cref="TargetPosition" />.</remarks>
+    ''' <remarks>
+    ''' Calling <see cref="Move">Move</see> causes the <see cref="TargetPosition" /> property to change to the sum of the current angular position 
+    ''' and the value of the <see cref="Position" /> parameter (modulo 360 degrees), then starts rotation to <see cref="TargetPosition" />.
+    ''' </remarks>
     Sub Move(ByVal Position As Single)
 
     ''' <summary>
     ''' Causes the rotator to move the absolute position of <see cref="Position" /> degrees.
     ''' </summary>
     ''' <param name="Position">Absolute position in degrees.</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If Position is invalid.</exception>
     ''' <remarks>Calling <see cref="MoveAbsolute">MoveAbsolute</see> causes the <see cref="TargetPosition" /> property to change to the value of the
     ''' <see cref="Position" /> parameter, then starts rotation to <see cref="TargetPosition" />. </remarks>
     Sub MoveAbsolute(ByVal Position As Single)
@@ -237,6 +247,7 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     ''' <summary>
     ''' Current instantaneous Rotator position, in degrees.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
     ''' <remarks>
     ''' The position is expressed as an angle from 0 up to but not including 360 degrees, counter-clockwise against the 
     ''' sky. This is the standard definition of Position Angle. However, the rotator does not need to (and in general will not) 
@@ -253,25 +264,26 @@ Public Interface IRotatorV2 '"49003324-8DE2-4986-BC7D-4D85E1C4CF6B
     ''' Sets or Returns the rotator’s Reverse state.
     ''' </summary>
     ''' <value>True if the rotation and angular direction must be reversed for the optics</value>
+    ''' <exception cref="PropertyNotImplementedException">Throw a PropertyNotImplementedException if the rotator cannot reverse and CanReverse is False.</exception>
     ''' <remarks>See the definition of <see cref="Position" />. Raises an error if not supported. </remarks>
-    ''' <exception cref="PropertyNotImplementedException">Throw a PropertyNotImplementedException if the rotator cannot reverse.</exception>
     Property Reverse() As Boolean
 
     ''' <summary>
     ''' The minimum StepSize, in degrees.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">Throw a PropertyNotImplementedException if the rotator does not know its step size.</exception>
     ''' <remarks>
     ''' Raises an exception if the rotator does not intrinsically know what the step size is.
     ''' </remarks>
-    ''' <exception cref="PropertyNotImplementedException">Throw a PropertyNotImplementedException if the rotator does not know its step size.</exception>
     ReadOnly Property StepSize() As Single
 
     ''' <summary>
     ''' The destination position angle for Move() and MoveAbsolute().
     ''' </summary>
     ''' <value>The destination position angle for<see cref="Move">Move</see> and <see cref="MoveAbsolute">MoveAbsolute</see>.</value>
-    ''' <remarks>Upon calling <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see>, this property immediately 
-    ''' changes to the position angle to which the rotator is moving. The value is retained until a subsequent call 
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+    ''' <remarks>
+    ''' Upon calling <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see>, this property immediately changes to the position angle to which the rotator is moving. The value is retained until a subsequent call 
     ''' to <see cref="Move">Move</see> or <see cref="MoveAbsolute">MoveAbsolute</see>.
     ''' </remarks>
     ReadOnly Property TargetPosition() As Single

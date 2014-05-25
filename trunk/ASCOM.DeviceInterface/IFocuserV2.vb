@@ -249,8 +249,8 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
     ''' <remarks>
-    ''' <p style="color:red"><b>Must be implemented</b></p> For most focusers this is the same as the <see cref="Maxstep" /> property. This is normally used to limit the Increment 
-    ''' display in the host software.
+    ''' <p style="color:red"><b>Must be implemented</b></p>
+    ''' For most focusers this is the same as the <see cref="Maxstep" /> property. This is normally used to limit the Increment display in the host software.
     ''' </remarks>
     ReadOnly Property MaxIncrement() As Integer
 
@@ -260,8 +260,8 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
     ''' <remarks>
-    ''' <p style="color:red"><b>Must be implemented</b></p> The focuser can step between 0 and <see cref="MaxStep" />. If an attempt is made to move the focuser beyond these limits,
-    ''' it will automatically stop at the limit.
+    ''' <p style="color:red"><b>Must be implemented</b></p>
+    ''' The focuser can step between 0 and <see cref="MaxStep" />. If an attempt is made to move the focuser beyond these limits, it will automatically stop at the limit.
     ''' </remarks>
     ReadOnly Property MaxStep() As Integer
 
@@ -272,12 +272,11 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' <exception cref="InvalidOperationException">If a Move operation is requested when <see cref="TempComp" /> is True</exception>
     ''' <exception cref="NotConnectedException">If the device is not connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented</b></p> If the <see cref="Absolute" /> property is True, then this is an absolute positioning focuser. 
-    ''' The <see cref="Move">Move</see> command tells the focuser to move to an exact step position, and the Position parameter 
+    ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
+    ''' If the <see cref="Absolute" /> property is True, then this is an absolute positioning focuser. The <see cref="Move">Move</see> command tells the focuser to move to an exact step position, and the Position parameter 
     ''' of the <see cref="Move">Move</see> method is an integer between 0 and <see cref="MaxStep" />.
-    ''' <para>If the <see cref="Absolute" /> property is False, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells 
-    ''' the focuser to move in a relative direction, and the Position parameter of the <see cref="Move">Move</see> method (in this case, step distance) 
-    ''' is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
+    ''' <para>If the <see cref="Absolute" /> property is False, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells the focuser to move in a relative direction, and the Position parameter 
+    ''' of the <see cref="Move">Move</see> method (in this case, step distance) is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
     '''</remarks>
     Sub Move(ByVal Position As Integer)
 
@@ -289,8 +288,7 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
     ''' <remarks>
     ''' <p style="color:red"><b>Can throw a not implemented exception</b></p> Valid only for absolute positioning focusers (see the <see cref="Absolute" /> property).
-    ''' A <see cref="PropertyNotImplementedException">PropertyNotImplementedException</see> exception must be thrown if this device is a 
-    ''' relative positioning focuser rather than an absolute position focuser.
+    ''' A <see cref="PropertyNotImplementedException">PropertyNotImplementedException</see> exception must be thrown if this device is a relative positioning focuser rather than an absolute position focuser.
     ''' </remarks>
     ReadOnly Property Position() As Integer
 
@@ -309,13 +307,13 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' <exception cref="PropertyNotImplementedException">If <see cref="TempCompAvailable" /> is False and an attempt is made to set <see cref="TempComp" /> to true.</exception>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
-    ''' <remarks><p style="color:red"><b>Can throw a not implemented exception</b></p> 
-    ''' If the <see cref="TempCompAvailable" /> property is True, then setting <see cref="TempComp" /> to True
-    ''' puts the focuser into temperature tracking mode. While in temperature tracking mode,
+    ''' <remarks>
+    ''' <p style="color:red;margin-bottom:0"><b>TempComp Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' <p style="color:red;margin-top:0"><b>TempComp Write can throw a PropertyNotImplementedException.</b></p>
+    ''' If the <see cref="TempCompAvailable" /> property is True, then setting <see cref="TempComp" /> to True puts the focuser into temperature tracking mode. While in temperature tracking mode,
     ''' <see cref="Move">Move</see> commands will be rejected by the focuser. Set to False to turn off temperature tracking.
     ''' <para>If temperature compensation is not available, this property must always return False.</para>
-    ''' <para> A <see cref="PropertyNotImplementedException" /> exception must be thrown if <see cref="TempCompAvailable" /> 
-    ''' is False and an attempt is made to set <see cref="TempComp" /> to true.</para>
+    ''' <para> A <see cref="PropertyNotImplementedException" /> exception must be thrown if <see cref="TempCompAvailable" /> is False and an attempt is made to set <see cref="TempComp" /> to true.</para>
     ''' </remarks>
     Property TempComp() As Boolean
 
@@ -325,7 +323,8 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
     ''' <remarks>
-    ''' <p style="color:red"><b>Must be implemented</b></p> Will be True only if the focuser's temperature compensation can be turned on and off via the <see cref="TempComp" /> property. 
+    ''' <p style="color:red"><b>Must be implemented</b></p>
+    ''' Will be True only if the focuser's temperature compensation can be turned on and off via the <see cref="TempComp" /> property. 
     ''' </remarks>
     ReadOnly Property TempCompAvailable() As Boolean
 

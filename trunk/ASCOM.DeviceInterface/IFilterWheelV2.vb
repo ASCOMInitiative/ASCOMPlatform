@@ -201,12 +201,9 @@ Public Interface IFilterWheelV2 '756FD725-A6E2-436F-8C7A-67E358622027
     ''' Focus offset of each filter in the wheel
     '''</summary>
     ''' <remarks>
-    ''' For each valid slot number (from 0 to N-1), reports the focus offset for
-    ''' the given filter position.  These values are focuser and filter
-    ''' dependent, and  would usually be set up by the user via the SetupDialog.
-    ''' The number of slots N can be determined from the length of the array.
-    ''' If focuser offsets are not available, then it should report back 0 for all
-    ''' array values.
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' For each valid slot number (from 0 to N-1), reports the focus offset for the given filter position.  These values are focuser and filter dependent, and  would usually be set up by the user via 
+    ''' the SetupDialog. The number of slots N can be determined from the length of the array. If focuser offsets are not available, then it should report back 0 for all array values.
     ''' </remarks>
     ReadOnly Property FocusOffsets() As Integer()
 
@@ -214,32 +211,26 @@ Public Interface IFilterWheelV2 '756FD725-A6E2-436F-8C7A-67E358622027
     ''' Name of each filter in the wheel
     '''</summary>
     ''' <remarks>
-    ''' For each valid slot number (from 0 to N-1), reports the name given to the
-    ''' filter position.  These names would usually be set up by the user via the
-    ''' SetupDialog.  The number of slots N can be determined from the length of
-    ''' the array.  If filter names are not available, then it should report back
-    ''' "Filter 1", "Filter 2", etc.
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' For each valid slot number (from 0 to N-1), reports the name given to the filter position.  These names would usually be set up by the user via the
+    ''' SetupDialog.  The number of slots N can be determined from the length of the array.  If filter names are not available, then it should report back "Filter 1", "Filter 2", etc.
     ''' </remarks>
     ReadOnly Property Names() As String()
 
     ''' <summary>
     ''' Sets or returns the current filter wheel position
     ''' </summary>
-    ''' <remarks>
-    ''' Write a position number between 0 and N-1, where N is the number of filter slots (see
-    ''' <see cref="Names"/>). Starts filter wheel rotation immediately when written. Reading
-    ''' the property gives current slot number (if wheel stationary) or -1 if wheel is
-    ''' moving. 
-    ''' <para>Returning a position of -1 is <b>mandatory</b> while the filter wheel is in motion; valid slot numbers must not be reported back while
-    ''' the filter wheel is rotating past filter positions.</para>
-    ''' <para><b>Note</b></para>
-    ''' <para>Some filter wheels are built into the camera (one driver, two
-    ''' interfaces).  Some cameras may not actually rotate the wheel until the
-    ''' exposure is triggered.  In this case, the written value is available
-    ''' immediately as the read value, and -1 is never produced.</para>
-    ''' </remarks>
     ''' <exception cref="InvalidValueException">Must throw an InvalidValueException if an invalid position is set</exception>
     ''' <exception cref="NotConnectedException">Must throw an exception if the Filter Wheel is not connected</exception>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' Write a position number between 0 and N-1, where N is the number of filter slots (see <see cref="Names"/>). Starts filter wheel rotation immediately when written. Reading
+    ''' the property gives current slot number (if wheel stationary) or -1 if wheel is moving. 
+    ''' <para>Returning a position of -1 is <b>mandatory</b> while the filter wheel is in motion; valid slot numbers must not be reported back while the filter wheel is rotating past filter positions.</para>
+    ''' <para><b>Note</b></para>
+    ''' <para>Some filter wheels are built into the camera (one driver, two interfaces).  Some cameras may not actually rotate the wheel until the exposure is triggered.  In this case, the written value is available
+    ''' immediately as the read value, and -1 is never produced.</para>
+    ''' </remarks>
     Property Position() As Short
 #End Region
 

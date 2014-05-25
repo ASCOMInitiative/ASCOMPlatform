@@ -198,46 +198,36 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' Immediately cancel current dome operation.
     ''' </summary>
     ''' <remarks>
-    ''' Calling this method will immediately disable hardware slewing (<see cref="Slaved" /> will become False).
-    ''' Raises an error if a communications failure occurs, or if the command is known to have failed. 
+    ''' <p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p>
+    ''' Calling this method will immediately disable hardware slewing (<see cref="Slaved" /> will become False). Raises an error if a communications failure occurs, or if the command is known to have failed. 
     ''' </remarks>
     Sub AbortSlew()
 
     ''' <summary>
     ''' The dome altitude (degrees, horizon zero and increasing positive to 90 zenith).
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ''' <remarks>
-    ''' Raises an error only if no altitude control. If actual dome altitude can not be read,
-    ''' then reports back the last slew position. 
+    ''' Raises an error only if no altitude control. If actual dome altitude can not be read, then reports back the last slew position. 
     ''' </remarks>
     ReadOnly Property Altitude() As Double
 
     ''' <summary>
-    '''   Indicates whether the dome is in the home position.
-    '''   Raises an error if not supported. 
+    ''' Indicates whether the dome is in the home position. Raises an error if not supported. 
     ''' <para>
-    '''   This is normally used following a <see cref="FindHome" /> operation. The value is reset with any azimuth
-    '''   slew operation that moves the dome away from the home position.
+    ''' This is normally used following a <see cref="FindHome" /> operation. The value is reset with any azimuth slew operation that moves the dome away from the home position.
     ''' </para>
     ''' <para>
-    '''   <see cref="AtHome" /> may also become true durng normal slew operations, if the dome passes through the home position
-    '''   and the dome controller hardware is capable of detecting that; or at the end of a slew operation if the dome
-    '''   comes to rest at the home position.
+    ''' <see cref="AtHome" /> may also become true durng normal slew operations, if the dome passes through the home position and the dome controller hardware is capable of detecting that; 
+    ''' or at the end of a slew operation if the dome comes to rest at the home position.
     ''' </para>
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ''' <remarks>
-    '''   <para>
-    '''     The home position is normally defined by a hardware sensor positioned around the dome circumference
-    '''     and represents a fixed, known azimuth reference.
-    '''   </para>
-    '''   <para>
-    '''     For some devices, the home position may represent a small range of azimuth values, rather than a discrete
-    '''     value, since dome inertia, the resolution of the home position sensor and/or the azimuth encoder may be
-    '''     insufficient to return the exact same azimuth value on each occasion. Some dome controllers, on the other
-    '''     hand, will always force the azimuth reading to a fixed value whenever the home position sensor is active.
-    '''     Because of these potential differences in behaviour, applications should not rely on the reported azimuth
-    '''     position being identical each time <see cref="AtHome" /> is set <c>true</c>.
-    '''   </para>
+    ''' <para>The home position is normally defined by a hardware sensor positioned around the dome circumference and represents a fixed, known azimuth reference.</para>
+    ''' <para>For some devices, the home position may represent a small range of azimuth values, rather than a discrete value, since dome inertia, the resolution of the home position sensor and/or the azimuth encoder may be
+    ''' insufficient to return the exact same azimuth value on each occasion. Some dome controllers, on the other hand, will always force the azimuth reading to a fixed value whenever the home position sensor is active.
+    ''' Because of these potential differences in behaviour, applications should not rely on the reported azimuth position being identical each time <see cref="AtHome" /> is set <c>true</c>.</para>
     ''' </remarks>
     ''' [ASCOM-135] TPL - Updated documentation
     ReadOnly Property AtHome() As Boolean
@@ -245,67 +235,94 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <summary>
     ''' True if the dome is in the programmed park position.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ''' <remarks>
-    ''' Set only following a <see cref="Park" /> operation and reset with any slew operation.
-    ''' Raises an error if not supported. 
+    ''' Set only following a <see cref="Park" /> operation and reset with any slew operation. Raises an error if not supported. 
     ''' </remarks>
     ReadOnly Property AtPark() As Boolean
 
     ''' <summary>
     ''' The dome azimuth (degrees, North zero and increasing clockwise, i.e., 90 East, 180 South, 270 West)
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ''' <remarks>Raises an error only if no azimuth control. If actual dome azimuth can not be read, then reports back last slew position</remarks>
     ReadOnly Property Azimuth() As Double
 
     ''' <summary>
     ''' True if driver can do a search for home position.
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property CanFindHome() As Boolean
 
     ''' <summary>
     ''' True if driver is capable of setting dome altitude.
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property CanPark() As Boolean
 
     ''' <summary>
     ''' True if driver is capable of setting dome altitude.
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property CanSetAltitude() As Boolean
 
     ''' <summary>
     ''' True if driver is capable of setting dome azimuth.
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property CanSetAzimuth() As Boolean
 
     ''' <summary>
     ''' True if driver can set the dome park position.
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property CanSetPark() As Boolean
 
     ''' <summary>
     ''' True if driver is capable of automatically operating shutter.
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property CanSetShutter() As Boolean
 
     ''' <summary>
     ''' True if the dome hardware supports slaving to a telescope.
     ''' </summary>
-    ''' <remarks>See the notes for the <see cref="Slaved" /> property.</remarks>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' See the notes for the <see cref="Slaved" /> property.
+    ''' </remarks>
     ReadOnly Property CanSlave() As Boolean
 
     ''' <summary>
     ''' True if driver is capable of synchronizing the dome azimuth position using the <see cref="SyncToAzimuth" /> method.
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property CanSyncAzimuth() As Boolean
 
     ''' <summary>
     ''' Close shutter or otherwise shield telescope from the sky.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     Sub CloseShutter()
 
     ''' <summary>
     ''' Start operation to search for the dome home position.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <remarks>
     ''' After Home position is established initializes <see cref="Azimuth" /> to the default value and sets the <see cref="AtHome" /> flag. 
     ''' Exception if not supported or communications failure. Raises an error if <see cref="Slaved" /> is True.
@@ -315,6 +332,7 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <summary>
     ''' Open shutter or otherwise expose telescope to the sky.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <remarks>
     ''' Raises an error if not supported or if a communications failure occurs. 
     ''' </remarks>
@@ -323,15 +341,16 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <summary>
     ''' Rotate dome in azimuth to park position.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <remarks>
-    ''' After assuming programmed park position, sets <see cref="AtPark" /> flag. Raises an error if <see cref="Slaved" /> is True,
-    ''' or if not supported, or if a communications failure has occurred. 
+    ''' After assuming programmed park position, sets <see cref="AtPark" /> flag. Raises an error if <see cref="Slaved" /> is True, or if not supported, or if a communications failure has occurred. 
     ''' </remarks>
     Sub Park()
 
     ''' <summary>
     ''' Set the current azimuth, altitude position of dome to be the park position.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <remarks>
     ''' Raises an error if not supported or if a communications failure occurs. 
     ''' </remarks>
@@ -340,10 +359,9 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <summary>
     ''' Status of the dome shutter or roll-off roof.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ''' <remarks>
-    ''' Raises an error only if no shutter control.
-    ''' If actual shutter status can not be read, 
-    ''' then reports back the last shutter state. 
+    ''' Raises an error only if no shutter control. If actual shutter status can not be read, then reports back the last shutter state. 
     ''' </remarks>
     ReadOnly Property ShutterStatus() As ShutterState
 
@@ -351,10 +369,10 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' True if the dome is slaved to the telescope in its hardware, else False.
     ''' </summary>
     ''' <remarks>
-    ''' Set this property to True to enable dome-telescope hardware slaving,
-    ''' if supported (see <see cref="CanSlave" />). Raises an exception on any attempt to set 
-    ''' this property if hardware slaving is not supported).
-    ''' Always returns False if hardware slaving is not supported. 
+    ''' <p style="color:red;margin-bottom:0"><b>Slaved Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' <p style="color:red;margin-top:0"><b>Slaved Write can throw a PropertyNotImplementedException.</b></p>
+    ''' Set this property to True to enable dome-telescope hardware slaving, if supported (see <see cref="CanSlave" />). Raises an exception on any attempt to set 
+    ''' this property if hardware slaving is not supported). Always returns False if hardware slaving is not supported. 
     ''' </remarks>
     Property Slaved() As Boolean
 
@@ -362,17 +380,18 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' True if any part of the dome is currently moving, False if all dome components are steady.
     ''' </summary>
     ''' <remarks>
-    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs,
-    ''' or if the dome can not reach indicated azimuth. 
+    ''' <p style="color:red;margin-bottom:0"><b>Slewing must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs, or if the dome can not reach indicated azimuth. 
     ''' </remarks>
     ReadOnly Property Slewing() As Boolean
 
     ''' <summary>
     ''' Slew the dome to the given altitude position.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If the supplied altitude is outside the range 0..90 degrees.</exception>
     ''' <remarks>
-    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs,
-    ''' or if the dome can not reach indicated altitude. 
+    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs, or if the dome can not reach indicated altitude. 
     ''' </remarks>
     ''' <param name="Altitude">Target dome altitude (degrees, horizon zero and increasing positive to 90 zenith)</param>
     Sub SlewToAltitude(ByVal Altitude As Double)
@@ -380,9 +399,10 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <summary>
     ''' Slew the dome to the given azimuth position.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If the supplied azimuth is outside the range 0..360 degrees.</exception>
     ''' <remarks>
-    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs,
-    ''' or if the dome can not reach indicated azimuth. 
+    ''' Raises an error if <see cref="Slaved" /> is True, if not supported, if a communications failure occurs, or if the dome can not reach indicated azimuth. 
     ''' </remarks>
     ''' <param name="Azimuth">Target azimuth (degrees, North zero and increasing clockwise. i.e., 90 East, 180 South, 270 West)</param>
     Sub SlewToAzimuth(ByVal Azimuth As Double)
@@ -390,6 +410,8 @@ Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
     ''' <summary>
     ''' Synchronize the current position of the dome to the given azimuth.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If the supplied azimuth is outside the range 0..360 degrees.</exception>
     ''' <remarks>
     ''' Raises an error if not supported or if a communications failure occurs. 
     ''' </remarks>
