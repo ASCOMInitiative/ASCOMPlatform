@@ -51,6 +51,9 @@
 	      			(Please see the notes on <link xlink:href="#DeprecatedCapability">Deprecated Components</link> below.)</para>
 	      			</listItem>
 					<listItem>The developer tools installer now bypasses the initial descriptive page and opens straight at the options page, only needing one click to start installation.</listItem>
+					<listItem>ITelescope, IDome, IFilerWheel and ISafetyMonitor interface documentation in the help file now clearly identifies the "required" members that all drivers must implement and that a client can expect to be functionally implemented.
+					The Conform tool will confirm that these required members are present and that they return reasonable values in line with the interface specification.</listItem>
+					<listItem>Expected exceptions for ITelescope, IDome, IFilerWheel and ISafetyMonitor members have been added to the interface documentation in the help file</listItem>
 				</list>
       		</content>
    		</section>

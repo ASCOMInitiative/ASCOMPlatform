@@ -199,6 +199,9 @@ Public Interface ISafetyMonitor
     ''' Indicates whether the monitored state is safe for use.
     ''' </summary>
     ''' <value>True if the state is safe, False if it is unsafe.</value>
+    ''' <remarks>
+    ''' <p style="color:red;margin-bottom:0"><b>Must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' </remarks>
     ReadOnly Property IsSafe() As Boolean
 #End Region
 

@@ -199,17 +199,17 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Stops a slew in progress.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
     ''' <remarks>
     ''' Effective only after a call to <see cref="SlewToTargetAsync" />, <see cref="SlewToCoordinatesAsync" />, <see cref="SlewToAltAzAsync" />, or <see cref="MoveAxis" />.
-    ''' Does nothing if no slew/motion is in progress. 
-    ''' Tracking is returned to its pre-slew state.
-    ''' Raises an error if <see cref="AtPark" /> is true. 
+    ''' Does nothing if no slew/motion is in progress. Tracking is returned to its pre-slew state. Raises an error if <see cref="AtPark" /> is true. 
     ''' </remarks>
     Sub AbortSlew()
 
     ''' <summary>
-    ''' The alignment mode of the mount.
+    ''' The alignment mode of the mount (Alt/Az, Polar, German Polar).
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ''' <remarks>
     ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </remarks>
@@ -218,6 +218,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The Altitude above the local horizon of the telescope's current position (degrees, positive up)
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ReadOnly Property Altitude() As Double
 
     ''' <summary>
@@ -226,6 +227,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <remarks>
     ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </remarks>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ReadOnly Property ApertureArea() As Double
 
     ''' <summary>
@@ -234,6 +236,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <remarks>
     ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </remarks>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ReadOnly Property ApertureDiameter() As Double
 
     ''' <summary>
@@ -241,6 +244,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     '''  and reset with any slew operation. This property must be False if the telescope does not support homing. 
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' This is only available for telescope InterfaceVersions 2 and 3
     ''' </remarks>
     ReadOnly Property AtHome() As Boolean
@@ -249,6 +253,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if the telescope has been put into the parked state by the seee <see cref="Park" /> method. Set False by calling the Unpark() method.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' <para>AtPark is True when the telescope is in the parked state. This is achieved by calling the <see cref="Park" /> method. When AtPark is true, 
     ''' the telescope movement is stopped (or restricted to a small safe range of movement) and all calls that would cause telescope 
     ''' movement (e.g. slewing, changing Tracking state) must not do so, and must raise an error.</para>
@@ -263,7 +268,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' </summary>
     ''' <param name="Axis">The axis about which rate information is desired (TelescopeAxes value)</param>
     ''' <returns>Collection of <see cref="IRate" /> rate objects</returns>
+    ''' <exception cref="InvalidValueException">If an invalid Axis is specified.</exception>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p>
     ''' See the description of <see cref="MoveAxis" /> for more information. This method must return an empty collection if <see cref="MoveAxis" /> is not supported. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' <para>
@@ -276,12 +283,14 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The azimuth at the local horizon of the telescope's current position (degrees, North-referenced, positive East/clockwise).
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ReadOnly Property Azimuth() As Double
 
     ''' <summary>
     ''' True if this telescope is capable of programmed finding its home position (<see cref="FindHome" /> method).
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
@@ -290,17 +299,20 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' True if this telescope can move the requested axis
     ''' </summary>
-    ''' <remarks>
-    ''' This is only available for telescope InterfaceVersions 2 and 3
-    ''' </remarks>
     ''' <param name="Axis">Primary, Secondary or Tertiary axis</param>
     ''' <returns>Boolean indicating can or can not move the requested axis</returns>
+    ''' <exception cref="InvalidValueException">If an invalid Axis is specified.</exception>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p>
+    ''' This is only available for telescope InterfaceVersions 2 and 3
+    ''' </remarks>
     Function CanMoveAxis(ByVal Axis As TelescopeAxes) As Boolean
 
     ''' <summary>
     ''' True if this telescope is capable of programmed parking (<see cref="Park" />method)
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
@@ -310,6 +322,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of software-pulsed guiding (via the <see cref="PulseGuide" /> method)
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' </remarks>
     ReadOnly Property CanPulseGuide() As Boolean
@@ -318,6 +331,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if the <see cref="DeclinationRate" /> property can be changed to provide offset tracking in the declination axis.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' </remarks>
     ReadOnly Property CanSetDeclinationRate() As Boolean
@@ -326,6 +340,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if the guide rate properties used for <see cref="PulseGuide" /> can ba adjusted.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
@@ -335,6 +350,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed setting of its park position (<see cref="SetPark" /> method)
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
@@ -344,6 +360,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if the <see cref="SideOfPier" /> property can be set, meaning that the mount can be forced to flip.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' This will always return False for non-German-equatorial mounts that do not have to be flipped. 
     ''' May raise an error if the telescope is not connected. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
@@ -354,6 +371,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if the <see cref="RightAscensionRate" /> property can be changed to provide offset tracking in the right ascension axis.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' </remarks>
     ReadOnly Property CanSetRightAscensionRate() As Boolean
@@ -362,6 +380,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if the <see cref="Tracking" /> property can be changed, turning telescope sidereal tracking on and off.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' </remarks>
     ReadOnly Property CanSetTracking() As Boolean
@@ -370,6 +389,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed slewing (synchronous or asynchronous) to equatorial coordinates
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' If this is true, then only the synchronous equatorial slewing methods are guaranteed to be supported.
     ''' See the <see cref="CanSlewAsync" /> property for the asynchronous slewing capability flag. 
     ''' May raise an error if the telescope is not connected. 
@@ -380,6 +400,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed slewing (synchronous or asynchronous) to local horizontal coordinates
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' If this is true, then only the synchronous local horizontal slewing methods are guaranteed to be supported.
     ''' See the <see cref="CanSlewAltAzAsync" /> property for the asynchronous slewing capability flag. 
     ''' May raise an error if the telescope is not connected. 
@@ -390,6 +411,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed asynchronous slewing to local horizontal coordinates
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' This indicates the the asynchronous local horizontal slewing methods are supported.
     ''' If this is True, then <see cref="CanSlewAltAz" /> will also be true. 
     ''' May raise an error if the telescope is not connected. 
@@ -400,6 +422,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed asynchronous slewing to equatorial coordinates.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' This indicates the the asynchronous equatorial slewing methods are supported.
     ''' If this is True, then <see cref="CanSlew" /> will also be true.
     ''' May raise an error if the telescope is not connected. 
@@ -410,6 +433,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed synching to equatorial coordinates.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' </remarks>
     ReadOnly Property CanSync() As Boolean
@@ -418,6 +442,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed synching to local horizontal coordinates
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' </remarks>
     ReadOnly Property CanSyncAltAz() As Boolean
@@ -426,8 +451,8 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed unparking (<see cref="Unpark" /> method).
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' If this is true, then <see cref="CanPark" /> will also be true. May raise an error if the telescope is not connected.
-    ''' May raise an error if the telescope is not connected. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
     ReadOnly Property CanUnpark() As Boolean
@@ -436,12 +461,18 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' The declination (degrees) of the telescope's current equatorial coordinates, in the coordinate system given by the <see cref="EquatorialSystem" /> property.
     ''' Reading the property will raise an error if the value is unavailable. 
     ''' </summary>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' </remarks>
     ReadOnly Property Declination() As Double
 
     ''' <summary>
     ''' The declination tracking rate (arcseconds per second, default = 0.0)
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If DeclinationRate Write is not implemented.</exception>
     ''' <remarks>
+    ''' <p style="color:red;margin-bottom:0"><b>DeclinationRate Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' <p style="color:red;margin-top:0"><b>DeclinationRate Write can throw a PropertyNotImplementedException.</b></p>
     ''' This property, together with <see cref="RightAscensionRate" />, provides support for "offset tracking".
     ''' Offset tracking is used primarily for tracking objects that move relatively slowly against the equatorial coordinate system.
     ''' It also may be used by a software guiding system that controls rates instead of using the <see cref="PulseGuide">PulseGuide</see> method. 
@@ -470,17 +501,20 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Predict side of pier for German equatorial mounts
     ''' </summary>
-    ''' <remarks>
-    ''' This is only available for telescope InterfaceVersions 2 and 3
-    ''' </remarks>
     ''' <param name="RightAscension">The destination right ascension (hours).</param>
     ''' <param name="Declination">The destination declination (degrees, positive North).</param>
     ''' <returns>The side of the pier on which the telescope would be on if a slew to the given equatorial coordinates is performed at the current instant of time.</returns>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If an invalid RightAscension or Declination is specified.</exception>
+    ''' <remarks>
+    ''' This is only available for telescope InterfaceVersions 2 and 3
+    ''' </remarks>
     Function DestinationSideOfPier(ByVal RightAscension As Double, ByVal Declination As Double) As PierSide
 
     ''' <summary>
     ''' True if the telescope or driver applies atmospheric refraction to coordinates.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">Either read or write or both properties can throw PropertyNotImplementedException if not implemented</exception>
     ''' <remarks>
     ''' If this property is True, the coordinates sent to, and retrieved from, the telescope are unrefracted. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
@@ -502,19 +536,15 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     Property DoesRefraction() As Boolean
 
     ''' <summary>
-    ''' Equatorial coordinate system used by this telescope.
+    ''' Equatorial coordinate system used by this telescope (e.g. Topocentric or J2000).
     ''' </summary>
     ''' <remarks>
-    ''' Most amateur telescopes use local topocentric coordinates.
-    ''' This coordinate system is simply the apparent position in the sky
-    ''' (possibly uncorrected for atmospheric refraction) for "here and now",
-    ''' thus these are the coordinates that one would use with digital setting
-    ''' circles and most amateur scopes. More sophisticated telescopes use one of
-    ''' the standard reference systems established by professional astronomers.
-    ''' The most common is the Julian Epoch 2000 (J2000). 
-    ''' These instruments apply corrections for precession,
-    ''' nutation, abberration, etc. to adjust the coordinates from the standard system
-    ''' to the pointing direction for the time and location of "here and now". 
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
+    ''' Most amateur telescopes use local topocentric coordinates. This coordinate system is simply the apparent position in the sky
+    ''' (possibly uncorrected for atmospheric refraction) for "here and now", thus these are the coordinates that one would use with digital setting
+    ''' circles and most amateur scopes. More sophisticated telescopes use one of the standard reference systems established by professional astronomers.
+    ''' The most common is the Julian Epoch 2000 (J2000). These instruments apply corrections for precession,nutation, abberration, etc. to adjust the coordinates 
+    ''' from the standard system to the pointing direction for the time and location of "here and now". 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
     ReadOnly Property EquatorialSystem() As EquatorialCoordinateType
@@ -522,6 +552,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Locates the telescope's "home" position (synchronous)
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanFindHome" /> is False</exception>
     ''' <remarks>
     ''' Returns only after the home position has been found.
     ''' At this point the <see cref="AtHome" /> property will be True.
@@ -534,6 +565,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The telescope's focal length, meters
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
     ''' <remarks>
     ''' This property may be used by clients to calculate telescope field of view and plate scale when combined with detector pixel size and geometry. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
@@ -543,21 +575,20 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The current Declination movement rate offset for telescope guiding (degrees/sec)
     ''' </summary>
-    ''' <remarks>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If an invalid guide rate is set.</exception>
+    ''' <remarks> 
     ''' This is the rate for both hardware/relay guiding and the PulseGuide() method. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' <para>
     ''' <b>NOTES:</b>
     ''' <list type="bullet">
     ''' <item><description>To discover whether this feature is supported, test the <see cref="CanSetGuideRates" /> property.</description></item> 
-    ''' <item><description>The supported range of this property is telescope specific, however,
-    ''' if this feature is supported, it can be expected that the range is sufficient to
+    ''' <item><description>The supported range of this property is telescope specific, however, if this feature is supported, it can be expected that the range is sufficient to
     ''' allow correction of guiding errors caused by moderate misalignment and periodic error.</description></item> 
-    ''' <item><description>If a telescope does not support separate guiding rates in Right Ascension and Declination,
-    ''' then it is permissible for <see cref="GuideRateRightAscension" /> and GuideRateDeclination to be tied together.
+    ''' <item><description>If a telescope does not support separate guiding rates in Right Ascension and Declination, then it is permissible for <see cref="GuideRateRightAscension" /> and GuideRateDeclination to be tied together.
     ''' In this case, changing one of the two properties will cause a change in the other.</description></item> 
-    ''' <item><description>Mounts must start up with a known or default declination guide rate,
-    ''' and this property must return that known/default guide rate until changed.</description></item> 
+    ''' <item><description>Mounts must start up with a known or default declination guide rate, and this property must return that known/default guide rate until changed.</description></item> 
     ''' </list>
     ''' </para>
     ''' </remarks>
@@ -566,6 +597,8 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The current Right Ascension movement rate offset for telescope guiding (degrees/sec)
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented</exception>
+    ''' <exception cref="InvalidValueException">If an invalid guide rate is set.</exception>
     ''' <remarks>
     ''' This is the rate for both hardware/relay guiding and the PulseGuide() method. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
@@ -573,14 +606,11 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <b>NOTES:</b>
     ''' <list type="bullet">
     ''' <item><description>To discover whether this feature is supported, test the <see cref="CanSetGuideRates" /> property.</description></item>  
-    ''' <item><description>The supported range of this property is telescope specific, however, if this feature is supported, 
-    ''' it can be expected that the range is sufficient to allow correction of guiding errors caused by moderate
+    ''' <item><description>The supported range of this property is telescope specific, however, if this feature is supported, it can be expected that the range is sufficient to allow correction of guiding errors caused by moderate
     ''' misalignment and periodic error.</description></item>  
-    ''' <item><description>If a telescope does not support separate guiding rates in Right Ascension and Declination,
-    ''' then it is permissible for GuideRateRightAscension and <see cref="GuideRateDeclination" /> to be tied together. 
+    ''' <item><description>If a telescope does not support separate guiding rates in Right Ascension and Declination, then it is permissible for GuideRateRightAscension and <see cref="GuideRateDeclination" /> to be tied together. 
     ''' In this case, changing one of the two properties will cause a change in the other.</description></item>  
-    '''<item><description> Mounts must start up with a known or default right ascension guide rate,
-    ''' and this property must return that known/default guide rate until changed.</description></item>  
+    '''<item><description> Mounts must start up with a known or default right ascension guide rate, and this property must return that known/default guide rate until changed.</description></item>  
     ''' </list>
     ''' </para>
     ''' </remarks>
@@ -589,15 +619,19 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' True if a <see cref="PulseGuide" /> command is in progress, False otherwise
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If <see cref="CanPulseGuide" /> is False</exception>
     ''' <remarks>
-    ''' Raises an error if the value of the <see cref="CanPulseGuide" /> property is false
-    ''' (the driver does not support the <see cref="PulseGuide" /> method). 
+    ''' Raises an error if the value of the <see cref="CanPulseGuide" /> property is false (the driver does not support the <see cref="PulseGuide" /> method). 
     ''' </remarks>
     ReadOnly Property IsPulseGuiding() As Boolean
 
     ''' <summary>
     ''' Move the telescope in one axis at the given rate.
     ''' </summary>
+    ''' <param name="Axis">The physical axis about which movement is desired</param>
+    ''' <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid axis or rate is given.</exception>
     ''' <remarks>
     ''' This method supports control of the mount about its mechanical axes.
     ''' The telescope will start moving at the specified rate about the specified axis and continue indefinitely.
@@ -613,32 +647,23 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <list type="bullet">
     ''' <item><description>The movement rate must be within the value(s) obtained from a <see cref="IRate" /> object in the 
     ''' the <see cref="AxisRates" /> collection. This is a signed value with negative rates moving in the oposite direction to positive rates.</description></item>
-    ''' <item><description>The values specified in <see cref="AxisRates" /> are absolute, unsigned values and apply to both directions, 
-    ''' determined by the sign used in this command.</description></item>
-    ''' <item><description>The value of <see cref="Slewing" /> must be True if the telescope is moving 
-    ''' about any of its axes as a result of this method being called. 
-    ''' This can be used to simulate a handbox by initiating motion with the
-    ''' MouseDown event and stopping the motion with the MouseUp event.</description></item>
-    ''' <item><description>When the motion is stopped by setting the rate to zero the scope will be set to the previous 
-    ''' <see cref="TrackingRate" /> or to no movement, depending on the state of the <see cref="Tracking" /> property.</description></item>
-    ''' <item><description>It may be possible to implement satellite tracking by using the <see cref="MoveAxis" /> method to move the 
-    ''' scope in the required manner to track a satellite.</description></item>
+    ''' <item><description>The values specified in <see cref="AxisRates" /> are absolute, unsigned values and apply to both directions, determined by the sign used in this command.</description></item>
+    ''' <item><description>The value of <see cref="Slewing" /> must be True if the telescope is moving about any of its axes as a result of this method being called. 
+    ''' This can be used to simulate a handbox by initiating motion with the MouseDown event and stopping the motion with the MouseUp event.</description></item>
+    ''' <item><description>When the motion is stopped by setting the rate to zero the scope will be set to the previous <see cref="TrackingRate" /> or to no movement, depending on the state of the <see cref="Tracking" /> property.</description></item>
+    ''' <item><description>It may be possible to implement satellite tracking by using the <see cref="MoveAxis" /> method to move the scope in the required manner to track a satellite.</description></item>
     ''' </list>
     ''' </para>
     ''' </remarks>
-    ''' <param name="Axis">The physical axis about which movement is desired</param>
-    ''' <param name="Rate">The rate of motion (deg/sec) about the specified axis</param>
     Sub MoveAxis(ByVal Axis As TelescopeAxes, ByVal Rate As Double)
 
     ''' <summary>
     ''' Move the telescope to its park position, stop all motion (or restrict to a small safe range), and set <see cref="AtPark" /> to True.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanPark" /> is False</exception>
     ''' <remarks>
-    ''' Raises an error if there is a problem communicating with the telescope or if parking fails. 
-    ''' Parking should put the telescope into a state where its pointing accuracy 
-    ''' will not be lost if it is power-cycled (without moving it).
-    ''' Some telescopes must be power-cycled before unparking.
-    ''' Others may be unparked by simply calling the <see cref="UnPark" /> method.
+    ''' Raises an error if there is a problem communicating with the telescope or if parking fails. Parking should put the telescope into a state where its pointing accuracy 
+    ''' will not be lost if it is power-cycled (without moving it).Some telescopes must be power-cycled before unparking. Others may be unparked by simply calling the <see cref="UnPark" /> method.
     ''' Calling this with <see cref="AtPark" /> = True does nothing (harmless) 
     ''' </remarks>
     Sub Park()
@@ -647,6 +672,10 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Moves the scope in the given direction for the given interval or time at 
     ''' the rate given by the corresponding guide rate property 
     ''' </summary>
+    ''' <param name="Direction">The direction in which the guide-rate motion is to be made</param>
+    ''' <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanPulseGuide" /> is False</exception>
+    ''' <exception cref="InvalidValueException">If an invalid direction or duration is given.</exception>
     ''' <remarks>
     ''' This method returns immediately if the hardware is capable of back-to-back moves,
     ''' i.e. dual-axis moves. For hardware not having the dual-axis capability,
@@ -665,8 +694,6 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' </list>
     ''' </para>
     ''' </remarks>
-    ''' <param name="Direction">The direction in which the guide-rate motion is to be made</param>
-    ''' <param name="Duration">The duration of the guide-rate motion (milliseconds)</param>
     Sub PulseGuide(ByVal Direction As GuideDirections, ByVal Duration As Integer)
 
     ''' <summary>
@@ -674,6 +701,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' in the coordinate system given by the EquatorialSystem property
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' Reading the property will raise an error if the value is unavailable. 
     ''' </remarks>
     ReadOnly Property RightAscension() As Double
@@ -681,11 +709,14 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The right ascension tracking rate offset from sidereal (seconds per sidereal second, default = 0.0)
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If RightAscensionRate Write is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid drive rate is set.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid rate is set.</exception>
     ''' <remarks>
-    ''' This property, together with <see cref="DeclinationRate" />, provides support for "offset tracking".
-    ''' Offset tracking is used primarily for tracking objects that move relatively slowly
-    ''' against the equatorial coordinate system. It also may be used by a software guiding
-    ''' system that controls rates instead of using the <see cref="PulseGuide">PulseGuide</see> method.
+    ''' <p style="color:red;margin-bottom:0"><b>RightAscensionRate Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' <p style="color:red;margin-top:0"><b>RightAscensionRate Write can throw a PropertyNotImplementedException.</b></p>
+    ''' This property, together with <see cref="DeclinationRate" />, provides support for "offset tracking". Offset tracking is used primarily for tracking objects that move relatively slowly
+    ''' against the equatorial coordinate system. It also may be used by a software guiding system that controls rates instead of using the <see cref="PulseGuide">PulseGuide</see> method.
     ''' <para>
     ''' <b>NOTES:</b>
     ''' The property value represents an offset from the currently selected <see cref="TrackingRate" />. 
@@ -694,23 +725,15 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <item><description>If <see cref="CanSetRightAscensionRate" /> is False, this property must always return 0.</description></item> 
     ''' To discover whether this feature is supported, test the <see cref="CanSetRightAscensionRate" />property. 
     ''' <item><description>The property value is in in seconds of right ascension per sidereal second.</description></item> 
-    ''' <item><description>To convert a given rate in (the more common) units of sidereal seconds
-    ''' per UTC (clock) second, multiply the value by 0.9972695677 
-    ''' (the number of UTC seconds in a sidereal second) then set the property.
-    ''' Please note that these units were chosen for the Telescope V1 standard,
-    ''' and in retrospect, this was an unfortunate choice.
-    ''' However, to maintain backwards compatibility, the units cannot be changed.
-    ''' A simple multiplication is all that's needed, as noted. 
-    ''' The supported range of this property is telescope specific, however,
-    ''' if this feature is supported, it can be expected that the range
-    ''' is sufficient to allow correction of guiding errors
+    ''' <item><description>To convert a given rate in (the more common) units of sidereal seconds per UTC (clock) second, multiply the value by 0.9972695677 
+    ''' (the number of UTC seconds in a sidereal second) then set the property. Please note that these units were chosen for the Telescope V1 standard,
+    ''' and in retrospect, this was an unfortunate choice. However, to maintain backwards compatibility, the units cannot be changed.
+    ''' A simple multiplication is all that's needed, as noted. The supported range of this property is telescope specific, however,
+    ''' if this feature is supported, it can be expected that the range is sufficient to allow correction of guiding errors
     ''' caused by moderate misalignment and periodic error. </description></item>
-    ''' <item><description>If this property is non-zero when an equatorial slew is initiated,
-    ''' the telescope should continue to update the slew destination coordinates 
-    ''' at the given offset rate. This will allow precise slews to a fast-moving 
-    ''' target with a slow-slewing telescope. When the slew completes, 
-    ''' the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties should
-    ''' reflect the final (adjusted) destination. This is not a required
+    ''' <item><description>If this property is non-zero when an equatorial slew is initiated, the telescope should continue to update the slew destination coordinates 
+    ''' at the given offset rate. This will allow precise slews to a fast-moving target with a slow-slewing telescope. When the slew completes, 
+    ''' the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties should reflect the final (adjusted) destination. This is not a required
     ''' feature of this specification, however it is desirable. </description></item>
     ''' <item><description>Use the <see cref="Tracking" /> property to enable and disable sidereal tracking (if supported). </description></item>
     ''' </list>
@@ -721,11 +744,14 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Sets the telescope's park position to be its current position.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanPark" /> is False</exception>
     Sub SetPark()
 
     ''' <summary>
     ''' Indicates the pointing state of the mount.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid side of pier is set.</exception>
     ''' <remarks>
     ''' <para>For historical reasons, this property's name does not reflect its true meaning. The name will not be changed (so as to preserve 
     ''' compatibility), but the meaning has since become clear. All conventional mounts have two pointing states for a given equatorial (sky) position. 
@@ -798,6 +824,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' The local apparent sidereal time from the telescope's internal clock (hours, sidereal)
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' It is required for a driver to calculate this from the system clock if the telescope 
     ''' has no accessible source of sidereal time. Local Apparent Sidereal Time is the sidereal 
     ''' time used for pointing telescopes, and thus must be calculated from the Greenwich Mean
@@ -808,6 +835,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The elevation above mean sea level (meters) of the site at which the telescope is located
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid elevation is set.</exception>
+    ''' <exception cref="InvalidOperationException">If the application must set the elevation before reading it, but has not.</exception>
     ''' <remarks>
     ''' Setting this property will raise an error if the given value is outside the range -300 through +10000 metres.
     ''' Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
@@ -818,6 +848,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The geodetic(map) latitude (degrees, positive North, WGS84) of the site at which the telescope is located.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid latitude is set.</exception>
+    ''' <exception cref="InvalidOperationException">If the application must set the latitude before reading it, but has not.</exception>
     ''' <remarks>
     ''' Setting this property will raise an error if the given value is outside the range -90 to +90 degrees.
     ''' Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
@@ -828,6 +861,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The longitude (degrees, positive East, WGS84) of the site at which the telescope is located.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid longitude is set.</exception>
+    ''' <exception cref="InvalidOperationException">If the application must set the longitude before reading it, but has not.</exception>
     ''' <remarks>
     ''' Setting this property will raise an error if the given value is outside the range -180 to +180 degrees.
     ''' Reading the property will raise an error if the value has never been set or is otherwise unavailable.
@@ -836,25 +872,23 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' </remarks>
     Property SiteLongitude() As Double
 
-
     ''' <summary>
     ''' True if telescope is currently moving in response to one of the
     ''' Slew methods or the <see cref="MoveAxis" /> method, False at all other times.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
     ''' <remarks>
-    ''' Reading the property will raise an error if the value is unavailable.
-    ''' If the telescope is not capable of asynchronous slewing,
-    ''' this property will always be False. 
-    ''' The definition of "slewing" excludes motion caused by sidereal tracking,
-    ''' <see cref="PulseGuide">PulseGuide</see>, <see cref="RightAscensionRate" />, and <see cref="DeclinationRate" />.
-    ''' It reflects only motion caused by one of the Slew commands, 
-    ''' flipping caused by changing the <see cref="SideOfPier" /> property, or <see cref="MoveAxis" />. 
+    ''' Reading the property will raise an error if the value is unavailable. If the telescope is not capable of asynchronous slewing, this property will always be False. 
+    ''' The definition of "slewing" excludes motion caused by sidereal tracking, <see cref="PulseGuide">PulseGuide</see>, <see cref="RightAscensionRate" />, and <see cref="DeclinationRate" />.
+    ''' It reflects only motion caused by one of the Slew commands, flipping caused by changing the <see cref="SideOfPier" /> property, or <see cref="MoveAxis" />. 
     ''' </remarks>
     ReadOnly Property Slewing() As Boolean
 
     ''' <summary>
     ''' Specifies a post-slew settling time (sec.).
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid settle time is set.</exception>
     ''' <remarks>
     ''' Adds additional time to slew operations. Slewing methods will not return, 
     ''' and the <see cref="Slewing" /> property will not become False, until the slew completes and the SlewSettleTime has elapsed.
@@ -865,6 +899,8 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Move the telescope to the given local horizontal coordinates, return when slew is complete
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAltAz" /> is False</exception>
+    ''' <exception cref="InvalidValueException">If an invalid azimuth or elevation is given.</exception>
     ''' <remarks>
     ''' This Method must be implemented if <see cref="CanSlewAltAz" /> returns True.
     ''' Raises an error if the slew fails. 
@@ -883,27 +919,28 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' This Method must be implemented if <see cref="CanSlewAltAzAsync" /> returns True.
     ''' </summary>
-    ''' <remarks>
-    ''' This method should only be implemented if the properties <see cref="Altitude" />, <see cref="Azimuth" />,
-    ''' <see cref="RightAscension" />, <see cref="Declination" /> and <see cref="Slewing" /> can be read while the scope is slewing.
-    ''' Raises an error if starting the slew fails. Returns immediately after starting the slew.
-    ''' The client may monitor the progress of the slew by reading the <see cref="Azimuth" />, <see cref="Altitude" />,
-    ''' and <see cref="Slewing" /> properties during the slew. When the slew completes, Slewing becomes False. 
-    ''' The slew may fail if the target coordinates are beyond limits imposed within the driver component.
-    ''' Such limits include mechanical constraints imposed by the mount or attached instruments,
-    ''' building or dome enclosure restrictions, etc. 
-    ''' The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method. 
-    ''' <para>
-    ''' Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
-    ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
-    ''' </remarks>
     ''' <param name="Azimuth">Azimuth to which to move</param>
     ''' <param name="Altitude">Altitude to which to move to</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAltAzAsync" /> is False</exception>
+    ''' <exception cref="InvalidValueException">If an invalid azimuth or elevation is given.</exception>
+    ''' <remarks>
+    ''' This method should only be implemented if the properties <see cref="Altitude" />, <see cref="Azimuth" />,
+    ''' <see cref="RightAscension" />, <see cref="Declination" /> and <see cref="Slewing" /> can be read while the scope is slewing. Raises an error if starting the slew fails. Returns immediately after starting the slew.
+    ''' The client may monitor the progress of the slew by reading the <see cref="Azimuth" />, <see cref="Altitude" />, and <see cref="Slewing" /> properties during the slew. When the slew completes, Slewing becomes False. 
+    ''' The slew may fail if the target coordinates are beyond limits imposed within the driver component. Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc. 
+    ''' The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method. 
+    ''' <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
+    ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
+    ''' </remarks>
     Sub SlewToAltAzAsync(ByVal Azimuth As Double, ByVal Altitude As Double)
 
     ''' <summary>
     ''' Move the telescope to the given equatorial coordinates, return when slew is complete
     ''' </summary>
+    ''' <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
+    ''' <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
+    ''' <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
     ''' <remarks>
     ''' This Method must be implemented if <see cref="CanSlew" /> returns True. Raises an error if the slew fails. 
     ''' The slew may fail if the target coordinates are beyond limits imposed within the driver component.
@@ -912,13 +949,15 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> whether or not the slew succeeds. 
     ''' <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
     ''' </remarks>
-    ''' <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
-    ''' <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
     Sub SlewToCoordinates(ByVal RightAscension As Double, ByVal Declination As Double)
 
     ''' <summary>
     ''' Move the telescope to the given equatorial coordinates, return immediately after starting the slew.
     ''' </summary>
+    ''' <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
+    ''' <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
+    ''' <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
     ''' <remarks>
     ''' This method must be implemented if <see cref="CanSlewAsync" /> returns True. Raises an error if starting the slew failed. 
     ''' Returns immediately after starting the slew. The client may monitor the progress of the slew by reading
@@ -930,13 +969,12 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' whether or not the slew succeeds. 
     ''' Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False.</para>
     ''' </remarks>
-    ''' <param name="RightAscension">The destination right ascension (hours). Copied to <see cref="TargetRightAscension" />.</param>
-    ''' <param name="Declination">The destination declination (degrees, positive North). Copied to <see cref="TargetDeclination" />.</param>
     Sub SlewToCoordinatesAsync(ByVal RightAscension As Double, ByVal Declination As Double)
 
     ''' <summary>
     ''' Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> coordinates, return when slew complete.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
     ''' <remarks>
     ''' This Method must be implemented if <see cref="CanSlew" /> returns True. Raises an error if the slew fails. 
     ''' The slew may fail if the target coordinates are beyond limits imposed within the driver component.
@@ -950,6 +988,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
     ''' returns immediately after starting the slew.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
     ''' <remarks>
     ''' This Method must be implemented if  <see cref="CanSlewAsync" /> returns True.
     ''' Raises an error if starting the slew failed. 
@@ -966,24 +1005,28 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Matches the scope's local horizontal coordinates to the given local horizontal coordinates.
     ''' </summary>
+    ''' <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
+    ''' <param name="Altitude">Target altitude (degrees, positive up)</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSyncAltAz" /> is False</exception>
+    ''' <exception cref="InvalidValueException">If an invalid azimuth or altitude is given.</exception>
     ''' <remarks>
     ''' This must be implemented if the <see cref="CanSyncAltAz" /> property is True. Raises an error if matching fails. 
     ''' <para>Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True.</para>
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
-    ''' <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise)</param>
-    ''' <param name="Altitude">Target altitude (degrees, positive up)</param>
     Sub SyncToAltAz(ByVal Azimuth As Double, ByVal Altitude As Double)
 
     ''' <summary>
     ''' Matches the scope's equatorial coordinates to the given equatorial coordinates.
     ''' </summary>
+    ''' <param name="RightAscension">The corrected right ascension (hours). Copied to the <see cref="TargetRightAscension" /> property.</param>
+    ''' <param name="Declination">The corrected declination (degrees, positive North). Copied to the <see cref="TargetDeclination" /> property.</param>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSync" /> is False</exception>
+    ''' <exception cref="InvalidValueException">If an invalid right ascension or declination is given.</exception>
     ''' <remarks>
     ''' This must be implemented if the <see cref="CanSync" /> property is True. Raises an error if matching fails. 
     ''' Raises an error if <see cref="AtPark" /> AtPark is True, or if <see cref="Tracking" /> is False. 
     ''' </remarks>
-    ''' <param name="RightAscension">The corrected right ascension (hours). Copied to the <see cref="TargetRightAscension" /> property.</param>
-    ''' <param name="Declination">The corrected declination (degrees, positive North). Copied to the <see cref="TargetDeclination" /> property.</param>
     Sub SyncToCoordinates(ByVal RightAscension As Double, ByVal Declination As Double)
 
     ''' <summary>
@@ -998,25 +1041,32 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The declination (degrees, positive North) for the target of an equatorial slew or sync operation
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid declination is set.</exception>
+    ''' <exception cref="InvalidOperationException">If the property is read before being set for the first time.</exception>
     ''' <remarks>
-    ''' Setting this property will raise an error if the given value is outside the range -90 to +90 degrees.
-    ''' Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
+    ''' Setting this property will raise an error if the given value is outside the range -90 to +90 degrees. Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
     ''' </remarks>
     Property TargetDeclination() As Double
 
     ''' <summary>
     ''' The right ascension (hours) for the target of an equatorial slew or sync operation
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If the property is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid right ascension is set.</exception>
+    ''' <exception cref="InvalidOperationException">If the property is read before being set for the first time.</exception>
     ''' <remarks>
-    ''' Setting this property will raise an error if the given value is outside the range 0 to 24 hours.
-    ''' Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
+    ''' Setting this property will raise an error if the given value is outside the range 0 to 24 hours. Reading the property will raise an error if the value has never been set or is otherwise unavailable. 
     ''' </remarks>
     Property TargetRightAscension() As Double
 
     ''' <summary>
     ''' The state of the telescope's sidereal tracking drive.
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If Tracking Write is not implemented.</exception>
     ''' <remarks>
+    ''' <p style="color:red;margin-bottom:0"><b>Tracking Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' <p style="color:red;margin-top:0"><b>Tracking Write can throw a PropertyNotImplementedException.</b></p>
     ''' Changing the value of this property will turn the sidereal drive on and off.
     ''' However, some telescopes may not support changing the value of this property
     ''' and thus may not support turning tracking on and off.
@@ -1027,18 +1077,17 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The current tracking rate of the telescope's sidereal drive
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If TrackingRate Write is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid drive rate is set.</exception>
     ''' <remarks>
+    ''' <p style="color:red;margin-bottom:0"><b>TrackingRate Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' <p style="color:red;margin-top:0"><b>TrackingRate Write can throw a PropertyNotImplementedException.</b></p>
     ''' Supported rates (one of the <see cref="DriveRates" />  values) are contained within the <see cref="TrackingRates" /> collection.
-    ''' Values assigned to TrackingRate must be one of these supported rates. 
-    ''' If an unsupported value is assigned to this property, it will raise an error. 
-    ''' The currently selected tracking rate be further adjusted via the <see cref="RightAscensionRate" /> 
-    ''' and <see cref="DeclinationRate" /> properties. These rate offsets are applied to the currently 
-    ''' selected tracking rate. Mounts must start up with a known or default tracking rate,
-    ''' and this property must return that known/default tracking rate until changed.
-    ''' <para>If the mount's current tracking rate cannot be determined (for example, 
-    ''' it is a write-only property of the mount's protocol), 
-    ''' it is permitted for the driver to force and report a default rate on connect.
-    ''' In this case, the preferred default is Sidereal rate.</para>
+    ''' Values assigned to TrackingRate must be one of these supported rates. If an unsupported value is assigned to this property, it will raise an error. 
+    ''' The currently selected tracking rate can be further adjusted via the <see cref="RightAscensionRate" /> and <see cref="DeclinationRate" /> properties. These rate offsets are applied to the currently 
+    ''' selected tracking rate. Mounts must start up with a known or default tracking rate, and this property must return that known/default tracking rate until changed.
+    ''' <para>If the mount's current tracking rate cannot be determined (for example, it is a write-only property of the mount's protocol), 
+    ''' it is permitted for the driver to force and report a default rate on connect. In this case, the preferred default is Sidereal rate.</para>
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
     Property TrackingRate() As DriveRates
@@ -1048,6 +1097,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' values of the <see cref="TrackingRate" /> property for this telescope type.
     ''' </summary>
     ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented and must not throw a PropertyNotImplementedException.</b></p>
     ''' At a minimum, this must contain an item for <see cref="DriveRates.driveSidereal" />.
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
@@ -1056,10 +1106,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Takes telescope out of the Parked state.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanUnpark" /> is False</exception>
     ''' <remarks>
-    ''' The state of <see cref="Tracking" /> after unparking is undetermined. 
-    ''' Valid only after <see cref="Park" />.
-    ''' Applications must check and change Tracking as needed after unparking. 
+    ''' The state of <see cref="Tracking" /> after unparking is undetermined. Valid only after <see cref="Park" />. Applications must check and change Tracking as needed after unparking. 
     ''' Raises an error if unparking fails. Calling this with <see cref="AtPark" /> = False does nothing (harmless) 
     ''' </remarks>
     Sub Unpark()
@@ -1067,13 +1116,14 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' The UTC date/time of the telescope's internal clock
     ''' </summary>
+    ''' <exception cref="PropertyNotImplementedException">If UTCDate Write is not implemented.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid <see cref="DateTime" /> is set.</exception>
+    ''' <exception cref="InvalidOperationException">When UTCDate is read and the mount cannot provide this property itslef and a value has not yet be established by writing to the property.</exception>
     ''' <remarks>
-    ''' The driver must calculate this from the system clock if the telescope has no accessible
-    ''' source of UTC time. In this case, the property must not be writeable 
-    ''' (this would change the system clock!) and will instead raise an error.
-    ''' However, it is permitted to change the telescope's internal UTC clock 
-    ''' if it is being used for this property. This allows clients to adjust 
-    ''' the telescope's UTC clock as needed for accuracy. Reading the property
+    ''' <p style="color:red;margin-bottom:0"><b>UTCDate Read must be implemented and must not throw a PropertyNotImplementedException. </b></p>
+    ''' <p style="color:red;margin-top:0"><b>UTCDate Write can throw a PropertyNotImplementedException.</b></p>
+    ''' The driver must calculate this from the system clock if the telescope has no accessible source of UTC time. In this case, the property must not be writeable (this would change the system clock!) and will instead raise an error.
+    ''' However, it is permitted to change the telescope's internal UTC clock if it is being used for this property. This allows clients to adjust the telescope's UTC clock as needed for accuracy. Reading the property
     ''' will raise an error if the value has never been set or is otherwise unavailable. 
     ''' </remarks>
     Property UTCDate() As DateTime
