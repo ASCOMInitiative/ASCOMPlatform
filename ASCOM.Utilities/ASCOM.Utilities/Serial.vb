@@ -450,7 +450,7 @@ Public Class Serial
             If Boolean.TryParse(buf, b) Then UseReadPolling = b
 
             Try
-                Logger.LogMessage("Set Connected To", Connecting.ToString)
+                Logger.LogMessage("Set Connected", Connecting.ToString)
                 If Connecting Then 'Log port parameters only if we are connecting
                     Logger.LogMessage("Set Connected", "Using COM port: " & m_PortName & _
                                       " Baud rate: " & m_Speed.ToString & _
@@ -474,7 +474,7 @@ Public Class Serial
                 TData.SerialCommand = SerialCommandType.Connected
                 TData.Connecting = Connecting
                 TData.ManualResetEvent = New ManualResetEvent(False)
-                TData.TransactionID = GetTransactionID("Set Conected")
+                TData.TransactionID = GetTransactionID("Set Connected")
                 ThreadPool.QueueUserWorkItem(AddressOf ConnectedWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
 
