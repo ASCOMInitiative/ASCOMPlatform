@@ -312,7 +312,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' True if this telescope is capable of programmed parking (<see cref="Park" />method)
     ''' </summary>
     ''' <remarks>
-    ''' <p style="color:red"><b>Must be implemented, must not throw a MethodNotImplementedException.</b></p>
+    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
     ''' May raise an error if the telescope is not connected. 
     ''' <para>This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
@@ -902,15 +902,10 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAltAz" /> is False</exception>
     ''' <exception cref="InvalidValueException">If an invalid azimuth or elevation is given.</exception>
     ''' <remarks>
-    ''' This Method must be implemented if <see cref="CanSlewAltAz" /> returns True.
-    ''' Raises an error if the slew fails. 
-    ''' The slew may fail if the target coordinates are beyond limits imposed within the driver component.
-    ''' Such limits include mechanical constraints imposed by the mount or attached instruments,
-    ''' building or dome enclosure restrictions, etc.
-    ''' <para>
-    ''' The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method. 
-    ''' Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True. 
-    ''' This is only available for telescope InterfaceVersions 2 and 3</para>
+    ''' This Method must be implemented if <see cref="CanSlewAltAz" /> returns True. Raises an error if the slew fails. The slew may fail if the target coordinates are beyond limits imposed within the driver component.
+    ''' Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc.
+    ''' <para>The <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties are not changed by this method. 
+    ''' Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is True. This is only available for telescope InterfaceVersions 2 and 3</para>
     ''' </remarks>
     ''' <param name="Azimuth">Target azimuth (degrees, North-referenced, positive East/clockwise).</param>
     ''' <param name="Altitude">Target altitude (degrees, positive up)</param>
@@ -988,16 +983,12 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' Move the telescope to the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" />  coordinates,
     ''' returns immediately after starting the slew.
     ''' </summary>
-    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlew" /> is False</exception>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSlewAsync" /> is False</exception>
     ''' <remarks>
     ''' This Method must be implemented if  <see cref="CanSlewAsync" /> returns True.
-    ''' Raises an error if starting the slew failed. 
-    ''' Returns immediately after starting the slew. The client may
-    ''' monitor the progress of the slew by reading the RightAscension, Declination,
-    ''' and Slewing properties during the slew. When the slew completes,  <see cref="Slewing" /> becomes False. 
-    ''' The slew may fail to start if the target coordinates are beyond limits imposed within 
-    ''' the driver component. Such limits include mechanical constraints imposed by the mount
-    ''' or attached instruments, building or dome enclosure restrictions, etc. 
+    ''' Raises an error if starting the slew failed. Returns immediately after starting the slew. The client may monitor the progress of the slew by reading the RightAscension, Declination,
+    ''' and Slewing properties during the slew. When the slew completes,  <see cref="Slewing" /> becomes False. The slew may fail to start if the target coordinates are beyond limits imposed within 
+    ''' the driver component. Such limits include mechanical constraints imposed by the mount or attached instruments, building or dome enclosure restrictions, etc. 
     ''' Raises an error if <see cref="AtPark" /> is True, or if <see cref="Tracking" /> is False. 
     ''' </remarks>
     Sub SlewToTargetAsync()
@@ -1032,6 +1023,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <summary>
     ''' Matches the scope's equatorial coordinates to the given equatorial coordinates.
     ''' </summary>
+    ''' <exception cref="MethodNotImplementedException">If the method is not implemented and <see cref="CanSync" /> is False</exception>
     ''' <remarks>
     ''' This must be implemented if the <see cref="CanSync" /> property is True. Raises an error if matching fails. 
     ''' Raises an error if <see cref="AtPark" /> AtPark is True, or if <see cref="Tracking" /> is False. 
