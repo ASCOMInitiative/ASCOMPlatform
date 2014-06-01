@@ -564,8 +564,68 @@ Namespace Interfaces
         ''' <returns>Collection of Integers</returns>
         ''' <remarks></remarks>
         <DispId(26)> Function ToIntegerCollection(ByVal integerArray As Integer()) As ArrayList
-        '<MarshalAs(UnmanagedType.SafeArray, SafeArraySubtype:=VarEnum.VT_VARIANT)>
-        <DispId(27)> Function ArrayToVariantArray(ByVal array As Object) As <MarshalAs(UnmanagedType.SafeArray, SafeArraySubtype:=VarEnum.VT_VARIANT)> Object
+
+        ''' <summary>
+        ''' Convert an array of .NET built-in types to an equivalent Variant arrray (array of .NET Objects)
+        ''' </summary>
+        ''' <param name="SuppliedObject">The array to convert to variant types</param>
+        ''' <returns>A Variant array</returns>
+        ''' <exception cref="InvalidValueException">If the supplied array contains elements of an unsuported Type.</exception>
+        ''' <exception cref="InvalidValueException">If the array rank is outside the range 1 to 5.</exception>
+        ''' <exception cref="InvalidValueException">If the supplied object is not an array.</exception>
+        ''' <remarks>This function will primarily be of use to Scripting Language programmers who need to convert Camera and Video ImageArrays from their native types to Variant types. If this is not done, 
+        ''' the scripting language will throw a type mismatch exception when it receives, for example, Int32 element types instead of the expected Variant types.
+        ''' <para>A VBScript Camera usage example is: Image = UTIL.ArrayToVariantArray(CAMERA.ImageArray) This example assumes that the camera and utilities objects have already been created with CreateObject statements.</para>
+        ''' <para>The supported .NET types are:
+        ''' <list type="bullet">
+        ''' <item><description>Int16</description></item>
+        ''' <item><description>Int32</description></item>
+        ''' <item><description>UInt16</description></item>
+        ''' <item><description>UInt32</description></item>
+        ''' <item><description>UInt64</description></item>
+        ''' <item><description>Byte</description></item>
+        ''' <item><description>SByte</description></item>
+        ''' <item><description>Single</description></item>
+        ''' <item><description>Double</description></item>
+        ''' <item><description>Boolean</description></item>
+        ''' <item><description>DateTime</description></item>
+        ''' <item><description>String</description></item>
+        ''' </list>
+        ''' </para>
+        ''' <para>The function supports arrays with 1 to 5 dimensions (Rank = 1 to 5). If the supplied array already contains elements of Variant type, it is returned as-is without any processing.</para></remarks>
+        <DispId(27)> Function ArrayToVariantArray(ByVal SuppliedObject As Object) As <MarshalAs(UnmanagedType.SafeArray, SafeArraySubtype:=VarEnum.VT_VARIANT)> Object
+
+        ''' <summary>
+        ''' Platform major version number
+        ''' </summary>
+        ''' <value>Platform major version number</value>
+        ''' <returns>Integer version number</returns>
+        ''' <remarks></remarks>
+        <DispId(28)> ReadOnly Property MajorVersion As Integer
+
+        ''' <summary>
+        ''' Platform minor version number
+        ''' </summary>
+        ''' <value>Platform minor version number</value>
+        ''' <returns>Integer version number</returns>
+        ''' <remarks></remarks>
+        <DispId(29)> ReadOnly Property MinorVersion As Integer
+
+        ''' <summary>
+        ''' Platform service pack number
+        ''' </summary>
+        ''' <value>Platform service pack number</value>
+        ''' <returns>Integer service pack number</returns>
+        ''' <remarks></remarks>
+        <DispId(30)> ReadOnly Property ServicePack As Integer
+
+        ''' <summary>
+        ''' Platform build number
+        ''' </summary>
+        ''' <value>Platform build number</value>
+        ''' <returns>Integer build number</returns>
+        ''' <remarks></remarks>
+        <DispId(31)> ReadOnly Property BuildNumber As Integer
 
     End Interface 'Interface to Utilities.Util
 

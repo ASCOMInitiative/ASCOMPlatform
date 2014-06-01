@@ -3,8 +3,6 @@
 'Common constants for the ASCOM.Utilities namesapce
 
 Module GlobalConstants
-    Friend Const PLATFORM_VERSION As String = "6.0" 'This is the master platform version and is set during profile migration
-
     Friend Const SERIAL_FILE_NAME_VARNAME As String = "SerTraceFile" 'Constant naming the profile trace file variable name
     Friend Const SERIAL_AUTO_FILENAME As String = "C:\SerialTraceAuto.txt" 'Special value to indicate use of automatic trace filenames
     Friend Const SERIAL_DEFAULT_FILENAME As String = "C:\SerialTrace.txt" 'Default manual trace filename
@@ -83,6 +81,11 @@ Module GlobalConstants
     'Contact driver author message
     Friend Const DRIVER_AUTHOR_MESSAGE_DRIVER As String = "Please contact the driver author and request an updated driver."
     Friend Const DRIVER_AUTHOR_MESSAGE_INSTALLER As String = "Please contact the driver author and request an updated installer."
+
+    'Location of Platform version in Profile
+    Friend Const PLATFORM_INFORMATION_SUBKEY As String = "Platform"
+    Friend Const PLATFORM_VERSION As String = "Platform Version"
+    Friend Const PLATFORM_VERSION_DEFAULT_BAD_VALUE As String = "0.0.0.0"
 
     Friend Enum EventLogErrors As Integer
         EventLogCreated = 0
