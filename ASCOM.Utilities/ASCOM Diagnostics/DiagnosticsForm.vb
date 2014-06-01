@@ -4612,6 +4612,7 @@ Public Class DiagnosticsForm
         Dim ts As String
         Dim HelperType As Type
         Dim i As Integer, Is64Bit As Boolean
+        Dim MyVersion As Version
         Dim Utl As Util
 
         Const TestDate As Date = #6/1/2010 4:37:00 PM#
@@ -4648,6 +4649,14 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 6.0", Utl.IsMinimumRequiredVersion(6, 0).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.1", Utl.IsMinimumRequiredVersion(6, 1).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.3", Utl.IsMinimumRequiredVersion(6, 3).ToString, "False")
+
+            ' Check that the platform version properties return the correct values
+            MyVersion = New Version(Application.ProductVersion) ' Get this assembly's version number against which to compare the Util version numbers
+            CompareInteger("UtilTests", "Major Version", Utl.MajorVersion, MyVersion.Major)
+            CompareInteger("UtilTests", "Minor Version", Utl.MinorVersion, MyVersion.Minor)
+            CompareInteger("UtilTests", "Service Pack", Utl.ServicePack, MyVersion.Build)
+            CompareInteger("UtilTests", "Build Number", Utl.BuildNumber, MyVersion.Revision)
+
             TL.BlankLine()
 
             IntArray1D(ArrayCopySize - 1) = ArrayCopySize

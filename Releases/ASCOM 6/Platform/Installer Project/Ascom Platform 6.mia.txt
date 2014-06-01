@@ -198,12 +198,8 @@ Comment: Set  up start menu variables, ASCOMSTARTMENU is the name of the Platfor
 Set Variable ASCOMSTARTMENU to ASCOM Platform 6
 Set Variable ALLUSERS to TRUE
  
-Comment: Get the build version into a variable so it can be written to the Profile
-Get File Version $SUPPORTDIR$\UninstallAscom.exe into Variable PLATFORMBUILDVERSION
- 
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value  (at end of file)
-Write into Text File $SETUPLOG$ from Value $TIME$ Platform build: $PLATFORMBUILDVERSION$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Revision code: $REVISIONCODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 if Variable NATIVE_ENGINE Equals TRUE
@@ -1065,7 +1061,6 @@ else
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\WScript.Exe, True
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\Astroart.Exe, True
       Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Build, $PLATFORMBUILDVERSION$
       Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
       Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name, $TITLE$
       Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Product Code, $PRODUCTCODE$
@@ -1189,7 +1184,6 @@ else
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceSystemTimer\WScript.Exe, True
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceSystemTimer\Astroart.Exe, True
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Build, $PLATFORMBUILDVERSION$
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Name, $TITLE$
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Product Code, $PRODUCTCODE$

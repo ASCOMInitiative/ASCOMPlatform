@@ -112,14 +112,11 @@ Get Folder Location Taskbar->Quick Launch Directory into QUICKLAUNCHDIR
 Get Folder Location WWW->WWWRoot into WWWROOTDIR
 Get Folder Location System->Profiles Directory into USERPROFILE
  
-Comment: Find the build number ready to store in the Profile
-Get File Version $SUPPORTDIR$\MigrationSupport.dll into Variable DEVELOPERTOOLSBUILDVERSION
 [END REGION]
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TITLE$ v$VERSION$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Installed $DATE$ $TIME$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
-Write into Text File $SETUPLOG$ from Value Platform build: $DEVELOPERTOOLSBUILDVERSION$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Revision code: $REVISIONCODE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 if Variable NATIVE_ENGINE Equals TRUE
@@ -438,7 +435,6 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
     [END REGION]
     [DEFINE REGION: Update Developer Tools installation information in Profile]
-    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Build, $DEVELOPERTOOLSBUILDVERSION$
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Installation Date, $DATE$ $TIME$
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Name, $TITLE$
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Product Code, $PRODUCTCODE$

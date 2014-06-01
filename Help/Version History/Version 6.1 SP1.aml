@@ -54,6 +54,8 @@
 					<listItem>ITelescope, IDome, IFilerWheel and ISafetyMonitor interface documentation in the help file now clearly identifies the "required" members that all drivers must implement and that a client can expect to be functionally implemented.
 					The Conform tool will confirm that these required members are present and that they return reasonable values in line with the interface specification.</listItem>
 					<listItem>Expected exceptions for ITelescope, IDome, IFilerWheel and ISafetyMonitor members have been added to the interface documentation in the help file</listItem>
+					<listItem>Platform build and version numbers have been consolidated to a single form: <legacyBold>PlatformMajor.PlatformMinor.ServicePack.BuildNumber</legacyBold> and each of these is now
+					available as a property in the ASCOM.Utilities.Util component.</listItem>
 				</list>
       		</content>
    		</section>

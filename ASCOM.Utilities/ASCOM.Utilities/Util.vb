@@ -1015,6 +1015,8 @@ Public Class Util
 
 #End Region
 
+#Region "Array To ArrAyVariant Code"
+
     ''' <summary>
     ''' Convert an array of .NET built-in types to an equivalent Variant arrray (array of .NET Objects)
     ''' </summary>
@@ -1149,6 +1151,71 @@ Public Class Util
         Return ReturnArray
     End Function
 
+#End Region
+
+#Region "Platform version properties"
+
+    ''' <summary>
+    ''' Platform major version number
+    ''' </summary>
+    ''' <value>Platform major version number</value>
+    ''' <returns>Integer version number</returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property MajorVersion As Integer Implements IUtil.MajorVersion
+        Get
+            Dim AscomVersion As Version
+            AscomVersion = New Version(myProfile.GetProfile(PLATFORM_INFORMATION_SUBKEY, PLATFORM_VERSION, PLATFORM_VERSION_DEFAULT_BAD_VALUE))
+            TL.LogMessage("MajorVersion Get", AscomVersion.Major.ToString())
+            Return AscomVersion.Major
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Platform minor version number
+    ''' </summary>
+    ''' <value>Platform minor version number</value>
+    ''' <returns>Integer version number</returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property MinorVersion As Integer Implements IUtil.MinorVersion
+        Get
+            Dim AscomVersion As Version
+            AscomVersion = New Version(myProfile.GetProfile(PLATFORM_INFORMATION_SUBKEY, PLATFORM_VERSION, PLATFORM_VERSION_DEFAULT_BAD_VALUE))
+            TL.LogMessage("MinorVersion Get", AscomVersion.Minor.ToString())
+            Return AscomVersion.Minor
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Platform service pack number
+    ''' </summary>
+    ''' <value>Platform service pack number</value>
+    ''' <returns>Integer service pack number</returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property ServicePack As Integer Implements IUtil.ServicePack
+        Get
+            Dim AscomVersion As Version
+            AscomVersion = New Version(myProfile.GetProfile(PLATFORM_INFORMATION_SUBKEY, PLATFORM_VERSION, PLATFORM_VERSION_DEFAULT_BAD_VALUE))
+            TL.LogMessage("ServicePack Get", AscomVersion.Build.ToString())
+            Return AscomVersion.Build
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Platform build number
+    ''' </summary>
+    ''' <value>Platform build number</value>
+    ''' <returns>Integer build number</returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property BuildNumber As Integer Implements IUtil.BuildNumber
+        Get
+            Dim AscomVersion As Version
+            AscomVersion = New Version(myProfile.GetProfile(PLATFORM_INFORMATION_SUBKEY, PLATFORM_VERSION, PLATFORM_VERSION_DEFAULT_BAD_VALUE))
+            TL.LogMessage("BuildNumber Get", AscomVersion.Revision.ToString())
+            Return AscomVersion.Revision
+        End Get
+    End Property
+
+#End Region
 
 #Region "Time Support Functions"
     '------------------------------------------------------------------------

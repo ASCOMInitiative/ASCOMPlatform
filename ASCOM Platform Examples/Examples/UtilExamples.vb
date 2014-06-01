@@ -2,12 +2,23 @@
     Sub Example()
         Dim Utl As ASCOM.Utilities.Util
         Dim PrmString, RspString As String, PrmDouble, RspDouble As Double, RspDate As Date
+        Dim PlatformMajor, PlatformMinor, ServicePack, Build As Integer, CurrrentPlatformVersion As Version
 
         Utl = New ASCOM.Utilities.Util
 
         'Get current julian datetime and ASCOM Platform version 
         RspDouble = Utl.JulianDate
         RspString = Utl.PlatformVersion
+
+        'Version and build
+        PlatformMajor = Utl.MajorVersion
+        PlatformMinor = Utl.MinorVersion
+        ServicePack = Utl.ServicePack
+        Build = Utl.BuildNumber
+
+        'Test whether the installed platform is at or greater than a required level
+        CurrrentPlatformVersion = New Version(PlatformMajor, PlatformMinor, ServicePack, Build)
+        If CurrrentPlatformVersion < New Version(6, 0, 3, 0) Then MsgBox("This application requires Platform 6.0 SP3 or later")
 
         With Utl 'Use "with" to get several properties
             RspString = .TimeZoneName 'Time zone name
@@ -30,7 +41,7 @@
         PrmString = "43:56:78.2567" : RspDouble = Utl.DMSToDegrees(PrmString)
         PrmString = "14:39:23" : RspDouble = Utl.HMSToDegrees(PrmString)
         PrmString = "14:37:23" : RspDouble = Utl.HMSToHours(PrmString)
-        
+
         Utl.Dispose() 'Clean up and dispose of the util component
         Utl = Nothing
 
