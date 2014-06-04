@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="status" value="needs attention" />
+	<infoitem key="notes" value="This needs to be refactored into eparate listings of client software and supported hardware.Then subdivide supported hardware into types. Maybe also subdivide client software into types?&#xD;&#xD;Perhaps combine with Supported Devices in the Support section?" />
+	<infoitem key="showOnOpen" value="true" />
+</info>

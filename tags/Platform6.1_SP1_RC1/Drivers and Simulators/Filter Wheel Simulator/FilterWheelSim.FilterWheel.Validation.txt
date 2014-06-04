@@ -1,0 +1,54 @@
+Conform Report Hash (V1): 60C6A210377A942C2551C0907AE760E78B8E900172A29A4C996B36061635FA73AF0015823BAF791A945A32BCC9C96505F8BF351FBE139FC427413FE128C64C07
+
+ConformanceCheck ASCOM Device Conformance Checker Version 2.0.2.0
+ConformanceCheck Running on ASCOM Platform 5.0
+ 
+ConformanceCheck Driver ProgID: FilterWheelSim.FilterWheel
+ 
+ConformanceCheck IConform driver interface not found, using internal configuration values
+ 
+Error numbers 
+Error number for "Not Implemented" is: 80040400
+Error number for "Invalid Value 1" is: 80040404
+Error number for "Value Not Set"   is: 0
+ 
+Driver Access Checks 
+22:51:52.339 AccessChecks                  OK       Successfully created driver using late binding
+22:51:52.348 AccessChecks                  OK       Successfully connected using late binding
+22:51:52.353 AccessChecks                  INFO     The driver is a COM object
+22:51:52.498 AccessChecks                  OK       Successfully created driver using early binding to IFilterWheel interface
+22:51:52.506 AccessChecks                  OK       Successfully connected using early binding to IFilterWheel interface
+22:51:52.647 AccessChecks                  OK       Successfully created driver using driver access toolkit
+22:51:52.655 AccessChecks                  OK       Successfully connected using driver access toolkit
+ 
+ConformanceCheck Using CreateObject to get a Filter Wheel object
+ 
+Properties 
+Test 1
+22:51:52.858 FocusOffsets Get              OK       Found 4 filter offset values
+22:51:52.865 FocusOffsets Get              INFO     Filter 0 Offset: 1200
+22:51:52.870 FocusOffsets Get              INFO     Filter 1 Offset: 1000
+22:51:52.875 FocusOffsets Get              INFO     Filter 2 Offset: -200
+22:51:52.881 FocusOffsets Get              INFO     Filter 3 Offset: 0
+22:51:52.890 FocusOffsets Get              OK       Exception correctly generated when accessing filter with negative filter number
+22:51:52.904 FocusOffsets Get              OK       Exception correctly generated when accessing filter outside expected range
+22:51:52.916 Names Get                     OK       Found 4 filter name values
+22:51:52.922 Names Get                     INFO     Filter 0 Name: Red
+22:51:52.930 Names Get                     INFO     Filter 1 Name: Green
+22:51:52.936 Names Get                     INFO     Filter 2 Name: Blue
+22:51:52.944 Names Get                     INFO     Filter 3 Name: Clear
+22:51:52.954 Names Get                     OK       Exception correctly generated when accessing filter with negative filter number
+22:51:52.965 Names Get                     OK       Exception correctly generated when accessing filter outside expected range
+22:51:52.972 Names Get                     OK       Number of filter offsets and number of names are the same: 4
+22:51:52.982 Position Get                  OK       Currently at position: 0
+22:51:52.992 Position Set                  OK       Reached position: 0 in: 0.0 seconds
+22:51:53.501 Position Set                  OK       Reached position: 1 in: 0.5 seconds
+22:51:54.003 Position Set                  OK       Reached position: 2 in: 0.5 seconds
+22:51:54.501 Position Set                  OK       Reached position: 3 in: 0.5 seconds
+22:51:54.511 Position Set                  OK       Exception correctly generated when selecting filter with negative filter number
+22:51:54.522 Position Set                  OK       Exception correctly generated when selecting filter outside expected range
+ 
+Filter Wheel test completed 
+No errors, warnings or issues found: your driver passes ASCOM validation!! 
+ 
+Driver Hash Value: 22D945DBC8D0730A72E24F559B17F68C78EEDBB843476D7596B7B4EA41AB5CEB781E043F4857EF83B4A0C4B526573B695C938F729BF6679E3222895DEC26FD88
