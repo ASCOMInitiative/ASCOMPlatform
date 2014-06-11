@@ -3,6 +3,7 @@ Imports ASCOM.DeviceInterface
 Imports ASCOM.Internal
 Imports ASCOM.Utilities.Exceptions
 Imports ASCOM.Utilities.Video
+Imports ASCOM.Utilities.Serial
 Imports Microsoft.Win32
 Imports System
 Imports System.Globalization
@@ -6990,7 +6991,10 @@ Public Class DiagnosticsForm
     ''' <remarks></remarks>
     Private Sub RefreshTraceItems()
         Dim ProfileStore As RegistryAccess, TraceFileName As String
+        Dim TypeOfWait As Serial.WaitType
+
         ProfileStore = New RegistryAccess("Diagnostics") 'Get access to the profile store
+
         TraceFileName = ProfileStore.GetProfile("", SERIAL_FILE_NAME_VARNAME, "")
         Select Case TraceFileName
             Case "" 'Trace is disabled
@@ -7027,6 +7031,22 @@ Public Class DiagnosticsForm
         MenuThrowAbandonedMutexExceptions.Checked = GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT)
         MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
         MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
+
+        TypeOfWait = GetWaitType(SERIAL_WAIT_TYPE, SERIAL_WAIT_TYPE_DEFAULT)
+
+        MenuWaitTypeManualResetEvent.Checked = False
+        MenuWaitTypeSleep.Checked = False
+        MenuWaitTypeWaitForSingleObject.Checked = False
+        Select Case TypeOfWait
+            Case Serial.WaitType.ManualResetEvent
+                MenuWaitTypeManualResetEvent.Checked = True
+            Case Serial.WaitType.Sleep
+                MenuWaitTypeSleep.Checked = True
+            Case Serial.WaitType.WaitForSingleObject
+                MenuWaitTypeWaitForSingleObject.Checked = True
+        End Select
+
+
     End Sub
 
     Private Sub ChooserToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserToolStripMenuItem1.Click
@@ -7129,6 +7149,27 @@ Public Class DiagnosticsForm
 
     Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
         VersionForm.ShowDialog()
+    End Sub
+
+    Private Sub MenuWaitTypeManualResetEvent_Click(sender As System.Object, e As System.EventArgs) Handles MenuWaitTypeManualResetEvent.Click
+        MenuWaitTypeManualResetEvent.Checked = True
+        MenuWaitTypeSleep.Checked = False
+        MenuWaitTypeWaitForSingleObject.Checked = False
+        SetName(SERIAL_WAIT_TYPE, Serial.WaitType.ManualResetEvent.ToString)
+    End Sub
+
+    Private Sub MenuWaitTypeSleep_Click(sender As System.Object, e As System.EventArgs) Handles MenuWaitTypeSleep.Click
+        MenuWaitTypeManualResetEvent.Checked = False
+        MenuWaitTypeSleep.Checked = True
+        MenuWaitTypeWaitForSingleObject.Checked = False
+        SetName(SERIAL_WAIT_TYPE, Serial.WaitType.Sleep.ToString)
+    End Sub
+
+    Private Sub MenuWaitTypeWaitForSingleObject_Click(sender As System.Object, e As System.EventArgs) Handles MenuWaitTypeWaitForSingleObject.Click
+        MenuWaitTypeManualResetEvent.Checked = False
+        MenuWaitTypeSleep.Checked = False
+        MenuWaitTypeWaitForSingleObject.Checked = True
+        SetName(SERIAL_WAIT_TYPE, Serial.WaitType.WaitForSingleObject.ToString)
     End Sub
 
 #End Region

@@ -56,6 +56,10 @@ Partial Class DiagnosticsForm
         Me.lblAction = New System.Windows.Forms.Label()
         Me.btnLastLog = New System.Windows.Forms.Button()
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
+        Me.SerialWaitTypeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuWaitTypeSleep = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuWaitTypeManualResetEvent = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuWaitTypeWaitForSingleObject = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -168,7 +172,7 @@ Partial Class DiagnosticsForm
         '
         'mnuTrace
         '
-        Me.mnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeaveUnset, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTimerTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuThrowAbandonedMutexExceptions})
+        Me.mnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeaveUnset, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTimerTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuThrowAbandonedMutexExceptions, Me.SerialWaitTypeToolStripMenuItem})
         Me.mnuTrace.Name = "mnuTrace"
         Me.mnuTrace.Size = New System.Drawing.Size(48, 20)
         Me.mnuTrace.Text = "Trace"
@@ -290,6 +294,31 @@ Partial Class DiagnosticsForm
         Me.btnLastLog.Text = "View Last Log"
         Me.btnLastLog.UseVisualStyleBackColor = True
         '
+        'SerialWaitTypeToolStripMenuItem
+        '
+        Me.SerialWaitTypeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuWaitTypeManualResetEvent, Me.MenuWaitTypeSleep, Me.MenuWaitTypeWaitForSingleObject})
+        Me.SerialWaitTypeToolStripMenuItem.Name = "SerialWaitTypeToolStripMenuItem"
+        Me.SerialWaitTypeToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.SerialWaitTypeToolStripMenuItem.Text = "Serial Wait Type"
+        '
+        'MenuWaitTypeSleep
+        '
+        Me.MenuWaitTypeSleep.Name = "MenuWaitTypeSleep"
+        Me.MenuWaitTypeSleep.Size = New System.Drawing.Size(182, 22)
+        Me.MenuWaitTypeSleep.Text = "Sleep"
+        '
+        'MenuWaitTypeManualResetEvent
+        '
+        Me.MenuWaitTypeManualResetEvent.Name = "MenuWaitTypeManualResetEvent"
+        Me.MenuWaitTypeManualResetEvent.Size = New System.Drawing.Size(182, 22)
+        Me.MenuWaitTypeManualResetEvent.Text = "ManualResetEvent"
+        '
+        'MenuWaitTypeWaitForSingleObject
+        '
+        Me.MenuWaitTypeWaitForSingleObject.Name = "MenuWaitTypeWaitForSingleObject"
+        Me.MenuWaitTypeWaitForSingleObject.Size = New System.Drawing.Size(182, 22)
+        Me.MenuWaitTypeWaitForSingleObject.Text = "WaitForSingleObject"
+        '
         'DiagnosticsForm
         '
         Me.AcceptButton = Me.btnCOM
@@ -348,5 +377,9 @@ Partial Class DiagnosticsForm
     Friend WithEvents MenuNovasTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ChooseAndConnectToDevice32bitApplicationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SerialTraceFileName As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents SerialWaitTypeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuWaitTypeSleep As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuWaitTypeManualResetEvent As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuWaitTypeWaitForSingleObject As System.Windows.Forms.ToolStripMenuItem
 
 End Class

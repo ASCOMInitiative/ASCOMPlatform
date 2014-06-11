@@ -8,9 +8,41 @@ Imports System.Globalization
 Imports ASCOM.Utilities
 Imports System.Collections.Generic
 Imports System.Diagnostics
+Imports ASCOM.Utilities.Serial
 
 #Region "Registry Utility Code"
 Module RegistryCommonCode
+    Friend Function GetWaitType(ByVal p_Name As String, ByVal p_DefaultValue As ASCOM.Utilities.Serial.WaitType) As WaitType
+        Dim l_Value As WaitType
+        Dim m_HKCU, m_SettingsKey As RegistryKey
+
+        m_HKCU = Registry.CurrentUser
+        m_HKCU.CreateSubKey(REGISTRY_UTILITIES_FOLDER)
+        m_SettingsKey = m_HKCU.OpenSubKey(REGISTRY_UTILITIES_FOLDER, True)
+
+        Try
+            If m_SettingsKey.GetValueKind(p_Name) = RegistryValueKind.String Then ' Value does exist
+                l_Value = CType([Enum].Parse(GetType(WaitType), m_SettingsKey.GetValue(p_Name).ToString), WaitType)
+            End If
+        Catch ex As System.IO.IOException 'Value doesn't exist so create it
+            SetName(p_Name, p_DefaultValue.ToString)
+            l_Value = p_DefaultValue
+        Catch ex As Exception
+            'LogMsg("GetBool", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
+            l_Value = p_DefaultValue
+        End Try
+
+        m_SettingsKey.Flush() 'Clean up registry keys
+        m_SettingsKey.Close()
+        m_SettingsKey = Nothing
+        m_HKCU.Flush()
+        m_HKCU.Close()
+        m_HKCU = Nothing
+
+        Return l_Value
+    End Function
+
+
     Friend Function GetBool(ByVal p_Name As String, ByVal p_DefaultValue As Boolean) As Boolean
         Dim l_Value As Boolean
         Dim m_HKCU, m_SettingsKey As RegistryKey
