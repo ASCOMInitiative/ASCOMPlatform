@@ -165,6 +165,7 @@ ComVisible(True)> _
 Public Class Serial
     Implements ISerial, IDisposable
 
+#Region "Variables"
     'State variables holding com port configuration
     Private m_Port As SerialPort
     Private m_PortName As String
@@ -222,6 +223,34 @@ Public Class Serial
     Private Const SERIAL_READ_POLLING As String = "ReadPolling"
     Private UseReadPolling As Boolean = SERIALPORT_DEFAULT_POLLING
 
+    Private TypeOfWait As WaitType = Serial.WaitType.ManualResetEvent
+
+#End Region
+
+#Region "Enums"
+    Private Enum SerialCommandType
+        AvailableCOMPorts
+        ClearBuffers
+        Connected
+        Receive
+        Receivebyte
+        ReceiveCounted
+        ReceiveCountedBinary
+        ReceiveTerminated
+        ReceiveTerminatedBinary
+        ReceiveTimeout
+        ReceiveTimeoutMs
+        Transmit
+        TransmitBinary
+    End Enum
+
+    Friend Enum WaitType
+        ManualResetEvent
+        Sleep
+        WaitForSingleObject
+    End Enum
+#End Region
+
 #Region "New and IDisposable Support"
     Sub New()
         Dim TraceFileName As String = ""
@@ -249,6 +278,11 @@ Public Class Serial
 
             'Get debug trace level on / off
             DebugTrace = GetBool(SERIAL_TRACE_DEBUG, SERIAL_TRACE_DEBUG_DEFAULT)
+
+            'Get the type of wait to use
+            TypeOfWait = GetWaitType(SERIAL_WAIT_TYPE, SERIAL_WAIT_TYPE_DEFAULT)
+            LogMessage("New", "Worker thread synchronisation by: " & TypeOfWait.ToString)
+
             ThreadPool.GetMinThreads(WorkerThreads, CompletionThreads)
             If DebugTrace Then Logger.LogMessage("New", "Minimum Threads: " & WorkerThreads & " " & CompletionThreads)
             ThreadPool.GetMaxThreads(WorkerThreads, CompletionThreads)
@@ -473,7 +507,6 @@ Public Class Serial
 
                 TData.SerialCommand = SerialCommandType.Connected
                 TData.Connecting = Connecting
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("Set Connected")
                 ThreadPool.QueueUserWorkItem(AddressOf ConnectedWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -547,8 +580,7 @@ Public Class Serial
             Try : Logger.LogMessage("ConnectedWorker", FormatIDs(TData.TransactionID) & "EXCEPTION: ConnectedWorker - " & ex.Message & " " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
 
     End Sub
@@ -591,7 +623,6 @@ Public Class Serial
                     If DebugTrace Then Logger.LogMessage("ReceiveTimeout", "Start")
                     TData.SerialCommand = SerialCommandType.ReceiveTimeout
                     TData.TimeoutValue = value
-                    TData.ManualResetEvent = New ManualResetEvent(False)
                     TData.TransactionID = GetTransactionID("ReceiveTimeout")
                     ThreadPool.QueueUserWorkItem(AddressOf ReceiveTimeoutWorker, TData)
                     WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -642,8 +673,7 @@ Public Class Serial
             Try : Logger.LogMessage("ReceiveTimeout", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
 
     End Sub
@@ -669,7 +699,6 @@ Public Class Serial
                     If DebugTrace Then Logger.LogMessage("ReceiveTimeoutMs", "Start")
                     TData.SerialCommand = SerialCommandType.ReceiveTimeoutMs
                     TData.TimeoutValueMs = value
-                    TData.ManualResetEvent = New ManualResetEvent(False)
                     TData.TransactionID = GetTransactionID("ReceiveTimeoutMs")
                     ThreadPool.QueueUserWorkItem(AddressOf ReceiveTimeoutMsWorker, TData)
                     WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -721,8 +750,7 @@ Public Class Serial
             Try : Logger.LogMessage("ReceiveTimeoutMs", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -758,7 +786,6 @@ Public Class Serial
             If m_Connected Then 'Clear buffers as we are connected
                 If DebugTrace Then Logger.LogMessage("ClearBuffers", "Start")
                 TData.SerialCommand = SerialCommandType.ClearBuffers
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("ClearBuffers")
                 ThreadPool.QueueUserWorkItem(AddressOf ClearBuffersWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -808,8 +835,7 @@ Public Class Serial
             Try : Logger.LogMessage("ClearBuffersWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -835,7 +861,6 @@ Public Class Serial
             Try
                 If DebugTrace Then Logger.LogMessage("Receive", "Start")
                 TData.SerialCommand = SerialCommandType.Receive
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("Receive")
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -891,8 +916,7 @@ Public Class Serial
             Try : Logger.LogMessage("ReceiveWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -914,7 +938,6 @@ Public Class Serial
             Try
                 If DebugTrace Then Logger.LogMessage("ReceiveByte", "Start")
                 TData.SerialCommand = SerialCommandType.Receivebyte
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("ReceiveByte")
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveByteWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -970,8 +993,7 @@ Public Class Serial
             Try : Logger.LogMessage("ReceiveByteWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -995,7 +1017,6 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("ReceiveCounted", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveCounted
                 TData.Count = Count
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("ReceiveCounted")
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -1053,8 +1074,7 @@ Public Class Serial
             Try : Logger.LogMessage("ReceiveCountedWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -1082,7 +1102,6 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("ReceiveCountedBinary", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveCountedBinary
                 TData.Count = Count
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("ReceiveCountedBinary")
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveCountedBinaryWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -1145,8 +1164,7 @@ Public Class Serial
             Try : Logger.LogMessage("ReceiveCountedBinaryWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -1169,7 +1187,6 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("ReceiveTerminated", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveTerminated
                 TData.Terminator = Terminator
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("ReceiveTerminated")
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -1239,8 +1256,7 @@ Public Class Serial
             Try : Logger.LogMessage("ReceiveTerminatedWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -1265,7 +1281,6 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("ReceiveTerminatedBinary", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveCounted
                 TData.TerminatorBytes = TerminatorBytes
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("ReceiveTerminatedBinary")
                 ThreadPool.QueueUserWorkItem(AddressOf ReceiveTerminatedBinaryWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -1341,8 +1356,7 @@ Public Class Serial
             Try : Logger.LogMessage("ReceiveTerminatedBinaryWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -1363,7 +1377,6 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("Transmit", "Start")
                 TData.SerialCommand = SerialCommandType.Transmit
                 TData.TransmitString = Data
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("Transmit")
                 ThreadPool.QueueUserWorkItem(AddressOf TransmitWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -1409,8 +1422,7 @@ Public Class Serial
             Try : Logger.LogMessage("TransmitWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 
@@ -1431,7 +1443,6 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("TransmitBinary", "Start")
                 TData.SerialCommand = SerialCommandType.ReceiveCounted
                 TData.TransmitBytes = Data
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("TransmitBinary")
                 ThreadPool.QueueUserWorkItem(AddressOf TransmitBinaryWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -1481,8 +1492,7 @@ Public Class Serial
             Try : Logger.LogMessage("TransmitBinaryWorker", FormatIDs(TData.TransactionID) & "Exception: " & ex.ToString) : Catch : End Try
             Try : TData.LastException = ex : Catch : End Try
         Finally
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
     End Sub
 #End Region
@@ -1568,7 +1578,6 @@ Public Class Serial
                 If DebugTrace Then Logger.LogMessage("AvailableCOMPorts", "Start")
                 TData.SerialCommand = SerialCommandType.AvailableCOMPorts
                 TData.AvailableCOMPorts = PortNames
-                TData.ManualResetEvent = New ManualResetEvent(False)
                 TData.TransactionID = GetTransactionID("AvailableCOMPorts")
                 ThreadPool.QueueUserWorkItem(AddressOf AvailableCOMPortsWorker, TData)
                 WaitForThread(TData, TData.TransactionID) ' Sleep this thread until serial operation is complete
@@ -1656,8 +1665,7 @@ Public Class Serial
         Finally
             Try : SerPort.Dispose() : Catch : End Try 'Dispose of the COM port
             Try : SerPort = Nothing : Catch : End Try
-            Try : TData.Completed = True : Catch : End Try
-            Try : TData.ManualResetEvent.Set() : Catch : End Try
+            TData.ThreadCompleted()
         End Try
         'This thread ends here so the calling WaitForThread releases the main thread to continue execution
     End Sub
@@ -1836,35 +1844,53 @@ Public Class Serial
 #End Region
 
 #Region "Threading Support"
+
+    Const INFINITE As UInt32 = &HFFFFFFFFUI
+    Const WAIT_ABANDONED As UInt32 = &H80UI
+    Const WAIT_OBJECT_0 As UInt32 = &H0UI
+    Const WAIT_TIMEOUT As UInt32 = &H102UI
+
+    ''' <summary>
+    ''' OS level blocking wait for an event 
+    ''' </summary>
+    ''' <param name="handle">The triggering even't handle</param>
+    ''' <param name="milliseconds">Length of time to wait before timing out</param>
+    ''' <returns>Status, 0 = success</returns>
+    ''' <remarks></remarks>
+    <DllImport("kernel32", SetLastError:=True)>
+    Private Shared Function WaitForSingleObject(ByVal handle As IntPtr, ByVal milliseconds As UInt32) As UInt32
+    End Function
+
+    ''' <summary>
+    ''' Sleep the calling thread until the worker thread has completed
+    ''' </summary>
+    ''' <param name="TData">ThreadData class holding required inputs, outputs and thread management information</param>
+    ''' <param name="TransactionID">ID number of this transaction</param>
+    ''' <remarks></remarks>
     Private Sub WaitForThread(ByVal TData As ThreadData, ByVal TransactionID As Long)
-        If DebugTrace Then LogMessage("WaitForThread", FormatIDs(TransactionID) & "Started")
-        TData.ManualResetEvent.WaitOne(Timeout.Infinite)
+        If DebugTrace Then LogMessage("WaitForThread", FormatIDs(TransactionID) & "Started, Type: " & TypeOfWait.ToString)
+
+        ' Execute the correct wait according to the set configuration
+        Select Case TypeOfWait
+            Case WaitType.ManualResetEvent
+                TData.ManualResetEvent.WaitOne(Timeout.Infinite)
+            Case WaitType.Sleep
+                Do
+                    Thread.Sleep(1)
+                Loop Until TData.Completed
+            Case WaitType.WaitForSingleObject
+                WaitForSingleObject(TData.ManualResetEvent.SafeWaitHandle.DangerousGetHandle, INFINITE)
+        End Select
+
         If DebugTrace Then LogMessage("WaitForThread", FormatIDs(TransactionID) & "Completed")
     End Sub
 
-    Private Enum SerialCommandType
-        AvailableCOMPorts
-        ClearBuffers
-        Connected
-        Receive
-        Receivebyte
-        ReceiveCounted
-        ReceiveCountedBinary
-        ReceiveTerminated
-        ReceiveTerminatedBinary
-        ReceiveTimeout
-        ReceiveTimeoutMs
-        Transmit
-        TransmitBinary
-    End Enum
 
+    ''' <summary>
+    ''' Worker thread data
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Class ThreadData
-        Sub New()
-            'Initialise values to required state
-            Me.Completed = False
-            Me.LastException = Nothing
-        End Sub
-
         'Transmit Input values
         Public TransmitString As String
         Public TransmitBytes() As Byte
@@ -1894,6 +1920,27 @@ Public Class Serial
         Public Connecting As Boolean
         Public TimeoutValueMs As Integer
         Public TimeoutValue As Integer
+
+        ''' <summary>
+        ''' Initialises a new ThreadData synchronisation object
+        ''' </summary>
+        ''' <remarks></remarks>
+        Sub New()
+            'Initialise values to required state
+            Me.Completed = False
+            Me.LastException = Nothing
+            Me.ManualResetEvent = New ManualResetEvent(False)
+        End Sub
+
+        ''' <summary>
+        ''' Signals that this thread has completed its work
+        ''' </summary>
+        ''' <remarks></remarks>
+        Sub ThreadCompleted()
+            Try : Completed = True : Catch : End Try
+            Try : ManualResetEvent.Set() : Catch : End Try
+        End Sub
+
     End Class
 #End Region
 
