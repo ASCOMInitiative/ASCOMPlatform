@@ -1885,6 +1885,8 @@ Public Class Serial
 
             Case WaitType.Sleep
                 If DebugTrace Then
+                    Dim ts As New Stopwatch
+                    ts.Start()
                     Do
                         Thread.Sleep(1)
                         LogMessage("WaitForThread", FormatIDs(TData.TransactionID) & "Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
@@ -1901,23 +1903,30 @@ Public Class Serial
                     Dim ts As New Stopwatch
                     ts.Start()
                     RetCode = WaitForSingleObject(TData.ManualResetEvent.SafeWaitHandle.DangerousGetHandle, INFINITE)
+                    Select Case RetCode
+                        Case WAIT_OBJECT_0
+                            LogMessage("WaitForThread", FormatIDs(TData.TransactionID) & "Completed WaitForSingleObject OK, " & "Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
+                        Case WAIT_ABANDONED
+                            LogMessage("***WaitForThread***", FormatIDs(TData.TransactionID) & "Completed WaitForSingleObject - ABANDONED, Return code: 0x" & RetCode.ToString("X8") & ", Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
+                        Case WAIT_TIMEOUT
+                            LogMessage("***WaitForThread***", FormatIDs(TData.TransactionID) & "Completed WaitForSingleObject - TIMEOUT, Return code: 0x" & RetCode.ToString("X8") & ", Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
+                    End Select
                 Else
                     RetCode = WaitForSingleObject(TData.ManualResetEvent.SafeWaitHandle.DangerousGetHandle, INFINITE)
+                    Select Case RetCode
+                        Case WAIT_OBJECT_0
+                            ' No action in production mode
+                        Case WAIT_ABANDONED
+                            LogMessage("***WaitForThread***", FormatIDs(TData.TransactionID) & "Completed WaitForSingleObject - ABANDONED, Return code: 0x" & RetCode.ToString("X8") & ", Command: " & TData.SerialCommand.ToString)
+                        Case WAIT_TIMEOUT
+                            LogMessage("***WaitForThread***", FormatIDs(TData.TransactionID) & "Completed WaitForSingleObject - TIMEOUT, Return code: 0x" & RetCode.ToString("X8") & ", Command: " & TData.SerialCommand.ToString)
+                    End Select
                 End If
-
-                Select Case RetCode
-                    Case WAIT_OBJECT_0
-                        If DebugTrace Then LogMessage("WaitForThread", FormatIDs(TData.TransactionID) & "Completed WaitForSingleObject OK, " & "Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
-                    Case WAIT_ABANDONED
-                        If DebugTrace Then LogMessage("**WaitForThread**", FormatIDs(TData.TransactionID) & "Completed WaitForSingleObject - ABANDONED, Return code: 0x" & RetCode.ToString("X8") & ", Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
-                    Case WAIT_TIMEOUT
-                        If DebugTrace Then LogMessage("**WaitForThread**", FormatIDs(TData.TransactionID) & "Completed WaitForSingleObject - TIMEOUT, Return code: 0x" & RetCode.ToString("X8") & ", Command: " & TData.SerialCommand.ToString & " Elapsed: " & ts.Elapsed.TotalMilliseconds)
-                End Select
 
         End Select
 
         'Check whether we are propcessing out of order, which is a bad thing!
-        If DebugTrace And (TData.TransactionID <> CallCount) Then LogMessage("**WaitForThread**", "Transactions out of order! TransactionID CurrentCallCount: " & TData.TransactionID & " " & CallCount)
+        If DebugTrace And (TData.TransactionID <> CallCount) Then LogMessage("***WaitForThread***", "Transactions out of order! TransactionID CurrentCallCount: " & TData.TransactionID & " " & CallCount)
 
     End Sub
 
