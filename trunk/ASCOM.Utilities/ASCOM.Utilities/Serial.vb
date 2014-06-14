@@ -532,7 +532,6 @@ Public Class Serial
                 If Not m_Connected Then
                     If m_Port Is Nothing Then
                         m_Port = New System.IO.Ports.SerialPort(m_PortName)
-                        If DebugTrace Then AddHandler m_Port.DataReceived, AddressOf DataReceivedEventHandler
                     Else
                         m_Port.PortName = m_PortName
                     End If
@@ -1834,13 +1833,6 @@ Public Class Serial
         End Function
     End Class
 
-    Private Sub DataReceivedEventHandler(sender As Object, e As SerialDataReceivedEventArgs)
-        Dim EventType As SerialData
-
-        EventType = CType([Enum].Parse(GetType(SerialData), e.EventType.ToString), SerialData)
-        Logger.LogMessage("DataReceivedEventHandler", "Event type: " & EventType.ToString & ", Number of bytes: " & m_Port.BytesToRead & ", Trigger level: " & m_Port.ReceivedBytesThreshold)
-    End Sub
-
 #End Region
 
 #Region "Threading Support"
@@ -1869,7 +1861,14 @@ Public Class Serial
     Private Sub WaitForThread(ByVal TData As ThreadData)
         Dim RetCode As UInteger
 
-        If DebugTrace Then LogMessage("WaitForThread", FormatIDs(TData.TransactionID) & "Started, Type: " & TypeOfWait.ToString & ", Command: " & TData.SerialCommand.ToString)
+        ' WARNING WARNING WARNING - Never put a logging statement here, before the sync command!
+
+        ' It will release the primary thread in VB6 drivers, which results in the next serial command being scheduled before
+        ' this one is completed and you get out of order serial command execution.
+
+        ' It is vital that the primary thread is fully blocked in order for VB6 drivers to work as expected. This means that some .NET sync primitives
+        ' such as ManualResetEvent CANNOT be used because they have been designed by MS to pump messages in the background while waiting
+        ' and this results in behaviur described above!
 
         ' Execute the correct wait according to the set configuration
         Select Case TypeOfWait
