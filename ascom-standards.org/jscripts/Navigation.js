@@ -138,6 +138,7 @@ function writesubmenu() {
 	    SubMenuOutput += "<li><a href=\"FilterWheelDrivers.htm\">Filter Wheels</a></li>";
 	    SubMenuOutput += "<li><a href=\"FocuserDrivers.htm\">Focuser</a></li>";
 	    SubMenuOutput += "<li><a href=\"RotatorDrivers.htm\">Rotator</a></li>";
+	    SubMenuOutput += "<li><a href=\"SwitchDrivers.htm\">Switch/Outlet</a></li>";
 	    SubMenuOutput += "<li><a href=\"ScopeDrivers.htm\">Telescope/Mount</a></li>";
 	    SubMenuOutput += "</ul>";
     	SubMenuOutput += "<h3>Plug-In Downloads</h3>";
