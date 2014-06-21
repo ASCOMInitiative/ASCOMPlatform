@@ -25,10 +25,13 @@ Module RegistryCommonCode
                 l_Value = CType([Enum].Parse(GetType(WaitType), m_SettingsKey.GetValue(p_Name).ToString), WaitType)
             End If
         Catch ex As System.IO.IOException 'Value doesn't exist so create it
-            SetName(p_Name, p_DefaultValue.ToString)
-            l_Value = p_DefaultValue
+            Try
+                SetName(p_Name, p_DefaultValue.ToString)
+                l_Value = p_DefaultValue
+            Catch ex1 As Exception ' Unable to create value so just return the default value
+                l_Value = p_DefaultValue
+            End Try
         Catch ex As Exception
-            'LogMsg("GetBool", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
             l_Value = p_DefaultValue
         End Try
 
@@ -41,7 +44,6 @@ Module RegistryCommonCode
 
         Return l_Value
     End Function
-
 
     Friend Function GetBool(ByVal p_Name As String, ByVal p_DefaultValue As Boolean) As Boolean
         Dim l_Value As Boolean
@@ -56,10 +58,13 @@ Module RegistryCommonCode
                 l_Value = CBool(m_SettingsKey.GetValue(p_Name))
             End If
         Catch ex As System.IO.IOException 'Value doesn't exist so create it
-            SetName(p_Name, p_DefaultValue.ToString)
-            l_Value = p_DefaultValue
+            Try
+                SetName(p_Name, p_DefaultValue.ToString)
+                l_Value = p_DefaultValue
+            Catch ex1 As Exception ' Unable to create value so just return the default value
+                l_Value = p_DefaultValue
+            End Try
         Catch ex As Exception
-            'LogMsg("GetBool", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
             l_Value = p_DefaultValue
         End Try
         m_SettingsKey.Flush() 'Clean up registry keys
@@ -84,10 +89,13 @@ Module RegistryCommonCode
                 l_Value = m_SettingsKey.GetValue(p_Name).ToString
             End If
         Catch ex As System.IO.IOException 'Value doesn't exist so create it
-            SetName(p_Name, p_DefaultValue.ToString)
-            l_Value = p_DefaultValue
+            Try
+                SetName(p_Name, p_DefaultValue.ToString)
+                l_Value = p_DefaultValue
+            Catch ex1 As Exception ' Unable to create value so just return the default value
+                l_Value = p_DefaultValue
+            End Try
         Catch ex As Exception
-            'LogMsg("GetString", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
             l_Value = p_DefaultValue
         End Try
         m_SettingsKey.Flush() 'Clean up registry keys
@@ -113,10 +121,13 @@ Module RegistryCommonCode
                 l_Value = CDbl(p_Key.GetValue(p_Name))
             End If
         Catch ex As System.IO.IOException 'Value doesn't exist so create it
-            SetName(p_Name, p_DefaultValue.ToString)
-            l_Value = p_DefaultValue
+            Try
+                SetName(p_Name, p_DefaultValue.ToString)
+                l_Value = p_DefaultValue
+            Catch ex1 As Exception ' Unable to create value so just return the default value
+                l_Value = p_DefaultValue
+            End Try
         Catch ex As Exception
-            'LogMsg("GetDouble", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
             l_Value = p_DefaultValue
         End Try
         m_SettingsKey.Flush() 'Clean up registry keys
@@ -141,10 +152,13 @@ Module RegistryCommonCode
                 l_Value = CDate(m_SettingsKey.GetValue(p_Name))
             End If
         Catch ex As System.IO.IOException 'Value doesn't exist so create it
-            SetName(p_Name, p_DefaultValue.ToString)
-            l_Value = p_DefaultValue
+            Try
+                SetName(p_Name, p_DefaultValue.ToString)
+                l_Value = p_DefaultValue
+            Catch ex1 As Exception ' Unable to create value so just return the default value
+                l_Value = p_DefaultValue
+            End Try
         Catch ex As Exception
-            'LogMsg("GetDate", GlobalVarsAndCode.MessageLevel.msgError, "Unexpected exception: " & ex.ToString)
             l_Value = p_DefaultValue
         End Try
         m_SettingsKey.Flush() 'Clean up registry keys
