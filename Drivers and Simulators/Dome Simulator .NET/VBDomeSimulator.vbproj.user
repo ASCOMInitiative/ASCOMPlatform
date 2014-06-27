@@ -14,4 +14,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Project</StartAction>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Users\Chris\Documents\Visual Studio 2010\Projects\domeconsole\bin\Debug\ASCOM.test.Test.exe</StartProgram>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Users\Chris\Documents\Visual Studio 2010\Projects\domeconsole\bin\Debug\ASCOM.test.Test.exe</StartProgram>
+  </PropertyGroup>
 </Project>

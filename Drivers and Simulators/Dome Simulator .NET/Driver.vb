@@ -41,7 +41,7 @@ Public Class Dome
 
         Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
 
-        If g_timer Is Nothing Then g_timer = New Windows.Forms.Timer
+        'If g_timer Is Nothing Then g_timer = New Windows.Forms.Timer
         If g_handBox Is Nothing Then g_handBox = New HandboxForm
         If g_Profile Is Nothing Then g_Profile = New Utilities.Profile
         g_Profile.DeviceType = "Dome"            ' Dome device type
@@ -49,24 +49,24 @@ Public Class Dome
         ' initialize variables that are not persistent
         g_Profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
 
-        ' Set handbox screen position
-        Try
-            g_handBox.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
-            g_handBox.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
-        Catch ex As Exception
+        '' Set handbox screen position
+        'Try
+        '    g_handBox.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
+        '    g_handBox.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
+        'Catch ex As Exception
 
-        End Try
+        'End Try
 
 
-        ' Fix bad positions (which shouldn't ever happen, ha ha)
-        If g_handBox.Left < 0 Then
-            g_handBox.Left = 100
-            g_Profile.WriteValue(g_csDriverID, "Left", g_handBox.Left.ToString(CultureInfo.InvariantCulture))
-        End If
-        If g_handBox.Top < 0 Then
-            g_handBox.Top = 100
-            g_Profile.WriteValue(g_csDriverID, "Top", g_handBox.Top.ToString(CultureInfo.InvariantCulture))
-        End If
+        '' Fix bad positions (which shouldn't ever happen, ha ha)
+        'If g_handBox.Left < 0 Then
+        '    g_handBox.Left = 100
+        '    g_Profile.WriteValue(g_csDriverID, "Left", g_handBox.Left.ToString(CultureInfo.InvariantCulture))
+        'End If
+        'If g_handBox.Top < 0 Then
+        '    g_handBox.Top = 100
+        '    g_Profile.WriteValue(g_csDriverID, "Top", g_handBox.Top.ToString(CultureInfo.InvariantCulture))
+        'End If
 
         g_dOCProgress = 0
         g_dOCDelay = 0
@@ -153,14 +153,19 @@ Public Class Dome
             g_bAtHome = HW_AtHome               ' Non standard, position, ok to wake up homed
         End If
 
-        g_timer.Interval = TIMER_INTERVAL * 1000
+        'g_timer.Interval = TIMER_INTERVAL * 1000
 
-        g_handBox.LabelButtons()
-        g_handBox.RefreshLeds()
+        'g_handBox.LabelButtons()
+        'g_handBox.RefreshLeds()
 
         ' Show the handbox now
-        g_handBox.Show()
-        g_handBox.Activate()
+        handboxThread = New Threading.Thread(AddressOf HandboxForm.Run)
+        handboxThread.IsBackground = True
+        handboxThread.TrySetApartmentState(Threading.ApartmentState.STA)
+        handboxThread.Start()
+
+        'g_handBox.Show()
+        'g_handBox.Activate()
     End Sub
 
     Private disposedValue As Boolean ' To detect redundant calls
@@ -181,11 +186,11 @@ Public Class Dome
                     'Try : g_handBox.Dispose() : Catch : End Try
                     g_handBox = Nothing
                 End If
-                If Not g_timer Is Nothing Then
-                    Try : g_timer.Enabled = False : Catch : End Try
-                    Try : g_timer.Dispose() : Catch : End Try
-                    g_timer = Nothing
-                End If
+                'If Not g_timer Is Nothing Then
+                '    Try : g_timer.Enabled = False : Catch : End Try
+                '    Try : g_timer.Dispose() : Catch : End Try
+                '    g_timer = Nothing
+                'End If
                 If Not g_Profile Is Nothing Then
                     Try : g_Profile.Dispose() : Catch : End Try
                     g_Profile = Nothing
@@ -484,7 +489,7 @@ Public Class Dome
             End If
 
             g_bConnected = value
-            g_timer.Enabled = value
+            'g_timer.Enabled = value
 
             out = " (done)"
 
@@ -614,10 +619,10 @@ Public Class Dome
 
         If Not g_bStandardAtPark Then               ' Non-standard, position
             g_bAtPark = True
-            g_handBox.RefreshLeds()
+            g_handBox.BeginInvoke(New Action(AddressOf g_handBox.RefreshLeds))
         End If
 
-        g_handBox.LabelButtons()
+        g_handBox.BeginInvoke(New Action(AddressOf g_handBox.LabelButtons))
 
         If Not g_TrafficForm Is Nothing Then
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(" (done)")
@@ -629,7 +634,7 @@ Public Class Dome
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("SetupDialog")
         End If
 
-        g_handBox.DoSetup()
+        g_handBox.BeginInvoke(New Action(AddressOf g_handBox.DoSetup))
 
         If Not g_TrafficForm Is Nothing Then
             If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(" (done)")
