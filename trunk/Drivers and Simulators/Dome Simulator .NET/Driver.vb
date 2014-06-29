@@ -41,8 +41,12 @@ Public Class Dome
 
         Dim RegVer As String = "1"                      ' Registry version, use to change registry if required by new version
 
+        TL = New ASCOM.Utilities.TraceLogger("", "DomeSim")
+        TL.Enabled = True
+        TL.LogMessage("New", "Log started")
+
         'If g_timer Is Nothing Then g_timer = New Windows.Forms.Timer
-        If g_handBox Is Nothing Then g_handBox = New HandboxForm
+        'If g_handBox Is Nothing Then g_handBox = New HandboxForm
         If g_Profile Is Nothing Then g_Profile = New Utilities.Profile
         g_Profile.DeviceType = "Dome"            ' Dome device type
 
@@ -158,11 +162,23 @@ Public Class Dome
         'g_handBox.LabelButtons()
         'g_handBox.RefreshLeds()
 
+        TL.LogMessage("New", "Starting thread")
+
         ' Show the handbox now
         handboxThread = New Threading.Thread(AddressOf HandboxForm.Run)
         handboxThread.IsBackground = True
         handboxThread.TrySetApartmentState(Threading.ApartmentState.STA)
         handboxThread.Start()
+        TL.LogMessage("New", "Thread started OK")
+
+        TL.LogMessage("New", "Starting wait for handbox form to be created")
+        Do
+            Threading.Thread.Sleep(10)
+            TL.LogMessage("New", "Waiting for handbox form to be created")
+        Loop Until Not g_handBox Is Nothing
+        TL.LogMessage("New", "Handbox created OK")
+
+        TL.LogMessage("New", "New completed OK")
 
         'g_handBox.Show()
         'g_handBox.Activate()
@@ -483,28 +499,31 @@ Public Class Dome
 
         Set(ByVal value As Boolean)
             Dim out As String
+            Try
+                If Not g_TrafficForm Is Nothing Then
+                    If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("Connected: " & g_bConnected & " -> " & value)
+                End If
 
-            If Not g_TrafficForm Is Nothing Then
-                If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficStart("Connected: " & g_bConnected & " -> " & value)
-            End If
+                g_bConnected = value
+                'g_timer.Enabled = value
 
-            g_bConnected = value
-            'g_timer.Enabled = value
+                out = " (done)"
 
-            out = " (done)"
-
-            If value Then
-                g_handBox.Show()
-                If Not g_TrafficForm Is Nothing Then g_TrafficForm.Show()
-            Else
-                If Not g_TrafficForm Is Nothing Then g_TrafficForm.Hide()
-                g_handBox.Hide()
-            End If
+                If value Then
+                    g_handBox.Show()
+                    If Not g_TrafficForm Is Nothing Then g_TrafficForm.Show()
+                Else
+                    If Not g_TrafficForm Is Nothing Then g_TrafficForm.Hide()
+                    g_handBox.Hide()
+                End If
 
 
-            If Not g_TrafficForm Is Nothing Then
-                If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(out)
-            End If
+                If Not g_TrafficForm Is Nothing Then
+                    If g_TrafficForm.chkOther.Checked Then g_TrafficForm.TrafficEnd(out)
+                End If
+            Catch ex As Exception
+                TL.LogMessageCrLf("Connected Set", "Exception: " & ex.ToString())
+            End Try
         End Set
     End Property
 

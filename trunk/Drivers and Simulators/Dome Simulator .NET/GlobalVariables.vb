@@ -138,6 +138,8 @@ Module GlobalVariables
     Public g_csDriverID As String = "ASCOM.Simulator.Dome"
     Public g_csDriverDescription As String = "Dome Simulator .NET"
 
+    Public TL As ASCOM.Utilities.TraceLogger
+
 #End Region
     ' ---------
     ' UTILITIES

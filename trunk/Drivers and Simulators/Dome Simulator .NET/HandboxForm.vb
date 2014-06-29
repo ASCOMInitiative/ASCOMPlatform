@@ -31,7 +31,11 @@ Public Class HandboxForm
 
     Friend Shared Sub Run()
         If g_handBox Is Nothing Then
+            TL.LogMessage("HandboxForm.Run", "Handbox Variable is empty, Creating Form")
             g_handBox = New HandboxForm
+            Application.Run(g_handBox)
+        Else
+            TL.LogMessage("HandboxForm.Run", "Handbox Variable is not empty, Doing nothing")
         End If
     End Sub
 
@@ -224,8 +228,6 @@ Public Class HandboxForm
 
     End Sub
 #End Region
-
-
 
 #Region "Event Handlers"
 
