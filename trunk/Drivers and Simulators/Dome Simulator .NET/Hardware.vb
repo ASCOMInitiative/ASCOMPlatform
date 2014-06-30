@@ -112,7 +112,7 @@ Module Hardware
 
         g_bAtHome = False
         g_bAtPark = False
-        g_handBox.BeginInvoke(New Action(AddressOf g_handBox.RefreshLeds))
+        g_handBox.RefreshLeds()
         g_dTargetAz = g_dSetHome
         g_eSlewing = Going.slewHome
 
@@ -132,7 +132,7 @@ Module Hardware
         If g_bStandardAtPark Then g_bAtPark = False
         If g_bStandardAtHome Then g_bAtHome = False
 
-        g_handBox.BeginInvoke(New Action(AddressOf g_handBox.RefreshLeds))
+        g_handBox.RefreshLeds()
 
         ' If the shutter is in motion, then cause it to jam
         If g_dOCProgress > 0 Then
@@ -151,7 +151,7 @@ Module Hardware
 
         g_bAtHome = False
         g_bAtPark = False
-        g_handBox.BeginInvoke(New Action(AddressOf g_handBox.RefreshLeds))
+        g_handBox.RefreshLeds()
         g_dTargetAz = Az
         g_eSlewing = Going.slewSomewhere
 
@@ -210,7 +210,7 @@ Module Hardware
 
         g_bAtHome = False
         g_bAtPark = False
-        g_handBox.BeginInvoke(New Action(AddressOf g_handBox.RefreshLeds))
+        g_handBox.RefreshLeds()
         g_dTargetAz = g_dSetPark
         g_eSlewing = Going.slewPark
 
@@ -225,7 +225,7 @@ Module Hardware
 
         g_bAtHome = False
         g_bAtPark = False
-        g_handBox.BeginInvoke(New Action(AddressOf g_handBox.RefreshLeds))
+        g_handBox.RefreshLeds()
         g_eSlewing = IIf(Dir, Going.slewCW, Going.slewCCW)
 
     End Sub
@@ -254,7 +254,7 @@ Module Hardware
             g_bAtPark = HW_AtPark                       ' Position (non-standard)
         End If
 
-        g_handBox.BeginInvoke(New Action(AddressOf g_handBox.RefreshLeds))
+        g_handBox.RefreshLeds()
 
     End Sub
 
