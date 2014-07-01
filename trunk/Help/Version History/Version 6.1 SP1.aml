@@ -1,10 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="c70b2e72-ab62-4dbb-b7c6-eed3cd523c14" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+      	<section address="Intro61">
+    		<title>Introduction</title>
+      		<content>
+				<para>In line with previous Platform installers, 6.1 SP1 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs.</para>
+				<alert class="note">
+					<para><legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the the 
+					next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability">Deprecated Features</link> section below. Please will you review 
+					this and update your applications and drivers as advised; these changes are not scheduled for introduction until the second half of 2014 
+					at the earliest. In the meantime service packs will be issued as required to correct bugs.</para>
+				</alert>
+            </content>
+		</section>
+
     	<section address="PreReqs">
     		<title>Platform 6.1 Prerequisites</title>
       		<content>
-				<list class="bullet">
+        		<para>Platform 6.1 requires the following .NET framework version and library:</para>
+      			<list class="bullet">
 	      			<listItem>.NET Framework 4 Client or .NET Framework 4 Full Installation or later</listItem>
 	      			<listItem>Visual C++ 10.0 libraries</listItem>
 	  			</list>
@@ -26,7 +40,7 @@
 		</section>
    		
     	<section address="Changes61SP1">
-    		<title>Key Changes in 6.1 - For Everyone</title>
+    		<title>Key Changes in 6.1 SP1 - For Everyone</title>
       		<content>
 				<list class="bullet">
 	      			<listItem>Chooser - When the mouse pointer hovers over the <legacyBold>Properties...</legacyBold> button, Chooser now displays a tooltip describing the button's purpose.</listItem>
@@ -37,23 +51,23 @@
 		</section>
    		
     	<section address="Changes61SP1Dev">
-	     	<title>Key Changes in 6.1 - For Developers</title>
+	     	<title>Key Changes in 6.1 SP1 - For Developers</title>
 	      	<content>
 	      		<list class="bullet">
-	      			<listItem><para>A new SOFA astrometry component has been added that presents the high level positional astronomy routines in the SOFA library. The class's functionality is provided by 
-	      			underlying DLLs compiled from unmodified original C source code distributed by SOFA but the class does not constitute software provided by and/or endorsed by SOFA. No 
-	      			change whatsoever has been made to the algorithms implemented by SOFA that realise IAU standards.</para>
+	      			<listItem><para>The high level positional astronomy routines in the SOFA library are now available in a new SOFA component in the ASCOM.Astrometry namespace. This has been introduced 
+	      			to provide a migration path from NOVAS based components whose positional astronomy routines have been found to have reliability issues very close to the celestial poles.
+	      			(Please see the notes on <link xlink:href="#DeprecatedCapability">Deprecated Components</link> below.)</para>
+	      			<para>The class's functionality is provided by underlying DLLs compiled from unmodified original C source code distributed by SOFA but the class does 
+	      			not constitute software provided by and/or endorsed by SOFA. No change whatsoever has been made to the algorithms implemented by SOFA that realise IAU standards.</para>
     				<para>SOFA provides a validation routine to confirm that the compiled library provides expected results. 32 and 64bit versions of this routine (SofaTestXX.exe and 
     				SofaTestXX-64.exe, where XX is the issue number) are included in this distribution and can be found in the Common Files\ASCOM\Astrometry directory. To run them open 
     				a command prompt in the Astrometry directory and enter the commands SofaTest10 /verbose and SofaTest10-64 /verbose. The susbset of these tests that is relevant to 
     				the routines presented in this component have also been incorporated in the ASCOM Diagnostics tool and expected operation of the SOFA routines can also be confirmed through this tool.</para>
-	      			<para>The SOFA component has been introduced to provide a migration path from the NOVAS routines that have reliability issues when very close to the celestial poles. 
-	      			(Please see the notes on <link xlink:href="#DeprecatedCapability">Deprecated Components</link> below.)</para>
 	      			</listItem>
 					<listItem>The developer tools installer now bypasses the initial descriptive page and opens straight at the options page, only needing one click to start installation.</listItem>
 					<listItem>ITelescope, IDome, IFilerWheel and ISafetyMonitor interface documentation in the help file now clearly identifies the "required" members that all drivers must implement and that a client can expect to be functionally implemented.
 					The Conform tool will confirm that these required members are present and that they return reasonable values in line with the interface specification.</listItem>
-					<listItem>Expected exceptions for ITelescope, IDome, IFilerWheel and ISafetyMonitor members have been added to the interface documentation in the help file</listItem>
+					<listItem>Expected exceptions for ITelescope, IDome, IFilterWheel and ISafetyMonitor members have been added to the interface documentation in the help file</listItem>
 					<listItem>Platform build and version numbers have been consolidated to a single form: <legacyBold>PlatformMajor.PlatformMinor.ServicePack.BuildNumber</legacyBold> and each of these is now
 					available as a property in the ASCOM.Utilities.Util component.</listItem>
 				</list>
@@ -66,6 +80,7 @@
       			<list class="bullet">
 	   				<listItem>Bluetooth serial port compatibility has been improved by removing unnecessary port enumeration from the SerialConnected method.</listItem>
 	   				<listItem>Slow ASCOM.Utilities.Serial performance when the Platform runs on Windows 8 and 8.1 has been fixed, performance is now the same as under Windows 7 and earlier.</listItem>
+      				<listItem>The Transform component now works reliably right up to declinations of 90.0 and -90.0, previously, it failed when within 30 arcseconds of the poles.</listItem>
 	   				<listItem>The Diagnostics tool now handles serial port cleanup properly when serial errors occur.</listItem>
 					</list>
    			</content>
@@ -77,6 +92,9 @@
       			<list class="bullet">
 					<listItem>Help - Telescope.Interfaceversion corrected to say that interface version 3 should be returned rather than 2.</listItem>
 					<listItem>The VB Console test application template now provides the missing app.config file.</listItem>
+					<listItem>Drivers built from a VB driver template will now automaticlaly register for COM interop like those built from the C# template.</listItem>
+	   				<listItem>Platform components will no longer throw an exception during instantiation if the process within which they are running cannot write to the user part of the registry. This enables components to be used in
+	   				environments such as Microsoft IIS, whose worker processes have restricted default access rights.</listItem>
 				</list>
    			</content>
    		</section>
