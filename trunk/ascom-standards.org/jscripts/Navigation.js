@@ -145,10 +145,10 @@ function writesubmenu() {
 	    SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"Plugins.htm\">Plug-Ins</a></li>";
 	    SubMenuOutput += "</ul>";
-    	SubMenuOutput += "<h3>Platform Updates</h3>";
-	    SubMenuOutput += "<ul class=\"treeview\">";
-	    SubMenuOutput += "<li><a href=\"PlatformUpdates.htm\">Platform Updates</a></li>";
-	    SubMenuOutput += "</ul>";
+//    	SubMenuOutput += "<h3>Platform Updates</h3>";
+//	    SubMenuOutput += "<ul class=\"treeview\">";
+//	    SubMenuOutput += "<li><a href=\"PlatformUpdates.htm\">Platform Updates</a></li>";
+//	    SubMenuOutput += "</ul>";
     	SubMenuOutput += "<h3>Additional Downloads</h3>";
 	    SubMenuOutput += "<ul class=\"treeview\">";
 	    SubMenuOutput += "<li><a href=\"ScriptableComponents.htm\">Scriptable Components</a></li>";
