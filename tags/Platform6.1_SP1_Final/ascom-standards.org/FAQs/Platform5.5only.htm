@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- #BeginTemplate "/Templates/Fixed_Fluid.dwt" --><!-- DW6 -->
+ 
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="expires" content="Fri, 1 Jan 1990 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+<!-- #BeginEditable "Title" -->
+<title>Platform 5.5 Only Drivers</title><!-- #EndEditable -->
+
+<link rel="stylesheet" type="text/css" href="../Styles/Fixed_Fluid.css" />
+
+<script type="text/javascript" language="javascript" src="../jscripts/Navigation.js"></script>
+
+</head>
+ 
+<body>
+
+<div id="banner">
+	<img style="position: absolute; top: 20px; left: 20px;" alt="ASCOM Standards for Astronomy" src="../Images/ASCOM-Logo.jpg" />
+	
+	<div id="breadcrumbs">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	breadcrumbs(); 
+	-->
+	</script>
+</div>
+
+	<div class="topmenucontainer">
+    <script type="text/javascript" language="javascript">
+      <!-- 
+	        writemainmenu();
+	        -->
+    </script>
+  </div>
+</div>
+
+
+
+<div id="leftcontent">
+
+
+	<div class="LeftNav">
+	<div class="center"><div class="north"><div class="south">
+	<script type="text/javascript" language="javascript">
+	<!-- 
+	writesubmenu(); 
+	-->
+	</script>
+	
+	</div></div></div></div>
+
+	<!-- #BeginEditable "LeftNav" -->	<!-- #EndEditable --></div>
+<div id="centercontent">
+	<!-- #BeginEditable "MainContent" -->
+	<div class="article">
+	<h3>My Driver can only install on Platform 5.5</h3>
+	<p>Some driver
+	installers check the platform version and report that they cannot be
+	installed on Platform 6.  You get a message like this:</p>
+	<p><IMG SRC="../Images/Platform5.5only.jpg" NAME="The ASCOm Platform 5 is required for this driver." BORDER=0><BR CLEAR=LEFT>
+	<p>This happens
+	because the driver installer is checking the platform version and
+	only accepts platform 5 or 5.5.</p>
+	<p>Platform 6 has
+	a mechanism that will allow these drivers to be installed. When the
+	installer asks for the platform version it checks the file name and
+	if it's in the list of files that need Platform 5.5 it reports the
+	version as 5.5.</p>
+
+
+	<p>For most
+	drivers this has been set up in the installer but there are some
+	which we are not aware of that cannot be included.  In this case you
+	can make the driver install by adding it's name to the list.  To do
+	this:</p>
+	<UL>
+		<LI>Open the Profiler Explorer.</li>
+		<LI>Go to the &ldquo;ForcePlatformVersion&rdquo; section.</li>
+		<LI>Add the <span class="underline">exact</span> file name of the installer and set
+ 		the version to what's required, usually 5.5.</li>
+		<LI>Go to the &ldquo;ForcePlatformVersionSeparator&rdquo;
+		section and add the <span class="underline">exact</span> file name to the list.</li>
+		<LI>Note that the <u>exact</U> file name is required. In some cases 
+		the browser will change the installer file name  when
+		it's downloaded.</li>
+		<LI>An alternative is to rename the installer file to a name
+		that is already in the ForcePlatformVersion list.</li>
+	</UL>
+		<p>Notes:</p>
+	<UL>
+		<LI>Please inform the driver author so he can
+		update his installer. Installers generated using the current Platform 6 installer generator
+		do not have this problem.</li>
+		<LI>Inform the Platform 6 developers so we can add
+		the driver to the list that's provided with the Platform 6
+		installer.</li>
+		<LI>NOTE. This mechanism is provided as a way to allow current
+		and orphaned drivers to continue to work.  We will not add new
+		driver installers to the list. The driver developer should update
+		their installer so this mechanism is not needed.  The current
+		driver installer generator does not have this problem.</li>
+	</UL>
+</div>
+	<!-- #EndEditable --></div>
+<div id="footer">
+	Copyright &copy; 1998-2014, The ASCOM Initiative. 
+	All rights reserved. </div>
+
+</body>
+
+<!-- #EndTemplate --></html>
