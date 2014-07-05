@@ -37,20 +37,18 @@ Namespace SOFA
 
         Private Const SOFA32DLL As String = "SOFA10.dll" 'Names of SOFA 32 and 64bit DLL files
         Private Const SOFA64DLL As String = "SOFA10-64.dll"
-        Private Const SOFA_DLL_LOCATION As String = "\ASCOM\Astrometry" 'This is appended to the Common Files path so that the calling application can dind the SOFA DLLs
+        Private Const SOFA_DLL_LOCATION As String = "\ASCOM\Astrometry\" 'This is appended to the Common Files path so that the calling application can dind the SOFA DLLs
 
         Private TL As TraceLogger
         Private Utl As Util
-        Private TraceEnabled As Boolean
+        Private SofaDllHandle As IntPtr
 
 #Region "New and IDisposable"
         Sub New()
-            Dim rc As Boolean, CommonProgramFilesPath As String
-            Dim ReturnedPath As New System.Text.StringBuilder(260)
+            Dim rc As Boolean, SofaDllFile As String, ReturnedPath As New System.Text.StringBuilder(260), LastError As Integer
 
             TL = New TraceLogger("", "SOFA")
             TL.Enabled = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
-            TraceEnabled = TL.Enabled
 
             Utl = New Util
 
@@ -59,18 +57,24 @@ Namespace SOFA
             'On a 64bit system this is \Program Files (x86)\Common Files
             If Is64Bit() Then ' 64bit application so find the 32bit folder location
                 rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, False)
-                CommonProgramFilesPath = ReturnedPath.ToString
+                SofaDllFile = ReturnedPath.ToString & SOFA_DLL_LOCATION & SOFA64DLL
             Else '32bit application so just go with the .NET returned value
-                CommonProgramFilesPath = GetFolderPath(SpecialFolder.CommonProgramFiles)
+                SofaDllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & SOFA_DLL_LOCATION & SOFA32DLL
             End If
-            'Add the ASCOM\.net directory to the DLL search path so that the SOFA C 32 and 64bit DLLs can be found
-            rc = SetDllDirectory(CommonProgramFilesPath & SOFA_DLL_LOCATION)
-            TL.LogMessage("New", "Added SOFA to application DLL search path: " + CommonProgramFilesPath & SOFA_DLL_LOCATION)
 
-            'Now make sure that it was actually attached OK
-            LogDllSearchDirectory("New")
+            TL.LogMessage("New", "Loading SOFA library DLL: " + SofaDllFile)
 
-            TL.LogMessage("New", "initialised OK")
+            SofaDllHandle = LoadLibrary(SofaDllFile)
+            LastError = Marshal.GetLastWin32Error
+
+            If SofaDllHandle <> IntPtr.Zero Then ' Loaded successfully
+                TL.LogMessage("New", "Loaded SOFA library OK")
+            Else ' Did not load 
+                TL.LogMessage("New", "Error loading SOFA library: " & LastError.ToString("X8"))
+                Throw New Exception("Error code returned from LoadLibrary when loading SOFA library: " & LastError.ToString("X8"))
+            End If
+
+            TL.LogMessage("New", "SOFA Initialised OK")
         End Sub
 
         Private disposedValue As Boolean = False        ' To detect redundant calls
@@ -91,6 +95,13 @@ Namespace SOFA
                         TL = Nothing
                     End If
                 End If
+
+                ' Free the SOFA library but don't return any error value
+                Try
+                    FreeLibrary(SofaDllHandle)
+                Catch ex As Exception
+
+                End Try
                 ' Free your own state (unmanaged objects) and set large fields to null.
             End If
             Me.disposedValue = True
@@ -163,7 +174,6 @@ Namespace SOFA
 
             If String.IsNullOrEmpty(s) Then s = " " ' Fix any invalid sign values
 
-            If TraceEnabled Then LogDllSearchDirectory("Af2a")
             If Is64Bit() Then
                 Af2a64(s.ToCharArray()(0), Convert.ToInt16(ideg), Convert.ToInt16(iamin), asec, rad)
             Else
@@ -182,7 +192,6 @@ Namespace SOFA
         Public Function Anp(a As Double) As Double Implements ISOFA.Anp
             Dim RetVal As Double
 
-            If TraceEnabled Then LogDllSearchDirectory("Anp")
             If Is64Bit() Then
                 RetVal = Anp64(a)
             Else
@@ -336,7 +345,6 @@ Namespace SOFA
                           ByRef di As Double,
                           ByRef eo As Double) Implements ISOFA.Atci13
 
-            If TraceEnabled Then LogDllSearchDirectory("CelestialToIntermediate")
             If Is64Bit() Then
                 Atci1364(rc, dc, pr, pd, px, rv, date1, date2, ri, di, eo)
             Else
@@ -423,7 +431,6 @@ Namespace SOFA
 
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("CelestialToObserved")
             If Is64Bit() Then
                 RetCode = Atco1364(rc, dc, pr, pd, px, rv, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob, eo)
             Else
@@ -472,7 +479,6 @@ Namespace SOFA
 
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("Dtf2d")
             If Is64Bit() Then
                 RetCode = Dtf2d64(scale, iy, im, id, ihr, imn, sec, d1, d2)
             Else
@@ -605,7 +611,6 @@ Namespace SOFA
 
             Dim RetVal As Double
 
-            If TraceEnabled Then LogDllSearchDirectory("Eo06a")
             If Is64Bit() Then
                 RetVal = Eo06a64(date1, date2)
             Else
@@ -751,7 +756,6 @@ Namespace SOFA
                           ByRef dc As Double,
                           ByRef eo As Double) Implements ISOFA.Atic13
 
-            If TraceEnabled Then LogDllSearchDirectory("IntermediateToCelestial")
             If Is64Bit() Then
                 Atic1364(ri, di, date1, date2, rc, dc, eo)
             Else
@@ -829,7 +833,6 @@ Namespace SOFA
                                          ByRef rob As Double) As Integer Implements ISOFA.Atio13
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("IntermediateToObserved")
             If Is64Bit() Then
                 RetCode = Atio1364(ri, di, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob)
             Else
@@ -908,7 +911,6 @@ Namespace SOFA
                                          ByRef dc As Double) As Integer Implements ISOFA.Atoc13
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("ObservedToCelestial")
             If Is64Bit() Then
                 RetCode = Atoc1364(type, ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
             Else
@@ -991,7 +993,6 @@ Namespace SOFA
                                          ByRef di As Double) As Integer Implements ISOFA.Atoi13
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("ObservedToIntermediate")
             If Is64Bit() Then
                 RetCode = Atoi1364(type, ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
 
@@ -1024,7 +1025,6 @@ Namespace SOFA
         Public Function TaiUtc(tai1 As Double, tai2 As Double, ByRef utc1 As Double, ByRef utc2 As Double) As Integer Implements ISOFA.TaiUtc
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("TaiUtc")
             If Is64Bit() Then
                 RetCode = Taiutc64(tai1, tai2, utc1, utc2)
             Else
@@ -1056,7 +1056,6 @@ Namespace SOFA
 
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("TaiTt")
             If Is64Bit() Then
                 RetCode = Taitt64(tai1, tai2, tt1, tt2)
             Else
@@ -1083,7 +1082,6 @@ Namespace SOFA
         Public Function TtTai(tt1 As Double, tt2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer Implements ISOFA.TtTai
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("TtTai")
             If Is64Bit() Then
                 RetCode = Tttai64(tt1, tt2, tai1, tai2)
             Else
@@ -1120,7 +1118,6 @@ Namespace SOFA
 
             If String.IsNullOrEmpty(s) Then s = " " ' Fix any invalid sign values
 
-            If TraceEnabled Then LogDllSearchDirectory("Tf2a")
             If Is64Bit() Then
                 Tf2a64(s.ToCharArray()(0), Convert.ToInt16(ihour), Convert.ToInt16(imin), sec, rad)
             Else
@@ -1156,7 +1153,6 @@ Namespace SOFA
 
             Dim RetCode As Short
 
-            If TraceEnabled Then LogDllSearchDirectory("UtcTai")
             If Is64Bit() Then
                 Utctai64(utc1, utc2, tai1, tai2)
             Else
@@ -1555,30 +1551,13 @@ Namespace SOFA
                                                ByVal fCreate As Boolean) As Boolean
         End Function
 
-        'Declare the api call that sets the additional DLL search directory
-        <DllImport("kernel32.dll", SetLastError:=False)> _
-        Private Shared Function SetDllDirectory(ByVal lpPathName As String) As Boolean
+        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="LoadLibraryA")> _
+        Public Shared Function LoadLibrary(ByVal lpFileName As String) As IntPtr
         End Function
 
-        'Declare function to get the current DLL search path
-        <DllImport("kernel32.dll", SetLastError:=True)> _
-        Private Shared Function GetDllDirectory(bufsize As Integer, buf As StringBuilder) As Integer
+        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="FreeLibrary")> _
+        Public Shared Function FreeLibrary(ByVal hModule As IntPtr) As Boolean
         End Function
-
-        ''' <summary>
-        ''' List the current DLL search path, path length and function error code to the trace file
-        ''' </summary>
-        ''' <remarks></remarks>
-        Private Sub LogDllSearchDirectory(Method As String)
-            Dim CurrentPath As New StringBuilder(240), PathLength As Integer
-
-            Try
-                PathLength = GetDllDirectory(CurrentPath.Capacity, CurrentPath)
-                TL.LogMessage(Method, "DLL Search Path: """ & CurrentPath.ToString(0, PathLength) & """, Length: " & PathLength & IIf(PathLength = 0, ", GetDllDirectory Error Code: " & Marshal.GetLastWin32Error.ToString("X8"), "").ToString())
-            Catch ex As Exception
-                TL.LogMessageCrLf(Method, "DLL Search Path Exception: " & ex.ToString())
-            End Try
-        End Sub
 
         ''' <summary>
         ''' Indicates whether we are running as a 32bit or 64bit application 
