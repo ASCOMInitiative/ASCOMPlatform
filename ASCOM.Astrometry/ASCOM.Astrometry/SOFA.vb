@@ -2,6 +2,7 @@
 Imports System.Environment
 Imports ASCOM.Utilities.Exceptions
 Imports ASCOM.Utilities
+Imports System.Text
 
 Namespace SOFA
     ''' <summary>
@@ -40,6 +41,7 @@ Namespace SOFA
 
         Private TL As TraceLogger
         Private Utl As Util
+        Private TraceEnabled As Boolean
 
 #Region "New and IDisposable"
         Sub New()
@@ -48,6 +50,7 @@ Namespace SOFA
 
             TL = New TraceLogger("", "SOFA")
             TL.Enabled = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
+            TraceEnabled = TL.Enabled
 
             Utl = New Util
 
@@ -63,7 +66,10 @@ Namespace SOFA
             'Add the ASCOM\.net directory to the DLL search path so that the SOFA C 32 and 64bit DLLs can be found
             rc = SetDllDirectory(CommonProgramFilesPath & SOFA_DLL_LOCATION)
             TL.LogMessage("New", "Added SOFA to application DLL search path: " + CommonProgramFilesPath & SOFA_DLL_LOCATION)
-            ' Open the ephemerides file and set its applicable date range
+
+            'Now make sure that it was actually attached OK
+            LogDllSearchDirectory("New")
+
             TL.LogMessage("New", "initialised OK")
         End Sub
 
@@ -157,6 +163,7 @@ Namespace SOFA
 
             If String.IsNullOrEmpty(s) Then s = " " ' Fix any invalid sign values
 
+            If TraceEnabled Then LogDllSearchDirectory("Af2a")
             If Is64Bit() Then
                 Af2a64(s.ToCharArray()(0), Convert.ToInt16(ideg), Convert.ToInt16(iamin), asec, rad)
             Else
@@ -175,6 +182,7 @@ Namespace SOFA
         Public Function Anp(a As Double) As Double Implements ISOFA.Anp
             Dim RetVal As Double
 
+            If TraceEnabled Then LogDllSearchDirectory("Anp")
             If Is64Bit() Then
                 RetVal = Anp64(a)
             Else
@@ -328,6 +336,7 @@ Namespace SOFA
                           ByRef di As Double,
                           ByRef eo As Double) Implements ISOFA.Atci13
 
+            If TraceEnabled Then LogDllSearchDirectory("CelestialToIntermediate")
             If Is64Bit() Then
                 Atci1364(rc, dc, pr, pd, px, rv, date1, date2, ri, di, eo)
             Else
@@ -414,6 +423,7 @@ Namespace SOFA
 
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("CelestialToObserved")
             If Is64Bit() Then
                 RetCode = Atco1364(rc, dc, pr, pd, px, rv, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob, eo)
             Else
@@ -462,6 +472,7 @@ Namespace SOFA
 
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("Dtf2d")
             If Is64Bit() Then
                 RetCode = Dtf2d64(scale, iy, im, id, ihr, imn, sec, d1, d2)
             Else
@@ -594,6 +605,7 @@ Namespace SOFA
 
             Dim RetVal As Double
 
+            If TraceEnabled Then LogDllSearchDirectory("Eo06a")
             If Is64Bit() Then
                 RetVal = Eo06a64(date1, date2)
             Else
@@ -739,6 +751,7 @@ Namespace SOFA
                           ByRef dc As Double,
                           ByRef eo As Double) Implements ISOFA.Atic13
 
+            If TraceEnabled Then LogDllSearchDirectory("IntermediateToCelestial")
             If Is64Bit() Then
                 Atic1364(ri, di, date1, date2, rc, dc, eo)
             Else
@@ -816,6 +829,7 @@ Namespace SOFA
                                          ByRef rob As Double) As Integer Implements ISOFA.Atio13
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("IntermediateToObserved")
             If Is64Bit() Then
                 RetCode = Atio1364(ri, di, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob)
             Else
@@ -894,6 +908,7 @@ Namespace SOFA
                                          ByRef dc As Double) As Integer Implements ISOFA.Atoc13
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("ObservedToCelestial")
             If Is64Bit() Then
                 RetCode = Atoc1364(type, ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
             Else
@@ -976,6 +991,7 @@ Namespace SOFA
                                          ByRef di As Double) As Integer Implements ISOFA.Atoi13
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("ObservedToIntermediate")
             If Is64Bit() Then
                 RetCode = Atoi1364(type, ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
 
@@ -1008,6 +1024,7 @@ Namespace SOFA
         Public Function TaiUtc(tai1 As Double, tai2 As Double, ByRef utc1 As Double, ByRef utc2 As Double) As Integer Implements ISOFA.TaiUtc
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("TaiUtc")
             If Is64Bit() Then
                 RetCode = Taiutc64(tai1, tai2, utc1, utc2)
             Else
@@ -1039,6 +1056,7 @@ Namespace SOFA
 
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("TaiTt")
             If Is64Bit() Then
                 RetCode = Taitt64(tai1, tai2, tt1, tt2)
             Else
@@ -1065,6 +1083,7 @@ Namespace SOFA
         Public Function TtTai(tt1 As Double, tt2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer Implements ISOFA.TtTai
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("TtTai")
             If Is64Bit() Then
                 RetCode = Tttai64(tt1, tt2, tai1, tai2)
             Else
@@ -1101,6 +1120,7 @@ Namespace SOFA
 
             If String.IsNullOrEmpty(s) Then s = " " ' Fix any invalid sign values
 
+            If TraceEnabled Then LogDllSearchDirectory("Tf2a")
             If Is64Bit() Then
                 Tf2a64(s.ToCharArray()(0), Convert.ToInt16(ihour), Convert.ToInt16(imin), sec, rad)
             Else
@@ -1136,6 +1156,7 @@ Namespace SOFA
 
             Dim RetCode As Short
 
+            If TraceEnabled Then LogDllSearchDirectory("UtcTai")
             If Is64Bit() Then
                 Utctai64(utc1, utc2, tai1, tai2)
             Else
@@ -1539,45 +1560,38 @@ Namespace SOFA
         Private Shared Function SetDllDirectory(ByVal lpPathName As String) As Boolean
         End Function
 
-        Private Shared Function Is64Bit() As Boolean
+        'Declare function to get the current DLL search path
+        <DllImport("kernel32.dll", SetLastError:=True)> _
+        Private Shared Function GetDllDirectory(bufsize As Integer, buf As StringBuilder) As Integer
+        End Function
+
+        ''' <summary>
+        ''' List the current DLL search path, path length and function error code to the trace file
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub LogDllSearchDirectory(Method As String)
+            Dim CurrentPath As New StringBuilder(240), PathLength As Integer
+
+            Try
+                PathLength = GetDllDirectory(CurrentPath.Capacity, CurrentPath)
+                TL.LogMessage(Method, "DLL Search Path: """ & CurrentPath.ToString(0, PathLength) & """, Length: " & PathLength & IIf(PathLength = 0, ", GetDllDirectory Error Code: " & Marshal.GetLastWin32Error.ToString("X8"), "").ToString())
+            Catch ex As Exception
+                TL.LogMessageCrLf(Method, "DLL Search Path Exception: " & ex.ToString())
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Indicates whether we are running as a 32bit or 64bit application 
+        ''' </summary>
+        ''' <returns>True if the application is 64bit, False for 32bit</returns>
+        ''' <remarks></remarks>
+        Private Function Is64Bit() As Boolean
             If IntPtr.Size = 8 Then 'Check whether we are running on a 32 or 64bit system.
                 Return True
             Else
                 Return False
             End If
         End Function
-
-        Private Shared Function ArrToPosVec(ByVal Arr As Double()) As PosVector
-            'Create a new vector having the values in the supplied double array
-            Dim V As New PosVector
-            V.x = Arr(0)
-            V.y = Arr(1)
-            V.z = Arr(2)
-            Return V
-        End Function
-
-        Private Shared Sub PosVecToArr(ByVal V As PosVector, ByRef Ar As Double())
-            'Copy a vector structure to a returned double array
-            Ar(0) = V.x
-            Ar(1) = V.y
-            Ar(2) = V.z
-        End Sub
-
-        Private Shared Function ArrToVelVec(ByVal Arr As Double()) As VelVector
-            'Create a new vector having the values in the supplied double array
-            Dim V As New VelVector
-            V.x = Arr(0)
-            V.y = Arr(1)
-            V.z = Arr(2)
-            Return V
-        End Function
-
-        Private Shared Sub VelVecToArr(ByVal V As VelVector, ByRef Ar As Double())
-            'Copy a vector structure to a returned double array
-            Ar(0) = V.x
-            Ar(1) = V.y
-            Ar(2) = V.z
-        End Sub
 
 #End Region
 
