@@ -1,7 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Environment
-Imports ASCOM.Utilities.Exceptions
 Imports ASCOM.Utilities
+Imports ASCOM.Utilities.Exceptions
 
 Namespace NOVAS
 
@@ -23,22 +23,28 @@ Namespace NOVAS
     Public Class NOVAS31
         Implements INOVAS31, IDisposable
 
-        Private Const NOVAS32Dll As String = "NOVAS31.dll" 'Names of NOVAS 32 and 64bit DLL files
-        Private Const NOVAS64Dll As String = "NOVAS31-64.dll"
+        Private Const NOVAS32DLL As String = "NOVAS31.dll" 'Names of NOVAS 32 and 64bit DLL files
+        Private Const NOVAS64DLL As String = "NOVAS31-64.dll"
 
         Private Const JPL_EPHEM_FILE_NAME As String = "JPLEPH" 'Name of JPL ephemeredes file
         Private Const JPL_EPHEM_START_DATE As Double = 2305424.5 'First date of data in the ephemeredes file
         Private Const JPL_EPHEM_END_DATE As Double = 2525008.5 'Last date of data in the ephemeredes file
 
-        Private Const NOVAS_DLL_LOCATION As String = "\ASCOM\Astrometry" 'This is appended to the Common Files path
-        Private Const RACIO_FILE As String = "\cio_ra.bin" 'Name of the RA of CIO binary data file
+        Private Const NOVAS_DLL_LOCATION As String = "\ASCOM\Astrometry\" 'This is appended to the Common Files path
+        Private Const RACIO_FILE As String = "cio_ra.bin" 'Name of the RA of CIO binary data file
         Private TL As TraceLogger
         Private Utl As Util
+        Private Novas31DllHandle As IntPtr
 
 #Region "New and IDisposable"
+        ''' <summary>
+        ''' Creates a new instance of the NOVAS31 component
+        ''' </summary>
+        ''' <exception cref="HelperException">Thrown if the NOVAS31 support library DLL cannot be loaded</exception>
+        ''' <remarks></remarks>
         Sub New()
-            Dim rc As Boolean, rc1 As Short, CommonProgramFilesPath As String, DENumber As Short
-            Dim ReturnedPath As New System.Text.StringBuilder(260)
+            Dim rc As Boolean, rc1 As Short, Novas31DllFile, RACIOFile, JPLEphFile As String, DENumber As Short
+            Dim ReturnedPath As New System.Text.StringBuilder(260), LastError As Integer
 
             TL = New TraceLogger("", "NOVAS31")
             TL.Enabled = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
@@ -50,20 +56,34 @@ Namespace NOVAS
             'On a 64bit system this is \Program Files (x86)\Common Files
             If Is64Bit() Then ' 64bit application so find the 32bit folder location
                 rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, False)
-                CommonProgramFilesPath = ReturnedPath.ToString
+                Novas31DllFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & NOVAS64DLL
+                RACIOFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & RACIO_FILE
+                JPLEphFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & JPL_EPHEM_FILE_NAME
             Else '32bit application so just go with the .NET returned value
-                CommonProgramFilesPath = GetFolderPath(SpecialFolder.CommonProgramFiles)
+                Novas31DllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & NOVAS32DLL
+                RACIOFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & RACIO_FILE
+                JPLEphFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & JPL_EPHEM_FILE_NAME
             End If
-            'Add the ASCOM\.net directory to the DLL search path so that the NOVAS C 32 and 64bit DLLs can be found
-            rc = SetDllDirectory(CommonProgramFilesPath & NOVAS_DLL_LOCATION)
+            TL.LogMessage("New", "Loading NOVAS31 library DLL: " + Novas31DllFile)
+
+            Novas31DllHandle = LoadLibrary(Novas31DllFile)
+            LastError = Marshal.GetLastWin32Error
+
+            If Novas31DllHandle <> IntPtr.Zero Then ' Loaded successfully
+                TL.LogMessage("New", "Loaded NOVAS31 library OK")
+            Else ' Did not load 
+                TL.LogMessage("New", "Error loading NOVAS31 library: " & LastError.ToString("X8"))
+                Throw New Exception("Error code returned from LoadLibrary when loading NOVAS31 library: " & LastError.ToString("X8"))
+            End If
 
             'Establish the location of the file of CIO RAs
-            SetRACIOFile(CommonProgramFilesPath & NOVAS_DLL_LOCATION & RACIO_FILE)
+            SetRACIOFile(RACIOFile)
 
             ' Open the ephemerides file and set its applicable date range
-            rc1 = Ephem_Open(CommonProgramFilesPath & NOVAS_DLL_LOCATION & "\" & JPL_EPHEM_FILE_NAME, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE, DENumber)
-            If rc1 > 0 Then Throw New HelperException("Unable to open ephemeris file: " & GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & "\" & JPL_EPHEM_FILE_NAME & ", RC: " & rc1)
-            TL.LogMessage("New", "initialised OK")
+            rc1 = Ephem_Open(JPLEphFile, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE, DENumber)
+            If rc1 > 0 Then Throw New HelperException("Unable to open ephemeris file: " & JPLEphFile & ", RC: " & rc1)
+
+            TL.LogMessage("New", "NOVAS31 initialised OK")
         End Sub
 
         Private disposedValue As Boolean = False        ' To detect redundant calls
@@ -84,7 +104,9 @@ Namespace NOVAS
                         TL = Nothing
                     End If
                 End If
+
                 ' Free your own state (unmanaged objects) and set large fields to null.
+                Try : FreeLibrary(Novas31DllHandle) : Catch : End Try ' Free the NOVAS library but don't return any error value
                 Try : Ephem_Close() : Catch : End Try ' Close the ephemeris file if its open
             End If
             Me.disposedValue = True
@@ -2375,22 +2397,22 @@ Namespace NOVAS
 #End Region
 
 #Region "DLL Entry Points for Ephemeris and RACIOFile (32bit)"
-        <DllImport(NOVAS32Dll, EntryPoint:="set_racio_file")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="set_racio_file")> _
         Private Shared Sub SetRACIOFile32(<MarshalAs(UnmanagedType.LPStr)> ByVal FName As String)
         End Sub
 
-        <DllImportAttribute(NOVAS32Dll, EntryPoint:="ephem_close")> _
+        <DllImportAttribute(NOVAS32DLL, EntryPoint:="ephem_close")> _
         Private Shared Function EphemClose32() As Short
         End Function
 
-        <DllImportAttribute(NOVAS32Dll, EntryPoint:="ephem_open")> _
+        <DllImportAttribute(NOVAS32DLL, EntryPoint:="ephem_open")> _
         Private Shared Function EphemOpen32(<MarshalAs(UnmanagedType.LPStr)> ByVal Ephem_Name As String, _
                                                                               ByRef JD_Begin As Double, _
                                                                               ByRef JD_End As Double, _
                                                                               ByRef DENumber As Short) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="planet_ephemeris")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="planet_ephemeris")> _
         Private Shared Function PlanetEphemeris32(ByRef Tjd As JDHighPrecision, _
                                                   ByVal Target As Target, _
                                                   ByVal Center As Target, _
@@ -2398,18 +2420,18 @@ Namespace NOVAS
                                                   ByRef Velocity As VelVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="readeph")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="readeph")> _
         Private Shared Function ReadEph32(ByVal Mp As Integer, _
                                           <MarshalAs(UnmanagedType.LPStr)> ByVal Name As String, _
                                           ByVal Jd As Double, _
                                           ByRef Err As Integer) As System.IntPtr
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="cleaneph")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="cleaneph")> _
         Private Shared Sub CleanEph32()
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="solarsystem")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="solarsystem")> _
         Private Shared Function SolarSystem32(ByVal tjd As Double, _
                                               ByVal body As Short, _
                                               ByVal origin As Short, _
@@ -2417,7 +2439,7 @@ Namespace NOVAS
                                               ByRef vel As VelVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="state")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="state")> _
         Private Shared Function State32(ByRef Jed As JDHighPrecision, _
                                          ByVal Target As Target, _
                                          ByRef TargetPos As PosVector, _
@@ -2426,14 +2448,14 @@ Namespace NOVAS
 #End Region
 
 #Region "DLL Entry Points NOVAS (32bit)"
-        <DllImport(NOVAS32Dll, EntryPoint:="aberration")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="aberration")> _
         Private Shared Sub Aberration32(ByRef Pos As PosVector, _
                                         ByRef Vel As VelVector, _
                                         ByVal LightTime As Double, _
                                         ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="app_planet")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="app_planet")> _
         Private Shared Function AppPlanet32(ByVal JdTt As Double, _
                                             ByRef SsBody As Object3Internal, _
                                             ByVal Accuracy As Accuracy, _
@@ -2442,7 +2464,7 @@ Namespace NOVAS
                                             ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="app_star")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="app_star")> _
         Private Shared Function AppStar32(ByVal JdTt As Double, _
                                              ByRef Star As CatEntry3, _
                                              ByVal Accuracy As Accuracy, _
@@ -2450,7 +2472,7 @@ Namespace NOVAS
                                              ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="astro_planet")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="astro_planet")> _
         Private Shared Function AstroPlanet32(ByVal JdTt As Double, _
                                               ByRef SsBody As Object3Internal, _
                                               ByVal Accuracy As Accuracy, _
@@ -2459,7 +2481,7 @@ Namespace NOVAS
                                               ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="astro_star")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="astro_star")> _
         Private Shared Function AstroStar32(ByVal JdTt As Double, _
                                             ByRef Star As CatEntry3, _
                                             ByVal Accuracy As Accuracy, _
@@ -2467,14 +2489,14 @@ Namespace NOVAS
                                             ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="bary2obs")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="bary2obs")> _
         Private Shared Sub Bary2Obs32(ByRef Pos As PosVector, _
                                       ByRef PosObs As PosVector, _
                                       ByRef Pos2 As PosVector, _
                                       ByRef Lighttime As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="cal_date")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="cal_date")> _
         Private Shared Sub CalDate32(ByVal Tjd As Double, _
                                      ByRef Year As Short, _
                                      ByRef Month As Short, _
@@ -2482,7 +2504,7 @@ Namespace NOVAS
                                      ByRef Hour As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="cel2ter")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="cel2ter")> _
         Private Shared Function Cel2Ter32(ByVal JdHigh As Double, _
                                           ByVal JdLow As Double, _
                                           ByVal DeltaT As Double, _
@@ -2495,20 +2517,20 @@ Namespace NOVAS
                                           ByRef VecC As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="cel_pole")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="cel_pole")> _
         Private Shared Function CelPole32(ByVal Tjd As Double, _
                                           ByVal Type As PoleOffsetCorrection, _
                                           ByVal Dpole1 As Double, _
                                           ByVal Dpole2 As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="cio_array")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="cio_array")> _
         Private Shared Function CioArray32(ByVal JdTdb As Double, _
                                            ByVal NPts As Integer, _
                                            ByRef Cio As RAOfCioArray) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="cio_basis")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="cio_basis")> _
         Private Shared Function CioBasis32(ByVal JdTdbEquionx As Double, _
                                            ByVal RaCioEquionx As Double, _
                                            ByVal RefSys As ReferenceSystem, _
@@ -2518,25 +2540,25 @@ Namespace NOVAS
                                            ByRef z As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="cio_location")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="cio_location")> _
         Private Shared Function CioLocation32(ByVal JdTdb As Double, _
                                               ByVal Accuracy As Accuracy, _
                                               ByRef RaCio As Double, _
                                               ByRef RefSys As ReferenceSystem) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="cio_ra")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="cio_ra")> _
         Private Shared Function CioRa32(ByVal JdTt As Double, _
                                         ByVal Accuracy As Accuracy, _
                                         ByRef RaCio As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="d_light")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="d_light")> _
         Private Shared Function DLight32(ByRef Pos1 As PosVector, _
                                          ByRef PosObs As PosVector) As Double
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="e_tilt")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="e_tilt")> _
         Private Shared Sub ETilt32(ByVal JdTdb As Double, _
                                    ByVal Accuracy As Accuracy, _
                                    ByRef Mobl As Double, _
@@ -2546,7 +2568,7 @@ Namespace NOVAS
                                    ByRef Deps As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="ecl2equ_vec")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="ecl2equ_vec")> _
         Private Shared Function Ecl2EquVec32(ByVal JdTt As Double, _
                                              ByVal CoordSys As CoordSys, _
                                              ByVal Accuracy As Accuracy, _
@@ -2554,13 +2576,13 @@ Namespace NOVAS
                                              ByRef Pos2 As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="ee_ct")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="ee_ct")> _
         Private Shared Function EeCt32(ByVal JdHigh As Double, _
                                        ByVal JdLow As Double, _
                                        ByVal Accuracy As Accuracy) As Double
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="ephemeris")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="ephemeris")> _
         Private Shared Function Ephemeris32(ByRef Jd As JDHighPrecision, _
                                             ByRef CelObj As Object3Internal, _
                                             ByVal Origin As Origin, _
@@ -2569,7 +2591,7 @@ Namespace NOVAS
                                             ByRef Vel As VelVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="equ2ecl")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="equ2ecl")> _
         Private Shared Function Equ2Ecl32(ByVal JdTt As Double, _
                                           ByVal CoordSys As CoordSys, _
                                           ByVal Accuracy As Accuracy, _
@@ -2579,7 +2601,7 @@ Namespace NOVAS
                                           ByRef ELat As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="equ2ecl_vec")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="equ2ecl_vec")> _
         Private Shared Function Equ2EclVec32(ByVal JdTt As Double, _
                                              ByVal CoordSys As CoordSys, _
                                              ByVal Accuracy As Accuracy, _
@@ -2587,14 +2609,14 @@ Namespace NOVAS
                                              ByRef Pos2 As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="equ2gal")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="equ2gal")> _
         Private Shared Sub Equ2Gal32(ByVal RaI As Double, _
                                      ByVal DecI As Double, _
                                      ByRef GLon As Double, _
                                      ByRef GLat As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="equ2hor")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="equ2hor")> _
         Private Shared Sub Equ2Hor32(ByVal Jd_Ut1 As Double, _
                                      ByVal DeltT As Double, _
                                      ByVal Accuracy As Accuracy, _
@@ -2610,23 +2632,23 @@ Namespace NOVAS
                                      ByRef DecR As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="era")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="era")> _
         Private Shared Function Era32(ByVal JdHigh As Double, _
                                       ByVal JdLow As Double) As Double
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="frame_tie")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="frame_tie")> _
         Private Shared Sub FrameTie32(ByRef Pos1 As PosVector, _
                                       ByVal Direction As FrameConversionDirection, _
                                       ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="fund_args")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="fund_args")> _
         Private Shared Sub FundArgs32(ByVal t As Double, _
                                       ByRef a As FundamentalArgs)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="gcrs2equ")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="gcrs2equ")> _
         Private Shared Function Gcrs2Equ32(ByVal JdTt As Double, _
                                             ByVal CoordSys As CoordSys, _
                                             ByVal Accuracy As Accuracy, _
@@ -2636,7 +2658,7 @@ Namespace NOVAS
                                             ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="geo_posvel")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="geo_posvel")> _
         Private Shared Function GeoPosVel32(ByVal JdTt As Double, _
                                             ByVal DeltaT As Double, _
                                             ByVal Accuracy As Accuracy, _
@@ -2645,7 +2667,7 @@ Namespace NOVAS
                                             ByRef Vel As VelVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="grav_def")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="grav_def")> _
         Private Shared Function GravDef32(ByVal JdTdb As Double, _
                                           ByVal LocCode As EarthDeflection, _
                                           ByVal Accuracy As Accuracy, _
@@ -2654,7 +2676,7 @@ Namespace NOVAS
                                           ByRef Pos2 As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="grav_vec")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="grav_vec")> _
         Private Shared Sub GravVec32(ByRef Pos1 As PosVector, _
                                      ByRef PosObs As PosVector, _
                                      ByRef PosBody As PosVector, _
@@ -2662,20 +2684,20 @@ Namespace NOVAS
                                      ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="ira_equinox")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="ira_equinox")> _
         Private Shared Function IraEquinox32(ByVal JdTdb As Double, _
                                              ByVal Equinox As EquinoxType, _
                                              ByVal Accuracy As Accuracy) As Double
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="julian_date")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="julian_date")> _
         Private Shared Function JulianDate32(ByVal Year As Short, _
                                              ByVal Month As Short, _
                                              ByVal Day As Short, _
                                              ByVal Hour As Double) As Double
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="light_time")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="light_time")> _
         Private Shared Function LightTime32(ByVal JdTdb As Double, _
                                             ByRef SsObject As Object3Internal, _
                                             ByRef PosObs As PosVector, _
@@ -2685,14 +2707,14 @@ Namespace NOVAS
                                             ByRef TLight As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="limb_angle")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="limb_angle")> _
         Private Shared Sub LimbAngle32(ByRef PosObj As PosVector, _
                                        ByRef PosObs As PosVector, _
                                        ByRef LimbAng As Double, _
                                        ByRef NadirAng As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="local_planet")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="local_planet")> _
         Private Shared Function LocalPlanet32(ByVal JdTt As Double, _
                                                ByRef SsBody As Object3Internal, _
                                                ByVal DeltaT As Double, _
@@ -2703,7 +2725,7 @@ Namespace NOVAS
                                                ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="local_star")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="local_star")> _
         Private Shared Function LocalStar32(ByVal JdTt As Double, _
                                             ByVal DeltaT As Double, _
                                             ByRef Star As CatEntry3, _
@@ -2713,7 +2735,7 @@ Namespace NOVAS
                                             ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="make_cat_entry")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="make_cat_entry")> _
         Private Shared Sub MakeCatEntry32(<MarshalAs(UnmanagedType.LPStr)> ByVal StarName As String, _
                                           <MarshalAs(UnmanagedType.LPStr)> ByVal Catalog As String, _
                                                                            ByVal StarNum As Integer, _
@@ -2726,13 +2748,13 @@ Namespace NOVAS
                                                                            ByRef Star As CatEntry3)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="make_in_space")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="make_in_space")> _
         Private Shared Sub MakeInSpace32(ByRef ScPos As PosVector, _
                                          ByRef ScVel As VelVector, _
                                          ByRef ObsSpace As InSpace)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="make_object")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="make_object")> _
         Private Shared Function MakeObject32(ByVal Type As ObjectType, _
                                              ByVal Number As Short, _
                                              <MarshalAs(UnmanagedType.LPStr)> ByVal Name As String, _
@@ -2740,24 +2762,24 @@ Namespace NOVAS
                                              ByRef CelObj As Object3Internal) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="make_observer")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="make_observer")> _
         Private Shared Function MakeObserver32(ByVal Where As ObserverLocation, _
                                                ByRef ObsSurface As OnSurface, _
                                                ByRef ObsSpace As InSpace, _
                                                ByRef Obs As Observer) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="make_observer_at_geocenter")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="make_observer_at_geocenter")> _
         Private Shared Sub MakeObserverAtGeocenter32(ByRef ObsAtGeocenter As Observer)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="make_observer_in_space")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="make_observer_in_space")> _
         Private Shared Sub MakeObserverInSpace32(ByRef ScPos As PosVector, _
                                                  ByRef ScVel As VelVector, _
                                                  ByRef ObsInSpace As Observer)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="make_observer_on_surface")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="make_observer_on_surface")> _
         Private Shared Sub MakeObserverOnSurface32(ByVal Latitude As Double, _
                                                    ByVal Longitude As Double, _
                                                    ByVal Height As Double, _
@@ -2766,7 +2788,7 @@ Namespace NOVAS
                                                    ByRef ObsOnSurface As Observer)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="make_on_surface")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="make_on_surface")> _
         Private Shared Sub MakeOnSurface32(ByVal Latitude As Double, _
                                            ByVal Longitude As Double, _
                                            ByVal Height As Double, _
@@ -2775,11 +2797,11 @@ Namespace NOVAS
                                            ByRef ObsSurface As OnSurface)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="mean_obliq")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="mean_obliq")> _
         Private Shared Function MeanObliq32(ByVal JdTdb As Double) As Double
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="mean_star")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="mean_star")> _
         Private Shared Function MeanStar32(ByVal JdTt As Double, _
                                            ByVal Ra As Double, _
                                            ByVal Dec As Double, _
@@ -2788,11 +2810,11 @@ Namespace NOVAS
                                            ByRef IDec As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="norm_ang")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="norm_ang")> _
         Private Shared Function NormAng32(ByVal Angle As Double) As Double
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="nutation")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="nutation")> _
         Private Shared Sub Nutation32(ByVal JdTdb As Double, _
                                       ByVal Direction As NutationDirection, _
                                       ByVal Accuracy As Accuracy, _
@@ -2800,14 +2822,14 @@ Namespace NOVAS
                                       ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="nutation_angles")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="nutation_angles")> _
         Private Shared Sub NutationAngles32(ByVal t As Double, _
                                             ByVal Accuracy As Accuracy, _
                                             ByRef DPsi As Double, _
                                             ByRef DEps As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="place")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="place")> _
         Private Shared Function Place32(ByVal JdTt As Double, _
                                         ByRef CelObject As Object3Internal, _
                                         ByRef Location As Observer, _
@@ -2817,14 +2839,14 @@ Namespace NOVAS
                                         ByRef Output As SkyPos) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="precession")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="precession")> _
         Private Shared Function Precession32(ByVal JdTdb1 As Double, _
                                              ByRef Pos1 As PosVector, _
                                              ByVal JdTdb2 As Double, _
                                              ByRef Pos2 As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="proper_motion")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="proper_motion")> _
         Private Shared Sub ProperMotion32(ByVal JdTdb1 As Double, _
                                           ByRef Pos As PosVector, _
                                           ByRef Vel As VelVector, _
@@ -2832,7 +2854,7 @@ Namespace NOVAS
                                           ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="rad_vel")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="rad_vel")> _
         Private Shared Sub RadVel32(ByRef CelObject As Object3Internal, _
                                     ByRef Pos As PosVector, _
                                     ByRef Vel As VelVector, _
@@ -2843,20 +2865,20 @@ Namespace NOVAS
                                     ByRef Rv As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="radec2vector")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="radec2vector")> _
         Private Shared Sub RaDec2Vector32(ByVal Ra As Double, _
                                           ByVal Dec As Double, _
                                           ByVal Dist As Double, _
                                           ByRef Vector As PosVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="refract")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="refract")> _
         Private Shared Function Refract32(ByRef Location As OnSurface, _
                                           ByVal RefOption As RefractionOption, _
                                           ByVal ZdObs As Double) As Double
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="sidereal_time")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="sidereal_time")> _
         Private Shared Function SiderealTime32(ByVal JdHigh As Double, _
                                                ByVal JdLow As Double, _
                                                ByVal DeltaT As Double, _
@@ -2866,25 +2888,25 @@ Namespace NOVAS
                                                ByRef Gst As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="spin")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="spin")> _
         Private Shared Sub Spin32(ByVal Angle As Double, _
                                   ByRef Pos1 As PosVector, _
                                   ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="starvectors")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="starvectors")> _
         Private Shared Sub StarVectors32(ByRef Star As CatEntry3, _
                                          ByRef Pos As PosVector, _
                                          ByRef Vel As VelVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="tdb2tt")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="tdb2tt")> _
         Private Shared Sub Tdb2Tt32(ByVal TdbJd As Double, _
                                     ByRef TtJd As Double, _
                                     ByRef SecDiff As Double)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="ter2cel")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="ter2cel")> _
         Private Shared Function Ter2Cel32(ByVal JdHigh As Double, _
                                           ByVal JdLow As Double, _
                                           ByVal DeltaT As Double, _
@@ -2897,14 +2919,14 @@ Namespace NOVAS
                                           ByRef VecC As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="terra")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="terra")> _
         Private Shared Sub Terra32(ByRef Location As OnSurface, _
                                    ByVal St As Double, _
                                    ByRef Pos As PosVector, _
                                    ByRef Vel As VelVector)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="topo_planet")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="topo_planet")> _
         Private Shared Function TopoPlanet32(ByVal JdTt As Double, _
                                              ByRef SsBody As Object3Internal, _
                                              ByVal DeltaT As Double, _
@@ -2915,7 +2937,7 @@ Namespace NOVAS
                                              ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="topo_star")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="topo_star")> _
         Private Shared Function TopoStar32(ByVal JdTt As Double, _
                                            ByVal DeltaT As Double, _
                                            ByRef Star As CatEntry3, _
@@ -2925,7 +2947,7 @@ Namespace NOVAS
                                            ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="transform_cat")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="transform_cat")> _
         Private Shared Function TransformCat32(ByVal TransformOption As TransformationOption3, _
                                                ByVal DateInCat As Double, _
                                                ByRef InCat As CatEntry3, _
@@ -2935,18 +2957,18 @@ Namespace NOVAS
 
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="transform_hip")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="transform_hip")> _
         Private Shared Sub TransformHip32(ByRef Hipparcos As CatEntry3, _
                                           ByRef Hip2000 As CatEntry3)
         End Sub
 
-        <DllImport(NOVAS32Dll, EntryPoint:="vector2radec")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="vector2radec")> _
         Private Shared Function Vector2RaDec32(ByRef Pos As PosVector, _
                                                ByRef Ra As Double, _
                                                ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="virtual_planet")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="virtual_planet")> _
         Private Shared Function VirtualPlanet32(ByVal JdTt As Double, _
                                                 ByRef SsBody As Object3Internal, _
                                                 ByVal Accuracy As Accuracy, _
@@ -2955,7 +2977,7 @@ Namespace NOVAS
                                                 ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="virtual_star")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="virtual_star")> _
         Private Shared Function VirtualStar32(ByVal JdTt As Double, _
                                               ByRef Star As CatEntry3, _
                                               ByVal Accuracy As Accuracy, _
@@ -2963,7 +2985,7 @@ Namespace NOVAS
                                               ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS32Dll, EntryPoint:="wobble")> _
+        <DllImport(NOVAS32DLL, EntryPoint:="wobble")> _
         Private Shared Sub Wobble32(ByVal Tjd As Double, _
                                     ByVal Direction As Short, _
                                     ByVal x As Double, _
@@ -2974,22 +2996,22 @@ Namespace NOVAS
 #End Region
 
 #Region "DLL Entry Points for Ephemeris and RACIOFile (64bit)"
-        <DllImport(NOVAS64Dll, EntryPoint:="set_racio_file")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="set_racio_file")> _
         Private Shared Sub SetRACIOFile64(<MarshalAs(UnmanagedType.LPStr)> ByVal Name As String)
         End Sub
 
-        <DllImportAttribute(NOVAS64Dll, EntryPoint:="ephem_close")> _
+        <DllImportAttribute(NOVAS64DLL, EntryPoint:="ephem_close")> _
         Private Shared Function EphemClose64() As Short
         End Function
 
-        <DllImportAttribute(NOVAS64Dll, EntryPoint:="ephem_open")> _
+        <DllImportAttribute(NOVAS64DLL, EntryPoint:="ephem_open")> _
         Private Shared Function EphemOpen64(<MarshalAs(UnmanagedType.LPStr)> ByVal Ephem_Name As String, _
                                                                               ByRef JD_Begin As Double, _
                                                                               ByRef JD_End As Double, _
                                                                               ByRef DENumber As Short) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="planet_ephemeris")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="planet_ephemeris")> _
         Private Shared Function PlanetEphemeris64(ByRef Tjd As JDHighPrecision, _
                                                   ByVal Target As Target, _
                                                   ByVal Center As Target, _
@@ -2997,18 +3019,18 @@ Namespace NOVAS
                                                   ByRef Velocity As VelVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="readeph")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="readeph")> _
         Private Shared Function ReadEph64(ByVal Mp As Integer, _
                                           <MarshalAs(UnmanagedType.LPStr)> ByVal Name As String, _
                                           ByVal Jd As Double, _
                                           ByRef Err As Integer) As System.IntPtr
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="cleaneph")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="cleaneph")> _
         Private Shared Sub CleanEph64()
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="solarsystem")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="solarsystem")> _
         Private Shared Function SolarSystem64(ByVal tjd As Double, _
                                               ByVal body As Short, _
                                               ByVal origin As Short, _
@@ -3016,7 +3038,7 @@ Namespace NOVAS
                                               ByRef vel As VelVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="state")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="state")> _
         Private Shared Function State64(ByRef Jed As JDHighPrecision, _
                                          ByVal Target As Target, _
                                          ByRef TargetPos As PosVector, _
@@ -3025,14 +3047,14 @@ Namespace NOVAS
 #End Region
 
 #Region "DLL Entry Points NOVAS (64bit)"
-        <DllImport(NOVAS64Dll, EntryPoint:="aberration")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="aberration")> _
         Private Shared Sub Aberration64(ByRef Pos As PosVector, _
                                         ByRef Vel As VelVector, _
                                         ByVal LightTime As Double, _
                                         ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="app_planet")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="app_planet")> _
         Private Shared Function AppPlanet64(ByVal JdTt As Double, _
                                             ByRef SsBody As Object3Internal, _
                                             ByVal Accuracy As Accuracy, _
@@ -3041,7 +3063,7 @@ Namespace NOVAS
                                             ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="app_star")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="app_star")> _
         Private Shared Function AppStar64(ByVal JdTt As Double, _
                                              ByRef Star As CatEntry3, _
                                              ByVal Accuracy As Accuracy, _
@@ -3049,7 +3071,7 @@ Namespace NOVAS
                                              ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="astro_planet")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="astro_planet")> _
         Private Shared Function AstroPlanet64(ByVal JdTt As Double, _
                                               ByRef SsBody As Object3Internal, _
                                               ByVal Accuracy As Accuracy, _
@@ -3058,7 +3080,7 @@ Namespace NOVAS
                                               ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="astro_star")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="astro_star")> _
         Private Shared Function AstroStar64(ByVal JdTt As Double, _
                                             ByRef Star As CatEntry3, _
                                             ByVal Accuracy As Accuracy, _
@@ -3066,14 +3088,14 @@ Namespace NOVAS
                                             ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="bary2obs")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="bary2obs")> _
         Private Shared Sub Bary2Obs64(ByRef Pos As PosVector, _
                                       ByRef PosObs As PosVector, _
                                       ByRef Pos2 As PosVector, _
                                       ByRef Lighttime As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="cal_date")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="cal_date")> _
         Private Shared Sub CalDate64(ByVal Tjd As Double, _
                                      ByRef Year As Short, _
                                      ByRef Month As Short, _
@@ -3081,7 +3103,7 @@ Namespace NOVAS
                                      ByRef Hour As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="cel2ter")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="cel2ter")> _
         Private Shared Function Cel2Ter64(ByVal JdHigh As Double, _
                                           ByVal JdLow As Double, _
                                           ByVal DeltaT As Double, _
@@ -3094,20 +3116,20 @@ Namespace NOVAS
                                           ByRef VecC As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="cel_pole")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="cel_pole")> _
         Private Shared Function CelPole64(ByVal Tjd As Double, _
                                           ByVal Type As PoleOffsetCorrection, _
                                           ByVal Dpole1 As Double, _
                                           ByVal Dpole2 As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="cio_array")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="cio_array")> _
         Private Shared Function CioArray64(ByVal JdTdb As Double, _
                                            ByVal NPts As Integer, _
                                            ByRef Cio As RAOfCioArray) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="cio_basis")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="cio_basis")> _
         Private Shared Function CioBasis64(ByVal JdTdbEquionx As Double, _
                                            ByVal RaCioEquionx As Double, _
                                            ByVal RefSys As ReferenceSystem, _
@@ -3117,25 +3139,25 @@ Namespace NOVAS
                                            ByRef z As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="cio_location")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="cio_location")> _
         Private Shared Function CioLocation64(ByVal JdTdb As Double, _
                                               ByVal Accuracy As Accuracy, _
                                               ByRef RaCio As Double, _
                                               ByRef RefSys As ReferenceSystem) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="cio_ra")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="cio_ra")> _
         Private Shared Function CioRa64(ByVal JdTt As Double, _
                                         ByVal Accuracy As Accuracy, _
                                         ByRef RaCio As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="d_light")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="d_light")> _
         Private Shared Function DLight64(ByRef Pos1 As PosVector, _
                                          ByRef PosObs As PosVector) As Double
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="e_tilt")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="e_tilt")> _
         Private Shared Sub ETilt64(ByVal JdTdb As Double, _
                                    ByVal Accuracy As Accuracy, _
                                    ByRef Mobl As Double, _
@@ -3145,7 +3167,7 @@ Namespace NOVAS
                                    ByRef Deps As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="ecl2equ_vec")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="ecl2equ_vec")> _
         Private Shared Function Ecl2EquVec64(ByVal JdTt As Double, _
                                              ByVal CoordSys As CoordSys, _
                                              ByVal Accuracy As Accuracy, _
@@ -3153,13 +3175,13 @@ Namespace NOVAS
                                              ByRef Pos2 As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="ee_ct")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="ee_ct")> _
         Private Shared Function EeCt64(ByVal JdHigh As Double, _
                                        ByVal JdLow As Double, _
                                        ByVal Accuracy As Accuracy) As Double
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="ephemeris")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="ephemeris")> _
         Private Shared Function Ephemeris64(ByRef Jd As JDHighPrecision, _
                                             ByRef CelObj As Object3Internal, _
                                             ByVal Origin As Origin, _
@@ -3168,7 +3190,7 @@ Namespace NOVAS
                                             ByRef Vel As VelVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="equ2ecl")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="equ2ecl")> _
         Private Shared Function Equ2Ecl64(ByVal JdTt As Double, _
                                           ByVal CoordSys As CoordSys, _
                                           ByVal Accuracy As Accuracy, _
@@ -3178,7 +3200,7 @@ Namespace NOVAS
                                           ByRef ELat As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="equ2ecl_vec")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="equ2ecl_vec")> _
         Private Shared Function Equ2EclVec64(ByVal JdTt As Double, _
                                              ByVal CoordSys As CoordSys, _
                                              ByVal Accuracy As Accuracy, _
@@ -3186,14 +3208,14 @@ Namespace NOVAS
                                              ByRef Pos2 As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="equ2gal")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="equ2gal")> _
         Private Shared Sub Equ2Gal64(ByVal RaI As Double, _
                                      ByVal DecI As Double, _
                                      ByRef GLon As Double, _
                                      ByRef GLat As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="equ2hor")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="equ2hor")> _
         Private Shared Sub Equ2Hor64(ByVal Jd_Ut1 As Double, _
                                      ByVal DeltT As Double, _
                                      ByVal Accuracy As Accuracy, _
@@ -3209,23 +3231,23 @@ Namespace NOVAS
                                      ByRef DecR As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="era")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="era")> _
         Private Shared Function Era64(ByVal JdHigh As Double, _
                                       ByVal JdLow As Double) As Double
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="frame_tie")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="frame_tie")> _
         Private Shared Sub FrameTie64(ByRef Pos1 As PosVector, _
                                       ByVal Direction As FrameConversionDirection, _
                                       ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="fund_args")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="fund_args")> _
         Private Shared Sub FundArgs64(ByVal t As Double, _
                                       ByRef a As FundamentalArgs)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="gcrs2equ")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="gcrs2equ")> _
         Private Shared Function Gcrs2Equ64(ByVal JdTt As Double, _
                                             ByVal CoordSys As CoordSys, _
                                             ByVal Accuracy As Accuracy, _
@@ -3235,7 +3257,7 @@ Namespace NOVAS
                                             ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="geo_posvel")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="geo_posvel")> _
         Private Shared Function GeoPosVel64(ByVal JdTt As Double, _
                                             ByVal DeltaT As Double, _
                                             ByVal Accuracy As Accuracy, _
@@ -3244,7 +3266,7 @@ Namespace NOVAS
                                             ByRef Vel As VelVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="grav_def")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="grav_def")> _
         Private Shared Function GravDef64(ByVal JdTdb As Double, _
                                           ByVal LocCode As EarthDeflection, _
                                           ByVal Accuracy As Accuracy, _
@@ -3253,7 +3275,7 @@ Namespace NOVAS
                                           ByRef Pos2 As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="grav_vec")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="grav_vec")> _
         Private Shared Sub GravVec64(ByRef Pos1 As PosVector, _
                                      ByRef PosObs As PosVector, _
                                      ByRef PosBody As PosVector, _
@@ -3261,20 +3283,20 @@ Namespace NOVAS
                                      ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="ira_equinox")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="ira_equinox")> _
         Private Shared Function IraEquinox64(ByVal JdTdb As Double, _
                                              ByVal Equinox As EquinoxType, _
                                              ByVal Accuracy As Accuracy) As Double
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="julian_date")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="julian_date")> _
         Private Shared Function JulianDate64(ByVal Year As Short, _
                                              ByVal Month As Short, _
                                              ByVal Day As Short, _
                                              ByVal Hour As Double) As Double
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="light_time")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="light_time")> _
         Private Shared Function LightTime64(ByVal JdTdb As Double, _
                                             ByRef SsObject As Object3Internal, _
                                             ByRef PosObs As PosVector, _
@@ -3284,14 +3306,14 @@ Namespace NOVAS
                                             ByRef TLight As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="limb_angle")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="limb_angle")> _
         Private Shared Sub LimbAngle64(ByRef PosObj As PosVector, _
                                        ByRef PosObs As PosVector, _
                                        ByRef LimbAng As Double, _
                                        ByRef NadirAng As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="local_planet")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="local_planet")> _
         Private Shared Function LocalPlanet64(ByVal JdTt As Double, _
                                                ByRef SsBody As Object3Internal, _
                                                ByVal DeltaT As Double, _
@@ -3302,7 +3324,7 @@ Namespace NOVAS
                                                ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="local_star")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="local_star")> _
         Private Shared Function LocalStar64(ByVal JdTt As Double, _
                                             ByVal DeltaT As Double, _
                                             ByRef Star As CatEntry3, _
@@ -3312,7 +3334,7 @@ Namespace NOVAS
                                             ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="make_cat_entry")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="make_cat_entry")> _
         Private Shared Sub MakeCatEntry64(<MarshalAs(UnmanagedType.LPStr)> ByVal StarName As String, _
                                           <MarshalAs(UnmanagedType.LPStr)> ByVal Catalog As String, _
                                                                            ByVal StarNum As Integer, _
@@ -3325,13 +3347,13 @@ Namespace NOVAS
                                                                            ByRef Star As CatEntry3)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="make_in_space")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="make_in_space")> _
         Private Shared Sub MakeInSpace64(ByRef ScPos As PosVector, _
                                          ByRef ScVel As VelVector, _
                                          ByRef ObsSpace As InSpace)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="make_object")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="make_object")> _
         Private Shared Function MakeObject64(ByVal Type As ObjectType, _
                                              ByVal Number As Short, _
                                              <MarshalAs(UnmanagedType.LPStr)> ByVal Name As String, _
@@ -3339,24 +3361,24 @@ Namespace NOVAS
                                              ByRef CelObj As Object3Internal) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="make_observer")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="make_observer")> _
         Private Shared Function MakeObserver64(ByVal Where As ObserverLocation, _
                                                ByRef ObsSurface As OnSurface, _
                                                ByRef ObsSpace As InSpace, _
                                                ByRef Obs As Observer) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="make_observer_at_geocenter")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="make_observer_at_geocenter")> _
         Private Shared Sub MakeObserverAtGeocenter64(ByRef ObsAtGeocenter As Observer)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="make_observer_in_space")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="make_observer_in_space")> _
         Private Shared Sub MakeObserverInSpace64(ByRef ScPos As PosVector, _
                                                  ByRef ScVel As VelVector, _
                                                  ByRef ObsInSpace As Observer)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="make_observer_on_surface")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="make_observer_on_surface")> _
         Private Shared Sub MakeObserverOnSurface64(ByVal Latitude As Double, _
                                                    ByVal Longitude As Double, _
                                                    ByVal Height As Double, _
@@ -3365,7 +3387,7 @@ Namespace NOVAS
                                                    ByRef ObsOnSurface As Observer)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="make_on_surface")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="make_on_surface")> _
         Private Shared Sub MakeOnSurface64(ByVal Latitude As Double, _
                                            ByVal Longitude As Double, _
                                            ByVal Height As Double, _
@@ -3374,11 +3396,11 @@ Namespace NOVAS
                                            ByRef ObsSurface As OnSurface)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="mean_obliq")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="mean_obliq")> _
         Private Shared Function MeanObliq64(ByVal JdTdb As Double) As Double
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="mean_star")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="mean_star")> _
         Private Shared Function MeanStar64(ByVal JdTt As Double, _
                                            ByVal Ra As Double, _
                                            ByVal Dec As Double, _
@@ -3387,11 +3409,11 @@ Namespace NOVAS
                                            ByRef IDec As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="norm_ang")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="norm_ang")> _
         Private Shared Function NormAng64(ByVal Angle As Double) As Double
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="nutation")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="nutation")> _
         Private Shared Sub Nutation64(ByVal JdTdb As Double, _
                                       ByVal Direction As NutationDirection, _
                                       ByVal Accuracy As Accuracy, _
@@ -3399,14 +3421,14 @@ Namespace NOVAS
                                       ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="nutation_angles")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="nutation_angles")> _
         Private Shared Sub NutationAngles64(ByVal t As Double, _
                                             ByVal Accuracy As Accuracy, _
                                             ByRef DPsi As Double, _
                                             ByRef DEps As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="place")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="place")> _
         Private Shared Function Place64(ByVal JdTt As Double, _
                                         ByRef CelObject As Object3Internal, _
                                         ByRef Location As Observer, _
@@ -3416,14 +3438,14 @@ Namespace NOVAS
                                         ByRef Output As SkyPos) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="precession")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="precession")> _
         Private Shared Function Precession64(ByVal JdTdb1 As Double, _
                                              ByRef Pos1 As PosVector, _
                                              ByVal JdTdb2 As Double, _
                                              ByRef Pos2 As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="proper_motion")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="proper_motion")> _
         Private Shared Sub ProperMotion64(ByVal JdTdb1 As Double, _
                                           ByRef Pos As PosVector, _
                                           ByRef Vel As VelVector, _
@@ -3431,7 +3453,7 @@ Namespace NOVAS
                                           ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="rad_vel")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="rad_vel")> _
         Private Shared Sub RadVel64(ByRef CelObject As Object3Internal, _
                                     ByRef Pos As PosVector, _
                                     ByRef Vel As VelVector, _
@@ -3442,20 +3464,20 @@ Namespace NOVAS
                                     ByRef Rv As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="radec2vector")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="radec2vector")> _
         Private Shared Sub RaDec2Vector64(ByVal Ra As Double, _
                                           ByVal Dec As Double, _
                                           ByVal Dist As Double, _
                                           ByRef Vector As PosVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="refract")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="refract")> _
         Private Shared Function Refract64(ByRef Location As OnSurface, _
                                           ByVal RefOption As RefractionOption, _
                                           ByVal ZdObs As Double) As Double
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="sidereal_time")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="sidereal_time")> _
         Private Shared Function SiderealTime64(ByVal JdHigh As Double, _
                                                ByVal JdLow As Double, _
                                                ByVal DeltaT As Double, _
@@ -3465,25 +3487,25 @@ Namespace NOVAS
                                                ByRef Gst As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="spin")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="spin")> _
         Private Shared Sub Spin64(ByVal Angle As Double, _
                                   ByRef Pos1 As PosVector, _
                                   ByRef Pos2 As PosVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="starvectors")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="starvectors")> _
         Private Shared Sub StarVectors64(ByRef Star As CatEntry3, _
                                          ByRef Pos As PosVector, _
                                          ByRef Vel As VelVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="tdb2tt")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="tdb2tt")> _
         Private Shared Sub Tdb2Tt64(ByVal TdbJd As Double, _
                                     ByRef TtJd As Double, _
                                     ByRef SecDiff As Double)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="ter2cel")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="ter2cel")> _
         Private Shared Function Ter2Cel64(ByVal JdHigh As Double, _
                                           ByVal JdLow As Double, _
                                           ByVal DeltaT As Double, _
@@ -3496,14 +3518,14 @@ Namespace NOVAS
                                           ByRef VecC As PosVector) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="terra")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="terra")> _
         Private Shared Sub Terra64(ByRef Location As OnSurface, _
                                    ByVal St As Double, _
                                    ByRef Pos As PosVector, _
                                    ByRef Vel As VelVector)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="topo_planet")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="topo_planet")> _
         Private Shared Function TopoPlanet64(ByVal JdTt As Double, _
                                              ByRef SsBody As Object3Internal, _
                                              ByVal DeltaT As Double, _
@@ -3514,7 +3536,7 @@ Namespace NOVAS
                                              ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="topo_star")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="topo_star")> _
         Private Shared Function TopoStar64(ByVal JdTt As Double, _
                                            ByVal DeltaT As Double, _
                                            ByRef Star As CatEntry3, _
@@ -3524,7 +3546,7 @@ Namespace NOVAS
                                            ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="transform_cat")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="transform_cat")> _
         Private Shared Function TransformCat64(ByVal TransformOption As TransformationOption3, _
                                                ByVal DateInCat As Double, _
                                                ByRef InCat As CatEntry3, _
@@ -3534,18 +3556,18 @@ Namespace NOVAS
 
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="transform_hip")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="transform_hip")> _
         Private Shared Sub TransformHip64(ByRef Hipparcos As CatEntry3, _
                                           ByRef Hip2000 As CatEntry3)
         End Sub
 
-        <DllImport(NOVAS64Dll, EntryPoint:="vector2radec")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="vector2radec")> _
         Private Shared Function Vector2RaDec64(ByRef Pos As PosVector, _
                                                ByRef Ra As Double, _
                                                ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="virtual_planet")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="virtual_planet")> _
         Private Shared Function VirtualPlanet64(ByVal JdTt As Double, _
                                                 ByRef SsBody As Object3Internal, _
                                                 ByVal Accuracy As Accuracy, _
@@ -3554,7 +3576,7 @@ Namespace NOVAS
                                                 ByRef Dis As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="virtual_star")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="virtual_star")> _
         Private Shared Function VirtualStar64(ByVal JdTt As Double, _
                                               ByRef Star As CatEntry3, _
                                               ByVal Accuracy As Accuracy, _
@@ -3562,7 +3584,7 @@ Namespace NOVAS
                                               ByRef Dec As Double) As Short
         End Function
 
-        <DllImport(NOVAS64Dll, EntryPoint:="wobble")> _
+        <DllImport(NOVAS64DLL, EntryPoint:="wobble")> _
         Private Shared Sub Wobble64(ByVal Tjd As Double, _
                                     ByVal Direction As Short, _
                                     ByVal x As Double, _
@@ -3597,9 +3619,12 @@ Namespace NOVAS
                                                ByVal fCreate As Boolean) As Boolean
         End Function
 
-        'Declare the api call that sets the additional DLL search directory
-        <DllImport("kernel32.dll", SetLastError:=False)> _
-        Private Shared Function SetDllDirectory(ByVal lpPathName As String) As Boolean
+        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="LoadLibraryA")> _
+        Public Shared Function LoadLibrary(ByVal lpFileName As String) As IntPtr
+        End Function
+
+        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="FreeLibrary")> _
+        Public Shared Function FreeLibrary(ByVal hModule As IntPtr) As Boolean
         End Function
 
         Private Shared Function Is64Bit() As Boolean

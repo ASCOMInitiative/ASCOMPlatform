@@ -95,6 +95,8 @@
 					<listItem>Drivers built from a VB driver template will now automaticlaly register for COM interop like those built from the C# template.</listItem>
 	   				<listItem>Platform components will no longer throw an exception during instantiation if the process within which they are running cannot write to the user part of the registry. This enables components to be used in
 	   				environments such as Microsoft IIS, whose worker processes have restricted default access rights.</listItem>
+	   				<listItem>The NOVAS3, NOVAS31, SOFA and NativeHelpers components now load their associated native DLLs explicitly during initialisation rather than waiting until the first method call that requires the DLL.
+	   				The native DLL load is now accomplished without changing the application DLL search path, which makes the components more robust when driver and client authors choose to modify the search path for their own ends.</listItem>
 				</list>
    			</content>
    		</section>
