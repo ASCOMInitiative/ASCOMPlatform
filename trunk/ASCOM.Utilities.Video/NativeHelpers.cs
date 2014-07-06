@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using ASCOM.Utilities;
+using ASCOM.Utilities.Exceptions;
 using ASCOM.DeviceInterface;
 
 namespace ASCOM.Utilities.Video
@@ -36,37 +37,54 @@ namespace ASCOM.Utilities.Video
         private const string VIDEOUTILS32_DLL_NAME = "ASCOM.NativeVideo32.dll";
         private const string VIDEOUTILS64_DLL_NAME = "ASCOM.NativeVideo64.dll";
 
-        private const string VIDEOUTILS_DLL_LOCATION = @"\ASCOM\VideoUtilities"; //This is appended to the Common Files path
+        private const string VIDEOUTILS_DLL_LOCATION = @"\ASCOM\VideoUtilities\"; //This is appended to the Common Files path
         private TraceLogger TL;
 
         private int rc;
         private uint urc;
+        private IntPtr VideoDllHandle;
 
         #region Initialisers and Dispose
 
+        /// <summary>
+        /// Crates a new instance of the NativeHelpers component
+        /// </summary>
+        /// <exception cref="HelperException">Thrown if the NativeHelpers support library DLL cannot be loaded</exception>
         public NativeHelpers()
         {
+            int lastError;
             TL = new TraceLogger("NativeHelpers");
             TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.TRACE_UTIL, GlobalConstants.TRACE_UTIL_DEFAULT);
             try
             {
-                bool rc = false;
-                string CommonProgramFilesPath = null;
+                string VideoDllFile = null;
                 System.Text.StringBuilder ReturnedPath = new System.Text.StringBuilder(260);
 
                 //Find the root location of the common files directory containing the ASCOM support files.
                 if (Is64Bit()) // 64bit application so find the 32bit folder location, usually Program Files (x86)\Common Files
                 {
-                    CommonProgramFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86);
+                    VideoDllFile = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86) + VIDEOUTILS_DLL_LOCATION + VIDEOUTILS64_DLL_NAME;
                 }
                 else //32bit application so just go with the .NET returned value usually, Program Files\Common Files
                 {
-                    CommonProgramFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
+                    VideoDllFile = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) + VIDEOUTILS_DLL_LOCATION + VIDEOUTILS32_DLL_NAME;
                 }
 
-                //Add the ASCOM\.net directory to the DLL search path so that the NOVAS C 32 and 64bit DLLs can be found
-                rc = SetDllDirectory(CommonProgramFilesPath + VIDEOUTILS_DLL_LOCATION);
-                TL .LogMessage("NativeHelpers", "Created");
+                TL.LogMessage("New", "Loading NativeHelpers library DLL: " + VideoDllFile);
+
+                VideoDllHandle = LoadLibrary(VideoDllFile);
+                lastError = Marshal.GetLastWin32Error();
+
+                if (VideoDllHandle != IntPtr.Zero) // Loaded successfully
+                {
+                    TL.LogMessage("New", "Loaded NativeHelpers library OK");
+                }
+                else // Did not load 
+                {
+                    TL.LogMessage("New", "Error loading NativeHelpers library: " + lastError.ToString("X8"));
+                    throw new HelperException("Error code returned from LoadLibrary when loading NativeHelpers library: " + lastError.ToString("X8"));
+                }
+                TL.LogMessage("NativeHelpers", "Created");
             }
             catch (Exception ex)
             {
@@ -93,7 +111,7 @@ namespace ASCOM.Utilities.Video
                 // Free your own state (unmanaged objects) and set large fields to null.
                 try
                 {
-
+                    FreeLibrary(VideoDllHandle);
                 }
                 catch
                 {
@@ -629,9 +647,11 @@ namespace ASCOM.Utilities.Video
 
         #region Private Utility code
 
-        //Declare the api call that sets the additional DLL search directory
-        [DllImport("kernel32.dll", SetLastError = false)]
-        private static extern bool SetDllDirectory(string lpPathName);
+        [DllImport("kernel32", SetLastError = true, EntryPoint = "LoadLibraryA")]
+        static extern IntPtr LoadLibrary(string lpFileName);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool FreeLibrary(IntPtr hModule);
 
         private static bool Is64Bit()
         {

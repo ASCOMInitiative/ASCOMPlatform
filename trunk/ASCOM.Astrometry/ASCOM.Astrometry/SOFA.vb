@@ -1,7 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Environment
-Imports ASCOM.Utilities.Exceptions
 Imports ASCOM.Utilities
+Imports ASCOM.Utilities.Exceptions
 Imports System.Text
 
 Namespace SOFA
@@ -44,6 +44,11 @@ Namespace SOFA
         Private SofaDllHandle As IntPtr
 
 #Region "New and IDisposable"
+        ''' <summary>
+        ''' Creates a new instance of the SOFA component
+        ''' </summary>
+        ''' <exception cref="HelperException">Thrown if the SOFA support library DLL cannot be loaded</exception>
+        ''' <remarks></remarks>
         Sub New()
             Dim rc As Boolean, SofaDllFile As String, ReturnedPath As New System.Text.StringBuilder(260), LastError As Integer
 
@@ -71,7 +76,7 @@ Namespace SOFA
                 TL.LogMessage("New", "Loaded SOFA library OK")
             Else ' Did not load 
                 TL.LogMessage("New", "Error loading SOFA library: " & LastError.ToString("X8"))
-                Throw New Exception("Error code returned from LoadLibrary when loading SOFA library: " & LastError.ToString("X8"))
+                Throw New HelperException("Error code returned from LoadLibrary when loading SOFA library: " & LastError.ToString("X8"))
             End If
 
             TL.LogMessage("New", "SOFA Initialised OK")
@@ -96,13 +101,9 @@ Namespace SOFA
                     End If
                 End If
 
-                ' Free the SOFA library but don't return any error value
-                Try
-                    FreeLibrary(SofaDllHandle)
-                Catch ex As Exception
-
-                End Try
                 ' Free your own state (unmanaged objects) and set large fields to null.
+                Try : FreeLibrary(SofaDllHandle) : Catch : End Try ' Free the SOFA library but don't return any error value
+
             End If
             Me.disposedValue = True
         End Sub

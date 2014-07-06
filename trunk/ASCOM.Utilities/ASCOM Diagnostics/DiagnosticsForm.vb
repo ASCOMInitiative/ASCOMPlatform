@@ -5946,66 +5946,38 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub ScanPlatformFiles(ByVal ASCOMPath As String)
-        Dim ASCOMPathPlatformV6, ASCOMPathInterface, ASCOMPathPlatformInternal, ASCOMPathPlatformV55, ASCOMPathAstrometry, ASCOMPathDotNet As String
-
         Try
             Status("Scanning Platform Files")
 
-            ASCOMPathInterface = ASCOMPath & "Interface\" 'Create folder paths
-            ASCOMPathPlatformV6 = ASCOMPath & "Platform\V6\"
-            ASCOMPathPlatformInternal = ASCOMPath & "Platform\Internal\"
-            ASCOMPathPlatformV55 = ASCOMPath & "Platform\v5.5\"
-            ASCOMPathAstrometry = ASCOMPath & "Astrometry\"
-            ASCOMPathDotNet = ASCOMPath & ".net\"
-
-            'ASCOM Root files
-            FileDetails(ASCOMPath, "Helper.dll") 'Report on files
-            FileDetails(ASCOMPath, "Helper2.dll")
-
-            'ASCOM\.net
-            FileDetails(ASCOMPathDotNet, "ASCOM.DriverAccess.dll")
-            FileDetails(ASCOMPathDotNet, "ASCOM.Utilities.dll")
-
-            'ASCOM\Astrometry
-            FileDetails(ASCOMPathAstrometry, "NOVAS3.dll")
-            FileDetails(ASCOMPathAstrometry, "NOVAS3.pdb")
-            FileDetails(ASCOMPathAstrometry, "NOVAS3-64.dll")
-            FileDetails(ASCOMPathAstrometry, "NOVAS3-64.pdb")
-            FileDetails(ASCOMPathAstrometry, "NOVAS-C.dll")
-            FileDetails(ASCOMPathAstrometry, "NOVAS-C.pdb")
-            FileDetails(ASCOMPathAstrometry, "NOVAS-C64.dll")
-            FileDetails(ASCOMPathAstrometry, "NOVAS-C64.pdb")
-
-            'ASCOM\Interfaces
-            FileDetails(ASCOMPathInterface, "ASCOMMasterInterfaces.tlb")
-            FileDetails(ASCOMPathInterface, "Helper.tlb")
-            FileDetails(ASCOMPathInterface, "Helper2.tlb")
-            FileDetails(ASCOMPathInterface, "IObjectSafety.tlb")
-
-            'ASCOM\Platform\Internal
-            FileDetails(ASCOMPathPlatformInternal, "ASCOM.Internal.GACInstall.exe")
-            FileDetails(ASCOMPathPlatformInternal, "MigrateProfile.exe")
-            FileDetails(ASCOMPathPlatformInternal, "RegTlb.exe")
-
-            'ASCOM\Platform\v5.5
-            FileDetails(ASCOMPathPlatformV55, "policy.1.0.ASCOM.DriverAccess.dll")
-            FileDetails(ASCOMPathPlatformV55, "policy.5.5.ASCOM.Astrometry.dll")
-            FileDetails(ASCOMPathPlatformV55, "policy.5.5.ASCOM.Utilities.dll")
-            FileDetails(ASCOMPathPlatformV55, "ASCOM.Astrometry.pdb")
-            FileDetails(ASCOMPathPlatformV55, "ASCOM.Attributes.pdb")
-            FileDetails(ASCOMPathPlatformV55, "ASCOM.DriverAccess.pdb")
-            FileDetails(ASCOMPathPlatformV55, "ASCOM.Utilities.pdb")
-
-            'ASCOM\Platform\v6
-            FileDetails(ASCOMPathPlatformV6, "ASCOM.Astrometry.dll")
-            FileDetails(ASCOMPathPlatformV6, "ASCOM.Exceptions.dll")
-            FileDetails(ASCOMPathPlatformV6, "ASCOM.Utilities.dll")
+            ScanDirectory(ASCOMPath, SearchOption.TopDirectoryOnly)
+            ScanDirectory(ASCOMPath & ".net", SearchOption.AllDirectories)
+            ScanDirectory(ASCOMPath & "Interface", SearchOption.AllDirectories)
+            ScanDirectory(ASCOMPath & "Platform", SearchOption.AllDirectories)
+            ScanDirectory(ASCOMPath & "Astrometry", SearchOption.AllDirectories)
+            ScanDirectory(ASCOMPath & "VideoUtilities", SearchOption.AllDirectories)
 
         Catch ex As Exception
             LogException("ScanFiles", "Exception: " & ex.ToString)
         End Try
         TL.BlankLine()
 
+    End Sub
+
+    Private Sub ScanDirectory(DirectoryName As String, Search As SearchOption)
+        Dim FullFileNames() As String
+
+        TL.LogMessage("ScanFiles", "Scanning directory: " & DirectoryName & ", " & Search.ToString)
+        Status("Scanning directory " & DirectoryName)
+
+        Try
+            FullFileNames = Directory.GetFiles(DirectoryName, "*.*", Search)
+            For Each FullFileName As String In FullFileNames
+                FileDetails(Path.GetDirectoryName(FullFileName) & Path.DirectorySeparatorChar, Path.GetFileName(FullFileName))
+            Next
+        Catch ex As Exception
+            LogException("ScanDirectory", "Exception: " & ex.ToString)
+        End Try
+        TL.BlankLine()
     End Sub
 
     Sub FileDetails(ByVal FPath As String, ByVal FName As String)
@@ -6565,6 +6537,7 @@ Public Class DiagnosticsForm
                 RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check rotator drivers
                 RecurseASCOMDrivers(BaseDir & "\SafetyMonitor") 'Check safetymonitor drivers
                 RecurseASCOMDrivers(BaseDir & "\Switch") 'Check switch drivers
+                RecurseASCOMDrivers(BaseDir & "\Video") 'Check switch drivers
 
                 BaseDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM"
 
@@ -6576,6 +6549,7 @@ Public Class DiagnosticsForm
                 RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check rotator drivers
                 RecurseASCOMDrivers(BaseDir & "\SafetyMonitor") 'Check safetymonitor drivers
                 RecurseASCOMDrivers(BaseDir & "\Switch") 'Check switch drivers
+                RecurseASCOMDrivers(BaseDir & "\Video") 'Check switch drivers
             Else '32 bit OS
                 BaseDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) & "\ASCOM"
 
@@ -6587,6 +6561,7 @@ Public Class DiagnosticsForm
                 RecurseASCOMDrivers(BaseDir & "\Rotator") 'Check rotator drivers
                 RecurseASCOMDrivers(BaseDir & "\SafetyMonitor") 'Check safetymonitor drivers
                 RecurseASCOMDrivers(BaseDir & "\Switch") 'Check switch drivers
+                RecurseASCOMDrivers(BaseDir & "\Video") 'Check switch drivers
             End If
 
             TL.BlankLine()
