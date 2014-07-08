@@ -234,8 +234,8 @@ Namespace Transform
         Sub SetJ2000(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetJ2000
             LastSetBy = SetBy.J2000
             If (RA <> RAJ2000Value) Or (DEC <> DECJ2000Value) Then RequiresRecalculate = True
-            RAJ2000Value = RA
-            DECJ2000Value = DEC
+            RAJ2000Value = ValidateRA("SetJ2000", RA)
+            DECJ2000Value = ValidateDec("SetJ2000", DEC)
             TL.LogMessage("SetJ2000", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
@@ -262,8 +262,8 @@ Namespace Transform
         Sub SetTopocentric(ByVal RA As Double, ByVal DEC As Double) Implements ITransform.SetTopocentric
             LastSetBy = SetBy.Topocentric
             If (RA <> RATopoValue) Or (DEC <> DECTopoValue) Then RequiresRecalculate = True
-            RATopoValue = RA
-            DECTopoValue = DEC
+            RATopoValue = ValidateRA("SetTopocentric", RA)
+            DECTopoValue = ValidateDec("SetTopocentric", DEC)
             TL.LogMessage("SetTopocentric", "RA: " & Format(RA) & ", DEC: " & FormatDec(DEC))
         End Sub
 
@@ -535,8 +535,6 @@ Namespace Transform
 
             JDUTCSofaDateTime = Julian2DateTime(JDUTCSofa)
 
-            'TL.LogMessage("  J2000 To Topo", "  JD UT1, JD TT, DeltaT, Date: " & JDUTCSofa & " " & JulianDateTTValue & " " & DeltaT & " " & JDUTCSofaDateTime.ToString)
-
             Sw.Reset() : Sw.Start()
 
             If RefracValue Then ' Include refraction
@@ -552,15 +550,8 @@ Namespace Transform
             AzimuthTopoValue = aob * RADIANS2DEGREES
             ElevationTopoValue = 90.0 - zob * RADIANS2DEGREES
 
-            TL.LogMessage("  J2000 To Topo", "  SOFA topocentric RA/DEC (including refraction if specified):  " & FormatRA(RATopoValue) & " " & _
-              FormatDec(DECTopoValue) & _
-              " Refraction: " & RefracValue.ToString & ", " & _
-              FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
-
-            TL.LogMessage("  J2000 To Topo", "  Azimuth/Elevation: " & FormatDec(AzimuthTopoValue) & " " & _
-                          FormatDec(ElevationTopoValue) & ", " & _
-                          FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
-
+            TL.LogMessage("  J2000 To Topo", "  Topocentric RA/DEC (including refraction if specified):  " & FormatRA(RATopoValue) & " " & FormatDec(DECTopoValue) & " Refraction: " & RefracValue.ToString & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  J2000 To Topo", "  Azimuth/Elevation: " & FormatDec(AzimuthTopoValue) & " " & FormatDec(ElevationTopoValue) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
             TL.LogMessage("  J2000 To Topo", "  Completed")
             TL.BlankLine()
         End Sub
@@ -576,12 +567,13 @@ Namespace Transform
             RAApparentValue = SOFA.Anp(ri - eo) * RADIANS2HOURS ' // Convert CIO RA to equinox of date RA by subtracting the equation of the origins and convert from radians to hours
             DECApparentValue = di * RADIANS2DEGREES ' Convert Dec from radians to degrees
 
-            TL.LogMessage("  J2000 To Apparent", "  SOFA Apparent:   " & FormatRA(RAApparentValue) & " " & FormatDec(DECApparentValue) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  J2000 To Apparent", "  Apparent RA/Dec:   " & FormatRA(RAApparentValue) & " " & FormatDec(DECApparentValue) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
         Private Sub TopoToJ2000()
-            Dim RACelestrial, DecCelestial, JulianDateTTSofa, JulianDateUTCSofa, DUT1 As Double, RetCode As Integer
+            Dim RACelestrial, DecCelestial, JDTTSofa, JDUTCSofa, DUT1 As Double, RetCode As Integer
+            Dim aob, zob, hob, dob, rob, eo As Double
 
             If Double.IsNaN(SiteElevValue) Then Throw New Exceptions.TransformUninitialisedException("Site elevation has not been set")
             If Double.IsNaN(SiteLatValue) Then Throw New Exceptions.TransformUninitialisedException("Site latitude has not been set")
@@ -590,20 +582,33 @@ Namespace Transform
 
             Sw.Reset() : Sw.Start()
 
-            JulianDateUTCSofa = GetJDUTCSofa()
-            JulianDateTTSofa = GetJDTTSofa()
-            DUT1 = AstroUtl.DeltaUT(JulianDateUTCSofa)
+            JDUTCSofa = GetJDUTCSofa()
+            JDTTSofa = GetJDTTSofa()
+            DUT1 = AstroUtl.DeltaUT(JDUTCSofa)
 
             Sw.Reset() : Sw.Start()
             If RefracValue Then ' Refraction is requuired
-                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JulianDateTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000, SiteTempValue, 0.85, 0.57, RACelestrial, DecCelestial)
+                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JDTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000, SiteTempValue, 0.85, 0.57, RACelestrial, DecCelestial)
             Else
-                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JulianDateTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JulianDateUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestrial, DecCelestial)
+                RetCode = SOFA.ObservedToCelestial("R", SOFA.Anp(RATopoValue * HOURS2RADIANS + SOFA.Eo06a(JDTTSofa, 0.0)), DECTopoValue * DEGREES2RADIANS, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, RACelestrial, DecCelestial)
             End If
 
             RAJ2000Value = RACelestrial * RADIANS2HOURS
             DECJ2000Value = DecCelestial * RADIANS2DEGREES
-            TL.LogMessage("  Topo To J2000 Sofa", "  " & FormatRA(RAJ2000Value) & " " & FormatDec(DECJ2000Value) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  Topo To J2000", "  J2000 RA/Dec:" & FormatRA(RAJ2000Value) & " " & FormatDec(DECJ2000Value) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+
+            ' Now calculate the corresponding AzEl values from the J2000 values
+            Sw.Reset() : Sw.Start()
+            If RefracValue Then ' Include refraction
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000.0, SiteTempValue, 0.8, 0.57, aob, zob, hob, dob, rob, eo)
+            Else ' No refraction
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1, SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, aob, zob, hob, dob, rob, eo)
+            End If
+
+            AzimuthTopoValue = aob * RADIANS2DEGREES
+            ElevationTopoValue = 90.0 - zob * RADIANS2DEGREES
+
+            TL.LogMessage("  Topo To J2000", "  Azimuth/Elevation: " & FormatDec(AzimuthTopoValue) & " " & FormatDec(ElevationTopoValue) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
@@ -618,7 +623,7 @@ Namespace Transform
             SOFA.IntermediateToCelestial(SOFA.Anp(RAApparentValue * HOURS2RADIANS + SOFA.Eo06a(JulianDateUTCSofa, 0.0)), DECApparentValue * DEGREES2RADIANS, JulianDateTTSofa, 0.0, RACelestial, DecCelestial, eo)
             RAJ2000Value = RACelestial * RADIANS2HOURS
             DECJ2000Value = DecCelestial * RADIANS2DEGREES
-            TL.LogMessage("  Apparent To J2000 Sofa", "  " & FormatRA(RAJ2000Value) & " " & FormatDec(DECJ2000Value) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
+            TL.LogMessage("  Apparent To J2000", "  J2000 RA/Dec" & FormatRA(RAJ2000Value) & " " & FormatDec(DECJ2000Value) & ", " & FormatNumber(Sw.Elapsed.TotalMilliseconds, 2) & "ms")
 
         End Sub
 
