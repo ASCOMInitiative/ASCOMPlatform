@@ -291,14 +291,7 @@ namespace ASCOM.Simulator
                 throw new MethodNotImplementedException("Halt");
 
             CheckConnected("Halt");
-            if (Absolute)
-            {
-                Target = _position;
-            }
-            else
-            {
-                _position = 0;
-            }
+            Target = _position;
         }
 
         /// <summary>
