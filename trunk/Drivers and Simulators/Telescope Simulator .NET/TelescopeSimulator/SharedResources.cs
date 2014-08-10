@@ -44,7 +44,8 @@ namespace ASCOM.Simulator
         SlewUp,
         SlewDown,
         SlewLeft,
-        SlewRight
+        SlewRight,
+        SlewNone
     }
 
     public static class SharedResources
@@ -77,22 +78,21 @@ namespace ASCOM.Simulator
         // ---------------------
         // Simulation Parameters
         // ---------------------
-        public const double INSTRUMENT_APERTURE = 0.2;            // 8 inch = 20 cm
-        public const double INSTRUMENT_APERTURE_AREA= 0.0269;    // 3 inch obstruction
-        public const double INSTRUMENT_FOCAL_LENGTH = 1.26 ;      // f/6.3 instrument
-        public const string INSTRUMENT_NAME = "Simulator" ;       // Our name
+        internal const double INSTRUMENT_APERTURE = 0.2;            // 8 inch = 20 cm
+        internal const double INSTRUMENT_APERTURE_AREA = 0.0269;    // 3 inch obstruction
+        internal const double INSTRUMENT_FOCAL_LENGTH = 1.26;      // f/6.3 instrument
+        public const string INSTRUMENT_NAME = "Simulator";       // Our name
         public const string INSTRUMENT_DESCRIPTION = "Software Telescope Simulator for ASCOM";
-        public const double INVALID_COORDINATE = 100000;
 
-        public const uint ERROR_BASE = 0x80040400;
-        public static readonly uint SCODE_NO_TARGET_COORDS = (uint)ASCOM.ErrorCodes.InvalidOperationException; //ERROR_BASE + 0x404;
-        public const string MSG_NO_TARGET_COORDS = "Target coordinates have not yet been set";
-        public static uint SCODE_VAL_OUTOFRANGE = (uint)ASCOM.ErrorCodes.InvalidValue;// ERROR_BASE + 0x405;
-        public const string MSG_VAL_OUTOFRANGE = "The property value is out of range";
-        public static uint SCOPE_PROP_NOT_SET = (uint)ASCOM.ErrorCodes.ValueNotSet;// ERROR_BASE + 0x403;
-        public const string MSG_PROP_NOT_SET = "The property has not yet been set";
-        public static uint INVALID_AT_PARK = (uint)ASCOM.ErrorCodes.InvalidWhileParked; //ERROR_BASE + 0x404;
-        public const string MSG_INVALID_AT_PARK = "Invalid while parked";
+        internal const uint ERROR_BASE = 0x80040400;
+        internal static readonly uint SCODE_NO_TARGET_COORDS = (uint)ASCOM.ErrorCodes.InvalidOperationException; //ERROR_BASE + 0x404;
+        internal const string MSG_NO_TARGET_COORDS = "Target coordinates have not yet been set";
+        internal static uint SCODE_VAL_OUTOFRANGE = (uint)ASCOM.ErrorCodes.InvalidValue;// ERROR_BASE + 0x405;
+        internal const string MSG_VAL_OUTOFRANGE = "The property value is out of range";
+        internal static uint SCOPE_PROP_NOT_SET = (uint)ASCOM.ErrorCodes.ValueNotSet;// ERROR_BASE + 0x403;
+        internal const string MSG_PROP_NOT_SET = "The property has not yet been set";
+        internal static uint INVALID_AT_PARK = (uint)ASCOM.ErrorCodes.InvalidWhileParked; //ERROR_BASE + 0x404;
+        internal const string MSG_INVALID_AT_PARK = "Invalid while parked";
         //
         // Public access to shared resources
         //
