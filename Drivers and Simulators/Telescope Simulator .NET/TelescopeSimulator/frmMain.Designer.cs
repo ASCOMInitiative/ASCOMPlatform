@@ -15,6 +15,7 @@ namespace ASCOM.Simulator
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            util.Dispose();
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -45,11 +46,11 @@ namespace ASCOM.Simulator
             this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.pictureBoxPierSideWest = new System.Windows.Forms.PictureBox();
-            this.buttonSlew1 = new System.Windows.Forms.Button();
-            this.buttonSlew3 = new System.Windows.Forms.Button();
-            this.buttonSlew4 = new System.Windows.Forms.Button();
-            this.buttonSlew2 = new System.Windows.Forms.Button();
-            this.buttonSlew0 = new System.Windows.Forms.Button();
+            this.buttonSlewUp = new System.Windows.Forms.Button();
+            this.buttonSlewRight = new System.Windows.Forms.Button();
+            this.buttonSlewLeft = new System.Windows.Forms.Button();
+            this.buttonSlewDown = new System.Windows.Forms.Button();
+            this.buttonSlewStop = new System.Windows.Forms.Button();
             this.pictureBoxPierSideEast = new System.Windows.Forms.PictureBox();
             this.ledPierEast = new ASCOM.Controls.LedIndicator();
             this.ledPierWest = new ASCOM.Controls.LedIndicator();
@@ -67,8 +68,9 @@ namespace ASCOM.Simulator
             this.labelSlew = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButtonPulseGuide = new System.Windows.Forms.RadioButton();
+            this.radioButtonMoveAxis = new System.Windows.Forms.RadioButton();
+            this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPierSideWest)).BeginInit();
@@ -218,11 +220,11 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.Controls.Add(this.pictureBoxPierSideWest, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.buttonSlew1, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.buttonSlew3, 2, 1);
-            this.tableLayoutPanel2.Controls.Add(this.buttonSlew4, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.buttonSlew2, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.buttonSlew0, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.buttonSlewUp, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.buttonSlewRight, 2, 1);
+            this.tableLayoutPanel2.Controls.Add(this.buttonSlewLeft, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.buttonSlewDown, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.buttonSlewStop, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.pictureBoxPierSideEast, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.ledPierEast, 2, 2);
             this.tableLayoutPanel2.Controls.Add(this.ledPierWest, 0, 2);
@@ -243,65 +245,65 @@ namespace ASCOM.Simulator
             this.pictureBoxPierSideWest.TabIndex = 6;
             this.pictureBoxPierSideWest.TabStop = false;
             // 
-            // buttonSlew1
+            // buttonSlewUp
             // 
-            this.buttonSlew1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSlew1.Location = new System.Drawing.Point(41, 3);
-            this.buttonSlew1.Name = "buttonSlew1";
-            this.buttonSlew1.Size = new System.Drawing.Size(32, 31);
-            this.buttonSlew1.TabIndex = 0;
-            this.buttonSlew1.Text = "N";
-            this.buttonSlew1.UseVisualStyleBackColor = true;
-            this.buttonSlew1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseDown);
-            this.buttonSlew1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew1_MouseUp);
+            this.buttonSlewUp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSlewUp.Location = new System.Drawing.Point(41, 3);
+            this.buttonSlewUp.Name = "buttonSlewUp";
+            this.buttonSlewUp.Size = new System.Drawing.Size(32, 31);
+            this.buttonSlewUp.TabIndex = 0;
+            this.buttonSlewUp.Text = "N";
+            this.buttonSlewUp.UseVisualStyleBackColor = true;
+            this.buttonSlewUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlewUp_MouseDown);
+            this.buttonSlewUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlewUp_MouseUp);
             // 
-            // buttonSlew3
+            // buttonSlewRight
             // 
-            this.buttonSlew3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSlew3.Location = new System.Drawing.Point(79, 40);
-            this.buttonSlew3.Name = "buttonSlew3";
-            this.buttonSlew3.Size = new System.Drawing.Size(33, 31);
-            this.buttonSlew3.TabIndex = 3;
-            this.buttonSlew3.Text = "E";
-            this.buttonSlew3.UseVisualStyleBackColor = true;
-            this.buttonSlew3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseDown);
-            this.buttonSlew3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew3_MouseUp);
+            this.buttonSlewRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSlewRight.Location = new System.Drawing.Point(79, 40);
+            this.buttonSlewRight.Name = "buttonSlewRight";
+            this.buttonSlewRight.Size = new System.Drawing.Size(33, 31);
+            this.buttonSlewRight.TabIndex = 3;
+            this.buttonSlewRight.Text = "E";
+            this.buttonSlewRight.UseVisualStyleBackColor = true;
+            this.buttonSlewRight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlewRight_MouseDown);
+            this.buttonSlewRight.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlewRight_MouseUp);
             // 
-            // buttonSlew4
+            // buttonSlewLeft
             // 
-            this.buttonSlew4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSlew4.Location = new System.Drawing.Point(3, 40);
-            this.buttonSlew4.Name = "buttonSlew4";
-            this.buttonSlew4.Size = new System.Drawing.Size(32, 31);
-            this.buttonSlew4.TabIndex = 1;
-            this.buttonSlew4.Text = "W";
-            this.buttonSlew4.UseVisualStyleBackColor = true;
-            this.buttonSlew4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew4_MouseDown);
-            this.buttonSlew4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew4_MouseUp);
+            this.buttonSlewLeft.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSlewLeft.Location = new System.Drawing.Point(3, 40);
+            this.buttonSlewLeft.Name = "buttonSlewLeft";
+            this.buttonSlewLeft.Size = new System.Drawing.Size(32, 31);
+            this.buttonSlewLeft.TabIndex = 1;
+            this.buttonSlewLeft.Text = "W";
+            this.buttonSlewLeft.UseVisualStyleBackColor = true;
+            this.buttonSlewLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlewLeft_MouseDown);
+            this.buttonSlewLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlewLeft_MouseUp);
             // 
-            // buttonSlew2
+            // buttonSlewDown
             // 
-            this.buttonSlew2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSlew2.Location = new System.Drawing.Point(41, 77);
-            this.buttonSlew2.Name = "buttonSlew2";
-            this.buttonSlew2.Size = new System.Drawing.Size(32, 31);
-            this.buttonSlew2.TabIndex = 4;
-            this.buttonSlew2.Text = "S";
-            this.buttonSlew2.UseVisualStyleBackColor = true;
-            this.buttonSlew2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlew2_MouseDown);
-            this.buttonSlew2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlew2_MouseUp);
+            this.buttonSlewDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSlewDown.Location = new System.Drawing.Point(41, 77);
+            this.buttonSlewDown.Name = "buttonSlewDown";
+            this.buttonSlewDown.Size = new System.Drawing.Size(32, 31);
+            this.buttonSlewDown.TabIndex = 4;
+            this.buttonSlewDown.Text = "S";
+            this.buttonSlewDown.UseVisualStyleBackColor = true;
+            this.buttonSlewDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSlewDown_MouseDown);
+            this.buttonSlewDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSlewDown_MouseUp);
             // 
-            // buttonSlew0
+            // buttonSlewStop
             // 
-            this.buttonSlew0.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSlew0.Font = new System.Drawing.Font("Wingdings 2", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.buttonSlew0.Location = new System.Drawing.Point(41, 40);
-            this.buttonSlew0.Name = "buttonSlew0";
-            this.buttonSlew0.Size = new System.Drawing.Size(32, 31);
-            this.buttonSlew0.TabIndex = 2;
-            this.buttonSlew0.Text = "Ä";
-            this.buttonSlew0.UseVisualStyleBackColor = true;
-            this.buttonSlew0.Click += new System.EventHandler(this.buttonSlew0_Click);
+            this.buttonSlewStop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSlewStop.Font = new System.Drawing.Font("Wingdings 2", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.buttonSlewStop.Location = new System.Drawing.Point(41, 40);
+            this.buttonSlewStop.Name = "buttonSlewStop";
+            this.buttonSlewStop.Size = new System.Drawing.Size(32, 31);
+            this.buttonSlewStop.TabIndex = 2;
+            this.buttonSlewStop.Text = "Ä";
+            this.buttonSlewStop.UseVisualStyleBackColor = true;
+            this.buttonSlewStop.Click += new System.EventHandler(this.buttonSlewStop_Click);
             // 
             // pictureBoxPierSideEast
             // 
@@ -320,7 +322,7 @@ namespace ASCOM.Simulator
             this.ledPierEast.Size = new System.Drawing.Size(17, 16);
             this.ledPierEast.TabIndex = 6;
             this.ledPierEast.TabStop = false;
-            this.toolTip1.SetToolTip(this.ledPierEast, "Scope on East side of Pier");
+            this.toolTip1.SetToolTip(this.ledPierEast, "Normal pointing state, scope on East side of Pier, looking West");
             // 
             // ledPierWest
             // 
@@ -331,7 +333,7 @@ namespace ASCOM.Simulator
             this.ledPierWest.Size = new System.Drawing.Size(16, 16);
             this.ledPierWest.TabIndex = 5;
             this.ledPierWest.TabStop = false;
-            this.toolTip1.SetToolTip(this.ledPierWest, "Scope on West Side of Pier");
+            this.toolTip1.SetToolTip(this.ledPierWest, "Through the pole pointing State, scope on West Side of Pier, looking East");
             // 
             // checkBoxTrack
             // 
@@ -496,8 +498,8 @@ namespace ASCOM.Simulator
             // 
             this.tableLayoutPanel6.ColumnCount = 1;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Controls.Add(this.radioButton2, 0, 1);
-            this.tableLayoutPanel6.Controls.Add(this.radioButton1, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.radioButtonPulseGuide, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.radioButtonMoveAxis, 0, 0);
             this.tableLayoutPanel6.Location = new System.Drawing.Point(12, 203);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 2;
@@ -506,29 +508,40 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel6.Size = new System.Drawing.Size(115, 43);
             this.tableLayoutPanel6.TabIndex = 2;
             // 
-            // radioButton2
+            // radioButtonPulseGuide
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.ForeColor = System.Drawing.Color.White;
-            this.radioButton2.Location = new System.Drawing.Point(3, 24);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(82, 16);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "Pulse Guide";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButtonPulseGuide.AutoSize = true;
+            this.radioButtonPulseGuide.ForeColor = System.Drawing.Color.White;
+            this.radioButtonPulseGuide.Location = new System.Drawing.Point(3, 24);
+            this.radioButtonPulseGuide.Name = "radioButtonPulseGuide";
+            this.radioButtonPulseGuide.Size = new System.Drawing.Size(82, 16);
+            this.radioButtonPulseGuide.TabIndex = 1;
+            this.radioButtonPulseGuide.Text = "Pulse Guide";
+            this.radioButtonPulseGuide.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // radioButtonMoveAxis
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.ForeColor = System.Drawing.Color.White;
-            this.radioButton1.Location = new System.Drawing.Point(3, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(74, 15);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Move Axis";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButtonMoveAxis.AutoSize = true;
+            this.radioButtonMoveAxis.Checked = true;
+            this.radioButtonMoveAxis.ForeColor = System.Drawing.Color.White;
+            this.radioButtonMoveAxis.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonMoveAxis.Name = "radioButtonMoveAxis";
+            this.radioButtonMoveAxis.Size = new System.Drawing.Size(74, 15);
+            this.radioButtonMoveAxis.TabIndex = 0;
+            this.radioButtonMoveAxis.TabStop = true;
+            this.radioButtonMoveAxis.Text = "Move Axis";
+            this.radioButtonMoveAxis.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.SystemColors.Control;
+            this.label6.Location = new System.Drawing.Point(8, 15);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(31, 20);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "V2";
             // 
             // FrmMain
             // 
@@ -536,6 +549,7 @@ namespace ASCOM.Simulator
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(138, 463);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.tableLayoutPanel6);
             this.Controls.Add(this.tableLayoutPanel5);
             this.Controls.Add(this.tableLayoutPanel4);
@@ -582,11 +596,11 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Label labelDec;
         private System.Windows.Forms.Label labelRa;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.Button buttonSlew1;
-        private System.Windows.Forms.Button buttonSlew3;
-        private System.Windows.Forms.Button buttonSlew4;
-        private System.Windows.Forms.Button buttonSlew2;
-        private System.Windows.Forms.Button buttonSlew0;
+        private System.Windows.Forms.Button buttonSlewUp;
+        private System.Windows.Forms.Button buttonSlewRight;
+        private System.Windows.Forms.Button buttonSlewLeft;
+        private System.Windows.Forms.Button buttonSlewDown;
+        private System.Windows.Forms.Button buttonSlewStop;
         private System.Windows.Forms.CheckBox checkBoxTrack;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Button buttonTraffic;
@@ -604,8 +618,9 @@ namespace ASCOM.Simulator
         private Controls.LedIndicator ledPierWest;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-		private System.Windows.Forms.RadioButton radioButton2;
-		private System.Windows.Forms.RadioButton radioButton1;
+		private System.Windows.Forms.RadioButton radioButtonPulseGuide;
+		private System.Windows.Forms.RadioButton radioButtonMoveAxis;
+        private System.Windows.Forms.Label label6;
 
 
     }

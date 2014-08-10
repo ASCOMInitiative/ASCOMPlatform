@@ -18,10 +18,12 @@
     </ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>
-    </StartArguments>
+    <StartArguments>/register</StartArguments>
     <StartAction>Project</StartAction>
     <StartProgram>
     </StartProgram>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <StartArguments>/register</StartArguments>
   </PropertyGroup>
 </Project>

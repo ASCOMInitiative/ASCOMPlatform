@@ -53,6 +53,8 @@ namespace ASCOM.Simulator
 
         const string SlewToHA = "SlewToHA"; const string SlewToHAUpper = "SLEWTOHA";
         const string AssemblyVersionNumber = "AssemblyVersionNumber"; const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
+        const string TimeUntilPointingStateCanChange = "TIMEUNTILPOINTINGSTATECANCHANGE";
+        const string AvailableTimeInThisPointingState = "AVAILABLETIMEINTHISPOINTINGSTATE";
 
         //
         // Constructor - Must be public for COM registration!
@@ -103,6 +105,12 @@ namespace ASCOM.Simulator
                     this.SlewToCoordinates(RA, 0.0);
                     Response = "Slew successful!";
                     break;
+                case AvailableTimeInThisPointingState:
+                    Response = TelescopeHardware.AvailableTimeInThisPointingState.ToString();
+                    break;
+                case TimeUntilPointingStateCanChange:
+                    Response = TelescopeHardware.TimeUntilPointingStateCanChange.ToString();
+                    break;
                 default:
                     throw new ASCOM.InvalidOperationException("Command: '" + ActionName + "' is not recognised by the Scope Simulator .NET driver. " + AssemblyVersionNumberUpper + " " + SlewToHAUpper);
             }
@@ -120,6 +128,8 @@ namespace ASCOM.Simulator
                 ArrayList sa = new ArrayList();
                 sa.Add(AssemblyVersionNumber); // Add a test action to return a value
                 sa.Add(SlewToHA); // Expects an numeric HA Parameter
+                sa.Add("AvailableTimeInThisPointingState");
+                sa.Add("TimeUntilPointingStateCanChange");
 
                 return sa;
             }
@@ -129,7 +139,7 @@ namespace ASCOM.Simulator
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "AbortSlew: ");
             CheckParked("AbortSlew");
-            TelescopeHardware.SlewState = SlewType.SlewNone;
+            TelescopeHardware.AbortSlew();
 
             SharedResources.TrafficEnd("(done)");
         }
@@ -682,44 +692,44 @@ namespace ASCOM.Simulator
 
             CheckParked("MoveAxis");
 
-            if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis || Rate != 0)
-            {
-                if (TelescopeHardware.SlewState != SlewType.SlewMoveAxis)
-                {
-                    TelescopeHardware.SlewState = SlewType.SlewNone;
-                    TelescopeHardware.ChangePark(false);
-                    TelescopeHardware.deltaAlt = 0;
-                    TelescopeHardware.deltaAz = 0;
-                    TelescopeHardware.deltaDec = 0;
-                    TelescopeHardware.deltaRa = 0;
-                }
+            //if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis || Rate != 0)
+            //{
+                //if (TelescopeHardware.SlewState != SlewType.SlewMoveAxis)
+                //{
+                //    TelescopeHardware.SlewState = SlewType.SlewNone;
+                //    TelescopeHardware.ChangePark(false);
+                //    TelescopeHardware.deltaAlt = 0;
+                //    TelescopeHardware.deltaAz = 0;
+                //    TelescopeHardware.deltaDec = 0;
+                //    TelescopeHardware.deltaRa = 0;
+                //}
 
                 switch (Axis)
                 {
                     case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
-                        TelescopeHardware.deltaAz = Rate;
+                        TelescopeHardware.rateAxes.X = Rate;
                         break;
                     case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
-                        TelescopeHardware.deltaAlt = Rate;
+                        TelescopeHardware.rateAxes.Y = Rate;
                         break;
                     case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
-                        TelescopeHardware.deltaDec = Rate;
+                        // not implemented
                         break;
                 }
-                if (TelescopeHardware.deltaAz == 0 && TelescopeHardware.deltaAlt == 0 && TelescopeHardware.deltaDec == 0)
-                {
-                    if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis)
-                    {
-                        TelescopeHardware.SlewState = SlewType.SlewNone;
-                        SharedResources.TrafficEnd("(stopped)");
-                        return;
-                    }
-                }
-                else
-                {
-                    TelescopeHardware.SlewState = SlewType.SlewMoveAxis;
-                }
-            }
+                //if (TelescopeHardware.deltaAz == 0 && TelescopeHardware.deltaAlt == 0 && TelescopeHardware.deltaDec == 0)
+                //{
+                //    if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis)
+                //    {
+                //        TelescopeHardware.SlewState = SlewType.SlewNone;
+                //        SharedResources.TrafficEnd("(stopped)");
+                //        return;
+                //    }
+                //}
+                //else
+                //{
+                //    TelescopeHardware.SlewState = SlewType.SlewMoveAxis;
+                //}
+            //}
 
             SharedResources.TrafficEnd("(done)");
         }
@@ -765,34 +775,50 @@ namespace ASCOM.Simulator
             if (Duration == 0)
             {
                 // stops the current guide command
+                switch (Direction)
+                {
+                    case GuideDirections.guideNorth:
+                    case GuideDirections.guideSouth:
+                        TelescopeHardware.isPulseGuidingDec = false;
+                        TelescopeHardware.guideDuration.Y = 0;
+                        break;
+                    case GuideDirections.guideEast:
+                    case GuideDirections.guideWest:
+                        TelescopeHardware.isPulseGuidingRa = false;
+                        TelescopeHardware.guideDuration.X = 0;
+                        break;
+                }
             }
             else
             {
 
-                DateTime endTime = DateTime.Now + TimeSpan.FromMilliseconds(Duration);
+                //DateTime endTime = DateTime.Now + TimeSpan.FromMilliseconds(Duration);
 
                 switch (Direction)
                 {
                     case GuideDirections.guideNorth:
-                        TelescopeHardware.guideRateDeclination = Math.Abs(TelescopeHardware.guideRateDeclination);
-                        TelescopeHardware.pulseGuideDecEndTime = endTime;
+                        TelescopeHardware.guideRate.Y = Math.Abs(TelescopeHardware.guideRate.Y);
                         TelescopeHardware.isPulseGuidingDec = true;
+                        TelescopeHardware.guideDuration.Y = Duration / 1000.0;
                         break;
                     case GuideDirections.guideSouth:
-                        TelescopeHardware.guideRateDeclination = -Math.Abs(TelescopeHardware.guideRateDeclination);
-                        TelescopeHardware.pulseGuideDecEndTime = endTime;
+                        TelescopeHardware.guideRate.Y = -Math.Abs(TelescopeHardware.guideRate.Y);
+                        //TelescopeHardware.pulseGuideDecEndTime = endTime;
                         TelescopeHardware.isPulseGuidingDec = true;
+                        TelescopeHardware.guideDuration.Y = Duration / 1000.0;
                         break;
 
                     case GuideDirections.guideEast:
-                        TelescopeHardware.guideRateRightAscension = Math.Abs(TelescopeHardware.guideRateRightAscension);
-                        TelescopeHardware.pulseGuideRaEndTime = endTime;
+                        TelescopeHardware.guideRate.X = Math.Abs(TelescopeHardware.guideRate.X);
+                        //TelescopeHardware.pulseGuideRaEndTime = endTime;
                         TelescopeHardware.isPulseGuidingRa = true;
-                        break;
+                        TelescopeHardware.guideDuration.X = Duration / 1000.0;
+                       break;
                     case GuideDirections.guideWest:
-                        TelescopeHardware.guideRateRightAscension = -Math.Abs(TelescopeHardware.guideRateRightAscension);
-                        TelescopeHardware.pulseGuideRaEndTime = endTime;
+                       TelescopeHardware.guideRate.X = -Math.Abs(TelescopeHardware.guideRate.X);
+                        //TelescopeHardware.pulseGuideRaEndTime = endTime;
                         TelescopeHardware.isPulseGuidingRa = true;
+                        TelescopeHardware.guideDuration.X = Duration / 1000.0;
                         break;
                 }
             }
@@ -866,18 +892,22 @@ namespace ASCOM.Simulator
 
         public PierSide SideOfPier
         {
-            get { return TelescopeHardware.sideOfPier; }
+            get { return TelescopeHardware.SideOfPier; }
             set 
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SideOfPier: ");
                 CheckCapability(TelescopeHardware.CanSetPierSide, "SideOfPier", true);
 
-                if (value == TelescopeHardware.sideOfPier)
+                if (value == TelescopeHardware.SideOfPier)
+                {
+                    SharedResources.TrafficEnd("(no chnage needed)");
                     return;
+                }
                 // TODO implement this correctly, it needs an overlap which can be reached on either side
-                TelescopeHardware.sideOfPier = value;
-                // slew in RaDec to the same position, setting the side of pier appropriately
+                TelescopeHardware.SideOfPier = value;
+                // slew to the same position, changing the side of pier appropriately if possible
                 TelescopeHardware.StartSlewRaDec(TelescopeHardware.RightAscension, TelescopeHardware.Declination, true);
+                SharedResources.TrafficEnd("(started)");
             }
         }
 
@@ -978,7 +1008,7 @@ namespace ASCOM.Simulator
 
             SharedResources.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
-            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true, SlewType.SlewAltAz);
+            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth);
 
             while (TelescopeHardware.SlewState == SlewType.SlewAltAz || TelescopeHardware.SlewState == SlewType.SlewSettle)
             {
@@ -998,7 +1028,7 @@ namespace ASCOM.Simulator
 
             SharedResources.TrafficStart(" Alt " + m_Util.DegreesToDMS(Altitude) + " Az " + m_Util.DegreesToDMS(Azimuth));
 
-            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth, true, SlewType.SlewAltAz);
+            TelescopeHardware.StartSlewAltAz(Altitude, Azimuth);
             SharedResources.TrafficEnd(" started");
         }
 
@@ -1015,7 +1045,8 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.StartSlewRaDec(RightAscension, Declination, true);
 
-            while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            //while (TelescopeHardware.SlewState == SlewType.SlewRaDec || TelescopeHardware.SlewState == SlewType.SlewSettle)
+            while (TelescopeHardware.IsSlewing)
             {
                 System.Windows.Forms.Application.DoEvents();
             }
@@ -1071,7 +1102,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Slew, string.Format(CultureInfo.CurrentCulture, "Slewing: {0}", TelescopeHardware.SlewState != SlewType.SlewNone));
-                return TelescopeHardware.SlewState != SlewType.SlewNone;
+                return TelescopeHardware.IsSlewing;
             }
         }
 
@@ -1088,10 +1119,12 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.ChangePark(false);
 
-            TelescopeHardware.Altitude = Altitude;
-            TelescopeHardware.Azimuth = Azimuth;
+            TelescopeHardware.SyncToAltAzm(Azimuth, Altitude);
 
-            TelescopeHardware.CalculateRaDec();
+            //TelescopeHardware.Altitude = Altitude;
+            //TelescopeHardware.Azimuth = Azimuth;
+
+            //TelescopeHardware.CalculateRaDec();
             SharedResources.TrafficEnd("done");
         }
 
@@ -1111,10 +1144,12 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.ChangePark(false);
 
-            TelescopeHardware.RightAscension = RightAscension;
-            TelescopeHardware.Declination = Declination;
+            TelescopeHardware.SyncToTargetRaDec();
 
-            TelescopeHardware.CalculateAltAz();
+            //TelescopeHardware.RightAscension = RightAscension;
+            //TelescopeHardware.Declination = Declination;
+
+            //TelescopeHardware.CalculateAltAz();
             SharedResources.TrafficEnd("done");
         }
 
@@ -1132,10 +1167,12 @@ namespace ASCOM.Simulator
 
             TelescopeHardware.ChangePark(false);
 
-            TelescopeHardware.RightAscension = TelescopeHardware.TargetRightAscension;
-            TelescopeHardware.Declination = TelescopeHardware.TargetDeclination;
+            TelescopeHardware.SyncToTargetRaDec();
 
-            TelescopeHardware.CalculateAltAz();
+            //TelescopeHardware.RightAscension = TelescopeHardware.TargetRightAscension;
+            //TelescopeHardware.Declination = TelescopeHardware.TargetDeclination;
+
+            //TelescopeHardware.CalculateAltAz();
             SharedResources.TrafficEnd("done");
         }
 
@@ -1198,60 +1235,18 @@ namespace ASCOM.Simulator
         {
             get
             {
-                string output = "";
-                DriveRates rate = DriveRates.driveSidereal;
+                DriveRates rate = TelescopeHardware.TrackingRate;
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "TrackingRate: ");
                 CheckVersionOne("TrackingRate", false);
-                switch (TelescopeHardware.TrackingRate)
-                {
-                    case 0:
-                        output = "King";
-                        rate = DriveRates.driveKing;
-                        break;
-                    case 1:
-                        output = "Lunar";
-                        rate = DriveRates.driveLunar;
-                        break;
-                    case 2:
-                        output = "Sidereal";
-                        rate = DriveRates.driveSidereal;
-                        break;
-                    case 3:
-                        output = "Solar";
-                        rate = DriveRates.driveSolar;
-                        break;
-                }
-
-                SharedResources.TrafficEnd(output);
+                SharedResources.TrafficEnd(rate.ToString());
                 return rate;
             }
             set
             {
-                string output = "";
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "TrackingRate: -> ");
                 CheckVersionOne("TrackingRate", true);
-
-                switch (value)
-                {
-                    case DriveRates.driveKing:
-                        output = "King";
-                        TelescopeHardware.TrackingRate = 0;
-                        break;
-                    case DriveRates.driveLunar:
-                        output = "Lunar";
-                        TelescopeHardware.TrackingRate = 1;
-                        break;
-                    case DriveRates.driveSidereal:
-                        TelescopeHardware.TrackingRate = 2;
-                        output = "Sidereal";
-                        break;
-                    case DriveRates.driveSolar:
-                        output = "Solar";
-                        TelescopeHardware.TrackingRate = 3;
-                        break;
-                }
-
-                SharedResources.TrafficEnd(output + "(done)");
+                TelescopeHardware.TrackingRate = value;
+                SharedResources.TrafficEnd(value.ToString() + "(done)");
             }
         }
 
@@ -1298,6 +1293,34 @@ namespace ASCOM.Simulator
 
         #endregion
 
+        #region new pier side properties
+
+        //public double AvailableTimeInThisPointingState
+        //{
+        //    get
+        //    {
+        //        if (AlignmentMode != AlignmentModes.algGermanPolar)
+        //        {
+        //            return 86400;
+        //        }
+        //        return TelescopeHardware.AvailableTimeInThisPointingState;
+        //    }
+        //}
+
+        //public double TimeUntilPointingStateCanChange
+        //{
+        //    get
+        //    {
+        //        if (AlignmentMode != AlignmentModes.algGermanPolar)
+        //        {
+        //            return 0;
+        //        }
+        //        return TelescopeHardware.TimeUntilPointingStateCanChange;
+        //    }
+        //}
+
+        #endregion
+
         #region private methods
         private void CheckRate(TelescopeAxes axis, double rate)
         {
@@ -1316,7 +1339,7 @@ namespace ASCOM.Simulator
 
         private static void CheckRange(double value, double min, double max, string propertyOrMethod, string valueName)
         {
-            if (value == SharedResources.INVALID_COORDINATE)
+            if (double.IsNaN(value))
             {
                 SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{0}:{1} value has not been set", propertyOrMethod, valueName));
                 throw new ValueNotSetException(propertyOrMethod + ":" + valueName);
@@ -1330,7 +1353,7 @@ namespace ASCOM.Simulator
 
         private static void CheckRange(double value, double min, double max, string propertyOrMethod)
         {
-            if (value == SharedResources.INVALID_COORDINATE)
+            if (double.IsNaN(value))
             {
                 SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{0} value has not been set", propertyOrMethod));
                 throw new ValueNotSetException(propertyOrMethod);

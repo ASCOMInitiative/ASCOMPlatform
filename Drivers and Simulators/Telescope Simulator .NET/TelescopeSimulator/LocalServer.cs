@@ -119,6 +119,7 @@ namespace ASCOM.Simulator
         private static ArrayList m_ComObjectTypes;				        // Served COM object types
         private static ArrayList m_ClassFactories;				        // Served COM object class factories
         private static string m_sAppId = "{fe02799d-b48a-46f0-add7-a06d40beb2e9}";	// Our AppId
+        private static readonly object lockObj = new object();
         #endregion
 
         // This property returns the main thread's id.
@@ -134,7 +135,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                lock (typeof(TelescopeSimulator))
+                lock (lockObj)
                 {
                     return m_iObjsInUse;
                 }
@@ -160,7 +161,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                lock (typeof(TelescopeSimulator))
+                lock (lockObj)
                 {
                     return m_iServerLocks;
                 }
@@ -192,7 +193,7 @@ namespace ASCOM.Simulator
         //
         public static void ExitIf()
         {
-            lock (typeof(TelescopeSimulator))
+            lock (lockObj)
             {
                 if ((ObjectsCount <= 0) && (ServerLockCount <= 0))
                 {
@@ -222,7 +223,7 @@ namespace ASCOM.Simulator
             m_ComObjectAssys = new ArrayList();
             m_ComObjectTypes = new ArrayList();
 
-            string assy = Assembly.GetEntryAssembly().Location;
+            //string assy = Assembly.GetEntryAssembly().Location;
             string assyPath = Assembly.GetEntryAssembly().Location;
             //int i = assyPath.LastIndexOf(@"\TelescopeSimulator\bin\");						// Look for us running in IDE
             //ASCOM.Utilities.TraceLogger TL = new ASCOM.Utilities.TraceLogger("", "LoadComObjectAssemblies");
@@ -241,7 +242,7 @@ namespace ASCOM.Simulator
             foreach (FileInfo fi in assemblyFiles)
             {
                 string aPath = fi.FullName;
-                string fqClassName = fi.Name.Replace(fi.Extension, "");		// The COM class name will be the assembly's file name (minus extension).
+                //string fqClassName = fi.Name.Replace(fi.Extension, "");		// The COM class name will be the assembly's file name (minus extension).
                 //TL.LogMessage("FilePath", aPath);
                 //TL.LogMessage("ClassName", fqClassName);
 
