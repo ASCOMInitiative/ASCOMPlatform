@@ -22,6 +22,7 @@ Partial Class HandboxForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(HandboxForm))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.txtDomeAz = New System.Windows.Forms.Label()
@@ -50,6 +51,7 @@ Partial Class HandboxForm
         Me.ButtonTraffic = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.picASCOM = New System.Windows.Forms.PictureBox()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -357,6 +359,9 @@ Partial Class HandboxForm
         Me.picASCOM.TabIndex = 2
         Me.picASCOM.TabStop = False
         '
+        'Timer1
+        '
+        '
         'HandboxForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -426,4 +431,5 @@ Partial Class HandboxForm
     Friend WithEvents ButtonSetup As System.Windows.Forms.Button
     Friend WithEvents ButtonTraffic As System.Windows.Forms.Button
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents Timer1 As System.Windows.Forms.Timer
 End Class
