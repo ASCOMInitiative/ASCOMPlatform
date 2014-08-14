@@ -29,6 +29,16 @@ Imports System.Globalization
 Public Class HandboxForm
     Public ButtonState As Integer                         'Controls the dome slewing buttons
 
+    Friend Shared Sub Run()
+        If g_handBox Is Nothing Then
+            TL.LogMessage("HandboxForm.Run", "Handbox Variable is empty, Creating Form")
+            g_handBox = New HandboxForm
+            Application.Run(g_handBox)
+        Else
+            TL.LogMessage("HandboxForm.Run", "Handbox Variable is not empty, Doing nothing")
+        End If
+    End Sub
+
 #Region "Public Properties and Methods"
 
     Public Shared Sub UpdateConfig()
@@ -60,7 +70,7 @@ Public Class HandboxForm
     End Sub
 
     Public Sub DoSetup()
-        g_timer.Enabled = False
+        Timer1.Enabled = False
 
         Using SetupDialog As SetupDialogForm = New SetupDialogForm
 
@@ -143,7 +153,7 @@ Public Class HandboxForm
         LabelButtons()
         RefreshLeds()
 
-        g_timer.Enabled = g_bConnected
+        Timer1.Enabled = g_bConnected
 
         Me.Visible = True
         Me.BringToFront()
@@ -218,8 +228,6 @@ Public Class HandboxForm
 
     End Sub
 #End Region
-
-
 
 #Region "Event Handlers"
 
@@ -377,6 +385,175 @@ Public Class HandboxForm
     Private Sub ButtonStepCounterClockwise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonStepCounterClockwise.Click
         ButtonState = 4
     End Sub
+
+    Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
+
+        Dim slew As Double
+        Dim distance As Double
+
+        ' Handle hand-box state first
+        If Me.ButtonState <> 0 Then
+            Select Case (Me.ButtonState)
+                Case 1 ' Go clockwise
+                    HW_Run(True)
+                Case 2 ' step clockwise
+                    HW_Move(AzScale(g_dDomeAz + g_dStepSize))
+                Case 3 ' Go counter clockwise
+                    HW_Run(False)
+                Case 4 ' step counter clockwise
+                    HW_Move(AzScale(g_dDomeAz - g_dStepSize))
+                Case 5 ' shutter up
+                    If g_eShutterState = ShutterState.shutterOpen Then HW_MoveShutter(g_dMaxAlt)
+                Case 6 ' shutter down
+                    If g_eShutterState = ShutterState.shutterOpen Then HW_MoveShutter(g_dMinAlt)
+                Case 7 ' shutter open
+                    If g_eShutterState = ShutterState.shutterClosed Then HW_OpenShutter()
+                Case 8 ' shutter close
+                    If (g_eShutterState = ShutterState.shutterOpen) Or (g_eShutterState = ShutterState.shutterError) Then HW_CloseShutter()
+                Case Else ' other - halt
+                    HW_Halt()
+            End Select
+
+            Me.ButtonState = 0
+        End If
+
+        ' Azimuth slew simulation
+        If g_eSlewing <> Going.slewNowhere Then
+            slew = g_dAzRate * TIMER_INTERVAL
+            If g_eSlewing > Going.slewCW Then
+                distance = g_dTargetAz - g_dDomeAz
+                If distance < 0 Then _
+                    slew = -slew
+                If distance > 180 Then _
+                    slew = -slew
+                If distance < -180 Then _
+                    slew = -slew
+            Else
+                distance = slew * 2
+                slew = slew * g_eSlewing
+            End If
+
+            ' Are we there yet ?
+            If System.Math.Abs(distance) < System.Math.Abs(slew) Then
+                g_dDomeAz = g_dTargetAz
+                If Not g_TrafficForm Is Nothing Then
+                    If g_TrafficForm.chkSlew.Checked Then _
+                        g_TrafficForm.TrafficLine("(Slew complete)")
+                End If
+
+                ' Handle standard (fragile) and non-standard park/home changes
+                If g_bStandardAtHome Then
+                    If g_eSlewing = Going.slewHome Then g_bAtHome = True ' Fragile (standard)
+                Else
+                    g_bAtHome = HW_AtHome                               ' Position (non-standard)
+                End If
+
+                If g_bStandardAtPark Then
+                    If g_eSlewing = Going.slewPark Then g_bAtPark = True ' Fragile (standard)
+                Else
+                    g_bAtPark = HW_AtPark                               ' Position (non-standard)
+                End If
+
+                g_eSlewing = Going.slewNowhere
+            Else
+                g_dDomeAz = AzScale(g_dDomeAz + slew)
+            End If
+        End If
+
+        ' shutter altitude control simulation
+        If (g_dDomeAlt <> g_dTargetAlt) And g_eShutterState = ShutterState.shutterOpen Then
+            slew = g_dAltRate * TIMER_INTERVAL
+            distance = g_dTargetAlt - g_dDomeAlt
+            If distance < 0 Then _
+                slew = -slew
+
+            ' Are we there yet ?
+            If System.Math.Abs(distance) < System.Math.Abs(slew) Then
+                g_dDomeAlt = g_dTargetAlt
+                If Not g_TrafficForm Is Nothing Then
+                    If g_TrafficForm.chkShutter.Checked Then _
+                        g_TrafficForm.TrafficLine("(Shutter complete)")
+                End If
+            Else
+                g_dDomeAlt = g_dDomeAlt + slew
+            End If
+        End If
+
+        ' shutter open/close simulation
+        If g_dOCProgress > 0 Then
+            g_dOCProgress = g_dOCProgress - TIMER_INTERVAL
+            If g_dOCProgress <= 0 Then
+                If g_eShutterState = ShutterState.shutterOpening Then
+                    g_eShutterState = ShutterState.shutterOpen
+                Else
+                    g_eShutterState = ShutterState.shutterClosed
+                End If
+                If Not g_TrafficForm Is Nothing Then
+                    If g_TrafficForm.chkShutter.Checked Then _
+                        g_TrafficForm.TrafficLine("(Shutter complete)")
+                End If
+            End If
+        End If
+
+        If g_dDomeAz = INVALID_COORDINATE Then
+            Me.txtDomeAz.Text = "---.-"
+        Else
+
+            Me.txtDomeAz.Text = Format$(AzScale(g_dDomeAz), "000.0")
+        End If
+        'Shutter = g_dDomeAlt
+        If g_dDomeAlt = INVALID_COORDINATE Or Not g_bCanSetShutter Then
+            Me.txtShutter.Text = "----"
+        Else
+            Select Case g_eShutterState
+                Case ShutterState.shutterOpen
+                    If g_bCanSetAltitude Then
+                        Me.txtShutter.Text = Format$(g_dDomeAlt, "0.0")
+                    Else
+                        Me.txtShutter.Text = "Open"
+                    End If
+                Case ShutterState.shutterClosed : Me.txtShutter.Text = "Closed"
+                Case ShutterState.shutterOpening : Me.txtShutter.Text = "Opening"
+                Case ShutterState.shutterClosing : Me.txtShutter.Text = "Closing"
+                Case ShutterState.shutterError : Me.txtShutter.Text = "Error"
+            End Select
+        End If
+        Me.RefreshLeds()
+    End Sub
+
 #End Region
 
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+        ' Set handbox screen position
+        Try
+            Me.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
+            Me.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
+        Catch ex As Exception
+
+        End Try
+
+
+        ' Fix bad positions (which shouldn't ever happen, ha ha)
+        If Me.Left < 0 Then
+            Me.Left = 100
+            g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
+        End If
+        If Me.Top < 0 Then
+            Me.Top = 100
+            g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
+        End If
+
+        Timer1.Interval = TIMER_INTERVAL * 1000
+        Timer1.Enabled = True
+
+        Me.LabelButtons()
+        Me.RefreshLeds()
+
+    End Sub
 End Class
