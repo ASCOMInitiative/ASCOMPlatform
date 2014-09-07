@@ -20,9 +20,9 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={cf32}\System
 DisableDirPage=yes
 DisableProgramGroupPage=yes
-WizardImageFile="C:\Program Files (x86)\ASCOM\InstallGen\Resources\WizardImage.bmp"
-LicenseFile=C:\Program Files (x86)\ASCOM\InstallGen\Resources\CreativeCommons.txt
-OutputDir=D:\dev\astro\ascom\BisqueCompat\TeleAPI_ASCOM
+WizardImageFile="C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Installer Generator\Resources\WizardImage.bmp"
+LicenseFile=C:\Program Files (x86)\ASCOM\Platform 6 Developer Components\Installer Generator\Resources\CreativeCommons.txt
+;OutputDir=D:\dev\astro\ascom\BisqueCompat\TeleAPI_ASCOM
 OutputBaseFilename=TeleAPI(5.0.4)Setup
 UninstallFilesDir={app}\teleapi
 Compression=lzma
@@ -32,8 +32,11 @@ SolidCompression=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "D:\dev\astro\ascom\BisqueCompat\TeleAPI_ASCOM\Release\TeleAPI.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\dev\astro\ascom\BisqueCompat\TeleAPI_ASCOM\TeleAPI-ReadMe.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Release\TeleAPI.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "TeleAPI-ReadMe.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Run]
 Filename: "{app}\TeleAPI-ReadMe.txt"; Flags: shellexec nowait skipifsilent
+
+[Registry]
+Root: HKLM; SubKey: "Software\SPACE.com\TheSky TeleAPI-ASCOM Plugin"; Permissions: users-full; 
