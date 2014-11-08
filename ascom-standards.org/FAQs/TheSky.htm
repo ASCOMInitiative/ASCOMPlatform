@@ -61,7 +61,8 @@
 	<div class="article">
 		<h3>Working With TheSky X&#8482; and TheSky 6&#8482;</h3>
 		<p>Since TheSky X and TheSky 6 are themselves not 100% compatible with the ASCOM environment, we've provided some adapter components to make them fit in. </p>
-		<p class="note">Please note: As of March 2013, Software Bisque's TheSky X includes built-in support for controlling devices through their ASCOM drivers. The description of the separate plug-ins that was here has been removed, as Software Bisque now provides access from TheSky X to all ASCOM devices. Please upgrade your copy of TheSky X to the latest version.</p>
+		<p class="note">Please note: As of November 2014, Software Bisque has  completed a project to include &quot;inbound&quot; ASCOM support in TheSky X, making the separate &quot;TheSky Controlled Telescope&quot; driver obsolete. Look for this feature in an upcoming release of TheSky X. When you have this new version installed, switch your client software to use the new Telescope type and you can then uninstall this driver. The information here will be updated. At that time TheSky X will be 100% ASCOM compatible. </p>
+		<p class="note">Please note: Software Bisque's TheSky X includes built-in support for controlling devices through their ASCOM drivers. The description of the separate plug-ins that was here has been removed, as Software Bisque now provides access from TheSky X to all ASCOM devices. Please upgrade your copy of TheSky X to the latest version.</p>
 		<p>There are three different ways that TheSky can fit into the ASCOM environment:</p>
 		<ol>
 			<li>Both TheSky X and TheSky 6 can look like an ASCOM compatible telescope. This is mainly useful when the telescope is a Paramount, which requires TheSky (X or 6) as part of its control system. </li>
@@ -101,14 +102,15 @@
 						should work.</li>
 				</ol>
 		<h4><a name="teleapi" id="teleapi"></a>2. TheSky 6 Controlling a Telescope With an ASCOM Driver</h4>
-		<p>In this case, TheSky 6 plays the role of an ASCOM astronomy program that uses ASCOM drivers like any other.  See the text below the diagram for details.</p>
-				<p align="center"><img src="../Images/TeleAPI.png" alt="Diagram" width="444" height="425" /></p>
+		<p class="note" style="font-size:large">Please note: This is for TheSky 6 only!</p>
+		<p>n this case, <span class="underline">TheSky 6</span> plays the role of an ASCOM astronomy program that uses ASCOM drivers like any other.  See the text below the diagram for details.</p>
+		<p align="center"><img src="../Images/TeleAPI.png" alt="Diagram" width="444" height="425" /></p>
 				<p>In order to use ASCOM drivers for telescope control from within 
 				TheSky, you need to install the <a href="../Downloads/Plugins.htm">ASCOM &quot;TeleAPI&quot; plug-in</a>. Download, unzip and read 
 				&#39;install.txt&#39;. This gives instructions on how to install the adapter. 
 				After you have done this: </p>
 				<ol>
-						<li>Start TheSky </li>
+						<li>Start <span class="underline">TheSky 6</span></li>
 				<li>In the Telescope menu, select Setup... TheSky's Telescope Setup 
 					window will appear. </li>
 				<li>Set the Telescope or control system name to <span class="underline">Telescope API</span>. </li>

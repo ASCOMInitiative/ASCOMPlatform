@@ -73,19 +73,20 @@
 
 		<div class="download">
 			<h5>Celestron Unified (6.0.5412.29108)</h5>
-			<a href="http://download.ascom-standards.org/drivers/Celestron Telescope Setup.exe">
+			<a href="http://download.ascom-standards.org/drivers/Celestron(6.0.5412)Setup.exe">
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
-			<p>Driver name: "Celestron Telescope Driver", ProgId: "ASCOM.Celestron.Telescope"</p>
+			<p>Driver name (users, in the Chooser): Celestron Telescope Driver<br />
+			ProgId (programmers only): <tt style="font-size:2">ASCOM.Celestron.Telescope</tt></p>
 			New driver, written in C#. Note the new name and ProgId.
 			Installs a driver for all computerized <a href="http://www.celestron.com/" target="aux">Celestron</a> telescopes.
 			This version has passed the <a href="DevTools.htm">Conformance Checker</a> tests and has support
 			for programmably changing pier side.  It also recognises the StarSense HC.
 			Park and Unpark use the mount Hibernate/Wakeup commands for NexStar+ HCs version 5.24. Works for locales where the comma
 			is the decimal separator. See the help file, installed as part of the driver, for a full description.
-			<p><b>This driver does NOT support Synta mounts.</b></p>
+			<p class="note"><b>This driver does NOT support Synta mounts.</b></p>
 			</div>
 
-		<div class="download">
+<!--    <div class="download">
 			<h5>Celestron Unified (5.0.30) (superceded)</h5>
 			<a href="http://download.ascom-standards.org/drivers/Celestron(5.0.30)Setup.exe">
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
@@ -96,8 +97,8 @@
 			further changes will be made to this driver.</b>  Please only use this if 
 			the new one does not work and please report the problem on Ascom-Talk or 
 			to the developer.
-			<p><b>Support for Synta mounts is now withdrawn.</b>
-			</div>
+			<p class="note"><b>Support for Synta mounts is now withdrawn.</b>
+			</div>-->
 
 		<div class="download">
 			<h5>EQMOD Project  (external link)</h5>
@@ -105,8 +106,8 @@
 			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>With the EQMOD ASCOM driver, the user will be able to control the <a href="http://eq-mod.sourceforge.net/" target="aux">Modded EQ mount</a> using any   ASCOM based astronomy software at 0.144 arcsecond resolution. This is an ongoing project, so be sure to check the site for updates.	</div>
 
 		<div class="download">
-			<h5>Gemini Telescope .NET (1.0.18.0, March 2012)</h5>
-			<a href="http://download.ascom-standards.org/drivers/GeminiTelescopeInstaller(1.0.18.0).exe">
+			<h5>Gemini Telescope .NET (1.0.56)</h5>
+			<a href="http://download.ascom-standards.org/drivers/GeminiTelescopeInstaller(1.0.56.0).exe">
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Installs a driver for mounts controlled by René Görlich's <a href="http://www.docgoerlich.com/" target="aux">Gemini</a> Astronomical Telescope Positioning System. <span class="underline">Current firmware required!</span> <!--This version has passed the <a href="DevTools.htm">Conformance Checker</a> tests (<a href="http://download.ascom-standards.org/drivers/ASCOM.GeminiTelescope.Telescope.Validation.txt">see this report</a>)-->		</div>
 
 		<div class="download">
@@ -166,9 +167,11 @@
 		This is a full-featured driver that provides not only ASCOM standard driver functions, but also user access to many of the Temma's special features.</div>
 
 		<div class="download">
-			<h5>TheSky Controlled Telescope (Paramount, etc., 5.2.12) for TheSky X and TheSky 5/6</h5>
-			<a href="http://download.ascom-standards.org/drivers/TheSkyTelescope(5.2.12)Setup.exe">
-			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>Installs  a driver that connects to Software Bisque's  <a href="http://www.bisque.com/" target="_blank">TheSky X/6/5 Astronomy Software</a> and makes it look like a standard ASCOM telescope. This allows ASCOM-based astronomy software to use TheSky (including TPOINT and ProTrack) as a smart telescope controller. For more information see <a href="../FAQs/TheSky.htm" target="_blank">Working with TheSky</a> (section 1). It is <span class="underline">required for the Paramount</span> mounts, and may be used with TheSky controlling any other of its supported telescope types, or via the <a href="Plugins.htm" target="_blank">ASCOM plugin</a>, using ASCOM telescope drivers. This driver provides <a href="../Standards/Index.htm" target="_parent">Telescope V2</a> support, 100% <a href="DevTools.htm" target="_blank">conformance</a>, and compatibility with TheSky X (10.1.11 or later). The driver is licensed per Creative Commons.</div>
+			<h5>TheSky Controlled Telescope (Paramount, etc., 5.2.12) for TheSky X and TheSky 5/6<a href="http://download.ascom-standards.org/drivers/TheSkyTelescope(5.2.12)Setup.exe"><img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a></h5>
+<p class="note">Please note: As of November 2014, Software Bisque has completed a project to include "inbound" ASCOM support in TheSky X, making this driver obsolete. Look for this feature in an upcoming release of TheSky X. When you have this new version installed, switch your client software to use the new Telescope type and you can then uninstall this driver.</p>
+
+<p>Installs  a driver that connects to Software Bisque's  <a href="http://www.bisque.com/" target="_blank">TheSky X/6/5 Astronomy Software</a> and makes it look like a standard ASCOM telescope. This allows ASCOM-based astronomy software to use TheSky (including TPOINT and ProTrack) as a smart telescope controller. For more information see <a href="../FAQs/TheSky.htm" target="_blank">Working with TheSky</a> (section 1). It is <span class="underline">required for the Paramount</span> mounts, and may be used with TheSky controlling any other of its supported telescope types, or via the <a href="Plugins.htm" target="_blank">ASCOM plugin</a>, using ASCOM telescope drivers. This driver provides <a href="../Standards/Index.htm" target="_parent">Telescope V2</a> support, 100% <a href="DevTools.htm" target="_blank">conformance</a>, and compatibility with TheSky X (10.1.11 or later). The driver is licensed per Creative Commons.</p>
+		</div>
 
 		<div class="download">
 			<h5>Vixen SkySensor 2000 (6.1.7)</h5>
