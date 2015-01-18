@@ -1,0 +1,281 @@
+List of Changes for the 10th release of SOFA as of 2013 November 19.
+
+-+-----------------------------------------------------------------------------
+FORTRAN Files
+-+-----------------------------------------------------------------------------
+
+
+Date e-mailed  File          Short Reason
+
+2012 Sep  5    epv00.for     Comment - minor.
+2013 Aug 31    eqeq94.for    Comment - minor.
+2012 Sep  5    fk5hz.for     Comment - minor.
+2012 Sep  5    hfk5z.for     Comment - minor.
+2012 Sep  5    nutm80.for    Comment - minor.
+2012 Sep  5    plan94.for    Comment - minor.
+2012 Sep  5    pnm80.for     Comment - minor.
+2013 Apr 16    ut1utc.for    Comment - minor.
+2013 May 14    xys06a.for    Comment - corrected to IAU 2006/2000A.
+2013 May 29    dat.for       Minor.
+2013 Jul 26    dtf2d.for     Corrected due to bug with TAI->UTC 1960-1972.
+2013 Jul 26    d2dtf.for     Corrected due to bug with TAI->UTC 1960-1972.
+2013 Jul 26    utctai.for    Corrected due to bug with TAI->UTC 1960-1972
+2013 Aug 07    epb.for       Comment - minor.
+2013 Aug 12    utcut1.for    Comment - correction.
+2013 Aug 21    bp00.for      Minor - support argument re-use.
+2013 Aug 21    bp06.for      Minor - support argument re-use.
+2013 Aug 24    c2tcio.for    Comment - '(radians)' inserted.
+2013 Aug 24    c2teqx.for    Comment - '(radians)' inserted.
+2013 Sep 01    gc2gd.for     Minor - if error, ELONG now set to -1D9.
+2013 Sep 02    fw2xy.for     Comment - minor.
+2013 Sep 12    taiutc.for    Corrected due to bug with TAI->UTC 1960-1972
+2013 Oct 04    t_sofa_f.for  Updated.
+2013 Nov 14    pn06.for      Comment - correction.
+2013 Nov 19    prec76.for    Minor - consistency.
+
+-+----------------------------------------------------------------------
+ANSI C Files
+-+----------------------------------------------------------------------
+
+Date e-mailed  File          Short Reason
+
+2013 Jun 18    *.c           Inclusion of sofam.h was replaced with sofa.h
+                             which now includes sofam.h (all except ee00.c,
+                             ee00a.c, ee00b.c, ee06a.c & gst94.c).
+2013 Jun 18    gmst82.c      Comment - typographical.
+2013 Jun 18    starpm.c      Comment - typographical.
+2013 Jun 18    ut1utc.c      Comment - correction.
+2013 Jun 18    xys06a.c      Comment - corrected to IAU 2006/2000A.
+2013 Jun 18    c2i06a.c      Comment - typographical.
+2013 Jun 18    eo06a.c       Comment - typographical.
+2013 Jun 18    s00a.c        Comment - typographical.
+2013 Jun 18    s00b.c        Comment - typographical.
+2013 Jun 18    c2i06a.c      Comment - typographical.
+2013 Jul 26    dtf2d.c       Corrected due to bug with TAI->UTC 1960-1972.
+2013 Jul 26    d2dtf.c       Corrected due to bug with TAI->UTC 1960-1972.
+2013 Jul 31    a2tf.c        Comment - typographical.
+2013 Aug 07    cal2jd.c      Trivial.
+2013 Aug 13    epb2jd.c      Trivial.
+2013 Aug 07    epj2jd.c      Trivial.
+2013 Aug 07    epj.c         Comment - typographical.
+2013 Aug 07    jd2cal.c      Trivial.
+2013 Aug 07    pm.c          Trivial.
+2013 Aug 07    sxpv.c        Comment - correction.
+2013 Aug 12    utcut1.c      Comment - corrections.
+2013 Aug 21    dat.c         Minor.
+2013 Aug 21    bp00.c        Trivial - white space.
+2013 Aug 21    bp06.c        Minor - support argument re-use.
+2013 Aug 21    epb.c         Trivial.
+2013 Aug 24    c2tcio.c      Comment - '(radians)' inserted.
+2013 Aug 24    c2teqx.c      Comment - '(radians)' inserted.
+2013 Aug 31    eqeq94.c      Comment - routine missing from 'Called' list.
+2013 Aug 21    xy06.c        Trivial.
+2013 Aug 22    sofa.h        Updated and also now #includes sofam.h.
+2013 Aug 27    sofam.h       Updated.
+2013 Sep 1     gc2gd.c       Minor - elong now set to -1e9 on error.
+2013 Sep 2     fw2xy.c       Comment - correction.
+2013 Jul 26    utctai.c      Corrected due to bug with TAI->UTC 1960-1972.
+2013 Sep 12    taiutc.c      Corrected due to bug with TAI->UTC 1960-1972.
+2013 Oct 04    t_sofa_c.c    Updated.
+2013 Nov 14    pn00a.c       Comment - correction.
+2014 Nov 14    pn00b.c       Comment - correction.
+2014 Nov 14    pn06a.c       Comment - correction.
+2014 Nov 14    pn06.c        Comment - correction.
+2013 Nov 19    prec76.c      Minor - consistency.
+
+-+----------------------------------------------------------------------
+Documentation Files
+-+----------------------------------------------------------------------
+
+2012 Jul 20    sofa_pn.tex   Add note that in the example numerical values for
+2012 Jul 20    sofa_pn.pdf   polar motion and UT1-UTC are for illustration
+                             only.
+
+2013 Feb 12    sofa_ts.tex   Units information added since:
+                             1) In the equation for TCG in terms of TT in Sect.
+                                3.6.4, TCG and TT are in JD or MJD form, though
+                                that is not stated.
+                             2) In the equation for TDB in terms of TCB in
+                                Sect. 3.6.5 (which is taken straight from the 
+                                IAU resolution) TDB and TCB are in seconds, and
+                                that also is not stated.
+2013 Aug 23    sofa_ts.tex   Page 23 of the c version; the xyz array should be
+               sofa_ts_c.pdf dimensioned to 3.
+               sofa_ts_f.pdf
+
+2013 Apr 30    board.lis     George Hobbs, retired and Scott Ransom joined.
+               copyr.lis     Cosmetic change.
+               intro.lis     Changes to deal with adding new section.
+               sofa_lib.lis  Changes to deal with adding new section.
+
+n.b. Tex source files are not distributed.
+
+-+----------------------------------------------------------------------
+NEW FILES
+-+----------------------------------------------------------------------
+
+   33 x 2 .c & .f files + 3 pdf files
+
+  Astrometry
+     AB        apply stellar aberration
+     APCG      prepare for ICRS <-> GCRS, geocentric, special
+     APCG13    prepare for ICRS <-> GCRS, geocentric
+     APCI      prepare for ICRS <-> CIRS, terrestrial, special
+     APCI13    prepare for ICRS <-> CIRS, terrestrial
+     APCO      prepare for ICRS <-> observed, terrestrial, special
+     APCO13    prepare for ICRS <-> observed, terrestrial
+     APCS      prepare for ICRS <-> CIRS, space, special
+     APCS13    prepare for ICRS <-> CIRS, space
+     APER      insert ERA into context
+     APER13    update context for Earth rotation
+     APIO      prepare for CIRS <-> observed, terrestrial, special
+     APIO13    prepare for CIRS <-> observed, terrestrial
+     ATCI13    catalog -> CIRS
+     ATCIQ     quick ICRS -> CIRS
+     ATCIQN    quick ICRS -> CIRS, multiple deflections
+     ATCIQZ    quick astrometric ICRS -> CIRS
+     ATCO13    ICRS -> observed
+     ATIC13    CIRS -> ICRS
+     ATICQ     quick CIRS -> ICRS
+     ATICQN    quick CIRS -> ICRS, multiple deflections
+     ATIO13    CIRS -> observed
+     ATIOQ     quick CIRS -> observed
+     ATOC13    observed -> astrometric ICRS
+     ATOI13    observed -> CIRS
+     ATOIQ     quick observed -> CIRS
+     LD        light deflection by a single solar-system body
+     LDN       light deflection by multiple solar-system bodies
+     LDSUN     light deflection by the Sun
+     PMPX      apply proper motion and parallax
+     PVTOB     observatory position and velocity
+     REFCO     refraction constants
+
+  Star catalog conversions
+     PMSAFE    apply proper motion, with zero-parallax precautions
+
+CookBooks/Documentation
+    sofa_ast_f.pdf           SOFA Astrometry Tools, Fortran
+    sofa_ast_c.pdf           SOFA Astrometry Tools, ANSI C
+    sofa_ast_summary.pdf     2-page summary of Astrometry Tools
+
+CYH/SAB - 2013 November 20th.
+
+
+
+PLEASE NOTE: There is no first minor release of the 10th release of SOFA for 
+ANSI C. The first minor release included changes relevant to the Fortran version
+of the SOFA library only.  
+
+
+
+List of Changes for the second minor release of the 10th release of 
+SOFA as of 2014 February 17.
+
+-+-----------------------------------------------------------------------------
+FORTRAN & ANSI C Files
+-+-----------------------------------------------------------------------------
+
+Date emailed   File          Reason
+
+2013 Dec 05    apco13        Documentation error.  Given argument THETA
+                             Earth rotation angle (radians) included
+                             incorrectly in the information list.
+
+2013 Dec 05    atioq         Documentation error.  Returned argument DOB, which
+                             is the observed declination (CIO-based, radians),
+                             was described incorrectly and the argument ROB,
+                             observed right ascension (CIO-based, radians), was
+                             missing from the information list.
+
+2014 Feb 15    d2dtf         Error.  The routine truncated rather than rounded
+                             in the (uncommon) case of a time in the second half
+                             of a leap second and a precision of 1 second.  In
+                             addition, the rounding behavior during leap seconds
+                             has been changed so that for a precision of 10 
+                             seconds or coarser the beginning of the next day is
+                             used in preference to the start of the leap second.
+
+-+----------------------------------------------------------------------
+Documentation Files
+-+----------------------------------------------------------------------
+
+2013 Dec 31  sofa_ts_f.pdf   Two errors in the example program in Section
+             sofa_ts_c.pdf   4.4: "A comprehensive example: transform UTC into
+                             other times"
+                             (1) +0.5 is required to be added to the UT
+                                 variable (page 23 C version, page 24 Fortran)
+                                 as time is measured from midnight;
+                             (2) On page 24, in the routine DTDB the units for
+                                 the variables, U and V (i.e. the last two
+                                 arguments) are required in kilometers and not
+                                 in meters as calculated.
+                             This results, on page 25, in a small difference
+                             in the TDB and TCB times reported.
+
+2013 Dec 31    sofa_ts.tex  Changes as described above.  File not distributed.
+
+
+
+List of Changes for the third minor release of the 10th release of 
+SOFA as of 2014 September 08.
+
+-+-----------------------------------------------------------------------------
+FORTRAN Files
+-+-----------------------------------------------------------------------------
+
+2014 Sep 01    ldsun         Revised comments.         
+
+-+-----------------------------------------------------------------------------
+ANSI C Files
+-+-----------------------------------------------------------------------------
+
+Date emailed   File          Reason
+
+2014 Jul 01    pmsafe        An operator precedence bug meant that under some
+                             circumstances the wrong error status could be 
+                             returned.
+
+2014 Apr 22    dat           Suppress an array bounds warning produced by
+                             recent gcc versions.
+
+2014 Sep 01    ldsun         Revised comments.         
+
+2014 Jul 29    sofa.h        Editing to make the arguments consistent with
+                             those in the routines.  
+
+-+----------------------------------------------------------------------
+Documentation Files
+-+----------------------------------------------------------------------
+
+2014 Aug 28  sofa_ast_f.pdf  All changes in the Cookbooks are correcting
+             sofa_ast_c.pdf  comments in the example code.
+
+2014 Aug 28  sofa_pn.pdf     All changes in the Cookbooks are correcting 
+                             comments in the example code.
+
+2014 Aug 28  sofa_ast.tex    Changes as described above. File not 
+                             distributed.
+             sofa_pn.tex     Changes as described above. File not 
+                             distributed.
+
+
+CYH/SAB - 2014 September 8th.
+
+
+
+List of Changes for the fourth minor release of the 10th release of 
+SOFA as of 2014 October 07.
+
+
+-+----------------------------------------------------------------------
+Documentation Files
+-+----------------------------------------------------------------------
+
+2014 Oct 01  sofa_ast_f.pdf  Correct page references for iau_ATCIQN to 
+             sofa_ast_c.pdf  iau_ATICQN on page 52 in sofa_ast_f.pdf 
+                             and similarly for iauAtciqn to iauAticqn on
+                             page 52 in sofa_ast_c.pdf. Also remove pages
+                             52/53 in both versions to replace comments
+                             for the appropriate routine. 
+
+CYH/SAB - 2014 October 7th.

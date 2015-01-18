@@ -39,6 +39,12 @@ Namespace SOFA
         Private Const SOFA64DLL As String = "SOFA10-64.dll"
         Private Const SOFA_DLL_LOCATION As String = "\ASCOM\Astrometry\" 'This is appended to the Common Files path so that the calling application can dind the SOFA DLLs
 
+        ' Release and revision constants
+        Private Const SOFA_RELEASE_NUMBER As Integer = 10
+        Private Const SOFA_ISSUE_DATE As String = "2013-12-02"
+        Private Const SOFA_REVISION_NUMBER As Integer = 4 ' Not presented in the interface, maintained here for reference
+        Private Const SOFA_REVISION_DATE As String = "2014-10-07"
+
         Private TL As TraceLogger
         Private Utl As Util
         Private SofaDllHandle As IntPtr
@@ -127,7 +133,7 @@ Namespace SOFA
         ''' <returns>Integer issue number</returns>
         ''' <remarks></remarks>
         Function SofaReleaseNumber() As Integer Implements ISOFA.SofaReleaseNumber
-            Return 10 ' The release number of the issue being used
+            Return SOFA_RELEASE_NUMBER ' The release number of the issue being used
         End Function
 
         ''' <summary>
@@ -136,7 +142,7 @@ Namespace SOFA
         ''' <returns>String date in format yyyy-mm-dd</returns>
         ''' <remarks></remarks>
         Function SofaIssueDate() As String Implements ISOFA.SofaIssueDate
-            Return "2013-12-02" ' Release date of the fundamental software issue currently being used 
+            Return SOFA_ISSUE_DATE ' Release date of the fundamental software issue currently being used 
         End Function
 
         ''' <summary>
@@ -145,7 +151,7 @@ Namespace SOFA
         ''' <returns>String date in format yyyy-mm-dd</returns>
         ''' <remarks>When a new issue is employed that doesn't yet have a revision, this mehtod will return the SofaIssueDate</remarks>
         Function SofaRevisionDate() As String Implements ISOFA.SofaRevisionDate
-            Return "2014-02-20" ' Release date of the revision currently being used 
+            Return SOFA_REVISION_DATE ' Release date of the revision currently being used 
         End Function
 
         ''' <summary>

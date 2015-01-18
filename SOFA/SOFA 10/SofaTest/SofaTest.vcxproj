@@ -78,7 +78,7 @@
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)-64</TargetName>
     <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(OutDir)\Intermediate Files</IntDir>
+    <IntDir>$(OutDir)\Intermediate Files\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,12 +141,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Sofa\20131202_b\c\src\t_sofa_c.c" />
+    <ClCompile Include="..\Sofa\20131202_current\c\src\t_sofa_c.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sofa\Sofa.vcxproj">
       <Project>{82d4a273-6125-40f5-bf29-9445d302a407}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Sofa\20131202_current\c\src\sofa.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
