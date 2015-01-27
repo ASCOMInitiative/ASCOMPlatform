@@ -949,6 +949,9 @@ Module AscomSharedCode
 End Module
 #End Region
 
+''' <summary>
+''' 
+''' </summary>
 Friend Class PEReader
     Implements IDisposable
 
@@ -1160,7 +1163,12 @@ Friend Class PEReader
 #End Region
 
     Friend Sub New(ByVal FileName As String)
-        If Left(FileName, 5).ToUpper = "FILE:" Then FileName = New Uri(FileName).LocalPath 'Convert uri to local path if required, uri paths are not supported by FileStream
+        If Left(FileName, 5).ToUpper = "FILE:" Then
+            'Convert uri to local path if required, uri paths are not supported by FileStream
+            ' this method allows file names with # characters to be passed through
+            Dim u As Uri = New Uri(FileName)
+            FileName = u.LocalPath + Uri.UnescapeDataString(u.Fragment).Replace("/", "\\")
+        End If
 
         If Not File.Exists(FileName) Then Throw New FileNotFoundException("PEReader - File not found: " & FileName)
         stream = New FileStream(FileName, FileMode.Open, FileAccess.Read)
