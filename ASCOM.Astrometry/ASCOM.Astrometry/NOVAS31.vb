@@ -2,6 +2,7 @@
 Imports System.Environment
 Imports ASCOM.Utilities
 Imports ASCOM.Utilities.Exceptions
+Imports System.Threading
 
 Namespace NOVAS
 
@@ -32,6 +33,9 @@ Namespace NOVAS
 
         Private Const NOVAS_DLL_LOCATION As String = "\ASCOM\Astrometry\" 'This is appended to the Common Files path
         Private Const RACIO_FILE As String = "cio_ra.bin" 'Name of the RA of CIO binary data file
+
+        Private Const NOVAS31_MUTEX_NAME As String = "ASCOMNovas31Mutex"
+
         Private TL As TraceLogger
         Private Utl As Util
         Private Novas31DllHandle As IntPtr
@@ -45,43 +49,55 @@ Namespace NOVAS
         Sub New()
             Dim rc As Boolean, rc1 As Short, Novas31DllFile, RACIOFile, JPLEphFile As String, DENumber As Short
             Dim ReturnedPath As New System.Text.StringBuilder(260), LastError As Integer
+            Dim Novas31Mutex As Mutex
 
             TL = New TraceLogger("", "NOVAS31")
             TL.Enabled = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
+            Novas31Mutex = New Mutex(False, NOVAS31_MUTEX_NAME) ' Create a mutex that will ensure that only one NOVAS31 initialisation can occur at a time
+            Try
+                TL.LogMessage("New", "Waiting for mutex")
+                Novas31Mutex.WaitOne(10000) ' Wait up to 10 seconds for the mutex to become available
+                TL.LogMessage("New", "Got mutex")
 
-            Utl = New Util
+                Utl = New Util
 
-            'Find the root location of the common files directory containing the ASCOM support files.
-            'On a 32bit system this is \Program Files\Common Files
-            'On a 64bit system this is \Program Files (x86)\Common Files
-            If Is64Bit() Then ' 64bit application so find the 32bit folder location
-                rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, False)
-                Novas31DllFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & NOVAS64DLL
-                RACIOFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & RACIO_FILE
-                JPLEphFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & JPL_EPHEM_FILE_NAME
-            Else '32bit application so just go with the .NET returned value
-                Novas31DllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & NOVAS32DLL
-                RACIOFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & RACIO_FILE
-                JPLEphFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & JPL_EPHEM_FILE_NAME
+                'Find the root location of the common files directory containing the ASCOM support files.
+                'On a 32bit system this is \Program Files\Common Files
+                'On a 64bit system this is \Program Files (x86)\Common Files
+                If Is64Bit() Then ' 64bit application so find the 32bit folder location
+                    rc = SHGetSpecialFolderPath(IntPtr.Zero, ReturnedPath, CSIDL_PROGRAM_FILES_COMMONX86, False)
+                    Novas31DllFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & NOVAS64DLL
+                    RACIOFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & RACIO_FILE
+                    JPLEphFile = ReturnedPath.ToString & NOVAS_DLL_LOCATION & JPL_EPHEM_FILE_NAME
+                Else '32bit application so just go with the .NET returned value
+                    Novas31DllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & NOVAS32DLL
+                    RACIOFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & RACIO_FILE
+                    JPLEphFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & NOVAS_DLL_LOCATION & JPL_EPHEM_FILE_NAME
+                End If
+                TL.LogMessage("New", "Loading NOVAS31 library DLL: " + Novas31DllFile)
+
+                Novas31DllHandle = LoadLibrary(Novas31DllFile)
+                LastError = Marshal.GetLastWin32Error
+
+                If Novas31DllHandle <> IntPtr.Zero Then ' Loaded successfully
+                    TL.LogMessage("New", "Loaded NOVAS31 library OK")
+                Else ' Did not load 
+                    TL.LogMessage("New", "Error loading NOVAS31 library: " & LastError.ToString("X8"))
+                    Throw New Exception("Error code returned from LoadLibrary when loading NOVAS31 library: " & LastError.ToString("X8"))
+                End If
+
+                'Establish the location of the file of CIO RAs
+                SetRACIOFile(RACIOFile)
+
+                ' Open the ephemerides file and set its applicable date range
+                rc1 = Ephem_Open(JPLEphFile, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE, DENumber)
+            Finally
+                Novas31Mutex.ReleaseMutex() ' Release the initialisation mutex
+            End Try
+            If rc1 > 0 Then
+                TL.LogMessage("New", "Unable to open ephemeris file: " & JPLEphFile & ", RC: " & rc1)
+                Throw New HelperException("Unable to open ephemeris file: " & JPLEphFile & ", RC: " & rc1)
             End If
-            TL.LogMessage("New", "Loading NOVAS31 library DLL: " + Novas31DllFile)
-
-            Novas31DllHandle = LoadLibrary(Novas31DllFile)
-            LastError = Marshal.GetLastWin32Error
-
-            If Novas31DllHandle <> IntPtr.Zero Then ' Loaded successfully
-                TL.LogMessage("New", "Loaded NOVAS31 library OK")
-            Else ' Did not load 
-                TL.LogMessage("New", "Error loading NOVAS31 library: " & LastError.ToString("X8"))
-                Throw New Exception("Error code returned from LoadLibrary when loading NOVAS31 library: " & LastError.ToString("X8"))
-            End If
-
-            'Establish the location of the file of CIO RAs
-            SetRACIOFile(RACIOFile)
-
-            ' Open the ephemerides file and set its applicable date range
-            rc1 = Ephem_Open(JPLEphFile, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE, DENumber)
-            If rc1 > 0 Then Throw New HelperException("Unable to open ephemeris file: " & JPLEphFile & ", RC: " & rc1)
 
             TL.LogMessage("New", "NOVAS31 initialised OK")
         End Sub
@@ -90,26 +106,36 @@ Namespace NOVAS
 
         ' IDisposable
         Protected Overridable Sub Dispose(ByVal disposing As Boolean)
-            If Not Me.disposedValue Then
-                If disposing Then
-                    ' Free other state (managed objects).
+            Dim Novas31Mutex As Mutex
+            Novas31Mutex = Nothing
 
-                    If Not (Utl Is Nothing) Then
-                        Utl.Dispose()
-                        Utl = Nothing
+            Try
+                Novas31Mutex = New Mutex(False, NOVAS31_MUTEX_NAME) ' Create a mutex that will ensure that only one NOVAS31 dispose can occur at a time
+                Novas31Mutex.WaitOne(10000) ' Wait up to 10 seconds for the mutex to become available
+
+                If Not Me.disposedValue Then
+                    If disposing Then
+                        ' Free other state (managed objects).
+
+                        If Not (Utl Is Nothing) Then
+                            Utl.Dispose()
+                            Utl = Nothing
+                        End If
+                        If Not (TL Is Nothing) Then
+                            TL.Enabled = False
+                            TL.Dispose()
+                            TL = Nothing
+                        End If
                     End If
-                    If Not (TL Is Nothing) Then
-                        TL.Enabled = False
-                        TL.Dispose()
-                        TL = Nothing
-                    End If
+
+                    ' Free your own state (unmanaged objects) and set large fields to null.
+                    Try : Ephem_Close() : Catch : End Try ' Close the ephemeris file if its open
+                    Try : FreeLibrary(Novas31DllHandle) : Catch : End Try ' Free the NOVAS library but don't return any error value
                 End If
-
-                ' Free your own state (unmanaged objects) and set large fields to null.
-                Try : FreeLibrary(Novas31DllHandle) : Catch : End Try ' Free the NOVAS library but don't return any error value
-                Try : Ephem_Close() : Catch : End Try ' Close the ephemeris file if its open
-            End If
-            Me.disposedValue = True
+                Me.disposedValue = True
+            Finally
+                If Not (Novas31Mutex Is Nothing) Then Novas31Mutex.ReleaseMutex()
+            End Try
         End Sub
 
         ' This code added by Visual Basic to correctly implement the disposable pattern.
