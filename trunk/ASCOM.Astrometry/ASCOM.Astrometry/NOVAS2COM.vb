@@ -39,6 +39,7 @@ Namespace NOVAS
     <Guid("C3F04186-CD53-40fb-8B2A-B52BE955956D"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class NOVAS2COM
         Implements INOVAS2
 

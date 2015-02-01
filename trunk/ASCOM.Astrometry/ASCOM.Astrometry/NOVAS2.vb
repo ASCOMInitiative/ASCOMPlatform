@@ -42,6 +42,7 @@ Namespace NOVAS
     ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.</para>
     ''' </remarks>
     <ComVisible(False)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class NOVAS2 'Static classes cannot be exposed through COM
 
         Private Const NOVAS32Dll As String = "NOVAS-C.dll"
@@ -1165,7 +1166,7 @@ Namespace NOVAS
                 sun_eph32(jd, ra, dec, dis)
             End If
         End Sub
-        
+
 #End Region
 
 #Region "DeltaT Member"

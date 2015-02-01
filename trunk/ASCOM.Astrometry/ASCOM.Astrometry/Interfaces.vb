@@ -193,6 +193,15 @@ Namespace Transform
         ''' Julian date from the PC's current date and time. If this property is non zero, that terrestrial time Julian date is used in preference 
         ''' to the value derrived from the PC's clock.</remarks>
         <DispId(19)> Property JulianDateTT As Double
+        ''' <summary>
+        ''' Sets or return the Julian date (UTC) for which the transform will be made
+        ''' </summary>
+        ''' <value>Julian date (UTC) of the transform</value>
+        ''' <returns>UTC Julian date that will be used by Transform or zero if the PC's current clock value will be used to calculate
+        ''' the Julian date.</returns>
+        ''' <remarks>The inital value of this parameter is 0 which is a special value that forces Transform to replicate original behaviour by determining the  
+        ''' Julian date from the PC's current date and time. If this property is non zero, that UTC Julian date is used in preference 
+        ''' to the value derrived from the PC's clock.</remarks>
         <DispId(20)> Property JulianDateUTC As Double
     End Interface
 End Namespace

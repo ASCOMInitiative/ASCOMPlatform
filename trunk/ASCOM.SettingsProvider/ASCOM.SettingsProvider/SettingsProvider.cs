@@ -187,8 +187,8 @@ namespace ASCOM
         /// <summary>
         ///   Persists a collection of settings values to the underlying ASCOM Profile store.
         /// </summary>
-        /// <param name = "context"></param>
-        /// <param name = "collection"></param>
+        /// <param name = "context">Context to which the settings will be saved</param>
+        /// <param name = "collection">Settings to be saved</param>
         public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
         {
             Diagnostics.TraceInfo("Persisting ASCOM Profile Properties for DeviceID={0}, {1} properties",

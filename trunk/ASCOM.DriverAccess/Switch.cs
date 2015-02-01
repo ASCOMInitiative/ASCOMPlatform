@@ -140,7 +140,7 @@ namespace ASCOM.DriverAccess
         /// <returns>
         ///   <c>true</c> if the device can be written to, otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="T:AASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
+        /// <exception cref="T:ASCOM.InvalidValueException">If id is outside the range 0 to <see cref="MaxSwitch"/> - 1</exception>
         /// <remarks>
         /// <p style="color:red"><b>Must be implemented, must not throw an ASCOM.MethodNotImplementedException</b></p>
         /// <para>This method was first introduced in Version 2.</para>

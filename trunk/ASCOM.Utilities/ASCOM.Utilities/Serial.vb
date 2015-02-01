@@ -2,7 +2,7 @@
 
 Option Strict On
 Option Explicit On
-
+Imports ASCOM
 Imports System.IO.Ports
 Imports ASCOM.Utilities.Interfaces
 Imports ASCOM.Utilities.Exceptions

@@ -26,6 +26,7 @@ Namespace Transform
     <Guid("779CD957-5502-4939-A661-EBEE9E1F485E"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the regular Transform component rather than this old platform 5.5.6 compatibility version, which is no longer maintained.")> _
     Public Class Transform
         Implements ITransform, IDisposable
         Private disposedValue As Boolean = False        ' To detect redundant calls
