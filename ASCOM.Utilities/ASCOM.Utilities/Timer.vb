@@ -4,6 +4,7 @@ Option Strict On
 Option Explicit On
 Imports ASCOM.Utilities.Interfaces
 Imports System.Runtime.InteropServices
+Imports System
 
 ''' <summary>
 ''' Provides a repeating timer with associated tick event.
@@ -284,4 +285,7 @@ Public Class [Timer]
 
 
 
+    Private Sub Timer_Tick() Handles Me.Tick
+
+    End Sub
 End Class

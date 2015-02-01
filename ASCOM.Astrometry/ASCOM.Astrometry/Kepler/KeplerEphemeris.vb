@@ -68,6 +68,7 @@ Namespace Kepler
     <Guid("2F2B0413-1F83-4777-B3B4-38DE3C32DC6B"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class Ephemeris
         Implements IEphemeris
 

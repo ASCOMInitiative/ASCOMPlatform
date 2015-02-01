@@ -35,6 +35,7 @@ Namespace NOVAS
     ''' and calls the relevant 32 or 64bit code according to its environment.</para>
     ''' </remarks>
     <ComVisible(False)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class NOVAS2 'Static classes cannot be exposed through COM
 
         Private Const NOVAS32Dll As String = "NOVAS-C.dll"

@@ -31,6 +31,7 @@ Namespace NOVASCOM
     <Guid("6BD93BA2-79C5-4077-9630-B7C6E30B2FDF"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class Earth
         Implements IEarth
 
@@ -281,6 +282,7 @@ Namespace NOVASCOM
     <Guid("78F157E4-D03D-4efb-8248-745F9C63A850"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class Planet
         Implements IPlanet
 
@@ -889,6 +891,7 @@ Namespace NOVASCOM
     <Guid("8D8B7043-49AA-40be-881F-0EC5D8E2213D"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class PositionVector
         Implements IPositionVector, IPositionVectorExtra
         Private xOk, yOk, zOk, RADecOk, AzElOk As Boolean
@@ -1376,6 +1379,7 @@ Namespace NOVASCOM
     <Guid("46ACFBCE-4EEE-496d-A4B6-7A5FDDD8F969"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class Site
         Implements ISite
         Private vHeight, vLatitude, vLongitude, vPressure, vTemperature As Double
@@ -1511,6 +1515,7 @@ Namespace NOVASCOM
     <Guid("8FD58EDE-DF7A-4fdc-9DEC-FD0B36424F5F"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class Star
         Implements IStar
         Private m_rv, m_plx, m_pmdec, m_pmra, m_ra, m_dec, m_deltat As Double
@@ -2224,6 +2229,7 @@ Namespace NOVASCOM
     <Guid("25F2ED0A-D0C1-403d-86B9-5F7CEBE97D87"), _
     ClassInterface(ClassInterfaceType.None), _
     ComVisible(True)> _
+    <Obsolete("This class will be withdrawn in the next major release, please use the SOFA or NOVAS31 classes instead")> _
     Public Class VelocityVector
         Implements IVelocityVector, IVelocityVectorExtra
 

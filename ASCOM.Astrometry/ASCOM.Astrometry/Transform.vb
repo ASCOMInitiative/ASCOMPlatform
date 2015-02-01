@@ -787,7 +787,7 @@ Namespace Transform
             Return Dec
         End Function
 
-        Public Function Julian2DateTime(m_JulianDate As Double) As DateTime
+        Private Function Julian2DateTime(m_JulianDate As Double) As DateTime
             Dim L, N, I, J, JDLong As Long
             Dim JDFraction, Remainder As Double
             Dim Day, Month, Year, Hours, Minutes, Seconds, MilliSeconds As Integer
