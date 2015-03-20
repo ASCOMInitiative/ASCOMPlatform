@@ -28,8 +28,8 @@ Partial Class SetupDialogForm
         Me.Label1 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.label2 = New System.Windows.Forms.Label()
-        Me.textBox1 = New System.Windows.Forms.TextBox()
         Me.chkTrace = New System.Windows.Forms.CheckBox()
+        Me.ComboBoxComPort = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -98,13 +98,6 @@ Partial Class SetupDialogForm
         Me.label2.TabIndex = 7
         Me.label2.Text = "Comm Port"
         '
-        'textBox1
-        '
-        Me.textBox1.Location = New System.Drawing.Point(76, 96)
-        Me.textBox1.Name = "textBox1"
-        Me.textBox1.Size = New System.Drawing.Size(158, 20)
-        Me.textBox1.TabIndex = 6
-        '
         'chkTrace
         '
         Me.chkTrace.AutoSize = True
@@ -115,6 +108,14 @@ Partial Class SetupDialogForm
         Me.chkTrace.Text = "Trace on"
         Me.chkTrace.UseVisualStyleBackColor = True
         '
+        'ComboBoxComPort
+        '
+        Me.ComboBoxComPort.FormattingEnabled = True
+        Me.ComboBoxComPort.Location = New System.Drawing.Point(76, 96)
+        Me.ComboBoxComPort.Name = "ComboBoxComPort"
+        Me.ComboBoxComPort.Size = New System.Drawing.Size(84, 21)
+        Me.ComboBoxComPort.TabIndex = 9
+        '
         'SetupDialogForm
         '
         Me.AcceptButton = Me.OK_Button
@@ -122,9 +123,9 @@ Partial Class SetupDialogForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(359, 229)
+        Me.Controls.Add(Me.ComboBoxComPort)
         Me.Controls.Add(Me.chkTrace)
         Me.Controls.Add(Me.label2)
-        Me.Controls.Add(Me.textBox1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -147,7 +148,7 @@ Partial Class SetupDialogForm
 	Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Private WithEvents label2 As System.Windows.Forms.Label
-    Private WithEvents textBox1 As System.Windows.Forms.TextBox
     Friend WithEvents chkTrace As System.Windows.Forms.CheckBox
+    Friend WithEvents ComboBoxComPort As System.Windows.Forms.ComboBox
 
 End Class

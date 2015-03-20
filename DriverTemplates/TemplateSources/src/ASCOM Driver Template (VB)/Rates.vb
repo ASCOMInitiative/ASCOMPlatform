@@ -186,7 +186,8 @@ Public Class TrackingRates
     End Property
 
     Public Function GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator, ITrackingRates.GetEnumerator
-        Return m_TrackingRates.GetEnumerator()
+		pos = -1
+		Return DirectCast(Me, IEnumerator)
     End Function
 
     Public Sub Dispose() Implements ITrackingRates.Dispose
