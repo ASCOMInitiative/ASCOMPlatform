@@ -219,7 +219,7 @@ Class DeviceTelescope
 
     Public Function DestinationSideOfPier(RightAscension As Double, Declination As Double) As PierSide Implements ITelescopeV3.DestinationSideOfPier
         TL.LogMessage("DestinationSideOfPier Get", "Not implemented")
-        Throw New ASCOM.PropertyNotImplementedException("DestinationSideOfPier", False)
+        Throw New ASCOM.MethodNotImplementedException("DestinationSideOfPier")
     End Function
 
     Public Property DoesRefraction() As Boolean Implements ITelescopeV3.DoesRefraction
@@ -496,7 +496,7 @@ Class DeviceTelescope
     Public Property UTCDate() As DateTime Implements ITelescopeV3.UTCDate
         Get
             Dim utcDate__1 As DateTime = DateTime.UtcNow
-            TL.LogMessage("TrackingRates", "Get - " & [String].Format("MM/dd/yy HH:mm:ss", utcDate__1))
+            TL.LogMessage("UTCDate", String.Format("Get - {0}", utcDate__1))
             Return utcDate__1
         End Get
         Set(value As DateTime)
