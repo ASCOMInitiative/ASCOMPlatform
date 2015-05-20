@@ -48,7 +48,8 @@ namespace ASCOM.DriverAccess
 
             memberFactory = new MemberFactory(deviceProgId, TL); // Create a memberfactory object and pass in the TraceLogger
 
-            interfaceVersion = this.InterfaceVersion;
+            try { interfaceVersion = this.InterfaceVersion; }
+            catch { interfaceVersion = 1; }
         }
 
         /// <summary>
