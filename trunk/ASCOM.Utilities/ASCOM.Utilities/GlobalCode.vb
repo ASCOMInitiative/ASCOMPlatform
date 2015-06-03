@@ -956,7 +956,8 @@ Friend Class PEReader
     Implements IDisposable
 
 #Region "Constants"
-    Friend Const CLR_HEADER As Integer = 14
+    Friend Const CLR_HEADER As Integer = 14 ' Header number of the CLR information, if present
+    Private Const MAX_HEADERS_TO_CHECK As Integer = 1000 ' Safety limit to ensure that we don't lock up the machine if we get a PE image that indicates it has a huge number of header directories
 #End Region
 
 #Region "Enums"
@@ -1187,14 +1188,23 @@ Friend Class PEReader
         End If
         _ntHeaders.FileHeader = MarshalBytesTo(Of IMAGE_FILE_HEADER)(reader) ' This starts 4 bytes on from the start of the signature (already here by reading the signature itself)
 
-
         If Is32bitCode() Then ' Read optional headers
             _ntHeaders.OptionalHeader32 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER32)(reader)
-            If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes <> &H10 Then ' Should have 16 data directories
-                Throw New InvalidOperationException("Invalid number of data directories in NT header")
-            End If
+            ' The PE specification does not mandate that NumberOfRvaAndSizes be 16, it is actually a variable.
+            ' MS have used DataDirectory 12 (on 0..n numbering) to contain a pointer to CLR information so I have 
+            ' removed this test and replaced it with a test further down the code to confirm that 
+            ' DatDictionary 12 does exist before attempting to read it.
 
-            For i As Integer = 0 To CInt(_ntHeaders.OptionalHeader32.NumberOfRvaAndSizes) - 1
+            ' Removed by Peter Simpson 3rd June 2015
+            'If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes <> &H10 Then ' Should have 16 data directories
+            'Throw New InvalidOperationException("Invalid number of data directories in NT header")
+            'End If
+
+            ' Added by Peter Simpson 3rd June 2015
+            Dim NumberOfHeadersToCheck As Integer = MAX_HEADERS_TO_CHECK
+            If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes < MAX_HEADERS_TO_CHECK Then NumberOfHeadersToCheck = CInt(_ntHeaders.OptionalHeader32.NumberOfRvaAndSizes)
+
+            For i As Integer = 0 To NumberOfHeadersToCheck - 1
                 If _ntHeaders.OptionalHeader32.DataDirectory(i).Size > 0 Then
                     _sectionHeaders.Add(MarshalBytesTo(Of IMAGE_SECTION_HEADER)(reader))
                 End If
@@ -1206,15 +1216,18 @@ Friend Class PEReader
 
             'MsgBox("CLR_HEADER Virtual Address: " & Hex(_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress) & " BaseOfCode" & Hex(_ntHeaders.OptionalHeader32.BaseOfCode) & " Pointer to raw data: " & Hex(TextBase) & "Ans: " & Hex(_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress - _ntHeaders.OptionalHeader32.BaseOfCode + TextBase))
 
-            If _ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress > 0 Then
-                reader.BaseStream.Seek(_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress - _ntHeaders.OptionalHeader32.BaseOfCode + TextBase, SeekOrigin.Begin)
-                CLR = MarshalBytesTo(Of IMAGE_COR20_HEADER)(reader)
+            If NumberOfHeadersToCheck >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the lcoation of the CLR header
+                If _ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress > 0 Then
+                    reader.BaseStream.Seek(_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress - _ntHeaders.OptionalHeader32.BaseOfCode + TextBase, SeekOrigin.Begin)
+                    CLR = MarshalBytesTo(Of IMAGE_COR20_HEADER)(reader)
+                End If
             End If
         Else
             _ntHeaders.OptionalHeader64 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER64)(reader)
-            If _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes <> &H10 Then ' Should have 16 data directories
-                Throw New InvalidOperationException("Invalid number of data directories in NT header")
-            End If
+            ' Removed because this test violates the PE specification Peter Simpson 3/6/15
+            'If _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes <> &H10 Then ' Should have 16 data directories
+            'Throw New InvalidOperationException("Invalid number of data directories in NT header")
+            'End If
 
         End If
 
@@ -1271,10 +1284,19 @@ Friend Class PEReader
     End Property
 
     Friend Function IsDotNetAssembly() As Boolean
+        ' Revised this code to check that there are at least CLR_HEADER + 1 headers in the executable
         If Is32bitCode() Then
-            Return (_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).Size > 0)
+            If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
+                Return (_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).Size > 0)
+            Else
+                Return False
+            End If
         Else
-            Return (_ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).Size > 0)
+            If _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
+                Return (_ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).Size > 0)
+            Else
+                Return False
+            End If
         End If
     End Function
 
