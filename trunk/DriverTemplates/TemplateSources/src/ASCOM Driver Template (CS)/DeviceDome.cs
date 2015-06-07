@@ -164,7 +164,7 @@ class DeviceDome
     {
         get
         {
-            tl.LogMessage("CanSyncAzimuth Get", false.ToString());
+            tl.LogMessage("ShutterStatus Get", false.ToString());
             if (domeShutterState)
             {
                 tl.LogMessage("ShutterStatus", ShutterState.shutterOpen.ToString());
