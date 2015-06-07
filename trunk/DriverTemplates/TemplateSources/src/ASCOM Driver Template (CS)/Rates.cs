@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using System.Collections;
+using System.Threading;
 
 namespace ASCOM.TEMPLATEDEVICENAME
 {
@@ -147,13 +148,20 @@ namespace ASCOM.TEMPLATEDEVICENAME
 	// The ClassInterface/None addribute prevents an empty interface called
 	// _TrackingRates from being created and used as the [default] interface
 	//
+    // This class is implemented in this way so that applications based on .NET 3.5
+    // will work with this .NET 4.0 object.  Changes to this have proved to be challenging
+    // and it is strongly suggested that it isn't changed.
+    //
     [Guid("49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB")]
 	[ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
 	public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
 	{
 		private readonly DriveRates[] trackingRates;
-        private static int pos = -1;
+
+        // this is used to make the index thread safe
+        private readonly ThreadLocal<int> pos = new ThreadLocal<int>(() => { return -1; });
+        private static readonly object lockObj = new object();
 
 		//
 		// Default constructor - Internal prevents public creation
@@ -179,7 +187,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
 		public IEnumerator GetEnumerator()
 		{
-            pos = -1;
+            pos.Value = -1;
             return this as IEnumerator;
         }
 
@@ -201,26 +209,32 @@ namespace ASCOM.TEMPLATEDEVICENAME
         {
             get
             {
-                if (pos < 0 || pos >= trackingRates.Length)
+                lock (lockObj)
                 {
-                    throw new System.InvalidOperationException();
+                    if (pos.Value < 0 || pos.Value >= trackingRates.Length)
+                    {
+                        throw new System.InvalidOperationException();
+                    }
+                    return trackingRates[pos.Value];
                 }
-                return trackingRates[pos];
             }
         }
 
         public bool MoveNext()
         {
-            if (++pos >= trackingRates.Length)
+            lock (lockObj)
             {
-                return false;
+                if (++pos.Value >= trackingRates.Length)
+                {
+                    return false;
+                }
+                return true;
             }
-            return true;
         }
 
         public void Reset()
         {
-            pos = -1;
+            pos.Value = -1;
         }
         #endregion
     }
