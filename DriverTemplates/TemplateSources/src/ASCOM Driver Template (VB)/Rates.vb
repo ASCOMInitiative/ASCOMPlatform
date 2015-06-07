@@ -156,7 +156,10 @@ Public Class TrackingRates
     '		=========================
 
     Private m_TrackingRates(-1) As DriveRates           ' Empty array, but an array nonetheless
-    Private pos As Integer = -1
+    ' This should make the enumerator thread safe.
+    Private ReadOnly pos As Threading.ThreadLocal(Of Integer)
+    Private ReadOnly lockObj As Object = New Object
+
     '
     ' Default constructor - Friend prevents public creation
     ' of instances. Returned by Telescope.AxisRates.
@@ -186,12 +189,13 @@ Public Class TrackingRates
     End Property
 
     Public Function GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator, ITrackingRates.GetEnumerator
-		pos = -1
-		Return DirectCast(Me, IEnumerator)
+        pos.Value = -1
+        Return DirectCast(Me, IEnumerator)
     End Function
 
     Public Sub Dispose() Implements ITrackingRates.Dispose
-        Throw New System.NotImplementedException()
+        pos.Dispose()
+        'Throw New System.NotImplementedException()
     End Sub
 
     Default Public ReadOnly Property Item(ByVal Index As Integer) As DriveRates Implements ITrackingRates.Item
@@ -204,24 +208,34 @@ Public Class TrackingRates
 
 #Region "IEnumerator members"
     Public Function MoveNext() As Boolean Implements IEnumerator.MoveNext
-        pos = pos + 1
-        If pos >= m_TrackingRates.Length Then
-            Return False
-        End If
-        Return True
+        SyncLock lockObj
+            If Not pos.IsValueCreated Then
+                pos.Value = -1
+            End If
+            pos.Value += 1
+            If pos.Value >= m_TrackingRates.Length Then
+                Return False
+            End If
+            Return True
+        End SyncLock
     End Function
 
     Public ReadOnly Property Current As Object Implements IEnumerator.Current
         Get
-            If pos < 0 Or pos >= m_TrackingRates.Length Then
-                Throw New InvalidOperationException()
-            End If
-            Return m_TrackingRates(pos)
+            SyncLock lockObj
+                If Not pos.IsValueCreated Then
+                    pos.Value = -1
+                End If
+                If pos.Value < 0 Or pos.Value >= m_TrackingRates.Length Then
+                    Throw New InvalidOperationException()
+                End If
+                Return m_TrackingRates(pos.Value)
+            End SyncLock
         End Get
     End Property
 
     Public Sub Reset() Implements IEnumerator.Reset
-        pos = -1
+        pos.Value = -1
     End Sub
 #End Region
 
