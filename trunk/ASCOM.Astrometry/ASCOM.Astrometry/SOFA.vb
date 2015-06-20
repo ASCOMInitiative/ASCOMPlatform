@@ -35,15 +35,15 @@ Namespace SOFA
     Public Class SOFA
         Implements ISOFA, IDisposable
 
-        Private Const SOFA32DLL As String = "SOFA10.dll" 'Names of SOFA 32 and 64bit DLL files
-        Private Const SOFA64DLL As String = "SOFA10-64.dll"
+        Private Const SOFA32DLL As String = "SOFA11.dll" 'Names of SOFA 32 and 64bit DLL files
+        Private Const SOFA64DLL As String = "SOFA11-64.dll"
         Private Const SOFA_DLL_LOCATION As String = "\ASCOM\Astrometry\" 'This is appended to the Common Files path so that the calling application can dind the SOFA DLLs
 
         ' Release and revision constants
-        Private Const SOFA_RELEASE_NUMBER As Integer = 10
-        Private Const SOFA_ISSUE_DATE As String = "2013-12-02"
-        Private Const SOFA_REVISION_NUMBER As Integer = 4 ' Not presented in the interface, maintained here for reference
-        Private Const SOFA_REVISION_DATE As String = "2014-10-07"
+        Private Const SOFA_RELEASE_NUMBER As Integer = 11
+        Private Const SOFA_ISSUE_DATE As String = "2015-02-09"
+        Private Const SOFA_REVISION_NUMBER As Integer = 1 ' Not presented in the interface, maintained here for reference
+        Private Const SOFA_REVISION_DATE As String = "2015-04-02"
 
         Private TL As TraceLogger
         Private Utl As Util

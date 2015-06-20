@@ -6704,7 +6704,7 @@ FALSE
 FALSE
 FALSE
 {94A346DE-FF77-4950-94DD-74E16651F5F7}
-..\..\..\..\SOFA\SOFA 10\Sofa\x64\Release\SOFA10-64.pdb
+..\..\..\..\SOFA\SOFA Releases\Sofa\x64\Release\SOFA11-64.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -6717,7 +6717,7 @@ FALSE
 FALSE
 FALSE
 {B665586D-FEAA-444B-9D16-D9F778BA6606}
-..\..\..\..\SOFA\SOFA 10\Sofa\Win32\Release\SOFA10.pdb
+..\..\..\..\SOFA\SOFA Releases\Sofa\Win32\Release\SOFA11.pdb
 FALSE|
 $WINDIR$\Symbols\dll
 FALSE
@@ -6730,7 +6730,7 @@ FALSE
 FALSE
 FALSE
 {0F2955FF-ED87-4107-823F-279763A4142C}
-..\..\..\..\SOFA\SOFA 10\Sofa\Win32\Release\SOFA10.dll
+..\..\..\..\SOFA\SOFA Releases\Sofa\Win32\Release\SOFA11.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -6743,7 +6743,7 @@ FALSE
 FALSE
 FALSE
 {BD20D395-35BC-44D1-AC77-B54024C41505}
-..\..\..\..\SOFA\SOFA 10\SofaTest\Win32\Release\SofaTest10.exe
+..\..\..\..\SOFA\SOFA Releases\SofaTest\Win32\Release\SofaTest11.exe
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -6756,7 +6756,7 @@ FALSE
 FALSE
 FALSE
 {A2E1184F-EE0D-4204-AD36-37C499DF5BCF}
-..\..\..\..\SOFA\SOFA 10\SofaTest\x64\Release\SofaTest10-64.exe
+..\..\..\..\SOFA\SOFA Releases\SofaTest\x64\Release\SofaTest11-64.exe
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE
@@ -6769,7 +6769,7 @@ FALSE
 FALSE
 FALSE
 {02D3549A-1029-450D-881D-AF2420EDB712}
-..\..\..\..\SOFA\SOFA 10\Sofa\x64\Release\SOFA10-64.dll
+..\..\..\..\SOFA\SOFA Releases\Sofa\x64\Release\SOFA11-64.dll
 FALSE|
 $COMMONFILES$\ASCOM\Astrometry
 FALSE

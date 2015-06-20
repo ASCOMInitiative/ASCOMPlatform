@@ -930,12 +930,12 @@ else
     Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.pdb to $COMMONFILES$\ASCOM\Switch\Switch V2
     Install Files ..\..\..\..\Drivers and Simulators\SwitchV2 Simulator\SwitchServer\bin\Release\ASCOM.Simulator.Switch.dll.config to $COMMONFILES$\ASCOM\Switch\Switch V2
     Comment: Platform 6.1 SP1 SOFA Files
-    Install Files ..\..\..\..\SOFA\SOFA 10\Sofa\Win32\Release\SOFA10.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files ..\..\..\..\SOFA\SOFA 10\Sofa\Win32\Release\SOFA10.pdb to $WINDIR$\Symbols\dll
-    Install Files ..\..\..\..\SOFA\SOFA 10\SofaTest\Win32\Release\SofaTest10.exe to $COMMONFILES$\ASCOM\Astrometry
-    Install Files ..\..\..\..\SOFA\SOFA 10\Sofa\x64\Release\SOFA10-64.dll to $COMMONFILES$\ASCOM\Astrometry
-    Install Files ..\..\..\..\SOFA\SOFA 10\Sofa\x64\Release\SOFA10-64.pdb to $WINDIR$\Symbols\dll
-    Install Files ..\..\..\..\SOFA\SOFA 10\SofaTest\x64\Release\SofaTest10-64.exe to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\SOFA\SOFA Releases\Sofa\Win32\Release\SOFA11.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\SOFA\SOFA Releases\Sofa\Win32\Release\SOFA11.pdb to $WINDIR$\Symbols\dll
+    Install Files ..\..\..\..\SOFA\SOFA Releases\SofaTest\Win32\Release\SofaTest11.exe to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\SOFA\SOFA Releases\Sofa\x64\Release\SOFA11-64.dll to $COMMONFILES$\ASCOM\Astrometry
+    Install Files ..\..\..\..\SOFA\SOFA Releases\Sofa\x64\Release\SOFA11-64.pdb to $WINDIR$\Symbols\dll
+    Install Files ..\..\..\..\SOFA\SOFA Releases\SofaTest\x64\Release\SofaTest11-64.exe to $COMMONFILES$\ASCOM\Astrometry
     [END REGION]
     [DEFINE REGION: Platform 6 Content]
     Comment: Platform 6 Documents
