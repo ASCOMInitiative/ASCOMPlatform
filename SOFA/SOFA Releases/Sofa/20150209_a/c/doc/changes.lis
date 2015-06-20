@@ -1,0 +1,135 @@
+                   Updates for SOFA Release 11 : 2015 February 2
+                   - - - - - - - - - - - - - - - - - - - - - - -
+
+Changes/updates fall into the following categories: 
+
+1. A leap second at the end of June 2015, requires updates to the 
+   iau_DAT (dat.for) and iauDat (dat.c) routines.
+   
+2. Introduction of two new routines, G2ICRS and ICRS2G (both Fortran 
+   and C), creating a new category entitled "Galactic coordinates".
+
+3. A few minor changes to a few routines to remove some compiler 
+   warnings; (1) Changes in the test for zero in C2IXYZ, GC2GDE, RM2V, 
+   RV2M, and multithread precaution in CAL2JD in the Fortan version only.
+
+4. Updated test programs t_sofa_f.for and t_sofa_c.c.  Updated the 
+   include header file sofa.h.
+   
+5. Documentation revision, moving the routines STARPV and PVSTAR 
+   (category Star Space Motion) and PMSAFE and STARPM (category Star 
+   Catalog Conversions) into Astrometry.  This results in the removal 
+   of the category Star Space Motion.
+   
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Fortran:
+--------
+
+iau_C2IXYS   there was a test for zero that could potentially cause 
+             compiler warnings.  The test has been changed.
+             
+iau_CAL2JD   a value in a DATA-initialized array was being changed
+             during execution.  This had consequences for multi-thread
+             code.  The algorithm has been changed to avoid the 
+             difficulty.             
+             
+iau_DAT      a leap second is now required in UTC for 2015 June 30. 
+
+iau_G2ICRS   transformation from Galactic Coordinates to ICRS.  A new 
+             routine.
+
+iau_GC2GDE   there was a test for zero that could potentially cause 
+             compiler warnings.  The test has been changed.
+             
+iau_ICRS2G   transformation from ICRS to Galactic Coordinates.  A new
+             routine.
+             
+iau_RM2V     there was a test for zero that could potentially cause 
+             compiler warnings.  The test has been changed.
+
+iau_RV2M     there was a test for zero that could potentially cause 
+             compiler warnings.  The test has been changed.
+             
+t_sofa_f     program updated with the two new Galactic Coordinate 
+             tansformations.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+ANSI C:
+-------
+
+iauC2ixys    there was a test for zero that could potentially cause 
+             compiler warnings.  The test has been changed.
+             
+iauDat       a leap second is now required in UTC for 2015 June 30.
+
+iauG2icrs    transformation from Galactic Coordinates to ICRS.  A new 
+             routine.           
+
+iauGc2gde    there was a test for zero that could potentially cause 
+             compiler warnings.  The test has been changed.
+             
+iauIcrs2g    transformation from Galactic Coordinates to ICRS.  A new 
+             routine.
+             
+iauRm2v      there was a test for zero that could potentially cause 
+             compiler warnings.  The test has been changed.
+
+iauRv2m      there was a test for zero that could potentially cause 
+             compiler warnings.  The test has been changed.
+        
+sofa.h       addition of the new functions, removal of duplicate 
+             functions.  All functions are listed in the categories 
+             that are given on the website and in the manual.
+             
+t_sofa_c     program updated with the two new Galactic Coordinate 
+             tansformations.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+Documentation:
+--------------
+
+intro.lis    Minor change.
+
+sofa_lib.lis New routines added.  The routines STARPV, PVSTA, PMSAFE and 
+             STARPM into Astrometry. Category Star Space Motion deleted.
+             This list harmonised with sofa.h and the website.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+End of Updates
+2015 February 9
+CYH/SAB
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
+
+
+                   Updates for SOFA Release 11a : 2015 March 4
+                   - - - - - - - - - - - - - - - - - - - - - - 
+
+This minor release (11a) contains a change to suppress a warning message 
+given by one C compiler.  The change does not affect the behaviour of the 
+routine and it is not essential that you update your libraries 
+(particularly if you are a Fortran user).
+
+The change had already been made in the 2014 September 9 (10c) release, 
+but due to an oversight was not present in the current release.  The 
+Fortran code has also been modified for harmony. 
+
+Summary of Changes
+
+iauDat      A change has been made to the ANSI C version to suppress 
+            an array bounds warning produced by recent gcc versions.
+            
+iau_DAT     A change has been made to the Fortran version to ensure 
+            equivalence between the Fortran and ANSI C versions.
+
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+End of Updates
+2015 March 4
+CYH
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
