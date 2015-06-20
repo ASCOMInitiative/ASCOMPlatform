@@ -16,7 +16,7 @@ Namespace AstroUtils
         Implements IAstroUtils, IDisposable
 
         Private TL As TraceLogger, Utl As Util, Nov31 As NOVAS.NOVAS31, RegAccess As RegistryAccess
-        Private CurrentLeapSeconds As Integer
+        Private UtcTaiOffset As Integer
 
         Friend Structure BodyInfo
             Public Altitude As Double
@@ -33,8 +33,8 @@ Namespace AstroUtils
             RegAccess = New RegistryAccess
             TL.LogMessage("New", "AstroUtils created Utilities component OK")
             'Set the current number of leap seconds once for this instance
-            CurrentLeapSeconds = CInt(RegAccess.GetProfile(ASTROMETRY_SUBKEY, LEAP_SECONDS_VALUENAME, CURRENT_LEAP_SECONDS.ToString))
-            TL.LogMessage("New", "Leap seconds: " & CurrentLeapSeconds)
+            UtcTaiOffset = CInt(RegAccess.GetProfile(ASTROMETRY_SUBKEY, UTC_TAI_OFFSET_VALUENAME, TAI_UTC_OFFSET.ToString))
+            TL.LogMessage("New", "Leap seconds: " & UtcTaiOffset)
             TL.LogMessage("New", "Finished initialisation OK")
         End Sub
         Private disposedValue As Boolean ' To detect redundant calls
@@ -221,7 +221,7 @@ Namespace AstroUtils
                 TTDate = UT1Date.Add(DeltaTTimespan) 'Add delta-t to UT1 to yield TT
             Else ' No value provided so get to TT through TAI
                 ' Computation method TT = UTC + ΔAT + 32.184s. ΔAT = 35.0 leap seconds in June 2012
-                TTDate = UTCDate.Add(TimeSpan.FromSeconds(CDbl(CurrentLeapSeconds) + TT_TAI_OFFSET))
+                TTDate = UTCDate.Add(TimeSpan.FromSeconds(CDbl(UtcTaiOffset) + TT_TAI_OFFSET))
             End If
 
             JD = Nov31.JulianDate(Convert.ToInt16(TTDate.Year), Convert.ToInt16(TTDate.Month), Convert.ToInt16(TTDate.Day), TTDate.TimeOfDay.TotalHours)
@@ -256,7 +256,7 @@ Namespace AstroUtils
             Else
                 ' Calculation UT1 = TT - DeltaT = UTC + ΔAT + 32.184s - DeltaT
                 DeltaT = DeltaTCalc(Nov31.JulianDate(Convert.ToInt16(UTCDate.Year), Convert.ToInt16(UTCDate.Month), Convert.ToInt16(UTCDate.Day), UTCDate.TimeOfDay.TotalHours))
-                TTDate = UTCDate.Add(TimeSpan.FromSeconds(CDbl(CurrentLeapSeconds) + TT_TAI_OFFSET))
+                TTDate = UTCDate.Add(TimeSpan.FromSeconds(CDbl(UtcTaiOffset) + TT_TAI_OFFSET))
                 UT1Date = TTDate.Subtract(TimeSpan.FromSeconds(DeltaT))
             End If
 
@@ -371,7 +371,7 @@ Namespace AstroUtils
         ''' <remarks>DeltaUT varies only slowly, so the Julian date can be based on UTC, UT1 or Terrestrial Time.</remarks>
         Public Function DeltaUT(JulianDate As Double) As Double Implements IAstroUtils.DeltaUT1
             Dim DUT1 As Double
-            DUT1 = CDbl(CurrentLeapSeconds) + TT_TAI_OFFSET - DeltaTCalc(JulianDate)
+            DUT1 = CDbl(UtcTaiOffset) + TT_TAI_OFFSET - DeltaTCalc(JulianDate)
             TL.LogMessage("DeltaUT", "Returning: " & DUT1 & " at Julian date: " & JulianDate)
             Return DUT1
         End Function
@@ -414,11 +414,11 @@ Namespace AstroUtils
         ''' here: ftp://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat</para> </remarks>
         Public Property LeapSeconds As Integer Implements IAstroUtils.LeapSeconds
             Get
-                Return CurrentLeapSeconds
+                Return UtcTaiOffset
             End Get
             Set(value As Integer)
-                CurrentLeapSeconds = value
-                RegAccess.WriteProfile(ASTROMETRY_SUBKEY, LEAP_SECONDS_VALUENAME, value.ToString)
+                UtcTaiOffset = value
+                RegAccess.WriteProfile(ASTROMETRY_SUBKEY, UTC_TAI_OFFSET_VALUENAME, value.ToString)
             End Set
         End Property
 
