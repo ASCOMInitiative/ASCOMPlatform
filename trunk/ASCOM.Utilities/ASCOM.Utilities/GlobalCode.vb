@@ -1266,7 +1266,7 @@ Friend Class PEReader
                     Return False
                 Case Else
                     TL.LogMessage("PE.Is32bitCode", "Unknown Processor type, throwing exception: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                    Throw New ASCOM.Utilities.Exceptions.HelperException("Unknown assembly processor architecture: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                    Throw New InvalidOperationException("Unknown assembly processor architecture: " & AssemblyInfo.ProcessorArchitecture.ToString())
             End Select
         Else ' Not an assembly so rely on the flags
             TL.LogMessage("PE.Is32bitCode", "Not an assembly relying on NTHeaders.FileHeader.Characteristics:" & _ntHeaders.FileHeader.Characteristics.ToString("X8"))
@@ -1310,26 +1310,6 @@ Friend Class PEReader
     Friend Function IsDotNetAssembly() As Boolean
         TL.LogMessage("PE.IsDotNetAssembly", "Returning: " & IsAssembly)
         Return IsAssembly
-        ' Revised this code to check that there are at least CLR_HEADER + 1 headers in the executable
-        'If Is32bitCode() Then
-        'TL.LogMessage("PE.IsDotNetAssembly", "Found 32bit code")
-        'If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
-        'TL.LogMessage("PE.IsDotNetAssembly", "NTHeaders.OptionalHeader32.NumberOfRvaAndSizes >=1 : " & _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes.ToString())
-        'Return (_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).Size > 0)
-        'Else
-        'TL.LogMessage("PE.IsDotNetAssembly", "NTHeaders.OptionalHeader32.NumberOfRvaAndSizes <1 : " & _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes.ToString())
-        'Return False
-        'End If
-        'Else
-        'TL.LogMessage("PE.IsDotNetAssembly", "Found 64bit code")
-        'If _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
-        'TL.LogMessage("PE.IsDotNetAssembly", "NTHeaders.OptionalHeader64.NumberOfRvaAndSizes >=1 : " & _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes.ToString())
-        'Return (_ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).Size > 0)
-        'Else
-        'TL.LogMessage("PE.IsDotNetAssembly", "NTHeaders.OptionalHeader64.NumberOfRvaAndSizes <1 : " & _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes.ToString())
-        'Return False
-        'End If
-        'End If
     End Function
 
     Private Shared Function MarshalBytesTo(Of T)(ByVal reader As BinaryReader) As T
