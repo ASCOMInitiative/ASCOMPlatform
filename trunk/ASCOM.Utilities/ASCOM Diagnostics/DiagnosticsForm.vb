@@ -6038,7 +6038,7 @@ Public Class DiagnosticsForm
                 Att = File.GetAttributes(FullPath)
                 TL.LogMessage("FileDetails", "   Attributes:         " & Att.ToString())
                 Try
-                    PE = New PEReader(FullPath)
+                    PE = New PEReader(FullPath, TL)
                     TL.LogMessage("FileDetails", "   .NET Assembly:      " & PE.IsDotNetAssembly)
                     TL.LogMessage("FileDetails", "   Bitness:            " & PE.BitNess.ToString)
                     TL.LogMessage("FileDetails", "   Subsystem:          " & PE.SubSystem.ToString)
