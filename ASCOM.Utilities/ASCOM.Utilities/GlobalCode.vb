@@ -638,7 +638,7 @@ Module VersionCode
                         If (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We have a path to the server and it is a dll
                             ' We have an assembly or other technology DLL, outside the GAC, in the file system
                             Try
-                                InProcServer = New PEReader(InprocFilePath) 'Get hold of the executable so we can determine its characteristics
+                                InProcServer = New PEReader(InprocFilePath, TL) 'Get hold of the executable so we can determine its characteristics
                                 InprocServerBitness = InProcServer.BitNess
                                 If InprocServerBitness = Bitness.Bits32 Then '32bit driver executable
                                     If Registered64Bit Then '32bit driver executable registered in 64bit COM
@@ -796,7 +796,7 @@ Module VersionCode
                         If (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We do have a path to the server and it is a dll
                             ' We have an assembly or other technology DLL, outside the GAC, in the file system
                             Try
-                                InProcServer = New PEReader(InprocFilePath) 'Get hold of the executable so we can determine its characteristics
+                                InProcServer = New PEReader(InprocFilePath, TL) 'Get hold of the executable so we can determine its characteristics
                                 If InProcServer.BitNess = Bitness.Bits64 Then '64bit only driver executable
                                     DriverCompatibilityMessage = "This is a 64bit only driver and is not compatible with this 32bit application." & vbCrLf & DRIVER_AUTHOR_MESSAGE_DRIVER
                                 End If
@@ -1161,17 +1161,37 @@ Friend Class PEReader
     Private TextBase As UInteger
     Private reader As BinaryReader
     Private stream As Stream
+    Private IsAssembly As Boolean = False
+    Private AssemblyInfo As AssemblyName
+
+    Private TL As TraceLogger
 #End Region
 
-    Friend Sub New(ByVal FileName As String)
+    Friend Sub New(ByVal FileName As String, TLogger As TraceLogger)
+        TL = TLogger ' Save the TraceLogger instance we have been passed
         If Left(FileName, 5).ToUpper = "FILE:" Then
-            'Convert uri to local path if required, uri paths are not supported by FileStream
-            ' this method allows file names with # characters to be passed through
+            'Convert uri to local path if required, uri paths are not supported by FileStream - this method allows file names with # characters to be passed through
             Dim u As Uri = New Uri(FileName)
             FileName = u.LocalPath + Uri.UnescapeDataString(u.Fragment).Replace("/", "\\")
         End If
+        TL.LogMessage("PEReader", "Filename to check: " & FileName)
 
         If Not File.Exists(FileName) Then Throw New FileNotFoundException("PEReader - File not found: " & FileName)
+
+        ' Determine whether this is an assembly by testing whether we can load the file as an assembly, if so then it IS an assembly!
+        Try
+            AssemblyInfo = AssemblyName.GetAssemblyName(FileName)
+            IsAssembly = True ' We got here without an exception so it must be an assembly
+            TL.LogMessage("PEReader", "Found an assembly name so this is an assembly: " & IsAssembly)
+        Catch ex As System.IO.FileNotFoundException
+            TL.LogMessage("PEReader", "File not found so this is NOT an assembly: " & IsAssembly)
+        Catch ex1 As System.BadImageFormatException
+            TL.LogMessage("PEReader", "Not an Assembly Format Image so this is NOT an assembly: " & IsAssembly)
+        Catch ex2 As System.IO.FileLoadException
+            IsAssembly = True
+            TL.LogMessage("PEReader", "Assembly already loaded so this is an assembly: " & IsAssembly)
+        End Try
+
         stream = New FileStream(FileName, FileMode.Open, FileAccess.Read)
         reader = New BinaryReader(stream)
 
@@ -1188,7 +1208,10 @@ Friend Class PEReader
         End If
         _ntHeaders.FileHeader = MarshalBytesTo(Of IMAGE_FILE_HEADER)(reader) ' This starts 4 bytes on from the start of the signature (already here by reading the signature itself)
 
+        TL.LogMessage("PEReader", "Checking whether we have 32bit or 64bit code")
+
         If Is32bitCode() Then ' Read optional headers
+            TL.LogMessage("PEReader", "This is 32bit code")
             _ntHeaders.OptionalHeader32 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER32)(reader)
             ' The PE specification does not mandate that NumberOfRvaAndSizes be 16, it is actually a variable.
             ' MS have used DataDirectory 12 (on 0..n numbering) to contain a pointer to CLR information so I have 
@@ -1214,8 +1237,6 @@ Friend Class PEReader
                 If SectionHeader.Name = ".text" Then TextBase = SectionHeader.PointerToRawData
             Next
 
-            'MsgBox("CLR_HEADER Virtual Address: " & Hex(_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress) & " BaseOfCode" & Hex(_ntHeaders.OptionalHeader32.BaseOfCode) & " Pointer to raw data: " & Hex(TextBase) & "Ans: " & Hex(_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress - _ntHeaders.OptionalHeader32.BaseOfCode + TextBase))
-
             If NumberOfHeadersToCheck >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the lcoation of the CLR header
                 If _ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress > 0 Then
                     reader.BaseStream.Seek(_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress - _ntHeaders.OptionalHeader32.BaseOfCode + TextBase, SeekOrigin.Begin)
@@ -1223,58 +1244,61 @@ Friend Class PEReader
                 End If
             End If
         Else
+            TL.LogMessage("PEReader", "This is 64bit code")
             _ntHeaders.OptionalHeader64 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER64)(reader)
             ' Removed because this test violates the PE specification Peter Simpson 3/6/15
             'If _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes <> &H10 Then ' Should have 16 data directories
             'Throw New InvalidOperationException("Invalid number of data directories in NT header")
             'End If
-
         End If
 
     End Sub
 
-    Friend Function GetDOSHeader() As IMAGE_DOS_HEADER
-        Return _dosHeader
-    End Function
-
-    Friend Function GetPESignature() As UInt32
-        Return _ntHeaders.Signature
-    End Function
-
-    Friend Function GetFileHeader() As IMAGE_FILE_HEADER
-        Return _ntHeaders.FileHeader
-    End Function
-
-    Friend Function GetOptionalHeaders32() As IMAGE_OPTIONAL_HEADER32
-        Return _ntHeaders.OptionalHeader32
-    End Function
-
-    Friend Function GetOptionalHeaders64() As IMAGE_OPTIONAL_HEADER64
-        Return _ntHeaders.OptionalHeader64
-    End Function
-
     Friend Function Is32bitCode() As Boolean
-        Return ((_ntHeaders.FileHeader.Characteristics And &H100) = &H100)
+        If IsAssembly Then
+            TL.LogMessage("PE.Is32bitCode", "Is an assembly")
+            Select Case AssemblyInfo.ProcessorArchitecture
+                Case ProcessorArchitecture.X86, ProcessorArchitecture.MSIL
+                    TL.LogMessage("PE.Is32bitCode", "Returning True: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                    Return True
+                Case ProcessorArchitecture.Amd64, ProcessorArchitecture.IA64
+                    TL.LogMessage("PE.Is32bitCode", "Returning False: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                    Return False
+                Case Else
+                    TL.LogMessage("PE.Is32bitCode", "Unknown Processor type, throwing exception: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                    Throw New ASCOM.Utilities.Exceptions.HelperException("Unknown assembly processor architecture: " & AssemblyInfo.ProcessorArchitecture.ToString())
+            End Select
+        Else ' Not an assembly so rely on the flags
+            TL.LogMessage("PE.Is32bitCode", "Not an assembly relying on NTHeaders.FileHeader.Characteristics:" & _ntHeaders.FileHeader.Characteristics.ToString("X8"))
+            Return ((_ntHeaders.FileHeader.Characteristics And &H100) = &H100)
+        End If
     End Function
 
     Friend ReadOnly Property BitNess As Bitness
         Get
             Dim RetVal As Bitness
             If IsDotNetAssembly() Then
+                TL.LogMessage("PE.BitNess", "Is a .NET assembly")
                 If Is32bitCode() Then
                     If ((CLR.Flags And CLR_FLAGS.CLR_FLAGS_32BITREQUIRED) > 0) Then
+                        TL.LogMessage("PE.BitNess", "Found 32bit Required")
                         RetVal = BitNess.Bits32
                     Else
+                        TL.LogMessage("PE.BitNess", "Found MSIL")
                         RetVal = BitNess.BitsMSIL
                     End If
                 Else
+                    TL.LogMessage("PE.BitNess", "Found 64bit Required")
                     RetVal = BitNess.Bits64
                 End If
 
             Else
+                TL.LogMessage("PE.BitNess", "Is NOT a .NET assembly")
                 If Is32bitCode() Then
+                    TL.LogMessage("PE.BitNess", "Found 32bit Required")
                     RetVal = BitNess.Bits32
                 Else
+                    TL.LogMessage("PE.BitNess", "Found 64bit Required")
                     RetVal = BitNess.Bits64
                 End If
 
@@ -1284,20 +1308,28 @@ Friend Class PEReader
     End Property
 
     Friend Function IsDotNetAssembly() As Boolean
+        TL.LogMessage("PE.IsDotNetAssembly", "Returning: " & IsAssembly)
+        Return IsAssembly
         ' Revised this code to check that there are at least CLR_HEADER + 1 headers in the executable
-        If Is32bitCode() Then
-            If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
-                Return (_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).Size > 0)
-            Else
-                Return False
-            End If
-        Else
-            If _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
-                Return (_ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).Size > 0)
-            Else
-                Return False
-            End If
-        End If
+        'If Is32bitCode() Then
+        'TL.LogMessage("PE.IsDotNetAssembly", "Found 32bit code")
+        'If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
+        'TL.LogMessage("PE.IsDotNetAssembly", "NTHeaders.OptionalHeader32.NumberOfRvaAndSizes >=1 : " & _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes.ToString())
+        'Return (_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).Size > 0)
+        'Else
+        'TL.LogMessage("PE.IsDotNetAssembly", "NTHeaders.OptionalHeader32.NumberOfRvaAndSizes <1 : " & _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes.ToString())
+        'Return False
+        'End If
+        'Else
+        'TL.LogMessage("PE.IsDotNetAssembly", "Found 64bit code")
+        'If _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
+        'TL.LogMessage("PE.IsDotNetAssembly", "NTHeaders.OptionalHeader64.NumberOfRvaAndSizes >=1 : " & _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes.ToString())
+        'Return (_ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).Size > 0)
+        'Else
+        'TL.LogMessage("PE.IsDotNetAssembly", "NTHeaders.OptionalHeader64.NumberOfRvaAndSizes <1 : " & _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes.ToString())
+        'Return False
+        'End If
+        'End If
     End Function
 
     Private Shared Function MarshalBytesTo(Of T)(ByVal reader As BinaryReader) As T

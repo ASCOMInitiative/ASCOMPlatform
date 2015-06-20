@@ -93,7 +93,7 @@ Public Class [Timer]
 
         Try
             TL.LogMessage("New", "Process FileName " & """" & Process.GetCurrentProcess().MainModule.FileName & """")
-            Dim PE As New PEReader(Process.GetCurrentProcess().MainModule.FileName)
+            Dim PE As New PEReader(Process.GetCurrentProcess().MainModule.FileName, TL)
             TL.LogMessage("New", "SubSystem " & PE.SubSystem.ToString)
             Select Case PE.SubSystem
                 Case PEReader.SubSystemType.WINDOWS_GUI ' Windows GUI app
