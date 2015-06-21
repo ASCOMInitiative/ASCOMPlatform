@@ -196,178 +196,180 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("RunningVersions", ex.ToString)
                 End Try
-                Try
-                    ScanDrives() 'Scan PC drives and report information
-                Catch ex As Exception
-                    LogException("ScanDrives", ex.ToString)
-                End Try
+                If False Then
+                    Try
+                        ScanDrives() 'Scan PC drives and report information
+                    Catch ex As Exception
+                        LogException("ScanDrives", ex.ToString)
+                    End Try
 
-                Try
-                    ScanFrameworks() 'Report on installed .NET Framework versions
-                Catch ex As Exception
-                    LogException("ScanFrameworks", ex.ToString)
-                End Try
-                Try
-                    ScanSerial() 'Report serial port information
-                Catch ex As Exception
-                    LogException("ScanSerial", ex.ToString)
-                End Try
-                Try
-                    ScanASCOMDrivers() : Action("") 'Report installed driver versions
-                Catch ex As Exception
-                    LogException("ScanASCOMDrivers", ex.ToString)
-                End Try
+                    Try
+                        ScanFrameworks() 'Report on installed .NET Framework versions
+                    Catch ex As Exception
+                        LogException("ScanFrameworks", ex.ToString)
+                    End Try
+                    Try
+                        ScanSerial() 'Report serial port information
+                    Catch ex As Exception
+                        LogException("ScanSerial", ex.ToString)
+                    End Try
+                    Try
+                        ScanASCOMDrivers() : Action("") 'Report installed driver versions
+                    Catch ex As Exception
+                        LogException("ScanASCOMDrivers", ex.ToString)
+                    End Try
 
-                Try
-                    ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
-                Catch ex As Exception
-                    LogException("ScanDriverExceptions", ex.ToString)
-                End Try
+                    Try
+                        ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
+                    Catch ex As Exception
+                        LogException("ScanDriverExceptions", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
-                Catch ex As Exception
-                    LogException("ScanProgramFiles", ex.ToString)
-                End Try
+                    Try
+                        ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+                    Catch ex As Exception
+                        LogException("ScanProgramFiles", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProfile() : Action("") 'Report profile information
-                Catch ex As Exception
-                    LogException("ScanProfile", ex.ToString)
-                End Try
+                    Try
+                        ScanProfile() : Action("") 'Report profile information
+                    Catch ex As Exception
+                        LogException("ScanProfile", ex.ToString)
+                    End Try
 
-                Try
-                    ScanRegistry() 'Scan Old ASCOM Registry Profile
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    Try
+                        ScanRegistry() 'Scan Old ASCOM Registry Profile
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
-                Catch ex As Exception
-                    LogException("ScanProfile55Files", ex.ToString)
-                End Try
+                    Try
+                        ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
+                    Catch ex As Exception
+                        LogException("ScanProfile55Files", ex.ToString)
+                    End Try
 
-                Try
-                    ScanCOMRegistration() 'Report Com Registration
-                Catch ex As Exception
-                    LogException("ScanCOMRegistration", ex.ToString)
-                End Try
+                    Try
+                        ScanCOMRegistration() 'Report Com Registration
+                    Catch ex As Exception
+                        LogException("ScanCOMRegistration", ex.ToString)
+                    End Try
 
-                Try
-                    ScanForHelperHijacking()
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    Try
+                        ScanForHelperHijacking()
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                'Scan files on 32 and 64bit systems
-                TL.LogMessage("Platform Files", "")
-                ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
-                Try
-                    Call ScanPlatformFiles(ASCOMPath) : Action("")
-                Catch ex As Exception
-                    LogException("ScanPlatformFiles", ex.ToString)
-                End Try
+                    'Scan files on 32 and 64bit systems
+                    TL.LogMessage("Platform Files", "")
+                    ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
+                    Try
+                        Call ScanPlatformFiles(ASCOMPath) : Action("")
+                    Catch ex As Exception
+                        LogException("ScanPlatformFiles", ex.ToString)
+                    End Try
 
-                Try
-                    ScanDeveloperFiles()
-                Catch ex As Exception
-                    LogException("ScanDeveloperFiles", ex.ToString)
-                End Try
+                    Try
+                        ScanDeveloperFiles()
+                    Catch ex As Exception
+                        LogException("ScanDeveloperFiles", ex.ToString)
+                    End Try
 
-                'List GAC contents
-                Try
-                    ScanGac()
-                Catch ex As Exception
-                    LogException("ScanGac", ex.ToString)
-                End Try
+                    'List GAC contents
+                    Try
+                        ScanGac()
+                    Catch ex As Exception
+                        LogException("ScanGac", ex.ToString)
+                    End Try
 
-                'List setup files
-                Try
-                    ScanLogs()
-                Catch ex As Exception
-                    LogException("ScanLogs", ex.ToString)
-                End Try
+                    'List setup files
+                    Try
+                        ScanLogs()
+                    Catch ex As Exception
+                        LogException("ScanLogs", ex.ToString)
+                    End Try
 
-                'List Platform 6 install logs
-                Try
-                    ScanPlatform6Logs()
-                Catch ex As Exception
-                    LogException("ScanPlatform6Logs", ex.ToString)
-                End Try
+                    'List Platform 6 install logs
+                    Try
+                        ScanPlatform6Logs()
+                    Catch ex As Exception
+                        LogException("ScanPlatform6Logs", ex.ToString)
+                    End Try
 
-                'Scan registry security rights
-                Try
-                    ScanRegistrySecurity()
-                Catch ex As Exception
-                    LogException("ScanRegistrySecurity", ex.ToString)
-                End Try
+                    'Scan registry security rights
+                    Try
+                        ScanRegistrySecurity()
+                    Catch ex As Exception
+                        LogException("ScanRegistrySecurity", ex.ToString)
+                    End Try
 
-                'Scan event log messages
-                Try
-                    ScanEventLog()
-                Catch ex As Exception
-                    LogException("ScanEventLog", ex.ToString)
-                End Try
+                    'Scan event log messages
+                    Try
+                        ScanEventLog()
+                    Catch ex As Exception
+                        LogException("ScanEventLog", ex.ToString)
+                    End Try
 
-                'Scan for ASCOM Applications
-                Try
-                    ScanApplications()
-                Catch ex As Exception
-                    LogException("ScanApplications", ex.ToString)
-                End Try
+                    'Scan for ASCOM Applications
+                    Try
+                        ScanApplications()
+                    Catch ex As Exception
+                        LogException("ScanApplications", ex.ToString)
+                    End Try
 
-                TL.BlankLine()
-                TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
-                TL.BlankLine()
-                TL.BlankLine()
-                Try
-                    'Functional tests
-                    UtilTests() : Action("")
-                Catch ex As Exception
-                    LogException("UtilTests", ex.ToString)
-                End Try
-                Try
-                    ProfileTests() : Action("")
-                Catch ex As Exception
-                    LogException("ProfileTests", ex.ToString)
-                End Try
-                Try
-                    TimerTests() : Action("")
-                Catch ex As Exception
-                    LogException("TimerTests", ex.ToString)
-                End Try
-                Try
-                    NovasComTests() : Action("")
-                Catch ex As Exception
-                    LogException("NovasComTests", ex.ToString)
-                End Try
-                Try
-                    KeplerTests() : Action("")
-                Catch ex As Exception
-                    LogException("KeplerTests", ex.ToString)
-                End Try
+                    TL.BlankLine()
+                    TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
+                    TL.BlankLine()
+                    TL.BlankLine()
+                    Try
+                        'Functional tests
+                        UtilTests() : Action("")
+                    Catch ex As Exception
+                        LogException("UtilTests", ex.ToString)
+                    End Try
+                    Try
+                        ProfileTests() : Action("")
+                    Catch ex As Exception
+                        LogException("ProfileTests", ex.ToString)
+                    End Try
+                    Try
+                        TimerTests() : Action("")
+                    Catch ex As Exception
+                        LogException("TimerTests", ex.ToString)
+                    End Try
+                    Try
+                        NovasComTests() : Action("")
+                    Catch ex As Exception
+                        LogException("NovasComTests", ex.ToString)
+                    End Try
+                    Try
+                        KeplerTests() : Action("")
+                    Catch ex As Exception
+                        LogException("KeplerTests", ex.ToString)
+                    End Try
 
-                Try
-                    TransformTest() : Action("")
-                Catch ex As Exception
-                    LogException("TransformTest", ex.ToString)
-                End Try
-                Try
-                    NOVAS2Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS2Tests", ex.ToString)
-                End Try
-                Try
-                    NOVAS3Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS3Tests", ex.ToString)
-                End Try
-                Try
-                    NOVAS31Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS31Tests", ex.ToString)
-                End Try
+                    Try
+                        TransformTest() : Action("")
+                    Catch ex As Exception
+                        LogException("TransformTest", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS2Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS2Tests", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS3Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS3Tests", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS31Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS31Tests", ex.ToString)
+                    End Try
+                End If
                 Try
                     SimulatorTests() : Action("")
                 Catch ex As Exception
@@ -888,139 +890,139 @@ Public Class DiagnosticsForm
         Sim.AxisRatesRelative = False
         TestSimulator(Sim)
         Sim = Nothing
+        If False Then
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "CCDSimulator.Camera"
+            Sim.Description = "Platform 5 Camera Simulator"
+            Sim.DeviceType = "Camera"
+            Sim.Name = "ASCOM CCD camera simulator"
+            Sim.DriverVersion = "5.0"
+            Sim.InterfaceVersion = 2
+            Sim.SixtyFourBit = False
+            Sim.IsPlatform5 = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "CCDSimulator.Camera"
-        Sim.Description = "Platform 5 Camera Simulator"
-        Sim.DeviceType = "Camera"
-        Sim.Name = "ASCOM CCD camera simulator"
-        Sim.DriverVersion = "5.0"
-        Sim.InterfaceVersion = 2
-        Sim.SixtyFourBit = False
-        Sim.IsPlatform5 = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.Simulator.Camera"
+            Sim.Description = "Platform 6 Camera Simulator"
+            Sim.DeviceType = "Camera"
+            Sim.Name = "Sim "
+            Sim.DriverVersion = "6.0"
+            Sim.InterfaceVersion = 2
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.Camera"
-        Sim.Description = "Platform 6 Camera Simulator"
-        Sim.DeviceType = "Camera"
-        Sim.Name = "Sim "
-        Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 2
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "FilterWheelSim.FilterWheel"
+            Sim.Description = "Platform 5 FilterWheel Simulator"
+            Sim.DeviceType = "FilterWheel"
+            Sim.Name = "xxxx"
+            Sim.DriverVersion = "5.0"
+            Sim.InterfaceVersion = 1
+            Sim.IsPlatform5 = True
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "FilterWheelSim.FilterWheel"
-        Sim.Description = "Platform 5 FilterWheel Simulator"
-        Sim.DeviceType = "FilterWheel"
-        Sim.Name = "xxxx"
-        Sim.DriverVersion = "5.0"
-        Sim.InterfaceVersion = 1
-        Sim.IsPlatform5 = True
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.Simulator.FilterWheel"
+            Sim.Description = "Platform 6 FilterWheel Simulator"
+            Sim.DeviceType = "FilterWheel"
+            Sim.Name = "Filter Wheel Simulator .NET"
+            Sim.DriverVersion = "6.0"
+            Sim.InterfaceVersion = 2
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.FilterWheel"
-        Sim.Description = "Platform 6 FilterWheel Simulator"
-        Sim.DeviceType = "FilterWheel"
-        Sim.Name = "Filter Wheel Simulator .NET"
-        Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 2
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "FocusSim.Focuser"
+            Sim.Description = "Platform 5 Focuser Simulator"
+            Sim.DeviceType = "Focuser"
+            Sim.Name = "Simulator"
+            Sim.DriverVersion = "5.0"
+            Sim.InterfaceVersion = 1
+            Sim.IsPlatform5 = True
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "FocusSim.Focuser"
-        Sim.Description = "Platform 5 Focuser Simulator"
-        Sim.DeviceType = "Focuser"
-        Sim.Name = "Simulator"
-        Sim.DriverVersion = "5.0"
-        Sim.InterfaceVersion = 1
-        Sim.IsPlatform5 = True
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.Simulator.Focuser"
+            Sim.Description = "Platform 6 Focuser Simulator"
+            Sim.DeviceType = "Focuser"
+            Sim.Name = "ASCOM.Simulator.Focuser"
+            Sim.DriverVersion = "6.0"
+            Sim.InterfaceVersion = 2
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.Focuser"
-        Sim.Description = "Platform 6 Focuser Simulator"
-        Sim.DeviceType = "Focuser"
-        Sim.Name = "ASCOM.Simulator.Focuser"
-        Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 2
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.Simulator.SafetyMonitor"
+            Sim.Description = "Platform 6 Safety Monitor Simulator"
+            Sim.DeviceType = "SafetyMonitor"
+            Sim.Name = "ASCOM.Simulator.SafetyMonitor"
+            Sim.DriverVersion = "6.0"
+            Sim.InterfaceVersion = 2
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.SafetyMonitor"
-        Sim.Description = "Platform 6 Safety Monitor Simulator"
-        Sim.DeviceType = "SafetyMonitor"
-        Sim.Name = "ASCOM.Simulator.SafetyMonitor"
-        Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 2
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "SwitchSim.Switch"
+            Sim.Description = "Platform 5 Switch Simulator"
+            Sim.DeviceType = "Switch"
+            Sim.Name = "Switch Simulator"
+            Sim.DriverVersion = "5.0"
+            Sim.InterfaceVersion = 1
+            Sim.IsPlatform5 = True
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "SwitchSim.Switch"
-        Sim.Description = "Platform 5 Switch Simulator"
-        Sim.DeviceType = "Switch"
-        Sim.Name = "Switch Simulator"
-        Sim.DriverVersion = "5.0"
-        Sim.InterfaceVersion = 1
-        Sim.IsPlatform5 = True
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.Simulator.Switch"
+            Sim.Description = "Platform 6 Switch Simulator"
+            Sim.DeviceType = "Switch"
+            Sim.Name = "ASCOM Switch V2 Simulator"
+            Sim.DriverVersion = "6.1"
+            Sim.InterfaceVersion = 2
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.Switch"
-        Sim.Description = "Platform 6 Switch Simulator"
-        Sim.DeviceType = "Switch"
-        Sim.Name = "ASCOM Switch V2 Simulator"
-        Sim.DriverVersion = "6.1"
-        Sim.InterfaceVersion = 2
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "DomeSim.Dome"
+            Sim.Description = "Dome Simulator"
+            Sim.DeviceType = "Dome"
+            Sim.Name = "Simulator"
+            Sim.DriverVersion = "5.0"
+            Sim.InterfaceVersion = 1
+            Sim.IsPlatform5 = True
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "DomeSim.Dome"
-        Sim.Description = "Dome Simulator"
-        Sim.DeviceType = "Dome"
-        Sim.Name = "Simulator"
-        Sim.DriverVersion = "5.0"
-        Sim.InterfaceVersion = 1
-        Sim.IsPlatform5 = True
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
-
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.Dome"
-        Sim.Description = "Platform 6 Dome Simulator"
-        Sim.DeviceType = "Dome"
-        Sim.Name = "Simulator"
-        Sim.DriverVersion = "6.0"
-        Sim.InterfaceVersion = 2
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        TestSimulator(Sim)
-        Sim = Nothing
-
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.Simulator.Dome"
+            Sim.Description = "Platform 6 Dome Simulator"
+            Sim.DeviceType = "Dome"
+            Sim.Name = "Simulator"
+            Sim.DriverVersion = "6.0"
+            Sim.InterfaceVersion = 2
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
+        End If
         TL.BlankLine()
     End Sub
 
@@ -1054,6 +1056,9 @@ Public Class DiagnosticsForm
                             DeviceObject.Connected = True
                             Compare("TestSimulator", "Connected OK", "True", "True")
                     End Select
+
+                    Thread.Sleep(1000)
+
                     Try
                         RetValString = DeviceObject.Description
                         Compare("TestSimulator", "Description member is present in Platform 6 Simulator", "True", "True")
@@ -1347,31 +1352,38 @@ Public Class DiagnosticsForm
                             Compare(Device, Test, DeviceObject.Tracking, "True")
                         Case "SiderealTime"
                             SiderealTime = DeviceObject.SiderealTime
+                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
                             RetValDouble = DeviceObject.SiderealTime
                             CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.000001)
                         Case "TargetRightDeclination"
                             DeviceObject.TargetDeclination = 0.0
                             RetValDouble = DeviceObject.TargetDeclination
-                            CompareDouble(Device, Test, RetValDouble, 0.0, 0.00001)
+                            CompareDouble(Device, Test, RetValDouble, 0.0, TOLERANCE_E4)
                         Case "TargetRightAscension"
                             SiderealTime = DeviceObject.SiderealTime
+                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
                             DeviceObject.TargetRightAscension = SiderealTime
+                            TL.LogMessage(Device, "Target RA set to: " & DeviceObject.TargetRightAscension)
                             RetValDouble = DeviceObject.TargetRightAscension
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.00001)
+                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_E4)
                         Case "Slew"
                             DeviceObject.UnPark()
                             DeviceObject.Tracking = True
                             SiderealTime = DeviceObject.SiderealTime
+                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
                             DeviceObject.TargetRightAscension = SiderealTime
+                            TL.LogMessage(Device, "Target RA set to: " & DeviceObject.TargetRightAscension)
                             DeviceObject.TargetDeclination = 0.0
+                            TL.LogMessage(Device, "Pre slew RA is: " & DeviceObject.RightAscension)
                             DeviceObject.SlewToTarget()
-                            CompareDouble(Device, Test, DeviceObject.RightAscension, SiderealTime, 0.00001)
-                            CompareDouble(Device, Test, DeviceObject.Declination, 0.0, 0.00001)
+                            TL.LogMessage(Device, "Post slew RA is: " & DeviceObject.RightAscension)
+                            CompareDouble(Device, Test, DeviceObject.RightAscension, SiderealTime, TOLERANCE_E4)
+                            CompareDouble(Device, Test, DeviceObject.Declination, 0.0, TOLERANCE_E4)
                         Case "RightAscension"
                             SiderealTime = DeviceObject.SiderealTime
                             DeviceObject.TargetRightAscension = SiderealTime
                             RetValDouble = DeviceObject.TargetRightAscension
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.00001)
+                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_E4)
                         Case "TrackingRates"
                             Try
                                 DeviceTrackingRates = DeviceObject.TrackingRates
@@ -4289,7 +4301,7 @@ Public Class DiagnosticsForm
                     DisplayTolerance = AscomUtil.HoursToHMS(p_Tolerance, ":", ":", "", 3)
                 Case DoubleDisplayAs.Number
                     DisplayNew = p_New.ToString
-                    DisplayTolerance = p_Tolerance.ToString
+                    DisplayTolerance = p_Tolerance.ToString("0.0E0")
                 Case Else
                     ErrMsg = "The DoubleDisplayAs value: " & p_DisplayAs.ToString & " is not configured in Sub CompareDouble"
                     TL.LogMessage(p_Section, ErrMsg)
