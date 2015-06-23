@@ -217,6 +217,9 @@ if Variable OPSYS Equals UNKNOWN
   if Variable OSCURRENTVERSION Equals 6.2
     Set Variable OPSYS to 8
   end
+  if Variable OSCURRENTVERSION Equals 6.3
+    Set Variable OPSYS to 10
+  end
 end
 Write into Text File $SETUPLOG$ from Value $TIME$ OS: Windows $OPSYS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Product Name:  $OSPRODUCTNAME$ (at end of file)

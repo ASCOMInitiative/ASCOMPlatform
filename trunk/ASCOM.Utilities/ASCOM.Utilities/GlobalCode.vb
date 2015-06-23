@@ -1163,12 +1163,17 @@ Friend Class PEReader
     Private stream As Stream
     Private IsAssembly As Boolean = False
     Private AssemblyInfo As AssemblyName
+    Private SuppliedAssembly As Assembly
+    Private ProfileStore As RegistryAccess
+    Private AssemblyDeterminationType As String
 
     Private TL As TraceLogger
 #End Region
 
     Friend Sub New(ByVal FileName As String, TLogger As TraceLogger)
         TL = TLogger ' Save the TraceLogger instance we have been passed
+        ProfileStore = New RegistryAccess("PE Reader") 'Get access to the profile store
+
         If Left(FileName, 5).ToUpper = "FILE:" Then
             'Convert uri to local path if required, uri paths are not supported by FileStream - this method allows file names with # characters to be passed through
             Dim u As Uri = New Uri(FileName)
@@ -1180,16 +1185,24 @@ Friend Class PEReader
 
         ' Determine whether this is an assembly by testing whether we can load the file as an assembly, if so then it IS an assembly!
         Try
-            AssemblyInfo = AssemblyName.GetAssemblyName(FileName)
+            AssemblyDeterminationType = ProfileStore.GetProfile("Chooser", "PEReader", "ReflectionOnlyLoadFrom")
+            TL.LogMessage("PEReader", "AssemblyDeterminationType: " & AssemblyDeterminationType)
+
+            Select Case AssemblyDeterminationType
+                Case "GetAssemblyName"
+                    AssemblyInfo = AssemblyName.GetAssemblyName(FileName)
+                Case Else ' Everything esle uses ReflectionOnlyLoadFrom
+                    SuppliedAssembly = Assembly.ReflectionOnlyLoadFrom(FileName)
+            End Select
             IsAssembly = True ' We got here without an exception so it must be an assembly
-            TL.LogMessage("PEReader", "Found an assembly name so this is an assembly: " & IsAssembly)
+            TL.LogMessage("PEReader", "Found an assembly: " & IsAssembly)
         Catch ex As System.IO.FileNotFoundException
-            TL.LogMessage("PEReader", "File not found so this is NOT an assembly: " & IsAssembly)
+            TL.LogMessage("PEReader", "FileNotFoundException: File not found so this is NOT an assembly: " & IsAssembly)
         Catch ex1 As System.BadImageFormatException
-            TL.LogMessage("PEReader", "Not an Assembly Format Image so this is NOT an assembly: " & IsAssembly)
+            TL.LogMessage("PEReader", "BadImageFormatException: Not an Assembly Format Image so this is NOT an assembly: " & IsAssembly)
         Catch ex2 As System.IO.FileLoadException
             IsAssembly = True
-            TL.LogMessage("PEReader", "Assembly already loaded so this is an assembly: " & IsAssembly)
+            TL.LogMessage("PEReader", "FileLoadException: Assembly already loaded so this is an assembly: " & IsAssembly)
         End Try
 
         stream = New FileStream(FileName, FileMode.Open, FileAccess.Read)
@@ -1210,7 +1223,7 @@ Friend Class PEReader
 
         TL.LogMessage("PEReader", "Checking whether we have 32bit or 64bit code")
 
-        If Is32bitCode() Then ' Read optional headers
+        If Is32bitCompatible() Then ' Read optional headers
             TL.LogMessage("PEReader", "This is 32bit code")
             _ntHeaders.OptionalHeader32 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER32)(reader)
             ' The PE specification does not mandate that NumberOfRvaAndSizes be 16, it is actually a variable.
@@ -1254,24 +1267,49 @@ Friend Class PEReader
 
     End Sub
 
-    Friend Function Is32bitCode() As Boolean
+    Friend Function Is32bitCompatible() As Boolean
+        Is32bitCompatible = False
+
         If IsAssembly Then
-            TL.LogMessage("PE.Is32bitCode", "Is an assembly")
-            Select Case AssemblyInfo.ProcessorArchitecture
-                Case ProcessorArchitecture.X86, ProcessorArchitecture.MSIL
-                    TL.LogMessage("PE.Is32bitCode", "Returning True: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                    Return True
-                Case ProcessorArchitecture.Amd64, ProcessorArchitecture.IA64
-                    TL.LogMessage("PE.Is32bitCode", "Returning False: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                    Return False
-                Case Else
-                    TL.LogMessage("PE.Is32bitCode", "Unknown Processor type, throwing exception: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                    Throw New InvalidOperationException("Unknown assembly processor architecture: " & AssemblyInfo.ProcessorArchitecture.ToString())
+            TL.LogMessage("PE.Is32bitCode", "Is an assembly, using AssemblyDeterminationType: " & AssemblyDeterminationType)
+            Select Case AssemblyDeterminationType ' Use appropriatemethods depending on the method used to determine assembly type
+                Case "GetAssemblyName"
+                    TL.LogMessage("PE.Is32bitCode", "Processor Architecture is: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                    Select Case AssemblyInfo.ProcessorArchitecture
+                        Case ProcessorArchitecture.X86, ProcessorArchitecture.MSIL
+                            TL.LogMessage("PE.Is32bitCode", "Returning True: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                            Return True
+                        Case ProcessorArchitecture.Amd64, ProcessorArchitecture.IA64
+                            TL.LogMessage("PE.Is32bitCode", "Returning False: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                            Return False
+                        Case Else
+                            TL.LogMessage("PE.Is32bitCode", "Unknown Processor type, throwing exception: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                            Throw New InvalidOperationException("Unknown assembly processor architecture: " & AssemblyInfo.ProcessorArchitecture.ToString())
+                    End Select
+                Case Else ' Everything esle uses ReflectionOnlyLoadFrom to get an assembly
+                    Dim ProcessorArchitecture As ProcessorArchitecture
+                    ProcessorArchitecture = SuppliedAssembly.GetName.ProcessorArchitecture
+                    TL.LogMessage("PE.Is32bitCode", "Processor Architecture is: " & ProcessorArchitecture.ToString())
+
+                    Select Case ProcessorArchitecture
+                        Case ProcessorArchitecture.X86, ProcessorArchitecture.MSIL
+                            TL.LogMessage("PE.Is32bitCode", "Returning True: " & ProcessorArchitecture.ToString())
+                            Return True
+                        Case ProcessorArchitecture.Amd64, ProcessorArchitecture.IA64
+                            TL.LogMessage("PE.Is32bitCode", "Returning False: " & ProcessorArchitecture.ToString())
+                            Return False
+                        Case Else
+                            TL.LogMessage("PE.Is32bitCode", "Unknown Processor type, throwing exception: " & ProcessorArchitecture.ToString())
+                            Throw New InvalidOperationException("Unknown assembly processor architecture: " & ProcessorArchitecture.ToString())
+                    End Select
             End Select
+
         Else ' Not an assembly so rely on the flags
             TL.LogMessage("PE.Is32bitCode", "Not an assembly relying on NTHeaders.FileHeader.Characteristics:" & _ntHeaders.FileHeader.Characteristics.ToString("X8"))
             Return ((_ntHeaders.FileHeader.Characteristics And &H100) = &H100)
         End If
+
+
     End Function
 
     Friend ReadOnly Property BitNess As Bitness
@@ -1279,7 +1317,7 @@ Friend Class PEReader
             Dim RetVal As Bitness
             If IsDotNetAssembly() Then
                 TL.LogMessage("PE.BitNess", "Is a .NET assembly")
-                If Is32bitCode() Then
+                If Is32bitCompatible() Then
                     If ((CLR.Flags And CLR_FLAGS.CLR_FLAGS_32BITREQUIRED) > 0) Then
                         TL.LogMessage("PE.BitNess", "Found 32bit Required")
                         RetVal = BitNess.Bits32
@@ -1294,7 +1332,7 @@ Friend Class PEReader
 
             Else
                 TL.LogMessage("PE.BitNess", "Is NOT a .NET assembly")
-                If Is32bitCode() Then
+                If Is32bitCompatible() Then
                     TL.LogMessage("PE.BitNess", "Found 32bit Required")
                     RetVal = BitNess.Bits32
                 Else
@@ -1329,7 +1367,7 @@ Friend Class PEReader
     End Function
 
     Friend Function SubSystem() As SubSystemType
-        If Is32bitCode() Then
+        If Is32bitCompatible() Then
             Return CType(_ntHeaders.OptionalHeader32.Subsystem, SubSystemType) 'Return the 32bit header field
         Else
             Return CType(_ntHeaders.OptionalHeader64.Subsystem, SubSystemType) 'Return the 64bit field
@@ -1343,11 +1381,14 @@ Friend Class PEReader
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me.disposedValue Then
             If disposing Then
-                reader.Close()
-
-                stream.Close()
-                stream.Dispose()
-                stream = Nothing
+                Try
+                    reader.Close()
+                    ProfileStore.Dispose()
+                    stream.Close()
+                    stream.Dispose()
+                    stream = Nothing
+                Catch ex As Exception ' Swallow any exceptions here
+                End Try
             End If
 
         End If
