@@ -630,6 +630,7 @@ Module VersionCode
                                 End Try
                             Else
                                 'No Assembly entry so we can't load the assembly, we'll just have to take a chance!
+                                TL.LogMessage("DriverCompatibility", "'AssemblyFullName is null so we can't load the assembly, we'll just have to take a chance!")
                                 InprocFilePath = "" 'Set to null to bypass tests
                                 TL.LogMessage("DriverCompatibility", "     Set InprocFilePath to null string")
                             End If
@@ -666,6 +667,7 @@ Module VersionCode
                             End If
                         Else
                             'No codebase so can't test this driver, don't give an error message, just have to take a chance!
+                            TL.LogMessage("DriverCompatibility", "No codebase so can't test this driver, don't give an error message, just have to take a chance!")
                         End If
                         RKInprocServer32.Close() 'Clean up the InProcServer registry key
                     Else 'This is not an inprocess DLL so no need to test further and no error message to return
@@ -788,6 +790,7 @@ Module VersionCode
                                 End Try
                             Else
                                 'No Assembly entry so we can't load the assembly, we'll just have to take a chance!
+                                TL.LogMessage("DriverCompatibility", "'AssemblyFullName is null so we can't load the assembly, we'll just have to take a chance!")
                                 InprocFilePath = "" 'Set to null to bypass tests
                                 TL.LogMessage("DriverCompatibility", "     Set InprocFilePath to null string")
                             End If
@@ -813,10 +816,12 @@ Module VersionCode
                             End If
                         Else
                             'No codebase or not a DLL so can't test this driver, don't give an error message, just have to take a chance!
+                            TL.LogMessage("DriverCompatibility", "No codebase or not a DLL so can't test this driver, don't give an error message, just have to take a chance!")
                         End If
                         RKInprocServer32.Close() 'Clean up the InProcServer registry key
                     Else 'This is not an inprocess DLL so no need to test further and no error message to return
                         'Please leave this empty clause here so the logic is clear!
+                        TL.LogMessage("DriverCompatibility", "This is not an inprocess DLL so no need to test further and no error message to return")
                     End If
                 Else 'Cannot find a CLSID entry
                     DriverCompatibilityMessage = "Unable to find a CLSID entry for this driver, please re-install."
@@ -958,6 +963,29 @@ Friend Class PEReader
 #Region "Constants"
     Friend Const CLR_HEADER As Integer = 14 ' Header number of the CLR information, if present
     Private Const MAX_HEADERS_TO_CHECK As Integer = 1000 ' Safety limit to ensure that we don't lock up the machine if we get a PE image that indicates it has a huge number of header directories
+
+    ' Possible error codes when an assembly is loaded for reflection
+    Private Const COR_E_BADIMAGEFORMAT As Integer = &H8007000B
+    Private Const CLDB_E_FILE_OLDVER As Integer = &H80131107
+    Private Const CLDB_E_INDEX_NOTFOUND As Integer = &H80131124
+    Private Const CLDB_E_FILE_CORRUPT As Integer = &H8013110E
+    Private Const COR_E_NEWER_RUNTIME As Integer = &H8013101B
+    Private Const COR_E_ASSEMBLYEXPECTED As Integer = &H80131018
+    Private Const ERROR_BAD_EXE_FORMAT As Integer = &H800700C1
+    Private Const ERROR_EXE_MARKED_INVALID As Integer = &H800700C0
+    Private Const CORSEC_E_INVALID_IMAGE_FORMAT As Integer = &H8013141D
+    Private Const ERROR_NOACCESS As Integer = &H800703E6
+    Private Const ERROR_INVALID_ORDINAL As Integer = &H800700B6
+    Private Const ERROR_INVALID_DLL As Integer = &H80070482
+    Private Const ERROR_FILE_CORRUPT As Integer = &H80070570
+    Private Const COR_E_LOADING_REFERENCE_ASSEMBLY As Integer = &H80131058
+    Private Const META_E_BAD_SIGNATURE As Integer = &H80131192
+
+    ' Executable machine types
+    Private Const IMAGE_FILE_MACHINE_I386 As UShort = &H14C ' x86
+    Private Const IMAGE_FILE_MACHINE_IA64 As UShort = &H200 ' Intel(Itanium)
+    Private Const IMAGE_FILE_MACHINE_AMD64 As UShort = &H8664 ' x64
+
 #End Region
 
 #Region "Enums"
@@ -1154,8 +1182,8 @@ Friend Class PEReader
 #End Region
 
 #Region "Fields"
-    Private ReadOnly _dosHeader As IMAGE_DOS_HEADER
-    Private _ntHeaders As IMAGE_NT_HEADERS
+    Private ReadOnly dosHeader As IMAGE_DOS_HEADER
+    Private ntHeaders As IMAGE_NT_HEADERS
     Private ReadOnly CLR As IMAGE_COR20_HEADER
     Private ReadOnly _sectionHeaders As Generic.IList(Of IMAGE_SECTION_HEADER) = New Generic.List(Of IMAGE_SECTION_HEADER)
     Private TextBase As UInteger
@@ -1166,6 +1194,7 @@ Friend Class PEReader
     Private SuppliedAssembly As Assembly
     Private ProfileStore As RegistryAccess
     Private AssemblyDeterminationType As String
+    Private OS32BitCompatible As Boolean = False
 
     Private TL As TraceLogger
 #End Region
@@ -1193,13 +1222,53 @@ Friend Class PEReader
                     AssemblyInfo = AssemblyName.GetAssemblyName(FileName)
                 Case Else ' Everything esle uses ReflectionOnlyLoadFrom
                     SuppliedAssembly = Assembly.ReflectionOnlyLoadFrom(FileName)
+                    'SuppliedAssembly = Assembly.LoadFrom(FileName)
             End Select
             IsAssembly = True ' We got here without an exception so it must be an assembly
             TL.LogMessage("PEReader", "Found an assembly: " & IsAssembly)
         Catch ex As System.IO.FileNotFoundException
             TL.LogMessage("PEReader", "FileNotFoundException: File not found so this is NOT an assembly: " & IsAssembly)
         Catch ex1 As System.BadImageFormatException
-            TL.LogMessage("PEReader", "BadImageFormatException: Not an Assembly Format Image so this is NOT an assembly: " & IsAssembly)
+
+            ' Now determine what actually happened by examining the hResult
+            Dim hResult As Integer = Marshal.GetHRForException(ex1)
+
+            Select Case hResult
+                Case COR_E_BADIMAGEFORMAT
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_BADIMAGEFORMAT. Setting IsAssembly to: " & IsAssembly)
+                Case CLDB_E_FILE_OLDVER
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_FILE_OLDVER. Setting IsAssembly to: " & IsAssembly)
+                Case CLDB_E_INDEX_NOTFOUND
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_INDEX_NOTFOUND. Setting IsAssembly to: " & IsAssembly)
+                Case CLDB_E_FILE_CORRUPT
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_FILE_CORRUPT. Setting IsAssembly to: " & IsAssembly)
+                Case COR_E_NEWER_RUNTIME
+                    IsAssembly = True
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_NEWER_RUNTIME. Setting IsAssembly to: " & IsAssembly)
+                Case COR_E_ASSEMBLYEXPECTED
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_ASSEMBLYEXPECTED. Setting IsAssembly to: " & IsAssembly)
+                Case ERROR_BAD_EXE_FORMAT
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_BAD_EXE_FORMAT. Setting IsAssembly to: " & IsAssembly)
+                Case ERROR_EXE_MARKED_INVALID
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_EXE_MARKED_INVALID. Setting IsAssembly to: " & IsAssembly)
+                Case CORSEC_E_INVALID_IMAGE_FORMAT
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CORSEC_E_INVALID_IMAGE_FORMAT. Setting IsAssembly to: " & IsAssembly)
+                Case ERROR_NOACCESS
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_NOACCESS. Setting IsAssembly to: " & IsAssembly)
+                Case ERROR_INVALID_ORDINAL
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_INVALID_ORDINAL. Setting IsAssembly to: " & IsAssembly)
+                Case ERROR_INVALID_DLL
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_INVALID_DLL. Setting IsAssembly to: " & IsAssembly)
+                Case ERROR_FILE_CORRUPT
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_FILE_CORRUPT. Setting IsAssembly to: " & IsAssembly)
+                Case COR_E_LOADING_REFERENCE_ASSEMBLY
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_LOADING_REFERENCE_ASSEMBLY. Setting IsAssembly to: " & IsAssembly)
+                Case META_E_BAD_SIGNATURE
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - META_E_BAD_SIGNATURE. Setting IsAssembly to: " & IsAssembly)
+                Case Else
+                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - Meaning of error code is unknown. Setting IsAssembly to: " & IsAssembly)
+            End Select
+
         Catch ex2 As System.IO.FileLoadException
             IsAssembly = True
             TL.LogMessage("PEReader", "FileLoadException: Assembly already loaded so this is an assembly: " & IsAssembly)
@@ -1209,139 +1278,125 @@ Friend Class PEReader
         reader = New BinaryReader(stream)
 
         reader.BaseStream.Seek(0, SeekOrigin.Begin) ' Reset reader position, just in case
-        _dosHeader = MarshalBytesTo(Of IMAGE_DOS_HEADER)(reader) ' Read MS-DOS header section
-        If _dosHeader.e_magic <> &H5A4D Then ' MS-DOS magic number should read 'MZ'
+        dosHeader = MarshalBytesTo(Of IMAGE_DOS_HEADER)(reader) ' Read MS-DOS header section
+        If dosHeader.e_magic <> &H5A4D Then ' MS-DOS magic number should read 'MZ'
             Throw New InvalidOperationException("File is not a portable executable.")
         End If
 
-        reader.BaseStream.Seek(_dosHeader.e_lfanew, SeekOrigin.Begin) ' Skip MS-DOS stub and seek reader to NT Headers
-        _ntHeaders.Signature = MarshalBytesTo(Of UInt32)(reader) ' Read NT Headers
-        If _ntHeaders.Signature <> &H4550 Then ' Make sure we have 'PE' in the pe signature. Options: 
+        reader.BaseStream.Seek(dosHeader.e_lfanew, SeekOrigin.Begin) ' Skip MS-DOS stub and seek reader to NT Headers
+        ntHeaders.Signature = MarshalBytesTo(Of UInt32)(reader) ' Read NT Headers
+        If ntHeaders.Signature <> &H4550 Then ' Make sure we have 'PE' in the pe signature. Options: 
             Throw New InvalidOperationException("Invalid portable executable signature in NT header.")
         End If
-        _ntHeaders.FileHeader = MarshalBytesTo(Of IMAGE_FILE_HEADER)(reader) ' This starts 4 bytes on from the start of the signature (already here by reading the signature itself)
+        ntHeaders.FileHeader = MarshalBytesTo(Of IMAGE_FILE_HEADER)(reader) ' This starts 4 bytes on from the start of the signature (already here by reading the signature itself)
 
-        TL.LogMessage("PEReader", "Checking whether we have 32bit or 64bit code")
+        ' Determine whether this is flagged as a 32bit or 64bit executable
+        Select Case ntHeaders.FileHeader.Machine
+            Case IMAGE_FILE_MACHINE_I386
+                OS32BitCompatible = True
+                TL.LogMessage("PEReader", "Machine - found Intel 32bit executable! Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
+            Case IMAGE_FILE_MACHINE_IA64
+                OS32BitCompatible = False
+                TL.LogMessage("PEReader", "Machine - found Itanium 64bit executable! Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
+            Case IMAGE_FILE_MACHINE_AMD64
+                OS32BitCompatible = False
+                TL.LogMessage("PEReader", "Machine - found Intel 64bit executable! Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
+            Case Else
+                TL.LogMessage("PEReader", "Found Unknown machine type: " & ntHeaders.FileHeader.Machine.ToString("X8") & ". Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
+        End Select
 
         If Is32bitCompatible() Then ' Read optional headers
-            TL.LogMessage("PEReader", "This is 32bit code")
-            _ntHeaders.OptionalHeader32 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER32)(reader)
-            ' The PE specification does not mandate that NumberOfRvaAndSizes be 16, it is actually a variable.
-            ' MS have used DataDirectory 12 (on 0..n numbering) to contain a pointer to CLR information so I have 
-            ' removed this test and replaced it with a test further down the code to confirm that 
-            ' DatDictionary 12 does exist before attempting to read it.
-
-            ' Removed by Peter Simpson 3rd June 2015
-            'If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes <> &H10 Then ' Should have 16 data directories
-            'Throw New InvalidOperationException("Invalid number of data directories in NT header")
-            'End If
-
-            ' Added by Peter Simpson 3rd June 2015
-            Dim NumberOfHeadersToCheck As Integer = MAX_HEADERS_TO_CHECK
-            If _ntHeaders.OptionalHeader32.NumberOfRvaAndSizes < MAX_HEADERS_TO_CHECK Then NumberOfHeadersToCheck = CInt(_ntHeaders.OptionalHeader32.NumberOfRvaAndSizes)
-
-            For i As Integer = 0 To NumberOfHeadersToCheck - 1
-                If _ntHeaders.OptionalHeader32.DataDirectory(i).Size > 0 Then
-                    _sectionHeaders.Add(MarshalBytesTo(Of IMAGE_SECTION_HEADER)(reader))
-                End If
-            Next
-
-            For Each SectionHeader As IMAGE_SECTION_HEADER In _sectionHeaders
-                If SectionHeader.Name = ".text" Then TextBase = SectionHeader.PointerToRawData
-            Next
-
-            If NumberOfHeadersToCheck >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the lcoation of the CLR header
-                If _ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress > 0 Then
-                    reader.BaseStream.Seek(_ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress - _ntHeaders.OptionalHeader32.BaseOfCode + TextBase, SeekOrigin.Begin)
-                    CLR = MarshalBytesTo(Of IMAGE_COR20_HEADER)(reader)
-                End If
-            End If
+            TL.LogMessage("PEReader", "Reading optional 32bit header")
+            ntHeaders.OptionalHeader32 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER32)(reader)
         Else
-            TL.LogMessage("PEReader", "This is 64bit code")
-            _ntHeaders.OptionalHeader64 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER64)(reader)
-            ' Removed because this test violates the PE specification Peter Simpson 3/6/15
-            'If _ntHeaders.OptionalHeader64.NumberOfRvaAndSizes <> &H10 Then ' Should have 16 data directories
-            'Throw New InvalidOperationException("Invalid number of data directories in NT header")
-            'End If
+            TL.LogMessage("PEReader", "Reading optional 64bit header")
+            ntHeaders.OptionalHeader64 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER64)(reader)
         End If
 
+        If IsAssembly Then
+            Dim NumberOfHeadersToCheck As Integer = MAX_HEADERS_TO_CHECK
+            If Is32bitCompatible() Then ' 32bit assembly
+                TL.LogMessage("PEReader", "This is a 32 bit assembly, reading the CLR Header")
+                If ntHeaders.OptionalHeader32.NumberOfRvaAndSizes < MAX_HEADERS_TO_CHECK Then NumberOfHeadersToCheck = CInt(ntHeaders.OptionalHeader32.NumberOfRvaAndSizes)
+
+                For i As Integer = 0 To NumberOfHeadersToCheck - 1
+                    If ntHeaders.OptionalHeader32.DataDirectory(i).Size > 0 Then
+                        _sectionHeaders.Add(MarshalBytesTo(Of IMAGE_SECTION_HEADER)(reader))
+                    End If
+                Next
+
+                For Each SectionHeader As IMAGE_SECTION_HEADER In _sectionHeaders
+                    If SectionHeader.Name = ".text" Then TextBase = SectionHeader.PointerToRawData
+                Next
+
+                If NumberOfHeadersToCheck >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the lcoation of the CLR header
+                    If ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress > 0 Then
+                        reader.BaseStream.Seek(ntHeaders.OptionalHeader32.DataDirectory(CLR_HEADER).VirtualAddress - ntHeaders.OptionalHeader32.BaseOfCode + TextBase, SeekOrigin.Begin)
+                        CLR = MarshalBytesTo(Of IMAGE_COR20_HEADER)(reader)
+                    End If
+                End If
+            Else ' 64bit assembly
+                TL.LogMessage("PEReader", "This is a 64 bit assembly, reading the CLR Header")
+                If ntHeaders.OptionalHeader64.NumberOfRvaAndSizes < MAX_HEADERS_TO_CHECK Then NumberOfHeadersToCheck = CInt(ntHeaders.OptionalHeader64.NumberOfRvaAndSizes)
+
+                For i As Integer = 0 To NumberOfHeadersToCheck - 1
+                    If ntHeaders.OptionalHeader64.DataDirectory(i).Size > 0 Then
+                        _sectionHeaders.Add(MarshalBytesTo(Of IMAGE_SECTION_HEADER)(reader))
+                    End If
+                Next
+
+                For Each SectionHeader As IMAGE_SECTION_HEADER In _sectionHeaders
+                    If SectionHeader.Name = ".text" Then TextBase = SectionHeader.PointerToRawData
+                Next
+
+                If NumberOfHeadersToCheck >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the lcoation of the CLR header
+                    If ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).VirtualAddress > 0 Then
+                        reader.BaseStream.Seek(ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).VirtualAddress - ntHeaders.OptionalHeader64.BaseOfCode + TextBase, SeekOrigin.Begin)
+                        CLR = MarshalBytesTo(Of IMAGE_COR20_HEADER)(reader)
+                    End If
+                End If
+
+            End If
+        End If
     End Sub
 
     Friend Function Is32bitCompatible() As Boolean
-        Is32bitCompatible = False
-
-        If IsAssembly Then
-            TL.LogMessage("PE.Is32bitCode", "Is an assembly, using AssemblyDeterminationType: " & AssemblyDeterminationType)
-            Select Case AssemblyDeterminationType ' Use appropriatemethods depending on the method used to determine assembly type
-                Case "GetAssemblyName"
-                    TL.LogMessage("PE.Is32bitCode", "Processor Architecture is: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                    Select Case AssemblyInfo.ProcessorArchitecture
-                        Case ProcessorArchitecture.X86, ProcessorArchitecture.MSIL
-                            TL.LogMessage("PE.Is32bitCode", "Returning True: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                            Return True
-                        Case ProcessorArchitecture.Amd64, ProcessorArchitecture.IA64
-                            TL.LogMessage("PE.Is32bitCode", "Returning False: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                            Return False
-                        Case Else
-                            TL.LogMessage("PE.Is32bitCode", "Unknown Processor type, throwing exception: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                            Throw New InvalidOperationException("Unknown assembly processor architecture: " & AssemblyInfo.ProcessorArchitecture.ToString())
-                    End Select
-                Case Else ' Everything esle uses ReflectionOnlyLoadFrom to get an assembly
-                    Dim ProcessorArchitecture As ProcessorArchitecture
-                    ProcessorArchitecture = SuppliedAssembly.GetName.ProcessorArchitecture
-                    TL.LogMessage("PE.Is32bitCode", "Processor Architecture is: " & ProcessorArchitecture.ToString())
-
-                    Select Case ProcessorArchitecture
-                        Case ProcessorArchitecture.X86, ProcessorArchitecture.MSIL
-                            TL.LogMessage("PE.Is32bitCode", "Returning True: " & ProcessorArchitecture.ToString())
-                            Return True
-                        Case ProcessorArchitecture.Amd64, ProcessorArchitecture.IA64
-                            TL.LogMessage("PE.Is32bitCode", "Returning False: " & ProcessorArchitecture.ToString())
-                            Return False
-                        Case Else
-                            TL.LogMessage("PE.Is32bitCode", "Unknown Processor type, throwing exception: " & ProcessorArchitecture.ToString())
-                            Throw New InvalidOperationException("Unknown assembly processor architecture: " & ProcessorArchitecture.ToString())
-                    End Select
-            End Select
-
-        Else ' Not an assembly so rely on the flags
-            TL.LogMessage("PE.Is32bitCode", "Not an assembly relying on NTHeaders.FileHeader.Characteristics:" & _ntHeaders.FileHeader.Characteristics.ToString("X8"))
-            Return ((_ntHeaders.FileHeader.Characteristics And &H100) = &H100)
-        End If
-
-
+        Return OS32BitCompatible
     End Function
 
     Friend ReadOnly Property BitNess As Bitness
         Get
             Dim RetVal As Bitness
-            If IsDotNetAssembly() Then
-                TL.LogMessage("PE.BitNess", "Is a .NET assembly")
-                If Is32bitCompatible() Then
-                    If ((CLR.Flags And CLR_FLAGS.CLR_FLAGS_32BITREQUIRED) > 0) Then
+            Try
+                If IsDotNetAssembly() Then
+                    TL.LogMessage("PE.BitNess", "Is a .NET assembly")
+                    If Is32bitCompatible() Then
+                        If ((CLR.Flags And CLR_FLAGS.CLR_FLAGS_32BITREQUIRED) > 0) Then
+                            TL.LogMessage("PE.BitNess", "Found 32bit Required")
+                            RetVal = BitNess.Bits32
+                        Else
+                            TL.LogMessage("PE.BitNess", "Found MSIL")
+                            RetVal = BitNess.BitsMSIL
+                        End If
+                    Else
+                        TL.LogMessage("PE.BitNess", "Found 64bit Required")
+                        RetVal = BitNess.Bits64
+                    End If
+                Else
+                    TL.LogMessage("PE.BitNess", "Is NOT a .NET assembly")
+                    If Is32bitCompatible() Then
                         TL.LogMessage("PE.BitNess", "Found 32bit Required")
                         RetVal = BitNess.Bits32
                     Else
-                        TL.LogMessage("PE.BitNess", "Found MSIL")
-                        RetVal = BitNess.BitsMSIL
+                        TL.LogMessage("PE.BitNess", "Found 64bit Required")
+                        RetVal = BitNess.Bits64
                     End If
-                Else
-                    TL.LogMessage("PE.BitNess", "Found 64bit Required")
-                    RetVal = BitNess.Bits64
                 End If
-
-            Else
-                TL.LogMessage("PE.BitNess", "Is NOT a .NET assembly")
-                If Is32bitCompatible() Then
-                    TL.LogMessage("PE.BitNess", "Found 32bit Required")
-                    RetVal = BitNess.Bits32
-                Else
-                    TL.LogMessage("PE.BitNess", "Found 64bit Required")
-                    RetVal = BitNess.Bits64
-                End If
-
-            End If
-            Return RetVal
+                Return RetVal
+            Catch ex As Exception
+                TL.LogMessageCrLf("PE.BitNess", ex.ToString())
+                Throw
+            End Try
         End Get
     End Property
 
@@ -1368,9 +1423,9 @@ Friend Class PEReader
 
     Friend Function SubSystem() As SubSystemType
         If Is32bitCompatible() Then
-            Return CType(_ntHeaders.OptionalHeader32.Subsystem, SubSystemType) 'Return the 32bit header field
+            Return CType(ntHeaders.OptionalHeader32.Subsystem, SubSystemType) 'Return the 32bit header field
         Else
-            Return CType(_ntHeaders.OptionalHeader64.Subsystem, SubSystemType) 'Return the 64bit field
+            Return CType(ntHeaders.OptionalHeader64.Subsystem, SubSystemType) 'Return the 64bit field
         End If
     End Function
 
