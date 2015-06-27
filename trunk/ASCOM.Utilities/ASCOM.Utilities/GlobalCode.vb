@@ -1185,23 +1185,24 @@ Friend Class PEReader
     Private ReadOnly dosHeader As IMAGE_DOS_HEADER
     Private ntHeaders As IMAGE_NT_HEADERS
     Private ReadOnly CLR As IMAGE_COR20_HEADER
-    Private ReadOnly _sectionHeaders As Generic.IList(Of IMAGE_SECTION_HEADER) = New Generic.List(Of IMAGE_SECTION_HEADER)
+    Private ReadOnly sectionHeaders As Generic.IList(Of IMAGE_SECTION_HEADER) = New Generic.List(Of IMAGE_SECTION_HEADER)
     Private TextBase As UInteger
     Private reader As BinaryReader
     Private stream As Stream
     Private IsAssembly As Boolean = False
     Private AssemblyInfo As AssemblyName
     Private SuppliedAssembly As Assembly
-    Private ProfileStore As RegistryAccess
     Private AssemblyDeterminationType As String
     Private OS32BitCompatible As Boolean = False
+    Private ExecutableBitness As Bitness
 
     Private TL As TraceLogger
 #End Region
 
     Friend Sub New(ByVal FileName As String, TLogger As TraceLogger)
         TL = TLogger ' Save the TraceLogger instance we have been passed
-        ProfileStore = New RegistryAccess("PE Reader") 'Get access to the profile store
+
+        TL.LogMessage("PEReader", "Running within CLR version: " & RuntimeEnvironment.GetSystemVersion())
 
         If Left(FileName, 5).ToUpper = "FILE:" Then
             'Convert uri to local path if required, uri paths are not supported by FileStream - this method allows file names with # characters to be passed through
@@ -1209,71 +1210,63 @@ Friend Class PEReader
             FileName = u.LocalPath + Uri.UnescapeDataString(u.Fragment).Replace("/", "\\")
         End If
         TL.LogMessage("PEReader", "Filename to check: " & FileName)
-
         If Not File.Exists(FileName) Then Throw New FileNotFoundException("PEReader - File not found: " & FileName)
 
         ' Determine whether this is an assembly by testing whether we can load the file as an assembly, if so then it IS an assembly!
+        TL.LogMessage("PEReader", "Determining whether this is an assembly")
         Try
-            AssemblyDeterminationType = ProfileStore.GetProfile("Chooser", "PEReader", "ReflectionOnlyLoadFrom")
-            TL.LogMessage("PEReader", "AssemblyDeterminationType: " & AssemblyDeterminationType)
-
-            Select Case AssemblyDeterminationType
-                Case "GetAssemblyName"
-                    AssemblyInfo = AssemblyName.GetAssemblyName(FileName)
-                Case Else ' Everything esle uses ReflectionOnlyLoadFrom
-                    SuppliedAssembly = Assembly.ReflectionOnlyLoadFrom(FileName)
-                    'SuppliedAssembly = Assembly.LoadFrom(FileName)
-            End Select
+            SuppliedAssembly = Assembly.ReflectionOnlyLoadFrom(FileName)
             IsAssembly = True ' We got here without an exception so it must be an assembly
-            TL.LogMessage("PEReader", "Found an assembly: " & IsAssembly)
+            TL.LogMessage("PEReader.IsAssembly", "Found an assembly because it loaded Ok to the reflection context: " & IsAssembly)
         Catch ex As System.IO.FileNotFoundException
-            TL.LogMessage("PEReader", "FileNotFoundException: File not found so this is NOT an assembly: " & IsAssembly)
+            TL.LogMessage("PEReader.IsAssembly", "FileNotFoundException: File not found so this is NOT an assembly: " & IsAssembly)
         Catch ex1 As System.BadImageFormatException
 
-            ' Now determine what actually happened by examining the hResult
+            ' There are multiple reasons why this can occur so now determine what actually happened by examining the hResult
             Dim hResult As Integer = Marshal.GetHRForException(ex1)
 
             Select Case hResult
                 Case COR_E_BADIMAGEFORMAT
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_BADIMAGEFORMAT. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_BADIMAGEFORMAT. Setting IsAssembly to: " & IsAssembly)
                 Case CLDB_E_FILE_OLDVER
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_FILE_OLDVER. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_FILE_OLDVER. Setting IsAssembly to: " & IsAssembly)
                 Case CLDB_E_INDEX_NOTFOUND
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_INDEX_NOTFOUND. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_INDEX_NOTFOUND. Setting IsAssembly to: " & IsAssembly)
                 Case CLDB_E_FILE_CORRUPT
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_FILE_CORRUPT. Setting IsAssembly to: " & IsAssembly)
-                Case COR_E_NEWER_RUNTIME
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CLDB_E_FILE_CORRUPT. Setting IsAssembly to: " & IsAssembly)
+                Case COR_E_NEWER_RUNTIME ' This is an assembly but it requires a newer runtime than is currently running, so flag it as an assembly even though we can't load it
                     IsAssembly = True
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_NEWER_RUNTIME. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_NEWER_RUNTIME. Setting IsAssembly to: " & IsAssembly)
                 Case COR_E_ASSEMBLYEXPECTED
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_ASSEMBLYEXPECTED. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_ASSEMBLYEXPECTED. Setting IsAssembly to: " & IsAssembly)
                 Case ERROR_BAD_EXE_FORMAT
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_BAD_EXE_FORMAT. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_BAD_EXE_FORMAT. Setting IsAssembly to: " & IsAssembly)
                 Case ERROR_EXE_MARKED_INVALID
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_EXE_MARKED_INVALID. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_EXE_MARKED_INVALID. Setting IsAssembly to: " & IsAssembly)
                 Case CORSEC_E_INVALID_IMAGE_FORMAT
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CORSEC_E_INVALID_IMAGE_FORMAT. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - CORSEC_E_INVALID_IMAGE_FORMAT. Setting IsAssembly to: " & IsAssembly)
                 Case ERROR_NOACCESS
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_NOACCESS. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_NOACCESS. Setting IsAssembly to: " & IsAssembly)
                 Case ERROR_INVALID_ORDINAL
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_INVALID_ORDINAL. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_INVALID_ORDINAL. Setting IsAssembly to: " & IsAssembly)
                 Case ERROR_INVALID_DLL
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_INVALID_DLL. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_INVALID_DLL. Setting IsAssembly to: " & IsAssembly)
                 Case ERROR_FILE_CORRUPT
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_FILE_CORRUPT. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - ERROR_FILE_CORRUPT. Setting IsAssembly to: " & IsAssembly)
                 Case COR_E_LOADING_REFERENCE_ASSEMBLY
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_LOADING_REFERENCE_ASSEMBLY. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - COR_E_LOADING_REFERENCE_ASSEMBLY. Setting IsAssembly to: " & IsAssembly)
                 Case META_E_BAD_SIGNATURE
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - META_E_BAD_SIGNATURE. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - META_E_BAD_SIGNATURE. Setting IsAssembly to: " & IsAssembly)
                 Case Else
-                    TL.LogMessage("PEReader", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - Meaning of error code is unknown. Setting IsAssembly to: " & IsAssembly)
+                    TL.LogMessage("PEReader.IsAssembly", "BadImageFormatException. hResult: " & hResult.ToString("X8") & " - Meaning of error code is unknown. Setting IsAssembly to: " & IsAssembly)
             End Select
 
-        Catch ex2 As System.IO.FileLoadException
+        Catch ex2 As System.IO.FileLoadException ' This is an assembly but that has already been loaded so flag it as an assembly
             IsAssembly = True
-            TL.LogMessage("PEReader", "FileLoadException: Assembly already loaded so this is an assembly: " & IsAssembly)
+            TL.LogMessage("PEReader.IsAssembly", "FileLoadException: Assembly already loaded so this is an assembly: " & IsAssembly)
         End Try
 
+        TL.LogMessage("PEReader", "Determining PE Machine type")
         stream = New FileStream(FileName, FileMode.Open, FileAccess.Read)
         reader = New BinaryReader(stream)
 
@@ -1285,47 +1278,50 @@ Friend Class PEReader
 
         reader.BaseStream.Seek(dosHeader.e_lfanew, SeekOrigin.Begin) ' Skip MS-DOS stub and seek reader to NT Headers
         ntHeaders.Signature = MarshalBytesTo(Of UInt32)(reader) ' Read NT Headers
-        If ntHeaders.Signature <> &H4550 Then ' Make sure we have 'PE' in the pe signature. Options: 
+        If ntHeaders.Signature <> &H4550 Then ' Make sure we have 'PE' in the pe signature 
             Throw New InvalidOperationException("Invalid portable executable signature in NT header.")
         End If
-        ntHeaders.FileHeader = MarshalBytesTo(Of IMAGE_FILE_HEADER)(reader) ' This starts 4 bytes on from the start of the signature (already here by reading the signature itself)
+        ntHeaders.FileHeader = MarshalBytesTo(Of IMAGE_FILE_HEADER)(reader) ' Read the IMAGE_FILE_HEADER which starts 4 bytes on from the start of the signature (already here by reading the signature itself)
 
-        ' Determine whether this is flagged as a 32bit or 64bit executable
+        ' Determine whether this executable is flagged as a 32bit or 64bit and set OS32BitCompatible accordingly
         Select Case ntHeaders.FileHeader.Machine
             Case IMAGE_FILE_MACHINE_I386
                 OS32BitCompatible = True
-                TL.LogMessage("PEReader", "Machine - found Intel 32bit executable! Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
+                TL.LogMessage("PEReader.MachineType", "Machine - found ""Intel 32bit"" executable. Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
             Case IMAGE_FILE_MACHINE_IA64
                 OS32BitCompatible = False
-                TL.LogMessage("PEReader", "Machine - found Itanium 64bit executable! Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
+                TL.LogMessage("PEReader.MachineType", "Machine - found ""Itanium 64bit"" executable. Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
             Case IMAGE_FILE_MACHINE_AMD64
                 OS32BitCompatible = False
-                TL.LogMessage("PEReader", "Machine - found Intel 64bit executable! Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
+                TL.LogMessage("PEReader.MachineType", "Machine - found ""Intel 64bit"" executable. Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
             Case Else
-                TL.LogMessage("PEReader", "Found Unknown machine type: " & ntHeaders.FileHeader.Machine.ToString("X8") & ". Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
+                TL.LogMessage("PEReader.MachineType", "Found Unknown machine type: " & ntHeaders.FileHeader.Machine.ToString("X8") & ". Characteristics: " & ntHeaders.FileHeader.Characteristics.ToString("X8") & ", OS32BitCompatible: " & OS32BitCompatible)
         End Select
 
-        If Is32bitCompatible() Then ' Read optional headers
-            TL.LogMessage("PEReader", "Reading optional 32bit header")
+        If OS32BitCompatible Then ' Read optional 32bit header
+            TL.LogMessage("PEReader.MachineType", "Reading optional 32bit header")
             ntHeaders.OptionalHeader32 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER32)(reader)
-        Else
-            TL.LogMessage("PEReader", "Reading optional 64bit header")
+        Else ' Read optional 64bit header
+            TL.LogMessage("PEReader.MachineType", "Reading optional 64bit header")
             ntHeaders.OptionalHeader64 = MarshalBytesTo(Of IMAGE_OPTIONAL_HEADER64)(reader)
         End If
 
         If IsAssembly Then
+            TL.LogMessage("PEReader", "This is an assembly, determining Bitness through the CLR header")
+            ' Find the CLR header
             Dim NumberOfHeadersToCheck As Integer = MAX_HEADERS_TO_CHECK
-            If Is32bitCompatible() Then ' 32bit assembly
-                TL.LogMessage("PEReader", "This is a 32 bit assembly, reading the CLR Header")
+            If OS32BitCompatible Then ' We have a 32bit assembly
+                TL.LogMessage("PEReader.Bitness", "This is a 32 bit assembly, reading the CLR Header")
                 If ntHeaders.OptionalHeader32.NumberOfRvaAndSizes < MAX_HEADERS_TO_CHECK Then NumberOfHeadersToCheck = CInt(ntHeaders.OptionalHeader32.NumberOfRvaAndSizes)
+                TL.LogMessage("PEReader.Bitness", "Checking " & NumberOfHeadersToCheck & " headers")
 
                 For i As Integer = 0 To NumberOfHeadersToCheck - 1
                     If ntHeaders.OptionalHeader32.DataDirectory(i).Size > 0 Then
-                        _sectionHeaders.Add(MarshalBytesTo(Of IMAGE_SECTION_HEADER)(reader))
+                        sectionHeaders.Add(MarshalBytesTo(Of IMAGE_SECTION_HEADER)(reader))
                     End If
                 Next
 
-                For Each SectionHeader As IMAGE_SECTION_HEADER In _sectionHeaders
+                For Each SectionHeader As IMAGE_SECTION_HEADER In sectionHeaders
                     If SectionHeader.Name = ".text" Then TextBase = SectionHeader.PointerToRawData
                 Next
 
@@ -1335,74 +1331,82 @@ Friend Class PEReader
                         CLR = MarshalBytesTo(Of IMAGE_COR20_HEADER)(reader)
                     End If
                 End If
-            Else ' 64bit assembly
-                TL.LogMessage("PEReader", "This is a 64 bit assembly, reading the CLR Header")
+            Else ' We have a 64bit assembly
+                TL.LogMessage("PEReader.Bitness", "This is a 64 bit assembly, reading the CLR Header")
                 If ntHeaders.OptionalHeader64.NumberOfRvaAndSizes < MAX_HEADERS_TO_CHECK Then NumberOfHeadersToCheck = CInt(ntHeaders.OptionalHeader64.NumberOfRvaAndSizes)
+                TL.LogMessage("PEReader.Bitness", "Checking " & NumberOfHeadersToCheck & " headers")
 
                 For i As Integer = 0 To NumberOfHeadersToCheck - 1
                     If ntHeaders.OptionalHeader64.DataDirectory(i).Size > 0 Then
-                        _sectionHeaders.Add(MarshalBytesTo(Of IMAGE_SECTION_HEADER)(reader))
+                        sectionHeaders.Add(MarshalBytesTo(Of IMAGE_SECTION_HEADER)(reader))
                     End If
                 Next
 
-                For Each SectionHeader As IMAGE_SECTION_HEADER In _sectionHeaders
-                    If SectionHeader.Name = ".text" Then TextBase = SectionHeader.PointerToRawData
+                For Each SectionHeader As IMAGE_SECTION_HEADER In sectionHeaders
+                    If SectionHeader.Name = ".text" Then
+                        TL.LogMessage("PEReader.Bitness", "Found TEXT section")
+                        TextBase = SectionHeader.PointerToRawData
+                    End If
                 Next
 
-                If NumberOfHeadersToCheck >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the lcoation of the CLR header
+                If NumberOfHeadersToCheck >= CLR_HEADER + 1 Then ' Only test if the number of headers meets or exceeds the location of the CLR header
                     If ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).VirtualAddress > 0 Then
                         reader.BaseStream.Seek(ntHeaders.OptionalHeader64.DataDirectory(CLR_HEADER).VirtualAddress - ntHeaders.OptionalHeader64.BaseOfCode + TextBase, SeekOrigin.Begin)
                         CLR = MarshalBytesTo(Of IMAGE_COR20_HEADER)(reader)
+                        TL.LogMessage("PEReader.Bitness", "Read CLR header successfully")
                     End If
                 End If
 
             End If
+
+            ' Determine the bitness from the CLR header
+            If OS32BitCompatible Then ' Could be an x86 or MSIL assembly so determine which
+                If ((CLR.Flags And CLR_FLAGS.CLR_FLAGS_32BITREQUIRED) > 0) Then
+                    TL.LogMessage("PEReader.Bitness", "Found ""32bit Required"" assembly")
+                    ExecutableBitness = BitNess.Bits32
+                Else
+                    TL.LogMessage("PEReader.Bitness", "Found ""MSIL"" assembly")
+                    ExecutableBitness = BitNess.BitsMSIL
+                End If
+            Else ' Must be an x64 assmebly
+                TL.LogMessage("PEReader.Bitness", "Found ""64bit Required"" assembly")
+                ExecutableBitness = BitNess.Bits64
+            End If
+
+            TL.LogMessage("PEReader", "Assembly required Runtime version: " & CLR.MajorRuntimeVersion & "." & CLR.MinorRuntimeVersion)
+        Else ' Not an assembly so just use the FileHeader.Machine value to determine bitness
+            TL.LogMessage("PEReader", "This is not an assembly, determining Bitness through the executable bitness flag")
+            If OS32BitCompatible Then
+                TL.LogMessage("PEReader.Bitness", "Found 32bit executable")
+                ExecutableBitness = BitNess.Bits32
+            Else
+                TL.LogMessage("PEReader.Bitness", "Found 64bit executable")
+                ExecutableBitness = BitNess.Bits64
+            End If
+
         End If
     End Sub
 
-    Friend Function Is32bitCompatible() As Boolean
-        Return OS32BitCompatible
-    End Function
-
     Friend ReadOnly Property BitNess As Bitness
         Get
-            Dim RetVal As Bitness
-            Try
-                If IsDotNetAssembly() Then
-                    TL.LogMessage("PE.BitNess", "Is a .NET assembly")
-                    If Is32bitCompatible() Then
-                        If ((CLR.Flags And CLR_FLAGS.CLR_FLAGS_32BITREQUIRED) > 0) Then
-                            TL.LogMessage("PE.BitNess", "Found 32bit Required")
-                            RetVal = BitNess.Bits32
-                        Else
-                            TL.LogMessage("PE.BitNess", "Found MSIL")
-                            RetVal = BitNess.BitsMSIL
-                        End If
-                    Else
-                        TL.LogMessage("PE.BitNess", "Found 64bit Required")
-                        RetVal = BitNess.Bits64
-                    End If
-                Else
-                    TL.LogMessage("PE.BitNess", "Is NOT a .NET assembly")
-                    If Is32bitCompatible() Then
-                        TL.LogMessage("PE.BitNess", "Found 32bit Required")
-                        RetVal = BitNess.Bits32
-                    Else
-                        TL.LogMessage("PE.BitNess", "Found 64bit Required")
-                        RetVal = BitNess.Bits64
-                    End If
-                End If
-                Return RetVal
-            Catch ex As Exception
-                TL.LogMessageCrLf("PE.BitNess", ex.ToString())
-                Throw
-            End Try
+            TL.LogMessage("PE.BitNess", "Returning: " & ExecutableBitness)
+            Return ExecutableBitness
         End Get
     End Property
 
     Friend Function IsDotNetAssembly() As Boolean
         TL.LogMessage("PE.IsDotNetAssembly", "Returning: " & IsAssembly)
         Return IsAssembly
+    End Function
+
+    Friend Function SubSystem() As SubSystemType
+        If OS32BitCompatible Then
+            TL.LogMessage("PE.SubSystem", "Returning 32bit value: " & CType(ntHeaders.OptionalHeader32.Subsystem, SubSystemType).ToString())
+            Return CType(ntHeaders.OptionalHeader32.Subsystem, SubSystemType) 'Return the 32bit header field
+        Else
+            TL.LogMessage("PE.SubSystem", "Returning 64bit value: " & CType(ntHeaders.OptionalHeader64.Subsystem, SubSystemType).ToString())
+            Return CType(ntHeaders.OptionalHeader64.Subsystem, SubSystemType) 'Return the 64bit field
+        End If
     End Function
 
     Private Shared Function MarshalBytesTo(Of T)(ByVal reader As BinaryReader) As T
@@ -1421,14 +1425,6 @@ Friend Class PEReader
         Return theStructure
     End Function
 
-    Friend Function SubSystem() As SubSystemType
-        If Is32bitCompatible() Then
-            Return CType(ntHeaders.OptionalHeader32.Subsystem, SubSystemType) 'Return the 32bit header field
-        Else
-            Return CType(ntHeaders.OptionalHeader64.Subsystem, SubSystemType) 'Return the 64bit field
-        End If
-    End Function
-
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' To detect redundant calls
 
@@ -1438,7 +1434,6 @@ Friend Class PEReader
             If disposing Then
                 Try
                     reader.Close()
-                    ProfileStore.Dispose()
                     stream.Close()
                     stream.Dispose()
                     stream = Nothing
