@@ -151,7 +151,7 @@
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
     </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
-    <FrameworkVersion>.NET Portable Library 4.6</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
