@@ -1,22 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="d5ab3afe-60aa-49aa-8dfb-caae4f86a8fc" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<section address="Which NOVAS?">
-		<title>Which NOVAS?</title>
+	<section address="Which Astrometry Component?">
+		<title>Which Astrometry Component?</title>
    		<content>
-      		<para>The ASCOM updated Platform has three astrometric components:
+      		<para>At Platform 6.1, the Platform has four astrometric components:
 	      		<list class="bullet">
 	      			<listItem>Transform</listItem>
+		      		<listItem>SOFA</listItem>
 		      		<listItem>NOVASCOM</listItem>
 		      		<listItem>NOVAS2</listItem>
 		      	</list>
-		      	Surely an embarrassment of riches? In fact these components provide different capabilities and are 
-		      	targetted at different requirements and uses as described below.
+		      	
+		      	<para>The ASCOM.Astrometry namespace of the Platform has become overcrowded with components that have similar capabilities but that differ in small ways from each
+		      	other (e.g. NOVAS2, NOVAS2COM, NOVAS3, NOVAS3.1). The recent realisation that some NOVAS routines use iterative algorithms that can fail, when in very close 
+		      	proximity to the poles, led to a search for an alternative and the SOFA Library was found to be an actively maintained and authoritative choice.</para>
+		      	
+		      	<para>The addition of a SOFA component brings the number of high precision astronomy libraries distributed within the Platform to 8! To reduce the maintenance burden, SOFA will 
+		      	become the primary high precision library for astronomical computing distributed with the ASCOM Platform and dependence of Platform components on NOVAS will be removed. 
+		      	However, the NOVAS routines provide functionality that is not present in SOFA e.g. major and minor planet ephemerides and consequently the NOVAS 3.1 component
+		      	will continue to be distributed with the Platform.</para>
+
+				The following NOVAS components will be removed from the Platform installer at the next major update and moved into a separate installer:
+				<list class="bullet">
+					<listItem>Kepler</listItem>
+					<listItem>NOVASCOM</listItem>
+					<listItem>NOVAS2</listItem>
+					<listItem>NOVAS2COM</listItem>
+					<listItem>NOVAS3</listItem>
+				</list>
+
+		      	<para>Surely an embarrassment of riches? In fact these components provide different capabilities and are 
+		      	targetted at different requirements and uses as described below.</para>
 	      	</para>
       	</content>
     </section>
   
-  <section address="Transform">
+    <section address="Transform">
 		<title>Transform</title>
    		<content>
       		<para>This simple component is designed for the telescope or dome driver author who simply needs to convert
@@ -25,8 +45,41 @@
 	      	The component is built on the established NOVAS3.1 supervisory library routines.</para>
 	      	<para>This component can be used directly by .NET based applications and is also exposed as a COM object to enable use 
 	      	by scripting and other languages.</para>
+	      	<para>Under the hood, Transform now ses the SOFA routines rather than NOVAS for better performance near the celestial poles.</para>      	
       	</content>
     </section>
+    
+    <section address="SOFA">
+		<title>SOFA</title>
+   		<content>
+      		<para>The International Astronomical Union's SOFA service has the task of establishing and maintaining an accessible and authoritative set of 
+      		algorithms and procedures that implement standard models used in fundamental astronomy. The service is managed by an international panel, 
+      		the SOFA Board, appointed through IAU Division A — Fundamental Astronomy. SOFA also works closely with the International Earth Rotation and 
+      		Reference Systems Service (IERS).</para>
+      		
+      		<para>This comnponent presents the latest SOFA routines so that they are accessible from both 32bit and 64bit COM and .NET applications. 
+      		In 2014, ASCOM adopted SOFA as its primary technology for co-ordinate conversion. ASCOM's intention is that the ASCOM SOFA component will be updated 
+      		as each new SOFA release is made rather than adding new components as was done for NOVAS 3.0 and NOVAS 3.1</para>
+      	</content>
+    </section>
+   
+    <section address="NOVAS31">
+        <title>NOVAS3.1</title>
+	    <content>
+	  		<para>This component is a shell for the NOVAS 3.1 library released in March 2011 for demanding applications that require access to the fundamental routines
+	  		in the NOVAS3.1 library, the latest JPL DE421 planetary and lunar ephemerises or to calculations 
+	  		based on the IAU 2000 reference systems resolution. It contains a range of supervisory routines that provide access to high
+	  		level functions and an extensive range of intermediate and basic level routines dedicated to lower level astrometric functions.</para>
+	  		
+	      	<para>The calling interface is close to the original C interface and most calculated values are passed back through reference parameters.</para>
+	      	
+	      	<para>This component can be used directly by .NET based applications and is also exposed as a COM object to enable use
+	      	by scripting and other languages. Full functionality is available through the .NET interface, however, recent testing (April 2012)
+	      	has shown that <hardware>many methods are not accessible through COM interop</hardware> because a number of method parameters are passed by Reference and
+	      	use structures that do not pass across the COM interface (this is a technical COM limitation, not an ASCOM limitation).</para>
+	    </content>
+    </section>
+
   <section address="NOVASCOM">
 		<title>NOVASCOM</title>
    		<content>
@@ -41,6 +94,7 @@
 	      	by scripting and other languages.</para>
       	</content>
     </section>
+    
   <section address="NOVAS2">
 		<title>NOVAS2</title>
    		<content>

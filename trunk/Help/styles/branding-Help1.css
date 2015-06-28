@@ -1,0 +1,36 @@
+/* Define the userData cache persistence mechanism for Help 1 files */
+.userDataStyle {
+	behavior: url(#default#userdata);
+}
+
+/* Style adjustments for Help 1 */
+th p {
+	padding-bottom: 0px;
+}
+td p {
+	padding-bottom: 5px;
+}
+.codeSnippetContainerTabs {
+	top: 1px;
+}
+.codeSnippetToolBarText {
+	top: -13px;
+}
+.codeSnippetContainerTabSingle {
+	padding: 2px 15px 0px 15px;
+	height: 22px;
+}
+
+/* Style adjustments for ASCOM */
+/* Changed margin-right from auto to 50px to ensure that long lines do not go under the vertical scroll bar when they wrap to the next line */
+/* Added overflow-x:hidden to suppress the horizontal scroll bar */
+body {
+	font-family: 'Segoe UI' , 'Lucida Grande' , Verdana, Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	padding: 0;
+	margin: 0;
+	margin-left: auto;
+	margin-right: 50;
+	overflow-x: hidden;
+	color: #000;
+}

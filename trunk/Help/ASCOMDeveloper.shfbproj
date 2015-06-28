@@ -141,11 +141,6 @@
     <ProjectSummary>ASCOM Platform 6 Developer Documentation</ProjectSummary>
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
-      <PlugInConfig id="Hierarchical Table of Contents" enabled="True">
-        <configuration>
-          <toc minParts="2" insertBelow="False" />
-        </configuration>
-      </PlugInConfig>
     </PlugInConfigurations>
     <FeedbackEMailAddress>feedback%40ascom-standards.org</FeedbackEMailAddress>
     <FeedbackEMailLinkText>Send feedback to ASCOM</FeedbackEMailLinkText>
@@ -156,15 +151,19 @@
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
     </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Portable Library 4.6</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <MaximumGroupParts>2</MaximumGroupParts>
-    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceGrouping>True</NamespaceGrouping>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <Language>en-US</Language>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <IndentHtml>True</IndentHtml>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CppCommentsFixup>False</CppCommentsFixup>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
@@ -173,8 +172,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Scripts\" />
     <Folder Include="Developer Information\" />
+    <Folder Include="Styles\" />
     <Folder Include="Tools and Features\" />
     <Folder Include="Examples\" />
     <Folder Include="Version History\" />
@@ -223,11 +222,10 @@
       <AlternateText>Video Camera State Diagram</AlternateText>
       <CopyToMedia>True</CopyToMedia>
     </Image>
-    <Content Include="Scripts\script_manifold.js" />
-    <Content Include="Introduction\Acknowledgements.aml" />
+    <Content Include="Styles\branding-Help1.css" />
+    <None Include="Introduction\Acknowledgements.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
-    <None Include="Developer Information\Time Relationships - Copy.aml" />
     <None Include="Developer Information\Time Relationships - Copy.aml" />
     <None Include="Developer Information\Camera States.aml" />
     <None Include="Developer Information\Camera States.aml" />
@@ -244,7 +242,6 @@
     <None Include="Version History\Version 6.0 SP2.aml" />
     <None Include="Version History\Version 6.0 SP2.aml" />
     <None Include="Introduction\Time Relationships.aml" />
-    <None Include="Introduction\Time Relationships.aml" />
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Examples\DriverAccess.aml" />
@@ -253,15 +250,15 @@
     <None Include="Tools and Features\Serial Port Configuration.aml" />
     <None Include="Developer Information\Gauges.aml" />
     <None Include="Introduction\Introduction - Developer.aml" />
-    <None Include="Introduction\Key Changes in 6.0.aml" />
+    <None Include="Version History\Key Changes in 6.0.aml" />
     <None Include="Examples\ProfileWhole.aml" />
     <None Include="Examples\SerialThreading.aml" />
     <None Include="Developer Information\MultiThreading.aml" />
     <None Include="Tools and Features\Diagnostics Tool.aml" />
-    <None Include="Introduction\Key Changes in 5.5.aml" />
+    <None Include="Version History\Key Changes in 5.5.aml" />
     <None Include="Examples\NOVAS2.aml" />
     <None Include="Examples\NOVASCOM.aml" />
-    <None Include="Introduction\Which NOVAS.aml" />
+    <None Include="Developer Information\Coordinate Conversion.aml" />
     <None Include="Examples\Transform.aml" />
     <None Include="Version History\Version 5.5 RC4.aml" />
     <None Include="Examples\Environment.aml" />
