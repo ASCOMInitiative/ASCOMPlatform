@@ -19,16 +19,14 @@
     <HtmlHelpName>PlatformHelp</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
-      <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
-    </DocumentationSources>
+<DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" /></DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
     <CopyrightText>Copyright &amp;#169%3b 2010-15, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM" isExposed="False" />
-      <Filter entryType="Namespace" fullName="System" isExposed="True">
-        <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
-      </Filter>
-    </ApiFilter>
+<Filter entryType="Namespace" fullName="System" isExposed="True">
+  <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
+</Filter></ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
@@ -107,11 +105,6 @@
     <ProjectSummary>ASCOM Platform Documentation</ProjectSummary>
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
-      <PlugInConfig id="Hierarchical Table of Contents" enabled="True">
-        <configuration>
-          <toc minParts="2" insertBelow="False" />
-        </configuration>
-      </PlugInConfig>
     </PlugInConfigurations>
     <FeedbackEMailAddress>feedback%40ascom-standards.org</FeedbackEMailAddress>
     <FeedbackEMailLinkText>Send feedback to ASCOM</FeedbackEMailLinkText>
@@ -129,7 +122,7 @@
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <CollectionTocStyle>Flat</CollectionTocStyle>
     <MaximumGroupParts>2</MaximumGroupParts>
-    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceGrouping>True</NamespaceGrouping>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <Language>en-US</Language>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
@@ -186,7 +179,6 @@
     <None Include="Version History\Version 6.0 SP1.aml" />
     <None Include="Tools and Features\Serial Port Configuration.aml" />
     <None Include="Tools and Features\Gauges.aml" />
-    <None Include="Introduction\Key Changes in 6.0 Developer.aml" />
     <None Include="Introduction\Key Changes in 6.0.aml" />
     <None Include="Tools and Features\Diagnostics Tool.aml" />
     <None Include="Introduction\Key Changes in 5.5.aml" />
