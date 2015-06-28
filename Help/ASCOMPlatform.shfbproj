@@ -141,7 +141,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Scripts\" />
+    <Folder Include="styles\" />
     <Folder Include="Tools and Features\" />
     <Folder Include="Version History\" />
     <Folder Include="Introduction\" />
@@ -171,7 +171,7 @@
       <ImageId>ForceCOMPort</ImageId>
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
-    <Content Include="Scripts\script_manifold.js" />
+    <Content Include="styles\branding-Help1.css" />
     <Content Include="Introduction\Acknowledgements.aml" />
     <None Include="Version History\Version 6.1 SP2.aml" />
     <None Include="Version History\Version 6.1 SP1.aml" />
