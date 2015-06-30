@@ -35,7 +35,7 @@
 					</externalLink>
 					please check under "Popular Downloads - Developer Tools" if Framework 4 is not otherwise listed.
 				</para>
-				<para>The Platform now also requires Visual C++ 10.0 libraries and the installer will provide these if they are not already present on your PC.</para>
+				<para>The Platform also requires Visual C++ 10.0 libraries and the installer will provide these if they are not already present on your PC.</para>
             </content>
 		</section>
    		
@@ -43,9 +43,11 @@
     		<title>Key Changes in 6.1 SP2 - For Everyone</title>
       		<content>
 				<list class="bullet">
-	      			<listItem>TBC.</listItem>
-	      			<listItem>TBC.</listItem>
-	  			</list>
+	      			<listItem>Added support for the June 30th 2015 leap second</listItem>
+	      			<listItem>Telescope Simulator - Improved simulation of Alt/AZ, German Equatorial and Equatorial modes</listItem>
+	      			<listItem>Help  - Now presented in easier to read style</listItem>
+	      			<listItem>Installer recognises Windows 10</listItem>
+	      		</list>
             </content>
 		</section>
    		
@@ -53,7 +55,14 @@
 	     	<title>Key Changes in 6.1 SP2 - For Developers</title>
 	      	<content>
 	      		<list class="bullet">
-	      			<listItem>TBC.</listItem>
+	      			<listItem>SOFA - Library upleveled to release 11</listItem>
+	      			<listItem>Driver Templates (VB) - Change the Rates implementation so that it is compatible with .NET v4</listItem>
+	      			<listItem>Driver Templates (VB) - Improved loggging</listItem>
+	      			<listItem>Driver Templates (VB) - SetupDialogForm now uses a combo box for the COM port selector.</listItem>
+	      			<listItem>Dome Simulator .NET - Improved to run from an application that is not running a Windows message loop</listItem>
+	      			<listItem>SOFA, NOVAS31 - Improved robustness when client applications change the DLL search path</listItem>
+	   				<listItem>Dome Simulator - Improved log messages</listItem>
+	      			<listItem>Help - Now presented in easier to read style</listItem>
 				</list>
       		</content>
    		</section>
@@ -62,8 +71,10 @@
            	<title>Issues Fixed - Platform</title>
             <content>
       			<list class="bullet">
-	   				<listItem>TBC.</listItem>
-					</list>
+	      			<listItem>Transform - Fixed missing Az/El coordinates after Transform was intialised with Topocentric coordinates</listItem>
+	   				<listItem>Chooser - Fixed compatibility issue when drivers are created in Visual Studio 2015RC</listItem>
+	   				<listItem>Focuser Simulator - Fixed issue when HALT was requested after a negative MOVE command.</listItem>
+				</list>
    			</content>
    		</section>
    		
@@ -71,7 +82,8 @@
            	<title>Issues Fixed - Developers</title>
             <content>
       			<list class="bullet">
-					<listItem>TBC.</listItem>
+					<listItem>DriverAccess - Improved compatibility with interface v1 drivers</listItem>
+					<listItem>NOVAS31 - Initialisation code is now thread safe.</listItem>
 				</list>
    			</content>
    		</section>
@@ -82,18 +94,15 @@
       			<list class="bullet">
 					<listItem>The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully 
 					accessible through COM from scripting languages because a number of parameters are passed by reference or use 
-					structures that do not pass across the COM interface. Three workrounds have been established:
-		      			<list class="bullet">
-							<listItem><legacyBold>Recommended</legacyBold> - Use the Transform component in the ASCOM.Astrometry.Transform 
-							namespace, it is fully COM compatible.</listItem>
-							<listItem><legacyBold>Recommended</legacyBold> - Use the NOVASCOM components in the Astrometry.NOVASCOM namespace,
-							they are also fully COM compatible.</listItem>
-							<listItem>Create your own COM presentation component that encapsulates the NOVAS 3.1 functions that you require
+					structures that do not pass across the COM interface. Two work rounds are available:
+		      			<list class="ordered">
+							<listItem>Use the Transform component in the ASCOM.Astrometry.Transform namespace, it is fully COM compatible.</listItem>
+							<listItem>Create your own COM presentation component that encapsulates the SOFA or NOVAS 3.1 functions that you require
 							and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your 
 							scripting application.</listItem>
 						</list>
 					</listItem>
-					</list>
+				</list>
    			</content>
    		</section>
    		
