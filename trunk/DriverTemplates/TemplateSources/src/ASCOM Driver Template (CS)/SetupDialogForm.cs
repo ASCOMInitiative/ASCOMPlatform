@@ -16,16 +16,15 @@ namespace ASCOM.TEMPLATEDEVICENAME
         public SetupDialogForm()
         {
             InitializeComponent();
-            // Initialise current values of user settings from the ASCOM Profile 
-            textBox1.Text = TEMPLATEDEVICECLASS.comPort;
-            chkTrace.Checked = TEMPLATEDEVICECLASS.traceState;
+            // Initialise current values of user settings from the ASCOM Profile
+            InitUI();
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
         {
             // Place any validation constraint checks here
-
-            TEMPLATEDEVICECLASS.comPort = textBox1.Text; // Update the state variables with results from the dialogue
+            // Update the state variables with results from the dialogue
+            TEMPLATEDEVICECLASS.comPort = (string)comboBoxComPort.SelectedItem;
             TEMPLATEDEVICECLASS.traceState = chkTrace.Checked;
         }
 
@@ -48,6 +47,19 @@ namespace ASCOM.TEMPLATEDEVICENAME
             catch (System.Exception other)
             {
                 MessageBox.Show(other.Message);
+            }
+        }
+
+        private void InitUI()
+        {
+            chkTrace.Checked = TEMPLATEDEVICECLASS.traceState;
+            // set the list of com ports to those that are currently available
+            comboBoxComPort.Items.Clear();
+            comboBoxComPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());      // use System.IO because it's static
+            // select the current port if possible
+            if (comboBoxComPort.Items.Contains(TEMPLATEDEVICECLASS.comPort))
+            {
+                comboBoxComPort.SelectedItem = TEMPLATEDEVICECLASS.comPort;
             }
         }
     }
