@@ -103,6 +103,8 @@ Source: "%srcp%\%rdmf%"; DestDir: "{app}"; Flags: isreadme
 %nbth%[UninstallRun]
 %nasm%; Only for .NET assembly/in-proc drivers
 %nasm%Filename: "{%net32%}\regasm.exe"; Parameters: "-u ""{app}\%file%"""; Flags: runhidden 32bit
+%nbth%; This helps to give a clean uninstall
+%nasm%Filename: "{%net64%}\regasm.exe"; Parameters: "/codebase ""{app}\%file%"""; Flags: runhidden 64bit; Check: IsWin64
 %nasm%Filename: "{%net64%}\regasm.exe"; Parameters: "-u ""{app}\%file%"""; Flags: runhidden 64bit; Check: IsWin64
 
 %nlcs%; Only for .NET local-server drivers
