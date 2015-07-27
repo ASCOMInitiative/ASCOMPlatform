@@ -1225,11 +1225,8 @@ Public Class Util
     '               UTC - local + offset
     '------------------------------------------------------------------------
     Private Function GetTimeZoneOffset() As Double
-        Dim x As Double
-        '5.0.2 Added sign as the ASCOM standard is opposite to Windows
-        x = 23.45 * 43.67
-        x = -x
-        Return -CDbl(TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours)
+        '6.1 SP2 - Revised to return .TotalHours value instead of .Hours value so that fractional time zone values are returned accurately.
+        Return -TimeZone.CurrentTimeZone.GetUtcOffset(Now).TotalHours
     End Function
     '------------------------------------------------------------------------
     ' FUNCTION    : GetTimeZoneName()

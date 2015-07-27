@@ -74,6 +74,7 @@
 	      			<listItem>Transform - Fixed missing Az/El coordinates after Transform was intialised with Topocentric coordinates</listItem>
 	   				<listItem>Chooser - Fixed compatibility issue when drivers are created in Visual Studio 2015RC</listItem>
 	   				<listItem>Focuser Simulator - Fixed issue when HALT was requested after a negative MOVE command.</listItem>
+	   				<listItem>Util.GetTimeZoneOffset - Now returns fractional time zone offsets where appropriate e.g. +5.5 for India.</listItem>
 				</list>
    			</content>
    		</section>
