@@ -24,13 +24,13 @@ td p {
 /* Style adjustments for ASCOM */
 /* Changed margin-right from auto to 50px to ensure that long lines do not go under the vertical scroll bar when they wrap to the next line */
 /* Added overflow-x:hidden to suppress the horizontal scroll bar */
+/* font-family: 'Segoe UI' , 'Lucida Grande' , Verdana, Arial, Helvetica, sans-serif; */
+/* font-size: 15px; */
+/* padding: 0; */
+/* margin: 0; */
+/* margin-left: auto; */
+/* color: #000; */
 body {
-	font-family: 'Segoe UI' , 'Lucida Grande' , Verdana, Arial, Helvetica, sans-serif;
-	font-size: 15px;
-	padding: 0;
-	margin: 0;
-	margin-left: auto;
 	margin-right: 50;
 	overflow-x: hidden;
-	color: #000;
 }
