@@ -32,9 +32,9 @@ namespace ASCOM.TEMPLATEDEVICENAME
             this.cmdCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.picASCOM = new System.Windows.Forms.PictureBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.chkTrace = new System.Windows.Forms.CheckBox();
+            this.comboBoxComPort = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,13 +84,6 @@ namespace ASCOM.TEMPLATEDEVICENAME
             this.picASCOM.Click += new System.EventHandler(this.BrowseToAscom);
             this.picASCOM.DoubleClick += new System.EventHandler(this.BrowseToAscom);
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(77, 87);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(158, 20);
-            this.textBox1.TabIndex = 4;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -110,14 +103,22 @@ namespace ASCOM.TEMPLATEDEVICENAME
             this.chkTrace.Text = "Trace on";
             this.chkTrace.UseVisualStyleBackColor = true;
             // 
+            // comboBoxComPort
+            // 
+            this.comboBoxComPort.FormattingEnabled = true;
+            this.comboBoxComPort.Location = new System.Drawing.Point(77, 87);
+            this.comboBoxComPort.Name = "comboBoxComPort";
+            this.comboBoxComPort.Size = new System.Drawing.Size(90, 21);
+            this.comboBoxComPort.TabIndex = 7;
+            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(350, 175);
+            this.Controls.Add(this.comboBoxComPort);
             this.Controls.Add(this.chkTrace);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.picASCOM);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmdCancel);
@@ -140,9 +141,9 @@ namespace ASCOM.TEMPLATEDEVICENAME
 		private System.Windows.Forms.Button cmdOK;
 		private System.Windows.Forms.Button cmdCancel;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.PictureBox picASCOM;
-		private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.PictureBox picASCOM;
 		private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chkTrace;
+        private System.Windows.Forms.ComboBox comboBoxComPort;
 	}
 }
