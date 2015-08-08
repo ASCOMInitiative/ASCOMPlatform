@@ -11,10 +11,10 @@
         RspString = Utl.PlatformVersion
 
         'Version and build
-        PlatformMajor = Utl.MajorVersion
-        PlatformMinor = Utl.MinorVersion
-        ServicePack = Utl.ServicePack
-        Build = Utl.BuildNumber
+        'PlatformMajor = Utl.MajorVersion
+        'PlatformMinor = Utl.MinorVersion
+        'ServicePack = Utl.ServicePack
+        'Build = Utl.BuildNumber
 
         'Test whether the installed platform is at or greater than a required level
         CurrrentPlatformVersion = New Version(PlatformMajor, PlatformMinor, ServicePack, Build)
