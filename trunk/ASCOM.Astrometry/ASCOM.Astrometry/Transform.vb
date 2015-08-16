@@ -773,7 +773,7 @@ Namespace Transform
         Private Sub CheckGAC()
             Dim strPath As String
             TL.LogMessage("CheckGAC", "Started")
-            strPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase)
+            strPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             TL.LogMessage("CheckGAC", "Assembly path: " & strPath)
         End Sub
 
