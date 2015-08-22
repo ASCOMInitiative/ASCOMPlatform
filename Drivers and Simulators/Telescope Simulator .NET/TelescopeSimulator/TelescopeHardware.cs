@@ -19,17 +19,14 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
-using System.Timers;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using ASCOM.DeviceInterface;
-using System.Globalization;
-using ASCOM.Utilities;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.Serialization;
 using System.Windows;
+using ASCOM.DeviceInterface;
+using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
@@ -168,7 +165,7 @@ namespace ASCOM.Simulator
                 s_wTimer.Tick += new EventHandler(m_wTimer_Tick);
 
                 southernHemisphere = false;
-                Connected = false;
+                //Connected = false;
                 rateAxes = new Vector();
 
                 TL = new ASCOM.Utilities.TraceLogger("", "TelescopeSimHardware");
@@ -384,7 +381,7 @@ namespace ASCOM.Simulator
 
         public static void Start()
         {
-            Connected = false;
+            //Connected = false;
             Tracking = AutoTrack;
             AtPark = false;
 
@@ -868,7 +865,38 @@ namespace ASCOM.Simulator
             }
         }
 
-        public static bool Connected {get; set;}
+        //public static bool Connected {get; set;}
+
+        // this emulates a hardware connection
+        // the dictionary maintains a list of connected drivers, a dictionary is used so only one of each
+        // driver is maintained.
+        // Connected will be reported as true if any driver is connected
+        // each driver instance has a unique id generated using ObjectIDGenerator
+
+        private static ConcurrentDictionary<long, bool> connectStates = new ConcurrentDictionary<long, bool>();
+
+        public static ObjectIDGenerator objectIDGenerator = new ObjectIDGenerator();
+
+        public static bool Connected
+        {
+            get
+            {
+                return connectStates.Count > 0;
+            }
+        }
+
+        public static void SetConnected(long id, bool value)
+        {
+            // add or remove the instance, this is done once regardless of the number of calls
+            if (value)
+            {
+                connectStates.TryAdd(id, true);
+            }
+            else
+            {
+                connectStates.TryRemove(id, out value);
+            }
+        }
 
         public static bool CanMoveAxis(ASCOM.DeviceInterface.TelescopeAxes axis)
         {
@@ -991,10 +1019,11 @@ namespace ASCOM.Simulator
             set { rateRaDec.Y = value; }
         }
 
+        // converts the rate between seconds per sidereal second and seconds per second
         public static double RightAscensionRate
         {
-            get { return rateRaDec.X; }
-            set { rateRaDec.X = value; }
+            get { return rateRaDec.X / SIDEREAL_RATE_SEC_SEC; }
+            set { rateRaDec.X = value * SIDEREAL_RATE_SEC_SEC; }
         }
 
         public static double GuideRateDeclination
@@ -1121,6 +1150,7 @@ namespace ASCOM.Simulator
         private const double SOLAR_RATE_DEG_SEC = 15.0 / 3600;
         private const double LUNAR_RATE_DEG_SEC = 14.515 / 3600;
         private const double KING_RATE_DEG_SEC = 15.037 / 3600;
+        private const double SIDEREAL_RATE_SEC_SEC = 15.041 / 15.0;
 
         private static DateTime lastUpdateTime;
 
