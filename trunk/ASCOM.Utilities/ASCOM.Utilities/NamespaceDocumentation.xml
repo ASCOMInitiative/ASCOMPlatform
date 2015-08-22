@@ -2,9 +2,28 @@
 <doc>
   <assembly>
     <name>ASCOM.Utilities</name>
+    <summary>
+      Provides a core suite of useful utiilties for ASCOM driver and application developers
+    </summary>
   </assembly>
   
   <members>
+    <member name="G:ASCOM">
+      <summary>
+        This namespace contains the core platform components, platform utilities and the VB6 COM based Helper components
+      </summary>
+    </member>
+
+    <member name="G:ASCOM.Utilities">
+      <summary>    
+        <h2>ASCOM.Utilities Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace provides a core suite of useful utiilties for ASCOM driver and application developers
+        </p>
+      </summary>
+    </member>
+
     <member name="R:Project">
       <summary>
         This project contains the core platform components, platform utilities and the VB6 COM based Helper components

@@ -63,6 +63,10 @@
 	      			<listItem>SOFA, NOVAS31 - Improved robustness when client applications change the DLL search path</listItem>
 	   				<listItem>Dome Simulator - Improved log messages</listItem>
 	      			<listItem>Help - Now presented in easier to read style</listItem>
+	      			<listItem>Help - Removed unnecessary interface definitions to reduce visual clutter and increase focus on the components themselves.</listItem>
+	      			<listItem>AscomDriver.Connected - Clarified expected behaviour of this method when multiple client applications are using a single driver.</listItem>
+	      			<listItem>Telescope.Sync - Clarified that the way that Sync is implemented is mount dependent and that it should only be relied on to improve pointing 
+	      			for positions close to the position at which the sync is done.</listItem>
 				</list>
       		</content>
    		</section>
@@ -75,6 +79,8 @@
 	   				<listItem>Chooser - Fixed compatibility issue when drivers are created in Visual Studio 2015RC</listItem>
 	   				<listItem>Focuser Simulator - Fixed issue when HALT was requested after a negative MOVE command.</listItem>
 	   				<listItem>Util.GetTimeZoneOffset - Now returns fractional time zone offsets where appropriate e.g. +5.5 for India.</listItem>
+					<listItem>Telescope Simulator - The Connected state will now follow the simulated hardware state. This means that the driver will now remain in 
+					the "Connected = true" state until the last client requiring it to be in this state has set Connected = false.</listItem>
 				</list>
    			</content>
    		</section>
