@@ -212,14 +212,19 @@ Public Interface IVideo
 
 #Region "Common Members"
     ''' <summary>
-    ''' Set True to connect to the device. Set False to disconnect from the device.
-    ''' You can also read the property to check whether it is connected.
+    ''' Set True to connect to the device hardware. Set False to disconnect from the device hardware.
+    ''' You can also read the property to check whether it is connected. This reports the current hardware state.
     ''' </summary>
-    ''' <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-    ''' <exception cref="DriverException">Must throw an exception if the call was not successful.</exception>
-    ''' <remarks><p style="color:red"><b>Must be implemented, must not throw an ASCOM.PropertyNotImplementedException.</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
-    ''' <para>The driver must put the camera in a mode that will start producing a constant stream of video frames when a connection has been established. For example a digital camera that can 
-    ''' operate as both a CCD camera and a video camera must be set in a video mode before the call <b>Connected = true</b> returns.</para>
+    ''' <value><c>true</c> if connected to the hardware; otherwise, <c>false</c>.</value>
+    ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
+    ''' <remarks>
+    ''' <p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.
+    ''' <para>The Connected property sets and reports the state of connection to the device hardware.
+    ''' For a hub this means that Connected will be true when the first driver connects and will only be set to false
+    ''' when all drivers have disconnected.  A second driver may find that Connected is already true and
+    ''' setting Connected to false does not report Connected as false.  This is not an error because the physical state is that the
+    ''' hardware connection is still true.</para>
+    ''' <para>Multiple calls setting Connected to true or false will not cause an error.</para>
     ''' </remarks>
     Property Connected() As Boolean
 
