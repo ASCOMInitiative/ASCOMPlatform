@@ -1127,6 +1127,8 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// This must be implemented if the <see cref="CanSync" /> property is True. Raises an error if matching fails. 
         /// Raises an error if <see cref="AtPark" /> AtPark is True, or if <see cref="Tracking" /> is False. 
+        /// The way that Sync is implemented is mount dependent and it should only be relied on to improve pointing for positions close to
+        /// the position at which the sync is done.
         /// </remarks>
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
@@ -1139,6 +1141,8 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// This must be implemented if the <see cref="CanSync" /> property is True. Raises an error if matching fails. 
         /// Raises an error if <see cref="AtPark" /> AtPark is True, or if <see cref="Tracking" /> is False. 
+        /// The way that Sync is implemented is mount dependent and it should only be relied on to improve pointing for positions close to
+        /// the position at which the sync is done.
         /// </remarks>
         public void SyncToTarget()
         {
@@ -1705,7 +1709,7 @@ namespace ASCOM.DriverAccess
         /// <returns>Collection of Rate objects </returns>
         /// <remarks><para>The (symbolic) values for Index (<see cref="TelescopeAxes" />) are:</para>
         /// <bl>
-        /// <li><see cref="TelescopeAxes.axisPrimary"/> 0 Primary axis (e.g., Right Ascension or Azimuth)</li>
+        /// <li><see cref="TelescopeAxes.axisPrimary"/> 0 Primary axis (e.g., Hour Angle or Azimuth)</li>
         /// <li><see cref="TelescopeAxes.axisSecondary"/> 1 Secondary axis (e.g., Declination or Altitude)</li>
         /// <li><see cref="TelescopeAxes.axisTertiary"/> 2 Tertiary axis (e.g. imager rotator/de-rotator)</li> 
         /// </bl>
