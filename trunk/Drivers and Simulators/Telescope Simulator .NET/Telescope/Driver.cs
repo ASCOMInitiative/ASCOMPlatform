@@ -25,6 +25,7 @@ using System.Runtime.InteropServices;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace ASCOM.Simulator
 {
@@ -50,6 +51,7 @@ namespace ASCOM.Simulator
         private TrackingRatesSimple m_TrackingRatesSimple;
         private ASCOM.Utilities.Util m_Util;
         private string driverID;
+        private long objectId;
 
         const string SlewToHA = "SlewToHA"; const string SlewToHAUpper = "SLEWTOHA";
         const string AssemblyVersionNumber = "AssemblyVersionNumber"; const string AssemblyVersionNumberUpper = "ASSEMBLYVERSIONNUMBER";
@@ -71,6 +73,9 @@ namespace ASCOM.Simulator
                 m_TrackingRates = new TrackingRates();
                 m_TrackingRatesSimple = new TrackingRatesSimple();
                 m_Util = new ASCOM.Utilities.Util();
+                // get a unique instance id
+                bool ft;
+                objectId = TelescopeHardware.objectIDGenerator.GetId(this, out ft);
             }
             catch (Exception ex)
             {
@@ -447,13 +452,14 @@ namespace ASCOM.Simulator
         {
             get
             {
-                SharedResources.TrafficLine(SharedResources.MessageType.Other, "Connected = " + TelescopeHardware.Connected.ToString());
-                return TelescopeHardware.Connected;
+                var connected = TelescopeHardware.Connected;
+                SharedResources.TrafficLine(SharedResources.MessageType.Other, "Connected = " + connected.ToString());
+                return connected;
             }
             set
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Set Connected to " + value.ToString());
-                TelescopeHardware.Connected = value;
+                TelescopeHardware.SetConnected(objectId, value);
             }
         }
 
