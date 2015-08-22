@@ -2,9 +2,25 @@
 <doc>
   <assembly>
     <name>ASCOM.Astrometry</name>
+    <summary>
+      Provides a suite of useful astrometry related utiilties for ASCOM driver and application developers
+    </summary>
   </assembly>
   
   <members>
+
+    <member name="G:ASCOM.Astrometry">
+      <summary>
+        <h2>ASCOM.Astrometry Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all ASCOM astrometry components together with associated enums and structures.
+          The astrometry components (Transform, NOVAS-COM and Kepler) are located in the ASCOM.Astrometry.Components
+          namespace while unified enums and structures are in the ASCOM.Astrometry namespace and serve all
+          three components.
+        </p>
+      </summary>
+    </member>
 
     <member name="N:ASCOM.Astrometry">
       <summary>
