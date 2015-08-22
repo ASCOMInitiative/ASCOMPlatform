@@ -21,7 +21,7 @@ Public Interface IAxisRates ' 2B8FD76E-AF7E-4faa-9FAC-4029E96129F4
     ''' <returns>Collection of Rate objects </returns>
     ''' <remarks><para>The (symbolic) values for Index (<see cref="TelescopeAxes" />) are:</para>
     ''' <bl>
-    ''' <li><see cref="TelescopeAxes.axisPrimary"/> 0 Primary axis (e.g., Right Ascension or Azimuth)</li>
+    ''' <li><see cref="TelescopeAxes.axisPrimary"/> 0 Primary axis (e.g., Hour Angle or Azimuth)</li>
     ''' <li><see cref="TelescopeAxes.axisSecondary"/> 1 Secondary axis (e.g., Declination or Altitude)</li>
     ''' <li><see cref="TelescopeAxes.axisTertiary"/> 2 Tertiary axis (e.g. imager rotator/de-rotator)</li> 
     ''' </bl>
