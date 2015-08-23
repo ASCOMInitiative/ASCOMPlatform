@@ -890,7 +890,7 @@ Public Class DiagnosticsForm
         Sim.AxisRatesRelative = False
         TestSimulator(Sim)
         Sim = Nothing
-        If False Then
+        If True Then
             Sim = New SimulatorDescriptor
             Sim.ProgID = "CCDSimulator.Camera"
             Sim.Description = "Platform 5 Camera Simulator"

@@ -194,6 +194,7 @@ namespace ASCOM.Simulator
         //
         void IClassFactory.CreateInstance(IntPtr pUnkOuter, ref Guid riid, out IntPtr ppvObject)
         {
+            TelescopeHardware.TL.LogMessage("CreateInstance", "GUID: " + riid.ToString());
             IntPtr nullPtr = new IntPtr(0);
             ppvObject = nullPtr;
 
@@ -231,11 +232,13 @@ namespace ASCOM.Simulator
 
         void IClassFactory.LockServer(bool bLock)
         {
+            TelescopeHardware.TL.LogMessage("LockServer", "Lock server: "+ bLock);
             if (bLock)
                 TelescopeSimulator.CountLock();
             else
                 TelescopeSimulator.UncountLock();
             // Always attempt to see if we need to shutdown this server application.
+            TelescopeHardware.TL.LogMessage("LockServer", "Calling ExitIf to check whether we can exit the server");
             TelescopeSimulator.ExitIf();
         }
         #endregion

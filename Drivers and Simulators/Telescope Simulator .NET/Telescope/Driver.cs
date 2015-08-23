@@ -76,6 +76,7 @@ namespace ASCOM.Simulator
                 // get a unique instance id
                 bool ft;
                 objectId = TelescopeHardware.objectIDGenerator.GetId(this, out ft);
+                TelescopeHardware.TL.LogMessage("New", "Instance ID: " + objectId + ", new: " + ft + "Driver ID: " + driverID);
             }
             catch (Exception ex)
             {
@@ -203,7 +204,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "ApertureDiameter: ");
-                CheckCapability(TelescopeHardware.CanOptics, "ApertureDiameter",false);
+                CheckCapability(TelescopeHardware.CanOptics, "ApertureDiameter", false);
                 SharedResources.TrafficEnd(TelescopeHardware.ApertureDiameter.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.ApertureDiameter;
             }
@@ -234,13 +235,13 @@ namespace ASCOM.Simulator
             switch (Axis)
             {
                 case TelescopeAxes.axisPrimary:
-//                    return m_AxisRates[0];
+                    //                    return m_AxisRates[0];
                     return new AxisRates(TelescopeAxes.axisPrimary);
                 case TelescopeAxes.axisSecondary:
-//                    return m_AxisRates[1];
+                    //                    return m_AxisRates[1];
                     return new AxisRates(TelescopeAxes.axisSecondary);
                 case TelescopeAxes.axisTertiary:
-//                    return m_AxisRates[2];
+                    //                    return m_AxisRates[2];
                     return new AxisRates(TelescopeAxes.axisTertiary);
                 default:
                     return null;
@@ -253,14 +254,14 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Polls, "Azimuth: ");
 
-                CheckCapability(TelescopeHardware.CanAltAz,"Azimuth", false);
+                CheckCapability(TelescopeHardware.CanAltAz, "Azimuth", false);
 
                 if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
                 {
                     SharedResources.TrafficEnd("No coordinates at park!");
                     throw new PropertyNotImplementedException("Azimuth", false);
                 }
-                SharedResources.TrafficEnd( m_Util.DegreesToDMS(TelescopeHardware.Azimuth));
+                SharedResources.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.Azimuth));
                 return TelescopeHardware.Azimuth;
             }
         }
@@ -375,7 +376,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Capabilities, "CanSlewAltAz: ");
-                CheckVersionOne("CanSlewAltAz",false);
+                CheckVersionOne("CanSlewAltAz", false);
                 SharedResources.TrafficEnd(TelescopeHardware.CanSlewAltAz.ToString());
                 return TelescopeHardware.CanSlewAltAz;
             }
@@ -454,11 +455,13 @@ namespace ASCOM.Simulator
             {
                 var connected = TelescopeHardware.Connected;
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Connected = " + connected.ToString());
+                TelescopeHardware.TL.LogMessage("Connected Get", connected.ToString());
                 return connected;
             }
             set
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "Set Connected to " + value.ToString());
+                TelescopeHardware.TL.LogMessage("Connected Set", value.ToString());
                 TelescopeHardware.SetConnected(objectId, value);
             }
         }
@@ -602,7 +605,7 @@ namespace ASCOM.Simulator
         public void FindHome()
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "FindHome: ");
-            CheckCapability(TelescopeHardware.CanFindHome,"FindHome");
+            CheckCapability(TelescopeHardware.CanFindHome, "FindHome");
 
             CheckParked("FindHome");
 
@@ -680,7 +683,7 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Polls, "IsPulseGuiding: ");
                 // TODO Is this correct, should it just return false?
-                CheckCapability(TelescopeHardware.CanPulseGuide,"IsPulseGuiding", false);
+                CheckCapability(TelescopeHardware.CanPulseGuide, "IsPulseGuiding", false);
                 SharedResources.TrafficEnd(TelescopeHardware.IsPulseGuiding.ToString());
 
                 return TelescopeHardware.IsPulseGuiding;
@@ -700,41 +703,41 @@ namespace ASCOM.Simulator
 
             //if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis || Rate != 0)
             //{
-                //if (TelescopeHardware.SlewState != SlewType.SlewMoveAxis)
-                //{
-                //    TelescopeHardware.SlewState = SlewType.SlewNone;
-                //    TelescopeHardware.ChangePark(false);
-                //    TelescopeHardware.deltaAlt = 0;
-                //    TelescopeHardware.deltaAz = 0;
-                //    TelescopeHardware.deltaDec = 0;
-                //    TelescopeHardware.deltaRa = 0;
-                //}
+            //if (TelescopeHardware.SlewState != SlewType.SlewMoveAxis)
+            //{
+            //    TelescopeHardware.SlewState = SlewType.SlewNone;
+            //    TelescopeHardware.ChangePark(false);
+            //    TelescopeHardware.deltaAlt = 0;
+            //    TelescopeHardware.deltaAz = 0;
+            //    TelescopeHardware.deltaDec = 0;
+            //    TelescopeHardware.deltaRa = 0;
+            //}
 
-                switch (Axis)
-                {
-                    case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
-                        TelescopeHardware.rateAxes.X = Rate;
-                        break;
-                    case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
-                        TelescopeHardware.rateAxes.Y = Rate;
-                        break;
-                    case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
-                        // not implemented
-                        break;
-                }
-                //if (TelescopeHardware.deltaAz == 0 && TelescopeHardware.deltaAlt == 0 && TelescopeHardware.deltaDec == 0)
-                //{
-                //    if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis)
-                //    {
-                //        TelescopeHardware.SlewState = SlewType.SlewNone;
-                //        SharedResources.TrafficEnd("(stopped)");
-                //        return;
-                //    }
-                //}
-                //else
-                //{
-                //    TelescopeHardware.SlewState = SlewType.SlewMoveAxis;
-                //}
+            switch (Axis)
+            {
+                case ASCOM.DeviceInterface.TelescopeAxes.axisPrimary:
+                    TelescopeHardware.rateAxes.X = Rate;
+                    break;
+                case ASCOM.DeviceInterface.TelescopeAxes.axisSecondary:
+                    TelescopeHardware.rateAxes.Y = Rate;
+                    break;
+                case ASCOM.DeviceInterface.TelescopeAxes.axisTertiary:
+                    // not implemented
+                    break;
+            }
+            //if (TelescopeHardware.deltaAz == 0 && TelescopeHardware.deltaAlt == 0 && TelescopeHardware.deltaDec == 0)
+            //{
+            //    if (TelescopeHardware.SlewState == SlewType.SlewMoveAxis)
+            //    {
+            //        TelescopeHardware.SlewState = SlewType.SlewNone;
+            //        SharedResources.TrafficEnd("(stopped)");
+            //        return;
+            //    }
+            //}
+            //else
+            //{
+            //    TelescopeHardware.SlewState = SlewType.SlewMoveAxis;
+            //}
             //}
 
             SharedResources.TrafficEnd("(done)");
@@ -819,9 +822,9 @@ namespace ASCOM.Simulator
                         //TelescopeHardware.pulseGuideRaEndTime = endTime;
                         TelescopeHardware.isPulseGuidingRa = true;
                         TelescopeHardware.guideDuration.X = Duration / 1000.0;
-                       break;
+                        break;
                     case GuideDirections.guideWest:
-                       TelescopeHardware.guideRate.X = -Math.Abs(TelescopeHardware.guideRate.X);
+                        TelescopeHardware.guideRate.X = -Math.Abs(TelescopeHardware.guideRate.X);
                         //TelescopeHardware.pulseGuideRaEndTime = endTime;
                         TelescopeHardware.isPulseGuidingRa = true;
                         TelescopeHardware.guideDuration.X = Duration / 1000.0;
@@ -842,7 +845,7 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "Right Ascension: ");
 
-                CheckCapability(TelescopeHardware.CanEquatorial,"RightAscension", false);
+                CheckCapability(TelescopeHardware.CanEquatorial, "RightAscension", false);
 
                 if ((TelescopeHardware.AtPark || TelescopeHardware.SlewState == SlewType.SlewPark) && TelescopeHardware.NoCoordinatesAtPark)
                 {
@@ -873,7 +876,7 @@ namespace ASCOM.Simulator
         public void SetPark()
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Other, "Set Park: ");
-            CheckCapability(TelescopeHardware.CanSetPark,"SetPark");
+            CheckCapability(TelescopeHardware.CanSetPark, "SetPark");
 
             TelescopeHardware.ParkAltitude = TelescopeHardware.Altitude;
             TelescopeHardware.ParkAzimuth = TelescopeHardware.Azimuth;
@@ -890,16 +893,16 @@ namespace ASCOM.Simulator
                 TelescopeSimulator.m_MainForm.DoSetupDialog();
             }
             catch (Exception ex)
-                {
-                    EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "Exception on SetupDialog", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorSetup, ex.ToString());
-                    System.Windows.Forms.MessageBox.Show("Telescope SetUp: " + ex.ToString());
-                }
+            {
+                EventLogCode.LogEvent("ASCOM.Simulator.Telescope", "Exception on SetupDialog", EventLogEntryType.Error, GlobalConstants.EventLogErrors.TelescopeSimulatorSetup, ex.ToString());
+                System.Windows.Forms.MessageBox.Show("Telescope SetUp: " + ex.ToString());
+            }
         }
 
         public PierSide SideOfPier
         {
             get { return TelescopeHardware.SideOfPier; }
-            set 
+            set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SideOfPier: ");
                 CheckCapability(TelescopeHardware.CanSetPierSide, "SideOfPier", true);
@@ -934,14 +937,14 @@ namespace ASCOM.Simulator
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "SiteElevation: ");
 
-                CheckCapability(TelescopeHardware.CanLatLongElev,"SiteElevation", false);
+                CheckCapability(TelescopeHardware.CanLatLongElev, "SiteElevation", false);
                 SharedResources.TrafficEnd(TelescopeHardware.Elevation.ToString(CultureInfo.InvariantCulture));
                 return TelescopeHardware.Elevation;
             }
             set
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "SiteElevation: ->");
-                CheckCapability(TelescopeHardware.CanLatLongElev,"SiteElevation", true);
+                CheckCapability(TelescopeHardware.CanLatLongElev, "SiteElevation", true);
                 CheckRange(value, -300, 10000, "SiteElevation");
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.Elevation = value;
@@ -961,7 +964,7 @@ namespace ASCOM.Simulator
             set
             {
                 SharedResources.TrafficLine(SharedResources.MessageType.Other, "SiteLatitude: ->");
-                CheckCapability(TelescopeHardware.CanLatLongElev,"SiteLatitude", true);
+                CheckCapability(TelescopeHardware.CanLatLongElev, "SiteLatitude", true);
                 CheckRange(value, -90, 90, "SiteLatitude");
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.Latitude = value;
@@ -980,7 +983,7 @@ namespace ASCOM.Simulator
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Other, "SiteLongitude: ->");
-                CheckCapability(TelescopeHardware.CanLatLongElev,"SiteLongitude", true);
+                CheckCapability(TelescopeHardware.CanLatLongElev, "SiteLongitude", true);
                 CheckRange(value, -180, 180, "SiteLongitude");
                 SharedResources.TrafficEnd(value.ToString(CultureInfo.InvariantCulture));
                 TelescopeHardware.Longitude = value;
@@ -1021,7 +1024,7 @@ namespace ASCOM.Simulator
                 System.Windows.Forms.Application.DoEvents();
             }
             SharedResources.TrafficEnd(" done");
-       }
+        }
 
         public void SlewToAltAzAsync(double Azimuth, double Altitude)
         {
@@ -1041,7 +1044,7 @@ namespace ASCOM.Simulator
         public void SlewToCoordinates(double RightAscension, double Declination)
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToCoordinates: ");
-            CheckCapability(TelescopeHardware.CanSlew,"SlewToCoordinates");
+            CheckCapability(TelescopeHardware.CanSlew, "SlewToCoordinates");
             CheckRange(RightAscension, 0, 24, "SlewToCoordinates", "RightAscension");
             CheckRange(Declination, -90, 90, "SlewToCoordinates", "Declination");
             CheckParked("SlewToCoordinates");
@@ -1062,7 +1065,7 @@ namespace ASCOM.Simulator
         public void SlewToCoordinatesAsync(double RightAscension, double Declination)
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToCoordinatesAsync: ");
-            CheckCapability(TelescopeHardware.CanSlewAsync,"SlewToCoordinatesAsync");
+            CheckCapability(TelescopeHardware.CanSlewAsync, "SlewToCoordinatesAsync");
             CheckRange(RightAscension, 0, 24, "SlewToCoordinatesAsync", "RightAscension");
             CheckRange(Declination, -90, 90, "SlewToCoordinatesAsync", "Declination");
             CheckParked("SlewToCoordinatesAsync");
@@ -1095,7 +1098,7 @@ namespace ASCOM.Simulator
         public void SlewToTargetAsync()
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SlewToTargetAsync: ");
-            CheckCapability(TelescopeHardware.CanSlewAsync,"SlewToTargetAsync");
+            CheckCapability(TelescopeHardware.CanSlewAsync, "SlewToTargetAsync");
             CheckRange(TelescopeHardware.TargetRightAscension, 0, 24, "SlewToTargetAsync", "TargetRightAscension");
             CheckRange(TelescopeHardware.TargetDeclination, -90, 90, "SlewToTargetAsync", "TargetDeclination");
             CheckParked("SlewToTargetAsync");
@@ -1137,7 +1140,7 @@ namespace ASCOM.Simulator
         public void SyncToCoordinates(double RightAscension, double Declination)
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SyncToCoordinates: ");
-            CheckCapability(TelescopeHardware.CanSync,"SyncToCoordinates");
+            CheckCapability(TelescopeHardware.CanSync, "SyncToCoordinates");
             CheckRange(RightAscension, 0, 24, "SyncToCoordinates", "RightAscension");
             CheckRange(Declination, -90, 90, "SyncToCoordinates", "Declination");
             CheckParked("SyncToCoordinates");
@@ -1162,7 +1165,7 @@ namespace ASCOM.Simulator
         public void SyncToTarget()
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "SyncToTarget: ");
-            CheckCapability(TelescopeHardware.CanSync,"SyncToTarget");
+            CheckCapability(TelescopeHardware.CanSync, "SyncToTarget");
             CheckRange(TelescopeHardware.TargetRightAscension, 0, 24, "SyncToTarget", "TargetRightAscension");
             CheckRange(TelescopeHardware.TargetDeclination, -90, 90, "SyncToTarget", "TargetDeclination");
 
@@ -1187,7 +1190,7 @@ namespace ASCOM.Simulator
             get
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetDeclination: ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetDeclination",false);
+                CheckCapability(TelescopeHardware.CanSlew, "TargetDeclination", false);
                 CheckRange(TelescopeHardware.TargetDeclination, -90, 90, "TargetDeclination");
                 SharedResources.TrafficEnd(m_Util.DegreesToDMS(TelescopeHardware.TargetDeclination));
                 return TelescopeHardware.TargetDeclination;
@@ -1195,7 +1198,7 @@ namespace ASCOM.Simulator
             set
             {
                 SharedResources.TrafficStart(SharedResources.MessageType.Gets, "TargetDeclination:-> ");
-                CheckCapability(TelescopeHardware.CanSlew, "TargetDeclination",true);
+                CheckCapability(TelescopeHardware.CanSlew, "TargetDeclination", true);
                 CheckRange(value, -90, 90, "TargetDeclination");
                 SharedResources.TrafficEnd(m_Util.DegreesToDMS(value));
                 TelescopeHardware.TargetDeclination = value;
@@ -1289,7 +1292,7 @@ namespace ASCOM.Simulator
         public void Unpark()
         {
             SharedResources.TrafficStart(SharedResources.MessageType.Slew, "UnPark: ");
-            CheckCapability(TelescopeHardware.CanUnpark,"UnPark");
+            CheckCapability(TelescopeHardware.CanUnpark, "UnPark");
 
             TelescopeHardware.ChangePark(false);
             TelescopeHardware.Tracking = true;
@@ -1366,7 +1369,7 @@ namespace ASCOM.Simulator
             }
             if (value < min || value > max)
             {
-                SharedResources.TrafficEnd( string.Format(CultureInfo.CurrentCulture, "{0} {1} out of range {2} to {3}", propertyOrMethod, value, min, max));
+                SharedResources.TrafficEnd(string.Format(CultureInfo.CurrentCulture, "{0} {1} out of range {2} to {3}", propertyOrMethod, value, min, max));
                 throw new InvalidValueException(propertyOrMethod, value.ToString(CultureInfo.CurrentCulture), string.Format(CultureInfo.CurrentCulture, "{0} to {1}", min, max));
             }
         }
@@ -1545,15 +1548,15 @@ namespace ASCOM.Simulator
                 case TelescopeAxes.axisPrimary:
                     // TODO Initialize this array with any Primary axis rates that your driver may provide
                     // Example: m_Rates = new Rate[] { new Rate(10.5, 30.2), new Rate(54.0, 43.6) }
-                    m_Rates = new Rate[] { new Rate(0.0, maxRate/3), new Rate(maxRate/2, maxRate) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate / 3), new Rate(maxRate / 2, maxRate) };
                     break;
                 case TelescopeAxes.axisSecondary:
                     // TODO Initialize this array with any Secondary axis rates that your driver may provide
-                    m_Rates = new Rate[] { new Rate(0.0, maxRate/3), new Rate(maxRate/2, maxRate) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate / 3), new Rate(maxRate / 2, maxRate) };
                     break;
                 case TelescopeAxes.axisTertiary:
                     // TODO Initialize this array with any Tertiary axis rates that your driver may provide
-                    m_Rates = new Rate[] { new Rate(0.0, maxRate/3), new Rate(maxRate/2, maxRate) };
+                    m_Rates = new Rate[] { new Rate(0.0, maxRate / 3), new Rate(maxRate / 2, maxRate) };
                     break;
             }
             pos = -1;
@@ -1771,7 +1774,7 @@ namespace ASCOM.Simulator
             }	// 1-based
         }
         #endregion
-        
+
         #region IEnumerator implementation
 
         public bool MoveNext()
