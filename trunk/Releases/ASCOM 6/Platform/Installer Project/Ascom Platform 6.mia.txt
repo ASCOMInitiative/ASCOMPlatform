@@ -1387,9 +1387,10 @@ else
           Set Variable RC7 to 1000
           Set Variable RC8 to 1000
           Set Variable RC9 to 1000
-          Set Variable RC10 to 1000
-          Set Variable RC11 to 1000
-          Set Variable RC12 to 1000
+          Comment: Unused variables
+          Set Variable RC10 to 0
+          Set Variable RC11 to 0
+          Set Variable RC12 to 0
            
           Comment: Register core components
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
@@ -1398,21 +1399,21 @@ else
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC2$ RegAsm64 - Exceptions (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC3)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC3$ RegAsm64 - Utilities (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC3)
-          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC3$ RegAsm64 - Video Utilities (at end of file)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC4)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC4$ RegAsm64 - Video Utilities (at end of file)
           Set Variable PROGRESS to 50
            
           Comment: Register simulators
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC4)
-          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC4$ RegAsm64 - Camera Simulator 6 (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC5)
-          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC5$ RegAsm64 - Focus Simulator 6 (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC6)
-          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC6$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC10)
-          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC10$ RegAsm64 - Dome Simulator 6 (at end of file)
-          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC11)
-          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC11$ RegAsm64 - Video Simulator (at end of file)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC5)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC5$ RegAsm64 - Camera Simulator 6 (at end of file)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC6)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC6$ RegAsm64 - Focus Simulator 6 (at end of file)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll" /codebase (WAIT, get result into variable RC7)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC7$ RegAsm64 - Safety Monitor Simulator 6 (at end of file)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll" /codebase (WAIT, get result into variable RC8)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC8$ RegAsm64 - Dome Simulator 6 (at end of file)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC9)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC9$ RegAsm64 - Video Simulator (at end of file)
           Set Variable PROGRESS to 60
           if Variable RC1 not Equals 0
             MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12

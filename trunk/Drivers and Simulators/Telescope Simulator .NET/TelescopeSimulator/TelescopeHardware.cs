@@ -37,7 +37,7 @@ namespace ASCOM.Simulator
 
         private static Utilities.Profile s_Profile;
         private static bool onTop;
-        private static ASCOM.Utilities.TraceLogger TL;
+        public static ASCOM.Utilities.TraceLogger TL;
 
         //Capabilities
         private static bool canFindHome;
@@ -338,9 +338,9 @@ namespace ASCOM.Simulator
                 slewSpeedSlow = slewSpeedFast * 0.02;
                 SlewDirection = SlewDirection.SlewNone;
 
-				GuideDurationShort = 0.8 * SharedResources.TIMER_INTERVAL;
-				GuideDurationMedium = 2.0 * GuideDurationShort;
-				GuideDurationLong = 2.0 * GuideDurationMedium;
+                GuideDurationShort = 0.8 * SharedResources.TIMER_INTERVAL;
+                GuideDurationMedium = 2.0 * GuideDurationShort;
+                GuideDurationLong = 2.0 * GuideDurationMedium;
 
                 guideRate.X = 15.0 * (1.0 / 3600.0) / SharedResources.SIDRATE;
                 guideRate.Y = guideRate.X;
@@ -370,6 +370,7 @@ namespace ASCOM.Simulator
                         homeAxes.Y = 0;
                         break;
                 }
+                TL.LogMessage("TelescopeHardware New", "Successfully initialised hardware");
 
             }
             catch (Exception ex)
@@ -817,15 +818,15 @@ namespace ASCOM.Simulator
                 if (value)
                 {
                     switch (AlignmentMode)
-	                {
-		                case AlignmentModes.algAltAz:
+                    {
+                        case AlignmentModes.algAltAz:
                             trackingMode = TrackingMode.AltAz;
                             break;
                         case AlignmentModes.algGermanPolar:
                         case AlignmentModes.algPolar:
-                            trackingMode = Latitude >=0 ? TrackingMode.EqN : TrackingMode.EqS;
+                            trackingMode = Latitude >= 0 ? TrackingMode.EqN : TrackingMode.EqS;
                             break;
-	                }
+                    }
                 }
                 else
                 {
@@ -881,6 +882,7 @@ namespace ASCOM.Simulator
         {
             get
             {
+                TL.LogMessage("Hardware.Connected Get", "Number of connected devices: " + connectStates.Count + ", Returning: " + (connectStates.Count > 0).ToString());
                 return connectStates.Count > 0;
             }
         }
@@ -890,11 +892,13 @@ namespace ASCOM.Simulator
             // add or remove the instance, this is done once regardless of the number of calls
             if (value)
             {
-                connectStates.TryAdd(id, true);
+                bool notAlreadyPresent = connectStates.TryAdd(id, true);
+                TL.LogMessage("Hardware.Connected Set", "Set Connected to: True, AlreadyConnected: " + (!notAlreadyPresent).ToString());
             }
             else
             {
-                connectStates.TryRemove(id, out value);
+                bool successfullyRemoved = connectStates.TryRemove(id, out value);
+                TL.LogMessage("Hardware.Connected Set", "Set Connected to: False, Successfully removed: " + successfullyRemoved.ToString());
             }
         }
 
@@ -1158,7 +1162,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                return (mountAxes.Y <= 90 && mountAxes.Y >= -90) ? 
+                return (mountAxes.Y <= 90 && mountAxes.Y >= -90) ?
                     PierSide.pierEast : PierSide.pierWest;
             }
             set
@@ -1171,7 +1175,7 @@ namespace ASCOM.Simulator
                 }
 
                 // change the pier side
-                StartSlewAxes(pa,  180 - mountAxes.Y, SlewType.SlewRaDec);
+                StartSlewAxes(pa, 180 - mountAxes.Y, SlewType.SlewRaDec);
             }
         }
 

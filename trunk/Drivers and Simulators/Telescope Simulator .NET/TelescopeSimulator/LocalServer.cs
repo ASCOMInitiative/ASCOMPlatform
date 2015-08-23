@@ -94,9 +94,12 @@ namespace ASCOM.Simulator
         // a specific thread (identified by its thread id).
         // We will need this API to post a WM_QUIT message to the main 
         // thread in order to terminate this application.
-        [DllImport("user32.dll")]
-        static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam,
-            IntPtr lParam);
+        //[DllImport("user32.dll")]
+        //static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
 
         // GetCurrentThreadId() allows us to obtain the thread id of the
         // calling thread. This allows us to post the WM_QUIT message to
@@ -146,6 +149,7 @@ namespace ASCOM.Simulator
         public static int CountObject()
         {
             // Increment the global count of objects.
+            TelescopeHardware.TL.LogMessage("CountObject", "Incrementing object count");
             return Interlocked.Increment(ref m_iObjsInUse);
         }
 
@@ -153,6 +157,7 @@ namespace ASCOM.Simulator
         public static int UncountObject()
         {
             // Decrement the global count of objects.
+            TelescopeHardware.TL.LogMessage("UncountObject", "Decrementing object count");
             return Interlocked.Decrement(ref m_iObjsInUse);
         }
 
@@ -173,6 +178,7 @@ namespace ASCOM.Simulator
         public static int CountLock()
         {
             // Increment the global lock count of this server.
+            TelescopeHardware.TL.LogMessage("CountLock", "Incrementing lock count");
             return Interlocked.Increment(ref m_iServerLocks);
         }
 
@@ -181,6 +187,7 @@ namespace ASCOM.Simulator
         public static int UncountLock()
         {
             // Decrement the global lock count of this server.
+            TelescopeHardware.TL.LogMessage("UncountLock", "Decrementing lock count");
             return Interlocked.Decrement(ref m_iServerLocks);
         }
 
@@ -195,13 +202,17 @@ namespace ASCOM.Simulator
         {
             lock (lockObj)
             {
+                TelescopeHardware.TL.LogMessage("ExitIf", "Object Count: " + +ObjectsCount + ", Server Lock Count: " + ServerLockCount + ", Started by COM: " + m_bComStart);
                 if ((ObjectsCount <= 0) && (ServerLockCount <= 0))
                 {
                     if (m_bComStart)
                     {
                         UIntPtr wParam = new UIntPtr(0);
                         IntPtr lParam = new IntPtr(0);
-                        PostThreadMessage(MainThreadId, 0x0012, wParam, lParam);
+                        TelescopeHardware.TL.LogMessage("ExitIf", "Posting WM_QUIT to Main Thread. Thread ID:" + MainThreadId.ToString() + ", wParam: " + wParam.ToString() + ", lParam: " + lParam.ToString());
+                        bool success = PostThreadMessage(MainThreadId, 0x0012, wParam, lParam);
+                        int returnCode = Marshal.GetLastWin32Error();
+                        TelescopeHardware.TL.LogMessage("ExitIf", "WM_QUIT outcome. Succcess: " + success+ ", return code: " + returnCode.ToString("X"));
                     }
                 }
             }
