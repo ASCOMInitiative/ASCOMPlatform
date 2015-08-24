@@ -119,6 +119,7 @@ namespace ASCOM.Simulator
 
         public ClassFactory(Type type)
         {
+            TelescopeHardware.TL.LogMessage("ClassFactory", "Start of initialisation");
             m_ClassType = type;
             if (type == null)
                 throw new ArgumentNullException("type");
@@ -130,8 +131,10 @@ namespace ASCOM.Simulator
 
             foreach (Type T in type.GetInterfaces())			// Save all of the implemented interfaces
             {
+                TelescopeHardware.TL.LogMessage("ClassFactory", "Adding Type: " + T.FullName);
                 m_InterfaceTypes.Add(T);
             }
+            TelescopeHardware.TL.LogMessage("ClassFactory", "Completed initialisation");
         }
 
         #endregion
@@ -157,6 +160,7 @@ namespace ASCOM.Simulator
 
         public bool RegisterClassObject()
         {
+
             // Register the class factory
             int i = CoRegisterClassObject
                 (
@@ -166,23 +170,27 @@ namespace ASCOM.Simulator
                 m_Flags,
                 out m_Cookie
                 );
+            TelescopeHardware.TL.LogMessage("RegisterClassObject", "GUID: " + m_ClassId.ToString() + ", Cookie: " + m_Cookie);
             return (i == 0);
         }
 
         public bool RevokeClassObject()
         {
+            TelescopeHardware.TL.LogMessage("RevokeClassObject", m_Cookie.ToString());
             int i = CoRevokeClassObject(m_Cookie);
             return (i == 0);
         }
 
         public static bool ResumeClassObjects()
         {
+            TelescopeHardware.TL.LogMessage("ResumeClassObjects", "Called");
             int i = CoResumeClassObjects();
             return (i == 0);
         }
 
         public static bool SuspendClassObjects()
         {
+            TelescopeHardware.TL.LogMessage("SuspendClassObjects", "Called");
             int i = CoSuspendClassObjects();
             return (i == 0);
         }
@@ -232,7 +240,7 @@ namespace ASCOM.Simulator
 
         void IClassFactory.LockServer(bool bLock)
         {
-            TelescopeHardware.TL.LogMessage("LockServer", "Lock server: "+ bLock);
+            TelescopeHardware.TL.LogMessage("LockServer", "Lock server: " + bLock);
             if (bLock)
                 TelescopeSimulator.CountLock();
             else
