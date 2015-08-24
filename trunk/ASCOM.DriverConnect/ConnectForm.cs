@@ -375,12 +375,40 @@ namespace ASCOM.DriverConnect
             }
             finally
             {
-                LogMsg("Dispose", "Disposing of device");
-                try { driver.Dispose(); }
-                catch { }
-                try { Marshal.ReleaseComObject(driver); }
-                catch { }
-                LogMsg("Dispose", "Completed disposal of device");
+                try
+                {
+                    LogMsg("Dispose", "Disposing of device with exception handling...");
+                    driver.Dispose();
+                    LogMsg("Dispose", "Completed disposal");
+                }
+                catch (Exception ex1)
+                {
+                    LogMsg("Dispose error", ex1.ToString());
+                }
+                try
+                {
+                    LogMsg("ReleaseComObject", "Releasing COM instance with exception handling...");
+                    int count = Marshal.ReleaseComObject(driver);
+                    LogMsg("ReleaseComObject", "Completed disposal. Count: " + count);
+                }
+                catch (Exception ex2)
+                {
+                    LogMsg("ReleaseComObject error", ex2.ToString());
+
+                }
+                LogMsg("Connected", "Completed disposal of device");
+            }
+
+            try
+            {
+                LogMsg("GC Collect", "Starting garbage collection");
+                driver = null;
+                GC.Collect();
+                LogMsg("GC Collect", "Completed garbage collection");
+            }
+            catch (Exception ex)
+            {
+                LogMsg("GC Collect", ex.ToString());
             }
 
             TL.Enabled = false;

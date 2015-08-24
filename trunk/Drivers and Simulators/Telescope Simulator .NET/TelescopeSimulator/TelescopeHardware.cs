@@ -19,7 +19,8 @@
 //
 
 using System;
-using System.Collections.Concurrent;
+//using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -874,7 +875,8 @@ namespace ASCOM.Simulator
         // Connected will be reported as true if any driver is connected
         // each driver instance has a unique id generated using ObjectIDGenerator
 
-        private static ConcurrentDictionary<long, bool> connectStates = new ConcurrentDictionary<long, bool>();
+        //private static ConcurrentDictionary<long, bool> connectStates = new ConcurrentDictionary<long, bool>();
+        private static Dictionary<long, bool> connectStates = new Dictionary<long, bool>();
 
         public static ObjectIDGenerator objectIDGenerator = new ObjectIDGenerator();
 
@@ -892,13 +894,27 @@ namespace ASCOM.Simulator
             // add or remove the instance, this is done once regardless of the number of calls
             if (value)
             {
-                bool notAlreadyPresent = connectStates.TryAdd(id, true);
-                TL.LogMessage("Hardware.Connected Set", "Set Connected to: True, AlreadyConnected: " + (!notAlreadyPresent).ToString());
+                if (connectStates.ContainsKey(id))
+                {
+                    TL.LogMessage("Hardware.SetConnected", "Set Connected to: True, Already contains key so do nothing");
+                }
+                else
+                {
+                    TL.LogMessage("Hardware.SetConnected", "Set Connected to: True, Key not present so adding this key");
+                    connectStates.Add(id, true);
+                }
             }
             else
             {
-                bool successfullyRemoved = connectStates.TryRemove(id, out value);
-                TL.LogMessage("Hardware.Connected Set", "Set Connected to: False, Successfully removed: " + successfullyRemoved.ToString());
+                if (connectStates.ContainsKey(id))
+                {
+                    TL.LogMessage("Hardware.SetConnected", "Set Connected to: False, Key present so removing it");
+                    connectStates.Remove(id);
+                }
+                else
+                {
+                    TL.LogMessage("Hardware.SetConnected", "Set Connected to: False, No key so ignoring request");
+                }
             }
         }
 

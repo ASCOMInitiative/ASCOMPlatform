@@ -149,7 +149,7 @@ namespace ASCOM.Simulator
         public static int CountObject()
         {
             // Increment the global count of objects.
-            TelescopeHardware.TL.LogMessage("CountObject", "Incrementing object count");
+            TelescopeHardware.TL.LogMessage("CountObject", "Incrementing object count to: " + (m_iObjsInUse + 1));
             return Interlocked.Increment(ref m_iObjsInUse);
         }
 
@@ -157,7 +157,7 @@ namespace ASCOM.Simulator
         public static int UncountObject()
         {
             // Decrement the global count of objects.
-            TelescopeHardware.TL.LogMessage("UncountObject", "Decrementing object count");
+            TelescopeHardware.TL.LogMessage("UncountObject", "Decrementing object count to: " + (m_iObjsInUse - 1));
             return Interlocked.Decrement(ref m_iObjsInUse);
         }
 
@@ -178,7 +178,7 @@ namespace ASCOM.Simulator
         public static int CountLock()
         {
             // Increment the global lock count of this server.
-            TelescopeHardware.TL.LogMessage("CountLock", "Incrementing lock count");
+            TelescopeHardware.TL.LogMessage("CountLock", "Incrementing lock count to: " + (m_iServerLocks + 1));
             return Interlocked.Increment(ref m_iServerLocks);
         }
 
@@ -187,7 +187,7 @@ namespace ASCOM.Simulator
         public static int UncountLock()
         {
             // Decrement the global lock count of this server.
-            TelescopeHardware.TL.LogMessage("UncountLock", "Decrementing lock count");
+            TelescopeHardware.TL.LogMessage("UncountLock", "Decrementing lock count to: " + (m_iServerLocks - 1));
             return Interlocked.Decrement(ref m_iServerLocks);
         }
 
@@ -212,7 +212,7 @@ namespace ASCOM.Simulator
                         TelescopeHardware.TL.LogMessage("ExitIf", "Posting WM_QUIT to Main Thread. Thread ID:" + MainThreadId.ToString() + ", wParam: " + wParam.ToString() + ", lParam: " + lParam.ToString());
                         bool success = PostThreadMessage(MainThreadId, 0x0012, wParam, lParam);
                         int returnCode = Marshal.GetLastWin32Error();
-                        TelescopeHardware.TL.LogMessage("ExitIf", "WM_QUIT outcome. Succcess: " + success+ ", return code: " + returnCode.ToString("X"));
+                        TelescopeHardware.TL.LogMessage("ExitIf", "WM_QUIT outcome. Succcess: " + success + ", return code: " + returnCode.ToString("X"));
                     }
                 }
             }
