@@ -29,44 +29,49 @@ Imports System.Globalization
 Public Class HandboxForm
     Public ButtonState As Integer                         'Controls the dome slewing buttons
 
-    Friend Shared Sub Run()
-        If g_handBox Is Nothing Then
-            TL.LogMessage("HandboxForm.Run", "Handbox Variable is empty, Creating Form")
-            g_handBox = New HandboxForm
-            Application.Run(g_handBox)
-        Else
-            TL.LogMessage("HandboxForm.Run", "Handbox Variable is not empty, Doing nothing")
-        End If
-    End Sub
+    'Friend Shared Sub Run()
+    '    If g_handBox Is Nothing Then
+    '        TL.LogMessage("HandboxForm.Run", "Handbox Variable is empty, Creating Form")
+    '        g_handBox = New HandboxForm
+    '        Application.Run(g_handBox)
+    '    Else
+    '        TL.LogMessage("HandboxForm.Run", "Handbox Variable is not empty, Doing nothing")
+    '    End If
+    'End Sub
 
 #Region "Public Properties and Methods"
 
     Public Shared Sub UpdateConfig()
-        g_Profile.WriteValue(ID, "OCDelay", CStr(g_dOCDelay))
-        g_Profile.WriteValue(ID, "SetPark", CStr(g_dSetPark))
-        g_Profile.WriteValue(ID, "SetHome", CStr(g_dSetHome))
-        g_Profile.WriteValue(ID, "AltRate", CStr(g_dAltRate))
-        g_Profile.WriteValue(ID, "AzRate", CStr(g_dAzRate))
-        g_Profile.WriteValue(ID, "StepSize", CStr(g_dStepSize))
-        g_Profile.WriteValue(ID, "MaxAlt", CStr(g_dMaxAlt))
-        g_Profile.WriteValue(ID, "MinAlt", CStr(g_dMinAlt))
-        g_Profile.WriteValue(ID, "StartShutterError", CStr(g_bStartShutterError))
-        g_Profile.WriteValue(ID, "SlewingOpenClose", CStr(g_bSlewingOpenClose))
-        g_Profile.WriteValue(ID, "NonFragileAtHome", CStr(Not g_bStandardAtHome))
-        g_Profile.WriteValue(ID, "NonFragileAtPark", CStr(Not g_bStandardAtPark))
+        Using p As New Utilities.Profile
+            p.DeviceType = "Dome"
 
-        g_Profile.WriteValue(ID, "DomeAz", CStr(g_dDomeAz), "State")
-        g_Profile.WriteValue(ID, "DomeAlt", CStr(g_dDomeAlt), "State")
 
-        g_Profile.WriteValue(ID, "ShutterState", CStr(g_eShutterState), "State")
+            p.WriteValue(ID, "OCDelay", CStr(g_dOCDelay))
+            p.WriteValue(ID, "SetPark", CStr(g_dSetPark))
+            p.WriteValue(ID, "SetHome", CStr(g_dSetHome))
+            p.WriteValue(ID, "AltRate", CStr(g_dAltRate))
+            p.WriteValue(ID, "AzRate", CStr(g_dAzRate))
+            p.WriteValue(ID, "StepSize", CStr(g_dStepSize))
+            p.WriteValue(ID, "MaxAlt", CStr(g_dMaxAlt))
+            p.WriteValue(ID, "MinAlt", CStr(g_dMinAlt))
+            p.WriteValue(ID, "StartShutterError", CStr(g_bStartShutterError))
+            p.WriteValue(ID, "SlewingOpenClose", CStr(g_bSlewingOpenClose))
+            p.WriteValue(ID, "NonFragileAtHome", CStr(Not g_bStandardAtHome))
+            p.WriteValue(ID, "NonFragileAtPark", CStr(Not g_bStandardAtPark))
 
-        g_Profile.WriteValue(ID, "CanFindHome", CStr(g_bCanFindHome), "Capabilities")
-        g_Profile.WriteValue(ID, "CanPark", CStr(g_bCanPark), "Capabilities")
-        g_Profile.WriteValue(ID, "CanSetAltitude", CStr(g_bCanSetAltitude), "Capabilities")
-        g_Profile.WriteValue(ID, "CanSetAzimuth", CStr(g_bCanSetAzimuth), "Capabilities")
-        g_Profile.WriteValue(ID, "CanSetPark", CStr(g_bCanSetPark), "Capabilities")
-        g_Profile.WriteValue(ID, "CanSetShutter", CStr(g_bCanSetShutter), "Capabilities")
-        g_Profile.WriteValue(ID, "CanSyncAzimuth", CStr(g_bCanSyncAzimuth), "Capabilities")
+            p.WriteValue(ID, "DomeAz", CStr(g_dDomeAz), "State")
+            p.WriteValue(ID, "DomeAlt", CStr(g_dDomeAlt), "State")
+
+            p.WriteValue(ID, "ShutterState", CStr(g_eShutterState), "State")
+
+            p.WriteValue(ID, "CanFindHome", CStr(g_bCanFindHome), "Capabilities")
+            p.WriteValue(ID, "CanPark", CStr(g_bCanPark), "Capabilities")
+            p.WriteValue(ID, "CanSetAltitude", CStr(g_bCanSetAltitude), "Capabilities")
+            p.WriteValue(ID, "CanSetAzimuth", CStr(g_bCanSetAzimuth), "Capabilities")
+            p.WriteValue(ID, "CanSetPark", CStr(g_bCanSetPark), "Capabilities")
+            p.WriteValue(ID, "CanSetShutter", CStr(g_bCanSetShutter), "Capabilities")
+            p.WriteValue(ID, "CanSyncAzimuth", CStr(g_bCanSyncAzimuth), "Capabilities")
+        End Using
     End Sub
 
     Public Sub DoSetup()
@@ -237,10 +242,11 @@ Public Class HandboxForm
             g_TrafficForm.Dispose()
             g_TrafficForm = Nothing
         End If
-        If Not g_Profile Is Nothing Then
-            g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
-            g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
-        End If
+        Using profile As New Utilities.Profile
+            profile.DeviceType = "Dome"
+            profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
+            profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
+        End Using
     End Sub
 
     <System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")>
@@ -529,25 +535,28 @@ Public Class HandboxForm
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        Using profile As New Utilities.Profile
+            profile.DeviceType = "Dome"
 
-        ' Set handbox screen position
-        Try
-            Me.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
-            Me.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
-        Catch ex As Exception
+            ' Set handbox screen position
+            Try
+                Me.Left = CInt(profile.GetValue(g_csDriverID, "Left", "", "100"))
+                Me.Top = CInt(profile.GetValue(g_csDriverID, "Top", "", "100"))
+            Catch ex As Exception
 
-        End Try
+            End Try
 
 
-        ' Fix bad positions (which shouldn't ever happen, ha ha)
-        If Me.Left < 0 Then
-            Me.Left = 100
-            g_Profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
-        End If
-        If Me.Top < 0 Then
-            Me.Top = 100
-            g_Profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
-        End If
+            ' Fix bad positions (which shouldn't ever happen, ha ha)
+            If Me.Left < 0 Then
+                Me.Left = 100
+                profile.WriteValue(g_csDriverID, "Left", Me.Left.ToString(CultureInfo.InvariantCulture))
+            End If
+            If Me.Top < 0 Then
+                Me.Top = 100
+                profile.WriteValue(g_csDriverID, "Top", Me.Top.ToString(CultureInfo.InvariantCulture))
+            End If
+        End Using
 
         Timer1.Interval = TIMER_INTERVAL * 1000
         Timer1.Enabled = True
