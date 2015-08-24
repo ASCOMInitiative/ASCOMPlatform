@@ -74,9 +74,8 @@ namespace ASCOM.Simulator
                 m_TrackingRatesSimple = new TrackingRatesSimple();
                 m_Util = new ASCOM.Utilities.Util();
                 // get a unique instance id
-                bool ft;
-                objectId = TelescopeHardware.objectIDGenerator.GetId(this, out ft);
-                TelescopeHardware.TL.LogMessage("New", "Instance ID: " + objectId + ", new: " + ft + "Driver ID: " + driverID);
+                objectId = TelescopeHardware.GetId();
+                TelescopeHardware.TL.LogMessage("New", "Instance ID: " + objectId + ", new: " + "Driver ID: " + driverID);
             }
             catch (Exception ex)
             {
