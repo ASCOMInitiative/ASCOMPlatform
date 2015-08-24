@@ -127,7 +127,6 @@ Module GlobalVariables
     Public g_bCanSyncAzimuth As Boolean
 
     ' Variables
-    Public g_Profile As Utilities.Profile
     'Public WithEvents g_timer As Windows.Forms.Timer
     Public g_handBox As HandboxForm             ' Hand box
     Public g_TrafficForm As ShowTrafficForm            ' Traffic window

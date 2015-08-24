@@ -47,107 +47,76 @@ Public Class Dome
 
         'If g_timer Is Nothing Then g_timer = New Windows.Forms.Timer
         'If g_handBox Is Nothing Then g_handBox = New HandboxForm
-        If g_Profile Is Nothing Then g_Profile = New Utilities.Profile
-        g_Profile.DeviceType = "Dome"            ' Dome device type
+        Using profile As New Utilities.Profile
+            profile.DeviceType = "Dome"            ' Dome device type
 
-        ' initialize variables that are not persistent
-        g_Profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
+            ' initialize variables that are not persistent
+            profile.Register(g_csDriverID, g_csDriverDescription) ' Self reg (skips if already reg)
 
-        '' Set handbox screen position
-        'Try
-        '    g_handBox.Left = CInt(g_Profile.GetValue(g_csDriverID, "Left"))
-        '    g_handBox.Top = CInt(g_Profile.GetValue(g_csDriverID, "Top"))
-        'Catch ex As Exception
+            '' Set handbox screen position
+            'Try
+            '    g_handBox.Left = CInt(profile.GetValue(g_csDriverID, "Left"))
+            '    g_handBox.Top = CInt(profile.GetValue(g_csDriverID, "Top"))
+            'Catch ex As Exception
 
-        'End Try
+            'End Try
+
+            g_dOCProgress = 0
+            g_dOCDelay = 0
+
+            '
+            ' Persistent settings - Create on first start
+            '
+            'If profile.GetValue(ID, "RegVer") <> RegVer Then
+            '    profile.WriteValue(ID, "RegVer", RegVer)
 
 
-        '' Fix bad positions (which shouldn't ever happen, ha ha)
-        'If g_handBox.Left < 0 Then
-        '    g_handBox.Left = 100
-        '    g_Profile.WriteValue(g_csDriverID, "Left", g_handBox.Left.ToString(CultureInfo.InvariantCulture))
-        'End If
-        'If g_handBox.Top < 0 Then
-        '    g_handBox.Top = 100
-        '    g_Profile.WriteValue(g_csDriverID, "Top", g_handBox.Top.ToString(CultureInfo.InvariantCulture))
-        'End If
+            '    profile.WriteValue(ID, "Left", "100")
+            '    profile.WriteValue(ID, "Top", "100")
 
-        g_dOCProgress = 0
-        g_dOCDelay = 0
+            'End If
 
-        '
-        ' Persistent settings - Create on first start
-        '
-        If g_Profile.GetValue(ID, "RegVer") <> RegVer Then
-            g_Profile.WriteValue(ID, "RegVer", RegVer)
+            g_dOCDelay = CDbl(profile.GetValue(ID, "OCDelay", "", "3"))
+            g_dSetPark = CDbl(profile.GetValue(ID, "SetPark", "", "180"))
+            g_dSetHome = CDbl(profile.GetValue(ID, "SetHome", "", "0"))
+            g_dAltRate = CDbl(profile.GetValue(ID, "AltRate", "", "30"))
+            g_dAzRate = CDbl(profile.GetValue(ID, "AzRate", "", "15"))
+            g_dStepSize = CDbl(profile.GetValue(ID, "StepSize", "", "5"))
+            g_dMaxAlt = CDbl(profile.GetValue(ID, "MaxAlt", "", "90"))
+            g_dMinAlt = CDbl(profile.GetValue(ID, "MinAlt", "", "0"))
+            g_bStartShutterError = CBool(profile.GetValue(ID, "StartShutterError", "", "False"))
+            g_bSlewingOpenClose = CBool(profile.GetValue(ID, "SlewingOpenClose", "", "False"))
+            g_bStandardAtHome = Not CBool(profile.GetValue(ID, "NonFragileAtHome", "", "False"))
+            g_bStandardAtPark = Not CBool(profile.GetValue(ID, "NonFragileAtPark", "", "False"))
 
-            g_Profile.WriteValue(ID, "OCDelay", "3")
-            g_Profile.WriteValue(ID, "SetPark", "180")
-            g_Profile.WriteValue(ID, "SetHome", "0")
-            g_Profile.WriteValue(ID, "AltRate", "30")
-            g_Profile.WriteValue(ID, "AzRate", "15")
-            g_Profile.WriteValue(ID, "StepSize", "5")
-            g_Profile.WriteValue(ID, "MaxAlt", "90")
-            g_Profile.WriteValue(ID, "MinAlt", "0")
-            g_Profile.WriteValue(ID, "StartShutterError", "False")
-            g_Profile.WriteValue(ID, "SlewingOpenClose", "False")
-            g_Profile.WriteValue(ID, "NonFragileAtHome", "False")
-            g_Profile.WriteValue(ID, "NonFragileAtPark", "False")
+            g_bCanFindHome = CBool(profile.GetValue(ID, "CanFindHome", "Capabilities", "True"))
+            g_bCanPark = CBool(profile.GetValue(ID, "CanPark", "Capabilities", "True"))
+            g_bCanSetAltitude = CBool(profile.GetValue(ID, "CanSetAltitude", "Capabilities", "True"))
+            g_bCanSetAzimuth = CBool(profile.GetValue(ID, "CanSetAzimuth", "Capabilities", "True"))
+            g_bCanSetPark = CBool(profile.GetValue(ID, "CanSetPark", "Capabilities", "True"))
+            g_bCanSetShutter = CBool(profile.GetValue(ID, "CanSetShutter", "Capabilities", "True"))
+            g_bCanSyncAzimuth = CBool(profile.GetValue(ID, "CanSyncAzimuth", "Capabilities", "True"))
 
-            g_Profile.WriteValue(ID, "DomeAz", CStr(INVALID_COORDINATE), "State")
-            g_Profile.WriteValue(ID, "DomeAlt", CStr(INVALID_COORDINATE), "State")
-            g_Profile.WriteValue(ID, "ShutterState", "1", "State")       ' ShutterClosed
+            ' get and range dome state
+            g_dDomeAz = CDbl(profile.GetValue(ID, "DomeAz", "State", CStr(INVALID_COORDINATE)))
+            g_dDomeAlt = CDbl(profile.GetValue(ID, "DomeAlt", "State", CStr(INVALID_COORDINATE)))
+            If g_dDomeAlt < g_dMinAlt Then _
+                g_dDomeAlt = g_dMinAlt
+            If g_dDomeAlt > g_dMaxAlt Then _
+                g_dDomeAlt = g_dMaxAlt
+            If g_dDomeAz < 0 Or g_dDomeAz >= 360 Then _
+                g_dDomeAz = g_dSetPark
+            g_dTargetAlt = g_dDomeAlt
+            g_dTargetAz = g_dDomeAz
 
-            g_Profile.WriteValue(ID, "Left", "100")
-            g_Profile.WriteValue(ID, "Top", "100")
-
-            g_Profile.WriteValue(ID, "CanFindHome", "True", "Capabilities")
-            g_Profile.WriteValue(ID, "CanPark", "True", "Capabilities")
-            g_Profile.WriteValue(ID, "CanSetAltitude", "True", "Capabilities")
-            g_Profile.WriteValue(ID, "CanSetAzimuth", "True", "Capabilities")
-            g_Profile.WriteValue(ID, "CanSetPark", "True", "Capabilities")
-            g_Profile.WriteValue(ID, "CanSetShutter", "True", "Capabilities")
-            g_Profile.WriteValue(ID, "CanSyncAzimuth", "True", "Capabilities")
-        End If
-
-        g_dOCDelay = CDbl(g_Profile.GetValue(ID, "OCDelay"))
-        g_dSetPark = CDbl(g_Profile.GetValue(ID, "SetPark"))
-        g_dSetHome = CDbl(g_Profile.GetValue(ID, "SetHome"))
-        g_dAltRate = CDbl(g_Profile.GetValue(ID, "AltRate"))
-        g_dAzRate = CDbl(g_Profile.GetValue(ID, "AzRate"))
-        g_dStepSize = CDbl(g_Profile.GetValue(ID, "StepSize"))
-        g_dMaxAlt = CDbl(g_Profile.GetValue(ID, "MaxAlt"))
-        g_dMinAlt = CDbl(g_Profile.GetValue(ID, "MinAlt"))
-        g_bStartShutterError = CBool(g_Profile.GetValue(ID, "StartShutterError"))
-        g_bSlewingOpenClose = CBool(g_Profile.GetValue(ID, "SlewingOpenClose"))
-        g_bStandardAtHome = Not CBool(g_Profile.GetValue(ID, "NonFragileAtHome"))
-        g_bStandardAtPark = Not CBool(g_Profile.GetValue(ID, "NonFragileAtPark"))
-
-        g_bCanFindHome = CBool(g_Profile.GetValue(ID, "CanFindHome", "Capabilities"))
-        g_bCanPark = CBool(g_Profile.GetValue(ID, "CanPark", "Capabilities"))
-        g_bCanSetAltitude = CBool(g_Profile.GetValue(ID, "CanSetAltitude", "Capabilities"))
-        g_bCanSetAzimuth = CBool(g_Profile.GetValue(ID, "CanSetAzimuth", "Capabilities"))
-        g_bCanSetPark = CBool(g_Profile.GetValue(ID, "CanSetPark", "Capabilities"))
-        g_bCanSetShutter = CBool(g_Profile.GetValue(ID, "CanSetShutter", "Capabilities"))
-        g_bCanSyncAzimuth = CBool(g_Profile.GetValue(ID, "CanSyncAzimuth", "Capabilities"))
-
-        ' get and range dome state
-        g_dDomeAz = CDbl(g_Profile.GetValue(ID, "DomeAz", "State"))
-        g_dDomeAlt = CDbl(g_Profile.GetValue(ID, "DomeAlt", "State"))
-        If g_dDomeAlt < g_dMinAlt Then _
-            g_dDomeAlt = g_dMinAlt
-        If g_dDomeAlt > g_dMaxAlt Then _
-            g_dDomeAlt = g_dMaxAlt
-        If g_dDomeAz < 0 Or g_dDomeAz >= 360 Then _
-            g_dDomeAz = g_dSetPark
-        g_dTargetAlt = g_dDomeAlt
-        g_dTargetAz = g_dDomeAz
-
-        If g_bStartShutterError Then
-            g_eShutterState = ShutterState.shutterError
-        Else
-            g_eShutterState = CDbl(g_Profile.GetValue(ID, "ShutterState", "State"))
-        End If
+            If g_bStartShutterError Then
+                g_eShutterState = ShutterState.shutterError
+            Else
+                Dim ret As String = profile.GetValue(ID, "ShutterState", "State", "1")       ' ShutterClosed
+                g_eShutterState = DirectCast([Enum].Parse(GetType(ShutterState), ret), ShutterState)
+                'g_eShutterState = CDbl(profile.GetValue(ID, "ShutterState", "State"))
+            End If
+        End Using
 
         g_eSlewing = Going.slewNowhere
         g_bAtPark = HW_AtPark                   ' its OK to wake up parked
@@ -165,7 +134,7 @@ Public Class Dome
         TL.LogMessage("New", "Starting thread")
 
         ' Show the handbox now
-        handboxThread = New Threading.Thread(AddressOf HandboxForm.Run)
+        handboxThread = New Threading.Thread(AddressOf handboxTask)
         handboxThread.IsBackground = True
         handboxThread.TrySetApartmentState(Threading.ApartmentState.STA)
         handboxThread.Start()
@@ -173,7 +142,7 @@ Public Class Dome
 
         TL.LogMessage("New", "Starting wait for handbox form to be created")
         Do
-            Threading.Thread.Sleep(10)
+            Threading.Thread.Sleep(100)
             TL.LogMessage("New", "Waiting for handbox form to be created")
         Loop Until Not g_handBox Is Nothing
         TL.LogMessage("New", "Handbox created OK")
@@ -182,6 +151,15 @@ Public Class Dome
 
         'g_handBox.Show()
         'g_handBox.Activate()
+    End Sub
+
+    Private Sub handboxTask()
+        If g_handBox Is Nothing Then
+            g_handBox = New HandboxForm
+            g_handBox.ShowDialog()
+            'g_handBox.Invoke(New Action(AddressOf g_handBox.Dispose))
+            g_handBox = Nothing
+        End If
     End Sub
 
     Private disposedValue As Boolean ' To detect redundant calls
@@ -196,21 +174,13 @@ Public Class Dome
                     g_TrafficForm = Nothing
                 End If
                 If Not g_handBox Is Nothing Then
-                    g_handBox.BeginInvoke(New Action(AddressOf g_handBox.Close))
-                    g_handBox.BeginInvoke(New Action(AddressOf g_handBox.Dispose))
-                    'Try : g_handBox.Close() : Catch : End Try
-                    'Try : g_handBox.Dispose() : Catch : End Try
-                    g_handBox = Nothing
+                    g_handBox.Invoke(New Action(AddressOf g_handBox.Close))
+                    handboxThread.Join(1000)
                 End If
-                'If Not g_timer Is Nothing Then
-                '    Try : g_timer.Enabled = False : Catch : End Try
-                '    Try : g_timer.Dispose() : Catch : End Try
-                '    g_timer = Nothing
+                'If Not profile Is Nothing Then
+                '    Try : profile.Dispose() : Catch : End Try
+                '    profile = Nothing
                 'End If
-                If Not g_Profile Is Nothing Then
-                    Try : g_Profile.Dispose() : Catch : End Try
-                    g_Profile = Nothing
-                End If
 
             End If
         End If
