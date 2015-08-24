@@ -19,8 +19,7 @@
 //
 
 using System;
-//using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -35,6 +34,15 @@ namespace ASCOM.Simulator
     {
         // change to using a Windows timer to avoid threading problems
         private static System.Windows.Forms.Timer s_wTimer;
+
+        private static long idCount; // Counter to generate ever increasing sequential ID numbers
+ 
+        // this emulates a hardware connection
+        // the dictionary maintains a list of connected drivers, a dictionary is used so only one of each
+        // driver is maintained.
+        // Connected will be reported as true if any driver is connected
+        // each driver instance has a unique id generated using ObjectIDGenerator
+        private static ConcurrentDictionary<long, bool> connectStates;// = new ConcurrentDictionary<long, bool>();
 
         private static Utilities.Profile s_Profile;
         private static bool onTop;
@@ -171,6 +179,9 @@ namespace ASCOM.Simulator
 
                 TL = new ASCOM.Utilities.TraceLogger("", "TelescopeSimHardware");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
+
+                connectStates = new ConcurrentDictionary<long, bool>();
+                idCount = 0; // Initialise count to zero
 
                 // check if the profile settings are correct 
                 if (s_Profile.GetValue(SharedResources.PROGRAM_ID, "RegVer", "") != SharedResources.REGISTRATION_VERSION)
@@ -869,16 +880,12 @@ namespace ASCOM.Simulator
 
         //public static bool Connected {get; set;}
 
-        // this emulates a hardware connection
-        // the dictionary maintains a list of connected drivers, a dictionary is used so only one of each
-        // driver is maintained.
-        // Connected will be reported as true if any driver is connected
-        // each driver instance has a unique id generated using ObjectIDGenerator
-
-        //private static ConcurrentDictionary<long, bool> connectStates = new ConcurrentDictionary<long, bool>();
-        private static Dictionary<long, bool> connectStates = new Dictionary<long, bool>();
-
-        public static ObjectIDGenerator objectIDGenerator = new ObjectIDGenerator();
+        public static long GetId()
+        {
+            idCount += 1;
+            TL.LogMessage("GetId", "Generated new ID: " + idCount.ToString());
+            return idCount;
+        }
 
         public static bool Connected
         {
@@ -894,27 +901,13 @@ namespace ASCOM.Simulator
             // add or remove the instance, this is done once regardless of the number of calls
             if (value)
             {
-                if (connectStates.ContainsKey(id))
-                {
-                    TL.LogMessage("Hardware.SetConnected", "Set Connected to: True, Already contains key so do nothing");
-                }
-                else
-                {
-                    TL.LogMessage("Hardware.SetConnected", "Set Connected to: True, Key not present so adding this key");
-                    connectStates.Add(id, true);
-                }
+                bool notAlreadyPresent = connectStates.TryAdd(id, true);
+                TL.LogMessage("Hardware.Connected Set", "Set Connected to: True, AlreadyConnected: " + (!notAlreadyPresent).ToString());
             }
             else
             {
-                if (connectStates.ContainsKey(id))
-                {
-                    TL.LogMessage("Hardware.SetConnected", "Set Connected to: False, Key present so removing it");
-                    connectStates.Remove(id);
-                }
-                else
-                {
-                    TL.LogMessage("Hardware.SetConnected", "Set Connected to: False, No key so ignoring request");
-                }
+                bool successfullyRemoved = connectStates.TryRemove(id, out value);
+                TL.LogMessage("Hardware.Connected Set", "Set Connected to: False, Successfully removed: " + successfullyRemoved.ToString());
             }
         }
 
