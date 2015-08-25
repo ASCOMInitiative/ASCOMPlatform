@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Windows;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
@@ -43,6 +44,7 @@ namespace ASCOM.Simulator
         // Connected will be reported as true if any driver is connected
         // each driver instance has a unique id generated using ObjectIDGenerator
         private static ConcurrentDictionary<long, bool> connectStates;// = new ConcurrentDictionary<long, bool>();
+        private static readonly object getIdLockObj = new object();
 
         private static Utilities.Profile s_Profile;
         private static bool onTop;
@@ -882,9 +884,12 @@ namespace ASCOM.Simulator
 
         public static long GetId()
         {
-            idCount += 1;
-            TL.LogMessage("GetId", "Generated new ID: " + idCount.ToString());
-            return idCount;
+            lock (getIdLockObj)
+            {
+                Interlocked.Increment(ref idCount); // Increment the counter in a threadsafe fashion
+                TL.LogMessage("GetId", "Generated new ID: " + idCount.ToString());
+                return idCount;
+            }
         }
 
         public static bool Connected
