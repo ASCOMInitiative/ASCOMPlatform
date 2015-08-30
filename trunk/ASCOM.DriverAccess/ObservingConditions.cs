@@ -92,7 +92,7 @@ namespace ASCOM.DriverAccess
         /// Atmospheric pressure at the observatory
         /// </summary>
         /// <value>Atmospheric presure at the observatory(hPa)</value>
-        /// <remarks>This must be the pressure at the observatory and not the "redued" pressure at sea level. Please check what your pressure sensor delivers and adjust to observatory altitude if required.</remarks>
+        /// <remarks>This must be the pressure at the observatory and not the "reduced" pressure at sea level. Please check whether your pressure sensor delivers local pressure or sea level pressure and adjust if required to observatory pressure.</remarks>
         public double Pressure
         {
             get { return (double)_memberFactory.CallMember(1, "Pressure", new Type[] { }, new object[] { }); }
@@ -109,6 +109,15 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
+        /// Sky brightness at the observatory
+        /// </summary>
+        /// <value>Sky brightness (Lux)</value>
+        /// <remarks></remarks>
+        public double SkyBrightness
+        {
+            get { return (double)_memberFactory.CallMember(1, "SkyBrightness", new Type[] { }, new object[] { }); }
+        }
+        /// <summary>
         /// Sky quality at the observatory
         /// </summary>
         /// <value>Sky quality measured in magnitudes per square arc second</value>
@@ -121,7 +130,7 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Seeing at the observatory
         /// </summary>
-        /// <value>Seeing reported as star full width half magnitude (arc seconds) </value>
+        /// <value>Seeing reported as star full width half magnitude (arc seconds)</value>
         public double SkySeeing
         {
             get { return (double)_memberFactory.CallMember(1, "SkySeeing", new Type[] { }, new object[] { }); }

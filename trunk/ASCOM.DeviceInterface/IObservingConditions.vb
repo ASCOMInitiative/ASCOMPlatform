@@ -236,7 +236,7 @@ Public Interface IObservingConditions
     ''' Atmospheric pressure at the observatory
     ''' </summary>
     ''' <value>Atmospheric presure at the observatory(hPa)</value>
-    ''' <remarks>This must be the pressure at the observatory And Not the "redued" pressure at sea level. Please check what your pressure sensor delivers And adjust to observatory altitude if required.</remarks>
+    ''' <remarks>This must be the pressure at the observatory and not the "reduced" pressure at sea level. Please check whether your pressure sensor delivers local pressure or sea level pressure and adjust if required to observatory pressure.</remarks>
     ReadOnly Property Pressure As Double
 
     ''' <summary>
@@ -245,6 +245,13 @@ Public Interface IObservingConditions
     ''' <value>Rain rate (mm / hour)</value>
     ''' <remarks>This property can be interpreted as 0.0 = Dry any positive nonzero value = wet.</remarks>
     ReadOnly Property RainRate As Double
+
+    ''' <summary>
+    ''' Sky brightness at the observatory
+    ''' </summary>
+    ''' <value>Sky brightness (Lux)</value>
+    ''' <remarks></remarks>
+    ReadOnly Property SkyBrightness As Double
 
     ''' <summary>
     ''' Sky quality at the observatory
@@ -256,7 +263,7 @@ Public Interface IObservingConditions
     ''' <summary>
     ''' Seeing at the observatory
     ''' </summary>
-    ''' <value>Seeing reported as star full width half magnitude (arc seconds) </value>
+    ''' <value>Seeing reported as star full width half magnitude (arc seconds)</value>
     ReadOnly Property SkySeeing As Double
 
     ''' <summary>
