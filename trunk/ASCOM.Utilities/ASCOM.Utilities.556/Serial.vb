@@ -495,7 +495,7 @@ Public Class Serial
     ''' <value>Integer, serial port timeout in seconds</value>
     ''' <returns>Integer, serial port timeout in seconds.</returns>
     ''' <remarks>The minimum delay timout that can be set through this command is 1 seconds. Use ReceiveTimeoutMs to set a timeout less than 1 second.</remarks>
-    ''' <exception cref="InvalidValueException">Thrown when <paramref name="value"><c>=0</c></paramref> is invalid (outside the range 1 to 120 seconds.</exception>
+    ''' <exception cref="InvalidValueException">Thrown when <i>value</i> is invalid (outside the range 1 to 120 seconds.)</exception>
     Public Property ReceiveTimeout() As Integer Implements ISerial.ReceiveTimeout
         'Get and set the receive timeout
         Get
@@ -568,7 +568,7 @@ Public Class Serial
     ''' <returns>Integer, serial port timeout in milli-seconds</returns>
     ''' <remarks>If a timeout occurs, an IO timeout error is raised. See ReceiveTimeout for an alternate form 
     ''' using the timeout in seconds. </remarks>
-    ''' <exception cref="InvalidValueException">Thrown when <paramref name="value"><c>=0</c></paramref> is invalid.</exception>
+    ''' <exception cref="InvalidValueException">Thrown when <i>value</i> is invalid.</exception>
     Public Property ReceiveTimeoutMs() As Integer Implements ISerial.ReceiveTimeoutMs
         'Get and set the receive timeout in ms
         Get
