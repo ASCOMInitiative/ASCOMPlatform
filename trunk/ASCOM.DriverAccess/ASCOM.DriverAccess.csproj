@@ -126,6 +126,7 @@
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="MemberFactory.cs" />
+    <Compile Include="ObservingConditions.cs" />
     <Compile Include="Rotator.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>

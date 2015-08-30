@@ -1066,6 +1066,7 @@ else
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\WScript.Exe, True
       Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\Astroart.Exe, True
+      Write Registry Key HKLM\SOFTWARE\ASCOM\ObservingConditions Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
       Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name, $TITLE$
@@ -1192,6 +1193,7 @@ else
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceSystemTimer\WScript.Exe, True
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceSystemTimer\Astroart.Exe, True
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ObservingConditions Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Name, $TITLE$
