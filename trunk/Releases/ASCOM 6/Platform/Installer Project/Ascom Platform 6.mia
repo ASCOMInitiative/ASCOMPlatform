@@ -940,6 +940,17 @@ Install Files
 Install Files
 Install Files
 Code Folding Region
+Comment
+Code Folding Region
+Comment
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Code Folding Region
+Comment
 Code Folding Region
 Comment
 Install Files
@@ -1367,6 +1378,8 @@ Register Assembly
 Comment
 Comment
 Set Variable
+Run Program
+Write to Text File
 Run Program
 Write to Text File
 Run Program
@@ -2509,6 +2522,17 @@ $
 {94A346DE-FF77-4950-94DD-74E16651F5F7}
 {A2E1184F-EE0D-4204-AD36-37C499DF5BCF}
 {C452B2F6-131F-4CE6-AD70-0640C5A90D0E}
+{ECC22152-7810-41B8-BDE7-DDFF695398AA}
+{F3229A1A-F7B3-4C40-A0E3-907C4A78B265}
+{B7250831-9643-49BA-9B27-A819B0E19BCE}
+{D7302087-4354-4FFF-B7DD-86F5F1025689}
+{EB04F2F3-1ADE-4E1D-9DC2-03B1149068AA}
+{10596AD9-F6C3-406A-8B22-8A9C490D4DA1}
+{59111D09-F2D2-4A98-A413-056EE5DAEC48}
+{6311DE0F-5CC0-4050-B64C-CC7575169BE4}
+{2FA7134C-6B63-49A8-B408-61358596AFA4}
+{5B8C1F36-A6D2-43D7-A0E5-DBF9F408C563}
+{EB141CC7-B3A2-4ABB-9880-83A53B0A6881}
 {CD7873F1-AC8F-4CCF-8011-27292C19C5C7}
 {97E1885F-326F-49A8-96A2-DECDAB7F74A1}
 {BF08B73E-89BC-4914-9C0F-6EA381F0D4C3}
@@ -2944,6 +2968,8 @@ $
 {4B471149-4265-499D-AB8D-8E3927FE91D8}
 {2ED798F5-0251-4C2E-A9D3-62EA35A3D09D}
 {B50102AE-BEA0-4702-AE08-1811014EE805}
+{47FDC16B-C086-4778-A198-4A2805B86D8C}
+{D83F168C-B01F-4FB7-961A-B4D2634CAD1E}
 {9D57B1ED-EEA3-455F-AD48-A1DACEBBB19D}
 {6701B3AA-2573-4A05-8E67-3BF634958F19}
 {5EEBB12C-C6FE-467B-A453-3318D02BCFAF}
@@ -3558,6 +3584,12 @@ Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is 
 Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is si added or removed.
 {57B22623-B92A-4FA6-9CA5-7ABCBCB23D9C}
 Unused variables
+{EB141CC7-B3A2-4ABB-9880-83A53B0A6881}
+
+{ECC22152-7810-41B8-BDE7-DDFF695398AA}
+
+{B7250831-9643-49BA-9B27-A819B0E19BCE}
+Platform 6.2 ObservingConditions Hub
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -6803,6 +6835,84 @@ FALSE
 FALSE
 FALSE
 FALSE
+{2FA7134C-6B63-49A8-B408-61358596AFA4}
+..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\OCH
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{6311DE0F-5CC0-4050-B64C-CC7575169BE4}
+..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb
+FALSE|
+$COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{59111D09-F2D2-4A98-A413-056EE5DAEC48}
+..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\OCH
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{10596AD9-F6C3-406A-8B22-8A9C490D4DA1}
+..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\OCH
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{EB04F2F3-1ADE-4E1D-9DC2-03B1149068AA}
+..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\OCH
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{D7302087-4354-4FFF-B7DD-86F5F1025689}
+..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\OCH
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {74C7A69B-8E34-4748-BFE0-F6B07F15BF93}
 INSTALLCACHEEXISTS
 $INSTALLCACHEDIRECTORY$
@@ -7109,6 +7219,12 @@ TRUE
 
 {72D0426B-F950-4C0D-9553-49D249E67C58}
 $COMMONFILES$\ASCOM\Switch\Switch V2\ASCOM.Simulator.Server.exe
+TRUE
+-register
+TRUE
+RC
+{47FDC16B-C086-4778-A198-4A2805B86D8C}
+$COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe
 TRUE
 -register
 TRUE
@@ -10377,6 +10493,11 @@ $SETUPLOG$
 
 FALSE
 TRUE
+{D83F168C-B01F-4FB7-961A-B4D2634CAD1E}
+$SETUPLOG$
+$TIME$ RC: $RC$ Register - Observing Conditions Hub
+FALSE
+TRUE
 {14A4D424-B117-4943-8443-B2433541ADE8}
 ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
 TRUE
@@ -10641,6 +10762,12 @@ Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {3D7744DA-ECEC-41AA-A961-B54F753BDC3D}
 FALSE
 Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
+{F3229A1A-F7B3-4C40-A0E3-907C4A78B265}
+TRUE
+Platform 6.2 files
+{5B8C1F36-A6D2-43D7-A0E5-DBF9F408C563}
+FALSE
+Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of Copy of 
 {F1670508-8739-4F56-8ADD-2DA803A33113}
 DISKSPACE
 C:
@@ -12534,7 +12661,33 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
