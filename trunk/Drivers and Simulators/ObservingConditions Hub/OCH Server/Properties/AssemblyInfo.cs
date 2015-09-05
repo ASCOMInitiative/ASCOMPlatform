@@ -1,0 +1,27 @@
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("ASCOM Observing Conditions Hub Server")]
+[assembly: AssemblyDescription("ASCOM Observing Conditions Hub Server")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("ASCOM Initiative")]
+[assembly: AssemblyProduct("ASCOM Observing Conditions Hub")]
+[assembly: AssemblyCopyright("Copyright ASCOM © 2015")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+[assembly: AssemblyVersion("6.1.2.0")]
+[assembly: AssemblyFileVersion("6.1.2.0")]
+
+[assembly: ComVisibleAttribute(false)]
