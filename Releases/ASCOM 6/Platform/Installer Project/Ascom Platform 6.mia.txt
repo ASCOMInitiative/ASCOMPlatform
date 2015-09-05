@@ -940,6 +940,17 @@ else
     Install Files ..\..\..\..\SOFA\SOFA Releases\Sofa\x64\Release\SOFA11-64.pdb to $WINDIR$\Symbols\dll
     Install Files ..\..\..\..\SOFA\SOFA Releases\SofaTest\x64\Release\SofaTest11-64.exe to $COMMONFILES$\ASCOM\Astrometry
     [END REGION]
+     
+    [DEFINE REGION: Platform 6.2 files]
+    Comment: Platform 6.2 ObservingConditions Hub
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb to $COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    [END REGION]
+     
     [DEFINE REGION: Platform 6 Content]
     Comment: Platform 6 Documents
     Install Files ..\Files\Help.ico to $COMMONFILES$\ASCOM\Platform
@@ -1375,6 +1386,8 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Switch V2 Simulator (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Telescope Simulator 6 (at end of file)
+        Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
          
         Set Variable PROGRESS to 45
         Comment: Extra registration of 64bit components if on 64bit system

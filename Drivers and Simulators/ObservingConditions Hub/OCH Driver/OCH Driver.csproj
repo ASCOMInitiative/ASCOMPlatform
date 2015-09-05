@@ -148,7 +148,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Drivers and Simulators\ObservingConditions Hub\OCH Server\$(OutDir)$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Drivers and Simulators\ObservingConditions Hub\OCH Server\$(OutDir)$(TargetFileName)"
+copy "$(SolutionDir)Drivers and Simulators\ObservingConditions Hub\OCH Driver\$(OutDir)ASCOM.OCH.ObservingConditions.pdb" "$(SolutionDir)Drivers and Simulators\ObservingConditions Hub\OCH Server\$(OutDir)ASCOM.OCH.ObservingConditions.pdb"
+copy "$(SolutionDir)Drivers and Simulators\ObservingConditions Hub\OCH Driver\$(OutDir)ASCOM.OCH.ObservingConditions.dll.config" "$(SolutionDir)Drivers and Simulators\ObservingConditions Hub\OCH Server\$(OutDir)ASCOM.OCH.ObservingConditions.dll.config"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
