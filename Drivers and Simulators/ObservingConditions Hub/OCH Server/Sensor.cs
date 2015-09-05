@@ -36,7 +36,7 @@ namespace ASCOM.Simulator
         public Hub.ConnectionType DeviceMode { get; set; }
         public bool ErrorOnConnect { get; set; }
         public string ProgID { get; set; }
-        public string SensorName { get; }
+        public string SensorName { get; set; }
         public double SimCurrentValue { get; set; }
         public double SimHighValue { get; set; }
         public double SimLowValue { get; set; }
