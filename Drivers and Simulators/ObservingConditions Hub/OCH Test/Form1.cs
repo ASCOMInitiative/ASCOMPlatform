@@ -13,6 +13,7 @@ namespace ASCOM.Simulator
             InitializeComponent();
             Properties.Settings.Default.DriverId = DEVICE_PROGID;
             labelDriverId.Text = DEVICE_PROGID;
+            driver = new ASCOM.DriverAccess.ObservingConditions(DEVICE_PROGID);
             SetUIState();
         }
 
@@ -41,7 +42,7 @@ namespace ASCOM.Simulator
             {
                 try
                 {
-                    driver = new ASCOM.DriverAccess.ObservingConditions(Properties.Settings.Default.DriverId);
+                    txtStatus.Clear();
                     driver.Connected = true;
                     LogMessage("Connected OK");
                     LogMessage(driver.DriverInfo);
@@ -121,10 +122,12 @@ namespace ASCOM.Simulator
         {
             try
             {
-                driver = new ASCOM.DriverAccess.ObservingConditions(Properties.Settings.Default.DriverId);
+                //driver = new ASCOM.DriverAccess.ObservingConditions(Properties.Settings.Default.DriverId);
+                if (driver.Connected) driver.Connected = false;
+                SetUIState();
                 driver.SetupDialog();
-                driver.Dispose();
-                driver = null;
+                //driver.Dispose();
+                //driver = null;
             }
             catch (Exception ex)
             {
