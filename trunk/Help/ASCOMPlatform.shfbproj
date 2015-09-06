@@ -113,8 +113,8 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Version History\Version 6.2.aml" />
     <None Include="Introduction\Acknowledgements.aml" />
-    <None Include="Version History\Version 6.1 SP2.aml" />
     <None Include="Version History\Version 6.1 SP1.aml" />
     <None Include="Version History\Version 6.1 SP1.aml" />
     <None Include="Version History\Version 6.1.aml" />

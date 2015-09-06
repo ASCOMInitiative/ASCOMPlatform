@@ -34,55 +34,56 @@
     <CopyrightText>Copyright &amp;#169%3b 2010-15, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry.AstroUtils" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.Kepler" isExposed="False">
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.Kepler.Ephemeris" filterName="Ephemeris" isExposed="True" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVAS" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS2" filterName="INOVAS2" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS3" filterName="INOVAS3" isExposed="False" />
-  <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS31" filterName="INOVAS31" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVASCOM" isExposed="False">
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Earth" filterName="Earth" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Planet" filterName="Planet" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.PositionVector" filterName="PositionVector" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Site" filterName="Site" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Star" filterName="Star" isExposed="True" />
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.VelocityVector" filterName="VelocityVector" isExposed="True" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.SOFA" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Astrometry.SOFA.ISOFA" filterName="ISOFA" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Astrometry.Transform" isExposed="False">
-  <Filter entryType="Class" fullName="ASCOM.Astrometry.Transform.Transform" filterName="Transform" isExposed="True" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Controls" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Controls.ICadencedControl" filterName="ICadencedControl" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
-  <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
-    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.GetSchema" filterName="GetSchema" isExposed="False" />
-    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.ReadXml" filterName="ReadXml" isExposed="False" />
-    <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.WriteXml" filterName="WriteXml" isExposed="False" />
-  </Filter>
-  <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
-    <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
-  </Filter>
-  <Filter entryType="Delegate" fullName="ASCOM.Utilities.Timer.TickEventHandler" filterName="Timer.TickEventHandler" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="ASCOM.Utilities.Interfaces" isExposed="False" />
-<Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
-<Filter entryType="Namespace" fullName="ASCOM.Utilities.Video" isExposed="True">
-  <Filter entryType="Interface" fullName="ASCOM.Utilities.Video.ICameraImage" filterName="ICameraImage" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="System" isExposed="True">
-  <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
-  <Filter entryType="Class" fullName="System.ValueType" filterName="ValueType" isExposed="False">
-    <Filter entryType="Method" fullName="System.ValueType.ToString" filterName="ToString" isExposed="True" />
-  </Filter>
-</Filter></ApiFilter>
+        <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.Kepler" isExposed="False">
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.Kepler.Ephemeris" filterName="Ephemeris" isExposed="True" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVAS" isExposed="True">
+        <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS2" filterName="INOVAS2" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS3" filterName="INOVAS3" isExposed="False" />
+        <Filter entryType="Interface" fullName="ASCOM.Astrometry.NOVAS.INOVAS31" filterName="INOVAS31" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.NOVASCOM" isExposed="False">
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Earth" filterName="Earth" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Planet" filterName="Planet" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.PositionVector" filterName="PositionVector" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Site" filterName="Site" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.Star" filterName="Star" isExposed="True" />
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.NOVASCOM.VelocityVector" filterName="VelocityVector" isExposed="True" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.SOFA" isExposed="True">
+        <Filter entryType="Interface" fullName="ASCOM.Astrometry.SOFA.ISOFA" filterName="ISOFA" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Astrometry.Transform" isExposed="False">
+        <Filter entryType="Class" fullName="ASCOM.Astrometry.Transform.Transform" filterName="Transform" isExposed="True" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Controls" isExposed="True">
+        <Filter entryType="Interface" fullName="ASCOM.Controls.ICadencedControl" filterName="ICadencedControl" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities" isExposed="True">
+        <Filter entryType="Class" fullName="ASCOM.Utilities.ASCOMProfile" filterName="ASCOMProfile" isExposed="True">
+          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.GetSchema" filterName="GetSchema" isExposed="False" />
+          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.ReadXml" filterName="ReadXml" isExposed="False" />
+          <Filter entryType="Method" fullName="ASCOM.Utilities.ASCOMProfile.WriteXml" filterName="WriteXml" isExposed="False" />
+        </Filter>
+        <Filter entryType="Class" fullName="ASCOM.Utilities.Profile" filterName="Profile" isExposed="True">
+          <Filter entryType="Method" fullName="ASCOM.Utilities.Profile.MigrateProfile" filterName="MigrateProfile" isExposed="False" />
+        </Filter>
+        <Filter entryType="Delegate" fullName="ASCOM.Utilities.Timer.TickEventHandler" filterName="Timer.TickEventHandler" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities.Interfaces" isExposed="False" />
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities.VB6HelperSupport" isExposed="False" />
+      <Filter entryType="Namespace" fullName="ASCOM.Utilities.Video" isExposed="True">
+        <Filter entryType="Interface" fullName="ASCOM.Utilities.Video.ICameraImage" filterName="ICameraImage" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System" isExposed="True">
+        <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
+        <Filter entryType="Class" fullName="System.ValueType" filterName="ValueType" isExposed="False">
+          <Filter entryType="Method" fullName="System.ValueType.ToString" filterName="ToString" isExposed="True" />
+        </Filter>
+      </Filter>
+    </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
@@ -96,14 +97,15 @@
     <ComponentConfigurations>
       <ComponentConfig id="Comments Index Data (ESENT Cache)" enabled="False">
         <component id="Comments Index Data (ESENT Cache)">
-  <index name="comments" value="/doc/members/member" key="@name" cache="30" localCacheSize="2500" frameworkCachePath="{@LocalDataFolder}Cache\CommentsIndexCache" projectCachePath="{@WorkingFolder}CommentsIndexCache">
+          <index name="comments" value="/doc/members/member" key="@name" cache="30" localCacheSize="2500" frameworkCachePath="{@LocalDataFolder}Cache\CommentsIndexCache" projectCachePath="{@WorkingFolder}CommentsIndexCache">
 	{@FrameworkCommentList}
 	{@CommentFileList}
 </index>
-  <copy name="comments" source="*" target="/document/comments" />
-</component>
+          <copy name="comments" source="*" target="/document/comments" />
+        </component>
       </ComponentConfig>
-<ComponentConfig id="Resolve Reference Links (ESENT Cache)" enabled="False"><component id="Resolve Reference Links (ESENT Cache)">{@HRefFormat}
+      <ComponentConfig id="Resolve Reference Links (ESENT Cache)" enabled="False">
+        <component id="Resolve Reference Links (ESENT Cache)">{@HRefFormat}
 <locale value="{@Locale}" /><linkTarget value="{@SdkLinkTarget}" /><helpOutput format="HtmlHelp1"><msdnContentIdCache path="{@LocalDataFolder}Cache\MsdnContentId.cache" cachePath="{@LocalDataFolder}Cache\ESentMsdnContentIdCache" localCacheSize="2500" /><targets base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" type="{@HtmlSdkLinkType}" id="FrameworkTargets" cachePath="{@LocalDataFolder}Cache\ESentFrameworkTargetCache" localCacheSize="2500">
 		{@ReferenceLinkNamespaceFiles}
 	</targets><targets files="reflection.xml" type="Local" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput><helpOutput format="MSHelpViewer"><msdnContentIdCache path="{@LocalDataFolder}Cache\MsdnContentId.cache" cachePath="{@LocalDataFolder}Cache\ESentMsdnContentIdCache" localCacheSize="2500" /><targets base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" type="{@MSHelpViewerSdkLinkType}" id="FrameworkTargets" cachePath="{@LocalDataFolder}Cache\ESentFrameworkTargetCache" localCacheSize="2500">
@@ -114,23 +116,29 @@
 		{@ReferenceLinkNamespaceFiles}
 	</targets><targets files="reflection.xml" type="Local" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput><helpOutput format="Markdown"><msdnContentIdCache path="{@LocalDataFolder}Cache\MsdnContentId.cache" cachePath="{@LocalDataFolder}Cache\ESentMsdnContentIdCache" localCacheSize="2500" /><targets base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" type="{@WebsiteSdkLinkType}" id="FrameworkTargets" cachePath="{@LocalDataFolder}Cache\ESentFrameworkTargetCache" localCacheSize="2500">
 		{@ReferenceLinkNamespaceFiles}
-	</targets><targets files="reflection.xml" type="Local" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput></component></ComponentConfig>
-<ComponentConfig id="Reflection Index Data (ESENT Cache)" enabled="False"><component id="Reflection Index Data (ESENT Cache)">
-  <index name="reflection" value="/reflection/apis/api" key="@id" cache="15" localCacheSize="2500" frameworkCachePath="{@LocalDataFolder}Cache\ReflectionIndexCache" projectCachePath="{@WorkingFolder}ReflectionIndexCache">
-    <data base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" duplicateWarning="false" groupId="ReflectionIndexCache">
+	</targets><targets files="reflection.xml" type="Local" id="ProjectTargets" cachePath="" localCacheSize="2500" noReload="true" /></helpOutput></component>
+      </ComponentConfig>
+      <ComponentConfig id="Reflection Index Data (ESENT Cache)" enabled="False">
+        <component id="Reflection Index Data (ESENT Cache)">
+          <index name="reflection" value="/reflection/apis/api" key="@id" cache="15" localCacheSize="2500" frameworkCachePath="{@LocalDataFolder}Cache\ReflectionIndexCache" projectCachePath="{@WorkingFolder}ReflectionIndexCache">
+            <data base="{@FrameworkReflectionDataFolder}" recurse="true" files="*.xml" duplicateWarning="false" groupId="ReflectionIndexCache">
 		{@ReferenceLinkNamespaceFiles}
 	</data>
-    <data files="reflection.xml" groupId="Project_Ref_{@UniqueID}" />
-  </index>
-  <copy name="reflection" source="*" target="/document/reference" />
-</component></ComponentConfig>
-<ComponentConfig id="Code Block Component" enabled="True"><component id="Code Block Component">
-  <basePath value="{@HtmlEncProjectFolder}" />
-  <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
-  <allowMissingSource value="false" />
-  <removeRegionMarkers value="false" />
-  <colorizer syntaxFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.xml" styleFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.xsl" stylesheet="{@SHFBFolder}PresentationStyles\Colorizer\highlight.css" scriptFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.js" disabled="{@DisableCodeBlockComponent}" language="cs" tabSize="0" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" />
-</component></ComponentConfig></ComponentConfigurations>
+            <data files="reflection.xml" groupId="Project_Ref_{@UniqueID}" />
+          </index>
+          <copy name="reflection" source="*" target="/document/reference" />
+        </component>
+      </ComponentConfig>
+      <ComponentConfig id="Code Block Component" enabled="True">
+        <component id="Code Block Component">
+          <basePath value="{@HtmlEncProjectFolder}" />
+          <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
+          <allowMissingSource value="false" />
+          <removeRegionMarkers value="false" />
+          <colorizer syntaxFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.xml" styleFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.xsl" stylesheet="{@SHFBFolder}PresentationStyles\Colorizer\highlight.css" scriptFile="{@SHFBFolder}PresentationStyles\Colorizer\highlight.js" disabled="{@DisableCodeBlockComponent}" language="cs" tabSize="0" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" />
+        </component>
+      </ComponentConfig>
+    </ComponentConfigurations>
     <ProjectSummary>ASCOM Platform 6 Developer Documentation</ProjectSummary>
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
@@ -142,7 +150,8 @@
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" />
-<NamespaceSummaryItem name="ASCOM.Utilities.Interfaces" isDocumented="True" /></NamespaceSummaries>
+      <NamespaceSummaryItem name="ASCOM.Utilities.Interfaces" isDocumented="True" />
+    </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
     <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
@@ -216,6 +225,7 @@
       <CopyToMedia>True</CopyToMedia>
     </Image>
     <Content Include="Styles\branding-Help1.css" />
+    <None Include="Version History\Version 6.2.aml" />
     <None Include="Introduction\Acknowledgements.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
@@ -223,7 +233,6 @@
     <None Include="Developer Information\Camera States.aml" />
     <None Include="Developer Information\Camera States.aml" />
     <None Include="Developer Information\Camera States.aml" />
-    <None Include="Version History\Version 6.1 SP2.aml" />
     <None Include="Version History\Version 6.1 SP1.aml" />
     <None Include="Version History\Version 6.1.aml" />
     <None Include="Version History\Version 6.0 SP3.aml" />

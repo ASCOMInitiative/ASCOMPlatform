@@ -548,7 +548,15 @@ namespace ASCOM.Simulator
                                 return sensorDescription;
 
                             case DeviceType.Switch:
-                                string switchDescription = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchDescription((short)Sensors[PropertyName].SwitchNumber);
+                                string switchDescription;
+                                if (SwitchDevices[Sensors[PropertyName].ProgID].InterfaceVersion <= 1) // Switch V1 does not have a switch description so get the switch name instead
+                                {
+                                    switchDescription = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchName((short)Sensors[PropertyName].SwitchNumber);
+                                }
+                                else // Switch V2 does have a switch description
+                                {
+                                    switchDescription = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchDescription((short)Sensors[PropertyName].SwitchNumber);
+                                }
                                 TL.LogMessage(clientNumber, "SensorDescription", "Got description: " + switchDescription + " from device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber);
                                 return switchDescription;
 
@@ -702,8 +710,20 @@ namespace ASCOM.Simulator
                             return observingConditionsValue;
 
                         case DeviceType.Switch:
-                            double switchValue = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchValue((short)Sensors[PropertyName].SwitchNumber);
-                            TL.LogMessage("GetDouble", "Got value: " + switchValue + " from device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber);
+                            double switchValue;
+
+                            if (SwitchDevices[Sensors[PropertyName].ProgID].InterfaceVersion <= 1) // Switch V1 does not have a switch description so get the switch name instead
+                            {
+                                bool switchBool = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitch((short)Sensors[PropertyName].SwitchNumber);
+                                switchValue = Convert.ToDouble(switchBool);
+                                TL.LogMessage("GetDouble", "Got value: " + switchValue + " from Switch V1 device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber + ", device returned: " + switchBool.ToString());
+                            }
+                            else // Switch V2 does have a switch description
+                            {
+                                switchValue = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchValue((short)Sensors[PropertyName].SwitchNumber);
+                                TL.LogMessage("GetDouble", "Got value: " + switchValue + " from Switch V2 device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber);
+                            }
+
                             return switchValue;
 
                         default:

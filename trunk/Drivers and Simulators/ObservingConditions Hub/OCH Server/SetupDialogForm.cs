@@ -73,15 +73,18 @@ namespace ASCOM.Simulator
 
         private void EnableUpDown(object sender)
         {
+            TL.LogMessage("EnableUpDown", "Event has fired");
             ComboBox cmb = (ComboBox)sender;
             NumericUpDown upDown = (NumericUpDown)this.Controls[tabControl1.Name].Controls[tabPage1.Name].Controls[UPDOWN_PREFIX + cmb.Name.Substring(3)];
 
             if (allDevices[cmb.SelectedIndex].Key.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) // Enable or disable the property's Switch number spin control 
             {
                 upDown.Enabled = true;
+                upDown.Value = Hub.Sensors[cmb.Name.Substring(3)].SwitchNumber;
             }
             else
             {
+                upDown.Value = 0;
                 upDown.Enabled = false;
             }
 
@@ -231,18 +234,9 @@ namespace ASCOM.Simulator
                             //TL.LogMessage("Setup Load", "ProgID comparison: : " + device.Key + " " + Hub.Sensors[property].ProgID);
                             if (device.Key == Hub.Sensors[property].ProgID)
                             {
-                                //TL.LogMessage("Setup Load", "Setting index to: : " + count);
-                                cmb.SelectedIndex = count;
-                                // Enable or disable the switch number control depending on whether or not a switch device has been selected.
-                                if (device.Key.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase))
-                                {
-                                    upDown.Enabled = true;
-                                    upDown.Value = Hub.Sensors[property].SwitchNumber;
-                                }
-                                else
-                                {
-                                    upDown.Enabled = false;
-                                }
+                                TL.LogMessage("Setup Load", "Before setting index to: : " + count);
+                                cmb.SelectedIndex = count; // This will fire the SelectedIndexChanged event (which calls EnableUpdDown) to set values and enable the switch number as required
+                                TL.LogMessage("Setup Load", "After setting index to: : " + count);
                             }
                             count++;
                         }
