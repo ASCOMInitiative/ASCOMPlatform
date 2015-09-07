@@ -35,6 +35,19 @@ namespace ASCOM.Simulator
             this.debugTrace = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cmbWindSpeedSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbWindGustSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbWindDirectionSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbTemperatureSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbSkyTemperatureSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbSkySeeingSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbSkyQualitySwitch = new System.Windows.Forms.ComboBox();
+            this.cmbSkyBrightnessSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbRainRateSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbPressureSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbHumiditySwitch = new System.Windows.Forms.ComboBox();
+            this.cmbDewPointSwitch = new System.Windows.Forms.ComboBox();
+            this.cmbCloudCoverSwitch = new System.Windows.Forms.ComboBox();
             this.upDownWindSpeed = new System.Windows.Forms.NumericUpDown();
             this.upDownWindGust = new System.Windows.Forms.NumericUpDown();
             this.upDownWindDirection = new System.Windows.Forms.NumericUpDown();
@@ -64,6 +77,21 @@ namespace ASCOM.Simulator
             this.cmbCloudCover = new System.Windows.Forms.ComboBox();
             this.cmbAveragePeriod = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.txtHighAveragePeriod = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.txtHighWindSpeed = new System.Windows.Forms.TextBox();
             this.txtHighWindGust = new System.Windows.Forms.TextBox();
@@ -108,21 +136,6 @@ namespace ASCOM.Simulator
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.txtHighAveragePeriod = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.upDownWindSpeed)).BeginInit();
@@ -198,6 +211,19 @@ namespace ASCOM.Simulator
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cmbWindSpeedSwitch);
+            this.tabPage1.Controls.Add(this.cmbWindGustSwitch);
+            this.tabPage1.Controls.Add(this.cmbWindDirectionSwitch);
+            this.tabPage1.Controls.Add(this.cmbTemperatureSwitch);
+            this.tabPage1.Controls.Add(this.cmbSkyTemperatureSwitch);
+            this.tabPage1.Controls.Add(this.cmbSkySeeingSwitch);
+            this.tabPage1.Controls.Add(this.cmbSkyQualitySwitch);
+            this.tabPage1.Controls.Add(this.cmbSkyBrightnessSwitch);
+            this.tabPage1.Controls.Add(this.cmbRainRateSwitch);
+            this.tabPage1.Controls.Add(this.cmbPressureSwitch);
+            this.tabPage1.Controls.Add(this.cmbHumiditySwitch);
+            this.tabPage1.Controls.Add(this.cmbDewPointSwitch);
+            this.tabPage1.Controls.Add(this.cmbCloudCoverSwitch);
             this.tabPage1.Controls.Add(this.upDownWindSpeed);
             this.tabPage1.Controls.Add(this.upDownWindGust);
             this.tabPage1.Controls.Add(this.upDownWindDirection);
@@ -234,102 +260,206 @@ namespace ASCOM.Simulator
             this.tabPage1.Text = "Source";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // cmbWindSpeedSwitch
+            // 
+            this.cmbWindSpeedSwitch.FormattingEnabled = true;
+            this.cmbWindSpeedSwitch.Location = new System.Drawing.Point(411, 379);
+            this.cmbWindSpeedSwitch.Name = "cmbWindSpeedSwitch";
+            this.cmbWindSpeedSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbWindSpeedSwitch.TabIndex = 58;
+            // 
+            // cmbWindGustSwitch
+            // 
+            this.cmbWindGustSwitch.FormattingEnabled = true;
+            this.cmbWindGustSwitch.Location = new System.Drawing.Point(411, 352);
+            this.cmbWindGustSwitch.Name = "cmbWindGustSwitch";
+            this.cmbWindGustSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbWindGustSwitch.TabIndex = 57;
+            // 
+            // cmbWindDirectionSwitch
+            // 
+            this.cmbWindDirectionSwitch.FormattingEnabled = true;
+            this.cmbWindDirectionSwitch.Location = new System.Drawing.Point(411, 325);
+            this.cmbWindDirectionSwitch.Name = "cmbWindDirectionSwitch";
+            this.cmbWindDirectionSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbWindDirectionSwitch.TabIndex = 56;
+            // 
+            // cmbTemperatureSwitch
+            // 
+            this.cmbTemperatureSwitch.FormattingEnabled = true;
+            this.cmbTemperatureSwitch.Location = new System.Drawing.Point(411, 298);
+            this.cmbTemperatureSwitch.Name = "cmbTemperatureSwitch";
+            this.cmbTemperatureSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbTemperatureSwitch.TabIndex = 55;
+            // 
+            // cmbSkyTemperatureSwitch
+            // 
+            this.cmbSkyTemperatureSwitch.FormattingEnabled = true;
+            this.cmbSkyTemperatureSwitch.Location = new System.Drawing.Point(411, 272);
+            this.cmbSkyTemperatureSwitch.Name = "cmbSkyTemperatureSwitch";
+            this.cmbSkyTemperatureSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbSkyTemperatureSwitch.TabIndex = 54;
+            // 
+            // cmbSkySeeingSwitch
+            // 
+            this.cmbSkySeeingSwitch.FormattingEnabled = true;
+            this.cmbSkySeeingSwitch.Location = new System.Drawing.Point(411, 245);
+            this.cmbSkySeeingSwitch.Name = "cmbSkySeeingSwitch";
+            this.cmbSkySeeingSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbSkySeeingSwitch.TabIndex = 53;
+            // 
+            // cmbSkyQualitySwitch
+            // 
+            this.cmbSkyQualitySwitch.FormattingEnabled = true;
+            this.cmbSkyQualitySwitch.Location = new System.Drawing.Point(411, 218);
+            this.cmbSkyQualitySwitch.Name = "cmbSkyQualitySwitch";
+            this.cmbSkyQualitySwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbSkyQualitySwitch.TabIndex = 52;
+            // 
+            // cmbSkyBrightnessSwitch
+            // 
+            this.cmbSkyBrightnessSwitch.FormattingEnabled = true;
+            this.cmbSkyBrightnessSwitch.Location = new System.Drawing.Point(411, 191);
+            this.cmbSkyBrightnessSwitch.Name = "cmbSkyBrightnessSwitch";
+            this.cmbSkyBrightnessSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbSkyBrightnessSwitch.TabIndex = 51;
+            // 
+            // cmbRainRateSwitch
+            // 
+            this.cmbRainRateSwitch.FormattingEnabled = true;
+            this.cmbRainRateSwitch.Location = new System.Drawing.Point(411, 164);
+            this.cmbRainRateSwitch.Name = "cmbRainRateSwitch";
+            this.cmbRainRateSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbRainRateSwitch.TabIndex = 50;
+            // 
+            // cmbPressureSwitch
+            // 
+            this.cmbPressureSwitch.FormattingEnabled = true;
+            this.cmbPressureSwitch.Location = new System.Drawing.Point(411, 137);
+            this.cmbPressureSwitch.Name = "cmbPressureSwitch";
+            this.cmbPressureSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbPressureSwitch.TabIndex = 49;
+            // 
+            // cmbHumiditySwitch
+            // 
+            this.cmbHumiditySwitch.FormattingEnabled = true;
+            this.cmbHumiditySwitch.Location = new System.Drawing.Point(411, 110);
+            this.cmbHumiditySwitch.Name = "cmbHumiditySwitch";
+            this.cmbHumiditySwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbHumiditySwitch.TabIndex = 48;
+            // 
+            // cmbDewPointSwitch
+            // 
+            this.cmbDewPointSwitch.FormattingEnabled = true;
+            this.cmbDewPointSwitch.Location = new System.Drawing.Point(411, 84);
+            this.cmbDewPointSwitch.Name = "cmbDewPointSwitch";
+            this.cmbDewPointSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbDewPointSwitch.TabIndex = 47;
+            // 
+            // cmbCloudCoverSwitch
+            // 
+            this.cmbCloudCoverSwitch.FormattingEnabled = true;
+            this.cmbCloudCoverSwitch.Location = new System.Drawing.Point(411, 57);
+            this.cmbCloudCoverSwitch.Name = "cmbCloudCoverSwitch";
+            this.cmbCloudCoverSwitch.Size = new System.Drawing.Size(107, 21);
+            this.cmbCloudCoverSwitch.TabIndex = 46;
+            // 
             // upDownWindSpeed
             // 
-            this.upDownWindSpeed.Location = new System.Drawing.Point(408, 380);
+            this.upDownWindSpeed.Location = new System.Drawing.Point(372, 379);
             this.upDownWindSpeed.Name = "upDownWindSpeed";
-            this.upDownWindSpeed.Size = new System.Drawing.Size(41, 20);
+            this.upDownWindSpeed.Size = new System.Drawing.Size(33, 20);
             this.upDownWindSpeed.TabIndex = 45;
             // 
             // upDownWindGust
             // 
-            this.upDownWindGust.Location = new System.Drawing.Point(408, 353);
+            this.upDownWindGust.Location = new System.Drawing.Point(372, 352);
             this.upDownWindGust.Name = "upDownWindGust";
-            this.upDownWindGust.Size = new System.Drawing.Size(41, 20);
+            this.upDownWindGust.Size = new System.Drawing.Size(33, 20);
             this.upDownWindGust.TabIndex = 44;
             // 
             // upDownWindDirection
             // 
-            this.upDownWindDirection.Location = new System.Drawing.Point(408, 326);
+            this.upDownWindDirection.Location = new System.Drawing.Point(372, 325);
             this.upDownWindDirection.Name = "upDownWindDirection";
-            this.upDownWindDirection.Size = new System.Drawing.Size(41, 20);
+            this.upDownWindDirection.Size = new System.Drawing.Size(33, 20);
             this.upDownWindDirection.TabIndex = 43;
             // 
             // upDownTemperature
             // 
-            this.upDownTemperature.Location = new System.Drawing.Point(408, 299);
+            this.upDownTemperature.Location = new System.Drawing.Point(372, 298);
             this.upDownTemperature.Name = "upDownTemperature";
-            this.upDownTemperature.Size = new System.Drawing.Size(41, 20);
+            this.upDownTemperature.Size = new System.Drawing.Size(33, 20);
             this.upDownTemperature.TabIndex = 42;
             // 
             // upDownSkyTemperature
             // 
-            this.upDownSkyTemperature.Location = new System.Drawing.Point(408, 273);
+            this.upDownSkyTemperature.Location = new System.Drawing.Point(372, 272);
             this.upDownSkyTemperature.Name = "upDownSkyTemperature";
-            this.upDownSkyTemperature.Size = new System.Drawing.Size(41, 20);
+            this.upDownSkyTemperature.Size = new System.Drawing.Size(33, 20);
             this.upDownSkyTemperature.TabIndex = 41;
             // 
             // upDownSkySeeing
             // 
-            this.upDownSkySeeing.Location = new System.Drawing.Point(408, 246);
+            this.upDownSkySeeing.Location = new System.Drawing.Point(372, 245);
             this.upDownSkySeeing.Name = "upDownSkySeeing";
-            this.upDownSkySeeing.Size = new System.Drawing.Size(41, 20);
+            this.upDownSkySeeing.Size = new System.Drawing.Size(33, 20);
             this.upDownSkySeeing.TabIndex = 40;
             // 
             // upDownSkyQuality
             // 
-            this.upDownSkyQuality.Location = new System.Drawing.Point(408, 219);
+            this.upDownSkyQuality.Location = new System.Drawing.Point(372, 218);
             this.upDownSkyQuality.Name = "upDownSkyQuality";
-            this.upDownSkyQuality.Size = new System.Drawing.Size(41, 20);
+            this.upDownSkyQuality.Size = new System.Drawing.Size(33, 20);
             this.upDownSkyQuality.TabIndex = 39;
             // 
             // upDownSkyBrightness
             // 
-            this.upDownSkyBrightness.Location = new System.Drawing.Point(408, 192);
+            this.upDownSkyBrightness.Location = new System.Drawing.Point(372, 191);
             this.upDownSkyBrightness.Name = "upDownSkyBrightness";
-            this.upDownSkyBrightness.Size = new System.Drawing.Size(41, 20);
+            this.upDownSkyBrightness.Size = new System.Drawing.Size(33, 20);
             this.upDownSkyBrightness.TabIndex = 38;
             // 
             // upDownRainRate
             // 
-            this.upDownRainRate.Location = new System.Drawing.Point(408, 165);
+            this.upDownRainRate.Location = new System.Drawing.Point(372, 164);
             this.upDownRainRate.Name = "upDownRainRate";
-            this.upDownRainRate.Size = new System.Drawing.Size(41, 20);
+            this.upDownRainRate.Size = new System.Drawing.Size(33, 20);
             this.upDownRainRate.TabIndex = 37;
             // 
             // upDownPressure
             // 
-            this.upDownPressure.Location = new System.Drawing.Point(408, 138);
+            this.upDownPressure.Location = new System.Drawing.Point(372, 137);
             this.upDownPressure.Name = "upDownPressure";
-            this.upDownPressure.Size = new System.Drawing.Size(41, 20);
+            this.upDownPressure.Size = new System.Drawing.Size(33, 20);
             this.upDownPressure.TabIndex = 36;
             // 
             // upDownHumidity
             // 
-            this.upDownHumidity.Location = new System.Drawing.Point(408, 111);
+            this.upDownHumidity.Location = new System.Drawing.Point(372, 110);
             this.upDownHumidity.Name = "upDownHumidity";
-            this.upDownHumidity.Size = new System.Drawing.Size(41, 20);
+            this.upDownHumidity.Size = new System.Drawing.Size(33, 20);
             this.upDownHumidity.TabIndex = 35;
             // 
             // upDownDewPoint
             // 
-            this.upDownDewPoint.Location = new System.Drawing.Point(408, 84);
+            this.upDownDewPoint.Location = new System.Drawing.Point(372, 83);
             this.upDownDewPoint.Name = "upDownDewPoint";
-            this.upDownDewPoint.Size = new System.Drawing.Size(41, 20);
+            this.upDownDewPoint.Size = new System.Drawing.Size(33, 20);
             this.upDownDewPoint.TabIndex = 34;
             // 
             // upDownCloudCover
             // 
-            this.upDownCloudCover.Location = new System.Drawing.Point(408, 58);
+            this.upDownCloudCover.Location = new System.Drawing.Point(372, 57);
             this.upDownCloudCover.Name = "upDownCloudCover";
-            this.upDownCloudCover.Size = new System.Drawing.Size(41, 20);
+            this.upDownCloudCover.Size = new System.Drawing.Size(33, 20);
             this.upDownCloudCover.TabIndex = 33;
             // 
             // upDownAveragePeriod
             // 
-            this.upDownAveragePeriod.Location = new System.Drawing.Point(408, 31);
+            this.upDownAveragePeriod.Location = new System.Drawing.Point(372, 30);
             this.upDownAveragePeriod.Name = "upDownAveragePeriod";
-            this.upDownAveragePeriod.Size = new System.Drawing.Size(41, 20);
+            this.upDownAveragePeriod.Size = new System.Drawing.Size(33, 20);
             this.upDownAveragePeriod.TabIndex = 32;
             // 
             // cmbWindGust
@@ -337,7 +467,7 @@ namespace ASCOM.Simulator
             this.cmbWindGust.FormattingEnabled = true;
             this.cmbWindGust.Location = new System.Drawing.Point(6, 352);
             this.cmbWindGust.Name = "cmbWindGust";
-            this.cmbWindGust.Size = new System.Drawing.Size(396, 21);
+            this.cmbWindGust.Size = new System.Drawing.Size(360, 21);
             this.cmbWindGust.TabIndex = 31;
             // 
             // cmbWindSpeed
@@ -345,7 +475,7 @@ namespace ASCOM.Simulator
             this.cmbWindSpeed.FormattingEnabled = true;
             this.cmbWindSpeed.Location = new System.Drawing.Point(6, 379);
             this.cmbWindSpeed.Name = "cmbWindSpeed";
-            this.cmbWindSpeed.Size = new System.Drawing.Size(396, 21);
+            this.cmbWindSpeed.Size = new System.Drawing.Size(360, 21);
             this.cmbWindSpeed.TabIndex = 30;
             // 
             // cmbSkySeeing
@@ -353,7 +483,7 @@ namespace ASCOM.Simulator
             this.cmbSkySeeing.FormattingEnabled = true;
             this.cmbSkySeeing.Location = new System.Drawing.Point(6, 245);
             this.cmbSkySeeing.Name = "cmbSkySeeing";
-            this.cmbSkySeeing.Size = new System.Drawing.Size(396, 21);
+            this.cmbSkySeeing.Size = new System.Drawing.Size(360, 21);
             this.cmbSkySeeing.TabIndex = 28;
             // 
             // cmbSkyTemperature
@@ -361,7 +491,7 @@ namespace ASCOM.Simulator
             this.cmbSkyTemperature.FormattingEnabled = true;
             this.cmbSkyTemperature.Location = new System.Drawing.Point(6, 272);
             this.cmbSkyTemperature.Name = "cmbSkyTemperature";
-            this.cmbSkyTemperature.Size = new System.Drawing.Size(396, 21);
+            this.cmbSkyTemperature.Size = new System.Drawing.Size(360, 21);
             this.cmbSkyTemperature.TabIndex = 27;
             // 
             // cmbTemperature
@@ -369,7 +499,7 @@ namespace ASCOM.Simulator
             this.cmbTemperature.FormattingEnabled = true;
             this.cmbTemperature.Location = new System.Drawing.Point(6, 298);
             this.cmbTemperature.Name = "cmbTemperature";
-            this.cmbTemperature.Size = new System.Drawing.Size(396, 21);
+            this.cmbTemperature.Size = new System.Drawing.Size(360, 21);
             this.cmbTemperature.TabIndex = 26;
             // 
             // cmbWindDirection
@@ -377,7 +507,7 @@ namespace ASCOM.Simulator
             this.cmbWindDirection.FormattingEnabled = true;
             this.cmbWindDirection.Location = new System.Drawing.Point(6, 325);
             this.cmbWindDirection.Name = "cmbWindDirection";
-            this.cmbWindDirection.Size = new System.Drawing.Size(396, 21);
+            this.cmbWindDirection.Size = new System.Drawing.Size(360, 21);
             this.cmbWindDirection.TabIndex = 25;
             // 
             // cmbSkyQuality
@@ -385,7 +515,7 @@ namespace ASCOM.Simulator
             this.cmbSkyQuality.FormattingEnabled = true;
             this.cmbSkyQuality.Location = new System.Drawing.Point(6, 218);
             this.cmbSkyQuality.Name = "cmbSkyQuality";
-            this.cmbSkyQuality.Size = new System.Drawing.Size(396, 21);
+            this.cmbSkyQuality.Size = new System.Drawing.Size(360, 21);
             this.cmbSkyQuality.TabIndex = 24;
             // 
             // cmbSkyBrightness
@@ -393,7 +523,7 @@ namespace ASCOM.Simulator
             this.cmbSkyBrightness.FormattingEnabled = true;
             this.cmbSkyBrightness.Location = new System.Drawing.Point(6, 191);
             this.cmbSkyBrightness.Name = "cmbSkyBrightness";
-            this.cmbSkyBrightness.Size = new System.Drawing.Size(396, 21);
+            this.cmbSkyBrightness.Size = new System.Drawing.Size(360, 21);
             this.cmbSkyBrightness.TabIndex = 23;
             // 
             // cmbRainRate
@@ -401,7 +531,7 @@ namespace ASCOM.Simulator
             this.cmbRainRate.FormattingEnabled = true;
             this.cmbRainRate.Location = new System.Drawing.Point(6, 164);
             this.cmbRainRate.Name = "cmbRainRate";
-            this.cmbRainRate.Size = new System.Drawing.Size(396, 21);
+            this.cmbRainRate.Size = new System.Drawing.Size(360, 21);
             this.cmbRainRate.TabIndex = 22;
             // 
             // cmbPressure
@@ -409,7 +539,7 @@ namespace ASCOM.Simulator
             this.cmbPressure.FormattingEnabled = true;
             this.cmbPressure.Location = new System.Drawing.Point(6, 137);
             this.cmbPressure.Name = "cmbPressure";
-            this.cmbPressure.Size = new System.Drawing.Size(396, 21);
+            this.cmbPressure.Size = new System.Drawing.Size(360, 21);
             this.cmbPressure.TabIndex = 21;
             // 
             // cmbHumidity
@@ -417,7 +547,7 @@ namespace ASCOM.Simulator
             this.cmbHumidity.FormattingEnabled = true;
             this.cmbHumidity.Location = new System.Drawing.Point(6, 111);
             this.cmbHumidity.Name = "cmbHumidity";
-            this.cmbHumidity.Size = new System.Drawing.Size(396, 21);
+            this.cmbHumidity.Size = new System.Drawing.Size(360, 21);
             this.cmbHumidity.TabIndex = 20;
             // 
             // cmbDewPoint
@@ -425,7 +555,7 @@ namespace ASCOM.Simulator
             this.cmbDewPoint.FormattingEnabled = true;
             this.cmbDewPoint.Location = new System.Drawing.Point(6, 84);
             this.cmbDewPoint.Name = "cmbDewPoint";
-            this.cmbDewPoint.Size = new System.Drawing.Size(396, 21);
+            this.cmbDewPoint.Size = new System.Drawing.Size(360, 21);
             this.cmbDewPoint.TabIndex = 19;
             // 
             // cmbCloudCover
@@ -433,7 +563,7 @@ namespace ASCOM.Simulator
             this.cmbCloudCover.FormattingEnabled = true;
             this.cmbCloudCover.Location = new System.Drawing.Point(6, 57);
             this.cmbCloudCover.Name = "cmbCloudCover";
-            this.cmbCloudCover.Size = new System.Drawing.Size(396, 21);
+            this.cmbCloudCover.Size = new System.Drawing.Size(360, 21);
             this.cmbCloudCover.TabIndex = 18;
             // 
             // cmbAveragePeriod
@@ -441,7 +571,7 @@ namespace ASCOM.Simulator
             this.cmbAveragePeriod.FormattingEnabled = true;
             this.cmbAveragePeriod.Location = new System.Drawing.Point(6, 30);
             this.cmbAveragePeriod.Name = "cmbAveragePeriod";
-            this.cmbAveragePeriod.Size = new System.Drawing.Size(396, 21);
+            this.cmbAveragePeriod.Size = new System.Drawing.Size(360, 21);
             this.cmbAveragePeriod.TabIndex = 17;
             // 
             // tabPage2
@@ -498,6 +628,140 @@ namespace ASCOM.Simulator
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Simulator Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(153, 382);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(73, 13);
+            this.label31.TabIndex = 45;
+            this.label31.Text = "Miles per hour";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(153, 355);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(73, 13);
+            this.label30.TabIndex = 44;
+            this.label30.Text = "Miles per hour";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(153, 328);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(47, 13);
+            this.label29.TabIndex = 43;
+            this.label29.Text = "Degrees";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(153, 301);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(83, 13);
+            this.label28.TabIndex = 42;
+            this.label28.Text = "Degrees Celsius";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(153, 275);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(83, 13);
+            this.label27.TabIndex = 41;
+            this.label27.Text = "Degrees Celsius";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(153, 248);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(77, 13);
+            this.label26.TabIndex = 40;
+            this.label26.Text = "Arcsec FHWM";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(153, 221);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(108, 13);
+            this.label25.TabIndex = 39;
+            this.label25.Text = "Mag / Square arcsec";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(153, 194);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(24, 13);
+            this.label24.TabIndex = 38;
+            this.label24.Text = "Lux";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(153, 167);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(43, 13);
+            this.label23.TabIndex = 37;
+            this.label23.Text = "mm / hr";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(153, 140);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(26, 13);
+            this.label22.TabIndex = 36;
+            this.label22.Text = "hPa";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(153, 114);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(44, 13);
+            this.label21.TabIndex = 35;
+            this.label21.Text = "Percent";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(153, 87);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(83, 13);
+            this.label20.TabIndex = 34;
+            this.label20.Text = "Degrees Celsius";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(153, 60);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(44, 13);
+            this.label19.TabIndex = 33;
+            this.label19.Text = "Percent";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(153, 33);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(56, 13);
+            this.label18.TabIndex = 32;
+            this.label18.Text = "Seconds *";
+            // 
+            // txtHighAveragePeriod
+            // 
+            this.txtHighAveragePeriod.Location = new System.Drawing.Point(280, 30);
+            this.txtHighAveragePeriod.Name = "txtHighAveragePeriod";
+            this.txtHighAveragePeriod.Size = new System.Drawing.Size(100, 20);
+            this.txtHighAveragePeriod.TabIndex = 31;
+            this.txtHighAveragePeriod.Visible = false;
             // 
             // label17
             // 
@@ -887,140 +1151,6 @@ namespace ASCOM.Simulator
             this.label14.Text = "Wind Speed";
             this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // txtHighAveragePeriod
-            // 
-            this.txtHighAveragePeriod.Location = new System.Drawing.Point(280, 30);
-            this.txtHighAveragePeriod.Name = "txtHighAveragePeriod";
-            this.txtHighAveragePeriod.Size = new System.Drawing.Size(100, 20);
-            this.txtHighAveragePeriod.TabIndex = 31;
-            this.txtHighAveragePeriod.Visible = false;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(153, 33);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(56, 13);
-            this.label18.TabIndex = 32;
-            this.label18.Text = "Seconds *";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(153, 60);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(44, 13);
-            this.label19.TabIndex = 33;
-            this.label19.Text = "Percent";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(153, 87);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(83, 13);
-            this.label20.TabIndex = 34;
-            this.label20.Text = "Degrees Celsius";
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(153, 114);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(44, 13);
-            this.label21.TabIndex = 35;
-            this.label21.Text = "Percent";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(153, 140);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(26, 13);
-            this.label22.TabIndex = 36;
-            this.label22.Text = "hPa";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(153, 167);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(43, 13);
-            this.label23.TabIndex = 37;
-            this.label23.Text = "mm / hr";
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(153, 194);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(24, 13);
-            this.label24.TabIndex = 38;
-            this.label24.Text = "Lux";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(153, 221);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(108, 13);
-            this.label25.TabIndex = 39;
-            this.label25.Text = "Mag / Square arcsec";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(153, 248);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(77, 13);
-            this.label26.TabIndex = 40;
-            this.label26.Text = "Arcsec FHWM";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(153, 275);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(83, 13);
-            this.label27.TabIndex = 41;
-            this.label27.Text = "Degrees Celsius";
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(153, 301);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(83, 13);
-            this.label28.TabIndex = 42;
-            this.label28.Text = "Degrees Celsius";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(153, 328);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(47, 13);
-            this.label29.TabIndex = 43;
-            this.label29.Text = "Degrees";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(153, 355);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(73, 13);
-            this.label30.TabIndex = 44;
-            this.label30.Text = "Miles per hour";
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(153, 382);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(73, 13);
-            this.label31.TabIndex = 45;
-            this.label31.Text = "Miles per hour";
-            // 
             // SetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1173,5 +1303,18 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ComboBox cmbHumiditySwitch;
+        private System.Windows.Forms.ComboBox cmbDewPointSwitch;
+        private System.Windows.Forms.ComboBox cmbCloudCoverSwitch;
+        private System.Windows.Forms.ComboBox cmbWindSpeedSwitch;
+        private System.Windows.Forms.ComboBox cmbWindGustSwitch;
+        private System.Windows.Forms.ComboBox cmbWindDirectionSwitch;
+        private System.Windows.Forms.ComboBox cmbTemperatureSwitch;
+        private System.Windows.Forms.ComboBox cmbSkyTemperatureSwitch;
+        private System.Windows.Forms.ComboBox cmbSkySeeingSwitch;
+        private System.Windows.Forms.ComboBox cmbSkyQualitySwitch;
+        private System.Windows.Forms.ComboBox cmbSkyBrightnessSwitch;
+        private System.Windows.Forms.ComboBox cmbRainRateSwitch;
+        private System.Windows.Forms.ComboBox cmbPressureSwitch;
     }
 }
