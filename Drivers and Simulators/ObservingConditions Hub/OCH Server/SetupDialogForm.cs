@@ -76,16 +76,40 @@ namespace ASCOM.Simulator
             TL.LogMessage("EnableUpDown", "Event has fired");
             ComboBox cmb = (ComboBox)sender;
             NumericUpDown upDown = (NumericUpDown)this.Controls[tabControl1.Name].Controls[tabPage1.Name].Controls[UPDOWN_PREFIX + cmb.Name.Substring(3)];
+            ComboBox cmbSwitch = null;
+            try { cmbSwitch = (ComboBox)this.Controls[tabControl1.Name].Controls[tabPage1.Name].Controls[cmb.Name + "Switch"]; }
+            catch { }
 
             if (allDevices[cmb.SelectedIndex].Key.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) // Enable or disable the property's Switch number spin control 
             {
                 upDown.Enabled = true;
-                upDown.Value = Hub.Sensors[cmb.Name.Substring(3)].SwitchNumber;
+
+                if (cmbSwitch != null)
+                {
+                    using (var s = new ASCOM.DriverAccess.Switch(allDevices[cmb.SelectedIndex].Key))
+                    {
+                        s.Connected = true;
+                        var max = s.MaxSwitch;
+                        upDown.Maximum = max;
+                        cmbSwitch.Items.Clear();
+                        for (short i = 0; i < max; i++)
+                        {
+                            var str = string.Format("{0}: {1}", i, s.GetSwitchName(i));
+                            cmbSwitch.Items.Add(str);
+                        }
+                        upDown.Value = Hub.Sensors[cmb.Name.Substring(3)].SwitchNumber;
+                        cmbSwitch.SelectedIndex = Hub.Sensors[cmb.Name.Substring(3)].SwitchNumber;
+                        cmbSwitch.Enabled = true;
+                        s.Connected = false;
+                    }
+                }
             }
             else
             {
                 upDown.Value = 0;
                 upDown.Enabled = false;
+                if (cmbSwitch != null)
+                    cmbSwitch.Enabled = false;
             }
 
             switch (allDevices[cmb.SelectedIndex].Key)  // Set the device mode flag
@@ -132,9 +156,18 @@ namespace ASCOM.Simulator
                     TextBox lowSimulator = (TextBox)this.Controls[tabControl1.Name].Controls[tabPage2.Name].Controls[LOW_SIMULATOR_PREFIX + property];
                     TextBox highSimulator = (TextBox)this.Controls[tabControl1.Name].Controls[tabPage2.Name].Controls[HIGH_SIMULATOR_PREFIX + property];
 
+                    ComboBox cmbSwitch = null;
+                    try { cmbSwitch = (ComboBox)this.Controls[tabControl1.Name].Controls[tabPage1.Name].Controls[cmb.Name + "Switch"]; }
+                    catch { }
+
                     // Save new values to Sensors collection
                     Hub.Sensors[property].ProgID = allDevices[cmb.SelectedIndex].Key;
                     Hub.Sensors[property].SwitchNumber = (int)upDown.Value;
+                    if (cmbSwitch != null)
+                    {
+                        Hub.Sensors[property].SwitchNumber = (int)cmbSwitch.SelectedIndex;
+                    }
+
                     Hub.Sensors[property].SimLowValue = Convert.ToDouble(lowSimulator.Text);
                     Hub.Sensors[property].SimHighValue = Convert.ToDouble(highSimulator.Text);
                     TL.LogMessage("Setup OK", "Saving new values for " + property +
@@ -260,6 +293,5 @@ namespace ASCOM.Simulator
                 MessageBox.Show("Setup Load exception 2: " + ex.ToString());
             }
         }
-
     }
 }
