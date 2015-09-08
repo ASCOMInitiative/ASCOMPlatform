@@ -34,6 +34,7 @@
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnSetup = new System.Windows.Forms.Button();
+            this.buttonRefresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonChoose
@@ -94,6 +95,16 @@
             this.btnSetup.UseVisualStyleBackColor = true;
             this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click);
             // 
+            // buttonRefresh
+            // 
+            this.buttonRefresh.Location = new System.Drawing.Point(646, 97);
+            this.buttonRefresh.Name = "buttonRefresh";
+            this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
+            this.buttonRefresh.TabIndex = 6;
+            this.buttonRefresh.Text = "Refresh";
+            this.buttonRefresh.UseVisualStyleBackColor = true;
+            this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonConnect;
@@ -101,6 +112,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(730, 648);
+            this.Controls.Add(this.buttonRefresh);
             this.Controls.Add(this.btnSetup);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.txtStatus);
@@ -123,6 +135,7 @@
         private System.Windows.Forms.TextBox txtStatus;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnSetup;
+        private System.Windows.Forms.Button buttonRefresh;
     }
 }
 
