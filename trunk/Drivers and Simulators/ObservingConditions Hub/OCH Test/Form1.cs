@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ASCOM;
+using ASCOM.DriverAccess;
+using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ASCOM.Simulator
@@ -44,37 +47,8 @@ namespace ASCOM.Simulator
                 {
                     txtStatus.Clear();
                     driver.Connected = true;
-                    LogMessage("Connected OK");
-                    LogMessage(driver.DriverInfo);
-                    try { LogMessage("Average period: " + driver.AveragePeriod); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("CloudCover : " + driver.CloudCover); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("DewPoint : " + driver.DewPoint); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("Humidity : " + driver.Humidity); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("Pressure : " + driver.Pressure); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("RainRate : " + driver.RainRate); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("CloudCover Description : " + driver.SensorDescription("CloudCover")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("DewPoint Description : " + driver.SensorDescription("DewPoint")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("Humidity Description : " + driver.SensorDescription("Humidity")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("Pressure Description : " + driver.SensorDescription("Pressure")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("RainRate Description : " + driver.SensorDescription("RainRate")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("SkyBrightness Description : " + driver.SensorDescription("SkyBrightness")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("SkyQuality Description : " + driver.SensorDescription("SkyQuality")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("SkySeeing Description : " + driver.SensorDescription("SkySeeing")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("SkyTemperature Description : " + driver.SensorDescription("SkyTemperature")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("Temperature Description : " + driver.SensorDescription("Temperature")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("WindDirection Description : " + driver.SensorDescription("WindDirection")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("WindGust Description : " + driver.SensorDescription("WindGust")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("WindSpeed Description : " + driver.SensorDescription("WindSpeed")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("SkyBrightness : " + driver.SkyBrightness); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("SkyQuality : " + driver.SkyQuality); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("SkySeeing : " + driver.SkySeeing); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("SkyTemperature : " + driver.SkyTemperature); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("Temperature : " + driver.Temperature); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("TimeSinceLastUpdate : " + driver.TimeSinceLastUpdate("")); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("WindDirection : " + driver.WindDirection); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("WindGust : " + driver.WindGust); } catch (Exception ex) { LogMessage(ex.Message); }
-                    try { LogMessage("WindSpeed : " + driver.WindSpeed); } catch (Exception ex) { LogMessage(ex.Message); }
-
+                    if (!IsConnected) LogMessage("Connected OK");
+                    DisplayProperties();
                 }
                 catch (Exception ex)
                 {
@@ -90,6 +64,9 @@ namespace ASCOM.Simulator
             buttonConnect.Enabled = !string.IsNullOrEmpty(Properties.Settings.Default.DriverId);
             buttonChoose.Enabled = !IsConnected;
             buttonConnect.Text = IsConnected ? "Disconnect" : "Connect";
+            buttonChoose.Enabled = !IsConnected;
+            buttonRefresh.Enabled = IsConnected;
+            btnSetup.Enabled = !IsConnected;
         }
 
         private bool IsConnected
@@ -133,6 +110,75 @@ namespace ASCOM.Simulator
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void buttonRefresh_Click(object sender, EventArgs e)
+        {
+            txtStatus.Clear();
+            DisplayProperties();
+        }
+
+        private void DisplayProperties()
+        {
+            LogMessage(driver.DriverInfo);
+            ListProperty("AveragePeriod");
+            ListProperty("CloudCover");
+            ListProperty("DewPoint");
+            ListProperty("Humidity");
+            ListProperty("Pressure");
+            ListProperty("RainRate");
+            ListProperty("SkyBrightness");
+            ListProperty("SkyQuality");
+            ListProperty("SkySeeing");
+            ListProperty("SkyTemperature");
+            ListProperty("Temperature");
+            ListProperty("WindDirection");
+            ListProperty("WindGust");
+            ListProperty("WindSpeed");
+
+            try { LogMessage("CloudCover Description : " + driver.SensorDescription("CloudCover")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("DewPoint Description : " + driver.SensorDescription("DewPoint")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("Humidity Description : " + driver.SensorDescription("Humidity")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("Pressure Description : " + driver.SensorDescription("Pressure")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("RainRate Description : " + driver.SensorDescription("RainRate")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("SkyBrightness Description : " + driver.SensorDescription("SkyBrightness")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("SkyQuality Description : " + driver.SensorDescription("SkyQuality")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("SkySeeing Description : " + driver.SensorDescription("SkySeeing")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("SkyTemperature Description : " + driver.SensorDescription("SkyTemperature")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("Temperature Description : " + driver.SensorDescription("Temperature")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("WindDirection Description : " + driver.SensorDescription("WindDirection")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("WindGust Description : " + driver.SensorDescription("WindGust")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("WindSpeed Description : " + driver.SensorDescription("WindSpeed")); } catch (Exception ex) { LogMessage(ex.Message); }
+
+            try { LogMessage("TimeSinceLastUpdate : " + driver.TimeSinceLastUpdate("")); } catch (Exception ex) { LogMessage(ex.Message); }
+
+        }
+
+        private void ListProperty(string PropertyName)
+        {
+
+            Type type = typeof(ObservingConditions);
+            PropertyInfo propertyInfo = type.GetProperty(PropertyName);
+            double observingConditionsValue = (double)propertyInfo.GetValue(driver, null);
+            try
+            {
+                LogMessage(PropertyName + " : " + observingConditionsValue);
+            }
+            catch(ASCOM.PropertyNotImplementedException)
+            {
+                LogMessage(PropertyName + " - This property is not implemented" );
+            }
+            catch (InvalidOperationException)
+            {
+                LogMessage(PropertyName + " - Invalid operation at this time");
+            }
+            catch (Exception ex)
+            {
+                LogMessage(ex.Message);
+            }
+
+
+
         }
     }
 }
