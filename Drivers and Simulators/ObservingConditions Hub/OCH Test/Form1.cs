@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using System.Windows.Forms;
 
+
 namespace ASCOM.Simulator
 {
     public partial class Form1 : Form
@@ -156,15 +157,14 @@ namespace ASCOM.Simulator
 
         private void ListProperty(string PropertyName)
         {
-
-            Type type = typeof(ObservingConditions);
-            PropertyInfo propertyInfo = type.GetProperty(PropertyName);
-            double observingConditionsValue = (double)propertyInfo.GetValue(driver, null);
             try
             {
+                Type type = typeof(ObservingConditions);
+                PropertyInfo propertyInfo = type.GetProperty(PropertyName);
+                var observingConditionsValue = (double)propertyInfo.GetValue(driver, null);
                 LogMessage(PropertyName + " : " + observingConditionsValue);
             }
-            catch(ASCOM.PropertyNotImplementedException)
+            catch(PropertyNotImplementedException)
             {
                 LogMessage(PropertyName + " - This property is not implemented" );
             }
@@ -174,7 +174,11 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                LogMessage(ex.Message);
+                LogMessage(PropertyName + " " + ex.Message);
+                if (ex.InnerException != null)
+                {
+                    LogMessage("   " + ex.InnerException.Message);
+                }
             }
 
 
