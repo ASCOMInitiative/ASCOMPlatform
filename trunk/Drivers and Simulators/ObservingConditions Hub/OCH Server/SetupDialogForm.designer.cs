@@ -206,7 +206,7 @@ namespace ASCOM.Simulator
             this.tabControl1.Location = new System.Drawing.Point(250, 108);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(471, 497);
+            this.tabControl1.Size = new System.Drawing.Size(539, 497);
             this.tabControl1.TabIndex = 10;
             // 
             // tabPage1
@@ -255,7 +255,7 @@ namespace ASCOM.Simulator
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(463, 471);
+            this.tabPage1.Size = new System.Drawing.Size(531, 471);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Source";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -624,7 +624,7 @@ namespace ASCOM.Simulator
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(524, 471);
+            this.tabPage2.Size = new System.Drawing.Size(463, 471);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Simulator Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
