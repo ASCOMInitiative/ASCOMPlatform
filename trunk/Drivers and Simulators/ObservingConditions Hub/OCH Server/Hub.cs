@@ -42,7 +42,7 @@ namespace ASCOM.Simulator
         public const string DRIVER_DISPLAY_NAME = "ASCOM Observing Conditions Hub (OCH)"; // Driver description that displays in the ASCOM Chooser.
         public const string DEVICE_TYPE = "ObservingConditions";
         public const string SWITCH_DEVICE_NAME = "Switch";
-        public const string OBSERVINGCONDITIONS_DEVICE_NAME = "ObservingConditions";
+        public const string AVERAGE_PERIOD = "AveragePeriod";
         public const string NO_DEVICE_PROGID = "";
 
         public static TraceLoggerPlus TL;
@@ -51,6 +51,7 @@ namespace ASCOM.Simulator
         // Setup dialogue configuration variables
         public static bool TraceState;
         public static int CacheTime;
+        public static bool ConnectToDrivers;
 
         // List of valid ObservingConditions properties
         public static List<string> ValidProperties = new List<string> { // Aray containing a list of all valid properties
@@ -70,11 +71,11 @@ namespace ASCOM.Simulator
             PROPERTY_WINDSPEED };
 
         // Hub simulator information
-        public static Dictionary<string, double> SimulatorDefaultLowValues = new Dictionary<string, double>()
+        public static Dictionary<string, double> SimulatorDefaultFromValues = new Dictionary<string, double>()
         {
             {"AveragePeriod", 0.0},
             {"CloudCover", 0.0},
-            {"DewPoint", 0.0},
+            {"DewPoint", 2.4 },
             {"Humidity", 50.0},
             {"Pressure", 1020.5},
             {"RainRate", 0.0},
@@ -87,7 +88,7 @@ namespace ASCOM.Simulator
             {"WindGust", 2.34},
             {"WindSpeed", 0.29}
         };
-        public static Dictionary<string, double> SimulatorDefaultHighValues = new Dictionary<string, double>()
+        public static Dictionary<string, double> SimulatorDefaultToValues = new Dictionary<string, double>()
         {
             {"AveragePeriod", 0.0},
             {"CloudCover", 5.0},
@@ -130,6 +131,7 @@ namespace ASCOM.Simulator
         private const string TRACE_LEVEL_PROFILENAME = "Trace Level"; private const string TRACE_LEVEL_DEFAULT = "true";
         private const string DEBUG_TRACE_PROFILENAME = "Include Debug Trace"; private const string DEBUG_TRACE_DEFAULT = "true";
         private const string CACHE_TIME_PROFILENAME = "Cache Time"; private const int CACHE_TIME_DEFAULT = 500;
+        private const string CONNECT_TO_DRIVERS_PROFILENAME = "Connect To Drivers"; private const string CONNECT_TO_DRIVERS_DEFAULT = "false";
 
         // Cache management constants
         private const string CACHE_ATPARK = "AtPark";
@@ -749,11 +751,17 @@ namespace ASCOM.Simulator
             using (Profile driverProfile = new Profile())
             {
                 driverProfile.DeviceType = DEVICE_TYPE;
+
+                // Initialise the logging trace state from the Profile
                 TraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, string.Empty, TRACE_LEVEL_DEFAULT));
                 TL.Enabled = TraceState; // Set the logging state immediately after this has been retrieved from Profile
+
+                // Initialise other variables from the Profile
                 DebugTraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, string.Empty, DEBUG_TRACE_DEFAULT));
                 CacheTime = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, CACHE_TIME_PROFILENAME, string.Empty, CACHE_TIME_DEFAULT.ToString()));
-                // Initialise the sensor collection
+                ConnectToDrivers = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, CONNECT_TO_DRIVERS_PROFILENAME, string.Empty, CONNECT_TO_DRIVERS_DEFAULT));
+
+                // Initialise the sensor collection from the Profile
                 foreach (string Property in ValidProperties)
                 {
                     TL.LogMessage("ReadProfile", "Reading profile for: " + Property);
@@ -771,9 +779,14 @@ namespace ASCOM.Simulator
             using (Profile driverProfile = new Profile())
             {
                 driverProfile.DeviceType = DEVICE_TYPE;
+
+                // Save the variable state to the Profile
                 driverProfile.WriteValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, TraceState.ToString());
                 driverProfile.WriteValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, DebugTraceState.ToString());
                 driverProfile.WriteValue(DRIVER_PROGID, CACHE_TIME_PROFILENAME, CacheTime.ToString());
+                driverProfile.WriteValue(DRIVER_PROGID, CONNECT_TO_DRIVERS_PROFILENAME, ConnectToDrivers.ToString());
+
+                // Save the sensor collection to the Profile
                 foreach (string Property in ValidProperties)
                 {
                     TL.LogMessage("WriteProfile", "Writing profile for: " + Property);
@@ -783,6 +796,15 @@ namespace ASCOM.Simulator
         }
         #endregion
 
+        public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dic, Dictionary<TKey, TValue> dicToAdd)
+        {
+            dicToAdd.ForEach(x => dic.Add(x.Key, x.Value));
+        }
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (var item in source)
+                action(item);
+        }
     }
 
 }
