@@ -28,7 +28,7 @@ namespace ASCOM.Simulator
             get
             {
                 if (ProgID.EndsWith(Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) return Hub.DeviceType.Switch;
-                if (ProgID.EndsWith(Hub.OBSERVINGCONDITIONS_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) return Hub.DeviceType.ObservingConditions;
+                if (ProgID.EndsWith(Hub.DEVICE_TYPE, StringComparison.InvariantCultureIgnoreCase)) return Hub.DeviceType.ObservingConditions;
                 if (ProgID=="") throw new InvalidValueException("Sensor.DeviceType - DeviceType called before ProgID has not been set");
                 throw new InvalidValueException("Sensor.DeviceType - Unknown device type: " + ProgID);
             }
@@ -66,9 +66,9 @@ namespace ASCOM.Simulator
             DeviceMode = (Hub.ConnectionType)Enum.Parse(typeof(Hub.ConnectionType), driverProfile.GetValue(Hub.DRIVER_PROGID, DEVICEMODE_PROFILENAME, SensorName, DEVICEMODE_PROFILENAME_DEFAULT));
             ProgID = driverProfile.GetValue(Hub.DRIVER_PROGID, PROGID_PROFILENAME, SensorName, PROGID_PROFILENAME_DEFAULT);
             Hub.TL.LogMessage("Sensor.ReadProfile", SensorName + " ProgID: " + ProgID);
-            SimHighValue = Convert.ToDouble(driverProfile.GetValue(Hub.DRIVER_PROGID, SIMHIGHVALUE_PROFILENAME, SensorName, Hub.SimulatorDefaultHighValues[SensorName].ToString()));
+            SimHighValue = Convert.ToDouble(driverProfile.GetValue(Hub.DRIVER_PROGID, SIMHIGHVALUE_PROFILENAME, SensorName, Hub.SimulatorDefaultToValues[SensorName].ToString()));
             Hub.TL.LogMessage("Sensor.ReadProfile", SensorName + " SimHighValue: " + SimHighValue);
-            SimLowValue = Convert.ToDouble(driverProfile.GetValue(Hub.DRIVER_PROGID, SIMLOWVALUE_PROFILENAME, SensorName, Hub.SimulatorDefaultLowValues[SensorName].ToString()));
+            SimLowValue = Convert.ToDouble(driverProfile.GetValue(Hub.DRIVER_PROGID, SIMLOWVALUE_PROFILENAME, SensorName, Hub.SimulatorDefaultFromValues[SensorName].ToString()));
             Hub.TL.LogMessage("Sensor.ReadProfile", SensorName + " SimLowValue: " + SimLowValue);
             SwitchNumber = Convert.ToInt32(driverProfile.GetValue(Hub.DRIVER_PROGID, SWITCHNUMBER_PROFILENAME, SensorName, SWITCHNUMBER_PROFILENAME_DEFAULT));
             Hub.TL.LogMessage("Sensor.ReadProfile", SensorName + " SwitchNumber: " + SwitchNumber.ToString());
