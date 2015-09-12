@@ -42,6 +42,7 @@ namespace ASCOM.Simulator
         public const string DRIVER_DISPLAY_NAME = "ASCOM Observing Conditions Hub (OCH)"; // Driver description that displays in the ASCOM Chooser.
         public const string DEVICE_TYPE = "ObservingConditions";
         public const string SWITCH_DEVICE_NAME = "Switch";
+        public const string OBSERVINGCONDITIONS_DEVICE_NAME = "ObservingConditions";
         public const string AVERAGE_PERIOD = "AveragePeriod";
         public const string NO_DEVICE_PROGID = "";
 

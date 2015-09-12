@@ -62,8 +62,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassFactory.cs" />
@@ -82,6 +84,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Sensor.cs" />
+    <Compile Include="SensorView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SensorView.Designer.cs">
+      <DependentUpon>SensorView.cs</DependentUpon>
+    </Compile>
     <Compile Include="SetupDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +134,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SensorView.resx">
+      <DependentUpon>SensorView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SetupDialogForm.resx">
       <DependentUpon>SetupDialogForm.cs</DependentUpon>
