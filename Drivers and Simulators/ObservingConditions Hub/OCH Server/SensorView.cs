@@ -30,11 +30,12 @@ namespace ASCOM.Simulator
         /// should be done with an event, at present it's assumed that this is set
         /// before InitUi is called.
         /// Or could be in this control so each device can have it's own state.
+        /// *** currently not used, we attempt to connect and set the UI depending on what can be read.
         /// </summary>
         public bool ConnectToDriver { get; set; }
 
         /// <summary>
-        /// returns the currently selected sensor ProgId and Switch number
+        /// returns the currently selected sensor ProgId, DeviceMode and SwitchNumber
         /// </summary>
         public Sensor SelectedSensor
         {
@@ -51,7 +52,8 @@ namespace ASCOM.Simulator
                         sensor.DeviceMode = Hub.ConnectionType.None;
                         sensor.ProgID = Hub.NO_DEVICE_PROGID;
                         break;
-                    case Hub.DRIVER_PROGID: // Simulate the device
+                    //case Hub.DRIVER_PROGID: // Simulate the device
+                    case Hub.SIMULATOR_PROGID: // Simulate the device
                         sensor.DeviceMode = Hub.ConnectionType.Simulation;
                         sensor.ProgID = Hub.DRIVER_PROGID;
                         break;
@@ -60,7 +62,7 @@ namespace ASCOM.Simulator
                         sensor.ProgID = ProgId;
                         break;
                 }
-                if (ProgId.EndsWith(".Switch"))
+                if (ProgId.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase))
                 {
                     sensor.SwitchNumber = (int)upDownSwitch.Value;
                 }
@@ -89,7 +91,8 @@ namespace ASCOM.Simulator
                 //Hub.TL.LogMessage("Setup Load", "Found device: : \"" + device.Value + "\", Count: " + count);
                 cmbDevice.Items.Add(device.Value);
                 //Hub.TL.LogMessage("Setup Load", "ProgID comparison: : " + device.Key + " " + Hub.Sensors[PropertyName].ProgID);
-                if (device.Key == Hub.Sensors[SensorName].ProgID )
+                if (device.Key == Hub.Sensors[SensorName].ProgID ||
+                    Hub.Sensors[SensorName].DeviceMode == Hub.ConnectionType.Simulation && device.Key == Hub.SIMULATOR_PROGID)
                 {
                     //Hub.TL.LogMessage("Setup Load", "Before setting index to: : " + count);
                     lastIdx = count;
@@ -107,16 +110,16 @@ namespace ASCOM.Simulator
         /// <param name="e"></param>
         private void cmbDevice_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Hub.TL.LogMessage("cmbDevice_SelectedIndexChanged", SensorName + " Event has fired");
+            Hub.TL.LogMessage("cmbDevice_SelectedIndexChanged", "{0} Event has fired", SensorName);
 
             // get the selected device Id from allDevices
             var progId = SetupDialogForm.allDevices[cmbDevice.SelectedIndex].Key;
 
-            var switchId = Hub.Sensors[SensorName].SwitchNumber;
 
             if (progId.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) // Enable or disable the property's Switch name combo 
             {
                 // handle switch drivers
+                var switchId = Hub.Sensors[SensorName].SwitchNumber;
 
                 buttonSetup.Enabled = true;
 
@@ -125,41 +128,38 @@ namespace ASCOM.Simulator
 
                 using (var s = new Switch(progId))
                 {
-                    if (ConnectToDriver)
+                    // we try to connect and read the switch properties from the driver
+                    // if it succeeds then we enable the switch name combo
+                    // the spin button is always enabled.
+                    var enableCmb = false;
+                    upDownSwitch.Enabled = true;
+                    // try to connect, ignore error.  This can block if connecting takes a while
+                    this.Cursor = Cursors.WaitCursor;
+                    try { s.Connected = true; }     
+                    catch { }
+                    this.Cursor = Cursors.Default;
+                    // try to set max switches from driver, set up combo as long as there is no error
+                    int max = 100;
+                    try
                     {
-                        cmbSwitch.Enabled = true;
-                        upDownSwitch.Enabled = false;
-                        try { s.Connected = true; }
-                        catch { }
-                        int max = 100;
-                        try { max = s.MaxSwitch; }
-                        catch { }
-
+                        max = s.MaxSwitch;      // this may work, even if we can't read the switch names
                         for (short i = 0; i < max; i++)
                         {
-                            string str = string.Format("{0}: unknown", i);
-                            try
-                            {
-                                str = string.Format("{0}: {1}", i, s.GetSwitchName(i));
-                            }
-                            catch {}
-                            finally { cmbSwitch.Items.Add(str); }
+                            var str = string.Format("{0}: {1}", i, s.GetSwitchName(i));
+                            cmbSwitch.Items.Add(str);
                         }
-                        cmbSwitch.SelectedIndex = switchId;
-                        cmbSwitch.Enabled = true;
-                        s.Connected = false;
-                        upDownSwitch.Maximum = max - 1;
-                        upDownSwitch.Value = switchId;
+                        enableCmb = true;   // successfully populated combo so enable it
                     }
-                    else
+                    catch
                     {
-                        cmbSwitch.SelectedIndex = -1;
-                        cmbSwitch.Enabled = false;
-                        upDownSwitch.Enabled = true;
-                        try { upDownSwitch.Maximum = s.MaxSwitch; }
-                        catch { upDownSwitch.Maximum = 100; }
-                        upDownSwitch.Value = switchId;
+                        cmbSwitch.Text = "";
                     }
+                    // set up the UI
+                    cmbSwitch.SelectedIndex = enableCmb ? switchId : -1;
+                    cmbSwitch.Enabled = enableCmb;
+                    upDownSwitch.Enabled = true;
+                    upDownSwitch.Maximum = max - 1;
+                    upDownSwitch.Value = switchId;
                 }
             }
             else if (progId.EndsWith("." + Hub.OBSERVINGCONDITIONS_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase))
@@ -181,18 +181,19 @@ namespace ASCOM.Simulator
                     }
                     catch (PropertyNotImplementedException)
                     {
-                        // this property isn't implemented so revert to the previous driver
+                        // this property isn't implemented in the selected driver so revert to the previous driver
                         cmbDevice.SelectedIndex = lastIdx;
                     }
-                    //catch(NotConnectedException)
-                    //{
-                    //    // not sure what to do, can we specify that the description is available even
-                    //    // if not connected?
-                    //}
+                    //catch (Exception)
+                    {
+                        // not sure what to do, can we specify that the description is available even
+                        // if not connected?
+                    }
                 }
             }
             else
             {
+                // no device selected
                 cmbSwitch.SelectedIndex = -1;
                 //upDownSwitch.Value = 0;
                 buttonSetup.Enabled = false;
@@ -200,6 +201,8 @@ namespace ASCOM.Simulator
                 upDownSwitch.Enabled = false;
             }
         }
+
+
 
         /// <summary>
         /// updates Hub.Sensors[propertyName].Switchnumber
@@ -209,20 +212,18 @@ namespace ASCOM.Simulator
         private void cmbSwitch_SelectedIndexChanged(object sender, EventArgs e)
         {
             var id = cmbSwitch.SelectedIndex;
-            upDownSwitch.Value = id >= 0 ? id : 0;
-            //if (Hub.Sensors[PropertyName].SwitchNumber == id)
-            //    return;
-            //Hub.Sensors[PropertyName].SwitchNumber = cmbSwitch.Enabled ? id : 0;
+            if (upDownSwitch.Value == id || id < 0 || id > upDownSwitch.Maximum)
+                return;
+            upDownSwitch.Value = id;
         }
 
         private void upDownSwitch_ValueChanged(object sender, EventArgs e)
         {
             var id = (int)upDownSwitch.Value;
-            if (cmbSwitch.Enabled && cmbSwitch.Items.Count < id)
+            if (cmbSwitch.SelectedIndex == id)
+                return;
+            if (cmbSwitch.Enabled && cmbSwitch.Items.Count >= id)
                 cmbSwitch.SelectedIndex = id;
-            //if (Hub.Sensors[PropertyName].SwitchNumber == id)
-            //    return;
-            //Hub.Sensors[PropertyName].SwitchNumber = id;
         }
 
         /// <summary>
@@ -232,7 +233,7 @@ namespace ASCOM.Simulator
         /// <param name="e"></param>
         private void buttonSetup_Click(object sender, EventArgs e)
         {
-            Hub.TL.LogMessage("buttonSetup_Click", "Event has fired");
+            Hub.TL.LogMessage("buttonSetup_Click", "{0} Event has fired", SensorName);
             var ProgId = SetupDialogForm.allDevices[cmbDevice.SelectedIndex].Key;
             using (var dev = new ASCOM.DriverAccess.AscomDriver(ProgId))
             {

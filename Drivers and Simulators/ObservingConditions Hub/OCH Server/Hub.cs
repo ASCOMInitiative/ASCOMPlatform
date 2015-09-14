@@ -45,6 +45,7 @@ namespace ASCOM.Simulator
         public const string OBSERVINGCONDITIONS_DEVICE_NAME = "ObservingConditions";
         public const string AVERAGE_PERIOD = "AveragePeriod";
         public const string NO_DEVICE_PROGID = "";
+        public const string SIMULATOR_PROGID = "Simulator";
 
         public static TraceLoggerPlus TL;
         public static bool DebugTraceState;

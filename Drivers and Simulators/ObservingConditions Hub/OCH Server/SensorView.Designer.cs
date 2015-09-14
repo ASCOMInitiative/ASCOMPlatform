@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.buttonSetup = new System.Windows.Forms.Button();
             this.cmbSwitch = new System.Windows.Forms.ComboBox();
             this.cmbDevice = new System.Windows.Forms.ComboBox();
             this.upDownSwitch = new System.Windows.Forms.NumericUpDown();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.upDownSwitch)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,6 +45,7 @@
             this.buttonSetup.Size = new System.Drawing.Size(33, 22);
             this.buttonSetup.TabIndex = 77;
             this.buttonSetup.Text = "C";
+            this.toolTip.SetToolTip(this.buttonSetup, "Runs the Setup dialg for the selected driver");
             this.buttonSetup.UseVisualStyleBackColor = true;
             this.buttonSetup.Click += new System.EventHandler(this.buttonSetup_Click);
             // 
@@ -97,5 +100,6 @@
         private System.Windows.Forms.ComboBox cmbSwitch;
         private System.Windows.Forms.ComboBox cmbDevice;
         private System.Windows.Forms.NumericUpDown upDownSwitch;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

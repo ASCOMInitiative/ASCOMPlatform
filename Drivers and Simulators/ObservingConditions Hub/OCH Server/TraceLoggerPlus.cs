@@ -14,7 +14,6 @@ namespace ASCOM.Simulator
 
         }
 
-
         public void LogMessage(int instance, string prefix, string message)
         {
             base.LogMessage(prefix + " " + instance.ToString(), message);
@@ -23,6 +22,16 @@ namespace ASCOM.Simulator
         public void LogMessageCrLf(int instance, string prefix, string message)
         {
             base.LogMessageCrLf(prefix + " " + instance.ToString(), message);
+        }
+
+        public void LogMessage(string identifier, string message, params object[] args)
+        {
+            base.LogMessage(identifier, string.Format(message, args));
+        }
+
+        public void LogMessageCrLf(string identifier, string message, params object[] args)
+        {
+            base.LogMessageCrLf(identifier, string.Format(message, args));
         }
     }
 
