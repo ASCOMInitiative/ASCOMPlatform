@@ -44,6 +44,10 @@ namespace ASCOM.Simulator
                 var sensor = new Sensor(this.SensorName);
 
                 // get the selected device Id from allDevices
+                if (cmbDevice.SelectedIndex < 0 || cmbDevice.SelectedIndex >= SetupDialogForm.allDevices.Count)
+                {
+                    MessageBox.Show("SelectedSensor - index out of range");
+                }
                 var ProgId = SetupDialogForm.allDevices[cmbDevice.SelectedIndex].Key;
 
                 switch (ProgId)  // Set the device mode flag and the progId
@@ -88,7 +92,7 @@ namespace ASCOM.Simulator
             int count = 0;
             foreach (KeyValuePair device in SetupDialogForm.allDevices)
             {
-                //Hub.TL.LogMessage("Setup Load", "Found device: : \"" + device.Value + "\", Count: " + count);
+                Hub.TL.LogMessage("Setup Load", "Found device: : \"" + device.Value + "\", Count: " + count);
                 cmbDevice.Items.Add(device.Value);
                 //Hub.TL.LogMessage("Setup Load", "ProgID comparison: : " + device.Key + " " + Hub.Sensors[PropertyName].ProgID);
                 if (device.Key == Hub.Sensors[SensorName].ProgID ||
@@ -113,8 +117,11 @@ namespace ASCOM.Simulator
             Hub.TL.LogMessage("cmbDevice_SelectedIndexChanged", "{0} Event has fired", SensorName);
 
             // get the selected device Id from allDevices
+            if (cmbDevice.SelectedIndex < 0 || cmbDevice.SelectedIndex >= SetupDialogForm.allDevices.Count)
+            {
+                MessageBox.Show("cmbDevice_SelectedIndexChanged - index out of range");
+            }
             var progId = SetupDialogForm.allDevices[cmbDevice.SelectedIndex].Key;
-
 
             if (progId.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) // Enable or disable the property's Switch name combo 
             {
@@ -185,10 +192,10 @@ namespace ASCOM.Simulator
                         cmbDevice.SelectedIndex = lastIdx;
                     }
                     //catch (Exception)
-                    {
-                        // not sure what to do, can we specify that the description is available even
-                        // if not connected?
-                    }
+                    //{
+                    //    // not sure what to do, can we specify that the description is available even
+                    //    // if not connected?
+                    //}
                 }
             }
             else
@@ -234,6 +241,10 @@ namespace ASCOM.Simulator
         private void buttonSetup_Click(object sender, EventArgs e)
         {
             Hub.TL.LogMessage("buttonSetup_Click", "{0} Event has fired", SensorName);
+            if (cmbDevice.SelectedIndex < 0 || cmbDevice.SelectedIndex >= SetupDialogForm.allDevices.Count)
+            {
+                MessageBox.Show("buttonSetup_Click - index out of range");
+            }
             var ProgId = SetupDialogForm.allDevices[cmbDevice.SelectedIndex].Key;
             using (var dev = new ASCOM.DriverAccess.AscomDriver(ProgId))
             {

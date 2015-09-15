@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SensorView));
             this.buttonSetup = new System.Windows.Forms.Button();
             this.cmbSwitch = new System.Windows.Forms.ComboBox();
             this.cmbDevice = new System.Windows.Forms.ComboBox();
@@ -40,9 +41,12 @@
             // buttonSetup
             // 
             this.buttonSetup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSetup.Location = new System.Drawing.Point(412, 0);
+            this.buttonSetup.Image = ((System.Drawing.Image)(resources.GetObject("buttonSetup.Image")));
+            this.buttonSetup.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonSetup.Location = new System.Drawing.Point(412, -1);
+            this.buttonSetup.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.buttonSetup.Name = "buttonSetup";
-            this.buttonSetup.Size = new System.Drawing.Size(33, 22);
+            this.buttonSetup.Size = new System.Drawing.Size(33, 26);
             this.buttonSetup.TabIndex = 77;
             this.buttonSetup.Text = "C";
             this.toolTip.SetToolTip(this.buttonSetup, "Runs the Setup dialg for the selected driver");

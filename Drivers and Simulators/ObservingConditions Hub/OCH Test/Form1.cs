@@ -109,7 +109,7 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.ToString(), "OCH Test.btnSetup_Click");
             }
         }
 
