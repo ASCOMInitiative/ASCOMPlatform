@@ -43,7 +43,7 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.ToString(),"SetupDialogForm");
             }
         }
 
@@ -75,11 +75,24 @@ namespace ASCOM.Simulator
             // update Average Period separately
             List<KeyValuePair> observingConditionsDevices = allDevices.Where(kvp => kvp.Key.EndsWith(Hub.DEVICE_TYPE, StringComparison.InvariantCultureIgnoreCase)).ToList();
             if (cmbAveragePeriod.SelectedIndex == 0)
-                Hub.Sensors[Hub.AVERAGE_PERIOD].ProgID = Hub.NO_DEVICE_PROGID;
+            {
+                Hub.Sensors[Hub.AVERAGE_PERIOD].ProgID = Hub.NO_DEVICE_PROGID;  // no device handled separately
+                Hub.Sensors[Hub.AVERAGE_PERIOD].DeviceMode = Hub.ConnectionType.None;
+            }
+            else if (cmbAveragePeriod.SelectedIndex > observingConditionsDevices.Count)
+            {
+                Hub.Sensors[Hub.AVERAGE_PERIOD].ProgID = Hub.SIMULATOR_PROGID;
+                Hub.Sensors[Hub.AVERAGE_PERIOD].DeviceMode = Hub.ConnectionType.Simulation;
+            }
             else
             {
                 int index = cmbAveragePeriod.SelectedIndex >= 1 ? cmbAveragePeriod.SelectedIndex - 1 : 0;
+                if (index < 0 || index >= observingConditionsDevices.Count)
+                {
+                    MessageBox.Show("Average period index out of range");
+                }
                 Hub.Sensors[Hub.AVERAGE_PERIOD].ProgID = observingConditionsDevices[index].Key; // -1 because there is no "No device" device in the filtered list
+                Hub.Sensors[Hub.AVERAGE_PERIOD].DeviceMode = Hub.ConnectionType.Real;
             }
         }
 
@@ -112,7 +125,7 @@ namespace ASCOM.Simulator
             debugTrace.Checked = Hub.DebugTraceState;
             chkConnectToDrivers.Checked = Hub.ConnectToDrivers;
 
-            if (allDevices.Count == 0) ReadDeviceInformation(); // Read device information if not already read by the ConnectToDrivers.CheckedChanged event
+            ReadDeviceInformation(); // Read device information
 
             // Set up the simulator values
             foreach (string property in Hub.ValidProperties) // Iterate over all the Hub properties
@@ -132,7 +145,7 @@ namespace ASCOM.Simulator
                 catch (Exception ex)
                 {
                     TL.LogMessageCrLf("Setup Load", "{0} exception: {1}", property, ex);
-                    MessageBox.Show("Setup Load exception 1: " + ex.ToString());
+                    MessageBox.Show("Setup Load exception 1: " + ex.ToString(), "Setup Load");
                 }
             }
         }
@@ -186,7 +199,7 @@ namespace ASCOM.Simulator
                 catch (Exception ex)
                 {
                     TL.LogMessageCrLf("ReadDeviceInformation 1", "ObservingConditions description exception: {0}", ex);
-                    MessageBox.Show("ReadDeviceInformatio 1: " + ex.ToString());
+                    MessageBox.Show("ReadDeviceInformatio 1: " + ex.ToString(),"ReadDeviceInformation 1");
                 }
 
                 // Log the combined list of ObservingConditions and Switch drivers 
@@ -223,13 +236,15 @@ namespace ASCOM.Simulator
                         currentIndex++;
                     }
                 }
+                if (cmbAveragePeriod.SelectedIndex < 0 || cmbAveragePeriod.SelectedIndex >= currentIndex)
+                    cmbAveragePeriod.SelectedIndex = 0;     // set the average period device to none
 
                 return;
             }
             catch (Exception ex)
             {
                 TL.LogMessageCrLf("ReadDeviceInformation2", ex.ToString());
-                MessageBox.Show("ReadDeviceInformation2: " + ex.ToString());
+                MessageBox.Show("ReadDeviceInformation2: " + ex.ToString(), "ReadDeviceInformation2");
             }
         }
 
