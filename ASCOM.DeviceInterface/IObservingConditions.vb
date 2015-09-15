@@ -3,8 +3,16 @@
 '-----------------------------------------------------------------------
 Imports System.Runtime.InteropServices
 ''' <summary>
-''' Defines the IObservingConditions Interface
-''' </summary> 
+''' Defines the IObservingConditions Interface.
+''' This interface provides a limited set of values that are useful
+''' for astronomical purposes for things such as determining if it is safe to open or operate the observing system
+''' and for recording astronomical data or determining refraction corrections.
+''' </summary>
+''' <remarks>It is NOT intended as a general purpose environmental sensor system.
+''' The <see cref="IObservingConditions.Action">Action</see> method and 
+''' <see cref="IObservingConditions.SupportedActions">SupportedActions</see> property 
+''' can be used to add driver specific sensors.
+''' </remarks>
 <ComVisible(True), Guid("06E9F8D9-E85C-4B2B-BC84-6F2EF6B3E779"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)>
 Public Interface IObservingConditions
 
@@ -119,6 +127,15 @@ Public Interface IObservingConditions
     ''' “General” will be used. Action names will be case insensitive, so FilterWheel:SelectWheel, filterwheel:selectwheel 
     ''' and FILTERWHEEL:SELECTWHEEL will all refer to the same action.</para>
     ''' <para>The names of all supported actions must be returned in the <see cref="SupportedActions"/> property.</para>
+    ''' <para>For ObservingConditions drivers the following conventions are recommended:
+    ''' <list type="bullet">
+    ''' <item>The "ActionName" should be the name of a sensor in a form that makes sense to the user.
+    ''' This must not be changed in the driver.</item>
+    ''' <item>The "ActionParameter" should be "Value" to return the sensor value and 
+    ''' "Description" to return the sensor description. 
+    ''' The description must return a valid description, even if not connected.</item>
+    ''' </list>
+    ''' </para>
     ''' </remarks>
     Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String
 
@@ -138,6 +155,7 @@ Public Interface IObservingConditions
     ''' about hom many members are in the collection. </para>
     ''' <para>Collections have been used in the Telescope specification for a number of years and are known to be compatible with COM. Within .NET
     ''' the ArrayList is the correct implementation to use as the .NET Generic methods are not compatible with COM.</para>
+    ''' <para>See <see cref="Action">Action</see> for advice on how th implement this for ObservingConditions drivers.</para>
     ''' </remarks>
     ReadOnly Property SupportedActions() As ArrayList
 
@@ -203,9 +221,11 @@ Public Interface IObservingConditions
 
 #Region "Device Properties"
     ''' <summary>
-    ''' Gets And sets the time period over which observations wil be averaged
+    ''' Gets And sets the time period over which observations will be averaged
     ''' </summary>
     ''' <value>Time period (hours) over which to average sensor readings</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>
     ''' Time period (hours) over which the property values will be averaged 0.0 = current value, 0.5= average for the last 30 minutes, 1.0 = average for the last hour
     ''' </remarks>
@@ -215,6 +235,8 @@ Public Interface IObservingConditions
     ''' Amount of sky obscured by cloud
     ''' </summary>
     ''' <value>percentage of the sky covered by cloud</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>0%= clear sky, 100% = 100% cloud coverage</remarks>
     ReadOnly Property CloudCover As Double
 
@@ -222,6 +244,8 @@ Public Interface IObservingConditions
     ''' Atmospheric dew point at the observatory
     ''' </summary>
     ''' <value>Atmospheric dew point reported in °C.</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>Normally optional but mandatory if <see cref="Humidity"/> Is provided</remarks>
     ReadOnly Property DewPoint As Double
 
@@ -229,20 +253,28 @@ Public Interface IObservingConditions
     ''' Atmospheric humidity at the observatory
     ''' </summary>
     ''' <value>Atmospheric humidity (%)</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>Normally optional but mandatory if <see cref="DewPoint"/> Is provided</remarks>   
     ReadOnly Property Humidity As Double
 
     ''' <summary>
     ''' Atmospheric pressure at the observatory
     ''' </summary>
-    ''' <value>Atmospheric presure at the observatory(hPa)</value>
-    ''' <remarks>This must be the pressure at the observatory and not the "reduced" pressure at sea level. Please check whether your pressure sensor delivers local pressure or sea level pressure and adjust if required to observatory pressure.</remarks>
+    ''' <value>Atmospheric presure at the observatory (hPa)</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
+    ''' <remarks>This must be the pressure at the observatory and not the "reduced" pressure at sea level.
+    ''' Please check whether your pressure sensor delivers local pressure or sea level pressure
+    ''' and adjust if required to observatory pressure.</remarks>
     ReadOnly Property Pressure As Double
 
     ''' <summary>
     ''' Rain rate at the observatory
     ''' </summary>
     ''' <value>Rain rate (mm / hour)</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>This property can be interpreted as 0.0 = Dry any positive nonzero value = wet.</remarks>
     ReadOnly Property RainRate As Double
 
@@ -250,6 +282,8 @@ Public Interface IObservingConditions
     ''' Sky brightness at the observatory
     ''' </summary>
     ''' <value>Sky brightness (Lux)</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks></remarks>
     ReadOnly Property SkyBrightness As Double
 
@@ -257,33 +291,44 @@ Public Interface IObservingConditions
     ''' Sky quality at the observatory
     ''' </summary>
     ''' <value>Sky quality measured in magnitudes per square arc second</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks></remarks>
     ReadOnly Property SkyQuality As Double
 
     ''' <summary>
-    ''' Seeing at the observatory
+    ''' Seeing at the observatory as FWHM in arc secs.
     ''' </summary>
     ''' <value>Seeing reported as star full width half magnitude (arc seconds)</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ReadOnly Property SkySeeing As Double
 
     ''' <summary>
     ''' Sky temperature at the observatory
     ''' </summary>
     ''' <value>Sky temperature in °C</value>
-    ''' <remarks></remarks>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
+    ''' <remarks>This is expected to be returned by an infra ref sensor looking at the sky.
+    ''' The lower the temperature the more the sky is likely to be clear.</remarks>
     ReadOnly Property SkyTemperature As Double
 
     ''' <summary>
     ''' Temperature at the observatory
     ''' </summary>
     ''' <value>Temperature in °C</value>
-    ''' <remarks></remarks>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
+    ''' <remarks>This is expected to be the ambient temperature.</remarks>
     ReadOnly Property Temperature As Double
 
     ''' <summary>
     ''' Wind direction at the observatory
     ''' </summary>
     ''' <value>Wind direction (degrees, 0..360.0)</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>0..360.0, 360=N, 180=S, 90=E, 270=W. When there Is no wind the driver will return a value of 0 for wind direction</remarks>
     ReadOnly Property WindDirection As Double
 
@@ -291,6 +336,8 @@ Public Interface IObservingConditions
     ''' Peak 3 second wind gust at the observatory over the last 2 minutes
     ''' </summary>
     ''' <value>Wind gust (m/s) Peak 3 second wind speed over the last 2 minutes</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks></remarks>
     ReadOnly Property WindGust As Double
 
@@ -298,6 +345,8 @@ Public Interface IObservingConditions
     ''' Wind speed at the observatory
     ''' </summary>
     ''' <value>Wind speed (m/s)</value>
+    ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks></remarks>
     ReadOnly Property WindSpeed As Double
 #End Region
@@ -307,22 +356,29 @@ Public Interface IObservingConditions
     ''' <summary>
     ''' Provides the time since the sensor value was last updated
     ''' </summary>
-    ''' <param name="PropertyName">Name of the property whose time since last update Is required</param>
+    ''' <param name="PropertyName">Name of the property whose time since last update is required</param>
     ''' <returns>Time in seconds since the last sensor update for this property</returns>
-    ''' <remarks>PropertyName should be one of the sensor properties Or empty string to get the last update of any parameter. A negative value indicates no valid value ever received.</remarks>
+    ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
+    ''' <remarks>PropertyName should be one of the sensor properties Or an empty string to get the last update
+    ''' of any parameter. A negative value indicates no valid value ever received.</remarks>
     Function TimeSinceLastUpdate(PropertyName As String) As Double
 
     ''' <summary>
     ''' Provides a description of the sensor providing the requested property
     ''' </summary>
-    ''' <param name="PropertyName">Name of the property whose sensor description Is required</param>
-    ''' <returns>Time in seconds since the last sensor update for this property</returns>
-    ''' <remarks>PropertyName should be one of the sensor properties Or empty string to get the last update of any parameter. A negative value indicates no valid value ever received.</remarks>
+    ''' <param name="PropertyName">Name of the sensor whose description is required</param>
+    ''' <returns>The description of the specified sensor.</returns>
+    ''' <exception cref="MethodNotImplementedException">If the sensor is not available.</exception>
+    ''' <remarks>PropertyName must be the name of one of the sensor properties implemented by this driver.
+    ''' This must return a valid string even if the driver is not connected so that
+    ''' applications can use this to determine what sensors are available.</remarks>
     Function SensorDescription(PropertyName As String) As String
 
     ''' <summary>
     ''' Forces the driver to immediatley query its atatched hardware to refersh sensor values
     ''' </summary>
+    ''' <exception cref="NotConnectedException">If the device is not connected.</exception>
+    ''' <exception cref="MethodNotImplementedException">If this method is not available.</exception>
     Sub Refresh()
 #End Region
 
