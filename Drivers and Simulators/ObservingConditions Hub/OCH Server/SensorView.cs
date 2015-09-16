@@ -42,6 +42,8 @@ namespace ASCOM.Simulator
             get
             {
                 var sensor = new Sensor(this.SensorName);
+                if (DesignMode)
+                    return sensor;
 
                 // get the selected device Id from allDevices
                 if (cmbDevice.SelectedIndex < 0 || cmbDevice.SelectedIndex >= SetupDialogForm.allDevices.Count)
@@ -139,7 +141,7 @@ namespace ASCOM.Simulator
                     // if it succeeds then we enable the switch name combo
                     // the spin button is always enabled.
                     var enableCmb = false;
-                    upDownSwitch.Enabled = true;
+                    //upDownSwitch.Enabled = true;
                     // try to connect, ignore error.  This can block if connecting takes a while
                     this.Cursor = Cursors.WaitCursor;
                     try { s.Connected = true; }     
@@ -152,7 +154,7 @@ namespace ASCOM.Simulator
                         max = s.MaxSwitch;      // this may work, even if we can't read the switch names
                         for (short i = 0; i < max; i++)
                         {
-                            var str = string.Format("{0}: {1}", i, s.GetSwitchName(i));
+                            var str = string.Format("{0}: {1}", i, s.GetSwitchDescription(i));
                             cmbSwitch.Items.Add(str);
                         }
                         enableCmb = true;   // successfully populated combo so enable it
@@ -163,8 +165,9 @@ namespace ASCOM.Simulator
                     }
                     // set up the UI
                     cmbSwitch.SelectedIndex = enableCmb ? switchId : -1;
-                    cmbSwitch.Enabled = enableCmb;
-                    upDownSwitch.Enabled = true;
+                    cmbSwitch.Visible = enableCmb;
+                    upDownSwitch.Visible = true;
+                    labelDescription.Visible = false;
                     upDownSwitch.Maximum = max - 1;
                     upDownSwitch.Value = switchId;
                 }
@@ -182,8 +185,10 @@ namespace ASCOM.Simulator
                         buttonSetup.Enabled = true;
                         cmbSwitch.Text = "";
                         upDownSwitch.Value = 0;
-                        upDownSwitch.Enabled = false;
-                        cmbSwitch.Enabled = false;
+                        upDownSwitch.Visible = false;
+                        cmbSwitch.Visible = false;
+                        labelDescription.Visible = true;
+                        labelDescription.Text = d;
                         lastIdx = cmbDevice.SelectedIndex;
                     }
                     catch (PropertyNotImplementedException)
@@ -204,8 +209,9 @@ namespace ASCOM.Simulator
                 cmbSwitch.SelectedIndex = -1;
                 //upDownSwitch.Value = 0;
                 buttonSetup.Enabled = false;
-                cmbSwitch.Enabled = false;
-                upDownSwitch.Enabled = false;
+                cmbSwitch.Visible = false;
+                upDownSwitch.Visible = false;
+                labelDescription.Visible = false;
             }
         }
 

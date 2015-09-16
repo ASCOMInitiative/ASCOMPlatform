@@ -35,6 +35,7 @@
             this.cmbDevice = new System.Windows.Forms.ComboBox();
             this.upDownSwitch = new System.Windows.Forms.NumericUpDown();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.labelDescription = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.upDownSwitch)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,6 +84,15 @@
             this.upDownSwitch.TabIndex = 78;
             this.upDownSwitch.ValueChanged += new System.EventHandler(this.upDownSwitch_ValueChanged);
             // 
+            // labelDescription
+            // 
+            this.labelDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelDescription.Location = new System.Drawing.Point(451, 0);
+            this.labelDescription.Name = "labelDescription";
+            this.labelDescription.Size = new System.Drawing.Size(360, 21);
+            this.labelDescription.TabIndex = 79;
+            // 
             // SensorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -91,6 +101,7 @@
             this.Controls.Add(this.buttonSetup);
             this.Controls.Add(this.cmbSwitch);
             this.Controls.Add(this.cmbDevice);
+            this.Controls.Add(this.labelDescription);
             this.Name = "SensorView";
             this.Size = new System.Drawing.Size(814, 24);
             ((System.ComponentModel.ISupportInitialize)(this.upDownSwitch)).EndInit();
@@ -105,5 +116,6 @@
         private System.Windows.Forms.ComboBox cmbDevice;
         private System.Windows.Forms.NumericUpDown upDownSwitch;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label labelDescription;
     }
 }
