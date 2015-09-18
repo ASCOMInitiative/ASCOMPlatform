@@ -88,7 +88,7 @@ namespace ASCOM.Simulator
             }
             else if (cmbAveragePeriod.SelectedIndex > observingConditionsDevices.Count)
             {
-                Hub.Sensors[Hub.AVERAGE_PERIOD].ProgID = Hub.SIMULATOR_PROGID;
+                Hub.Sensors[Hub.AVERAGE_PERIOD].ProgID = Hub.DRIVER_PROGID;
                 Hub.Sensors[Hub.AVERAGE_PERIOD].DeviceMode = Hub.ConnectionType.Simulation;
             }
             else
@@ -233,6 +233,7 @@ namespace ASCOM.Simulator
                 {
                     if (!device.Key.EndsWith(Hub.SWITCH_DEVICE_NAME))
                     {
+                        // adds everything except the switch devices, includes no device and simulator
                         TL.LogMessage("ReadDeviceInformation", "Processing: \"AveragePeriod\", Device: {0}, Adding device: {1}, Property ProgID: {2}", device.Key, device.Value, Hub.Sensors["AveragePeriod"].ProgID);
                         cmbAveragePeriod.Items.Add(device.Value); // Otherwise add the driver description to the available drivers combo box
 
@@ -243,8 +244,15 @@ namespace ASCOM.Simulator
                         currentIndex++;
                     }
                 }
-                if (cmbAveragePeriod.SelectedIndex < 0 || cmbAveragePeriod.SelectedIndex >= currentIndex)
-                    cmbAveragePeriod.SelectedIndex = 0;     // set the average period device to none
+                switch (Hub.Sensors[Hub.AVERAGE_PERIOD].DeviceMode)
+                {
+                    case Hub.ConnectionType.None:
+                        cmbAveragePeriod.SelectedIndex = 0;
+                        break;
+                    case Hub.ConnectionType.Simulation:
+                        cmbAveragePeriod.SelectedIndex = cmbAveragePeriod.Items.Count - 1;
+                        break;
+                }
 
                 return;
             }
