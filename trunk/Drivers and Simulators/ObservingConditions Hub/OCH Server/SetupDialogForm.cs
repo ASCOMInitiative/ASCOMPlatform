@@ -64,11 +64,18 @@ namespace ASCOM.Simulator
                     Hub.Sensors[sensorname].SwitchNumber = view.SelectedSensor.SwitchNumber;
                     Hub.Sensors[sensorname].DeviceMode = view.SelectedSensor.DeviceMode;
 
-                    // update the simulator values
-                    TextBox lowSimulator = (TextBox)this.Controls[tabControl1.Name].Controls[tabPage2.Name].Controls[LOW_SIMULATOR_PREFIX + sensorname];
-                    TextBox highSimulator = (TextBox)this.Controls[tabControl1.Name].Controls[tabPage2.Name].Controls[HIGH_SIMULATOR_PREFIX + sensorname];
-                    Hub.Sensors[sensorname].SimLowValue = Convert.ToDouble(lowSimulator.Text);
-                    Hub.Sensors[sensorname].SimHighValue = Convert.ToDouble(highSimulator.Text);
+                    // update the simulator values, this handles non numeric values better
+                    double value;
+                    var sval = ((TextBox)this.Controls[tabControl1.Name].Controls[tabPage2.Name].Controls[LOW_SIMULATOR_PREFIX + sensorname]).Text;
+                    if (double.TryParse(sval, out value) && value != Hub.Sensors[sensorname].SimLowValue)
+                    {
+                        Hub.Sensors[sensorname].SimLowValue = value;
+                    }
+                    sval = this.Controls[tabControl1.Name].Controls[tabPage2.Name].Controls[HIGH_SIMULATOR_PREFIX + sensorname].Text;
+                    if (double.TryParse(sval, out value) && value != Hub.Sensors[sensorname].SimHighValue)
+                    {
+                        Hub.Sensors[sensorname].SimHighValue = value;
+                    }
                 }
             }
 
