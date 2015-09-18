@@ -142,11 +142,15 @@ namespace ASCOM.Simulator
                     // the spin button is always enabled.
                     var enableCmb = false;
                     //upDownSwitch.Enabled = true;
-                    // try to connect, ignore error.  This can block if connecting takes a while
-                    this.Cursor = Cursors.WaitCursor;
-                    try { s.Connected = true; }     
-                    catch { }
-                    this.Cursor = Cursors.Default;
+                    if (ConnectToDriver)
+                    {
+                        // try to connect, ignore error.  This can block if connecting takes a while
+                        this.Cursor = Cursors.WaitCursor;
+                        try { s.Connected = true; }
+                        catch { }
+                        this.Cursor = Cursors.Default;
+                        
+                    }
                     // try to set max switches from driver, set up combo as long as there is no error
                     int max = 100;
                     try
@@ -235,7 +239,7 @@ namespace ASCOM.Simulator
             var id = (int)upDownSwitch.Value;
             if (cmbSwitch.SelectedIndex == id)
                 return;
-            if (cmbSwitch.Enabled && cmbSwitch.Items.Count >= id)
+            if (cmbSwitch.Visible && cmbSwitch.Items.Count >= id)
                 cmbSwitch.SelectedIndex = id;
         }
 
