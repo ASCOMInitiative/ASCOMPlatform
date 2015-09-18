@@ -197,16 +197,18 @@ namespace ASCOM.Simulator
                         labelDescription.Text = d;
                         lastIdx = cmbDevice.SelectedIndex;
                     }
-                    catch (PropertyNotImplementedException)
+                    catch (NotImplementedException)
                     {
-                        // this property isn't implemented in the selected driver so revert to the previous driver
+                        // this method or property isn't implemented in the selected driver so revert to the previous driver
                         cmbDevice.SelectedIndex = lastIdx;
                     }
-                    //catch (Exception)
-                    //{
-                    //    // not sure what to do, can we specify that the description is available even
-                    //    // if not connected?
-                    //}
+                    catch (Exception ex)
+                    {
+                        // not sure what to do, can we specify that the description is available even
+                        // if not connected?
+                        MessageBox.Show(string.Format("ObservingConditions.GetSensorDescription({0}) Exception {1}", SensorName, ex.Message));
+                        cmbDevice.SelectedIndex = lastIdx;
+                    }
                 }
             }
             else
