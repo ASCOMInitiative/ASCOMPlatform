@@ -92,6 +92,7 @@
     <Compile Include="DeviceDome.vb" />
     <Compile Include="DeviceFilterWheel.vb" />
     <Compile Include="DeviceFocuser.vb" />
+    <Compile Include="DeviceObservingConditions.vb" />
     <Compile Include="DeviceRotator.vb" />
     <Compile Include="DeviceSafetyMonitor.vb" />
     <Compile Include="DeviceSwitch.vb" />

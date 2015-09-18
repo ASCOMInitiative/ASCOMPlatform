@@ -82,6 +82,7 @@
     <Compile Include="DeviceDome.cs" />
     <Compile Include="DeviceFilterWheel.cs" />
     <Compile Include="DeviceFocuser.cs" />
+    <Compile Include="DeviceObservingConditions.cs" />
     <Compile Include="DeviceRotator.cs" />
     <Compile Include="DeviceSafetyMonitor.cs" />
     <Compile Include="DeviceSwitch.cs" />
