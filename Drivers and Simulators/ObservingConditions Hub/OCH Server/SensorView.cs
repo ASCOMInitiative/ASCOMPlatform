@@ -158,8 +158,10 @@ namespace ASCOM.Simulator
                         max = s.MaxSwitch;      // this may work, even if we can't read the switch names
                         for (short i = 0; i < max; i++)
                         {
-                            var str = string.Format("{0}: {1}", i, s.GetSwitchDescription(i));
-                            cmbSwitch.Items.Add(str);
+                            string str;
+                            try { str = s.GetSwitchDescription(i); }
+                            catch { str = s.GetSwitchName(i); }     // for V1 switches which don't have a description
+                            cmbSwitch.Items.Add(string.Format("{0}: {1}", i, str));
                         }
                         enableCmb = true;   // successfully populated combo so enable it
                     }
