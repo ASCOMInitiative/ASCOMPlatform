@@ -170,6 +170,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             this.CommandString(command, raw);
             // or
             throw new ASCOM.MethodNotImplementedException("CommandBlind");
+            // DO NOT have both these sections!  One or the other
         }
 
         public bool CommandBool(string command, bool raw)
@@ -179,6 +180,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             // TODO decode the return string and return true or false
             // or
             throw new ASCOM.MethodNotImplementedException("CommandBool");
+            // DO NOT have both these sections!  One or the other
         }
 
         public string CommandString(string command, bool raw)

@@ -577,3 +577,72 @@ Partial Public Class DeviceSafetyMonitor
     End Property
 
 End Class
+
+Partial Public Class DeviceObservingConditions
+    Public Sub Dispose() Implements IObservingConditions.Dispose
+    End Sub
+
+    Public Sub SetupDialog() Implements IObservingConditions.SetupDialog
+    End Sub
+
+    Public ReadOnly Property SupportedActions() As ArrayList Implements IObservingConditions.SupportedActions
+        Get
+            Return New ArrayList()
+        End Get
+    End Property
+
+    Public Function Action(ByVal ActionName As String, ByVal ActionParameters As String) As String Implements IObservingConditions.Action
+        Throw New MethodNotImplementedException("Action")
+    End Function
+
+    Public Sub CommandBlind(ByVal Command As String, Optional ByVal Raw As Boolean = False) Implements IObservingConditions.CommandBlind
+        Throw New MethodNotImplementedException("CommandBlind")
+    End Sub
+
+    Public Function CommandBool(ByVal Command As String, Optional ByVal Raw As Boolean = False) As Boolean Implements IObservingConditions.CommandBool
+        Throw New MethodNotImplementedException("CommandBool")
+    End Function
+
+    Public Function CommandString(ByVal Command As String, Optional ByVal Raw As Boolean = False) As String Implements IObservingConditions.CommandString
+        Throw New MethodNotImplementedException("CommandString")
+    End Function
+
+    Public Property Connected() As Boolean Implements IObservingConditions.Connected
+        Get
+            Return False
+        End Get
+        Set(value As Boolean)
+        End Set
+    End Property
+
+    Public ReadOnly Property Description As String Implements IObservingConditions.Description
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverInfo As String Implements IObservingConditions.DriverInfo
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property DriverVersion() As String Implements IObservingConditions.DriverVersion
+        Get
+            Return ""
+        End Get
+    End Property
+
+    Public ReadOnly Property InterfaceVersion() As Short Implements IObservingConditions.InterfaceVersion
+        Get
+            Return 0
+        End Get
+    End Property
+
+    Public ReadOnly Property Name As String Implements IObservingConditions.Name
+        Get
+            Return ""
+        End Get
+    End Property
+
+End Class
