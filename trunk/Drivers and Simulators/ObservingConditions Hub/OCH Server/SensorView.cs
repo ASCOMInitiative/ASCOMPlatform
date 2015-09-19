@@ -147,7 +147,7 @@ namespace ASCOM.Simulator
                         // try to connect, ignore error.  This can block if connecting takes a while
                         this.Cursor = Cursors.WaitCursor;
                         try { s.Connected = true; }
-                        catch { }
+                        catch { }    // could set ConnectToDriver to false
                         this.Cursor = Cursors.Default;
                         
                     }
@@ -197,7 +197,12 @@ namespace ASCOM.Simulator
                         labelDescription.Text = d;
                         lastIdx = cmbDevice.SelectedIndex;
                     }
-                    catch (NotImplementedException)
+                    catch (MethodNotImplementedException)
+                    {
+                        // this method or property isn't implemented in the selected driver so revert to the previous driver
+                        cmbDevice.SelectedIndex = lastIdx;
+                    }
+                    catch (PropertyNotImplementedException)
                     {
                         // this method or property isn't implemented in the selected driver so revert to the previous driver
                         cmbDevice.SelectedIndex = lastIdx;
