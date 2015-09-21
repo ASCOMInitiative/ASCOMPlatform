@@ -1388,7 +1388,7 @@ namespace ASCOM.Simulator
             if (TelescopeHardware.VersionOneOnly)
             {
                 SharedResources.TrafficEnd(property + " is not implemented in version 1");
-                throw new PropertyNotImplementedException(property);
+                throw new System.NotImplementedException(property);
             }
         }
 
@@ -1439,7 +1439,7 @@ namespace ASCOM.Simulator
 
         public void Dispose()
         {
-            throw new MethodNotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         #endregion
