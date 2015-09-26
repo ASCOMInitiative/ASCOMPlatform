@@ -29,25 +29,11 @@ namespace ASCOM.Simulator
 
                 util = new Util();
                 TL = OCSimulator.TL;
-                // Initialise current values of user settings from the ASCOM Profile 
-                chkTrace.Checked = OCSimulator.TraceState;
-                debugTrace.Checked = OCSimulator.DebugTraceState;
-
-                // Initialise sensorview items here
-
-                foreach (string sensor in OCSimulator.ValidProperties)
-                {
-                SensorView sv = (SensorView)this.Controls["sensorView"+ sensor];
-                    sv.Units = "Peter's units!";
-                    sv.LowValue = OCSimulator.Sensors[sensor].SimLowValue;
-                    sv.MaxValue = OCSimulator.Sensors[sensor].SimHighValue;
-
-                }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(),"SetupDialogForm");
+                MessageBox.Show(ex.ToString(), "SetupDialogForm");
             }
         }
 
@@ -57,7 +43,15 @@ namespace ASCOM.Simulator
             OCSimulator.TraceState = chkTrace.Checked;
             OCSimulator.DebugTraceState = debugTrace.Checked;
 
-   
+            foreach (string sensor in OCSimulator.ValidProperties)
+            {
+                SensorView sv = (SensorView)this.Controls["sensorView" + sensor];
+                OCSimulator.Sensors[sensor].SimFromValue = sv.MinValue;
+                OCSimulator.Sensors[sensor].SimToValue = sv.MaxValue;
+                OCSimulator.Sensors[sensor].IsImplemented = sv.SensorEnabled;
+                OCSimulator.Sensors[sensor].ShowNotReady = sv.ShowNotReady;
+                OCSimulator.Sensors[sensor].NotReadyDelay = sv.NotReadyDelay;
+            }
         }
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -87,6 +81,23 @@ namespace ASCOM.Simulator
             // Initialise current values of user settings from the ASCOM Profile 
             chkTrace.Checked = OCSimulator.TraceState;
             debugTrace.Checked = OCSimulator.DebugTraceState;
+            SensorView humiditySensorView = (SensorView)this.Controls["sensorViewHumidity"];
+            humiditySensorView.EnabledCheckboxVisible = false;
+
+            // Initialise sensorview items here
+
+            foreach (string sensor in OCSimulator.ValidProperties)
+            {
+                SensorView thisSensorView = (SensorView)this.Controls["sensorView" + sensor];
+                thisSensorView.MinValue = OCSimulator.Sensors[sensor].SimFromValue;
+                thisSensorView.MaxValue = OCSimulator.Sensors[sensor].SimToValue;
+                thisSensorView.SensorEnabled = OCSimulator.Sensors[sensor].IsImplemented;
+                thisSensorView.NotReadyControlsEnabled = OCSimulator.Sensors[sensor].IsImplemented;
+                thisSensorView.ShowNotReady = OCSimulator.Sensors[sensor].ShowNotReady;
+                thisSensorView.NotReadyDelay = OCSimulator.Sensors[sensor].NotReadyDelay;
+            }
+
+            // Initialise current values of user settings from the ASCOM Profile 
 
         }
 

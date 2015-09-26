@@ -48,6 +48,7 @@ namespace ASCOM.Simulator
         public const string SIMULATOR_PROGID = "Simulator";
 
         public static TraceLoggerPlus TL;
+        public static SetupDialogForm setupForm;
         public static bool DebugTraceState;
 
         // Setup dialogue configuration variables
@@ -158,6 +159,7 @@ namespace ASCOM.Simulator
         private readonly static object commLockObject = new object();
         private readonly static object connectLockObject = new object();
         private static ConcurrentDictionary<long, bool> connectStates;
+        private static DateTime initialConnectionTime;
 
         //Sensor information and devices
         public static Dictionary<string, Sensor> Sensors = new Dictionary<string, Sensor>();
@@ -187,7 +189,8 @@ namespace ASCOM.Simulator
             TL.LogMessage("OCSimulator", "Setting sensor initial values");
             foreach (string Property in ValidProperties)
             {
-                Sensors[Property].SimCurrentValue = Sensors[Property].SimLowValue;
+                Sensors[Property].SimCurrentValue = Sensors[Property].SimFromValue;
+                Sensors[Property].TimeSinceLastUpdate = 5.324; // Dummy test value - remove later
             }
 
             TL.LogMessage("OCSimulator", "Simulator initialisation complete.");
@@ -297,85 +300,13 @@ namespace ASCOM.Simulator
                     try
                     {
                         TL.LogMessage(clientNumber, "Connect", "Attempting to connect to devices");
-
-                        // Work out which devices we actually need to connect to
-                        foreach (KeyValuePair<string, Sensor> sensor in Sensors)
-                        {
-                            switch (sensor.Value.ProgID)
-                            {
-                                case NO_DEVICE_PROGID:
-                                    // No action required as there is no device
-                                    break;
-                                case DRIVER_PROGID:
-                                    // No action required as this is the Hub simulator
-                                    break;
-                                default: // Must be a real device so we need to connect to it
-                                    switch (sensor.Value.DeviceType)
-                                    {
-                                        case DeviceType.ObservingConditions:
-                                            if (!ObservingConditionsDevices.ContainsKey(sensor.Value.ProgID))
-                                            {
-                                                TL.LogMessage(clientNumber, "Connect", "Adding new ObservingConditions ProgID: " + sensor.Value.ProgID);
-                                                ObservingConditionsDevices.Add(sensor.Value.ProgID, new ObservingConditions(sensor.Value.ProgID));
-                                            }
-                                            else
-                                            {
-                                                TL.LogMessage(clientNumber, "Connect", "Skipping this ObservingConditions ProgID, it already exists: " + sensor.Value.ProgID);
-                                            }
-                                            break;
-                                        case DeviceType.Switch:
-                                            if (!SwitchDevices.ContainsKey(sensor.Value.ProgID))
-                                            {
-                                                TL.LogMessage(clientNumber, "Connect", "Adding new Switch ProgID: " + sensor.Value.ProgID);
-                                                SwitchDevices.Add(sensor.Value.ProgID, new Switch(sensor.Value.ProgID));
-                                            }
-                                            else
-                                            {
-                                                TL.LogMessage(clientNumber, "Connect", "Skipping this Switch ProgID, it already exists: " + sensor.Value.ProgID);
-                                            }
-                                            break;
-                                        default:
-                                            break;
-                                    }
-
-                                    break;
-                            }
-                        }
-
-                        // Now try to connect to ObservingConditions devices
-                        foreach (KeyValuePair<string, ObservingConditions> observingConditionsDevice in ObservingConditionsDevices)
-                        {
-                            TL.LogMessage(clientNumber, "Connect", "Connecting to: " + observingConditionsDevice.Key);
-                            try
-                            {
-                                observingConditionsDevice.Value.Connected = true;
-                                TL.LogMessage(clientNumber, "Connect", "Successfully connected to: " + observingConditionsDevice.Key);
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(clientNumber, "Connect", "Failed to connect: " + ex.ToString());
-                            }
-
-                        }
-
-                        // Now try to connect to Switch devices
-                        foreach (KeyValuePair<string, Switch> switchDevice in SwitchDevices)
-                        {
-                            TL.LogMessage(clientNumber, "Connect", "Connecting to: " + switchDevice.Key);
-                            try
-                            {
-                                switchDevice.Value.Connected = true;
-                                TL.LogMessage(clientNumber, "Connect", "Successfully connected to: " + switchDevice.Key);
-                            }
-                            catch (Exception ex)
-                            {
-                                TL.LogMessage(clientNumber, "Connect", "Failed to connect: " + ex.ToString());
-                            }
-
-                        }
-
                         bool notAlreadyPresent = connectStates.TryAdd(clientNumber, true);
                         TL.LogMessage(clientNumber, "Connect", "Successfully connected, AlreadyConnected: " + (!notAlreadyPresent).ToString());
+                        if (ConnectionCount == 1) // This is the first successful connection
+                        {
+                            TL.LogMessage(clientNumber, "Connect", "This is the first connection so set the connection start time");
+                            initialConnectionTime = DateTime.Now;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -459,13 +390,18 @@ namespace ASCOM.Simulator
             }
             else
             {
-                using (SetupDialogForm F = new SetupDialogForm())
+                TL.LogMessage(clientNumber, "SetupDialog", "Creating setup form");
+                using (setupForm = new SetupDialogForm())
                 {
-                    var result = F.ShowDialog();
+                    TL.LogMessage(clientNumber, "SetupDialog", "Showing Dialogue");
+                    var result = setupForm.ShowDialog();
+                    TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed");
                     if (result == DialogResult.OK)
                     {
+                        TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with OK status");
                         WriteProfile(); // Persist device configuration values to the ASCOM Profile store
                     }
+                    else TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
                 }
             }
         }
@@ -532,48 +468,9 @@ namespace ASCOM.Simulator
         {
             if (IsValidProperty(PropertyName))
             {
-                switch (Sensors[PropertyName].DeviceMode)
-                {
-                    case ConnectionType.None:
-                        throw new MethodNotImplementedException(PropertyName + " is not implemented in the ObservingConditions Simulator");
-
-                    case ConnectionType.Simulation:
-                        return "ObservingConditions Simulator simulated " + PropertyName + " sensor";
-
-                    case ConnectionType.Real:
-                        switch (Sensors[PropertyName].DeviceType)
-                        {
-                            case DeviceType.ObservingConditions:
-                                string sensorDescription = ObservingConditionsDevices[Sensors[PropertyName].ProgID].SensorDescription(PropertyName);
-                                TL.LogMessage(clientNumber, "SensorDescription", "Got description: " + sensorDescription + " from device " + Sensors[PropertyName].ProgID + " method " + PropertyName);
-                                return sensorDescription;
-
-                            case DeviceType.Switch:
-                                string switchDescription;
-                                if (SwitchDevices[Sensors[PropertyName].ProgID].InterfaceVersion <= 1) // Switch V1 does not have a switch description so get the switch name instead
-                                {
-                                    switchDescription = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchName((short)Sensors[PropertyName].SwitchNumber);
-                                }
-                                else // Switch V2 does have a switch description
-                                {
-                                    switchDescription = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchDescription((short)Sensors[PropertyName].SwitchNumber);
-                                }
-                                TL.LogMessage(clientNumber, "SensorDescription", "Got description: " + switchDescription + " from device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber);
-                                return switchDescription;
-
-                            default:
-                                MessageBox.Show("GetDouble: Unknown DeviceType Enum value: " + Sensors[PropertyName].DeviceType.ToString());
-                                break;
-                        }
-                        break;
-                    default:
-                        MessageBox.Show("SensorDescription: Unknown DeviceMode Enum value: " + Sensors[PropertyName].DeviceMode.ToString());
-                        break;
-                }
-
-                string propertyDescription = PropertyName + " description";
-                TL.LogMessage(clientNumber, "SensorDescription", PropertyName + ": " + propertyDescription.ToString());
-                return propertyDescription;
+                if (Sensors[PropertyName].IsImplemented)
+                    return "ObservingConditions Simulated " + PropertyName + " sensor";
+                else throw new MethodNotImplementedException("SensorDescription(\"" + PropertyName + "\")");
             }
             else
             {
@@ -637,10 +534,19 @@ namespace ASCOM.Simulator
             {
                 if (IsValidProperty(PropertyName))
                 {
-                    // For now just return 0.0 as this is true for simulated values
-                    double timeSinceLastUpdate = 0.0;
-                    TL.LogMessage(clientNumber, "TimeSinceLastUpdate", PropertyName + ": " + timeSinceLastUpdate.ToString());
-                    return timeSinceLastUpdate;
+                    if (Sensors[PropertyName].IsImplemented) // Sensor is implemented
+                    {
+                        if (DateTime.Now.Subtract(initialConnectionTime).TotalSeconds <= Sensors[PropertyName].NotReadyDelay) // Check whether the device is still initialising
+                        {
+                            return -1.0; // Still initialising so return a negative value        
+                        }
+                        else // 
+                        {
+                            TL.LogMessage(clientNumber, "TimeSinceLastUpdate", PropertyName + ": " + Sensors[PropertyName].TimeSinceLastUpdate.ToString());
+                            return Sensors[PropertyName].TimeSinceLastUpdate; // Operating normally so return current value
+                        }
+                    }
+                    else throw new MethodNotImplementedException(PropertyName); // This sensor is not implemented
                 }
                 else
                 {
@@ -691,52 +597,20 @@ namespace ASCOM.Simulator
 
         private static double GetDouble(string PropertyName)
         {
-            TL.LogMessage("GetDouble", PropertyName + " device mode: " + Sensors[PropertyName].DeviceMode.ToString());
-            switch (Sensors[PropertyName].DeviceMode)
+            TL.LogMessage("GetDouble", PropertyName + ": " + Sensors[PropertyName].SimCurrentValue);
+
+            if (Sensors[PropertyName].IsImplemented) // Sensor is implemented
             {
-                case ConnectionType.None:
-                    throw new PropertyNotImplementedException(PropertyName, false);
-
-                case ConnectionType.Simulation:
-                    return Sensors[PropertyName].SimCurrentValue;
-
-                case ConnectionType.Real:
-                    switch (Sensors[PropertyName].DeviceType)
-                    {
-                        case DeviceType.ObservingConditions:
-                            Type type = typeof(ObservingConditions);
-                            PropertyInfo propertyInfo = type.GetProperty(PropertyName);
-                            double observingConditionsValue = (double)propertyInfo.GetValue(ObservingConditionsDevices[Sensors[PropertyName].ProgID], null);
-                            TL.LogMessage("GetDouble", "Got value: " + observingConditionsValue + " from device " + Sensors[PropertyName].ProgID + " method " + PropertyName);
-                            return observingConditionsValue;
-
-                        case DeviceType.Switch:
-                            double switchValue;
-
-                            if (SwitchDevices[Sensors[PropertyName].ProgID].InterfaceVersion <= 1) // Switch V1 does not have a switch description so get the switch name instead
-                            {
-                                bool switchBool = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitch((short)Sensors[PropertyName].SwitchNumber);
-                                switchValue = Convert.ToDouble(switchBool);
-                                TL.LogMessage("GetDouble", "Got value: " + switchValue + " from Switch V1 device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber + ", device returned: " + switchBool.ToString());
-                            }
-                            else // Switch V2 does have a switch description
-                            {
-                                switchValue = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchValue((short)Sensors[PropertyName].SwitchNumber);
-                                TL.LogMessage("GetDouble", "Got value: " + switchValue + " from Switch V2 device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber);
-                            }
-
-                            return switchValue;
-
-                        default:
-                            MessageBox.Show("GetDouble: Unknown DeviceType Enum value: " + Sensors[PropertyName].DeviceType.ToString());
-                            break;
-                    }
-                    break;
-                default:
-                    MessageBox.Show("GetDouble: Unknown DeviceMode Enum value: " + Sensors[PropertyName].DeviceMode.ToString());
-                    break;
+                if (DateTime.Now.Subtract(initialConnectionTime).TotalSeconds <= Sensors[PropertyName].NotReadyDelay) // Check whether the device is still initialising
+                {
+                    throw new InvalidOperationException(PropertyName + " is not ready"); // Still initialising so throw InvalidOperationException
+                }
+                else // 
+                {
+                    return Sensors[PropertyName].SimCurrentValue; // Operating normally so return current value
+                }
             }
-            return 0.0;
+            throw new PropertyNotImplementedException(PropertyName, false);
         }
 
         #endregion
