@@ -38,14 +38,41 @@ namespace ASCOM.Simulator
     {
         #region Public variables and constants
 
+        // Valid properties constants
+        public const string PROPERTY_CLOUDCOVER = "CloudCover";
+        public const string PROPERTY_DEWPOINT = "DewPoint";
+        public const string PROPERTY_HUMIDITY = "Humidity";
+        public const string PROPERTY_PRESSURE = "Pressure";
+        public const string PROPERTY_RAINRATE = "RainRate";
+        public const string PROPERTY_SKYBRIGHTNESS = "SkyBrightness";
+        public const string PROPERTY_SKYQUALITY = "SkyQuality";
+        public const string PROPERTY_SKYSEEING = "SkySeeing";
+        public const string PROPERTY_SKYTEMPERATURE = "SkyTemperature";
+        public const string PROPERTY_TEMPERATURE = "Temperature";
+        public const string PROPERTY_WINDDIRECTION = "WindDirection";
+        public const string PROPERTY_WINDGUST = "WindGust";
+        public const string PROPERTY_WINDSPEED = "WindSpeed";
+
         public const string DRIVER_PROGID = "ASCOM.Simulator.ObservingConditions";
         public const string DRIVER_DISPLAY_NAME = "ASCOM Observing Conditions Simulator"; // Driver description that displays in the ASCOM Chooser.
         public const string DEVICE_TYPE = "ObservingConditions";
-        public const string SWITCH_DEVICE_NAME = "Switch";
         public const string OBSERVINGCONDITIONS_DEVICE_NAME = "ObservingConditions";
-        public const string AVERAGE_PERIOD = "AveragePeriod";
-        public const string NO_DEVICE_PROGID = "";
         public const string SIMULATOR_PROGID = "Simulator";
+        public const string SENSORVIEW_CONTROL_PREFIX = "sensorView";
+
+        // Profile persistance constants
+        public const string SIMFROMVALUE_PROFILENAME = "Simulated From Value"; // Default values are held in Dictionary SimulatorDefaultFromValues
+        public const string SIMTOVALUE_PROFILENAME = "Simulated To Value"; // Default values are held in Dictionary SimulatorDefaultToValues
+        public const string IS_IMPLEMENTED_PROFILENAME = "Is Implemented"; public const string IS_IMPLEMENTED_DEFAULT = "true";
+        public const string SHOW_NOT_READY_PROFILENAME = "Show NotReady"; public const string SHOW_NOT_READY_DEFAULT = "false";
+        public const string NOT_READY_DELAY_PROFILENAME = "Not Ready Delay"; public const string NOT_READY_DELAY_DEFAULT = "0.0";
+        public const string VALUE_CYCLE_TIME_PROFILE_NAME = "Value Cycle Time"; public const string VALUE_CYCLE_TIME_DEFAULT = "60.0";
+        public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; public const string TRACE_LEVEL_DEFAULT = "true";
+        public const string DEBUG_TRACE_PROFILENAME = "Include Debug Trace"; public const string DEBUG_TRACE_DEFAULT = "true";
+        public const string CONNECT_TO_DRIVERS_PROFILENAME = "Connect To Drivers"; public const string CONNECT_TO_DRIVERS_DEFAULT = "false";
+        public const string SENSOR_READ_PERIOD_PROFILENAME = "Sensor Read Period"; public const string SENSOR_READ_PERIOD_DEFAULT = "1.0";
+        public const string AVERAGE_PERIOD_PROFILENAME = "Average Period"; public const string AVERAGE_PERIOD_DEFAULT = "0.0";
+        public const string NUMBER_OF_READINGS_PROFILENAME = "Number Of Readings"; public const string NUMBER_OF_READINGS_DEFAULT = "10";
 
         public static TraceLoggerPlus TL;
         public static SetupDialogForm setupForm;
@@ -53,11 +80,27 @@ namespace ASCOM.Simulator
 
         // Setup dialogue configuration variables
         public static bool TraceState;
-        public static int CacheTime;
-        public static bool ConnectToDrivers;
+        public static double SensorQueryInterval;
+        public static double AveragePeriod;
+        public static int NumberOfReadingsToAverage;
+
+        // List of ObservingConditions properties that are dynamically simulated
+        public static List<string> SimulatedProperties = new List<string> { // Aray containing a list of all valid properties
+            PROPERTY_CLOUDCOVER,
+            PROPERTY_HUMIDITY,
+            PROPERTY_PRESSURE,
+            PROPERTY_RAINRATE,
+            PROPERTY_SKYBRIGHTNESS,
+            PROPERTY_SKYQUALITY,
+            PROPERTY_SKYSEEING,
+            PROPERTY_SKYTEMPERATURE,
+            PROPERTY_TEMPERATURE,
+            PROPERTY_WINDDIRECTION,
+            PROPERTY_WINDGUST,
+            PROPERTY_WINDSPEED };
 
         // List of valid ObservingConditions properties
-        public static List<string> ValidProperties = new List<string> { // Aray containing a list of all valid properties
+        public static List<string> DriverProperties = new List<string> { // Aray containing a list of all valid properties
             PROPERTY_CLOUDCOVER,
             PROPERTY_DEWPOINT,
             PROPERTY_HUMIDITY,
@@ -75,96 +118,72 @@ namespace ASCOM.Simulator
         // Hub simulator information
         public static Dictionary<string, double> SimulatorDefaultFromValues = new Dictionary<string, double>()
         {
-            {"CloudCover", 0.0},
-            {"DewPoint", 2.4 },
-            {"Humidity", 50.0},
-            {"Pressure", 1020.5},
-            {"RainRate", 0.0},
-            {"SkyBrightness", 85.0},
-            {"SkyQuality", 18.0},
-            {"SkySeeing", 0.85},
-            {"SkyTemperature", -28.0},
-            {"Temperature", 5.4},
-            {"WindDirection", 174.4},
-            {"WindGust", 2.34},
-            {"WindSpeed", 0.29}
+            {PROPERTY_CLOUDCOVER, 0.0},
+            {PROPERTY_HUMIDITY, 50.0},
+            {PROPERTY_PRESSURE, 1020.5},
+            {PROPERTY_RAINRATE, 0.0},
+            {PROPERTY_SKYBRIGHTNESS, 85.0},
+            {PROPERTY_SKYQUALITY, 18.0},
+            {PROPERTY_SKYSEEING, 0.85},
+            {PROPERTY_SKYTEMPERATURE, -28.0},
+            {PROPERTY_TEMPERATURE, 5.4},
+            {PROPERTY_WINDDIRECTION, 174.4},
+            {PROPERTY_WINDGUST, 2.34},
+            {PROPERTY_WINDSPEED, 0.29}
         };
         public static Dictionary<string, double> SimulatorDefaultToValues = new Dictionary<string, double>()
         {
-            {"CloudCover", 5.0},
-            {"DewPoint", 3.0},
-            {"Humidity", 55.0},
-            {"Pressure", 1032.5},
-            {"RainRate", 0.0},
-            {"SkyBrightness", 95.0},
-            {"SkyQuality", 20.0},
-            {"SkySeeing", 1.35},
-            {"SkyTemperature", -25.0},
-            {"Temperature", 8.8},
-            {"WindDirection", 253.8},
-            {"WindGust", 5.45},
-            {"WindSpeed", 2.38}
+            {PROPERTY_CLOUDCOVER, 5.0},
+            {PROPERTY_HUMIDITY, 55.0},
+            {PROPERTY_PRESSURE, 1032.5},
+            {PROPERTY_RAINRATE, 0.0},
+            {PROPERTY_SKYBRIGHTNESS, 95.0},
+            {PROPERTY_SKYQUALITY, 20.0},
+            {PROPERTY_SKYSEEING, 1.35},
+            {PROPERTY_SKYTEMPERATURE, -25.0},
+            {PROPERTY_TEMPERATURE, 8.8},
+            {PROPERTY_WINDDIRECTION, 253.8},
+            {PROPERTY_WINDGUST, 5.45},
+            {PROPERTY_WINDSPEED, 2.38}
         };
 
         #endregion
 
-        #region Public Enums
+        #region Public Enums and Structs
 
-        public enum ConnectionType
+        public enum ValueCycleDirections
         {
-            None,
-            Simulation,
-            Real
+            FromTowardsTo,
+            ToTowardsFrom
         }
 
-        public enum DeviceType
+        public struct TimeValue
         {
-            ObservingConditions,
-            Switch
+            public TimeValue(DateTime obsTime, double sensValue)
+            {
+                ObservationTime = obsTime;
+                SensorValue = sensValue;
+            }
+            public DateTime ObservationTime;
+            public double SensorValue;
         }
 
         #endregion
 
         #region Private variables and constants
 
-        // private constants
-        private const string TRACE_LEVEL_PROFILENAME = "Trace Level"; private const string TRACE_LEVEL_DEFAULT = "true";
-        private const string DEBUG_TRACE_PROFILENAME = "Include Debug Trace"; private const string DEBUG_TRACE_DEFAULT = "true";
-        private const string CACHE_TIME_PROFILENAME = "Cache Time"; private const int CACHE_TIME_DEFAULT = 500;
-        private const string CONNECT_TO_DRIVERS_PROFILENAME = "Connect To Drivers"; private const string CONNECT_TO_DRIVERS_DEFAULT = "false";
-
-        // Cache management constants
-        private const string CACHE_ATPARK = "AtPark";
-        private static string[] CACHE_ITEMS = { CACHE_ATPARK };
-
-        // Valid properties constants
-        private const string PROPERTY_AVERAGEPERIOD = "AveragePeriod";
-        private const string PROPERTY_CLOUDCOVER = "CloudCover";
-        private const string PROPERTY_DEWPOINT = "DewPoint";
-        private const string PROPERTY_HUMIDITY = "Humidity";
-        private const string PROPERTY_PRESSURE = "Pressure";
-        private const string PROPERTY_RAINRATE = "RainRate";
-        private const string PROPERTY_SKYBRIGHTNESS = "SkyBrightness";
-        private const string PROPERTY_SKYQUALITY = "SkyQuality";
-        private const string PROPERTY_SKYSEEING = "SkySeeing";
-        private const string PROPERTY_SKYTEMPERATURE = "SkyTemperature";
-        private const string PROPERTY_TEMPERATURE = "Temperature";
-        private const string PROPERTY_WINDDIRECTION = "WindDirection";
-        private const string PROPERTY_WINDGUST = "WindGust";
-        private const string PROPERTY_WINDSPEED = "WindSpeed";
-
         // Miscellaneous variables
         private static Util util; // Private variable to hold an ASCOM Utilities object
         private static int uniqueClientNumber = 0; // Unique number that increements on each call to UniqueClientNumber
-        private readonly static object commLockObject = new object();
         private readonly static object connectLockObject = new object();
         private static ConcurrentDictionary<long, bool> connectStates;
         private static DateTime initialConnectionTime;
+        private static DateTime mostRecentUpdateTime;
+        private static System.Timers.Timer sensorQueryTimer;
+        private static System.Timers.Timer averagePeriodTimer;
 
         //Sensor information and devices
         public static Dictionary<string, Sensor> Sensors = new Dictionary<string, Sensor>();
-        public static Dictionary<string, ObservingConditions> ObservingConditionsDevices = new Dictionary<string, ObservingConditions>();
-        public static Dictionary<string, Switch> SwitchDevices = new Dictionary<string, Switch>();
 
         #endregion
 
@@ -176,25 +195,35 @@ namespace ASCOM.Simulator
         {
             // Create sensor objects ready to be populated from the Profile
             // This must be done before reading the Profile
-            foreach (string Property in ValidProperties)
+            foreach (string Property in DriverProperties)
             {
                 Sensors.Add(Property, new Sensor(Property));
             }
 
             TL = new TraceLoggerPlus("", "OCSimulator"); // Trace state is set in ReadProfile, immediately after nbeing read fomr the Profile
             ReadProfile(); // Read device configuration from the ASCOM Profile store
+
             TL.LogMessage("OCSimulator", "Simulator initialising");
+            sensorQueryTimer = new System.Timers.Timer();
+            sensorQueryTimer.Elapsed += RefreshTimer_Elapsed;
+            averagePeriodTimer = new System.Timers.Timer();
+            averagePeriodTimer.Elapsed += AveragePeriodTimer_Elapsed;
+
             connectStates = new ConcurrentDictionary<long, bool>();
             util = new Util(); // Create an  ASCOM Utilities object
+            mostRecentUpdateTime = DateTime.Now;
+
             TL.LogMessage("OCSimulator", "Setting sensor initial values");
-            foreach (string Property in ValidProperties)
+            foreach (string Property in SimulatedProperties)
             {
                 Sensors[Property].SimCurrentValue = Sensors[Property].SimFromValue;
-                Sensors[Property].TimeSinceLastUpdate = 5.324; // Dummy test value - remove later
+                Sensors[Property].ValueCycleDirection = ValueCycleDirections.FromTowardsTo;
+                Sensors[Property].TimeOfLastUpdate = DateTime.Now;
             }
 
             TL.LogMessage("OCSimulator", "Simulator initialisation complete.");
         }
+
         #endregion
 
         #region ASCOM Common Methods
@@ -206,83 +235,54 @@ namespace ASCOM.Simulator
 
         public static void CommandBlind(int clientNumber, string command)
         {
-            CommandBlind(clientNumber, command, false);
+            throw new MethodNotImplementedException("CommandBlind");
         }
 
         public static void CommandBlind(int clientNumber, string command, bool raw)
         {
-            lock (commLockObject)
-            {
-                if (raw)
-                { // Send string as received and return result as received
-                    if (DebugTraceState) TL.LogMessage(clientNumber, "CommandBlindRaw", "Sending: " + command);
-                }
-                else
-                { // Pad with leading : and trainling # and strip trailing # from returned string
-                    command = ":" + command + "#";
-                    if (DebugTraceState) TL.LogMessage(clientNumber, "CommandBlind", "Sending: " + command);
-                }
-            }
+            throw new MethodNotImplementedException("CommandBlind");
         }
 
         public static bool CommandBool(int clientNumber, string command)
         {
-            return CommandBool(clientNumber, command, false);
+            throw new MethodNotImplementedException("CommandBool");
         }
 
         public static bool CommandBool(int clientNumber, string command, bool raw)
         {
-            string returnMessage = "";
-            lock (commLockObject)
-            {
-                if (raw)
-                {
-                    // Send supplied string
-                    if (DebugTraceState) TL.LogMessage(clientNumber, "CommandBoolRaw", "Sending: " + command);
-                    if (DebugTraceState) TL.LogMessage(clientNumber, "CommandBoolRaw", "Response: " + returnMessage);
-                }
-                else
-                { // Pad supplied string with leading : and trailing # string
-                    command = ":" + command + "#";
-                    if (DebugTraceState) TL.LogMessage(clientNumber, "CommandBool", "Sending: " + command);
-                    if (DebugTraceState) TL.LogMessage(clientNumber, "CommandBool", "Response: " + returnMessage);
-                }
-
-                return false;
-            }
+            throw new MethodNotImplementedException("CommandBool");
         }
 
         public static string CommandString(int clientNumber, string command)
         {
-            return CommandString(clientNumber, command, false);
+            throw new MethodNotImplementedException("CommandString");
         }
 
         public static string CommandString(int clientNumber, string command, bool raw)
         {
-            lock (commLockObject)
-            {
-                if (raw)
-                { // Send string as received and return result as received
-                    if (DebugTraceState) TL.LogMessage(clientNumber, "CommandStringRaw", "Sending: " + command);
-                    return "";
-                }
-                else
-                { // Pad with leading : and trainling # and strip trailing # from returned string
-                    if (DebugTraceState) TL.LogMessage(clientNumber, "CommandString", "Sending: " + command);
-                    return "";
-                }
-            }
+            throw new MethodNotImplementedException("CommandString");
         }
 
-        public static bool IsConnected(int clientNumber)
+        public static bool IsHardwareConnected()
         {
-            if (DebugTraceState) TL.LogMessage("Hardware.Connected Get", "Number of connected devices: " + connectStates.Count + ", Returning: " + (connectStates.Count > 0).ToString());
+            if (DebugTraceState) TL.LogMessage("IsHardwareConnected", "Number of connected devices: " + connectStates.Count + ", Returning: " + (connectStates.Count > 0).ToString());
             return connectStates.Count > 0;
+        }
+
+        public static bool IsClientConnected(int clientNumber)
+        {
+            TL.LogMessage(clientNumber, "IsClientConnected", "Number of connected devices: " + connectStates.Count + ", Returning: " + connectStates.ContainsKey(clientNumber).ToString());
+
+            return connectStates.ContainsKey(clientNumber);
         }
 
         public static int ConnectionCount
         {
-            get { return connectStates.Count; }
+            get
+            {
+                TL.LogMessage("ConnectionCount", connectStates.Count.ToString());
+                return connectStates.Count;
+            }
         }
 
         public static void Connect(int clientNumber)
@@ -291,7 +291,7 @@ namespace ASCOM.Simulator
             lock (connectLockObject) // Esnure that only one connection attempt can happen at a time
             {
                 TL.LogMessage(clientNumber, "Connect", "Has connection lock");
-                if (IsConnected(clientNumber)) // If we are already connected then just log this 
+                if (IsClientConnected(clientNumber)) // If we are already connected then just log this 
                 {
                     TL.LogMessage(clientNumber, "Connect", "Already connected, just incrementing connection count.");
                 }
@@ -301,11 +301,21 @@ namespace ASCOM.Simulator
                     {
                         TL.LogMessage(clientNumber, "Connect", "Attempting to connect to devices");
                         bool notAlreadyPresent = connectStates.TryAdd(clientNumber, true);
-                        TL.LogMessage(clientNumber, "Connect", "Successfully connected, AlreadyConnected: " + (!notAlreadyPresent).ToString());
+                        TL.LogMessage(clientNumber, "Connect", "Successfully connected, AlreadyConnected: " + (!notAlreadyPresent).ToString() + ", number of connections: " + connectStates.Count);
                         if (ConnectionCount == 1) // This is the first successful connection
                         {
                             TL.LogMessage(clientNumber, "Connect", "This is the first connection so set the connection start time");
                             initialConnectionTime = DateTime.Now;
+                            foreach (string property in SimulatedProperties)
+                            {
+                                Sensors[property].ValueCycleDirection = ValueCycleDirections.FromTowardsTo;
+                                Sensors[property].SimCurrentValue = Sensors[property].SimFromValue;
+                                Sensors[property].TimeOfLastUpdate = DateTime.Now;
+                            }
+
+                            sensorQueryTimer.Interval = SensorQueryInterval * 1000.0;
+                            sensorQueryTimer.Enabled = true;
+                            ConfigureAveragePeriodTimer();
                         }
                     }
                     catch (Exception ex)
@@ -323,25 +333,10 @@ namespace ASCOM.Simulator
             bool successfullyRemoved = connectStates.TryRemove(clientNumber, out lastValue);
             TL.LogMessage("Hardware.Connected Set", "Set Connected to: False, Successfully removed: " + successfullyRemoved.ToString());
 
-            // Now try to disconnect ObservingConditions devices
-            foreach (KeyValuePair<string, ObservingConditions> observingConditionsDevice in ObservingConditionsDevices)
+            if (ConnectionCount == 0) // The last connection has dropped so stop the timer
             {
-                TL.LogMessage(clientNumber, "Disconnect", "Disconnecting: " + observingConditionsDevice.Key);
-                try { observingConditionsDevice.Value.Connected = false; } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "Disconnect", "Connected = false: " + ex.ToString()); }
-                try { observingConditionsDevice.Value.Dispose(); } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "Disconnect", "Dispose(): " + ex.ToString()); }
-                TL.LogMessage(clientNumber, "Disconnect", "Successfully disconnected: " + observingConditionsDevice.Key);
+                sensorQueryTimer.Enabled = false;
             }
-            ObservingConditionsDevices.Clear();
-
-            // Now try to disconnect Switch devices
-            foreach (KeyValuePair<string, Switch> switchDevice in SwitchDevices)
-            {
-                TL.LogMessage(clientNumber, "Disconnect", "Disconnecting: " + switchDevice.Key);
-                try { switchDevice.Value.Connected = false; } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "Disconnect", "Connected = false: " + ex.ToString()); }
-                try { switchDevice.Value.Dispose(); } catch (Exception ex) { TL.LogMessageCrLf(clientNumber, "Disconnect", "Dispose(): " + ex.ToString()); }
-                TL.LogMessage(clientNumber, "Disconnect", "Successfully disconnected: " + switchDevice.Key);
-            }
-            SwitchDevices.Clear();
 
         }
 
@@ -383,8 +378,8 @@ namespace ASCOM.Simulator
 
         public static void SetupDialog(int clientNumber)
         {
-            TL.LogMessage(clientNumber, "SetupDialog", "Connected: " + IsConnected(clientNumber).ToString());
-            if (IsConnected(clientNumber))
+            TL.LogMessage(clientNumber, "SetupDialog", "Connected: " + IsHardwareConnected().ToString());
+            if (IsHardwareConnected())
             {
                 MessageBox.Show("Simulator is connected, setup parameters cannot be changed, please press OK");
             }
@@ -403,6 +398,11 @@ namespace ASCOM.Simulator
                     }
                     else TL.LogMessage(clientNumber, "SetupDialog", "Dialogue closed with Cancel status");
                 }
+                if (!(setupForm == null))
+                {
+                    setupForm.Dispose();
+                    setupForm = null;
+                }
             }
         }
 
@@ -416,17 +416,17 @@ namespace ASCOM.Simulator
 
         #region ASCOM ObservingConditions Methods
 
-        public static double AveragePeriod(int clientNumber)
+        public static double AveragePeriodGet(int clientNumber)
         {
-            double averagePeriod = GetDouble(PROPERTY_AVERAGEPERIOD);
-            TL.LogMessage(clientNumber, "AveragePeriod", averagePeriod.ToString());
-            return averagePeriod;
+            TL.LogMessage(clientNumber, "AveragePeriodGet", AveragePeriod.ToString());
+            return AveragePeriod;
         }
 
         public static void AveragePeriodSet(int clientNumber, double value)
         {
-            Sensors[PROPERTY_AVERAGEPERIOD].SimCurrentValue = value;
-            TL.LogMessage(clientNumber, "AveragePeriodSet", value.ToString());
+            AveragePeriod = value;
+            TL.LogMessage(clientNumber, "AveragePeriodSet", AveragePeriod.ToString());
+            ConfigureAveragePeriodTimer();
         }
 
         public static double CloudCover(int clientNumber)
@@ -481,9 +481,7 @@ namespace ASCOM.Simulator
 
         public static void Refresh(int clientNumber)
         {
-            // No action required for devices that are not connected
             // No action required for devices that are simulated
-            ;
         }
 
         public static double SkyBrightness(int clientNumber)
@@ -525,8 +523,7 @@ namespace ASCOM.Simulator
         {
             if (PropertyName == "") // Return the most recent update time of any sensor
             {
-                // For now just return 0.0 as this is true for simulated values
-                double timeSinceLastUpdate = 0.0;
+                double timeSinceLastUpdate = DateTime.Now.Subtract(mostRecentUpdateTime).TotalSeconds;
                 TL.LogMessage(clientNumber, "TimeSinceLastUpdate", "Most recent sensor update time: " + timeSinceLastUpdate.ToString());
                 return timeSinceLastUpdate;
             }
@@ -536,14 +533,15 @@ namespace ASCOM.Simulator
                 {
                     if (Sensors[PropertyName].IsImplemented) // Sensor is implemented
                     {
-                        if (DateTime.Now.Subtract(initialConnectionTime).TotalSeconds <= Sensors[PropertyName].NotReadyDelay) // Check whether the device is still initialising
+                        if (DateTime.Now.Subtract(initialConnectionTime).TotalSeconds < Sensors[PropertyName].NotReadyDelay) // Check whether the device is still initialising
                         {
                             return -1.0; // Still initialising so return a negative value        
                         }
                         else // 
                         {
-                            TL.LogMessage(clientNumber, "TimeSinceLastUpdate", PropertyName + ": " + Sensors[PropertyName].TimeSinceLastUpdate.ToString());
-                            return Sensors[PropertyName].TimeSinceLastUpdate; // Operating normally so return current value
+                            double timeSinceLastUpdate = DateTime.Now.Subtract(Sensors[PropertyName].TimeOfLastUpdate).TotalSeconds;
+                            TL.LogMessage(clientNumber, "TimeSinceLastUpdate", PropertyName + ": " + timeSinceLastUpdate.ToString());
+                            return timeSinceLastUpdate; // Operating normally so return current value
                         }
                     }
                     else throw new MethodNotImplementedException(PropertyName); // This sensor is not implemented
@@ -579,6 +577,98 @@ namespace ASCOM.Simulator
 
         #endregion
 
+        #region Timer event handlers
+
+        private static void AveragePeriodTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            foreach (string Property in SimulatedProperties)
+            {
+                Sensors[Property].Readings.Add(new TimeValue(now, Sensors[Property].SimCurrentValue));
+                int beforeTrim = Sensors[Property].Readings.Count;
+                Sensors[Property].Readings.RemoveAll(TimeRemovePredicate);
+                int afterTrim = Sensors[Property].Readings.Count;
+                if (DebugTraceState) TL.LogMessage("AveragePeriodTimer", Property + " reading added to reading collection. Before trim: " + beforeTrim + ", Aftertrim: " + afterTrim);
+            }
+        }
+
+        private static void RefreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            foreach (string Property in SimulatedProperties)
+            {
+                double fromValue = Sensors[Property].SimFromValue;
+                double toValue = Sensors[Property].SimToValue;
+                double currentValue = Sensors[Property].SimCurrentValue;
+                double sensorValueCycleTime = Sensors[Property].ValueCycleTime;
+                double newValue = 0.0;
+
+                switch (Sensors[Property].ValueCycleDirection)
+                {
+                    case ValueCycleDirections.FromTowardsTo: // Going from the From value towards the To Value
+                        newValue = currentValue + (toValue - fromValue) * (SensorQueryInterval / sensorValueCycleTime);
+                        if (toValue >= fromValue) // We are increasing in value going from From towards To
+                        {
+                            if (newValue > toValue) // We are out of bounds so reverse direction and reset to To value
+                            {
+                                newValue = toValue;
+                                Sensors[Property].ValueCycleDirection = ValueCycleDirections.ToTowardsFrom;
+                            }
+                            else // We are within in bounds so no further action required
+                            { }
+                        }
+                        else // We are decreasing in value as we go from From towards To
+                        {
+                            if (newValue < toValue) // We are out of bounds so reverse direction and reset to To value
+                            {
+                                newValue = toValue;
+                                Sensors[Property].ValueCycleDirection = ValueCycleDirections.ToTowardsFrom;
+                            }
+                            else // We are within in bounds so no further action required
+                            { }
+                        }
+                        break;
+                    case ValueCycleDirections.ToTowardsFrom: // Going from the To value towards the From value
+                        newValue = currentValue - (toValue - fromValue) * (SensorQueryInterval / sensorValueCycleTime);
+                        if (toValue >= fromValue) // We are increasing in value going from From towards To
+                        {
+                            if (newValue < fromValue) // We are out of bounds so reverse direction and reset to To value
+                            {
+                                newValue = fromValue;
+                                Sensors[Property].ValueCycleDirection = ValueCycleDirections.FromTowardsTo;
+                            }
+                            else // We are within in bounds so no further action required
+                            { }
+                        }
+                        else // We are decreasing in value as we go from From towards To
+                        {
+                            if (newValue > fromValue) // We are out of bounds so reverse direction and reset to To value
+                            {
+                                newValue = fromValue;
+                                Sensors[Property].ValueCycleDirection = ValueCycleDirections.FromTowardsTo;
+                            }
+                            else // We are within in bounds so no further action required
+                            { }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                mostRecentUpdateTime = DateTime.Now; // Set the last updated times
+                Sensors[Property].TimeOfLastUpdate = mostRecentUpdateTime;
+                Sensors[Property].SimCurrentValue = newValue; // Set the new simulator value
+
+                if (Property == PROPERTY_HUMIDITY)
+                {
+                    Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = mostRecentUpdateTime;
+                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = CalculateDewPoint(newValue); // Set the new simulator value
+                }
+
+            }
+        }
+
+        #endregion
+
         #region Basic infrastructure functions
         /// <summary>
         /// Returns a unique client numnber to the calling instance
@@ -592,25 +682,79 @@ namespace ASCOM.Simulator
 
         internal static bool IsValidProperty(string PropertyName)
         {
-            return ValidProperties.Contains(PropertyName.Trim(), StringComparer.OrdinalIgnoreCase); // Make the test case insensitive as well as leading and trailing space insensitive
+            return DriverProperties.Contains(PropertyName.Trim(), StringComparer.OrdinalIgnoreCase); // Make the test case insensitive as well as leading and trailing space insensitive
         }
 
         private static double GetDouble(string PropertyName)
         {
-            TL.LogMessage("GetDouble", PropertyName + ": " + Sensors[PropertyName].SimCurrentValue);
 
             if (Sensors[PropertyName].IsImplemented) // Sensor is implemented
             {
-                if (DateTime.Now.Subtract(initialConnectionTime).TotalSeconds <= Sensors[PropertyName].NotReadyDelay) // Check whether the device is still initialising
+                if (DateTime.Now.Subtract(initialConnectionTime).TotalSeconds >= Sensors[PropertyName].NotReadyDelay) // Check whether the device is still initialising
                 {
-                    throw new InvalidOperationException(PropertyName + " is not ready"); // Still initialising so throw InvalidOperationException
+                    // Sensor is initialised so return its value
+                    if (AveragePeriod == 0.0) // No averaging so just return current value
+                    {
+                        TL.LogMessage("GetDouble", PropertyName + " current value: " + Sensors[PropertyName].SimCurrentValue);
+                        return Sensors[PropertyName].SimCurrentValue;
+                    }
+                    else // Calculate the average and return this
+                    {
+                        double averageValue = 0.0;
+                        int numberOfSensorReadings = Sensors[PropertyName].Readings.Count;
+
+                        if (numberOfSensorReadings > 0.0) // There are one or more readings so calculate the average value
+                        {
+                            foreach (TimeValue tv in Sensors[PropertyName].Readings) // Add the sensor readings
+                            {
+                                averageValue += tv.SensorValue;
+                            }
+                            averageValue = averageValue / numberOfSensorReadings; // Calcualte the average sensor reading
+                        }
+                        else // There are no readings so just return the current value
+                        {
+                            averageValue = Sensors[PropertyName].SimCurrentValue;
+                        }
+
+                        TL.LogMessage("GetDouble", PropertyName + " average value: " + averageValue + ", from " + numberOfSensorReadings + " readings, AveragePeriod: " + AveragePeriod + " minutes.");
+                        return averageValue; // Return the average sensor value
+                    }
                 }
-                else // 
+                else
                 {
-                    return Sensors[PropertyName].SimCurrentValue; // Operating normally so return current value
+                    // Still initialising so throw InvalidOperationException
+                    TL.LogMessage("GetDouble", PropertyName + ": Sensor not ready");
+                    throw new InvalidOperationException(PropertyName + " sensor is not ready");
                 }
             }
-            throw new PropertyNotImplementedException(PropertyName, false);
+            else
+            {
+                // Not implemented so throw a PropertyNotImplementedException
+                TL.LogMessage("GetDouble", PropertyName + ": Sensor not implemented");
+                throw new PropertyNotImplementedException(PropertyName, false);
+            }
+        }
+
+        /// <summary>
+        /// Remove stale values from the collection of PC-Mount time difference measurements
+        /// </summary>
+        /// <param name="timevalue">The time value to test</param>
+        /// <returns>Boolean value indicating whether a particular time value shold be removed from the collection</returns>
+        private static bool TimeRemovePredicate(TimeValue timevalue)
+        {
+            return DateTime.Now.Subtract(timevalue.ObservationTime).TotalMinutes > AveragePeriod;
+        }
+
+        private static void ConfigureAveragePeriodTimer()
+        {
+            if (averagePeriodTimer.Enabled) averagePeriodTimer.Stop();
+            averagePeriodTimer.Interval = AveragePeriod * 60000.0 / NumberOfReadingsToAverage; // Averageperiod in minutes, convert to milliseocnds and divide by the number of readings required
+            if (IsHardwareConnected()) averagePeriodTimer.Enabled = true;
+        }
+
+        static double CalculateDewPoint(double humidity)
+        {
+            return humidity;
         }
 
         #endregion
@@ -631,17 +775,22 @@ namespace ASCOM.Simulator
 
                 // Initialise other variables from the Profile
                 DebugTraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, string.Empty, DEBUG_TRACE_DEFAULT));
-                CacheTime = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, CACHE_TIME_PROFILENAME, string.Empty, CACHE_TIME_DEFAULT.ToString()));
-                ConnectToDrivers = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, CONNECT_TO_DRIVERS_PROFILENAME, string.Empty, CONNECT_TO_DRIVERS_DEFAULT));
+                SensorQueryInterval = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, string.Empty, SENSOR_READ_PERIOD_DEFAULT));
+                AveragePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT));
+                NumberOfReadingsToAverage = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, string.Empty, NUMBER_OF_READINGS_DEFAULT));
 
                 // Initialise the sensor collection from the Profile
-                foreach (string Property in ValidProperties)
+                foreach (string Property in SimulatedProperties)
                 {
                     TL.LogMessage("ReadProfile", "Reading profile for: " + Property);
                     Sensors[Property].ReadProfile(driverProfile);
                 }
-
             }
+
+            Sensors[PROPERTY_DEWPOINT].IsImplemented = Sensors[PROPERTY_HUMIDITY].IsImplemented;
+            Sensors[PROPERTY_DEWPOINT].SimFromValue = Sensors[PROPERTY_HUMIDITY].SimFromValue;
+            Sensors[PROPERTY_DEWPOINT].SimToValue = Sensors[PROPERTY_HUMIDITY].SimToValue;
+            Sensors[PROPERTY_DEWPOINT].SimCurrentValue = Sensors[PROPERTY_HUMIDITY].SimCurrentValue;
         }
 
         /// <summary>
@@ -656,11 +805,12 @@ namespace ASCOM.Simulator
                 // Save the variable state to the Profile
                 driverProfile.WriteValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, TraceState.ToString());
                 driverProfile.WriteValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, DebugTraceState.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, CACHE_TIME_PROFILENAME, CacheTime.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, CONNECT_TO_DRIVERS_PROFILENAME, ConnectToDrivers.ToString());
+                driverProfile.WriteValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, SensorQueryInterval.ToString());
+                driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, AveragePeriod.ToString());
+                driverProfile.WriteValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, NumberOfReadingsToAverage.ToString());
 
                 // Save the sensor collection to the Profile
-                foreach (string Property in ValidProperties)
+                foreach (string Property in SimulatedProperties)
                 {
                     TL.LogMessage("WriteProfile", "Writing profile for: " + Property);
                     Sensors[Property].WriteProfile(driverProfile);
@@ -668,16 +818,5 @@ namespace ASCOM.Simulator
             }
         }
         #endregion
-
-        public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dic, Dictionary<TKey, TValue> dicToAdd)
-        {
-            dicToAdd.ForEach(x => dic.Add(x.Key, x.Value));
-        }
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
-        {
-            foreach (var item in source)
-                action(item);
-        }
     }
-
 }
