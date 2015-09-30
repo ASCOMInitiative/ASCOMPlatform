@@ -25,55 +25,81 @@ namespace ASCOM.Simulator
         /// </summary>
         public string SensorName { get; set; }
 
-        public bool ShowNotReady
-        {
-            get { return chkNotReady.Checked; }
-            set { chkNotReady.Checked = value; }
-        }
-
         public double NotReadyDelay
         {
-            get { return Convert.ToDouble(numDelay.Value); }
+            get
+            {
+                if (DesignMode) return 0.0;
+                else return Convert.ToDouble(numDelay.Value);
+            }
             set { numDelay.Value = Convert.ToDecimal(value); }
         }
 
         public bool SensorEnabled
         {
-            get { return chkEnabled.Checked; }
+            get
+            {
+                if (DesignMode) return true;
+                else return chkEnabled.Checked;
+            }
             set { chkEnabled.Checked = value; }
         }
 
         public double MinValue
         {
-            get { return Convert.ToDouble(txtMinValue.Text); }
+            get
+            {
+                if (DesignMode) return 0.0;
+                else return Convert.ToDouble(txtMinValue.Text);
+            }
             set { txtMinValue.Text = value.ToString(); }
+        }
+
+        public double ValueCycleTime
+        {
+            get
+            {
+                if (DesignMode) return 0.0;
+                else return Convert.ToDouble(numValueCycleTime.Value);
+            }
+            set { numValueCycleTime.Value = Convert.ToDecimal(value); }
         }
 
         public double MaxValue
         {
-            get { return Convert.ToDouble(txtMaxValue.Text); }
+            get
+            {
+                if (DesignMode) return 0.0;
+                else return Convert.ToDouble(txtMaxValue.Text);
+            }
             set { txtMaxValue.Text = value.ToString(); }
         }
 
         public bool EnabledCheckboxVisible
         {
-            get { return chkEnabled.Visible; }
+            get
+            {
+                if (DesignMode) return true;
+                else return chkEnabled.Visible;
+            }
             set { chkEnabled.Visible = value; }
         }
 
         public bool NotReadyControlsEnabled
         {
-            get { return chkNotReady.Enabled; }
+            get
+            {
+                if (DesignMode) return true;
+                else return txtMinValue.Enabled;
+            }
             set
             {
-                chkNotReady.Enabled = value;
                 numDelay.Enabled = value;
+                numValueCycleTime.Enabled = value;
                 txtMinValue.Enabled = value;
                 txtMaxValue.Enabled = value;
             }
         }
-
-
 
         /// <summary>
         /// should be done with an event, at present it's assumed that this is set
@@ -96,45 +122,21 @@ namespace ASCOM.Simulator
 
         private void ChkEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            CheckBox chk = (CheckBox)sender;
-            if (OCSimulator.setupForm != null)
+            if (!DesignMode)
             {
-                SensorView svHumidity = (SensorView)OCSimulator.setupForm.Controls["sensorViewHumidity"];
-                SensorView svThisSensor = (SensorView)OCSimulator.setupForm.Controls[this.Name];
-
-                TL.LogMessage("ChkEnabled_CheckedChanged", "Checked changed: " + chk.Name + " " + this.Name);
-                if (this.Name.Contains("DewPoint"))
+                CheckBox chk = (CheckBox)sender;
+                if (OCSimulator.setupForm != null)
                 {
-                    TL.LogMessage("ChkEnabled_CheckedChanged", "Found DewPoint");
-                    if (svHumidity != null)
-                    {
-                        if (chk.Checked != svHumidity.SensorEnabled)
-                        {
-                            TL.LogMessage("ChkEnabled_CheckedChanged", "Humidity is not the same as Dewpoint, alignining Humidity to DewPoint");
-                            svHumidity.SensorEnabled = chk.Checked;
-                        }
-                        else
-                        {
-                            TL.LogMessage("ChkEnabled_CheckedChanged", "Humidity is the same as Dewpoint, no action required");
-                        }
-                    }
-                    else TL.LogMessage("ChkEnabled_CheckedChanged", "Sensorview variable is null!");
-                    svHumidity.NotReadyControlsEnabled = chk.Checked;
+                    SensorView svThisSensor = (SensorView)OCSimulator.setupForm.Controls[this.Name];
+
+                    TL.LogMessage("ChkEnabled_CheckedChanged", "Checked changed: " + chk.Name + " " + this.Name);
+                    svThisSensor.NotReadyControlsEnabled = chk.Checked;
                 }
-                svThisSensor.NotReadyControlsEnabled = chk.Checked;
-            }
-            else
-            {
-                TL.LogMessage("ChkEnabled_CheckedChanged", "setupForm variable is null!");
+                else
+                {
+                    TL.LogMessage("ChkEnabled_CheckedChanged", "setupForm variable is null!");
+                }
             }
         }
-
-        /// <summary>
-        /// sets up the combo boxes and selects the current driver and device Id.
-        /// </summary>
-        public void InitUI()
-        {
-        }
-
     }
 }

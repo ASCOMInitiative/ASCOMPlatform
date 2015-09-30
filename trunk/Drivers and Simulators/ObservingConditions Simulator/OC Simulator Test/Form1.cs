@@ -162,7 +162,7 @@ namespace ASCOM.Simulator
             DisplaySensorDescription("WindSpeed");
             LogMessage(" ");
 
-            try { LogMessage("TimeSinceLastUpdate : " + driver.TimeSinceLastUpdate("")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("TimeSinceLastUpdate : " + driver.TimeSinceLastUpdate("").ToString("0.00")); } catch (Exception ex) { LogMessage(ex.Message); }
             DisplayTimeSinceLastUpdate("CloudCover");
             DisplayTimeSinceLastUpdate("DewPoint");
             DisplayTimeSinceLastUpdate("Humidity");
@@ -177,9 +177,6 @@ namespace ASCOM.Simulator
             DisplayTimeSinceLastUpdate("WindGust");
             DisplayTimeSinceLastUpdate("WindSpeed");
             LogMessage(" ");
-
-
-
 
         }
 
@@ -207,7 +204,7 @@ namespace ASCOM.Simulator
         {
             try
             {
-                LogMessage(sensor + " Time since last update: " + driver.TimeSinceLastUpdate(sensor));
+                LogMessage(sensor + " Time since last update: " + driver.TimeSinceLastUpdate(sensor).ToString("0.00"));
             }
             catch (MethodNotImplementedException)
             {
@@ -231,7 +228,7 @@ namespace ASCOM.Simulator
                 Type type = typeof(ObservingConditions);
                 PropertyInfo propertyInfo = type.GetProperty(PropertyName);
                 var observingConditionsValue = (double)propertyInfo.GetValue(driver, null);
-                LogMessage(PropertyName + " : " + observingConditionsValue);
+                LogMessage(PropertyName + " : " + observingConditionsValue.ToString("0.0"));
             }
 
             catch (TargetInvocationException ex)

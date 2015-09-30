@@ -24,28 +24,11 @@ namespace ASCOM.Simulator
 
         }
 
-
-        private void SetText(string text)
-        {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (this.lblNumberOfConnections.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(SetText);
-                this.Invoke(d, new object[] { text });
-            }
-            else
-            {
-                this.lblNumberOfConnections.Text = text;
-            }
-        }
-
         void refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
-                SetText("Number of connections: " + OCSimulator.ConnectionCount.ToString() + ", Objects: " + Server.ObjectsCount + ", ServerLocks: " + Server.ServerLockCount + ", Started by COM: " + Server.StartedByCOM);
+                SetControlPropertyThreadSafe(lblNumberOfConnections, "Text", "Number of connections: " + OCSimulator.ConnectionCount.ToString() + ", Objects: " + Server.ObjectsCount + ", ServerLocks: " + Server.ServerLockCount + ", Started by COM: " + Server.StartedByCOM);
             }
             catch (Exception ex)
             {
@@ -58,36 +41,23 @@ namespace ASCOM.Simulator
             this.Close();
         }
 
-        private delegate void SetControlPropertyThreadSafeDelegate(
-            Control control,
-            string propertyName,
-            object propertyValue);
+        private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
 
-        public static void SetControlPropertyThreadSafe(
-            Control control,
-            string propertyName,
-            object propertyValue)
+        public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
         {
             if (control.InvokeRequired)
             {
-                control.Invoke(new SetControlPropertyThreadSafeDelegate
-                (SetControlPropertyThreadSafe),
-                new object[] { control, propertyName, propertyValue });
+                control.Invoke(new SetControlPropertyThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, propertyValue });
             }
             else
             {
-                control.GetType().InvokeMember(
-                    propertyName,
-                    BindingFlags.SetProperty,
-                    null,
-                    control,
-                    new object[] { propertyValue });
+                control.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, control, new object[] { propertyValue });
             }
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.WindowState = FormWindowState.Minimized;
             Application.ThreadException += Application_ThreadException;
         }
 

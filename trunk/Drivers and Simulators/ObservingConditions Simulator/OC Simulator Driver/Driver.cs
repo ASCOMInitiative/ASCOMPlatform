@@ -23,6 +23,7 @@ namespace ASCOM.Simulator
 
         internal static TraceLoggerPlus TL; // Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
         private int clientNumber;
+        private bool clientIsConnected;
 
         #endregion
 
@@ -95,10 +96,12 @@ namespace ASCOM.Simulator
         {
             get
             {
-                return OCSimulator.IsConnected(clientNumber);
+                //return OCSimulator.IsConnected(clientNumber);
+                return clientIsConnected;
             }
             set
             {
+                clientIsConnected = value;
                 if (value) OCSimulator.Connect(clientNumber);
                 else OCSimulator.Disconnect(clientNumber);
             }
@@ -135,7 +138,7 @@ namespace ASCOM.Simulator
 
         public double AveragePeriod
         {
-            get { return OCSimulator.AveragePeriod(clientNumber); }
+            get { return OCSimulator.AveragePeriodGet(clientNumber); }
             set { OCSimulator.AveragePeriodSet(clientNumber, value); }
         }
 
