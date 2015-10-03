@@ -114,6 +114,9 @@
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOMProfile.vb">
       <Link>ASCOMProfile.vb</Link>
     </Compile>
+    <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Enums.vb">
+      <Link>Enums.vb</Link>
+    </Compile>
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\Exceptions.vb">
       <Link>Exceptions.vb</Link>
     </Compile>

@@ -98,7 +98,7 @@ Public Class DiagnosticsForm
             lblResult.Text = ""
             lblAction.Text = ""
 
-            lblMessage.Text = "Your diagnostic log will be created in:" & vbCrLf & vbCrLf & _
+            lblMessage.Text = "Your diagnostic log will be created in:" & vbCrLf & vbCrLf &
             System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
 
             btnLastLog.Enabled = False 'Disable last log button
@@ -154,13 +154,13 @@ Public Class DiagnosticsForm
             TL.LogMessage("UTCDate", Date.UtcNow)
             TL.LogMessage("Julian date", Date.UtcNow.ToOADate() + 2415018.5)
             TL.BlankLine()
-            TL.LogMessage("CurrentCulture", CultureInfo.CurrentCulture.EnglishName & _
-                                            " " & CultureInfo.CurrentCulture.Name & _
-                                            " Decimal Separator """ & CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & """" & _
+            TL.LogMessage("CurrentCulture", CultureInfo.CurrentCulture.EnglishName &
+                                            " " & CultureInfo.CurrentCulture.Name &
+                                            " Decimal Separator """ & CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & """" &
                                             " Number Group Separator """ & CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator & """")
-            TL.LogMessage("CurrentUICulture", CultureInfo.CurrentUICulture.EnglishName & _
-                                            " " & CultureInfo.CurrentUICulture.Name & _
-                                            " Decimal Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator & """" & _
+            TL.LogMessage("CurrentUICulture", CultureInfo.CurrentUICulture.EnglishName &
+                                            " " & CultureInfo.CurrentUICulture.Name &
+                                            " Decimal Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator & """" &
                                             " Number Group Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberGroupSeparator & """")
             TL.BlankLine()
 
@@ -391,7 +391,6 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("SOFATests", ex.ToString)
                 End Try
-
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratulations, all " & NMatches & " function tests passed!"
                 Else
@@ -506,7 +505,7 @@ Public Class DiagnosticsForm
         'Eo06a tests
         eo = SOFA.Eo06a(2400000.5, 53736.0)
 
-        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418337, 0.000000000000001)
+        CompareDouble("SOFATests", "Eo06a-eo", eo, -0.0013328823719418338, 0.000000000000001)
 
         'Atic13 tests
         ri = 2.7101215729690389
@@ -992,7 +991,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Switch Simulator"
             Sim.DeviceType = "Switch"
             Sim.Name = "ASCOM Switch V2 Simulator"
-            Sim.DriverVersion = "6.1"
+            Sim.DriverVersion = "6.2"
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -3431,11 +3430,9 @@ Public Class DiagnosticsForm
         Dim AstroRA, AstroDEC As Double
         Dim SiteLat, SiteLong, SiteElev As Double
         Dim TR As Transform.Transform = New Transform.Transform
-        Dim Earth As New BodyDescription
-        Dim tjd, RA, DEC As Double
-        Dim star As New CatEntry
+        Dim RA, DEC As Double
         Dim rc As Short
-        Dim Location As New SiteInfo, OnSurface3 As New OnSurface, Cat3 As New CatEntry3
+        Dim OnSurface3 As New OnSurface, Cat3 As New CatEntry3
 
         Try
             'RA and DEC
@@ -3453,42 +3450,21 @@ Public Class DiagnosticsForm
             TR.SiteLongitude = SiteLong
             TR.SiteTemperature = 10.0
             TR.Refraction = False
-
-            'Set up NOVAS parameters
-            tjd = Util.JulianDate
-            Earth.Name = "Earth"
-            Earth.Number = Body.Earth
-            Earth.Type = BodyType.MajorPlanet
-            star.RA = AstroRA
-            star.Dec = AstroDEC
-            Location.Height = SiteElev
-            Location.Latitude = SiteLat
-            Location.Longitude = SiteLong
-            Location.Pressure = 1000
-            Location.Temperature = 10
-
             TR.SetJ2000(AstroRA, AstroDEC)
-            rc = NOVAS.NOVAS2.TopoStar(tjd, Earth, 0, star, Location, RA, DEC) ' Compare to the NOVAS 2 prediction
-            TL.LogMessage("TransformTest", Name & ": Astrometric(" & Util.HoursToHMS(AstroRA, ":", ":", "", 3) & ", " & Util.DegreesToDMS(AstroDEC, ":", ":", "", 2) & _
-                                                     ") Topocentric(" & Util.HoursToHMS(RA, ":", ":", "", 3) & " DEC: " & Util.DegreesToDMS(DEC, ":", ":", "", 2) & ")")
-            TL.LogMessage("TransformTest", Name & " RA/DEC Actual  : " & Util.HoursToHMS(TR.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(TR.DECTopocentric, ":", ":", "", 3))
-            TL.LogMessage("TransformTest", Name & " RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
-            CompareDouble("TransformTest", Name & " Topocentric RA", TR.RATopocentric, RA, RATolerance, DoubleDisplayAs.HoursMinutesSeconds)
-            CompareDouble("TransformTest", Name & " Topocentric Dec", TR.DECTopocentric, DEC, DecTolerance, DoubleDisplayAs.DegreesMinutesSeconds)
 
-            Cat3.RA = star.RA
-            Cat3.Dec = star.Dec
-            OnSurface3.Height = Location.Height
-            OnSurface3.Latitude = Location.Latitude
-            OnSurface3.Longitude = Location.Longitude
-            OnSurface3.Pressure = Location.Pressure
-            OnSurface3.Temperature = Location.Temperature
+            Cat3.RA = AstroRA
+            Cat3.Dec = AstroDEC
+            OnSurface3.Height = SiteElev
+            OnSurface3.Latitude = SiteLat
+            OnSurface3.Longitude = SiteLong
+            OnSurface3.Pressure = 1000.0
+            OnSurface3.Temperature = 10.0
 
-            rc = Nov3.TopoStar(AstroUtil.JulianDateTT(0.0), AstroUtil.DeltaT, Cat3, OnSurface3, Accuracy.Full, RA, DEC)
-            TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Actual  : " & Util.HoursToHMS(TR.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(TR.DECTopocentric, ":", ":", "", 3))
-            TL.LogMessage("TransformTest", Name & " Novas3 RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
-            CompareDouble("TransformTest", Name & " Novas3 Topocentric RA", TR.RATopocentric, RA, RATolerance, DoubleDisplayAs.HoursMinutesSeconds)
-            CompareDouble("TransformTest", Name & " Novas3 Topocentric Dec", TR.DECTopocentric, DEC, DecTolerance, DoubleDisplayAs.DegreesMinutesSeconds)
+            rc = Nov31.TopoStar(AstroUtil.JulianDateTT(0.0), AstroUtil.DeltaT, Cat3, OnSurface3, Accuracy.Full, RA, DEC)
+            TL.LogMessage("TransformTest", Name & " Novas31 RA/DEC Actual  : " & Util.HoursToHMS(TR.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(TR.DECTopocentric, ":", ":", "", 3))
+            TL.LogMessage("TransformTest", Name & " Novas31 RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
+            CompareDouble("TransformTest", Name & " Novas31 Topocentric RA", TR.RATopocentric, RA, RATolerance, DoubleDisplayAs.HoursMinutesSeconds)
+            CompareDouble("TransformTest", Name & " Novas31 Topocentric Dec", TR.DECTopocentric, DEC, DecTolerance, DoubleDisplayAs.DegreesMinutesSeconds)
 
         Catch ex As Exception
             LogException("TransformTest2000 Exception", ex.ToString)
@@ -3500,59 +3476,59 @@ Public Class DiagnosticsForm
         Dim JD As Double
         Dim EA As New ASCOM.Astrometry.NOVASCOM.Earth
 
-        Dim Mercury() As Double = New Double() {-0.146477263357071, -0.739730529540394, -0.275237058490435, _
-                                                -0.146552680905756, -0.73971718813053, -0.275232768188589, _
-                                                -0.144373027430296, -0.740086172152297, -0.275392756115203, _
-                                                -0.146535954004373, -0.739695817952422, -0.27526565650813, _
+        Dim Mercury() As Double = New Double() {-0.146477263357071, -0.739730529540394, -0.275237058490435,
+                                                -0.146552680905756, -0.73971718813053, -0.275232768188589,
+                                                -0.144373027430296, -0.740086172152297, -0.275392756115203,
+                                                -0.146535954004373, -0.739695817952422, -0.27526565650813,
                                                 -0.144631609584528, -0.740282847942203, -0.274694144671298}
 
-        Dim Venus() As Double = New Double() {-0.372100971951828, -0.449343256389233, -0.154902566021356, _
-                                              -0.372134026409355, -0.449318563980132, -0.154894786229779, _
-                                              -0.370822518399929, -0.450260651717891, -0.155303914026952, _
-                                              -0.372117531588399, -0.449297391719315, -0.154927789061455, _
+        Dim Venus() As Double = New Double() {-0.372100971951828, -0.449343256389233, -0.154902566021356,
+                                              -0.372134026409355, -0.449318563980132, -0.154894786229779,
+                                              -0.370822518399929, -0.450260651717891, -0.155303914026952,
+                                              -0.372117531588399, -0.449297391719315, -0.154927789061455,
                                               -0.370858459989012, -0.450324120624622, -0.154965842632926}
 
-        Dim Earth() As Double = New Double() {-0.147896190667482, 0.892857938625284, 0.387075601638547, _
-                                             -0.0173032744107731, -0.00236387487195205, -0.00102513648587834, _
-                                             -0.143537477185852, 0.892578667572019, 0.386954522818712, _
-                                             -0.0173040812547209, -0.00235851019511069, -0.00102281061381548, _
-                                             2455560.875, 1.06091018181116, 23.437861319031, _
+        Dim Earth() As Double = New Double() {-0.147896190667482, 0.892857938625284, 0.387075601638547,
+                                             -0.0173032744107731, -0.00236387487195205, -0.00102513648587834,
+                                             -0.143537477185852, 0.892578667572019, 0.386954522818712,
+                                             -0.0173040812547209, -0.00235851019511069, -0.00102281061381548,
+                                             2455560.875, 1.06091018181116, 23.437861319031,
                                              17.3476127157785, -0.0796612008211573, 23.4378391909196}
 
-        Dim Mars() As Double = New Double() {0.693859781031977, -2.07097170353203, -0.942316778727103, _
-                                             0.693632762626122, -2.07103494950845, -0.942344911675691, _
-                                             0.699920307729267, -2.06926836488007, -0.941576391467848, _
-                                             0.693650157043109, -2.07101326327704, -0.942377215846966, _
+        Dim Mars() As Double = New Double() {0.693859781031977, -2.07097170353203, -0.942316778727103,
+                                             0.693632762626122, -2.07103494950845, -0.942344911675691,
+                                             0.699920307729267, -2.06926836488007, -0.941576391467848,
+                                             0.693650157043109, -2.07101326327704, -0.942377215846966,
                                              0.694585522035482, -2.07602310877394, -0.930591370257697}
 
-        Dim Jupiter() As Double = New Double() {5.05143975731352, -0.264744225667142, -0.237337980646129, _
-                                                5.05143226054377, -0.264839400889264, -0.237391349301542, _
-                                                5.05234611594448, -0.252028458651431, -0.231824986961043, _
-                                                5.05144816590343, -0.264820597160675, -0.237424161148292, _
+        Dim Jupiter() As Double = New Double() {5.05143975731352, -0.264744225667142, -0.237337980646129,
+                                                5.05143226054377, -0.264839400889264, -0.237391349301542,
+                                                5.05234611594448, -0.252028458651431, -0.231824986961043,
+                                                5.05144816590343, -0.264820597160675, -0.237424161148292,
                                                 5.05236200971188, -0.252009614615973, -0.231857781296635}
 
-        Dim Saturn() As Double = New Double() {-9.26931711919579, -2.66882658902422, -0.715270438185988, _
-                                               -9.2693570741403, -2.66869165249896, -0.715256117911115, _
-                                               -9.26176606870019, -2.69218837105073, -0.725464045762982, _
-                                               -9.2693389177143, -2.66867733760923, -0.71528954188717, _
+        Dim Saturn() As Double = New Double() {-9.26931711919579, -2.66882658902422, -0.715270438185988,
+                                               -9.2693570741403, -2.66869165249896, -0.715256117911115,
+                                               -9.26176606870019, -2.69218837105073, -0.725464045762982,
+                                               -9.2693389177143, -2.66867733760923, -0.71528954188717,
                                                -9.26144908836291, -2.69455677562765, -0.720448748375586}
 
-        Dim Uranus() As Double = New Double() {20.2306046509148, -0.944778087940209, -0.693874737147122, _
-                                                  20.2305809175823, -0.945147799559502, -0.694063183048263, _
-                                                  20.233665104794, -0.893841634639764, -0.671770710247389, _
-                                                  20.2305964586587, -0.945137337897977, -0.694095638580723, _
+        Dim Uranus() As Double = New Double() {20.2306046509148, -0.944778087940209, -0.693874737147122,
+                                                  20.2305809175823, -0.945147799559502, -0.694063183048263,
+                                                  20.233665104794, -0.893841634639764, -0.671770710247389,
+                                                  20.2305964586587, -0.945137337897977, -0.694095638580723,
                                                   20.2336806550414, -0.893831133568696, -0.671803148655406}
 
-        Dim Neptune() As Double = New Double() {25.5771370144156, -15.409403535665, -6.96191248591339, _
-                                                25.5759958639324, -15.4109792947898, -6.96261684888268, _
-                                                25.6226500915255, -15.3460649228334, -6.93440511594961, _
-                                                25.5760116932439, -15.4109610670775, -6.96264327213014, _
+        Dim Neptune() As Double = New Double() {25.5771370144156, -15.409403535665, -6.96191248591339,
+                                                25.5759958639324, -15.4109792947898, -6.96261684888268,
+                                                25.6226500915255, -15.3460649228334, -6.93440511594961,
+                                                25.5760116932439, -15.4109610670775, -6.96264327213014,
                                                 25.6226659036666, -15.3460466550117, -6.93443152177256}
 
-        Dim Pluto() As Double = New Double() {2.92990303317673, -31.0320730022551, -10.6309560278551, _
-                                              2.92658680141819, -31.0323439400104, -10.6310785882777, _
-                                              3.01698355034971, -31.0248119250537, -10.627792242015, _
-                                              2.92662685257385, -31.0323223789174, -10.6311050132883, _
+        Dim Pluto() As Double = New Double() {2.92990303317673, -31.0320730022551, -10.6309560278551,
+                                              2.92658680141819, -31.0323439400104, -10.6310785882777,
+                                              3.01698355034971, -31.0248119250537, -10.627792242015,
+                                              2.92662685257385, -31.0323223789174, -10.6311050132883,
                                               2.99849040874885, -31.0401256627947, -10.5882115993866}
 
         Try
@@ -3580,17 +3556,17 @@ Public Class DiagnosticsForm
 
             JD = TestJulianDate()
             pv = st.GetAstrometricPosition(JD)
-            Dim AstroResults() As Double = New Double() {9.0, 25.0, 2062648062470.13, 0.0, 11912861640.6606, -1321861174769.38, 1321861174768.63, 871712738743.913, _
+            Dim AstroResults() As Double = New Double() {9.0, 25.0, 2062648062470.13, 0.0, 11912861640.6606, -1321861174769.38, 1321861174768.63, 871712738743.913,
                                                     9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
             ComparePosVec("NovasCom Astrometric", st, pv, AstroResults, False, TOLERANCE_E9)
 
-            Dim TopoNoReractResults() As Double = New Double() {9.01140781883559, 24.9535152700125, 2062648062470.13, 14.2403113213804, 11912861640.6606, -1326304233902.68, 1318405625773.8, 870195790998.564, _
+            Dim TopoNoReractResults() As Double = New Double() {9.01140781883559, 24.9535152700125, 2062648062470.13, 14.2403113213804, 11912861640.6606, -1326304233902.68, 1318405625773.8, 870195790998.564,
                                         9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
             pv = st.GetTopocentricPosition(JD, s, False)
             ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, True, TOLERANCE_E9)
             pv = st.GetTopocentricPosition(JD, s, True)
 
-            Dim TopoReractResults() As Double = New Double() {9.01438008140491, 25.0016930437008, 2062648062470.13, 14.3031953401364, 11912861640.6606, -1326809918883.5, 1316857267239.29, 871767977436.204, _
+            Dim TopoReractResults() As Double = New Double() {9.01438008140491, 25.0016930437008, 2062648062470.13, 14.3031953401364, 11912861640.6606, -1326809918883.5, 1316857267239.29, 871767977436.204,
                                                               9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 
             ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, True, TOLERANCE_E9)
@@ -3718,10 +3694,10 @@ Public Class DiagnosticsForm
 
     Sub KeplerTests()
         Dim JD As Double
-        Dim MercuryPosVecs(,) As Double = New Double(,) {{-0.273826054895093, -0.332907079792611, -0.149433886467295, 0.0168077277855921, -0.0131641564589086, -0.00877483629689174}, _
-                                                 {0.341715100611224, -0.15606206441965, -0.118796704430727, 0.00818341889620433, 0.0231859105741514, 0.0115367662530341}, _
-                                                 {-0.290111477510344, 0.152752021696643, 0.11167615364006, -0.0208610666648984, -0.0207283399022831, -0.00890975564191571}, _
-                                                 {-0.0948016996541467, -0.407064938162915, -0.207618339106762, 0.0218998992953613, -0.00301004943316363, -0.00387841048587606}, _
+        Dim MercuryPosVecs(,) As Double = New Double(,) {{-0.273826054895093, -0.332907079792611, -0.149433886467295, 0.0168077277855921, -0.0131641564589086, -0.00877483629689174},
+                                                 {0.341715100611224, -0.15606206441965, -0.118796704430727, 0.00818341889620433, 0.0231859105741514, 0.0115367662530341},
+                                                 {-0.290111477510344, 0.152752021696643, 0.11167615364006, -0.0208610666648984, -0.0207283399022831, -0.00890975564191571},
+                                                 {-0.0948016996541467, -0.407064938162915, -0.207618339106762, 0.0218998992953613, -0.00301004943316363, -0.00387841048587606},
                                                  {0.335104649167322, 0.0711444942030144, 0.00326561005720837, -0.0109228475729584, 0.0251353246085599, 0.0145593566074213}}
         Status("Kepler Tests")
         JD = TestJulianDate()
@@ -4345,6 +4321,20 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
+    Private Sub CompareWithin(p_Section As String, p_Name As String, p_Value As Double, p_LowerBound As Double, p_UpperBound As Double)
+        Dim ErrMsg As String
+        If (p_Value >= p_LowerBound) And (p_Value <= p_UpperBound) Then
+            TL.LogMessage(p_Section, "Matched " & p_Name & " value: " & p_Value & " is within the range: " & p_LowerBound & " to " & p_UpperBound)
+            NMatches += 1
+        Else
+            ErrMsg = "##### NOT Matched - " & p_Name & " value: " & p_Value & " is outside the range: " & p_LowerBound & " to " & p_UpperBound
+            NMatches += 1
+            TL.LogMessageCrLf(p_Section, ErrMsg)
+            NNonMatches += 1
+            ErrorList.Add(p_Section & " - " & ErrMsg)
+        End If
+    End Sub
+
     Private Sub VideoUtilsTests()
         Dim NH As Video.NativeHelpers
         Dim rc As Integer
@@ -4833,6 +4823,208 @@ Public Class DiagnosticsForm
             TimingTest(2000, Is64Bit)
             TL.BlankLine()
 
+            ' Test conversion funcitons
+            CompareDouble("UtilTests", "DewPoint2Humidity", Utl.DewPoint2Humidity(20.0, 25.0), 73.81, TOLERANCE_E4)
+            CompareDouble("UtilTests", "Humidity2DewPoint", Utl.Humidity2DewPoint(45.0, 5.0), -5.948, TOLERANCE_E4)
+
+            'Test that invalid values are rejected by dewpoint and humidity conversion functions
+            Dim result As Double, ErrMsg As String
+
+            Try
+                result = Utl.DewPoint2Humidity(-300.0, 25.0)
+                ErrMsg = "##### DewPoint2Humidity - InvalidValueException not thrown when dew point < absolute zero"
+                TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+
+            Catch ex As InvalidValueException ' Expected behaviour for bad value
+                TL.LogMessage("UtilTests", "DewPoint2Humidity - InvalidValueException thrown as expected when dew point < absolute zero")
+                NMatches += 1
+
+            Catch ex As Exception
+                ErrMsg = "##### DewPoint2Humidity - InvalidValueException not thrown when dew point < absolute zero" & ", instead received: " & ex.Message
+                TL.LogMessageCrLf("UtilTests", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+            End Try
+
+            Try
+                result = Utl.DewPoint2Humidity(101.0, 25.0)
+                ErrMsg = "##### DewPoint2Humidity - InvalidValueException not thrown when dew point > 100.0C"
+                TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+
+            Catch ex As InvalidValueException ' Expected behaviour for bad value
+                TL.LogMessage("UtilTests", "DewPoint2Humidity - InvalidValueException thrown as expected when dew point > 100.0C")
+                NMatches += 1
+
+            Catch ex As Exception
+                ErrMsg = "##### DewPoint2Humidity - InvalidValueException not thrown when dew point > 100.0C" & ", instead received: " & ex.Message
+                TL.LogMessageCrLf("UtilTests", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+            End Try
+
+            Try
+                result = Utl.DewPoint2Humidity(25.0, -300.0)
+                ErrMsg = "##### DewPoint2Humidity - InvalidValueException not thrown when ambient temperature < absolute zero"
+                TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+
+            Catch ex As InvalidValueException ' Expected behaviour for bad value
+                TL.LogMessage("UtilTests", "DewPoint2Humidity - InvalidValueException thrown as expected when ambient temperature < absolute zero")
+                NMatches += 1
+
+            Catch ex As Exception
+                ErrMsg = "##### DewPoint2Humidity - InvalidValueException not thrown when ambient temperature < absolute zero" & ", instead received: " & ex.Message
+                TL.LogMessageCrLf("UtilTests", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+            End Try
+
+            Try
+                result = Utl.DewPoint2Humidity(25.0, 101.0)
+                ErrMsg = "##### DewPoint2Humidity - InvalidValueException not thrown when ambient temperature > 100.0C"
+                TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+
+            Catch ex As InvalidValueException ' Expected behaviour for bad value
+                TL.LogMessage("UtilTests", "DewPoint2Humidity - InvalidValueException thrown as expected when ambient temperature > 100.0C")
+                NMatches += 1
+
+            Catch ex As Exception
+                ErrMsg = "##### DewPoint2Humidity - InvalidValueException not thrown when ambient temperature > 100.0C" & ", instead received: " & ex.Message
+                TL.LogMessageCrLf("UtilTests", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+            End Try
+
+            Try
+                result = Utl.Humidity2DewPoint(-1.0, 25.0)
+                ErrMsg = "##### Humidity2DewPoint - InvalidValueException not thrown when humidity < 0.0"
+                TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+
+            Catch ex As InvalidValueException ' Expected behaviour for bad value
+                TL.LogMessage("UtilTests", "Humidity2DewPoint - InvalidValueException thrown as expected when humidity < 0.0")
+                NMatches += 1
+
+            Catch ex As Exception
+                ErrMsg = "##### Humidity2DewPoint - InvalidValueException not thrown when humidity < 0.0" & ", instead received: " & ex.Message
+                TL.LogMessageCrLf("UtilTests", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+            End Try
+
+            Try
+                result = Utl.DewPoint2Humidity(101.0, 25.0)
+                ErrMsg = "##### Humidity2DewPoint - InvalidValueException not thrown when humidity > 100.0%"
+                TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+
+            Catch ex As InvalidValueException ' Expected behaviour for bad value
+                TL.LogMessage("UtilTests", "Humidity2DewPoint - InvalidValueException thrown as expected when humidity > 100.0%")
+                NMatches += 1
+
+            Catch ex As Exception
+                ErrMsg = "##### Humidity2DewPoint - InvalidValueException not thrown when humidity > 100.0%" & ", instead received: " & ex.Message
+                TL.LogMessageCrLf("UtilTests", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+            End Try
+
+            Try
+                result = Utl.DewPoint2Humidity(25.0, -300.0)
+                ErrMsg = "##### Humidity2DewPoint - InvalidValueException not thrown when ambient temperature < absolute zero"
+                TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+
+            Catch ex As InvalidValueException ' Expected behaviour for bad value
+                TL.LogMessage("UtilTests", "Humidity2DewPoint - InvalidValueException thrown as expected when ambient temperature < absolute zero")
+                NMatches += 1
+
+            Catch ex As Exception
+                ErrMsg = "##### Humidity2DewPoint - InvalidValueException not thrown when ambient temperature < absolute zero" & ", instead received: " & ex.Message
+                TL.LogMessageCrLf("UtilTests", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+            End Try
+
+            Try
+                result = Utl.DewPoint2Humidity(25.0, 101.0)
+                ErrMsg = "##### Humidity2DewPoint - InvalidValueException not thrown when ambient temperature > 100.0C"
+                TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+
+            Catch ex As InvalidValueException ' Expected behaviour for bad value
+                TL.LogMessage("UtilTests", "Humidity2DewPoint - InvalidValueException thrown as expected when ambient temperature > 100.0C")
+                NMatches += 1
+
+            Catch ex As Exception
+                ErrMsg = "##### Humidity2DewPoint - InvalidValueException not thrown when ambient temperature > 100.0C" & ", instead received: " & ex.Message
+                TL.LogMessageCrLf("UtilTests", ErrMsg)
+                NNonMatches += 1
+                ErrorList.Add("UtilTests" & " - " & ErrMsg)
+            End Try
+
+            CompareDouble("UtilTests", "metresPerSecond==>metresPerSecond", Utl.ConvertUnits(10.0, Units.metresPerSecond, Units.metresPerSecond), 10.0, TOLERANCE_E4)
+            CompareDouble("UtilTests", "metresPerSecond==>milesPerHour", Utl.ConvertUnits(10.0, Units.metresPerSecond, Units.milesPerHour), 22.36936, TOLERANCE_E4)
+            CompareDouble("UtilTests", "metresPerSecond==>knots", Utl.ConvertUnits(10.0, Units.metresPerSecond, Units.knots), 19.438461718, TOLERANCE_E4) ' These are Knots and not UK or US admiralty knots, which are slightly different!
+            CompareDouble("UtilTests", "milesPerHour==>metresPerSecond", Utl.ConvertUnits(10.0, Units.milesPerHour, Units.metresPerSecond), 4.4704, TOLERANCE_E4)
+            CompareDouble("UtilTests", "knots==>metresPerSecond", Utl.ConvertUnits(10.0, Units.knots, Units.metresPerSecond), 5.14444, TOLERANCE_E4)
+
+            CompareDouble("UtilTests", "Degrees K==>Degrees K", Utl.ConvertUnits(300.0, Units.degreesKelvin, Units.degreesKelvin), 300.0, TOLERANCE_E4)
+            CompareDouble("UtilTests", "Degrees K==>Degrees F", Utl.ConvertUnits(300.0, Units.degreesKelvin, Units.degreesFarenheit), 80.33, TOLERANCE_E4)
+            CompareDouble("UtilTests", "Degrees K==>Degrees C", Utl.ConvertUnits(300.0, Units.degreesKelvin, Units.degreesCelsius), 26.85, TOLERANCE_E4)
+            CompareDouble("UtilTests", "Degrees F==>Degrees K", Utl.ConvertUnits(70.0, Units.degreesFarenheit, Units.degreesKelvin), 294.26, TOLERANCE_E4)
+            CompareDouble("UtilTests", "Degrees C==>Degrees K", Utl.ConvertUnits(20.0, Units.degreesCelsius, Units.degreesKelvin), 293.15, TOLERANCE_E4)
+
+            CompareDouble("UtilTests", "hPa==>hPa", Utl.ConvertUnits(1000.0, Units.hPa, Units.hPa), 1000.0, TOLERANCE_E4)
+            CompareDouble("UtilTests", "hPa==>mBar", Utl.ConvertUnits(1000.0, Units.hPa, Units.mBar), 1000.0, TOLERANCE_E4)
+            CompareDouble("UtilTests", "hPa==>mmHg", Utl.ConvertUnits(1000.0, Units.hPa, Units.mmHg), 750.0615, TOLERANCE_E4)
+            CompareDouble("UtilTests", "hPa==>inHg", Utl.ConvertUnits(1000.0, Units.hPa, Units.inHg), 29.53, TOLERANCE_E4)
+            CompareDouble("UtilTests", "mBar==>hPa", Utl.ConvertUnits(1000.0, Units.mBar, Units.hPa), 1000.0, TOLERANCE_E4)
+            CompareDouble("UtilTests", "mmHg==>hPa", Utl.ConvertUnits(800.0, Units.mmHg, Units.hPa), 1066.58, TOLERANCE_E4)
+            CompareDouble("UtilTests", "inHg==>hPa", Utl.ConvertUnits(30.0, Units.inHg, Units.hPa), 1015.92, TOLERANCE_E4)
+
+            CompareDouble("UtilTests", "mmPerHour==>mmPerHour", Utl.ConvertUnits(100.0, Units.mmPerHour, Units.mmPerHour), 100.0, TOLERANCE_E4)
+            CompareDouble("UtilTests", "mmPerHour==>inPerHour", Utl.ConvertUnits(100.0, Units.mmPerHour, Units.inPerHour), 3.937, TOLERANCE_E4)
+            CompareDouble("UtilTests", "inPerHour==>mmPerHour", Utl.ConvertUnits(10.0, Units.inPerHour, Units.mmPerHour), 254.0, TOLERANCE_E4)
+
+            CompareDouble("UtilTests", "ConvertPressure 0.0 ==> 0.0", Utl.ConvertPressure(1000.0, 0.0, 0.0), 1000.0, TOLERANCE_E4)
+            CompareDouble("UtilTests", "ConvertPressure 3000.0 ==> 3000.0", Utl.ConvertPressure(1000.0, 3000.0, 3000.0), 1000.0, TOLERANCE_E4)
+            CompareDouble("UtilTests", "ConvertPressure 0.0 ==> 3000.0", Utl.ConvertPressure(1000.0, 0.0, 3000.0), 691.92, TOLERANCE_E4)
+            CompareDouble("UtilTests", "ConvertPressure 3000.0 ==> 0.0", Utl.ConvertPressure(700.0, 3000.0, 0.0), 1011.68, TOLERANCE_E4)
+            CompareDouble("UtilTests", "ConvertPressure 3000.0 ==> 1000.0", Utl.ConvertPressure(700.0, 3000.0, 1000.0), 897.35, TOLERANCE_E4)
+
+            TestUnitsInvalidOperation(Utl, Units.metresPerSecond, Units.degreesCelsius)
+            TestUnitsInvalidOperation(Utl, Units.metresPerSecond, Units.hPa)
+            TestUnitsInvalidOperation(Utl, Units.metresPerSecond, Units.mmPerHour)
+
+            TestUnitsInvalidOperation(Utl, Units.degreesCelsius, Units.milesPerHour)
+            TestUnitsInvalidOperation(Utl, Units.degreesCelsius, Units.mBar)
+            TestUnitsInvalidOperation(Utl, Units.degreesCelsius, Units.inPerHour)
+
+            TestUnitsInvalidOperation(Utl, Units.mmHg, Units.knots)
+            TestUnitsInvalidOperation(Utl, Units.mmHg, Units.degreesFarenheit)
+            TestUnitsInvalidOperation(Utl, Units.mmHg, Units.mmPerHour)
+
+            TestUnitsInvalidOperation(Utl, Units.inPerHour, Units.metresPerSecond)
+            TestUnitsInvalidOperation(Utl, Units.inPerHour, Units.degreesKelvin)
+            TestUnitsInvalidOperation(Utl, Units.inPerHour, Units.hPa)
+
+
+
+
+
+
             Try
                 Utl.Dispose()
                 TL.LogMessage("UtilTests", "ASCOM.Utilities.Dispose, Disposed OK")
@@ -4859,6 +5051,28 @@ Public Class DiagnosticsForm
             LogException("UtilTests", "Exception: " & ex.ToString)
         End Try
 
+    End Sub
+
+    Private Sub TestUnitsInvalidOperation(Util As Util, FromUnit As Units, ToUnit As Units)
+        Dim result As Double, ErrMsg As String
+
+        Try
+            result = Util.ConvertUnits(0.0, FromUnit, ToUnit)
+            ErrMsg = "##### InvalidOperationException not thrown - FromUnit: " & FromUnit.ToString() & ", ToUnit: " & ToUnit.ToString()
+            TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+            NNonMatches += 1
+            ErrorList.Add("TestInvalidOperation" & " - " & ErrMsg)
+
+        Catch ex As InvalidOperationException ' Expected behaviour for mismatched types of unit
+            TL.LogMessage("TestInvalidOperation", "InvalidOperationException thrown as expected for FromUnit: " & FromUnit.ToString() & ", ToUnit: " & ToUnit.ToString())
+            NMatches += 1
+
+        Catch ex As Exception
+            ErrMsg = "##### InvalidOperationException not thrown - FromUnit: " & FromUnit.ToString() & ", ToUnit: " & ToUnit.ToString() & ", instead received: " & ex.Message
+            TL.LogMessageCrLf("TestInvalidOperation", ErrMsg)
+            NNonMatches += 1
+            ErrorList.Add("TestInvalidOperation" & " - " & ErrMsg)
+        End Try
     End Sub
 
     Private Sub CheckArray(InputObject As Object)
@@ -4947,11 +5161,11 @@ Public Class DiagnosticsForm
                 ELog = New EventLog(EVENTLOG_NAME, ".", EVENT_SOURCE)
                 Entries = ELog.Entries
                 For Each Entry As EventLogEntry In Entries
-                    TL.LogMessageCrLf("ScanEventLog", Entry.TimeGenerated & " " & _
-                                                      Entry.Source & " " & _
-                                                      Entry.EntryType.ToString & " " & _
-                                                      Entry.UserName & " " & _
-                                                      Entry.InstanceId & " " & _
+                    TL.LogMessageCrLf("ScanEventLog", Entry.TimeGenerated & " " &
+                                                      Entry.Source & " " &
+                                                      Entry.EntryType.ToString & " " &
+                                                      Entry.UserName & " " &
+                                                      Entry.InstanceId & " " &
                                                       Entry.Message.Trim(New Char() {Chr(10), Chr(13)}))
                 Next
                 TL.LogMessage("ScanEventLog", "ASCOM Log entries complete")
@@ -5065,11 +5279,11 @@ Public Class DiagnosticsForm
             sec = SKey.GetAccessControl() 'System.Security.AccessControl.AccessControlSections.All)
 
             For Each RegRule As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount)) 'Iterate over the rule set and list them
-                TL.LogMessage("RegistrySecurity", RegRule.AccessControlType.ToString() & " " & _
-                                                  RegRule.IdentityReference.ToString() & " " & _
-                                                  RegRule.RegistryRights.ToString() & " / " & _
-                                                  IIf(RegRule.IsInherited.ToString(), "Inherited", "NotInherited") & " / " & _
-                                                  RegRule.InheritanceFlags.ToString() & " / " & _
+                TL.LogMessage("RegistrySecurity", RegRule.AccessControlType.ToString() & " " &
+                                                  RegRule.IdentityReference.ToString() & " " &
+                                                  RegRule.RegistryRights.ToString() & " / " &
+                                                  IIf(RegRule.IsInherited.ToString(), "Inherited", "NotInherited") & " / " &
+                                                  RegRule.InheritanceFlags.ToString() & " / " &
                                                   RegRule.PropagationFlags.ToString())
                 If (RegRule.IdentityReference.ToString.ToUpper = GetBuiltInUsers().ToUpper) And (RegRule.RegistryRights = RegistryRights.FullControl) Then
                     FoundFullAccess = True
@@ -5105,8 +5319,8 @@ Public Class DiagnosticsForm
 
         Try
 
-            Searcher = New ManagementObjectSearcher(New ManagementScope("\\localhost\root\cimv2"), _
-                                                    New WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"), _
+            Searcher = New ManagementObjectSearcher(New ManagementScope("\\localhost\root\cimv2"),
+                                                    New WqlObjectQuery("Select * From Win32_Account Where SID = 'S-1-5-32'"),
                                                     Nothing)
 
             For Each wmiClass In Searcher.Get
@@ -5122,8 +5336,8 @@ Public Class DiagnosticsForm
         End Try
 
         Try
-            Searcher = New ManagementObjectSearcher(New ManagementScope("\\localhost\root\cimv2"), _
-                                                    New WqlObjectQuery("Select * From Win32_Group Where SID = 'S-1-5-32-545'"), _
+            Searcher = New ManagementObjectSearcher(New ManagementScope("\\localhost\root\cimv2"),
+                                                    New WqlObjectQuery("Select * From Win32_Group Where SID = 'S-1-5-32-545'"),
                                                     Nothing)
 
             For Each wmiClass In Searcher.Get
@@ -5783,9 +5997,9 @@ Public Class DiagnosticsForm
                         Try
                             Dim U As New Uri(ass.GetName.CodeBase)
                             Dim LocalPath As String = U.LocalPath
-                            If (LocalPath.ToUpper.Contains("\ASCOM.DRIVERACCESS\6") Or _
-                                LocalPath.ToUpper.Contains("\ASCOM.UTILITIES\6") Or _
-                                LocalPath.ToUpper.Contains("\ASCOM.ASTROMETRY\6") Or _
+                            If (LocalPath.ToUpper.Contains("\ASCOM.DRIVERACCESS\6") Or
+                                LocalPath.ToUpper.Contains("\ASCOM.UTILITIES\6") Or
+                                LocalPath.ToUpper.Contains("\ASCOM.ASTROMETRY\6") Or
                                 LocalPath.ToUpper.Contains("\ASCOM.DEVICEINTERFACES\6")) Then
                                 AscomGACPaths.Add(LocalPath)
                             Else
@@ -6647,8 +6861,8 @@ Public Class DiagnosticsForm
             CompareDouble("AstroUtilTests", "Range 0:359.999 360.0", AstroUtil2.Range(360.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
             CompareDouble("AstroUtilTests", "Range 0:360.0 360.0", AstroUtil2.Range(360.0, 0.0, True, 360.0, True), 360.0, TOLERANCE_E6)
 
-            CompareBoolean("AstroUtilTests", "DeltaT", (AstroUtil2.DeltaT() >= 67.0) And (AstroUtil2.DeltaT() <= 69.0), True)
-            CompareBoolean("AstroUtilTests", "DeltaUT", (AstroUtil2.DeltaUT(AstroUtil2.JulianDateTT(0.0)) >= -1.0) And (AstroUtil2.DeltaUT(AstroUtil2.JulianDateTT(0.0)) <= 1.0), True)
+            CompareWithin("AstroUtilTests", "DeltaT", AstroUtil2.DeltaT(), 67.0, 69.0)
+            CompareWithin("AstroUtilTests", "DeltaUT", AstroUtil2.DeltaUT(AstroUtil2.JulianDateTT(0.0)), -1.0, 1.0)
             Events = GetEvents(ASCOM.Astrometry.EventType.SunRiseSunset, 5, 8, 2012, 51.0, -60.0, -5.0)
 
             CompareBoolean("AstroUtilTests", "Events Sun Risen at Midnight", Events.RisenAtMidnight, False)
@@ -6753,109 +6967,109 @@ Public Class DiagnosticsForm
     End Function
 
 #Region "XML  test String"
-    Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf & _
-                                    "<ASCOMProfile>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName />" & vbCrLf & _
-                                    "    <DefaultValue>" & TestTelescopeDescription & "</DefaultValue>" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Results 1</Name>" & vbCrLf & _
-                                    "        <Data />" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Root Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in Root key</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Test Name Default</Name>" & vbCrLf & _
-                                    "        <Data>123456</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values />" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1\SubKey2</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue>Null Key in SubKey2</DefaultValue>" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2 Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2 Test Name1</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2a Test Name2a</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2a</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a\SubKey2b</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2b Test Name2b</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2b</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2c</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey2c Test Name2c</Name>" & vbCrLf & _
-                                    "        <Data>Test Value in SubKey 2c</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey3</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey3 Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value SubKey 3</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKey4</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>SubKey4 Test Name</Name>" & vbCrLf & _
-                                    "        <Data>Test Value SubKey 4</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
-                                    "  <SubKey>" & vbCrLf & _
-                                    "    <SubKeyName>SubKeyDefault</SubKeyName>" & vbCrLf & _
-                                    "    <DefaultValue />" & vbCrLf & _
-                                    "    <Values>" & vbCrLf & _
-                                    "      <Value>" & vbCrLf & _
-                                    "        <Name>Test Name Default</Name>" & vbCrLf & _
-                                    "        <Data>123456</Data>" & vbCrLf & _
-                                    "      </Value>" & vbCrLf & _
-                                    "    </Values>" & vbCrLf & _
-                                    "  </SubKey>" & vbCrLf & _
+    Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf &
+                                    "<ASCOMProfile>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName />" & vbCrLf &
+                                    "    <DefaultValue>" & TestTelescopeDescription & "</DefaultValue>" & vbCrLf &
+                                    "    <Values>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>Results 1</Name>" & vbCrLf &
+                                    "        <Data />" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>Root Test Name</Name>" & vbCrLf &
+                                    "        <Data>Test Value in Root key</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>Test Name</Name>" & vbCrLf &
+                                    "        <Data>Test Value</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>Test Name Default</Name>" & vbCrLf &
+                                    "        <Data>123456</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "    </Values>" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName>SubKey1</SubKeyName>" & vbCrLf &
+                                    "    <DefaultValue />" & vbCrLf &
+                                    "    <Values />" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName>SubKey1\SubKey2</SubKeyName>" & vbCrLf &
+                                    "    <DefaultValue>Null Key in SubKey2</DefaultValue>" & vbCrLf &
+                                    "    <Values>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>SubKey2 Test Name</Name>" & vbCrLf &
+                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>SubKey2 Test Name1</Name>" & vbCrLf &
+                                    "        <Data>Test Value in SubKey 2</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "    </Values>" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a</SubKeyName>" & vbCrLf &
+                                    "    <DefaultValue />" & vbCrLf &
+                                    "    <Values>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>SubKey2a Test Name2a</Name>" & vbCrLf &
+                                    "        <Data>Test Value in SubKey 2a</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "    </Values>" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2a\SubKey2b</SubKeyName>" & vbCrLf &
+                                    "    <DefaultValue />" & vbCrLf &
+                                    "    <Values>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>SubKey2b Test Name2b</Name>" & vbCrLf &
+                                    "        <Data>Test Value in SubKey 2b</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "    </Values>" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName>SubKey1\SubKey2\SubKey2c</SubKeyName>" & vbCrLf &
+                                    "    <DefaultValue />" & vbCrLf &
+                                    "    <Values>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>SubKey2c Test Name2c</Name>" & vbCrLf &
+                                    "        <Data>Test Value in SubKey 2c</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "    </Values>" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName>SubKey3</SubKeyName>" & vbCrLf &
+                                    "    <DefaultValue />" & vbCrLf &
+                                    "    <Values>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>SubKey3 Test Name</Name>" & vbCrLf &
+                                    "        <Data>Test Value SubKey 3</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "    </Values>" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName>SubKey4</SubKeyName>" & vbCrLf &
+                                    "    <DefaultValue />" & vbCrLf &
+                                    "    <Values>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>SubKey4 Test Name</Name>" & vbCrLf &
+                                    "        <Data>Test Value SubKey 4</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "    </Values>" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
+                                    "  <SubKey>" & vbCrLf &
+                                    "    <SubKeyName>SubKeyDefault</SubKeyName>" & vbCrLf &
+                                    "    <DefaultValue />" & vbCrLf &
+                                    "    <Values>" & vbCrLf &
+                                    "      <Value>" & vbCrLf &
+                                    "        <Name>Test Name Default</Name>" & vbCrLf &
+                                    "        <Data>123456</Data>" & vbCrLf &
+                                    "      </Value>" & vbCrLf &
+                                    "    </Values>" & vbCrLf &
+                                    "  </SubKey>" & vbCrLf &
                                     "</ASCOMProfile>"
 #End Region
 
@@ -7164,10 +7378,10 @@ Public Class DiagnosticsForm
 #Region "Utility Code"
 
     'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
-    <DllImport("shell32.dll")> _
-    Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
-        <Out()> ByVal lpszPath As System.Text.StringBuilder, _
-        ByVal nFolder As Integer, _
+    <DllImport("shell32.dll")>
+    Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
+        <Out()> ByVal lpszPath As System.Text.StringBuilder,
+        ByVal nFolder As Integer,
         ByVal fCreate As Boolean) As Boolean
     End Function
 

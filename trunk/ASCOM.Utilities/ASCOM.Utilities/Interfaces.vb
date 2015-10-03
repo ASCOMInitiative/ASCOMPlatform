@@ -4,6 +4,7 @@ Imports System.Runtime.InteropServices
 Imports System.ComponentModel
 Imports ASCOM.Utilities
 Imports System.Collections.Generic
+Imports ASCOM.Utilities.Enums
 
 Namespace Interfaces
 
@@ -16,8 +17,8 @@ Namespace Interfaces
     ''' <see cref="IProfile.RegisteredDevices">IProfile.RegisteredDevices</see>, 
     ''' <see cref="IProfile.SubKeys">IProfile.SubKeys</see> and 
     ''' <see cref="IProfile.Values">IProfile.Values</see>.</remarks>
-    <Guid("CA653783-E47D-4e9d-9759-3B91BE0F4340"), _
-    ComVisible(True)> _
+    <Guid("CA653783-E47D-4e9d-9759-3B91BE0F4340"),
+    ComVisible(True)>
     Public Interface IKeyValuePair
         ''' <summary>
         ''' Key member of a key value pair
@@ -25,7 +26,7 @@ Namespace Interfaces
         ''' <value>Key</value>
         ''' <returns>Ky as string</returns>
         ''' <remarks></remarks>
-        <DispId(1)> _
+        <DispId(1)>
         Property Key() As String
         ''' <summary>
         ''' Value memeber of a key value pair
@@ -33,7 +34,7 @@ Namespace Interfaces
         ''' <value>Value</value>
         ''' <returns>Value as string</returns>
         ''' <remarks></remarks>
-        <DispId(0)> _
+        <DispId(0)>
         Property Value() As String
     End Interface
 
@@ -41,8 +42,8 @@ Namespace Interfaces
     ''' Interface to the TraceLogger component
     ''' </summary>
     ''' <remarks></remarks>
-    <Guid("1C7ABC95-8B63-475e-B5DB-D0CE7ADC436B"), _
-    ComVisible(True)> _
+    <Guid("1C7ABC95-8B63-475e-B5DB-D0CE7ADC436B"),
+    ComVisible(True)>
     Public Interface ITraceLogger
         ''' <summary>
         ''' Writes the time and identifier to the log, leaving the line ready for further content through LogContinue and LogFinish
@@ -212,8 +213,8 @@ Namespace Interfaces
     ''' Interface to the .NET Chooser component
     ''' </summary>
     ''' <remarks></remarks>
-    <Guid("D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1"), _
-    ComVisible(True)> _
+    <Guid("D398FD76-F4B8-48a2-9CA3-2EF0DD8B98E1"),
+    ComVisible(True)>
     Public Interface IChooser
         ''' <summary>
         ''' The type of device for which the Chooser will select a driver. (String, default = "Telescope")
@@ -258,8 +259,8 @@ Namespace Interfaces
     ''' Interface to the .NET Util component
     ''' </summary>
     ''' <remarks></remarks>
-    <Guid("DF41946E-EE14-40f7-AA66-DD8A92E36EF2"), _
-    ComVisible(True)> _
+    <Guid("DF41946E-EE14-40f7-AA66-DD8A92E36EF2"),
+    ComVisible(True)>
     Public Interface IUtil
         'Interface for the new larger Util class including overloads to replace optional parameters
         ''' <summary>
@@ -593,7 +594,7 @@ Namespace Interfaces
         ''' </list>
         ''' </para>
         ''' <para>The function supports arrays with 1 to 5 dimensions (Rank = 1 to 5). If the supplied array already contains elements of Variant type, it is returned as-is without any processing.</para></remarks>
-        <DispId(27)> Function ArrayToVariantArray(ByVal SuppliedObject As Object) As <MarshalAs(UnmanagedType.SafeArray, SafeArraySubtype:=VarEnum.VT_VARIANT)> Object
+        <DispId(27)> Function ArrayToVariantArray(ByVal SuppliedObject As Object) As <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_VARIANT)> Object
 
         ''' <summary>
         ''' Platform major version number
@@ -626,6 +627,40 @@ Namespace Interfaces
         ''' <returns>Integer build number</returns>
         ''' <remarks></remarks>
         <DispId(31)> ReadOnly Property BuildNumber As Integer
+
+        ''' <summary>
+        ''' Convert from one set of units to another
+        ''' </summary>
+        ''' <param name="InputValue">Value to convert</param>
+        ''' <param name="FromUnits">Integer value from the Units enum indicating the value's current units</param>
+        ''' <param name="ToUnits">Integer value from the Units enum indicating the units to which the input value should be converted</param>
+        ''' <returns>Input value converted to the new specified units</returns>
+        <DispId(32)> Function ConvertUnits(InputValue As Double, FromUnits As Units, ToUnits As Units) As Double
+
+        ''' <summary>
+        ''' Calculate the dew point given the ambient temperature and humidity
+        ''' </summary>
+        ''' <param name="Humidity">Humidity expressed in percent (0.0 .. 100.0)</param>
+        ''' <param name="AmbientTemperature">Ambient temperature in degrees C</param>
+        ''' <returns>Dew point in degrees C</returns>
+        <DispId(33)> Function Humidity2DewPoint(Humidity As Double, AmbientTemperature As Double) As Double
+
+        ''' <summary>
+        ''' Calculate the humidity given the ambient temperature and dew point
+        ''' </summary>
+        ''' <param name="DewPoint">Dewpoint in degrees C</param>
+        ''' <param name="AmbientTemperature">Ambient temperature in degrees C</param>
+        ''' <returns>Humidity expressed in percent (0.0 .. 100.0)</returns>
+        <DispId(34)> Function DewPoint2Humidity(DewPoint As Double, AmbientTemperature As Double) As Double
+
+        ''' <summary>
+        ''' Convert atmospheric pressure from one altitude above mean sea level to another
+        ''' </summary>
+        ''' <param name="Pressure">Measured pressure in hPa at the "From" altitude</param>
+        ''' <param name="FromAltitudeAboveMeanSeaLevel">"Altitude at which the input pressure was measured</param>
+        ''' <param name="ToAltitudeAboveMeanSeaLevel">Altitude to which the pressure is to be converted</param>
+        ''' <returns>Pressure in hPa at the "To" altitude</returns>
+        <DispId(35)> Function ConvertPressure(Pressure As Double, FromAltitudeAboveMeanSeaLevel As Double, ToAltitudeAboveMeanSeaLevel As Double) As Double
 
     End Interface 'Interface to Utilities.Util
 
@@ -927,8 +962,8 @@ Namespace Interfaces
     ''' Interface to the .NET Timer component
     ''' </summary>
     ''' <remarks></remarks>
-    <Guid("23A8A279-FB8E-4b3c-8F2E-010AC0F98588"), _
-    ComVisible(True)> _
+    <Guid("23A8A279-FB8E-4b3c-8F2E-010AC0F98588"),
+    ComVisible(True)>
     Public Interface ITimer
         'Interface for the Timer class
 
@@ -952,9 +987,9 @@ Namespace Interfaces
     ''' Timer event interface
     ''' </summary>
     ''' <remarks></remarks>
-    <Guid("BDDA4DFD-77F8-4bd2-ACC0-AF32B4F8B9C2"), _
-    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
-    ComVisible(True)> _
+    <Guid("BDDA4DFD-77F8-4bd2-ACC0-AF32B4F8B9C2"),
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
+    ComVisible(True)>
     Public Interface ITimerEvent
         ''' <summary>
         ''' Fired once per Interval when timer is Enabled.
@@ -967,8 +1002,8 @@ Namespace Interfaces
     ''' Interface to the .NET Profile component
     ''' </summary>
     ''' <remarks></remarks>
-    <Guid("3503C303-B268-4da8-A0AA-CD6530B802AA"), _
-    ComVisible(True)> _
+    <Guid("3503C303-B268-4da8-A0AA-CD6530B802AA"),
+    ComVisible(True)>
     Public Interface IProfile
         'Interface for the Profile class
         ''' <summary>
@@ -1147,7 +1182,7 @@ Namespace Interfaces
         ''' </summary>
         ''' <param name="CurrentPlatformVersion">The platform version number of the current profile store beig migrated</param>
         ''' <remarks></remarks>
-        <EditorBrowsable(EditorBrowsableState.Never)> _
+        <EditorBrowsable(EditorBrowsableState.Never)>
         Sub MigrateProfile(ByVal CurrentPlatformVersion As String)
 
         ''' <summary>
@@ -1233,7 +1268,7 @@ Namespace Interfaces
         ''' <returns>Device profile represented as a recusrive class</returns>
         ''' <remarks>Returns a whole driver profile encoded as an XML string</remarks>
         Overloads Function GetProfile(ByVal DriverId As String) As ASCOMProfile
-        
+
         ''' <summary>
         ''' Set an entire device profile from an XML encoded string
         ''' </summary>
@@ -1243,12 +1278,12 @@ Namespace Interfaces
         Sub SetProfile(ByVal DriverId As String, ByVal XmlProfileKey As ASCOMProfile)
     End Interface
 
-        ''' <summary>
-        ''' Interface to the .NET Serial component
-        ''' </summary>
-        ''' <remarks></remarks>
-    <Guid("8828511A-05C1-43c7-8970-00D23595930A"), _
-    ComVisible(True)> _
+    ''' <summary>
+    ''' Interface to the .NET Serial component
+    ''' </summary>
+    ''' <remarks></remarks>
+    <Guid("8828511A-05C1-43c7-8970-00D23595930A"),
+    ComVisible(True)>
     Public Interface ISerial
 
         'Interface for the standard ASCOM serial functionality

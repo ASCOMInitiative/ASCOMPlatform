@@ -945,13 +945,21 @@ else
     Comment: Platform 6.2 ObservingConditions Hub
     Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OCH
     Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb to $COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
     Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb to $COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
     Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-    Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
     Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
+    Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe.config to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+    Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
+    Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
     [END REGION]
      
     [DEFINE REGION: Platform 6 Content]

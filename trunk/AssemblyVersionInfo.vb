@@ -15,6 +15,6 @@
 ' The build server will replace this entire file with a machine-generated one. Therefore,
 ' this file should contain ONLY the global file version number and no other settings.
 ' 
-' For local builds, the version is always 6.0.9999.9999, indicating an uncontrolled release.
+' For local builds, the version is always 6.x.9999.9999, indicating an uncontrolled release.
 
-<Assembly: AssemblyFileVersion("6.1.9999.9999")> 
+<Assembly: AssemblyFileVersion("6.2.9999.9999")> 
