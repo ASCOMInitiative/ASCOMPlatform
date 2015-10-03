@@ -950,8 +950,16 @@ Install Files
 Install Files
 Install Files
 Install Files
+Install Files
 Create Shortcut
 Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Create Shortcut
 Code Folding Region
 Comment
 Code Folding Region
@@ -2530,13 +2538,21 @@ $
 {B7250831-9643-49BA-9B27-A819B0E19BCE}
 {D7302087-4354-4FFF-B7DD-86F5F1025689}
 {EB04F2F3-1ADE-4E1D-9DC2-03B1149068AA}
-{10596AD9-F6C3-406A-8B22-8A9C490D4DA1}
+{1ACF7C6C-18EB-40A5-879A-82F0A22E8AD2}
 {59111D09-F2D2-4A98-A413-056EE5DAEC48}
+{18C815A8-879C-4DE3-B614-292208D8AAF8}
 {6311DE0F-5CC0-4050-B64C-CC7575169BE4}
-{2FA7134C-6B63-49A8-B408-61358596AFA4}
 {CD602022-CE00-4AD0-A9B4-C1BF05BDF82F}
-{7A4FE5E0-08D0-405A-B348-0C410406DD89}
 {BD7B9E36-430F-4B6C-95A2-8DA2A947AC34}
+{90DD6DAB-2BD0-4931-A84A-A77B7026C7E4}
+{F31C7033-25DA-4A25-A983-BDBE4E07BB90}
+{4EC57B79-E598-4CA6-8509-80050FE44C90}
+{31EFC171-513C-41DA-9FBE-745704ED6FE4}
+{C097F481-840F-4500-86E5-6DCF94C7A496}
+{1474B9E8-A4AF-4417-99C4-7AA0ED2B8AC8}
+{591F31AD-98AB-41AE-A096-61122E79FD11}
+{7930CA45-D135-48FF-992A-DA782F588B5E}
+{F432B788-89C8-4047-9917-7072B6F517F7}
 {5B8C1F36-A6D2-43D7-A0E5-DBF9F408C563}
 {EB141CC7-B3A2-4ABB-9880-83A53B0A6881}
 {CD7873F1-AC8F-4CCF-8011-27292C19C5C7}
@@ -6841,19 +6857,6 @@ FALSE
 FALSE
 FALSE
 FALSE
-{2FA7134C-6B63-49A8-B408-61358596AFA4}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config
-FALSE|
-$COMMONFILES$\ASCOM\ObservingConditions\OCH
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
 {6311DE0F-5CC0-4050-B64C-CC7575169BE4}
 ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb
 FALSE|
@@ -6869,19 +6872,6 @@ FALSE
 FALSE
 {59111D09-F2D2-4A98-A413-056EE5DAEC48}
 ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe
-FALSE|
-$COMMONFILES$\ASCOM\ObservingConditions\OCH
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{10596AD9-F6C3-406A-8B22-8A9C490D4DA1}
-..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -6934,6 +6924,123 @@ FALSE
 FALSE
 {BD7B9E36-430F-4B6C-95A2-8DA2A947AC34}
 ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.pdb
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\OCH
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{7930CA45-D135-48FF-992A-DA782F588B5E}
+..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.pdb
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\Simulator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{591F31AD-98AB-41AE-A096-61122E79FD11}
+..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\Simulator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{C097F481-840F-4500-86E5-6DCF94C7A496}
+..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe.config
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\Simulator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{31EFC171-513C-41DA-9FBE-745704ED6FE4}
+..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\Simulator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{4EC57B79-E598-4CA6-8509-80050FE44C90}
+..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.pdb
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\Simulator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{F31C7033-25DA-4A25-A983-BDBE4E07BB90}
+..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.dll
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\Simulator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{1474B9E8-A4AF-4417-99C4-7AA0ED2B8AC8}
+..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.pdb
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\Simulator
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{18C815A8-879C-4DE3-B614-292208D8AAF8}
+..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.exe.config
+FALSE|
+$COMMONFILES$\ASCOM\ObservingConditions\OCH
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{1ACF7C6C-18EB-40A5-879A-82F0A22E8AD2}
+..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.ObservingConditions.dll.config
 FALSE|
 $COMMONFILES$\ASCOM\ObservingConditions\OCH
 FALSE
@@ -7688,9 +7795,19 @@ $SHORTCUTFOLDER$\Tools
 
 |
 0|
-{7A4FE5E0-08D0-405A-B348-0C410406DD89}
+{90DD6DAB-2BD0-4931-A84A-A77B7026C7E4}
 $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
-ObservingConditions Tester
+ObservingConditions Hub Tester
+$SHORTCUTFOLDER$\Tools
+
+
+
+C:\InstallAware-ASCOM-Build\ASCOM.ico
+|
+0|
+{F432B788-89C8-4047-9917-7072B6F517F7}
+$COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
+ObservingConditions SimulatorTester
 $SHORTCUTFOLDER$\Tools
 
 
@@ -12719,7 +12836,23 @@ C
 
 
 
+
+
+
+
+
+
+
+
 $
+
+
+
+
+
+
+
+
 
 
 

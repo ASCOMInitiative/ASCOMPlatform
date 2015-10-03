@@ -11,9 +11,9 @@ Imports System.Runtime.InteropServices
 ''' Provides a set of utility functions for ASCOM clients and drivers
 ''' </summary>
 ''' <remarks></remarks>
-<Guid("E861C6D8-B55B-494a-BC59-0F27F981CA98"), _
-ComVisible(True), _
-ClassInterface(ClassInterfaceType.None)> _
+<Guid("E861C6D8-B55B-494a-BC59-0F27F981CA98"),
+ComVisible(True),
+ClassInterface(ClassInterfaceType.None)>
 Public Class Util
     Implements IUtil, IUtilExtra, IDisposable
     '   ========
@@ -247,7 +247,7 @@ Public Class Util
     ''' "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToDMS(ByVal Degrees As Double) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, "° ", "' ", """", 0)
     End Function
@@ -265,7 +265,7 @@ Public Class Util
     ''' "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, DegDelim, "' ", """", 0)
     End Function
@@ -284,7 +284,7 @@ Public Class Util
     ''' "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, DegDelim, MinDelim, """", 0)
     End Function
@@ -304,7 +304,7 @@ Public Class Util
     ''' "DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToDMS(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtilExtra.DegreesToDMS
         Return DegreesToDMS(Degrees, DegDelim, MinDelim, SecDelim, 0)
     End Function
@@ -374,7 +374,7 @@ Public Class Util
     ''' "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function HoursToHMS(ByVal Hours As Double) As String Implements IUtilExtra.HoursToHMS
         Return DegreesToDMS(Hours, ":", ":", "", 0)
     End Function
@@ -391,7 +391,7 @@ Public Class Util
     ''' "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String) As String Implements IUtilExtra.HoursToHMS
         Return DegreesToDMS(Hours, HrsDelim, ":", "", 0)
     End Function
@@ -409,7 +409,7 @@ Public Class Util
     ''' "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.HoursToHMS
         Return DegreesToDMS(Hours, HrsDelim, MinDelim, "", 0)
     End Function
@@ -428,7 +428,7 @@ Public Class Util
     ''' "HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function HoursToHMS(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtilExtra.HoursToHMS
         Return DegreesToDMS(Hours, HrsDelim, MinDelim, SecDelim, 0)
     End Function
@@ -463,7 +463,7 @@ Public Class Util
     ''' "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToHMS(ByVal Degrees As Double) As String Implements IUtilExtra.DegreesToHMS
         Return DegreesToHMS(Degrees, ":", ":", "", 0)
     End Function
@@ -480,7 +480,7 @@ Public Class Util
     ''' "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String) As String Implements IUtilExtra.DegreesToHMS
         Return DegreesToHMS(Degrees, HrsDelim, ":", "", 0)
     End Function
@@ -498,7 +498,7 @@ Public Class Util
     ''' "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.DegreesToHMS
         Return DegreesToHMS(Degrees, HrsDelim, MinDelim, "", 0)
     End Function
@@ -517,7 +517,7 @@ Public Class Util
     ''' "DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String, ByVal SecDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToHMS(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal SecDelim As String) As String Implements IUtilExtra.DegreesToHMS
         Return DegreesToHMS(Degrees, HrsDelim, MinDelim, SecDelim, 0)
     End Function
@@ -556,7 +556,7 @@ Public Class Util
     ''' "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToDM(ByVal Degrees As Double) As String Implements IUtilExtra.DegreesToDM
         Return DegreesToDM(Degrees, "° ", "'", 0)
     End Function
@@ -573,7 +573,7 @@ Public Class Util
     ''' "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String) As String Implements IUtilExtra.DegreesToDM
         Return DegreesToDM(Degrees, DegDelim, "'", 0)
     End Function
@@ -591,7 +591,7 @@ Public Class Util
     ''' "DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Function DegreesToDM(ByVal Degrees As Double, ByVal DegDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.DegreesToDM
         Return DegreesToDM(Degrees, DegDelim, MinDelim, 0)
     End Function
@@ -653,7 +653,7 @@ Public Class Util
     ''' "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with an suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Function HoursToHM(ByVal Hours As Double) As String Implements IUtilExtra.HoursToHM
         Return DegreesToDM(Hours, ":", "", 0)
     End Function
@@ -670,7 +670,7 @@ Public Class Util
     ''' "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with an suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Function HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String) As String Implements IUtilExtra.HoursToHM
         Return DegreesToDM(Hours, HrsDelim, "", 0)
     End Function
@@ -688,7 +688,7 @@ Public Class Util
     ''' "HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with an suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Function HoursToHM(ByVal Hours As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.HoursToHM
         Return DegreesToDM(Hours, HrsDelim, MinDelim, 0)
     End Function
@@ -723,7 +723,7 @@ Public Class Util
     ''' "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Function DegreesToHM(ByVal Degrees As Double) As String Implements IUtilExtra.DegreesToHM
         Return DegreesToHM(Degrees, ":", "", 0)
     End Function
@@ -740,7 +740,7 @@ Public Class Util
     ''' "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Function DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String) As String Implements IUtilExtra.DegreesToHM
         Return DegreesToHM(Degrees, HrsDelim, "", 0)
     End Function
@@ -758,7 +758,7 @@ Public Class Util
     ''' "DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String, ByVal MinDecimalDigits As Integer)"
     ''' with suitable parameters to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Function DegreesToHM(ByVal Degrees As Double, ByVal HrsDelim As String, ByVal MinDelim As String) As String Implements IUtilExtra.DegreesToHM
         Return DegreesToHM(Degrees, HrsDelim, MinDelim, 0)
     End Function
@@ -1013,6 +1013,225 @@ Public Class Util
         Next
     End Function
 
+    ''' <summary>
+    ''' Convert from one set of speed / temperature / pressure rain rate units to another
+    ''' </summary>
+    ''' <param name="InputValue">Value to convert</param>
+    ''' <param name="FromUnits">Integer value from the Units enum indicating the value's current units</param>
+    ''' <param name="ToUnits">Integer value from the Units enum indicating the units to which the input value should be converted</param>
+    ''' <returns>Input value expressed in the new units</returns>
+    ''' <exception cref="InvalidValueException">When the specified from and to units can not refer to the same value. e.g. attempting to convert miles per hour to degrees Celsius</exception>
+    ''' <remarks>
+    ''' <para>Conversions available:</para>
+    ''' <list type="bullet">
+    ''' <item>metres per second &lt;==&gt; miles per hour &lt;==&gt; knots</item>
+    ''' <item>Celsius &lt;==&gt; Farenheit &lt;==&gt; Kelvin</item>
+    ''' <item>hecto Pascals (hPa) &lt;==&gt; milli bar(mbar) &lt;==&gt; mm of mercury &lt;==&gt; inches of mercury</item>
+    ''' <item>mm per hour &lt;==&gt; inches per hour</item>
+    ''' </list>
+    ''' <para>Knots conversions use the international nautical mile definition (1 nautical mile = 1852m) rather than the orginal UK or US Admiralty definitions.</para>
+    ''' <para>For convenience, milli bar and hecto Pascals are shown as separate units even though they have numerically identical values and there is a 1:1 conversion between them.</para>
+    ''' </remarks>
+    Function ConvertUnits(InputValue As Double, FromUnits As Units, ToUnits As Units) As Double Implements IUtil.ConvertUnits
+        Dim intermediateValue, finalValue As Double
+
+        If (FromUnits >= Units.metresPerSecond) And (FromUnits <= Units.knots) And (ToUnits >= Units.metresPerSecond) And (ToUnits <= Units.knots) Then        ' Speed conversion
+            ' First convert the input to metres per second
+            Select Case FromUnits
+                Case Units.metresPerSecond
+                    intermediateValue = InputValue
+                Case Units.milesPerHour
+                    intermediateValue = InputValue * 0.44704
+                Case Units.knots
+                    intermediateValue = InputValue * 0.514444444
+                Case Else
+                    Throw New InvalidValueException("Unknown ""From"" speed units: " & FromUnits.ToString())
+            End Select
+
+            ' Now convert metres per second to the output value
+            Select Case ToUnits
+                Case Units.metresPerSecond
+                    finalValue = intermediateValue
+                Case Units.milesPerHour
+                    finalValue = intermediateValue / 0.44704
+                Case Units.knots
+                    finalValue = intermediateValue / 0.514444444
+                Case Else
+                    Throw New InvalidValueException("Unknown ""To"" speed units: " & ToUnits.ToString())
+            End Select
+
+            Return finalValue
+
+        ElseIf (FromUnits >= Units.degreesCelsius) And (FromUnits <= Units.degreesKelvin) And (ToUnits >= Units.degreesCelsius) And (ToUnits <= Units.degreesKelvin) Then ' Temperature conversion
+
+            ' First convert the input to degrees K
+            Select Case FromUnits
+                Case Units.degreesCelsius
+                    intermediateValue = InputValue - ABSOLUTE_ZERO_CELSIUS
+                Case Units.degreesFarenheit
+                    intermediateValue = (InputValue + 459.67) * 5.0 / 9.0
+                Case Units.degreesKelvin
+                    intermediateValue = InputValue
+                Case Else
+                    Throw New InvalidValueException("Unknown ""From"" temperature units: " & FromUnits.ToString())
+            End Select
+
+            ' Now convert degrees K to the output value
+            Select Case ToUnits
+                Case Units.degreesCelsius
+                    finalValue = intermediateValue + ABSOLUTE_ZERO_CELSIUS
+                Case Units.degreesFarenheit
+                    finalValue = (intermediateValue * 9.0 / 5.0) - 459.67
+                Case Units.degreesKelvin
+                    finalValue = intermediateValue
+                Case Else
+                    Throw New InvalidValueException("Unknown ""To"" temperature units: " & ToUnits.ToString())
+            End Select
+
+            Return finalValue
+        ElseIf (FromUnits >= Units.hPa) And (FromUnits <= Units.inHg) And (ToUnits >= Units.hPa) And (ToUnits <= Units.inHg) Then ' Pressure conversion
+            ' First convert the input to hPa
+            Select Case FromUnits
+                Case Units.hPa
+                    intermediateValue = InputValue
+                Case Units.mBar
+                    intermediateValue = InputValue
+                Case Units.mmHg
+                    intermediateValue = InputValue * 1.33322368
+                Case Units.inHg
+                    intermediateValue = InputValue * 33.8638816
+                Case Else
+                    Throw New InvalidValueException("Unknown ""From"" pressure units: " & FromUnits.ToString())
+            End Select
+
+            ' Now convert hPa to the output value
+            Select Case ToUnits
+                Case Units.hPa
+                    finalValue = intermediateValue
+                Case Units.mBar
+                    finalValue = intermediateValue
+                Case Units.mmHg
+                    finalValue = intermediateValue / 1.33322368
+                Case Units.inHg
+                    finalValue = intermediateValue / 33.8638816
+                Case Else
+                    Throw New InvalidValueException("Unknown ""To"" pressure units: " & ToUnits.ToString())
+            End Select
+
+            Return finalValue
+
+        ElseIf (FromUnits >= Units.mmPerHour) And (FromUnits <= Units.inPerHour) And (ToUnits >= Units.mmPerHour) And (ToUnits <= Units.inPerHour) Then ' Rain rate conversion
+            ' First convert the input to mm
+            Select Case FromUnits
+                Case Units.mmPerHour
+                    intermediateValue = InputValue
+                Case Units.inPerHour
+                    intermediateValue = InputValue * 25.4
+                Case Else
+                    Throw New InvalidValueException("Unknown ""From"" rain rate units: " & FromUnits.ToString())
+            End Select
+
+            ' Now convert mm to the output value
+            Select Case ToUnits
+                Case Units.mmPerHour
+                    finalValue = intermediateValue
+                Case Units.inPerHour
+                    finalValue = intermediateValue / 25.4
+                Case Else
+                    Throw New InvalidValueException("Unknown ""To"" rain rate units: " & ToUnits.ToString())
+            End Select
+
+            Return finalValue
+
+        Else
+            Throw New InvalidOperationException("From and to units are not of the same type. From: " & FromUnits.ToString() & ", To: " & ToUnits.ToString())
+        End If
+
+        Return 0.0
+    End Function
+
+    ''' <summary>
+    ''' Calculate the dew point (°Celsius) given the ambient temperature (°Celsius) and relative humidity (%)
+    ''' </summary>
+    ''' <param name="RelativeHumidity">Relative humidity expressed in percent (0.0 .. 100.0)</param>
+    ''' <param name="AmbientTemperature">Ambient temperature (°Celsius)</param>
+    ''' <returns>Dew point (°Celsius)</returns>
+    ''' <exception cref="InvalidValueException">When relative humidity &lt; 0.0% or &gt; 100.0%></exception>
+    ''' <exception cref="InvalidValueException">When ambient temperature &lt; absolute zero or &gt; 100.0C></exception>
+    '''  <remarks>'Calculation uses Vaisala formula for water vapour saturation pressure and is accurate to 0.083% over -20C - +50°C
+    ''' <para>http://www.vaisala.com/Vaisala%20Documents/Application%20notes/Humidity_Conversion_Formulas_B210973EN-F.pdf </para>
+    ''' </remarks>
+    Function Humidity2DewPoint(RelativeHumidity As Double, AmbientTemperature As Double) As Double Implements IUtil.Humidity2DewPoint
+        ' Formulae taken from Vaisala: http://www.vaisala.com/Vaisala%20Documents/Application%20notes/Humidity_Conversion_Formulas_B210973EN-F.pdf 
+        Dim Pws, Pw, Td As Double
+
+        ' Constants from Vaisala document
+        Const A As Double = 6.116441
+        Const m As Double = 7.591386
+        Const Tn As Double = 240.7263
+
+        'Validate input values
+        If (RelativeHumidity < 0.0) Or (RelativeHumidity > 100.0) Then Throw New InvalidValueException("Humidity2DewPoint - Relative humidity is < 0.0% or > 100.0%: " + RelativeHumidity.ToString())
+        If (AmbientTemperature < ABSOLUTE_ZERO_CELSIUS) Or (AmbientTemperature > 100.0) Then Throw New InvalidValueException("Humidity2DewPoint - Ambient temperature is < " & ABSOLUTE_ZERO_CELSIUS & "C or > 100.0C: " + AmbientTemperature.ToString())
+
+        Pws = A * Math.Pow(10.0, m * AmbientTemperature / (AmbientTemperature + Tn)) 'Calculate water vapor saturation pressure, Pws, from Vaisala formula (6) - In hPa
+        Pw = Pws * RelativeHumidity / 100.0 'Calculate measured vapor pressure, Pw
+        Td = Tn / (m / Math.Log10(Pw / A) - 1) ' Finally, calculate dew-point in °C
+
+        TL.LogMessage("Humidity2DewPoint", "DewPoint: " & Td & ", Given Relative Humidity: " & RelativeHumidity & ", Given Ambient temperaure: " & AmbientTemperature)
+
+        Return Td
+    End Function
+
+    ''' <summary>
+    ''' Calculate the relative humidity (%) given the ambient temperature (°Celsius) and dew point (°Celsius)
+    ''' </summary>
+    ''' <param name="DewPoint">Dewpoint in (°Celsius)</param>
+    ''' <param name="AmbientTemperature">Ambient temperature (°Celsius)</param>
+    ''' <returns>Humidity expressed in percent (0.0 .. 100.0)</returns>
+    ''' <exception cref="InvalidValueException">When dew point &lt; absolute zero or &gt; 100.0C></exception>
+    ''' <exception cref="InvalidValueException">When ambient temperature &lt; absolute zero or &gt; 100.0C></exception>
+    ''' <remarks>'Calculation uses the Vaisala formula for water vapour saturation pressure and is accurate to 0.083% over -20C - +50°C
+    ''' <para>http://www.vaisala.com/Vaisala%20Documents/Application%20notes/Humidity_Conversion_Formulas_B210973EN-F.pdf </para>
+    ''' </remarks>
+    Function DewPoint2Humidity(DewPoint As Double, AmbientTemperature As Double) As Double Implements IUtil.DewPoint2Humidity
+        ' Formulae taken from Vaisala: http://www.vaisala.com/Vaisala%20Documents/Application%20notes/Humidity_Conversion_Formulas_B210973EN-F.pdf 
+        Dim RH As Double
+
+        ' Constants from Vaisala document
+        Const m As Double = 7.591386
+        Const Tn As Double = 240.7263
+
+        'Validate input values
+        If (DewPoint < ABSOLUTE_ZERO_CELSIUS) Or (DewPoint > 100.0) Then Throw New InvalidValueException("DewPoint2Humidity - Dew point is < " & ABSOLUTE_ZERO_CELSIUS & "C or > 100.0C: " + DewPoint.ToString())
+        If (AmbientTemperature < ABSOLUTE_ZERO_CELSIUS) Or (AmbientTemperature > 100.0) Then Throw New InvalidValueException("DewPoint2Humidity - Ambient temperature is < " & ABSOLUTE_ZERO_CELSIUS & "C or > 100.0C: " + AmbientTemperature.ToString())
+
+        RH = 100.0 * Math.Pow(10.0, m * ((DewPoint / (DewPoint + Tn)) - (AmbientTemperature / (AmbientTemperature + Tn))))
+        TL.LogMessage("DewPoint2Humidity", "RH: " & RH & ", Given Dew point: " & DewPoint & ", Given Ambient temperaure: " & AmbientTemperature)
+
+        Return RH
+    End Function
+
+    ''' <summary>
+    ''' Convert atmospheric pressure from one altitude above mean sea level to another
+    ''' </summary>
+    ''' <param name="Pressure">Measured pressure in hPa (mBar) at the "From" altitude</param>
+    ''' <param name="FromAltitudeAboveMeanSeaLevel">"Altitude at which the input pressure was measured (metres)</param>
+    ''' <param name="ToAltitudeAboveMeanSeaLevel">Altitude to which the pressure is to be converted (metres)</param>
+    ''' <returns>Pressure in hPa at the "To" altitude</returns>
+    ''' <remarks>Uses the equation: p = p0 * (1.0 - 2.25577E-05 h)^5.25588</remarks>
+    Function ConvertPressure(Pressure As Double, FromAltitudeAboveMeanSeaLevel As Double, ToAltitudeAboveMeanSeaLevel As Double) As Double Implements IUtil.ConvertPressure
+        ' Convert supplied pressure to sea level then convert again to the required altitude using this equation:
+        ' p = p0 (1 - 2.25577 10-5 h)5.25588
+        Dim SeaLevelPressure, ActualPressure As Double
+        SeaLevelPressure = Pressure / Math.Pow(1.0 - 0.0000225577 * FromAltitudeAboveMeanSeaLevel, 5.25588)
+        ActualPressure = SeaLevelPressure * Math.Pow(1.0 - 0.0000225577 * ToAltitudeAboveMeanSeaLevel, 5.25588)
+
+        TL.LogMessage("ConvertPressure", "SeaLevelPressure: " & SeaLevelPressure & ", ActualPressure: " & ActualPressure & ", Given Presure: " & Pressure & ", Given FromAltitudeAboveMeanSeaLevel: " & FromAltitudeAboveMeanSeaLevel & ", Given ToAltitudeAboveMeanSeaLevel: " & ToAltitudeAboveMeanSeaLevel)
+
+        Return ActualPressure
+    End Function
+
 #End Region
 
 #Region "Array To ArrAyVariant Code"
@@ -1045,7 +1264,7 @@ Public Class Util
     ''' </list>
     ''' </para>
     ''' <para>The function supports arrays with 1 to 5 dimensions (Rank = 1 to 5). If the supplied array already contains elements of Variant type, it is returned as-is without any processing.</para></remarks>
-    Public Function ArrayToVariantArray(ByVal SuppliedObject As Object) As <MarshalAs(UnmanagedType.SafeArray, SafeArraySubtype:=VarEnum.VT_VARIANT)> Object Implements IUtil.ArrayToVariantArray
+    Public Function ArrayToVariantArray(ByVal SuppliedObject As Object) As <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_VARIANT)> Object Implements IUtil.ArrayToVariantArray
         Dim ReturnObject As Object ' An object tp represent the Variant array
         Dim TypeOfSuppliedObject, ArrayType As Type ' Variables to hold the Type of the Array and the Type of its elements
         Dim SuppliedArray As Array ' Variable to hold the supplied array as an Array type (as opposed to Object)

@@ -88,6 +88,9 @@ Module GlobalConstants
     Friend Const PLATFORM_VERSION As String = "Platform Version"
     Friend Const PLATFORM_VERSION_DEFAULT_BAD_VALUE As String = "0.0.0.0"
 
+    ' Other constants
+    Friend Const ABSOLUTE_ZERO_CELSIUS As Double = -273.15
+
     Friend Enum EventLogErrors As Integer
         EventLogCreated = 0
         ChooserFormLoad = 1
