@@ -77,6 +77,12 @@
     </Compile>
     <Compile Include="GarbageCollection.cs" />
     <Compile Include="LocalServer.cs" />
+    <Compile Include="OverrideView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OverrideView.Designer.cs">
+      <DependentUpon>OverrideView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -129,6 +135,9 @@
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OverrideView.resx">
+      <DependentUpon>OverrideView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

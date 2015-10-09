@@ -18,10 +18,8 @@ namespace ASCOM.Simulator
         public frmMain()
         {
             InitializeComponent();
-
             refreshTimer.Elapsed += refreshTimer_Elapsed;
             refreshTimer.Enabled = true;
-
         }
 
         void refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -57,7 +55,16 @@ namespace ASCOM.Simulator
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
+            // Minimise or bring the window into view as required
+            if (OCSimulator.MinimiseOnStart) this.WindowState = FormWindowState.Minimized;
+            else this.WindowState = FormWindowState.Normal;
+            chkMinimise.Checked = OCSimulator.MinimiseOnStart;
+
+            foreach (string property in OCSimulator.SimulatedProperties)
+            {
+                OverrideView over = (OverrideView)Controls.Find("overrideView" + property, false)[0];
+                over.InitUI(property);
+            }
             Application.ThreadException += Application_ThreadException;
         }
 
@@ -65,6 +72,21 @@ namespace ASCOM.Simulator
         {
             this.WindowState = FormWindowState.Normal;
             MessageBox.Show("Application Thread Exception: " + e.Exception.ToString());
+        }
+
+        private void btnSaveSettings_Click(object sender, EventArgs e)
+        {
+            // Get the control values into variables in the Sensors array
+            foreach (string property in OCSimulator.SimulatedProperties)
+            {
+                OverrideView over = (OverrideView)Controls.Find("overrideView" + property, false)[0];
+                over.SaveUI(property);
+            }
+
+            OCSimulator.MinimiseOnStart = chkMinimise.Checked;
+
+            // Write the Sensors array values to the Profile
+            OCSimulator.WriteProfile();
         }
     }
 }

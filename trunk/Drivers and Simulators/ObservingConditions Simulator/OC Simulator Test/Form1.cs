@@ -62,7 +62,7 @@ namespace ASCOM.Simulator
                 catch (Exception ex)
                 {
                     LogMessage("Failed to connect");
-                    LogMessage("Exception: " + ex.Message);
+                    LogMessage("Exception: " + ex.ToString());
                 }
             }
             SetUIState();
