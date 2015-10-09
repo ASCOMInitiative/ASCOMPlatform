@@ -73,6 +73,9 @@ namespace ASCOM.Simulator
         public const string SENSOR_READ_PERIOD_PROFILENAME = "Sensor Read Period"; public const string SENSOR_READ_PERIOD_DEFAULT = "1.0";
         public const string AVERAGE_PERIOD_PROFILENAME = "Average Period"; public const string AVERAGE_PERIOD_DEFAULT = "0.0";
         public const string NUMBER_OF_READINGS_PROFILENAME = "Number Of Readings"; public const string NUMBER_OF_READINGS_DEFAULT = "10";
+        public const string OVERRIDE_PROFILENAME = "Override"; public const string OVERRIDE_DEFAULT = "false";
+        public const string OVERRIDE_VALUE_PROFILENAME = "Override Value"; // No default value, these are picked from the simulator "from" values
+        public const string MINIMISE_ON_START_PROFILENAME = "Minimise On Start"; public const string MINIMISE_ON_START_DEFAULT = "true";
 
         public static TraceLoggerPlus TL;
         public static SetupDialogForm setupForm;
@@ -83,6 +86,9 @@ namespace ASCOM.Simulator
         public static double SensorQueryInterval;
         public static double AveragePeriod;
         public static int NumberOfReadingsToAverage;
+
+        // Main dialogue configuration variables
+        public static bool MinimiseOnStart;
 
         // List of ObservingConditions properties that are dynamically simulated
         public static List<string> SimulatedProperties = new List<string> { // Aray containing a list of all valid properties
@@ -145,6 +151,36 @@ namespace ASCOM.Simulator
             {PROPERTY_WINDDIRECTION, 253.8},
             {PROPERTY_WINDGUST, 5.45},
             {PROPERTY_WINDSPEED, 2.38}
+        };
+        public static Dictionary<string, double> OverrideFromValues = new Dictionary<string, double>()
+        {
+            {PROPERTY_CLOUDCOVER, 0.0},
+            {PROPERTY_HUMIDITY, 0.0},
+            {PROPERTY_PRESSURE, 950.0},
+            {PROPERTY_RAINRATE, 0.0},
+            {PROPERTY_SKYBRIGHTNESS, 0.0},
+            {PROPERTY_SKYQUALITY, 2.0},
+            {PROPERTY_SKYSEEING, 0.1},
+            {PROPERTY_SKYTEMPERATURE, -75.0},
+            {PROPERTY_TEMPERATURE, -50.0},
+            {PROPERTY_WINDDIRECTION, 0.0},
+            {PROPERTY_WINDGUST, 0},
+            {PROPERTY_WINDSPEED, 0}
+        };
+        public static Dictionary<string, double> OverrideToValues = new Dictionary<string, double>()
+        {
+            {PROPERTY_CLOUDCOVER, 100.0},
+            {PROPERTY_HUMIDITY, 100.0},
+            {PROPERTY_PRESSURE, 1075.0},
+            {PROPERTY_RAINRATE, 100.0},
+            {PROPERTY_SKYBRIGHTNESS, 10000.0},
+            {PROPERTY_SKYQUALITY, 22.0},
+            {PROPERTY_SKYSEEING, 10.0},
+            {PROPERTY_SKYTEMPERATURE, 50.0},
+            {PROPERTY_TEMPERATURE, 50.0},
+            {PROPERTY_WINDDIRECTION, 360.0},
+            {PROPERTY_WINDGUST, 100.0},
+            {PROPERTY_WINDSPEED, 100.0}
         };
 
         #endregion
@@ -687,51 +723,58 @@ namespace ASCOM.Simulator
 
         private static double GetDouble(string PropertyName)
         {
-
-            if (Sensors[PropertyName].IsImplemented) // Sensor is implemented
+            if (Sensors[PropertyName].Override) // Override in effect so just return the specified value
             {
-                if (DateTime.Now.Subtract(initialConnectionTime).TotalSeconds >= Sensors[PropertyName].NotReadyDelay) // Check whether the device is still initialising
+                TL.LogMessage("GetDouble", PropertyName + " override value: " + Sensors[PropertyName].OverrideValue);
+                return Sensors[PropertyName].OverrideValue;
+            }
+            else // No override so return the simulated value
+            {
+                if (Sensors[PropertyName].IsImplemented) // Sensor is implemented
                 {
-                    // Sensor is initialised so return its value
-                    if (AveragePeriod == 0.0) // No averaging so just return current value
+                    if (DateTime.Now.Subtract(initialConnectionTime).TotalSeconds >= Sensors[PropertyName].NotReadyDelay) // Check whether the device is still initialising
                     {
-                        TL.LogMessage("GetDouble", PropertyName + " current value: " + Sensors[PropertyName].SimCurrentValue);
-                        return Sensors[PropertyName].SimCurrentValue;
-                    }
-                    else // Calculate the average and return this
-                    {
-                        double averageValue = 0.0;
-                        int numberOfSensorReadings = Sensors[PropertyName].Readings.Count;
-
-                        if (numberOfSensorReadings > 0.0) // There are one or more readings so calculate the average value
+                        // Sensor is initialised so return its value
+                        if (AveragePeriod == 0.0) // No averaging so just return current value
                         {
-                            foreach (TimeValue tv in Sensors[PropertyName].Readings) // Add the sensor readings
+                            TL.LogMessage("GetDouble", PropertyName + " current value: " + Sensors[PropertyName].SimCurrentValue);
+                            return Sensors[PropertyName].SimCurrentValue;
+                        }
+                        else // Calculate the average and return this
+                        {
+                            double averageValue = 0.0;
+                            int numberOfSensorReadings = Sensors[PropertyName].Readings.Count;
+
+                            if (numberOfSensorReadings > 0.0) // There are one or more readings so calculate the average value
                             {
-                                averageValue += tv.SensorValue;
+                                foreach (TimeValue tv in Sensors[PropertyName].Readings) // Add the sensor readings
+                                {
+                                    averageValue += tv.SensorValue;
+                                }
+                                averageValue = averageValue / numberOfSensorReadings; // Calcualte the average sensor reading
                             }
-                            averageValue = averageValue / numberOfSensorReadings; // Calcualte the average sensor reading
-                        }
-                        else // There are no readings so just return the current value
-                        {
-                            averageValue = Sensors[PropertyName].SimCurrentValue;
-                        }
+                            else // There are no readings so just return the current value
+                            {
+                                averageValue = Sensors[PropertyName].SimCurrentValue;
+                            }
 
-                        TL.LogMessage("GetDouble", PropertyName + " average value: " + averageValue + ", from " + numberOfSensorReadings + " readings, AveragePeriod: " + AveragePeriod + " minutes.");
-                        return averageValue; // Return the average sensor value
+                            TL.LogMessage("GetDouble", PropertyName + " average value: " + averageValue + ", from " + numberOfSensorReadings + " readings, AveragePeriod: " + AveragePeriod + " minutes.");
+                            return averageValue; // Return the average sensor value
+                        }
+                    }
+                    else
+                    {
+                        // Still initialising so throw InvalidOperationException
+                        TL.LogMessage("GetDouble", PropertyName + ": Sensor not ready");
+                        throw new InvalidOperationException(PropertyName + " sensor is not ready");
                     }
                 }
                 else
                 {
-                    // Still initialising so throw InvalidOperationException
-                    TL.LogMessage("GetDouble", PropertyName + ": Sensor not ready");
-                    throw new InvalidOperationException(PropertyName + " sensor is not ready");
+                    // Not implemented so throw a PropertyNotImplementedException
+                    TL.LogMessage("GetDouble", PropertyName + ": Sensor not implemented");
+                    throw new PropertyNotImplementedException(PropertyName, false);
                 }
-            }
-            else
-            {
-                // Not implemented so throw a PropertyNotImplementedException
-                TL.LogMessage("GetDouble", PropertyName + ": Sensor not implemented");
-                throw new PropertyNotImplementedException(PropertyName, false);
             }
         }
 
@@ -748,8 +791,11 @@ namespace ASCOM.Simulator
         private static void ConfigureAveragePeriodTimer()
         {
             if (averagePeriodTimer.Enabled) averagePeriodTimer.Stop();
-            averagePeriodTimer.Interval = AveragePeriod * 60000.0 / NumberOfReadingsToAverage; // Averageperiod in minutes, convert to milliseocnds and divide by the number of readings required
-            if (IsHardwareConnected()) averagePeriodTimer.Enabled = true;
+            if (AveragePeriod > 0.0)
+            {
+                averagePeriodTimer.Interval = AveragePeriod * 60000.0 / NumberOfReadingsToAverage; // Averageperiod in minutes, convert to milliseocnds and divide by the number of readings required
+                if (IsHardwareConnected()) averagePeriodTimer.Enabled = true;
+            }
         }
 
         static double CalculateDewPoint(double humidity)
@@ -778,6 +824,7 @@ namespace ASCOM.Simulator
                 SensorQueryInterval = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, string.Empty, SENSOR_READ_PERIOD_DEFAULT));
                 AveragePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT));
                 NumberOfReadingsToAverage = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, string.Empty, NUMBER_OF_READINGS_DEFAULT));
+                MinimiseOnStart= Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, string.Empty, MINIMISE_ON_START_DEFAULT));
 
                 // Initialise the sensor collection from the Profile
                 foreach (string Property in SimulatedProperties)
@@ -808,6 +855,7 @@ namespace ASCOM.Simulator
                 driverProfile.WriteValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, SensorQueryInterval.ToString());
                 driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, AveragePeriod.ToString());
                 driverProfile.WriteValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, NumberOfReadingsToAverage.ToString());
+                driverProfile.WriteValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, MinimiseOnStart.ToString());
 
                 // Save the sensor collection to the Profile
                 foreach (string Property in SimulatedProperties)

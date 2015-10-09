@@ -29,6 +29,8 @@ namespace ASCOM.Simulator
         public DateTime TimeOfLastUpdate { get; set; }
         public List<OCSimulator.TimeValue> Readings { get; set; }
         public OCSimulator.ValueCycleDirections ValueCycleDirection { get; set; }
+        public bool Override{ get; set; }
+        public double OverrideValue { get; set; }
 
         public void ReadProfile(Profile driverProfile)
         {
@@ -51,6 +53,12 @@ namespace ASCOM.Simulator
 
             ValueCycleTime = Convert.ToDouble(driverProfile.GetValue(OCSimulator.DRIVER_PROGID, OCSimulator.VALUE_CYCLE_TIME_PROFILE_NAME, SensorName, OCSimulator.VALUE_CYCLE_TIME_DEFAULT));
             OCSimulator.TL.LogMessage("Sensor.ReadProfile", SensorName + " Value CycleTime: " + ValueCycleTime.ToString());
+
+            Override = Convert.ToBoolean(driverProfile.GetValue(OCSimulator.DRIVER_PROGID, OCSimulator.OVERRIDE_PROFILENAME, SensorName, OCSimulator.OVERRIDE_DEFAULT));
+            OCSimulator.TL.LogMessage("Sensor.ReadProfile", SensorName + " Override: " + Override.ToString());
+
+            OverrideValue = Convert.ToDouble(driverProfile.GetValue(OCSimulator.DRIVER_PROGID, OCSimulator.OVERRIDE_VALUE_PROFILENAME, SensorName, OCSimulator.SimulatorDefaultFromValues[SensorName].ToString()));
+            OCSimulator.TL.LogMessage("Sensor.ReadProfile", SensorName + " OverrideValue: " + OverrideValue.ToString());
 
             OCSimulator.TL.LogMessage("Sensor.ReadProfile", "Completed reading profile values");
         }
@@ -76,6 +84,12 @@ namespace ASCOM.Simulator
 
             OCSimulator.TL.LogMessage("Sensor.WriteProfile", SensorName + " Value Cycle Time: " + ValueCycleTime);
             driverProfile.WriteValue(OCSimulator.DRIVER_PROGID, OCSimulator.VALUE_CYCLE_TIME_PROFILE_NAME, ValueCycleTime.ToString(), SensorName);
+
+            OCSimulator.TL.LogMessage("Sensor.WriteProfile", SensorName + " Override: " + Override);
+            driverProfile.WriteValue(OCSimulator.DRIVER_PROGID, OCSimulator.OVERRIDE_PROFILENAME, Override.ToString(), SensorName);
+
+            OCSimulator.TL.LogMessage("Sensor.WriteProfile", SensorName + " OverrideValue: " + OverrideValue);
+            driverProfile.WriteValue(OCSimulator.DRIVER_PROGID, OCSimulator.OVERRIDE_VALUE_PROFILENAME, OverrideValue.ToString(), SensorName);
 
             OCSimulator.TL.LogMessage("Sensor.WriteProfile", SensorName + " Completed writing profile values");
         }

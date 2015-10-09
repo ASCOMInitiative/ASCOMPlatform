@@ -1135,7 +1135,7 @@ Public Class DiagnosticsForm
                             DeviceTest("Telescope", "TrackingTrue")
                             DeviceTest("Telescope", "SiderealTime")
                             DeviceTest("Telescope", "RightAscension")
-                            DeviceTest("Telescope", "TargetRightDeclination")
+                            DeviceTest("Telescope", "TargetDeclination")
                             DeviceTest("Telescope", "TargetRightAscension")
                             DeviceTest("Telescope", "Slew")
                             DeviceTest("Telescope", "TrackingRates")
@@ -1354,7 +1354,7 @@ Public Class DiagnosticsForm
                             TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
                             RetValDouble = DeviceObject.SiderealTime
                             CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.000001)
-                        Case "TargetRightDeclination"
+                        Case "TargetDeclination"
                             DeviceObject.TargetDeclination = 0.0
                             RetValDouble = DeviceObject.TargetDeclination
                             CompareDouble(Device, Test, RetValDouble, 0.0, TOLERANCE_E4)
