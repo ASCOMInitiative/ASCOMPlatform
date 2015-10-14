@@ -4,6 +4,9 @@ using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
 {
+    /// <summary>
+    /// Observing conditions simulator definition
+    /// </summary>
     public class Sensor
     {
 

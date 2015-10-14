@@ -31,18 +31,9 @@ namespace ASCOM.Simulator
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            this.label1 = new System.Windows.Forms.Label();
             this.btnShutDown = new System.Windows.Forms.Button();
             this.lblNumberOfConnections = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(99, 92);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(310, 33);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Observing Conditions Hub";
             // 
             // btnShutDown
             // 
@@ -57,7 +48,7 @@ namespace ASCOM.Simulator
             // lblNumberOfConnections
             // 
             this.lblNumberOfConnections.AutoSize = true;
-            this.lblNumberOfConnections.Location = new System.Drawing.Point(102, 129);
+            this.lblNumberOfConnections.Location = new System.Drawing.Point(77, 102);
             this.lblNumberOfConnections.Name = "lblNumberOfConnections";
             this.lblNumberOfConnections.Size = new System.Drawing.Size(129, 13);
             this.lblNumberOfConnections.TabIndex = 2;
@@ -70,12 +61,11 @@ namespace ASCOM.Simulator
             this.ClientSize = new System.Drawing.Size(527, 226);
             this.Controls.Add(this.lblNumberOfConnections);
             this.Controls.Add(this.btnShutDown);
-            this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmMain";
-            this.Text = "Observing Conditions Hub Server";
+            this.Text = "Observing Conditions Hub";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.ResumeLayout(false);
@@ -84,8 +74,6 @@ namespace ASCOM.Simulator
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnShutDown;
         private System.Windows.Forms.Label lblNumberOfConnections;
 

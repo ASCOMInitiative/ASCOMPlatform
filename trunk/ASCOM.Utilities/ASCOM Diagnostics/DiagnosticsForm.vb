@@ -867,7 +867,7 @@ Public Class DiagnosticsForm
         Sim.Description = "Platform 6 Telescope Simulator"
         Sim.DeviceType = "Telescope"
         Sim.Name = "Simulator"
-        Sim.DriverVersion = "6.0.0.0"
+        Sim.DriverVersion = "6.2.0.0"
         Sim.InterfaceVersion = 3
         Sim.IsPlatform5 = False
         Sim.SixtyFourBit = True
@@ -907,7 +907,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Camera Simulator"
             Sim.DeviceType = "Camera"
             Sim.Name = "Sim "
-            Sim.DriverVersion = "6.0"
+            Sim.DriverVersion = "6.2"
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -1015,7 +1015,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Dome Simulator"
             Sim.DeviceType = "Dome"
             Sim.Name = "Simulator"
-            Sim.DriverVersion = "6.0"
+            Sim.DriverVersion = "6.2"
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True

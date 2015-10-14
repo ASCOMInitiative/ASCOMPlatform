@@ -2,6 +2,7 @@
 using ASCOM.DriverAccess;
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 
@@ -11,14 +12,11 @@ namespace ASCOM.Simulator
     {
         private const string DEVICE_PROGID = "ASCOM.OCH.ObservingConditions";
         private ASCOM.DriverAccess.ObservingConditions driver = null;
+        private System.Windows.Forms.Timer refreshTimer;
 
         public Form1()
         {
             InitializeComponent();
-            Properties.Settings.Default.DriverId = DEVICE_PROGID;
-            labelDriverId.Text = DEVICE_PROGID;
-            driver = new ASCOM.DriverAccess.ObservingConditions(DEVICE_PROGID);
-            SetUIState();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -39,6 +37,13 @@ namespace ASCOM.Simulator
         {
             if (IsConnected)
             {
+                if (!(refreshTimer == null))
+                    {
+                    refreshTimer.Stop();
+                    System.Threading.Thread.Sleep(1000); // Wait for anything nin progress to complete
+                    refreshTimer.Dispose();
+                    refreshTimer = null;
+                }
                 driver.Connected = false;
                 LogMessage("Disconnected OK");
             }
@@ -54,7 +59,7 @@ namespace ASCOM.Simulator
                 catch (Exception ex)
                 {
                     LogMessage("Failed to connect");
-                    LogMessage("Exception: " + ex.Message);
+                    LogMessage("Exception: " + ex.ToString());
                 }
             }
             SetUIState();
@@ -67,7 +72,9 @@ namespace ASCOM.Simulator
             buttonConnect.Text = IsConnected ? "Disconnect" : "Connect";
             buttonChoose.Enabled = !IsConnected;
             buttonRefresh.Enabled = IsConnected;
+            buttonAutoRefresh.Enabled = IsConnected;
             btnSetup.Enabled = !IsConnected;
+            btnQuery.Enabled = IsConnected;
         }
 
         private bool IsConnected
@@ -121,6 +128,7 @@ namespace ASCOM.Simulator
 
         private void DisplayProperties()
         {
+            LogMessage(DateTime.Now.ToString());
             LogMessage(driver.DriverInfo);
             ListProperty("AveragePeriod");
             ListProperty("CloudCover");
@@ -136,23 +144,79 @@ namespace ASCOM.Simulator
             ListProperty("WindDirection");
             ListProperty("WindGust");
             ListProperty("WindSpeed");
+            LogMessage(" ");
 
-            try { LogMessage("CloudCover Description : " + driver.SensorDescription("CloudCover")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("DewPoint Description : " + driver.SensorDescription("DewPoint")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("Humidity Description : " + driver.SensorDescription("Humidity")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("Pressure Description : " + driver.SensorDescription("Pressure")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("RainRate Description : " + driver.SensorDescription("RainRate")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("SkyBrightness Description : " + driver.SensorDescription("SkyBrightness")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("SkyQuality Description : " + driver.SensorDescription("SkyQuality")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("SkySeeing Description : " + driver.SensorDescription("SkySeeing")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("SkyTemperature Description : " + driver.SensorDescription("SkyTemperature")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("Temperature Description : " + driver.SensorDescription("Temperature")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("WindDirection Description : " + driver.SensorDescription("WindDirection")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("WindGust Description : " + driver.SensorDescription("WindGust")); } catch (Exception ex) { LogMessage(ex.Message); }
-            try { LogMessage("WindSpeed Description : " + driver.SensorDescription("WindSpeed")); } catch (Exception ex) { LogMessage(ex.Message); }
+            DisplaySensorDescription("CloudCover");
+            DisplaySensorDescription("DewPoint");
+            DisplaySensorDescription("Humidity");
+            DisplaySensorDescription("Pressure");
+            DisplaySensorDescription("RainRate");
+            DisplaySensorDescription("SkyBrightness");
+            DisplaySensorDescription("SkyQuality");
+            DisplaySensorDescription("SkySeeing");
+            DisplaySensorDescription("SkyTemperature");
+            DisplaySensorDescription("Temperature");
+            DisplaySensorDescription("WindDirection");
+            DisplaySensorDescription("WindGust");
+            DisplaySensorDescription("WindSpeed");
+            LogMessage(" ");
 
-            try { LogMessage("TimeSinceLastUpdate : " + driver.TimeSinceLastUpdate("")); } catch (Exception ex) { LogMessage(ex.Message); }
+            try { LogMessage("TimeSinceLastUpdate : " + driver.TimeSinceLastUpdate("").ToString("0.00")); } catch (Exception ex) { LogMessage(ex.Message); }
+            DisplayTimeSinceLastUpdate("CloudCover");
+            DisplayTimeSinceLastUpdate("DewPoint");
+            DisplayTimeSinceLastUpdate("Humidity");
+            DisplayTimeSinceLastUpdate("Pressure");
+            DisplayTimeSinceLastUpdate("RainRate");
+            DisplayTimeSinceLastUpdate("SkyBrightness");
+            DisplayTimeSinceLastUpdate("SkyQuality");
+            DisplayTimeSinceLastUpdate("SkySeeing");
+            DisplayTimeSinceLastUpdate("SkyTemperature");
+            DisplayTimeSinceLastUpdate("Temperature");
+            DisplayTimeSinceLastUpdate("WindDirection");
+            DisplayTimeSinceLastUpdate("WindGust");
+            DisplayTimeSinceLastUpdate("WindSpeed");
+            LogMessage(" ");
 
+        }
+
+        private void DisplaySensorDescription(string sensor)
+        {
+            try
+            {
+                LogMessage(sensor + " Description : " + driver.SensorDescription(sensor));
+            }
+            catch (MethodNotImplementedException)
+            {
+                LogMessage(sensor + " is not implemented");
+            }
+            catch (InvalidOperationException)
+            {
+                LogMessage("Invalid operation, " + sensor + " is not ready");
+            }
+            catch (Exception ex)
+            {
+                LogMessage(ex.Message);
+            }
+        }
+
+        private void DisplayTimeSinceLastUpdate(string sensor)
+        {
+            try
+            {
+                LogMessage(sensor + " Time since last update: " + driver.TimeSinceLastUpdate(sensor).ToString("0.00"));
+            }
+            catch (MethodNotImplementedException)
+            {
+                LogMessage(sensor + " is not implemented");
+            }
+            catch (InvalidOperationException)
+            {
+                LogMessage("Invalid operation, " + sensor + " is not ready");
+            }
+            catch (Exception ex)
+            {
+                LogMessage(ex.Message);
+            }
         }
 
         private void ListProperty(string PropertyName)
@@ -162,11 +226,23 @@ namespace ASCOM.Simulator
                 Type type = typeof(ObservingConditions);
                 PropertyInfo propertyInfo = type.GetProperty(PropertyName);
                 var observingConditionsValue = (double)propertyInfo.GetValue(driver, null);
-                LogMessage(PropertyName + " : " + observingConditionsValue);
+                LogMessage(PropertyName + " : " + observingConditionsValue.ToString("0.0"));
             }
-            catch(PropertyNotImplementedException)
+
+            catch (TargetInvocationException ex)
             {
-                LogMessage(PropertyName + " - This property is not implemented" );
+                if (ex.InnerException is PropertyNotImplementedException) LogMessage(PropertyName + " - This property is not implemented");
+                else if (ex.InnerException is InvalidOperationException) LogMessage("Invalid operation, " + PropertyName + " is not ready");
+                else if (ex.InnerException is COMException)
+                {
+                    if (((COMException)ex.InnerException).ErrorCode == ErrorCodes.InvalidOperationException)
+                        LogMessage("Invalid operation (COM), " + PropertyName + " is not ready");
+                }
+                else LogMessage(ex.ToString());
+            }
+            catch (PropertyNotImplementedException)
+            {
+                LogMessage(PropertyName + " - This property is not implemented");
             }
             catch (InvalidOperationException)
             {
@@ -174,15 +250,42 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                LogMessage(PropertyName + " " + ex.Message);
+                LogMessage(PropertyName + " " + ex.ToString());
                 if (ex.InnerException != null)
                 {
                     LogMessage("   " + ex.InnerException.Message);
                 }
             }
+        }
 
+        private void buttonAutoRefresh_Click(object sender, EventArgs e)
+        {
 
+            refreshTimer = new Timer();
+            refreshTimer.Interval = 1000; // 1 second refresh interval
+            refreshTimer.Start();
+            refreshTimer.Tick += RefreshTimer_Tick;
+        }
 
+        private void RefreshTimer_Tick(object sender, EventArgs e)
+        {
+            txtStatus.Clear();
+            DisplayProperties();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.DriverId = DEVICE_PROGID;
+            labelDriverId.Text = DEVICE_PROGID;
+            driver = new ASCOM.DriverAccess.ObservingConditions(DEVICE_PROGID);
+            SetUIState();
+        }
+
+        private void btnQuery_Click(object sender, EventArgs e)
+        {
+            driver.Refresh();
+            txtStatus.Clear();
+            DisplayProperties();
         }
     }
 }
