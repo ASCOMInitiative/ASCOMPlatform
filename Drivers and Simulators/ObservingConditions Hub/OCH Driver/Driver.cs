@@ -91,7 +91,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                return Hub.IsHardwareConnected(clientNumber);
+                return Hub.IsClientConnected(clientNumber);
             }
             set
             {
