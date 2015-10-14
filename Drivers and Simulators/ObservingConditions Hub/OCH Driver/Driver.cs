@@ -87,15 +87,11 @@ namespace ASCOM.Simulator
             return Hub.CommandString(clientNumber, command, raw);
         }
 
-        public void Dispose()
-        {
-        }
-
         public bool Connected
         {
             get
             {
-                return Hub.IsConnected(clientNumber);
+                return Hub.IsHardwareConnected(clientNumber);
             }
             set
             {
@@ -107,6 +103,10 @@ namespace ASCOM.Simulator
         public string Description
         {
             get { return Hub.Description(clientNumber); }
+        }
+
+        public void Dispose()
+        {
         }
 
         public string DriverInfo

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ASCOM.Utilities;
 using ASCOM.DriverAccess;
@@ -58,11 +53,7 @@ namespace ASCOM.Simulator
                         sensor.DeviceMode = Hub.ConnectionType.None;
                         sensor.ProgID = Hub.NO_DEVICE_PROGID;
                         break;
-                    //case Hub.DRIVER_PROGID: // Simulate the device
-                    case Hub.SIMULATOR_PROGID: // Simulate the device
-                        sensor.DeviceMode = Hub.ConnectionType.Simulation;
-                        sensor.ProgID = Hub.DRIVER_PROGID;
-                        break;
+
                     default: // Real driver
                         sensor.DeviceMode = Hub.ConnectionType.Real;
                         sensor.ProgID = ProgId;
@@ -82,6 +73,36 @@ namespace ASCOM.Simulator
         public SensorView()
         {
             InitializeComponent();
+
+            // Device combo box is self painted because the DropDownStyle is DropDownList to make the list read only, and this changes the background colour to grey!
+            cmbDevice.DrawMode = DrawMode.OwnerDrawFixed;
+            cmbSwitch.DrawMode = DrawMode.OwnerDrawFixed;
+            cmbDevice.DrawItem += new DrawItemEventHandler(comboBox_DrawItem);
+            cmbSwitch.DrawItem += new DrawItemEventHandler(comboBox_DrawItem);
+        }
+
+        /// <summary>
+        /// Event handler to paint the device list combo box in the "DropDown" rather than "DropDownList" style
+        /// </summary>
+        /// <param name="sender">Device to be painted</param>
+        /// <param name="e">Draw event arguments object</param>
+        void comboBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            ComboBox combo = sender as ComboBox;
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) // Draw the selected item in menu highlight colour
+            {
+                e.Graphics.FillRectangle(new SolidBrush(SystemColors.MenuHighlight), e.Bounds);
+                e.Graphics.DrawString(combo.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.HighlightText), new Point(e.Bounds.X, e.Bounds.Y));
+            }
+            else
+            {
+                e.Graphics.FillRectangle(new SolidBrush(SystemColors.Window), e.Bounds);
+                e.Graphics.DrawString(combo.Items[e.Index].ToString(), e.Font, new SolidBrush(combo.ForeColor), new Point(e.Bounds.X, e.Bounds.Y));
+            }
+
+            e.DrawFocusRectangle();
         }
 
         /// <summary>
@@ -96,14 +117,10 @@ namespace ASCOM.Simulator
             {
                 Hub.TL.LogMessage("Setup Load", "Found device: : \"" + device.Value + "\", Count: " + count);
                 cmbDevice.Items.Add(device.Value);
-                //Hub.TL.LogMessage("Setup Load", "ProgID comparison: : " + device.Key + " " + Hub.Sensors[PropertyName].ProgID);
-                if (device.Key == Hub.Sensors[SensorName].ProgID ||
-                    Hub.Sensors[SensorName].DeviceMode == Hub.ConnectionType.Simulation && device.Key == Hub.SIMULATOR_PROGID)
+                if (device.Key == Hub.Sensors[SensorName].ProgID)
                 {
-                    //Hub.TL.LogMessage("Setup Load", "Before setting index to: : " + count);
                     lastIdx = count;
                     cmbDevice.SelectedIndex = count; // This will fire the SelectedIndexChanged event to set values and enable the switch number as required
-                    //Hub.TL.LogMessage("Setup Load", "After setting index to: : " + count);
                 }
                 count++;
             }
@@ -116,7 +133,6 @@ namespace ASCOM.Simulator
         /// <param name="e"></param>
         private void cmbDevice_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Hub.TL.LogMessage("cmbDevice_SelectedIndexChanged", "{0} Event has fired", SensorName);
 
             // get the selected device Id from allDevices
             if (cmbDevice.SelectedIndex < 0 || cmbDevice.SelectedIndex >= SetupDialogForm.allDevices.Count)
@@ -124,10 +140,13 @@ namespace ASCOM.Simulator
                 MessageBox.Show("cmbDevice_SelectedIndexChanged - index out of range");
             }
             var progId = SetupDialogForm.allDevices[cmbDevice.SelectedIndex].Key;
+            Hub.TL.LogMessage("cmbDevice_SelectedIndexChanged", "{0} Event has fired, ProgID: {1}", SensorName, progId);
 
             if (progId.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) // Enable or disable the property's Switch name combo 
             {
                 // handle switch drivers
+                Hub.TL.LogMessage("cmbDevice_Index", "Switch found - ProgID: {0}", progId);
+
                 var switchId = Hub.Sensors[SensorName].SwitchNumber;
 
                 buttonSetup.Enabled = true;
@@ -149,7 +168,7 @@ namespace ASCOM.Simulator
                         try { s.Connected = true; }
                         catch { }    // could set ConnectToDriver to false
                         this.Cursor = Cursors.Default;
-                        
+
                     }
                     // try to set max switches from driver, set up combo as long as there is no error
                     int max = 100;
@@ -178,46 +197,54 @@ namespace ASCOM.Simulator
                     upDownSwitch.Value = switchId;
                 }
             }
-            else if (progId.EndsWith("." + Hub.OBSERVINGCONDITIONS_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase))
+            else if (progId.EndsWith("." + Hub.OBSERVING_CONDITIONS_DEVICE_TYPE, StringComparison.InvariantCultureIgnoreCase))
             {
+                Hub.TL.LogMessage("cmbDevice_Index", "ObservingConditions device found - ProgID: {0}", progId);
+
                 // checks that the selected OC driver implements this property by
                 // trying to read the sensor description.
                 // can we specify that the description is available even when not connected?
                 using (var oc = new ObservingConditions(progId))
                 {
+
+                    if (ConnectToDriver)
+                    {
+                        // try to connect, ignore error.  This can block if connecting takes a while
+                        this.Cursor = Cursors.WaitCursor;
+                        try { oc.Connected = true; }
+                        catch { }    // could set ConnectToDriver to false
+                        this.Cursor = Cursors.Default;
+                    }
+
                     try
                     {
-                        var d = oc.SensorDescription(SensorName);
+                        Hub.TL.LogMessage("cmbDevice_Index", "Getting description");
+                        string description = oc.SensorDescription(SensorName);
+                        Hub.TL.LogMessage("cmbDevice_Index", "Found description: {0}", description);
                         buttonSetup.Enabled = true;
-                        cmbSwitch.Text = "";
-                        upDownSwitch.Value = 0;
                         upDownSwitch.Visible = false;
                         cmbSwitch.Visible = false;
                         labelDescription.Visible = true;
-                        labelDescription.Text = d;
-                        lastIdx = cmbDevice.SelectedIndex;
+                        labelDescription.Text = description;
                     }
-                    catch (MethodNotImplementedException)
-                    {
-                        // this method or property isn't implemented in the selected driver so revert to the previous driver
-                        cmbDevice.SelectedIndex = lastIdx;
-                    }
-                    catch (PropertyNotImplementedException)
-                    {
-                        // this method or property isn't implemented in the selected driver so revert to the previous driver
-                        cmbDevice.SelectedIndex = lastIdx;
-                    }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // not sure what to do, can we specify that the description is available even
                         // if not connected?
-                        MessageBox.Show(string.Format("ObservingConditions.GetSensorDescription({0}) Exception {1}", SensorName, ex.Message));
-                        cmbDevice.SelectedIndex = lastIdx;
+                        // MessageBox.Show(string.Format("ObservingConditions.GetSensorDescription({0}) Exception {1}", SensorName, ex.Message));
+                        buttonSetup.Enabled = true;
+                        upDownSwitch.Visible = false;
+                        cmbSwitch.Visible = false;
+                        labelDescription.Visible = false;
                     }
+                    // set up the UI
                 }
+
             }
             else
             {
+                Hub.TL.LogMessage("cmbDevice_Index", "No device found - ProgID: {0}", progId);
+
                 // no device selected
                 cmbSwitch.SelectedIndex = -1;
                 //upDownSwitch.Value = 0;
@@ -227,8 +254,6 @@ namespace ASCOM.Simulator
                 labelDescription.Visible = false;
             }
         }
-
-
 
         /// <summary>
         /// updates Hub.Sensors[propertyName].Switchnumber
@@ -270,5 +295,6 @@ namespace ASCOM.Simulator
                 dev.SetupDialog();
             }
         }
+
     }
 }

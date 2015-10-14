@@ -30,11 +30,18 @@ namespace ASCOM.Simulator
                 util = new Util();
                 TL = OCSimulator.TL;
 
+                numAveragePeriod.ValueChanged += NumAveragePeriod_ValueChanged;
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "SetupDialogForm");
             }
+        }
+
+        private void NumAveragePeriod_ValueChanged(object sender, EventArgs e)
+        {
+            EnableNumberOfReadingsToAverage();
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
@@ -94,7 +101,7 @@ namespace ASCOM.Simulator
             numSensorQueryInterval.Value = Convert.ToDecimal(OCSimulator.SensorQueryInterval);
             numAveragePeriod.Value = Convert.ToDecimal(OCSimulator.AveragePeriod);
             numNumberOfReadingsToAverage.Value = Convert.ToDecimal(OCSimulator.NumberOfReadingsToAverage);
-
+            EnableNumberOfReadingsToAverage();
             // Initialise sensorview items here
 
             foreach (string sensor in OCSimulator.SimulatedProperties)
@@ -112,5 +119,12 @@ namespace ASCOM.Simulator
 
         }
 
+        /// <summary>
+        /// Enable or disable the number of readings to average control depending on whether or not we are averaging
+        /// </summary>
+        private void EnableNumberOfReadingsToAverage()
+        {
+            numNumberOfReadingsToAverage.Enabled = numAveragePeriod.Value > 0.0M;
+        }
     }
 }
