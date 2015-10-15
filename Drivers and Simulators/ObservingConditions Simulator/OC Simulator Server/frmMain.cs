@@ -15,12 +15,35 @@ namespace ASCOM.Simulator
 
         private System.Timers.Timer refreshTimer = new System.Timers.Timer(1000);
 
+        #region Initialiser and form load
+
         public frmMain()
         {
             InitializeComponent();
+            Application.ThreadException += Application_ThreadException;
             refreshTimer.Elapsed += refreshTimer_Elapsed;
             refreshTimer.Enabled = true;
         }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            // Minimise or bring the window into view as required
+            if (OCSimulator.MinimiseOnStart) this.WindowState = FormWindowState.Minimized;
+            else this.WindowState = FormWindowState.Normal;
+            chkMinimise.Checked = OCSimulator.MinimiseOnStart;
+
+            foreach (string property in OCSimulator.SimulatedProperties)
+            {
+                OverrideView over = (OverrideView)Controls.Find("overrideView" + property, false)[0];
+                over.InitUI(property);
+            }
+
+            DeactivateEnableButton(); // Deactivate the enable button        
+        }
+
+        #endregion
+
+        #region Event handlers
 
         void refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -39,6 +62,30 @@ namespace ASCOM.Simulator
             this.Close();
         }
 
+        private void btnEnable_Click(object sender, EventArgs e)
+        {
+            Button btnEnable = (Button)sender;
+            // Get the control values into variables in the Sensors array
+            foreach (string property in OCSimulator.SimulatedProperties)
+            {
+                OverrideView over = (OverrideView)Controls.Find("overrideView" + property, false)[0];
+                over.SaveUI(property);
+            }
+
+            // Provide an overridden dew point calculation
+            OCSimulator.Sensors[OCSimulator.PROPERTY_DEWPOINT].OverrideValue = OCSimulator.util.Humidity2DewPoint(OCSimulator.Humidity(0), OCSimulator.Temperature(0));
+
+            OCSimulator.MinimiseOnStart = chkMinimise.Checked;
+
+            // Write the Sensors array values to the Profile
+            OCSimulator.WriteProfile();
+
+            DeactivateEnableButton(); // Deactivate the enable button        
+        }
+        #endregion
+
+        #region Support code
+
         private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
 
         public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
@@ -53,40 +100,19 @@ namespace ASCOM.Simulator
             }
         }
 
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-            // Minimise or bring the window into view as required
-            if (OCSimulator.MinimiseOnStart) this.WindowState = FormWindowState.Minimized;
-            else this.WindowState = FormWindowState.Normal;
-            chkMinimise.Checked = OCSimulator.MinimiseOnStart;
-
-            foreach (string property in OCSimulator.SimulatedProperties)
-            {
-                OverrideView over = (OverrideView)Controls.Find("overrideView" + property, false)[0];
-                over.InitUI(property);
-            }
-            Application.ThreadException += Application_ThreadException;
-        }
-
         private void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
             this.WindowState = FormWindowState.Normal;
             MessageBox.Show("Application Thread Exception: " + e.Exception.ToString());
         }
 
-        private void btnSaveSettings_Click(object sender, EventArgs e)
+        private void DeactivateEnableButton()
         {
-            // Get the control values into variables in the Sensors array
-            foreach (string property in OCSimulator.SimulatedProperties)
-            {
-                OverrideView over = (OverrideView)Controls.Find("overrideView" + property, false)[0];
-                over.SaveUI(property);
-            }
-
-            OCSimulator.MinimiseOnStart = chkMinimise.Checked;
-
-            // Write the Sensors array values to the Profile
-            OCSimulator.WriteProfile();
+            btnEnable.Enabled = false; // Set the enabled button to false ready to be enabed by the next change
+            btnEnable.ForeColor = Color.Black;
         }
+
+        #endregion
+
     }
 }

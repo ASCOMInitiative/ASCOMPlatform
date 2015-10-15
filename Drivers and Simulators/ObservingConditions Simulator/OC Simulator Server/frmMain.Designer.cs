@@ -50,7 +50,7 @@ namespace ASCOM.Simulator
             this.label33 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.btnSaveSettings = new System.Windows.Forms.Button();
+            this.btnEnable = new System.Windows.Forms.Button();
             this.chkMinimise = new System.Windows.Forms.CheckBox();
             this.overrideViewWindSpeed = new ASCOM.Simulator.OverrideView();
             this.overrideViewWindGust = new ASCOM.Simulator.OverrideView();
@@ -68,9 +68,10 @@ namespace ASCOM.Simulator
             // 
             // btnShutDown
             // 
-            this.btnShutDown.Location = new System.Drawing.Point(622, 520);
+            this.btnShutDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShutDown.Location = new System.Drawing.Point(605, 516);
             this.btnShutDown.Name = "btnShutDown";
-            this.btnShutDown.Size = new System.Drawing.Size(75, 23);
+            this.btnShutDown.Size = new System.Drawing.Size(100, 23);
             this.btnShutDown.TabIndex = 1;
             this.btnShutDown.Text = "ShutDown";
             this.btnShutDown.UseVisualStyleBackColor = true;
@@ -79,7 +80,7 @@ namespace ASCOM.Simulator
             // lblNumberOfConnections
             // 
             this.lblNumberOfConnections.AutoSize = true;
-            this.lblNumberOfConnections.Location = new System.Drawing.Point(14, 525);
+            this.lblNumberOfConnections.Location = new System.Drawing.Point(18, 521);
             this.lblNumberOfConnections.Name = "lblNumberOfConnections";
             this.lblNumberOfConnections.Size = new System.Drawing.Size(129, 13);
             this.lblNumberOfConnections.TabIndex = 2;
@@ -283,20 +284,21 @@ namespace ASCOM.Simulator
             this.label15.TabIndex = 67;
             this.label15.Text = "To";
             // 
-            // btnSaveSettings
+            // btnEnable
             // 
-            this.btnSaveSettings.Location = new System.Drawing.Point(525, 520);
-            this.btnSaveSettings.Name = "btnSaveSettings";
-            this.btnSaveSettings.Size = new System.Drawing.Size(91, 23);
-            this.btnSaveSettings.TabIndex = 68;
-            this.btnSaveSettings.Text = "Save Settings";
-            this.btnSaveSettings.UseVisualStyleBackColor = true;
-            this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
+            this.btnEnable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEnable.Location = new System.Drawing.Point(499, 516);
+            this.btnEnable.Name = "btnEnable";
+            this.btnEnable.Size = new System.Drawing.Size(100, 23);
+            this.btnEnable.TabIndex = 68;
+            this.btnEnable.Text = "Enable Changes";
+            this.btnEnable.UseVisualStyleBackColor = true;
+            this.btnEnable.Click += new System.EventHandler(this.btnEnable_Click);
             // 
             // chkMinimise
             // 
             this.chkMinimise.AutoSize = true;
-            this.chkMinimise.Location = new System.Drawing.Point(525, 497);
+            this.chkMinimise.Location = new System.Drawing.Point(500, 491);
             this.chkMinimise.Name = "chkMinimise";
             this.chkMinimise.Size = new System.Drawing.Size(104, 17);
             this.chkMinimise.TabIndex = 69;
@@ -391,9 +393,9 @@ namespace ASCOM.Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 553);
+            this.ClientSize = new System.Drawing.Size(717, 551);
             this.Controls.Add(this.chkMinimise);
-            this.Controls.Add(this.btnSaveSettings);
+            this.Controls.Add(this.btnEnable);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label33);
@@ -469,8 +471,8 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Button btnSaveSettings;
         private System.Windows.Forms.CheckBox chkMinimise;
+        public System.Windows.Forms.Button btnEnable;
     }
 }
 

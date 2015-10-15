@@ -81,6 +81,7 @@ namespace ASCOM.Simulator
         public static TraceLoggerPlus TL;
         public static SetupDialogForm setupForm;
         public static bool DebugTraceState;
+        public static Util util; // Public variable to hold an ASCOM Utilities object
 
         // Setup dialogue configuration variables
         public static bool TraceState;
@@ -210,7 +211,6 @@ namespace ASCOM.Simulator
         #region Private variables and constants
 
         // Miscellaneous variables
-        private static Util util; // Private variable to hold an ASCOM Utilities object
         private static int uniqueClientNumber = 0; // Unique number that increements on each call to UniqueClientNumber
         private readonly static object connectLockObject = new object();
         private static ConcurrentDictionary<long, bool> connectStates;
@@ -705,7 +705,7 @@ namespace ASCOM.Simulator
                 if (Property == PROPERTY_HUMIDITY)
                 {
                     Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = mostRecentUpdateTime;
-                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(newValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue); // Set the new simulator value
+                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(Humidity(0), Temperature(0)); // Set the new simulator value
                 }
 
             }
