@@ -75,6 +75,8 @@
             // 
             // txtValue
             // 
+            this.txtValue.BackColor = System.Drawing.SystemColors.Window;
+            this.txtValue.Enabled = false;
             this.txtValue.Location = new System.Drawing.Point(439, 5);
             this.txtValue.Name = "txtValue";
             this.txtValue.Size = new System.Drawing.Size(100, 20);
