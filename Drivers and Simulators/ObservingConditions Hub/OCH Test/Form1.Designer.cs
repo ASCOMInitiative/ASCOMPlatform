@@ -144,7 +144,7 @@
             this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.buttonChoose);
             this.Name = "Form1";
-            this.Text = "Observing conditions hub test harness";
+            this.Text = "Observing conditions Hub test harness";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
