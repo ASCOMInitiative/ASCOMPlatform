@@ -44,7 +44,7 @@ namespace ASCOM.Simulator
         {
             // Initialise current values of user settings from the ASCOM Profile 
             chkTrace.Checked = Hub.TraceState;
-            debugTrace.Checked = Hub.DebugTraceState;
+            chkDebugTrace.Checked = Hub.DebugTraceState;
             chkConnectToDrivers.Checked = Hub.ConnectToDrivers;
             chkOverrideSafetyLimits.Checked = Hub.overrideUISafetyLimits;
 
@@ -56,6 +56,175 @@ namespace ASCOM.Simulator
         }
 
         #endregion
+
+        #region Event handlers
+
+        private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
+        {
+            // Check whether both dew point and humidy are either set or unset. It is not allowed for one to be available and not the other
+            Hub.ConnectionType connectionTypeDewPoint = this.Controls.OfType<SensorView>().First(sv => sv.Name == "sensorView" + Hub.PROPERTY_DEWPOINT).SelectedSensor.DeviceMode;
+            Hub.ConnectionType connectionTypeHumidity = this.Controls.OfType<SensorView>().First(sv => sv.Name == "sensorView" + Hub.PROPERTY_HUMIDITY).SelectedSensor.DeviceMode;
+
+            if (((connectionTypeDewPoint == Hub.ConnectionType.None) & (connectionTypeHumidity == Hub.ConnectionType.Real)) || ((connectionTypeDewPoint == Hub.ConnectionType.Real) & (connectionTypeHumidity == Hub.ConnectionType.None)))
+            {
+                // We have one of dew point or humidity set to a device and the other is set to "No Device" - this violates the ASCOM spec so flash a warning
+                MessageBox.Show("Dew point and Humidity must both be implemented or both must be not implemented. The ASCOM specification does not allow one to be implemented and the other not.\r\n\r\nPlease ensure that the configured Dew point and Humidity implementations match.", "DewPoint and Humnidty Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.DialogResult = DialogResult.None;
+            }
+            else // Both humidity and dew point are either no device or real device
+            {
+                // Save the UI control states
+                Hub.TraceState = chkTrace.Checked;
+                Hub.DebugTraceState = chkDebugTrace.Checked;
+                Hub.ConnectToDrivers = chkConnectToDrivers.Checked;
+                Hub.averagePeriod = Convert.ToDouble(numAveragePeriod.Value);
+                Hub.numberOfMeasurementsPerAveragePeriod = Convert.ToInt32(numNumberOfReadingsToAverage.Value);
+                Hub.overrideUISafetyLimits = chkOverrideSafetyLimits.Checked;
+
+                // Save updated sensor control values to Hub.Sensors 
+                foreach (Control item in this.Controls.OfType<SensorView>())
+                {
+                    SensorView view = item as SensorView;
+                    if (view != null)
+                    {
+                        var sensorname = view.SensorName;
+                        Hub.Sensors[sensorname].ProgID = view.SelectedSensor.ProgID;
+                        Hub.Sensors[sensorname].SwitchNumber = view.SelectedSensor.SwitchNumber;
+                        Hub.Sensors[sensorname].DeviceMode = view.SelectedSensor.DeviceMode;
+                    }
+                }
+
+                this.DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
+
+        private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
+        {
+            this.DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void NumNumberOfReadingsToAverage_ValueChanged(object sender, EventArgs e)
+        {
+            string warningMessage = "";
+
+            // Set background colour whenver the value changes to give a warning if the user selects a large number of readings that wil slow the hub down when calaculating average values
+            if ((numNumberOfReadingsToAverage.Value <= 30.0M) || (chkOverrideSafetyLimits.Checked)) // SHow normal black on white text if we are safe or we have warnings turned off
+            {
+                numNumberOfReadingsToAverage.ForeColor = Color.Black;
+                numNumberOfReadingsToAverage.BackColor = Color.White;
+            }
+            else if ((numNumberOfReadingsToAverage.Value > 30.0M) & (numNumberOfReadingsToAverage.Value <= 60.0M))
+            {
+                numNumberOfReadingsToAverage.ForeColor = Color.Black;
+                numNumberOfReadingsToAverage.BackColor = Color.Yellow;
+            }
+            else
+            {
+                numNumberOfReadingsToAverage.ForeColor = Color.White;
+                numNumberOfReadingsToAverage.BackColor = Color.Red;
+            }
+
+            if (!chkOverrideSafetyLimits.Checked)// Safety limit is in effect so colour contrl as appropriate and ensure that the selected rate is between 1 and the maximum permitted value
+            {
+                if (numNumberOfReadingsToAverage.Value == numNumberOfReadingsToAverage.Minimum) warningMessage = "( Query rate must be at least 1 per average period )";
+                if (numNumberOfReadingsToAverage.Value == numNumberOfReadingsToAverage.Maximum) // We are at the maximum rate so workj out which message to show
+                {
+                    if (numNumberOfReadingsToAverage.Maximum == Hub.MAX_QUERIES_PER_PERIOD) // We are at the 60 per second limit
+                    {
+                        warningMessage = "( Query rate limited to " + Hub.MAX_QUERIES_PER_PERIOD.ToString() + " per average period )";
+                    }
+                    else // We are at a lower limit determined by 1 per second
+                    {
+                        warningMessage = "( Query rate limited to 1 per second )";
+                    }
+                }
+
+                if (numAveragePeriod.Value > 0.0M) lblWarning.Text = warningMessage; // Display the warning message, if any
+                else lblWarning.Text = "";
+            }
+        }
+
+        private void NumAveragePeriod_ValueChanged(object sender, EventArgs e)
+        {
+            EnableNumberOfReadingsToAverage();
+        }
+
+        private void chkConnectToDrivers_CheckedChanged(object sender, EventArgs e)
+        {
+            TL.LogMessage("ConnectToDrivers", "Event fired");
+            ReadDeviceInformation();
+        }
+
+        /// <summary>
+        /// Event handler to paint the average period combo box in the "DropDown" rather than "DropDownList" style
+        /// </summary>
+        /// <param name="sender">Device to be painted</param>
+        /// <param name="e">Draw event arguments object</param>
+        void DropDownListComboBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            ComboBox combo = sender as ComboBox;
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) // Draw the selected item in menu highlight colour
+            {
+                e.Graphics.FillRectangle(new SolidBrush(SystemColors.MenuHighlight), e.Bounds);
+                e.Graphics.DrawString(combo.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.HighlightText), new Point(e.Bounds.X, e.Bounds.Y));
+            }
+            else
+            {
+                e.Graphics.FillRectangle(new SolidBrush(SystemColors.Window), e.Bounds);
+                e.Graphics.DrawString(combo.Items[e.Index].ToString(), e.Font, new SolidBrush(combo.ForeColor), new Point(e.Bounds.X, e.Bounds.Y));
+            }
+
+            e.DrawFocusRectangle();
+        }
+
+         private void chkOverrideSafetyLimits_CheckedChanged(object sender, EventArgs e)
+        {
+            EnableNumberOfReadingsToAverage();
+            NumNumberOfReadingsToAverage_ValueChanged(new object(), new EventArgs());
+        }
+
+        /// <summary>
+        /// Event handler for the Trace checkbox when the checked state changes
+        /// </summary>
+        /// <param name="sender">Trace Checkbox</param>
+        /// <param name="e">Contextual information</param>
+        private void chkTrace_CheckedChanged(object sender, EventArgs e)
+        {
+            Hub.TL.LogMessage("chkTraceChanged", "chkTrace: {0}, chkDebugTrace: {1}", chkTrace.Checked, chkDebugTrace.Checked);
+            CheckBox chkBox = (CheckBox)sender;
+            if (!chkBox.Checked & chkDebugTrace.Checked)
+            {
+                Hub.TL.LogMessage("chkTraceChanged", "Disabling chkDebugTrace");
+                chkDebugTrace.Checked = false; // Trace has been turned off so turn off debug trace as well
+            }
+            chkDebugTrace.Enabled = chkTrace.Checked; // Enable or disable the debug trace box as required
+            Hub.TL.LogMessage("chkTraceChanged", "chkTrace.Enabled: {0}, chkTrace.Checked: {1}, chkDebugTrace.Enabled: {2}, chkDebugTrace.Checked: {3}", chkTrace.Enabled, chkTrace.Checked, chkDebugTrace.Enabled, chkDebugTrace.Checked);
+        }
+
+        private void BrowseToAscom(object sender, EventArgs e) // Click on ASCOM logo event handler
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("http://ascom-standards.org/");
+            }
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                    MessageBox.Show(noBrowser.Message);
+            }
+            catch (System.Exception other)
+            {
+                MessageBox.Show(other.Message);
+            }
+        }
+
+       #endregion
+
+        #region Support code
 
         private void ReadDeviceInformation()
         {
@@ -175,151 +344,7 @@ namespace ASCOM.Simulator
             else lblWarning.Text = "";
         }
 
-        #region Event handlers
-
-        private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
-        {
-            // Check whether both dew point and humidy are either set or unset. It is not allowed for one to be available and not the other
-            Hub.ConnectionType connectionTypeDewPoint = this.Controls.OfType<SensorView>().First(sv => sv.Name == "sensorView" + Hub.PROPERTY_DEWPOINT).SelectedSensor.DeviceMode;
-            Hub.ConnectionType connectionTypeHumidity = this.Controls.OfType<SensorView>().First(sv => sv.Name == "sensorView" + Hub.PROPERTY_HUMIDITY).SelectedSensor.DeviceMode;
-
-            if (((connectionTypeDewPoint == Hub.ConnectionType.None) & (connectionTypeHumidity == Hub.ConnectionType.Real)) || ((connectionTypeDewPoint == Hub.ConnectionType.Real) & (connectionTypeHumidity == Hub.ConnectionType.None)))
-            {
-                // We have one of dew point or humidity set to a device and the other is set to "No Device" - this violates the ASCOM spec so flash a warning
-                MessageBox.Show("Dew point and Humidity must both be implemented or both must be not implemented. The ASCOM specification does not allow one to be implemented and the other not.\r\n\r\nPlease ensure that the configured Dew point and Humidity implementations match.", "DewPoint and Humnidty Issue", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else // Both humidity and dew point are either no device or real device
-            {
-                // Save the UI control states
-                Hub.TraceState = chkTrace.Checked;
-                Hub.DebugTraceState = debugTrace.Checked;
-                Hub.ConnectToDrivers = chkConnectToDrivers.Checked;
-                Hub.averagePeriod = Convert.ToDouble(numAveragePeriod.Value);
-                Hub.numberOfMeasurementsPerAveragePeriod = Convert.ToInt32(numNumberOfReadingsToAverage.Value);
-                Hub.overrideUISafetyLimits = chkOverrideSafetyLimits.Checked;
-
-                // Save updated sensor control values to Hub.Sensors 
-                foreach (Control item in this.Controls.OfType<SensorView>())
-                {
-                    SensorView view = item as SensorView;
-                    if (view != null)
-                    {
-                        var sensorname = view.SensorName;
-                        Hub.Sensors[sensorname].ProgID = view.SelectedSensor.ProgID;
-                        Hub.Sensors[sensorname].SwitchNumber = view.SelectedSensor.SwitchNumber;
-                        Hub.Sensors[sensorname].DeviceMode = view.SelectedSensor.DeviceMode;
-                    }
-                }
-
-                this.DialogResult = DialogResult.OK;
-                Close();
-            }
-        }
-
-        private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
-        {
-            Close();
-        }
-
-        private void NumNumberOfReadingsToAverage_ValueChanged(object sender, EventArgs e)
-        {
-            string warningMessage = "";
-
-            // Set background colour whenver the value changes to give a warning if the user selects a large number of readings that wil slow the hub down when calaculating average values
-            if ((numNumberOfReadingsToAverage.Value <= 30.0M) || (chkOverrideSafetyLimits.Checked)) // SHow normal black on white text if we are safe or we have warnings turned off
-            {
-                numNumberOfReadingsToAverage.ForeColor = Color.Black;
-                numNumberOfReadingsToAverage.BackColor = Color.White;
-            }
-            else if ((numNumberOfReadingsToAverage.Value > 30.0M) & (numNumberOfReadingsToAverage.Value <= 60.0M))
-            {
-                numNumberOfReadingsToAverage.ForeColor = Color.Black;
-                numNumberOfReadingsToAverage.BackColor = Color.Yellow;
-            }
-            else
-            {
-                numNumberOfReadingsToAverage.ForeColor = Color.White;
-                numNumberOfReadingsToAverage.BackColor = Color.Red;
-            }
-
-            if (!chkOverrideSafetyLimits.Checked)// Safety limit is in effect so colour contrl as appropriate and ensure that the selected rate is between 1 and the maximum permitted value
-            {
-                if (numNumberOfReadingsToAverage.Value == numNumberOfReadingsToAverage.Minimum) warningMessage = "( Query rate must be at least 1 per average period )";
-                if (numNumberOfReadingsToAverage.Value == numNumberOfReadingsToAverage.Maximum) // We are at the maximum rate so workj out which message to show
-                {
-                    if (numNumberOfReadingsToAverage.Maximum == Hub.MAX_QUERIES_PER_PERIOD) // We are at the 60 per second limit
-                    {
-                        warningMessage = "( Query rate limited to " + Hub.MAX_QUERIES_PER_PERIOD.ToString() + " per average period )";
-                    }
-                    else // We are at a lower limit determined by 1 per second
-                    {
-                        warningMessage = "( Query rate limited to 1 per second )";
-                    }
-                }
-
-                if (numAveragePeriod.Value > 0.0M) lblWarning.Text = warningMessage; // Display the warning message, if any
-                else lblWarning.Text = "";
-            }
-        }
-
-        private void NumAveragePeriod_ValueChanged(object sender, EventArgs e)
-        {
-            EnableNumberOfReadingsToAverage();
-        }
-
-        private void chkConnectToDrivers_CheckedChanged(object sender, EventArgs e)
-        {
-            TL.LogMessage("ConnectToDrivers", "Event fired");
-            ReadDeviceInformation();
-        }
-
-        private void BrowseToAscom(object sender, EventArgs e) // Click on ASCOM logo event handler
-        {
-            try
-            {
-                System.Diagnostics.Process.Start("http://ascom-standards.org/");
-            }
-            catch (System.ComponentModel.Win32Exception noBrowser)
-            {
-                if (noBrowser.ErrorCode == -2147467259)
-                    MessageBox.Show(noBrowser.Message);
-            }
-            catch (System.Exception other)
-            {
-                MessageBox.Show(other.Message);
-            }
-        }
-
-        /// <summary>
-        /// Event handler to paint the average period combo box in the "DropDown" rather than "DropDownList" style
-        /// </summary>
-        /// <param name="sender">Device to be painted</param>
-        /// <param name="e">Draw event arguments object</param>
-        void DropDownListComboBox_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            if (e.Index < 0) return;
-
-            ComboBox combo = sender as ComboBox;
-            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) // Draw the selected item in menu highlight colour
-            {
-                e.Graphics.FillRectangle(new SolidBrush(SystemColors.MenuHighlight), e.Bounds);
-                e.Graphics.DrawString(combo.Items[e.Index].ToString(), e.Font, new SolidBrush(SystemColors.HighlightText), new Point(e.Bounds.X, e.Bounds.Y));
-            }
-            else
-            {
-                e.Graphics.FillRectangle(new SolidBrush(SystemColors.Window), e.Bounds);
-                e.Graphics.DrawString(combo.Items[e.Index].ToString(), e.Font, new SolidBrush(combo.ForeColor), new Point(e.Bounds.X, e.Bounds.Y));
-            }
-
-            e.DrawFocusRectangle();
-        }
-
         #endregion
 
-        private void chkOverrideSafetyLimits_CheckedChanged(object sender, EventArgs e)
-        {
-            EnableNumberOfReadingsToAverage();
-            NumNumberOfReadingsToAverage_ValueChanged(new object(), new EventArgs());
-        }
     }
 }
