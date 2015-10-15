@@ -12,8 +12,6 @@ namespace ASCOM.Simulator
     [ComVisible(false)]					// Form not registered for COM!
     public partial class SetupDialogForm : Form
     {
-        // Constants
-
         // Variables
         private Util util;
         private TraceLoggerPlus TL;
@@ -21,6 +19,7 @@ namespace ASCOM.Simulator
         // make this static so the SensorView controls can use it
         internal static List<KeyValuePair> allDevices = new List<KeyValuePair>();
 
+        #region Initialiser and form load
         public SetupDialogForm()
         {
             try
@@ -30,7 +29,7 @@ namespace ASCOM.Simulator
                 util = new Util();
                 TL = OCSimulator.TL;
 
-                numAveragePeriod.ValueChanged += NumAveragePeriod_ValueChanged;
+                numAveragePeriod.ValueChanged += numAveragePeriod_ValueChanged;
 
             }
             catch (Exception ex)
@@ -39,16 +38,46 @@ namespace ASCOM.Simulator
             }
         }
 
-        private void NumAveragePeriod_ValueChanged(object sender, EventArgs e)
+        private void SetupDialogForm_Load(object sender, EventArgs e)
         {
+            // Initialise current values of user settings from the ASCOM Profile 
+            chkTrace.Checked = OCSimulator.TraceState;
+            chkDebugTrace.Checked = OCSimulator.DebugTraceState;
+            numSensorQueryInterval.Value = Convert.ToDecimal(OCSimulator.SensorQueryInterval);
+            numAveragePeriod.Value = Convert.ToDecimal(OCSimulator.AveragePeriod);
+            numNumberOfReadingsToAverage.Value = Convert.ToDecimal(OCSimulator.NumberOfReadingsToAverage);
             EnableNumberOfReadingsToAverage();
+            // Initialise sensorview items here
+
+            foreach (string sensor in OCSimulator.SimulatedProperties)
+            {
+                SensorView thisSensorView = (SensorView)this.Controls[OCSimulator.SENSORVIEW_CONTROL_PREFIX + sensor];
+                thisSensorView.MinValue = OCSimulator.Sensors[sensor].SimFromValue;
+                thisSensorView.MaxValue = OCSimulator.Sensors[sensor].SimToValue;
+                thisSensorView.SensorEnabled = OCSimulator.Sensors[sensor].IsImplemented;
+                thisSensorView.NotReadyControlsEnabled = OCSimulator.Sensors[sensor].IsImplemented;
+                thisSensorView.NotReadyDelay = OCSimulator.Sensors[sensor].NotReadyDelay;
+                thisSensorView.ValueCycleTime = OCSimulator.Sensors[sensor].ValueCycleTime;
+            }
+
+            // Initialise current values of user settings from the ASCOM Profile 
+
+        }
+
+        #endregion
+
+        #region Event handlers
+
+        private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
+        {
+            Close();
         }
 
         private void cmdOK_Click(object sender, EventArgs e) // OK button event handler
         {
             // Place any validation constraint checks here
             OCSimulator.TraceState = chkTrace.Checked;
-            OCSimulator.DebugTraceState = debugTrace.Checked;
+            OCSimulator.DebugTraceState = chkDebugTrace.Checked;
             OCSimulator.SensorQueryInterval = Convert.ToDouble(numSensorQueryInterval.Value);
             OCSimulator.AveragePeriod = Convert.ToDouble(numAveragePeriod.Value);
             OCSimulator.NumberOfReadingsToAverage = Convert.ToInt32(numNumberOfReadingsToAverage.Value);
@@ -71,9 +100,27 @@ namespace ASCOM.Simulator
 
         }
 
-        private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
+        private void numAveragePeriod_ValueChanged(object sender, EventArgs e)
         {
-            Close();
+            EnableNumberOfReadingsToAverage();
+        }
+
+        /// <summary>
+        /// Event handler for the Trace checkbox when the checked state changes
+        /// </summary>
+        /// <param name="sender">Trace Checkbox</param>
+        /// <param name="e">Contextual information</param>
+        private void chkTrace_CheckedChanged(object sender, EventArgs e)
+        {
+            OCSimulator.TL.LogMessage("chkTraceChanged", "chkTrace: {0}, chkDebugTrace: {1}", chkTrace.Checked, chkDebugTrace.Checked);
+            CheckBox chkBox = (CheckBox)sender;
+            if (!chkBox.Checked & chkDebugTrace.Checked)
+            {
+                OCSimulator.TL.LogMessage("chkTraceChanged", "Disabling chkDebugTrace");
+                chkDebugTrace.Checked = false; // Trace has been turned off so turn off debug trace as well
+            }
+            chkDebugTrace.Enabled = chkTrace.Checked; // Enable or disable the debug trace box as required
+            OCSimulator.TL.LogMessage("chkTraceChanged", "chkTrace.Enabled: {0}, chkTrace.Checked: {1}, chkDebugTrace.Enabled: {2}, chkDebugTrace.Checked: {3}", chkTrace.Enabled, chkTrace.Checked, chkDebugTrace.Enabled, chkDebugTrace.Checked);
         }
 
         private void BrowseToAscom(object sender, EventArgs e) // Click on ASCOM logo event handler
@@ -93,31 +140,9 @@ namespace ASCOM.Simulator
             }
         }
 
-        private void SetupDialogForm_Load(object sender, EventArgs e)
-        {
-            // Initialise current values of user settings from the ASCOM Profile 
-            chkTrace.Checked = OCSimulator.TraceState;
-            debugTrace.Checked = OCSimulator.DebugTraceState;
-            numSensorQueryInterval.Value = Convert.ToDecimal(OCSimulator.SensorQueryInterval);
-            numAveragePeriod.Value = Convert.ToDecimal(OCSimulator.AveragePeriod);
-            numNumberOfReadingsToAverage.Value = Convert.ToDecimal(OCSimulator.NumberOfReadingsToAverage);
-            EnableNumberOfReadingsToAverage();
-            // Initialise sensorview items here
+        #endregion
 
-            foreach (string sensor in OCSimulator.SimulatedProperties)
-            {
-                SensorView thisSensorView = (SensorView)this.Controls[OCSimulator.SENSORVIEW_CONTROL_PREFIX + sensor];
-                thisSensorView.MinValue = OCSimulator.Sensors[sensor].SimFromValue;
-                thisSensorView.MaxValue = OCSimulator.Sensors[sensor].SimToValue;
-                thisSensorView.SensorEnabled = OCSimulator.Sensors[sensor].IsImplemented;
-                thisSensorView.NotReadyControlsEnabled = OCSimulator.Sensors[sensor].IsImplemented;
-                thisSensorView.NotReadyDelay = OCSimulator.Sensors[sensor].NotReadyDelay;
-                thisSensorView.ValueCycleTime = OCSimulator.Sensors[sensor].ValueCycleTime;
-            }
-
-            // Initialise current values of user settings from the ASCOM Profile 
-
-        }
+        #region Support code
 
         /// <summary>
         /// Enable or disable the number of readings to average control depending on whether or not we are averaging
@@ -126,5 +151,8 @@ namespace ASCOM.Simulator
         {
             numNumberOfReadingsToAverage.Enabled = numAveragePeriod.Value > 0.0M;
         }
+
+        #endregion
+
     }
 }

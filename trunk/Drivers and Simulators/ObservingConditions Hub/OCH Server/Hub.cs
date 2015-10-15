@@ -52,7 +52,7 @@ namespace ASCOM.Simulator
         public const string NOT_CONNECTED_MESSAGE = DRIVER_DISPLAY_NAME + " is not connected.";
 
         // Profile constants
-        public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; private const string TRACE_LEVEL_DEFAULT = "True";
+        public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; private const string TRACE_LEVEL_DEFAULT = "False";
         public const string DEBUG_TRACE_PROFILENAME = "Include Debug Trace"; private const string DEBUG_TRACE_DEFAULT = "False";
         public const string CONNECT_TO_DRIVERS_PROFILENAME = "Connect To Drivers"; private const string CONNECT_TO_DRIVERS_DEFAULT = "False";
         public const string AVERAGE_PERIOD_PROFILENAME = "Average Period"; public const string AVERAGE_PERIOD_DEFAULT = "0.0";

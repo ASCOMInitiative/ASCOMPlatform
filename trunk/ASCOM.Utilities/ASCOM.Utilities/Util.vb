@@ -1176,9 +1176,9 @@ Public Class Util
 
         Pws = A * Math.Pow(10.0, m * AmbientTemperature / (AmbientTemperature + Tn)) 'Calculate water vapor saturation pressure, Pws, from Vaisala formula (6) - In hPa
         Pw = Pws * RelativeHumidity / 100.0 'Calculate measured vapor pressure, Pw
-        Td = Tn / (m / Math.Log10(Pw / A) - 1) ' Finally, calculate dew-point in °C
+        Td = Tn / ((m / Math.Log10(Pw / A)) - 1.0) ' Finally, calculate dew-point in °C
 
-        TL.LogMessage("Humidity2DewPoint", "DewPoint: " & Td & ", Given Relative Humidity: " & RelativeHumidity & ", Given Ambient temperaure: " & AmbientTemperature)
+        TL.LogMessage("Humidity2DewPoint", "DewPoint: " & Td & ", Given Relative Humidity: " & RelativeHumidity & ", Given Ambient temperaure: " & AmbientTemperature & ", Pws: " & Pws & ", Pw: " & Pw)
 
         Return Td
     End Function

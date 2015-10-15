@@ -64,19 +64,19 @@ namespace ASCOM.Simulator
         // Profile persistance constants
         public const string SIMFROMVALUE_PROFILENAME = "Simulated From Value"; // Default values are held in Dictionary SimulatorDefaultFromValues
         public const string SIMTOVALUE_PROFILENAME = "Simulated To Value"; // Default values are held in Dictionary SimulatorDefaultToValues
-        public const string IS_IMPLEMENTED_PROFILENAME = "Is Implemented"; public const string IS_IMPLEMENTED_DEFAULT = "true";
-        public const string SHOW_NOT_READY_PROFILENAME = "Show NotReady"; public const string SHOW_NOT_READY_DEFAULT = "false";
+        public const string IS_IMPLEMENTED_PROFILENAME = "Is Implemented"; public const string IS_IMPLEMENTED_DEFAULT = "True";
+        public const string SHOW_NOT_READY_PROFILENAME = "Show NotReady"; public const string SHOW_NOT_READY_DEFAULT = "False";
         public const string NOT_READY_DELAY_PROFILENAME = "Not Ready Delay"; public const string NOT_READY_DELAY_DEFAULT = "0.0";
         public const string VALUE_CYCLE_TIME_PROFILE_NAME = "Value Cycle Time"; public const string VALUE_CYCLE_TIME_DEFAULT = "60.0";
-        public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; public const string TRACE_LEVEL_DEFAULT = "true";
-        public const string DEBUG_TRACE_PROFILENAME = "Include Debug Trace"; public const string DEBUG_TRACE_DEFAULT = "true";
-        public const string CONNECT_TO_DRIVERS_PROFILENAME = "Connect To Drivers"; public const string CONNECT_TO_DRIVERS_DEFAULT = "false";
+        public const string TRACE_LEVEL_PROFILENAME = "Trace Level"; public const string TRACE_LEVEL_DEFAULT = "False";
+        public const string DEBUG_TRACE_PROFILENAME = "Include Debug Trace"; public const string DEBUG_TRACE_DEFAULT = "False";
+        public const string CONNECT_TO_DRIVERS_PROFILENAME = "Connect To Drivers"; public const string CONNECT_TO_DRIVERS_DEFAULT = "False";
         public const string SENSOR_READ_PERIOD_PROFILENAME = "Sensor Read Period"; public const string SENSOR_READ_PERIOD_DEFAULT = "1.0";
         public const string AVERAGE_PERIOD_PROFILENAME = "Average Period"; public const string AVERAGE_PERIOD_DEFAULT = "0.0";
         public const string NUMBER_OF_READINGS_PROFILENAME = "Number Of Readings"; public const string NUMBER_OF_READINGS_DEFAULT = "10";
         public const string OVERRIDE_PROFILENAME = "Override"; public const string OVERRIDE_DEFAULT = "false";
         public const string OVERRIDE_VALUE_PROFILENAME = "Override Value"; // No default value, these are picked from the simulator "from" values
-        public const string MINIMISE_ON_START_PROFILENAME = "Minimise On Start"; public const string MINIMISE_ON_START_DEFAULT = "true";
+        public const string MINIMISE_ON_START_PROFILENAME = "Minimise On Start"; public const string MINIMISE_ON_START_DEFAULT = "True";
 
         public static TraceLoggerPlus TL;
         public static SetupDialogForm setupForm;
@@ -705,7 +705,7 @@ namespace ASCOM.Simulator
                 if (Property == PROPERTY_HUMIDITY)
                 {
                     Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = mostRecentUpdateTime;
-                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(newValue, Temperature(0)); // Set the new simulator value
+                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(newValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue); // Set the new simulator value
                 }
 
             }

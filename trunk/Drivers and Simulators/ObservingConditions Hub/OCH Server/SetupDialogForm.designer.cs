@@ -32,7 +32,7 @@ namespace ASCOM.Simulator
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.chkTrace = new System.Windows.Forms.CheckBox();
-            this.debugTrace = new System.Windows.Forms.CheckBox();
+            this.chkDebugTrace = new System.Windows.Forms.CheckBox();
             this.label35 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
@@ -83,7 +83,8 @@ namespace ASCOM.Simulator
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdOK.Location = new System.Drawing.Point(993, 501);
+            this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.cmdOK.Location = new System.Drawing.Point(993, 503);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(59, 24);
             this.cmdOK.TabIndex = 0;
@@ -95,7 +96,7 @@ namespace ASCOM.Simulator
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(993, 531);
+            this.cmdCancel.Location = new System.Drawing.Point(993, 533);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(59, 25);
             this.cmdCancel.TabIndex = 1;
@@ -112,16 +113,17 @@ namespace ASCOM.Simulator
             this.chkTrace.TabIndex = 6;
             this.chkTrace.Text = "Trace on";
             this.chkTrace.UseVisualStyleBackColor = true;
+            this.chkTrace.CheckedChanged += new System.EventHandler(this.chkTrace_CheckedChanged);
             // 
-            // debugTrace
+            // chkDebugTrace
             // 
-            this.debugTrace.AutoSize = true;
-            this.debugTrace.Location = new System.Drawing.Point(86, 40);
-            this.debugTrace.Name = "debugTrace";
-            this.debugTrace.Size = new System.Drawing.Size(121, 17);
-            this.debugTrace.TabIndex = 9;
-            this.debugTrace.Text = "Include debug trace";
-            this.debugTrace.UseVisualStyleBackColor = true;
+            this.chkDebugTrace.AutoSize = true;
+            this.chkDebugTrace.Location = new System.Drawing.Point(86, 40);
+            this.chkDebugTrace.Name = "chkDebugTrace";
+            this.chkDebugTrace.Size = new System.Drawing.Size(121, 17);
+            this.chkDebugTrace.TabIndex = 9;
+            this.chkDebugTrace.Text = "Include debug trace";
+            this.chkDebugTrace.UseVisualStyleBackColor = true;
             // 
             // label35
             // 
@@ -585,8 +587,10 @@ namespace ASCOM.Simulator
             // 
             // SetupDialogForm
             // 
+            this.AcceptButton = this.cmdOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cmdCancel;
             this.ClientSize = new System.Drawing.Size(1064, 570);
             this.Controls.Add(this.chkOverrideSafetyLimits);
             this.Controls.Add(this.lblNumberOfReadingsToAverage);
@@ -630,7 +634,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.label35);
             this.Controls.Add(this.label34);
             this.Controls.Add(this.label33);
-            this.Controls.Add(this.debugTrace);
+            this.Controls.Add(this.chkDebugTrace);
             this.Controls.Add(this.label32);
             this.Controls.Add(this.chkTrace);
             this.Controls.Add(this.cmdCancel);
@@ -657,7 +661,7 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.Button cmdOK;
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.CheckBox chkTrace;
-        private System.Windows.Forms.CheckBox debugTrace;
+        private System.Windows.Forms.CheckBox chkDebugTrace;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
