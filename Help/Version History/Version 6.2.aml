@@ -44,10 +44,11 @@
       		<content>
 				<list class="bullet">
 	      			<listItem>Added support for the June 30th 2015 leap second</listItem>
+	      			<listItem>DeltaT prediction modelling updated with the latest USNO data</listItem>
 	      			<listItem>Telescope Simulator - Improved simulation of Alt/AZ, German Equatorial and Equatorial modes</listItem>
 	      			<listItem>Help  - Now presented in easier to read style</listItem>
 	      			<listItem>Installer recognises Windows 10</listItem>
-	      			<listItem>Platform now supports an ObservingConditions interface</listItem>
+	      			<listItem>The Platform now supports an ObservingConditions interface, which enables weather and astronomical seeing sensors to be presented in a consistent way</listItem>
 	      			<listItem>ObservingConditions simulator added</listItem>
 	      			<listItem>ObservingConditions Hub added. The ObservingConditions interface is very broad and most equipment manufacturers do not provide devices that 
 	      			support all of the interface's capabiities. The ObservingConditions Hub enables a collection individual sensors from different manufacturers to be 
@@ -79,10 +80,7 @@
 						that report atmospheric pressure at sea level rather than at observatory altitude.</listItem>
 						<listItem>Util.DewPoint2Humidity: Returns humidity given dew point and ambient temperature.</listItem>
 						<listItem>Util.Humidity2DewPoint: Returns dew point given humidity and ambient temperature.</listItem>
-					</list>
-
-	      			
-	      			
+					</list>      			
 	      			</listItem>
 				</list>
       		</content>
