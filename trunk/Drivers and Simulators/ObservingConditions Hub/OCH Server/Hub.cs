@@ -463,11 +463,11 @@ namespace ASCOM.Simulator
 
         #region ASCOM ObservingConditions Methods
 
-        public static double AveragePeriod(int clientNumber)
+        public static double AveragePeriodGet(int clientNumber)
         {
-            CheckConnected("AveragePeriod");
+            CheckConnected("AveragePeriodGet");
 
-            TL.LogMessage(clientNumber, "AveragePeriod", averagePeriod.ToString());
+            TL.LogMessage(clientNumber, "AveragePeriodGet", averagePeriod.ToString());
             return averagePeriod;
         }
 
@@ -475,10 +475,18 @@ namespace ASCOM.Simulator
         {
             CheckConnected("AveragePeriodSet");
 
-            averagePeriod = value;
+            if (value >= 0.0)
+            {
+                averagePeriod = value;
 
-            ConfigureAveragePeriodTimer();
-            TL.LogMessage(clientNumber, "AveragePeriodSet", value.ToString());
+                ConfigureAveragePeriodTimer();
+                TL.LogMessage(clientNumber, "AveragePeriodSet", value.ToString());
+            }
+            else
+            {
+                TL.LogMessage(clientNumber, "AveragePeriodSet", "Bad value: " + value.ToString() + ", throwing InvalidValueException");
+                throw new InvalidValueException("AveragePeriod Set", value.ToString(), "0.0 updwards");
+            }
         }
 
         public static double CloudCover(int clientNumber)

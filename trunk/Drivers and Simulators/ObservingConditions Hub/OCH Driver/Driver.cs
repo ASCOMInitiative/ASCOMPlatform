@@ -135,7 +135,7 @@ namespace ASCOM.Simulator
 
         public double AveragePeriod
         {
-            get { return Hub.AveragePeriod(clientNumber); }
+            get { return Hub.AveragePeriodGet(clientNumber); }
             set { Hub.AveragePeriodSet(clientNumber, value); }
         }
 
