@@ -464,9 +464,18 @@ namespace ASCOM.Simulator
         {
             CheckConnected("AveragePeriodSet");
 
-            AveragePeriod = value;
-            TL.LogMessage(clientNumber, "AveragePeriodSet", AveragePeriod.ToString());
-            ConfigureAveragePeriodTimer();
+            if (value >= 0.0)
+            {
+                AveragePeriod = value;
+
+                ConfigureAveragePeriodTimer();
+                TL.LogMessage(clientNumber, "AveragePeriodSet", value.ToString());
+            }
+            else
+            {
+                TL.LogMessage(clientNumber, "AveragePeriodSet", "Bad value: " + value.ToString() + ", throwing InvalidValueException");
+                throw new InvalidValueException("AveragePeriod Set", value.ToString(), "0.0 updwards");
+            }
         }
 
         public static double CloudCover(int clientNumber)
