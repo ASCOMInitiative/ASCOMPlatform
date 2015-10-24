@@ -1385,10 +1385,12 @@ namespace ASCOM.Simulator
                         LogMessage("Settle", "Moved from slew to settle");
                         break;
                     case SlewType.SlewPark:
+                        LogMessage("DoSlew", "Parked done");
                         SlewState = SlewType.SlewNone;
                         ChangePark(true);
                         break;
                     case SlewType.SlewHome:
+                        LogMessage("DoSlew", "Home done");
                         SlewState = SlewType.SlewNone;
                         break;
                     case SlewType.SlewNone:
@@ -1606,12 +1608,9 @@ namespace ASCOM.Simulator
             TelescopeSimulator.m_MainForm.Tracking();
             TelescopeSimulator.m_MainForm.LedPier(SideOfPier);
 
-            if (AtPark) TelescopeSimulator.m_MainForm.lblPARK.ForeColor = Color.Red;
-            else TelescopeSimulator.m_MainForm.lblPARK.ForeColor = Color.SaddleBrown;
-            if (AtHome) TelescopeSimulator.m_MainForm.lblHOME.ForeColor = Color.Red;
-            else TelescopeSimulator.m_MainForm.lblHOME.ForeColor = Color.SaddleBrown;
-            if (!IsSlewing) TelescopeSimulator.m_MainForm.labelSlew.ForeColor = Color.SaddleBrown;
-            else TelescopeSimulator.m_MainForm.labelSlew.ForeColor = Color.Red;
+            TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.lblPARK, AtPark);
+            TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.lblHOME, AtHome);
+            TelescopeSimulator.m_MainForm.LabelState(TelescopeSimulator.m_MainForm.labelSlew, IsSlewing);
         }
 
         public static void StartSlewRaDec(double rightAscension, double declination, bool doSideOfPier)
@@ -1714,7 +1713,7 @@ namespace ASCOM.Simulator
 
         public static void SyncToTargetRaDec()
         {
-            mountAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec);
+            mountAxes = MountFunctions.ConvertRaDecToAxes(targetRaDec, true);
             UpdatePositions();
         }
 

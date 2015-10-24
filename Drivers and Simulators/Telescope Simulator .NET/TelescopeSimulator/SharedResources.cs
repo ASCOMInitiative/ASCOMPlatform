@@ -51,7 +51,7 @@ namespace ASCOM.Simulator
     public static class SharedResources
     {
         
-        private static int s_z = 0;
+        //private static int s_z = 0;
         private static TrafficForm m_trafficForm;               // Traffic Form 
 
         //private SharedResources() { }							// Prevent creation of instances
@@ -97,9 +97,10 @@ namespace ASCOM.Simulator
         // Public access to shared resources
         //
 
-        public static int z { get { return s_z++; } }
+        //public static int z { get { return s_z++; } }
 
-        public static TrafficForm TrafficForm { 
+        public static TrafficForm TrafficForm
+        { 
             get 
             {
                 if (m_trafficForm == null)

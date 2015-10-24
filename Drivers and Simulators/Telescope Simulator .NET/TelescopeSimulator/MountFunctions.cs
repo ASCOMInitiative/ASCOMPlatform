@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using ASCOM.DeviceInterface;
 
 namespace ASCOM.Simulator
 {
@@ -15,8 +16,13 @@ namespace ASCOM.Simulator
     /// </summary>
     internal static class MountFunctions
     {
-
-        internal static Vector ConvertRaDecToAxes(Vector raDec)
+        /// <summary>
+        /// convert a RaDec position to an axes positions. 
+        /// </summary>
+        /// <param name="raDec"></param>
+        /// <param name="preserveSop">used for sync</param>
+        /// <returns></returns>
+        internal static Vector ConvertRaDecToAxes(Vector raDec, bool preserveSop = false)
         {
             Vector axes = new Vector();
             switch (TelescopeHardware.AlignmentMode)
@@ -25,6 +31,7 @@ namespace ASCOM.Simulator
                     axes = AstronomyFunctions.CalculateAltAzm(raDec.X, raDec.Y, TelescopeHardware.Latitude);
                     break;
                 case ASCOM.DeviceInterface.AlignmentModes.algGermanPolar:
+                    var sop = TelescopeHardware.SideOfPier;
                     axes.X = (TelescopeHardware.SiderealTime - raDec.X) * 15.0;
                     axes.Y = (TelescopeHardware.Latitude >= 0) ? raDec.Y : -raDec.Y;
                     axes.X = RangeAzm(axes.X);
@@ -32,6 +39,14 @@ namespace ASCOM.Simulator
                     {
                         // adjust the targets to be through the pole
                         axes.X += 180;
+                        axes.Y = 180 - axes.Y;
+                    }
+                    var newsop = (axes.Y <= 90 && axes.Y >= -90) ?
+                        PierSide.pierEast : PierSide.pierWest;
+
+                    if (preserveSop && newsop != sop)
+                    {
+                        axes.X -= 180;
                         axes.Y = 180 - axes.Y;
                     }
                     break;

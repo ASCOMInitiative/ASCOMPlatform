@@ -397,26 +397,40 @@ namespace ASCOM.Simulator
 
         public void Tracking()
         {
-            if (TelescopeHardware.Tracking == checkBoxTrack.Checked)
-                return;
-            // this avoids triggering the checked changed event
-            checkBoxTrack.CheckState = TelescopeHardware.Tracking ? CheckState.Checked : CheckState.Unchecked;
+            checkBoxTrack.Invoke((MethodInvoker)delegate
+            {
+                if (TelescopeHardware.Tracking == checkBoxTrack.Checked)
+                    return;
+                // this avoids triggering the checked changed event
+                checkBoxTrack.CheckState = TelescopeHardware.Tracking ? CheckState.Checked : CheckState.Unchecked;
+            });
         }
 
         public void LedPier(ASCOM.DeviceInterface.PierSide sideOfPier)
         {
-            if (sideOfPier == ASCOM.DeviceInterface.PierSide.pierEast)
+            this.Invoke((MethodInvoker)delegate
             {
-                ledPierEast.Status=TrafficLight.Green;
-                ledPierEast.Visible = true;
-                ledPierWest.Visible = false;
-            }
-            else
+                if (sideOfPier == ASCOM.DeviceInterface.PierSide.pierEast)
+                {
+                    ledPierEast.Status = TrafficLight.Green;
+                    ledPierEast.Visible = true;
+                    ledPierWest.Visible = false;
+                }
+                else
+                {
+                    ledPierWest.Status = TrafficLight.Red;
+                    ledPierWest.Visible = true;
+                    ledPierEast.Visible = false;
+                }
+            });
+        }
+
+        public void LabelState(Label label, bool state)
+        {
+            this.Invoke((MethodInvoker)delegate
             {
-                ledPierWest.Status=TrafficLight.Red;
-                ledPierWest.Visible = true;
-                ledPierEast.Visible = false;
-            }
+                label.ForeColor = state ? Color.Red : Color.SaddleBrown;
+            });
         }
 
         private void buttonUnpark_Click(object sender, EventArgs e)
