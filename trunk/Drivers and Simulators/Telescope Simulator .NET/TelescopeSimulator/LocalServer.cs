@@ -648,6 +648,7 @@ namespace ASCOM.Simulator
         [STAThread]
         static void Main(string[] args)
         {
+            //MessageBox.Show("Test");            // used to allow debugging
             if (!LoadComObjectAssemblies()) return;						// Load served COM class assemblies, get types
 
             if (!ProcessArguments(args)) return;						// Register/Unregister
@@ -673,21 +674,31 @@ namespace ASCOM.Simulator
             Thread GCThread = new Thread(new ThreadStart(GarbageCollector.GCWatch));
             GCThread.Name = "Garbage Collection Thread";
             GCThread.Start();
+            try
+            {
+                //
+                // Start the message loop. This serializes incoming calls to our
+                // served COM objects, making this act like the VB6 equivalent!
+                //
+                Application.Run(m_MainForm);
+            }
+            catch (Exception ex)
+            {
+                var str = string.Format("Fatal error in the Simulator server: {0}", ex);
+                MessageBox.Show(str);
+                throw;
+            }
+            finally
+            {
+                // Revoke the class factories immediately.
+                // Don't wait until the thread has stopped before
+                // we perform revocation!!!
+                RevokeClassFactories();
 
-            //
-            // Start the message loop. This serializes incoming calls to our
-            // served COM objects, making this act like the VB6 equivalent!
-            //
-            Application.Run(m_MainForm);
-
-            // Revoke the class factories immediately.
-            // Don't wait until the thread has stopped before
-            // we perform revocation!!!
-            RevokeClassFactories();
-
-            // Now stop the Garbage Collector thread.
-            GarbageCollector.StopThread();
-            GarbageCollector.WaitForThreadToStop();
+                // Now stop the Garbage Collector thread.
+                GarbageCollector.StopThread();
+                GarbageCollector.WaitForThreadToStop();
+            }
         }
         #endregion
     }
