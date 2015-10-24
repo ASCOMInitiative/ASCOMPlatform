@@ -78,8 +78,6 @@ namespace ASCOM.Simulator
 
         #region internal properties
 
-        internal TraceLogger log;
-
         //Interface version
         internal short interfaceVersion;
 
@@ -200,9 +198,8 @@ namespace ASCOM.Simulator
         {
             // TODO Implement your additional construction here
             InitialiseSimulator();
-            log = new TraceLogger(null, "Camera Simulator");
-            log.Enabled = false;
-            log.LogMessage("Constructor", "Done");
+            //Log.Enabled = false;
+            Log.LogMessage("Constructor", "Done");
 
         }
 
@@ -331,12 +328,14 @@ namespace ASCOM.Simulator
         /// </summary>
         public void AbortExposure()
         {
-            if (!this.connected)
-                throw new NotConnectedException("Can't abort exposure when not connected");
+            CheckConnected("Can't abort exposure when not connected");
             if (!this.canAbortExposure)
+            {
+                Log.LogMessage("AbortExposure", "CanAbortExposure is false");
                 throw new ASCOM.MethodNotImplementedException("AbortExposure");
+            }
 
-            log.LogMessage("AbortExposure", "");
+            Log.LogMessage("AbortExposure", "start");
             switch (this.cameraState)
             {
                 case CameraStates.cameraWaiting:
@@ -351,8 +350,10 @@ namespace ASCOM.Simulator
                 case CameraStates.cameraIdle:
                     break;
                 case CameraStates.cameraError:
+                    Log.LogMessage("AbortExposure", "Camera Error");
                     throw new ASCOM.InvalidOperationException("AbortExposure not possible because of an error");
             }
+            Log.LogMessage("AbortExposure", "done");
         }
 
         /// <summary>
@@ -367,19 +368,16 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read BinX when not connected");
+                CheckConnected("Can't read BinX when not connected");
                 return this.binX;
             }
             set
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set BinX when not connected");
-                if (value > this.maxBinX || value < 1)
-                    throw new InvalidValueException("BinX", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.MaxBinX));
-
+                CheckConnected("Can't set BinX when not connected");
+                CheckRange("BinX", 1, value, maxBinX);
                 if ((maxBinX >= 4) & omitOddBins & ((value % 2) > 0) & (value >= 3)) // Must be an odd value of 3 or greater when maxbin is 4 or greater
                 {
+                    Log.LogMessage("BinX", "Odd bin value {0} is invalid", value);
                     throw new InvalidValueException("BinX", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", this.MaxBinX));
                 }
 
@@ -400,19 +398,17 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read BinY when not connected");
+                CheckConnected("Can't read BinY when not connected");
                 return this.binY;
             }
             set
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set BinY when not connected");
-                if (value > this.maxBinY || value < 1)
-                    throw new InvalidValueException("BinY", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.MaxBinY));
+                CheckConnected("Can't set BinY when not connected");
+                CheckRange("BinY", 1, value, this.maxBinY);
 
                 if ((maxBinY >= 4) & omitOddBins & ((value % 2) > 0) & (value >= 3)) // Must be an odd value of 3 or greater when maxbin is 4 or greater
                 {
+                    Log.LogMessage("BinY", "Odd bin value {0} is invalid", value);
                     throw new InvalidValueException("BinY", value.ToString("d2", CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "1 and even bin values between 2 and {0}", this.MaxBinY));
                 }
 
@@ -431,8 +427,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read the CCD temperature when not connected");
+                CheckConnected("Can't read the CCD temperature when not connected");
+                Log.LogMessage("CCDTemperature", "get {0}", this.ccdTemperature);
                 return this.ccdTemperature;
             }
         }
@@ -470,9 +466,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read the camera state when not connected");
-                log.LogMessage("CameraState", this.cameraState.ToString());
+                CheckConnected("Can't read the camera state when not connected");
+                Log.LogMessage("CameraState", this.cameraState.ToString());
                 return this.cameraState;
             }
         }
@@ -485,8 +480,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read the camera Xsize when not connected");
+                CheckConnected("Can't read the camera Xsize when not connected");
+                Log.LogMessage("CameraXSize", "get {0}", this.cameraXSize);
                 return this.cameraXSize;
             }
         }
@@ -499,8 +494,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read the camera Ysize when not connected");
+                CheckConnected("Can't read the camera Ysize when not connected");
+                Log.LogMessage("CameraYSize", "get {0}", this.cameraYSize);
                 return this.cameraYSize;
             }
         }
@@ -512,8 +507,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read CanAbortExposure when not connected");
+                CheckConnected("Can't read CanAbortExposure when not connected");
+                Log.LogMessage("CanAbortExposure", "get {0}", this.canAbortExposure);
                 return this.canAbortExposure;
             }
         }
@@ -529,8 +524,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read CanAsymmetricBin when not connected");
+                CheckConnected("Can't read CanAsymmetricBin when not connected");
+                Log.LogMessage("CanAsymmetricBin", "get {0}", canAsymmetricBin);
                 return this.canAsymmetricBin;
             }
         }
@@ -542,8 +537,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read CanGetCoolerPower when not connected");
+                CheckConnected("Can't read CanGetCoolerPower when not connected");
+                Log.LogMessage("CanGetCoolerPower", "get {0}", canGetCoolerPower);
                 return this.canGetCoolerPower;
             }
         }
@@ -555,7 +550,11 @@ namespace ASCOM.Simulator
         /// </summary>
         public bool CanPulseGuide
         {
-            get { return this.canPulseGuide; }
+            get 
+            {                 
+                Log.LogMessage("CanPulseGuide", "get {0}", canPulseGuide);
+                return this.canPulseGuide; 
+            }
         }
 
         /// <summary>
@@ -567,8 +566,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read CanSetCCDTemperature when not connected");
+                CheckConnected("Can't read CanSetCCDTemperature when not connected");
+                Log.LogMessage("CanSetCCDTemperature", "get {0}", canSetCcdTemperature);
                 return this.canSetCcdTemperature;
             }
         }
@@ -584,8 +583,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read CanStopExposure when not connected");
+                CheckConnected("Can't read CanStopExposure when not connected");
+                Log.LogMessage("CanStopExposure", "get {0}", canStopExposure);
                 return this.canStopExposure;
             }
         }
@@ -600,10 +599,12 @@ namespace ASCOM.Simulator
         {
             get
             {
+                Log.LogMessage("Connected", "get {0}", connected);
                 return this.connected;
             }
             set
             {
+                Log.LogMessage("Connected", "set {0}", value);
                 if (value)
                     ReadImageFile();
                 this.connected = value;
@@ -623,18 +624,16 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read CoolerOn when not connected");
-                if (!this.hasCooler)
-                    throw new PropertyNotImplementedException("CoolerOn", false);
+                CheckConnected ("Can't read CoolerOn when not connected");
+                CheckCapability("CoolerOn", this.hasCooler);
+                Log.LogMessage("CoolerOn", "get {0}", coolerOn);
                 return this.coolerOn;
             }
             set
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set CoolerOn when not connected");
-                if (!this.hasCooler)
-                    throw new PropertyNotImplementedException("CoolerOn", true);
+                CheckConnected("Can't set CoolerOn when not connected");
+                CheckCapability("CoolerOn", this.hasCooler);
+                Log.LogMessage("CoolerOn", "set {0}", value);
                 this.coolerOn = value;
 
                 if (this.canSetCcdTemperature)
@@ -675,10 +674,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read Cooler Power when not connected");
-                if (!this.hasCooler)
-                    throw new PropertyNotImplementedException("CoolerPower", false);
+                CheckConnected("Can't read Cooler Power when not connected");
+                CheckCapability("CoolerPower", hasCooler);
+                Log.LogMessage("CoolerPower", "get {0}", coolerPower);
                 return this.coolerPower;
             }
         }
@@ -693,12 +691,17 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read Description when not connected");
+                CheckConnected("Can't read Description when not connected");
                 if (this.interfaceVersion == 1)
+                {
+                    Log.LogMessage("Description", "Simulated V1 Camera");
                     return "Simulated V1 Camera";
+                }
                 else
+                {
+                    Log.LogMessage("Description", "Simulated {0} camera {1}", this.sensorType, this.sensorName);
                     return string.Format(CultureInfo.CurrentCulture, "Simulated {0} camera {1}", this.sensorType, this.sensorName);
+                }
             }
         }
 
@@ -712,8 +715,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read ElectronsPerADU when not connected");
+                CheckConnected("Can't read ElectronsPerADU when not connected");
+                Log.LogMessage("ElectronsPerADU", "get {0}", electronsPerADU);
                 return this.electronsPerADU;
             }
         }
@@ -727,8 +730,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read FullWellCapacity when not connected");
+                CheckConnected("Can't read FullWellCapacity when not connected");
+                Log.LogMessage("FullWellCapacity", "get {0}", fullWellCapacity);
                 return this.fullWellCapacity;
             }
         }
@@ -742,8 +745,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read HasShutter when not connected");
+                CheckConnected("Can't read HasShutter when not connected");
+                Log.LogMessage("HasShutter", "get {0}", hasShutter);
                 return this.hasShutter;
             }
         }
@@ -757,10 +760,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read HeatSinkTemperature when not connected");
-                if (!this.canSetCcdTemperature)
-                    throw new PropertyNotImplementedException("HeatSinkTemperature", false);
+                CheckConnected("Can't read HeatSinkTemperature when not connected");
+                CheckCapability("HeatSinkTemperature", canSetCcdTemperature);
+                Log.LogMessage("HeatSinkTemperature", "get {0}", heatSinkTemperature);
                 return this.heatSinkTemperature;
             }
         }
@@ -782,12 +784,14 @@ namespace ASCOM.Simulator
         {
             get
             {
-                log.LogMessage("ImageArray", "get");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read ImageArray when not connected");
+                CheckConnected("Can't read ImageArray when not connected");
                 if (!this.imageReady)
+                {
+                    Log.LogMessage("ImageArray", "No Image Available");
                     throw new ASCOM.InvalidOperationException("There is no image available");
+                }
 
+                Log.LogMessage("ImageArray", "get");
                 if (this.sensorType == SensorType.Color)
                     return this.imageArrayColour;
                 else
@@ -814,10 +818,12 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read ImageArrayVariant when not connected");
+                CheckConnected("Can't read ImageArrayVariant when not connected");
                 if (!this.imageReady)
+                {
+                    Log.LogMessage("ImageArrayVariant", "No Image Available");
                     throw new ASCOM.InvalidOperationException("There is no image available");
+                }
                 // convert to variant
                 if (this.sensorType == SensorType.Color)
                 {
@@ -859,9 +865,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read ImageReady when not connected");
-                log.LogMessage("ImageReady", this.imageReady.ToString());
+                CheckConnected("Can't read ImageReady when not connected");
+                Log.LogMessage("ImageReady", "get {0}", this.imageReady);
                 return this.imageReady;
             }
         }
@@ -875,9 +880,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.canPulseGuide)
-                    throw new ASCOM.PropertyNotImplementedException("IsPulseGuiding", false);
-                return this.isPulseGuidingRa || this.isPulseGuidingDec;
+                CheckCapability("IsPulseGuiding", canPulseGuide);
+                var ipg = this.isPulseGuidingRa || this.isPulseGuidingDec;
+                Log.LogMessage("IsPulseGuiding", "get {0}", ipg);
+                return ipg;
             }
         }
 
@@ -891,10 +897,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read LastExposureDuration when not connected");
-                if (!this.imageReady)
-                    throw new NotConnectedException("Can't read LastExposureDuration when no image is ready");
+                CheckConnected("Can't read LastExposureDuration when not connected");
+                CheckReady("LastExposureDuration");
+                Log.LogMessage("LastExposureDuration", "get {0}", lastExposureDuration);
                 return this.lastExposureDuration;
             }
         }
@@ -908,10 +913,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read LastExposureStartTime when not connected");
-                if (!this.imageReady)
-                    throw new NotConnectedException("Can't read LastExposureStartTime when no image is ready");
+                CheckConnected("Can't read LastExposureStartTime when not connected");
+                CheckReady("LastExposureStartTime");
+                Log.LogMessage("LastExposureStartTime", "get {0}", lastExposureStartTime);
                 return this.lastExposureStartTime;
             }
         }
@@ -924,8 +928,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read MaxADU when not connected");
+                CheckConnected("Can't read MaxADU when not connected");
+                Log.LogMessage("MaxADU", "get {0}", maxADU);
                 return this.maxADU;
             }
         }
@@ -939,8 +943,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read MaxBinX when not connected");
+                CheckConnected("Can't read MaxBinX when not connected");
+                Log.LogMessage("MaxBinX", "get {0}", maxBinX);
                 return this.maxBinX;
             }
         }
@@ -954,8 +958,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read MaxBinY when not connected");
+                CheckConnected("Can't read MaxBinY when not connected");
+                Log.LogMessage("MaxBinY", "get {0}", maxBinY);
                 return this.maxBinY;
             }
         }
@@ -969,14 +973,14 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read NumX when not connected");
+                CheckConnected("Can't read NumX when not connected");
+                Log.LogMessage("NumX", "get {0}", numX);
                 return this.numX;
             }
             set
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set NumX when not connected");
+                CheckConnected("Can't set NumX when not connected");
+                Log.LogMessage("NumX", "set {0}", value);
                 this.numX = value;
             }
         }
@@ -990,14 +994,14 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read NumY when not connected");
+                CheckConnected("Can't read NumY when not connected");
+                Log.LogMessage("NumY", "get {0}", numY);
                 return this.numY;
             }
             set
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set NumY when not connected");
+                CheckConnected("Can't set NumY when not connected");
+                Log.LogMessage("NumY", "set {0}", value);
                 this.numY = value;
             }
         }
@@ -1011,8 +1015,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read PixelSizeX when not connected");
+                CheckConnected("Can't read PixelSizeX when not connected");
+                Log.LogMessage("PixelSizeX", "get {0}", pixelSizeX);
                 return this.pixelSizeX;
             }
         }
@@ -1026,8 +1030,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read PixelSizeY when not connected");
+                CheckConnected("Can't read PixelSizeY when not connected");
+                Log.LogMessage("PixelSizeY", "get {0}", pixelSizeY);
                 return this.pixelSizeY;
             }
         }
@@ -1054,8 +1058,12 @@ namespace ASCOM.Simulator
         public void PulseGuide(GuideDirections Direction, int Duration)
         {
             if (!this.canPulseGuide)
+            {
+                Log.LogMessage("PulseGuide", "Not Implemented");
                 throw new ASCOM.MethodNotImplementedException("PulseGuide");
+            }
 
+            Log.LogMessage("PulseGuide", "Direction {0}, Duration (1)", Direction, Duration);
             // very simple implementation, starts a timer that turns isPulseGuiding off when it elapses
             // consider calculating and applying a shift to the image
             // separate Ra and Dec timers
@@ -1112,20 +1120,17 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read SetCCDTemperature when not connected");
-                if (!this.canSetCcdTemperature)
-                    throw new PropertyNotImplementedException(STR_SetCCDTemperature, false);
+                CheckConnected("Can't read SetCCDTemperature when not connected");
+                CheckCapability("SetCCDTemperature", canSetCcdTemperature);
+                Log.LogMessage("SetCCDTemperature", "get {0}", setCcdTemperature);
                 return this.setCcdTemperature;
             }
             set
             {
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set SetCCDTemperature when not connected");
-                if (!this.canSetCcdTemperature)
-                    throw new PropertyNotImplementedException(STR_SetCCDTemperature, true);
-                if (value < -50 || value > 20)
-                    throw new InvalidValueException("SetCCDTemperature", value.ToString(CultureInfo.InvariantCulture), "-50 to 20");
+                CheckConnected("Can't set SetCCDTemperature when not connected");
+                CheckCapability("SetCCDTemperature", canSetCcdTemperature);
+                CheckRange("SetCCDTemperature", -50, value, 20);
+                Log.LogMessage("SetCCDTemperature", "set {0}", value);
                 this.setCcdTemperature = value;
                 // does this turn cooling on?
             }
@@ -1143,8 +1148,7 @@ namespace ASCOM.Simulator
             using (SetupDialogForm F = new SetupDialogForm())
             {
                 F.InitProperties(this);
-                F.ShowDialog();
-                if (F.okButtonPressed)
+                if (F.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     this.SaveToProfile();
             }
         }
@@ -1160,27 +1164,30 @@ namespace ASCOM.Simulator
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
         public void StartExposure(double Duration, bool Light)
         {
-            if (!this.connected)
-                throw new NotConnectedException("Can't set StartExposure when not connected");
+            Log.LogStart("StartExposure", "Duration {0}, Light {1}", Duration, Light);
+            CheckConnected("Can't set StartExposure when not connected");
             // check the duration, light frames only
-            if (!Light && (Duration > this.exposureMax || Duration < this.exposureMin))
+            if (Light && (Duration > this.exposureMax || Duration < this.exposureMin))
             {
                 this.lastError = "Incorrect exposure duration";
+                Log.LogMessage("StartExposure", "Incorrect exposure Duration {0}", Duration);
                 throw new ASCOM.InvalidValueException("StartExposure Duration",
                                                      Duration.ToString(CultureInfo.InvariantCulture),
                                                      string.Format(CultureInfo.InvariantCulture, "{0} to {1}", this.exposureMax, this.exposureMin));
             }
             //  binning tests
-            if ((this.binX > this.MaxBinX) || (this.BinX < 1))
+            if ((this.binX > this.maxBinX) || (this.binX < 1))
             {
                 this.lastError = "Incorrect bin X factor";
+                Log.LogMessage("StartExposure", "Incorrect BinX {0}", binX);
                 throw new ASCOM.InvalidValueException("StartExposure BinX",
                                                     this.binX.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.maxBinX));
             }
-            if ((this.binY > this.MaxBinY) || (this.BinY < 1))
+            if ((this.binY > this.maxBinY) || (this.binY < 1))
             {
                 this.lastError = "Incorrect bin Y factor";
+                Log.LogMessage("StartExposure", "Incorrect BinY {0}", binY);
                 throw new ASCOM.InvalidValueException("StartExposure BinY",
                                                     this.binY.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}", this.maxBinY));
@@ -1190,13 +1197,15 @@ namespace ASCOM.Simulator
             if (this.startX < 0 || this.startX * this.binX > this.cameraXSize)
             {
                 this.lastError = "Incorrect Start X position";
+                Log.LogMessage("StartExposure", "Incorrect Start X {0}", startX);
                 throw new ASCOM.InvalidValueException("StartExposure StartX",
                                                     this.startX.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / this.binX));
             }
             if (this.startY < 0 || this.startY * this.binY > this.cameraYSize)
             {
-                this.lastError = "Incorrect Start X position";
+                this.lastError = "Incorrect Start Y position";
+                Log.LogMessage("StartExposure", "Incorrect Start Y {0}", startY);
                 throw new ASCOM.InvalidValueException("StartExposure StartX",
                                                     this.startX.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "0 to {0}", cameraXSize / this.binX));
@@ -1205,6 +1214,7 @@ namespace ASCOM.Simulator
             if (this.numX < 1 || (this.numX + this.startX) * this.binX > this.cameraXSize)
             {
                 this.lastError = "Incorrect Num X value";
+                Log.LogMessage("StartExposure", "Incorrect Num X {0}", numX);
                 throw new ASCOM.InvalidValueException("StartExposure NumX",
                                                     this.numX.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraXSize / this.binX));
@@ -1212,16 +1222,15 @@ namespace ASCOM.Simulator
             if (this.numY < 1 || (this.numY + this.startY) * this.binY > this.cameraYSize)
             {
                 this.lastError = "Incorrect Num Y value";
+                Log.LogMessage("StartExposure", "Incorrect Num Y {0}", numY);
                 throw new ASCOM.InvalidValueException("StartExposure NumY",
                                                     this.numY.ToString(CultureInfo.InvariantCulture),
                                                     string.Format(CultureInfo.InvariantCulture, "1 to {0}", cameraYSize / this.binY));
             }
 
-            log.LogStart("StartExposure", "Duration " + Duration.ToString("F3"));
-
             // set up the things to do at the start of the exposure
             this.imageReady = false;
-            if (this.HasShutter)
+            if (this.hasShutter)
             {
                 this.darkFrame = !Light;
             }
@@ -1237,12 +1246,13 @@ namespace ASCOM.Simulator
                 this.exposureTimer = new System.Timers.Timer();
                 this.exposureTimer.Elapsed += exposureTimer_Elapsed;
             }
-            this.exposureTimer.Interval = (int)(Duration * 1000);
+            // force the minimum exposure to be 1 millisec to keep the exposureTimer happy
+            this.exposureTimer.Interval = Math.Max((int)(Duration * 1000), 1);
             this.cameraState = CameraStates.cameraExposing;
             this.exposureStartTime = DateTime.Now;
             this.exposureDuration = Duration;
             this.exposureTimer.Enabled = true;
-            log.LogFinish(" started");
+            Log.LogFinish(" started");
         }
 
         private void exposureTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -1253,7 +1263,7 @@ namespace ASCOM.Simulator
             this.FillImageArray();
             this.imageReady = true;
             this.cameraState = CameraStates.cameraIdle;
-            log.LogMessage("ExposureTimer_Elapsed", "done");
+            Log.LogMessage("ExposureTimer_Elapsed", "done");
         }
 
         /// <summary>
@@ -1266,12 +1276,14 @@ namespace ASCOM.Simulator
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read StartX when not connected");
+                Log.LogMessage("StartX", "get {0}", startX);
                 return this.startX;
             }
             set
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set StartX when not connected");
+                Log.LogMessage("StartX", "set {0}", value);
                 this.startX = value;
             }
         }
@@ -1286,12 +1298,14 @@ namespace ASCOM.Simulator
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't read StartY when not connected");
+                Log.LogMessage("StartY", "get {0}", startY);
                 return this.startY;
             }
             set
             {
                 if (!this.connected)
                     throw new NotConnectedException("Can't set StartY when not connected");
+                Log.LogMessage("StartY", "set {0}", value);
                 this.startY = value;
             }
         }
@@ -1306,11 +1320,9 @@ namespace ASCOM.Simulator
         /// <exception cref=" System.Exception">Must throw an exception if for any reason no image readout will be available.</exception>
         public void StopExposure()
         {
-            if (!this.connected)
-                throw new NotConnectedException("Can't stop exposure when not connected");
-            if (!this.canStopExposure)
-                throw new ASCOM.MethodNotImplementedException("StopExposure");
-            log.LogMessage("StopExposure", "");
+            CheckConnected("Can't stop exposure when not connected");
+            CheckCapability("StopExposure", canStopExposure);
+            Log.LogMessage("StopExposure", "state {0}", cameraState);
             switch (this.cameraState)
             {
                 case CameraStates.cameraWaiting:
@@ -1328,7 +1340,8 @@ namespace ASCOM.Simulator
                     break;
                 case CameraStates.cameraError:
                 default:
-                    // these states are this where it isn't possible to stop an exposure 
+                    Log.LogMessage("StopExposure", "Not exposing");
+                    // these states are this where it isn't possible to stop an exposure
                     throw new ASCOM.InvalidOperationException("StopExposure not possible if not exposing");
             }
         }
@@ -1348,12 +1361,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("BayerOffsetX (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read BayerOffsetX when not connected");
-                if (this.sensorType == DeviceInterface.SensorType.Monochrome)
-                    throw new PropertyNotImplementedException("BayerOffsetX is not available with a monochrome camera", false);
+                CheckInterface("BayerOffsetX");
+                CheckConnected("BayerOffsetX");
+                CheckCapability("BayerOffsetX", this.sensorType != DeviceInterface.SensorType.Monochrome);
+                Log.LogMessage("BayerOffsetX", "get {0}", bayerOffsetX);
                 return this.bayerOffsetX;
             }
         }
@@ -1369,12 +1380,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("BayerOffsetY (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read BayerOffsetY when not connected");
-                if (this.sensorType == DeviceInterface.SensorType.Monochrome)
-                    throw new PropertyNotImplementedException("BayerOffsetY is not available with a monochrome camera", false);
+                CheckInterface("BayerOffsetY");
+                CheckConnected("BayerOffsetY");
+                CheckCapability("BayerOffsetY", this.sensorType != DeviceInterface.SensorType.Monochrome);
+                Log.LogMessage("BayerOffsetY", "get {0}", bayerOffsetY);
                 return this.bayerOffsetY;
             }
         }
@@ -1389,10 +1398,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("CanFastReadout (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read CanFastReadout when not connected");
+                CheckInterface("CanFastReadout");
+                CheckConnected("CanFastReadout");
+                Log.LogMessage("CanFastReadout", "get {0}", canFastReadout);
                 return this.canFastReadout;
             }
         }
@@ -1409,9 +1417,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("DriverInfo (not supported for Interface V1)");
+                CheckInterface("DriverInfo");
+                CheckConnected("DriverInfo");
                 String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                Log.LogMessage("DriverInfo", "{0} - Version {1}", s_csDriverDescription, strVersion);
                 return (s_csDriverDescription + " - Version " + strVersion);
             }
         }
@@ -1425,10 +1434,11 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("DriverVersion (not supported for Interface V1)");
+                CheckInterface("DriverVersion");
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                return String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
+                var str = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
+                Log.LogMessage("DriverVersion", "get {0}", str);
+                return str;
             }
         }
 
@@ -1440,10 +1450,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("ExposureMax (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read ExposureMax when not connected");
+                CheckInterface("ExposureMax");
+                CheckConnected("ExposureMax");
+                Log.LogMessage("ExposureMax", "get {0}", exposureMax);
                 return this.exposureMax;
             }
         }
@@ -1456,10 +1465,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("ExposureMin (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read ExposureMin when not connected");
+                CheckInterface("ExposureMin");
+                CheckConnected("ExposureMin");
+                Log.LogMessage("ExposureMin", "get {0}", exposureMin);
                 return this.exposureMin;
             }
         }
@@ -1472,10 +1480,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("ExposureResolution (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read ExposureResolution when not connected");
+                CheckInterface("ExposureResolution");
+                CheckConnected("ExposureResolution");
+                Log.LogMessage("ExposureResolution", "get {0}", exposureResolution);
                 return this.exposureResolution;
             }
         }
@@ -1489,22 +1496,18 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("FastReadout (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't read FastReadout when not connected");
-                if (!this.canFastReadout)
-                    throw new PropertyNotImplementedException("FastReadout", false);
+                CheckInterface("FastReadout");
+                CheckConnected("FastReadout");
+                CheckCapability("FastReadout", canFastReadout);
+                Log.LogMessage("FastReadout", "get {0}", fastReadout);
                 return this.fastReadout;
             }
             set
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("FastReadout (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set FastReadout when not connected");
-                if (!this.canFastReadout)
-                    throw new ASCOM.PropertyNotImplementedException("FastReadout", true);
+                CheckInterface("FastReadout");
+                CheckConnected("FastReadout");
+                CheckCapability("FastReadout", canFastReadout);
+                Log.LogMessage("FastReadout", "get {0}", value);
                 this.fastReadout = value;
             }
         }
@@ -1518,24 +1521,19 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("Gain (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get Gain when not connected");
-                if (this.gainMax <= this.gainMin)
-                    throw new PropertyNotImplementedException("Gain", false);
+                CheckInterface("Gain");
+                CheckConnected("Gain");
+                CheckCapability("Gain", this.gainMax > this.gainMin);
+                Log.LogMessage("Gain", "get {0}", gain);
                 return this.gain;
             }
             set
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("Gain (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set Gain when not connected");
-                if (this.gainMax <= this.gainMin)
-                    throw new PropertyNotImplementedException("Gain", true);
-                if (value < this.gainMin || value > this.gainMax)
-                    throw new ASCOM.InvalidValueException("Gain", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", this.gainMin, this.gainMax));
+                CheckInterface("Gain");
+                CheckConnected("Gain");
+                CheckCapability("Gain", this.gainMax > this.gainMin, true);
+                CheckRange("Gain", gainMin, value, gainMax);
+                Log.LogMessage("Gain", "set {0}", value);
                 this.gain = value;
             }
         }
@@ -1549,14 +1547,15 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("GainMax (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get GainMax when not connected");
-                if (this.gainMax <= this.gainMin)
-                    throw new PropertyNotImplementedException("GainMax", false);
+                CheckInterface("GainMax");
+                CheckConnected("GainMax");
+                CheckCapability("GainMax", this.gainMax > this.gainMin);
                 if (this.gains != null && this.gains.Count > 0)
+                {
+                    Log.LogMessage("GainMax", "cannot be read if there is an array of Gains in use");
                     throw new InvalidOperationException("GainMax cannot be read if there is an array of Gains in use");
+                }
+                Log.LogMessage("GainMax", "get {0}", gainMax);
                 return this.gainMax;
             }
         }
@@ -1570,14 +1569,15 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("GainMin (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get GainMin when not connected");
-                if (this.gainMax <= this.gainMin)
-                    throw new PropertyNotImplementedException("GainMin", false);
+                CheckInterface("GainMin");
+                CheckConnected("GainMin");
+                CheckCapability("GainMin", this.gainMax > this.gainMin);
                 if (this.gains != null && this.gains.Count > 0)
+                {
+                    Log.LogMessage("GainMin", "cannot be read if there is an array of Gains in use");
                     throw new InvalidOperationException("GainMin cannot be read if there is an array of Gains in use");
+                }
+                Log.LogMessage("GainMin", "get {0}", gainMin);
                 return this.gainMin;
             }
         }
@@ -1591,12 +1591,10 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("Gains (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get Gains when not connected");
-                if (this.gains == null || this.gains.Count == 0)
-                    throw new PropertyNotImplementedException("Gains", false);
+                CheckInterface("Gains");
+                CheckConnected("Gains");
+                CheckCapability("Gains", !(this.gains == null || this.gains.Count == 0));
+                Log.LogMessage("Gains", "get {0}", gains);
                 return this.gains;
             }
         }
@@ -1618,10 +1616,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("Name (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get camera Name when not connected");
+                CheckInterface("Name");
+                CheckConnected("Name");
+                Log.LogMessage("Name", "Sim {0}", SensorName);
                 return "Sim " + this.SensorName;
             }
         }
@@ -1635,20 +1632,22 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("PercentCompleted (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get PercentCompleted when not connected");
+                CheckInterface("PercentCompleted");
+                CheckConnected("PercentCompleted");
                 switch (this.cameraState)
                 {
                     case CameraStates.cameraWaiting:
                     case CameraStates.cameraExposing:
                     case CameraStates.cameraReading:
                     case CameraStates.cameraDownload:
-                        return (short)(((DateTime.Now - this.exposureStartTime).TotalSeconds / this.exposureDuration) * 100);
+                        var pc = (short)(((DateTime.Now - this.exposureStartTime).TotalSeconds / this.exposureDuration) * 100);
+                        Log.LogMessage("PercentCompleted", "state {0}, get {1}", cameraState, pc);
+                        return pc;
                     case CameraStates.cameraIdle:
+                        Log.LogMessage("PercentCompleted", "imageready {0}", (short)(imageReady ? 100 : 0));
                         return (short)(imageReady ? 100 : 0);
                     default:
+                        Log.LogMessage("PercentCompleted", "state {0}, invalid", cameraState);
                         throw new ASCOM.InvalidOperationException("get PercentCompleted is not valid if the camera is not active");
                 }
             }
@@ -1664,28 +1663,40 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("ReadoutMode (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get ReadoutMode when not connected");
-                //if (this.readoutModes == null || this.readoutModes.Count < 1)
-                //    throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
-                if (this.canFastReadout)
-                    throw new PropertyNotImplementedException("ReadoutMode", false);
-                return this.readoutMode;
+                CheckInterface("ReadoutMode");
+                CheckConnected("ReadoutMode");
+                if (this.readoutModes == null || this.readoutModes.Count < 1)
+                {
+                    Log.LogMessage("ReadoutMode", "PropertyNotImplemented because readoutModes == null || readoutModes.Count < 1");
+                    throw new ASCOM.PropertyNotImplementedException("ReadoutMode", false);
+                //if (this.canFastReadout)
+                //    throw new PropertyNotImplementedException("ReadoutMode", false);
+                }
+                var rm = this.readoutMode;
+                Log.LogMessage("ReadoutMode", "get {0}, mode {1}", rm, readoutModes[rm]);
+
+                return rm;
             }
             set
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("ReadoutMode (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't set ReadoutMode when not connected");
+                Log.LogMessage("ReadoutMode", "set {0}", value);
+                CheckInterface("ReadoutMode");
+                CheckConnected("ReadoutMode");
                 if (this.readoutModes == null || this.readoutModes.Count < 1)
+                {
+                    Log.LogMessage("ReadoutMode", "PropertyNotImplemented readoutModes == null || readoutModes.Count < 1");
                     throw new PropertyNotImplementedException("ReadoutMode", true);
+                }
                 if (this.canFastReadout)
+                {
+                    Log.LogMessage("ReadoutMode", "PropertyNotImplemented canFastReadout is true");
                     throw new PropertyNotImplementedException("ReadoutMode", true);
+                }
                 if (value < 0 || value > this.readoutModes.Count - 1)
-                    throw new InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", 0, this.readoutModes.Count - 1));
+                {
+                    Log.LogMessage("ReadoutMode", "InvalidValueException, value {0}, range 0 to {1}", value, readoutModes.Count - 1);
+                    throw new InvalidValueException("ReadoutMode", value.ToString(CultureInfo.InvariantCulture), string.Format(CultureInfo.InvariantCulture, "0 to {0}", this.readoutModes.Count - 1));
+                } 
                 this.readoutMode = value;
             }
         }
@@ -1700,14 +1711,15 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("ReadoutModes (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get ReadoutModes when not connected");
-                if (this.canFastReadout)
-                    throw new PropertyNotImplementedException("ReadoutModes", false);
-                if (this.readoutModes == null || this.readoutModes.Count < 1)
-                    throw new PropertyNotImplementedException("ReadoutModes", false);
+                CheckInterface("ReadoutModes");
+                CheckConnected("ReadoutModes");
+                //CheckCapability("ReadoutModes", !this.canFastReadout);
+                //CheckCapability("ReadoutModes", !(this.readoutModes == null || this.readoutModes.Count < 1));
+                Log.LogMessage("ReadoutModes", "ReadoutModes {0}", readoutModes.Count);
+                foreach (var item in readoutModes)
+                {
+                    Log.LogMessage("", "       {0}", item);
+                }
                 return this.readoutModes;
             }
         }
@@ -1722,10 +1734,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("SensorName (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get SensorName when not connected");
+                CheckInterface("SensorName");
+                CheckConnected("SensorName");
+                Log.LogMessage("SensorName", "get {0}", sensorName);
                 return this.sensorName;
             }
         }
@@ -1739,10 +1750,9 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (interfaceVersion == 1)
-                    throw new System.NotSupportedException("SensorType (not supported for Interface V1)");
-                if (!this.connected)
-                    throw new NotConnectedException("Can't get SensorType when not connected");
+                CheckInterface("SensorType");
+                CheckConnected("SensorType");
+                Log.LogMessage("SensorType", "get {0}", sensorType);
                 return this.sensorType;
             }
         }
@@ -1757,6 +1767,7 @@ namespace ASCOM.Simulator
             {
                 profile.DeviceType = "Camera";
                 // read properties from profile
+                Log.Enabled = Convert.ToBoolean(profile.GetValue(s_csDriverID, "Trace", string.Empty, "false"), CultureInfo.InvariantCulture);
                 this.interfaceVersion = Convert.ToInt16(profile.GetValue(s_csDriverID, STR_InterfaceVersion, string.Empty, "2"), CultureInfo.InvariantCulture);
                 this.pixelSizeX = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeX, string.Empty, "5.6"), CultureInfo.InvariantCulture);
                 this.pixelSizeY = Convert.ToDouble(profile.GetValue(s_csDriverID, STR_PixelSizeY, string.Empty, "5.6"), CultureInfo.InvariantCulture);
@@ -1836,6 +1847,7 @@ namespace ASCOM.Simulator
             {
                 profile.DeviceType = "Camera";
 
+                profile.WriteValue(s_csDriverID, "Trace", Log.Enabled.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_InterfaceVersion, this.interfaceVersion.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_PixelSizeX, this.pixelSizeX.ToString(CultureInfo.InvariantCulture));
                 profile.WriteValue(s_csDriverID, STR_PixelSizeY, this.pixelSizeY.ToString(CultureInfo.InvariantCulture));
@@ -1992,7 +2004,7 @@ namespace ASCOM.Simulator
             // use normal distribution for large values
             // because Poisson falls over and gets slow
             if (lambda > 50)
-                return Math.Min((int)BoxMuller(lambda, Math.Sqrt(lambda)), this.MaxADU);
+                return Math.Min((int)BoxMuller(lambda, Math.Sqrt(lambda)), this.maxADU);
 
             double L = Math.Exp(-lambda);
             double p = 1.0;
@@ -2231,5 +2243,59 @@ namespace ASCOM.Simulator
 
         #endregion
 
+        #region checks
+
+        private void CheckConnected(string message)
+        {
+            if (!this.connected)
+            {
+                Log.LogMessage("NotConnected", message);
+                throw new NotConnectedException(message);
+            }
+        }
+
+        private void CheckRange(string identifier, double min, double value, double max)
+        {
+            if (value > max || value < min)
+            {
+                Log.LogMessage(identifier, "{0} is not in rang {1} to {2}", value, min, max);
+                throw new InvalidValueException(identifier, value.ToString(), string.Format(CultureInfo.InvariantCulture, "{0} to {1}", min, max));
+            }
+        }
+
+        private void CheckCapability(string identifier, bool capability)
+        {
+            CheckCapability(identifier, capability, false);
+        }
+
+        private void CheckCapability(string identifier, bool capability, bool accessorSet)
+        {
+            if (!capability)
+            {
+                Log.LogMessage(identifier, "Not Implemented");
+                throw new PropertyNotImplementedException(identifier, accessorSet);
+            }
+        }
+
+        private void CheckReady(string identifier)
+        {
+            if (!this.imageReady)
+            {
+                Log.LogMessage(identifier, "image not ready");
+                throw new NotConnectedException("Can't read " + identifier + " when no image is ready");
+            }
+        }
+
+        private void CheckInterface(string identifier)
+        {
+            if (interfaceVersion == 1)
+            {
+                Log.LogMessage(identifier, "Not supported for interface version 1");
+                throw new System.NotSupportedException(identifier + " (not supported for Interface V1)");
+            }
+        }
+
+
+        #endregion
     }
 }

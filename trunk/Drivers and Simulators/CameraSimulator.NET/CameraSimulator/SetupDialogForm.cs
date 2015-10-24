@@ -55,6 +55,7 @@ namespace ASCOM.Simulator
 
         internal void InitProperties(Camera theCamera)
         {
+            checkBoxLogging.Checked = Log.Enabled;
             this.checkBoxInterfaceVersion.Checked = (theCamera.interfaceVersion == 2);
             this.textBoxPixelSizeX.Text = theCamera.pixelSizeX.ToString(STR_N2, CultureInfo.CurrentCulture);
             this.textBoxPixelSizeY.Text = theCamera.pixelSizeY.ToString(STR_N2, CultureInfo.CurrentCulture);
@@ -116,6 +117,7 @@ namespace ASCOM.Simulator
 
         private void SaveProperties()
         {
+            Log.Enabled = checkBoxLogging.Checked;
             camera.pixelSizeX = double.Parse(this.textBoxPixelSizeX.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             camera.pixelSizeY = double.Parse(this.textBoxPixelSizeY.Text, NumberStyles.Number, CultureInfo.CurrentCulture);
             //camera.fullWellCapacity = Convert.ToDouble(this.textBoxFullWellCapacity.Text, CultureInfo.InvariantCulture);
@@ -214,6 +216,11 @@ namespace ASCOM.Simulator
                 labelBayerOffsetY.Enabled =
                 textBoxBayerOffsetX.Enabled =
                 textBoxBayerOffsetY.Enabled = (si != "Monochrome" && si != "Color");
+        }
+
+        private void checkBoxLogging_CheckedChanged(object sender, EventArgs e)
+        {
+            Log.Enabled = checkBoxLogging.Checked;
         }
 	}
 }
