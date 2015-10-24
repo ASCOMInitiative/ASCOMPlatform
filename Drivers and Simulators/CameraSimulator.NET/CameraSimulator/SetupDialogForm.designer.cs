@@ -89,6 +89,7 @@ namespace ASCOM.Simulator
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxUseReadoutModes = new System.Windows.Forms.CheckBox();
             this.checkBoxCanFastReadout = new System.Windows.Forms.CheckBox();
+            this.checkBoxLogging = new System.Windows.Forms.CheckBox();
             this.groupBoxReadoutModes = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.picASCOM)).BeginInit();
             this.groupBoxCCD.SuspendLayout();
@@ -176,7 +177,7 @@ namespace ASCOM.Simulator
             this.checkBoxOmitOddBins.TabIndex = 29;
             this.checkBoxOmitOddBins.Text = "Omit Odd Bins";
             this.toolTip1.SetToolTip(this.checkBoxOmitOddBins, "Throw NotImplementedExceptions for odd bin values of 3 or greater. This has no ef" +
-                    "fect unless MaxBinX and MaxBinY are 4 or greater.");
+        "fect unless MaxBinX and MaxBinY are 4 or greater.");
             this.checkBoxOmitOddBins.UseVisualStyleBackColor = true;
             // 
             // textBoxCameraYSize
@@ -262,7 +263,7 @@ namespace ASCOM.Simulator
             this.labelBayerOffsetX.TabIndex = 19;
             this.labelBayerOffsetX.Text = "Bayer Offset   X:";
             this.toolTip1.SetToolTip(this.labelBayerOffsetX, "Set the offset in X and Y pixels to the first pixel in the Bayer array. For camer" +
-                    "as with a colour filter array only.");
+        "as with a colour filter array only.");
             // 
             // comboBoxSensorType
             // 
@@ -640,7 +641,7 @@ namespace ASCOM.Simulator
             this.checkBoxApplyNoise.TabIndex = 0;
             this.checkBoxApplyNoise.Text = "Apply Noise";
             this.toolTip1.SetToolTip(this.checkBoxApplyNoise, "Check this to apply noise to the simulated image.  The amount of noise will vary " +
-                    "depending on the CCD temperature, exposure time and image brightness.");
+        "depending on the CCD temperature, exposure time and image brightness.");
             this.checkBoxApplyNoise.UseVisualStyleBackColor = true;
             // 
             // openFileDialog1
@@ -657,7 +658,7 @@ namespace ASCOM.Simulator
             this.checkBoxInterfaceVersion.TabIndex = 10;
             this.checkBoxInterfaceVersion.Text = "Interface Version 2";
             this.toolTip1.SetToolTip(this.checkBoxInterfaceVersion, "Check this if the camera simulates a Version 2 camera. If unchecked the V2 parame" +
-                    "ters will raise a not implemented error.");
+        "ters will raise a not implemented error.");
             this.checkBoxInterfaceVersion.UseVisualStyleBackColor = true;
             this.checkBoxInterfaceVersion.CheckedChanged += new System.EventHandler(this.checkBoxInterfaceVersion_CheckedChanged);
             // 
@@ -680,7 +681,7 @@ namespace ASCOM.Simulator
             this.checkBoxCanPulseGuide.TabIndex = 0;
             this.checkBoxCanPulseGuide.Text = "Can Pulse Guide";
             this.toolTip1.SetToolTip(this.checkBoxCanPulseGuide, "Check this if the camera can accept pulse guide commands. They will have no effec" +
-                    "t.");
+        "t.");
             this.checkBoxCanPulseGuide.UseVisualStyleBackColor = true;
             // 
             // checkBoxUseReadoutModes
@@ -692,7 +693,7 @@ namespace ASCOM.Simulator
             this.checkBoxUseReadoutModes.TabIndex = 0;
             this.checkBoxUseReadoutModes.Text = "Multiple Readout Modes";
             this.toolTip1.SetToolTip(this.checkBoxUseReadoutModes, "Check this if the camera can accept pulse guide commands. They will have no effec" +
-                    "t.");
+        "t.");
             this.checkBoxUseReadoutModes.UseVisualStyleBackColor = true;
             // 
             // checkBoxCanFastReadout
@@ -704,9 +705,22 @@ namespace ASCOM.Simulator
             this.checkBoxCanFastReadout.TabIndex = 1;
             this.checkBoxCanFastReadout.Text = "Can do Fast readout";
             this.toolTip1.SetToolTip(this.checkBoxCanFastReadout, "Check this if the camera can accept pulse guide commands. They will have no effec" +
-                    "t.");
+        "t.");
             this.checkBoxCanFastReadout.UseVisualStyleBackColor = true;
             this.checkBoxCanFastReadout.CheckedChanged += new System.EventHandler(this.checkBoxCanFastReadout_CheckedChanged);
+            // 
+            // checkBoxLogging
+            // 
+            this.checkBoxLogging.AutoSize = true;
+            this.checkBoxLogging.Location = new System.Drawing.Point(329, 118);
+            this.checkBoxLogging.Name = "checkBoxLogging";
+            this.checkBoxLogging.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxLogging.TabIndex = 13;
+            this.checkBoxLogging.Text = "Logging";
+            this.toolTip1.SetToolTip(this.checkBoxLogging, "Check this to turn logging on. Log files are in the \"My Documents\\ASCOM\\<date>\" f" +
+        "older.\r\n");
+            this.checkBoxLogging.UseVisualStyleBackColor = true;
+            this.checkBoxLogging.CheckedChanged += new System.EventHandler(this.checkBoxLogging_CheckedChanged);
             // 
             // groupBoxReadoutModes
             // 
@@ -724,6 +738,7 @@ namespace ASCOM.Simulator
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 403);
+            this.Controls.Add(this.checkBoxLogging);
             this.Controls.Add(this.groupBoxReadoutModes);
             this.Controls.Add(this.groupBoxGuiding);
             this.Controls.Add(this.checkBoxInterfaceVersion);
@@ -827,5 +842,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.GroupBox groupBoxReadoutModes;
         private System.Windows.Forms.CheckBox checkBoxUseReadoutModes;
         private System.Windows.Forms.CheckBox checkBoxCanFastReadout;
+        private System.Windows.Forms.CheckBox checkBoxLogging;
 	}
 }
