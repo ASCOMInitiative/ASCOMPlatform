@@ -168,8 +168,8 @@ namespace CameraTest
             checkBoxDarkFrame.Enabled = oCamera.HasShutter;
 
             // set Camera Version 2 properties, the client should return this correctly, even for an unversioned driver.
-                    this.bayerOffsetX = oCamera.BayerOffsetX;
-                    this.bayerOffsetY = oCamera.BayerOffsetY;
+                    //this.bayerOffsetX = oCamera.BayerOffsetX;
+                    //this.bayerOffsetY = oCamera.BayerOffsetY;
             if (oCamera.InterfaceVersion >= 2)
             {
                 groupBoxV2.Visible = true;
@@ -288,7 +288,8 @@ namespace CameraTest
             get
             {
                 if (oCamera == null) return false;
-                return oCamera.Connected;
+                try { return oCamera.Connected; }
+                catch { return false; }
             }
         }
 
