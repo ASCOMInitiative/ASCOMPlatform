@@ -58,6 +58,10 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASCOM.Attributes, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
+    <Reference Include="ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -122,22 +126,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
-      <Project>{2c40fad9-de75-4360-a0ad-911c4d24d98c}</Project>
-      <Name>ASCOM.Attributes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj">
-      <Project>{872ef2d6-ac89-4c15-ac84-6c69b040a843}</Project>
-      <Name>ASCOM.DeviceInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
-      <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
-      <Name>ASCOM.Utilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
-      <Project>{5f6cf410-7b16-4a32-99d2-0d92196c4490}</Project>
-      <Name>ASCOM.Exceptions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OC Simulator Server\OC Simulator Server.csproj">
       <Project>{01ca0c54-b4a7-47d7-8bab-1df543d86d0c}</Project>
       <Name>OC Simulator Server</Name>
@@ -149,9 +137,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\$(OutDir)$(TargetFileName)"
-copy "$(SolutionDir)Drivers and Simulators\ObservingConditions Simulator\OC Simulator Driver\$(OutDir)ASCOM.Simulator.ObservingConditions.pdb" "$(SolutionDir)Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\$(OutDir)ASCOM.Simulator.ObservingConditions.pdb"
-copy "$(SolutionDir)Drivers and Simulators\ObservingConditions Simulator\OC Simulator Driver\$(OutDir)ASCOM.Simulator.ObservingConditions.dll.config" "$(SolutionDir)Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\$(OutDir)ASCOM.Simulator.ObservingConditions.dll.config"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(ProjectDir)..\OC Simulator Server\$(OutDir)$(TargetFileName)"
+copy "$(TargetDir)\$(TargetName).pdb" "$(ProjectDir)..\OC Simulator Server\$(OutDir)"
+copy "$(TargetDir)$(TargetFileName).config" "$(ProjectDir)..\OC Simulator Server\$(OutDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
