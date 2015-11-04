@@ -5512,6 +5512,8 @@ Public Class DiagnosticsForm
                 Next
             Catch ex As UnauthorizedAccessException
                 TL.LogMessage("RecurseProgramFiles 1", "UnauthorizedAccessException for directory; " & Folder)
+            Catch ex As PathTooLongException
+                TL.LogMessage("RecurseProgramFiles 1", "PathTooLongException in directory; " & Folder)
             Catch ex As Exception
                 LogException("RecurseProgramFiles 1", "Exception: " & ex.ToString)
             End Try
@@ -5523,6 +5525,8 @@ Public Class DiagnosticsForm
                 Next
             Catch ex As UnauthorizedAccessException
                 TL.LogMessage("RecurseProgramFiles 2", "UnauthorizedAccessException for directory; " & Folder)
+            Catch ex As PathTooLongException
+                TL.LogMessage("RecurseProgramFiles 2", "PathTooLongException in directory; " & Folder)
             Catch ex As Exception
                 LogException("RecurseProgramFiles 2", "Exception: " & ex.ToString)
             End Try
@@ -5530,6 +5534,8 @@ Public Class DiagnosticsForm
             Action("")
         Catch ex As UnauthorizedAccessException
             TL.LogMessage("RecurseProgramFiles 3", "UnauthorizedAccessException for directory; " & Folder)
+        Catch ex As PathTooLongException
+            TL.LogMessage("RecurseProgramFiles 3", "PathTooLongException in directory; " & Folder)
         Catch ex As Exception
             LogException("RecurseProgramFiles 3", "Exception: " & ex.ToString)
         End Try
@@ -6066,7 +6072,7 @@ Public Class DiagnosticsForm
                         Case Is > 0
                             TL.LogMessage("GACFileVersion", "   ##### Diagnostics is newer than this assembly! Diagnostics: " & DiagnosticsVersion.ToString & ", Assembly: " & FileVersion.ToString)
                             NNonMatches += 1
-                            ErrorList.Add("Diagnostics is older than this assembly! Diagnostics: " & DiagnosticsVersion.ToString & ", Assembly: " & FileVersion.ToString & " " & AscomGACPath)
+                            ErrorList.Add("Diagnostics is newer than this assembly! Diagnostics: " & DiagnosticsVersion.ToString & ", Assembly: " & FileVersion.ToString & " " & AscomGACPath)
                     End Select
                 Catch ex As FormatException
                     LogException("GACFileVersion", "  ##### File version is in an invalid format: " & FVInfo.FileVersion)
