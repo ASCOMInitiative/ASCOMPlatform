@@ -2,6 +2,8 @@
 ' <summary>Defines the ISafetyMonitor Interface</summary>
 '-----------------------------------------------------------------------
 Imports System.Runtime.InteropServices
+Imports ASCOM.Utilities
+
 ''' <summary>
 ''' Defines the IObservingConditions Interface.
 ''' This interface provides a limited set of values that are useful
@@ -251,10 +253,10 @@ Public Interface IObservingConditions
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>
     ''' <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException when the <see cref="Humidity"/> property also throws a PropertyNotImplementedException.</b></p>
-    ''' <p style="color:red"><b>However, this is a mandatory property and must NOT throw a PropertyNotImplementedException if <see cref="Humidity"/> is implemented.</b></p>
+    ''' <p style="color:red"><b>Mandatory property, must NOT throw a PropertyNotImplementedException when the <see cref="Humidity"/> property is implemented.</b></p>
     ''' <para>The ASCOM specification requires that DewPoint and Humidity are either both implemented or both throw PropertyNotImplementedExceptions. It is not allowed for 
-    ''' one to be implemented and the other to throw a PropertyNotImplementedException. The Utilities component contains methods (<see cref="Utilities.Util.DewPoint2Humidity(Double, Double)"/> and 
-    ''' <see cref="Utilities.Util.Humidity2DewPoint(Double, Double)"/>) to convert DewPoint to Humidity and vice versa given the ambient temperature.</para>
+    ''' one to be implemented and the other to throw a PropertyNotImplementedException. The Utilities component contains methods (<see cref="ASCOM.Utilities.Util.DewPoint2Humidity(Double, Double)"/> and 
+    ''' <see cref="ASCOM.Utilities.Util.Humidity2DewPoint(Double, Double)"/>) to convert DewPoint to Humidity and vice versa given the ambient temperature.</para>
     ''' </remarks>
     ReadOnly Property DewPoint As Double
 
@@ -266,10 +268,10 @@ Public Interface IObservingConditions
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>
     ''' <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException when the <see cref="DewPoint"/> property also throws a PropertyNotImplementedException.</b></p>
-    ''' <p style="color:red"><b>However, this is a mandatory property and must NOT throw a PropertyNotImplementedException if <see cref="DewPoint"/> is implemented.</b></p>
+    ''' <p style="color:red"><b>Mandatory property, must NOT throw a PropertyNotImplementedException when the <see cref="DewPoint"/> property is implemented.</b></p>
     ''' <para>The ASCOM specification requires that DewPoint and Humidity are either both implemented or both throw PropertyNotImplementedExceptions. It is not allowed for 
-    ''' one to be implemented and the other to throw a PropertyNotImplementedException. The Utilities component contains methods (<see cref="Utilities.Util.DewPoint2Humidity(Double, Double)"/> and 
-    ''' <see cref="Utilities.Util.Humidity2DewPoint(Double, Double)"/>) to convert DewPoint to Humidity and vice versa given the ambient temperature.</para>
+    ''' one to be implemented and the other to throw a PropertyNotImplementedException. The Utilities component contains methods (<see cref="Util.DewPoint2Humidity(Double, Double)"/> and 
+    ''' <see cref="Util.Humidity2DewPoint(Double, Double)"/>) to convert DewPoint to Humidity and vice versa given the ambient temperature.</para>
     ''' </remarks>   
     ReadOnly Property Humidity As Double
 
@@ -396,11 +398,16 @@ Public Interface IObservingConditions
     ''' </summary>
     ''' <param name="PropertyName">Name of the property whose time since last update is required</param>
     ''' <returns>Time in seconds since the last sensor update for this property</returns>
+    ''' <exception cref="MethodNotImplementedException">If the sensor is not implemented.</exception>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid property name parameter is supplied.</exception>
     ''' <remarks>
-    ''' <p style="color:red"><b>Mandatory method, must NOT throw a MethodNotImplementedException</b></p>
-    ''' PropertyName should be one of the sensor properties Or an empty string to get the last update
-    ''' of any parameter. A negative value indicates no valid value ever received.</remarks>
+    ''' <p style="color:red"><b>Must Not throw a MethodNotImplementedException when the specified sensor Is implemented 
+    ''' but must throw a MethodNotImplementedException when the specified sensor Is Not implemented.</b></p>
+    ''' <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditions"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
+    ''' <para>Return a negative value to indicate that no valid value has ever been received from the hardware.</para>
+    ''' <para>If the sensor is not implemented, this must throw a MethodNotImplementedException.</para>
+    ''' </remarks>
     Function TimeSinceLastUpdate(PropertyName As String) As Double
 
     ''' <summary>
@@ -408,13 +415,16 @@ Public Interface IObservingConditions
     ''' </summary>
     ''' <param name="PropertyName">Name of the sensor whose description is required</param>
     ''' <returns>The description of the specified sensor.</returns>
-    ''' <exception cref="MethodNotImplementedException">If the sensor is not available.</exception>
+    ''' <exception cref="MethodNotImplementedException">If the sensor is not implemented.</exception>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
+    ''' <exception cref="InvalidValueException">If an invalid property name parameter is supplied.</exception>
     ''' <remarks>
-    ''' <p style="color:red"><b>Optional method, can throw a MethodNotImplementedException</b></p>
-    ''' PropertyName must be the name Of one Of the sensor properties implemented by this driver.
-    ''' This must return a valid string even if the driver is not connected so that
-    ''' applications can use this to determine what sensors are available.</remarks>
+    ''' <p style="color:red"><b>Must Not throw a MethodNotImplementedException when the specified sensor Is implemented 
+    ''' but must throw a MethodNotImplementedException when the specified sensor Is Not implemented.</b></p>
+    ''' <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditions"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
+    ''' <para>If the sensor is implemented, this must return a valid string, even if the driver is not connected, so that applications can use this to determine what sensors are available.</para>
+    ''' <para>If the sensor is not implemented, this must throw a MethodNotImplementedException.</para>
+    ''' </remarks>
     Function SensorDescription(PropertyName As String) As String
 
     ''' <summary>
