@@ -290,6 +290,10 @@
       <Name>ASCOM.Utilities</Name>
       <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Name>ASCOM.Exceptions</Name>
+      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+    </ProjectReference>
   </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
