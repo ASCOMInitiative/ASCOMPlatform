@@ -104,59 +104,75 @@ namespace ASCOM.OpenWeatherMap
             // get 5 reports round a location
             // http://api.openweathermap.org/data/2.5/find?lat=51.6&lon=-0.73&cnt=5
             var uri = string.Format("http://api.openweathermap.org/data/2.5/find?lat={0}&lon={1}&cnt=5&APPID={2}",
-                lat, lon, OpenWeatherMap.apiKey);
+                lat, lon, textBoxApiKey.Text);
             Log.LogMessage("ShowLatLonList", "URI {0}", uri);
-            string ret = "";
-            using (var wc = new WebClient())
-            {
-                wc.Headers[HttpRequestHeader.ContentType] = "application/json";
-                try { ret = wc.DownloadString(uri); }
-                catch (Exception ex)
-                {
-                    Log.LogMessage("ShowLatLonList", "DownLoadString error {0}", ex);
-                }
-            }
-            Log.LogMessage("ShowLatLonList", "reply {0}", ret);
-            var jss = new JavaScriptSerializer();
-            dataGridView.Rows.Clear();
-            try
-            {
-                var wl = jss.Deserialize<WeatherList>(ret);
-                foreach (var item in wl.list)
-                {
-                    dataGridView.Rows.Add(item.name, util.DegreesToDM(item.coord.lat), util.DegreesToDM(item.coord.lon));
-                }
-            }
-            catch { }
+
+            GetResponse(uri);
         }
 
-        private void showCityList()
+        private void ShowCityList()
         {
             // get 5 reports round a location
             var uri = string.Format("http://api.openweathermap.org/data/2.5/find?q={0}&cnt=5&APPID={1}",
-                textBoxCityName.Text, OpenWeatherMap.apiKey);
-            Log.LogMessage("showCityList", "URI {0}", uri);
-            string ret;
-            using (var wc = new WebClient())
+            textBoxCityName.Text, textBoxApiKey.Text);
+
+            Log.LogMessage("ShowCityList", "URI {0}", uri);
+
+            GetResponse(uri);
+        }
+
+        private void GetResponse(string uri)
+        {
+            if (string.IsNullOrEmpty(textBoxApiKey.Text))
             {
-                wc.Headers[HttpRequestHeader.ContentType] = "application/json";
-                ret = wc.DownloadString(uri + "&APIKEY=" + OpenWeatherMap.apiKey);
+                MessageBox.Show("The API key has not been set", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            Log.LogMessage("showCityList", "reply {0}", ret);
-            dataGridView.Rows.Clear();
-            var jss = new JavaScriptSerializer();
-            try
+            else
             {
-                var wl = jss.Deserialize<WeatherList>(ret);
-                foreach (var item in wl.list)
+                string ret = "";
+
+                using (var wc = new WebClient())
                 {
-                    dataGridView.Rows.Add(item.name, util.DegreesToDM(item.coord.lat), util.DegreesToDM(item.coord.lon));
+                    wc.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    try
+                    {
+                        ret = wc.DownloadString(uri);
+                    }
+                    catch (WebException ex)
+                    {
+                        if (ex.Status == WebExceptionStatus.ProtocolError)
+                        {
+                            var response = ex.Response as HttpWebResponse;
+                            if (response.StatusCode == HttpStatusCode.Unauthorized) MessageBox.Show("The API key was rejected, please check that the key is valid. (Status code: 401)");
+                            else MessageBox.Show(string.Format("The GetResponse call was unsuccessul, (Status code: {0}): {1}", (int)response.StatusCode), ex.Message);
+                            Log.LogMessage("GetResponse", "Received {0} error: {1}", ex.Status.ToString(), ex.Message);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Received " + ex.Status.ToString() + " error: " + ex.Message);
+                            Log.LogMessage("GetResponse", "Received {0} error: {1}", ex.Status.ToString(), ex.Message);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.LogMessage("GetResponse", "DownLoadString error {0}", ex.ToString());
+                    }
                 }
-            }
-            catch (Exception)
-            {
-                
-                //throw;
+
+                Log.LogMessage("GetResponse", "reply {0}", ret);
+
+                dataGridView.Rows.Clear();
+                var jss = new JavaScriptSerializer();
+                try
+                {
+                    var wl = jss.Deserialize<WeatherList>(ret);
+                    foreach (var item in wl.list)
+                    {
+                        dataGridView.Rows.Add(item.name, util.DegreesToDM(item.coord.lat), util.DegreesToDM(item.coord.lon));
+                    }
+                }
+                catch (Exception)
+                { }
             }
         }
 
@@ -164,8 +180,8 @@ namespace ASCOM.OpenWeatherMap
         {
             var rb = sender as RadioButton;
             switch ((LocationType)rb.Tag)
-	        {
-		        case LocationType.CityName:
+            {
+                case LocationType.CityName:
                     textBoxCityName.Enabled = true;
                     textBoxSiteLatitude.Enabled = false;
                     textBoxSiteLongitude.Enabled = false;
@@ -180,7 +196,7 @@ namespace ASCOM.OpenWeatherMap
                     textBoxSiteLatitude.Enabled = false;
                     textBoxSiteLongitude.Enabled = false;
                     break;
-	        }
+            }
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -194,7 +210,7 @@ namespace ASCOM.OpenWeatherMap
         private void buttonCheck_Click(object sender, EventArgs e)
         {
             if (radioButtonCity.Checked)
-                showCityList();
+                ShowCityList();
             if (radioButtonLatLong.Checked)
                 ShowLatLonList();
         }
