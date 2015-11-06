@@ -960,6 +960,9 @@ else
     Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
     Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
     Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
+    Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
+    Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
+    Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
     [END REGION]
      
     [DEFINE REGION: Platform 6 Content]
@@ -1386,6 +1389,7 @@ else
         Register assembly $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\ASCOM.Simulator.SafetyMonitor.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Dome\ASCOM.Simulator.Dome\ASCOM.Simulator.Dome.dll, set the code base in the registry
         Register assembly $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll, set the code base in the registry
+        Register assembly $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll, set the code base in the registry
          
         Comment: Register these LocalServer drivers using the -register option
         Set Variable PROGRESS to 40
@@ -1413,8 +1417,8 @@ else
           Set Variable RC7 to 1000
           Set Variable RC8 to 1000
           Set Variable RC9 to 1000
+          Set Variable RC10 to 1000
           Comment: Unused variables
-          Set Variable RC10 to 0
           Set Variable RC11 to 0
           Set Variable RC12 to 0
            
@@ -1440,6 +1444,8 @@ else
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC8$ RegAsm64 - Dome Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\ASCOM.Simulator.Video.dll" /codebase (WAIT, get result into variable RC9)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC9$ RegAsm64 - Video Simulator (at end of file)
+          Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC10)
+          Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC10$ RegAsm64 - Open Weather Map Driver (at end of file)
           Set Variable PROGRESS to 60
           if Variable RC1 not Equals 0
             MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
