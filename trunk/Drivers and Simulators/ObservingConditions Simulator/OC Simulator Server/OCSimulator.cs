@@ -263,6 +263,7 @@ namespace ASCOM.Simulator
                 }
 
                 // Dew point is calculated from humidity so initialise that here
+                Sensors[PROPERTY_DEWPOINT].IsImplemented = Sensors[PROPERTY_HUMIDITY].IsImplemented;
                 Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(Sensors[PROPERTY_HUMIDITY].SimCurrentValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue);
                 Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = DateTime.Now;
 
@@ -338,16 +339,17 @@ namespace ASCOM.Simulator
                             {
                                 Sensors[property].ValueCycleDirection = ValueCycleDirections.FromTowardsTo;
                                 Sensors[property].SimCurrentValue = Sensors[property].SimFromValue;
-                                Sensors[property].TimeOfLastUpdate = DateTime.Now;
+                                Sensors[property].TimeOfLastUpdate = initialConnectionTime;
                             }
+
+                            // Dew point is calculated from humidity so initialise that here
+                            Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(Sensors[PROPERTY_HUMIDITY].SimCurrentValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue);
+                            Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = initialConnectionTime;
+                            mostRecentUpdateTime = initialConnectionTime;
 
                             sensorQueryTimer.Interval = SensorQueryInterval * 1000.0;
                             sensorQueryTimer.Enabled = true;
                             ConfigureAveragePeriodTimer();
-
-                            // Dew point is calculated from humidity so initialise that here
-                            Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(Sensors[PROPERTY_HUMIDITY].SimCurrentValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue);
-                            Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = DateTime.Now;
 
                         }
                     }
@@ -914,10 +916,6 @@ namespace ASCOM.Simulator
                 }
             }
 
-            Sensors[PROPERTY_DEWPOINT].IsImplemented = Sensors[PROPERTY_HUMIDITY].IsImplemented;
-            Sensors[PROPERTY_DEWPOINT].SimFromValue = Sensors[PROPERTY_HUMIDITY].SimFromValue;
-            Sensors[PROPERTY_DEWPOINT].SimToValue = Sensors[PROPERTY_HUMIDITY].SimToValue;
-            Sensors[PROPERTY_DEWPOINT].SimCurrentValue = Sensors[PROPERTY_HUMIDITY].SimCurrentValue;
         }
 
         /// <summary>
