@@ -9,8 +9,8 @@ namespace ASCOM.DriverAccess
     /// <summary>
     /// Provides universal access to ObservingConditions drivers.
     /// Defines the IObservingConditions Interface. This interface provides a limited set of values that are useful
-    /// for astronomical purposes for things such as determining if it is safe to open or operate the observing system
-    /// and for recording astronomical data or determining refraction corrections.
+    /// for astronomical purposes for things such as determining if it is safe to open or operate the observing system,
+    /// for recording astronomical data or determining refraction corrections.
     /// </summary>
     /// <remarks>It is NOT intended as a general purpose environmental sensor system.
     /// The <see cref="IObservingConditions.Action">Action</see> method and 
@@ -57,7 +57,9 @@ namespace ASCOM.DriverAccess
         /// Gets and sets the time period over which observations will be averaged
         /// </summary>
         /// <value>Time period (hours) over which to average sensor readings</value>
-        /// <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
+        /// <exception cref="PropertyNotImplementedException">If setting this property is not available.</exception>
+        /// <exception cref="ASCOM.InvalidValueException">If the value set is not available for this driver. All drivers must accept 0.0 to specify that
+        /// an instantaneous value is available.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Mandatory property, must be implemented, can NOT throw a PropertyNotImplementedException</b></p>
@@ -158,6 +160,15 @@ namespace ASCOM.DriverAccess
         /// to convert these units to and from inches per hour.</para>
         /// <para>This property can be interpreted as 0.0 = Dry any positive nonzero value = wet.</para>
         /// </remarks>
+        /// <para>This property can be interpreted as 0.0 = Dry any positive nonzero value = wet.</para>
+        /// <para>Rainfall intensity is classified according to the rate of precipitation:</para>
+        /// <list type="bullet">
+        /// <item><description>Light rain — when the precipitation rate is < 2.5 mm (0.098 in) per hour</description></item>
+        /// <item><description>Moderate rain — when the precipitation rate is between 2.5 mm (0.098 in) - 7.6 mm (0.30 in) or 10 mm (0.39 in) per hour</description></item>
+        /// <item><description>Heavy rain — when the precipitation rate is > 7.6 mm (0.30 in) per hour, or between 10 mm (0.39 in) and 50 mm (2.0 in) per hour</description></item>
+        /// <item><description>Violent rain — when the precipitation rate is > 50 mm (2.0 in) per hour</description></item>
+        /// </list>
+        /// </remarks>
         public double RainRate
         {
             get { return (double)_memberFactory.CallMember(1, "RainRate", new Type[] { }, new object[] { }); }
@@ -172,11 +183,30 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
         /// This property returns the sky brightness measured in Lux.
+        /// <para>Luminance Examples in Lux</para>
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Illuminance</term><term>Surfaces illuminated by:</term>
+        /// </listheader>
+        /// <item><description>0.0001 lux</description><description>Moonless, overcast night sky (starlight)</description></item>
+        /// <item><description>0.002 lux</description><description>Moonless clear night sky with airglow</description></item>
+        /// <item><description>0.27–1.0 lux</description><description>Full moon on a clear night</description></item>
+        /// <item><description>3.4 lux</description><description>Dark limit of civil twilight under a clear sky</description></item>
+        /// <item><description>50 lux</description><description>Family living room lights (Australia, 1998)</description></item>
+        /// <item><description>80 lux</description><description>Office building hallway/toilet lighting</description></item>
+        /// <item><description>100 lux</description><description>Very dark overcast day</description></item>
+        /// <item><description>320–500 lux</description><description>Office lighting</description></item>
+        /// <item><description>400 lux</description><description>Sunrise or sunset on a clear day.</description></item>
+        /// <item><description>1000 lux</description><description>Overcast day; typical TV studio lighting</description></item>
+        /// <item><description>10000–25000 lux</description><description>Full daylight (not direct sun)</description></item>
+        /// <item><description>32000–100000 lux</description><description>Direct sunlight</description></item>
+        /// </list>
         /// </remarks>
         public double SkyBrightness
         {
             get { return (double)_memberFactory.CallMember(1, "SkyBrightness", new Type[] { }, new object[] { }); }
         }
+
         /// <summary>
         /// Sky quality at the observatory
         /// </summary>
@@ -332,7 +362,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Forces the driver to immediatley query its attached hardware to refresh sensor values
+        /// Forces the driver to immediately query its attached hardware to refresh sensor values
         /// </summary>
         /// <exception cref="MethodNotImplementedException">If this method is not available.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
