@@ -369,7 +369,7 @@ namespace ASCOM.OpenWeatherMap
                     return "Wind speed, m/s";
                 case "SkyBrightness":
                 case "SkyQuality":
-                case "SkySeeing":
+                case "SkyFWHM":
                 case "SkyTemperature":
                 case "WindGust":
                     Log.LogMessage("SensorDescription", PropertyName + " - not implemented");
@@ -407,12 +407,12 @@ namespace ASCOM.OpenWeatherMap
         /// <summary>
         /// Seeing at the observatory
         /// </summary>
-        public double SkySeeing
+        public double SkyFWHM
         {
             get
             {
-                Log.LogMessage("SkySeeing", "get - not implemented");
-                throw new PropertyNotImplementedException("SkySeeing", false);
+                Log.LogMessage("SkyFWHM", "get - not implemented");
+                throw new PropertyNotImplementedException("SkyFWHM", false);
             }
         }
 

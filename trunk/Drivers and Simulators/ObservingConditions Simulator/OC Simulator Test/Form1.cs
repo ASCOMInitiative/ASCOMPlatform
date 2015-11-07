@@ -139,7 +139,7 @@ namespace ASCOM.Simulator
             ListProperty("RainRate");
             ListProperty("SkyBrightness");
             ListProperty("SkyQuality");
-            ListProperty("SkySeeing");
+            ListProperty("SkyFWHM");
             ListProperty("SkyTemperature");
             ListProperty("Temperature");
             ListProperty("WindDirection");
@@ -154,7 +154,7 @@ namespace ASCOM.Simulator
             DisplaySensorDescription("RainRate");
             DisplaySensorDescription("SkyBrightness");
             DisplaySensorDescription("SkyQuality");
-            DisplaySensorDescription("SkySeeing");
+            DisplaySensorDescription("SkyFWHM");
             DisplaySensorDescription("SkyTemperature");
             DisplaySensorDescription("Temperature");
             DisplaySensorDescription("WindDirection");
@@ -170,7 +170,7 @@ namespace ASCOM.Simulator
             DisplayTimeSinceLastUpdate("RainRate");
             DisplayTimeSinceLastUpdate("SkyBrightness");
             DisplayTimeSinceLastUpdate("SkyQuality");
-            DisplayTimeSinceLastUpdate("SkySeeing");
+            DisplayTimeSinceLastUpdate("SkyFWHM");
             DisplayTimeSinceLastUpdate("SkyTemperature");
             DisplayTimeSinceLastUpdate("Temperature");
             DisplayTimeSinceLastUpdate("WindDirection");

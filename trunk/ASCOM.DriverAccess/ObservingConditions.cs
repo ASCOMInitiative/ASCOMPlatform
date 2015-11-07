@@ -158,14 +158,12 @@ namespace ASCOM.DriverAccess
         /// <para>The units of this property are millimetres per hour. Client and driver authors can use the method <see cref="Util.ConvertUnits"/>
         /// to convert these units to and from inches per hour.</para>
         /// <para>This property can be interpreted as 0.0 = Dry any positive nonzero value = wet.</para>
-        /// </remarks>
-        /// <para>This property can be interpreted as 0.0 = Dry any positive nonzero value = wet.</para>
         /// <para>Rainfall intensity is classified according to the rate of precipitation:</para>
         /// <list type="bullet">
-        /// <item><description>Light rain — when the precipitation rate is < 2.5 mm (0.098 in) per hour</description></item>
+        /// <item><description>Light rain — when the precipitation rate is &lt; 2.5 mm (0.098 in) per hour</description></item>
         /// <item><description>Moderate rain — when the precipitation rate is between 2.5 mm (0.098 in) - 7.6 mm (0.30 in) or 10 mm (0.39 in) per hour</description></item>
-        /// <item><description>Heavy rain — when the precipitation rate is > 7.6 mm (0.30 in) per hour, or between 10 mm (0.39 in) and 50 mm (2.0 in) per hour</description></item>
-        /// <item><description>Violent rain — when the precipitation rate is > 50 mm (2.0 in) per hour</description></item>
+        /// <item><description>Heavy rain — when the precipitation rate is &gt; 7.6 mm (0.30 in) per hour, or between 10 mm (0.39 in) and 50 mm (2.0 in) per hour</description></item>
+        /// <item><description>Violent rain — when the precipitation rate is &gt; 50 mm (2.0 in) per hour</description></item>
         /// </list>
         /// </remarks>
         public double RainRate
@@ -221,17 +219,17 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Seeing at the observatory as FWHM in arc secs.
+        /// Seeing at the observatory measured as star full width half maximum (FWHM) in arc secs.
         /// </summary>
-        /// <value>Seeing reported as star full width half magnitude (arc seconds)</value>
+        /// <value>Seeing reported as star full width half maximum (arc seconds)</value>
         /// <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected.</exception>
         /// <remarks>
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
         /// </remarks>
-        public double SkySeeing
+        public double SkyFWHM
         {
-            get { return (double)_memberFactory.CallMember(1, "SkySeeing", new Type[] { }, new object[] { }); }
+            get { return (double)_memberFactory.CallMember(1, "SkyFWHM", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>

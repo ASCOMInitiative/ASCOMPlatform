@@ -81,7 +81,7 @@ namespace ASCOM.Simulator
             this.sensorViewRainRate = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyBrightness = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyQuality = new ASCOM.Simulator.SensorView();
-            this.sensorViewSkySeeing = new ASCOM.Simulator.SensorView();
+            this.sensorViewSkyFWHM = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyTemperature = new ASCOM.Simulator.SensorView();
             this.sensorViewPressure = new ASCOM.Simulator.SensorView();
             ((System.ComponentModel.ISupportInitialize)(this.numSensorQueryInterval)).BeginInit();
@@ -116,7 +116,7 @@ namespace ASCOM.Simulator
             // chkTrace
             // 
             this.chkTrace.AutoSize = true;
-            this.chkTrace.Location = new System.Drawing.Point(71, 12);
+            this.chkTrace.Location = new System.Drawing.Point(73, 12);
             this.chkTrace.Name = "chkTrace";
             this.chkTrace.Size = new System.Drawing.Size(69, 17);
             this.chkTrace.TabIndex = 6;
@@ -127,7 +127,7 @@ namespace ASCOM.Simulator
             // chkDebugTrace
             // 
             this.chkDebugTrace.AutoSize = true;
-            this.chkDebugTrace.Location = new System.Drawing.Point(71, 36);
+            this.chkDebugTrace.Location = new System.Drawing.Point(73, 36);
             this.chkDebugTrace.Name = "chkDebugTrace";
             this.chkDebugTrace.Size = new System.Drawing.Size(121, 17);
             this.chkDebugTrace.TabIndex = 9;
@@ -236,9 +236,9 @@ namespace ASCOM.Simulator
             this.label9.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.label9.Location = new System.Drawing.Point(37, 319);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.Size = new System.Drawing.Size(70, 13);
             this.label9.TabIndex = 19;
-            this.label9.Text = "Sky Seeing";
+            this.label9.Text = "Sky FWHM";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label10
@@ -467,7 +467,7 @@ namespace ASCOM.Simulator
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(91, 61);
+            this.label36.Location = new System.Drawing.Point(87, 61);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(155, 13);
             this.label36.TabIndex = 65;
@@ -704,21 +704,21 @@ namespace ASCOM.Simulator
             this.sensorViewSkyQuality.TabIndex = 57;
             this.sensorViewSkyQuality.ValueCycleTime = 0D;
             // 
-            // sensorViewSkySeeing
+            // sensorViewSkyFWHM
             // 
-            this.sensorViewSkySeeing.ConnectToDriver = false;
-            this.sensorViewSkySeeing.EnabledCheckboxVisible = true;
-            this.sensorViewSkySeeing.Location = new System.Drawing.Point(140, 313);
-            this.sensorViewSkySeeing.MaxValue = 0D;
-            this.sensorViewSkySeeing.MinValue = 0D;
-            this.sensorViewSkySeeing.Name = "sensorViewSkySeeing";
-            this.sensorViewSkySeeing.NotReadyControlsEnabled = true;
-            this.sensorViewSkySeeing.NotReadyDelay = 0D;
-            this.sensorViewSkySeeing.SensorEnabled = true;
-            this.sensorViewSkySeeing.SensorName = null;
-            this.sensorViewSkySeeing.Size = new System.Drawing.Size(692, 24);
-            this.sensorViewSkySeeing.TabIndex = 56;
-            this.sensorViewSkySeeing.ValueCycleTime = 0D;
+            this.sensorViewSkyFWHM.ConnectToDriver = false;
+            this.sensorViewSkyFWHM.EnabledCheckboxVisible = true;
+            this.sensorViewSkyFWHM.Location = new System.Drawing.Point(140, 313);
+            this.sensorViewSkyFWHM.MaxValue = 0D;
+            this.sensorViewSkyFWHM.MinValue = 0D;
+            this.sensorViewSkyFWHM.Name = "sensorViewSkyFWHM";
+            this.sensorViewSkyFWHM.NotReadyControlsEnabled = true;
+            this.sensorViewSkyFWHM.NotReadyDelay = 0D;
+            this.sensorViewSkyFWHM.SensorEnabled = true;
+            this.sensorViewSkyFWHM.SensorName = null;
+            this.sensorViewSkyFWHM.Size = new System.Drawing.Size(692, 24);
+            this.sensorViewSkyFWHM.TabIndex = 56;
+            this.sensorViewSkyFWHM.ValueCycleTime = 0D;
             // 
             // sensorViewSkyTemperature
             // 
@@ -809,7 +809,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.sensorViewRainRate);
             this.Controls.Add(this.sensorViewSkyBrightness);
             this.Controls.Add(this.sensorViewSkyQuality);
-            this.Controls.Add(this.sensorViewSkySeeing);
+            this.Controls.Add(this.sensorViewSkyFWHM);
             this.Controls.Add(this.sensorViewSkyTemperature);
             this.Controls.Add(this.sensorViewPressure);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -858,7 +858,7 @@ namespace ASCOM.Simulator
         private SensorView sensorViewWindGust;
         private SensorView sensorViewWindDirection;
         private SensorView sensorViewSkyTemperature;
-        private SensorView sensorViewSkySeeing;
+        private SensorView sensorViewSkyFWHM;
         private SensorView sensorViewSkyQuality;
         private SensorView sensorViewSkyBrightness;
         private SensorView sensorViewRainRate;
