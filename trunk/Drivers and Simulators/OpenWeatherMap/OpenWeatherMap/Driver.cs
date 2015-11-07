@@ -239,7 +239,7 @@ namespace ASCOM.OpenWeatherMap
             {
                 Log.LogMessage("AveragePeriod", "set {0}", value);
                 if (value != 0)
-                    throw new PropertyNotImplementedException("AveragePeriod", true);
+                    throw new InvalidValueException("AveragePeriod", value.ToString(), "Current value only available.");
             }
         }
 
@@ -405,7 +405,7 @@ namespace ASCOM.OpenWeatherMap
         }
 
         /// <summary>
-        /// Seeing at the observatory
+        /// Seeing at the observatory as the FWH size of stars in arc sec.
         /// </summary>
         public double SkyFWHM
         {
