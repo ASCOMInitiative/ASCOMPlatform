@@ -57,7 +57,6 @@ namespace ASCOM.DriverAccess
         /// Gets and sets the time period over which observations will be averaged
         /// </summary>
         /// <value>Time period (hours) over which to average sensor readings</value>
-        /// <exception cref="PropertyNotImplementedException">If setting this property is not available.</exception>
         /// <exception cref="ASCOM.InvalidValueException">If the value set is not available for this driver. All drivers must accept 0.0 to specify that
         /// an instantaneous value is available.</exception>
         /// <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>

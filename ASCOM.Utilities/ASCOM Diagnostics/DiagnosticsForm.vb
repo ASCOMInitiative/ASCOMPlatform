@@ -1021,6 +1021,43 @@ Public Class DiagnosticsForm
             Sim.SixtyFourBit = True
             TestSimulator(Sim)
             Sim = Nothing
+
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.Simulator.Video"
+            Sim.Description = "Platform 6 Video Simulator"
+            Sim.DeviceType = "Video"
+            Sim.Name = "Video Simulator"
+            Sim.DriverVersion = "6.2"
+            Sim.InterfaceVersion = 1
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.Simulator.ObservingConditions"
+            Sim.Description = "Platform 6 ObservingConditions Simulator"
+            Sim.DeviceType = "ObservingConditions"
+            Sim.Name = "ASCOM Observing Conditions Simulator"
+            Sim.DriverVersion = "6.2"
+            Sim.InterfaceVersion = 1
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
+
+            Sim = New SimulatorDescriptor
+            Sim.ProgID = "ASCOM.OCH.ObservingConditions"
+            Sim.Description = "Platform 6 ObservingConditions Hub"
+            Sim.DeviceType = "ObservingConditions"
+            Sim.Name = "ASCOM Observing Conditions Hub (OCH)"
+            Sim.DriverVersion = "6.2"
+            Sim.InterfaceVersion = 1
+            Sim.IsPlatform5 = False
+            Sim.SixtyFourBit = True
+            TestSimulator(Sim)
+            Sim = Nothing
+
         End If
         TL.BlankLine()
     End Sub
@@ -1196,10 +1233,20 @@ Public Class DiagnosticsForm
                             DeviceTest("Dome", "SlewToAltitude")
                             DeviceTest("Dome", "SlewToAzimuth")
                             DeviceTest("Dome", "CloseShutter")
+                        Case "Video"
+                            DeviceTest("Video", "BitDepth")
+                            DeviceTest("Video", "CanConfigureDeviceProperties")
+                            DeviceTest("Video", "ExposureMin")
+                            DeviceTest("Video", "Height")
+                            DeviceTest("Video", "Width")
+                        Case "ObservingConditions"
+                            DeviceTest("ObservingConditions", "AveragePeriod")
+                            DeviceTest("ObservingConditions", "TimeSinceLastUpdate")
                         Case Else
                             LogException("TestSimulator", "Unknown device type: " & Sim.DeviceType)
                     End Select
 
+                    ' Disconnect the device
                     Select Case Sim.DeviceType
                         Case "Focuser"
                             Try
@@ -1457,9 +1504,36 @@ Public Class DiagnosticsForm
                             Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
                             CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, 0.00001)
                         Case Else
-                            LogException("DeviceTest", "Unknown Test: " & Test)
+                            LogException("DeviceTest", "Unknown Dome Test: " & Test)
                     End Select
 
+                Case "Video"
+                    Select Case Test
+                        Case "FrameNumber"
+                            Compare(Device, Test, (DeviceObject.FrameNumber >= 0).ToString(), "True")
+                        Case "BitDepth"
+                            Compare(Device, Test, (DeviceObject.BitDepth >= 0).ToString(), "True")
+                        Case "CanConfigureDeviceProperties"
+                            Compare(Device, Test, DeviceObject.CanConfigureDeviceProperties.ToString(), "True")
+                        Case "ExposureMin"
+                            Compare(Device, Test, (DeviceObject.BitDepth >= 0.0).ToString(), "True")
+                        Case "Height"
+                            Compare(Device, Test, (DeviceObject.BitDepth >= 0).ToString(), "True")
+                        Case "Width"
+                            Compare(Device, Test, (DeviceObject.BitDepth >= 0).ToString(), "True")
+                        Case Else
+                            LogException("DeviceTest", "Unknown Video Test: " & Test)
+                    End Select
+
+                Case "ObservingConditions"
+                    Select Case Test
+                        Case "AveragePeriod"
+                            Compare(Device, Test, (DeviceObject.AveragePeriod >= 0.0).ToString(), "True")
+                        Case "TimeSinceLastUpdate"
+                            Compare(Device, Test, IsNumeric(DeviceObject.TimeSinceLastUpdate("")).ToString(), "True")
+                        Case Else
+                            LogException("DeviceTest", "Unknown ObservingConditions Test: " & Test)
+                    End Select
                 Case Else
                     LogException("DeviceTest", "Unknown Device: " & Device)
             End Select
