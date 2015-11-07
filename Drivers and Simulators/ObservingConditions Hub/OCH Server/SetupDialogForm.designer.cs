@@ -67,7 +67,7 @@ namespace ASCOM.Simulator
             this.sensorViewWindGust = new ASCOM.Simulator.SensorView();
             this.sensorViewWindDirection = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyTemperature = new ASCOM.Simulator.SensorView();
-            this.sensorViewSkySeeing = new ASCOM.Simulator.SensorView();
+            this.sensorViewSkyFWHM = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyQuality = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyBrightness = new ASCOM.Simulator.SensorView();
             this.sensorViewRainRate = new ASCOM.Simulator.SensorView();
@@ -260,9 +260,9 @@ namespace ASCOM.Simulator
             this.label9.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.label9.Location = new System.Drawing.Point(49, 322);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.Size = new System.Drawing.Size(70, 13);
             this.label9.TabIndex = 19;
-            this.label9.Text = "Sky Seeing";
+            this.label9.Text = "Sky FWHM";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label10
@@ -504,14 +504,14 @@ namespace ASCOM.Simulator
             this.sensorViewSkyTemperature.Size = new System.Drawing.Size(894, 24);
             this.sensorViewSkyTemperature.TabIndex = 75;
             // 
-            // sensorViewSkySeeing
+            // sensorViewSkyFWHM
             // 
-            this.sensorViewSkySeeing.ConnectToDriver = false;
-            this.sensorViewSkySeeing.Location = new System.Drawing.Point(133, 318);
-            this.sensorViewSkySeeing.Name = "sensorViewSkySeeing";
-            this.sensorViewSkySeeing.SensorName = "SkySeeing";
-            this.sensorViewSkySeeing.Size = new System.Drawing.Size(894, 24);
-            this.sensorViewSkySeeing.TabIndex = 74;
+            this.sensorViewSkyFWHM.ConnectToDriver = false;
+            this.sensorViewSkyFWHM.Location = new System.Drawing.Point(133, 318);
+            this.sensorViewSkyFWHM.Name = "sensorViewSkyFWHM";
+            this.sensorViewSkyFWHM.SensorName = "SkyFWHM";
+            this.sensorViewSkyFWHM.Size = new System.Drawing.Size(894, 24);
+            this.sensorViewSkyFWHM.TabIndex = 74;
             // 
             // sensorViewSkyQuality
             // 
@@ -612,7 +612,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.label13);
             this.Controls.Add(this.sensorViewSkyTemperature);
             this.Controls.Add(this.label12);
-            this.Controls.Add(this.sensorViewSkySeeing);
+            this.Controls.Add(this.sensorViewSkyFWHM);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.sensorViewSkyQuality);
             this.Controls.Add(this.label10);
@@ -690,7 +690,7 @@ namespace ASCOM.Simulator
         private SensorView sensorViewWindGust;
         private SensorView sensorViewWindDirection;
         private SensorView sensorViewSkyTemperature;
-        private SensorView sensorViewSkySeeing;
+        private SensorView sensorViewSkyFWHM;
         private SensorView sensorViewSkyQuality;
         private SensorView sensorViewSkyBrightness;
         private System.Windows.Forms.Label label15;

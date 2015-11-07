@@ -312,7 +312,7 @@ Public Interface IObservingConditions
     ''' <item><description>Light rain — when the precipitation rate is less than 2.5 mm (0.098 in) per hour</description></item>
     ''' <item><description>Moderate rain — when the precipitation rate is between 2.5 mm (0.098 in) and 10 mm (0.39 in) per hour</description></item>
     ''' <item><description>Heavy rain — when the precipitation rate is between 10 mm (0.39 in) and 50 mm (2.0 in) per hour</description></item>
-    ''' <item><description>Violent rain — when the precipitation rate is > 50 mm (2.0 in) per hour</description></item>
+    ''' <item><description>Violent rain — when the precipitation rate is &gt; 50 mm (2.0 in) per hour</description></item>
     ''' </list>
     ''' </remarks>
     ReadOnly Property RainRate As Double
@@ -359,15 +359,15 @@ Public Interface IObservingConditions
     ReadOnly Property SkyQuality As Double
 
     ''' <summary>
-    ''' Seeing at the observatory as FWHM in arc secs.
+    ''' Seeing at the observatory measured as star full width half maximum (FWHM) in arc secs.
     ''' </summary>
-    ''' <value>Seeing reported as star full width half magnitude (arc seconds)</value>
+    ''' <value>Seeing reported as star full width half maximum (arc seconds)</value>
     ''' <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>
     ''' <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
     ''' </remarks>
-    ReadOnly Property SkySeeing As Double
+    ReadOnly Property SkyFWHM As Double
 
     ''' <summary>
     ''' Sky temperature at the observatory

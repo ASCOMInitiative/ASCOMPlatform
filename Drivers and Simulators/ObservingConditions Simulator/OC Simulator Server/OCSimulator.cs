@@ -46,7 +46,7 @@ namespace ASCOM.Simulator
         public const string PROPERTY_RAINRATE = "RainRate";
         public const string PROPERTY_SKYBRIGHTNESS = "SkyBrightness";
         public const string PROPERTY_SKYQUALITY = "SkyQuality";
-        public const string PROPERTY_SKYSEEING = "SkySeeing";
+        public const string PROPERTY_SKYFWHM = "SkyFWHM";
         public const string PROPERTY_SKYTEMPERATURE = "SkyTemperature";
         public const string PROPERTY_TEMPERATURE = "Temperature";
         public const string PROPERTY_WINDDIRECTION = "WindDirection";
@@ -100,7 +100,7 @@ namespace ASCOM.Simulator
             PROPERTY_RAINRATE,
             PROPERTY_SKYBRIGHTNESS,
             PROPERTY_SKYQUALITY,
-            PROPERTY_SKYSEEING,
+            PROPERTY_SKYFWHM,
             PROPERTY_SKYTEMPERATURE,
             PROPERTY_TEMPERATURE,
             PROPERTY_WINDDIRECTION,
@@ -116,7 +116,7 @@ namespace ASCOM.Simulator
             PROPERTY_RAINRATE,
             PROPERTY_SKYBRIGHTNESS,
             PROPERTY_SKYQUALITY,
-            PROPERTY_SKYSEEING,
+            PROPERTY_SKYFWHM,
             PROPERTY_SKYTEMPERATURE,
             PROPERTY_TEMPERATURE,
             PROPERTY_WINDDIRECTION,
@@ -132,7 +132,7 @@ namespace ASCOM.Simulator
             {PROPERTY_RAINRATE, 0.0},
             {PROPERTY_SKYBRIGHTNESS, 85.0},
             {PROPERTY_SKYQUALITY, 18.0},
-            {PROPERTY_SKYSEEING, 0.85},
+            {PROPERTY_SKYFWHM, 0.85},
             {PROPERTY_SKYTEMPERATURE, -28.0},
             {PROPERTY_TEMPERATURE, 5.4},
             {PROPERTY_WINDDIRECTION, 174.4},
@@ -147,7 +147,7 @@ namespace ASCOM.Simulator
             {PROPERTY_RAINRATE, 0.0},
             {PROPERTY_SKYBRIGHTNESS, 95.0},
             {PROPERTY_SKYQUALITY, 20.0},
-            {PROPERTY_SKYSEEING, 1.35},
+            {PROPERTY_SKYFWHM, 1.35},
             {PROPERTY_SKYTEMPERATURE, -25.0},
             {PROPERTY_TEMPERATURE, 8.8},
             {PROPERTY_WINDDIRECTION, 253.8},
@@ -162,7 +162,7 @@ namespace ASCOM.Simulator
             {PROPERTY_RAINRATE, 0.0},
             {PROPERTY_SKYBRIGHTNESS, 0.0},
             {PROPERTY_SKYQUALITY, 2.0},
-            {PROPERTY_SKYSEEING, 0.1},
+            {PROPERTY_SKYFWHM, 0.1},
             {PROPERTY_SKYTEMPERATURE, -75.0},
             {PROPERTY_TEMPERATURE, -50.0},
             {PROPERTY_WINDDIRECTION, 0.0},
@@ -177,7 +177,7 @@ namespace ASCOM.Simulator
             {PROPERTY_RAINRATE, 100.0},
             {PROPERTY_SKYBRIGHTNESS, 10000.0},
             {PROPERTY_SKYQUALITY, 22.0},
-            {PROPERTY_SKYSEEING, 10.0},
+            {PROPERTY_SKYFWHM, 10.0},
             {PROPERTY_SKYTEMPERATURE, 50.0},
             {PROPERTY_TEMPERATURE, 50.0},
             {PROPERTY_WINDDIRECTION, 360.0},
@@ -549,11 +549,11 @@ namespace ASCOM.Simulator
             return skyQuality;
         }
 
-        public static double SkySeeing(int clientNumber)
+        public static double SkyFWHM(int clientNumber)
         {
-            double skySeeing = GetSensorValue(PROPERTY_SKYSEEING); ;
-            TL.LogMessage(clientNumber, "SkySeeing", skySeeing.ToString());
-            return skySeeing;
+            double skyFWHM = GetSensorValue(PROPERTY_SKYFWHM); ;
+            TL.LogMessage(clientNumber, "SkyFWHM", skyFWHM.ToString());
+            return skyFWHM;
         }
 
         public static double SkyTemperature(int clientNumber)

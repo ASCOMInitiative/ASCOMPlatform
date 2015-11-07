@@ -57,7 +57,7 @@ namespace ASCOM.Simulator
             this.overrideViewWindDirection = new ASCOM.Simulator.OverrideView();
             this.overrideViewTemperature = new ASCOM.Simulator.OverrideView();
             this.overrideViewSkyTemperature = new ASCOM.Simulator.OverrideView();
-            this.overrideViewSkySeeing = new ASCOM.Simulator.OverrideView();
+            this.overrideViewSkyFWHM = new ASCOM.Simulator.OverrideView();
             this.overrideViewSkyQuality = new ASCOM.Simulator.OverrideView();
             this.overrideViewSkyBrightness = new ASCOM.Simulator.OverrideView();
             this.overrideViewRainRate = new ASCOM.Simulator.OverrideView();
@@ -153,9 +153,9 @@ namespace ASCOM.Simulator
             this.label9.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.label9.Location = new System.Drawing.Point(50, 285);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.Size = new System.Drawing.Size(70, 13);
             this.label9.TabIndex = 32;
-            this.label9.Text = "Sky Seeing";
+            this.label9.Text = "Sky FWHM";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label8
@@ -340,12 +340,12 @@ namespace ASCOM.Simulator
             this.overrideViewSkyTemperature.Size = new System.Drawing.Size(551, 28);
             this.overrideViewSkyTemperature.TabIndex = 12;
             // 
-            // overrideViewSkySeeing
+            // overrideViewSkyFWHM
             // 
-            this.overrideViewSkySeeing.Location = new System.Drawing.Point(127, 276);
-            this.overrideViewSkySeeing.Name = "overrideViewSkySeeing";
-            this.overrideViewSkySeeing.Size = new System.Drawing.Size(551, 28);
-            this.overrideViewSkySeeing.TabIndex = 11;
+            this.overrideViewSkyFWHM.Location = new System.Drawing.Point(127, 276);
+            this.overrideViewSkyFWHM.Name = "overrideViewSkyFWHM";
+            this.overrideViewSkyFWHM.Size = new System.Drawing.Size(551, 28);
+            this.overrideViewSkyFWHM.TabIndex = 11;
             // 
             // overrideViewSkyQuality
             // 
@@ -418,7 +418,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.overrideViewWindDirection);
             this.Controls.Add(this.overrideViewTemperature);
             this.Controls.Add(this.overrideViewSkyTemperature);
-            this.Controls.Add(this.overrideViewSkySeeing);
+            this.Controls.Add(this.overrideViewSkyFWHM);
             this.Controls.Add(this.overrideViewSkyQuality);
             this.Controls.Add(this.overrideViewSkyBrightness);
             this.Controls.Add(this.overrideViewRainRate);
@@ -453,7 +453,7 @@ namespace ASCOM.Simulator
         private OverrideView overrideViewWindDirection;
         private OverrideView overrideViewTemperature;
         private OverrideView overrideViewSkyTemperature;
-        private OverrideView overrideViewSkySeeing;
+        private OverrideView overrideViewSkyFWHM;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;

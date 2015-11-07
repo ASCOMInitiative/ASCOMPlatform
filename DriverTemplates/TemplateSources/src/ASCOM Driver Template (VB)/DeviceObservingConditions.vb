@@ -73,10 +73,10 @@ Class DeviceObservingConditions
         End Get
     End Property
 
-    Public ReadOnly Property SkySeeing() As Double Implements IObservingConditions.SkySeeing
+    Public ReadOnly Property SkyFWHM() As Double Implements IObservingConditions.SkyFWHM
         Get
-            TL.LogMessage("SkySeeing", "Get Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException("SkySeeing", False)
+            TL.LogMessage("SkyFWHM", "Get Not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("SkyFWHM", False)
         End Get
     End Property
 

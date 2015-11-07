@@ -73,7 +73,7 @@ namespace ASCOM.Simulator
         public const string PROPERTY_RAINRATE = "RainRate";
         public const string PROPERTY_SKYBRIGHTNESS = "SkyBrightness";
         public const string PROPERTY_SKYQUALITY = "SkyQuality";
-        public const string PROPERTY_SKYSEEING = "SkySeeing";
+        public const string PROPERTY_SKYFWHM = "SkyFWHM";
         public const string PROPERTY_SKYTEMPERATURE = "SkyTemperature";
         public const string PROPERTY_TEMPERATURE = "Temperature";
         public const string PROPERTY_WINDDIRECTION = "WindDirection";
@@ -90,7 +90,7 @@ namespace ASCOM.Simulator
             PROPERTY_RAINRATE,
             PROPERTY_SKYBRIGHTNESS,
             PROPERTY_SKYQUALITY,
-            PROPERTY_SKYSEEING,
+            PROPERTY_SKYFWHM,
             PROPERTY_SKYTEMPERATURE,
             PROPERTY_TEMPERATURE,
             PROPERTY_WINDDIRECTION,
@@ -107,7 +107,7 @@ namespace ASCOM.Simulator
             PROPERTY_RAINRATE,
             PROPERTY_SKYBRIGHTNESS,
             PROPERTY_SKYQUALITY,
-            PROPERTY_SKYSEEING,
+            PROPERTY_SKYFWHM,
             PROPERTY_SKYTEMPERATURE,
             PROPERTY_TEMPERATURE,
             PROPERTY_WINDDIRECTION,
@@ -612,13 +612,13 @@ namespace ASCOM.Simulator
             return skyQuality;
         }
 
-        public static double SkySeeing(int clientNumber)
+        public static double SkyFWHM(int clientNumber)
         {
-            CheckConnected("SkySeeing");
+            CheckConnected("SkyFWHM");
 
-            double skySeeing = GetPropertyValue(PROPERTY_SKYSEEING); ;
-            TL.LogMessage(clientNumber, "SkySeeing", skySeeing.ToString());
-            return skySeeing;
+            double skyFWHM = GetPropertyValue(PROPERTY_SKYFWHM); ;
+            TL.LogMessage(clientNumber, "SkyFWHM", skyFWHM.ToString());
+            return skyFWHM;
         }
 
         public static double SkyTemperature(int clientNumber)
