@@ -448,11 +448,10 @@ Public Interface IObservingConditions
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <exception cref="InvalidValueException">If an invalid property name parameter is supplied.</exception>
     ''' <remarks>
-    ''' <p style="color:red"><b>Must Not throw a MethodNotImplementedException when the specified sensor Is implemented 
-    ''' but must throw a MethodNotImplementedException when the specified sensor Is Not implemented.</b></p>
+    ''' <p style="color:red"><b>Must Not throw a MethodNotImplementedException when the specified sensor Is implemented but must throw a MethodNotImplementedException when the specified sensor Is Not implemented.</b></p>
     ''' <para>PropertyName must be the name of one of the sensor properties specified in the <see cref="IObservingConditions"/> interface. If the caller supplies some other value, throw an InvalidValueException.</para>
     ''' <para>Return a negative value to indicate that no valid value has ever been received from the hardware.</para>
-    ''' <para>If the sensor is not implemented, this must throw a MethodNotImplementedException.</para>
+    ''' <para>If an empty string is supplied as the PropertyName, the driver must return the time since the most recent update of any sensor. A MethodNotImplementedException must not be thrown in this circumstance.</para>
     ''' </remarks>
     Function TimeSinceLastUpdate(PropertyName As String) As Double
 
