@@ -396,7 +396,7 @@ namespace ASCOM.Simulator
         {
             CheckConnected("InterfaceVersion");
 
-            short interfaceVersion = 3;
+            short interfaceVersion = 1;
             TL.LogMessage(clientNumber, "InterfaceVersion", interfaceVersion.ToString());
             return interfaceVersion;
         }

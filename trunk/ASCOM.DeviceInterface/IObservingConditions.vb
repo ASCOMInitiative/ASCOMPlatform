@@ -10,10 +10,8 @@ Imports ASCOM.Utilities
 ''' for astronomical purposes for things such as determining if it is safe to open or operate the observing system,
 ''' for recording astronomical data or determining refraction corrections.
 ''' </summary>
-''' <remarks>It is NOT intended as a general purpose environmental sensor system.
-''' The <see cref="IObservingConditions.Action">Action</see> method and 
-''' <see cref="IObservingConditions.SupportedActions">SupportedActions</see> property 
-''' can be used to add driver specific sensors.
+''' <remarks>It is NOT intended as a general purpose environmental sensor system. The <see cref="IObservingConditions.Action">Action</see> method and 
+''' <see cref="IObservingConditions.SupportedActions">SupportedActions</see> property can be used to extend your driver to present any further sensors that you need.
 ''' </remarks>
 <ComVisible(True), Guid("06E9F8D9-E85C-4B2B-BC84-6F2EF6B3E779"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)>
 Public Interface IObservingConditions
@@ -224,7 +222,6 @@ Public Interface IObservingConditions
     ''' Gets And sets the time period over which observations will be averaged
     ''' </summary>
     ''' <value>Time period (hours) over which to average sensor readings</value>
-    ''' <exception cref="PropertyNotImplementedException">If setting this property is not available.</exception>
     ''' <exception cref="ASCOM.InvalidValueException">If the value set is not available for this driver. All drivers must accept 0.0 to specify that
     ''' an instantaneous value is available.</exception>
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
