@@ -714,7 +714,7 @@ namespace ASCOM.Simulator
                 if (Property == PROPERTY_HUMIDITY)
                 {
                     Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = mostRecentUpdateTime;
-                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(Humidity(0), Temperature(0)); // Set the new simulator value
+                    Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(newValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue); // Set the new simulator value
                 }
 
             }
