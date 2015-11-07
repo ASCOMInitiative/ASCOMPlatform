@@ -262,6 +262,10 @@ namespace ASCOM.Simulator
                     Sensors[Property].TimeOfLastUpdate = DateTime.Now;
                 }
 
+                // Dew point is calculated from humidity so initialise that here
+                Sensors[PROPERTY_DEWPOINT].SimCurrentValue = util.Humidity2DewPoint(Sensors[PROPERTY_HUMIDITY].SimCurrentValue, Sensors[PROPERTY_TEMPERATURE].SimCurrentValue);
+                Sensors[PROPERTY_DEWPOINT].TimeOfLastUpdate = DateTime.Now;
+
                 TL.LogMessage("OCSimulator", "Simulator initialisation complete.");
             }
             catch (Exception ex)
