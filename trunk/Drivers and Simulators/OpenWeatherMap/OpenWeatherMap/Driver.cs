@@ -369,7 +369,7 @@ namespace ASCOM.OpenWeatherMap
                     return "Wind speed, m/s";
                 case "SkyBrightness":
                 case "SkyQuality":
-                case "SkyFWHM":
+                case "StarFWHM":
                 case "SkyTemperature":
                 case "WindGust":
                     Log.LogMessage("SensorDescription", PropertyName + " - not implemented");
@@ -407,12 +407,12 @@ namespace ASCOM.OpenWeatherMap
         /// <summary>
         /// Seeing at the observatory as the FWH size of stars in arc sec.
         /// </summary>
-        public double SkyFWHM
+        public double StarFWHM
         {
             get
             {
-                Log.LogMessage("SkyFWHM", "get - not implemented");
-                throw new PropertyNotImplementedException("SkyFWHM", false);
+                Log.LogMessage("StarFWHM", "get - not implemented");
+                throw new PropertyNotImplementedException("StarFWHM", false);
             }
         }
 

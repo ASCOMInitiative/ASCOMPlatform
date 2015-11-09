@@ -73,10 +73,10 @@ Class DeviceObservingConditions
         End Get
     End Property
 
-    Public ReadOnly Property SkyFWHM() As Double Implements IObservingConditions.SkyFWHM
+    Public ReadOnly Property StarFWHM() As Double Implements IObservingConditions.StarFWHM
         Get
-            TL.LogMessage("SkyFWHM", "Get Not implemented")
-            Throw New ASCOM.PropertyNotImplementedException("SkyFWHM", False)
+            TL.LogMessage("StarFWHM", "Get Not implemented")
+            Throw New ASCOM.PropertyNotImplementedException("StarFWHM", False)
         End Get
     End Property
 

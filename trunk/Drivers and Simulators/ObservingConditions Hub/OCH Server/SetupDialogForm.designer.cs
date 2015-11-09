@@ -67,7 +67,7 @@ namespace ASCOM.Simulator
             this.sensorViewWindGust = new ASCOM.Simulator.SensorView();
             this.sensorViewWindDirection = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyTemperature = new ASCOM.Simulator.SensorView();
-            this.sensorViewSkyFWHM = new ASCOM.Simulator.SensorView();
+            this.sensorViewStarFWHM = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyQuality = new ASCOM.Simulator.SensorView();
             this.sensorViewSkyBrightness = new ASCOM.Simulator.SensorView();
             this.sensorViewRainRate = new ASCOM.Simulator.SensorView();
@@ -174,7 +174,7 @@ namespace ASCOM.Simulator
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label2.Location = new System.Drawing.Point(44, 134);
+            this.label2.Location = new System.Drawing.Point(44, 135);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(76, 13);
             this.label2.TabIndex = 12;
@@ -186,7 +186,7 @@ namespace ASCOM.Simulator
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label3.Location = new System.Drawing.Point(55, 161);
+            this.label3.Location = new System.Drawing.Point(55, 162);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 13);
             this.label3.TabIndex = 13;
@@ -198,7 +198,7 @@ namespace ASCOM.Simulator
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label4.Location = new System.Drawing.Point(64, 214);
+            this.label4.Location = new System.Drawing.Point(64, 216);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(56, 13);
             this.label4.TabIndex = 14;
@@ -222,7 +222,7 @@ namespace ASCOM.Simulator
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label6.Location = new System.Drawing.Point(56, 241);
+            this.label6.Location = new System.Drawing.Point(56, 243);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(64, 13);
             this.label6.TabIndex = 16;
@@ -234,7 +234,7 @@ namespace ASCOM.Simulator
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label7.Location = new System.Drawing.Point(29, 268);
+            this.label7.Location = new System.Drawing.Point(29, 270);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(91, 13);
             this.label7.TabIndex = 17;
@@ -246,7 +246,7 @@ namespace ASCOM.Simulator
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label8.Location = new System.Drawing.Point(49, 295);
+            this.label8.Location = new System.Drawing.Point(49, 297);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 13);
             this.label8.TabIndex = 18;
@@ -258,11 +258,11 @@ namespace ASCOM.Simulator
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label9.Location = new System.Drawing.Point(49, 322);
+            this.label9.Location = new System.Drawing.Point(48, 351);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(70, 13);
+            this.label9.Size = new System.Drawing.Size(72, 13);
             this.label9.TabIndex = 19;
-            this.label9.Text = "Sky FWHM";
+            this.label9.Text = "Star FWHM";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label10
@@ -270,7 +270,7 @@ namespace ASCOM.Simulator
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label10.Location = new System.Drawing.Point(17, 349);
+            this.label10.Location = new System.Drawing.Point(17, 324);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(103, 13);
             this.label10.TabIndex = 20;
@@ -282,7 +282,7 @@ namespace ASCOM.Simulator
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label11.Location = new System.Drawing.Point(42, 375);
+            this.label11.Location = new System.Drawing.Point(42, 379);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(78, 13);
             this.label11.TabIndex = 21;
@@ -294,7 +294,7 @@ namespace ASCOM.Simulator
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label12.Location = new System.Drawing.Point(29, 402);
+            this.label12.Location = new System.Drawing.Point(29, 406);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(91, 13);
             this.label12.TabIndex = 22;
@@ -306,7 +306,7 @@ namespace ASCOM.Simulator
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label13.Location = new System.Drawing.Point(54, 429);
+            this.label13.Location = new System.Drawing.Point(54, 433);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(66, 13);
             this.label13.TabIndex = 23;
@@ -318,7 +318,7 @@ namespace ASCOM.Simulator
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label14.Location = new System.Drawing.Point(44, 456);
+            this.label14.Location = new System.Drawing.Point(44, 460);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(76, 13);
             this.label14.TabIndex = 24;
@@ -471,7 +471,7 @@ namespace ASCOM.Simulator
             // sensorViewWindSpeed
             // 
             this.sensorViewWindSpeed.ConnectToDriver = false;
-            this.sensorViewWindSpeed.Location = new System.Drawing.Point(133, 452);
+            this.sensorViewWindSpeed.Location = new System.Drawing.Point(133, 454);
             this.sensorViewWindSpeed.Name = "sensorViewWindSpeed";
             this.sensorViewWindSpeed.SensorName = "WindSpeed";
             this.sensorViewWindSpeed.Size = new System.Drawing.Size(894, 24);
@@ -480,7 +480,7 @@ namespace ASCOM.Simulator
             // sensorViewWindGust
             // 
             this.sensorViewWindGust.ConnectToDriver = false;
-            this.sensorViewWindGust.Location = new System.Drawing.Point(133, 425);
+            this.sensorViewWindGust.Location = new System.Drawing.Point(133, 427);
             this.sensorViewWindGust.Name = "sensorViewWindGust";
             this.sensorViewWindGust.SensorName = "WindGust";
             this.sensorViewWindGust.Size = new System.Drawing.Size(894, 24);
@@ -489,7 +489,7 @@ namespace ASCOM.Simulator
             // sensorViewWindDirection
             // 
             this.sensorViewWindDirection.ConnectToDriver = false;
-            this.sensorViewWindDirection.Location = new System.Drawing.Point(133, 398);
+            this.sensorViewWindDirection.Location = new System.Drawing.Point(133, 400);
             this.sensorViewWindDirection.Name = "sensorViewWindDirection";
             this.sensorViewWindDirection.SensorName = "WindDirection";
             this.sensorViewWindDirection.Size = new System.Drawing.Size(894, 24);
@@ -498,25 +498,25 @@ namespace ASCOM.Simulator
             // sensorViewSkyTemperature
             // 
             this.sensorViewSkyTemperature.ConnectToDriver = false;
-            this.sensorViewSkyTemperature.Location = new System.Drawing.Point(133, 345);
+            this.sensorViewSkyTemperature.Location = new System.Drawing.Point(133, 319);
             this.sensorViewSkyTemperature.Name = "sensorViewSkyTemperature";
             this.sensorViewSkyTemperature.SensorName = "SkyTemperature";
             this.sensorViewSkyTemperature.Size = new System.Drawing.Size(894, 24);
             this.sensorViewSkyTemperature.TabIndex = 75;
             // 
-            // sensorViewSkyFWHM
+            // sensorViewStarFWHM
             // 
-            this.sensorViewSkyFWHM.ConnectToDriver = false;
-            this.sensorViewSkyFWHM.Location = new System.Drawing.Point(133, 318);
-            this.sensorViewSkyFWHM.Name = "sensorViewSkyFWHM";
-            this.sensorViewSkyFWHM.SensorName = "SkyFWHM";
-            this.sensorViewSkyFWHM.Size = new System.Drawing.Size(894, 24);
-            this.sensorViewSkyFWHM.TabIndex = 74;
+            this.sensorViewStarFWHM.ConnectToDriver = false;
+            this.sensorViewStarFWHM.Location = new System.Drawing.Point(133, 346);
+            this.sensorViewStarFWHM.Name = "sensorViewStarFWHM";
+            this.sensorViewStarFWHM.SensorName = "StarFWHM";
+            this.sensorViewStarFWHM.Size = new System.Drawing.Size(894, 24);
+            this.sensorViewStarFWHM.TabIndex = 74;
             // 
             // sensorViewSkyQuality
             // 
             this.sensorViewSkyQuality.ConnectToDriver = false;
-            this.sensorViewSkyQuality.Location = new System.Drawing.Point(133, 291);
+            this.sensorViewSkyQuality.Location = new System.Drawing.Point(133, 292);
             this.sensorViewSkyQuality.Name = "sensorViewSkyQuality";
             this.sensorViewSkyQuality.SensorName = "SkyQuality";
             this.sensorViewSkyQuality.Size = new System.Drawing.Size(894, 24);
@@ -525,7 +525,7 @@ namespace ASCOM.Simulator
             // sensorViewSkyBrightness
             // 
             this.sensorViewSkyBrightness.ConnectToDriver = false;
-            this.sensorViewSkyBrightness.Location = new System.Drawing.Point(133, 264);
+            this.sensorViewSkyBrightness.Location = new System.Drawing.Point(133, 265);
             this.sensorViewSkyBrightness.Name = "sensorViewSkyBrightness";
             this.sensorViewSkyBrightness.SensorName = "SkyBrightness";
             this.sensorViewSkyBrightness.Size = new System.Drawing.Size(894, 24);
@@ -534,7 +534,7 @@ namespace ASCOM.Simulator
             // sensorViewRainRate
             // 
             this.sensorViewRainRate.ConnectToDriver = false;
-            this.sensorViewRainRate.Location = new System.Drawing.Point(133, 237);
+            this.sensorViewRainRate.Location = new System.Drawing.Point(133, 238);
             this.sensorViewRainRate.Name = "sensorViewRainRate";
             this.sensorViewRainRate.SensorName = "RainRate";
             this.sensorViewRainRate.Size = new System.Drawing.Size(894, 24);
@@ -543,7 +543,7 @@ namespace ASCOM.Simulator
             // sensorViewPressure
             // 
             this.sensorViewPressure.ConnectToDriver = false;
-            this.sensorViewPressure.Location = new System.Drawing.Point(133, 210);
+            this.sensorViewPressure.Location = new System.Drawing.Point(133, 211);
             this.sensorViewPressure.Name = "sensorViewPressure";
             this.sensorViewPressure.SensorName = "Pressure";
             this.sensorViewPressure.Size = new System.Drawing.Size(894, 24);
@@ -579,7 +579,7 @@ namespace ASCOM.Simulator
             // sensorViewTemperature
             // 
             this.sensorViewTemperature.ConnectToDriver = false;
-            this.sensorViewTemperature.Location = new System.Drawing.Point(133, 371);
+            this.sensorViewTemperature.Location = new System.Drawing.Point(133, 373);
             this.sensorViewTemperature.Name = "sensorViewTemperature";
             this.sensorViewTemperature.SensorName = "Temperature";
             this.sensorViewTemperature.Size = new System.Drawing.Size(894, 24);
@@ -612,7 +612,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.label13);
             this.Controls.Add(this.sensorViewSkyTemperature);
             this.Controls.Add(this.label12);
-            this.Controls.Add(this.sensorViewSkyFWHM);
+            this.Controls.Add(this.sensorViewStarFWHM);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.sensorViewSkyQuality);
             this.Controls.Add(this.label10);
@@ -690,7 +690,7 @@ namespace ASCOM.Simulator
         private SensorView sensorViewWindGust;
         private SensorView sensorViewWindDirection;
         private SensorView sensorViewSkyTemperature;
-        private SensorView sensorViewSkyFWHM;
+        private SensorView sensorViewStarFWHM;
         private SensorView sensorViewSkyQuality;
         private SensorView sensorViewSkyBrightness;
         private System.Windows.Forms.Label label15;

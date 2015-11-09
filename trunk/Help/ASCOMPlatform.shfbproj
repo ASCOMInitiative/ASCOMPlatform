@@ -88,6 +88,11 @@
     <Folder Include="Introduction\" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Tools and Features\CameraV2 State Diagram.png">
+      <ImageId>CameraV2 State Diagram</ImageId>
+      <AlternateText>Camera V 2 State Diagram</AlternateText>
+      <CopyToMedia>True</CopyToMedia>
+    </Image>
     <Image Include="Introduction\ManufLogos.png">
       <CopyToMedia>False</CopyToMedia>
       <ImageId>ManufLogos</ImageId>

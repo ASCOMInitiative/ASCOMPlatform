@@ -355,6 +355,146 @@ Public Interface IObservingConditions
     ''' <exception cref="NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
     ''' <remarks>
     ''' <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
+    ''' <para>Sky quality is typically measured in units of magnitudes per square arc second. A sky quality of 20 magnitudes per square arc second means that the
+    ''' overall sky appears with a brightness equivalent to having 1 magnitude 20 star in each square arc second of sky.</para>
+    ''' <para >Examples of typical sky quality values were published by Sky and Telescope (<a href="http://www.skyandtelescope.com/astronomy-resources/rate-your-skyglow/">http://www.skyandtelescope.com/astronomy-resources/rate-your-skyglow/</a>) and, in slightly adpated form, are reproduced below:</para>
+    ''' <para>
+    ''' <table style="width:80.0%;" cellspacing="0" width="80.0%">
+    ''' <col style="width: 20.0%;"></col>
+    ''' <col style="width: 80.0%;"></col>
+    ''' <tr>
+    ''' <td colspan="1" rowspan="1" style="width: 20.0%; padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-top-color: #000000; border-top-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid;
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; 
+    ''' background-color: #00ffff;" width="10.0">
+    ''' <b>Sky Quality (mag/arcsec<sup>2</sup>)</b></td>
+    ''' <td colspan="1" rowspan="1" style="width: 80.0%; padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-top-color: #000000; border-top-style: Solid; 
+    ''' border-right-style: Solid; border-right-color: #000000; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; 
+    ''' background-color: #00ffff;" width="90.0">
+    ''' <b>Description</b></td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 22.0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' By convention, this is often assumed to be the average brightness of a moonless night sky that's completely free of artificial light pollution.</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 21.0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' This is typical for a rural area with a medium-sized city not far away. It's comparable to the glow of the brightest section of the northern Milky Way, from Cygnus through Perseus. </td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 20.0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' This is typical for the outer suburbs of a major metropolis. The summer Milky Way is readily visible but severely washed out.</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 19.0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Typical for a suburb with widely spaced single-family homes. It's a little brighter than a remote rural site at the end of nautical twilight, when the Sun is 12° below the horizon.</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 18.0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Bright suburb or dark urban neighborhood. It's also a typical zenith skyglow at a rural site when the Moon is full. The Milky Way is invisible, or nearly so.</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 17.0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' Typical near the center of a major city.</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 13.0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' The zenith skyglow at the end of civil twilight, roughly a half hour after sunset, when the Sun is 6° below the horizon. Venus and Jupiter are easy to see, but bright stars are just beginning to appear.</td>
+    ''' </tr>
+    ''' <tr>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' text-align: center;vertical-align: middle;
+    ''' border-left-color: #000000; border-left-style: Solid; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' 7.0</td>
+    ''' <td style="padding-right: 10px; padding-left: 10px; 
+    ''' border-right-color: #000000; border-right-style: Solid; 
+    ''' border-bottom-color: #000000; border-bottom-style: Solid; 
+    ''' border-right-width: 1px; border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; ">
+    ''' The zenith skyglow at sunrise or sunset</td>
+    ''' </tr>
+    ''' </table>
+    ''' </para>
     ''' </remarks>
     ReadOnly Property SkyQuality As Double
 
@@ -367,7 +507,7 @@ Public Interface IObservingConditions
     ''' <remarks>
     ''' <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
     ''' </remarks>
-    ReadOnly Property SkyFWHM As Double
+    ReadOnly Property StarFWHM As Double
 
     ''' <summary>
     ''' Sky temperature at the observatory

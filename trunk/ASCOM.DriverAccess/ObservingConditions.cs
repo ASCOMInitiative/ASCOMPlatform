@@ -219,7 +219,7 @@ namespace ASCOM.DriverAccess
         }
 
         /// <summary>
-        /// Seeing at the observatory measured as star full width half maximum (FWHM) in arc secs.
+        /// Seeing at the observatory measured as the average star full width half maximum (FWHM in arc secs) within a star field.
         /// </summary>
         /// <value>Seeing reported as star full width half maximum (arc seconds)</value>
         /// <exception cref="PropertyNotImplementedException">If this property is not available.</exception>
@@ -227,9 +227,9 @@ namespace ASCOM.DriverAccess
         /// <remarks>
         /// <p style="color:red"><b>Optional property, can throw a PropertyNotImplementedException</b></p>
         /// </remarks>
-        public double SkyFWHM
+        public double StarFWHM
         {
-            get { return (double)_memberFactory.CallMember(1, "SkyFWHM", new Type[] { }, new object[] { }); }
+            get { return (double)_memberFactory.CallMember(1, "StarFWHM", new Type[] { }, new object[] { }); }
         }
 
         /// <summary>

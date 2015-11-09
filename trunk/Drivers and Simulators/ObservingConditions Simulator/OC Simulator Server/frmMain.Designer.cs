@@ -57,7 +57,7 @@ namespace ASCOM.Simulator
             this.overrideViewWindDirection = new ASCOM.Simulator.OverrideView();
             this.overrideViewTemperature = new ASCOM.Simulator.OverrideView();
             this.overrideViewSkyTemperature = new ASCOM.Simulator.OverrideView();
-            this.overrideViewSkyFWHM = new ASCOM.Simulator.OverrideView();
+            this.overrideViewStarFWHM = new ASCOM.Simulator.OverrideView();
             this.overrideViewSkyQuality = new ASCOM.Simulator.OverrideView();
             this.overrideViewSkyBrightness = new ASCOM.Simulator.OverrideView();
             this.overrideViewRainRate = new ASCOM.Simulator.OverrideView();
@@ -139,7 +139,7 @@ namespace ASCOM.Simulator
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label10.Location = new System.Drawing.Point(18, 319);
+            this.label10.Location = new System.Drawing.Point(18, 285);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(103, 13);
             this.label10.TabIndex = 33;
@@ -151,11 +151,11 @@ namespace ASCOM.Simulator
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.label9.Location = new System.Drawing.Point(50, 285);
+            this.label9.Location = new System.Drawing.Point(50, 319);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(70, 13);
+            this.label9.Size = new System.Drawing.Size(72, 13);
             this.label9.TabIndex = 32;
-            this.label9.Text = "Sky FWHM";
+            this.label9.Text = "Star FWHM";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label8
@@ -335,17 +335,17 @@ namespace ASCOM.Simulator
             // 
             // overrideViewSkyTemperature
             // 
-            this.overrideViewSkyTemperature.Location = new System.Drawing.Point(127, 310);
+            this.overrideViewSkyTemperature.Location = new System.Drawing.Point(127, 276);
             this.overrideViewSkyTemperature.Name = "overrideViewSkyTemperature";
             this.overrideViewSkyTemperature.Size = new System.Drawing.Size(551, 28);
             this.overrideViewSkyTemperature.TabIndex = 12;
             // 
-            // overrideViewSkyFWHM
+            // overrideViewStarFWHM
             // 
-            this.overrideViewSkyFWHM.Location = new System.Drawing.Point(127, 276);
-            this.overrideViewSkyFWHM.Name = "overrideViewSkyFWHM";
-            this.overrideViewSkyFWHM.Size = new System.Drawing.Size(551, 28);
-            this.overrideViewSkyFWHM.TabIndex = 11;
+            this.overrideViewStarFWHM.Location = new System.Drawing.Point(127, 310);
+            this.overrideViewStarFWHM.Name = "overrideViewStarFWHM";
+            this.overrideViewStarFWHM.Size = new System.Drawing.Size(551, 28);
+            this.overrideViewStarFWHM.TabIndex = 11;
             // 
             // overrideViewSkyQuality
             // 
@@ -418,7 +418,7 @@ namespace ASCOM.Simulator
             this.Controls.Add(this.overrideViewWindDirection);
             this.Controls.Add(this.overrideViewTemperature);
             this.Controls.Add(this.overrideViewSkyTemperature);
-            this.Controls.Add(this.overrideViewSkyFWHM);
+            this.Controls.Add(this.overrideViewStarFWHM);
             this.Controls.Add(this.overrideViewSkyQuality);
             this.Controls.Add(this.overrideViewSkyBrightness);
             this.Controls.Add(this.overrideViewRainRate);
@@ -453,7 +453,7 @@ namespace ASCOM.Simulator
         private OverrideView overrideViewWindDirection;
         private OverrideView overrideViewTemperature;
         private OverrideView overrideViewSkyTemperature;
-        private OverrideView overrideViewSkyFWHM;
+        private OverrideView overrideViewStarFWHM;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;

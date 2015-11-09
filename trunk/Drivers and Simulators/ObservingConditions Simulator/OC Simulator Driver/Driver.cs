@@ -187,9 +187,9 @@ namespace ASCOM.Simulator
             get { return OCSimulator.SkyQuality(clientNumber); }
         }
 
-        public double SkyFWHM
+        public double StarFWHM
         {
-            get { return OCSimulator.SkyFWHM(clientNumber); }
+            get { return OCSimulator.StarFWHM(clientNumber); }
         }
 
         public double SkyTemperature

@@ -145,7 +145,7 @@ class DeviceObservingConditions
             case "RainRate":
             case "SkyBrightness":
             case "SkyQuality":
-            case "SkyFWHM":
+            case "StarFWHM":
             case "SkyTemperature":
             case "Temperature":
             case "WindDirection":
@@ -186,12 +186,12 @@ class DeviceObservingConditions
     /// <summary>
     /// Seeing at the observatory
     /// </summary>
-    public double SkyFWHM
+    public double StarFWHM
     {
         get
         {
-            tl.LogMessage("SkyFWHM", "get - not implemented");
-            throw new PropertyNotImplementedException("SkyFWHM", false);
+            tl.LogMessage("StarFWHM", "get - not implemented");
+            throw new PropertyNotImplementedException("StarFWHM", false);
         }
     }
 
