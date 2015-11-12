@@ -20,6 +20,7 @@
         		<para>Platform 6.2 requires the following .NET framework version and library:</para>
       			<list class="bullet">
 	      			<listItem>.NET Framework 4 Client or .NET Framework 4 Full Installation or later</listItem>
+	      			<listItem>For WIndows 8 and later the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
 	      			<listItem>Visual C++ 10.0 libraries</listItem>
 	  			</list>
 				<para>While previous Platforms required .NET Framework 3.5, Platform 6.2 requires that .NET Framework 4 or later is installed on your PC. Framework 4 has been available 
@@ -74,7 +75,7 @@
 	      		<list class="bullet">
 	      			<listItem>SOFA - Library upleveled to release 11</listItem>
 	      			<listItem>Driver Templates (VB) - Change the Rates implementation so that it is compatible with .NET v4</listItem>
-	      			<listItem>Driver Templates (VB) - Improved loggging</listItem>
+	      			<listItem>Driver Templates (VB) - Improved logging</listItem>
 	      			<listItem>Driver Templates (VB) - SetupDialogForm now uses a combo box for the COM port selector.</listItem>
 	      			<listItem>Dome Simulator .NET - Improved to run from an application that is not running a Windows message loop</listItem>
 	      			<listItem>SOFA, NOVAS31 - Improved robustness when client applications change the DLL search path</listItem>
