@@ -1401,6 +1401,8 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Switch V2 Simulator (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Telescope Simulator 6 (at end of file)
+        Run Program $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Server.exe -register (WAIT, get result into variable RC)
+        Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Simulator (at end of file)
         Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
          
