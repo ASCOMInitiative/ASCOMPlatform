@@ -53,8 +53,23 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                MessageBox.Show("RefreshTimer: " + ex.ToString());
+                try // Something went wrong so try and log the issue, if we can't then don't do anything
+                {
+                    OCSimulator.TL.LogMessageCrLf("RefreshTimer", "Exception: " + ex.ToString());
+                    WaitFor(500); // Wait for a short while so we don't flood the log with exception messages
+                }
+                catch { }
             }
+        }
+
+        private void WaitFor(double duration)
+        {
+            DateTime startTime = DateTime.Now; // Save the wait's start time
+            do
+            {
+                System.Threading.Thread.Sleep(20); // Have a short sleep
+                Application.DoEvents(); // Keep the UI alive
+            } while (DateTime.Now.Subtract(startTime).TotalMilliseconds < duration); // Wait until the durationhas elapsed
         }
 
         private void btnShutDown_Click(object sender, EventArgs e)
@@ -102,8 +117,12 @@ namespace ASCOM.Simulator
 
         private void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            this.WindowState = FormWindowState.Normal;
-            MessageBox.Show("Application Thread Exception: " + e.Exception.ToString());
+            try // Something went wrong so try and log the issue, if we can't then don't do anything
+            {
+                OCSimulator.TL.LogMessageCrLf("Application", "Thread Exception: " + e.Exception.ToString());
+                WaitFor(500); // Wait for a short while so we don't flood the log with exception messages
+            }
+            catch { }
         }
 
         private void DeactivateEnableButton()
