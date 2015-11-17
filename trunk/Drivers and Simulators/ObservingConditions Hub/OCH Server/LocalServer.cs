@@ -233,12 +233,10 @@ namespace ASCOM.Simulator
             // put everything into one folder, the same as the server.
             string assyPath = Assembly.GetEntryAssembly().Location;
             assyPath = Path.GetDirectoryName(assyPath);
-            //MessageBox.Show("Assembly path: " + assyPath);
             DirectoryInfo d = new DirectoryInfo(assyPath);
             foreach (FileInfo fi in d.GetFiles("*.dll"))
             {
                 string aPath = fi.FullName;
-                //MessageBox.Show("Processing: " + aPath);               
                 //
                 // First try to load the assembly and get the types for
                 // the class and the class factory. If this doesn't work ????
