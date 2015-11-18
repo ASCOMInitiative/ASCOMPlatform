@@ -914,6 +914,9 @@ namespace ASCOM.Simulator
                     TL.LogMessage("ReadProfile", "Reading profile for: " + Property);
                     Sensors[Property].ReadProfile(driverProfile);
                 }
+
+                Sensors[PROPERTY_DEWPOINT].IsImplemented = Sensors[PROPERTY_HUMIDITY].IsImplemented; // Align dewpoint values with Humidity "master" values
+                Sensors[PROPERTY_DEWPOINT].NotReadyDelay = Sensors[PROPERTY_HUMIDITY].NotReadyDelay;
             }
 
         }
