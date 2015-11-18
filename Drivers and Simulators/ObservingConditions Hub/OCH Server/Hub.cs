@@ -810,97 +810,92 @@ namespace ASCOM.Simulator
                         throw new PropertyNotImplementedException(PropertyName, false);
 
                     case ConnectionType.Real:
-                        switch (Sensors[PropertyName].DeviceType)
+                        try
                         {
-                            case DeviceType.ObservingConditions:
-                                Type type = typeof(ObservingConditions);
-                                PropertyInfo propertyInfo = type.GetProperty(PropertyName);
-
-                                // Device interrogation is done inside a try catch because we are using reflection to call the property
-                                // If the device throws an exception the outer exception we get will be "TargetInvocationException" with the actual exception as the inner exception
-                                // This approach simply removes the outer exception and throws the inner one up to the client.
-                                try
-                                {
+                            switch (Sensors[PropertyName].DeviceType)
+                            {
+                                case DeviceType.ObservingConditions:
+                                    // Device interrogation is done inside a try catch because we are using reflection to call the property
+                                    // If the device throws an exception the outer exception we get will be "TargetInvocationException" with the actual exception as the inner exception
+                                    Type type = typeof(ObservingConditions);
+                                    PropertyInfo propertyInfo = type.GetProperty(PropertyName);
                                     double observingConditionsValue = (double)propertyInfo.GetValue(ObservingConditionsDevices[Sensors[PropertyName].ProgID], null);
                                     TL.LogMessage("GetDeviceSensorValue", "Got value: " + observingConditionsValue + " from device " + Sensors[PropertyName].ProgID + " method " + PropertyName);
                                     returnValue = observingConditionsValue;
-                                    Sensors[PropertyName].TimeOfLastUpdate = DateTime.Now;
-                                    timeOfLastUpdate = DateTime.Now;
-                                    if (averagePeriod > 0.0) Sensors[PropertyName].Readings.Add(new TimeValue(DateTime.Now, returnValue)); // Save the value to the sensor readings collection if we are reporting average values over a period
-                                }
-                                catch (COMException ex)
-                                {
-                                    if (ex.ErrorCode == ErrorCodes.InvalidOperationException)
+                                    break;
+
+                                case DeviceType.Switch:
+                                    double switchValue;
+                                    if (SwitchDevices[Sensors[PropertyName].ProgID].InterfaceVersion <= 1) // Switch V1 does not have a switch description so get the switch name instead
                                     {
-                                        TL.LogMessageCrLf("GetDeviceSensorValue", "Received a COM invalid operation exception reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.Message);
+                                        bool switchBool = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitch((short)Sensors[PropertyName].SwitchNumber);
+                                        switchValue = Convert.ToDouble(switchBool);
+                                        TL.LogMessage("GetDeviceSensorValue", "Got value: " + switchValue + " from Switch V1 device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber + ", device returned: " + switchBool.ToString());
                                     }
-                                    else
+                                    else // Switch V2 does have a switch description
                                     {
-                                        TL.LogMessageCrLf("GetDeviceSensorValue", "Received a COM exception ({0}) {1} reading {2}: {3}", ex.ErrorCode.ToString("X8"), Sensors[PropertyName].ProgID, PropertyName, ex.ToString());
+                                        switchValue = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchValue((short)Sensors[PropertyName].SwitchNumber);
+                                        TL.LogMessage("GetDeviceSensorValue", "Got value: " + switchValue + " from Switch V2 device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber);
                                     }
+                                    returnValue = switchValue;
+                                    break;
 
-                                    throw;
-                                }
-                                catch (TargetInvocationException ex)
+                                default:
+                                    MessageBox.Show("GetDeviceSensorValue: Unknown DeviceType Enum value: " + Sensors[PropertyName].DeviceType.ToString());
+                                    break;
+                            }
+                            Sensors[PropertyName].TimeOfLastUpdate = DateTime.Now;
+                            timeOfLastUpdate = DateTime.Now;
+                            if (averagePeriod > 0.0) Sensors[PropertyName].Readings.Add(new TimeValue(DateTime.Now, returnValue)); // Save the value to the sensor readings collection if we are reporting average values over a period
+                        }
+                        catch (COMException ex)
+                        {
+                            if (ex.ErrorCode == ErrorCodes.InvalidOperationException)
+                            {
+                                TL.LogMessageCrLf("GetDeviceSensorValue", "Received a COM invalid operation exception reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.Message);
+                            }
+                            else
+                            {
+                                TL.LogMessageCrLf("GetDeviceSensorValue", "Received a COM exception ({0}) {1} reading {2}: {3}", ex.ErrorCode.ToString("X8"), Sensors[PropertyName].ProgID, PropertyName, ex.ToString());
+                            }
+                            throw;
+
+                        }
+                        catch (TargetInvocationException ex)
+                        {
+                            if (ex.InnerException is InvalidOperationException)
+                            {
+                                TL.LogMessageCrLf("GetDeviceSensorValue", "Received an InvalidOperationException reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.Message);
+                            }
+                            else if (ex.InnerException is COMException)
+                            {
+                                COMException exCom = (COMException)ex.InnerException;
+                                if (exCom.ErrorCode == ErrorCodes.InvalidOperationException)
                                 {
-                                    if (ex.InnerException is InvalidOperationException)
-                                    {
-                                        TL.LogMessageCrLf("GetDeviceSensorValue", "Received an InvalidOperationException reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.Message);
-                                    }
-                                    else if (ex.InnerException is COMException)
-                                    {
-                                        COMException exCom = (COMException)ex.InnerException;
-                                        if (exCom.ErrorCode == ErrorCodes.InvalidOperationException)
-                                        {
-                                            TL.LogMessageCrLf("GetDeviceSensorValue", "Received a COM inner invalid operation exception reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.Message);
-                                        }
-                                        else
-                                        {
-                                            TL.LogMessageCrLf("GetDeviceSensorValue", "Received a COM inner exception ({0}) {1} reading {2}: {3}", exCom.ErrorCode.ToString("X8"), Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.ToString());
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TL.LogMessageCrLf("GetDeviceSensorValue", "Received a target invocation exception reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.ToString());
-                                    }
-
-                                    throw ex.InnerException;
+                                    TL.LogMessageCrLf("GetDeviceSensorValue", "Received a COM inner invalid operation exception reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.Message);
                                 }
-                                catch (Exception ex)
+                                else
                                 {
-                                    // Driver threw an exception so log this and throw it
-                                    TL.LogMessage("GetDeviceSensorValue", "Driver : " + Sensors[PropertyName].ProgID + " method " + PropertyName + " threw an exception.");
-                                    TL.LogMessageCrLf("GetDeviceSensorValue", ex.ToString());
-                                    throw;
+                                    TL.LogMessageCrLf("GetDeviceSensorValue", "Received a COM inner exception ({0}) {1} reading {2}: {3}", exCom.ErrorCode.ToString("X8"), Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.ToString());
                                 }
-                                break;
+                            }
+                            else
+                            {
+                                TL.LogMessageCrLf("GetDeviceSensorValue", "Received a target invocation exception reading {0} {1}: {2}", Sensors[PropertyName].ProgID, PropertyName, ex.InnerException.ToString());
+                            }
+                            throw ex.InnerException;
 
-                            case DeviceType.Switch:
-                                double switchValue;
+                        }
+                        catch (Exception ex)
+                        {
+                            // Driver threw an exception so log this and throw it
+                            TL.LogMessage("GetDeviceSensorValue", "Driver : " + Sensors[PropertyName].ProgID + " method " + PropertyName + " threw an exception.");
+                            TL.LogMessageCrLf("GetDeviceSensorValue", ex.ToString());
+                            throw;
 
-                                if (SwitchDevices[Sensors[PropertyName].ProgID].InterfaceVersion <= 1) // Switch V1 does not have a switch description so get the switch name instead
-                                {
-                                    bool switchBool = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitch((short)Sensors[PropertyName].SwitchNumber);
-                                    switchValue = Convert.ToDouble(switchBool);
-                                    TL.LogMessage("GetDeviceSensorValue", "Got value: " + switchValue + " from Switch V1 device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber + ", device returned: " + switchBool.ToString());
-                                }
-                                else // Switch V2 does have a switch description
-                                {
-                                    switchValue = SwitchDevices[Sensors[PropertyName].ProgID].GetSwitchValue((short)Sensors[PropertyName].SwitchNumber);
-                                    TL.LogMessage("GetDeviceSensorValue", "Got value: " + switchValue + " from Switch V2 device " + Sensors[PropertyName].ProgID + " switch number " + Sensors[PropertyName].SwitchNumber);
-                                }
-
-                                returnValue = switchValue;
-                                Sensors[PropertyName].TimeOfLastUpdate = DateTime.Now;
-                                timeOfLastUpdate = DateTime.Now;
-                                if (averagePeriod > 0.0) Sensors[PropertyName].Readings.Add(new TimeValue(DateTime.Now, returnValue)); // Save the value to the sensor readings collection if we are reporting average values over a period
-                                break;
-
-                            default:
-                                MessageBox.Show("GetDeviceSensorValue: Unknown DeviceType Enum value: " + Sensors[PropertyName].DeviceType.ToString());
-                                break;
                         }
                         break;
+
                     default:
                         MessageBox.Show("GetDeviceSensorValue: Unknown DeviceMode Enum value: " + Sensors[PropertyName].DeviceMode.ToString());
                         break;
