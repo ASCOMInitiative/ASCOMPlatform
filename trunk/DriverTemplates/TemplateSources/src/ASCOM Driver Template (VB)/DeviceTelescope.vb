@@ -335,9 +335,22 @@ Class DeviceTelescope
 
     Public ReadOnly Property SiderealTime() As Double Implements ITelescopeV3.SiderealTime
         Get
-            Dim siderealTime__1 As Double = (18.697374558 + 24.0657098244191 * (utilities.DateLocalToJulian(DateTime.Now) - 2451545.0)) Mod 24.0
-            TL.LogMessage("SiderealTime", "Get - " & siderealTime__1.ToString())
-            Return siderealTime__1
+            ' now using novas 3.1
+            Dim lst As Double = 0.0
+            Using novas As New ASCOM.Astrometry.NOVAS.NOVAS31
+                Dim jd As Double = utilities.DateUTCToJulian(DateTime.UtcNow)
+                novas.SiderealTime(jd, 0, novas.DeltaT(jd),
+                                   Astrometry.GstType.GreenwichMeanSiderealTime,
+                                   Astrometry.Method.EquinoxBased,
+                                   Astrometry.Accuracy.Reduced,
+                                   lst)
+            End Using
+            lst += SiteLongitude / 360.0 * 24.0657098244191
+            lst = lst Mod 24.0
+            TL.LogMessage("SiderealTime", "Get - " & lst.ToString())
+            Return lst
+
+
         End Get
     End Property
 

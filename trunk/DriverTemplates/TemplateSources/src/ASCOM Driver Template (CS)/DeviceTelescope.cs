@@ -418,7 +418,23 @@ class DeviceTelescope
     {
         get
         {
-            double siderealTime = (18.697374558 + 24.065709824419081 * (utilities.DateLocalToJulian(DateTime.Now) - 2451545.0)) % 24.0;
+            // get greenwich sidereal time: https://en.wikipedia.org/wiki/Sidereal_time
+            //double siderealTime = (18.697374558 + 24.065709824419081 * (utilities.DateUTCToJulian(DateTime.UtcNow) - 2451545.0));
+
+            // alternative using NOVAS 3.1
+            double siderealTime = 0.0;
+            using (var novas = new ASCOM.Astrometry.NOVAS.NOVAS31())
+            {
+                var jd = utilities.DateUTCToJulian(DateTime.UtcNow);
+                novas.SiderealTime(jd, 0, novas.DeltaT(jd),
+                    ASCOM.Astrometry.GstType.GreenwichApparentSiderealTime,
+                    ASCOM.Astrometry.Method.EquinoxBased,
+                    ASCOM.Astrometry.Accuracy.Reduced, ref siderealTime);
+            }
+            // allow for the longitude
+            siderealTime += SiteLongitude / 360.0 * 24.065709824419098;
+            // reduce to the range 0 to 24 hours
+            siderealTime = siderealTime % 24.0;
             tl.LogMessage("SiderealTime", "Get - " + siderealTime.ToString());
             return siderealTime;
         }
