@@ -432,7 +432,7 @@ class DeviceTelescope
                     ASCOM.Astrometry.Accuracy.Reduced, ref siderealTime);
             }
             // allow for the longitude
-            siderealTime += SiteLongitude / 360.0 * 24.065709824419098;
+            siderealTime += SiteLongitude / 360.0 * 24.0;
             // reduce to the range 0 to 24 hours
             siderealTime = siderealTime % 24.0;
             tl.LogMessage("SiderealTime", "Get - " + siderealTime.ToString());
