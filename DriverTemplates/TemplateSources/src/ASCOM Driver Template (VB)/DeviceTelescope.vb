@@ -345,7 +345,7 @@ Class DeviceTelescope
                                    Astrometry.Accuracy.Reduced,
                                    lst)
             End Using
-            lst += SiteLongitude / 360.0 * 24.0657098244191
+            lst += SiteLongitude / 360.0 * 24.0
             lst = lst Mod 24.0
             TL.LogMessage("SiderealTime", "Get - " & lst.ToString())
             Return lst
