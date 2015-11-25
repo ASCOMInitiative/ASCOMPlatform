@@ -106,7 +106,7 @@
             <content>
       			<list class="bullet">
 	      			<listItem>Transform - Fixed missing Az/El coordinates after Transform was intialised with Topocentric coordinates</listItem>
-	   				<listItem>Chooser - Fixed compatibility issue when drivers are created in Visual Studio 2015RC</listItem>
+	   				<listItem>Chooser - Fixed compatibility issue when drivers are created in Visual Studio 2015</listItem>
 	   				<listItem>Focuser Simulator - Fixed issue when HALT was requested after a negative MOVE command.</listItem>
 	   				<listItem>Util.GetTimeZoneOffset - Now returns fractional time zone offsets where appropriate e.g. +5.5 for India.</listItem>
 					<listItem>Telescope Simulator - The Connected state will now follow the simulated hardware state. This means that the driver will now remain in 
@@ -122,6 +122,7 @@
       			<list class="bullet">
 					<listItem>DriverAccess - Improved compatibility with interface v1 drivers</listItem>
 					<listItem>NOVAS31 - Initialisation code is now thread safe.</listItem>
+					<listItem>Telescope Driver Template - SiderealTime method now uses the NOVAS31 component and correctly compensates for site longitude.</listItem>
 				</list>
    			</content>
    		</section>

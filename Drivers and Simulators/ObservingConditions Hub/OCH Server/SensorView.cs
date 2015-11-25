@@ -154,47 +154,55 @@ namespace ASCOM.Simulator
                 // populate the switch combo
                 cmbSwitch.Items.Clear();
 
-                using (var s = new Switch(progId))
+                try
                 {
-                    // we try to connect and read the switch properties from the driver
-                    // if it succeeds then we enable the switch name combo
-                    // the spin button is always enabled.
-                    var enableCmb = false;
-                    //upDownSwitch.Enabled = true;
-                    if (ConnectToDriver)
+                    using (var s = new Switch(progId))
                     {
-                        // try to connect, ignore error.  This can block if connecting takes a while
-                        this.Cursor = Cursors.WaitCursor;
-                        try { s.Connected = true; }
-                        catch { }    // could set ConnectToDriver to false
-                        this.Cursor = Cursors.Default;
-
-                    }
-                    // try to set max switches from driver, set up combo as long as there is no error
-                    int max = 100;
-                    try
-                    {
-                        max = s.MaxSwitch;      // this may work, even if we can't read the switch names
-                        for (short i = 0; i < max; i++)
+                        // we try to connect and read the switch properties from the driver
+                        // if it succeeds then we enable the switch name combo
+                        // the spin button is always enabled.
+                        var enableCmb = false;
+                        //upDownSwitch.Enabled = true;
+                        if (ConnectToDriver)
                         {
-                            string str;
-                            try { str = s.GetSwitchDescription(i); }
-                            catch { str = s.GetSwitchName(i); }     // for V1 switches which don't have a description
-                            cmbSwitch.Items.Add(string.Format("{0}: {1}", i, str));
+                            // try to connect, ignore error.  This can block if connecting takes a while
+                            this.Cursor = Cursors.WaitCursor;
+                            try { s.Connected = true; }
+                            catch { }    // could set ConnectToDriver to false
+                            this.Cursor = Cursors.Default;
+
                         }
-                        enableCmb = true;   // successfully populated combo so enable it
+                        // try to set max switches from driver, set up combo as long as there is no error
+                        int max = 100;
+                        try
+                        {
+                            max = s.MaxSwitch;      // this may work, even if we can't read the switch names
+                            for (short i = 0; i < max; i++)
+                            {
+                                string str;
+                                try { str = s.GetSwitchDescription(i); }
+                                catch { str = s.GetSwitchName(i); }     // for V1 switches which don't have a description
+                                cmbSwitch.Items.Add(string.Format("{0}: {1}", i, str));
+                            }
+                            enableCmb = true;   // successfully populated combo so enable it
+                        }
+                        catch
+                        {
+                            cmbSwitch.Text = "";
+                        }
+                        // set up the UI
+                        cmbSwitch.SelectedIndex = enableCmb ? switchId : -1;
+                        cmbSwitch.Visible = enableCmb;
+                        upDownSwitch.Visible = true;
+                        labelDescription.Visible = false;
+                        upDownSwitch.Maximum = max - 1;
+                        upDownSwitch.Value = switchId;
                     }
-                    catch
-                    {
-                        cmbSwitch.Text = "";
-                    }
-                    // set up the UI
-                    cmbSwitch.SelectedIndex = enableCmb ? switchId : -1;
-                    cmbSwitch.Visible = enableCmb;
-                    upDownSwitch.Visible = true;
-                    labelDescription.Visible = false;
-                    upDownSwitch.Maximum = max - 1;
-                    upDownSwitch.Value = switchId;
+                }
+                catch (Exception ex)
+                {
+                    Hub.TL.LogMessageCrLf("cmbDevice_Index", "Select Switch device exception: {0}", ex.ToString());
+                    MessageBox.Show("Exception: " + ex.Message);
                 }
             }
             else if (progId.EndsWith("." + Hub.OBSERVING_CONDITIONS_DEVICE_TYPE, StringComparison.InvariantCultureIgnoreCase))
@@ -204,40 +212,48 @@ namespace ASCOM.Simulator
                 // checks that the selected OC driver implements this property by
                 // trying to read the sensor description.
                 // can we specify that the description is available even when not connected?
-                using (var oc = new ObservingConditions(progId))
+                try
                 {
+                    using (var oc = new ObservingConditions(progId))
+                    {
 
-                    if (ConnectToDriver)
-                    {
-                        // try to connect, ignore error.  This can block if connecting takes a while
-                        this.Cursor = Cursors.WaitCursor;
-                        try { oc.Connected = true; }
-                        catch { }    // could set ConnectToDriver to false
-                        this.Cursor = Cursors.Default;
-                    }
+                        if (ConnectToDriver)
+                        {
+                            // try to connect, ignore error.  This can block if connecting takes a while
+                            this.Cursor = Cursors.WaitCursor;
+                            try { oc.Connected = true; }
+                            catch { }    // could set ConnectToDriver to false
+                            this.Cursor = Cursors.Default;
+                        }
 
-                    try
-                    {
-                        Hub.TL.LogMessage("cmbDevice_Index", "Getting description");
-                        string description = oc.SensorDescription(SensorName);
-                        Hub.TL.LogMessage("cmbDevice_Index", "Found description: {0}", description);
-                        buttonSetup.Enabled = true;
-                        upDownSwitch.Visible = false;
-                        cmbSwitch.Visible = false;
-                        labelDescription.Visible = true;
-                        labelDescription.Text = description;
+                        try
+                        {
+                            Hub.TL.LogMessage("cmbDevice_Index", "Getting description");
+                            string description = oc.SensorDescription(SensorName);
+                            Hub.TL.LogMessage("cmbDevice_Index", "Found description: {0}", description);
+                            buttonSetup.Enabled = true;
+                            upDownSwitch.Visible = false;
+                            cmbSwitch.Visible = false;
+                            labelDescription.Visible = true;
+                            labelDescription.Text = description;
+                        }
+                        catch (Exception)
+                        {
+                            // not sure what to do, can we specify that the description is available even
+                            // if not connected?
+                            // MessageBox.Show(string.Format("ObservingConditions.GetSensorDescription({0}) Exception {1}", SensorName, ex.Message));
+                            buttonSetup.Enabled = true;
+                            upDownSwitch.Visible = false;
+                            cmbSwitch.Visible = false;
+                            labelDescription.Visible = false;
+                        }
+                        // set up the UI
                     }
-                    catch (Exception)
-                    {
-                        // not sure what to do, can we specify that the description is available even
-                        // if not connected?
-                        // MessageBox.Show(string.Format("ObservingConditions.GetSensorDescription({0}) Exception {1}", SensorName, ex.Message));
-                        buttonSetup.Enabled = true;
-                        upDownSwitch.Visible = false;
-                        cmbSwitch.Visible = false;
-                        labelDescription.Visible = false;
-                    }
-                    // set up the UI
+                }
+                catch (Exception ex)
+                {
+                    Hub.TL.LogMessageCrLf("cmbDevice_Index", "Select ObservingConditions device exception: {0}", ex.ToString());
+                    MessageBox.Show("Exception: " + ex.Message);
                 }
 
             }
@@ -290,11 +306,19 @@ namespace ASCOM.Simulator
                 MessageBox.Show("buttonSetup_Click - index out of range");
             }
             var ProgId = SetupDialogForm.allDevices[cmbDevice.SelectedIndex].Key;
-            using (var dev = new ASCOM.DriverAccess.AscomDriver(ProgId))
+            try
             {
-                dev.SetupDialog();
+                using (var dev = new ASCOM.DriverAccess.AscomDriver(ProgId))
+                {
+                    dev.SetupDialog();
+                }
             }
-        }
+            catch (Exception ex)
+            {
+                Hub.TL.LogMessageCrLf("buttonSetup_Click", "Exception opening Setup Dialogue: {0}", ex.ToString());
+                MessageBox.Show("Unable to open Setup Dialogue: " + ex.Message);
+            }
 
+        }
     }
 }
