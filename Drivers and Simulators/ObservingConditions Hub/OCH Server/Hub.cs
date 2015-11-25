@@ -261,7 +261,15 @@ namespace ASCOM.Simulator
                                             if (!ObservingConditionsDevices.ContainsKey(sensor.Value.ProgID))
                                             {
                                                 TL.LogMessage(clientNumber, "Connect", "Adding new ObservingConditions ProgID: " + sensor.Value.ProgID);
-                                                ObservingConditionsDevices.Add(sensor.Value.ProgID, new ObservingConditions(sensor.Value.ProgID));
+                                                try
+                                                {
+                                                    ObservingConditionsDevices.Add(sensor.Value.ProgID, new ObservingConditions(sensor.Value.ProgID));
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    TL.LogMessageCrLf(clientNumber, "Connect", "Exception adding ObservingConditions Device " + sensor.Value.ProgID + ": " + ex.ToString());
+                                                    MessageBox.Show("Unable to connect to ObservingConditions device " + sensor.Value.ProgID + ": " + ex.Message);
+                                                }
                                             }
                                             else
                                             {
@@ -272,7 +280,15 @@ namespace ASCOM.Simulator
                                             if (!SwitchDevices.ContainsKey(sensor.Value.ProgID))
                                             {
                                                 TL.LogMessage(clientNumber, "Connect", "Adding new Switch ProgID: " + sensor.Value.ProgID);
-                                                SwitchDevices.Add(sensor.Value.ProgID, new Switch(sensor.Value.ProgID));
+                                                try
+                                                {
+                                                    SwitchDevices.Add(sensor.Value.ProgID, new Switch(sensor.Value.ProgID));
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    TL.LogMessageCrLf(clientNumber, "Connect", "Exception adding Switch Device " + sensor.Value.ProgID + ": " + ex.ToString());
+                                                    MessageBox.Show("Unable to connect to Switch device " + sensor.Value.ProgID + ": " + ex.Message);
+                                                }
                                             }
                                             else
                                             {
@@ -337,7 +353,7 @@ namespace ASCOM.Simulator
                 }
                 catch (Exception ex)
                 {
-                    TL.LogMessageCrLf(clientNumber, "Connect", "Exception: " + ex.ToString());
+                    TL.LogMessageCrLf(clientNumber, "Connect", "Unhandled Exception: " + ex.ToString());
                     throw;
                 }
             }
