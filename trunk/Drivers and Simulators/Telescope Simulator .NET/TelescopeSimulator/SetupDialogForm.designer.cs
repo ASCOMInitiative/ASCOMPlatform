@@ -45,6 +45,7 @@ namespace ASCOM.Simulator
             this.picASCOM = new System.Windows.Forms.PictureBox();
             this.checkBoxAutoTrack = new System.Windows.Forms.CheckBox();
             this.checkBoxNoCoordinatesAtPark = new System.Windows.Forms.CheckBox();
+            this.checkBoxNoSyncPastMeridian = new System.Windows.Forms.CheckBox();
             this.checkBoxDisconnectOnPark = new System.Windows.Forms.CheckBox();
             this.buttonSetParkPosition = new System.Windows.Forms.Button();
             this.buttonResetParkPosition = new System.Windows.Forms.Button();
@@ -295,6 +296,15 @@ namespace ASCOM.Simulator
             this.checkBoxNoCoordinatesAtPark.TabIndex = 6;
             this.checkBoxNoCoordinatesAtPark.Text = "No Coordinates when Parked";
             this.checkBoxNoCoordinatesAtPark.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxErrorOnSyncPastMeridian
+            // 
+            this.checkBoxNoSyncPastMeridian.AutoSize = true;
+            this.checkBoxNoSyncPastMeridian.Location = new System.Drawing.Point(450, 164);
+            this.checkBoxNoSyncPastMeridian.Name = "checkBoxErrorOnSyncPastMeridian";
+            this.checkBoxNoSyncPastMeridian.Size = new System.Drawing.Size(132, 17);
+            this.checkBoxNoSyncPastMeridian.TabIndex = 40;
+            this.checkBoxNoSyncPastMeridian.Text = "No Sync past meridian";
             // 
             // checkBoxDisconnectOnPark
             // 
@@ -550,6 +560,7 @@ namespace ASCOM.Simulator
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanDateTime, 2, 7);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCanSiderealTime, 2, 8);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxVersionOne, 3, 8);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxNoSyncPastMeridian, 3, 7);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -1110,5 +1121,6 @@ namespace ASCOM.Simulator
         private System.Windows.Forms.TextBox textBoxApertureArea;
         private System.Windows.Forms.TextBox textBoxFocalLength;
         private System.Windows.Forms.TextBox textBoxAperture;
+        private System.Windows.Forms.CheckBox checkBoxNoSyncPastMeridian;
     }
 }
