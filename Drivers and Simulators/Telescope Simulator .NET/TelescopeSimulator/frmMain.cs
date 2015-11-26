@@ -70,6 +70,7 @@ namespace ASCOM.Simulator
                 setupForm.Latitude = TelescopeHardware.Latitude;
                 setupForm.Longitude = TelescopeHardware.Longitude;
                 setupForm.MaximumSlewRate = TelescopeHardware.MaximumSlewRate;
+                setupForm.NoSyncPastMeridian = TelescopeHardware.NoSyncPastMeridian;
                 this.BringToFront();
                 DialogResult ans = setupForm.ShowDialog(this);
 
@@ -115,6 +116,7 @@ namespace ASCOM.Simulator
                     TelescopeHardware.Latitude = setupForm.Latitude;
                     TelescopeHardware.Longitude = setupForm.Longitude;
                     TelescopeHardware.MaximumSlewRate = setupForm.MaximumSlewRate;
+                    TelescopeHardware.NoSyncPastMeridian = setupForm.NoSyncPastMeridian;
 
                     this.TopMost = setupForm.OnTop;
                 }

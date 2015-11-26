@@ -94,6 +94,7 @@ namespace ASCOM.Simulator
         private static double longitude;
         private static double elevation;
         private static int maximumSlewRate;
+        private static bool noSyncPastMeridian;
 
         //
         // Vectors are used for pairs of angles that represent the various positions and rates
@@ -334,6 +335,7 @@ namespace ASCOM.Simulator
                 canPierSide = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanPierSide", "Capabilities"));
                 canTrackingRates = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanTrackingRates", "Capabilities"));
                 canDualAxisPulseGuide = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "CanDualAxisPulseGuide", "Capabilities"));
+                noSyncPastMeridian = bool.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "NoSyncPastMeridian", "Capabilities", "false"));
 
                 dateDelta = int.Parse(s_Profile.GetValue(SharedResources.PROGRAM_ID, "DateDelta"), CultureInfo.InvariantCulture);
 
@@ -814,6 +816,15 @@ namespace ASCOM.Simulator
             {
                 canSiderealTime = value;
                 s_Profile.WriteValue(SharedResources.PROGRAM_ID, "CanSiderealTime", value.ToString(), "Capabilities");
+            }
+        }
+        public static bool NoSyncPastMeridian
+        {
+            get { return noSyncPastMeridian; }
+            set
+            {
+                noSyncPastMeridian = value;
+                s_Profile.WriteValue(SharedResources.PROGRAM_ID, "NoSyncPastMeridian", value.ToString(), "Capabilities");
             }
         }
 

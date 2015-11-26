@@ -46,6 +46,9 @@ namespace ASCOM.Simulator
 
                     if (preserveSop && newsop != sop)
                     {
+                        if (TelescopeHardware.NoSyncPastMeridian)
+                            throw new InvalidOperationException("Sync is not allowed when the mount has tracked past the meridian");
+
                         axes.X -= 180;
                         axes.Y = 180 - axes.Y;
                     }

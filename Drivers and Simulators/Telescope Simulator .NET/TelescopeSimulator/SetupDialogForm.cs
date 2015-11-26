@@ -428,6 +428,12 @@ namespace ASCOM.Simulator
                 }
             }
         }
+
+        public bool NoSyncPastMeridian
+        {
+            get { return checkBoxNoSyncPastMeridian.Checked; }
+            set { checkBoxNoSyncPastMeridian.Checked = value; }
+        }
         #endregion
 
         private void buttonSetParkPosition_Click(object sender, EventArgs e)
