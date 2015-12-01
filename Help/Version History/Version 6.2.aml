@@ -66,6 +66,7 @@
 		      		<listItem>Support has been added for the June 30th 2015 leap second</listItem>
 	      			<listItem>The DeltaT prediction modelling has been updated with the latest USNO data, which is considered good to 2018</listItem>
 	      			<listItem>The Telescope Simulator has improved simulation of Alt/AZ, German Equatorial and Equatorial modes</listItem>
+	      			<listItem>The Telescope Simulator has a new configuration option to disable the ability to Sync the telescope to a position on the other side of the meridian.</listItem>
 	      			<listItem>Help is presented in an easier to read style</listItem>
 	      			<listItem>The installer recognises Windows 10</listItem>
 	      		</list>
