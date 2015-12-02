@@ -175,7 +175,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Developer Information\" />
-    <Folder Include="Styles\" />
+    <Folder Include="styles\" />
     <Folder Include="Tools and Features\" />
     <Folder Include="Examples\" />
     <Folder Include="Version History\" />
@@ -224,7 +224,7 @@
       <AlternateText>Video Camera State Diagram</AlternateText>
       <CopyToMedia>True</CopyToMedia>
     </Image>
-    <Content Include="Styles\branding-Help1.css" />
+    <Content Include="styles\branding-Help1.css" />
     <None Include="Version History\Version 6.2.aml" />
     <None Include="Introduction\Acknowledgements.aml" />
     <None Include="Developer Information\Time Relationships.aml" />
