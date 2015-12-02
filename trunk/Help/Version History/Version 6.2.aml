@@ -60,7 +60,7 @@
 						be able to set your location, either as a city name or as a latitude / longitude pair.
 		      			</listItem>
 		      			<listItem>An ObservingConditions Hub has been added to the Platform. The ObservingConditions interface is very broad and most equipment manufacturers do not provide 
-		      			devices that support all of the interface's capabiities. The ObservingConditions Hub enables a collection sensor drivers from different manufacturers to be 
+		      			devices that support all of the interface's capabiities. The ObservingConditions Hub enables a collection of sensor drivers from different manufacturers to be 
 		      			consolidated and presented to client applications as one virtual device.</listItem>
 		      		</list>
 		      		<listItem>Support has been added for the June 30th 2015 leap second</listItem>
