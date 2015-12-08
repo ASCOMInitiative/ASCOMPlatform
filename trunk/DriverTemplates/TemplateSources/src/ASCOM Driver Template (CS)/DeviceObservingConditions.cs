@@ -9,7 +9,12 @@ using System.Collections.Generic;
 
 class DeviceObservingConditions
 {
-    private TraceLogger tl = new TraceLogger();
+    //private static TraceLogger tl = new TraceLogger();
+
+    private static void LogMessage(string identifier, string message, params object[] args)
+    {
+        //tl.LogMessage(identifier, string.Format(message, args));
+    }
 
     #region IObservingConditions Implementation
 
@@ -26,7 +31,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("AveragePeriod", "get - 0");
+            LogMessage("AveragePeriod", "get - 0");
             return 0;
         }
         set
@@ -45,7 +50,7 @@ class DeviceObservingConditions
     {
         get 
         { 
-            tl.LogMessage("CloudCover", "get - not implemented");
+            LogMessage("CloudCover", "get - not implemented");
             throw new PropertyNotImplementedException("CloudCover", false);
         }
     }
@@ -61,7 +66,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("DewPoint", "get - not implemented");
+            LogMessage("DewPoint", "get - not implemented");
             throw new PropertyNotImplementedException("DewPoint", false);
         }
     }
@@ -77,7 +82,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("Humidity", "get - not implemented");
+            LogMessage("Humidity", "get - not implemented");
             throw new PropertyNotImplementedException("Humidity", false);
         }
     }
@@ -94,7 +99,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("Pressure", "get - not implemented");
+            LogMessage("Pressure", "get - not implemented");
             throw new PropertyNotImplementedException("Pressure", false);
         }
     }
@@ -110,7 +115,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("RainRate", "get - not implemented");
+            LogMessage("RainRate", "get - not implemented");
             throw new PropertyNotImplementedException("RainRate", false);
         }
     }
@@ -135,26 +140,26 @@ class DeviceObservingConditions
     /// </remarks>
     public string SensorDescription(string PropertyName)
     {
-        switch (PropertyName)
+        switch (PropertyName.Trim().ToLowerInvariant())
         {
-            case "AveragePeriod":
+            case "averageperiod":
                 return "Average period in hours, immediate values are only available";
-            case "DewPoint":
-            case "Humidity":
-            case "Pressure":
-            case "RainRate":
-            case "SkyBrightness":
-            case "SkyQuality":
-            case "StarFWHM":
-            case "SkyTemperature":
-            case "Temperature":
-            case "WindDirection":
-            case "WindGust":
-            case "WindSpeed":
-                tl.LogMessage("SensorDescription", PropertyName + " - not implemented");
+            case "dewpoint":
+            case "humidity":
+            case "pressure":
+            case "rainrate":
+            case "skybrightness":
+            case "skyquality":
+            case "starfwhm":
+            case "skytemperature":
+            case "temperature":
+            case "winddirection":
+            case "windgust":
+            case "windspeed":
+                LogMessage("SensorDescription", "{0} - not implemented", PropertyName);
                 throw new MethodNotImplementedException("SensorDescription(" + PropertyName + ")");
             default:
-                tl.LogMessage("SensorDescription", PropertyName + " - unrecognised");
+                LogMessage("SensorDescription", "{0} - unrecognised", PropertyName);
                 throw new ASCOM.InvalidValueException("SensorDescription(" + PropertyName + ")");
         }
     }
@@ -166,7 +171,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("SkyBrightness", "get - not implemented");
+            LogMessage("SkyBrightness", "get - not implemented");
             throw new PropertyNotImplementedException("SkyBrightness", false);
         }
     }
@@ -178,7 +183,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("SkyQuality", "get - not implemented");
+            LogMessage("SkyQuality", "get - not implemented");
             throw new PropertyNotImplementedException("SkyQuality", false);
         }
     }
@@ -190,7 +195,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("StarFWHM", "get - not implemented");
+            LogMessage("StarFWHM", "get - not implemented");
             throw new PropertyNotImplementedException("StarFWHM", false);
         }
     }
@@ -202,7 +207,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("SkyTemperature", "get - not implemented");
+            LogMessage("SkyTemperature", "get - not implemented");
             throw new PropertyNotImplementedException("SkyTemperature", false);
         }
     }
@@ -214,7 +219,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("Temperature", "get - not implemented");
+            LogMessage("Temperature", "get - not implemented");
             throw new PropertyNotImplementedException("Temperature", false);
         }
     }
@@ -231,7 +236,35 @@ class DeviceObservingConditions
     /// </remarks>
     public double TimeSinceLastUpdate(string PropertyName)
     {
-        tl.LogMessage("TimeSinceLastUpdate", PropertyName + " - not implemented");
+        // the checks can be removed if all properties have the same time.
+        if (!string.IsNullOrEmpty(PropertyName))
+        {
+            switch (PropertyName.Trim().ToLowerInvariant())
+            {
+                // break or return the time on the properties that are implemented
+                case "averageperiod":
+                case "dewpoint":
+                case "humidity":
+                case "pressure":
+                case "rainrate":
+                case "skybrightness":
+                case "skyquality":
+                case "starfwhm":
+                case "skytemperature":
+                case "temperature":
+                case "winddirection":
+                case "windgust":
+                case "windspeed":
+                    // throw an exception on the properties that are not implemented
+                    LogMessage("TimeSinceLastUpdate", "{0} - not implemented", PropertyName);
+                    throw new MethodNotImplementedException("SensorDescription(" + PropertyName + ")");
+                default:
+                    LogMessage("TimeSinceLastUpdate", "{0} - unrecognised", PropertyName);
+                    throw new ASCOM.InvalidValueException("SensorDescription(" + PropertyName + ")");
+            }
+        }
+        // return the time
+        LogMessage("TimeSinceLastUpdate", "{0} - not implemented", PropertyName);
         throw new MethodNotImplementedException("TimeSinceLastUpdate(" + PropertyName + ")");
     }
 
@@ -246,7 +279,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("WindDirection", "get - not implemented");
+            LogMessage("WindDirection", "get - not implemented");
             throw new PropertyNotImplementedException("WindDirection", false);
         }
     }
@@ -258,7 +291,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("WindGust", "get - not implemented");
+            LogMessage("WindGust", "get - not implemented");
             throw new PropertyNotImplementedException("WindGust", false);
         }
     }
@@ -270,7 +303,7 @@ class DeviceObservingConditions
     {
         get
         {
-            tl.LogMessage("WindSpeed", "get - not implemented");
+            LogMessage("WindSpeed", "get - not implemented");
             throw new PropertyNotImplementedException("WindSpeed", false);
         }
     }
@@ -306,11 +339,6 @@ class DeviceObservingConditions
     }
 
     #endregion
-
-    private void LogMessage(string identifier, string message, params object[] args)
-    {
-        tl.LogMessage(identifier, string.Format(message, args));
-    }
 
     #endregion
 

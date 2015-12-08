@@ -77,7 +77,6 @@ namespace ASCOM.TEMPLATEDEVICENAME
         internal static string traceStateDefault = "false";
 
         internal static string comPort; // Variables to hold the currrent device configuration
-        internal static bool traceState;
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -95,9 +94,9 @@ namespace ASCOM.TEMPLATEDEVICENAME
         private AstroUtils astroUtilities;
 
         /// <summary>
-        /// Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
+        /// Variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
         /// </summary>
-        private TraceLogger tl;
+        internal static TraceLogger tl;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TEMPLATEDEVICENAME"/> class.
@@ -105,10 +104,9 @@ namespace ASCOM.TEMPLATEDEVICENAME
         /// </summary>
         public TEMPLATEDEVICECLASS()
         {
+            tl = new TraceLogger("", "TEMPLATEDEVICENAME");
             ReadProfile(); // Read device configuration from the ASCOM Profile store
 
-            tl = new TraceLogger("", "TEMPLATEDEVICENAME");
-            tl.Enabled = traceState;
             tl.LogMessage("TEMPLATEDEVICECLASS", "Starting initialisation");
 
             connectedState = false; // Initialise connected to false
@@ -160,6 +158,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public string Action(string actionName, string actionParameters)
         {
+            LogMessage("", "Action {0}, parameters {1} not implemented", actionName, actionParameters);
             throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
         }
 
@@ -209,25 +208,25 @@ namespace ASCOM.TEMPLATEDEVICENAME
         {
             get
             {
-                tl.LogMessage("Connected Get", IsConnected.ToString());
+                LogMessage("Connected", "Get {0}", IsConnected);
                 return IsConnected;
             }
             set
             {
-                tl.LogMessage("Connected Set", value.ToString());
+                tl.LogMessage("Connected", "Set {0}", value);
                 if (value == IsConnected)
                     return;
 
                 if (value)
                 {
                     connectedState = true;
-                    tl.LogMessage("Connected Set", "Connecting to port " + comPort);
+                    LogMessage("Connected Set", "Connecting to port {0}", comPort);
                     // TODO connect to the device
                 }
                 else
                 {
                     connectedState = false;
-                    tl.LogMessage("Connected Set", "Disconnecting from port " + comPort);
+                    LogMessage("Connected Set", "Disconnecting from port {0}", comPort);
                     // TODO disconnect from the device
                 }
             }
@@ -271,7 +270,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             // set by the driver wizard
             get
             {
-                tl.LogMessage("InterfaceVersion Get", "TEMPLATEINTERFACEVERSION");
+                LogMessage("InterfaceVersion Get", "TEMPLATEINTERFACEVERSION");
                 return Convert.ToInt16("TEMPLATEINTERFACEVERSION");
             }
         }
@@ -399,7 +398,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             using (Profile driverProfile = new Profile())
             {
                 driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
-                traceState = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
+                tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
                 comPort = driverProfile.GetValue(driverID, comPortProfileName, string.Empty, comPortDefault);
             }
         }
@@ -412,12 +411,22 @@ namespace ASCOM.TEMPLATEDEVICENAME
             using (Profile driverProfile = new Profile())
             {
                 driverProfile.DeviceType = "TEMPLATEDEVICECLASS";
-                driverProfile.WriteValue(driverID, traceStateProfileName, traceState.ToString());
+                driverProfile.WriteValue(driverID, traceStateProfileName, tl.Enabled.ToString());
                 driverProfile.WriteValue(driverID, comPortProfileName, comPort.ToString());
             }
         }
 
+        /// <summary>
+        /// Log helper function that takes formatted strings and arguments
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        internal static void LogMessage(string identifier, string message, params object[] args)
+        {
+            var msg = string.Format(message, args);
+            tl.LogMessage(identifier, msg);
+        }
         #endregion
-
     }
 }
