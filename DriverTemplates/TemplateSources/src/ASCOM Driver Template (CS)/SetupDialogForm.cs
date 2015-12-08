@@ -25,7 +25,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
             // Place any validation constraint checks here
             // Update the state variables with results from the dialogue
             TEMPLATEDEVICECLASS.comPort = (string)comboBoxComPort.SelectedItem;
-            TEMPLATEDEVICECLASS.traceState = chkTrace.Checked;
+            TEMPLATEDEVICECLASS.tl.Enabled = chkTrace.Checked;
         }
 
         private void cmdCancel_Click(object sender, EventArgs e) // Cancel button event handler
@@ -52,7 +52,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         private void InitUI()
         {
-            chkTrace.Checked = TEMPLATEDEVICECLASS.traceState;
+            chkTrace.Checked = TEMPLATEDEVICECLASS.tl.Enabled;
             // set the list of com ports to those that are currently available
             comboBoxComPort.Items.Clear();
             comboBoxComPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());      // use System.IO because it's static

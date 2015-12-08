@@ -121,8 +121,26 @@ Class DeviceObservingConditions
     End Function
 
     Public Function SensorDescription(PropertyName As String) As String Implements IObservingConditions.SensorDescription
-        TL.LogMessage("SensorDescription", "Get Not implemented")
-        Throw New ASCOM.MethodNotImplementedException("SensorDescription")
+        Select Case PropertyName.Trim.ToLowerInvariant
+            Case "averageperiod"
+                Return "Average period in hours, immediate values are only available"
+            Case "dewpoint"
+            Case "humidity"
+            Case "pressure"
+            Case "rainrate"
+            Case "skybrightness"
+            Case "skyquality"
+            Case "starfwhm"
+            Case "skytemperature"
+            Case "temperature"
+            Case "winddirection"
+            Case "windgust"
+            Case "windspeed"
+                TL.LogMessage("SensorDescription", PropertyName & " - not implemented")
+                Throw New MethodNotImplementedException("SensorDescription(" + PropertyName + ")")
+        End Select
+        TL.LogMessage("SensorDescription", PropertyName & " - unrecognised")
+        Throw New ASCOM.InvalidValueException("SensorDescription(" + PropertyName + ")")
     End Function
 
     Public Sub Refresh() Implements IObservingConditions.Refresh
