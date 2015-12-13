@@ -34,6 +34,9 @@ wizard.dfm.miaf
 $
 ASCOM.Exceptions.dll
 ASCOM.Exceptions.pdb
+GACInstall.exe
+GACInstall.exe.config
+GACInstall.pdb
 icon.ico
 Index.htm
 InstallTemplates.exe
@@ -43,6 +46,13 @@ MigrationSupport.pdb
 moon.bmp
 swoosh.avi
 $
+
+
+
+
+
+
+
 
 
 
@@ -578,7 +588,7 @@ ASCOM Platform 6.2 Developer Components
 ASCOM Platform 6.2 Developer Components Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{4396C87A-F663-4631-8482-5F75DADBEA6C}
+{3057CCC9-2D4B-45F6-B9EA-F8889C167FF7}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
