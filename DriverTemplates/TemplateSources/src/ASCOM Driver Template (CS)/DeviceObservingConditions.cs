@@ -38,7 +38,7 @@ class DeviceObservingConditions
         {
             LogMessage("AveragePeriod", "set - {0}", value);
             if (value != 0)
-                throw new PropertyNotImplementedException("AveragePeriod", true);
+                throw new InvalidValueException("AveragePeriod", value.ToString(), "0 only");
         }
     }
 
