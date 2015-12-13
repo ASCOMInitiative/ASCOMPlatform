@@ -140,6 +140,7 @@ Write into Text File $SETUPLOG$ from Value Win64Mode: $WIN64MODE$ (at end of fil
 Write into Text File $SETUPLOG$ from Value ProgramFiles: $PROGRAMFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value CommonFiles: $COMMONFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value GacUtil: $GACUTIL$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ShortcutFiles: $SHORTCUTFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ShortcutFilesAll: $SHORTCUTFILESALL$ (at end of file)
 Write into Text File $SETUPLOG$ from Value DesktopDir: $DESKTOPDIR$ (at end of file)
@@ -298,10 +299,9 @@ if Variable REMOVE Equals TRUE
   Comment: Uninstall product
   Comment: TO-DO: Insert any additional uninstall commands here
   Apply Uninstall (get result into variable SUCCESS)
-  Comment: Unregister old assemby that may not have been uninstalled by previous istallers
-  Unregister assembly ASCOM.Setup.TemplateWizard, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Comment: Unregister the assembly installed by this installer
-  Unregister assembly ASCOM.Setup.TemplateWizard, Version=6.2.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Comment: Remove old assembly that may not have been uninstalled by previous istallers
+  Run Program $SUPPORTDIR$\GACInstall.exe /U "Ascom.Setup.TemplateWizard" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value Removing template wizard dll - Return Code: $RC$ (at end of file)
   Set Variable PROGRESS to 100
 else
   [END REGION]
@@ -325,6 +325,12 @@ else
   end
   Write into Text File $SETUPLOG$ from Value  (at end of file)
   Set Variable NATIVE_ENGINE to FALSE
+   
+  Comment: Remove old assemblies that may not have been uninstalled by previous istallers
+  Run Program $SUPPORTDIR$\GACInstall.exe /U "Ascom.Setup.TemplateWizard" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value Removing old template wizard dll  - Attempt 1 - Return Code: $RC$ (at end of file)
+  Run Program $SUPPORTDIR$\GACInstall.exe /U "Ascom.Setup.TemplateWizard" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value Removing old template wizard dll  - Attempt 2 - Return Code: $RC$ (at end of file)
    
   [OFFLINE CONTENT]
   Set Variable PROGRESS to 30
@@ -456,6 +462,7 @@ else
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
     Comment: Support DLL for driver templates
     Install Assembly ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to Global Assembly Cache
+    Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to $TARGETDIR$\Platform 6 Developer Components\Installer Generator
     Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.pdb to $WINDIR$\Symbols\dll
   end
   [END REGION]
