@@ -298,6 +298,10 @@ if Variable REMOVE Equals TRUE
   Comment: Uninstall product
   Comment: TO-DO: Insert any additional uninstall commands here
   Apply Uninstall (get result into variable SUCCESS)
+  Comment: Unregister old assemby that may not have been uninstalled by previous istallers
+  Unregister assembly ASCOM.Setup.TemplateWizard, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Comment: Unregister the assembly installed by this installer
+  Unregister assembly ASCOM.Setup.TemplateWizard, Version=6.2.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESS to 100
 else
   [END REGION]

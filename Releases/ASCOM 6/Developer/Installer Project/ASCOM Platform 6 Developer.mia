@@ -298,6 +298,10 @@ If
 Comment
 Comment
 Apply Changes
+Comment
+Register Assembly
+Comment
+Register Assembly
 Set Variable
 Else
 Code Folding Region
@@ -810,6 +814,10 @@ $
 {A181D926-1E00-4CDE-BC3B-FC2B20B2DD4E}
 {3757A810-613A-4B71-BD84-E3136D579123}
 {5D57EE19-E06A-49F2-A418-A0250EFC4653}
+{13F37AAE-CCC7-467E-AF89-85D9F294C3E6}
+{AA078808-5631-48EC-9864-7DB94F870075}
+{A492321A-B422-4570-9A76-3893A481A3D9}
+{A0E02A28-79F6-434F-B348-FD896191F988}
 {7209B1D1-47C6-44AD-B4EE-49930BB78EB9}
 {5815F867-078A-42FA-B73A-6BA38B9769DF}
 {6C5CFE9F-0037-49D9-8F9D-15BF8F6AF7DC}
@@ -1148,6 +1156,10 @@ Platform 6.1 references
 Platform 6 Documentation
 {96AD7446-2BBE-481F-837F-3020C7FF718C}
 Platform 6.1 Documentation
+{13F37AAE-CCC7-467E-AF89-85D9F294C3E6}
+Unregister old assemby that may not have been uninstalled by previous istallers
+{A492321A-B422-4570-9A76-3893A481A3D9}
+Unregister the assembly installed by this installer
 {3188C79A-1A28-4C92-84A6-B3C5A6485BF8}
 PREREQ
 FALSE
@@ -3347,6 +3359,10 @@ Uninstalling previous Developer Tools version...
 
 0
 10
+{AA078808-5631-48EC-9864-7DB94F870075}
+ASCOM.Setup.TemplateWizard, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE|FALSE
+{A0E02A28-79F6-434F-B348-FD896191F988}
+ASCOM.Setup.TemplateWizard, Version=6.2.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE|FALSE
 {1769AA30-A747-435C-A18D-7E418479ADEF}
 OPSYS
 TRUE
@@ -3845,6 +3861,10 @@ C
 
 
 
+
+
+
+
 C
 
 
@@ -3864,6 +3884,10 @@ C
 
 
 $
+
+
+
+
 
 
 
