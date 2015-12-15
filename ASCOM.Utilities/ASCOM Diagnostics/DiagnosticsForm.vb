@@ -5343,6 +5343,7 @@ Public Class DiagnosticsForm
         Dim FoundFullAccess As Boolean = False
 
         Try
+            TL.LogMessage("RegistrySecurityDbg", "Entered ReadRegistryRights")
             TL.LogMessage("RegistrySecurity", IIf(SubKey = "", key.Name.ToString, key.Name.ToString & "\" & SubKey))
             If (SubKey = "") Or (SubKey = ASCOM_ROOT_KEY) Then
                 SKey = key
@@ -5350,20 +5351,27 @@ Public Class DiagnosticsForm
                 SKey = key.OpenSubKey(SubKey)
             End If
 
+            TL.LogMessage("RegistrySecurityDbg", "Getting access control")
             sec = SKey.GetAccessControl() 'System.Security.AccessControl.AccessControlSections.All)
+            TL.LogMessage("RegistrySecurityDbg", "Starting iteration of security rules")
 
             For Each RegRule As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount)) 'Iterate over the rule set and list them
+                TL.LogMessage("RegistrySecurityDbg", "Before printing rule")
                 TL.LogMessage("RegistrySecurity", RegRule.AccessControlType.ToString() & " " &
                                                   RegRule.IdentityReference.ToString() & " " &
                                                   RegRule.RegistryRights.ToString() & " / " &
                                                   IIf(RegRule.IsInherited.ToString(), "Inherited", "NotInherited") & " / " &
                                                   RegRule.InheritanceFlags.ToString() & " / " &
                                                   RegRule.PropagationFlags.ToString())
+                TL.LogMessage("RegistrySecurityDbg", "After printing rule")
+
                 If (RegRule.IdentityReference.ToString.ToUpper = GetBuiltInUsers().ToUpper) And (RegRule.RegistryRights = RegistryRights.FullControl) Then
                     FoundFullAccess = True
                 End If
+                TL.LogMessage("RegistrySecurityDbg", "After testing for FullAccess")
             Next
 
+            TL.LogMessage("RegistrySecurityDbg", "Completed iteration of security rules")
             If ConfirmFullAccess Then 'Check whether full access is availble if required
                 If FoundFullAccess Then
                     NMatches += 1
@@ -5373,11 +5381,13 @@ Public Class DiagnosticsForm
                     LogError("RegistrySecurity", "Subkey " & SubKey & " does not have full access rights for BUILTIN\Users!")
                 End If
             End If
+            TL.LogMessage("RegistrySecurityDbg", "End of Try-Catch code")
         Catch ex As NullReferenceException
             LogException("ReadRegistryRights", "The subkey: " & key.Name & "\" & SubKey & " does not exist.")
         Catch ex As Exception
             LogException("ReadRegistryRights", ex.ToString)
         End Try
+        TL.LogMessage("RegistrySecurityDbg", "Exited ReadRegistryRights")
         TL.BlankLine()
     End Sub
 

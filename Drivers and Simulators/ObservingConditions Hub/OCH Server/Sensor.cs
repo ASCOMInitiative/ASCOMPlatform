@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using ASCOM.Utilities;
 
 namespace ASCOM.Simulator
@@ -59,7 +60,7 @@ namespace ASCOM.Simulator
             if (Hub.DebugTraceState) Hub.TL.LogMessage("Sensor.WriteProfile", SensorName + " ProgID: " + ProgID);
             driverProfile.WriteValue(Hub.DRIVER_PROGID, PROGID_PROFILENAME, ProgID, SensorName);
             if (Hub.DebugTraceState) Hub.TL.LogMessage("Sensor.WriteProfile", SensorName + " SwitchNumber: " + SwitchNumber.ToString());
-            driverProfile.WriteValue(Hub.DRIVER_PROGID, SWITCHNUMBER_PROFILENAME, SwitchNumber.ToString(), SensorName);
+            driverProfile.WriteValue(Hub.DRIVER_PROGID, SWITCHNUMBER_PROFILENAME, SwitchNumber.ToString(CultureInfo.InvariantCulture), SensorName);
             if (Hub.DebugTraceState) Hub.TL.LogMessage("Sensor.WriteProfile", SensorName + " Completed writing profile values");
         }
 
@@ -71,8 +72,8 @@ namespace ASCOM.Simulator
             DeviceMode = (Hub.ConnectionType)Enum.Parse(typeof(Hub.ConnectionType), driverProfile.GetValue(Hub.DRIVER_PROGID, DEVICEMODE_PROFILENAME, SensorName, DEVICEMODE_PROFILENAME_DEFAULT));
             ProgID = driverProfile.GetValue(Hub.DRIVER_PROGID, PROGID_PROFILENAME, SensorName, PROGID_PROFILENAME_DEFAULT);
             if (Hub.DebugTraceState) Hub.TL.LogMessage("Sensor.ReadProfile", SensorName + " ProgID: " + ProgID);
-            SwitchNumber = Convert.ToInt32(driverProfile.GetValue(Hub.DRIVER_PROGID, SWITCHNUMBER_PROFILENAME, SensorName, SWITCHNUMBER_PROFILENAME_DEFAULT));
-            if (Hub.DebugTraceState) Hub.TL.LogMessage("Sensor.ReadProfile", SensorName + " SwitchNumber: " + SwitchNumber.ToString());
+            SwitchNumber = Convert.ToInt32(driverProfile.GetValue(Hub.DRIVER_PROGID, SWITCHNUMBER_PROFILENAME, SensorName, SWITCHNUMBER_PROFILENAME_DEFAULT), CultureInfo.InvariantCulture);
+            if (Hub.DebugTraceState) Hub.TL.LogMessage("Sensor.ReadProfile", SensorName + " SwitchNumber: " + SwitchNumber.ToString(CultureInfo.InvariantCulture));
             if (Hub.DebugTraceState) Hub.TL.LogMessage("Sensor.ReadProfile", "Completed reading profile values");
         }
     }
