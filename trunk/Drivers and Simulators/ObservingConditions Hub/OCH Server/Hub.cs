@@ -1053,15 +1053,15 @@ namespace ASCOM.Simulator
                 driverProfile.DeviceType = DEVICE_TYPE;
 
                 // Initialise the logging trace state from the Profile
-                TraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, string.Empty, TRACE_LEVEL_DEFAULT));
+                TraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, string.Empty, TRACE_LEVEL_DEFAULT), CultureInfo.InvariantCulture);
                 TL.Enabled = TraceState; // Set the logging state immediately after this has been retrieved from Profile
 
                 // Initialise other variables from the Profile
-                DebugTraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, string.Empty, DEBUG_TRACE_DEFAULT));
-                ConnectToDrivers = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, CONNECT_TO_DRIVERS_PROFILENAME, string.Empty, CONNECT_TO_DRIVERS_DEFAULT));
-                averagePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT.ToString()));
-                numberOfMeasurementsPerAveragePeriod = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, string.Empty, NUMBER_OF_READINGS_DEFAULT.ToString()));
-                overrideUISafetyLimits = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, OVERRIDE_UI_SAFETY_LIMITS_PROFILENAME, string.Empty, OVERRIDE_UI_SAFETY_LIMITS_DEFAULT.ToString())); // This cannot be changed through the setup UI so it is only read in
+                DebugTraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, string.Empty, DEBUG_TRACE_DEFAULT), CultureInfo.InvariantCulture);
+                ConnectToDrivers = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, CONNECT_TO_DRIVERS_PROFILENAME, string.Empty, CONNECT_TO_DRIVERS_DEFAULT), CultureInfo.InvariantCulture);
+                averagePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                numberOfMeasurementsPerAveragePeriod = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, string.Empty, NUMBER_OF_READINGS_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
+                overrideUISafetyLimits = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, OVERRIDE_UI_SAFETY_LIMITS_PROFILENAME, string.Empty, OVERRIDE_UI_SAFETY_LIMITS_DEFAULT.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture);
 
                 // Initialise the sensor collection from the Profile
                 foreach (string Property in ValidSensors)
@@ -1082,12 +1082,12 @@ namespace ASCOM.Simulator
                 driverProfile.DeviceType = DEVICE_TYPE;
 
                 // Save the variable state to the Profile
-                driverProfile.WriteValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, TraceState.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, DebugTraceState.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, CONNECT_TO_DRIVERS_PROFILENAME, ConnectToDrivers.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, averagePeriod.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, numberOfMeasurementsPerAveragePeriod.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, OVERRIDE_UI_SAFETY_LIMITS_PROFILENAME, overrideUISafetyLimits.ToString());
+                driverProfile.WriteValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, TraceState.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, DebugTraceState.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, CONNECT_TO_DRIVERS_PROFILENAME, ConnectToDrivers.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, averagePeriod.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, numberOfMeasurementsPerAveragePeriod.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, OVERRIDE_UI_SAFETY_LIMITS_PROFILENAME, overrideUISafetyLimits.ToString(CultureInfo.InvariantCulture));
 
                 // Save the sensor collection to the Profile
                 foreach (string Property in ValidSensors)

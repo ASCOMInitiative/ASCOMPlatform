@@ -898,15 +898,15 @@ namespace ASCOM.Simulator
                 driverProfile.DeviceType = DEVICE_TYPE;
 
                 // Initialise the logging trace state from the Profile
-                TraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, string.Empty, TRACE_LEVEL_DEFAULT));
+                TraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, string.Empty, TRACE_LEVEL_DEFAULT), CultureInfo.InvariantCulture);
                 TL.Enabled = TraceState; // Set the logging state immediately after this has been retrieved from Profile
 
                 // Initialise other variables from the Profile
-                DebugTraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, string.Empty, DEBUG_TRACE_DEFAULT));
-                SensorQueryInterval = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, string.Empty, SENSOR_READ_PERIOD_DEFAULT));
-                AveragePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT));
-                NumberOfReadingsToAverage = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, string.Empty, NUMBER_OF_READINGS_DEFAULT));
-                MinimiseOnStart = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, string.Empty, MINIMISE_ON_START_DEFAULT));
+                DebugTraceState = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, string.Empty, DEBUG_TRACE_DEFAULT), CultureInfo.InvariantCulture);
+                SensorQueryInterval = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, string.Empty, SENSOR_READ_PERIOD_DEFAULT),CultureInfo.InvariantCulture);
+                AveragePeriod = Convert.ToDouble(driverProfile.GetValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, string.Empty, AVERAGE_PERIOD_DEFAULT), CultureInfo.InvariantCulture);
+                NumberOfReadingsToAverage = Convert.ToInt32(driverProfile.GetValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, string.Empty, NUMBER_OF_READINGS_DEFAULT), CultureInfo.InvariantCulture);
+                MinimiseOnStart = Convert.ToBoolean(driverProfile.GetValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, string.Empty, MINIMISE_ON_START_DEFAULT), CultureInfo.InvariantCulture);
 
                 // Initialise the sensor collection from the Profile
                 foreach (string Property in SimulatedProperties)
@@ -931,12 +931,12 @@ namespace ASCOM.Simulator
                 driverProfile.DeviceType = DEVICE_TYPE;
 
                 // Save the variable state to the Profile
-                driverProfile.WriteValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, TraceState.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, DebugTraceState.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, SensorQueryInterval.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, AveragePeriod.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, NumberOfReadingsToAverage.ToString());
-                driverProfile.WriteValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, MinimiseOnStart.ToString());
+                driverProfile.WriteValue(DRIVER_PROGID, TRACE_LEVEL_PROFILENAME, TraceState.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, DEBUG_TRACE_PROFILENAME, DebugTraceState.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, SENSOR_READ_PERIOD_PROFILENAME, SensorQueryInterval.ToString( CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, AVERAGE_PERIOD_PROFILENAME, AveragePeriod.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, NUMBER_OF_READINGS_PROFILENAME, NumberOfReadingsToAverage.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(DRIVER_PROGID, MINIMISE_ON_START_PROFILENAME, MinimiseOnStart.ToString(CultureInfo.InvariantCulture));
 
                 // Save the sensor collection to the Profile
                 foreach (string Property in SimulatedProperties)
