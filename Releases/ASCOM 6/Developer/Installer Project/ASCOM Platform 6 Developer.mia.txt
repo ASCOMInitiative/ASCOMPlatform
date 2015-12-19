@@ -125,6 +125,7 @@ else
   Write into Text File $SETUPLOG$ from Value Installer mode: MSI Engine (at end of file)
 end
 Write into Text File $SETUPLOG$ from Value  (at end of file)
+ 
 Comment: Correct presentation for Win 7
 if Variable OPSYS Equals SEVEN
   Set Variable OPSYS to 7
@@ -140,12 +141,16 @@ Write into Text File $SETUPLOG$ from Value Win64Mode: $WIN64MODE$ (at end of fil
 Write into Text File $SETUPLOG$ from Value ProgramFiles: $PROGRAMFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value CommonFiles: $COMMONFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Maintenance: $MAINTENANCE$, RecommendedUpgrade: $RECOMMENDEDUPGRADE$, NeedsUpgrade: $NEEDSUPGRADE$ (at end of file)
-Write into Text File $SETUPLOG$ from Value GacUtil: $GACUTIL$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ShortcutFiles: $SHORTCUTFILES$ (at end of file)
 Write into Text File $SETUPLOG$ from Value ShortcutFilesAll: $SHORTCUTFILESALL$ (at end of file)
 Write into Text File $SETUPLOG$ from Value DesktopDir: $DESKTOPDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value AllUsers: $ALLUSERS$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Target Directory: $TARGETDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
+ 
+Comment: Set install directory and start menu folder
+Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6 Developer Components
+Set Variable STARTMENU to ASCOM Platform 6
  
 [DEFINE REGION: Setup User Interview]
 if Variable MAINTENANCE Equals TRUE
@@ -153,8 +158,6 @@ if Variable MAINTENANCE Equals TRUE
 else
   [compiler if Variable BUILDMODE not Equals PATCH]
   Comment: First Time Install
-  Set Variable TARGETDIR to $PROGRAMFILES$\ASCOM\Platform 6 Developer Components
-  Set Variable STARTMENU to ASCOM Platform 6
   [compiler end]
 end
  
@@ -297,11 +300,10 @@ Comment: Modify Target System
 [DEFINE REGION: Perform Uninstallation]
 if Variable REMOVE Equals TRUE
   Comment: Uninstall product
-  Comment: TO-DO: Insert any additional uninstall commands here
-  Apply Uninstall (get result into variable SUCCESS)
-  Comment: Remove old assembly that may not have been uninstalled by previous istallers
-  Run Program $SUPPORTDIR$\GACInstall.exe /U "Ascom.Setup.TemplateWizard" (WAIT, get result into variable RC)
+  Comment: Remove old assembly that may not have been uninstalled by previous installers
+  Run Program $TARGETDIR$\Internal\ASCOM.Internal.GACInstall.exe /U "ASCOM.Setup.TemplateWizard" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value Removing template wizard dll - Return Code: $RC$ (at end of file)
+  Apply Uninstall (get result into variable SUCCESS)
   Set Variable PROGRESS to 100
 else
   [END REGION]
@@ -327,9 +329,9 @@ else
   Set Variable NATIVE_ENGINE to FALSE
    
   Comment: Remove old assemblies that may not have been uninstalled by previous istallers
-  Run Program $SUPPORTDIR$\GACInstall.exe /U "Ascom.Setup.TemplateWizard" (WAIT, get result into variable RC)
+  Run Program $TARGETDIR$\Internal\ASCOM.Internal.GACInstall.exe /U "ASCOM.Setup.TemplateWizard" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value Removing old template wizard dll  - Attempt 1 - Return Code: $RC$ (at end of file)
-  Run Program $SUPPORTDIR$\GACInstall.exe /U "Ascom.Setup.TemplateWizard" (WAIT, get result into variable RC)
+  Run Program $TARGETDIR$\Internal\ASCOM.Internal.GACInstall.exe /U "ASCOM.Setup.TemplateWizard" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value Removing old template wizard dll  - Attempt 2 - Return Code: $RC$ (at end of file)
    
   [OFFLINE CONTENT]
@@ -451,6 +453,10 @@ else
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Revision Code, $REVISIONCODE$
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Version, $VERSION$
     [END REGION]
+    Comment: Install GacInstall so that we can uninstall assemblies from the GAC indepndently of the Platform itself
+    Comment: Install FusionLib here in case the Platform is removed first and has already uninstalled this from the GAC
+    Install Files ..\..\..\..\GACInstall\bin\Release\ASCOM.Internal.GACInstall.exe to $TARGETDIR$\Internal
+    Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Internal
   end
   [DEFINE REGION: Visual Studio Driver Templates]
   Set Variable PROGRESS to 90

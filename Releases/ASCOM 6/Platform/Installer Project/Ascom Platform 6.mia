@@ -199,6 +199,10 @@ Set Variable
 Set Variable
 Comment
 Comment
+Set Variable
+Set Variable
+Comment
+Comment
 Write to Text File
 Write to Text File
 Write to Text File
@@ -238,6 +242,7 @@ Read from Text File
 Read from Text File
 Read from Text File
 Comment
+Write to Text File
 Write to Text File
 Write to Text File
 Write to Text File
@@ -274,8 +279,6 @@ Else
 Compiler Variable If
 Comment
 Write to Text File
-Set Variable
-Set Variable
 Compiler Variable End
 End
 Comment
@@ -559,6 +562,7 @@ MessageBalloon
 Generate Native Images
 Generate Native Images
 Generate Native Images
+Generate Native Images
 Set Variable
 Generate Native Images
 Generate Native Images
@@ -572,6 +576,8 @@ If
 MessageBalloon
 Set 64 Bit Mode
 Set Variable
+Run Program
+Write to Text File
 Run Program
 Write to Text File
 Run Program
@@ -1798,6 +1804,10 @@ $
 {975A5F71-CFE2-4FC0-92CE-03515DCED696}
 {3058A604-212A-42C5-8228-28E83CE9FE52}
 {BFF1352B-E850-4E52-A789-6523ED22D508}
+{FB06E0E9-3190-4181-BEB8-BB2AC3B51BAD}
+{CE264A75-0454-48A1-A2CA-FD6B4595AE1F}
+{F02F9189-D1A0-4A79-A3D0-FF114790AD0C}
+{867E1840-E650-46F9-ACB3-5CB219C55E32}
 {5B6C62AC-C7A0-472A-8D13-F1B941C71652}
 {01B1F73B-FD2E-4826-9655-631FBDDFE68F}
 {E5D845A3-9849-4096-A2C6-B295C9334310}
@@ -1859,6 +1869,7 @@ $
 {21834060-9A82-4EC9-99E2-056AD870CF00}
 {E11C3DCF-2E24-46EA-8EB1-20D894628C81}
 {B3F9547F-0F72-4D73-9B2D-17B5C206C926}
+{BE4ABEB4-09A2-4D88-B1C5-CAFCCCA76264}
 {EDFEA293-82F9-49C0-BAC4-38E488FB5E46}
 {88C5AAB7-32E7-46E7-974A-EB2427D54905}
 {3224F346-6162-469A-825C-C091E2346FDB}
@@ -1875,8 +1886,6 @@ $
 {7FE602AE-4B3A-44EC-BA1B-AD7B83702368}
 {6F9BCBE5-51A7-4172-98B8-998682CFA00D}
 {2AFD8E94-1EAB-493A-8BD1-D2AF3352EBEC}
-{D5A127CC-474C-434C-B805-8F1D0AB34CA9}
-{68D8848D-A79E-4133-9D77-39939BAA64DE}
 {0824EC99-D1D1-4F4F-A7CC-EA197C7B753A}
 {C051384F-DE91-4DE8-A06F-E2AC90CB48DD}
 {27834352-FD11-40A1-BC4D-C7B41D153D67}
@@ -2157,6 +2166,7 @@ $
 {44CEC52E-8C5A-45A8-A108-62C240D4896C}
 {81363D86-290C-4683-9798-92A553D1D212}
 {3C880CFC-C3D7-41D3-A53E-E401DB1615E9}
+{76BC19FE-14D5-4A9D-8485-84BB5998F3F4}
 {3B6C6D52-6A79-414F-ACB8-4DB627AAE29B}
 {5AD2E578-0570-45C4-9A6A-D5C29D6971E1}
 {2325596D-E0FF-474A-A74B-9EE9558938E8}
@@ -2173,6 +2183,8 @@ $
 {9EAA8DBC-1081-4747-8C54-037FD304E423}
 {6B6D52A0-227B-4EFF-BE90-C0338E06E8F1}
 {E38A43DE-99DF-4AA2-A3B5-E2E733A67066}
+{BA82239C-5E88-43ED-91E7-0EECBE698843}
+{121A7123-1ADD-4F9A-946A-7A0F5BCB90B6}
 {C60CC3F9-6689-4A3E-A525-57930CA485C2}
 {09C0D044-AACB-41EB-AE91-50B3BA5861FE}
 {72EDA22F-A6CA-4915-AFD1-2FEC0879FC51}
@@ -3628,6 +3640,10 @@ Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is 
 Platform 6.2 ObservingConditions Hub
 {42A32346-9A62-48AB-90AD-724F3D893011}
 Unused variables
+{FB06E0E9-3190-4181-BEB8-BB2AC3B51BAD}
+
+{CE264A75-0454-48A1-A2CA-FD6B4595AE1F}
+Set the Target directory and start menu folder
 {9792D65A-C1A8-43B4-BA24-DD21C5DCEDF7}
 PROGRESSTEXT
 Installing $TITLE$
@@ -3658,12 +3674,6 @@ PRELIST
 {F6C7353E-AC0B-465F-8A6E-C70AEB8984DD}
 PREREQ
 FALSE
-{68D8848D-A79E-4133-9D77-39939BAA64DE}
-STARTMENU
-$TITLE$
-{D5A127CC-474C-434C-B805-8F1D0AB34CA9}
-TARGETDIR
-$PROGRAMFILES$\ASCOM\Platform 6
 {6825F656-CB0C-43AD-BCED-CFFFB6EA1467}
 PRELIST$MYAH$MYAH$FALSE
 $PRELIST$$NEWLINE$Previous Version Removal
@@ -4063,6 +4073,12 @@ PLATFORMVERSIONSPNUMBER$MYAH$MYAH$FALSE
 {FEC1FAAF-57A6-4928-A928-7F8CF97B693A}
 OPSYS$MYAH$MYAH$FALSE
 10
+{867E1840-E650-46F9-ACB3-5CB219C55E32}
+STARTMENU
+$TITLE$
+{F02F9189-D1A0-4A79-A3D0-FF114790AD0C}
+TARGETDIR$MYAH$MYAH$FALSE
+$PROGRAMFILES$ASCOM\Platform 6
 {340178B5-D93C-4075-ABA8-DE4CCDAFC689}
 MAINTENANCE
 0
@@ -7435,6 +7451,12 @@ TRUE
 -register
 TRUE
 RC
+{BA82239C-5E88-43ED-91E7-0EECBE698843}
+$NGEN64$
+TRUE
+uninstall "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7"
+TRUE
+RC
 {1A792D77-26E6-4BBF-9750-37EBD8EC2BE3}
 $UNINSTALLER$
 
@@ -7449,7 +7471,7 @@ TRUE
 {D0F53DED-9F4C-43AB-8155-D5782684B587}
 $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/u policy.5.5.ASCOM.Astrometry.dll
+/u policy.5.5.ASCOM.Astrometry
 1
 
 
@@ -7460,7 +7482,7 @@ TRUE
 {D2806B9A-D876-4312-BF7E-F5CD0B7E8306}
 $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/u policy.1.0.ASCOM.DriverAccess.dll
+/u policy.1.0.ASCOM.DriverAccess
 1
 
 
@@ -7471,7 +7493,7 @@ TRUE
 {968342E3-5ABC-4D80-91CC-2036B780E5BE}
 $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
 $COMMONFILES$\ASCOM\Platform\v5.5
-/u policy.5.5.ASCOM.Utilities.dll
+/u policy.5.5.ASCOM.Utilities
 1
 
 
@@ -7548,7 +7570,7 @@ TRUE
 {E9DC0155-C3D6-4743-9B1A-377AEBA98DEA}
 $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
 $COMMONFILES$\ASCOM\Platform\v6.0
-/u policy.1.0.ASCOM.Exceptions.dll"
+/u policy.1.0.ASCOM.Exceptions"
 1
 
 
@@ -7559,7 +7581,7 @@ TRUE
 {892158A3-92FC-4C92-A484-E22AAC01A99D}
 $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe
 $COMMONFILES$\ASCOM\Platform\v6.0
-/u policy.1.1.ASCOM.Exceptions.dll"
+/u policy.1.1.ASCOM.Exceptions"
 1
 
 
@@ -10734,6 +10756,16 @@ $SETUPLOG$
 $TIME$ RC: $RC$ Register - Observing Conditions Simulator
 FALSE
 TRUE
+{BE4ABEB4-09A2-4D88-B1C5-CAFCCCA76264}
+$SETUPLOG$
+$TIME$ Target Directory: $TARGETDIR$
+FALSE
+TRUE
+{121A7123-1ADD-4F9A-946A-7A0F5BCB90B6}
+$SETUPLOG$
+$TIME$ RC: $RC$ NGen Remove ASCOM.Utilities.Video
+FALSE
+TRUE
 {14A4D424-B117-4943-8443-B2433541ADE8}
 ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll
 TRUE
@@ -10860,6 +10892,8 @@ ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946f
 ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|TRUE
 {1C4CFC94-0790-42A0-AF4F-75F16F165A3A}
 DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f|TRUE
+{76BC19FE-14D5-4A9D-8485-84BB5998F3F4}
+ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7|FALSE
 {5177FF3C-C42D-4163-ACD1-BAF4DBE0F1C2}
 TRUE
 Check Application Requirements
@@ -11623,21 +11657,6 @@ C
 
 
 
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -11645,12 +11664,6 @@ C
 
 
 
-
-
-
-
-
-C
 
 
 
@@ -11683,6 +11696,30 @@ C
 
 
 
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
 C
 
 
@@ -11709,130 +11746,6 @@ C
 
 
 
-C
-C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-C
-C
-C
-C
-C
-C
 C
 C
 
@@ -11881,7 +11794,134 @@ C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 C
+C
+C
+C
+C
+C
+C
+C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C
+
+
+
 
 
 
@@ -12932,6 +12972,12 @@ C
 
 
 $
+
+
+
+
+
+
 
 
 
