@@ -200,8 +200,10 @@ namespace ASCOM.OpenWeatherMap
                     }
                     if (weatherData.main.pressure.HasValue)
                     {
-                        var qfe = weatherData.main.pressure.Value;
-                        Log.LogMessage("Pressure", "pressure {0}", qfe);
+                        // assume QNH
+                        var qnh = weatherData.main.pressure.Value;
+                        var qfe = util.ConvertPressure(qnh, 0, SiteElevation);
+                        Log.LogMessage("Pressure", "pressure {0}, elevation {1}, qfe {2}", qnh, SiteElevation, qfe);
                         return Math.Round(qfe, 1);
                     }
                 }
