@@ -5,6 +5,22 @@
 ''' <summary>
 ''' Defines the IDome Interface
 ''' </summary>
+''' <remarks>
+''' This interface is used to handle a dome, with or without a controllable shutter, and also a roll off roof.
+''' <para>The dome implentation should be self explanatory.</para>
+''' <para>A roll off roof is implemented using the shutter control as the roof.  The properties and methods shoud be implented as follows:
+''' <list>
+''' <item><description>OpenShutter and CloseShutter open and close the roof.</description></item>
+''' <item><description>CanFindHome, CanPark,CanSetAltitude, CanSetAzimuth, CanSetPark, CanSlave and CanSyncAzimuth all return false.</description></item>
+''' <item><description>CanSetShutter returns true.</description></item>
+''' <item><description>ShutterStatus is implemented.</description></item>
+''' <item><description>Slewing always returns false.</description></item>
+''' <item><description>AbortSlew should stop the shutter moving.</description></item>
+''' <item><description>FindHome, Park, SetPark, SlewToAltitude, SlewToAzimuth and SyncToAzimuth all throw the <see cref="ASCOM.MethodNotImplementedException" /></description></item>
+''' <item><description>Altitude and Azimuth throw the <see cref="PropertyNotImplementedException"/>.</description></item>
+''' </list></para>
+''' </remarks>
+
 <Guid("88CFA00C-DDD3-4b42-A1F0-9387E6823832"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
 Public Interface IDomeV2 'CCDA0D85-474A-4775-8105-1D513ADC3896
 
