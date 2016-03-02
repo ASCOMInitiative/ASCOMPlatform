@@ -90,11 +90,14 @@ namespace ASCOM.Simulator
 		//
 		public static float RotationRate
 		{
-			get { return s_fSpeed * 1000; }				// Internally deg/millisecond
-			set { s_fSpeed = value / 1000; }
-		}
+			//get { return s_fSpeed * 1000; }				// Internally deg/millisecond
+			//set { s_fSpeed = value / 1000; }
+            // I think the above should be reversed if internally we are using degrees per millisecond.
+            get { return s_fSpeed / 1000; }             // Internally deg/millisecond
+            set { s_fSpeed = value * 1000; }
+        }
 
-		public static bool CanReverse
+        public static bool CanReverse
 		{
 			get { return s_bCanReverse; }
 			set 
@@ -157,6 +160,7 @@ namespace ASCOM.Simulator
                     Reverse = form.Reverse;
                     CanReverse = form.CanReverse;
                     RotationRate = form.RotationRate;
+                    Finalize_(); // Added to force persistence after valus are changed in the setup dialogue
                 }
             }
         }
