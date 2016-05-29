@@ -68,9 +68,9 @@
 
 		<div class="download">
 			<!--<h5>TheSky Controlled Telescope (Paramount, etc., 5.2.12) for TheSky X and TheSky 5/6<a href="http://download.ascom-standards.org/drivers/TheSkyTelescope(5.2.12)Setup.exe"><img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a></h5>-->
-			<h5><a name="Bisque2x" id="Bisque2x"></a>Ascom 2X Mount Adaptor (Paramount, etc., 6.0) for TheSky X and TheSky 5/6 (external link)</h5>
+			<h5><a name="Bisque2x" id="Bisque2x"></a>Ascom 2X Mount Adaptor (Paramount, etc., 6.1) for TheSky X and TheSky 5/6 (external link)</h5>
 
-			<a href="http://www.bisque.com/sc/media/p/106120.aspx"><img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
+			<a href="http://www.bisque.com/sc/media/p/112531.aspx"><img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>
 			<p>This is supplied by Software Bisque and is available from the Downloads section of the Software Bisque site, the file is called Ascom 2X Mount Adaptor Setup.exe</p>
 <p>Installs  a driver that connects to Software Bisque's  <a href="http://www.bisque.com/" target="_blank">TheSky X/6/5 Astronomy Software</a> and makes it look like a standard ASCOM telescope. This allows ASCOM-based astronomy software to use TheSky (including TPOINT and ProTrack) as a smart telescope controller. For more information see <a href="../FAQs/TheSky.htm" target="_blank">Working with TheSky</a> (section 1). It is <span class="underline">required for the Paramount</span> mounts, and may be used with TheSky controlling any other of its supported telescope types, or via its built-in outbound ASCOM support<a href="Plugins.htm" target="_blank"></a>, and then using ASCOM telescope drivers. This driver provides <a href="../Standards/Index.htm" target="_parent">Telescope V3</a> support, 100% <a href="DevTools.htm" target="_blank">conformance</a>, and compatibility with TheSky X (10.2.0 or later). It should also work with TheSky6 and TheSky5 but not all functionality will be present.</p>
 		</div>
@@ -81,18 +81,16 @@
 			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>This is the installer for the <a href="http://www.astro-physics.com/" target="_new">Astro-Physics</a> factory-supported driver for all Astro-Physics telescope models. Please go to the <a href="http://www.astro-physics.com/index.htm?products/accessories/software/ascom/ascom" target="_new">Astro-Physics Driver web page</a> for their driver and associated software.</div>
 
 		<div class="download">
-			<h5>Celestron Unified (6.0.5604)</h5>
-			<a href="http://download.ascom-standards.org/drivers/Celestron(6.0.5604)Setup.exe">
+			<h5>Celestron Unified (6.0.5978, May 2016)</h5>
+			<a href="http://download.ascom-standards.org/drivers/Celestron(6.0.5978)Setup.exe">
 			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a>
 			<p>Driver name (users, in the Chooser): Celestron Telescope Driver<br />
 			ProgId (programmers only): <tt style="font-size:2">ASCOM.Celestron.Telescope</tt></p>
-			New driver, written in C#. Note the new name and ProgId.
 			Installs a driver for all computerized <a href="http://www.celestron.com/" target="aux">Celestron</a> telescopes.
 			This version has passed the <a href="DevTools.htm">Conformance Checker</a> tests and has support
 			for programmably changing pier side.  It also recognises the StarSense HC.
-			Park and Unpark use the mount Hibernate/Wakeup commands for NexStar+ HCs version 5.24. Works for locales where the comma
-			is the decimal separator. See the help file, installed as part of the driver, for a full description.
-			<p class="note"><b>This driver does NOT support Synta mounts.</b></p>
+			Park and Unpark use the mount Hibernate/Wakeup commands for NexStar+ HCs version 5.24. See the help file and release notes(!), installed as part of the driver, for a full description.
+			<p class="note"><b>This driver does NOT support Synta mounts. Use the <a href="#synta">SkyWatcher driver</a> listed below.</b></p>
 			</div>
 
 <!--    <div class="download">
@@ -174,6 +172,11 @@
 			<h5>Sky Commander (2.1.0, external link)</h5>
 			<a href="http://www.unm.edu/~eschman/SkyCommander_Driver.htm" target="_new">
 			<img alt="Download" src="../Images/VisitButton.jpg" width="149" height="44" align="right" border="0" /></a>Driver for the Sky Commander digital setting circle (DSC) device. The author provides a self-contained installer.</div>
+
+		<div class="download">
+			<h5>SkyWatcher SynScan Mount Controller (6.0.5961, May 2016)</h5>
+			<a href="http://download.ascom-standards.org/drivers/SkyWatcher(6.0.5961)Setup.exe">
+			<img alt="Download" src="../Images/Button2.jpg" width="149" height="44" align="right" border="0" /></a><a name="synta" id="synta"></a>This driver is for all mounts that use the Synta SkyWatcher SynScan controller, including those provided by Orion etc. It should work with both AltAz and GEM mounts. The SynScan Hand Controller version must be 3.38 or 4.38 or later to get full functionality but limited functionality should be available for all HC versions.</div>
 
 		<div class="download">
 			<h5>Takahashi Temma  (5.0.26, external link)</h5>
