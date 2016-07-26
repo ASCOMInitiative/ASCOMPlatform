@@ -513,8 +513,9 @@ Public Interface ICameraV2
 
     ''' <summary>
     ''' Reports the actual exposure start in the FITS-standard CCYY-MM-DDThh:mm:ss[.sss...] format.
+    ''' The start time must be UTC.
     ''' </summary>
-    ''' <value>The last exposure start time.</value>
+    ''' <value>The last exposure start time in UTC.</value>
     ''' <exception cref="PropertyNotImplementedException">Must throw an exception if not supported</exception>
     ''' <exception cref="InvalidOperationException">If called before any exposure has been taken</exception>
     ReadOnly Property LastExposureStartTime() As String
