@@ -62,7 +62,7 @@ namespace UninstallAscom
                 TL.Enabled = true;
 
                 LogMessage("Uninstall", "Creating RegistryAccess object");
-                RegAccess = new RegistryAccess("UninstallASCOM"); //Create a RegistryAccess object triggering the special behaviour that creates a log with a special name
+                RegAccess = new RegistryAccess(TL); //Create a RegistryAccess object that will use the UninstallASCOM trace logger to ensure all messages appear in one log file
 
                 // This has been removed because it destroys the ability to remove 5.5 after use and does NOT restore all the 
                 // Platform 5 files resulting in an unexpected automatic repair. Its left here just in case, Please DO NOT RE-ENABLE THIS FEATURE unless have a way round the resulting issues
@@ -208,7 +208,6 @@ namespace UninstallAscom
                     }
                 }
 
-
                 if (found == true)
                 {
                     CleanUp55();
@@ -222,7 +221,7 @@ namespace UninstallAscom
                 LogMessage("Uninstall", "Setting Profile registry ACL");
                 RegAccess.SetRegistryACL();
 
-                // Restore the relevant the profile based on the latest platform installed
+                // Restore the relevant profile based on the latest platform installed
                 if ((platform5564KeyValue != null) | (platform5532KeyValue != null))
                 {
                     LogMessage("Uninstall", "Restoring Platform 5.5 Profile");
@@ -326,15 +325,15 @@ namespace UninstallAscom
         public static void LogMessage(string section, string logMessage)
         {
             // Make sure none of these failing stops the overall migration process
-            try 
-            { 
-                Console.WriteLine(logMessage); 
-            } 
+            try
+            {
+                Console.WriteLine(logMessage);
+            }
             catch { }
-            try 
+            try
             {
                 TL.LogMessageCrLf(section, logMessage);  // The CrLf version is used in order properly to format exception messages
-            } 
+            }
             catch { }
             try
             {
@@ -346,19 +345,19 @@ namespace UninstallAscom
         //log error messages and send to screen when appropriate
         public static void LogError(string section, string logMessage)
         {
-            try 
-            { 
-            Console.WriteLine(logMessage);
+            try
+            {
+                Console.WriteLine(logMessage);
             }
             catch { }
-            try 
-            { 
-            TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
+            try
+            {
+                TL.LogMessageCrLf(section, logMessage); // The CrLf version is used in order properly to format exception messages
             }
             catch { }
-            try 
-            { 
-            EventLogCode.LogEvent("UninstallAscom", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
+            try
+            {
+                EventLogCode.LogEvent("UninstallAscom", "Exception", EventLogEntryType.Error, GlobalConstants.EventLogErrors.UninstallASCOMError, logMessage);
             }
             catch { }
         }
