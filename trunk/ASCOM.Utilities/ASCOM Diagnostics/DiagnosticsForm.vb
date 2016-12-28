@@ -1091,7 +1091,7 @@ Public Class DiagnosticsForm
                         Case "ObservingConditionsHub"
                             ' The ObservingConditions Hub is unconfigured on initial installation and so has a special test mode that fakes a valid configuration
                             ' This unpublicised Action initiates the test mode
-                            returnString = DeviceObject.Action("Testmode", "")
+                            returnString = DeviceObject.Action("SetTestMode", "")
                             TL.LogMessage("TestSimulator", "Observing conditions hub test mode request returned: " & returnString)
                             DeviceObject.Connected = True
                             Compare("TestSimulator", "Connected OK", "True", "True")
