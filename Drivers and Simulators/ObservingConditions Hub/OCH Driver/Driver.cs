@@ -23,6 +23,7 @@ namespace ASCOM.Simulator
 
         internal static TraceLoggerPlus TL; // Private variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
         private int clientNumber;
+        private bool testMode, testConnected;
 
         #endregion
 
@@ -41,6 +42,8 @@ namespace ASCOM.Simulator
                 clientNumber = Hub.GetUniqueClientNumber();
                 TL.LogMessage(clientNumber, "ObservingConditions", "This instance's unique client number: " + clientNumber);
 
+                testMode = false;
+                testConnected = false;
                 TL.LogMessage(clientNumber, "ObservingConditions", "Completed initialisation");
             }
             catch (Exception ex)
@@ -70,7 +73,15 @@ namespace ASCOM.Simulator
         }
 
         public string Action(string actionName, string actionParameters)
-        { return Hub.Action(clientNumber, actionName, actionParameters); }
+        {
+            if (actionName.ToUpper() == "SETTESTMODE")
+            {
+                testMode = true;
+                TL.LogMessage(clientNumber, "Action", "SETTESTMODE received: Test mode now active");
+                return "Test mode active";
+            }
+            return Hub.Action(clientNumber, actionName, actionParameters);
+        }
 
         public void CommandBlind(string command, bool raw)
         {
@@ -91,18 +102,39 @@ namespace ASCOM.Simulator
         {
             get
             {
+                if (testMode)
+                {
+                    TL.LogMessage(clientNumber, "Connected", "Test mode, returning: " + testConnected.ToString());
+                    return testConnected;
+                }
                 return Hub.IsClientConnected(clientNumber);
             }
             set
             {
-                if (value) Hub.Connect(clientNumber);
-                else Hub.Disconnect(clientNumber);
+                if (testMode)
+                {
+                    TL.LogMessage(clientNumber, "Connected", "Setting connected to: " + value.ToString());
+                    testConnected=value;
+                }
+                else
+                {
+                    if (value) Hub.Connect(clientNumber);
+                    else Hub.Disconnect(clientNumber);
+                }
             }
         }
 
         public string Description
         {
-            get { return Hub.Description(clientNumber); }
+            get
+            {
+                if (testMode)
+                {
+                    TL.LogMessage(clientNumber, "Description", "ObservingConditionsHub test mode description");
+                    return "ObservingConditionsHub test mode description";
+                }
+                return Hub.Description(clientNumber);
+            }
         }
 
         public void Dispose()
@@ -111,22 +143,54 @@ namespace ASCOM.Simulator
 
         public string DriverInfo
         {
-            get { return Hub.DriverInfo(clientNumber); }
+            get
+            {
+                if (testMode)
+                {
+                    TL.LogMessage(clientNumber, "DriverInfo", "ObservingConditionsHub test mode driver information");
+                    return "ObservingConditionsHub test mode driver information";
+                }
+                return Hub.DriverInfo(clientNumber);
+            }
         }
 
         public string DriverVersion
         {
-            get { return Hub.DriverVersion(clientNumber); }
+            get
+            {
+                if (testMode)
+                {
+                    TL.LogMessage(clientNumber, "DriverVersion", "6.2");
+                    return "6.2";
+                }
+                return Hub.DriverVersion(clientNumber);
+            }
         }
 
         public short InterfaceVersion
         {
-            get { return Hub.InterfaceVersion(clientNumber); }
+            get
+            {
+                if (testMode)
+                {
+                    TL.LogMessage(clientNumber, "InterfaceVersion", "1");
+                    return 1;
+                }
+                return Hub.InterfaceVersion(clientNumber);
+            }
         }
 
         public string Name
         {
-            get { return Hub.Name(clientNumber); }
+            get
+            {
+                if (testMode)
+                {
+                    TL.LogMessage(clientNumber, "Name", "ASCOM Observing Conditions Hub (OCH)");
+                    return "ASCOM Observing Conditions Hub (OCH)";
+                }
+                return Hub.Name(clientNumber);
+            }
         }
 
         #endregion
