@@ -1118,7 +1118,7 @@ Friend Class RegistryAccess
             Case 2 'Key not found so return nothing
                 Throw New ProfilePersistenceException("Cannot open key " & SubKeyName & " as it does not exist - Result: 0x" & Hex(Result))
             Case Else 'Some other error so throw an error
-                Throw New ComponentModel.Win32Exception(Result, "OpenSubKey: Exception encountered opening key - Result: 0x" & Hex(Result))
+                Throw New ProfilePersistenceException("OpenSubKey: Exception encountered opening key - Result: 0x" & Hex(Result))
         End Select
 
     End Function
