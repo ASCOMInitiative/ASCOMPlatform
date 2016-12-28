@@ -1049,7 +1049,7 @@ Public Class DiagnosticsForm
             Sim = New SimulatorDescriptor
             Sim.ProgID = "ASCOM.OCH.ObservingConditions"
             Sim.Description = "Platform 6 ObservingConditions Hub"
-            Sim.DeviceType = "ObservingConditions"
+            Sim.DeviceType = "ObservingConditionsHub"
             Sim.Name = "ASCOM Observing Conditions Hub (OCH)"
             Sim.DriverVersion = "6.2"
             Sim.InterfaceVersion = 1
@@ -1065,6 +1065,7 @@ Public Class DiagnosticsForm
     Private Sub TestSimulator(ByVal Sim As SimulatorDescriptor)
         Dim RetValString As String, DeviceAxisRates As Object, ct As Integer, DeviceType As Type
         Dim prof As Profile, MaxSlewRate As Double
+        Dim returnString As String
 
         Const MAX_SLEW_RATE_PROFILE_NAME As String = "MaxSlewRate" ' Name of the Profile variable holding the maximum slew rate
 
@@ -1087,7 +1088,13 @@ Public Class DiagnosticsForm
                                 DeviceObject.Link = True ' Try Link, if it fails the outer try will catch the exception
                                 Compare("TestSimulator", "Linked OK", "True", "True")
                             End Try
-
+                        Case "ObservingConditionsHub"
+                            ' The ObservingConditions Hub is unconfigured on initial installation and so has a special test mode that fakes a valid configuration
+                            ' This unpublicised Action initiates the test mode
+                            returnString = DeviceObject.Action("Testmode", "")
+                            TL.LogMessage("TestSimulator", "Observing conditions hub test mode request returned: " & returnString)
+                            DeviceObject.Connected = True
+                            Compare("TestSimulator", "Connected OK", "True", "True")
                         Case Else ' Everything else should be Connected 
                             DeviceObject.Connected = True
                             Compare("TestSimulator", "Connected OK", "True", "True")
@@ -1239,7 +1246,7 @@ Public Class DiagnosticsForm
                             DeviceTest("Video", "ExposureMin")
                             DeviceTest("Video", "Height")
                             DeviceTest("Video", "Width")
-                        Case "ObservingConditions"
+                        Case "ObservingConditions", "ObservingConditionsHub"
                             DeviceTest("ObservingConditions", "AveragePeriod")
                             DeviceTest("ObservingConditions", "TimeSinceLastUpdate")
                         Case Else
