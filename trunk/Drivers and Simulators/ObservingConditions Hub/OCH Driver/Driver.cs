@@ -114,7 +114,7 @@ namespace ASCOM.Simulator
                 if (testMode)
                 {
                     TL.LogMessage(clientNumber, "Connected", "Setting connected to: " + value.ToString());
-                    testConnected=value;
+                    testConnected = value;
                 }
                 else
                 {
@@ -199,7 +199,18 @@ namespace ASCOM.Simulator
 
         public double AveragePeriod
         {
-            get { return Hub.AveragePeriodGet(clientNumber); }
+            get
+            {
+                if (testMode)
+                {
+                    TL.LogMessage(clientNumber, "AveragePeriod", "Test mode - returning 0.0");
+                    return 0.0;
+                }
+                else
+                {
+                    return Hub.AveragePeriodGet(clientNumber);
+                }
+            }
             set { Hub.AveragePeriodSet(clientNumber, value); }
         }
 
@@ -265,7 +276,15 @@ namespace ASCOM.Simulator
 
         public double TimeSinceLastUpdate(string PropertyName)
         {
-            return Hub.TimeSinceLastUpdate(clientNumber, PropertyName);
+            if (testMode)
+            {
+                TL.LogMessage(clientNumber, "TimeSinceLastUpdate", "Test mode - returning 1.0");
+                return 1.0;
+            }
+            else
+            {
+                return Hub.TimeSinceLastUpdate(clientNumber, PropertyName);
+            }
         }
 
         public double WindDirection
