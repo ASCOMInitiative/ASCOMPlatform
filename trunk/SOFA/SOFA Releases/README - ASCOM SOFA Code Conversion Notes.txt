@@ -3,8 +3,8 @@ To convert native SOFA source code to compile under Visual Studio you need to:
 FILE t_sofa_c
 In t_sofa_c.c change #include <sofa.h> to #include "sofa.h" 
 
-FILE sofa.h	
-Add #define EXPORT after #define SOFAHDEF
+FILE sofa.h
+Add #define EXPORT __declspec(dllexport) after #define SOFAHDEF
 #ifndef SOFAHDEF
 #define SOFAHDEF
 #define EXPORT __declspec(dllexport)
