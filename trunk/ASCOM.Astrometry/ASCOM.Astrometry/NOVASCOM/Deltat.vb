@@ -28,6 +28,12 @@ Module DeltatCode
 
         YearFraction = 2000.0 + (tjd - T0) / 365.25 ' This calculation is accurate enough for our purposes here (T0 = 2451545.0 is TDB Julian date of epoch J2000.0)
 
+        ' DATE RANGE January 2017 Onwards - The analysis was performed on 29th December 2016 and creates values within 0.12 of a second of the projections to Q3 2019
+        If (YearFraction >= 2017.0) And (YearFraction < Double.MaxValue) Then
+            ans = (0.02465436 * YearFraction * YearFraction) + (-98.92626556 * YearFraction) + 99301.85784308
+            Return (ans)
+        End If
+
         ' DATE RANGE October 2015 Onwards - The analysis was performed on 24th October 2015 and creates values within 0.05 of a second of the projections to Q2 2018
         If (YearFraction >= 2015.75) And (YearFraction < Double.MaxValue) Then
             ans = (0.02002376 * YearFraction * YearFraction) + (-80.27921003 * YearFraction) + 80529.32
