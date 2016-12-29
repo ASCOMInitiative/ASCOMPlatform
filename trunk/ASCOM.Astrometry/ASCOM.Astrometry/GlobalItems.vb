@@ -45,7 +45,7 @@ Module GlobalItems
     Friend Const RAD2DEG As Double = 57.295779513082323
 
     'General constants
-    Friend Const TAI_UTC_OFFSET As Integer = 36 ' Current TAI - UTC offset (seconds), changed to 36 at 1st July 2015
+    Friend Const TAI_UTC_OFFSET As Integer = 37 ' Current TAI - UTC offset (seconds), changed to 37 at 31st December 2016
     Friend Const TT_TAI_OFFSET As Double = 32.184 '32.184 seconds
     Friend Const MJDBASE As Double = 2400000.5 'This is the offset of Modified Julian dates from true Julian dates
     Friend Const SECPERDAY As Double = 86400.0
