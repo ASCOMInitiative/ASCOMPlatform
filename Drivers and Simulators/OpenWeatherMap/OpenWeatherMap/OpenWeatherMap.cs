@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using ASCOM.Utilities;
+using System.Globalization;
 
 namespace ASCOM.OpenWeatherMap
 {
@@ -333,9 +334,9 @@ namespace ASCOM.OpenWeatherMap
                 Log.ReadProfile(profile);
                 locationType = (LocationType)Enum.Parse(typeof(LocationType), profile.GetValue(driverID, "LocationType", string.Empty, LocationType.CityName.ToString()));
                 CityName = profile.GetValue(driverID, "CityName", string.Empty, CityName);
-                SiteElevation = double.Parse(profile.GetValue(driverID, "SiteElevation", string.Empty, "0"));
-                SiteLatitude = double.Parse(profile.GetValue(driverID, "SiteLatitude", string.Empty, "0"));
-                SiteLongitude = double.Parse(profile.GetValue(driverID, "SiteLongitude", string.Empty, "0"));
+                SiteElevation = double.Parse(profile.GetValue(driverID, "SiteElevation", string.Empty, "0"), CultureInfo.InvariantCulture);
+                SiteLatitude = double.Parse(profile.GetValue(driverID, "SiteLatitude", string.Empty, "0"), CultureInfo.InvariantCulture);
+                SiteLongitude = double.Parse(profile.GetValue(driverID, "SiteLongitude", string.Empty, "0"), CultureInfo.InvariantCulture);
                 apiKey = profile.GetValue(driverID, "ApiKey");
                 apiUrl = profile.GetValue(driverID, "ApiUrl", string.Empty, apiUrl);
             }
@@ -352,9 +353,9 @@ namespace ASCOM.OpenWeatherMap
                 Log.WriteProfile(driverProfile);
                 driverProfile.WriteValue(driverID, "LocationType", locationType.ToString());
                 driverProfile.WriteValue(driverID, "CityName", CityName);
-                driverProfile.WriteValue(driverID, "SiteElevation", SiteElevation.ToString());
-                driverProfile.WriteValue(driverID, "SiteLatitude", SiteLatitude.ToString());
-                driverProfile.WriteValue(driverID, "SiteLongitude", SiteLongitude.ToString());
+                driverProfile.WriteValue(driverID, "SiteElevation", SiteElevation.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverID, "SiteLatitude", SiteLatitude.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverID, "SiteLongitude", SiteLongitude.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverID, "ApiKey", apiKey);
                 driverProfile.WriteValue(driverID, "ApiUrl", apiUrl);
             }

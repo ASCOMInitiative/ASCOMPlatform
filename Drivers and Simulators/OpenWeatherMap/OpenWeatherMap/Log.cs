@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ASCOM.Utilities;
+using System.Globalization;
 
 namespace ASCOM.OpenWeatherMap
 {
@@ -20,12 +21,12 @@ namespace ASCOM.OpenWeatherMap
 
         internal static void ReadProfile(Profile profile)
         {
-            tl.Enabled = Convert.ToBoolean(profile.GetValue(OpenWeatherMap.driverID, "Trace Level", string.Empty, bool.TrueString));
+            tl.Enabled = Convert.ToBoolean(profile.GetValue(OpenWeatherMap.driverID, "Trace Level", string.Empty, bool.TrueString), CultureInfo.InvariantCulture);
         }
 
         internal static void WriteProfile(Profile profile)
         {
-            profile.WriteValue(OpenWeatherMap.driverID, "Trace Level", tl.Enabled.ToString());
+            profile.WriteValue(OpenWeatherMap.driverID, "Trace Level", tl.Enabled.ToString(CultureInfo.InvariantCulture));
         }
 
         public static bool Enabled
