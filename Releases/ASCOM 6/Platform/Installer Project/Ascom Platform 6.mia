@@ -3631,7 +3631,7 @@ Read in the Platform major, minor and service pack numbers from the master file
 {51E52C38-5C6E-41DD-905B-CB9010B0F15D}
 Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is si added or removed.
 {72806340-EC65-465D-84B3-867D9FD71B41}
-Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is si added or removed.
+Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
 {EB141CC7-B3A2-4ABB-9880-83A53B0A6881}
 
 {ECC22152-7810-41B8-BDE7-DDFF695398AA}
@@ -9856,7 +9856,7 @@ FALSE
 2
 SOFTWARE\ASCOM\Astrometry
 Leap Seconds
-36
+37
 TRUE
 FALSE
 {F2820A85-A495-42BE-98BD-B4C2AA8C8128}

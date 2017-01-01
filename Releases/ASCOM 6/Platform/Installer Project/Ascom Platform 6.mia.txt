@@ -997,8 +997,8 @@ else
       Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\,  (permanent)
-      Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is si added or removed.
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds, 36
+      Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
+      Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds, 37
       Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
