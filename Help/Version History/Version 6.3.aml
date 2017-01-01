@@ -48,7 +48,12 @@
 	      			<listItem>DeltaT prediction modelling has been updated with the latest USNO data, which is considered good to 2019.</listItem>
 	      			<listItem>Messaging has been improved in the Developer Components installer to provide better advice to everyone if installation is attempted before the Platform itself
 	      			has been installed.</listItem>
-	      			<listItem>The OpenWeatherMap driver now calculates pressure at ground level from the supplied pressure, which is assumed to be at the location's altitude.</listItem>
+	      			<listItem>OpenWeatherMap
+						<list class="bullet">
+							<listItem>The OpenWeatherMap driver now calculates pressure at ground level from the supplied pressure, which is assumed to be at the location's altitude.</listItem>
+							<listItem>Globalisation support is improved.</listItem>
+	      				</list>
+	      			</listItem>
 	      		</list>
             </content>
 		</section>
@@ -72,7 +77,8 @@
            	<title>Issues Fixed - Platform</title>
             <content>
       			<list class="bullet">
-	      			<listItem>The Platform installer now operates correctly on PCs running new Windows 10 Anniversary edition installs.</listItem>
+	      			<listItem>The Platform installer now operates correctly on PCs running fresh Windows 10 Anniversary edition installs.</listItem>
+	      			<listItem>Diagnostics no longer flags issues with the ObservingConditions hub if this has never been configured.</listItem>
 	      			<listItem>ObservingConditions Hub and Simulator profile reads and writes are now culture invariant so that they will work correctly in locates where "," is the decimal separator.</listItem>
 	   				<listItem>Improved file cleanup when Platforms are uninstalled or upgraded.</listItem>
 				</list>
