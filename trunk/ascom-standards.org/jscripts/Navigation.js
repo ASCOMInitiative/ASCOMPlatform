@@ -6,6 +6,8 @@
 // More and more... (Bob Denny 07-Jan-08)
 // Case sensitivity for Unix/A2 (Bob Denny 13-May-08)
 // Developer Getting Started (Bob Denny 28-Jul-10)
+// Unknown who/when SafetyMonitor Drivers was added (Jan 2015 maybe?)
+// Observing Conditions Drivers (Bob Denny 06-Jan-2016)
 //
 //* Initialize globals
 
@@ -137,6 +139,7 @@ function writesubmenu() {
 	    SubMenuOutput += "<li><a href=\"DomeDrivers.htm\">Dome &amp; Roof</a></li>";
 	    SubMenuOutput += "<li><a href=\"FilterWheelDrivers.htm\">Filter Wheels</a></li>";
 	    SubMenuOutput += "<li><a href=\"FocuserDrivers.htm\">Focuser</a></li>";
+	    SubMenuOutput += "<li><a href=\"ObservingConditionsDrivers.htm\">ObservingConditions</a></li>";
 	    SubMenuOutput += "<li><a href=\"RotatorDrivers.htm\">Rotator</a></li>";
 	    SubMenuOutput += "<li><a href=\"SafetyMonitorDrivers.htm\">Safety Monitor</a></li>";
 	    SubMenuOutput += "<li><a href=\"SwitchDrivers.htm\">Switch/Outlet</a></li>";
