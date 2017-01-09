@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM.Simulator.Focuser")]
 [assembly: AssemblyDescription("ASCOM Focuser Simulator Driver")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2010 , 2014 The ASCOM Initiative")]
+[assembly: AssemblyCopyright("Copyright © 2010 , 2014, 2017, The ASCOM Initiative")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -19,5 +19,5 @@ using System.Runtime.InteropServices;
 [assembly: Guid("5FC578AC-C7E2-4F02-9478-BD459DC4981F")]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.2.0.0")]
+[assembly: AssemblyVersion("6.3.0.0")]
 

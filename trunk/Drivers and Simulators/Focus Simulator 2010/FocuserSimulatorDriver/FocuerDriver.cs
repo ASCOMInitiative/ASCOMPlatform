@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -83,6 +84,8 @@ namespace ASCOM.Simulator
         private FocuserHandboxForm Handbox;
         private  DateTime lastTempUpdate;
         private Random RandomGenerator;
+        internal double stepSize;
+        internal bool tempComp;
         #endregion
 
         #region Constructor and dispose
@@ -354,7 +357,7 @@ namespace ASCOM.Simulator
         public void Move(int value)
         {
             CheckConnected("Move");
-            if (TempComp)
+            if (tempComp)
                 throw new InvalidOperationException("Move not allowed when temperature compensation is active");
             if (Absolute)
             {
@@ -411,7 +414,23 @@ namespace ASCOM.Simulator
         /// Step size (microns) for the focuser. Raises an exception if the focuser 
         /// does not intrinsically know what the step size is.
         /// </summary>
-        public double StepSize { get; internal set; }
+        public double StepSize
+        {
+            get
+            {
+                if (CanStepSize)
+                {
+                    return stepSize;
+                }
+                throw new PropertyNotImplementedException("Property StepSize is not implemented");
+            }
+            internal set
+            {
+                stepSize = value;
+            }
+        }
+
+        //public double StepSize { get; internal set; }
 
         /// <summary>
         /// Gets the supported actions.
@@ -436,7 +455,16 @@ namespace ASCOM.Simulator
         /// will be raised if TempCompAvailable is False and an attempt is made 
         /// to set TempComp to true.
         /// </summary>
-        public bool TempComp { get; set; }
+        public bool TempComp 
+        {
+            get { return tempComp; }
+            set
+            {
+                if (!TempCompAvailable)
+                    throw new PropertyNotImplementedException("TempComp");
+                tempComp = value;
+            }
+        }
 
         /// <summary>
         /// True if focuser has temperature compensation available. Will be True 
@@ -471,7 +499,7 @@ namespace ASCOM.Simulator
                 Temperature = Math.Round(Temperature + tempOffset, 2);
 
                 // move the focuser target to track the temperature if required
-                if (TempComp)
+                if (tempComp)
                 {
                     var dt = (int)((Temperature - _lastTemp) * TempSteps);
                     if (dt != 0)// return;
@@ -553,23 +581,23 @@ namespace ASCOM.Simulator
         /// </summary>
         private void LoadFocuserKeyValues()
         {
-            Absolute = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Absolute", string.Empty, "true"));
-            MaxIncrement = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxIncrement", string.Empty, "50000"));
-            MaxStep = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxStep", string.Empty, "50000"));
-            _position = Convert.ToInt32(Profile.GetValue(sCsDriverId, "Position", string.Empty, "25000"));
-            StepSize = Convert.ToDouble(Profile.GetValue(sCsDriverId, "StepSize", string.Empty, "20"));
-            TempComp = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempComp", string.Empty, "false"));
-            TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable", string.Empty, "true"));
-            Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature", string.Empty, "5"));
+            Absolute = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Absolute", string.Empty, "true"), CultureInfo.InvariantCulture);
+            MaxIncrement = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxIncrement", string.Empty, "50000"), CultureInfo.InvariantCulture);
+            MaxStep = Convert.ToInt32(Profile.GetValue(sCsDriverId, "MaxStep", string.Empty, "50000"), CultureInfo.InvariantCulture);
+            _position = Convert.ToInt32(Profile.GetValue(sCsDriverId, "Position", string.Empty, "25000"), CultureInfo.InvariantCulture);
+            stepSize = Convert.ToDouble(Profile.GetValue(sCsDriverId, "StepSize", string.Empty, "20"), CultureInfo.InvariantCulture);
+            tempComp = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempComp", string.Empty, "false"), CultureInfo.InvariantCulture);
+            TempCompAvailable = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempCompAvailable", string.Empty, "true"), CultureInfo.InvariantCulture);
+            Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature", string.Empty, "5"), CultureInfo.InvariantCulture);
             //extended focuser items
-            CanHalt = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanHalt", string.Empty, "true"));
-            CanStepSize = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanStepSize", string.Empty, "true")); 
-            Synchronous = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Synchronous", string.Empty, "true"));
-            TempMax = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempMax", string.Empty, "50"));
-            TempMin = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempMin", string.Empty, "-50"));
-            TempPeriod = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempPeriod", string.Empty, "3"));
-            TempProbe = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempProbe", string.Empty, "true"));
-            TempSteps = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempSteps", string.Empty, "10"));
+            CanHalt = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanHalt", string.Empty, "true"), CultureInfo.InvariantCulture);
+            CanStepSize = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanStepSize", string.Empty, "true"), CultureInfo.InvariantCulture); 
+            Synchronous = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Synchronous", string.Empty, "true"), CultureInfo.InvariantCulture);
+            TempMax = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempMax", string.Empty, "50"), CultureInfo.InvariantCulture);
+            TempMin = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempMin", string.Empty, "-50"), CultureInfo.InvariantCulture);
+            TempPeriod = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempPeriod", string.Empty, "3"), CultureInfo.InvariantCulture);
+            TempProbe = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempProbe", string.Empty, "true"), CultureInfo.InvariantCulture);
+            TempSteps = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempSteps", string.Empty, "10"), CultureInfo.InvariantCulture);
       }
 
         /// <summary>
@@ -596,23 +624,23 @@ namespace ASCOM.Simulator
             if (_position > MaxStep) _position = MaxStep;
 
             //ascom items
-            Profile.WriteValue(sCsDriverId, "Absolute", Absolute.ToString());
-            Profile.WriteValue(sCsDriverId, "MaxIncrement", MaxIncrement.ToString());
-            Profile.WriteValue(sCsDriverId, "MaxStep", MaxStep.ToString());
-            Profile.WriteValue(sCsDriverId, "Position", _position.ToString());
-            Profile.WriteValue(sCsDriverId, "StepSize", StepSize.ToString());
-            Profile.WriteValue(sCsDriverId, "TempComp", TempComp.ToString());
-            Profile.WriteValue(sCsDriverId, "TempCompAvailable", TempCompAvailable.ToString());
-            Profile.WriteValue(sCsDriverId, "Temperature", Temperature.ToString());
+            Profile.WriteValue(sCsDriverId, "Absolute", Absolute.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "MaxIncrement", MaxIncrement.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "MaxStep", MaxStep.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "Position", _position.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "StepSize", stepSize.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "TempComp", tempComp.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "TempCompAvailable", TempCompAvailable.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "Temperature", Temperature.ToString(CultureInfo.InvariantCulture));
             //extended focuser items
-            Profile.WriteValue(sCsDriverId, "CanHalt", CanHalt.ToString());
-            Profile.WriteValue(sCsDriverId, "CanStepSize", CanStepSize.ToString());
-            Profile.WriteValue(sCsDriverId, "Synchronous", Synchronous.ToString());
-            Profile.WriteValue(sCsDriverId, "TempMax", TempMax.ToString());
-            Profile.WriteValue(sCsDriverId, "TempMin", TempMin.ToString());
-            Profile.WriteValue(sCsDriverId, "TempPeriod", TempPeriod.ToString());
-            Profile.WriteValue(sCsDriverId, "TempProbe", TempProbe.ToString());
-            Profile.WriteValue(sCsDriverId, "TempSteps", TempSteps.ToString());
+            Profile.WriteValue(sCsDriverId, "CanHalt", CanHalt.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "CanStepSize", CanStepSize.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "Synchronous", Synchronous.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "TempMax", TempMax.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "TempMin", TempMin.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "TempPeriod", TempPeriod.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "TempProbe", TempProbe.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "TempSteps", TempSteps.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

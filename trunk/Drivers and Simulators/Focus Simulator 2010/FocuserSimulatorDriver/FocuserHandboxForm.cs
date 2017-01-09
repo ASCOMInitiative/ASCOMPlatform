@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -68,13 +69,13 @@ namespace ASCOM.Simulator
 
         private void UpdateDisplay()
         {
-            lblTempDisplay.Text = _focuser.TempProbe ? _focuser.Temperature.ToString() : 0.ToString();
-            lblPositionDisplay.Text = _focuser.Position.ToString();
+            lblTempDisplay.Text = _focuser.TempProbe ? _focuser.Temperature.ToString(CultureInfo.CurrentCulture) : 0.ToString();
+            lblPositionDisplay.Text = _focuser.Position.ToString(CultureInfo.CurrentCulture);
 
             if (_focuser.TempCompAvailable)
             {
                 chkTempCompEnabled.Enabled = true;
-                chkTempCompEnabled.Checked = _focuser.TempComp;
+                chkTempCompEnabled.Checked = _focuser.tempComp;
             }
             else
             {
@@ -129,15 +130,15 @@ namespace ASCOM.Simulator
             {
                 btnMoveIn.Enabled = false;
                 btnMoveOut.Enabled = false;
-                _focuser.TempComp = true;
+                _focuser.tempComp = true;
             }
             else
             {
                 btnMoveIn.Enabled = true;
                 btnMoveOut.Enabled = true;
-                _focuser.TempComp = false;
+                _focuser.tempComp = false;
             }
-            Focuser.SaveProfileSetting("TempComp", _focuser.TempComp.ToString());
+            Focuser.SaveProfileSetting("TempComp", _focuser.tempComp.ToString(CultureInfo.InvariantCulture));
         }
         
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -25,14 +26,14 @@ namespace ASCOM.Simulator
         private void SettingsFormLoad(object sender, EventArgs e)
         {
             _focuser.TL.LogMessage("FocusSettingsForm", "Form loading");
-            txtMaxStepPosition.Text = _focuser.MaxStep.ToString();
-            txtStepSize.Text = _focuser.StepSize.ToString();
-            txtMaxIncrement.Text = _focuser.MaxIncrement.ToString();
-            txtCurrentTemperature.Text = _focuser.Temperature.ToString();
-            txtMaximumTemperature.Text = _focuser.TempMax.ToString();
-            txtMinimumTemperature.Text = _focuser.TempMin.ToString();
-            txtUpdatePeriod.Text = _focuser.TempPeriod.ToString();
-            txtStepsPerDegree.Text = _focuser.TempSteps.ToString();
+            txtMaxStepPosition.Text = _focuser.MaxStep.ToString(CultureInfo.CurrentCulture);
+            txtStepSize.Text = _focuser.stepSize.ToString(CultureInfo.CurrentCulture);
+            txtMaxIncrement.Text = _focuser.MaxIncrement.ToString(CultureInfo.CurrentCulture);
+            txtCurrentTemperature.Text = _focuser.Temperature.ToString(CultureInfo.CurrentCulture);
+            txtMaximumTemperature.Text = _focuser.TempMax.ToString(CultureInfo.CurrentCulture);
+            txtMinimumTemperature.Text = _focuser.TempMin.ToString(CultureInfo.CurrentCulture);
+            txtUpdatePeriod.Text = _focuser.TempPeriod.ToString(CultureInfo.CurrentCulture);
+            txtStepsPerDegree.Text = _focuser.TempSteps.ToString(CultureInfo.CurrentCulture);
 
             chkHasTempProbe.Checked = _focuser.TempProbe;
             chkHasTempComp.Checked = _focuser.TempCompAvailable;
@@ -52,14 +53,14 @@ namespace ASCOM.Simulator
         private void btnOK_Click(object sender, EventArgs e)
         {
             //save textboxes
-            _focuser.MaxStep = Convert.ToInt32(txtMaxStepPosition.Text);
-            _focuser.StepSize = Convert.ToDouble(txtStepSize.Text);
-            _focuser.MaxIncrement = Convert.ToInt32(txtMaxIncrement.Text);
-            _focuser.Temperature = Convert.ToDouble(txtCurrentTemperature.Text);
-            _focuser.TempMax = Convert.ToDouble(txtMaximumTemperature.Text);
-            _focuser.TempMin = Convert.ToDouble(txtMinimumTemperature.Text);
-            _focuser.TempPeriod = Convert.ToDouble(txtUpdatePeriod.Text);
-            _focuser.TempSteps = Convert.ToInt32(txtStepsPerDegree.Text);
+            _focuser.MaxStep = Convert.ToInt32(txtMaxStepPosition.Text, CultureInfo.CurrentCulture);
+            _focuser.stepSize = Convert.ToDouble(txtStepSize.Text, CultureInfo.CurrentCulture);
+            _focuser.MaxIncrement = Convert.ToInt32(txtMaxIncrement.Text, CultureInfo.CurrentCulture);
+            _focuser.Temperature = Convert.ToDouble(txtCurrentTemperature.Text, CultureInfo.CurrentCulture);
+            _focuser.TempMax = Convert.ToDouble(txtMaximumTemperature.Text, CultureInfo.CurrentCulture);
+            _focuser.TempMin = Convert.ToDouble(txtMinimumTemperature.Text, CultureInfo.CurrentCulture);
+            _focuser.TempPeriod = Convert.ToDouble(txtUpdatePeriod.Text, CultureInfo.CurrentCulture);
+            _focuser.TempSteps = Convert.ToInt32(txtStepsPerDegree.Text, CultureInfo.CurrentCulture);
 
             //save checkboxes
             _focuser.TempProbe = chkHasTempProbe.Checked;
