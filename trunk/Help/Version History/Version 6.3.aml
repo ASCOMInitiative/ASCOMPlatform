@@ -81,6 +81,7 @@
 	      			<listItem>Diagnostics no longer flags issues with the ObservingConditions hub if this has never been configured.</listItem>
 	      			<listItem>ObservingConditions Hub and Simulator profile reads and writes are now culture invariant so that they will work correctly in locates where "," is the decimal separator.</listItem>
 	   				<listItem>Improved file cleanup when Platforms are uninstalled or upgraded.</listItem>
+	   				<listItem>The Foucser simulator now implements CanStepSize and TempCompAvailble correctly and international support has been improved.</listItem>
 				</list>
    			</content>
    		</section>

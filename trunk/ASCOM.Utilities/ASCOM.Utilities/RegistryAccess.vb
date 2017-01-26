@@ -678,17 +678,17 @@ Friend Class RegistryAccess
                                                AccessControlType.Allow) ' Create the new access permission rule
 
         ' List the ACLs on the standard registry keys before we do anything
-        TL.LogMessage("SetRegistryACL", "Listing base key ACLs")
+        LogMessage("SetRegistryACL", "Listing base key ACLs")
 
         If ApplicationBits() = Bitness.Bits64 Then
-            TL.LogMessage("SetRegistryACL", "Listing base key ACLs in 64bit mode")
+            LogMessage("SetRegistryACL", "Listing base key ACLs in 64bit mode")
             ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT")
             ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE"), "HKEY_LOCAL_MACHINE\SOFTWARE")
             ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft"), "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft")
             ListRegistryACLs(OpenSubKey(Registry.LocalMachine, "SOFTWARE", True, RegWow64Options.KEY_WOW64_64KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node")
             ListRegistryACLs(OpenSubKey(Registry.LocalMachine, "SOFTWARE\Microsoft", True, RegWow64Options.KEY_WOW64_32KEY), "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft")
         Else
-            TL.LogMessage("SetRegistryACL", "Listing base key ACLS in 32bit mode")
+            LogMessage("SetRegistryACL", "Listing base key ACLS in 32bit mode")
             ListRegistryACLs(Registry.ClassesRoot, "HKEY_CLASSES_ROOT")
             ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE"), "HKEY_LOCAL_MACHINE\SOFTWARE")
             ListRegistryACLs(Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft"), "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft")
@@ -717,11 +717,11 @@ Friend Class RegistryAccess
 
         TL.BlankLine()
         If KeySec.AreAccessRulesCanonical Then
-            TL.LogMessage("SetRegistryACL", "Current access rules on the ASCOM profile key are canonical, no fix-up action required")
+            LogMessage("SetRegistryACL", "Current access rules on the ASCOM profile key are canonical, no fix-up action required")
         Else
-            TL.LogMessage("SetRegistryACL", "***** Current access rules on the ASCOM profile key are NOT canonical, fixing them")
+            LogMessage("SetRegistryACL", "***** Current access rules on the ASCOM profile key are NOT canonical, fixing them")
             CanonicalizeDacl(KeySec) ' Ensure that the ACLs are canonical
-            TL.LogMessage("SetRegistryACL", "Access Rules are Canonical after fix: " & KeySec.AreAccessRulesCanonical)
+            LogMessage("SetRegistryACL", "Access Rules are Canonical after fix: " & KeySec.AreAccessRulesCanonical)
         End If
         TL.BlankLine()
 
@@ -738,7 +738,7 @@ Friend Class RegistryAccess
 
         LogMessage("SetRegistryACL", "Adding new ACL rule")
         KeySec.AddAccessRule(RegAccessRule) 'Add the new rule to the existing rules
-        TL.LogMessage("SetRegistryACL", "Access Rules are Canonical after adding full access rule: " & KeySec.AreAccessRulesCanonical)
+        LogMessage("SetRegistryACL", "Access Rules are Canonical after adding full access rule: " & KeySec.AreAccessRulesCanonical)
         TL.BlankLine()
         RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules after adding the new one
 
