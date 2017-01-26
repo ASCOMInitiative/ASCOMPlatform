@@ -991,7 +991,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Switch Simulator"
             Sim.DeviceType = "Switch"
             Sim.Name = "ASCOM Switch V2 Simulator"
-            Sim.DriverVersion = "6.2"
+            Sim.DriverVersion = "6.3"
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
