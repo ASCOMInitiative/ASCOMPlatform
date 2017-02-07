@@ -157,7 +157,7 @@
 		    ReplacementText="$(PlatformVersion).$(PlatformServicePack).$(Revision)">
 	    </FileUpdate>
 
-        <!-- Add browser compatibility line to all the html help files so that all browsers can read them on ASCOM-Talk -->
+        <!-- Add browser compatibility line to all the html help files so that all browsers can read them on the ASCOM Standards web site -->
         <ItemGroup>
             <HTMLHelpFiles Include="$(CheckoutDirectory)\$(PlatformHelpDirectory)\*.html;$(CheckoutDirectory)\$(PlatformHelpDirectory)\html\*.htm;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\*.html;$(CheckoutDirectory)\$(DeveloperHelpDirectory)\html\*.htm" />
         </ItemGroup>
@@ -165,6 +165,10 @@
     		Regex="&lt;head&gt;" 
 		    ReplacementText="&lt;head&gt;&lt;meta&#32;http-equiv&#61;&quot;X-UA-Compatible&quot;&#32;content&#61;&quot;IE&#61;5&quot;&#32;&#47;&gt;">
 	    </FileUpdate>
+		
+		<!-- Rename index.html files so that they work on the ASCOM Standards web site -->
+		<Exec Command='Rename "$(CheckoutDirectory)\$(PlatformHelpDirectory)\index.html" "Index.html" ' />
+		<Exec Command='Rename "$(CheckoutDirectory)\$(DeveloperHelpDirectory)\index.html" "Index.html" ' />
 		
 	    <!-- Build the InstallAware installers -->
         <Exec Command='"$(MIABuild)" "$(CheckoutDirectory)\$(PlatformInstallerProject)" /r' />
