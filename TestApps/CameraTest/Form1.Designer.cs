@@ -47,6 +47,9 @@ namespace CameraTest
             this.lblCCDTemp = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.comboBoxGain = new System.Windows.Forms.ComboBox();
+            this.numGain = new System.Windows.Forms.NumericUpDown();
+            this.labelGain = new System.Windows.Forms.Label();
             this.checkBoxSameBins = new System.Windows.Forms.CheckBox();
             this.checkBoxFastReadout = new System.Windows.Forms.CheckBox();
             this.checkBoxDarkFrame = new System.Windows.Forms.CheckBox();
@@ -138,6 +141,7 @@ namespace CameraTest
             this.groupBoxCoolerControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSetCCDTemperature)).BeginInit();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numExposure)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBinY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBinX)).BeginInit();
@@ -266,6 +270,9 @@ namespace CameraTest
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.comboBoxGain);
+            this.groupBox3.Controls.Add(this.numGain);
+            this.groupBox3.Controls.Add(this.labelGain);
             this.groupBox3.Controls.Add(this.checkBoxSameBins);
             this.groupBox3.Controls.Add(this.checkBoxFastReadout);
             this.groupBox3.Controls.Add(this.checkBoxDarkFrame);
@@ -289,10 +296,42 @@ namespace CameraTest
             this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Location = new System.Drawing.Point(0, 5);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(165, 233);
+            this.groupBox3.Size = new System.Drawing.Size(165, 245);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Exposure";
+            // 
+            // comboBoxGain
+            // 
+            this.comboBoxGain.FormattingEnabled = true;
+            this.comboBoxGain.Location = new System.Drawing.Point(64, 153);
+            this.comboBoxGain.Name = "comboBoxGain";
+            this.comboBoxGain.Size = new System.Drawing.Size(86, 21);
+            this.comboBoxGain.TabIndex = 25;
+            this.comboBoxGain.Visible = false;
+            // 
+            // numGain
+            // 
+            this.numGain.Location = new System.Drawing.Point(48, 154);
+            this.numGain.Name = "numGain";
+            this.numGain.Size = new System.Drawing.Size(53, 20);
+            this.numGain.TabIndex = 24;
+            this.numGain.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.numGain.Visible = false;
+            // 
+            // labelGain
+            // 
+            this.labelGain.AutoSize = true;
+            this.labelGain.Location = new System.Drawing.Point(9, 156);
+            this.labelGain.Name = "labelGain";
+            this.labelGain.Size = new System.Drawing.Size(29, 13);
+            this.labelGain.TabIndex = 23;
+            this.labelGain.Text = "Gain";
+            this.labelGain.Visible = false;
             // 
             // checkBoxSameBins
             // 
@@ -310,7 +349,7 @@ namespace CameraTest
             // checkBoxFastReadout
             // 
             this.checkBoxFastReadout.AutoSize = true;
-            this.checkBoxFastReadout.Location = new System.Drawing.Point(9, 183);
+            this.checkBoxFastReadout.Location = new System.Drawing.Point(9, 195);
             this.checkBoxFastReadout.Name = "checkBoxFastReadout";
             this.checkBoxFastReadout.Size = new System.Drawing.Size(87, 17);
             this.checkBoxFastReadout.TabIndex = 21;
@@ -320,7 +359,7 @@ namespace CameraTest
             // checkBoxDarkFrame
             // 
             this.checkBoxDarkFrame.AutoSize = true;
-            this.checkBoxDarkFrame.Location = new System.Drawing.Point(9, 165);
+            this.checkBoxDarkFrame.Location = new System.Drawing.Point(9, 172);
             this.checkBoxDarkFrame.Name = "checkBoxDarkFrame";
             this.checkBoxDarkFrame.Size = new System.Drawing.Size(81, 17);
             this.checkBoxDarkFrame.TabIndex = 20;
@@ -340,7 +379,7 @@ namespace CameraTest
             // 
             // btnAbort
             // 
-            this.btnAbort.Location = new System.Drawing.Point(93, 206);
+            this.btnAbort.Location = new System.Drawing.Point(92, 218);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(48, 21);
             this.btnAbort.TabIndex = 18;
@@ -350,7 +389,7 @@ namespace CameraTest
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(48, 206);
+            this.btnStop.Location = new System.Drawing.Point(48, 218);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(38, 21);
             this.btnStop.TabIndex = 17;
@@ -360,7 +399,7 @@ namespace CameraTest
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(3, 206);
+            this.btnStart.Location = new System.Drawing.Point(0, 218);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(38, 21);
             this.btnStart.TabIndex = 16;
@@ -387,7 +426,7 @@ namespace CameraTest
             0,
             0,
             196608});
-            this.numExposure.Location = new System.Drawing.Point(62, 139);
+            this.numExposure.Location = new System.Drawing.Point(63, 127);
             this.numExposure.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -402,7 +441,7 @@ namespace CameraTest
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 141);
+            this.label17.Location = new System.Drawing.Point(6, 129);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(51, 13);
             this.label17.TabIndex = 13;
@@ -549,7 +588,7 @@ namespace CameraTest
             0,
             0,
             0});
-            this.imageControl.Location = new System.Drawing.Point(3, 19);
+            this.imageControl.Location = new System.Drawing.Point(3, 23);
             this.imageControl.Maximum = new decimal(new int[] {
             100,
             0,
@@ -592,7 +631,7 @@ namespace CameraTest
             // txtExposureDuration
             // 
             this.txtExposureDuration.AutoSize = true;
-            this.txtExposureDuration.Location = new System.Drawing.Point(0, 161);
+            this.txtExposureDuration.Location = new System.Drawing.Point(60, 161);
             this.txtExposureDuration.Name = "txtExposureDuration";
             this.txtExposureDuration.Size = new System.Drawing.Size(41, 13);
             this.txtExposureDuration.TabIndex = 7;
@@ -601,7 +640,7 @@ namespace CameraTest
             // txtExposureStartTime
             // 
             this.txtExposureStartTime.AutoSize = true;
-            this.txtExposureStartTime.Location = new System.Drawing.Point(0, 148);
+            this.txtExposureStartTime.Location = new System.Drawing.Point(0, 161);
             this.txtExposureStartTime.Name = "txtExposureStartTime";
             this.txtExposureStartTime.Size = new System.Drawing.Size(55, 13);
             this.txtExposureStartTime.TabIndex = 6;
@@ -612,11 +651,11 @@ namespace CameraTest
             this.trkZoom.AutoSize = false;
             this.trkZoom.BackColor = System.Drawing.SystemColors.ControlLight;
             this.trkZoom.LargeChange = 10;
-            this.trkZoom.Location = new System.Drawing.Point(3, 128);
+            this.trkZoom.Location = new System.Drawing.Point(12, 141);
             this.trkZoom.Maximum = 100;
             this.trkZoom.Minimum = -100;
             this.trkZoom.Name = "trkZoom";
-            this.trkZoom.Size = new System.Drawing.Size(159, 17);
+            this.trkZoom.Size = new System.Drawing.Size(138, 17);
             this.trkZoom.TabIndex = 8;
             this.trkZoom.TickFrequency = 255;
             this.trkZoom.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -625,7 +664,7 @@ namespace CameraTest
             // chkAuto
             // 
             this.chkAuto.AutoSize = true;
-            this.chkAuto.Location = new System.Drawing.Point(3, 114);
+            this.chkAuto.Location = new System.Drawing.Point(3, 118);
             this.chkAuto.Name = "chkAuto";
             this.chkAuto.Size = new System.Drawing.Size(48, 17);
             this.chkAuto.TabIndex = 5;
@@ -854,7 +893,7 @@ namespace CameraTest
             // 
             this.labelBayerOsY.AutoSize = true;
             this.labelBayerOsY.Location = new System.Drawing.Point(103, 16);
-            this.labelBayerOsY.Name = "label1BayerOsY";
+            this.labelBayerOsY.Name = "labelBayerOsY";
             this.labelBayerOsY.Size = new System.Drawing.Size(17, 13);
             this.labelBayerOsY.TabIndex = 3;
             this.labelBayerOsY.Text = "Y:";
@@ -1247,6 +1286,7 @@ namespace CameraTest
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSetCCDTemperature)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numGain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numExposure)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBinY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBinX)).EndInit();
@@ -1378,6 +1418,9 @@ namespace CameraTest
         private System.Windows.Forms.Button buttonAction;
         private System.Windows.Forms.TextBox textBoxActionParameters;
         private System.Windows.Forms.ComboBox comboBoxSupportedActions;
+        private System.Windows.Forms.ComboBox comboBoxGain;
+        private System.Windows.Forms.NumericUpDown numGain;
+        private System.Windows.Forms.Label labelGain;
     }
 }
 

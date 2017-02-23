@@ -9,6 +9,7 @@ using nom.tam.fits;
 using nom.tam.util;
 using System.Globalization;
 using System.Collections;
+using System.Threading;
 
 //[assembly: CLSCompliant(true)]
 namespace CameraTest
@@ -89,6 +90,7 @@ namespace CameraTest
                 numNumX.Value = oCamera.CameraXSize;
                 numNumY.Value = oCamera.CameraYSize;
                 this.Text = string.Format("Camera Test - {0}", oCamera.Description);
+                InitGain();
             }
             else
             {
@@ -336,6 +338,15 @@ namespace CameraTest
                 oCamera.BinX = (short)numBinX.Value;
                 oCamera.BinY = (short)(checkBoxSameBins.Checked ? numBinX.Value: numBinY.Value);
                 bool light = !(oCamera.HasShutter) || !checkBoxDarkFrame.Checked;
+                if (comboBoxGain.Visible)
+                {
+                    oCamera.Gain = (short)comboBoxGain.SelectedIndex;
+                }
+                if (numGain.Visible && oCamera.Gain != (short)numGain.Value)
+                {
+                    oCamera.Gain = (short)numGain.Value;
+                    Thread.Sleep(1000);
+                }
                 oCamera.StartExposure((double)numExposure.Value, light);
                 ExposureTimer.Enabled = true;
                 imageControl.Change += imageControl_Change;
@@ -1162,6 +1173,51 @@ namespace CameraTest
         //    CMYG2,
         //    LRGB
         //}
+
+        private void InitGain()
+        {
+            if (oCamera == null || oCamera.InterfaceVersion < 2) return;
+
+            short gain;
+
+            labelGain.Visible = false;
+            numGain.Visible = false;
+            comboBoxGain.Visible = false;
+
+            try
+            {
+                gain = oCamera.Gain;    // try to read gain, exception if gain not implemented.
+                labelGain.Visible = true;
+            }
+            catch (Exception)
+            {
+                return;
+            }
+            try
+            {
+                var gains = oCamera.Gains;
+                comboBoxGain.Visible = true;
+                comboBoxGain.Items.Clear();
+                comboBoxGain.Items.AddRange(gains.ToArray());
+                comboBoxGain.SelectedIndex = gain;
+                return;
+            }
+            catch (Exception)
+            {
+            }
+            try
+            {
+                var gainMax = oCamera.GainMax;
+                var gainMin = oCamera.GainMin;
+                numGain.Visible = true;
+                numGain.Minimum = gainMin;
+                numGain.Maximum = gainMax;
+                numGain.Value = gain;
+            }
+            catch (Exception)
+            {
+            }
+        }
 
 
 
