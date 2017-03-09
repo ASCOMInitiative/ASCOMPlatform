@@ -205,10 +205,18 @@ namespace ASCOM.Simulator
 			CheckConnected();
 			lock (s_objSync) 
 			{
-				CheckAngle(s_fTargetPosition + relativePosition);
-				s_fTargetPosition += relativePosition; 
-				s_bMoving = true;
-			}
+                // add check for relative position limits rather than using the check on the target.
+                if (relativePosition <= -360.0 || relativePosition >= 360.0)
+                {
+                    throw new ASCOM.InvalidValueException("Relative Angle out of range", relativePosition.ToString(), "-360 < angle < 360");
+                }
+                var target = s_fTargetPosition + relativePosition;
+                // force to the range 0 to 360
+                if (target >= 360.0) target -= 360.0F;
+                if (target < 0.0) target += 360.0F;
+                s_fTargetPosition = target;
+                s_bMoving = true;
+            }
 		}
 
 		public static void MoveAbsolute(float position)
