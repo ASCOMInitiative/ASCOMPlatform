@@ -1,6 +1,6 @@
 6
 3
-0
+1
 
 The first line of this file must contain the major Platform version number
 The second line of this file must contain the minor Platform version number
