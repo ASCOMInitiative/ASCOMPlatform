@@ -20,9 +20,9 @@ Imports System.Runtime.InteropServices
 ''' that is running the code from which the log was called, "Identifier" is the supplied identifier (usually the subroutine, 
 ''' function, property or method from which the message is sent) and "Message" is the message to be logged.</para>
 '''</remarks>
-<Guid("A088DB9B-E081-4339-996E-191EB9A80844"), _
-ComVisible(True), _
-ClassInterface(ClassInterfaceType.None)> _
+<Guid("A088DB9B-E081-4339-996E-191EB9A80844"),
+ComVisible(True),
+ClassInterface(ClassInterfaceType.None)>
 Public Class TraceLogger
     Implements ITraceLogger, ITraceLoggerExtra, IDisposable
 
@@ -347,7 +347,7 @@ Public Class TraceLogger
     ''' "LogMessage(ByVal Identifier As String, ByVal Message As String, ByVal HexDump As Boolean)"
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Sub LogMessage(ByVal Identifier As String, ByVal Message As String) Implements ITraceLoggerExtra.LogMessage
         Try
             GetTraceLoggerMutex("LogMessage", """" & Identifier & """, """ & Message & """")
@@ -373,7 +373,7 @@ Public Class TraceLogger
     ''' "LogContinue(ByVal Message As String, ByVal HexDump As Boolean)"
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Sub LogContinue(ByVal Message As String) Implements ITraceLoggerExtra.LogContinue
         Try
             GetTraceLoggerMutex("LogContinue", """" & Message & """")
@@ -402,7 +402,7 @@ Public Class TraceLogger
     ''' "LogFinish(ByVal Message As String, ByVal HexDump As Boolean)"
     ''' with HexDump set False to achieve this effect.</para>
     ''' </remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Overloads Sub LogFinish(ByVal Message As String) Implements ITraceLoggerExtra.LogFinish
         Try
             GetTraceLoggerMutex("LogFinish", """" & Message & """")
@@ -509,6 +509,7 @@ Public Class TraceLogger
             threadNameOrId = Threading.Thread.CurrentThread.Name
             If String.IsNullOrEmpty(threadNameOrId) Then
                 threadNameOrId = Threading.Thread.CurrentThread.ManagedThreadId.ToString
+                If threadNameOrId.Length < 3 Then threadNameOrId = Right("   " & threadNameOrId, 3) ' Ensure that thread IDs up to 3 digits long are right justified so that following message text is lined up; not perfect but should deal with most usage.
             End If
             l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & threadNameOrId & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
             'l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
