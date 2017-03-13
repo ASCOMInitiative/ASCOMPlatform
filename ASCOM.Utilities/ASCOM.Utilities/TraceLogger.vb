@@ -15,9 +15,10 @@ Imports System.Runtime.InteropServices
 ''' ASCOM.Identifier.hhmm.ssffff where hh, mm, ss and ffff are the current hour, minute, second and fraction of second 
 ''' numbers at the time of file creation.
 ''' </para> 
-''' <para>Within the file the format of each line is hh:mm:ss.fff Identifier Message where hh, mm, ss and fff are the hour, minute, second 
-''' and fractional second at the time that the message was logged, Identifier is the supplied identifier (usually the subroutine, 
-''' function, property or method from which the message is sent) and Message is the message to be logged.</para>
+''' <para>Within the file the format of each line is hh:mm:ss.fff Thread Message where "hh:mm:ss.fff" are the hour, minute, second 
+''' and fractional second at the time that the message was logged, "Thread" is the thread name or if there is no name the ID of the thread
+''' that is running the code from which the log was called, "Identifier" is the supplied identifier (usually the subroutine, 
+''' function, property or method from which the message is sent) and "Message" is the message to be logged.</para>
 '''</remarks>
 <Guid("A088DB9B-E081-4339-996E-191EB9A80844"), _
 ComVisible(True), _
@@ -504,8 +505,13 @@ Public Class TraceLogger
         Dim l_Msg As String = ""
         Try
             p_Test = Left(p_Test & Microsoft.VisualBasic.StrDup(30, " "), 25)
-
-            l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
+            Dim threadNameOrId As String
+            threadNameOrId = Threading.Thread.CurrentThread.Name
+            If String.IsNullOrEmpty(threadNameOrId) Then
+                threadNameOrId = Threading.Thread.CurrentThread.ManagedThreadId.ToString
+            End If
+            l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & threadNameOrId & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
+            'l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
             If Not g_LogFile Is Nothing Then
                 If p_NewLine Then
                     g_LogFile.WriteLine(l_Msg) 'Update log file with newline terminator
