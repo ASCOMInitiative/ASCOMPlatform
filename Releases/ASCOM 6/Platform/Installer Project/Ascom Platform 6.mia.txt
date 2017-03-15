@@ -101,6 +101,9 @@ end
 [END REGION]
  
 [DEFINE REGION: Define Setup Globals]
+Comment: Set current leap second value
+Set Variable LEAPSECONDS to 37
+ 
 Comment: Initialize Setup Globals
 Set Variable ASCOMERROR to 
 Set Variable PLATFORMVERSIONMAJOR to 
@@ -998,7 +1001,7 @@ else
       Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\,  (permanent)
       Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds, 37
+      Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds, $LEAPSECONDS$
       Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
       Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
@@ -1125,7 +1128,7 @@ else
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Astrometry\,  (permanent)
       Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is si added or removed.
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Astrometry\Leap Seconds, 36
+      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Astrometry\Leap Seconds, $LEAPSECONDS$
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Camera Drivers\,  (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
       Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Chooser\,  (permanent)
