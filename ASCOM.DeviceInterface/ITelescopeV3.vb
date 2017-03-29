@@ -500,6 +500,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' destination coordinates at the given offset rate.</description></item>
     ''' <item><description>This will allow precise slews to a fast-moving target with a slow-slewing telescope.</description></item>
     ''' <item><description>When the slew completes, the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties should reflect the final (adjusted) destination.</description></item>
+    ''' <item><description>
+    ''' <span style="color: fuchsia"><b>The units of this property are arcseconds per SI (atomic) second. Please note that for historic reasons the units of the <see cref="RightAscensionRate" /> property are seconds per sidereal second.</b></span>
+    ''' </description></item>
     ''' </list>
     ''' </para>
     ''' <para>
@@ -734,7 +737,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' <item><description>If this property is zero, tracking will be at the selected <see cref="TrackingRate" />.</description></item>
     ''' <item><description>If <see cref="CanSetRightAscensionRate" /> is False, this property must always return 0.</description></item> 
     ''' To discover whether this feature is supported, test the <see cref="CanSetRightAscensionRate" />property. 
-    ''' <item><description>The property value is in in seconds of right ascension per sidereal second.</description></item> 
+    ''' <item><description>
+    ''' <span style="color: fuchsia"><b>The units of this property are seconds of right ascension per sidereal second. Please note that for historic reasons the units of the <see cref="DeclinationRate" /> property are arcseconds per SI second.</b></span>
+    ''' </description></item> 
     ''' <item><description>To convert a given rate in (the more common) units of sidereal seconds per UTC (clock) second, multiply the value by 0.9972695677 
     ''' (the number of UTC seconds in a sidereal second) then set the property. Please note that these units were chosen for the Telescope V1 standard,
     ''' and in retrospect, this was an unfortunate choice. However, to maintain backwards compatibility, the units cannot be changed.
@@ -746,6 +751,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties should reflect the final (adjusted) destination. This is not a required
     ''' feature of this specification, however it is desirable. </description></item>
     ''' <item><description>Use the <see cref="Tracking" /> property to enable and disable sidereal tracking (if supported). </description></item>
+    ''' <item><description>
+    '''
+    ''' </description></item>
     ''' </list>
     ''' </para>
     ''' </remarks>
