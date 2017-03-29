@@ -70,7 +70,7 @@ End Enum
 <Guid("3FA761EC-12F4-4757-8637-F0ABE5ECB9F7"), ComVisible(True)> _
 Public Enum DriveRates ' D9998808-2DF0-4ca1-ADD6-CE592026C663
     ''' <summary>
-    ''' Sidereal tracking rate (15.0 arcseconds per sidereal second).
+    ''' Sidereal tracking rate (<span style="color: fuchsia"><b>15.041 arcseconds per second</b></span>).
     ''' </summary>
     driveSidereal
 
