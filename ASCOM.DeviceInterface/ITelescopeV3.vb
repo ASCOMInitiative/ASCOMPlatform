@@ -475,7 +475,9 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ReadOnly Property Declination() As Double
 
     ''' <summary>
-    ''' The declination tracking rate (arcseconds per second, default = 0.0)
+    ''' The declination tracking rate (arcseconds per 
+    ''' <span style="color: green">SI </span>
+    ''' second, default = 0.0)
     ''' </summary>
     ''' <exception cref="PropertyNotImplementedException">If DeclinationRate Write is not implemented.</exception>
     ''' <remarks>
