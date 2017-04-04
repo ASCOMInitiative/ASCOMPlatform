@@ -498,7 +498,7 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' destination coordinates at the given offset rate.</description></item>
     ''' <item><description>This will allow precise slews to a fast-moving target with a slow-slewing telescope.</description></item>
     ''' <item><description>When the slew completes, the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties should reflect the final (adjusted) destination.</description></item>
-    ''' <item><description>The units of this property are arcseconds per SI (atomic) second. Please note that for historic reasons the units of the <see cref="RightAscensionRate" /> property are seconds per sidereal second.</description></item>
+    ''' <item><description>The units of this property are arcseconds per SI (atomic) second. Please note that for historic reasons the units of the <see cref="RightAscensionRate" /> property are seconds of RA per sidereal second.</description></item>
     ''' </list>
     ''' </para>
     ''' <para>
@@ -745,9 +745,6 @@ Public Interface ITelescopeV3 ' EF0C67AD-A9D3-4f7b-A635-CD2095517633
     ''' the <see cref="TargetRightAscension" /> and <see cref="TargetDeclination" /> properties should reflect the final (adjusted) destination. This is not a required
     ''' feature of this specification, however it is desirable. </description></item>
     ''' <item><description>Use the <see cref="Tracking" /> property to enable and disable sidereal tracking (if supported). </description></item>
-    ''' <item><description>
-    '''
-    ''' </description></item>
     ''' </list>
     ''' </para>
     ''' </remarks>
