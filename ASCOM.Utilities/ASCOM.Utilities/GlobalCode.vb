@@ -280,6 +280,7 @@ Module VersionCode
         Dim OS As System.OperatingSystem = System.Environment.OSVersion
 
         Try
+            TL.LogMessage("Versions", "Run on: " & DateTime.Now.ToString("dddd dd MMMM yyyy"))
             TL.LogMessage("Versions", "Main Process: " & Process.GetCurrentProcess().MainModule.FileName) 'Get the name of the executable without path or file extension
             Dim FV As FileVersionInfo
             FV = Process.GetCurrentProcess().MainModule.FileVersionInfo 'Get the name of the executable without path or file extension

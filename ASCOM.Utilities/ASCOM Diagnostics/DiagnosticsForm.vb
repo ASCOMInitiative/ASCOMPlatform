@@ -208,11 +208,20 @@ Public Class DiagnosticsForm
                 Catch ex As Exception
                     LogException("ScanFrameworks", ex.ToString)
                 End Try
+
                 Try
                     ScanSerial() 'Report serial port information
                 Catch ex As Exception
                     LogException("ScanSerial", ex.ToString)
                 End Try
+
+                'Scan registry security rights
+                Try
+                    ScanRegistrySecurity()
+                Catch ex As Exception
+                    LogException("ScanRegistrySecurity", ex.ToString)
+                End Try
+
                 Try
                     ScanASCOMDrivers() : Action("") 'Report installed driver versions
                 Catch ex As Exception
@@ -295,13 +304,6 @@ Public Class DiagnosticsForm
                     ScanPlatform6Logs()
                 Catch ex As Exception
                     LogException("ScanPlatform6Logs", ex.ToString)
-                End Try
-
-                'Scan registry security rights
-                Try
-                    ScanRegistrySecurity()
-                Catch ex As Exception
-                    LogException("ScanRegistrySecurity", ex.ToString)
                 End Try
 
                 'Scan event log messages
@@ -5319,84 +5321,182 @@ Public Class DiagnosticsForm
     End Sub
 
     Sub ScanRegistrySecurity()
+        Dim Key As RegistryKey
         Try
             Status("Scanning Registry Security")
             TL.LogMessage("RegistrySecurity", "Start")
 
-            'Dim RA As New ASCOM.Utilities.RegistryAccess
-            'ReadRegistryRights(RA.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, True, ASCOM.Utilities.RegistryAccess.RegWow64Options.KEY_WOW64_32KEY), ASCOM_ROOT_KEY)
+            RegistryRights(Registry.CurrentUser, "", False)
+            RegistryRights(Registry.CurrentUser, "SOFTWARE\ASCOM", False)
+            RegistryRights(Registry.ClassesRoot, "", False)
+            RegistryRights(Registry.ClassesRoot, "DriverHelper.Util", False)
 
-            ReadRegistryRights(Registry.CurrentUser, "", False)
-            ReadRegistryRights(Registry.CurrentUser, "SOFTWARE\ASCOM", False)
-            ReadRegistryRights(Registry.ClassesRoot, "", False)
-            ReadRegistryRights(Registry.ClassesRoot, "DriverHelper.Util", False)
+            RegistryRights(Registry.LocalMachine, "", False)
+            RegistryRights(Registry.LocalMachine, "SOFTWARE", False)
 
-            ReadRegistryRights(Registry.LocalMachine, "", False)
-            ReadRegistryRights(Registry.LocalMachine, "SOFTWARE", False)
-
-            If IntPtr.Size = 8 Then '64bit OS so look in Wow64node
-                ReadRegistryRights(Registry.LocalMachine, "SOFTWARE\Wow6432Node\ASCOM", True)
+            If OSBits() = Bitness.Bits64 Then '64bit OS so look in Wow64node for ASCOM profile store
+                Try
+                    'List the 32bit registry
+                    TL.LogMessage("RegistrySecurity", "Machine Profile Root (64bit OS - 32bit Registry)")
+                    RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM", False)
+                    RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM\Telescope Drivers", False)
+                    RegistryRights(Registry.LocalMachine, "SOFTWARE\WOW6432Node\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope", False)
+                    Key = ASCOMRegistryAccess.OpenSubKey(Registry.LocalMachine, REGISTRY_ROOT_KEY_NAME, False, RegistryAccess.RegWow64Options.KEY_WOW64_32KEY)
+                    RecursionLevel = -1
+                    RecurseRegistrySecurity(Key)
+                Catch ex As Exception
+                    LogException("RegistrySecurity", "Exception: " & ex.ToString)
+                End Try
+                TL.BlankLine()
             Else '32 bit OS
-                ReadRegistryRights(Registry.LocalMachine, "SOFTWARE\ASCOM", True)
+                Try
+                    'List the registry (only one view on a 32bit machine)
+                    TL.LogMessage("RegistrySecurity", "Machine Profile Root (32bit OS)")
+                    RegistryRights(Registry.LocalMachine, "SOFTWARE\ASCOM", False)
+                    RegistryRights(Registry.LocalMachine, "SOFTWARE\ASCOM\Telescope Drivers", False)
+                    RegistryRights(Registry.LocalMachine, "SOFTWARE\ASCOM\Telescope Drivers\ASCOM.Simulator.Telescope", False)
+                    Key = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT_KEY_NAME)
+                    RecursionLevel = -1
+                    RecurseRegistrySecurity(Key)
+                Catch ex As Exception
+                    LogException("RegistrySecurity", "Exception: " & ex.ToString)
+                End Try
             End If
 
             TL.BlankLine()
+
         Catch ex As Exception
             LogException("RegistrySecurity", "Exception: " & ex.ToString)
         End Try
     End Sub
 
-    Private Sub ReadRegistryRights(ByVal key As RegistryKey, ByVal SubKey As String, ByVal ConfirmFullAccess As Boolean)
+    Sub RecurseRegistrySecurity(ByVal Key As RegistryKey)
+        Dim SubKeys() As String
         Dim sec As System.Security.AccessControl.RegistrySecurity
-        Dim SKey As RegistryKey
         Dim FoundFullAccess As Boolean = False
+        Dim debugSwitch As Boolean = False
+        Dim builtInUsers As String
 
         Try
-            TL.LogMessage("RegistrySecurityDbg", "Entered ReadRegistryRights")
-            TL.LogMessage("RegistrySecurity", IIf(SubKey = "", key.Name.ToString, key.Name.ToString & "\" & SubKey))
+            builtInUsers = GetBuiltInUsers().ToUpper()
+            RecursionLevel += 1
+
+            Try
+                If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "Entered ReadRegistryRights")
+                If (debugSwitch) Then TL.LogMessage("RegistrySecurityRec", "Processing key: " & Key.Name.ToString)
+
+                If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "Getting access control")
+                sec = Key.GetAccessControl()
+                If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "Starting iteration of security rules")
+
+                For Each RegRule As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount)) 'Iterate over the rule set and list them
+                    If (debugSwitch) Then
+                        TL.LogMessage("RegistrySecurityDbg", "Before printing rule")
+                        TL.LogMessage("RegistrySecurityRec", RegRule.AccessControlType.ToString() & " " &
+                                                      RegRule.IdentityReference.ToString() & " " &
+                                                      RegRule.RegistryRights.ToString() & " / " &
+                                                      IIf(RegRule.IsInherited.ToString(), "Inherited", "NotInherited") & " / " &
+                                                      RegRule.InheritanceFlags.ToString() & " / " &
+                                                      RegRule.PropagationFlags.ToString())
+                        TL.LogMessage("RegistrySecurityDbg", "After printing rule")
+                    End If
+                    If (RegRule.IdentityReference.ToString.ToUpper = builtInUsers) And (RegRule.RegistryRights = Global.System.Security.AccessControl.RegistryRights.FullControl) Then
+                        FoundFullAccess = True
+                    End If
+                    If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "After testing for FullAccess")
+                Next
+
+                If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "Completed iteration of security rules")
+                If FoundFullAccess Then
+                    NMatches += 1
+                    TL.LogMessage("RegistrySecurityRec", "OK - SubKey " & Key.Name & " does have full registry access rights for BUILTIN\Users")
+                Else
+                    LogError("RegistrySecurityRec", "Subkey " & Key.Name & " does not have full access rights for BUILTIN\Users!")
+                End If
+
+                If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "End of Try-Catch code")
+            Catch ex As NullReferenceException
+                LogException("RegistrySecurityRec", "The subkey: " & Key.Name & " does not exist.")
+            Catch ex As Exception
+                LogException("RegistrySecurityRec", ex.ToString)
+            End Try
+            If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "Exited ReadRegistryRights")
+
+        Catch ex As Exception
+            LogException("RegistrySecurityRec 1", "Exception: " & ex.ToString)
+        End Try
+
+        Try
+            SubKeys = Key.GetSubKeyNames
+            For Each SubKey As String In SubKeys
+                If (debugSwitch) Then TL.LogMessage("RegistrySecurityRec", "Recursing to Profile Key: " & SubKey)
+                RecurseRegistrySecurity(Key.OpenSubKey(SubKey))
+            Next
+        Catch ex As Exception
+            LogException("RegistrySecurityRec 2", "Exception: " & ex.ToString)
+        End Try
+        RecursionLevel -= 1
+
+    End Sub
+
+    Private Sub RegistryRights(ByVal Key As RegistryKey, ByVal SubKey As String, ByVal ConfirmFullAccess As Boolean)
+        Dim sec As System.Security.AccessControl.RegistrySecurity
+        Dim sKey As RegistryKey
+        Dim foundFullAccess As Boolean = False
+        Dim debugSwitch As Boolean = False
+        Dim builtInUsers As String
+
+        Try
+            builtInUsers = GetBuiltInUsers().ToUpper()
+            If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "Entered ReadRegistryRights")
+            TL.LogMessage("RegistryRights", IIf(SubKey = "", Key.Name.ToString, Key.Name.ToString & "\" & SubKey))
             If (SubKey = "") Or (SubKey = ASCOM_ROOT_KEY) Then
-                SKey = key
+                sKey = Key
             Else
-                SKey = key.OpenSubKey(SubKey)
+                sKey = Key.OpenSubKey(SubKey)
             End If
 
-            TL.LogMessage("RegistrySecurityDbg", "Getting access control")
-            sec = SKey.GetAccessControl() 'System.Security.AccessControl.AccessControlSections.All)
-            TL.LogMessage("RegistrySecurityDbg", "Starting iteration of security rules")
+            If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "Getting access control")
+            sec = sKey.GetAccessControl() 'System.Security.AccessControl.AccessControlSections.All)
+            If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "Starting iteration of security rules")
 
             For Each RegRule As RegistryAccessRule In sec.GetAccessRules(True, True, GetType(NTAccount)) 'Iterate over the rule set and list them
-                TL.LogMessage("RegistrySecurityDbg", "Before printing rule")
-                TL.LogMessage("RegistrySecurity", RegRule.AccessControlType.ToString() & " " &
+                If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "Before printing rule")
+                Try
+                    TL.LogMessage("RegistryRights", RegRule.AccessControlType.ToString() & " " &
                                                   RegRule.IdentityReference.ToString() & " " &
                                                   RegRule.RegistryRights.ToString() & " / " &
                                                   IIf(RegRule.IsInherited.ToString(), "Inherited", "NotInherited") & " / " &
                                                   RegRule.InheritanceFlags.ToString() & " / " &
                                                   RegRule.PropagationFlags.ToString())
-                TL.LogMessage("RegistrySecurityDbg", "After printing rule")
+                    If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "After printing rule")
+                Catch ex1 As Exception
+                    LogException("RegistryRights", "Issue formatting registry rights: " & ex1.ToString)
+                End Try
 
-                If (RegRule.IdentityReference.ToString.ToUpper = GetBuiltInUsers().ToUpper) And (RegRule.RegistryRights = RegistryRights.FullControl) Then
-                    FoundFullAccess = True
+                If (RegRule.IdentityReference.ToString.ToUpper = builtInUsers) And (RegRule.RegistryRights = Global.System.Security.AccessControl.RegistryRights.FullControl) Then
+                    foundFullAccess = True
                 End If
-                TL.LogMessage("RegistrySecurityDbg", "After testing for FullAccess")
+                If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "After testing for FullAccess")
             Next
 
-            TL.LogMessage("RegistrySecurityDbg", "Completed iteration of security rules")
+            If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "Completed iteration of security rules")
             If ConfirmFullAccess Then 'Check whether full access is availble if required
-                If FoundFullAccess Then
+                If foundFullAccess Then
                     NMatches += 1
                     TL.BlankLine()
-                    TL.LogMessage("RegistrySecurity", "OK - SubKey " & SubKey & " does have full registry access rights for BUILTIN\Users")
+                    TL.LogMessage("RegistryRights", "OK - SubKey " & SubKey & " does have full registry access rights for BUILTIN\Users")
                 Else
-                    LogError("RegistrySecurity", "Subkey " & SubKey & " does not have full access rights for BUILTIN\Users!")
+                    LogError("RegistryRights", "Subkey " & SubKey & " does not have full access rights for BUILTIN\Users!")
                 End If
             End If
-            TL.LogMessage("RegistrySecurityDbg", "End of Try-Catch code")
+            If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "End of Try-Catch code")
         Catch ex As NullReferenceException
-            LogException("ReadRegistryRights", "The subkey: " & key.Name & "\" & SubKey & " does not exist.")
+            LogException("RegistryRights", "The subkey: " & Key.Name & "\" & SubKey & " does not exist.")
         Catch ex As Exception
-            LogException("ReadRegistryRights", ex.ToString)
+            LogException("RegistryRights", "Issue reading registry rights: " & ex.ToString)
         End Try
-        TL.LogMessage("RegistrySecurityDbg", "Exited ReadRegistryRights")
+        If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "Exited ReadRegistryRights")
         TL.BlankLine()
     End Sub
 
@@ -5723,34 +5823,55 @@ Public Class DiagnosticsForm
 
     Sub ScanPlatform6Logs()
 
-        Dim SetupFiles() As String
-        Dim SR As StreamReader = Nothing
+        Dim fileList() As String
+        Dim setupFiles As SortedList(Of DateTime, String) = New SortedList(Of DateTime, String)
+        Dim streamReader As StreamReader = Nothing
+        Dim fileInfo As FileInfo
 
         Try
             Status("Scanning Platform 6 install logs")
             TL.LogMessage("ScanPlatform6Logs", "Starting scan")
-            'Get an array of setup and uninstall filenames from the Temp directory
-            SetupFiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6Install*.txt", SearchOption.TopDirectoryOnly)
 
-            For Each TempFile As String In SetupFiles 'Iterate over results
+            'Get a list of setup files in the ASCOM directory and sub directories in creation date order
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOMPlatform6Install*.txt", SearchOption.TopDirectoryOnly)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(fileInfo.CreationTime, foundFile)
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.UninstallASCOM.*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(fileInfo.CreationTime, foundFile)
+            Next
+
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.FinaliseInstall.*.txt", SearchOption.AllDirectories)
+            For Each foundFile In fileList
+                fileInfo = New FileInfo(foundFile)
+                setupFiles.Add(fileInfo.CreationTime, foundFile)
+            Next
+
+            For Each foundFile In setupFiles 'Iterate over results
                 Try
-                    TL.LogMessage("InstallLog Found", TempFile)
-                    SR = File.OpenText(TempFile)
+                    fileInfo = New FileInfo(foundFile.Value)
+                    TL.LogMessage("InstallLog Found", String.Format("{0}, Created: {1}, Last updated: {2}", foundFile.Value, fileInfo.CreationTime.ToString("dd MMM yyyy HH:mm:ss"), fileInfo.LastWriteTime.ToString("dd MMM yyyy HH:mm:ss")))
 
-                    Do Until SR.EndOfStream 'include the file
-                        TL.LogMessage("InstallLog", SR.ReadLine())
+                    streamReader = File.OpenText(foundFile.Value)
+
+                    Do Until streamReader.EndOfStream 'include the file
+                        TL.LogMessage("InstallLog", streamReader.ReadLine())
                     Loop
 
                     TL.LogMessage("", "")
-                    SR.Close()
-                    SR.Dispose()
-                    SR = Nothing
+                    streamReader.Close()
+                    streamReader.Dispose()
+                    streamReader = Nothing
                 Catch ex1 As Exception
                     LogException("ScanPlatform6Logs", "Exception 1: " & ex1.ToString)
-                    If Not (SR Is Nothing) Then 'Clean up streamreader
-                        SR.Close()
-                        SR.Dispose()
-                        SR = Nothing
+                    If Not (streamReader Is Nothing) Then 'Clean up streamreader
+                        streamReader.Close()
+                        streamReader.Dispose()
+                        streamReader = Nothing
                     End If
                 End Try
             Next
@@ -5759,27 +5880,30 @@ Public Class DiagnosticsForm
             Status("Scanning Migration logs")
             TL.LogMessage("ScanMigrationLogs", "Starting scan")
             'Get an array of setup and uninstall filenames from the Temp directory
-            SetupFiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.ProfileMigrationLog*.txt", SearchOption.TopDirectoryOnly)
+            fileList = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM", "ASCOM.ProfileMigrationLog*.txt", SearchOption.TopDirectoryOnly)
 
-            For Each TempFile As String In SetupFiles 'Iterate over results
+            For Each tempFile As String In fileList 'Iterate over results
                 Try
-                    TL.LogMessage("MigrationLog Found", TempFile)
-                    SR = File.OpenText(TempFile)
+                    TL.LogMessage("MigrationLog Found", tempFile)
+                    fileInfo = New FileInfo(tempFile)
+                    TL.LogMessage("InstallLog", "File created: " & fileInfo.CreationTime.ToString("dd MMM yyyy hh:mm:ss"))
+                    TL.LogMessage("InstallLog", "File last updated: " & fileInfo.LastWriteTime.ToString("dd MMM yyyy hh:mm:ss"))
+                    streamReader = File.OpenText(tempFile)
 
-                    Do Until SR.EndOfStream 'include the file
-                        TL.LogMessage("MigrationLog", SR.ReadLine())
+                    Do Until streamReader.EndOfStream 'include the file
+                        TL.LogMessage("MigrationLog", streamReader.ReadLine())
                     Loop
 
                     TL.LogMessage("", "")
-                    SR.Close()
-                    SR.Dispose()
-                    SR = Nothing
+                    streamReader.Close()
+                    streamReader.Dispose()
+                    streamReader = Nothing
                 Catch ex2 As Exception
                     LogException("ScanPlatform6Logs", "Exception 2: " & ex2.ToString)
-                    If Not (SR Is Nothing) Then 'Clean up streamreader
-                        SR.Close()
-                        SR.Dispose()
-                        SR = Nothing
+                    If Not (streamReader Is Nothing) Then 'Clean up streamreader
+                        streamReader.Close()
+                        streamReader.Dispose()
+                        streamReader = Nothing
                     End If
                 End Try
             Next
@@ -6066,6 +6190,16 @@ Public Class DiagnosticsForm
         Dim AssemblyNames As Generic.SortedList(Of String, String)
         Dim assname As AssemblyName
         Dim AscomGACPaths As Generic.List(Of String)
+        Dim FVInfo As FileVersionInfo = Nothing
+        Dim MyName, FVer As String
+        Dim FileLocation As String
+        Dim FileVer As FileVersionInfo
+        Dim DiagnosticsVersion As New Version("0.0.0.0")
+        Dim FileVersion As New Version("0.0.0.0")
+        Dim VersionComparison As Integer
+        Dim assemblyURI As Uri = Nothing
+        Dim localPath As String
+
         Try
             Status("Scanning Assemblies")
             AssemblyNames = New Generic.SortedList(Of String, String)
@@ -6077,11 +6211,9 @@ Public Class DiagnosticsForm
                 Try
                     assname = GetAssemblyName(an)
                     AssemblyNames.Add(assname.FullName, assname.Name) 'Convert the fusion representation to a standard AssemblyName and get its full name
-
                 Catch ex As Exception
                     'Ignore an exceptions here due to duplicate names, these are all MS assemblies
                 End Try
-
             Loop
 
             AscomGACPaths = New Generic.List(Of String)
@@ -6094,16 +6226,15 @@ Public Class DiagnosticsForm
                         AssemblyInfo(TL, AssemblyName.Value, ass) ' Get file version and other information
 
                         Try
-                            Dim U As New Uri(ass.GetName.CodeBase)
-                            Dim LocalPath As String = U.LocalPath
-                            If (LocalPath.ToUpper.Contains("\ASCOM.DRIVERACCESS\6") Or
-                                LocalPath.ToUpper.Contains("\ASCOM.UTILITIES\6") Or
-                                LocalPath.ToUpper.Contains("\ASCOM.ASTROMETRY\6") Or
-                                LocalPath.ToUpper.Contains("\ASCOM.DEVICEINTERFACES\6")) Then
-                                AscomGACPaths.Add(LocalPath)
-                            Else
-                                FileDetails(Path.GetDirectoryName(LocalPath) & "\", Path.GetFileName(LocalPath))
+                            assemblyURI = New Uri(ass.GetName.CodeBase)
+                            localPath = assemblyURI.LocalPath
+                            If (localPath.ToUpper.Contains("\ASCOM.DRIVERACCESS\6") Or
+                                localPath.ToUpper.Contains("\ASCOM.UTILITIES\6") Or
+                                localPath.ToUpper.Contains("\ASCOM.ASTROMETRY\6") Or
+                                localPath.ToUpper.Contains("\ASCOM.DEVICEINTERFACES\6")) Then
+                                AscomGACPaths.Add(localPath)
                             End If
+                            FileDetails(Path.GetDirectoryName(localPath) & "\", Path.GetFileName(localPath))
                         Catch ex As Exception
 
                         End Try
@@ -6115,13 +6246,6 @@ Public Class DiagnosticsForm
                     LogException("Assemblies", "Exception 2: " & ex.ToString)
                 End Try
             Next
-            Dim FVInfo As FileVersionInfo = Nothing
-            Dim MyName, FVer As String
-            Dim FileLocation As String
-            Dim FileVer As FileVersionInfo
-            Dim DiagnosticsVersion As New Version("0.0.0.0")
-            Dim FileVersion As New Version("0.0.0.0")
-            Dim VersionComparison As Integer
 
             Try
                 ass = Assembly.GetExecutingAssembly
