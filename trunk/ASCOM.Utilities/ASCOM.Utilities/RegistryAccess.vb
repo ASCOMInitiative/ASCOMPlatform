@@ -702,16 +702,18 @@ Friend Class RegistryAccess
         KeySec = Key.GetAccessControl() ' Get existing ACL rules on the key 
 
         RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules
-
         For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
-            LogMessage("SetRegistryACL Before", RegRule.AccessControlType.ToString() & " " &
-                                                RegRule.IdentityReference.ToString() & " " &
-                                                CType(RegRule.RegistryRights, AccessRights).ToString() & " " &
-                                                IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() & " " &
-                                                RegRule.InheritanceFlags.ToString() & " " &
-                                                RegRule.PropagationFlags.ToString())
+            Try
+                LogMessage("SetRegistryACL Before", RegRule.AccessControlType.ToString() & " " &
+                                            RegRule.IdentityReference.ToString() & " " &
+                                            CType(RegRule.RegistryRights, AccessRights).ToString() & " " &
+                                            IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() & " " &
+                                            RegRule.InheritanceFlags.ToString() & " " &
+                                            RegRule.PropagationFlags.ToString())
+            Catch ex As Exception ' Report but ignore errors when logging information
+                LogMessage("SetRegistryACL Before", ex.ToString())
+            End Try
         Next
-
         ' Ensure that the ACLs are canonical before writing them back.
         ' key.GetAccessControl sometimes provides ACLs in a non-canonical format, which causes failure when we write them back - UGH!
 
@@ -722,33 +724,41 @@ Friend Class RegistryAccess
             LogMessage("SetRegistryACL", "***** Current access rules on the ASCOM profile key are NOT canonical, fixing them")
             CanonicalizeDacl(KeySec) ' Ensure that the ACLs are canonical
             LogMessage("SetRegistryACL", "Access Rules are Canonical after fix: " & KeySec.AreAccessRulesCanonical)
-        End If
-        TL.BlankLine()
 
-        ' List the rules post canonicalisation
-        RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules
-        For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
-            LogMessage("SetRegistryACL Canon", RegRule.AccessControlType.ToString() & " " &
+            ' List the rules post canonicalisation
+            RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules
+            For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
+                Try
+                    LogMessage("SetRegistryACL Canon", RegRule.AccessControlType.ToString() & " " &
                                                RegRule.IdentityReference.ToString() & " " &
                                                CType(RegRule.RegistryRights, AccessRights).ToString() & " " &
                                                IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() & " " &
                                                RegRule.InheritanceFlags.ToString() & " " &
                                                RegRule.PropagationFlags.ToString())
-        Next
+                Catch ex As Exception ' Report but ignore errors when logging information
+                    LogMessage("SetRegistryACL Canon", ex.ToString())
+                End Try
+            Next
+
+        End If
+        TL.BlankLine()
 
         LogMessage("SetRegistryACL", "Adding new ACL rule")
         KeySec.AddAccessRule(RegAccessRule) 'Add the new rule to the existing rules
         LogMessage("SetRegistryACL", "Access Rules are Canonical after adding full access rule: " & KeySec.AreAccessRulesCanonical)
         TL.BlankLine()
         RuleCollection = KeySec.GetAccessRules(True, True, GetType(NTAccount)) 'Get the access rules after adding the new one
-
         For Each RegRule As RegistryAccessRule In RuleCollection 'Iterate over the rule set and list them
-            LogMessage("SetRegistryACL After", RegRule.AccessControlType.ToString() & " " &
-                                               RegRule.IdentityReference.ToString() & " " &
-                                               CType(RegRule.RegistryRights, AccessRights).ToString() & " " &
-                                               IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() & " " &
-                                               RegRule.InheritanceFlags.ToString() & " " &
-                                               RegRule.PropagationFlags.ToString())
+            Try
+                LogMessage("SetRegistryACL After", RegRule.AccessControlType.ToString() & " " &
+                                                   RegRule.IdentityReference.ToString() & " " &
+                                                   CType(RegRule.RegistryRights, AccessRights).ToString() & " " &
+                                                   IIf(RegRule.IsInherited, "Inherited", "NotInherited").ToString() & " " &
+                                                   RegRule.InheritanceFlags.ToString() & " " &
+                                                   RegRule.PropagationFlags.ToString())
+            Catch ex As Exception ' Report but ignore errors when logging information
+                LogMessage("SetRegistryACL After", ex.ToString())
+            End Try
         Next
 
         TL.BlankLine()
@@ -939,6 +949,7 @@ Friend Class RegistryAccess
 
             descriptor.DiscretionaryAcl = newDacl
             objectSecurity.SetSecurityDescriptorSddlForm(descriptor.GetSddlForm(AccessControlSections.Access), AccessControlSections.Access)
+            LogMessage("CanonicalizeDacl", "New ACL successfully applied to registry key.")
         Catch ex2 As Exception
             LogError("CanonicalizeDacl", "Unexpected exception")
             LogError("CanonicalizeDacl", ex2.ToString())

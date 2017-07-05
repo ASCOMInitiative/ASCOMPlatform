@@ -18,7 +18,7 @@ Imports System.Runtime.CompilerServices
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("43234d78-8dfc-44b5-9d39-e18d568748c1")> 
+<Assembly: Guid("43234d78-8dfc-44b5-9d39-e18d568748c1")>
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -31,7 +31,7 @@ Imports System.Runtime.CompilerServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("6.0.0.0")> 
+<Assembly: AssemblyVersion("6.3.0.0")>
 
 'Permissions for particular assemblies to access internal "Friend" variables and methods of this assembly
 <Assembly: InternalsVisibleToAttribute("UninstallAscom, PublicKey= " + _

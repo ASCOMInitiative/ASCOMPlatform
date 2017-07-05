@@ -10,6 +10,13 @@ Comment: Create the path to the setup log and create the ASCOM directory, which 
 Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
 Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ v$VERSION$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installation date: $DATE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value   (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Setup path: $SETUPPATH$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Support directory: $SUPPORTDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Installer: $EXEFILE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ Engine cache: $ENGINECACHE$ (at end of file)
+Write into Text File $SETUPLOG$ from Value $TIME$ MSI file: $MSIFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
 [END REGION]
