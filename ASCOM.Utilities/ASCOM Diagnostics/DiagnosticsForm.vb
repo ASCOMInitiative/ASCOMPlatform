@@ -5851,6 +5851,13 @@ Public Class DiagnosticsForm
                 setupFiles.Add(fileInfo.CreationTime, foundFile)
             Next
 
+            TL.LogMessage("ScanPlatform6Logs", "Found the following installation logs:")
+            For Each foundFile In setupFiles
+                TL.LogMessage("ScanPlatform6Logs", String.Format("  Date: {0} Log: {1}", foundFile.Key.ToString("dd MMM yyyy HH:mm:ss"), foundFile.Value))
+            Next
+
+            TL.BlankLine()
+
             For Each foundFile In setupFiles 'Iterate over results
                 Try
                     fileInfo = New FileInfo(foundFile.Value)

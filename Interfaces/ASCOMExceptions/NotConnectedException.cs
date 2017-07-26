@@ -5,9 +5,12 @@ using System.Runtime.InteropServices;
 namespace ASCOM
 {
     /// <summary>
-    ///   This exception should be raised when an operation is attempted that requires communication with the
-    ///   device, but the device is disconnected.
+    /// This exception should be raised when an operation is attempted that requires communication with the device, but the device is disconnected.
     /// </summary>
+    /// <remarks>
+    /// <para>If you need to throw this error as a COM exception use the error number: 0x80040400.</para>
+    /// </remarks>
+
     [Serializable]
     [ComVisible(true)]
     [Guid("C22D9A81-63FA-4AC3-AD64-77B77D3CEB2B")]
@@ -16,51 +19,46 @@ namespace ASCOM
         [NonSerialized] const string csDefaultMessage = "Device is not connected";
 
         /// <summary>
-        ///   Default public constructor for NotConnectedException takes no parameters.
+        /// Default public constructor for NotConnectedException takes no parameters.
         /// </summary>
-        public NotConnectedException()
-            : base(csDefaultMessage, ErrorCodes.NotConnected)
+        public NotConnectedException() : base(csDefaultMessage, ErrorCodes.NotConnected)
         {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "NotConnectedException" /> class
-        ///   from another exception.
+        /// Initializes a new instance of the <see cref = "NotConnectedException" /> class
+        /// from another exception.
         /// </summary>
         /// <param name = "innerException">The inner exception.</param>
-        public NotConnectedException(Exception innerException)
-            : base(csDefaultMessage, ErrorCodes.NotConnected, innerException)
+        public NotConnectedException(Exception innerException) : base(csDefaultMessage, ErrorCodes.NotConnected, innerException)
         {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "NotConnectedException" /> class
-        ///   with a non-default error message.
+        /// Initializes a new instance of the <see cref = "NotConnectedException" /> class
+        /// with a non-default error message.
         /// </summary>
         /// <param name = "message">A descriptive human-readable message.</param>
-        public NotConnectedException(string message)
-            : base(message, ErrorCodes.NotConnected)
+        public NotConnectedException(string message) : base(message, ErrorCodes.NotConnected)
         {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "NotConnectedException" /> class
-        ///   based on another exception.
+        /// Initializes a new instance of the <see cref = "NotConnectedException" /> class
+        /// based on another exception.
         /// </summary>
         /// <param name = "message">Descriptive text documenting the cause or source of the error.</param>
         /// <param name = "innerException">The inner exception the led to the throwing of this exception.</param>
-        public NotConnectedException(string message, Exception innerException)
-            : base(message, ErrorCodes.NotConnected, innerException)
+        public NotConnectedException(string message, Exception innerException) : base(message, ErrorCodes.NotConnected, innerException)
         {
         }
 
         /// <summary>
-        ///   Added to keep Code Analysis happy
+        /// Added to keep Code Analysis happy
         /// </summary>
         /// <param name = "info"></param>
         /// <param name = "context"></param>
-        protected NotConnectedException(SerializationInfo info,
-                                        StreamingContext context) : base(info, context)
+        protected NotConnectedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
