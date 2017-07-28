@@ -361,19 +361,15 @@ Public Interface ICameraV2
     ''' <value>
     ''' 	<c>true</c> if the camera can stop the exposure; otherwise, <c>false</c>.
     ''' </value>
-    ''' <exception cref=" PropertyNotImplementedException">not supported</exception>
     ''' <exception cref=" NotConnectedException">an error condition such as connection failure is present</exception>
     ReadOnly Property CanStopExposure() As Boolean
 
     ''' <summary>
     ''' Returns the current CCD temperature in degrees Celsius.
     ''' </summary>
-    ''' <remarks>
-    ''' <p style="color:red"><b>Must be implemented, must not throw a PropertyNotImplementedException.</b></p>
-    ''' <para>Only valid if  <see cref="CanSetCCDTemperature" /> is <c>true</c>.</para>
-    ''' </remarks>
     ''' <value>The CCD temperature.</value>
     ''' <exception cref="InvalidValueException">Must throw exception if data unavailable.</exception>
+    ''' <exception cref="PropertyNotImplementedException">Must throw exception if not supported.</exception>
     ReadOnly Property CCDTemperature() As Double
 
     ''' <summary>
