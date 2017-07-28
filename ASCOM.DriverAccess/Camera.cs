@@ -118,11 +118,9 @@ namespace ASCOM.DriverAccess
         /// <summary>
         /// Returns the current CCD temperature in degrees Celsius.
         /// </summary>
-        /// <remarks>
-        /// Only valid if  <see cref="CanSetCCDTemperature" /> is True.
-        /// </remarks>
         /// <value>The CCD temperature.</value>
         /// <exception cref="InvalidValueException">Must throw exception if data unavailable.</exception>
+        /// <exception cref="PropertyNotImplementedException">Must throw exception if it is not implemented.</exception>
         public double CCDTemperature
         {
             get { return Convert.ToDouble(_memberFactory.CallMember(1, "CCDTemperature", new Type[] { }, new object[] { })); }
