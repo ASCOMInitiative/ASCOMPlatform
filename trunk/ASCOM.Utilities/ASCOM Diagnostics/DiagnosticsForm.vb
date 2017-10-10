@@ -7091,7 +7091,7 @@ Public Class DiagnosticsForm
             CompareDouble("AstroUtilTests", "Range 0:359.999 360.0", AstroUtil2.Range(360.0, 0.0, True, 360.0, False), 0.0, TOLERANCE_E6)
             CompareDouble("AstroUtilTests", "Range 0:360.0 360.0", AstroUtil2.Range(360.0, 0.0, True, 360.0, True), 360.0, TOLERANCE_E6)
 
-            CompareWithin("AstroUtilTests", "DeltaT", AstroUtil2.DeltaT(), 67.0, 69.0)
+            CompareWithin("AstroUtilTests", "DeltaT", AstroUtil2.DeltaT(), 67.0, 71.0) ' Upper bound increased because DeltaT has reached the original upper bound value! PWGS 9/10/2017
             CompareWithin("AstroUtilTests", "DeltaUT", AstroUtil2.DeltaUT(AstroUtil2.JulianDateTT(0.0)), -1.0, 1.0)
             Events = GetEvents(ASCOM.Astrometry.EventType.SunRiseSunset, 5, 8, 2012, 51.0, -60.0, -5.0)
 
