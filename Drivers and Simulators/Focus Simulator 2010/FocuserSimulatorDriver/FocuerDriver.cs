@@ -86,6 +86,18 @@ namespace ASCOM.Simulator
         private Random RandomGenerator;
         internal double stepSize;
         internal bool tempComp;
+
+        private enum MotorState
+        {
+            idle,
+            moving,
+            settling
+        }
+
+        private MotorState motorState = MotorState.idle;
+        internal int settleTime;
+        private DateTime settleFinishTime;
+
         #endregion
 
         #region Constructor and dispose
@@ -319,7 +331,12 @@ namespace ASCOM.Simulator
         /// <value><c>true</c> if moving; otherwise, <c>false</c>.</value>
         public bool IsMoving
         {
-            get { return (_position != Target); }
+            //get { return (_position != Target); }
+            get 
+            {
+                TL.LogMessage("IsMoving", "MotorState " + motorState.ToString());
+                return (motorState != MotorState.idle); 
+            }
         }
 
         /// <summary>
@@ -372,6 +389,7 @@ namespace ASCOM.Simulator
                 _position = Truncate(-MaxStep, value, MaxStep);
                 RateOfChange = 40;
             }
+            motorState = MotorState.moving;
         }
 
         /// <summary>
@@ -392,6 +410,7 @@ namespace ASCOM.Simulator
         {
             get
             {
+                TL.LogMessage("Position", _position.ToString());
                 return _position;
             }
         }
@@ -539,6 +558,26 @@ namespace ASCOM.Simulator
                 }
                 TL.LogMessage("KeepMoving", "LastOffset, Position, Target, RateOfChange MouseDownTime " + LastOffset + " " + _position + " " + Target + " " + RateOfChange + " " + MouseDownTime.ToLongTimeString());
             }
+
+            // handle MotorState
+            switch (motorState)
+            {
+                case MotorState.moving:
+                    if (_position == Target)
+                    {
+                        motorState = MotorState.settling;
+                        settleFinishTime = DateTime.Now + TimeSpan.FromMilliseconds(settleTime);
+                        TL.LogMessage("MoveTimer", "Settle start, time " + settleTime.ToString());
+                    }
+                    return;
+                case MotorState.settling:
+                    if (settleFinishTime < DateTime.Now)
+                    {
+                        motorState = MotorState.idle;
+                        TL.LogMessage("MoveTimer", "settle finished");
+                    }
+                    return;
+            }
         }
 
         private void CheckConnected(string property)
@@ -598,6 +637,10 @@ namespace ASCOM.Simulator
             TempPeriod = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempPeriod", string.Empty, "3"), CultureInfo.InvariantCulture);
             TempProbe = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "TempProbe", string.Empty, "true"), CultureInfo.InvariantCulture);
             TempSteps = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempSteps", string.Empty, "10"), CultureInfo.InvariantCulture);
+            settleTime = Convert.ToInt32(Profile.GetValue(sCsDriverId, "SettleTime", string.Empty, "500"), CultureInfo.InvariantCulture);
+
+            if(!TL.Enabled)
+                TL.Enabled = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Logging", string.Empty, "false"), CultureInfo.InvariantCulture);
       }
 
         /// <summary>
@@ -641,6 +684,8 @@ namespace ASCOM.Simulator
             Profile.WriteValue(sCsDriverId, "TempPeriod", TempPeriod.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue(sCsDriverId, "TempProbe", TempProbe.ToString(CultureInfo.InvariantCulture));
             Profile.WriteValue(sCsDriverId, "TempSteps", TempSteps.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "SettleTime", settleTime.ToString(CultureInfo.InvariantCulture));
+            Profile.WriteValue(sCsDriverId, "Logging", TL.Enabled.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
