@@ -22,7 +22,7 @@
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-15, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-18, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM" isExposed="False" />
       <Filter entryType="Namespace" fullName="System" isExposed="True">
@@ -54,8 +54,9 @@
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
     </PlugInConfigurations>
-    <FeedbackEMailAddress>feedback%40ascom-standards.org</FeedbackEMailAddress>
-    <FeedbackEMailLinkText>Send feedback to ASCOM</FeedbackEMailLinkText>
+    <FeedbackEMailAddress>
+    </FeedbackEMailAddress>
+    <FeedbackEMailLinkText>the ASCOM Talk Yahoo Group</FeedbackEMailLinkText>
     <HeaderText>
     </HeaderText>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
@@ -74,6 +75,7 @@
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <Language>en-US</Language>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

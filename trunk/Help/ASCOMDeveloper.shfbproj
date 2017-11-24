@@ -31,7 +31,7 @@
       <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
     </DocumentationSources>
     <HelpTitle>ASCOM Platform Developer Help</HelpTitle>
-    <CopyrightText>Copyright &amp;#169%3b 2010-15, The ASCOM Initiative</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2010-18, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM.Astrometry.AstroUtils" isExposed="True">
         <Filter entryType="Interface" fullName="ASCOM.Astrometry.AstroUtils.IAstroUtils" filterName="IAstroUtils" isExposed="False" />
@@ -143,8 +143,9 @@
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
     </PlugInConfigurations>
-    <FeedbackEMailAddress>feedback%40ascom-standards.org</FeedbackEMailAddress>
-    <FeedbackEMailLinkText>Send feedback to ASCOM</FeedbackEMailLinkText>
+    <FeedbackEMailAddress>
+    </FeedbackEMailAddress>
+    <FeedbackEMailLinkText>the ASCOM Talk Yahoo Group</FeedbackEMailLinkText>
     <HeaderText>
     </HeaderText>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
@@ -166,6 +167,7 @@
     <IndentHtml>True</IndentHtml>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
