@@ -28,7 +28,7 @@ namespace ASCOM.Simulator
 
             // Sets the timer interval to 0.1 seconds.
             MyTimer.Interval = 100;
-            MyTimer.Start(); 
+            MyTimer.Start();
 
             btnMoveOut.MouseDown += new MouseEventHandler(btnMoveOut_MouseDown);
             btnMoveOut.MouseUp += new MouseEventHandler(btnMove_MouseUp);
@@ -64,7 +64,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private void TimerEventProcessor(object caller, EventArgs e)
         {
-             UpdateDisplay();
+            UpdateDisplay();
         }
 
         private void UpdateDisplay()
@@ -90,16 +90,16 @@ namespace ASCOM.Simulator
         /// </summary>
         private void UpdatePosition(int offSet)
         {
-          /*  if (offSet != 0)
-            {
-                if (_focuser.Absolute)
-                    _focuser.Target = _focuser.Position + offSet;
-                else
-                {
-                    _focuser.Position = offSet;
-                    _focuser.Target = 0;
-                }*/
-                _focuser.LastOffset = offSet;
+            /*  if (offSet != 0)
+              {
+                  if (_focuser.Absolute)
+                      _focuser.Target = _focuser.Position + offSet;
+                  else
+                  {
+                      _focuser.Position = offSet;
+                      _focuser.Target = 0;
+                  }*/
+            _focuser.LastOffset = offSet;
             //}
         }
 
@@ -140,7 +140,7 @@ namespace ASCOM.Simulator
             }
             Focuser.SaveProfileSetting("TempComp", _focuser.tempComp.ToString(CultureInfo.InvariantCulture));
         }
-        
+
         /// <summary>
         /// This disables the form close button i.e. the X in the top right hand corner of the form.
         /// </summary>
