@@ -25,7 +25,7 @@ namespace ASCOM.Simulator
     [Guid("24C040F2-2FA5-4DA4-B87B-6C1101828D2A")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-    public class Focuser : IFocuserV2,IDisposable
+    public class Focuser : IFocuserV2, IDisposable
     {
         #region Constants
 
@@ -71,8 +71,8 @@ namespace ASCOM.Simulator
         private static readonly Profile Profile = new Profile();
 
         #endregion
-         
-        internal TraceLogger TL ;// Shared tracelogger between this instances classes
+
+        internal TraceLogger TL;// Shared tracelogger between this instances classes
 
         #region local parameters
 
@@ -82,7 +82,7 @@ namespace ASCOM.Simulator
         internal int Target;
         private double _lastTemp;
         private FocuserHandboxForm Handbox;
-        private  DateTime lastTempUpdate;
+        private DateTime lastTempUpdate;
         private Random RandomGenerator;
         internal double stepSize;
         internal bool tempComp;
@@ -110,7 +110,7 @@ namespace ASCOM.Simulator
         {
             try
             {
-                TL = new TraceLogger("","FocusSimulator");
+                TL = new TraceLogger("", "FocusSimulator");
                 TL.Enabled = RegistryCommonCode.GetBool(GlobalConstants.SIMULATOR_TRACE, GlobalConstants.SIMULATOR_TRACE_DEFAULT);
                 TL.LogMessage("New", "Started");
 
@@ -122,7 +122,7 @@ namespace ASCOM.Simulator
                     LastOffset = 0;
                     RateOfChange = 1;
                     MouseDownTime = DateTime.MaxValue; //Initialise to "don't accelerate" value
-                    RandomGenerator=new Random(); //Temperature fluctuation random generator
+                    RandomGenerator = new Random(); //Temperature fluctuation random generator
                     LoadFocuserKeyValues();
                     TL.LogMessage("New", "Loaded Key Values");
                     Handbox = new FocuserHandboxForm(this);
@@ -150,20 +150,31 @@ namespace ASCOM.Simulator
             }
             catch (Exception ex)
             {
-                TL.LogMessageCrLf("New Exception",ex.ToString());
+                TL.LogMessageCrLf("New Exception", ex.ToString());
                 MessageBox.Show(@"Focuser: " + ex);
+            }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                try { TL.LogMessage("Dispose", "Dispose called: " + disposing.ToString()); } catch { }
+                try { Handbox.Close(); } catch { }
+                try { Handbox.Dispose(); } catch { }
+                try { _moveTimer.Stop(); } catch { }
+                try { _moveTimer.Close(); } catch { }
+                try { _moveTimer.Dispose(); } catch { }
+                try { TL.Enabled = false; } catch { }
+                try { TL.Dispose(); } catch { }
             }
         }
 
         public void Dispose()
         {
-            try { Handbox.Close(); } catch { }
-            try { Handbox.Dispose(); } catch { }
-            try { _moveTimer.Stop(); } catch { }
-            try { _moveTimer.Close(); } catch { }
-            try { _moveTimer.Dispose(); } catch { }
-            try { TL.Enabled=false; } catch { }
-            try { TL.Dispose(); } catch { }
+            try { TL.LogMessage("Dispose", "Dispose called."); } catch { }
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         #endregion
@@ -242,24 +253,42 @@ namespace ASCOM.Simulator
         /// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
         public bool Connected
         {
-            get { return _isConnected; }
+            get
+            {
+                TL.LogMessage("Connected Get", _isConnected.ToString());
+                return _isConnected;
+            }
             set
             {
                 if (_isConnected == value)
+                {
+                    TL.LogMessage("Connected Set", "Connected is already :" + _isConnected.ToString() + ", doing nothing.");
                     return;
+                }
                 if (value)
                 {
+                    TL.LogMessage("Connected Set", "Connecting driver.");
                     if (_moveTimer == null)
+                    {
+                        TL.LogMessage("Connected Set", "Move timer is null so creating new timer.");
                         _moveTimer = new System.Timers.Timer();
+                    }
+                    TL.LogMessage("Connected Set", "Adding move timer handler.");
                     _moveTimer.Elapsed += new System.Timers.ElapsedEventHandler(MoveTimer_Tick);
                     _moveTimer.Interval = 100;
+                    TL.LogMessage("Connected Set", "Enabling move timer.");
                     _moveTimer.Enabled = true;
+                    TL.LogMessage("Connected Set", "Showing handbox.");
                     Handbox.Show();
                 }
                 else
                 {
+                    TL.LogMessage("Connected Set", "Disconnecting driver.");
+                    TL.LogMessage("Connected Set", "Disabling move timer.");
                     _moveTimer.Enabled = false;
+                    TL.LogMessage("Connected Set", "Removing move timer handler.");
                     _moveTimer.Elapsed -= MoveTimer_Tick;
+                    TL.LogMessage("Connected Set", "Hiding handbox.");
                     Handbox.Hide();
                 }
                 _isConnected = value;
@@ -332,10 +361,10 @@ namespace ASCOM.Simulator
         public bool IsMoving
         {
             //get { return (_position != Target); }
-            get 
+            get
             {
                 TL.LogMessage("IsMoving", "MotorState " + motorState.ToString());
-                return (motorState != MotorState.idle); 
+                return (motorState != MotorState.idle);
             }
         }
 
@@ -474,7 +503,7 @@ namespace ASCOM.Simulator
         /// will be raised if TempCompAvailable is False and an attempt is made 
         /// to set TempComp to true.
         /// </summary>
-        public bool TempComp 
+        public bool TempComp
         {
             get { return tempComp; }
             set
@@ -533,28 +562,28 @@ namespace ASCOM.Simulator
 
             if (_position != Target) //Actually move the focuse if necessary
             {
-                 TL.LogMessage("Moving", "LastOffset, Position, Target RateOfChange " + LastOffset + " " + _position + " " + Target + " " + RateOfChange);
+                TL.LogMessage("Moving", "LastOffset, Position, Target RateOfChange " + LastOffset + " " + _position + " " + Target + " " + RateOfChange);
 
-                 if (Math.Abs(_position - Target) <= RateOfChange)
-                 {
-                     _position = Target;
-                     TL.LogMessage("Moving", "  Set position = target");
+                if (Math.Abs(_position - Target) <= RateOfChange)
+                {
+                    _position = Target;
+                    TL.LogMessage("Moving", "  Set position = target");
 
-                 }
-                 else
-                 {
-                     _position += (_position > Target) ? -RateOfChange : RateOfChange;
-                     TL.LogMessage("Moving", "  Updated position = " + _position);
-                 }
-                 TL.LogMessage("Moving", "  New position = " + _position);
+                }
+                else
+                {
+                    _position += (_position > Target) ? -RateOfChange : RateOfChange;
+                    TL.LogMessage("Moving", "  Updated position = " + _position);
+                }
+                TL.LogMessage("Moving", "  New position = " + _position);
             }
             if (KeepMoving & (DateTime.Now.Subtract(MouseDownTime).TotalSeconds > 0.5))
             {
-                Target = (Math.Sign(LastOffset) > 0 ) ?  MaxStep : 0;
+                Target = (Math.Sign(LastOffset) > 0) ? MaxStep : 0;
                 MouseDownTime = DateTime.Now;
                 if (RateOfChange < 100)
                 {
-                    RateOfChange = (int) Math.Ceiling((double) RateOfChange  * 1.2);
+                    RateOfChange = (int)Math.Ceiling((double)RateOfChange * 1.2);
                 }
                 TL.LogMessage("KeepMoving", "LastOffset, Position, Target, RateOfChange MouseDownTime " + LastOffset + " " + _position + " " + Target + " " + RateOfChange + " " + MouseDownTime.ToLongTimeString());
             }
@@ -630,7 +659,7 @@ namespace ASCOM.Simulator
             Temperature = Convert.ToDouble(Profile.GetValue(sCsDriverId, "Temperature", string.Empty, "5"), CultureInfo.InvariantCulture);
             //extended focuser items
             CanHalt = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanHalt", string.Empty, "true"), CultureInfo.InvariantCulture);
-            CanStepSize = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanStepSize", string.Empty, "true"), CultureInfo.InvariantCulture); 
+            CanStepSize = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "CanStepSize", string.Empty, "true"), CultureInfo.InvariantCulture);
             Synchronous = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Synchronous", string.Empty, "true"), CultureInfo.InvariantCulture);
             TempMax = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempMax", string.Empty, "50"), CultureInfo.InvariantCulture);
             TempMin = Convert.ToDouble(Profile.GetValue(sCsDriverId, "TempMin", string.Empty, "-50"), CultureInfo.InvariantCulture);
@@ -639,9 +668,9 @@ namespace ASCOM.Simulator
             TempSteps = Convert.ToInt32(Profile.GetValue(sCsDriverId, "TempSteps", string.Empty, "10"), CultureInfo.InvariantCulture);
             settleTime = Convert.ToInt32(Profile.GetValue(sCsDriverId, "SettleTime", string.Empty, "500"), CultureInfo.InvariantCulture);
 
-            if(!TL.Enabled)
+            if (!TL.Enabled)
                 TL.Enabled = Convert.ToBoolean(Profile.GetValue(sCsDriverId, "Logging", string.Empty, "false"), CultureInfo.InvariantCulture);
-      }
+        }
 
         /// <summary>
         /// Register the driver to setup a Profile
