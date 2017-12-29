@@ -35,6 +35,21 @@ namespace ASCOM.Simulator
             btnMoveIn.MouseDown += new MouseEventHandler(btnMoveIn_MouseDown);
             btnMoveIn.MouseUp += new MouseEventHandler(btnMove_MouseUp);
             txtGoTo.TextChanged += new EventHandler(txtGoTo_Changed);
+            this.VisibleChanged += FocuserHandboxForm_VisibleChanged;
+        }
+
+        private void FocuserHandboxForm_VisibleChanged(object sender, EventArgs e)
+        {
+            if (((Form)sender).Visible == true)
+            {
+                if (!(MyTimer == null)) MyTimer.Start();
+            }
+            else
+            {
+                MessageBox.Show("Form hidden");
+                if (!(MyTimer == null)) MyTimer.Stop();
+                System.Threading.Thread.Sleep(120); // Wait for just over a whole interval in case the timer fires
+            }
         }
 
         private void btnMoveOut_MouseDown(object sender, MouseEventArgs e)
