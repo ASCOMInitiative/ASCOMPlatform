@@ -9,6 +9,7 @@ namespace ASCOM.Simulator
     {
         private readonly Focuser _focuser; // = new Focuser();
         private const int positionClick = 1;
+        private const int timerUpdateInterval = 100; // Set the timer interval to 100ms = 0.1 sec
         private Timer MyTimer = new Timer();
 
         /// <summary>
@@ -26,8 +27,8 @@ namespace ASCOM.Simulator
             /* Adds the event and the event handler for the method that will process the timer event to the timer. */
             MyTimer.Tick += TimerEventProcessor;
 
-            // Sets the timer interval to 0.1 seconds.
-            MyTimer.Interval = 100;
+            // Set the timer interval and start the timer.
+            MyTimer.Interval = timerUpdateInterval;
             MyTimer.Start();
 
             btnMoveOut.MouseDown += new MouseEventHandler(btnMoveOut_MouseDown);
@@ -38,17 +39,22 @@ namespace ASCOM.Simulator
             this.VisibleChanged += FocuserHandboxForm_VisibleChanged;
         }
 
+        /// <summary>
+        /// This event handler is to stop the UI update timer when the form is hidden because its not needed.
+        /// This also stops exceptions being raised when the form is disposed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FocuserHandboxForm_VisibleChanged(object sender, EventArgs e)
         {
             if (((Form)sender).Visible == true)
             {
-                if (!(MyTimer == null)) MyTimer.Start();
+                if (!(MyTimer == null)) MyTimer.Start(); // Start the timer because the form is visible
             }
             else
             {
-                MessageBox.Show("Form hidden");
-                if (!(MyTimer == null)) MyTimer.Stop();
-                System.Threading.Thread.Sleep(120); // Wait for just over a whole interval in case the timer fires
+                if (!(MyTimer == null)) MyTimer.Stop(); // Stop the timer because the form is not visible
+                System.Threading.Thread.Sleep(timerUpdateInterval + 20); // Wait for just over a whole update interval in case the timer fires
             }
         }
 
