@@ -6,6 +6,9 @@ Set Variable SETUPLOG to
 Get Folder Location My->My Documents into MYDOCUMENTS
 Get Free Space on C: into variable DISKSPACE
  
+Comment: Set the dialogue transition style: Empty / FADE / SLIDE
+Set Variable FX to FADE
+ 
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Convert Variable REMOVE to UPPER case
 Comment: Create the correct log name depending on whether we are installing or uninstalling
@@ -175,7 +178,7 @@ if Variable WIN64MODE Equals TRUE
 end
  
 Comment: Setup up further global variables
-Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008) into ISNT
+Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008, 7, 2008 R2, 8, 2012, 8.1, 2012 R2, 10) into ISNT
 Get Folder Location System->Program Files Directory into PROGRAMFILES
 Get Common Folder Location System->Application Data Directory into PROGRAMDATA
 Get Common Folder Location System->Program Files Directory into COMMONFILES
