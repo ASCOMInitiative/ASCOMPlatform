@@ -518,6 +518,31 @@ $
 
 
 
+B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -576,12 +601,9 @@ $
 
 
 $
-PLATFORM6OK
-PREREQ
-PRELIST
-NEEDSUPGRADE
+PROGRESSMODE
 $
-1
+0
 4
 TRUE
 
@@ -595,18 +617,18 @@ ASCOM Platform 6.3 Developer Components
 ASCOM Platform 6.3 Developer Components Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{E25CA25D-4D32-48D4-919A-3023BAAF196B}
+{00C3C2F1-412B-49B0-9063-6BAAE927F8EF}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
 Copyright � 1998-2015, The ASCOM Initiative. All rights reserved. 
-FALSE
+TRUE
 ASCOMPlatform63Developer
 TRUE
 FALSE
 
-
+|
 http://timestamp.verisign.com/scripts/timstamp.dll
 
 UAC=requireAdministrator,CACHESOURCES=TRUE,BUILDMODE=SFX,LANGUAGE=English,"TITLE=ASCOM Platform 6 Developer Components Alpha 16",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~1,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\DEVELO~1\INSTAL~1,IAVER=10.00,LANGUAGE=English,LANGUAGE=English
