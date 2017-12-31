@@ -89,8 +89,11 @@ Define Component
 Define Component
 Comment
 Read Registry
+Read Registry
+If
 If
 Set Component State
+End
 End
 Comment
 Comment
@@ -265,6 +268,7 @@ MessageBalloon
 Set Variable
 Set Variable
 Comment
+Display Dialog
 Comment
 Set Variable
 Read Registry
@@ -618,9 +622,12 @@ $
 {EB6EF5ED-56F6-4268-9BDE-0DDB2ADA7F8F}
 {69DF2C82-E168-4ADD-963C-BA4102487851}
 {9BAE20C0-9336-4BEA-AE0F-0B0C56D8029B}
+{8DFDE4E0-9699-45B5-9477-758B6CB7578A}
 {2FE7696F-C592-4AE5-A6A0-8099F0101A9F}
+{3A90A78F-AD3B-463C-83FC-F36001110718}
 {6E4980A2-53EE-424D-ADB6-84A96412233D}
 {5034FE59-C0D2-4C5C-AB3D-4503A56FA556}
+{6188668D-446D-4186-A09C-395EEC9182B4}
 {CC00AD09-2D3D-445C-BB75-07426322DEFE}
 {179DA5EB-5D94-48D0-899E-24C8DE93ACB4}
 {453B1E22-7B83-4520-AD85-81C5DEFFC482}
@@ -794,6 +801,7 @@ $
 {F5476A9A-E31F-4332-8778-5CAC6F5A8D1B}
 {3AEFB5FC-6E78-4006-B9A3-7115413EA025}
 {2E4B1216-403A-4CC3-963D-44DDCF9C6B0E}
+{E3322111-ECF0-401E-A4ED-A73A7A63B69F}
 {CDA9757E-7502-4885-A7E6-1E8592C519D7}
 {097280ED-CBF5-486E-AF8F-6095A29B6731}
 {5123BD62-1155-45CC-AEA6-B71CF0130659}
@@ -1127,7 +1135,7 @@ Find location of our uninstaller and run it
 {2505375C-32E9-4A2C-AE1B-DDCA6114AE5F}
 Remove previous version (MSI install)
 {69DF2C82-E168-4ADD-963C-BA4102487851}
-Test whether VS is installed by seeing whether the >VSI extention is mapped to the content installer. If not then ignore!
+Test whether VS is installed by seeing whether the .VSI or .VSIX extentions are mapped to the content installer. If not then ignore!
 {BF70540B-FA52-4F0C-910C-88CC4BAA6716}
 Run the VsiInstaller to install the templates, provided that it is present on the system.
 {BFC987E2-B8EE-45EF-8F90-22068F4D3883}
@@ -1627,6 +1635,11 @@ NATIVE_ENGINE
 0
 TRUE
 FALSE
+{3A90A78F-AD3B-463C-83FC-F36001110718}
+VSIXENTRY
+0
+
+FALSE
 {485F537B-92DD-408E-BFC3-098ACA3F0AC8}
 $TITLE$ Setup
 Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
@@ -1778,6 +1791,13 @@ FALSE
 finish
 WIZARD
 TRUE
+
+TRUE
+FALSE
+{E3322111-ECF0-401E-A4ED-A73A7A63B69F}
+startinstallation
+WIZARD
+FALSE
 
 TRUE
 FALSE
@@ -3030,6 +3050,11 @@ PLATFORMNAME
 2
 SOFTWARE\ASCOM\Platform
 Platform Name
+{8DFDE4E0-9699-45B5-9477-758B6CB7578A}
+VSIXENTRY|
+0
+.vsix
+
 {DD2C0A7D-6C57-437A-8451-7160883242DC}
 0
 2
@@ -3641,25 +3666,10 @@ C
 
 
 
-C
-
-
-
-
-
-C
-
-
-
-
-
 
 
 
 C
-
-
-
 
 
 
@@ -3675,15 +3685,6 @@ C
 
 
 C
-
-
-
-
-
-
-
-
-
 
 
 
@@ -3711,6 +3712,33 @@ C
 
 
 
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+C
+
+
+
+
+
+
+
+
+
 C
 
 
@@ -3730,6 +3758,7 @@ C
 C
 
 C
+
 
 
 
@@ -4006,6 +4035,10 @@ C
 
 
 $
+
+
+
+
 
 
 
