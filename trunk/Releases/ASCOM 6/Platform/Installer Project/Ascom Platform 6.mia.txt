@@ -7,7 +7,9 @@ Get Folder Location My->My Documents into MYDOCUMENTS
 Get Free Space on C: into variable DISKSPACE
  
 Comment: Set the dialogue transition style: Empty / FADE / SLIDE
-Set Variable FX to FADE
+Set Variable FX to 
+Set Variable MYPROGRESS to 0
+Set Variable PROGRESSTEXT to 
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
 Convert Variable REMOVE to UPPER case
@@ -410,11 +412,11 @@ if Variable REMOVE Equals TRUE
     Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ - Uninstall cancelled (at end of file)
     Terminate Installation
   end
-  MessageBalloon: ASCOM Platform Maintenance, Removing Platform 6...
+  Set Variable PROGRESSTEXT to Removing Platform 6...
   Set Variable REPAIR to FALSE
 end
 if Variable REPAIR Equals TRUE
-  MessageBalloon: ASCOM Platform Maintenance, Repairing Platform 6...
+  Set Variable PROGRESSTEXT to Repairing Platform 6...
   Set Variable REMOVE to FALSE
 end
 Write into Text File $SETUPLOG$ from Value $TIME$ Maintenance - Repair: $REPAIR$, Remove: $REMOVE$ (at end of file)
@@ -456,7 +458,7 @@ Include Script: setupvc10_x86
 Include Script: setupvc10_x64
  
 if Variable REQUIRESUPGRADE Equals TRUE
-  MessageBalloon: ASCOM Platform Maintenance, Upgrading Platform 6 - Removing old version...
+  Set Variable PROGRESSTEXT to Uninstalling old Platform...
   Set Variable REMOVEOLD to 
   Set Variable ERROROLD to 
   Set Variable UNINSTALLCODE to 
@@ -475,8 +477,10 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable UNINSTALLER to 
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}\UninstallString into UNINSTALLER
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
+  Set Variable MYPROGRESS to 15
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
+  Set Variable MYPROGRESS to 20
    
   Comment: Now process the installer error code
   if Variable UNINSTALLCODE not Equals 0
@@ -525,7 +529,8 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Comment: end
   Comment: end
   Set Variable MAINTENANCE to FALSE
-  MessageBalloon: ASCOM Platform Maintenance, Upgrading Platform 6 - Installing new version...
+  Set Variable PROGRESSTEXT to Upgrading Platform 6 - Installing new version...
+  Set Variable MYPROGRESS to 25
 end
  
 Comment: Modify Target System
@@ -533,7 +538,7 @@ Comment: Modify Target System
 if Variable REMOVE Equals TRUE
   Comment: Uninstall product
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling platform (at end of file)
-  Set Variable PROGRESS to 0
+  Set Variable MYPROGRESS to 0
   Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.Exceptions", startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - removing policy.1.0.ASCOM.Exceptions (at end of file)
   if Variable GACINSTALLRC not Equals 0
@@ -559,12 +564,12 @@ if Variable REMOVE Equals TRUE
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
   end
-  Set Variable PROGRESS to 40
+  Set Variable MYPROGRESS to 40
   Unregister assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESS to 45
+  Set Variable MYPROGRESS to 45
   Unregister assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -573,28 +578,28 @@ if Variable REMOVE Equals TRUE
   Comment: Unregister assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Unregister ASCOM Master Interfaces typelib (at end of file)
-  Set Variable PROGRESS to 50
+  Set Variable MYPROGRESS to 50
    
   Comment: Remove 32bit native images
-  Set Variable PROGRESS to 60
+  Set Variable MYPROGRESS to 60
   MessageBalloon: ASCOM Platform Maintenance, Removing 32bit native images
   Delete Native Images for assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Delete Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Delete Native Images for assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Delete Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESS to 65
+  Set Variable MYPROGRESS to 65
   Delete Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Delete Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Delete Native Images for assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESS to 75
+  Set Variable MYPROGRESS to 75
   Delete Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Delete Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable PROGRESS to 80
+  Set Variable MYPROGRESS to 80
   Comment: Remove 64bit native images if necessary and remove 64bit component COM registration
   if Variable WIN64MODE Equals TRUE
     MessageBalloon: ASCOM Platform Maintenance, Removing 64bit native images
     Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-    Set Variable PROGRESS to 85
+    Set Variable MYPROGRESS to 85
     Run Program $NGEN64$ uninstall "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove ASCOM.Utilities.Video (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
@@ -603,14 +608,14 @@ if Variable REMOVE Equals TRUE
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove Astrometry 5.5.6.0 (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove Astrometry 6.0.0.0 (at end of file)
-    Set Variable PROGRESS to 90
+    Set Variable MYPROGRESS to 90
     Run Program $NGEN64$ uninstall "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove Utilities (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove DeviceInterfaces (at end of file)
     Run Program $NGEN64$ uninstall "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen Remove Exceptions (at end of file)
-    Set Variable PROGRESS to 95
+    Set Variable MYPROGRESS to 95
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm Unregister Astrometry (at end of file)
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
@@ -635,7 +640,7 @@ if Variable REMOVE Equals TRUE
       Write into Text File $SETUPLOG$ from Value $TIME$ Removing unpinned assemblies (at end of file)
     end
   end
-  Set Variable PROGRESS to 100
+  Set Variable MYPROGRESS to 100
   MessageBalloon: , 
   Write into Text File $SETUPLOG$ from Value $TIME$ Finished uninstalling Platform (at end of file)
 else
@@ -712,25 +717,25 @@ else
       Comment: Run the uninstaller if either platform is found
       Set Variable RC to 999
       if Variable PLATFORM5FOUND Equals TRUE
-        MessageBalloon: ASCOM Platform Maintenance, Removing Platform 5...
+        Set Variable PROGRESSTEXT to Removing Platform 5...
         Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 5... (at end of file)
         Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
-        MessageBalloon: ASCOM Platform Maintenance, Installing Platform 6...
+        Set Variable PROGRESSTEXT to Installing Platform 6...
       else
         if Variable PLATFORM4FOUND Equals TRUE
-          MessageBalloon: ASCOM Platform Maintenance, Removing Platform 4...
+          Set Variable PROGRESSTEXT to Removing Platform 4...
           Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling Platform 4... (at end of file)
           Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM  (at end of file)
-          MessageBalloon: ASCOM Platform Maintenance, Installing Platform 6...
+          Set Variable PROGRESSTEXT to Installing Platform 6...
         else
           Comment: UninstallASCOM must run in order to set the correct security ACL on the ASCOM registry profile store
-          MessageBalloon: ASCOM Platform Maintenance, Preparing ASCOM Profile Store...
+          Set Variable PROGRESSTEXT to Preparing ASCOM Profile Store...
           Write into Text File $SETUPLOG$ from Value $TIME$ First time install, preparing ASCOM Profile Store (at end of file)
           Run Program $SUPPORTDIR$\UninstallAscom.exe  (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ UninstallASCOM (at end of file)
-          MessageBalloon: ASCOM Platform Maintenance, First time install - Installing Platform 6...
+          Set Variable PROGRESSTEXT to First time install - Installing Platform 6...
         end
       end
       if Variable RC not Equals 0
@@ -749,8 +754,10 @@ else
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
+    Set Variable MYPROGRESS to 35
      
     Comment: ***** Start of Platform Installation *****
+    Set Variable PROGRESSTEXT to Installing $TITLE$
     Comment: Create the main ASCOM folder in Common Files
     Create Folder $COMMONFILES$\ASCOM
      
@@ -1314,6 +1321,7 @@ else
      
     Comment: Run the installation
     Apply Install (get result into variable SUCCESS)
+    Set Variable MYPROGRESS to 65
     Write into Text File $SETUPLOG$ from Value $TIME$ Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
     Write into Text File $SETUPLOG$ from Value  (at end of file)
     if Variable SUCCESS not Equals ERROR
@@ -1322,13 +1330,14 @@ else
          
         [DEFINE REGION: COM registrations]
         Comment: Register Platform 5 components
-        Set Variable PROGRESS to 0
+        Set Variable PROGRESSTEXT to Registering Platform 5 components
+        Set Variable MYPROGRESS to 70
         Register assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Set Variable PROGRESS to 5
+        Set Variable MYPROGRESS to 72
         Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Comment: Register the Platform 5 type libraries
-        Set Variable PROGRESS to 10
+        Set Variable MYPROGRESS to 74
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - ASCOMMasterInterfaces (at end of file)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT, get result into variable RC)
@@ -1337,7 +1346,7 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper2 (at end of file)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - IObjectSafety (at end of file)
-        Set Variable PROGRESS to 15
+        Set Variable MYPROGRESS to 76
         Comment: Register Platform 5 Simulators
         Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ScopeSim (at end of file)
@@ -1347,7 +1356,7 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Pipe (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
-        Set Variable PROGRESS to 20
+        Set Variable MYPROGRESS to 78
         Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - DomeSim (at end of file)
         Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
@@ -1358,9 +1367,10 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FocusSim (at end of file)
         Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - SwitchSim (at end of file)
-        Set Variable PROGRESS to 25
+        Set Variable MYPROGRESS to 80
          
         Comment: Register Platform 5.5 components
+        Set Variable PROGRESSTEXT to Registering Platform 5.5 components
         Register assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -1371,7 +1381,7 @@ else
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
         end
-        Set Variable PROGRESS to 30
+        Set Variable MYPROGRESS to 82
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Astrometry Policy (at end of file)
         if Variable GACINSTALLRC not Equals 0
@@ -1400,9 +1410,10 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Astrometry 5.5.6 (at end of file)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
-        Set Variable PROGRESS to 35
+        Set Variable MYPROGRESS to 84
          
         Comment: Register Platform 6 components
+        Set Variable PROGRESSTEXT to Registering Platform 6 components
         Register assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -1417,7 +1428,7 @@ else
         Register assembly $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll, set the code base in the registry
          
         Comment: Register these LocalServer drivers using the -register option
-        Set Variable PROGRESS to 40
+        Set Variable MYPROGRESS to 86
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
         Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
@@ -1431,7 +1442,7 @@ else
         Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
          
-        Set Variable PROGRESS to 45
+        Set Variable MYPROGRESS to 88
         Comment: Extra registration of 64bit components if on 64bit system
         if Variable WIN64MODE Equals TRUE
           Comment: Initialise variables
@@ -1450,6 +1461,7 @@ else
           Set Variable RC12 to 0
            
           Comment: Register core components
+          Set Variable PROGRESSTEXT to Registering core components
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC1)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC1$ RegAsm64 - Astrometry (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC2)
@@ -1458,9 +1470,10 @@ else
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC3$ RegAsm64 - Utilities (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC4)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC4$ RegAsm64 - Video Utilities (at end of file)
-          Set Variable PROGRESS to 50
+          Set Variable MYPROGRESS to 90
            
           Comment: Register simulators
+          Set Variable PROGRESSTEXT to Registering simulators
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\ASCOM.Simulator.Camera.dll" /codebase (WAIT, get result into variable RC5)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC5$ RegAsm64 - Camera Simulator 6 (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\ASCOM.Simulator.Focuser.dll" /codebase (WAIT, get result into variable RC6)
@@ -1473,7 +1486,7 @@ else
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC9$ RegAsm64 - Video Simulator (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC10)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC10$ RegAsm64 - Open Weather Map Driver (at end of file)
-          Set Variable PROGRESS to 60
+          Set Variable MYPROGRESS to 91
           if Variable RC1 not Equals 0
             MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
           else
@@ -1524,7 +1537,7 @@ else
         end
          
         Comment: Install native images
-        MessageBalloon: ASCOM Platform Maintenance, Creating 32bit native images
+        Set Variable PROGRESSTEXT to Creating 32bit native images
         Generate Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DeviceInterfaces 6 (at end of file)
         Generate Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -1533,15 +1546,15 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Utilities 6 (at end of file)
         Generate Native Images for assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - VideoUtils 6.1 (at end of file)
-        Set Variable PROGRESS to 65
+        Set Variable MYPROGRESS to 92
         Generate Native Images for assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 5.5.6 (at end of file)
         Generate Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 6 (at end of file)
-        Set Variable PROGRESS to 75
+        Set Variable MYPROGRESS to 93
         Generate Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DriverAccess 6 (at end of file)
-        Set Variable PROGRESS to 80
+        Set Variable MYPROGRESS to 94
         Generate Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Helper2 1.0 (at end of file)
         Generate Native Images for assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -1549,46 +1562,45 @@ else
         Generate Native Images for assembly DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DirectShowLib 2.1 (at end of file)
         if Variable WIN64MODE Equals TRUE
-          MessageBalloon: ASCOM Platform Maintenance, Creating 64bit native images
+          Set Variable PROGRESSTEXT to Creating 64bit native images
           Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DeviceInterfaces 6 (at end of file)
-          Set Variable PROGRESS to 85
+          Set Variable MYPROGRESS to 95
           Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DriverAccess 6 (at end of file)
           Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Exceptions 6 (at end of file)
-          Set Variable PROGRESS to 88
+          Set Variable MYPROGRESS to 96
           Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Utilities 6 (at end of file)
           Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Video Utilities (at end of file)
-          Set Variable PROGRESS to 90
+          Set Variable MYPROGRESS to 97
           Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 5.5.6 (at end of file)
-          Set Variable PROGRESS to 93
+          Set Variable MYPROGRESS to 98
           Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 6 (at end of file)
           Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
-          Set Variable PROGRESS to 95
+          Set Variable MYPROGRESS to 99
         end
-        MessageBalloon: ASCOM Platform Maintenance, Finalising install
+        Set Variable PROGRESSTEXT to Finalising install
         [END REGION]
          
         Comment: Tidy up COM registration (add AppID for DCOM etc.) and finish
         Run Program $SUPPORTDIR$\FinaliseInstall.exe  (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ FinaliseInstall (at end of file)
-        Set Variable PROGRESS to 100
+        Set Variable MYPROGRESS to 100
         if Variable RC not Equals 0
           MessageBox: Finalise Setup, An error has occured while finalising the installation, please save all logs in My Documents\ASCOM... and report this on the ASCOM-Talk Yahoo group.
           Set Variable ASCOMERROR to $RC$
         end
-        MessageBalloon: , 
       end
     end
   end
   [compiler end]
-  Set Variable PROGRESS to 100
+  Set Variable MYPROGRESS to 100
 end
 [END REGION]
 [END REGION]
