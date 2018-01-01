@@ -50,6 +50,7 @@ moon.bmp
 readme.rtf
 RemoveASCOM.exe
 RemoveASCOM.pdb
+setup.bmp
 Sleep.exe
 SuppressWinErrors.exe
 SuppressWinErrors.pdb
@@ -57,6 +58,15 @@ swoosh.avi
 UninstallAscom.exe
 UninstallAscom.pdb
 $
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1764,6 +1774,9 @@ B
 
 
 
+
+
+
 $
 SHORTCUTFOLDER
 SHORTCUTFILESALL
@@ -1783,7 +1796,7 @@ ASCOM Platform 6.3
 ASCOM Platform 6.3 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{C1F56A55-C2D9-49F7-8E3B-1FAD0E5E726C}
+{27B1DD7D-BFD5-47AF-A895-84AE632AE566}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
@@ -1794,7 +1807,7 @@ ASCOMPlatform63
 TRUE
 FALSE
 
-
+|
 http://timestamp.verisign.com/scripts/timstamp.dll
 
 UAC=requireAdministrator,CACHESOURCES=TRUE
