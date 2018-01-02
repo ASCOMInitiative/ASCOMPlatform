@@ -1403,6 +1403,8 @@ $
 
 
 
+
+
 B
 
 
@@ -1796,7 +1798,7 @@ ASCOM Platform 6.3
 ASCOM Platform 6.3 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{92F13FBE-F313-4176-B28F-6251819B2701}
+{801A34EE-7194-49D6-9684-52D593547A80}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
@@ -1828,11 +1830,11 @@ FALSE
 checknet351.mia
 checkmsi31.mia
 setupmsi31.mia
-checkvc10_x64.mia
-checkvc10_x86.mia
-setupvc10_x64.mia
-setupvc10_x86.mia
 checknet4client_x86.mia
+checkvc1410_25017_x86.mia
+setupvc1410_25017_x86.mia
+checkvc1410_25017_x64.mia
+setupvc1410_25017_x64.mia
 $
 FALSE
 

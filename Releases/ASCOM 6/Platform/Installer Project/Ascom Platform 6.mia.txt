@@ -56,8 +56,10 @@ end
 Comment: Check setup pre-requisites
 Set Variable PREREQ to FALSE
 Set Variable PRELIST to 
-Set Variable VC10_X86 to 
 Set Variable DOTNET40CLIENT_X86 to 
+Set Variable VC1410_25017_RTM_X64 to 
+Set Variable VC1410_25017_RTM_X86 to 
+Set Variable VC to 
 [compiler if Variable BUILDMODE not Equals PATCH]
 if Variable NEEDSUPGRADE Equals TRUE
   Comment: Uninstall via Windows Installer
@@ -65,6 +67,8 @@ if Variable NEEDSUPGRADE Equals TRUE
   Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Uninstallation
 end
 Include Script: checkmsi31
+Include Script: checkvc1410_25017_x64
+Include Script: checkvc1410_25017_x86
 if Variable RECOMMENDEDUPGRADE Equals TRUE
   Comment: Uninstall via Native Engine
   Comment: Set Variable PREREQ to TRUE
@@ -72,22 +76,18 @@ if Variable RECOMMENDEDUPGRADE Equals TRUE
 end
 Include Script: checknet351
 Include Script: checknet4client_x86
-Include Script: checkvc10_x86
-Include Script: checkvc10_x64
 [compiler end]
 [END REGION]
  
 [DEFINE REGION: Install Application Pre-Requisites]
 Comment: Install setup pre-requisites
+Comment: Create a single variable to show whether VC installs are required
+Set Variable VC to FALSE
 if Variable PREREQ not Equals FALSE
-  Comment: Create a single variable indicating whether any C++ 10 libraries need to be installed.
-  Set Variable VC10 to 
-  Set Variable VC10 to TRUE
-  if Variable VC10_X86 Equals FALSE
-    Set Variable VC10 to FALSE
-  end
-  if Variable VC10_X64 Equals FALSE
-    Set Variable VC10 to FALSE
+  if Variable VC1410_25017_RTM_X86 Equals FALSE
+    if Variable VC1410_25017_RTM_X64 Equals FALSE
+      Set Variable VC to TRUE
+    end
   end
   if Variable DOTNET40CLIENT_X86 Equals FALSE
     Comment: If Framework 4 is missing then we don't need a message about 3.5 as well!
@@ -454,8 +454,10 @@ if Variable NEEDSUPGRADE Equals TRUE
 end
 [DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
 Include Script: setupmsi31
-Include Script: setupvc10_x86
-Include Script: setupvc10_x64
+[DEFINE WEB MEDIA Microsoft Visual C++ Runtime for Visual Studio 2017 v.15.2 (x64)]
+Include Script: setupvc1410_25017_x64
+[DEFINE WEB MEDIA Microsoft Visual C++ Runtime for Visual Studio 2017 v.15.2 (x86)]
+Include Script: setupvc1410_25017_x86
  
 if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable PROGRESSTEXT to Uninstalling old Platform...
