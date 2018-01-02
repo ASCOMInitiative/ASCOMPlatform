@@ -489,9 +489,9 @@ Public Class DiagnosticsForm
 
         j = SOFA.CelestialToObserved(rc, dc, pr, pd, px, rv, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob, eo)
 
-        CompareDouble("SOFATests", "CelestialToObserved-aob", aob, 0.0925177448535823, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "CelestialToObserved-aob", aob, 0.0925177448538656, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareDouble("SOFATests", "CelestialToObserved-zob", zob, 1.4076614052567671, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
-        CompareDouble("SOFATests", "CelestialToObserved-hob", hob, -0.092651544314031581, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "CelestialToObserved-hob", hob, -0.0926515443143121, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
         CompareDouble("SOFATests", "CelestialToObserved-dob", dob, 0.17166265600755917, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
         CompareDouble("SOFATests", "CelestialToObserved-rob", rob, 2.7102604535030976, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
         CompareDouble("SOFATests", "CelestialToObserved-eo", eo, -0.0030205483548024128, 0.00000000000001)
