@@ -1,6 +1,6 @@
 Comment: ASCOM Platform installation script
  
-[DEFINE REGION: Set up log file and display checking for pre-requisites dialogue.]
+[DEFINE REGION: Set up log file and Global Variables]
 Comment: Define variables, create the directory and log file name.
 Set Variable SETUPLOG to 
 Get Folder Location My->My Documents into MYDOCUMENTS
@@ -10,16 +10,18 @@ Comment: Set the dialogue transition style: Empty / FADE / SLIDE
 Set Variable FX to 
 Set Variable MYPROGRESS to 0
 Set Variable PROGRESSTEXT to 
+Set Variable APPLYINSTALLSUCCESS to 
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
-Convert Variable REMOVE to UPPER case
+Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
+ 
 Comment: Create the correct log name depending on whether we are installing or uninstalling
+Convert Variable REMOVE to UPPER case
 if Variable REMOVE Equals TRUE
   Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Remove$DISKSPACE$.txt
 else
   Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6Install$DISKSPACE$.txt
 end
-Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
 Write into Text File $SETUPLOG$ from Value $TIME$ $TITLE$ v$VERSION$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Installation date: $DATE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
@@ -30,95 +32,6 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Engine cache: $ENGINECACHE$ (a
 Write into Text File $SETUPLOG$ from Value $TIME$ MSI file: $MSIFILE$ (at end of file)
 Write into Text File $SETUPLOG$ from Value   (at end of file)
  
-[END REGION]
- 
-[DEFINE REGION: Check Application Requirements]
-Get System Setting Administrator Rights into CHECKSYSTEM
-if Variable CHECKSYSTEM not Equals TRUE
-  MessageBox: $TITLE$ Setup Error, This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
-  Terminate Installation
-end
-Get System Setting Internet Explorer 5.01 Service Pack 1 into CHECKSYSTEM
-if Variable CHECKSYSTEM not Equals TRUE
-  MessageBox: $TITLE$ Setup Error, This product requires at least Internet Explorer 5.01 Service Pack 1.$NEWLINE$$NEWLINE$Setup cannot continue.
-  Terminate Installation
-end
-Get System Setting Windows XP into CHECKSYSTEM
-if Variable CHECKSYSTEM not Equals TRUE
-  MessageBox: $TITLE$ Setup Error, This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
-  Terminate Installation
-end
-[END REGION]
- 
-[DEFINE REGION: Check/Install Application Pre-Requisites]
- 
-[DEFINE REGION: Check Application Pre-Requisites]
-Comment: Check setup pre-requisites
-Set Variable PREREQ to FALSE
-Set Variable PRELIST to 
-Set Variable DOTNET40CLIENT_X86 to 
-Set Variable VC1410_25017_RTM_X64 to 
-Set Variable VC1410_25017_RTM_X86 to 
-Set Variable VC to 
-[compiler if Variable BUILDMODE not Equals PATCH]
-if Variable NEEDSUPGRADE Equals TRUE
-  Comment: Uninstall via Windows Installer
-  Comment: Set Variable PREREQ to TRUE
-  Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Uninstallation
-end
-Include Script: checkmsi31
-Include Script: checkvc1410_25017_x64
-Include Script: checkvc1410_25017_x86
-if Variable RECOMMENDEDUPGRADE Equals TRUE
-  Comment: Uninstall via Native Engine
-  Comment: Set Variable PREREQ to TRUE
-  Comment: Set Variable PRELIST to $PRELIST$$NEWLINE$Previous Version Removal
-end
-Include Script: checknet351
-Include Script: checknet4client_x86
-[compiler end]
-[END REGION]
- 
-[DEFINE REGION: Install Application Pre-Requisites]
-Comment: Install setup pre-requisites
-Comment: Create a single variable to show whether VC installs are required
-Set Variable VC to FALSE
-if Variable PREREQ not Equals FALSE
-  if Variable VC1410_25017_RTM_X86 Equals FALSE
-    if Variable VC1410_25017_RTM_X64 Equals FALSE
-      Set Variable VC to TRUE
-    end
-  end
-  if Variable DOTNET40CLIENT_X86 Equals FALSE
-    Comment: If Framework 4 is missing then we don't need a message about 3.5 as well!
-    Set Variable NET351 to TRUE
-  end
-  Display Dialog: prereq, wait for dialog to return (modal)
-  if Variable WIZARD Equals CANCEL
-    Terminate Installation
-  end
-  if Variable WIZARD Equals NEXT
-    Comment: Check for .NET 4.0
-    if Variable DOTNET40CLIENT_X86 Equals FALSE
-      MessageBox: Pre-requisites, We are sorry but you must install Framework 4 before continuing with this install.
-      Terminate Installation
-    end
-    Comment: Check for .NET 3.5 SP1
-    if Variable NET351 Equals FALSE
-      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
-      Terminate Installation
-    end
-  end
-  Display Dialog: progressprereq, use as progress dialog (non-modal)
-  [compiler if Variable BUILDMODE not Equals PATCH]
-  [compiler end]
-  Hide Dialog
-end
-[END REGION]
- 
-[END REGION]
- 
-[DEFINE REGION: Define Setup Globals]
 Comment: Set current leap second value
 Set Variable LEAPSECONDS to 37
  
@@ -233,19 +146,6 @@ else
   Write into Text File $SETUPLOG$ from Value $TIME$ Installer mode: MSI Engine (at end of file)
 end
 Write into Text File $SETUPLOG$ from Value  (at end of file)
-Comment: Correct presentation for Win 7
-if Variable OPSYS Equals SEVEN
-  Set Variable OPSYS to 7
-end
-Comment: Check for presence of Windows 8
-if Variable OPSYS Equals UNKNOWN
-  if Variable OSCURRENTVERSION Equals 6.2
-    Set Variable OPSYS to 8
-  end
-  if Variable OSCURRENTVERSION Equals 6.3
-    Set Variable OPSYS to 10
-  end
-end
 Write into Text File $SETUPLOG$ from Value $TIME$ OS: Windows $OPSYS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Product Name:  $OSPRODUCTNAME$ (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Edition:  $OSEDITIONID$ (at end of file)
@@ -287,6 +187,72 @@ Write into Text File $SETUPLOG$ from Value $TIME$ Target Directory: $TARGETDIR$ 
 Write into Text File $SETUPLOG$ from Value  (at end of file)
 Write into Text File $SETUPLOG$ from Value $TIME$ Platform Version: $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$.$PLATFORMVERSIONSPNUMBER$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
+[END REGION]
+ 
+[DEFINE REGION: Check Application Requirements]
+Get System Setting Administrator Rights into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Administrator Privileges.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
+Get System Setting Internet Explorer 5.01 Service Pack 1 into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Internet Explorer 5.01 Service Pack 1.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
+Get System Setting Windows XP into CHECKSYSTEM
+if Variable CHECKSYSTEM not Equals TRUE
+  MessageBox: $TITLE$ Setup Error, This product requires at least Windows XP.$NEWLINE$$NEWLINE$Setup cannot continue.
+  Terminate Installation
+end
+[END REGION]
+ 
+[DEFINE REGION: Check/Install Application Pre-Requisites]
+ 
+[DEFINE REGION: Check Application Pre-Requisites]
+Comment: Check setup pre-requisites
+Set Variable PREREQ to FALSE
+Set Variable PRELIST to 
+Set Variable DOTNET40CLIENT_X86 to 
+[compiler if Variable BUILDMODE not Equals PATCH]
+Include Script: checkmsi31
+Include Script: checknet351
+Include Script: checknet4client_x86
+Include Script: checkvc1410_25017_x86
+Include Script: checkvc1410_25017_x64
+[compiler end]
+[END REGION]
+ 
+[DEFINE REGION: Install Application Pre-Requisites]
+Comment: Install setup pre-requisites
+if Variable PREREQ not Equals FALSE
+  if Variable DOTNET40CLIENT_X86 Equals FALSE
+    Comment: If Framework 4 is missing then we don't need a message about 3.5 as well!
+    Set Variable NET351 to TRUE
+  end
+  Display Dialog: prereq, wait for dialog to return (modal)
+  if Variable WIZARD Equals CANCEL
+    Terminate Installation
+  end
+  if Variable WIZARD Equals NEXT
+    Comment: Check for .NET 4.0
+    if Variable DOTNET40CLIENT_X86 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but you must install Framework 4 before continuing with this install.
+      Terminate Installation
+    end
+    Comment: Check for .NET 3.5 SP1
+    if Variable NET351 Equals FALSE
+      MessageBox: Pre-requisites, We are sorry but this installer does not contain any pre-requisites except for Windows Installer 3.1.$NEWLINE$$NEWLINE$Please install other pre-requisites manually.
+      Terminate Installation
+    end
+  end
+  Display Dialog: progressprereq, use as progress dialog (non-modal)
+  [compiler if Variable BUILDMODE not Equals PATCH]
+  [compiler end]
+  Hide Dialog
+end
+[END REGION]
+ 
 [END REGION]
  
 [DEFINE REGION: Setup User Interview]
@@ -452,13 +418,15 @@ Comment: MSI install requires upgrade
 if Variable NEEDSUPGRADE Equals TRUE
   Set Variable REQUIRESUPGRADE to TRUE
 end
-[DEFINE WEB MEDIA Microsoft Windows Installer 3.1]
+ 
+Comment: Install pre-requisites included in this installer
 Include Script: setupmsi31
-[DEFINE WEB MEDIA Microsoft Visual C++ Runtime for Visual Studio 2017 v.15.2 (x64)]
 Include Script: setupvc1410_25017_x64
-[DEFINE WEB MEDIA Microsoft Visual C++ Runtime for Visual Studio 2017 v.15.2 (x86)]
 Include Script: setupvc1410_25017_x86
  
+[DEFINE REGION: Perform Uninstallation]
+ 
+[DEFINE REGION: Uninstall previous version]
 if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable PROGRESSTEXT to Uninstalling old Platform...
   Set Variable REMOVEOLD to 
@@ -534,9 +502,11 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable PROGRESSTEXT to Upgrading Platform 6 - Installing new version...
   Set Variable MYPROGRESS to 25
 end
+[END REGION]
+ 
+[DEFINE REGION: Remove items installed outside of MSI installer]
  
 Comment: Modify Target System
-[DEFINE REGION: Perform Uninstallation]
 if Variable REMOVE Equals TRUE
   Comment: Uninstall product
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling platform (at end of file)
@@ -648,6 +618,8 @@ if Variable REMOVE Equals TRUE
 else
   [END REGION]
    
+  [END REGION]
+   
   [DEFINE REGION: Perform First Time or Maintenance Installation]
    
   [DEFINE REGION: Uninstall previous Platforms]
@@ -750,6 +722,8 @@ else
   Comment: TO-DO: Insert any additional install commands here
   [END REGION]
    
+  [DEFINE REGION: Main Platform installation]
+   
   [compiler if Variable BUILDMODE Equals PATCH]
   Apply Patch (get result into variable SUCCESS)
   [compiler else]
@@ -820,14 +794,6 @@ else
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES$\ASCOM\.net
     Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES$\ASCOM\.net
     Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES$\ASCOM\.net
-    Comment: Install additional files to make sure old 64bit mode driver installers continue to work
-    if Variable WIN64MODE Equals TRUE
-      Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-      Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES64$ASCOM\.net
-      Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES64$ASCOM\.net
-      Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES64$ASCOM\.net
-      Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
-    end
     [END REGION]
      
     [DEFINE REGION: Platform 6 files]
@@ -1308,12 +1274,13 @@ else
     Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
     [END REGION]
      
-    [DEFINE REGION: Additional clean-up when uninstalling]
+    [DEFINE REGION: Specify additional clean-up required when uninstalling]
     Comment: Remove TLB files created by RegAsm when application is uninstalled
     Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\Focuser\ASCOM.Simulator.Focuser\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\SafetyMonitor\ASCOM.Simulator.SafetyMonitor\*.tlb (when uninstalling)
     Delete Files $COMMONFILES$\ASCOM\Video\ASCOM.Simulator.Video\*.tlb (when uninstalling)
+     
     [END REGION]
      
     Comment: Install in 64bit mode if we are running on a 64bit OS
@@ -1323,14 +1290,23 @@ else
      
     Comment: Run the installation
     Apply Install (get result into variable SUCCESS)
+     
+    Comment: Save the installation success value and log status outcomes
+    Set Variable APPLYINSTALLSUCCESS to $SUCCESS$
     Set Variable MYPROGRESS to 65
     Write into Text File $SETUPLOG$ from Value $TIME$ Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
     Write into Text File $SETUPLOG$ from Value  (at end of file)
-    if Variable SUCCESS not Equals ERROR
-      if Variable SUCCESS not Equals CANCEL
-        Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+     
+    Comment: Reset to 32bit mode if we are operating in 64bit mode
+    if Variable WIN64MODE Equals TRUE
+      Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+    end
+     
+    Comment: Process COM registrations if the MSI install was successful
+    if Variable APPLYINSTALLSUCCESS not Equals ERROR
+      if Variable APPLYINSTALLSUCCESS not Equals CANCEL
          
-        [DEFINE REGION: COM registrations]
+        [DEFINE REGION: Non-MSI installation activities]
         Comment: Register Platform 5 components
         Set Variable PROGRESSTEXT to Registering Platform 5 components
         Set Variable MYPROGRESS to 70
@@ -1338,6 +1314,7 @@ else
         Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Set Variable MYPROGRESS to 72
         Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+         
         Comment: Register the Platform 5 type libraries
         Set Variable MYPROGRESS to 74
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
@@ -1349,6 +1326,7 @@ else
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - IObjectSafety (at end of file)
         Set Variable MYPROGRESS to 76
+         
         Comment: Register Platform 5 Simulators
         Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - ScopeSim (at end of file)
@@ -1586,6 +1564,16 @@ else
           Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
           Set Variable MYPROGRESS to 99
+           
+          Comment: Install additional Platform 5.5 files on 64 bit systems to make sure old 64bit mode driver installers continue to work
+          Set Variable NATIVE_ENGINE to TRUE
+          Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+          Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES64$ASCOM\.net
+          Install Files ..\..\..\..\ASCOM.DriverAccess.Platform5\bin\Release\ASCOM.DriverAccess.dll to $COMMONFILES64$ASCOM\.net
+          Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Docs\These files are not in use - ReadMe.txt to $COMMONFILES64$ASCOM\.net
+          Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
+          Apply Install (get result into variable SUCCESS)
+          Set Variable NATIVE_ENGINE to FALSE
         end
         Set Variable PROGRESSTEXT to Finalising install
         [END REGION]
@@ -1605,6 +1593,9 @@ else
   Set Variable MYPROGRESS to 100
 end
 [END REGION]
+ 
+[END REGION]
+ 
 [END REGION]
  
 [DEFINE REGION: Finish Setup]
