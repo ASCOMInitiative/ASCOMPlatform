@@ -6,6 +6,9 @@ Set Variable SETUPLOG to
 Get Folder Location My->My Documents into MYDOCUMENTS
 Get Free Space on C: into variable DISKSPACE
  
+Comment: Suppress InstallAware branding in dialogues
+Set Variable MYAHLOGO to TRUE
+ 
 Comment: Set the dialogue transition style: Empty / FADE / SLIDE
 Set Variable FX to 
 Set Variable MYPROGRESS to 0
@@ -421,8 +424,11 @@ end
  
 Comment: Install pre-requisites included in this installer
 Include Script: setupmsi31
+Set Variable MYPROGRESS to 3
 Include Script: setupvc1410_25017_x64
+Set Variable MYPROGRESS to 8
 Include Script: setupvc1410_25017_x86
+Set Variable MYPROGRESS to 13
  
 [DEFINE REGION: Perform Uninstallation]
  
@@ -450,7 +456,7 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Set Variable MYPROGRESS to 15
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
-  Set Variable MYPROGRESS to 20
+  Set Variable MYPROGRESS to 30
    
   Comment: Now process the installer error code
   if Variable UNINSTALLCODE not Equals 0
@@ -500,7 +506,7 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Comment: end
   Set Variable MAINTENANCE to FALSE
   Set Variable PROGRESSTEXT to Upgrading Platform 6 - Installing new version...
-  Set Variable MYPROGRESS to 25
+  Set Variable MYPROGRESS to 35
 end
 [END REGION]
  
@@ -510,7 +516,7 @@ Comment: Modify Target System
 if Variable REMOVE Equals TRUE
   Comment: Uninstall product
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling platform (at end of file)
-  Set Variable MYPROGRESS to 0
+  Set Variable MYPROGRESS to 40
   Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.Exceptions", startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - removing policy.1.0.ASCOM.Exceptions (at end of file)
   if Variable GACINSTALLRC not Equals 0
@@ -536,12 +542,12 @@ if Variable REMOVE Equals TRUE
   if Variable GACINSTALLRC not Equals 0
     MessageBalloon: GACInstall, DriverAccess install error RC: $GACINSTALLRC$
   end
-  Set Variable MYPROGRESS to 40
+  Set Variable MYPROGRESS to 45
   Unregister assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Exceptions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-  Set Variable MYPROGRESS to 45
+  Set Variable MYPROGRESS to 50
   Unregister assembly ASCOM.IConform, Version=5.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Unregister assembly ASCOM.Internal.FusionLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
@@ -550,7 +556,7 @@ if Variable REMOVE Equals TRUE
   Comment: Unregister assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe -u "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Unregister ASCOM Master Interfaces typelib (at end of file)
-  Set Variable MYPROGRESS to 50
+  Set Variable MYPROGRESS to 55
    
   Comment: Remove 32bit native images
   Set Variable MYPROGRESS to 60
@@ -730,7 +736,6 @@ else
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
-    Set Variable MYPROGRESS to 35
      
     Comment: ***** Start of Platform Installation *****
     Set Variable PROGRESSTEXT to Installing $TITLE$
@@ -980,264 +985,131 @@ else
     [END REGION]
      
     [DEFINE REGION: Set Registry Keys]
-    Comment: *** BEWARE *** All registry entries are duplicated with different locations for 32 and 64bit OS.
-    Comment: *** BEWARE *** You must replicate any registry changes in BOTH sections, which should always be identical
-    Comment: As of IA 10.10 you CANNOT use variables successfully to handle 32 and 64bit entries with just one statement, hence they are duplicated UGH!
-    if Variable WIN64MODE not Equals TRUE
-      Comment: This is a 32bit system so put in the normal 32bit registry location
-      Write into Text File $SETUPLOG$ from Value $TIME$ Installing 32bit Registry entries (at end of file)
-      [DEFINE REGION: Registry Keys 32bit]
-      Comment: Create registry keys
-      Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\,  (permanent)
-      Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds, $LEAPSECONDS$
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\, Configuration for COM ports that require special handling (see Platform Help file for instructions)  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.10)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup_5_03.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LittleFootClassic(1.0.0)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LXPTelescope(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeClassic(5.0.3)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeLX200GPS(5.0.0)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Optec IFW(1.1.0.1) Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\QHY8ASCOMSetup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\QHY9ASCOMSetup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.2)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.3)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.10)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup_5_03.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LittleFootClassic(1.0.0)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LXPTelescope(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeClassic(5.0.3)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeLX200GPS(5.0.0)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Optec IFW(1.1.0.1) Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\QHY8ASCOMSetup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\QHY9ASCOMSetup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.2)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.3)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.4)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\WScript.Exe, True
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\Astroart.Exe, True
-      Write Registry Key HKLM\SOFTWARE\ASCOM\ObservingConditions Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name, $TITLE$
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Product Code, $PRODUCTCODE$
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Revision Code, $REVISIONCODE$
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Version, $VERSION$
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\ASCOM\Video Drivers\,  (permanent)
-      [END REGION]
-    else
-      Comment: This is a 64bit system so put in the 32bit registry location on a 64bit system (Wow6432Node)
-      Write into Text File $SETUPLOG$ from Value $TIME$ Installing 64bit Registry entries (at end of file)
-      [DEFINE REGION: Registry Keys 64bit]
-      Comment: Create registry keys
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Astrometry\,  (permanent)
-      Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is si added or removed.
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Astrometry\Leap Seconds, $LEAPSECONDS$
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Camera Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Chooser\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\COMPortSettings\, Configuration for COM ports that require special handling (see Platform Help file for instructions)  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\COMPortSettings\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\COMPortSettings\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Dome Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\FilterWheel Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Focuser Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\Celestron(5.0.10)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup_5_03.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\LittleFootClassic(1.0.0)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\LXPTelescope(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\MeadeClassic(5.0.3)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\MeadeLX200GPS(5.0.0)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\Optec IFW(1.1.0.1) Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\QHY8ASCOMSetup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\QHY9ASCOMSetup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.1)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.2)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.3)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.10)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup_5_03.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\LittleFootClassic(1.0.0)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\LXPTelescope(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\MeadeClassic(5.0.3)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\MeadeLX200GPS(5.0.0)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\Optec IFW(1.1.0.1) Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\QHY8ASCOMSetup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\QHY9ASCOMSetup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.1)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.2)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.3)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.4)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceSystemTimer\WScript.Exe, True
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ForceSystemTimer\Astroart.Exe, True
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\ObservingConditions Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Name, $TITLE$
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Product Code, $PRODUCTCODE$
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Revision Code, $REVISIONCODE$
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Platform\Platform Version, $VERSION$
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Rotator Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\SafetyMonitor Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Switch Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Telescope Drivers\,  (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
-      Write Registry Key HKLM\SOFTWARE\Wow6432Node\ASCOM\Video Drivers\,  (permanent)
-      [END REGION]
-    end
+    Comment: Install into 32bit registry, even on a 64bit system
+    Write into Text File $SETUPLOG$ from Value $TIME$ Installing 32bit Registry entries (at end of file)
+     
+    Comment: Create registry keys
+    Write Registry Key HKLM\SOFTWARE\ASCOM\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\PlatformVersion, $PLATFORMVERSIONMAJOR$.$PLATFORMVERSIONMINOR$ (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\,  (permanent)
+    Comment: Leap Seconds = UTC-TAI offset - needs to be updated every time a leap second is added or removed.
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Astrometry\Leap Seconds, $LEAPSECONDS$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Camera Drivers\CCDSimulator.Camera\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Chooser\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\, Configuration for COM ports that require special handling (see Platform Help file for instructions)  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\ForceCOMPorts\, List of COM ports that will always appear in the AvailableCOMPorts list (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\COMPortSettings\IgnoreCOMPorts\, List of COM ports that will be omitted from the AvailableCOMPorts scan (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\DomeSim.Dome\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Pipe.Dome\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\Hub.Dome\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Dome Drivers\POTH.Dome\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\FilterWheel Drivers\FilterWheelSim.FilterWheel\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\FocusSim.Focuser\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Hub.Focuser\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\Pipe.Focuser\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Focuser Drivers\POTH.Focuser\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\, List of applications requiring a specific value of Platform Version (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLDome(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ACLTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\AstroPhysics(4.1.25)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.10)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.13)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Celestron(5.0.14)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\CyberDrive(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS Setup_5_03.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\JMISmartFocus(4.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LakesideAstro Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LesveDome 5 0 27 Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LittleFootClassic(1.0.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\LXPTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeClassic(5.0.3)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\MeadeLX200GPS(5.0.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\Optec IFW(1.1.0.1) Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecPyxis(1.0.4)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\OptecTCF(4.1.0)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\PCTCSCombined(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\QHY8ASCOMSetup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\QHY9ASCOMSetup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\RoboFocus(3.0.9)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\ServoCAT(4.2.2)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\StarlightXpress Setup, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.1)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.2)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\TheSkyTelescope(5.0.3)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.4)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2k(5.1.6b)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersion\\VixenSS2K(5.1.7b)Setup.exe, 5.5
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\, List of applications requiring a localised decimal separator in the returned Platform Version value (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLDome(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ACLTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\AstroPhysics(4.1.25)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.10)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.13)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Celestron(5.0.14)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\CyberDrive(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS Setup_5_03.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_505_v5v6.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_5_03.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\GCUSB_nFOCUS_Setup_Two_505_v5v6.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\JMISmartFocus(4.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LakesideAstro Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LesveDome 5 0 27 Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LittleFootClassic(1.0.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\LXPTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeClassic(5.0.3)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\MeadeLX200GPS(5.0.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\Optec IFW(1.1.0.1) Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecPyxis(1.0.4)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\OptecTCF(4.1.0)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\PCTCSCombined(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\QHY8ASCOMSetup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\QHY9ASCOMSetup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\RoboFocus(3.0.9)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\ServoCAT(4.2.2)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\StarlightXpress Setup, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.1)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.2)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\TheSkyTelescope(5.0.3)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.4)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2k(5.1.6b)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\\VixenSS2K(5.1.7b)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForcePlatformVersionSeparator\TheSkyTelescope(5.2.7)Setup.exe, 
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\, List of applications for which Utiliites.Timer will employ a Systems.Timer timer in place of the default Forms timer. (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\WScript.Exe, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ForceSystemTimer\Astroart.Exe, True
+    Write Registry Key HKLM\SOFTWARE\ASCOM\ObservingConditions Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\, Description of installed ASCOM Platform (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Installation Date, $DATE$ $TIME$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name, $TITLE$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Product Code, $PRODUCTCODE$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Revision Code, $REVISIONCODE$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Version, $VERSION$
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Rotator Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\SafetyMonitor Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Switch Drivers\SwitchSim.Switch\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\,  (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ASCOMDome.Telescope\\, ASCOM Dome Control (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Hub.Telescope\\, Generic Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\POTH.Telescope\\, POTH Hub (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\Pipe.Telescope\\, Pipe diagnostic tool (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Telescope Drivers\ScopeSim.Telescope\\, Simulator (permanent)
+    Write Registry Key HKLM\SOFTWARE\ASCOM\Video Drivers\,  (permanent)
     [END REGION]
      
     [DEFINE REGION: Create shortcuts]
@@ -1283,40 +1155,30 @@ else
      
     [END REGION]
      
-    Comment: Install in 64bit mode if we are running on a 64bit OS
-    if Variable WIN64MODE Equals TRUE
-      Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
-    end
-     
     Comment: Run the installation
     Apply Install (get result into variable SUCCESS)
      
     Comment: Save the installation success value and log status outcomes
     Set Variable APPLYINSTALLSUCCESS to $SUCCESS$
-    Set Variable MYPROGRESS to 65
+    Set Variable MYPROGRESS to 50
     Write into Text File $SETUPLOG$ from Value $TIME$ Apply Install - Success:  $SUCCESS$, LastError: $LASTERROR$ (at end of file)
     Write into Text File $SETUPLOG$ from Value  (at end of file)
      
-    Comment: Reset to 32bit mode if we are operating in 64bit mode
-    if Variable WIN64MODE Equals TRUE
-      Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
-    end
-     
-    Comment: Process COM registrations if the MSI install was successful
+    Comment: Process COM registrations and other activities if the MSI install was successful
     if Variable APPLYINSTALLSUCCESS not Equals ERROR
       if Variable APPLYINSTALLSUCCESS not Equals CANCEL
          
         [DEFINE REGION: Non-MSI installation activities]
         Comment: Register Platform 5 components
         Set Variable PROGRESSTEXT to Registering Platform 5 components
-        Set Variable MYPROGRESS to 70
+        Set Variable MYPROGRESS to 52
         Register assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
         Register assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-        Set Variable MYPROGRESS to 72
+        Set Variable MYPROGRESS to 55
         Register assembly ASCOM.Interfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
          
         Comment: Register the Platform 5 type libraries
-        Set Variable MYPROGRESS to 74
+        Set Variable MYPROGRESS to 57
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\AscomMasterInterfaces.tlb" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - ASCOMMasterInterfaces (at end of file)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\Helper.tlb" (WAIT, get result into variable RC)
@@ -1325,7 +1187,7 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - Helper2 (at end of file)
         Run Program $COMMONFILES$\ASCOM\Platform\internal\regtlb.exe "$COMMONFILES$\ASCOM\Interface\IObjectSafety.tlb" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegTLB - IObjectSafety (at end of file)
-        Set Variable MYPROGRESS to 76
+        Set Variable MYPROGRESS to 60
          
         Comment: Register Platform 5 Simulators
         Run Program $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe /regserver (WAIT, get result into variable RC)
@@ -1336,7 +1198,7 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Pipe (at end of file)
         Run Program $COMMONFILES$\ASCOM\Telescope\POTH.exe /regserver (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - POTH (at end of file)
-        Set Variable MYPROGRESS to 78
+        Set Variable MYPROGRESS to 62
         Run Program $COMMONFILES$\ASCOM\Dome\DomeSim.exe /regserver (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - DomeSim (at end of file)
         Run Program $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe /regserver (WAIT, get result into variable RC)
@@ -1347,7 +1209,7 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FocusSim (at end of file)
         Run Program $COMMONFILES$\ASCOM\Switch\SwitchSim.exe /regserver (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - SwitchSim (at end of file)
-        Set Variable MYPROGRESS to 80
+        Set Variable MYPROGRESS to 65
          
         Comment: Register Platform 5.5 components
         Set Variable PROGRESSTEXT to Registering Platform 5.5 components
@@ -1361,7 +1223,7 @@ else
         if Variable GACINSTALLRC not Equals 0
           MessageBalloon: GACInstall, Utilities install error RC: $GACINSTALLRC$
         end
-        Set Variable MYPROGRESS to 82
+        Set Variable MYPROGRESS to 67
         Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe policy.5.5.ASCOM.Astrometry.dll, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable GACINSTALLRC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $GACINSTALLRC$ GACInstall - Astrometry Policy (at end of file)
         if Variable GACINSTALLRC not Equals 0
@@ -1390,7 +1252,7 @@ else
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Astrometry 5.5.6 (at end of file)
         Run Program $WINSYSDIR$\Cmd.exe /c copy ASCOM.Attributes.pdb $WINDIR$\assembly\GAC_MSIL\ASCOM.Attributes\5.5.0.0__565de7938946fba7, startup in folder $COMMONFILES$\ASCOM\Platform\v5.5 (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Copy - Attributes 5.5.0 (at end of file)
-        Set Variable MYPROGRESS to 84
+        Set Variable MYPROGRESS to 70
          
         Comment: Register Platform 6 components
         Set Variable PROGRESSTEXT to Registering Platform 6 components
@@ -1408,7 +1270,7 @@ else
         Register assembly $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll, set the code base in the registry
          
         Comment: Register these LocalServer drivers using the -register option
-        Set Variable MYPROGRESS to 86
+        Set Variable MYPROGRESS to 72
         Run Program $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - FilterWheel Simulator 6 (at end of file)
         Run Program $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe -register (WAIT, get result into variable RC)
@@ -1422,7 +1284,7 @@ else
         Run Program $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Server.exe -register (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ Register - Observing Conditions Hub (at end of file)
          
-        Set Variable MYPROGRESS to 88
+        Set Variable MYPROGRESS to 75
         Comment: Extra registration of 64bit components if on 64bit system
         if Variable WIN64MODE Equals TRUE
           Comment: Initialise variables
@@ -1450,7 +1312,7 @@ else
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC3$ RegAsm64 - Utilities (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC4)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC4$ RegAsm64 - Video Utilities (at end of file)
-          Set Variable MYPROGRESS to 90
+          Set Variable MYPROGRESS to 77
            
           Comment: Register simulators
           Set Variable PROGRESSTEXT to Registering simulators
@@ -1466,7 +1328,7 @@ else
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC9$ RegAsm64 - Video Simulator (at end of file)
           Run Program $REGASM64$ "$COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap\ASCOM.OpenWeatherMap.ObservingConditions.dll" /codebase (WAIT, get result into variable RC10)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC10$ RegAsm64 - Open Weather Map Driver (at end of file)
-          Set Variable MYPROGRESS to 91
+          Set Variable MYPROGRESS to 80
           if Variable RC1 not Equals 0
             MessageBalloon: RegAsm 64, Running 64 bit RegAsm for ASCOM.Utilities RC: $RC1$ $RC2$ $RC3$ $RC4$ $RC5$ $RC6$ $RC7$ $RC8$ $RC9$ $RC10$ $RC11$ $RC12
           else
@@ -1517,55 +1379,84 @@ else
         end
          
         Comment: Install native images
-        Set Variable PROGRESSTEXT to Creating 32bit native images
-        Generate Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DeviceInterfaces
+        Comment: Generate Native Images for assembly ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DeviceInterfaces 6 (at end of file)
-        Generate Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper
+        Comment: Generate Native Images for assembly ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.Helper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Helper (at end of file)
-        Generate Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities
+        Comment: Generate Native Images for assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Utilities 6 (at end of file)
-        Generate Native Images for assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Utilities.Video
+        Comment: Generate Native Images for assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - VideoUtils 6.1 (at end of file)
-        Set Variable MYPROGRESS to 92
-        Generate Native Images for assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable MYPROGRESS to 82
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry 5.5.6
+        Comment: Generate Native Images for assembly ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 5.5.6 (at end of file)
-        Generate Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Astrometry 6.0.0
+        Comment: Generate Native Images for assembly ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Astrometry 6 (at end of file)
-        Set Variable MYPROGRESS to 93
-        Generate Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable MYPROGRESS to 85
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.DriverAccess
+        Comment: Generate Native Images for assembly ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DriverAccess 6 (at end of file)
-        Set Variable MYPROGRESS to 94
-        Generate Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable MYPROGRESS to 87
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Helper2
+        Comment: Generate Native Images for assembly ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.Helper2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Helper2 1.0 (at end of file)
-        Generate Native Images for assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Exceptions
+        Comment: Generate Native Images for assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+        Run Program $NGEN32$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - Exceptions 6 (at end of file)
-        Generate Native Images for assembly DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f
+        Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005
+        Comment: Generate Native Images for assembly DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f
+        Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
         Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DirectShowLib 2.1 (at end of file)
+         
+        [DEFINE REGION: Additional installs for 64bit systems]
         if Variable WIN64MODE Equals TRUE
-          Set Variable PROGRESSTEXT to Creating 64bit native images
+          Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces
           Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DeviceInterfaces 6 (at end of file)
-          Set Variable MYPROGRESS to 95
+          Set Variable MYPROGRESS to 90
+          Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DriverAccess
           Run Program $NGEN64$ "ASCOM.DriverAccess, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DriverAccess 6 (at end of file)
+          Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Exceptions
           Run Program $NGEN64$ "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Exceptions 6 (at end of file)
-          Set Variable MYPROGRESS to 96
+          Set Variable MYPROGRESS to 92
+          Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities
           Run Program $NGEN64$ "ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Utilities 6 (at end of file)
+          Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Utilities.Video
           Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Video Utilities (at end of file)
-          Set Variable MYPROGRESS to 97
+          Set Variable MYPROGRESS to 95
+          Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - 5.5.6
           Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 5.5.6 (at end of file)
-          Set Variable MYPROGRESS to 98
+          Set Variable MYPROGRESS to 97
+          Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - 6.0.0
           Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 6 (at end of file)
+          Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005
           Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
           Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
           Set Variable MYPROGRESS to 99
            
           Comment: Install additional Platform 5.5 files on 64 bit systems to make sure old 64bit mode driver installers continue to work
+          Set Variable PROGRESSTEXT to Installing additional Platform 5.5 files required for 64bit systems
           Set Variable NATIVE_ENGINE to TRUE
           Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
           Install Files ..\..\..\..\Releases\ASCOM 6\Platform\Files\Platform 5.5\ASCOM.Utilities.dll to $COMMONFILES64$ASCOM\.net
@@ -1575,6 +1466,8 @@ else
           Apply Install (get result into variable SUCCESS)
           Set Variable NATIVE_ENGINE to FALSE
         end
+        [END REGION]
+         
         Set Variable PROGRESSTEXT to Finalising install
         [END REGION]
          
