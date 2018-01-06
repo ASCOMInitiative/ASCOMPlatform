@@ -129,6 +129,14 @@ Public Class DiagnosticsForm
         Dim PathShell As New System.Text.StringBuilder(260)
         Dim MyVersion As Version
         Dim SuccessMessage As String
+
+        ' Controls to reduce testing conducted - only set to false to speed up testing during development. Must all be set True for production builds
+        Const TestRegistry As Boolean = True
+        Const TestLogsAndApplications As Boolean = True
+        Const TestUtilities As Boolean = True
+        Const TestAstrometry As Boolean = True
+        Const TestSimulators As Boolean = True
+
         Try
             Status("Diagnostics running...")
 
@@ -215,184 +223,189 @@ Public Class DiagnosticsForm
                     LogException("ScanSerial", ex.ToString)
                 End Try
 
-                'Scan registry security rights
-                Try
-                    ScanRegistrySecurity()
-                Catch ex As Exception
-                    LogException("ScanRegistrySecurity", ex.ToString)
-                End Try
+                If TestRegistry Then
+                    'Scan registry security rights
+                    Try
+                        ScanRegistrySecurity()
+                    Catch ex As Exception
+                        LogException("ScanRegistrySecurity", ex.ToString)
+                    End Try
+                    Try
+                        ScanASCOMDrivers() : Action("") 'Report installed driver versions
+                    Catch ex As Exception
+                        LogException("ScanASCOMDrivers", ex.ToString)
+                    End Try
 
-                Try
-                    ScanASCOMDrivers() : Action("") 'Report installed driver versions
-                Catch ex As Exception
-                    LogException("ScanASCOMDrivers", ex.ToString)
-                End Try
+                    Try
+                        ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
+                    Catch ex As Exception
+                        LogException("ScanDriverExceptions", ex.ToString)
+                    End Try
 
-                Try
-                    ScanDriverExceptions() : Action("") 'Report drivers listed as exceptions
-                Catch ex As Exception
-                    LogException("ScanDriverExceptions", ex.ToString)
-                End Try
+                    Try
+                        ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
+                    Catch ex As Exception
+                        LogException("ScanProgramFiles", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProgramFiles() 'Search for copies of Helper and Helper2.DLL in the wrong places
-                Catch ex As Exception
-                    LogException("ScanProgramFiles", ex.ToString)
-                End Try
+                    Try
+                        ScanProfile() : Action("") 'Report profile information
+                    Catch ex As Exception
+                        LogException("ScanProfile", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProfile() : Action("") 'Report profile information
-                Catch ex As Exception
-                    LogException("ScanProfile", ex.ToString)
-                End Try
+                    Try
+                        ScanRegistry() 'Scan Old ASCOM Registry Profile
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                Try
-                    ScanRegistry() 'Scan Old ASCOM Registry Profile
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    Try
+                        ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
+                    Catch ex As Exception
+                        LogException("ScanProfile55Files", ex.ToString)
+                    End Try
 
-                Try
-                    ScanProfile55Files() : Action("") 'List contents of Profile 5.5 XML files
-                Catch ex As Exception
-                    LogException("ScanProfile55Files", ex.ToString)
-                End Try
+                    Try
+                        ScanCOMRegistration() 'Report Com Registration
+                    Catch ex As Exception
+                        LogException("ScanCOMRegistration", ex.ToString)
+                    End Try
 
-                Try
-                    ScanCOMRegistration() 'Report Com Registration
-                Catch ex As Exception
-                    LogException("ScanCOMRegistration", ex.ToString)
-                End Try
+                    Try
+                        ScanForHelperHijacking()
+                    Catch ex As Exception
+                        LogException("ScanInstalledPlatform", ex.ToString)
+                    End Try
 
-                Try
-                    ScanForHelperHijacking()
-                Catch ex As Exception
-                    LogException("ScanInstalledPlatform", ex.ToString)
-                End Try
+                    'Scan files on 32 and 64bit systems
+                    TL.LogMessage("Platform Files", "")
+                    ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
+                    Try
+                        Call ScanPlatformFiles(ASCOMPath) : Action("")
+                    Catch ex As Exception
+                        LogException("ScanPlatformFiles", ex.ToString)
+                    End Try
 
-                'Scan files on 32 and 64bit systems
-                TL.LogMessage("Platform Files", "")
-                ASCOMPath = GetASCOMPath() 'Get relevant 32 or 64bit path to ACOM files
-                Try
-                    Call ScanPlatformFiles(ASCOMPath) : Action("")
-                Catch ex As Exception
-                    LogException("ScanPlatformFiles", ex.ToString)
-                End Try
+                    Try
+                        ScanDeveloperFiles()
+                    Catch ex As Exception
+                        LogException("ScanDeveloperFiles", ex.ToString)
+                    End Try
 
-                Try
-                    ScanDeveloperFiles()
-                Catch ex As Exception
-                    LogException("ScanDeveloperFiles", ex.ToString)
-                End Try
+                    'List GAC contents
+                    Try
+                        ScanGac()
+                    Catch ex As Exception
+                        LogException("ScanGac", ex.ToString)
+                    End Try
+                End If
 
-                'List GAC contents
-                Try
-                    ScanGac()
-                Catch ex As Exception
-                    LogException("ScanGac", ex.ToString)
-                End Try
+                If TestLogsAndApplications Then
+                    'List setup files
+                    Try
+                        ScanLogs()
+                    Catch ex As Exception
+                        LogException("ScanLogs", ex.ToString)
+                    End Try
 
-                'List setup files
-                Try
-                    ScanLogs()
-                Catch ex As Exception
-                    LogException("ScanLogs", ex.ToString)
-                End Try
+                    'List Platform 6 install logs
+                    Try
+                        ScanPlatform6Logs()
+                    Catch ex As Exception
+                        LogException("ScanPlatform6Logs", ex.ToString)
+                    End Try
 
-                'List Platform 6 install logs
-                Try
-                    ScanPlatform6Logs()
-                Catch ex As Exception
-                    LogException("ScanPlatform6Logs", ex.ToString)
-                End Try
+                    'Scan event log messages
+                    Try
+                        ScanEventLog()
+                    Catch ex As Exception
+                        LogException("ScanEventLog", ex.ToString)
+                    End Try
 
-                'Scan event log messages
-                Try
-                    ScanEventLog()
-                Catch ex As Exception
-                    LogException("ScanEventLog", ex.ToString)
-                End Try
-
-                'Scan for ASCOM Applications
-                Try
-                    ScanApplications()
-                Catch ex As Exception
-                    LogException("ScanApplications", ex.ToString)
-                End Try
+                    'Scan for ASCOM Applications
+                    Try
+                        ScanApplications()
+                    Catch ex As Exception
+                        LogException("ScanApplications", ex.ToString)
+                    End Try
+                End If
 
                 TL.BlankLine()
                 TL.LogMessage("Diagnostics", "Completed diagnostic run, starting function testing run")
                 TL.BlankLine()
                 TL.BlankLine()
-                Try
-                    'Functional tests
-                    UtilTests() : Action("")
-                Catch ex As Exception
-                    LogException("UtilTests", ex.ToString)
-                End Try
-                Try
-                    ProfileTests() : Action("")
-                Catch ex As Exception
-                    LogException("ProfileTests", ex.ToString)
-                End Try
-                Try
-                    TimerTests() : Action("")
-                Catch ex As Exception
-                    LogException("TimerTests", ex.ToString)
-                End Try
-                Try
-                    NovasComTests() : Action("")
-                Catch ex As Exception
-                    LogException("NovasComTests", ex.ToString)
-                End Try
-                Try
-                    KeplerTests() : Action("")
-                Catch ex As Exception
-                    LogException("KeplerTests", ex.ToString)
-                End Try
 
-                Try
-                    TransformTest() : Action("")
-                Catch ex As Exception
-                    LogException("TransformTest", ex.ToString)
-                End Try
-                Try
-                    NOVAS2Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS2Tests", ex.ToString)
-                End Try
-                Try
-                    NOVAS3Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS3Tests", ex.ToString)
-                End Try
-                Try
-                    NOVAS31Tests() : Action("")
-                Catch ex As Exception
-                    LogException("NOVAS31Tests", ex.ToString)
-                End Try
+                If TestUtilities Then
+                    Try
+                        'Functional tests
+                        UtilTests() : Action("")
+                    Catch ex As Exception
+                        LogException("UtilTests", ex.ToString)
+                    End Try
+                    Try
+                        ProfileTests() : Action("")
+                    Catch ex As Exception
+                        LogException("ProfileTests", ex.ToString)
+                    End Try
+                    Try
+                        TimerTests() : Action("")
+                    Catch ex As Exception
+                        LogException("TimerTests", ex.ToString)
+                    End Try
+                    Try
+                        VideoUtilsTests() : Action("")
+                    Catch ex As Exception
+                        LogException("VideoUtilsTests", ex.ToString)
+                    End Try
+                End If
+                If TestAstrometry Then
+                    Try
+                        NovasComTests() : Action("")
+                    Catch ex As Exception
+                        LogException("NovasComTests", ex.ToString)
+                    End Try
+                    Try
+                        KeplerTests() : Action("")
+                    Catch ex As Exception
+                        LogException("KeplerTests", ex.ToString)
+                    End Try
 
-                Try
-                    SimulatorTests() : Action("")
-                Catch ex As Exception
-                    LogException("SimulatorTests", ex.ToString)
-                End Try
-                Try
-                    AstroUtilsTests() : Action("")
-                Catch ex As Exception
-                    LogException("AstroUtilsTests", ex.ToString)
-                End Try
-                Try
-                    VideoUtilsTests() : Action("")
-                Catch ex As Exception
-                    LogException("VideoUtilsTests", ex.ToString)
-                End Try
+                    Try
+                        TransformTest() : Action("")
+                    Catch ex As Exception
+                        LogException("TransformTest", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS2Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS2Tests", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS3Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS3Tests", ex.ToString)
+                    End Try
+                    Try
+                        NOVAS31Tests() : Action("")
+                    Catch ex As Exception
+                        LogException("NOVAS31Tests", ex.ToString)
+                    End Try
+                    Try
+                        AstroUtilsTests() : Action("")
+                    Catch ex As Exception
+                        LogException("AstroUtilsTests", ex.ToString)
+                    End Try
+                End If
 
-                Try
-                    SOFATests() : Action("")
-                Catch ex As Exception
-                    LogException("SOFATests", ex.ToString)
-                End Try
+                If TestSimulators Then
+                    Try
+                        SimulatorTests() : Action("")
+                    Catch ex As Exception
+                        LogException("SimulatorTests", ex.ToString)
+                    End Try
+                End If
+
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratulations, all " & NMatches & " function tests passed!"
                 Else

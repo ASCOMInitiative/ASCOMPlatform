@@ -1,5 +1,5 @@
 if Variable VC1410_25017_RTM_X86 Equals TRUE
-  Set Variable PROGRESSTEXT to Installing Microsoft Visual C++ Runtime for Visual Studio 2017 v.15.2 (x86)
+  Set Variable PROGRESSTEXT to Installing Visual C++ Runtime for Visual Studio 2017 v.15.2 (x86)
   Set Variable PROGRESSMODE to MARQUEE
    
   Set Variable VC1410_25017_FILES_X86 to 

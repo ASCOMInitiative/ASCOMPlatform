@@ -1,5 +1,5 @@
 if Variable VC1410_25017_RTM_X64 Equals TRUE
-  Set Variable PROGRESSTEXT to Installing Microsoft Visual C++ Runtime for Visual Studio 2017 v.15.2 (x64)
+  Set Variable PROGRESSTEXT to Installing Visual C++ Runtime for Visual Studio 2017 v.15.2 (x64)
   Set Variable PROGRESSMODE to MARQUEE
    
   Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
