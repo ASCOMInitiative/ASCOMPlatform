@@ -15,711 +15,706 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\sofa.h">
+    <ClInclude Include="20160503_c\c\src\sofa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\sofam.h">
+    <ClInclude Include="20160503_c\c\src\sofam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\a2af.c">
+    <ClCompile Include="20160503_c\c\src\a2af.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\a2tf.c">
+    <ClCompile Include="20160503_c\c\src\a2tf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ab.c">
+    <ClCompile Include="20160503_c\c\src\ab.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\af2a.c">
+    <ClCompile Include="20160503_c\c\src\af2a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\anp.c">
+    <ClCompile Include="20160503_c\c\src\anp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\anpm.c">
+    <ClCompile Include="20160503_c\c\src\anpm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apcg.c">
+    <ClCompile Include="20160503_c\c\src\apcg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apcg13.c">
+    <ClCompile Include="20160503_c\c\src\apcg13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apci.c">
+    <ClCompile Include="20160503_c\c\src\apci.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apci13.c">
+    <ClCompile Include="20160503_c\c\src\apci13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apco.c">
+    <ClCompile Include="20160503_c\c\src\apco.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apco13.c">
+    <ClCompile Include="20160503_c\c\src\apco13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apcs.c">
+    <ClCompile Include="20160503_c\c\src\apcs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apcs13.c">
+    <ClCompile Include="20160503_c\c\src\apcs13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\aper.c">
+    <ClCompile Include="20160503_c\c\src\aper.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\aper13.c">
+    <ClCompile Include="20160503_c\c\src\aper13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apio.c">
+    <ClCompile Include="20160503_c\c\src\apio.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\apio13.c">
+    <ClCompile Include="20160503_c\c\src\apio13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atci13.c">
+    <ClCompile Include="20160503_c\c\src\atci13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atciq.c">
+    <ClCompile Include="20160503_c\c\src\atciq.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atciqn.c">
+    <ClCompile Include="20160503_c\c\src\atciqn.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atciqz.c">
+    <ClCompile Include="20160503_c\c\src\atciqz.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atco13.c">
+    <ClCompile Include="20160503_c\c\src\atco13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atic13.c">
+    <ClCompile Include="20160503_c\c\src\atic13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\aticq.c">
+    <ClCompile Include="20160503_c\c\src\aticq.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\aticqn.c">
+    <ClCompile Include="20160503_c\c\src\aticqn.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atio13.c">
+    <ClCompile Include="20160503_c\c\src\atio13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atioq.c">
+    <ClCompile Include="20160503_c\c\src\atioq.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atoc13.c">
+    <ClCompile Include="20160503_c\c\src\atoc13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atoi13.c">
+    <ClCompile Include="20160503_c\c\src\atoi13.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\atoiq.c">
+    <ClCompile Include="20160503_c\c\src\atoiq.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\bi00.c">
+    <ClCompile Include="20160503_c\c\src\bi00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\bp00.c">
+    <ClCompile Include="20160503_c\c\src\bp00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\bp06.c">
+    <ClCompile Include="20160503_c\c\src\bp06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\bpn2xy.c">
+    <ClCompile Include="20160503_c\c\src\bpn2xy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2i00a.c">
+    <ClCompile Include="20160503_c\c\src\c2i00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2i00b.c">
+    <ClCompile Include="20160503_c\c\src\c2i00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2i06a.c">
+    <ClCompile Include="20160503_c\c\src\c2i06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2ibpn.c">
+    <ClCompile Include="20160503_c\c\src\c2ibpn.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2ixy.c">
+    <ClCompile Include="20160503_c\c\src\c2ixy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2ixys.c">
+    <ClCompile Include="20160503_c\c\src\c2ixys.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2s.c">
+    <ClCompile Include="20160503_c\c\src\c2s.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2t00a.c">
+    <ClCompile Include="20160503_c\c\src\c2t00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2t00b.c">
+    <ClCompile Include="20160503_c\c\src\c2t00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2t06a.c">
+    <ClCompile Include="20160503_c\c\src\c2t06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2tcio.c">
+    <ClCompile Include="20160503_c\c\src\c2tcio.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2teqx.c">
+    <ClCompile Include="20160503_c\c\src\c2teqx.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2tpe.c">
+    <ClCompile Include="20160503_c\c\src\c2tpe.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\c2txy.c">
+    <ClCompile Include="20160503_c\c\src\c2txy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\cal2jd.c">
+    <ClCompile Include="20160503_c\c\src\cal2jd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\cp.c">
+    <ClCompile Include="20160503_c\c\src\cp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\cpv.c">
+    <ClCompile Include="20160503_c\c\src\cpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\cr.c">
+    <ClCompile Include="20160503_c\c\src\cr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\d2dtf.c">
+    <ClCompile Include="20160503_c\c\src\d2dtf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\d2tf.c">
+    <ClCompile Include="20160503_c\c\src\d2tf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\dat.c">
+    <ClCompile Include="20160503_c\c\src\dat.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\dtdb.c">
+    <ClCompile Include="20160503_c\c\src\dtdb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\dtf2d.c">
+    <ClCompile Include="20160503_c\c\src\dtf2d.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\eceq06.c">
+    <ClCompile Include="20160503_c\c\src\eceq06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ecm06.c">
+    <ClCompile Include="20160503_c\c\src\ecm06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ee00.c">
+    <ClCompile Include="20160503_c\c\src\ee00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ee00a.c">
+    <ClCompile Include="20160503_c\c\src\ee00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ee00b.c">
+    <ClCompile Include="20160503_c\c\src\ee00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ee06a.c">
+    <ClCompile Include="20160503_c\c\src\ee06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\eect00.c">
+    <ClCompile Include="20160503_c\c\src\eect00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\eform.c">
+    <ClCompile Include="20160503_c\c\src\eform.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\eo06a.c">
+    <ClCompile Include="20160503_c\c\src\eo06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\eors.c">
+    <ClCompile Include="20160503_c\c\src\eors.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\epb.c">
+    <ClCompile Include="20160503_c\c\src\epb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\epb2jd.c">
+    <ClCompile Include="20160503_c\c\src\epb2jd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\epj.c">
+    <ClCompile Include="20160503_c\c\src\epj.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\epj2jd.c">
+    <ClCompile Include="20160503_c\c\src\epj2jd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\epv00.c">
+    <ClCompile Include="20160503_c\c\src\epv00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\eqec06.c">
+    <ClCompile Include="20160503_c\c\src\eqec06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\eqeq94.c">
+    <ClCompile Include="20160503_c\c\src\eqeq94.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\era00.c">
+    <ClCompile Include="20160503_c\c\src\era00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fad03.c">
+    <ClCompile Include="20160503_c\c\src\fad03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fae03.c">
+    <ClCompile Include="20160503_c\c\src\fae03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\faf03.c">
+    <ClCompile Include="20160503_c\c\src\faf03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\faju03.c">
+    <ClCompile Include="20160503_c\c\src\faju03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fal03.c">
+    <ClCompile Include="20160503_c\c\src\fal03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\falp03.c">
+    <ClCompile Include="20160503_c\c\src\falp03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fama03.c">
+    <ClCompile Include="20160503_c\c\src\fama03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fame03.c">
+    <ClCompile Include="20160503_c\c\src\fame03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fane03.c">
+    <ClCompile Include="20160503_c\c\src\fane03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\faom03.c">
+    <ClCompile Include="20160503_c\c\src\faom03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fapa03.c">
+    <ClCompile Include="20160503_c\c\src\fapa03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fasa03.c">
+    <ClCompile Include="20160503_c\c\src\fasa03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\faur03.c">
+    <ClCompile Include="20160503_c\c\src\faur03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fave03.c">
+    <ClCompile Include="20160503_c\c\src\fave03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fk5hip.c">
+    <ClCompile Include="20160503_c\c\src\fk5hip.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fk5hz.c">
+    <ClCompile Include="20160503_c\c\src\fk5hz.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fk52h.c">
+    <ClCompile Include="20160503_c\c\src\fk52h.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fw2m.c">
+    <ClCompile Include="20160503_c\c\src\fw2m.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\fw2xy.c">
+    <ClCompile Include="20160503_c\c\src\fw2xy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\g2icrs.c">
+    <ClCompile Include="20160503_c\c\src\g2icrs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gc2gd.c">
+    <ClCompile Include="20160503_c\c\src\gc2gd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gc2gde.c">
+    <ClCompile Include="20160503_c\c\src\gc2gde.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gd2gc.c">
+    <ClCompile Include="20160503_c\c\src\gd2gc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gd2gce.c">
+    <ClCompile Include="20160503_c\c\src\gd2gce.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gmst00.c">
+    <ClCompile Include="20160503_c\c\src\gmst00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gmst06.c">
+    <ClCompile Include="20160503_c\c\src\gmst06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gmst82.c">
+    <ClCompile Include="20160503_c\c\src\gmst82.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gst00a.c">
+    <ClCompile Include="20160503_c\c\src\gst00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gst00b.c">
+    <ClCompile Include="20160503_c\c\src\gst00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gst06.c">
+    <ClCompile Include="20160503_c\c\src\gst06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gst06a.c">
+    <ClCompile Include="20160503_c\c\src\gst06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\gst94.c">
+    <ClCompile Include="20160503_c\c\src\gst94.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\h2fk5.c">
+    <ClCompile Include="20160503_c\c\src\h2fk5.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\hfk5z.c">
+    <ClCompile Include="20160503_c\c\src\hfk5z.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\icrs2g.c">
+    <ClCompile Include="20160503_c\c\src\icrs2g.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ir.c">
+    <ClCompile Include="20160503_c\c\src\ir.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\jd2cal.c">
+    <ClCompile Include="20160503_c\c\src\jd2cal.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\jdcalf.c">
+    <ClCompile Include="20160503_c\c\src\jdcalf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ld.c">
+    <ClCompile Include="20160503_c\c\src\ld.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ldn.c">
+    <ClCompile Include="20160503_c\c\src\ldn.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ldsun.c">
+    <ClCompile Include="20160503_c\c\src\ldsun.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\lteceq.c">
+    <ClCompile Include="20160503_c\c\src\lteceq.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ltecm.c">
+    <ClCompile Include="20160503_c\c\src\ltecm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\lteqec.c">
+    <ClCompile Include="20160503_c\c\src\lteqec.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ltp.c">
+    <ClCompile Include="20160503_c\c\src\ltp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ltpb.c">
+    <ClCompile Include="20160503_c\c\src\ltpb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ltpecl.c">
+    <ClCompile Include="20160503_c\c\src\ltpecl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ltpequ.c">
+    <ClCompile Include="20160503_c\c\src\ltpequ.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\num00a.c">
+    <ClCompile Include="20160503_c\c\src\num00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\num00b.c">
+    <ClCompile Include="20160503_c\c\src\num00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\num06a.c">
+    <ClCompile Include="20160503_c\c\src\num06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\numat.c">
+    <ClCompile Include="20160503_c\c\src\numat.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\nut00a.c">
+    <ClCompile Include="20160503_c\c\src\nut00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\nut00b.c">
+    <ClCompile Include="20160503_c\c\src\nut00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\nut06a.c">
+    <ClCompile Include="20160503_c\c\src\nut06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\nut80.c">
+    <ClCompile Include="20160503_c\c\src\nut80.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\nutm80.c">
+    <ClCompile Include="20160503_c\c\src\nutm80.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\obl06.c">
+    <ClCompile Include="20160503_c\c\src\obl06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\obl80.c">
+    <ClCompile Include="20160503_c\c\src\obl80.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\p2pv.c">
+    <ClCompile Include="20160503_c\c\src\p2pv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\p2s.c">
+    <ClCompile Include="20160503_c\c\src\p2s.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\p06e.c">
+    <ClCompile Include="20160503_c\c\src\p06e.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pap.c">
+    <ClCompile Include="20160503_c\c\src\pap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pas.c">
+    <ClCompile Include="20160503_c\c\src\pas.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pb06.c">
+    <ClCompile Include="20160503_c\c\src\pb06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pdp.c">
+    <ClCompile Include="20160503_c\c\src\pdp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pfw06.c">
+    <ClCompile Include="20160503_c\c\src\pfw06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\plan94.c">
+    <ClCompile Include="20160503_c\c\src\plan94.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pm.c">
+    <ClCompile Include="20160503_c\c\src\pm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pmat00.c">
+    <ClCompile Include="20160503_c\c\src\pmat00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pmat06.c">
+    <ClCompile Include="20160503_c\c\src\pmat06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pmat76.c">
+    <ClCompile Include="20160503_c\c\src\pmat76.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pmp.c">
+    <ClCompile Include="20160503_c\c\src\pmp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pmpx.c">
+    <ClCompile Include="20160503_c\c\src\pmpx.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pmsafe.c">
+    <ClCompile Include="20160503_c\c\src\pmsafe.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pn.c">
+    <ClCompile Include="20160503_c\c\src\pn.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pn00.c">
+    <ClCompile Include="20160503_c\c\src\pn00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pn00a.c">
+    <ClCompile Include="20160503_c\c\src\pn00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pn00b.c">
+    <ClCompile Include="20160503_c\c\src\pn00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pn06.c">
+    <ClCompile Include="20160503_c\c\src\pn06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pn06a.c">
+    <ClCompile Include="20160503_c\c\src\pn06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pnm00a.c">
+    <ClCompile Include="20160503_c\c\src\pnm00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pnm00b.c">
+    <ClCompile Include="20160503_c\c\src\pnm00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pnm06a.c">
+    <ClCompile Include="20160503_c\c\src\pnm06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pnm80.c">
+    <ClCompile Include="20160503_c\c\src\pnm80.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pom00.c">
+    <ClCompile Include="20160503_c\c\src\pom00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ppp.c">
+    <ClCompile Include="20160503_c\c\src\ppp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ppsp.c">
+    <ClCompile Include="20160503_c\c\src\ppsp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pr00.c">
+    <ClCompile Include="20160503_c\c\src\pr00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\prec76.c">
+    <ClCompile Include="20160503_c\c\src\prec76.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pv2p.c">
+    <ClCompile Include="20160503_c\c\src\pv2p.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pv2s.c">
+    <ClCompile Include="20160503_c\c\src\pv2s.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvdpv.c">
+    <ClCompile Include="20160503_c\c\src\pvdpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvm.c">
+    <ClCompile Include="20160503_c\c\src\pvm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvmpv.c">
+    <ClCompile Include="20160503_c\c\src\pvmpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvppv.c">
+    <ClCompile Include="20160503_c\c\src\pvppv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvstar.c">
+    <ClCompile Include="20160503_c\c\src\pvstar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvtob.c">
+    <ClCompile Include="20160503_c\c\src\pvtob.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvu.c">
+    <ClCompile Include="20160503_c\c\src\pvu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvup.c">
+    <ClCompile Include="20160503_c\c\src\pvup.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pvxpv.c">
+    <ClCompile Include="20160503_c\c\src\pvxpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\pxp.c">
+    <ClCompile Include="20160503_c\c\src\pxp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\refco.c">
+    <ClCompile Include="20160503_c\c\src\refco.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\rm2v.c">
+    <ClCompile Include="20160503_c\c\src\rm2v.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\rv2m.c">
+    <ClCompile Include="20160503_c\c\src\rv2m.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\rx.c">
+    <ClCompile Include="20160503_c\c\src\rx.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\rxp.c">
+    <ClCompile Include="20160503_c\c\src\rxp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\rxpv.c">
+    <ClCompile Include="20160503_c\c\src\rxpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\rxr.c">
+    <ClCompile Include="20160503_c\c\src\rxr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ry.c">
+    <ClCompile Include="20160503_c\c\src\ry.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\rz.c">
+    <ClCompile Include="20160503_c\c\src\rz.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s00.c">
+    <ClCompile Include="20160503_c\c\src\s00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s00a.c">
+    <ClCompile Include="20160503_c\c\src\s00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s00b.c">
+    <ClCompile Include="20160503_c\c\src\s00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s2c.c">
+    <ClCompile Include="20160503_c\c\src\s2c.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s2p.c">
+    <ClCompile Include="20160503_c\c\src\s2p.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s2pv.c">
+    <ClCompile Include="20160503_c\c\src\s2pv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s2xpv.c">
+    <ClCompile Include="20160503_c\c\src\s2xpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s06.c">
+    <ClCompile Include="20160503_c\c\src\s06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\s06a.c">
+    <ClCompile Include="20160503_c\c\src\s06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\sepp.c">
+    <ClCompile Include="20160503_c\c\src\sepp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\seps.c">
+    <ClCompile Include="20160503_c\c\src\seps.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\sp00.c">
+    <ClCompile Include="20160503_c\c\src\sp00.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\starpm.c">
+    <ClCompile Include="20160503_c\c\src\starpm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\starpv.c">
+    <ClCompile Include="20160503_c\c\src\starpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\sxp.c">
+    <ClCompile Include="20160503_c\c\src\sxp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\sxpv.c">
+    <ClCompile Include="20160503_c\c\src\sxpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\taitt.c">
+    <ClCompile Include="20160503_c\c\src\taitt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\taiut1.c">
+    <ClCompile Include="20160503_c\c\src\taiut1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\taiutc.c">
+    <ClCompile Include="20160503_c\c\src\taiutc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tcbtdb.c">
+    <ClCompile Include="20160503_c\c\src\tcbtdb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tcgtt.c">
+    <ClCompile Include="20160503_c\c\src\tcgtt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tdbtcb.c">
+    <ClCompile Include="20160503_c\c\src\tdbtcb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tdbtt.c">
+    <ClCompile Include="20160503_c\c\src\tdbtt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tf2a.c">
+    <ClCompile Include="20160503_c\c\src\tf2a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tf2d.c">
+    <ClCompile Include="20160503_c\c\src\tf2d.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tr.c">
+    <ClCompile Include="20160503_c\c\src\tr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\trxp.c">
+    <ClCompile Include="20160503_c\c\src\trxp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\trxpv.c">
+    <ClCompile Include="20160503_c\c\src\trxpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tttai.c">
+    <ClCompile Include="20160503_c\c\src\tttai.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tttcg.c">
+    <ClCompile Include="20160503_c\c\src\tttcg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\tttdb.c">
+    <ClCompile Include="20160503_c\c\src\tttdb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ttut1.c">
+    <ClCompile Include="20160503_c\c\src\ttut1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ut1tai.c">
+    <ClCompile Include="20160503_c\c\src\ut1tai.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ut1tt.c">
+    <ClCompile Include="20160503_c\c\src\ut1tt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\ut1utc.c">
+    <ClCompile Include="20160503_c\c\src\ut1utc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\utctai.c">
+    <ClCompile Include="20160503_c\c\src\utctai.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\utcut1.c">
+    <ClCompile Include="20160503_c\c\src\utcut1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\xy06.c">
+    <ClCompile Include="20160503_c\c\src\xy06.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\xys00a.c">
+    <ClCompile Include="20160503_c\c\src\xys00a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\xys00b.c">
+    <ClCompile Include="20160503_c\c\src\xys00b.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\xys06a.c">
+    <ClCompile Include="20160503_c\c\src\xys06a.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\zp.c">
+    <ClCompile Include="20160503_c\c\src\zp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\zpv.c">
+    <ClCompile Include="20160503_c\c\src\zpv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\zr.c">
+    <ClCompile Include="20160503_c\c\src\zr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\makefile">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

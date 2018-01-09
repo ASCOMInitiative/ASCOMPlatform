@@ -41,7 +41,6 @@ InstallTemplates.pdb
 MigrationSupport.dll
 MigrationSupport.pdb
 moon.bmp
-setup.bmp
 swoosh.avi
 $
 
@@ -572,32 +571,14 @@ $
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 $
-PROGRESSMODE
+PLATFORM6OK
+PREREQ
+PRELIST
+NEEDSUPGRADE
 $
 1
-6
+4
 TRUE
 
 ASCOM Initiative
@@ -610,18 +591,18 @@ ASCOM Platform 6.3 Developer Components
 ASCOM Platform 6.3 Developer Components Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
-{EB80E306-A44D-4441-9BD7-DBA244864BF1}
+{989E2E48-ACC2-48EA-A3D0-F79167F724A8}
 ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
-Copyright ï¿½ 1998-2015, The ASCOM Initiative. All rights reserved. 
+Copyright © 1998-2015, The ASCOM Initiative. All rights reserved. 
 FALSE
 ASCOMPlatform63Developer
 TRUE
 FALSE
 
-|
+
 http://timestamp.verisign.com/scripts/timstamp.dll
 
 UAC=requireAdministrator,CACHESOURCES=TRUE,BUILDMODE=SFX,LANGUAGE=English,"TITLE=ASCOM Platform 6 Developer Components Alpha 16",TARGETDIR=$TARGETDIR$,IADIR=C:\PROGRA~2\INSTAL~2\INSTAL~1,PROJDIR=c:\ASCOMT~1\releases\ASCOM6~1\DEVELO~1\INSTAL~1,IAVER=10.00,LANGUAGE=English,LANGUAGE=English

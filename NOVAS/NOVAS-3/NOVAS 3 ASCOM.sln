@@ -1,13 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NOVAS3", "NOVAS3\NOVAS3.vcxproj", "{AC850762-F3A5-4B3D-8FA2-DEF9018281FC}"
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NOVAS3", "NOVAS3\NOVAS3.vcproj", "{AC850762-F3A5-4B3D-8FA2-DEF9018281FC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CioFile", "CioFile\CioFile.vcxproj", "{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CioFile", "CioFile\CioFile.vcproj", "{C291C8CE-E2D1-456B-8923-89F3FDADB8D3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeEph", "MakeEph\MakeEph.vcxproj", "{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeEph", "MakeEph\MakeEph.vcproj", "{4A4FC3BD-B445-49AA-87E4-B7A046CA1735}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,8 +38,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {446B4EC6-9CF3-4662-8D19-02C0573BE52F}
 	EndGlobalSection
 EndGlobal

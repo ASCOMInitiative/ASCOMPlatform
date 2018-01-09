@@ -44,14 +44,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe - Changes to USNO Source Files.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="README.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\USNOAE98\ALLOCATE.H">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -76,5 +68,9 @@
     <ClInclude Include="solarsystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe - Changes to USNO Source Files.txt" />
+    <None Include="README.txt" />
   </ItemGroup>
 </Project>

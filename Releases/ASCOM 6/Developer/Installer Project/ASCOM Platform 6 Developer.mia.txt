@@ -1,12 +1,9 @@
 Comment: ASCOM Platform 6 Developer Components Setup Project
+Comment: Set Variable NATIVE_ENGINE to TRUE
+Comment: Set Variable DELAYUNTIL_APPLYCHANGES to FALSE
+Comment: Set Variable LOGGED to C:\ASCOMInstallLog.txt
+Comment: Set Variable NATIVE_LOGGING to TRUE
 Set Variable PROGRAMDATA to 
- 
-Comment: Set the dialogue transition style: Empty / FADE / SLIDE
-Set Variable FX to 
-Set Variable MYPROGRESS to 0
- 
-Comment: Remove the InstallAware Logo message
-Set Variable MYAHLOGO to TRUE
  
 Comment: Set up the log file
 Set Variable SETUPLOG to 
@@ -14,13 +11,7 @@ Get Folder Location My->My Documents into MYDOCUMENTS
 Get Free Space on C: into variable DISKSPACE
  
 Comment: Create the path to the setup log and create the ASCOM directory, which must exist or the following write into text file commands fail
-Convert Variable REMOVE to UPPER case
-Comment: Create the correct log name depending on whether we are installing or uninstalling
-if Variable REMOVE Equals TRUE
-  Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6DeveloperRemove$DISKSPACE$.txt
-else
-  Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6DeveloperInstall$DISKSPACE$.txt
-end
+Set Variable SETUPLOG to $MYDOCUMENTS$\ASCOM\ASCOMPlatform6DeveloperInstall$DISKSPACE$.txt
 Run Program CMD.EXE /c MKDIR "$MYDOCUMENTS$\ASCOM" (WAIT)
  
 [DEFINE REGION: Check Application Requirements]
@@ -42,7 +33,7 @@ Comment: end
 Comment: Check that Platform 6 is already installed
 Set Variable PLATFORM6OK to FALSE
 Set Variable PLATFORMNAME to 
-Comment: Get Installed State for Windows Installer Setup {8961E141-B307-4882-ABAD-77A3E76A40C1} into Variable PLATFORM6OK
+Comment: Get Installed State for {8961E141-B307-4882-ABAD-77A3E76A40C1} into Variable PLATFORM6OK
 Read Registry Key HKLM\SOFTWARE\ASCOM\Platform\Platform Name into PLATFORMNAME
 if Variable PLATFORMNAME Equals 
   if Variable MAINTENANCE Equals FALSE
@@ -96,17 +87,14 @@ end
 Comment: Define Setup Components
 Define Component: Developer Components
 Define Component: Developer Components\Visual Studio Driver Templates
-Comment: Test whether VS is installed by seeing whether the .VSI or .VSIX extentions are mapped to the content installer. If not then ignore!
+Comment: Test whether VS is installed by seeing whether the >VSI extention is mapped to the content installer. If not then ignore!
 Read Registry Key HKCR\.vsi\ into VSIENTRY
-Read Registry Key HKCR\.vsix\ into VSIXENTRY
 if Variable VSIENTRY Equals 
-  if Variable VSIXENTRY Equals 
-    Deselect Component: Developer Components\Visual Studio Driver Templates
-  end
+  Deselect Component: Developer Components\Visual Studio Driver Templates
 end
  
 Comment: Initialize Setup Globals
-Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008, 7, 2008 R2, 8, 2012, 8.1, 2012 R2, 10) into ISNT
+Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008) into ISNT
 Get System Setting Windows in 64 bit Mode into WIN64MODE
 Get Exact OS Level into OPSYS
 Get Folder Location System->Program Files Directory into PROGRAMFILES
@@ -138,6 +126,10 @@ else
 end
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
+Comment: Correct presentation for Win 7
+if Variable OPSYS Equals SEVEN
+  Set Variable OPSYS to 7
+end
 Write into Text File $SETUPLOG$ from Value OS: Windows $OPSYS$ (at end of file)
 if Variable WIN64MODE Equals TRUE
   Write into Text File $SETUPLOG$ from Value Architecture: 64bit (at end of file)
@@ -159,7 +151,6 @@ Write into Text File $SETUPLOG$ from Value  (at end of file)
 Comment: Set install directory and start menu folder
 Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6 Developer Components
 Set Variable STARTMENU to ASCOM Platform 6
-Set Variable MYPROGRESS to 5
  
 [DEFINE REGION: Setup User Interview]
 if Variable MAINTENANCE Equals TRUE
@@ -270,12 +261,10 @@ if Variable WIZARD Equals CANCEL
 end
 Comment: Remove previous version (MSI install)
 if Variable NEEDSUPGRADE Equals TRUE
+  MessageBalloon: ASCOM Developer Tools Maintenance, Uninstalling previous Developer Tools version...
   Set Variable REMOVEOLD to 
   Set Variable ERROROLD to 
-  Set Variable PROGRESSMODE to 
    
-  Display Dialog: progress, use as progress dialog (non-modal)
-  Set Variable PROGRESSTEXT to Removing previous tools...
   Comment: Find location of our uninstaller and run it
   Set Variable UNINSTALLER to 
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}\UninstallString into UNINSTALLER
@@ -293,19 +282,19 @@ if Variable NEEDSUPGRADE Equals TRUE
     end
   end
   Set Variable MAINTENANCE to FALSE
+  MessageBalloon: ASCOM DeveloperTools Maintenance, Installing new Developer Tools version
 end
-Set Variable MYPROGRESS to 30
  
 Comment: Prepare to install
 Set Variable PROGRESSTEXT to Installing $TITLE$
 Set Variable SUCCESS to 
 Set Variable LASTERROR to 
- 
 if Variable ALLUSERS Equals TRUE
   Set Variable SHORTCUTFOLDER to $SHORTCUTFILESALL$\$STARTMENU$
 else
   Set Variable SHORTCUTFOLDER to $SHORTCUTFILES$\$STARTMENU$
 end
+Display Dialog: progress, use as progress dialog (non-modal)
  
 Comment: Modify Target System
 [DEFINE REGION: Perform Uninstallation]
@@ -315,9 +304,9 @@ if Variable REMOVE Equals TRUE
   Run Program $TARGETDIR$\Internal\ASCOM.Internal.GACInstall.exe /U "ASCOM.Setup.TemplateWizard" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value Removing template wizard dll - Return Code: $RC$ (at end of file)
   Apply Uninstall (get result into variable SUCCESS)
+  Set Variable PROGRESS to 100
 else
   [END REGION]
-  Set Variable MYPROGRESS to 40
   [DEFINE REGION: Perform First Time or Maintenance Installation]
   Comment: Install/Re-Install product
   Comment: At this point there should not be any Platform 6 Developer Installaware install on the system either because previous version is uninstalled or this is a new P6 install
@@ -346,13 +335,10 @@ else
   Write into Text File $SETUPLOG$ from Value Removing old template wizard dll  - Attempt 2 - Return Code: $RC$ (at end of file)
    
   [OFFLINE CONTENT]
-  Set Variable PROGRESSMODE to 
   Set Variable PROGRESS to 30
   Get Component Developer Components Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     Write into Text File $SETUPLOG$ from Value Installing Developer Components (at end of file)
-    Set Variable MYPROGRESS to 40
-     
     [DEFINE REGION: Visual Studio references]
     Comment: Platform 6.1 references
     Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $TARGETDIR$\Components\Platform6
@@ -396,7 +382,6 @@ else
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 6\, $TARGETDIR$\Components\Platform6
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
-    Set Variable PROGRESSMODE to 
     Set Variable PROGRESS to 50
     [END REGION]
     [DEFINE REGION: Developer Documentation]
@@ -409,13 +394,11 @@ else
     Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\NOVAS\Algorithms.pdf to $TARGETDIR$\Developer Documentation
-    Set Variable PROGRESSMODE to 
     Set Variable PROGRESS to 60
     Install Files ..\..\..\..\Doc\tip.gif to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Developer Documentation
-    Set Variable PROGRESSMODE to 
     Set Variable PROGRESS to 70
     Install Files ..\..\..\..\Help\Output\Developer\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
     Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Active Scripting Help to $TARGETDIR$\Developer Documentation\Script56.chm
@@ -455,7 +438,6 @@ else
     Install Files ..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $TARGETDIR$\Installer Generator
     Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $TARGETDIR$\Installer Generator
     Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb to $TARGETDIR$\Installer Generator
-    Set Variable PROGRESSMODE to 
     Set Variable PROGRESS to 80
     Install Files ..\..\..\..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt to $TARGETDIR$\Installer Generator
     Install Files ..\..\..\..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $TARGETDIR$\Installer Generator\Resources
@@ -477,7 +459,7 @@ else
     Install Files ..\..\..\..\ASCOM.Utilities\FusionLib\bin\Release\ASCOM.Internal.FusionLib.dll to $TARGETDIR$\Internal
   end
   [DEFINE REGION: Visual Studio Driver Templates]
-   
+  Set Variable PROGRESS to 90
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     Write into Text File $SETUPLOG$ from Value Installing Project Templates (at end of file)
@@ -499,28 +481,25 @@ else
   if Variable ADVERTISE Equals TRUE
     Apply Advertised (get result into variable SUCCESS)
   else
-    Set Variable MYPROGRESS to 50
     Apply Install (get result into variable SUCCESS)
-    Set Variable MYPROGRESS to 60
   end
   [compiler end]
+  Comment: Remove previous message baloon
+  MessageBalloon: , 
    
   Comment: Run the VsiInstaller to install the templates, provided that it is present on the system.
   Set Variable RC to 
-  Set Variable PROGRESSMODE to 
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     Comment: Install templates
     Write into Text File $SETUPLOG$ from Value Installing templates (at end of file)
-    Set Variable MYPROGRESS to 75
     Run Program $SUPPORTDIR$\InstallTemplates.exe  (WAIT, get result into variable RC)
-    Set Variable MYPROGRESS to 90
     Write into Text File $SETUPLOG$ from Value Finished installing new templates - Return Code: $RC$ (at end of file)
     if Variable RC not Equals 0
       MessageBox: Install Templates, An error has occured during template installation. $NEWLINE$$NEWLINE$Please report this on the ASCOM-Talk Yahoo group.
     end
   end
-  Set Variable MYPROGRESS to 100
+  Set Variable PROGRESS to 100
   Write into Text File $SETUPLOG$ from Value Finished (at end of file)
 end
 [END REGION]

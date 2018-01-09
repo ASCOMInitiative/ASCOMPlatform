@@ -1,23 +1,5 @@
-﻿Check Application Requirements
-Setup User Interview
-Perform First Time or Maintenance Installation
-Finish Setup
 Install Application Pre-Requisites
 Check Application Pre-Requisites
 Check/Install Application Pre-Requisites
-Non-MSI installation activities
-Specify additional clean-up required when uninstalling
 Platform 6 Content
-Platform 6 files
 Platform 5.5 files
-Platform 5 files
-Create shortcuts
-Set Registry Keys
-Platform 6.1 files
-Set up log file and variables
-Platform 6.2 files
-Install Platform 6
-Uninstall Platforms 4 and 5
-Extra activities if on a 64bit system
-Uninstall items installed by this installer
-Components to be uininstalled only from 64bit systems

@@ -1,4 +1,4 @@
-﻿IF (TestRemove.Caption <> TRUE)  THEN  CaptionInstall.Visible := True;
+IF (TestRemove.Caption <> TRUE)  THEN  CaptionInstall.Visible := True;
 IF (TestRemove.Caption = TRUE)  THEN  CaptionUninstall.Visible := True;
 IF (TestRemove.Caption <> TRUE)  THEN  CaptionUninstall.Visible := False;
 IF (TestRemove.Caption = TRUE)  THEN  CaptionInstall.Visible := False;

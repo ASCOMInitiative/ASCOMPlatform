@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\sofa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\sofam.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\SOFA 13 - 20th April 2017 Release\sofa\20170420\c\src\t_sofa_c.c">
+    <ClCompile Include="..\Sofa\20150209_a\c\src\t_sofa_c.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Sofa\20160503_c\c\src\sofa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sofa\20160503_c\c\src\sofam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
