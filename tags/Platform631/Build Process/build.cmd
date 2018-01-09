@@ -1,0 +1,1 @@
+msbuild buildplatform.msbuild > op.txt

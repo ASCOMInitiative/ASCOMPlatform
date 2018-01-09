@@ -1,0 +1,536 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6DD9248B-EB0E-4076-9F50-1B206B695AFB}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ASCOM.GeminiTelescope</RootNamespace>
+    <AssemblyName>ASCOM.GeminiTelescope</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <ApplicationIcon>GeminiSB32x32.ico</ApplicationIcon>
+    <TargetFrameworkProfile />
+    <PublishUrl>http://localhost/LocalServerCOM/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\ASCOM.GeminiTelescope.XML</DocumentationFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <NoWarn>1591</NoWarn>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\ASCOM.GeminiTelescope.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591, 1607</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\ASCOM.GeminiTelescope.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|AnyCPU' ">
+    <OutputPath>bin\Peter\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\ASCOM.GeminiTelescope.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|x64' ">
+    <OutputPath>bin\x64\Peter\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\ASCOM.GeminiTelescope.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591, 1607</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Peter|x86' ">
+    <OutputPath>bin\x86\Peter\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\ASCOM.GeminiTelescope.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.SpeechLib, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Interop.SpeechLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox\AboutBox1.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox\AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="AstronomyFunctions.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="ClassFactory.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="CollapsibleGroupBox.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CollapsibleGroupBox.Designer.cs">
+      <DependentUpon>CollapsibleGroupBox.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmObservationLog.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmObservationLog.Designer.cs">
+      <DependentUpon>frmObservationLog.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmParkPosition.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmParkPosition.Designer.cs">
+      <DependentUpon>frmParkPosition.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmProgress.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProgress.Designer.cs">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmSafetyLimits.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSafetyLimits.Designer.cs">
+      <DependentUpon>frmSafetyLimits.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmUserCatalog.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUserCatalog.Designer.cs">
+      <DependentUpon>frmUserCatalog.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmVoiceOut.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVoiceOut.Designer.cs">
+      <DependentUpon>frmVoiceOut.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmAdvancedSettings.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAdvancedSettings.Designer.cs">
+      <DependentUpon>frmAdvancedSettings.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmGps.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGps.Designer.cs">
+      <DependentUpon>frmGps.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmJoystickConfig.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmJoystickConfig.Designer.cs">
+      <DependentUpon>frmJoystickConfig.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmModel.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmModel.Designer.cs">
+      <DependentUpon>frmModel.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmPassThroughPortSetup.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPassThroughPortSetup.Designer.cs">
+      <DependentUpon>frmPassThroughPortSetup.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmStatus.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStatus.Designer.cs">
+      <DependentUpon>frmStatus.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="GeminiProperties.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MainSpeech.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="NmeaInterpretor.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="PassThroughPort.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="FocuserSetupDialogForm.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FocuserSetupDialogForm.Designer.cs">
+      <DependentUpon>FocuserSetupDialogForm.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmBootMode.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBootMode.Designer.cs">
+      <DependentUpon>frmBootMode.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="GarbageCollection.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="GeminiCommands.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="GeminiError.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="LocalServer.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <EmbeddedResource Include="AboutBox\AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmObservationLog.resx">
+      <DependentUpon>frmObservationLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmParkPosition.resx">
+      <DependentUpon>frmParkPosition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProgress.resx">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSafetyLimits.resx">
+      <DependentUpon>frmSafetyLimits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUserCatalog.resx">
+      <DependentUpon>frmUserCatalog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVoiceOut.resx">
+      <DependentUpon>frmVoiceOut.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FocuserSetupDialogForm.resx">
+      <DependentUpon>FocuserSetupDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAdvancedSettings.resx">
+      <DependentUpon>frmAdvancedSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmBootMode.resx">
+      <DependentUpon>frmBootMode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGps.resx">
+      <DependentUpon>frmGps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmJoystickConfig.resx">
+      <DependentUpon>frmJoystickConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmModel.resx">
+      <DependentUpon>frmModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPassThroughPortSetup.resx">
+      <DependentUpon>frmPassThroughPortSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStatus.resx">
+      <DependentUpon>frmStatus.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.en-GB.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.en-GB.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ru-RU.resx" />
+    <EmbeddedResource Include="TelescopeSetupDialogForm.resx">
+      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Properties\Resources.en-GB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.en-GB.resx</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="ReferenceCountedObject.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="SharedResources.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="GeminiHardware.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Speech.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="TButton.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelescopeSetupDialogForm.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TelescopeSetupDialogForm.designer.cs">
+      <DependentUpon>TelescopeSetupDialogForm.cs</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Tracer.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="UserCommand.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Win32API.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ASCOM.png" />
+    <Content Include="GeminiSB32x32.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ReadMe.htm" />
+    <None Include="app.config" />
+    <None Include="Documentation\Gemini Telescope Net Installation and Operation.docx">
+      <Generator>Docx2UnitTest</Generator>
+      <LastGenOutput>Gemini Telescope Net Installation and Operation.log</LastGenOutput>
+    </None>
+    <None Include="Documentation\Gemini Telescope Net Installation and Operation.log">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Gemini Telescope Net Installation and Operation.docx</DependentUpon>
+    </None>
+    <None Include="Documentation\Gemini Telescope Net Installation and Operation.pdf" />
+    <None Include="Resources\no fix satellite.png" />
+    <None Include="Resources\satellite.png" />
+    <None Include="Resources\no satellite.png" />
+    <None Include="Resources\plus.bmp" />
+    <None Include="Resources\minus.bmp" />
+    <None Include="Resources\diamond1-down.gif" />
+    <None Include="Resources\diamond1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Documentation\GeminiHardware.chm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ASCOM.Astrometry\ASCOM.Astrometry\ASCOM.Astrometry.vbproj">
+      <Project>{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3}</Project>
+      <Name>ASCOM.Astrometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.Attributes\ASCOM.Attributes.csproj">
+      <Project>{2C40FAD9-DE75-4360-A0AD-911C4D24D98C}</Project>
+      <Name>ASCOM.Attributes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ASCOM.Utilities\ASCOM.Utilities\ASCOM.Utilities.vbproj">
+      <Project>{C9BF0A8B-594F-4AB9-938A-EDC8448D8520}</Project>
+      <Name>ASCOM.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj">
+      <Project>{5F6CF410-7B16-4A32-99D2-0D92196C4490}</Project>
+      <Name>ASCOM.Exceptions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\..\External Dependencies\StyleCop\v4.3\Microsoft.StyleCop.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

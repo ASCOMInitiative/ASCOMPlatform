@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="ASCOM.Interface.IAscomDriver" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgQAAACAAEAAQAAAAAAAIAAAAAAAAgAAA=</HashCode>
+      <FileName>IAscomDriver.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.IAxisRates" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAACAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IAxisRates.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.ICamera" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FAAADDAAICFgRIACAIABAACygGBBQECAAQAAaKEgBQA=</HashCode>
+      <FileName>ICamera.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.ICameraV2" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAgAAAgEACAAAAAAAAAAAAABIACAQAASgYAAAAA=</HashCode>
+      <FileName>ICameraV2.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.IDome" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>UAEACACAIAAgUI4BCAJAgAQAAAAAwAIQAAIQAQAyCII=</HashCode>
+      <FileName>IDome.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.IFilterWheel" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAQAAgAAAAAAAAEAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>IFilterWheel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.IFocuser" Collapsed="true">
+    <Position X="5.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAIAAIAAoAAAAAAAAAAAgAAEAAAAAQSAkAAA=</HashCode>
+      <FileName>IFocuser.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.IRate" Collapsed="true">
+    <Position X="7" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IRate.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.IRotator" Collapsed="true">
+    <Position X="8.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAYAAoAAAIAAAAAAAAAAEQAAACAAAgAAA=</HashCode>
+      <FileName>IRotator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.ISwitch" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ISwitch.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.ISwitchController" Collapsed="true">
+    <Position X="5.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>ISwitch.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.ITelescope" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>xAEAAQCUCFBMkOYJkALY0EKBAAJMTCIQQIIIKwIACCI=</HashCode>
+      <FileName>ITelescopeV2.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ASCOM.Interface.ITrackingRates" Collapsed="true">
+    <Position X="7" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAACAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ITrackingRates.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="ASCOM.Interface.CameraStates" Collapsed="true">
+    <Position X="7" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAgAAAAAAgAAAAAAgAAAAAEAAAAAIAAAAAAAA=</HashCode>
+      <FileName>CameraEnumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ASCOM.Interface.SensorType" Collapsed="true">
+    <Position X="5.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAIAAABAAAAAAACAAAAAgAgAAAA=</HashCode>
+      <FileName>CameraEnumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ASCOM.Interface.ShutterState" Collapsed="true">
+    <Position X="7" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAIAAAAAAAAAAACAAAAAQAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>DomeEnumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ASCOM.Interface.AlignmentModes" Collapsed="true">
+    <Position X="5.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgACAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Telescope.Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ASCOM.Interface.DriveRates" Collapsed="true">
+    <Position X="8.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAIA=</HashCode>
+      <FileName>Telescope.Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ASCOM.Interface.EquatorialCoordinateType" Collapsed="true">
+    <Position X="5.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAABAAIQAAAAAAAAEAAAA=</HashCode>
+      <FileName>Telescope.Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ASCOM.Interface.GuideDirections" Collapsed="true">
+    <Position X="7" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAiAAAAAAAAAAAAABACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Telescope.Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ASCOM.Interface.TelescopeAxes" Collapsed="true">
+    <Position X="8.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAIAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Telescope.Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ASCOM.Interface.PierSide" Collapsed="true">
+    <Position X="8.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAEAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Telescope.Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

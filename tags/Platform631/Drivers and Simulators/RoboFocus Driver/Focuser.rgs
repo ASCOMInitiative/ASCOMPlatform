@@ -1,0 +1,26 @@
+HKCR
+{
+	RoboFocus.Focuser.1 = s 'ASCOM Focuser Driver for RoboFocus'
+	{
+		CLSID = s '{026DAA75-C2C3-488d-AC0A-A8342D1702E6}'
+	}
+	RoboFocus.Focuser = s 'ASCOM Focuser Driver for RoboFocus'
+	{
+		CLSID = s '{026DAA75-C2C3-488d-AC0A-A8342D1702E6}'
+		CurVer = s 'RoboFocus.Focuser.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {026DAA75-C2C3-488d-AC0A-A8342D1702E6} = s 'ASCOM Focuser Driver for RoboFocus'
+		{
+			ProgID = s 'RoboFocus.Focuser.1'
+			VersionIndependentProgID = s 'RoboFocus.Focuser for RoboFocus'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E8E01F61-2D1D-4585-833A-38480DA22EB1}'
+		}
+	}
+}

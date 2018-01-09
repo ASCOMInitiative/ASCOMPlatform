@@ -1,0 +1,848 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 14.00.50727.762 (39b705e5).
+//
+// c:\documents and settings\robert b. denny\my documents\visual studio 2005\projects\ascom\helpercilentc++\debug\scrrun.tli
+//
+// Wrapper implementations for Win32 type library scrrun.dll
+// compiler-generated file created 05/08/07 at 10:55:39 - DO NOT EDIT!
+
+#pragma once
+
+//
+// interface IDictionary wrapper method implementations
+//
+
+inline void IDictionary::PutRefItem ( VARIANT * Key, VARIANT * pRetItem ) {
+    HRESULT _hr = putref_Item(Key, pRetItem);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline void IDictionary::PutItem ( VARIANT * Key, VARIANT * pRetItem ) {
+    HRESULT _hr = put_Item(Key, pRetItem);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t IDictionary::GetItem ( VARIANT * Key ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_Item(Key, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT IDictionary::Add ( VARIANT * Key, VARIANT * Item ) {
+    HRESULT _hr = raw_Add(Key, Item);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long IDictionary::GetCount ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL IDictionary::Exists ( VARIANT * Key ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_Exists(Key, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _variant_t IDictionary::Items ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_Items(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline void IDictionary::PutKey ( VARIANT * Key, VARIANT * _arg2 ) {
+    HRESULT _hr = put_Key(Key, _arg2);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t IDictionary::Keys ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_Keys(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT IDictionary::Remove ( VARIANT * Key ) {
+    HRESULT _hr = raw_Remove(Key);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IDictionary::RemoveAll ( ) {
+    HRESULT _hr = raw_RemoveAll();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline void IDictionary::PutCompareMode ( enum CompareMethod pcomp ) {
+    HRESULT _hr = put_CompareMode(pcomp);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline enum CompareMethod IDictionary::GetCompareMode ( ) {
+    enum CompareMethod _result;
+    HRESULT _hr = get_CompareMode(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline IUnknownPtr IDictionary::_NewEnum ( ) {
+    IUnknown * _result = 0;
+    HRESULT _hr = raw__NewEnum(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IUnknownPtr(_result, false);
+}
+
+inline _variant_t IDictionary::GetHashVal ( VARIANT * Key ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_HashVal(Key, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+//
+// interface ITextStream wrapper method implementations
+//
+
+inline long ITextStream::GetLine ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Line(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ITextStream::GetColumn ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Column(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ITextStream::GetAtEndOfStream ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AtEndOfStream(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ITextStream::GetAtEndOfLine ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AtEndOfLine(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ITextStream::Read ( long Characters ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_Read(Characters, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ITextStream::ReadLine ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_ReadLine(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ITextStream::ReadAll ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_ReadAll(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT ITextStream::Write ( _bstr_t Text ) {
+    HRESULT _hr = raw_Write(Text);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ITextStream::WriteLine ( _bstr_t Text ) {
+    HRESULT _hr = raw_WriteLine(Text);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ITextStream::WriteBlankLines ( long Lines ) {
+    HRESULT _hr = raw_WriteBlankLines(Lines);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ITextStream::Skip ( long Characters ) {
+    HRESULT _hr = raw_Skip(Characters);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ITextStream::SkipLine ( ) {
+    HRESULT _hr = raw_SkipLine();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ITextStream::Close ( ) {
+    HRESULT _hr = raw_Close();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+//
+// interface IScriptEncoder wrapper method implementations
+//
+
+inline _bstr_t IScriptEncoder::EncodeScriptFile ( _bstr_t szExt, _bstr_t bstrStreamIn, long cFlags, _bstr_t bstrDefaultLang ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_EncodeScriptFile(szExt, bstrStreamIn, cFlags, bstrDefaultLang, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface IFileSystem wrapper method implementations
+//
+
+inline IDriveCollectionPtr IFileSystem::GetDrives ( ) {
+    struct IDriveCollection * _result = 0;
+    HRESULT _hr = get_Drives(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDriveCollectionPtr(_result, false);
+}
+
+inline _bstr_t IFileSystem::BuildPath ( _bstr_t Path, _bstr_t Name ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_BuildPath(Path, Name, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFileSystem::GetDriveName ( _bstr_t Path ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetDriveName(Path, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFileSystem::GetParentFolderName ( _bstr_t Path ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetParentFolderName(Path, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFileSystem::GetFileName ( _bstr_t Path ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetFileName(Path, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFileSystem::GetBaseName ( _bstr_t Path ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetBaseName(Path, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFileSystem::GetExtensionName ( _bstr_t Path ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetExtensionName(Path, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFileSystem::GetAbsolutePathName ( _bstr_t Path ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetAbsolutePathName(Path, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFileSystem::GetTempName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetTempName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline VARIANT_BOOL IFileSystem::DriveExists ( _bstr_t DriveSpec ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_DriveExists(DriveSpec, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL IFileSystem::FileExists ( _bstr_t FileSpec ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_FileExists(FileSpec, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL IFileSystem::FolderExists ( _bstr_t FolderSpec ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_FolderExists(FolderSpec, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline IDrivePtr IFileSystem::GetDrive ( _bstr_t DriveSpec ) {
+    struct IDrive * _result = 0;
+    HRESULT _hr = raw_GetDrive(DriveSpec, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDrivePtr(_result, false);
+}
+
+inline IFilePtr IFileSystem::GetFile ( _bstr_t FilePath ) {
+    struct IFile * _result = 0;
+    HRESULT _hr = raw_GetFile(FilePath, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFilePtr(_result, false);
+}
+
+inline IFolderPtr IFileSystem::GetFolder ( _bstr_t FolderPath ) {
+    struct IFolder * _result = 0;
+    HRESULT _hr = raw_GetFolder(FolderPath, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderPtr(_result, false);
+}
+
+inline IFolderPtr IFileSystem::GetSpecialFolder ( SpecialFolderConst SpecialFolder ) {
+    struct IFolder * _result = 0;
+    HRESULT _hr = raw_GetSpecialFolder(SpecialFolder, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderPtr(_result, false);
+}
+
+inline HRESULT IFileSystem::DeleteFileX ( _bstr_t FileSpec, VARIANT_BOOL Force ) {
+    HRESULT _hr = raw_DeleteFileX(FileSpec, Force);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFileSystem::DeleteFolder ( _bstr_t FolderSpec, VARIANT_BOOL Force ) {
+    HRESULT _hr = raw_DeleteFolder(FolderSpec, Force);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFileSystem::MoveFileX ( _bstr_t Source, _bstr_t Destination ) {
+    HRESULT _hr = raw_MoveFileX(Source, Destination);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFileSystem::MoveFolder ( _bstr_t Source, _bstr_t Destination ) {
+    HRESULT _hr = raw_MoveFolder(Source, Destination);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFileSystem::CopyFileX ( _bstr_t Source, _bstr_t Destination, VARIANT_BOOL OverWriteFiles ) {
+    HRESULT _hr = raw_CopyFileX(Source, Destination, OverWriteFiles);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFileSystem::CopyFolder ( _bstr_t Source, _bstr_t Destination, VARIANT_BOOL OverWriteFiles ) {
+    HRESULT _hr = raw_CopyFolder(Source, Destination, OverWriteFiles);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline IFolderPtr IFileSystem::CreateFolder ( _bstr_t Path ) {
+    struct IFolder * _result = 0;
+    HRESULT _hr = raw_CreateFolder(Path, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderPtr(_result, false);
+}
+
+inline ITextStreamPtr IFileSystem::CreateTextFile ( _bstr_t FileName, VARIANT_BOOL Overwrite, VARIANT_BOOL Unicode ) {
+    struct ITextStream * _result = 0;
+    HRESULT _hr = raw_CreateTextFile(FileName, Overwrite, Unicode, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ITextStreamPtr(_result, false);
+}
+
+inline ITextStreamPtr IFileSystem::OpenTextFile ( _bstr_t FileName, enum IOMode IOMode, VARIANT_BOOL Create, enum Tristate Format ) {
+    struct ITextStream * _result = 0;
+    HRESULT _hr = raw_OpenTextFile(FileName, IOMode, Create, Format, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ITextStreamPtr(_result, false);
+}
+
+//
+// interface IFileSystem3 wrapper method implementations
+//
+
+inline ITextStreamPtr IFileSystem3::GetStandardStream ( StandardStreamTypes StandardStreamType, VARIANT_BOOL Unicode ) {
+    struct ITextStream * _result = 0;
+    HRESULT _hr = raw_GetStandardStream(StandardStreamType, Unicode, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ITextStreamPtr(_result, false);
+}
+
+inline _bstr_t IFileSystem3::GetFileVersion ( _bstr_t FileName ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetFileVersion(FileName, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface IDriveCollection wrapper method implementations
+//
+
+inline IDrivePtr IDriveCollection::GetItem ( const _variant_t & Key ) {
+    struct IDrive * _result = 0;
+    HRESULT _hr = get_Item(Key, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDrivePtr(_result, false);
+}
+
+inline IUnknownPtr IDriveCollection::Get_NewEnum ( ) {
+    IUnknown * _result = 0;
+    HRESULT _hr = get__NewEnum(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IUnknownPtr(_result, false);
+}
+
+inline long IDriveCollection::GetCount ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+//
+// interface IDrive wrapper method implementations
+//
+
+inline _bstr_t IDrive::GetPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Path(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IDrive::GetDriveLetter ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_DriveLetter(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IDrive::GetShareName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ShareName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline DriveTypeConst IDrive::GetDriveType ( ) {
+    DriveTypeConst _result;
+    HRESULT _hr = get_DriveType(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline IFolderPtr IDrive::GetRootFolder ( ) {
+    struct IFolder * _result = 0;
+    HRESULT _hr = get_RootFolder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderPtr(_result, false);
+}
+
+inline _variant_t IDrive::GetAvailableSpace ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_AvailableSpace(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _variant_t IDrive::GetFreeSpaceX ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_FreeSpaceX(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _variant_t IDrive::GetTotalSizeX ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_TotalSizeX(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _bstr_t IDrive::GetVolumeName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_VolumeName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void IDrive::PutVolumeName ( _bstr_t pbstrName ) {
+    HRESULT _hr = put_VolumeName(pbstrName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t IDrive::GetFileSystem ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_FileSystem(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline long IDrive::GetSerialNumber ( ) {
+    long _result = 0;
+    HRESULT _hr = get_SerialNumber(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL IDrive::GetIsReady ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_IsReady(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+//
+// interface IFolder wrapper method implementations
+//
+
+inline _bstr_t IFolder::GetPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Path(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFolder::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void IFolder::PutName ( _bstr_t pbstrName ) {
+    HRESULT _hr = put_Name(pbstrName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t IFolder::GetShortPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ShortPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFolder::GetShortName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ShortName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline IDrivePtr IFolder::GetDrive ( ) {
+    struct IDrive * _result = 0;
+    HRESULT _hr = get_Drive(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDrivePtr(_result, false);
+}
+
+inline IFolderPtr IFolder::GetParentFolder ( ) {
+    struct IFolder * _result = 0;
+    HRESULT _hr = get_ParentFolder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderPtr(_result, false);
+}
+
+inline FileAttribute IFolder::GetAttributes ( ) {
+    FileAttribute _result;
+    HRESULT _hr = get_Attributes(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IFolder::PutAttributes ( FileAttribute pfa ) {
+    HRESULT _hr = put_Attributes(pfa);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline DATE IFolder::GetDateCreated ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_DateCreated(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline DATE IFolder::GetDateLastModified ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_DateLastModified(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline DATE IFolder::GetDateLastAccessed ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_DateLastAccessed(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t IFolder::GetType ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Type(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT IFolder::Delete ( VARIANT_BOOL Force ) {
+    HRESULT _hr = raw_Delete(Force);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFolder::Copy ( _bstr_t Destination, VARIANT_BOOL OverWriteFiles ) {
+    HRESULT _hr = raw_Copy(Destination, OverWriteFiles);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFolder::Move ( _bstr_t Destination ) {
+    HRESULT _hr = raw_Move(Destination);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL IFolder::GetIsRootFolder ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_IsRootFolder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _variant_t IFolder::GetSize ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_Size(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline IFolderCollectionPtr IFolder::GetSubFolders ( ) {
+    struct IFolderCollection * _result = 0;
+    HRESULT _hr = get_SubFolders(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderCollectionPtr(_result, false);
+}
+
+inline IFileCollectionPtr IFolder::GetFiles ( ) {
+    struct IFileCollection * _result = 0;
+    HRESULT _hr = get_Files(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFileCollectionPtr(_result, false);
+}
+
+inline ITextStreamPtr IFolder::CreateTextFile ( _bstr_t FileName, VARIANT_BOOL Overwrite, VARIANT_BOOL Unicode ) {
+    struct ITextStream * _result = 0;
+    HRESULT _hr = raw_CreateTextFile(FileName, Overwrite, Unicode, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ITextStreamPtr(_result, false);
+}
+
+//
+// interface IFolderCollection wrapper method implementations
+//
+
+inline IFolderPtr IFolderCollection::Add ( _bstr_t Name ) {
+    struct IFolder * _result = 0;
+    HRESULT _hr = raw_Add(Name, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderPtr(_result, false);
+}
+
+inline IFolderPtr IFolderCollection::GetItem ( const _variant_t & Key ) {
+    struct IFolder * _result = 0;
+    HRESULT _hr = get_Item(Key, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderPtr(_result, false);
+}
+
+inline IUnknownPtr IFolderCollection::Get_NewEnum ( ) {
+    IUnknown * _result = 0;
+    HRESULT _hr = get__NewEnum(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IUnknownPtr(_result, false);
+}
+
+inline long IFolderCollection::GetCount ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+//
+// interface IFile wrapper method implementations
+//
+
+inline _bstr_t IFile::GetPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Path(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFile::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void IFile::PutName ( _bstr_t pbstrName ) {
+    HRESULT _hr = put_Name(pbstrName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t IFile::GetShortPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ShortPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IFile::GetShortName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ShortName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline IDrivePtr IFile::GetDrive ( ) {
+    struct IDrive * _result = 0;
+    HRESULT _hr = get_Drive(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDrivePtr(_result, false);
+}
+
+inline IFolderPtr IFile::GetParentFolder ( ) {
+    struct IFolder * _result = 0;
+    HRESULT _hr = get_ParentFolder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFolderPtr(_result, false);
+}
+
+inline FileAttribute IFile::GetAttributes ( ) {
+    FileAttribute _result;
+    HRESULT _hr = get_Attributes(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IFile::PutAttributes ( FileAttribute pfa ) {
+    HRESULT _hr = put_Attributes(pfa);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline DATE IFile::GetDateCreated ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_DateCreated(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline DATE IFile::GetDateLastModified ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_DateLastModified(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline DATE IFile::GetDateLastAccessed ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_DateLastAccessed(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _variant_t IFile::GetSize ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_Size(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _bstr_t IFile::GetType ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Type(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT IFile::Delete ( VARIANT_BOOL Force ) {
+    HRESULT _hr = raw_Delete(Force);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFile::Copy ( _bstr_t Destination, VARIANT_BOOL OverWriteFiles ) {
+    HRESULT _hr = raw_Copy(Destination, OverWriteFiles);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IFile::Move ( _bstr_t Destination ) {
+    HRESULT _hr = raw_Move(Destination);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline ITextStreamPtr IFile::OpenAsTextStream ( enum IOMode IOMode, enum Tristate Format ) {
+    struct ITextStream * _result = 0;
+    HRESULT _hr = raw_OpenAsTextStream(IOMode, Format, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ITextStreamPtr(_result, false);
+}
+
+//
+// interface IFileCollection wrapper method implementations
+//
+
+inline IFilePtr IFileCollection::GetItem ( const _variant_t & Key ) {
+    struct IFile * _result = 0;
+    HRESULT _hr = get_Item(Key, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IFilePtr(_result, false);
+}
+
+inline IUnknownPtr IFileCollection::Get_NewEnum ( ) {
+    IUnknown * _result = 0;
+    HRESULT _hr = get__NewEnum(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IUnknownPtr(_result, false);
+}
+
+inline long IFileCollection::GetCount ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}

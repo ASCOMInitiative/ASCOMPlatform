@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="732148ca-fc8a-4f0d-bc1d-8f5fe2907744" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <section address="TimeRelationships">
+		<title>Time relationships</title>
+   		<content>
+      		<para>A number of time scales are used in the world of astronomy, some key ones are:
+      		
+				<list class="bullet">
+				  <listItem><legacyBold>TT</legacyBold> - Terrestrial time</listItem>
+				  <listItem><legacyBold>TAI</legacyBold> - International atomic time</listItem>
+				  <listItem><legacyBold>UTC</legacyBold> - Coordinated universal time</listItem>
+				  <listItem><legacyBold>Civil Time</legacyBold> - Local clock time</listItem>
+				  <listItem><legacyBold>UT1</legacyBold> - Universal time</listItem>
+				</list>		
+      		</para>
+	      	<para>These time scales are related to each other and the following figure shows the mathematical relationships and the names
+	      	ascribed to the differences between them e.g. DeltaT</para>
+	  		<para>
+				<mediaLink>
+					<image placement="center" xlink:href="TimeTypes"/>
+				</mediaLink>
+			</para>
+			<para>Terrestrial time (TT)and Atomic time (TAI) are based on the SI second (defined as the duration of 9,192,631,770 periods of the radiation 
+			corresponding to the transition between the two hyperfine levels of the ground state of the caesium-133 atom) and are 
+			independent of time as defined by rotation of the earth. The two time scales are related by a fixed constant offset of 32.184s. The 
+			terrestrial time scale is used as the yardstick for applying corrections for precession, nutation and star proper motion.</para>
+			
+			<para>Coorindated universal time (UTC) is also based on the SI second and is always an integral number of seconds different 
+			to TAI. This is the timescale on which we govern our lives and is the base to which time zone and daylight saving time corrections 
+			are applied in order to get local civil time in the various time zones around the world.</para>
+			
+			<para>Universal time is determined by the rotation of the earth and is gradually diverging from terrestrial time because earth
+			rotation is gradually slowing and consequently the universal time second is getting longer when measured using
+			the caesium oscillation based SI second. The difference between terrestrial time and universal time is known as DeltaT, the ASCOM
+			astrometry namespace contains routines that should give good values of DeltaT for the next couple of years.</para>
+			
+			<para>The fact that there is a difference in rate between UTC, which is based on atomic time, and UT, which is based on the rotation 
+			of earth and which governs when day and night actually occur, requres management. This is effected by introducing occasional leap 
+			seconds into UTC in order to keep it within plus or minus 0.9 seconds of UT. This approach ensures that our civil time, despite being 
+			based on the SI second always stays close to universal time as defined by the rotation of the earth.</para>
+			
+			<para>These relationships are shown in the following figure.</para>
+
+			<para>
+				<mediaLink>
+					<image placement="center" xlink:href="TimeRelationships"/>
+				</mediaLink>
+			</para>
+
+      	</content>
+    </section>
+  </developerConceptualDocument>
+</topic>

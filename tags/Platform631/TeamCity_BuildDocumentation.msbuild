@@ -1,0 +1,12 @@
+﻿<Project DefaultTargets="BuildDocumentation" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 3rd Party Program Settings -->
+  <PropertyGroup>
+    <SandCastleHFBCmd>$(SHFBROOT)SandcastleBuilderConsole.exe</SandCastleHFBCmd>
+    <SandCastleHFBProject>Help\ASCOMPlatform.shfb</SandCastleHFBProject>
+  </PropertyGroup>
+
+  <Target Name="BuildDocumentation">
+    <!-- Build source code docs -->
+    <Exec Command="%22$(SandCastleHFBCmd)%22 %22$(SandCastleHFBProject)%22" />
+  </Target>
+</Project>

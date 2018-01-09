@@ -1,0 +1,872 @@
+//
+// =======================
+// Master ASCOM Interfaces
+// =======================
+//
+// Bob Denny 03-May-2007
+// Bob Denny 05-May-2007    Change AxisRates, TrackingRates for strict typing
+// Bob Denny 07-May-2007    Oops, name COM interfaces starting with "I"
+// Bob Denny 13-May-2007    Interface names prefixed with "I" for .NET too
+// Bob Denny 16-May-2007    Collapse name space 1 level for .NET
+// Bob Denny 18-May-2007    From Telescope.idl, combine all into one TLB. Needed to keep
+//                          them all in a single namespace. Could not ref multiple assys
+//                          from GAC if in same namespace! New LIBID of course. No need
+//                          for custom attribs on individual interfaces any more.
+// Bob Denny 30-May-2007    Add ICamera and IFilterWheel, version metadata
+// Bob Denny 05-Jun-2007    (John Brewster) Switch interface
+// Bob Denny 06-Jun-2007    Minor changes to parameter names for clarity and form
+// Bob Denny 13-Oct-2007    ICamera.ImageArray returns VARIANT
+
+#define VARIANT_TRUE ((VARIANT_BOOL)-1)
+#define VARIANT_FALSE ((VARIANT_BOOL)0)
+
+#if (__midl >= 501)
+midl_pragma warning( disable: 2400 2401 )   // rbd These warnings are n/a
+#endif
+
+// -------------------
+// Type Library header
+// -------------------
+
+[
+  uuid(76618F90-032F-4424-A680-802467A55742),
+  version(1.0),
+  helpstring("ASCOM Master Interfaces for .NET and COM"),
+  custom(0F21F359-AB84-41E8-9A78-36D110E6D2F9, "ASCOM.Interface")   // Override PIA file name -> namespace
+]
+library AscomInterfacesLib
+{
+    importlib("stdole2.tlb");
+    
+    interface IRate;
+    interface IAxisRates;
+    interface ITrackingRates;
+    interface ITelescope;
+
+    // -------------------------------------
+    // Enums used by the Telescope interface
+    // -------------------------------------
+    
+    [
+        uuid(30D18B61-AECC-4c03-8759-E3EDD246F062),
+        version(1.0),
+        helpstring("ASCOM Telescope alignment mode values")
+    ]
+    typedef enum AlignmentModes {
+        algAltAz = 0,
+        algPolar = 1,
+        algGermanPolar = 2
+    } AlignmentModes;
+
+    [
+        uuid(D9998808-2DF0-4ca1-ADD6-CE592026C663),
+        version(1.0),
+        helpstring("ASCOM Telescope drive rate values")
+    ]
+    typedef enum DriveRates {
+        driveSidereal = 0,
+        driveLunar = 1,
+        driveSolar = 2,
+        driveKing = 3
+    } DriveRates;
+
+    [
+        uuid(135265BA-25AC-4f43-95E5-80D0171E48FA),
+        version(1.0),
+        helpstring("ASCOM Telescope equatorial coordinate type values")
+    ]
+    typedef enum EquatorialCoordinateType {
+        equOther = 0,
+        equLocalTopocentric = 1,
+        equJ2000 = 2,
+        equJ2050 = 3,
+        equB1950 = 4
+    } EquatorialCoordinateType;
+
+    [
+        uuid(3613EEEB-5563-47d8-B512-1D36D64CEEBB),
+        version(1.0),
+        helpstring("ASCOM Telescope guide direction values")
+    ]
+    typedef enum GuideDirections {
+        guideNorth = 0,
+        guideSouth = 1,
+        guideEast = 2,
+        guideWest = 3
+    } GuideDirections;
+
+    [
+        uuid(ECD99531-A2CF-4b9f-91A0-35FE5D12B043),
+        version(1.0),
+        helpstring("ASCOM Telescope pier side values")
+    ]
+    typedef enum PierSide {
+        pierUnknown = 0xffffffff,
+        pierEast = 0,
+        pierWest = 1
+    } PierSide;
+
+    [
+        uuid(BCB5C21D-B0EA-40d1-B36C-272456F44D01),
+        version(1.0),
+        helpstring("ASCOM Telescope axis values")
+    ]
+    typedef enum TelescopeAxes {
+        axisPrimary = 0,
+        axisSecondary = 1,
+        axisTertiary = 2
+    } TelescopeAxes;
+
+    // --------------------
+    // Telescope Interfaces
+    // --------------------
+    
+    [
+        object,
+        uuid(EF0C67AD-A9D3-4f7b-A635-CD2095517633),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Telescope Driver 2.0 Interface")
+    ]
+    interface ITelescope : IDispatch {
+        //
+        // PROPERTIES
+        //
+        [id(101), propget]
+            HRESULT AlignmentMode([out, retval] AlignmentModes* );
+        [id(102), propget]
+            HRESULT Altitude([out, retval] double* );
+        [id(103), propget]
+            HRESULT ApertureArea([out, retval] double* );
+        [id(104), propget]
+            HRESULT ApertureDiameter([out, retval] double* );
+        [id(105), propget]
+            HRESULT AtHome([out, retval] VARIANT_BOOL* );
+        [id(106), propget]
+            HRESULT AtPark([out, retval] VARIANT_BOOL* );
+        [id(107), propget]
+            HRESULT Azimuth([out, retval] double* );
+        [id(108), propget]
+            HRESULT CanFindHome([out, retval] VARIANT_BOOL* );
+        [id(109), propget]
+            HRESULT CanPark([out, retval] VARIANT_BOOL* );
+        [id(110), propget]
+            HRESULT CanPulseGuide([out, retval] VARIANT_BOOL* );
+        [id(111), propget]
+            HRESULT CanSetDeclinationRate([out, retval] VARIANT_BOOL* );
+        [id(112), propget]
+            HRESULT CanSetGuideRates([out, retval] VARIANT_BOOL* );
+        [id(113), propget]
+            HRESULT CanSetPark([out, retval] VARIANT_BOOL* );
+        [id(114), propget]
+            HRESULT CanSetRightAscensionRate([out, retval] VARIANT_BOOL* );
+        [id(115), propget]
+            HRESULT CanSetPierSide([out, retval] VARIANT_BOOL* );
+        [id(116), propget]
+            HRESULT CanSetTracking([out, retval] VARIANT_BOOL* );
+        [id(117), propget]
+            HRESULT CanSlew([out, retval] VARIANT_BOOL* );
+        [id(118), propget]
+            HRESULT CanSlewAltAz([out, retval] VARIANT_BOOL* );
+        [id(119), propget]
+            HRESULT CanSlewAltAzAsync([out, retval] VARIANT_BOOL* );
+        [id(120), propget]
+            HRESULT CanSlewAsync([out, retval] VARIANT_BOOL* );
+        [id(121), propget]
+            HRESULT CanSync([out, retval] VARIANT_BOOL* );
+        [id(122), propget]
+            HRESULT CanSyncAltAz([out, retval] VARIANT_BOOL* );
+        [id(123), propget]
+            HRESULT CanUnpark([out, retval] VARIANT_BOOL* );
+        [id(124), propget]
+            HRESULT Connected([out, retval] VARIANT_BOOL* );
+        [id(124), propput]
+            HRESULT Connected([in] VARIANT_BOOL );
+        [id(125), propget]
+            HRESULT Declination([out, retval] double* );
+        [id(126), propget]
+            HRESULT DeclinationRate([out, retval] double* );
+        [id(126), propput]
+            HRESULT DeclinationRate([in] double );
+        [id(127), propget]
+            HRESULT Description([out, retval] BSTR* );
+        [id(128), propget]
+            HRESULT DoesRefraction([out, retval] VARIANT_BOOL* );
+        [id(128), propput]
+            HRESULT DoesRefraction([in] VARIANT_BOOL );
+        [id(129), propget]
+            HRESULT DriverInfo([out, retval] BSTR* );
+        [id(130), propget]
+            HRESULT DriverVersion([out, retval] BSTR* );
+        [id(131), propget]
+            HRESULT EquatorialSystem([out, retval] EquatorialCoordinateType* );
+        [id(132), propget]
+            HRESULT FocalLength([out, retval] double* );
+        [id(133), propget]
+            HRESULT GuideRateDeclination([out, retval] double* );
+        [id(133), propput]
+            HRESULT GuideRateDeclination([in] double );
+        [id(134), propget]
+            HRESULT GuideRateRightAscension([out, retval] double* );
+        [id(134), propput]
+            HRESULT GuideRateRightAscension([in] double );
+        [id(135), propget]
+            HRESULT InterfaceVersion([out, retval] short* );
+        [id(136), propget]
+            HRESULT IsPulseGuiding([out, retval] VARIANT_BOOL* );
+        [id(137), propget]
+            HRESULT Name([out, retval] BSTR* );
+        [id(138), propget]
+            HRESULT RightAscension([out, retval] double* );
+        [id(139), propget]
+            HRESULT RightAscensionRate([out, retval] double* );
+        [id(139), propput]
+            HRESULT RightAscensionRate([in] double );
+        [id(140), propget]
+            HRESULT SideOfPier([out, retval] PierSide* );
+        [id(140), propput]
+            HRESULT SideOfPier([in] PierSide );
+        [id(141), propget]
+            HRESULT SiderealTime([out, retval] double* );
+        [id(142), propget]
+            HRESULT SiteElevation([out, retval] double* );
+        [id(142), propput]
+            HRESULT SiteElevation([in] double );
+        [id(143), propget]
+            HRESULT SiteLatitude([out, retval] double* );
+        [id(143), propput]
+            HRESULT SiteLatitude([in] double );
+        [id(144), propget]
+            HRESULT SiteLongitude([out, retval] double* );
+        [id(144), propput]
+            HRESULT SiteLongitude([in] double );
+        [id(145), propget]
+            HRESULT Slewing([out, retval] VARIANT_BOOL* );
+        [id(146), propget]
+            HRESULT SlewSettleTime([out, retval] short* );
+        [id(146), propput]
+            HRESULT SlewSettleTime([in] short );
+        [id(147), propget]
+            HRESULT TargetDeclination([out, retval] double* );
+        [id(147), propput]
+            HRESULT TargetDeclination([in] double );
+        [id(148), propget]
+            HRESULT TargetRightAscension([out, retval] double* );
+        [id(148), propput]
+            HRESULT TargetRightAscension([in] double );
+        [id(149), propget]
+            HRESULT Tracking([out, retval] VARIANT_BOOL* );
+        [id(149), propput]
+            HRESULT Tracking([in] VARIANT_BOOL );
+        [id(150), propget]
+            HRESULT TrackingRate([out, retval] DriveRates* );
+        [id(150), propput]
+            HRESULT TrackingRate([in] DriveRates );
+        [id(151), propget]
+            HRESULT TrackingRates([out, retval] ITrackingRates** );
+        [id(152), propget]
+            HRESULT UTCDate([out, retval] DATE* );
+        [id(152), propput]
+            HRESULT UTCDate([in] DATE );
+        //
+        // METHODS
+        //
+        [id(401)]
+            HRESULT AbortSlew();
+        [id(402)]
+            HRESULT AxisRates(
+                        [in] TelescopeAxes Axis, 
+                        [out, retval] IAxisRates** );
+        [id(403)]
+            HRESULT CanMoveAxis(
+                        [in] TelescopeAxes Axis, 
+                        [out, retval] VARIANT_BOOL* );
+        [id(404)]
+            HRESULT DestinationSideOfPier(
+                        [in] double RightAscension, 
+                        [in] double Declination, 
+                        [out, retval] PierSide* );
+        [id(405)]
+            HRESULT FindHome();
+        [id(406)]
+            HRESULT MoveAxis(
+                        [in] TelescopeAxes Axis, 
+                        [in] double Rate);
+        [id(407)]
+            HRESULT Park();
+        [id(408)]
+            HRESULT PulseGuide(
+                        [in] GuideDirections Direction, 
+                        [in] long Duration);
+        [id(409)]
+            HRESULT SetPark();
+        [id(410)]
+            HRESULT SetupDialog();
+        [id(411)]
+            HRESULT SlewToAltAz(
+                        [in] double Azimuth, 
+                        [in] double Altitude);
+        [id(412)]
+            HRESULT SlewToAltAzAsync(
+                        [in] double Azimuth, 
+                        [in] double Altitude);
+        [id(413)]
+            HRESULT SlewToCoordinates(
+                        [in] double RightAscension, 
+                        [in] double Declination);
+        [id(414)]
+            HRESULT SlewToCoordinatesAsync(
+                        [in] double RightAscension, 
+                        [in] double Declination);
+        [id(415)]
+            HRESULT SlewToTarget();
+        [id(416)]
+            HRESULT SlewToTargetAsync();
+        [id(417)]
+            HRESULT SyncToAltAz(
+                        [in] double Azimuth, 
+                        [in] double Altitude);
+        [id(418)]
+            HRESULT SyncToCoordinates(
+                        [in] double RightAscension, 
+                        [in] double Declination);
+        [id(419)]
+            HRESULT SyncToTarget();
+        [id(420)]
+            HRESULT Unpark();
+        [id(421)]
+            HRESULT CommandBlind(
+                        [in] BSTR Command, 
+                        [in, optional, defaultvalue(VARIANT_FALSE)] VARIANT_BOOL Raw);
+        [id(422)]
+            HRESULT CommandBool(
+                        [in] BSTR Command, 
+                        [in, optional, defaultvalue(VARIANT_FALSE)] VARIANT_BOOL Raw, 
+                        [out, retval] VARIANT_BOOL* );
+        [id(423)]
+            HRESULT CommandString(
+                        [in] BSTR Command, 
+                        [in, optional, defaultvalue(VARIANT_FALSE)] VARIANT_BOOL Raw, 
+                        [out, retval] BSTR* );
+    };
+    
+    
+    [
+        object,
+        uuid(221C0BC0-110B-4129-85A0-18BB28579290),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Telescope Driver 2.0 Rate Range Interface")
+    ]
+    interface IRate : IDispatch {
+        [id(101), propput]
+            HRESULT Maximum([in] double );
+        [id(101), propget]
+            HRESULT Maximum([out, retval] double* );
+        [id(102), propput]
+            HRESULT Minimum([in] double );
+        [id(102), propget]
+            HRESULT Minimum([out, retval] double* );
+    };
+
+    [
+        object,
+        uuid(2B8FD76E-AF7E-4faa-9FAC-4029E96129F4),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Telescope Driver 2.0 Axis Rates Collection Interface")
+    ]
+    interface IAxisRates : IDispatch {
+        [id(101), propget]
+            HRESULT Count([out, retval] long* );
+        [id(0), propget]                                        // Default property DispID = 0
+            HRESULT Item(
+                        [in] long Index, 
+                        [out, retval] IRate** );
+        [id(0xfffffffc), propget, hidden]                       // Enumerator DispID = -4
+            HRESULT NewEnum([out, retval] IEnumVARIANT** );     // VB6 does not like IUnknown**!!
+    };
+
+    [
+        object,
+        uuid(DC98F1DF-315A-43ef-81F6-23F3DD461F58),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Telescope Driver 2.0 Tracking Rates Collection Interface")
+    ]
+    interface ITrackingRates : IDispatch {
+        [id(101), propget]
+            HRESULT Count([out, retval] long* );
+        [id(0), propget]                                        // Default property DispID = 0
+            HRESULT Item(
+                        [in] long Index, 
+                        [out, retval] DriveRates* );
+        [id(0xfffffffc), propget, hidden]                       // Enumerator DispID = -4
+            HRESULT NewEnum([out, retval] IEnumVARIANT** );     // VB6 does not like IUnknown**!!
+    };
+
+    // -----------------
+    // Focuser Interface
+    // -----------------
+    
+    [
+        object,
+        uuid(C2E3FE9C-01CD-440c-B8E3-C56EE9E4EDBC),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Focuser 1.0 Driver Interface")
+    ]
+    interface IFocuser : IDispatch {
+        //
+        // PROPERTIES
+        //
+        [id(101), propget]
+            HRESULT Absolute([out, retval] VARIANT_BOOL* );
+        [id(102), propget]
+            HRESULT IsMoving([out, retval] VARIANT_BOOL* );
+        [id(103), propget]
+            HRESULT Link([out, retval] VARIANT_BOOL* );
+        [id(103), propput]
+            HRESULT Link([in] VARIANT_BOOL );
+        [id(104), propget]
+            HRESULT MaxIncrement([out, retval] long* );
+        [id(105), propget]
+            HRESULT MaxStep([out, retval] long* );
+        [id(106), propget]
+            HRESULT Position([out, retval] long* );
+        [id(107), propget]
+            HRESULT StepSize([out, retval] double* );
+        [id(108), propget]
+            HRESULT TempComp([out, retval] VARIANT_BOOL* );
+        [id(108), propput]
+            HRESULT TempComp([in] VARIANT_BOOL );
+        [id(109), propget]
+            HRESULT TempCompAvailable([out, retval] VARIANT_BOOL* );
+        [id(110), propget]
+            HRESULT Temperature([out, retval] double* );
+        //
+        // METHODS
+        //
+        [id(401)]
+            HRESULT Halt();
+        [id(402)]
+            HRESULT SetupDialog();
+        [id(403)]
+            HRESULT Move([in] long val);
+    };
+
+    
+    // --------------------------------
+    // Enums used by the Dome interface
+    // --------------------------------
+    
+    [
+        uuid(8915DF3D-B055-4195-8D23-AAD7F58FDF3B),
+        version(1.0),
+        helpstring("ASCOM Dome shutter state values")
+    ]
+    typedef enum ShutterState {
+        shutterOpen = 0,
+        shutterClosed = 1,
+        shutterOpening = 2,
+        shutterClosing = 3,
+        shutterError = 4
+    } ShutterState;
+    
+    // --------------
+    // Dome Interface
+    // --------------
+    
+    [
+        object,
+        uuid(CCDA0D85-474A-4775-8105-1D513ADC3896),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Dome Driver 1.0 Interface")
+    ]
+    interface IDome : IDispatch {
+        //
+        // PROPERTIES
+        //
+        [id(101), propget]
+            HRESULT Altitude([out, retval] double* );
+        [id(102), propget]
+            HRESULT AtHome([out, retval] VARIANT_BOOL* );
+        [id(103), propget]
+            HRESULT AtPark([out, retval] VARIANT_BOOL* );
+        [id(104), propget]
+            HRESULT Azimuth([out, retval] double* );
+        [id(105), propget]
+            HRESULT CanFindHome([out, retval] VARIANT_BOOL* );
+        [id(106), propget]
+            HRESULT CanPark([out, retval] VARIANT_BOOL* );
+        [id(107), propget]
+            HRESULT CanSetAltitude([out, retval] VARIANT_BOOL* );
+        [id(108), propget]
+            HRESULT CanSetAzimuth([out, retval] VARIANT_BOOL* );
+        [id(109), propget]
+            HRESULT CanSetPark([out, retval] VARIANT_BOOL* );
+        [id(110), propget]
+            HRESULT CanSetShutter([out, retval] VARIANT_BOOL* );
+        [id(111), propget]
+            HRESULT CanSlave([out, retval] VARIANT_BOOL* );
+        [id(112), propget]
+            HRESULT CanSyncAzimuth([out, retval] VARIANT_BOOL* );
+        [id(113), propget]
+            HRESULT Connected([out, retval] VARIANT_BOOL* );
+        [id(113), propput]
+            HRESULT Connected([in] VARIANT_BOOL );
+        [id(114), propget]
+            HRESULT Description([out, retval] BSTR* );
+        [id(115), propget]
+            HRESULT DriverInfo([out, retval] BSTR* );
+        [id(116), propget]
+            HRESULT InterfaceVersion([out, retval] short* );
+        [id(117), propget]
+            HRESULT Name([out, retval] BSTR* );
+        [id(118), propget]
+            HRESULT Slaved([out, retval] VARIANT_BOOL* );
+        [id(118), propput]
+            HRESULT Slaved([in] VARIANT_BOOL );
+        [id(119), propget]
+            HRESULT ShutterStatus([out, retval] ShutterState* );
+        [id(120), propget]
+            HRESULT Slewing([out, retval] VARIANT_BOOL* );
+        //
+        // METHODS
+        //
+        [id(401)]
+            HRESULT AbortSlew();
+        [id(402)]
+            HRESULT CloseShutter();
+        [id(403)]
+            HRESULT FindHome();
+        [id(404)]
+            HRESULT OpenShutter();
+        [id(405)]
+            HRESULT Park();
+        [id(406)]
+            HRESULT SetPark();
+        [id(407)]
+            HRESULT SetupDialog();
+        [id(408)]
+            HRESULT SlewToAltitude([in] double Altitude);
+        [id(409)]
+            HRESULT SlewToAzimuth([in] double Azimuth);
+        [id(410)]
+            HRESULT SyncToAzimuth([in] double Azimuth);
+        [id(411)]
+            HRESULT CommandBlind([in] BSTR Command);
+        [id(412)]
+            HRESULT CommandBool(
+                        [in] BSTR Command, 
+                        [out, retval] VARIANT_BOOL* );
+        [id(413)]
+            HRESULT CommandString(
+                        [in] BSTR Command, 
+                        [out, retval] BSTR* );
+    };
+
+    // -----------------
+    // Rotator Interface
+    // -----------------
+    
+    [
+        object,
+        uuid(49003324-8DE2-4986-BC7D-4D85E1C4CF6B),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Rotator Driver 1.0 Interface")
+    ]
+    interface IRotator : IDispatch {
+        //
+        // PROPERTIES
+        //
+        [propget, id(101)] 
+		    HRESULT CanReverse([out, retval] VARIANT_BOOL *pVal);
+        [propget, id(102)] 
+		    HRESULT Connected([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(102)] 
+		    HRESULT Connected([in] VARIANT_BOOL newVal);
+        [propget, id(103)] 
+		    HRESULT IsMoving([out, retval] VARIANT_BOOL *pVal);
+        [propget, id(104)] 
+		    HRESULT Position([out, retval] float *pVal);
+        [propget, id(105)] 
+		    HRESULT Reverse([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(105)] 
+		    HRESULT Reverse([in] VARIANT_BOOL newVal);
+        [propget, id(106)] 
+		    HRESULT StepSize([out, retval] float *pVal);
+        [propget, id(107)] 
+		    HRESULT TargetPosition([out, retval] float *pVal);
+	    //
+	    // METHODS
+	    //
+		[id(401)] 
+		    HRESULT Halt();
+		[id(402)] 
+		    HRESULT Move(float Position);
+		[id(403)] 
+		    HRESULT MoveAbsolute(float Position);
+		[id(404)] 
+		    HRESULT SetupDialog();
+    };
+    
+
+    // ----------------------------------
+    // Enums used by the Camera interface
+    // ----------------------------------
+    
+    [
+        uuid(D40EB54D-0F0F-406d-B68F-C2A7984235BC),
+        version(1.0),
+        helpstring("ASCOM Camera status values")
+    ]
+    typedef enum CameraStates {
+        cameraIdle = 0,
+        cameraWaiting = 1,
+        cameraExposing = 2,
+        cameraReading = 3,
+        cameraDownload = 4,
+        cameraError = 5
+    } CameraStates;
+    
+    // ----------------
+    // Camera Interface
+    // ----------------
+    
+    [
+        object,
+        uuid(D95FBC6E-0705-458b-84C0-57E3295DBCCE),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Camera Driver 1.0 Interface")
+    ]
+    interface ICamera : IDispatch {
+        //
+        // PROPERTIES
+        //
+        [propget, id(101)] 
+            HRESULT BinX([out, retval] short* pVal);
+        [propput, id(101)]
+            HRESULT BinX([in] short newVal);
+        [propget, id(102)]
+            HRESULT BinY([out, retval] short* pVal);
+        [propput, id(102)]
+            HRESULT BinY([in] short newVal);
+        [propget, id(103)]
+            HRESULT CameraState([out, retval] CameraStates* pVal);
+        [propget, id(104)]
+            HRESULT CameraXSize([out, retval] long* pVal);
+        [propget, id(105)]
+            HRESULT CameraYSize([out, retval] long* pVal);
+        [propget, id(106)]
+            HRESULT CanAbortExposure([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(107)]
+            HRESULT CanAsymmetricBin([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(108)]
+            HRESULT CanGetCoolerPower([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(109)]
+            HRESULT CanPulseGuide([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(110)]
+            HRESULT CanSetCCDTemperature([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(111)]
+            HRESULT CanStopExposure([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(112)]
+            HRESULT CCDTemperature([out, retval] double* pVal);
+        [propget, id(113)]
+            HRESULT Connected([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(113)]
+            HRESULT Connected([in] VARIANT_BOOL newVal);
+        [propget, id(114)]
+            HRESULT CoolerOn([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(114)]
+            HRESULT CoolerOn([in] VARIANT_BOOL newVal);
+        [propget, id(115)]
+            HRESULT CoolerPower([out, retval] double* pVal);
+        [propget, id(116)]
+            HRESULT Description([out, retval] BSTR* pVal);
+        [propget, id(117)]
+            HRESULT ElectronsPerADU([out, retval] double* pVal);
+        [propget, id(118)]
+            HRESULT FullWellCapacity([out, retval] double* pVal);
+        [propget, id(119)]
+            HRESULT HasShutter([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(120)]
+            HRESULT HeatSinkTemperature([out, retval] double* pVal);
+        [propget, id(121)]
+            HRESULT ImageArray([out, retval] VARIANT* pVal);
+        [propget, id(122)]
+            HRESULT ImageArrayVariant([out, retval] VARIANT* pVal);
+        [propget, id(123)]
+            HRESULT ImageReady([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(124)]
+            HRESULT IsPulseGuiding([out, retval] VARIANT_BOOL* pVal);
+        [propget, id(125)]
+            HRESULT LastError([out, retval] BSTR* pVal);
+        [propget, id(126)]
+            HRESULT LastExposureDuration([out, retval] double* pVal);
+        [propget, id(127)]
+            HRESULT LastExposureStartTime([out, retval] BSTR* pVal);
+        [propget, id(128)]
+            HRESULT MaxADU([out, retval] long* pVal);
+        [propget, id(129)]
+            HRESULT MaxBinX([out, retval] short* pVal);
+        [propget, id(130)]
+            HRESULT MaxBinY([out, retval] short* pVal);
+        [propget, id(131)]
+            HRESULT NumX([out, retval] long* pVal);
+        [propput, id(131)]
+            HRESULT NumX([in] long newVal);
+        [propget, id(132)]
+            HRESULT NumY([out, retval] long* pVal);
+        [propput, id(132)]
+            HRESULT NumY([in] long newVal);
+        [propget, id(133)]
+            HRESULT PixelSizeX([out, retval] double* pVal);
+        [propget, id(134)]
+            HRESULT PixelSizeY([out, retval] double* pVal);
+        [propget, id(135)]
+            HRESULT SetCCDTemperature([out, retval] double* pVal);
+        [propput, id(135)]
+            HRESULT SetCCDTemperature([in] double newVal);
+        [propget, id(136)]
+            HRESULT StartX([out, retval] long* pVal);
+        [propput, id(136)]
+            HRESULT StartX([in] long newVal);
+        [propget, id(137)]
+            HRESULT StartY([out, retval] long* pVal);
+        [propput, id(137)]
+            HRESULT StartY([in] long newVal);
+	    //
+	    // METHODS
+	    //
+        [id(401)]
+            HRESULT AbortExposure(void);
+        [id(402)]
+            HRESULT PulseGuide(
+                        [in] GuideDirections Direction, 
+                        [in] long Duration);
+        [id(403)]
+            HRESULT SetupDialog(void);
+        [id(404)]
+            HRESULT StartExposure(
+                        [in] double Duration, 
+                        [in] VARIANT_BOOL Light);
+        [id(405)]
+            HRESULT StopExposure(void);
+    };
+    
+    // ---------------------
+    // FilterWheel Interface
+    // ---------------------
+    
+    [
+        object,
+        uuid(756FD725-A6E2-436f-8C7A-67E358622027),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM FilterWheel Driver 1.0 Interface")
+    ]
+    interface IFilterWheel : IDispatch {
+        //
+        // PROPERTIES
+        //
+        [propget, id(101)]
+            HRESULT Connected([out, retval] VARIANT_BOOL* pVal);
+        [propput, id(101)]
+            HRESULT Connected([in] VARIANT_BOOL newVal);
+        [propget, id(102)]
+            HRESULT FocusOffsets([out, retval] SAFEARRAY(long)* pVal);
+        [propget, id(103)]
+            HRESULT Position([out, retval] short* pVal);
+        [propput, id(103)]
+            HRESULT Position([in] short newVal);
+        [propget, id(104)]
+            HRESULT Names([out, retval] SAFEARRAY(BSTR)* pVal);
+        //
+        // METHODS
+        //
+        [id(401)]
+            HRESULT SetupDialog(void);
+    };
+
+    // ----------------
+    // Switch Interface
+    // ----------------
+    [
+        object,
+        uuid(44C03033-C60E-4101-856C-AAFB0F735F83),
+        version(1.0),
+        dual,
+        nonextensible,
+        oleautomation,
+        pointer_default(unique),
+        helpstring("ASCOM Switch Driver 1.0 Interface")
+    ]
+    interface ISwitch : IDispatch {
+        [id(101), propget]
+        HRESULT Connected([out, retval] VARIANT_BOOL* );
+        [id(101), propput]
+        HRESULT Connected([in] VARIANT_BOOL );
+        [id(0x6803000b), propget]
+        HRESULT Description([out, retval] BSTR* );
+        [id(102), propget]
+        HRESULT DriverInfo([out, retval] BSTR* );
+        [id(103), propget]
+        HRESULT DriverVersion([out, retval] BSTR* );
+        [id(104), propget]
+        HRESULT InterfaceVersion([out, retval] short* );
+        [id(105), propget]
+        HRESULT MaxSwitch([out, retval] short* );
+        [id(106), propget]
+        HRESULT Name([out, retval] BSTR* );
+        [id(401)]
+        HRESULT GetSwitch(
+                        [in] short ID, 
+                        [out, retval] VARIANT_BOOL* );
+        [id(402)]
+        HRESULT SetSwitch(
+                        [in] short ID, 
+                        [in] VARIANT_BOOL State);
+        [id(403)]
+        HRESULT SetupDialog();
+        [id(404)]
+        HRESULT GetSwitchName(
+                        [in] short ID, 
+                        [out, retval] BSTR* );
+        [id(405)]
+        HRESULT SetSwitchName(
+                        [in] short ID, 
+                        [in] BSTR State);
+    };
+
+};

@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<title>ASCOM Scope Simulator Help</title>
+</head>
+
+<body bgcolor="#C0C0C0">
+
+<h1>Scope Simulator Information</h1>
+
+<p>The ASCOM Scope Simulator is an ASCOM executable and driver  with support for all of the 
+ASCOM telescope capabilities.&nbsp; There are two primary uses for this 
+simulator:</p>
+<ol>
+	<li>it can be used in place of a real telescope when testing higher 
+level ASCOM compliant software.</li>
+	<li>it can be used to validate test tools that will then be 
+used to validate real telescope drivers.</li>
+</ol>
+<p>The various capabilities can be turned on 
+and off in order to simulate any particular telescope type.&nbsp; For example 
+support for parking, tracking control, pulse guiding, and many other features 
+can all be enabled or disabled.&nbsp; Also, the basic telescope type can be 
+selected: Alt/Az , normal equatorial, or German equatorial (complete with pier 
+flipping). Lastly, version 1 and version 2 modes are supported.</p>
+<p>The follow sections are available in this document:</p>
+
+<ul>
+  <li><a href="#Handset">Handset</a> - how to drive the simulator</li>
+  <li><a href="#Setup">Setup dialog</a> - how to set the simulator capabilities</li>
+  <li><a href="#API">API notes</a> - interpretations and foibles with respect to 
+	the standard</li>
+</ul>
+
+<h2><a name="Handset"></a>Handset</h2>
+
+<h3>Display:</h3>
+<ul>
+	<li>LST - Local Sidereal Time.&nbsp; (The setup dialog will allow geographic 
+	coordinates to be set.)</li>
+	<li>RA - Right Ascension</li>
+	<li>Dec - Declination</li>
+	<li>Az - Azimuth</li>
+	<li>Alt - Altitude</li>
+</ul>
+<h3>Controls:</h3>
+<ul>
+	<li>Motion Buttons - Just like a handset</li>
+	<li>Track checkbox - Used to turn tracking on and off</li>
+	<li>Park and Home buttons - command the scope to these distinguished 
+	positions.&nbsp; Green &quot;LED&quot;'s will light up when in these states.</li>
+	<li>Setup - brings up the Setup dialog</li>
+	<li>Traffic - brings up an ASCOM traffic window so that incoming ASCOM 
+	commands can be monitored</li>
+</ul>
+
+<h2><a name="Setup"></a>Setup Dialog</h2>
+
+<p>The Setup Dialog in Basic mode provides for site information, mount type, and 
+optics inputs. A few other useful controls such as controlling Park position are 
+also included:</p>
+<ul>
+	<li>The Auto Unpark/Track checkbox allows version 1 type behavior for 
+backwards compatibility.&nbsp; Version 1 drivers would unpark and track on 
+connect.</li>
+	<li>No Coordinates when Parked allows simulation of those scopes that cannot 
+	return coordinates when parked.</li>
+	<li>Disconnect on Park simulates those scopes that go completely away upon 
+	parking.</li>
+</ul>
+<p>In Advanced mode, additional features are revealed for controlling what type 
+of scope to simulate.&nbsp; Items such as being able to set the numbers of axis 
+give a great deal of flexibility.&nbsp; But one of the nicer features is the 
+Version 1 only checkbox.&nbsp; In V1 mode the simulator behaves exactly as a V1 
+driver.</p>
+
+<h2><a name="API"></a>API Notes</h2>
+
+<ul>
+	<li>All V2 calls are implemented.&nbsp;&nbsp; Optional calls will throw errors if 
+disabled by the Setup Dialog.&nbsp;</li>
+	<li>In V1 mode all new V2 calls become 
+&quot;unimplemented&quot;</li>
+	<li>CommandBlind, CommandBool, CommandString will swallow any string.&nbsp;<ul>
+		<li>CommandBool always returns True.&nbsp;</li>
+		<li>CommandString always returns &quot;&quot;.&nbsp;</li>
+		<li>The optional &quot;Raw&quot; parameter is supported for V2.&nbsp;</li>
+		<li>If Raw is set in V1 
+mode, an error will be thrown.</li>
+	</ul>
+	</li>
+</ul>
+
+</body>
+</html>

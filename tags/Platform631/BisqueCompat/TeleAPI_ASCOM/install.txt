@@ -1,0 +1,48 @@
+TheSky ASCOM Plugin
+===================
+
+This plugin allows Software Bisque's TheSky to communicate with
+ASCOM-compliant telescopes via TheSky's "TeleAPI" feature.
+
+Installation
+------------
+
+(1) Rename the file 
+
+  C:\Program Files\Common Files\System\TeleAPI.dll 
+
+to TeleAPI-Original.dll
+
+(2) Copy the ASCOM TeleAPI.dll to 
+
+  C:\Program Files\Common Files\System\TeleAPI.dll 
+
+
+One-time Telescope Setup
+------------------------
+
+(1) In TheSky, Telescope menu, select Setup...
+
+(2) In the Control System box, select "Telescope API"
+
+(3) Click Settings... to open the ASCOM Telescope Chooser and
+select the ASCOM compliant telescope you wish to use. 
+
+(4) Now click Properties... in the Chooser, which will display
+the settings window for the telescope type you just chose. Make
+adjustments as your telescope needs.
+
+(5) Close all windows including the TheSky Telescope Setup
+window by clicking OK or Close. Do not click any Cancel buttons
+:-)
+
+Operation
+---------
+
+(1) Make sure both your telescope and TheSky are set for the same
+geograpic location and time.
+
+(2) In TheSky, Telescope menu, select Link->Establish. You should
+see the cross-hairs indicating where the telescope is pointing.
+
+

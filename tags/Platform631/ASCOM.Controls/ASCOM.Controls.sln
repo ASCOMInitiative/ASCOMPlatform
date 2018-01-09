@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls", "ASCOM.Controls\ASCOM.Controls.csproj", "{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Projects", "Referenced Projects", "{90B17BCD-4B58-49CF-B79A-18E40286245D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.SettingsProvider", "..\ASCOM.SettingsProvider\ASCOM.SettingsProvider\ASCOM.SettingsProvider.csproj", "{4FFFD202-81D4-4549-880B-09B640D72C1D}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HelperNET", "..\HelperNET\HelperNET\HelperNET.vbproj", "{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DriverAccess", "..\ClientToolbox\ASCOM.DriverAccess.csproj", "{35194767-5585-45C3-803F-1BCE74CEAAFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.Controls.Demo", "ASCOM.Controls.Demo\ASCOM.Controls.Demo.csproj", "{D1A5A486-8C9C-4421-91AB-508F63B684C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63AD32E8-98FF-44BB-AA29-ED2E5A5CF026}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FFFD202-81D4-4549-880B-09B640D72C1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35194767-5585-45C3-803F-1BCE74CEAAFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35194767-5585-45C3-803F-1BCE74CEAAFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35194767-5585-45C3-803F-1BCE74CEAAFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35194767-5585-45C3-803F-1BCE74CEAAFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1A5A486-8C9C-4421-91AB-508F63B684C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1A5A486-8C9C-4421-91AB-508F63B684C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1A5A486-8C9C-4421-91AB-508F63B684C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1A5A486-8C9C-4421-91AB-508F63B684C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4FFFD202-81D4-4549-880B-09B640D72C1D} = {90B17BCD-4B58-49CF-B79A-18E40286245D}
+		{D48EB9A3-AEBC-4EE0-A674-45EFD736926C} = {90B17BCD-4B58-49CF-B79A-18E40286245D}
+		{35194767-5585-45C3-803F-1BCE74CEAAFC} = {90B17BCD-4B58-49CF-B79A-18E40286245D}
+	EndGlobalSection
+EndGlobal

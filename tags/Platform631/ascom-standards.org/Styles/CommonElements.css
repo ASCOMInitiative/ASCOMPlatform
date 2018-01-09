@@ -1,0 +1,177 @@
+#banner {
+	background: #000000 url('../Images/NavBG.jpg') no-repeat right 50%;
+	height: 168px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px;
+}
+
+#breadcrumbs {
+	position: relative;
+	top: 126px;
+	height: 23px;
+	margin-left: 218px;
+	padding: 0px;
+}
+
+.topmenucontainer {
+	position: relative;
+	top: 131px;
+	height: 35px;
+	background: black url('../Images/blockdefault.png') repeat-x center;
+	border-left: 0 solid #666666;
+	border-right: 0 solid #666666;
+	border-top: 0px solid #666666;
+	border-bottom: 0px solid #666666;
+}
+
+#leftcontent {
+	position: absolute;
+	left: 0px;
+	top: 100px;
+	width: 209px;
+	height: 420px;
+	/*background: #333333 url('../Images/LeftNavBG.jpg');*/
+	background-repeat: no-repeat;
+}
+#leftcontent h3 {
+	color: white;
+	margin: 10px;
+	font-size: 14px;
+}
+#centercontent {
+	background: #333333;
+	padding: 25px 25px 25px 25px;
+}
+#rightcontent {
+	position: absolute;
+	right: 10px;
+	top: 200px;
+	width: 240px;
+	background: #333333;
+	padding: 12px 0 25px 0;
+}
+#footer {
+	clear: left;
+	width: 100%;
+	text-align: center;
+	padding: 4px 0;
+	border-left: 0 solid #666666;
+	border-right: 0 solid #666666;
+	border-top: 1px solid #666666;
+	border-bottom: 1px solid #666666;
+	color: #FFF;
+	background-color: #000000;
+	width: 100%;
+}
+
+/* Additional styling for containers and menus */
+
+.solidblockmenu {
+	font: bold 13px;
+	text-align: right;
+	margin: -2px 0px 0px 0px;
+	padding: 10px 0px 0px 0px;
+	height: 25px;
+}
+.solidblockmenu li {
+	color: white;
+	display: inline;
+	vertical-align: middle;
+}
+.solidblockmenu li a {
+	color: white;
+	padding: 7px 9px;
+	text-decoration: none;
+}
+.solidblockmenu li a:visited {
+	color: white;
+		text-decoration: none;
+}
+.solidblockmenu li a:hover, .solidblockmenu li .current {
+	background: url('../Images/blockactiveblue.png') repeat-x center;
+	color: white;
+	text-decoration: none;
+}
+
+.treeview h3 {
+	font-size: 15px;
+}
+
+.treeview li {
+	background: url('../Images/listYellow.gif') no-repeat left top;
+	list-style-type: none;
+	padding-left: 15px;
+	margin-bottom: 3px;
+	margin-left: -24px;
+	color: white;
+}
+.treeview li a {
+	font-size: 12px;
+	color: white;
+	text-decoration: none;
+}
+.treeview li a:hover {
+	font-size: 12px;
+	color: #66CCFF;
+	text-decoration: none;
+}
+
+/* Containers */
+
+
+.LeftNav {
+	clear: both;
+	width: 209px;
+}
+
+.LeftNav .center { background:url('../Images/Cnts/LeftNav/Center.jpg') repeat-y right; }
+.LeftNav .north { background:url('../Images/Cnts/LeftNav/north.jpg') no-repeat top right; }
+.LeftNav .south { background:url('../Images/Cnts/LeftNav/south.jpg') no-repeat bottom right; padding:10px;}
+
+
+.silvercontainer {
+	width: 100%;
+	clear: both;
+	background-color: #999999;
+
+}
+
+.silvercontainer .north { background:url('../Images/Cnts/SilverContainer/north.gif') repeat-x top; }
+.silvercontainer .east { background:url('../Images/Cnts/SilverContainer/east.gif') repeat-y right; }
+.silvercontainer .south { background:url('../Images/Cnts/SilverContainer/south.gif') repeat-x bottom; }
+.silvercontainer .west { background:url('../Images/Cnts/SilverContainer/west.gif') repeat-y left; }
+.silvercontainer .ne { background:url('../Images/Cnts/SilverContainer/ne.gif') no-repeat top right; }
+.silvercontainer .se { background:url('../Images/Cnts/SilverContainer/se.gif') no-repeat bottom right; }
+.silvercontainer .sw { background:url('../Images/Cnts/SilverContainer/sw.gif') no-repeat bottom left; }
+.silvercontainer .nw { background:url('../Images/Cnts/SilverContainer/nw.gif') no-repeat top left; }
+
+.silvercontainer .nw { padding:5px 15px 15px 15px } /* Controls padding.  Increase to make text further away from edges; decrease to bring closer.  */
+
+.silvercontainer .nw h4 {
+	color:#FFCC00
+}
+
+
+.BlueBorder{
+	width: 100%;
+	clear: both;
+	background-color: #333333;
+
+}
+
+.BlueBorder .north { background:url('../Images/Cnts/BlueBorder/north.gif') repeat-x top; }
+.BlueBorder .east { background:url('../Images/Cnts/BlueBorder/east.gif') repeat-y right; }
+.BlueBorder .south { background:url('../Images/Cnts/BlueBorder/south.gif') repeat-x bottom; }
+.BlueBorder .west { background:url('../Images/Cnts/BlueBorder/west.gif') repeat-y left; }
+.BlueBorder .ne { background:url('../Images/Cnts/BlueBorder/ne.gif') no-repeat top right; }
+.BlueBorder .se { background:url('../Images/Cnts/BlueBorder/se.gif') no-repeat bottom right; }
+.BlueBorder .sw { background:url('../Images/Cnts/BlueBorder/sw.gif') no-repeat bottom left; }
+.BlueBorder .nw { background:url('../Images/Cnts/BlueBorder/nw.gif') no-repeat top left; }
+
+.BlueBorder .nw { padding:5px 25px 15px 25px } /* Controls padding.  Increase to make text further away from edges; decrease to bring closer.  */
+
+/* Style for expando text blocks. display: must be inline style="xxx" for jscript! */
+
+div.expando {
+	overflow: hidden;
+}
