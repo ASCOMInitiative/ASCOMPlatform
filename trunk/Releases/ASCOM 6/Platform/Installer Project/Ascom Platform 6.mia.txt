@@ -451,7 +451,7 @@ if Variable REQUIRESUPGRADE Equals TRUE
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{8961E141-B307-4882-ABAD-77A3E76A40C1}\UninstallString into UNINSTALLER
   Write into Text File $SETUPLOG$ from Value $TIME$ Uninstalling old Platform 6 - $UNINSTALLER$ (at end of file)
   Set Variable MYPROGRESS to 15
-  Comment: Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
+  Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $UNINSTALLCODE$ - Completed uninstallation (at end of file)
   Set Variable MYPROGRESS to 30
    
