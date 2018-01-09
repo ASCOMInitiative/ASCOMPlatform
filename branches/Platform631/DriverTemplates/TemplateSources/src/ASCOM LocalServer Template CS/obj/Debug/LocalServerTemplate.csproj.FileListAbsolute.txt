@@ -1,0 +1,1 @@
+C:\ASCOM\trunk\DriverTemplates\ASCOM 6 Templates\src\ASCOM LocalServer Template CS\bin\Debug\ASCOM.safeprojectname.Server.exe.config

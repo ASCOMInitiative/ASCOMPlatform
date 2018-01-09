@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <assembly>
+    <name>ASCOM.Utilities</name>
+  </assembly>
+  
+  <members>
+    <member name="R:Project">
+      <summary>
+        This project contains the core platform components, platform utilities and the VB6 COM based Helper components
+      </summary>
+    </member>
+
+    <member name="N:ASCOM">
+      <summary>
+        <h2>ASCOM</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all ASCOM components and applications
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Utilities">
+      <summary>
+        <h2>ASCOM.Utilities</h2>
+        <h3>Summary</h3>
+        <p>
+           This namespace contains the core platform utilities
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Utilities.Exceptions">
+      <summary>
+        <h2>ASCOM.Utilities.Exceptions Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all utility and tool related exceptions
+        </p>
+      </summary>
+    </member>
+    
+    <member name="N:ASCOM.Utilities.Interfaces">
+      <summary>
+        <h2>ASCOM.Utilties.Interfaces Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains interfaces for the core utilities
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Conform">
+      <summary>
+        <h2>ASCOM.Conform Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains the IConform interface and associated classes that enable drivers
+          to tell Conform which commands to send through the CommandXXX functions and the expected 
+          responses. The CommandXXX commands are of necessity hardware specific, hence this mechanic 
+          to allow Conform to send valid commands.
+        </p>
+      </summary>
+    </member>
+    
+  </members>
+
+</doc>

@@ -1,0 +1,56 @@
+<VSTemplate Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>ASCOM Device Driver (C#)</Name>
+    <Description>Creates a skeleton ASCOM driver in C#. Use the wizard to specify the device type.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+      ASCOM6
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ASCOM.DeviceName.DeviceClass</DefaultName>
+    <ProvideDefaultName>false</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>CSharpASCOM.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ASCOM Device Driver.csproj" File="ASCOM Device Driver CS.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.ico">ASCOM.ico</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.png">ASCOM.png</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="ASCOMDriverTemplate.snk">ASCOMDriverTemplate.snk</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceCamera.cs">DeviceCamera.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceDome.cs">DeviceDome.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceFilterWheel.cs">DeviceFilterWheel.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceFocuser.cs">DeviceFocuser.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceRotator.cs">DeviceRotator.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceSafetyMonitor.cs">DeviceSafetyMonitor.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceSwitch.cs">DeviceSwitch.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="DeviceTelescope.cs">DeviceTelescope.cs</ProjectItem>
+	    <ProjectItem ReplaceParameters="false" TargetFileName="DeviceVideo.cs">DeviceVideo.cs</ProjectItem>
+	    <ProjectItem ReplaceParameters="false" TargetFileName="DeviceObservingConditions.cs">DeviceObservingConditions.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Driver.cs">Driver.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Rates.cs">Rates.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderInterface.cs">PlaceholderInterface.cs</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Resources.Designer.cs">Resources.Designer.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Resources" TargetFolderName="Resources">
+        <ProjectItem ReplaceParameters="false" TargetFileName="ASCOM.bmp">ASCOM.bmp</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.htm" OpenInWebBrowser="true">ReadMe.htm</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.cs">SetupDialogForm.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.designer.cs">SetupDialogForm.designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="SetupDialogForm.resx">SetupDialogForm.resx</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>ASCOM.Setup.TemplateWizard, Version=6.2.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
+    <FullClassName>ASCOM.Setup.DriverWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

@@ -1,0 +1,16 @@
+ErrorConstants = 0, 0, 0, 0, C
+WindowsAPI = 0, 0, 0, 0, C
+Rate = 0, 0, 742, 567, C
+TrackingRates = 22, 29, 831, 731, C
+AxisRates = 44, 58, 904, 829, C
+frmHandBox = 274, 50, 1061, 889, C, 653, 32, 1099, 743, C
+ObjectSafety = 63, 227, 716, 657, C
+Public = 240, 22, 967, 882, C
+Startup = 0, 0, 0, 0, C
+Focuser = 172, 55, 990, 753, C
+Telescope = 15, 10, 878, 854, C
+Dome = 263, 63, 1049, 761, C
+FocuserHW = 0, 0, 0, 0, C
+DomeHW = 0, 0, 0, 0, C
+ScopeHW = 0, 0, 0, 0, C
+frmSetup = 253, 42, 1021, 924, C, 452, 8, 1461, 715, C

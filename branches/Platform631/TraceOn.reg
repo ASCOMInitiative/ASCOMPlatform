@@ -1,0 +1,4 @@
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\ASCOM]
+"SerTraceFile"="C:\\SerialTrace.txt"

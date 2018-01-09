@@ -1,0 +1,1 @@
+al /link:DriverAccess.config /out:policy.1.0.ASCOM.DriverAccess.dll /keyfile:ASCOM.snk /platform:anycpu

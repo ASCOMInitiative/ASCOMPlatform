@@ -1,0 +1,720 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="20160503_c\c\src\sofa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="20160503_c\c\src\sofam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="20160503_c\c\src\a2af.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\a2tf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ab.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\af2a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\anp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\anpm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apcg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apcg13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apci.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apci13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apco.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apco13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apcs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apcs13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\aper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\aper13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\apio13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atci13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atciq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atciqn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atciqz.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atco13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atic13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\aticq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\aticqn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atio13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atioq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atoc13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atoi13.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\atoiq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\bi00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\bp00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\bp06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\bpn2xy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2i00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2i00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2i06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2ibpn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2ixy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2ixys.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2s.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2t00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2t00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2t06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2tcio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2teqx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2tpe.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\c2txy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\cal2jd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\cp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\cpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\cr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\d2dtf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\d2tf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\dat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\dtdb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\dtf2d.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\eceq06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ecm06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ee00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ee00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ee00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ee06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\eect00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\eform.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\eo06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\eors.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\epb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\epb2jd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\epj.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\epj2jd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\epv00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\eqec06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\eqeq94.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\era00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fad03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fae03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\faf03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\faju03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fal03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\falp03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fama03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fame03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fane03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\faom03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fapa03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fasa03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\faur03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fave03.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fk5hip.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fk5hz.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fk52h.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fw2m.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\fw2xy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\g2icrs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gc2gd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gc2gde.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gd2gc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gd2gce.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gmst00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gmst06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gmst82.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gst00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gst00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gst06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gst06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\gst94.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\h2fk5.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\hfk5z.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\icrs2g.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ir.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\jd2cal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\jdcalf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ld.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ldn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ldsun.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\lteceq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ltecm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\lteqec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ltp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ltpb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ltpecl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ltpequ.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\num00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\num00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\num06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\numat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\nut00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\nut00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\nut06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\nut80.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\nutm80.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\obl06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\obl80.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\p2pv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\p2s.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\p06e.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pas.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pb06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pdp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pfw06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\plan94.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pmat00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pmat06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pmat76.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pmpx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pmsafe.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pn00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pn00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pn00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pn06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pn06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pnm00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pnm00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pnm06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pnm80.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pom00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ppp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ppsp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pr00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\prec76.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pv2p.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pv2s.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvdpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvmpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvppv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvstar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvtob.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvup.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pvxpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\pxp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\refco.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\rm2v.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\rv2m.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\rx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\rxp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\rxpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\rxr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ry.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\rz.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s2c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s2p.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s2pv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s2xpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\s06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\sepp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\seps.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\sp00.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\starpm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\starpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\sxp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\sxpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\taitt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\taiut1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\taiutc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tcbtdb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tcgtt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tdbtcb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tdbtt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tf2a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tf2d.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\trxp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\trxpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tttai.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tttcg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\tttdb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ttut1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ut1tai.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ut1tt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\ut1utc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\utctai.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\utcut1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\xy06.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\xys00a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\xys00b.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\xys06a.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\zp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\zpv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="20160503_c\c\src\zr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

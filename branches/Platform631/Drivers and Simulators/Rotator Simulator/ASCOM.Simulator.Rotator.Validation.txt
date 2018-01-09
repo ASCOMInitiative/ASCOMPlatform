@@ -1,0 +1,62 @@
+Conform Report Hash (V1): 6BE9DD2518B8121D822485F2DAABADBF83367EC90A84C61CDE49227AF000C744650B86662789E6504BD77FDA00D74B4E10E76F555EF691545826F542E31D4269
+
+ConformanceCheck ASCOM Device Conformance Checker Version 3.0.0.10
+ConformanceCheck Running on ASCOM Platform 5
+ 
+ConformanceCheck Driver ProgID: ASCOM.Simulator.Rotator
+ 
+Error numbers 
+Error number for "Not Implemented" is: 80040400
+Error number for "Invalid Value 1" is: 80040405
+Error number for "Invalid Value 3" is: 0
+Error number for "Value Not Set"   is: 80040403
+ 
+05:46:49.546 Driver Access Checks          OK       
+05:46:49.764 AccessChecks                  OK       Successfully created driver using late binding
+05:46:49.780 AccessChecks                  OK       Successfully connected using late binding
+05:46:49.780 AccessChecks                  INFO     The driver is a COM object
+05:46:49.796 AccessChecks                  OK       Successfully created driver using early binding to IRotator interface
+05:46:49.796 AccessChecks                  OK       Successfully connected using early binding to IRotator interface
+05:46:49.796 AccessChecks                  OK       Successfully created driver using driver access toolkit
+05:46:49.796 AccessChecks                  OK       Successfully connected using driver access toolkit
+ 
+Conform is using CreateObject to get a Rotator object
+05:46:49.811 ConformanceCheck              OK       Driver instance created successfully
+05:46:49.811 ConformanceCheck              OK       Connected OK
+ 
+Can Properties 
+05:46:49.811 CanReverse                    OK       True
+ 
+Pre-run Checks 
+05:46:50.014 Pre-run Check                 OK       Rotator is stationary
+ 
+Properties 
+05:46:50.014 IsMoving                      OK       False
+05:46:50.014 Position                      OK       315
+05:46:50.014 TargetPosition                OK       315
+05:46:50.014 StepSize                      OK       1
+05:46:50.030 Reverse Read                  OK       False
+05:46:50.030 Reverse Write                 OK       Reverse state successfully changed and restored
+ 
+Methods 
+05:46:50.030 Halt                          OK       Halt command successful
+05:47:13.186 MoveAbsolute                  OK       Asynchronous move successful to: 45 degrees
+05:47:36.342 MoveAbsolute                  OK       Asynchronous move successful to: 135 degrees
+05:48:44.592 MoveAbsolute                  OK       Asynchronous move successful to: 225 degrees
+05:49:07.749 MoveAbsolute                  OK       Asynchronous move successful to: 315 degrees
+05:49:07.749 MoveAbsolute                  OK       Exception thrown as expected on movement to large negative angle -405 degrees
+05:49:07.764 MoveAbsolute                  OK       Exception thrown as expected on movement to large positive angle 405 degrees
+05:49:10.811 Move                          OK       Asynchronous move successful - moved by -10 degrees to: 305 degrees
+05:49:13.858 Move                          OK       Asynchronous move successful - moved by 10 degrees to: 315 degrees
+05:49:24.217 Move                          OK       Asynchronous move successful - moved by -40 degrees to: 275 degrees
+05:49:34.577 Move                          OK       Asynchronous move successful - moved by 40 degrees to: 315 degrees
+05:50:07.483 Move                          OK       Asynchronous move successful - moved by -130 degrees to: 185 degrees
+05:50:40.389 Move                          OK       Asynchronous move successful - moved by 130 degrees to: 315 degrees
+05:50:40.389 Move                          OK       Exception thrown as expected on movement to large negative angle -375 degrees
+05:50:40.389 Move                          OK       Exception thrown as expected on movement to large positive angle 375 degrees
+ 
+Conformance test complete 
+ 
+No errors, warnings or issues found: your driver passes ASCOM validation!! 
+ 
+Driver Hash Value: 560A1234DB6C01227D0971149732F986E59B7180E91E938F041C39DA79E6BC33999964EFC479678340E33F11DB3FECAD9CD7EC338BBF6C4262AEC8A8995F722E

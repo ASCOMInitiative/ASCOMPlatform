@@ -1,0 +1,710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutGeminiDriver" xml:space="preserve">
+    <value>О Джеменай</value>
+  </data>
+  <data name="Accelerate" xml:space="preserve">
+    <value>Быстрее</value>
+  </data>
+  <data name="AdvancedSettings" xml:space="preserve">
+    <value>Все параметры Джеменай </value>
+  </data>
+  <data name="AllSpeedsMode" xml:space="preserve">
+    <value>Метод Всех Скоростей</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ASCOM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ASCOM.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AtCenterSpeed" xml:space="preserve">
+    <value>Скорость Центр</value>
+  </data>
+  <data name="AtGuideSpeed" xml:space="preserve">
+    <value>Скорость Гайд</value>
+  </data>
+  <data name="AtSlewSpeed" xml:space="preserve">
+    <value>Скорость Быстрая</value>
+  </data>
+  <data name="CannotConnect" xml:space="preserve">
+    <value>Нет контакта с Джеменай</value>
+  </data>
+  <data name="CannotDisconnect" xml:space="preserve">
+    <value>Не смог отсоединитса от Джеменай</value>
+  </data>
+  <data name="CannotUseVoice" xml:space="preserve">
+    <value>Это голос не может быть использован для объявлений. Пожалуйста, выберите другой.</value>
+  </data>
+  <data name="ConfigureFocuser" xml:space="preserve">
+    <value>Настройка фокусера</value>
+  </data>
+  <data name="ConfigureTelescope" xml:space="preserve">
+    <value>Настройка телескопа</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Подключиться</value>
+  </data>
+  <data name="Decelerate" xml:space="preserve">
+    <value>Замедлить</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Отключиться</value>
+  </data>
+  <data name="DisconnectWarning" xml:space="preserve">
+    <value>Другие программы по-прежнему связаны с Джеменай.
+Вы уверены, что хотите отключиться?</value>
+  </data>
+  <data name="DownButton" xml:space="preserve">
+    <value>Кнопка вниз</value>
+  </data>
+  <data name="DownKey" xml:space="preserve">
+    <value>Кнопка вниз</value>
+  </data>
+  <data name="DriverMinimized" xml:space="preserve">
+    <value>Джеменай Контроллер иконизирован</value>
+  </data>
+  <data name="DriverRunning" xml:space="preserve">
+    <value>Джеменай Контроллер попрежнему работает. 
+Он  доступен с этой иконки</value>
+  </data>
+  <data name="EnterMenu" xml:space="preserve">
+    <value>Войди в меню</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="ExitMenu" xml:space="preserve">
+    <value>Выйди из меню</value>
+  </data>
+  <data name="FailedSetTime" xml:space="preserve">
+    <value>Не удалось установить время</value>
+  </data>
+  <data name="FocuserFast" xml:space="preserve">
+    <value>Быстрая скорость  фокусировки</value>
+  </data>
+  <data name="FocuserIn" xml:space="preserve">
+    <value>Focuser In</value>
+  </data>
+  <data name="FocuserMedium" xml:space="preserve">
+    <value>Средняя скорость  фокусировки</value>
+  </data>
+  <data name="FocuserOut" xml:space="preserve">
+    <value>Focuser Out</value>
+  </data>
+  <data name="FocuserSlow" xml:space="preserve">
+    <value>Медленная скорость  фокусировки</value>
+  </data>
+  <data name="GeminiConnectionAlive1" xml:space="preserve">
+    <value>Вы уверены что хотите отключиться и закрыть Джеменай?</value>
+  </data>
+  <data name="GoHome" xml:space="preserve">
+    <value>Пойди домой</value>
+  </data>
+  <data name="HideHandController" xml:space="preserve">
+    <value>Спрячь Контроллер</value>
+  </data>
+  <data name="HideNotifications" xml:space="preserve">
+    <value>Спрячь нотификации</value>
+  </data>
+  <data name="InvalidSettings" xml:space="preserve">
+    <value>Следующие параметры содержат ошибки: </value>
+  </data>
+  <data name="InvalidSite" xml:space="preserve">
+    <value>Неправильные параметры  сайту</value>
+  </data>
+  <data name="JoystickStop" xml:space="preserve">
+    <value>Джойстик стоп</value>
+  </data>
+  <data name="LeftButton" xml:space="preserve">
+    <value>Кнопка налево</value>
+  </data>
+  <data name="LeftKey" xml:space="preserve">
+    <value>Кнопка налево</value>
+  </data>
+  <data name="MedidianFlip" xml:space="preserve">
+    <value>Меридиан флип</value>
+  </data>
+  <data name="MoveJoystick" xml:space="preserve">
+    <value>Двигать  Джойстик</value>
+  </data>
+  <data name="NoProfileLoad" xml:space="preserve">
+    <value>Несмог загрузить профиль</value>
+  </data>
+  <data name="NoProfileSave" xml:space="preserve">
+    <value>Не удалось сохранить профиль</value>
+  </data>
+  <data name="ObjectBelowHorizon" xml:space="preserve">
+    <value>Объект под горизонтом - не могу сделать меридиан флип</value>
+  </data>
+  <data name="ObjectSearch1" xml:space="preserve">
+    <value>Поиск объекта на один градус</value>
+  </data>
+  <data name="ObjectSearch2" xml:space="preserve">
+    <value>Поиск объекта на один двa градуса</value>
+  </data>
+  <data name="ObjectUnreachable" xml:space="preserve">
+    <value>Не могу сделать меридиан флип: объект недоступен с другой стороны</value>
+  </data>
+  <data name="OverwriteSettings" xml:space="preserve">
+    <value>Вы уверены, что хотите записать новые параметры в Джеменай?</value>
+  </data>
+  <data name="ParkAtCurrent" xml:space="preserve">
+    <value>Парк в теперешнeй позиции</value>
+  </data>
+  <data name="ParkAtCWD" xml:space="preserve">
+    <value>Парк в начальной позиции (CWD)</value>
+  </data>
+  <data name="ParkAtHome" xml:space="preserve">
+    <value>Парк в домашнeй  позиции</value>
+  </data>
+  <data name="ParkCWD" xml:space="preserve">
+    <value>Парк в начальной позиции</value>
+  </data>
+  <data name="ParkHere" xml:space="preserve">
+    <value>Парк в теперешнeй позиции</value>
+  </data>
+  <data name="ParkHome" xml:space="preserve">
+    <value>Парк в домашнeй  позиции</value>
+  </data>
+  <data name="PhotoMode" xml:space="preserve">
+    <value>Режим фото</value>
+  </data>
+  <data name="PTPDisabled" xml:space="preserve">
+    <value>Сквозной КОМ-порт будет отключен</value>
+  </data>
+  <data name="PTPInvalid" xml:space="preserve">
+    <value>Неправильный сквозной КОМ-порт  # </value>
+  </data>
+  <data name="RebootController" xml:space="preserve">
+    <value>Are you sure you want to reboot Gemini controller?</value>
+  </data>
+  <data name="RightButton" xml:space="preserve">
+    <value>Кнопка направо</value>
+  </data>
+  <data name="RightKey" xml:space="preserve">
+    <value>Кнопка направо</value>
+  </data>
+  <data name="SafetyLimitSet" xml:space="preserve">
+    <value>Предохранительный предел установлен  в теперешнeй позиции</value>
+  </data>
+  <data name="SelectCOMPort" xml:space="preserve">
+    <value>Пожалуйста, выберите КОМ-порт</value>
+  </data>
+  <data name="Setup" xml:space="preserve">
+    <value>Конфигурация</value>
+  </data>
+  <data name="SetupTelescope" xml:space="preserve">
+    <value>Конфигурация  Джеменай</value>
+  </data>
+  <data name="ShowHandController" xml:space="preserve">
+    <value>Покажи контроллер</value>
+  </data>
+  <data name="ShowNotifications" xml:space="preserve">
+    <value>Покажи нотификации</value>
+  </data>
+  <data name="ShowSetupFocuser" xml:space="preserve">
+    <value>Покажи Конфигурацию фокусерa</value>
+  </data>
+  <data name="SomeInvalidSettings" xml:space="preserve">
+    <value>Некоторые параметры содержат ошибки</value>
+  </data>
+  <data name="StartTracking" xml:space="preserve">
+    <value>Начать трекинг</value>
+  </data>
+  <data name="StopSlew" xml:space="preserve">
+    <value>Прекратить движение</value>
+  </data>
+  <data name="StopTracking" xml:space="preserve">
+    <value>Прекратить трекинг</value>
+  </data>
+  <data name="UpButton" xml:space="preserve">
+    <value>Кнопка вверх</value>
+  </data>
+  <data name="UpKey" xml:space="preserve">
+    <value>Кнопка вверх</value>
+  </data>
+  <data name="VisualMode" xml:space="preserve">
+    <value>Зрительный Режим</value>
+  </data>
+  <data name="CannotOpenPTP" xml:space="preserve">
+    <value>Не смог открыть сквозной КОМ-порт:</value>
+  </data>
+  <data name="CheckPort" xml:space="preserve">
+    <value>Проверка KOM-порта</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Подключаюсь...</value>
+  </data>
+  <data name="ConnectingToGemini" xml:space="preserve">
+    <value>Подключаюсь к Джеменай на</value>
+  </data>
+  <data name="ConnectionFailed" xml:space="preserve">
+    <value>Соединение не удалось:</value>
+  </data>
+  <data name="GeminiNotResponding" xml:space="preserve">
+    <value>Джеменай не отвечает. Пожалуйста, проверьте подключен ли он.</value>
+  </data>
+  <data name="SearchForGemini" xml:space="preserve">
+    <value>Разыскиваю Джеменай</value>
+  </data>
+  <data name="SerialError" xml:space="preserve">
+    <value>Ошибка в порта коммуникации </value>
+  </data>
+  <data name="SerialTimeout" xml:space="preserve">
+    <value>КОМ-порт тайм-аут!</value>
+  </data>
+  <data name="TerminatingConnection" xml:space="preserve">
+    <value>Джеменай не отвечает! Прерываю связ.</value>
+  </data>
+  <data name="TooManyErrors" xml:space="preserve">
+    <value>Too many serial port errors! Please check Gemini.</value>
+  </data>
+  <data name="AccJoystick" xml:space="preserve">
+    <value>Ускорить джойстик</value>
+  </data>
+  <data name="ConnectToGemini" xml:space="preserve">
+    <value>Подключиться к Джеменай</value>
+  </data>
+  <data name="DecJoystick" xml:space="preserve">
+    <value>Замедлить джойстик</value>
+  </data>
+  <data name="EnablePEC" xml:space="preserve">
+    <value>Включить / выключить коррекцию периодических  ошибок  (PEC)</value>
+  </data>
+  <data name="HC_DN" xml:space="preserve">
+    <value>Контроллер Кнопка вниз</value>
+  </data>
+  <data name="HC_LF" xml:space="preserve">
+    <value>Контроллер Кнопка налево</value>
+  </data>
+  <data name="HC_MENU" xml:space="preserve">
+    <value>Контроллер Кнопка меню</value>
+  </data>
+  <data name="HC_RT" xml:space="preserve">
+    <value>Контроллер Кнопка направо</value>
+  </data>
+  <data name="HC_UP" xml:space="preserve">
+    <value>Контроллер Кнопка вверх</value>
+  </data>
+  <data name="HintJoystick" xml:space="preserve">
+    <value>HINT: Press a button on the joystick to see it highlited in the list above.</value>
+  </data>
+  <data name="MeridianFlip" xml:space="preserve">
+    <value>Меридиан флип</value>
+  </data>
+  <data name="MountDEC" xml:space="preserve">
+    <value>Джеменай Declination</value>
+  </data>
+  <data name="MountLST" xml:space="preserve">
+    <value>Cжеменай местное звездное время</value>
+  </data>
+  <data name="MountRA" xml:space="preserve">
+    <value>Джеменай Right Ascension</value>
+  </data>
+  <data name="MountStopStart" xml:space="preserve">
+    <value>Включить / выключить трекинг</value>
+  </data>
+  <data name="MoveFocusIn" xml:space="preserve">
+    <value>Двигать фокусер внутрь</value>
+  </data>
+  <data name="MoveFocusOut" xml:space="preserve">
+    <value>Двигать фокусер наружу</value>
+  </data>
+  <data name="ObjSrch1" xml:space="preserve">
+    <value>Поиск объекта на один градус</value>
+  </data>
+  <data name="ObjSrch2" xml:space="preserve">
+    <value>Поиск объекта на один двa градуса</value>
+  </data>
+  <data name="ParkMount" xml:space="preserve">
+    <value>Парк Джеменай</value>
+  </data>
+  <data name="PERF_FLIP" xml:space="preserve">
+    <value>Меридиан флип</value>
+  </data>
+  <data name="SetFastFocuser" xml:space="preserve">
+    <value>Быстрая скорость  фокусировки</value>
+  </data>
+  <data name="SetMediumFocuser" xml:space="preserve">
+    <value>Средняя скорость  фокусировки</value>
+  </data>
+  <data name="SetSlowFocuser" xml:space="preserve">
+    <value>Медленная скорость  фокусировки</value>
+  </data>
+  <data name="SetupDriver" xml:space="preserve">
+    <value>Конфигурация Джеменай</value>
+  </data>
+  <data name="SlewDECM" xml:space="preserve">
+    <value>Slew DEC-</value>
+  </data>
+  <data name="SlewDECP" xml:space="preserve">
+    <value>Slew DEC+</value>
+  </data>
+  <data name="SlewRAM" xml:space="preserve">
+    <value>Slew RA-</value>
+  </data>
+  <data name="SlewRAP" xml:space="preserve">
+    <value>Slew RA+</value>
+  </data>
+  <data name="SwapDEC" xml:space="preserve">
+    <value>Поменять местами кнопки DEC</value>
+  </data>
+  <data name="SwapRA" xml:space="preserve">
+    <value>Поменять местами кнопки RA</value>
+  </data>
+  <data name="ToggleFocuserSpeed" xml:space="preserve">
+    <value>Переключи скорость  фокусировки: Медленная/Средняя/Быстрая</value>
+  </data>
+  <data name="ToggleVAP" xml:space="preserve">
+    <value>Переключи Режим зрительный/Всех Скоростей/фото</value>
+  </data>
+  <data name="UseCenter" xml:space="preserve">
+    <value>Скорость Центр</value>
+  </data>
+  <data name="UseGuide" xml:space="preserve">
+    <value>Скорость Гайд</value>
+  </data>
+  <data name="UseSlew" xml:space="preserve">
+    <value>Скорость Быстрая</value>
+  </data>
+  <data name="SameAxis" xml:space="preserve">
+    <value>RA and DEC относятся к одной  и той же оси контроллера. Пожалуйста, выберите различныe оси.</value>
+  </data>
+  <data name="BaudRate" xml:space="preserve">
+    <value>Baud Rate</value>
+  </data>
+  <data name="COMport" xml:space="preserve">
+    <value>COM port</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>connected</value>
+  </data>
+  <data name="Control" xml:space="preserve">
+    <value>Control</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="dispCENTER" xml:space="preserve">
+    <value>CENTER</value>
+  </data>
+  <data name="dispLIMIT" xml:space="preserve">
+    <value>LIMIT!</value>
+  </data>
+  <data name="dispSLEW" xml:space="preserve">
+    <value>SLEW</value>
+  </data>
+  <data name="dispSTOP" xml:space="preserve">
+    <value>STOP</value>
+  </data>
+  <data name="dispTRACK" xml:space="preserve">
+    <value>TRACK</value>
+  </data>
+  <data name="Elevation" xml:space="preserve">
+    <value>Elevation</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="GeminiIs" xml:space="preserve">
+    <value>Gemini is </value>
+  </data>
+  <data name="GPS" xml:space="preserve">
+    <value>GPS</value>
+  </data>
+  <data name="Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="Mount" xml:space="preserve">
+    <value>Mount</value>
+  </data>
+  <data name="MountIsConnected" xml:space="preserve">
+    <value>Mount is connected</value>
+  </data>
+  <data name="MountIsDisconnected" xml:space="preserve">
+    <value>Mount is disconnected</value>
+  </data>
+  <data name="MountStopped" xml:space="preserve">
+    <value>Mount stopped</value>
+  </data>
+  <data name="NoTarget" xml:space="preserve">
+    <value>No Target!</value>
+  </data>
+  <data name="NotConnected" xml:space="preserve">
+    <value>not connected</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="SafetyLimitReached" xml:space="preserve">
+    <value>Safety limit reached!</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ConfigureCatalogs" xml:space="preserve">
+    <value>Manage Catalogs</value>
+  </data>
+  <data name="Align" xml:space="preserve">
+    <value>Additional Align</value>
+  </data>
+  <data name="ConfigurePark" xml:space="preserve">
+    <value>Configure Park Position</value>
+  </data>
+  <data name="ObservationLog" xml:space="preserve">
+    <value>Observation Log</value>
+  </data>
+  <data name="Park" xml:space="preserve">
+    <value>Park Gemini</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Synchronize</value>
+  </data>
+  <data name="Unpark" xml:space="preserve">
+    <value>Unpark Gemini</value>
+  </data>
+  <data name="CannotSetParkCoordinates" xml:space="preserve">
+    <value>Cannot set park coordinates:</value>
+  </data>
+  <data name="DEC" xml:space="preserve">
+    <value>DEC</value>
+  </data>
+  <data name="DefaultProfileNotSaved" xml:space="preserve">
+    <value>Default profile was not saved!</value>
+  </data>
+  <data name="DefaultProfileSavedAsGeminiDefaultProfile" xml:space="preserve">
+    <value>Default profile was saved as 'GeminiDefaultProfile.gp'</value>
+  </data>
+  <data name="discWarning1" xml:space="preserve">
+    <value>Gemini connection</value>
+  </data>
+  <data name="discWarning2" xml:space="preserve">
+    <value>s are</value>
+  </data>
+  <data name="discWarning3" xml:space="preserve">
+    <value>is</value>
+  </data>
+  <data name="discWarning4" xml:space="preserve">
+    <value>still active.</value>
+  </data>
+  <data name="dispEAST" xml:space="preserve">
+    <value>EAST</value>
+  </data>
+  <data name="dispPARK" xml:space="preserve">
+    <value>PARK</value>
+  </data>
+  <data name="dispWEST" xml:space="preserve">
+    <value>WEST</value>
+  </data>
+  <data name="ErrorReadingFile" xml:space="preserve">
+    <value>Error reading file</value>
+  </data>
+  <data name="ErrorWritingFile" xml:space="preserve">
+    <value>Error writing file:</value>
+  </data>
+  <data name="GeminiG11DefaultSafetyLimitWarning" xml:space="preserve">
+    <value>Please note that Gemini default East limit of 114° is too aggressive for most G-11.
+
+Would you like to set the East limit to a more conservative 98° instead?</value>
+  </data>
+  <data name="GotoFailed" xml:space="preserve">
+    <value>Goto failed:</value>
+  </data>
+  <data name="InvalidAltValue" xml:space="preserve">
+    <value>Invalid Alt value</value>
+  </data>
+  <data name="InvalidAzValue" xml:space="preserve">
+    <value>Invalid Az value</value>
+  </data>
+  <data name="JoystickIsNotAvailable" xml:space="preserve">
+    <value>Joystick is not available</value>
+  </data>
+  <data name="Object" xml:space="preserve">
+    <value>Object</value>
+  </data>
+  <data name="Operation" xml:space="preserve">
+    <value>Operation</value>
+  </data>
+  <data name="PleaseSelectOne" xml:space="preserve">
+    <value>Please select one!</value>
+  </data>
+  <data name="Query" xml:space="preserve">
+    <value>Query</value>
+  </data>
+  <data name="RA" xml:space="preserve">
+    <value>RA</value>
+  </data>
+  <data name="RebootGemini" xml:space="preserve">
+    <value>Reboot Gemini</value>
+  </data>
+  <data name="RetrieveGeminiObservationLog" xml:space="preserve">
+    <value>Retrieve Gemini Observation Log</value>
+  </data>
+  <data name="SafetyLimitsAggressive" xml:space="preserve">
+    <value>The new safety limits are more aggressive than the Gemini default.
+
+Incorrect safety limits can result in hardware damage.
+Are you sure you want to use these new values?</value>
+  </data>
+  <data name="SafetyLimitWarning" xml:space="preserve">
+    <value>Safety Limit Warning</value>
+  </data>
+  <data name="SettingsFromGemini" xml:space="preserve">
+    <value>[settings from Gemini]</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="LimitOff" xml:space="preserve">
+    <value>Limit switches off</value>
+  </data>
+  <data name="LimitOn" xml:space="preserve">
+    <value>Limit switches on</value>
+  </data>
+  <data name="HelpMenu" xml:space="preserve">
+    <value>Help!</value>
+  </data>
+  <data name="MountHA" xml:space="preserve">
+    <value>Mount Hour Angle</value>
+  </data>
+  <data name="dispGUIDE" xml:space="preserve">
+    <value>GUIDE</value>
+  </data>
+  <data name="DataOK" xml:space="preserve">
+    <value>Data OK</value>
+  </data>
+  <data name="GPSDateTime" xml:space="preserve">
+    <value>GPS Date/Time</value>
+  </data>
+  <data name="GPSNoFix" xml:space="preserve">
+    <value>GPS: No position fix</value>
+  </data>
+  <data name="InvalidDataReceived" xml:space="preserve">
+    <value>Invalid data received</value>
+  </data>
+  <data name="WaitingForData" xml:space="preserve">
+    <value>Waiting for data...</value>
+  </data>
+</root>

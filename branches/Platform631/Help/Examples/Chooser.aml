@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="fe14eee4-22ee-4cad-a326-539ec2c00595" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>Examples of how to use Utilities.Chooser capabilities.</para>
+	</introduction>
+    <section address="Chooser Examples">
+		<title>Chooser Examples</title>
+   		<content>
+      		<para>
+      		<code lang="vbnet" title="ASCOM Chooser Examples" 
+      		source="..\ASCOM Platform Examples\Examples\ChooserExamples.vb" />
+      		</para>
+      	</content>
+    </section>
+  </developerConceptualDocument>
+</topic>

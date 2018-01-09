@@ -1,0 +1,8 @@
+IF (UserName.Text <> )  THEN  Next.Enabled := True;
+IF (Password.Text = PasswordConfirm.Text)  THEN  Next.Enabled := True;
+IF (Password.Text = )  THEN  Exclamation.Visible := True;
+IF (Password.Text = )  THEN  ExclamationText.Visible := True;
+IF (Password.Text <> PasswordConfirm.Text)  THEN  Next.Enabled := False;
+IF (Password.Text <> )  THEN  ExclamationText.Visible := false;
+IF (Password.Text <> )  THEN  Exclamation.Visible := false;
+IF (UserName.Text = )  THEN  Next.Enabled := False;
