@@ -40,6 +40,11 @@
 			seconds into UTC in order to keep it within plus or minus 0.9 seconds of UT. This approach ensures that our civil time, despite being 
 			based on the SI second always stays close to universal time as defined by the rotation of the earth.</para>
 			
+			<para>Please note that DeltaT and DeltaUT change in opposite senses to each other. E.g. if DeltaT increases in value and DeltaUT happens to be positive,
+			then DeltaUT will decrease from positive through zero to a negative value. Eventually it will become less than -0.5 and a leap second will be added to UTC
+			in June or December, which will add a whole second to DeltaUT, making it positive again, with a value around +0.5. The leap second addition does not 
+			affect DeltaT at all because it is only influenced by the earth's rotation and is independent of UTC.</para>
+			
 			<para>These relationships are shown in the following figure.</para>
 
 			<para>
