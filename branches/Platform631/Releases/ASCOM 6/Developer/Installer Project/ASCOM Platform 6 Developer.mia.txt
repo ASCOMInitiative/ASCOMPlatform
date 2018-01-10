@@ -4,6 +4,8 @@ Comment: Set Variable DELAYUNTIL_APPLYCHANGES to FALSE
 Comment: Set Variable LOGGED to C:\ASCOMInstallLog.txt
 Comment: Set Variable NATIVE_LOGGING to TRUE
 Set Variable PROGRAMDATA to 
+Set Variable VSIENTRY to 
+Set Variable VSIXENTRY to 
  
 Comment: Set up the log file
 Set Variable SETUPLOG to 
