@@ -84,15 +84,16 @@ Public Class DiagnosticsForm
     Private Const ArrayCopySize As Integer = 2
     Private IntArray1D(ArrayCopySize) As Integer, IntArray2D(ArrayCopySize, ArrayCopySize) As Integer, IntArray3D(ArrayCopySize, ArrayCopySize, ArrayCopySize) As Integer
 
+    Private DiagnosticsVersion As Version ' Assembly version number of this executable
+
 #End Region
 
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Initialise form
-        Dim MyVersion As Version
         Dim InstallInformation As Generic.SortedList(Of String, String)
 
         Try
-            MyVersion = Assembly.GetExecutingAssembly.GetName.Version
+            DiagnosticsVersion = Assembly.GetExecutingAssembly.GetName.Version
             InstallInformation = GetInstallInformation(PLATFORM_INSTALLER_PROPDUCT_CODE, False, True, False) 'Retrieve the current install information
             lblTitle.Text = InstallInformation.Item(INST_DISPLAY_NAME) & " - " & InstallInformation.Item(INST_DISPLAY_VERSION)
             lblResult.Text = ""
@@ -127,7 +128,6 @@ Public Class DiagnosticsForm
     Private Sub btnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
         Dim ASCOMPath As String, ApplicationPath As String = "Path Not Set!"
         Dim PathShell As New System.Text.StringBuilder(260)
-        Dim MyVersion As Version
         Dim SuccessMessage As String
         Try
             Status("Diagnostics running...")
@@ -145,8 +145,7 @@ Public Class DiagnosticsForm
             NExceptions = 0
 
             'Log Diagnostics version information
-            MyVersion = Assembly.GetExecutingAssembly.GetName.Version
-            TL.LogMessage("Diagnostics", "Version " & MyVersion.ToString & ", " & Application.ProductVersion)
+            TL.LogMessage("Diagnostics", "Version " & DiagnosticsVersion.ToString & ", " & Application.ProductVersion)
             TL.BlankLine()
             TL.LogMessage("Date", Date.Now.ToString)
             TL.LogMessage("TimeZoneName", GetTimeZoneName)
@@ -863,13 +862,20 @@ Public Class DiagnosticsForm
 
     Private Sub SimulatorTests()
         Dim Sim As SimulatorDescriptor
+        Dim DiagnosticsFullVersionNumber As String
+        Dim DiagnosticsMajorMinorVersionNumber As String
+        Dim DiagnosticsMajorNumber As String
+
+        DiagnosticsFullVersionNumber = DiagnosticsVersion.ToString()
+        DiagnosticsMajorMinorVersionNumber = DiagnosticsVersion.Major.ToString() & "." & DiagnosticsVersion.Minor.ToString()
+        DiagnosticsMajorNumber = DiagnosticsVersion.Major.ToString()
 
         Sim = New SimulatorDescriptor
         Sim.ProgID = "ASCOM.Simulator.Telescope"
         Sim.Description = "Platform 6 Telescope Simulator"
         Sim.DeviceType = "Telescope"
         Sim.Name = "Simulator"
-        Sim.DriverVersion = "6.2.0.0"
+        Sim.DriverVersion = DiagnosticsFullVersionNumber
         Sim.InterfaceVersion = 3
         Sim.IsPlatform5 = False
         Sim.SixtyFourBit = True
@@ -891,6 +897,7 @@ Public Class DiagnosticsForm
         Sim.AxisRatesRelative = False
         TestSimulator(Sim)
         Sim = Nothing
+
         If True Then
             Sim = New SimulatorDescriptor
             Sim.ProgID = "CCDSimulator.Camera"
@@ -909,7 +916,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Camera Simulator"
             Sim.DeviceType = "Camera"
             Sim.Name = "Sim "
-            Sim.DriverVersion = "6.2"
+            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -933,7 +940,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 FilterWheel Simulator"
             Sim.DeviceType = "FilterWheel"
             Sim.Name = "Filter Wheel Simulator .NET"
-            Sim.DriverVersion = "6.0"
+            Sim.DriverVersion = DiagnosticsMajorNumber & ".0"
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -957,7 +964,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Focuser Simulator"
             Sim.DeviceType = "Focuser"
             Sim.Name = "ASCOM.Simulator.Focuser"
-            Sim.DriverVersion = "6.0"
+            Sim.DriverVersion = DiagnosticsMajorNumber & ".0"
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -969,7 +976,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Safety Monitor Simulator"
             Sim.DeviceType = "SafetyMonitor"
             Sim.Name = "ASCOM.Simulator.SafetyMonitor"
-            Sim.DriverVersion = "6.0"
+            Sim.DriverVersion = DiagnosticsMajorNumber & ".0"
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -993,7 +1000,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Switch Simulator"
             Sim.DeviceType = "Switch"
             Sim.Name = "ASCOM Switch V2 Simulator"
-            Sim.DriverVersion = "6.3"
+            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -1017,7 +1024,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Dome Simulator"
             Sim.DeviceType = "Dome"
             Sim.Name = "Simulator"
-            Sim.DriverVersion = "6.2"
+            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
             Sim.InterfaceVersion = 2
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -1029,7 +1036,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 Video Simulator"
             Sim.DeviceType = "Video"
             Sim.Name = "Video Simulator"
-            Sim.DriverVersion = "6.2"
+            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
             Sim.InterfaceVersion = 1
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -1041,7 +1048,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 ObservingConditions Simulator"
             Sim.DeviceType = "ObservingConditions"
             Sim.Name = "ASCOM Observing Conditions Simulator"
-            Sim.DriverVersion = "6.2"
+            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
             Sim.InterfaceVersion = 1
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
@@ -1053,7 +1060,7 @@ Public Class DiagnosticsForm
             Sim.Description = "Platform 6 ObservingConditions Hub"
             Sim.DeviceType = "ObservingConditionsHub"
             Sim.Name = "ASCOM Observing Conditions Hub (OCH)"
-            Sim.DriverVersion = "6.2"
+            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
             Sim.InterfaceVersion = 1
             Sim.IsPlatform5 = False
             Sim.SixtyFourBit = True
