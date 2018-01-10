@@ -6,7 +6,7 @@
         <CheckoutDirectory>$(MSBuildProjectDirectory)\Export</CheckoutDirectory>
 
         <!-- Subversion URL from which to make the export - Customise this line with your own login name in place of simpsonpwg -->
-        <RepositoryPath>svn://simpsonpwg@svn.code.sf.net/p/ascom/code/trunk</RepositoryPath>
+        <RepositoryPath>svn://simpsonpwg@svn.code.sf.net/p/ascom/code/branches/Platform631</RepositoryPath>
 
         <!-- Registry location for the user's Subversion login credentials -->
         <SecurityCredentialsLocation>HKEY_CURRENT_USER\Software\ASCOM\Build</SecurityCredentialsLocation>
