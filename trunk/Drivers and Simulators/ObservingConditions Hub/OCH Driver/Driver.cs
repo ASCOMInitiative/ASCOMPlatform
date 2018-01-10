@@ -165,7 +165,7 @@ namespace ASCOM.Simulator
                     string driverVersion =  String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
 
                     TL.LogMessage(clientNumber, "DriverVersion", driverVersion);
-                    return "6.2";
+                    return driverVersion;
                 }
                 return Hub.DriverVersion(clientNumber);
             }
