@@ -9,6 +9,7 @@ namespace ASCOM.Simulator
     {
         private readonly Focuser _focuser; // = new Focuser();
         private const int positionClick = 1;
+        private const int timerUpdateInterval = 100; // Set the timer interval to 100ms = 0.1 sec
         private Timer MyTimer = new Timer();
 
         /// <summary>
@@ -26,15 +27,35 @@ namespace ASCOM.Simulator
             /* Adds the event and the event handler for the method that will process the timer event to the timer. */
             MyTimer.Tick += TimerEventProcessor;
 
-            // Sets the timer interval to 0.1 seconds.
-            MyTimer.Interval = 100;
-            MyTimer.Start(); 
+            // Set the timer interval and start the timer.
+            MyTimer.Interval = timerUpdateInterval;
+            MyTimer.Start();
 
             btnMoveOut.MouseDown += new MouseEventHandler(btnMoveOut_MouseDown);
             btnMoveOut.MouseUp += new MouseEventHandler(btnMove_MouseUp);
             btnMoveIn.MouseDown += new MouseEventHandler(btnMoveIn_MouseDown);
             btnMoveIn.MouseUp += new MouseEventHandler(btnMove_MouseUp);
             txtGoTo.TextChanged += new EventHandler(txtGoTo_Changed);
+            this.VisibleChanged += FocuserHandboxForm_VisibleChanged;
+        }
+
+        /// <summary>
+        /// This event handler is to stop the UI update timer when the form is hidden because its not needed.
+        /// This also stops exceptions being raised when the form is disposed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FocuserHandboxForm_VisibleChanged(object sender, EventArgs e)
+        {
+            if (((Form)sender).Visible == true)
+            {
+                if (!(MyTimer == null)) MyTimer.Start(); // Start the timer because the form is visible
+            }
+            else
+            {
+                if (!(MyTimer == null)) MyTimer.Stop(); // Stop the timer because the form is not visible
+                System.Threading.Thread.Sleep(timerUpdateInterval + 20); // Wait for just over a whole update interval in case the timer fires
+            }
         }
 
         private void btnMoveOut_MouseDown(object sender, MouseEventArgs e)
@@ -64,7 +85,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private void TimerEventProcessor(object caller, EventArgs e)
         {
-             UpdateDisplay();
+            UpdateDisplay();
         }
 
         private void UpdateDisplay()
@@ -90,16 +111,16 @@ namespace ASCOM.Simulator
         /// </summary>
         private void UpdatePosition(int offSet)
         {
-          /*  if (offSet != 0)
-            {
-                if (_focuser.Absolute)
-                    _focuser.Target = _focuser.Position + offSet;
-                else
-                {
-                    _focuser.Position = offSet;
-                    _focuser.Target = 0;
-                }*/
-                _focuser.LastOffset = offSet;
+            /*  if (offSet != 0)
+              {
+                  if (_focuser.Absolute)
+                      _focuser.Target = _focuser.Position + offSet;
+                  else
+                  {
+                      _focuser.Position = offSet;
+                      _focuser.Target = 0;
+                  }*/
+            _focuser.LastOffset = offSet;
             //}
         }
 
@@ -140,7 +161,7 @@ namespace ASCOM.Simulator
             }
             Focuser.SaveProfileSetting("TempComp", _focuser.tempComp.ToString(CultureInfo.InvariantCulture));
         }
-        
+
         /// <summary>
         /// This disables the form close button i.e. the X in the top right hand corner of the form.
         /// </summary>
