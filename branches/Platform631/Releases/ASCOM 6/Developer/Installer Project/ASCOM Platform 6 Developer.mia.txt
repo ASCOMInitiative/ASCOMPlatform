@@ -8,8 +8,8 @@ Comment: Suppress Installaware branding
 Set Variable MYAHLOGO to TRUE
  
 Set Variable PROGRAMDATA to 
-Set Variable VSIENTRY to 
-Set Variable VSIXENTRY to 
+Set Variable VSIENTRY to Not Read
+Set Variable VSIXENTRY to Not Read
  
 Comment: Set up the log file
 Set Variable SETUPLOG to 
@@ -94,14 +94,20 @@ Comment: Define Setup Components
 Define Component: Developer Components
 Define Component: Developer Components\Visual Studio Driver Templates
 Comment: Test whether VS is installed by seeing whether the >VSI extention is mapped to the content installer. If not then ignore!
-Read Registry Key HKCR\.vsi\ into VSIENTRY
-Read Registry Key HKCR\.vsix\ into VSIXENTRY
+Write into Text File $SETUPLOG$ from Value VSI: $VSIENTRY$ (at end of file)
+Write into Text File $SETUPLOG$ from Value VSIX: $VSIXENTRY$ (at end of file)
+Read Registry Key HKCR\.vsi\Content Type into VSIENTRY
+Read Registry Key HKCR\.vsix\Content Type into VSIXENTRY
+Write into Text File $SETUPLOG$ from Value VSI: $VSIENTRY$ (at end of file)
+Write into Text File $SETUPLOG$ from Value VSIX: $VSIXENTRY$ (at end of file)
 Select Component: Developer Components\Visual Studio Driver Templates
 if Variable VSIXENTRY Equals 
   if Variable VSIENTRY Equals 
     Deselect Component: Developer Components\Visual Studio Driver Templates
   end
 end
+Write into Text File $SETUPLOG$ from Value VSI: $VSIENTRY$ (at end of file)
+Write into Text File $SETUPLOG$ from Value VSIX: $VSIXENTRY$ (at end of file)
  
 Comment: Initialize Setup Globals
 Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008, 7, 2008 R2, 8, 2012, 8.1, 2012 R2, 10) into ISNT
