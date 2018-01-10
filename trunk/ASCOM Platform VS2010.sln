@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A54CA39-AB72-45B4-B09F-63679076D040}"
 	ProjectSection(SolutionItems) = preProject
@@ -250,6 +250,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OC Simulator Test", "Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\OC Simulator Test.csproj", "{7DF15865-2F46-4257-B2A8-3B96CEE65E08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenWeatherMap", "Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\OpenWeatherMap.csproj", "{88C51AAE-755D-460A-9952-2C578EE53592}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profile Explorer", "Profile Explorer", "{E80B946E-B41F-456E-BC38-D652819654ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -2661,7 +2663,7 @@ Global
 		{A4006FB9-7B26-44C6-B66A-E3A1EFA85D16} = {2F656A36-ED02-4FE2-AA49-C212A92908AA}
 		{AE1B820F-AB93-4BA9-B3DC-DF55EB333835} = {E61A5194-09EE-46E0-9171-1CBDC35D7A53}
 		{BCE07B80-9E3D-43D9-BE5B-50D121D40ED3} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
-		{2CB726BB-E327-41C8-9AEC-5327E5187147} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
+		{2CB726BB-E327-41C8-9AEC-5327E5187147} = {E80B946E-B41F-456E-BC38-D652819654ED}
 		{C9BF0A8B-594F-4AB9-938A-EDC8448D8520} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{BFC7E633-745D-4359-9416-587ECFA42208} = {9EE4BA96-FE1D-463E-A59F-2AC547581B6B}
 		{634E1731-3DFE-46CB-A21C-C98F09CE4644} = {9EE4BA96-FE1D-463E-A59F-2AC547581B6B}
@@ -2670,7 +2672,7 @@ Global
 		{20CD9164-D5BF-4DA5-A248-EC6B81830610} = {F319D614-A93C-4952-9D75-4230DB9896B8}
 		{2C40FAD9-DE75-4360-A0AD-911C4D24D98C} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 		{44999847-A7B6-462D-B663-FE988D98E317} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
-		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
+		{A6F7ADB8-B812-4BFA-B2BD-DF61CC35A200} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{68255A7C-76E3-4D51-9475-6CFE21188FF6} = {29B3E411-4259-4315-85A7-3063F31A282A}
 		{9EE7C0D0-D2D7-496B-8989-C44ECD53A45A} = {999A8FF4-B0DA-4D4D-9ED0-AC0D7F9E00D9}
 		{A3C42AFF-E6A0-478E-92DF-DC88234403C2} = {37ED9238-1D79-45FC-941E-18848BA6056D}
@@ -2726,15 +2728,17 @@ Global
 		{01CA0C54-B4A7-47D7-8BAB-1DF543D86D0C} = {16AE81C0-F48F-4712-8EBF-B3FCE3FD54DE}
 		{7DF15865-2F46-4257-B2A8-3B96CEE65E08} = {16AE81C0-F48F-4712-8EBF-B3FCE3FD54DE}
 		{88C51AAE-755D-460A-9952-2C578EE53592} = {358D1EAC-1E2A-479F-80DB-3E7E22E39D97}
+		{E80B946E-B41F-456E-BC38-D652819654ED} = {355010AC-1A83-4AE5-93A9-74D09CD25E4A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
 	EndGlobalSection
 EndGlobal
