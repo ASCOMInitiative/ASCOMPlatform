@@ -369,7 +369,7 @@ namespace ASCOM.Simulator
                 {
                     key.SetValue(null, assyDescription);
                     key.SetValue("AppID", s_appId);
-                    key.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);
+                    key.SetValue("AuthenticationLevel", 3, RegistryValueKind.DWord); // Changed to RPC_C_AUTHN_LEVEL_USER (3) from RPC_C_AUTHN_LEVEL_NONE (1) becuase of issue caused by Microsoft security update
                 }
                 //
                 // HKCR\APPID\exename.ext

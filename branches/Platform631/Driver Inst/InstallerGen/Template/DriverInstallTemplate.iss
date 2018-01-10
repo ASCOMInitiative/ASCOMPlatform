@@ -122,12 +122,12 @@ Source: "%srcp%\%rdmf%"; DestDir: "{app}"; Flags: isreadme
 %cexe%Root: HKCR; Subkey: CLSID\{#AppClsid}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid}
 %cexe%Root: HKCR; Subkey: AppId\{#AppClsid}; ValueType: string; ValueData: "ASCOM %name% %type% Driver"
 %cexe%Root: HKCR; Subkey: AppId\{#AppClsid}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid}
-%cexe%Root: HKCR; Subkey: AppId\{#AppClsid}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
+%cexe%Root: HKCR; Subkey: AppId\{#AppClsid}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 3
 %cex2%; set the DCOM access control for TheSky on the %typ2% interface
 %cex2%Root: HKCR; Subkey: CLSID\{#AppClsid2}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid2}
 %cex2%Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: string; ValueData: "ASCOM %name% %type% Driver"
 %cex2%Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: string; ValueName: AppID; ValueData: {#AppClsid2}
-%cex2%Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 1
+%cex2%Root: HKCR; Subkey: AppId\{#AppClsid2}; ValueType: dword; ValueName: AuthenticationLevel; ValueData: 3
 %cexe%; set the DCOM key for the executable as a whole
 %cexe%Root: HKCR; Subkey: AppId\%file%; ValueType: string; ValueName: AppID; ValueData: {#AppClsid}
 %cexe%; CAUTION! DO NOT EDIT - DELETING ENTIRE APPID TREE WILL BREAK WINDOWS!

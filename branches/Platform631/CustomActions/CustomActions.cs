@@ -49,9 +49,9 @@ namespace ASCOM.PlatformInstaller
 								RegistryKeyPermissionCheck.ReadWriteSubTree);
 				rkAPPID.SetValue("", rkCLSID.GetValue(""));				// Same description as class
 				rkAPPID.SetValue("AppId", sAPPID);
-				rkAPPID.SetValue("AuthenticationLevel", 1, RegistryValueKind.DWord);	// RPC_C_AUTHN_LEVEL_NONE
+				rkAPPID.SetValue("AuthenticationLevel", 3, RegistryValueKind.DWord);    // Changed to RPC_C_AUTHN_LEVEL_USER (3) from RPC_C_AUTHN_LEVEL_NONE (1) becuase of issue caused by Microsoft security update
 
-				if (exeName != "")										// If want AppId\Exe.name
+                if (exeName != "")										// If want AppId\Exe.name
 				{
 					rkAPPIDExe = Registry.ClassesRoot.CreateSubKey(
 									"AppId\\" + exeName,
