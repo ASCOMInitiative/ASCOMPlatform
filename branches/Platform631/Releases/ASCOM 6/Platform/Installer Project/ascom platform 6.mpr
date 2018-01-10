@@ -1771,13 +1771,13 @@ $
 TRUE
 
 ASCOM Initiative
-ASCOM Platform 6.3
+ASCOM Platform 6.3.1
 {8961E141-B307-4882-ABAD-77A3E76A40C1}
 {A6BBF69E-978B-43BE-B8DF-21EFC599A93A}
 6.3.9999.9999
 English
-ASCOM Platform 6.3
-ASCOM Platform 6.3 Installation
+ASCOM Platform 6.3.1
+ASCOM Platform 6.3.1 Installation
 ASCOM Initiative
 All rights reserved. http://www.ascom-standards.org
 {C1F56A55-C2D9-49F7-8E3B-1FAD0E5E726C}
@@ -1785,13 +1785,13 @@ ASCOM Initiative
 ASCOM Initiative
 http://tech.groups.yahoo.com/group/ASCOM-Talk
 http://ascom-standards.org/Downloads/Index.htm
-Copyright � 1998-2015, The ASCOM Initiative. All rights reserved. 
+Copyright � 1998-2018, The ASCOM Initiative. All rights reserved. 
 FALSE
-ASCOMPlatform63
+ASCOMPlatform631
 TRUE
 FALSE
 
-
+|
 http://timestamp.verisign.com/scripts/timstamp.dll
 
 UAC=requireAdministrator,CACHESOURCES=TRUE
