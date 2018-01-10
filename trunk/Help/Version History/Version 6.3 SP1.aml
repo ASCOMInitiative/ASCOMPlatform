@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="EF4E9405-610F-4353-B4C5-11885BF24898" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+      	<section address="Intro612">
+    		<title>Introduction</title>
+      		<content>
+				<para>In line with previous Platform installers, 6.3.1 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs.</para>
+				<alert class="note">
+					<para><legacyBold>Driver and application developers</legacyBold>: In order to maintain a healthy code base, some tidying up is planned for the the 
+					next <legacyBold>major</legacyBold> update and details of the changes are given in the <link xlink:href="#DeprecatedCapability">Deprecated Features</link> section below. Please will you review 
+					this and update your applications and drivers as advised; these changes are not scheduled for introduction until Q1 2017 
+					at the earliest. In the meantime service packs will be issued as required to correct bugs.</para>
+				</alert>
+            </content>
+		</section>
+
+    	<section address="PreReqs">
+    		<title>Platform Prerequisites</title>
+      		<content>
+        		<para>Platform 6.3.1 requires the following .NET framework version and library:</para>
+      			<list class="bullet">
+	      			<listItem>.NET Framework 4 Client or .NET Framework 4 Full Installation or later</listItem>
+	      			<listItem>For WIndows 8 and later the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
+	      			<listItem>Visual C++ 10.0 libraries</listItem>
+	  			</list>
+				<para>While previous Platforms required .NET Framework 3.5, Platform 6.3.1 requires that .NET Framework 4 or later is installed on your PC. Framework 4 has been available 
+				for a number of years and is provided for all operating systems that the Platform supports (Windows XP onwards). This change is to enable Platform components to take 
+				advantage of the new features that Framework 4 provides.</para>
+				<para>The installer will advise you if your PC does not have the required support and will request that you install
+				it before continuing with the installation. The framework can be downloaded from the
+					<externalLink>
+						<linkText>Microsoft Download Centre</linkText>
+						<linkAlternateText>http://www.microsoft.com/downloads</linkAlternateText>
+						<linkUri>http://www.microsoft.com/downloads</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>
+					please check under "Popular Downloads - Developer Tools" if Framework 4 is not otherwise listed.
+				</para>
+				<para>The Platform also requires Visual C++ 10.0 libraries and the installer will provide these if they are not already present on your PC.</para>
+            </content>
+		</section>
+   		
+    	<section address="Changes631">
+    		<title>Key Changes in 6.3.1 - For Everyone</title>
+      		<content>
+				<list class="bullet">
+		      		<listItem>Rotator Simulator - The relative Move command has been improved so that relative moves outside the range -360 to 360 are rejected while moves inside the range -360 to +360 
+		      		are accepted with the target forced to the range 0 to 360. This matches the specification more accurately; thanks to Steve Barkes for finding this.</listItem>
+		      		<listItem>Focuser Simulator - Now has a short delay after a move before IsMoving returns false.</listItem>
+		      		<listItem>Focuser Simulator - Now has a logging function and check box to enable this.</listItem>
+	      			<listItem>DeltaT and DeltaUT prediction modelling was updated in January 2018 with the latest USNO data, which is considered good to the end of 2019.</listItem>
+	      			<listItem>Installer - Now names uninstall logs as such rather than naming them install logs, which was confusing.</listItem>
+	      			<listItem>Platform Documentation
+						<list class="bullet">
+							<listItem>Telescope.DeclinationRate was updated to reference SI seconds as agreed on ASCOM Talk in March 2017.</listItem>
+							<listItem>Telescope.RightAscensionRate was updated to reference its units as seconds of RA per sidereal second as agreed on ASCOM Talk in March 2017.</listItem>
+							<listItem>Telescope Sidereal tracking rate was updated to angle per SI second as agreed on ASCOM Talk in March 2017.</listItem>
+							<listItem>Camera.CCDTemperature was updated to allow CCD temperature to be returned even if there is no cooler.</listItem>
+	      				</list>
+	      			</listItem>
+	      		</list>
+            </content>
+		</section>
+   		
+    	<section address="Changes631Dev">
+	     	<title>Key Changes in 6.3.1 - For Developers</title>
+	      	<content>
+	      		<list class="bullet">
+	      			<listItem>A gain control has been added to the Camera test application.</listItem>
+	      			<listItem>COM error numbers are now included in documentation so that these can be thrown directly if required, e.g. by a Delphi application.</listItem>
+	      			<listItem>The ASCOM open source license text has been added to the Platform SubVersion repository to reflect Open Source norms.</listItem>
+	      			<listItem>Template Wizard - Now uplevelled to v6.3.</listItem>
+				</list>
+      		</content>
+   		</section>
+
+        <section address="IssuesFixedPlatform">
+           	<title>Issues Fixed - Platform</title>
+            <content>
+      			<list class="bullet">
+	      			<listItem>Several components returned references to Platform 6.2 rather than Platform 6.3 when queried.</listItem>
+	      			<listItem>The Diagnostics DeltaT test no longer throws false errors.</listItem>
+				</list>
+   			</content>
+   		</section>
+   		
+        <section address="IssuesFixedDeveloper">
+           	<title>Issues Fixed - Developers</title>
+            <content>
+      			<list class="bullet">
+	      			<listItem>The Developer components installer will now recognise a VS2017 install and offer to install the ASCOM driver templates.</listItem>
+	      		</list>
+   			</content>
+   		</section>
+
+       <section address="KnownIssuesDevelopment">
+           	<title>Known Limitations - Developers</title>
+            <content>
+      			<list class="bullet">
+					<listItem>The components in the Astrometry.NOVAS namespace are fully usable from .NET languages but are not fully 
+					accessible through COM from scripting languages because a number of parameters are passed by reference or use 
+					structures that do not pass across the COM interface. Two work rounds are available:
+		      			<list class="ordered">
+							<listItem>Use the Transform component in the ASCOM.Astrometry.Transform namespace, it is fully COM compatible.</listItem>
+							<listItem>Create your own COM presentation component that encapsulates the SOFA or NOVAS 3.1 functions that you require
+							and presents them in a COM compatible fashion to suit your needs. This component can them be consumed by your 
+							scripting application.</listItem>
+						</list>
+					</listItem>
+				</list>
+   			</content>
+   		</section>
+   		
+   		<section address="BreakingChanges">
+           	<title>Breaking Changes (For Developers)</title>
+            <content>
+      			<list class="bullet">
+ 		 			<listItem>None.</listItem>
+				</list>
+   			</content>
+   		</section>
+  		<section address="DeprecatedCapability">
+           	<title>Deprecated Capabilites (For Developers)</title>
+            <content>
+      			<list class="bullet">
+      				<listItem><para>The ASCOM.Astrometry namespace of the Platform has become overcrowded with components that have similar capabilities but that differ in small ways from each other (e.g. NOVAS2, NOVAS2COM, NOVAS3, NOVAS3.1). The recent 
+      				realisation that some NOVAS routines use iterative algorithms that can fail, when in very close proximity to the poles, led to a search for an alternative and the 
+      				<externalLink>
+						<linkText>SOFA Library</linkText>
+						<linkAlternateText>http://www.iausofa.org</linkAlternateText>
+						<linkUri>http://www.iausofa.org</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>
+      				was found to be an actively maintained and authoritative choice.</para>
+      				<para>The addition of a SOFA component brings the number of high precision astronomy libraries distributed within the Platform to 8! 
+      				To reduce the maintenance burden, SOFA will become the primary high precision library for astronomical computing distributed with the ASCOM Platform and 
+      				dependence of Platform components on NOVAS will be removed. However, the NOVAS routines provide functionality that is not present in SOFA e.g. major and minor planet ephemerides 
+      				and consequently the NOVAS 3.1 component will continue to be distributed with the Platform.</para>
+      				<para>The following NOVAS components will be removed from the Platform installer at the next major update and moved into a separate installer:</para>
+  					<list class="bullet">
+						<listItem>Kepler</listItem>
+						<listItem>NOVASCOM</listItem>
+						<listItem>NOVAS2</listItem>
+						<listItem>NOVAS2COM</listItem>
+						<listItem>NOVAS3</listItem>
+					</list>
+      				</listItem>
+ 		 			<listItem>The following VB6 based simulators will be removed from the Platform at the next major update. These drivers were moved to a 
+ 		 			"bug-fix only" maintenance mode when Platform 6 was released and are becoming increasingly out of step with their .NET counterparts, which are fully integrated 
+ 		 			into the Platform code base.
+ 						<table>
+						  <tableHeader>
+						    <row>
+						      <entry><para>Simulator</para></entry>
+						      <entry><para>ProgID</para></entry>
+						      <entry><para>Replacement</para></entry>
+						    </row>
+						  </tableHeader>
+						  <row>
+						    <entry><para>Camera Simulator</para></entry>
+						    <entry><para>CCDSimulator.Camera</para></entry>
+							<entry><para>Replace use of the CCDSimulator.Camera ProgID with ASCOM.Simulator.Camera, which will invoke the "Camera V2 simulator</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Dome Simulator</para></entry>
+						    <entry><para>DomeSim.Telescope</para></entry>
+							<entry><para>Replace use of the DomeSim.Telescope ProgID with ASCOM.Simulator.Dome, which will invoke the "Dome Simulator .NET" driver.</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Filter Wheel Simulator</para></entry>
+						    <entry><para>FilterWheelSim.FilterWheel</para></entry>
+							<entry><para>Replace use of the FilterWheelSim.FilterWheel ProgID with ASCOM.Simulator.FilterWheel, which will invoke the "Filter Wheel Simulator [.NET]" driver.</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Focuser Simulator</para></entry>
+						    <entry><para>FocuserSim.Focuser</para></entry>
+							<entry><para>Replace use of the FocuserSim.Focuser ProgID with ASCOM.Simulator.Focuser, which will invoke the "ASCOM Simulator Focuser Driver" driver.</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Switch Simulator</para></entry>
+						    <entry><para>SwitchSim.Switch</para></entry>
+							<entry><para>Replace use of the SwitchSim.Switch ProgID with ASCOM.Simulator.Switch, which will invoke the "ASCOM SwitchV2 Simulator Driver" driver.</para></entry>
+						  </row>
+						  <row>
+						    <entry><para>Telescope Simulator</para></entry>
+						    <entry><para>ScopeSim.Telescope</para></entry>
+							<entry><para>Replace use of the ScopeSim.Telescope ProgID with ASCOM.Simulator.Telescope, which will invoke the "Telescope Simulator for .NET" driver.</para></entry>
+						  </row>
+						</table>
+		 			</listItem>
+				</list>
+   			</content>
+   		</section></developerConceptualDocument>
+</topic>

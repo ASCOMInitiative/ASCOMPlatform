@@ -2,7 +2,8 @@
 <Topics>
   <Topic id="7d9253c2-fdfd-4c0d-8225-a96bddb49731" visible="True" isDefault="true" />
   <Topic id="174fff87-9bd7-442e-98e1-9fe2ac09bac6" visible="True" />
-  <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" isExpanded="true" isSelected="true" title="Version History">
+  <Topic id="bfd53b69-9f13-489b-9a98-50c60d2a633b" visible="True" isExpanded="true" title="Version History">
+    <Topic id="EF4E9405-610F-4353-B4C5-11885BF24898" visible="True" isSelected="true" />
     <Topic id="cc21f341-2809-4353-8b71-66a0277153ac" visible="True" />
     <Topic id="f6d76cb9-e638-4d8a-83eb-def459a0e258" visible="True" />
     <Topic id="c70b2e72-ab62-4dbb-b7c6-eed3cd523c14" visible="True" />
