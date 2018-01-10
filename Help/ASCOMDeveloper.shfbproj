@@ -227,6 +227,7 @@
       <CopyToMedia>True</CopyToMedia>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Version History\Version 6.3 SP1.aml" />
     <None Include="Version History\Version 6.3.aml" />
     <None Include="Version History\Version 6.2.aml" />
     <None Include="Introduction\Acknowledgements.aml" />
