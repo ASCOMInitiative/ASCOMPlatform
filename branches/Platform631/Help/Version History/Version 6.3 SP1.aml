@@ -78,6 +78,7 @@
            	<title>Issues Fixed - Platform</title>
             <content>
       			<list class="bullet">
+	      			<listItem>DCOM permissions revised so that local servers operate with Microsoft's Spectre and Meltdown security updates.</listItem>
 	      			<listItem>Several components returned references to Platform 6.2 rather than Platform 6.3 when queried.</listItem>
 	      			<listItem>The Diagnostics DeltaT test no longer throws false errors.</listItem>
 				</list>

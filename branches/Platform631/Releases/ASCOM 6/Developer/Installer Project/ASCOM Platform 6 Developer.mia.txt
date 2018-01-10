@@ -3,6 +3,10 @@ Comment: Set Variable NATIVE_ENGINE to TRUE
 Comment: Set Variable DELAYUNTIL_APPLYCHANGES to FALSE
 Comment: Set Variable LOGGED to C:\ASCOMInstallLog.txt
 Comment: Set Variable NATIVE_LOGGING to TRUE
+ 
+Comment: Suppress Installaware branding
+Set Variable MYAHLOGO to TRUE
+ 
 Set Variable PROGRAMDATA to 
 Set Variable VSIENTRY to 
 Set Variable VSIXENTRY to 
@@ -92,6 +96,7 @@ Define Component: Developer Components\Visual Studio Driver Templates
 Comment: Test whether VS is installed by seeing whether the >VSI extention is mapped to the content installer. If not then ignore!
 Read Registry Key HKCR\.vsi\ into VSIENTRY
 Read Registry Key HKCR\.vsix\ into VSIXENTRY
+Select Component: Developer Components\Visual Studio Driver Templates
 if Variable VSIXENTRY Equals 
   if Variable VSIENTRY Equals 
     Deselect Component: Developer Components\Visual Studio Driver Templates

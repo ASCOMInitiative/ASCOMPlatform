@@ -1,5 +1,8 @@
 Comment: ASCOM Platform installation script
  
+Comment: Suppress Installaware branding
+Set Variable MYAHLOGO to TRUE
+ 
 [DEFINE REGION: Set up log file and display checking for pre-requisites dialogue.]
 Comment: Define variables, create the directory and log file name.
 Set Variable SETUPLOG to 
