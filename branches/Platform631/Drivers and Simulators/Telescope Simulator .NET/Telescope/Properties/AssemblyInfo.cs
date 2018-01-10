@@ -23,5 +23,5 @@ using System.Resources;
 //[assembly: ASCOM.ServedClassName("Telescope Simulator for .NET")]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.2.0.0")]
+[assembly: AssemblyVersion("6.3.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en")]

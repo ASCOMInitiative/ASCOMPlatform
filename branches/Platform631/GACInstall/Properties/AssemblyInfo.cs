@@ -20,4 +20,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("fc0404ba-bf0d-4faf-bdd7-b7f1aa1f015d")]
 
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.2.0.0")]
+[assembly: AssemblyVersion("6.3.0.0")]
