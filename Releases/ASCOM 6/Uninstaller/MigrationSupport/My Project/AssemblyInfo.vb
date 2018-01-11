@@ -31,7 +31,7 @@ Imports System.Runtime.CompilerServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("6.3.0.0")>
+<Assembly: AssemblyVersion("6.4.0.0")>
 
 'Permissions for particular assemblies to access internal "Friend" variables and methods of this assembly
 <Assembly: InternalsVisibleToAttribute("UninstallAscom, PublicKey= " + _
