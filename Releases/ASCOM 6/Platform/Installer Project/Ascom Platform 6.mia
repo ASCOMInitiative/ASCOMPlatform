@@ -1,5 +1,7 @@
 Comment
 Comment
+Comment
+Comment
 Set Variable
 Set 64 Bit Mode
 Comment
@@ -1529,7 +1531,9 @@ Code Folding Region
 Comment
 $
 {A0BF7AED-96C7-4B31-B1FC-DFCB5A0CFB07}
+{39EB71ED-7656-4050-AC68-84D640571E11}
 {26CF807C-D540-4DDB-B958-1139C253CD95}
+{317F2C14-A304-4836-BB90-F62A4B4ED822}
 {46665F92-517E-4C33-9D33-6C2DC892982B}
 {A7BE6AF6-EEDD-4A91-96CF-7C3F72B48A5E}
 {C5641E13-7142-4898-9D42-F15B9F3A1C7A}
@@ -3263,7 +3267,7 @@ Define variables, create the directory and log file name.
 {C5641E13-7142-4898-9D42-F15B9F3A1C7A}
 
 {A0BF7AED-96C7-4B31-B1FC-DFCB5A0CFB07}
-ASCOM Platform installation script - the installer must be started in 32bit MSI mode
+ASCOM Platform installation script
 {68EA601C-9307-441F-A03F-D2C0B968297B}
 If Framework 4 is missing then we don't need a message about 3.5 as well!
 {DDEBC1D4-92C6-4B1D-A36B-A9F4F03B1961}
@@ -3516,6 +3520,10 @@ Unregister MasterInterfaces TypeLib
 
 {B821D45A-314F-4A4A-852D-1C98BB5BE6B5}
 Remove 32bit components
+{39EB71ED-7656-4050-AC68-84D640571E11}
+NOTE: The required Platform version number is read at build time by this script from the MasterPlatformVersion.txt file that is maintained through the main Visual Studio project
+{317F2C14-A304-4836-BB90-F62A4B4ED822}
+The installer must be started in 32bit MSI mode
 {A4096648-40D6-4817-81BA-DE0AD4949DE5}
 SHORTCUTFOLDER$MYAH$MYAH$FALSE
 $SHORTCUTFILESALL$$ASCOMSTARTMENU$
@@ -10799,6 +10807,8 @@ $
 
 
 
+
+
 C
 
 
@@ -12033,6 +12043,8 @@ C
 
 
 $
+
+
 
 
 
