@@ -137,6 +137,11 @@ Get Folder Location WWW->WWWRoot into WWWROOTDIR
 Get Folder Location System->Profiles Directory into USERPROFILE
  
 [END REGION]
+ 
+Comment: Set install directory and start menu folder
+Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6 Developer Components
+Set Variable STARTMENU to ASCOM Platform 6
+ 
 Comment: Create the start of the installation log
 Write into Text File $SETUPLOG$ from Value $TITLE$ v$VERSION$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Installed $DATE$ $TIME$ (at end of file)
@@ -166,11 +171,9 @@ Write into Text File $SETUPLOG$ from Value ShortcutFilesAll: $SHORTCUTFILESALL$ 
 Write into Text File $SETUPLOG$ from Value DesktopDir: $DESKTOPDIR$ (at end of file)
 Write into Text File $SETUPLOG$ from Value AllUsers: $ALLUSERS$ (at end of file)
 Write into Text File $SETUPLOG$ from Value Target Directory: $TARGETDIR$ (at end of file)
+Write into Text File $SETUPLOG$ from Value Start Menu Directory: $STARTMENU$ (at end of file)
 Write into Text File $SETUPLOG$ from Value  (at end of file)
  
-Comment: Set install directory and start menu folder
-Set Variable TARGETDIR to $PROGRAMFILES$ASCOM\Platform 6 Developer Components
-Set Variable STARTMENU to ASCOM Platform 6
 Set Variable MYPROGRESS to 5
  
 [DEFINE REGION: Setup User Interview]
