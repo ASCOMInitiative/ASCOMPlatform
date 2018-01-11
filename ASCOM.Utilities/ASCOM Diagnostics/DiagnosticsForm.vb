@@ -4756,7 +4756,8 @@ Public Class DiagnosticsForm
             Compare("UtilTests", "IsMinimumRequiredVersion 6.1", Utl.IsMinimumRequiredVersion(6, 1).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.2", Utl.IsMinimumRequiredVersion(6, 2).ToString, "True")
             Compare("UtilTests", "IsMinimumRequiredVersion 6.3", Utl.IsMinimumRequiredVersion(6, 3).ToString, "True")
-            Compare("UtilTests", "IsMinimumRequiredVersion 6.4", Utl.IsMinimumRequiredVersion(6, 4).ToString, "False")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.4", Utl.IsMinimumRequiredVersion(6, 4).ToString, "True")
+            Compare("UtilTests", "IsMinimumRequiredVersion 6.5", Utl.IsMinimumRequiredVersion(6, 5).ToString, "False")
 
             ' Check that the platform version properties return the correct values
             MyVersion = New Version(Application.ProductVersion) ' Get this assembly's version number against which to compare the Util version numbers
