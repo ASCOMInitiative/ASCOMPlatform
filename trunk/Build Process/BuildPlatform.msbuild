@@ -18,7 +18,7 @@
         <MIABuild>miabuild.exe</MIABuild>
 
         <!-- Names and locations of solution and project files used by this build script-->
-        <PlatformVSSolution>ASCOM Platform VS2010.sln</PlatformVSSolution>
+        <PlatformVSSolution>ASCOM Platform.sln</PlatformVSSolution>
         <PlatformHelpProject>Help\ASCOMPlatform.shfbproj</PlatformHelpProject>
         <DeveloperHelpProject>Help\ASCOMDeveloper.shfbproj</DeveloperHelpProject>
         <PlatformHelpDirectory>Help\Output\Platform</PlatformHelpDirectory>
