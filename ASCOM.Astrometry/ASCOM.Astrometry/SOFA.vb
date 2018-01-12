@@ -1564,8 +1564,8 @@ Namespace SOFA
         ''' <param name="lpFileName">Full path to the file to load</param>
         ''' <returns>A pointer to the loaded DLL image</returns>
         ''' <remarks>This is a wrapper for the Windows kernel32 function LoadLibraryA</remarks>
-        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="LoadLibraryA")> _
-        Public Shared Function LoadLibrary(ByVal lpFileName As String) As IntPtr
+        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="LoadLibraryA")>
+        Private Shared Function LoadLibrary(ByVal lpFileName As String) As IntPtr
         End Function
 
         ''' <summary>
@@ -1574,8 +1574,8 @@ Namespace SOFA
         ''' <param name="hModule">Pointer to the loaded library returned by the LoadLibrary function.</param>
         ''' <returns>True or false depending on whether the library was released.</returns>
         ''' <remarks></remarks>
-        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="FreeLibrary")> _
-        Public Shared Function FreeLibrary(ByVal hModule As IntPtr) As Boolean
+        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="FreeLibrary")>
+        Private Shared Function FreeLibrary(ByVal hModule As IntPtr) As Boolean
         End Function
 
         ''' <summary>
