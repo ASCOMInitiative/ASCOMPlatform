@@ -19,16 +19,22 @@
     <HtmlHelpName>PlatformHelp</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\ASCOM.DeviceInterface\ASCOM.DeviceInterface.vbproj" />
-<DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
-<DocumentationSource sourceFile="..\Interfaces\ASCOMExceptions\ASCOM.Exceptions.csproj" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\ASCOM.Utilities\ASCOM.Utilities\NamespaceDocumentation.xml" />
+    </DocumentationSources>
     <HelpTitle>ASCOM Platform Help</HelpTitle>
     <CopyrightText>Copyright &amp;#169%3b 2010-18, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="ASCOM" isExposed="False" />
-      <Filter entryType="Namespace" fullName="System" isExposed="True">
-        <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
-      </Filter>
-    </ApiFilter>
+      <Filter entryType="Namespace" fullName="ASCOM" isExposed="True">
+  <Filter entryType="Class" fullName="ASCOM.ActionNotImplementedException" filterName="ActionNotImplementedException" isExposed="False" />
+  <Filter entryType="Class" fullName="ASCOM.DriverAccessCOMException" filterName="DriverAccessCOMException" isExposed="False" />
+  <Filter entryType="Class" fullName="ASCOM.NotConnectedException" filterName="NotConnectedException" isExposed="False" />
+  <Filter entryType="Class" fullName="ASCOM.ParkedException" filterName="ParkedException" isExposed="False" />
+  <Filter entryType="Class" fullName="ASCOM.SlavedException" filterName="SlavedException" isExposed="False" />
+  <Filter entryType="Class" fullName="ASCOM.ValueNotSetException" filterName="ValueNotSetException" isExposed="False" />
+</Filter>
+<Filter entryType="Namespace" fullName="System" isExposed="True">
+  <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
+</Filter></ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
@@ -53,6 +59,13 @@
     <ProjectSummary>ASCOM Platform Documentation</ProjectSummary>
     <ShowFeedbackControl>True</ShowFeedbackControl>
     <PlugInConfigurations>
+      <PlugInConfig id="Additional Reference Links" enabled="True">
+        <configuration>
+          <targets>
+            <target htmlSdkLinkType="None" helpViewerSdkLinkType="Id" websiteSdkLinkType="None" helpFileProject="ASCOMPlatformReferences.shfbproj" />
+          </targets>
+        </configuration>
+      </PlugInConfig>
     </PlugInConfigurations>
     <FeedbackEMailAddress>
     </FeedbackEMailAddress>
@@ -64,18 +77,22 @@
       <NamespaceSummaryItem name="ASCOM.HelperNET.VB6HelperSupport" isDocumented="False" xmlns="" />
     </NamespaceSummaries>
     <SdkLinkType>Msdn</SdkLinkType>
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 3.5</FrameworkVersion>
     <KeepLogFile>True</KeepLogFile>
     <MSHelpViewerSdkLinkType>None</MSHelpViewerSdkLinkType>
     <SyntaxFilters>C#, Visual Basic, Managed C++</SyntaxFilters>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <CollectionTocStyle>Flat</CollectionTocStyle>
     <MaximumGroupParts>2</MaximumGroupParts>
-    <NamespaceGrouping>True</NamespaceGrouping>
+    <NamespaceGrouping>False</NamespaceGrouping>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <Language>en-US</Language>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
+    <SaveComponentCacheCapacity>0</SaveComponentCacheCapacity>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <IndentHtml>False</IndentHtml>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
