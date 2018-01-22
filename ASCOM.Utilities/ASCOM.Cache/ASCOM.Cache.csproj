@@ -91,6 +91,7 @@
     <ProjectReference Include="..\ASCOM.Utilities\ASCOM.Utilities.vbproj">
       <Project>{c9bf0a8b-594f-4ab9-938a-edc8448d8520}</Project>
       <Name>ASCOM.Utilities</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
