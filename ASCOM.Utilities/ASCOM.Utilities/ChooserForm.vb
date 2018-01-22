@@ -170,6 +170,7 @@ Friend Class ChooserForm
             MenuDriverAccessTraceEnabled.Checked = GetBool(DRIVERACCESS_TRACE, DRIVERACCESS_TRACE_DEFAULT)
             MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
             MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
+            MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
         End Using
     End Sub
 
@@ -471,6 +472,11 @@ Friend Class ChooserForm
         SetName(SIMULATOR_TRACE, MenuSimulatorTraceEnabled.Checked.ToString)
     End Sub
 
+    Private Sub MenuCacheTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuCacheTraceEnabled.Click
+        MenuCacheTraceEnabled.Checked = Not MenuCacheTraceEnabled.Checked 'Invert selection
+        SetName(TRACE_CACHE, MenuCacheTraceEnabled.Checked.ToString)
+    End Sub
+
     Private Sub MenuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTrace.DropDownOpening
         RefreshTraceMenu()
     End Sub
@@ -489,4 +495,5 @@ Friend Class ChooserForm
         MenuNovasTraceEnabled.Checked = Not MenuNovasTraceEnabled.Checked 'Invert selection
         SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
     End Sub
+
 End Class

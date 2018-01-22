@@ -31,6 +31,7 @@ Module GlobalConstants
     ' Trace settings values, these are used to persist trace values on a per user basis
     Friend Const TRACE_TRANSFORM As String = "Trace Transform", TRACE_TRANSFORM_DEFAULT As Boolean = False
     Friend Const REGISTRY_UTILITIES_FOLDER As String = "Software\ASCOM\Utilities"
+    Friend Const TRACE_CACHE As String = "Trace Cache", TRACE_CACHE_DEFAULT As Boolean = False
 
     'Settings for the ASCOM Windows event log
     Friend Const EVENT_SOURCE As String = "ASCOM Platform" 'Name of the the event source

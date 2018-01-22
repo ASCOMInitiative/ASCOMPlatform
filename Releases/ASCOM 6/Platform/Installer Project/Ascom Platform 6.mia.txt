@@ -511,6 +511,7 @@ if Variable REMOVE Equals TRUE
   Comment: Remove 64bit native images and 64bit component COM registration if necessary
   if Variable WIN64MODE Equals TRUE
     Set x64 - Native 64 bit Windows, AMD64 and EM64T Architectures - installation mode
+    Comment: Remove 64bit native images
     Set Variable MYPROGRESS to 40
     Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Utilities.Video
     Run Program $NGEN64$ uninstall "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
@@ -534,7 +535,12 @@ if Variable REMOVE Equals TRUE
     Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Exceptions
     Run Program $NGEN64$ uninstall "ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Remove ASCOM.Exceptions 6.0.0.0 (at end of file)
+    Set Variable PROGRESSTEXT to Removing 64bit native images - ASCOM.Cache
+    Run Program $NGEN64$ uninstall "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Remove ASCOM.Cache 6.0.0.0 (at end of file)
     Set Variable MYPROGRESS to 50
+     
+    Comment: Unregister 64bit components
     Set Variable PROGRESSTEXT to Unregistering 64bit COM component - ASCOM.Astrometry
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Astrometry.dll" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm ASCOM.Unregister ASCOM.Astrometry 6.0.0.0 (at end of file)
@@ -544,7 +550,12 @@ if Variable REMOVE Equals TRUE
     Set Variable PROGRESSTEXT to Unregistering 64bit COM component - ASCOM.Utilities
     Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm Unregister ASCOM.Utilities 6.0.0.0 (at end of file)
-    Set Variable PROGRESSTEXT to Unregistering 64bit COM component - ASCOM.DeviceInterfaces
+    Set Variable PROGRESSTEXT to Unregistering 64bit COM component - ASCOM.Utilities.Video
+    Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm Unregister ASCOM.Utilities.Video 6.1.0.0 (at end of file)
+    Set Variable PROGRESSTEXT to Unregistering 64bit COM component - ASCOM.Cache
+    Run Program $REGASM64$ /unregister "$COMMONFILES$\ASCOM\Platform\v6.4\ASCOM.Cache.dll" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm Unregister ASCOM.Cache 6.0.0.0 (at end of file)
     Set Win32 - Native 32 bit Windows and Windows 32 on Windows 64 (WOW64) - installation mode
   end
    
@@ -586,6 +597,9 @@ if Variable REMOVE Equals TRUE
   Set Variable PROGRESSTEXT to Removing 32bit native images - DirectShowLib-2005
   Run Program $NGEN32$ uninstall "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
   Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Remove DirectShowLib 2.1.0.15637 (at end of file)
+  Set Variable PROGRESSTEXT to Removing 32bit native images - ASCOM.Cache
+  Run Program $NGEN32$ uninstall "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+  Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Remove ASCOM.Cache 6.0.0.0 (at end of file)
    
   Set Variable PROGRESSTEXT to Removing ASCOM.Exceptions 1.0 policy
   Run Program $COMMONFILES$\ASCOM\Platform\Internal\ASCOM.Internal.GACInstall.exe /u policy.1.0.ASCOM.Exceptions", startup in folder $COMMONFILES$\ASCOM\Platform\v6.0 (WAIT, get result into variable GACINSTALLRC)
@@ -639,6 +653,8 @@ if Variable REMOVE Equals TRUE
   Unregister assembly ASCOM.Utilities, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7
   Set Variable PROGRESSTEXT to Unregistering ASCOM.Utilities 6.0.0.0
   Unregister assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+  Set Variable PROGRESSTEXT to Unregistering ASCOM.Cache 6.0.0.0
+  Unregister assembly ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
    
   Comment: Unregister MasterInterfaces TypeLib
   Set Variable PROGRESSTEXT to Unregistering ASCOM Master Interfaces Typelib
@@ -986,6 +1002,12 @@ if Variable REMOVE not Equals TRUE
   Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
   [END REGION]
    
+  [DEFINE REGION: ASCOM Cache]
+  Install Assembly ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to Global Assembly Cache
+  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.pdb to $WINDIR$\Symbols\dll
+  Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $COMMONFILES$\ASCOM\Platform\v6.4
+  [END REGION]
+   
   [DEFINE REGION: Platform 6 Content]
   Comment: Platform 6 Documents
   Install Files ..\Files\Help.ico to $COMMONFILES$\ASCOM\Platform
@@ -1302,8 +1324,10 @@ if Variable REMOVE not Equals TRUE
     Register assembly ASCOM.Exceptions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
     Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 6.0.0.0
     Register assembly ASCOM.Utilities, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
-    Set Variable PROGRESSTEXT to Registering ASCOM.Utilities 6.1.0.0
+    Set Variable PROGRESSTEXT to Registering ASCOM.Utilities.Video 6.1.0.0
     Register assembly ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
+    Set Variable PROGRESSTEXT to Registering ASCOM.Cache 6.0.0.0
+    Register assembly ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7
      
     Comment: Register in-process simulator DLL files with Codebase option
     Set Variable PROGRESSTEXT to Registering Platform 6 Camera simulator
@@ -1376,6 +1400,9 @@ if Variable REMOVE not Equals TRUE
     Set Variable PROGRESSTEXT to Creating 32bit native images - DirectShowLib-2005
     Run Program $NGEN32$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
     Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - DirectShowLib 2.1 (at end of file)
+    Set Variable PROGRESSTEXT to Creating 32bit native images - ASCOM.Cache
+    Run Program $NGEN32$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+    Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen32 Install - ASCOM Cache (at end of file)
      
     [DEFINE REGION: Extra activities if on a 64bit system]
     Comment: Extra registration of 64bit components if on 64bit system
@@ -1392,17 +1419,22 @@ if Variable REMOVE not Equals TRUE
       Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Exceptions.dll" (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Exceptions (at end of file)
       if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Astrometry assembly for 64bit operation. RC: $RC$
+        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Exceptions assembly for 64bit operation. RC: $RC$
       end
       Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6\ASCOM.Utilities.dll" (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Utilities (at end of file)
       if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Astrometry assembly for 64bit operation. RC: $RC$
+        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilities assembly for 64bit operation. RC: $RC$
       end
       Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.1\ASCOM.Utilities.Video.dll" (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - Video Utilities (at end of file)
       if Variable RC not Equals 0
-        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Astrometry assembly for 64bit operation. RC: $RC$
+        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Utilites.Video assembly for 64bit operation. RC: $RC$
+      end
+      Run Program $REGASM64$ "$COMMONFILES$\ASCOM\Platform\v6.4\ASCOM.Cache.dll" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ RegAsm64 - ASCOM Cache (at end of file)
+      if Variable RC not Equals 0
+        MessageBalloon: RegAsm 64, Unable to register the ASCOM.Cache assembly for 64bit operation. RC: $RC$
       end
       Set Variable MYPROGRESS to 77
        
@@ -1438,6 +1470,8 @@ if Variable REMOVE not Equals TRUE
       if Variable RC not Equals 0
         MessageBalloon: RegAsm 64, Unable to register the ASCOM.Astrometry assembly for 64bit operation. RC: $RC$
       end
+       
+      Comment: Create 64bit native images
       Set Variable MYPROGRESS to 80
       Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.DeviceInterfaces
       Run Program $NGEN64$ "ASCOM.DeviceInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
@@ -1457,16 +1491,19 @@ if Variable REMOVE not Equals TRUE
       Run Program $NGEN64$ "ASCOM.Utilities.Video, Version=6.1.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Video Utilities (at end of file)
       Set Variable MYPROGRESS to 95
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - 5.5.6
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - 5.5.6.0
       Run Program $NGEN64$ "ASCOM.Astrometry, Version=5.5.6.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 5.5.6 (at end of file)
       Set Variable MYPROGRESS to 97
-      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - 6.0.0
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Astrometry - 6.0.0.0
       Run Program $NGEN64$ "ASCOM.Astrometry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - Astrometry 6 (at end of file)
       Set Variable PROGRESSTEXT to Creating 64bit native images - DirectShowLib-2005
       Run Program $NGEN64$ "DirectShowLib-2005, Version=2.1.0.15637, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f" (WAIT, get result into variable RC)
       Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - DirectShowLib (at end of file)
+      Set Variable PROGRESSTEXT to Creating 64bit native images - ASCOM.Cache
+      Run Program $NGEN64$ "ASCOM.Cache, Version=6.0.0.0, Culture=neutral, PublicKeyToken=565de7938946fba7" (WAIT, get result into variable RC)
+      Write into Text File $SETUPLOG$ from Value $TIME$ RC: $RC$ NGen64 Install - ASCOM Cache (at end of file)
       Set Variable MYPROGRESS to 99
        
       Comment: Install additional Platform 5.5 files on 64 bit systems to make sure old 64bit mode driver installers continue to work

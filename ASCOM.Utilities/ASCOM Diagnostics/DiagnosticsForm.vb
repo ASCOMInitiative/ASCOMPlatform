@@ -14,6 +14,7 @@ Imports System.Runtime.InteropServices
 Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Threading
+Imports System.Text
 
 Public Class DiagnosticsForm
 
@@ -136,6 +137,7 @@ Public Class DiagnosticsForm
         Const TestUtilities As Boolean = True
         Const TestAstrometry As Boolean = True
         Const TestSimulators As Boolean = True
+        Const TestCache As Boolean = True
 
         Try
             Status("Diagnostics running...")
@@ -169,6 +171,13 @@ Public Class DiagnosticsForm
                                             " " & CultureInfo.CurrentUICulture.Name &
                                             " Decimal Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator & """" &
                                             " Number Group Separator """ & CultureInfo.CurrentUICulture.NumberFormat.NumberGroupSeparator & """")
+            If RunningInVM(False) Then
+                TL.LogMessage("Environment", "Diagnostics is running in a virtual machine")
+
+            Else
+                TL.LogMessage("Environment", "Diagnostics is running on a real PC")
+            End If
+
             TL.BlankLine()
 
             LastLogFile = TL.LogFileName
@@ -358,6 +367,15 @@ Public Class DiagnosticsForm
                         LogException("VideoUtilsTests", ex.ToString)
                     End Try
                 End If
+
+                If TestCache Then
+                    Try
+                        CacheTests() : Action("")
+                    Catch ex As Exception
+                        LogException("CacheTests", ex.ToString)
+                    End Try
+                End If
+
                 If TestAstrometry Then
                     Try
                         NovasComTests() : Action("")
@@ -4327,6 +4345,19 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
+    Private Sub CompareString(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As String, ByVal p_Orig As String)
+        Dim ErrMsg As String
+        If p_New = p_Orig Then
+            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & p_New)
+            NMatches += 1
+        Else
+            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: """ & p_New & """, Expected: """ & p_Orig & """"
+            TL.LogMessageCrLf(p_Section, ErrMsg)
+            NNonMatches += 1
+            ErrorList.Add(p_Section & " - " & ErrMsg)
+        End If
+    End Sub
+
     Private Sub CompareLongInteger(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Int64, ByVal p_Orig As Int64)
         Dim ErrMsg As String
         If p_New = p_Orig Then
@@ -4711,6 +4742,285 @@ Public Class DiagnosticsForm
         Next
 
         Return sum
+    End Function
+
+    Sub CacheTests()
+        If CacheTest("CacheTest", False) Then CacheTest("CacheTestLogged", True)
+    End Sub
+
+    Function CacheTest(TestName As String, LogCache As Boolean) As Boolean
+        Dim cache As Cache, returnDouble As Double, returnInt As Integer, returnBool As Boolean, returnString As String, inputObject, returnObject As KeyValuePair
+        Dim removedItemCount As Integer, errorOccured As Boolean = False, throttleLowerBound, throttleUpperBound As Integer
+
+        Const THROTTLE_TEST_LOWER_BOUND_NORMAL As Integer = 4900 ' Limits for real PCs
+        Const THROTTLE_TEST_UPPER_BOUND_NORMAL As Integer = 5100
+        Const THROTTLE_TEST_LOWER_BOUND_WIDE As Integer = 4000 ' Limits for virtual machine tests
+        Const THROTTLE_TEST_UPPER_BOUND_WIDE As Integer = 6000
+
+        Const NUMBER_OF_CLEAR_CACHE_ITEMS As Integer = 1000
+        Const NUMBER_OF_THROTTLING_TEST_LOOPS As Integer = 10 ' 10 loops = 5 seconds
+
+        Const testInt As Integer = 23, intKey As String = "IntKey"
+        Const testDouble As Double = 45.639, doubleKey As String = "DoubleKey"
+        Const testBool As Boolean = True, boolKey As String = "BoolKey"
+        Const testString As String = "Cache test string.", stringKey As String = "StringKey"
+        Const testObjectKey As String = "TestKey23", testObjectValue As String = "TestValue23"
+
+        Status("Running Cache functional tests")
+
+        ' Test cached doubles
+        cache = Nothing
+        Try
+            cache = New Cache(IIf(LogCache, TL, Nothing))
+
+            ' Set appropriate timing limts depending on whether or not we are running in a VM
+            ' VM limits are wider because VMWare seems to loose time when threads are slept without pumping events. 
+            ' This approach is needed simply to avoid spurious failures when Diagnostics is run in VM test environments
+            If RunningInVM(True) Then
+                throttleLowerBound = THROTTLE_TEST_LOWER_BOUND_WIDE
+                throttleUpperBound = THROTTLE_TEST_UPPER_BOUND_WIDE
+            Else
+                throttleLowerBound = THROTTLE_TEST_LOWER_BOUND_NORMAL
+                throttleUpperBound = THROTTLE_TEST_UPPER_BOUND_NORMAL
+            End If
+            Try
+                Action("Test Doubles")
+                cache.SetDouble(doubleKey, testDouble, 0.1) ' Set a value with a 100ms lifetime
+                returnDouble = cache.GetDouble(doubleKey)
+                CompareDouble(TestName, "Get Double", returnDouble, testDouble, TOLERANCE_E6)
+            Catch ex As Exception
+                LogException(TestName, "Error getting double value: " & ex.ToString())
+                errorOccured = True
+            End Try
+            Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
+            Try
+                returnDouble = cache.GetDouble(doubleKey)
+            Catch ex As NotInCacheException
+                NMatches += 1
+                TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired double value.")
+            Catch ex As Exception
+                LogException(TestName, "Error getting expired double value: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test cached int
+            Try
+                Action("Test Integers")
+                cache.SetInt(intKey, testInt, 0.1) ' Set a value with a 100ms lifetime
+                returnInt = cache.GetInt(intKey)
+                CompareInteger(TestName, "Get Int", returnInt, testInt)
+            Catch ex As Exception
+                LogException(TestName, "Error getting int value: " & ex.ToString())
+                errorOccured = True
+            End Try
+            Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
+            Try
+                returnInt = cache.GetInt(intKey)
+            Catch ex As NotInCacheException
+                NMatches += 1
+                TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired int value.")
+            Catch ex As Exception
+                LogException(TestName, "Error getting expired int value: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test cached bool
+            Try
+                Action("Test Booleans")
+                cache.SetBool(boolKey, testBool, 0.1) ' Set a value with a 100ms lifetime
+                returnBool = cache.GetBool(boolKey)
+                CompareBoolean(TestName, "Get Int", returnBool, testBool)
+            Catch ex As Exception
+                LogException(TestName, "Error getting boolean value: " & ex.ToString())
+                errorOccured = True
+            End Try
+            Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
+            Try
+                returnBool = cache.GetBool(boolKey)
+            Catch ex As NotInCacheException
+                NMatches += 1
+                TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired boolean value.")
+            Catch ex As Exception
+                LogException(TestName, "Error getting expired boolean value: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test cached string
+            Try
+                Action("Test Strings")
+                cache.SetString(stringKey, testString, 0.1) ' Set a value with a 100ms lifetime
+                returnString = cache.GetString(stringKey)
+                CompareString(TestName, "Get String", returnString, testString)
+            Catch ex As Exception
+                LogException(TestName, "Error getting string value: " & ex.ToString())
+                errorOccured = True
+            End Try
+            Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
+            Try
+                returnString = cache.GetString(stringKey)
+            Catch ex As NotInCacheException
+                NMatches += 1
+                TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired string value.")
+            Catch ex As Exception
+                LogException(TestName, "Exception getting expired string value: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test cached object
+            Try
+                Action("Test Objects")
+                inputObject = New KeyValuePair() ' Create a test KeyValuePair oject
+                inputObject.Key = testObjectKey
+                inputObject.Value = testObjectValue
+
+                cache.Set(testObjectKey, inputObject, 0.1) ' Set a value with a 100ms lifetime
+                returnObject = cache.Get(testObjectKey)
+
+                CompareString(TestName, "Get Object Key", returnObject.Key, testObjectKey)
+                CompareString(TestName, "Get Object Value", returnObject.Value, testObjectValue)
+            Catch ex As Exception
+                LogException(TestName, "Error getting object: " & ex.ToString())
+                errorOccured = True
+            End Try
+            Thread.Sleep(150) ' Now wait until the value has timed out and been removed from the cache then test again to make sure an exception is generated
+            Try
+                returnObject = cache.Get(testObjectKey)
+            Catch ex As NotInCacheException
+                NMatches += 1
+                TL.LogMessage(TestName, "InvalidOperationException thrown as expected for expired object.")
+            Catch ex As Exception
+                LogException(TestName, "Exception getting expired object: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test throttling without pumped events
+            Try
+                cache.SetDouble(doubleKey, testDouble, 100.0) ' Set a value with a 100 second lifetime, so it doesn't time out within the text
+                cache.PumpMessagesInterval = 0
+                returnDouble = cache.GetDouble(doubleKey) ' Do a first get outside the loop so that all subsequqnt gets will be throttled 
+
+                ' Make 10 calls that should be limited to 2 calls per second, i.e. the overall test should take about 5 seconds
+                sw.Restart()
+                For i = 1 To NUMBER_OF_THROTTLING_TEST_LOOPS
+                    Action("Test Throttling without pumped events " & i & "/" & NUMBER_OF_THROTTLING_TEST_LOOPS)
+                    returnDouble = cache.GetDouble(doubleKey, 2.0) ' Get the value with a maximum rate of 2 calls per second
+                Next
+                sw.Stop()
+
+                If ((sw.ElapsedMilliseconds > THROTTLE_TEST_LOWER_BOUND_NORMAL) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("Cache throttling timing: {0} milliseconds is inside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
+                Else ' Outside the range so log an error
+                    LogError(TestName, String.Format("Cache throttling timing: {0} milliseconds is outside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
+                End If
+            Catch ex As Exception
+                LogException(TestName, "Exception testing throttling without pumped events: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test throttling with pumped events
+            Try
+                cache.SetDouble(doubleKey, testDouble, 100.0) ' Set a value with a 100 second lifetime, so it doesn't time out within the text
+                cache.PumpMessagesInterval = 20
+                returnDouble = cache.GetDouble(doubleKey) ' Do a first get outside the loop so that all subsequqnt gets will be throttled 
+
+                ' Make 10 calls that should be limited to 2 calls per second, i.e. the overall test should take about 5 seconds
+                sw.Restart()
+                For i = 1 To NUMBER_OF_THROTTLING_TEST_LOOPS
+                    Action("Test Throttling with pumped events " & i & "/" & NUMBER_OF_THROTTLING_TEST_LOOPS)
+                    returnDouble = cache.GetDouble(doubleKey, 2.0) ' Get the value with a maximum rate of 2 calls per second
+                Next
+                sw.Stop()
+
+                If ((sw.ElapsedMilliseconds > THROTTLE_TEST_LOWER_BOUND_NORMAL) And (sw.ElapsedMilliseconds < throttleUpperBound)) Then ' elapsed time is within +-10% of expected 5 seconds
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("Cache throttling timing (with event pumping ): {0} milliseconds is inside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
+                Else ' Outside the range so log an error
+                    LogError(TestName, String.Format("Cache throttling timing (with event pumping): {0} milliseconds is outside the expected range of {1} to {2} milliseconds", sw.ElapsedMilliseconds, throttleLowerBound, throttleUpperBound))
+                End If
+            Catch ex As Exception
+                LogException(TestName, "Exception testing throttling with pumped events: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test cache item removal
+            Try
+                cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
+                Action("Test item removal")
+                cache.SetInt(intKey, testInt, 0.1) ' Set a value with a 100ms lifetime
+                returnInt = cache.GetInt(intKey) ' Check that it is there
+                CompareInteger(TestName, "Get Int", returnInt, testInt)
+
+                ' Now remove the item and check that it is gone
+                cache.Remove(intKey)
+                Try
+                    returnInt = cache.GetInt(intKey)
+                Catch ex As NotInCacheException
+                    NMatches += 1
+                    TL.LogMessage(TestName, "InvalidOperationException thrown as expected for removed int value.")
+                End Try
+            Catch ex As Exception
+                LogException(TestName, "Error getting or removing item: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+            ' Test clearing of entire cache
+
+            Try
+                cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
+                Action("Clear cache - Populating cache")
+                sw.Restart()
+                For i = 1 To NUMBER_OF_CLEAR_CACHE_ITEMS ' Create 100 entries in the cache
+                    cache.SetInt(intKey & i, testInt, 10.0) ' Set values with a 10s lifetime
+                Next
+                sw.Stop()
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("Cache populated {0} items in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
+
+                ' Check that all can be read
+                Action("Clear cache - Reading items")
+                sw.Restart()
+                For i = 1 To NUMBER_OF_CLEAR_CACHE_ITEMS
+                    returnInt = cache.GetInt(intKey & i) ' Check that it is there
+                Next
+                sw.Stop()
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("Cache read back {0} items OK in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
+
+                ' Now clear the cache and check that all values are gone
+                Action("Clear cache - clearing cache")
+                sw.Restart()
+                cache.ClearCache()
+                sw.Stop()
+                NMatches += 1
+                TL.LogMessage(TestName, String.Format("Cache cleared of {0} items in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
+
+                Action("Clear cache - Confirming cache is empty")
+                removedItemCount = 0
+                sw.Restart()
+                For i = 1 To NUMBER_OF_CLEAR_CACHE_ITEMS
+                    Try
+                        returnInt = cache.GetInt(intKey)
+                    Catch ex As NotInCacheException
+                        removedItemCount += 1
+                    End Try
+                Next
+                sw.Stop()
+
+                CompareInteger(TestName, "Clear cache", removedItemCount, NUMBER_OF_CLEAR_CACHE_ITEMS)
+                TL.LogMessage(TestName, String.Format("Checked {0} items not present in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
+            Catch ex As Exception
+                LogException(TestName, "Error getting or removing item: " & ex.ToString())
+                errorOccured = True
+            End Try
+        Catch ex1 As Exception
+            LogException(TestName, "Error creating ASCOM Cache, further cache testing abandoned! " & ex1.ToString())
+            errorOccured = True
+        End Try
+
+        TL.BlankLine()
+
+        Return errorOccured
     End Function
 
     Sub UtilTests()
@@ -7483,6 +7793,7 @@ Public Class DiagnosticsForm
         MenuThrowAbandonedMutexExceptions.Checked = GetBool(ABANDONED_MUTEXT_TRACE, ABANDONED_MUTEX_TRACE_DEFAULT)
         MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
         MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
+        MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
 
         TypeOfWait = GetWaitType(SERIAL_WAIT_TYPE, SERIAL_WAIT_TYPE_DEFAULT)
 
@@ -7584,6 +7895,11 @@ Public Class DiagnosticsForm
         SetName(DRIVERACCESS_TRACE, MenuDriverAccessTraceEnabled.Checked.ToString)
     End Sub
 
+    Private Sub MenuCacheTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuCacheTraceEnabled.Click
+        MenuCacheTraceEnabled.Checked = Not MenuCacheTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_CACHE, MenuCacheTraceEnabled.Checked.ToString)
+    End Sub
+
     Private Sub MenuAstroUtilsTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuAstroUtilsTraceEnabled.Click
         MenuAstroUtilsTraceEnabled.Checked = Not MenuAstroUtilsTraceEnabled.Checked 'Invert the selection
         SetName(ASTROUTILS_TRACE, MenuAstroUtilsTraceEnabled.Checked.ToString)
@@ -7647,6 +7963,23 @@ Public Class DiagnosticsForm
         lblAction.Text = Msg
         Application.DoEvents()
     End Sub
+
+    Private Function RunningInVM(WriteToLog As Boolean) As Boolean
+        Dim cpuId1 As CpuID.CpuIdResult, ecxBytes As Byte()
+
+        ' The static CpuId class is located in the ASCOM.Cache component because it is written in C#
+        ' Bit 31 of the ECX register is set when running in a VM, so we retrieve the ECX register and return a test of bit 31
+
+        cpuId1 = CpuID.Invoke(1) ' Get leaf 1 of the CPUID information, where the virtualisation bit is stored in the ECX register
+        ecxBytes = BitConverter.GetBytes(cpuId1.Ecx) ' Extract the ECX register as a 4 byte array
+        If WriteToLog Then TL.LogMessage("RunningInVM", String.Format("Found ECX byte {0} = {1}", 3, Hex(ecxBytes(3))))
+
+        RunningInVM = (ecxBytes(3) And &H80) > 0 ' Set to true if top bit of ECX is set, otherwise false
+        If WriteToLog Then TL.LogMessage("RunningInVM", String.Format("Returning value: {0}", runningInVm))
+
+        Return runningInVm
+
+    End Function
 
 #End Region
 

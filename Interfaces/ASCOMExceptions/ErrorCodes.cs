@@ -67,9 +67,17 @@ namespace ASCOM
         public static readonly int InvalidOperationException = unchecked((int)0x8004040B);
 
         /// <summary>
-        /// Reserved error code (0x8004040C) to indicate that the requested operation can not be undertaken at this time.
+        /// Reserved error code (0x8004040C) to indicate that the requested action is not implemented in this driver.
         /// </summary>
         public static readonly int ActionNotImplementedException = unchecked((int)0x8004040C);
+
+        /// <summary>
+        /// Reserved error code (0x8004040D) to indicate that the requested item is not present in the ASCOM cache.
+        /// </summary>
+        /// <remarks>
+        /// The exception is defined in the ASCOM.Cache component rather than ASCOM.Exceptions.
+        /// </remarks>
+        public static readonly int NotInCacheException = unchecked((int)0x8004040D);
 
         /// <summary>
         /// Reserved 'catch-all' error code (0x800404FF) used when nothing else was specified.
