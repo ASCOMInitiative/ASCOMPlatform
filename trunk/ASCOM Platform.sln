@@ -2663,7 +2663,6 @@ Global
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.Debug|x86.Build.0 = Debug|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.MakeDynamicLists|Any CPU.ActiveCfg = Release|Any CPU
-		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.MakeDynamicLists|Any CPU.Build.0 = Release|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.MakeDynamicLists|Mixed Platforms.Build.0 = Release|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.MakeDynamicLists|Win32.ActiveCfg = Release|Any CPU
@@ -2673,7 +2672,6 @@ Global
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.MakeDynamicLists|x86.ActiveCfg = Release|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.MakeDynamicLists|x86.Build.0 = Release|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.Release 64bit|Any CPU.ActiveCfg = Release|Any CPU
-		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.Release 64bit|Any CPU.Build.0 = Release|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.Release 64bit|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.Release 64bit|Mixed Platforms.Build.0 = Release|Any CPU
 		{12B590FE-3199-4188-B9E2-D89EEFA50CE5}.Release 64bit|Win32.ActiveCfg = Release|Any CPU
@@ -2713,7 +2711,6 @@ Global
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.Debug|x86.Build.0 = Debug|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.MakeDynamicLists|Any CPU.ActiveCfg = Release|Any CPU
-		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.MakeDynamicLists|Any CPU.Build.0 = Release|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.MakeDynamicLists|Mixed Platforms.Build.0 = Release|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.MakeDynamicLists|Win32.ActiveCfg = Release|Any CPU
@@ -2723,7 +2720,6 @@ Global
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.MakeDynamicLists|x86.ActiveCfg = Release|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.MakeDynamicLists|x86.Build.0 = Release|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.Release 64bit|Any CPU.ActiveCfg = Release|Any CPU
-		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.Release 64bit|Any CPU.Build.0 = Release|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.Release 64bit|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.Release 64bit|Mixed Platforms.Build.0 = Release|Any CPU
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826}.Release 64bit|Win32.ActiveCfg = Release|Any CPU
@@ -2840,14 +2836,14 @@ Global
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
 	EndGlobalSection
 EndGlobal
