@@ -126,7 +126,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Private Sub btnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
+    Private Sub BtnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
         Dim ASCOMPath As String, ApplicationPath As String = "Path Not Set!"
         Dim PathShell As New System.Text.StringBuilder(260)
         Dim SuccessMessage As String
@@ -142,8 +142,9 @@ Public Class DiagnosticsForm
         Try
             Status("Diagnostics running...")
 
-            TL = New TraceLogger("", "Diagnostics")
-            TL.Enabled = True
+            TL = New TraceLogger("", "Diagnostics") With {
+                .Enabled = True
+            }
 
             btnExit.Enabled = False ' Disable buttons during run
             btnLastLog.Enabled = False
@@ -901,200 +902,216 @@ Public Class DiagnosticsForm
         DiagnosticsMajorMinorVersionNumber = DiagnosticsVersion.Major.ToString() & "." & DiagnosticsVersion.Minor.ToString()
         DiagnosticsMajorNumber = DiagnosticsVersion.Major.ToString()
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ASCOM.Simulator.Telescope"
-        Sim.Description = "Platform 6 Telescope Simulator"
-        Sim.DeviceType = "Telescope"
-        Sim.Name = "Simulator"
-        Sim.DriverVersion = DiagnosticsFullVersionNumber
-        Sim.InterfaceVersion = 3
-        Sim.IsPlatform5 = False
-        Sim.SixtyFourBit = True
-        Sim.AxisRates = New Double(,) {{0.0, 0.5}, {1.0 / 3.0, 1.0}} ' Axis rates relative to MaxRate
-        Sim.AxisRatesRelative = True
+        Sim = New SimulatorDescriptor With {
+            .ProgID = "ASCOM.Simulator.Telescope",
+            .Description = "Platform 6 Telescope Simulator",
+            .DeviceType = "Telescope",
+            .Name = "Simulator",
+            .DriverVersion = DiagnosticsFullVersionNumber,
+            .InterfaceVersion = 3,
+            .IsPlatform5 = False,
+            .SixtyFourBit = True,
+            .AxisRates = New Double(,) {{0.0, 0.5}, {1.0 / 3.0, 1.0}}, ' Axis rates relative to MaxRate
+            .AxisRatesRelative = True
+        }
         TestSimulator(Sim)
         Sim = Nothing
 
-        Sim = New SimulatorDescriptor
-        Sim.ProgID = "ScopeSim.Telescope"
-        Sim.Description = "Platform 5 Telescope Simulator"
-        Sim.DeviceType = "Telescope"
-        Sim.Name = "Simulator"
-        Sim.DriverVersion = "5.0"
-        Sim.InterfaceVersion = 2
-        Sim.IsPlatform5 = True
-        Sim.SixtyFourBit = True
-        Sim.AxisRates = New Double(,) {{0.0}, {8.0}} ' Absolute axis rates
-        Sim.AxisRatesRelative = False
+        Sim = New SimulatorDescriptor With {
+            .ProgID = "ScopeSim.Telescope",
+            .Description = "Platform 5 Telescope Simulator",
+            .DeviceType = "Telescope",
+            .Name = "Simulator",
+            .DriverVersion = "5.0",
+            .InterfaceVersion = 2,
+            .IsPlatform5 = True,
+            .SixtyFourBit = True,
+            .AxisRates = New Double(,) {{0.0}, {8.0}}, ' Absolute axis rates
+            .AxisRatesRelative = False
+        }
         TestSimulator(Sim)
         Sim = Nothing
 
         If True Then
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "CCDSimulator.Camera"
-            Sim.Description = "Platform 5 Camera Simulator"
-            Sim.DeviceType = "Camera"
-            Sim.Name = "ASCOM CCD camera simulator"
-            Sim.DriverVersion = "5.0"
-            Sim.InterfaceVersion = 2
-            Sim.SixtyFourBit = False
-            Sim.IsPlatform5 = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "CCDSimulator.Camera",
+                .Description = "Platform 5 Camera Simulator",
+                .DeviceType = "Camera",
+                .Name = "ASCOM CCD camera simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 2,
+                .SixtyFourBit = False,
+                .IsPlatform5 = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.Simulator.Camera"
-            Sim.Description = "Platform 6 Camera Simulator"
-            Sim.DeviceType = "Camera"
-            Sim.Name = "Sim "
-            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
-            Sim.InterfaceVersion = 2
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Camera",
+                .Description = "Platform 6 Camera Simulator",
+                .DeviceType = "Camera",
+                .Name = "Sim ",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "FilterWheelSim.FilterWheel"
-            Sim.Description = "Platform 5 FilterWheel Simulator"
-            Sim.DeviceType = "FilterWheel"
-            Sim.Name = "xxxx"
-            Sim.DriverVersion = "5.0"
-            Sim.InterfaceVersion = 1
-            Sim.IsPlatform5 = True
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "FilterWheelSim.FilterWheel",
+                .Description = "Platform 5 FilterWheel Simulator",
+                .DeviceType = "FilterWheel",
+                .Name = "xxxx",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.Simulator.FilterWheel"
-            Sim.Description = "Platform 6 FilterWheel Simulator"
-            Sim.DeviceType = "FilterWheel"
-            Sim.Name = "Filter Wheel Simulator .NET"
-            Sim.DriverVersion = DiagnosticsMajorNumber & ".0"
-            Sim.InterfaceVersion = 2
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.FilterWheel",
+                .Description = "Platform 6 FilterWheel Simulator",
+                .DeviceType = "FilterWheel",
+                .Name = "Filter Wheel Simulator .NET",
+                .DriverVersion = DiagnosticsMajorNumber & ".0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "FocusSim.Focuser"
-            Sim.Description = "Platform 5 Focuser Simulator"
-            Sim.DeviceType = "Focuser"
-            Sim.Name = "Simulator"
-            Sim.DriverVersion = "5.0"
-            Sim.InterfaceVersion = 1
-            Sim.IsPlatform5 = True
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "FocusSim.Focuser",
+                .Description = "Platform 5 Focuser Simulator",
+                .DeviceType = "Focuser",
+                .Name = "Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.Simulator.Focuser"
-            Sim.Description = "Platform 6 Focuser Simulator"
-            Sim.DeviceType = "Focuser"
-            Sim.Name = "ASCOM.Simulator.Focuser"
-            Sim.DriverVersion = DiagnosticsMajorNumber & ".0"
-            Sim.InterfaceVersion = 2
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Focuser",
+                .Description = "Platform 6 Focuser Simulator",
+                .DeviceType = "Focuser",
+                .Name = "ASCOM.Simulator.Focuser",
+                .DriverVersion = DiagnosticsMajorNumber & ".0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.Simulator.SafetyMonitor"
-            Sim.Description = "Platform 6 Safety Monitor Simulator"
-            Sim.DeviceType = "SafetyMonitor"
-            Sim.Name = "ASCOM.Simulator.SafetyMonitor"
-            Sim.DriverVersion = DiagnosticsMajorNumber & ".0"
-            Sim.InterfaceVersion = 2
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.SafetyMonitor",
+                .Description = "Platform 6 Safety Monitor Simulator",
+                .DeviceType = "SafetyMonitor",
+                .Name = "ASCOM.Simulator.SafetyMonitor",
+                .DriverVersion = DiagnosticsMajorNumber & ".0",
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "SwitchSim.Switch"
-            Sim.Description = "Platform 5 Switch Simulator"
-            Sim.DeviceType = "Switch"
-            Sim.Name = "Switch Simulator"
-            Sim.DriverVersion = "5.0"
-            Sim.InterfaceVersion = 1
-            Sim.IsPlatform5 = True
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "SwitchSim.Switch",
+                .Description = "Platform 5 Switch Simulator",
+                .DeviceType = "Switch",
+                .Name = "Switch Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.Simulator.Switch"
-            Sim.Description = "Platform 6 Switch Simulator"
-            Sim.DeviceType = "Switch"
-            Sim.Name = "ASCOM Switch V2 Simulator"
-            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
-            Sim.InterfaceVersion = 2
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Switch",
+                .Description = "Platform 6 Switch Simulator",
+                .DeviceType = "Switch",
+                .Name = "ASCOM Switch V2 Simulator",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "DomeSim.Dome"
-            Sim.Description = "Dome Simulator"
-            Sim.DeviceType = "Dome"
-            Sim.Name = "Simulator"
-            Sim.DriverVersion = "5.0"
-            Sim.InterfaceVersion = 1
-            Sim.IsPlatform5 = True
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "DomeSim.Dome",
+                .Description = "Dome Simulator",
+                .DeviceType = "Dome",
+                .Name = "Simulator",
+                .DriverVersion = "5.0",
+                .InterfaceVersion = 1,
+                .IsPlatform5 = True,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.Simulator.Dome"
-            Sim.Description = "Platform 6 Dome Simulator"
-            Sim.DeviceType = "Dome"
-            Sim.Name = "Simulator"
-            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
-            Sim.InterfaceVersion = 2
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Dome",
+                .Description = "Platform 6 Dome Simulator",
+                .DeviceType = "Dome",
+                .Name = "Simulator",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 2,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.Simulator.Video"
-            Sim.Description = "Platform 6 Video Simulator"
-            Sim.DeviceType = "Video"
-            Sim.Name = "Video Simulator"
-            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
-            Sim.InterfaceVersion = 1
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.Video",
+                .Description = "Platform 6 Video Simulator",
+                .DeviceType = "Video",
+                .Name = "Video Simulator",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 1,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.Simulator.ObservingConditions"
-            Sim.Description = "Platform 6 ObservingConditions Simulator"
-            Sim.DeviceType = "ObservingConditions"
-            Sim.Name = "ASCOM Observing Conditions Simulator"
-            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
-            Sim.InterfaceVersion = 1
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.Simulator.ObservingConditions",
+                .Description = "Platform 6 ObservingConditions Simulator",
+                .DeviceType = "ObservingConditions",
+                .Name = "ASCOM Observing Conditions Simulator",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 1,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
-            Sim = New SimulatorDescriptor
-            Sim.ProgID = "ASCOM.OCH.ObservingConditions"
-            Sim.Description = "Platform 6 ObservingConditions Hub"
-            Sim.DeviceType = "ObservingConditionsHub"
-            Sim.Name = "ASCOM Observing Conditions Hub (OCH)"
-            Sim.DriverVersion = DiagnosticsMajorMinorVersionNumber
-            Sim.InterfaceVersion = 1
-            Sim.IsPlatform5 = False
-            Sim.SixtyFourBit = True
+            Sim = New SimulatorDescriptor With {
+                .ProgID = "ASCOM.OCH.ObservingConditions",
+                .Description = "Platform 6 ObservingConditions Hub",
+                .DeviceType = "ObservingConditionsHub",
+                .Name = "ASCOM Observing Conditions Hub (OCH)",
+                .DriverVersion = DiagnosticsMajorMinorVersionNumber,
+                .InterfaceVersion = 1,
+                .IsPlatform5 = False,
+                .SixtyFourBit = True
+            }
             TestSimulator(Sim)
             Sim = Nothing
 
@@ -1791,12 +1808,13 @@ Public Class DiagnosticsForm
         '/*
         'The(Observer) 's terrestrial coordinates (latitude, longitude, height).
         '*/
-        Dim geo_loc As New OnSurface
-        geo_loc.Latitude = 45.0
-        geo_loc.Longitude = -75.0
-        geo_loc.Height = 0.0
-        geo_loc.Temperature = 10.0
-        geo_loc.Pressure = 1010.0
+        Dim geo_loc As New OnSurface With {
+            .Latitude = 45.0,
+            .Longitude = -75.0,
+            .Height = 0.0,
+            .Temperature = 10.0,
+            .Pressure = 1010.0
+        }
 
         '/*
         'Compute the topocentric places of the three stars at the four
@@ -2465,12 +2483,13 @@ Public Class DiagnosticsForm
         '/*
         'The(Observer) 's terrestrial coordinates (latitude, longitude, height).
         '*/
-        Dim geo_loc As New OnSurface
-        geo_loc.Latitude = 45.0
-        geo_loc.Longitude = -75.0
-        geo_loc.Height = 0.0
-        geo_loc.Temperature = 10.0
-        geo_loc.Pressure = 1010.0
+        Dim geo_loc As New OnSurface With {
+            .Latitude = 45.0,
+            .Longitude = -75.0,
+            .Height = 0.0,
+            .Temperature = 10.0,
+            .Pressure = 1010.0
+        }
 
         '/*
         'Compute the topocentric places of the three stars at the four
@@ -3659,12 +3678,13 @@ Public Class DiagnosticsForm
             TL.LogMessage("NovasCom Tests", "Julian Date = " & JD & " = " & TEST_DATE)
             CompareDouble("NovasCom", "JulianDate", JD, 2455560.875, TOLERANCE_E9)
 
-            Dim s As New NOVASCOM.Site
-            s.Height = 80.0
-            s.Latitude = 51.0
-            s.Longitude = 0.0
-            s.Pressure = 1000.0
-            s.Temperature = 10.0
+            Dim s As New NOVASCOM.Site With {
+                .Height = 80.0,
+                .Latitude = 51.0,
+                .Longitude = 0.0,
+                .Pressure = 1000.0,
+                .Temperature = 10.0
+            }
             Dim pv As New NOVASCOM.PositionVector
             pv.SetFromSite(s, 11.0)
             CompareDouble("NovasCom", "SetFromSite X", pv.x, -0.0000259698466733494, TOLERANCE_E9)
@@ -3854,9 +3874,10 @@ Public Class DiagnosticsForm
         TL.LogMessage("TimerTests", "Started")
         Status("Timer tests")
         Try
-            ASCOMTimer = New ASCOM.Utilities.Timer
-            ASCOMTimer.Interval = TimerInterval
-            ASCOMTimer.Enabled = True
+            ASCOMTimer = New ASCOM.Utilities.Timer With {
+                .Interval = TimerInterval,
+                .Enabled = True
+            }
             StartTime = Now
             sw.Reset() : sw.Start()
             NumberOfTicks = 0 'Initialise counter
@@ -3886,7 +3907,7 @@ Public Class DiagnosticsForm
         ErrorList.Add(FailingModule & " - " & Msg)
     End Sub
 
-    Private Sub cnt_TickNet() Handles ASCOMTimer.Tick
+    Private Sub Cnt_TickNet() Handles ASCOMTimer.Tick
         Dim Duration As Double
 
         Duration = Now.Subtract(StartTime).TotalSeconds
@@ -4750,8 +4771,7 @@ Public Class DiagnosticsForm
 
     Function CacheTest(TestName As String, LogCache As Boolean) As Boolean
         Dim cache As Cache, returnDouble As Double, returnInt As Integer, returnBool As Boolean, returnString As String, inputObject, returnObject As KeyValuePair
-        Dim removedItemCount As Integer, errorOccured As Boolean = False, throttleLowerBound, throttleUpperBound As Integer
-
+        Dim removedItemCount As Integer, errorOccured As Boolean = False, throttleLowerBound, throttleUpperBound, numerOfClearItemsToTest As Integer
         Const THROTTLE_TEST_LOWER_BOUND_NORMAL As Integer = 4900 ' Limits for real PCs
         Const THROTTLE_TEST_UPPER_BOUND_NORMAL As Integer = 5100
         Const THROTTLE_TEST_LOWER_BOUND_WIDE As Integer = 4000 ' Limits for virtual machine tests
@@ -4869,9 +4889,10 @@ Public Class DiagnosticsForm
             ' Test cached object
             Try
                 Action("Test Objects")
-                inputObject = New KeyValuePair() ' Create a test KeyValuePair oject
-                inputObject.Key = testObjectKey
-                inputObject.Value = testObjectValue
+                inputObject = New KeyValuePair With {
+                    .Key = testObjectKey,
+                    .Value = testObjectValue
+                } ' Create a test KeyValuePair oject
 
                 cache.Set(testObjectKey, inputObject, 0.1) ' Set a value with a 100ms lifetime
                 returnObject = cache.Get(testObjectKey)
@@ -4965,7 +4986,6 @@ Public Class DiagnosticsForm
             End Try
 
             ' Test clearing of entire cache
-
             Try
                 cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
                 Action("Clear cache - Populating cache")
@@ -4996,9 +5016,18 @@ Public Class DiagnosticsForm
                 TL.LogMessage(TestName, String.Format("Cache cleared of {0} items in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
 
                 Action("Clear cache - Confirming cache is empty")
-                removedItemCount = 0
+
+                If (Debugger.IsAttached) Then
+
+                End If
+
+                removedItemCount = 0 ' Initialise count of number of items removed
+
+                ' The "item is removed" test is very slow when run in Visual Studio, which attaches a debugger that slows exception handling, so reduce the number of tests in this circumstance.
+                numerOfClearItemsToTest = IIf(Debugger.IsAttached, NUMBER_OF_CLEAR_CACHE_ITEMS / 50, NUMBER_OF_CLEAR_CACHE_ITEMS)
                 sw.Restart()
-                For i = 1 To NUMBER_OF_CLEAR_CACHE_ITEMS
+
+                For i = 1 To numerOfClearItemsToTest
                     Try
                         returnInt = cache.GetInt(intKey)
                     Catch ex As NotInCacheException
@@ -5007,12 +5036,163 @@ Public Class DiagnosticsForm
                 Next
                 sw.Stop()
 
-                CompareInteger(TestName, "Clear cache", removedItemCount, NUMBER_OF_CLEAR_CACHE_ITEMS)
-                TL.LogMessage(TestName, String.Format("Checked {0} items not present in {1} milliseconds ({2} milliseconds per item).", NUMBER_OF_CLEAR_CACHE_ITEMS, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / NUMBER_OF_CLEAR_CACHE_ITEMS).ToString("0.000")))
+                CompareInteger(TestName, "Clear cache", removedItemCount, numerOfClearItemsToTest)
+                TL.LogMessage(TestName, String.Format("Checked {0} items not present in {1} milliseconds ({2} milliseconds per item).", numerOfClearItemsToTest, sw.Elapsed.TotalMilliseconds.ToString("0.000"), (sw.Elapsed.TotalMilliseconds / numerOfClearItemsToTest).ToString("0.000")))
             Catch ex As Exception
-                LogException(TestName, "Error getting or removing item: " & ex.ToString())
+                LogException(TestName, "Error testing Cache.ClearCache: " & ex.ToString())
                 errorOccured = True
             End Try
+
+            ' Test invalid value handling
+            Try
+                cache = New Cache(IIf(LogCache, TL, Nothing)) ' Create a new cache with nothing in it
+
+                ' Test PumpMessagesInterval
+                Try
+                    Action("Test invalid values - PumpMessagesInterval")
+                    cache.PumpMessagesInterval = -1
+                    LogError(TestName, "InvalidValueException was not thrown when supplying a negative value for PumpMessagesInterval.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative value for PumpMessagesInterval: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying a negative value for PumpMessagesInterval." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test GetDouble Key - empty string
+                Try
+                    Action("Test invalid values - GetDouble Key Empty")
+                    cache.GetDouble("")
+                    LogError(TestName, "InvalidValueException was not thrown when supplying an empty GetDouble key string.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty GetDouble key string: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying an empty GetDouble key string." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test GetDouble Key - null value
+                Try
+                    Action("Test invalid values - GetDouble Key Null")
+                    cache.GetDouble(Nothing)
+                    LogError(TestName, "InvalidValueException was not thrown when supplying a null value as GetDouble key.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as GetDouble key: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying a null value as GetDouble key." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test GetDouble MaximumCallFrequency
+                Try
+                    Action("Test invalid values - GetDouble MaximumCallFrequency")
+                    cache.GetDouble(doubleKey, -1.0)
+                    LogError(TestName, "InvalidValueException was not thrown when supplying a GetDouble negative MaximumCallFrequency value.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a GetDouble negative MaximumCallFrequency value: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying a negative GetDouble MaximumCallFrequency value." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test SetDouble Key - empty string
+                Try
+                    Action("Test invalid values - SetDouble Key Empty")
+                    cache.SetDouble("", 0.0, 0.0)
+                    LogError(TestName, "InvalidValueException was not thrown when supplying an empty SetDouble key string.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty SetDouble key string: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying an empty SetDouble key string." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test SetDouble Key - null value
+                Try
+                    Action("Test invalid values - SetDouble Key Null")
+                    cache.SetDouble(Nothing, 0.0, 0.0)
+                    LogError(TestName, "InvalidValueException was not thrown when supplying a null value as SetDouble key.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as SetDouble key: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying a null value as SetDouble key." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test SetDouble CacheTime
+                Try
+                    Action("Test invalid values - CacheTime")
+                    cache.SetDouble(doubleKey, 123.45, -1.0)
+                    LogError(TestName, "InvalidValueException was not thrown when supplying a negative CacheTime value.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative SetDouble CacheTime value: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying a negative CacheTime value." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test SetDouble MaximumCallFrequency
+                Try
+                    Action("Test invalid values - SetDouble MaximumCallFrequency")
+                    cache.SetDouble(doubleKey, 0.0, 1.0, -1.0)
+                    LogError(TestName, "InvalidValueException was not thrown when supplying a negative SetDouble MaximumCallFrequency value.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a negative SetDouble MaximumCallFrequency value: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying a negative SetDouble MaximumCallFrequency value." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test Cache.Remove Key - empty string
+                Try
+                    Action("Test invalid values - Cache.Remove Key Empty")
+                    cache.Remove("")
+                    LogError(TestName, "InvalidValueException was not thrown when supplying an empty Cache.Remove key string.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying an empty Cache.Remove key string: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying an empty Cache.Remove key string." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+                ' Test Cache.Remove Keys - null value
+                Try
+                    Action("Test invalid values - Cache.Remove Key Null")
+                    cache.Remove(Nothing)
+                    LogError(TestName, "InvalidValueException was not thrown when supplying a null value as Cache.Remove key.")
+                    errorOccured = True
+                Catch ex As InvalidValueException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidValueException correctly generated when supplying a null value as Cache.Remove key: ""{0}""", ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, "An unexpected exception was thrown when supplying a null value as Cache.Remove key." & ex.ToString())
+                    errorOccured = True
+                End Try
+
+            Catch ex As Exception
+                LogException(TestName, "Error testing Cache invalid values: " & ex.ToString())
+                errorOccured = True
+            End Try
+
+
         Catch ex1 As Exception
             LogException(TestName, "Error creating ASCOM Cache, further cache testing abandoned! " & ex1.ToString())
             errorOccured = True
@@ -6467,13 +6647,15 @@ Public Class DiagnosticsForm
                                         SHGetSpecialFolderPath(IntPtr.Zero, PathShell, CSIDL_SYSTEM, False) ' Get the system directory
                                     End If
                                     RegSvr32Path = PathShell.ToString & "\RegSvr32.exe" 'Construct the full path to RegSvr32.exe
-                                    Info = New ProcessStartInfo
-                                    Info.FileName = RegSvr32Path 'Populate the ProcessStartInfo with the full path to RegSvr32.exe 
-                                    Info.Arguments = "/s """ & ASCOMPath & """" ' And the start parameter specifying the file to COM register
+                                    Info = New ProcessStartInfo With {
+                                        .FileName = RegSvr32Path, 'Populate the ProcessStartInfo with the full path to RegSvr32.exe 
+                                        .Arguments = "/s """ & ASCOMPath & """" ' And the start parameter specifying the file to COM register
+                                        }
                                     TL.LogMessage("HelperHijacking", "  RegSvr32 Path: """ & RegSvr32Path & """, COM Path: """ & ASCOMPath & """")
 
-                                    P = New Process ' Create the process
-                                    P.StartInfo = Info ' Set the start info
+                                    P = New Process With {
+                                        .StartInfo = Info ' Set the start info
+                                        } ' Create the process
                                     P.Start() 'Start the process and wait for it to finish
                                     TL.LogMessage("HelperHijacking", "  Started registration")
                                     P.WaitForExit()
@@ -7636,12 +7818,12 @@ Public Class DiagnosticsForm
 
 #Region "Button event handlers"
 
-    Private Sub btnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
+    Private Sub BtnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
         'Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
         Process.Start(LastLogFile) ' Open in the system's default text editor
     End Sub
 
-    Private Sub btnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
+    Private Sub BtnExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnExit.Click
         End 'Close the program
     End Sub
 
@@ -7743,7 +7925,7 @@ Public Class DiagnosticsForm
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub mnuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuTrace.DropDownOpening
+    Private Sub MnuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuTrace.DropDownOpening
         RefreshTraceItems()
     End Sub
 
@@ -7830,8 +8012,9 @@ Public Class DiagnosticsForm
     Private Sub ChooserNETToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChooserNETToolStripMenuItem.Click
         Dim Chooser As ASCOM.Utilities.Chooser, Chosen As String
 
-        Chooser = New ASCOM.Utilities.Chooser
-        Chooser.DeviceType = "Telescope"
+        Chooser = New ASCOM.Utilities.Chooser With {
+            .DeviceType = "Telescope"
+        }
         Chosen = Chooser.Choose("ScopeSim.Telescope")
         Chooser.Dispose()
 
@@ -7846,8 +8029,9 @@ Public Class DiagnosticsForm
         Dim proc As Process, procStartInfo As ProcessStartInfo
         Try
             procStartInfo = New ProcessStartInfo(Application.StartupPath & DRIVER_CONNECT_APPLICATION_64BIT)
-            proc = New Process
-            proc.StartInfo = procStartInfo
+            proc = New Process With {
+                .StartInfo = procStartInfo
+            }
             proc.Start()
         Catch ex As Exception
             MessageBox.Show(ex.Message.ToString() & " - " & Application.StartupPath & DRIVER_CONNECT_APPLICATION_64BIT, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -7860,8 +8044,9 @@ Public Class DiagnosticsForm
 
         Try
             procStartInfo = New ProcessStartInfo(Application.StartupPath & DRIVER_CONNECT_APPLICATION_32BIT)
-            proc = New Process
-            proc.StartInfo = procStartInfo
+            proc = New Process With {
+                .StartInfo = procStartInfo
+            }
             proc.Start()
         Catch ex As Exception
             MessageBox.Show(ex.Message.ToString() & " - " & Application.StartupPath & DRIVER_CONNECT_APPLICATION_32BIT, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -7975,9 +8160,9 @@ Public Class DiagnosticsForm
         If WriteToLog Then TL.LogMessage("RunningInVM", String.Format("Found ECX byte {0} = {1}", 3, Hex(ecxBytes(3))))
 
         RunningInVM = (ecxBytes(3) And &H80) > 0 ' Set to true if top bit of ECX is set, otherwise false
-        If WriteToLog Then TL.LogMessage("RunningInVM", String.Format("Returning value: {0}", runningInVm))
+        If WriteToLog Then TL.LogMessage("RunningInVM", String.Format("Returning value: {0}", RunningInVM))
 
-        Return runningInVm
+        Return RunningInVM
 
     End Function
 

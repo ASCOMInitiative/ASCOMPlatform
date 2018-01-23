@@ -354,6 +354,9 @@ else
     Set Variable MYPROGRESS to 40
      
     [DEFINE REGION: Visual Studio references]
+    Comment: Platform 6.4 references
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.dll to $TARGETDIR$\Components\Platform6
+    Install Files ..\..\..\..\ASCOM.Utilities\ASCOM.Cache\bin\Release\ASCOM.Cache.xml to $TARGETDIR$\Components\Platform6
     Comment: Platform 6.1 references
     Install Files ..\..\..\..\ASCOM.Utilities.Video\bin\Release\ASCOM.Utilities.Video.dll to $TARGETDIR$\Components\Platform6
     Comment: Platform 6 references
