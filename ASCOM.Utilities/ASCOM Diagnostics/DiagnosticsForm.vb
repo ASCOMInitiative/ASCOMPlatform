@@ -46,9 +46,7 @@ Public Class DiagnosticsForm
     Private Const INST_UNINSTALL_STRING As String = "UninstallString"
     Private Const INST_DISPLAY_ICON As String = "DisplayIcon"
 
-    'Astrometry test data for planets obtained from the original 32bit  components
-    'The data is for the arbitary test date Thursday, 30 December 2010 09:00:00" 
-    Private Const TEST_DATE As String = "Thursday, 30 December 2010 09:00:00" ' Arbitary test date used to generate data above, it must conform to the "F" date format for the invariant culture
+    Private Const TEST_DATE As String = "Thursday, 30 December 2010 09:00:00" ' Arbitary test date used to generate NOVASCOM test data, it must conform to the "F" date format for the invariant culture
     Private Const J2000 As Double = 2451545.0 'Julian day for J2000 epoch
     Private Const INDENT As Integer = 3 ' Display indent for recursive loop output
 
@@ -58,6 +56,10 @@ Public Class DiagnosticsForm
     Private Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44 ' 0x002c,
     Private Const CSIDL_SYSTEM As Integer = 37 ' 0x0025,
     Private Const CSIDL_SYSTEMX86 As Integer = 41 ' 0x0029,
+
+    Private Const OPTIONS_REGISTRYKEY_BASE As String = "Software\ASCOM\Diagnostics"
+    Private Const OPTIONS_AUTOVIEW_REGISTRYKEY As String = "Diagnostics Auto View Log"
+    Private Const OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT As Boolean = False
 
     Private NMatches, NNonMatches, NExceptions As Integer
     Private ErrorList As New Generic.List(Of String)
@@ -87,6 +89,14 @@ Public Class DiagnosticsForm
 
     Private DiagnosticsVersion As Version ' Assembly version number of this executable
 
+    ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
+    Private Const TestRegistry As Boolean = True
+    Private Const TestLogsAndApplications As Boolean = True
+    Private Const TestUtilities As Boolean = True
+    Private Const TestAstrometry As Boolean = True
+    Private Const TestSimulators As Boolean = True
+    Private Const TestCache As Boolean = True
+
 #End Region
 
     Private Sub DiagnosticsForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -103,7 +113,7 @@ Public Class DiagnosticsForm
             lblMessage.Text = "Your diagnostic log will be created in:" & vbCrLf & vbCrLf &
             System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
 
-            btnLastLog.Enabled = False 'Disable last log button
+            btnViewLastLog.Enabled = False 'Disable last log button
             sw = New Stopwatch
 
             If Environment.Is64BitOperatingSystem Then ' We are on a 64bit OS so make both 32 and 64bit Chooser forms available
@@ -115,29 +125,24 @@ Public Class DiagnosticsForm
             End If
 
             RefreshTraceItems() ' Get current values for the trace menu settings
+            MenuAutoViewLog.Checked = GetBool(OPTIONS_AUTOVIEW_REGISTRYKEY, OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT) ' Get the auto view log setting
+
             AstroUtil = New AstroUtils.AstroUtils
             Nov3 = New NOVAS.NOVAS3
             Nov31 = New NOVAS.NOVAS31
             AscomUtil = New ASCOM.Utilities.Util
             Me.BringToFront()
+            Me.KeyPreview = True ' Ensure that keypress events are sent to the form so that the keypress event handler can respond to them
         Catch ex As Exception
             EventLogCode.LogEvent("Diagnostics Load", "Exception", EventLogEntryType.Error, EventLogErrors.DiagnosticsLoadException, ex.ToString)
             MsgBox(ex.ToString)
         End Try
     End Sub
 
-    Private Sub BtnCOM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCOM.Click
+    Private Sub RunDiagnostics(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRunDiagnostics.Click
         Dim ASCOMPath As String, ApplicationPath As String = "Path Not Set!"
         Dim PathShell As New System.Text.StringBuilder(260)
         Dim SuccessMessage As String
-
-        ' Controls to reduce testing conducted - only set to false to speed up testing during development. Must all be set True for production builds
-        Const TestRegistry As Boolean = True
-        Const TestLogsAndApplications As Boolean = True
-        Const TestUtilities As Boolean = True
-        Const TestAstrometry As Boolean = True
-        Const TestSimulators As Boolean = True
-        Const TestCache As Boolean = True
 
         Try
             Status("Diagnostics running...")
@@ -147,8 +152,8 @@ Public Class DiagnosticsForm
             }
 
             btnExit.Enabled = False ' Disable buttons during run
-            btnLastLog.Enabled = False
-            btnCOM.Enabled = False
+            btnViewLastLog.Enabled = False
+            btnRunDiagnostics.Enabled = False
 
             ErrorList.Clear() 'Remove any errors from previous runs
             NMatches = 0
@@ -454,13 +459,17 @@ Public Class DiagnosticsForm
                 Try : ASCOMRegistryAccess.Dispose() : Catch : End Try 'Clean up registryaccess object
                 ASCOMRegistryAccess = Nothing
             End Try
-            btnLastLog.Enabled = True
+
+            btnViewLastLog.Enabled = True ' Enable the view log control and set focus to it
+            Me.ActiveControl = btnViewLastLog
+
+            If (MenuAutoViewLog.Checked) Then Process.Start(LastLogFile) ' If autoi log opening is enabled, open the last log in the system's default text editor
 
         Catch ex1 As Exception
             lblResult.Text = "Can't create log: " & ex1.Message
         End Try
         btnExit.Enabled = True ' Enable buttons during run
-        btnCOM.Enabled = True
+        btnRunDiagnostics.Enabled = True
     End Sub
 
     Private Sub SOFATests()
@@ -3616,6 +3625,8 @@ Public Class DiagnosticsForm
         Dim JD As Double
         Dim EA As New ASCOM.Astrometry.NOVASCOM.Earth
 
+        'Astrometry test data for planets obtained from the original 32bit  components
+        'The data is for the arbitary test date Thursday, 30 December 2010 09:00:00" 
         Dim Mercury() As Double = New Double() {-0.146477263357071, -0.739730529540394, -0.275237058490435,
                                                 -0.146552680905756, -0.73971718813053, -0.275232768188589,
                                                 -0.144373027430296, -0.740086172152297, -0.275392756115203,
@@ -5187,11 +5198,103 @@ Public Class DiagnosticsForm
                     errorOccured = True
                 End Try
 
+                Try
+                    cache.SetDouble(doubleKey, testDouble, 1.0)
+                    returnInt = cache.GetInt(doubleKey)
+                    LogError(TestName, String.Format("Getting a double value as an integer worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+                Catch ex As InvalidCastException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double value as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double value and retrieving it as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
+                Try
+                    cache.SetInt(intKey, testInt, 1.0)
+                    returnDouble = cache.GetDouble(intKey)
+                    LogError(TestName, String.Format("Getting an integer value as a double worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+                Catch ex As InvalidCastException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting an integer value as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when setting an integer value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
+                Try
+                    cache.SetString(stringKey, testString, 1.0)
+                    returnDouble = cache.GetDouble(stringKey)
+                    LogError(TestName, String.Format("Getting a string value as a double worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+                Catch ex As InvalidCastException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a string value as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a string value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
+                Try
+                    cache.Set(doubleKey, testDouble, 1.0)
+                    returnString = cache.GetString(doubleKey)
+                    LogError(TestName, String.Format("Getting a double object as a string worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+                Catch ex As InvalidCastException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double object as a string. {0} - {1}", ex.GetType.Name, ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a string value and retrieving it as a double. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
+                Try
+                    cache.Set(doubleKey, testDouble, 1.0)
+                    returnInt = cache.GetInt(doubleKey)
+                    LogError(TestName, String.Format("Getting a double object as an integer worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnInt))
+                Catch ex As InvalidCastException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a double object as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as an integer. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
+                Try
+                    cache.Set(stringKey, testString, 1.0)
+                    returnBool = cache.Get(stringKey)
+                    LogError(TestName, String.Format("Getting a string object as a boolean worked but it should have thrown an InvalidCastException! Retrieved value: ""{0}""", returnBool))
+                Catch ex As InvalidCastException
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("InvalidCastException correctly generated when getting a string object as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when getting a string object as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
+                Try
+                    cache.Set(doubleKey, testDouble, 1.0)
+                    returnInt = cache.Get(doubleKey)
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as an integer object: {1}", testDouble, returnInt))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as an integer object. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
+                Try
+                    cache.Set(doubleKey, testDouble, 1.0)
+                    returnString = cache.Get(doubleKey)
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as a string object: {1}", testDouble, returnString))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as a string object. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
+                Try
+                    cache.Set(doubleKey, testDouble, 1.0)
+                    returnBool = cache.Get(doubleKey)
+                    NMatches += 1
+                    TL.LogMessage(TestName, String.Format("Successfully retrieved a double object: {0} as a boolean object: {1}", testDouble, returnBool))
+                Catch ex As Exception
+                    LogError(TestName, String.Format("An unexpected exception was thrown when setting a double object and retrieving it as a boolean object. {0} - {1}", ex.GetType.Name, ex.Message))
+                End Try
+
             Catch ex As Exception
                 LogException(TestName, "Error testing Cache invalid values: " & ex.ToString())
                 errorOccured = True
             End Try
-
 
         Catch ex1 As Exception
             LogException(TestName, "Error creating ASCOM Cache, further cache testing abandoned! " & ex1.ToString())
@@ -7818,8 +7921,7 @@ Public Class DiagnosticsForm
 
 #Region "Button event handlers"
 
-    Private Sub BtnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLastLog.Click
-        'Shell("notepad " & LastLogFile, AppWinStyle.NormalFocus)
+    Private Sub BtnLastLog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnViewLastLog.Click
         Process.Start(LastLogFile) ' Open in the system's default text editor
     End Sub
 
@@ -8123,6 +8225,19 @@ Public Class DiagnosticsForm
         MenuWaitTypeSleep.Checked = False
         MenuWaitTypeWaitForSingleObject.Checked = True
         SetName(SERIAL_WAIT_TYPE, Serial.WaitType.WaitForSingleObject.ToString)
+    End Sub
+
+    Private Sub MenuAutoViewLog_Click(sender As Object, e As EventArgs) Handles MenuAutoViewLog.Click
+        MenuAutoViewLog.Checked = Not MenuAutoViewLog.Checked ' Auto view log option clicked so invert its checked status
+        SetName(OPTIONS_AUTOVIEW_REGISTRYKEY, MenuAutoViewLog.Checked.ToString()) ' Set the new value in the registry
+    End Sub
+
+    Private Sub DiagnosticsForm_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
+        ' Handle the Form KeyDown event to determine which key was pressed
+        ' Test whether the F5 key was pressed to start the test
+        If e.KeyCode = Keys.F5 Then ' F5 was pressed so start the Diagnostics test
+            RunDiagnostics(New Object, New EventArgs)
+        End If
     End Sub
 
 #End Region
