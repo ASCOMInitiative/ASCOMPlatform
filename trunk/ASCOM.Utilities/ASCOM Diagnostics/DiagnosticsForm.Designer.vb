@@ -23,7 +23,7 @@ Partial Class DiagnosticsForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(DiagnosticsForm))
-        Me.btnCOM = New System.Windows.Forms.Button()
+        Me.btnRunDiagnostics = New System.Windows.Forms.Button()
         Me.btnExit = New System.Windows.Forms.Button()
         Me.lblMessage = New System.Windows.Forms.Label()
         Me.lblTitle = New System.Windows.Forms.Label()
@@ -51,27 +51,29 @@ Partial Class DiagnosticsForm
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuNovasTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuAstroUtilsTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuCacheTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuThrowAbandonedMutexExceptions = New System.Windows.Forms.ToolStripMenuItem()
         Me.SerialWaitTypeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuWaitTypeManualResetEvent = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuWaitTypeSleep = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuWaitTypeWaitForSingleObject = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuAutoViewLog = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblAction = New System.Windows.Forms.Label()
-        Me.btnLastLog = New System.Windows.Forms.Button()
+        Me.btnViewLastLog = New System.Windows.Forms.Button()
         Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
-        Me.MenuCacheTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'btnCOM
+        'btnRunDiagnostics
         '
-        Me.btnCOM.Location = New System.Drawing.Point(408, 202)
-        Me.btnCOM.Name = "btnCOM"
-        Me.btnCOM.Size = New System.Drawing.Size(110, 23)
-        Me.btnCOM.TabIndex = 0
-        Me.btnCOM.Text = "Run Diagnostics"
-        Me.btnCOM.UseVisualStyleBackColor = True
+        Me.btnRunDiagnostics.Location = New System.Drawing.Point(408, 202)
+        Me.btnRunDiagnostics.Name = "btnRunDiagnostics"
+        Me.btnRunDiagnostics.Size = New System.Drawing.Size(110, 23)
+        Me.btnRunDiagnostics.TabIndex = 0
+        Me.btnRunDiagnostics.Text = "Run Diagnostics"
+        Me.btnRunDiagnostics.UseVisualStyleBackColor = True
         '
         'btnExit
         '
@@ -120,7 +122,7 @@ Partial Class DiagnosticsForm
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuChooseDevice, Me.mnuTools, Me.mnuTrace, Me.AboutToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuChooseDevice, Me.mnuTools, Me.mnuTrace, Me.OptionsToolStripMenuItem, Me.AboutToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(530, 24)
@@ -261,6 +263,12 @@ Partial Class DiagnosticsForm
         Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(279, 22)
         Me.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled"
         '
+        'MenuCacheTraceEnabled
+        '
+        Me.MenuCacheTraceEnabled.Name = "MenuCacheTraceEnabled"
+        Me.MenuCacheTraceEnabled.Size = New System.Drawing.Size(279, 22)
+        Me.MenuCacheTraceEnabled.Text = "Cache Trace Enabled"
+        '
         'MenuThrowAbandonedMutexExceptions
         '
         Me.MenuThrowAbandonedMutexExceptions.Name = "MenuThrowAbandonedMutexExceptions"
@@ -292,6 +300,19 @@ Partial Class DiagnosticsForm
         Me.MenuWaitTypeWaitForSingleObject.Size = New System.Drawing.Size(182, 22)
         Me.MenuWaitTypeWaitForSingleObject.Text = "WaitForSingleObject"
         '
+        'OptionsToolStripMenuItem
+        '
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuAutoViewLog})
+        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
+        Me.OptionsToolStripMenuItem.Text = "Options"
+        '
+        'MenuAutoViewLog
+        '
+        Me.MenuAutoViewLog.Name = "MenuAutoViewLog"
+        Me.MenuAutoViewLog.Size = New System.Drawing.Size(243, 22)
+        Me.MenuAutoViewLog.Text = "Automatically view log after run"
+        '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
@@ -310,36 +331,30 @@ Partial Class DiagnosticsForm
         Me.lblAction.Text = "Label1"
         Me.lblAction.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'btnLastLog
+        'btnViewLastLog
         '
-        Me.btnLastLog.Enabled = False
-        Me.btnLastLog.Location = New System.Drawing.Point(408, 173)
-        Me.btnLastLog.Name = "btnLastLog"
-        Me.btnLastLog.Size = New System.Drawing.Size(108, 23)
-        Me.btnLastLog.TabIndex = 7
-        Me.btnLastLog.Text = "View Last Log"
-        Me.btnLastLog.UseVisualStyleBackColor = True
-        '
-        'MenuCacheTraceEnabled
-        '
-        Me.MenuCacheTraceEnabled.Name = "MenuCacheTraceEnabled"
-        Me.MenuCacheTraceEnabled.Size = New System.Drawing.Size(279, 22)
-        Me.MenuCacheTraceEnabled.Text = "Cache Trace Enabled"
+        Me.btnViewLastLog.Enabled = False
+        Me.btnViewLastLog.Location = New System.Drawing.Point(408, 173)
+        Me.btnViewLastLog.Name = "btnViewLastLog"
+        Me.btnViewLastLog.Size = New System.Drawing.Size(108, 23)
+        Me.btnViewLastLog.TabIndex = 7
+        Me.btnViewLastLog.Text = "View Last Log"
+        Me.btnViewLastLog.UseVisualStyleBackColor = True
         '
         'DiagnosticsForm
         '
-        Me.AcceptButton = Me.btnCOM
+        Me.AcceptButton = Me.btnRunDiagnostics
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnExit
         Me.ClientSize = New System.Drawing.Size(530, 266)
-        Me.Controls.Add(Me.btnLastLog)
+        Me.Controls.Add(Me.btnViewLastLog)
         Me.Controls.Add(Me.lblAction)
         Me.Controls.Add(Me.lblResult)
         Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.lblMessage)
         Me.Controls.Add(Me.btnExit)
-        Me.Controls.Add(Me.btnCOM)
+        Me.Controls.Add(Me.btnRunDiagnostics)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
@@ -351,7 +366,7 @@ Partial Class DiagnosticsForm
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents btnCOM As System.Windows.Forms.Button
+    Friend WithEvents btnRunDiagnostics As System.Windows.Forms.Button
     Friend WithEvents btnExit As System.Windows.Forms.Button
     Friend WithEvents lblMessage As System.Windows.Forms.Label
     Friend WithEvents lblTitle As System.Windows.Forms.Label
@@ -362,7 +377,7 @@ Partial Class DiagnosticsForm
     Friend WithEvents ChooserNETToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents lblAction As System.Windows.Forms.Label
     Friend WithEvents ListAvailableCOMPortsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents btnLastLog As System.Windows.Forms.Button
+    Friend WithEvents btnViewLastLog As System.Windows.Forms.Button
     Friend WithEvents mnuChooseDevice As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ChooseAndConnectToDevice64bitApplicationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnuTrace As System.Windows.Forms.ToolStripMenuItem
@@ -389,4 +404,6 @@ Partial Class DiagnosticsForm
     Friend WithEvents MenuWaitTypeManualResetEvent As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuWaitTypeWaitForSingleObject As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuCacheTraceEnabled As ToolStripMenuItem
+    Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MenuAutoViewLog As ToolStripMenuItem
 End Class
