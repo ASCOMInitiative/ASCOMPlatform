@@ -275,7 +275,8 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     '''  Moves the focuser by the specified amount or to the specified position depending on the value of the <see cref="Absolute" /> property.
     ''' </summary>
     ''' <param name="Position">Step distance or absolute position, depending on the value of the <see cref="Absolute" /> property.</param>
-    ''' <exception cref="InvalidOperationException">If a Move operation is requested when <see cref="TempComp" /> is True</exception>
+    ''' <exception cref="InvalidOperationException">If a Move operation is requested when <see cref="TempComp" /> is True and the focuser can only move when temperature compensation is inactive. 
+    ''' <font color="red">Please note that this condition is different to that in use prior to January 2018, see note below.</font></exception>
     ''' <exception cref="NotConnectedException">If the device is not connected.</exception>
     ''' <exception cref="DriverException">Must throw an exception if the call was not successful</exception>
     ''' <remarks><p style="color:red"><b>Must be implemented</b></p>
@@ -283,6 +284,12 @@ Public Interface IFocuserV2 'C2E3FE9C-01CD-440C-B8E3-C56EE9E4EDBC
     ''' of the <see cref="Move">Move</see> method is an integer between 0 and <see cref="MaxStep" />.
     ''' <para>If the <see cref="Absolute" /> property is False, then this is a relative positioning focuser. The <see cref="Move">Move</see> command tells the focuser to move in a relative direction, and the Position parameter 
     ''' of the <see cref="Move">Move</see> method (in this case, step distance) is an integer between minus <see cref="MaxIncrement" /> and plus <see cref="MaxIncrement" />.</para>
+    ''' <para><b>NOTE - January 2018</b></para>
+    ''' <para>Up to January 2018, the interface specification mandated that drivers must throw an <see cref="InvalidOperationException"/> if a move was attempted when <see cref="TempComp"/> was True, even if the focuser 
+    ''' was able to execute the move safely without disrupting temperature compensation. </para>
+    ''' <para>Following discussion on ASCOM-Talk in January 2018, the specification has been revised so that throwing the <see cref="InvalidOperationException"/> exception is only required when the the focuser can not
+    ''' move safely when temperature compensation is active. The revised specification now requires that, if the driver can move the focuser safely with temperature compensation enabled, it should do so and should not 
+    ''' throw an <see cref="InvalidOperationException"/>.</para>
     '''</remarks>
     Sub Move(ByVal Position As Integer)
 
