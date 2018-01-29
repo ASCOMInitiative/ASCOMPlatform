@@ -988,7 +988,6 @@ if Variable REMOVE not Equals TRUE
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Server\bin\Release\ASCOM.OCH.Server.pdb to $COMMONFILES$\ASCOM\Switch\ObservingConditions\OCH
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\OCH
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Hub\OCH Test\bin\Release\ASCOM.OCH.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OCH
-  Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.Simulator.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
@@ -996,7 +995,6 @@ if Variable REMOVE not Equals TRUE
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Server\bin\Release\ASCOM.OCSimulator.Server.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.exe to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
   Install Files ..\..\..\..\Drivers and Simulators\ObservingConditions Simulator\OC Simulator Test\bin\Release\ASCOM.OCSimulator.Test.pdb to $COMMONFILES$\ASCOM\ObservingConditions\Simulator
-  Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
   Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
   Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.dll.config to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
   Install Files ..\..\..\..\Drivers and Simulators\OpenWeatherMap\OpenWeatherMap\bin\Release\ASCOM.OpenWeatherMap.ObservingConditions.pdb to $COMMONFILES$\ASCOM\ObservingConditions\OpenWeatherMap
@@ -1150,40 +1148,6 @@ if Variable REMOVE not Equals TRUE
   Write Registry Key HKLM\SOFTWARE\ASCOM\Video Drivers\,  (permanent)
   [END REGION]
    
-  [DEFINE REGION: Create shortcuts]
-  Comment: Menu shortcuts
-  Comment: Install after main MSI install has run so we pick up correct icons from applicaitons
-  Write into Text File $SETUPLOG$ from Value  (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
-  Write into Text File $SETUPLOG$ from Value  (at end of file)
-  Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-  Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-  Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
-  Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
-  Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
-  Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
-  Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
-  Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
-  Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
-  Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
-  Create Shortcut $SHORTCUTFOLDER$\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
-  Create Shortcut $SHORTCUTFOLDER$\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
-  Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
-  Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
-  Create Shortcut $SHORTCUTFOLDER$\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
-  Create Shortcut $SHORTCUTFOLDER$\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
-  Create Shortcut $SHORTCUTFOLDER$\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
-  Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
-  Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
-  Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
-  Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
-  Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
-  Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
-  Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
-  [END REGION]
-   
   [DEFINE REGION: Specify additional clean-up required when uninstalling]
   Comment: Remove TLB files created by RegAsm when application is uninstalled
   Delete Files $COMMONFILES$\ASCOM\Camera\ASCOM.Simulator.Camera\*.tlb (when uninstalling)
@@ -1207,6 +1171,45 @@ if Variable REMOVE not Equals TRUE
   if Variable SUCCESS not Equals ERROR
      
     [DEFINE REGION: Non-MSI installation activities]
+     
+    [DEFINE REGION: Create shortcuts]
+    Comment: Menu shortcuts
+    Comment: Install after main MSI install has run so we pick up correct icons from applicaitons
+    Set Variable NATIVE_ENGINE to TRUE
+    Write into Text File $SETUPLOG$ from Value $TIME$ Creating shortcuts in native mode (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ DesktopFolder: $DESKTOPFOLDER$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value $TIME$ ShortcutFolder: $SHORTCUTFOLDER$ (at end of file)
+    Write into Text File $SETUPLOG$ from Value  (at end of file)
+    Create Shortcut $DESKTOPFOLDER$\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $DESKTOPFOLDER$\ProfileExplorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions SimulatorTester to $COMMONFILES$\ASCOM\ObservingConditions\Simulator\ASCOM.OCSimulator.Test.exe
+    Create Shortcut $SHORTCUTFOLDER$\Tools\ObservingConditions Hub Tester to $COMMONFILES$\ASCOM\ObservingConditions\OCH\ASCOM.OCH.Test.exe
+    Create Shortcut $SHORTCUTFOLDER$\ASCOM Compatible Software to http://ascom-standards.org/Community/Partners.htm
+    Create Shortcut $SHORTCUTFOLDER$\ASCOM Drivers and Downloads to http://www.ascom-standards.org/Downloads/Index.htm
+    Create Shortcut $SHORTCUTFOLDER$\ASCOM User Guide to $TARGETDIR$\Docs\ASCOM_Users_Guide.pdf
+    Create Shortcut $SHORTCUTFOLDER$\Check for Updates to $TARGETDIR$\Tools\CheckForUpdates.js
+    Create Shortcut $SHORTCUTFOLDER$\Help and Device Interface Standards to $TARGETDIR$\Docs\PlatformHelp.chm
+    Create Shortcut $SHORTCUTFOLDER$\How to get support to http://ascom-standards.org/Support/index.htm
+    Create Shortcut $SHORTCUTFOLDER$\Show Platform Version to $COMMONFILES$\ASCOM\ShowPlatformVersion.vbs
+    Create Shortcut $SHORTCUTFOLDER$\Tools\Profile Explorer to $TARGETDIR$\Tools\ProfileExplorer.exe
+    Create Shortcut $SHORTCUTFOLDER$\Tools\ASCOM Diagnostics to $TARGETDIR$\Tools\ASCOM Diagnostics.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Dome Simulator to $COMMONFILES$\ASCOM\Dome\DomeSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator to $COMMONFILES$\ASCOM\FilterWheel\FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\FilterWheel Simulator .NET to $COMMONFILES$\ASCOM\FilterWheel\ASCOM.FilterWheelSim\ASCOM.FilterWheelSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Focus Simulator to $COMMONFILES$\ASCOM\Focuser\FocusSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Rotator Simulator .NET to $COMMONFILES$\ASCOM\Rotator\ASCOM.RotatorSimulator\ASCOM.RotatorSimulator.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Switch Simulator to $COMMONFILES$\ASCOM\Switch\SwitchSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator to $COMMONFILES$\ASCOM\Telescope\ScopeSim.exe
+    Create Shortcut $SHORTCUTFOLDER$\Simulators\Telescope Simulator .NET to $COMMONFILES$\ASCOM\Telescope\ASCOM.TelescopeSimulator\ASCOM.TelescopeSimulator.exe
+    Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Connection Monitor to $COMMONFILES$\ASCOM\Telescope\Pipe.exe
+    Create Shortcut $SHORTCUTFOLDER$\Tools\Pipe Help to $COMMONFILES$\ASCOM\Telescope\PipeHubHelp.htm
+    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Scope-Dome Hub to $COMMONFILES$\ASCOM\Telescope\POTH.exe
+    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\POTH Help to $COMMONFILES$\ASCOM\Telescope\POTHHelp.htm
+    Create Shortcut $SHORTCUTFOLDER$\Scope-Dome Hubs\ASCOM Dome Control to $COMMONFILES$\ASCOM\Dome\ASCOMDome.exe
+    Set Variable NATIVE_ENGINE to FALSE
+     
+    [END REGION]
+     
     Comment: Register Platform 5 components
     Set Variable MYPROGRESS to 52
     Set Variable PROGRESSTEXT to Registering assembly ASCOM.Helper 1.0.0.0
