@@ -421,23 +421,9 @@ Install Files
 Set Variable
 Set Variable
 Install Files
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Create Shortcut
 Comment
 Install Files
-Create Shortcut
 Install Files
-Create Shortcut
 Comment
 Install Files
 Install Files
@@ -445,12 +431,9 @@ Install Files
 Install Files
 Install Files
 Install Files
-Create Shortcut
 Comment
 Install Files
 Install Files
-Create Shortcut
-Create Shortcut
 Code Folding Region
 Code Folding Region
 Install Files
@@ -464,8 +447,6 @@ Install Files
 Install Files
 Install Files
 Install Files
-Create Shortcut
-Create Shortcut
 Code Folding Region
 Code Folding Region
 Write Registry
@@ -486,7 +467,6 @@ If
 Write to Text File
 Install Files
 Install Files
-Create Shortcut
 Comment
 Install Assembly
 Install Files
@@ -507,6 +487,32 @@ Apply Changes
 Set Variable
 End
 Compiler Variable End
+Comment
+Code Folding Region
+Comment
+Set Variable
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Create Shortcut
+Set Variable
+Code Folding Region
 Comment
 Comment
 Set Variable
@@ -974,23 +980,9 @@ $
 {0C8B9776-07C6-4BFA-BF55-3B405BB78200}
 {B8873485-E285-417C-9580-D02DE360A1DC}
 {55908527-B59D-42B1-9D10-42D039566565}
-{FDB09EE3-104F-4E47-8659-646104AD4CDA}
-{09767C29-1AFC-47DF-BEC0-E81EC22B075B}
-{68D285BA-CAF3-4BF5-9E23-59C7C08920D6}
-{AADE4209-5063-4EEE-9F91-A5922F3D1FCA}
-{ADD53AAB-8DB2-492F-8649-6C2DC33DAC6F}
-{6164BBCC-8F3C-4A2D-9975-22D1625D32A2}
-{EB7F500E-2C93-4FB9-B5BB-76332590EFE5}
-{E4908A1B-BF68-4E04-9935-C889916AC793}
-{ACBBA184-E349-40FD-A1BE-4AE88D234DB4}
-{22BEB51E-76A8-4F0D-B618-F4C15C80AE1C}
-{221A8A01-69CB-4B44-81CB-611CBF4BC171}
-{B36D7EB8-A369-410D-A6A9-16913BEEAC41}
 {B5A15F0C-EAFD-4966-8B3E-7168229E610B}
 {78BDADB0-1211-4D85-B9AF-22F8A6DD66F7}
-{60A149B5-D75F-4A4D-BB19-3CFCB248D943}
 {DA36DB18-F09F-449D-B575-18D06D9A8751}
-{C0C5F2ED-0110-404A-9237-569424D511C2}
 {0BC88320-115C-401E-95E1-473A1DB8B50B}
 {8287DFF3-F622-45AD-BE48-C9EA2476F08D}
 {C77E90CC-3699-4FBF-9A7D-A5C087216251}
@@ -998,12 +990,9 @@ $
 {3CA815CB-8AB1-49D7-9F23-8E643BC4EB38}
 {623688B9-C5AD-4916-87E6-905D489E79CB}
 {BEFAD791-0B00-4CEE-9BA9-C417C8AA5546}
-{871207C8-36DE-4D5E-905E-529B48FDB573}
 {96AD7446-2BBE-481F-837F-3020C7FF718C}
 {C550B1CA-B28D-432A-A5AE-407BD356A787}
 {1E59158E-BA84-4D76-827D-CC30F64F8A43}
-{85C67E31-AA84-4A75-98CB-79DC1C3444D7}
-{2D5DFE61-E46A-4914-86DC-7AD62BAAA426}
 {FFF5D8FD-CDA9-4FA6-8BA7-E922004CD2BB}
 {E7539521-EB47-427B-A918-2A2FCEB82449}
 {AF5ED094-3A84-465A-9907-D892C2D78EB4}
@@ -1017,8 +1006,6 @@ $
 {52C0CAC6-634A-4DFE-92D8-713EDF1FD7E6}
 {62D8753A-017C-4A29-9F6C-7B0DA0FADC71}
 {BE0FF982-C3E6-4A13-9284-A087DD1FE94A}
-{C52F6281-EE66-4105-8B78-93DBF10410B9}
-{C93D432A-F9A9-43F8-B670-E33506032F94}
 {01AEFF54-2934-4CD2-9C42-4C71B701955E}
 {A86164A8-B1A0-42F4-A365-9287B4766A2C}
 {9BADDBA6-A183-419F-843A-4E6C189723B2}
@@ -1039,7 +1026,6 @@ $
 {3C853666-602D-48CC-90FA-4D4A144B54A7}
 {2A752E25-0E7E-4E13-B1D3-FB2305E2354C}
 {2481BBD9-6FCE-47E2-9952-DD8776769777}
-{84B03C40-6099-4728-97B9-02168416C613}
 {CCBD330A-E6E1-4524-9A56-3A52CC082EA3}
 {E88C9B68-BF66-4536-A611-FBE660565282}
 {7C5262F8-759A-4667-8F6A-BF8A850F33FE}
@@ -1061,6 +1047,32 @@ $
 {E31FB623-AA93-46F2-999D-677371C84DF1}
 {C854CE6D-7420-4230-8D46-6269216AE23C}
 {36773DFA-11E8-4B8B-A42C-DE4288F054AF}
+{552CAB98-ECE0-4974-B624-E40A919DBFDD}
+{08E4FC9D-2F28-47E3-B043-1CFFF46CB2FB}
+{9F112CA8-0239-4464-A056-EA3FE697597E}
+{C54FB7DD-928D-44BF-84D4-CF967E507AE7}
+{D1379E7D-7C30-4FA4-99AA-9A27276A01A1}
+{527C8DD3-C57F-4E3D-9237-E20535885395}
+{2D42CFFF-A462-45D5-9354-09683B6E6C43}
+{07AB0CA7-8D2B-470B-998F-557890EFFBCD}
+{04122420-C7F4-43C8-928B-2F287D504C2C}
+{C950EFD4-6C8A-4780-81F2-77C16A47A889}
+{EF87D779-F836-4C8F-8A30-D4618D2FE024}
+{98F3C24E-9522-48EE-904D-8AAFC7367FFE}
+{AA6D3A1C-8A6D-438C-9EA0-8F244065EFC3}
+{9B7994E4-6083-4153-BFAE-47AA125F9A4D}
+{D5C5BD78-0F03-4FB1-8E2B-FD400466215D}
+{79E73DF8-B21C-42B3-89EE-480C06F0DECE}
+{1E6F71B8-755B-48E3-B7AA-F1AE6511DDF6}
+{AC91EC4D-2E16-4FF8-972D-CAD6A45316C8}
+{BBDB0281-A4D5-466B-9AD8-2FA316DB207A}
+{9579FE86-E6E8-48DE-8F0C-1312F993C787}
+{F8955333-7896-4524-B3C8-B7EAE26EAFB5}
+{A33BCF30-E50C-4185-B6C5-76FBC7EA079C}
+{497901E1-FC91-4196-A7CC-4DC4A3DC321B}
+{D8E34C7F-6752-4C95-9FEE-41BFB7456A87}
+{06C6A054-29DF-4BE5-AE74-C5BBF1E83EF3}
+{77BC2B9F-DF47-43B1-BFFC-8C1901FDEB01}
 {BF70540B-FA52-4F0C-910C-88CC4BAA6716}
 {BFFE4FA2-11C9-465B-A428-56CE1070B32C}
 {1B5DCE04-C0BD-4E39-99B2-2CD9BD324DF5}
@@ -1258,6 +1270,10 @@ Remove the InstallAware Logo message
 
 {6CE877ED-628E-4D6D-8711-8A9ED0E72354}
 Platform 6.4 references
+{08E4FC9D-2F28-47E3-B043-1CFFF46CB2FB}
+Create shortcuts through the native engine so that we can use variables in the icon path field.
+{77BC2B9F-DF47-43B1-BFFC-8C1901FDEB01}
+
 {3188C79A-1A28-4C92-84A6-B3C5A6485BF8}
 PREREQ
 FALSE
@@ -1438,6 +1454,12 @@ MYPROGRESS$MYAH$MYAH$FALSE
 {9916BF02-B6E2-42C1-9892-0B56126F02CA}
 PROGRESSTEXT$MYAH$MYAH$FALSE
 Removing previous tools...
+{9F112CA8-0239-4464-A056-EA3FE697597E}
+NATIVE_ENGINE$MYAH$MYAH$FALSE
+TRUE
+{D8E34C7F-6752-4C95-9FEE-41BFB7456A87}
+NATIVE_ENGINE$MYAH$MYAH$FALSE
+FALSE
 {15C151B2-9373-4502-98C4-B9ABC17CF5C6}
 BUILDMODE
 0
@@ -2944,69 +2966,39 @@ $UNINSTALLER$
 UNINSTALLCODE
 TRUE
 
-{C93D432A-F9A9-43F8-B670-E33506032F94}
-http://www.jrsoftware.org/isinfo.php
-Inno Installer Web Site
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Tools
-
-
-
-C:\InstallAware-ASCOM-Build\Internet.ico
-|
-0|
-{C52F6281-EE66-4105-8B78-93DBF10410B9}
-$TARGETDIR$\Installer Generator\InstallerGen.exe
-Driver Install Script Generator
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Tools
-
-
-
-C:\InstallAware-ASCOM-Build\ASCOM.ico
-|
-0|
-{84B03C40-6099-4728-97B9-02168416C613}
-$TARGETDIR$\Developer Documentation\Templates.html
+{497901E1-FC91-4196-A7CC-4DC4A3DC321B}
+$TARGETDIR$\Developer Documentation\Templates.html|FALSE
 Visual Studio Templates Readme
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation|FALSE
 
 
-
-C:\InstallAware-ASCOM-Build\ASCOM.ico
+|FALSE
+$COMMONFILES$\ASCOM\Platform\ASCOM.ico|FALSE
 |
 0|
-{B36D7EB8-A369-410D-A6A9-16913BEEAC41}
-$TARGETDIR$\Developer Documentation\wsh-56.chm
-Windows Scripting Host Help
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+{F8955333-7896-4524-B3C8-B7EAE26EAFB5}
+http://www.jrsoftware.org/isinfo.php|FALSE
+Inno Installer Web Site
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Tools|FALSE
 
 
-
-
+|FALSE
+$COMMONFILES$\ASCOM\Platform\Internet.ico|FALSE
 |
 0|
-{221A8A01-69CB-4B44-81CB-611CBF4BC171}
-$TARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
-Platform 6 Client-Driver Interaction V2
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+{9579FE86-E6E8-48DE-8F0C-1312F993C787}
+$TARGETDIR$\Installer Generator\InstallerGen.exe|FALSE
+Driver Install Script Generator
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Tools|FALSE
 
 
-
-
+|FALSE
+$COMMONFILES$\ASCOM\Platform\ASCOM.ico|FALSE
 |
 0|
-{ACBBA184-E349-40FD-A1BE-4AE88D234DB4}
-$TARGETDIR$\Developer Documentation\Platform Evolution.pdf
-Platform Evolution
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{E4908A1B-BF68-4E04-9935-C889916AC793}
-$TARGETDIR$\Developer Documentation\NOVAS_C3.0_Guide.pdf
-NOVAS 3 Users Guide
+{BBDB0281-A4D5-466B-9AD8-2FA316DB207A}
+$TARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
+ASCOM Settings Provider Documentation
 $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
@@ -3014,117 +3006,7 @@ $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 |
 0|
-{AADE4209-5063-4EEE-9F91-A5922F3D1FCA}
-$TARGETDIR$\Developer Documentation\Algorithms.pdf
-Fundamental Astrometry Theory Paper
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{68D285BA-CAF3-4BF5-9E23-59C7C08920D6}
-$TARGETDIR$\Developer Documentation\DriverInstallers.html
-Creating Driver Installers with Inno
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-C:\InstallAware-ASCOM-Build\ASCOM.ico
-|
-0|
-{FDB09EE3-104F-4E47-8659-646104AD4CDA}
-$TARGETDIR$\Developer Documentation\Script56.chm
-Active Scripting Help
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{09767C29-1AFC-47DF-BEC0-E81EC22B075B}
-$TARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
-ASCOM Developer Help
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{6164BBCC-8F3C-4A2D-9975-22D1625D32A2}
-$TARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
-How to create multiple versions of a driver
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{ADD53AAB-8DB2-492F-8649-6C2DC33DAC6F}
-$TARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
-How to create a local server  based driver
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{22BEB51E-76A8-4F0D-B618-F4C15C80AE1C}
-$TARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
-Pointing State and Side of Pier
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{60A149B5-D75F-4A4D-BB19-3CFCB248D943}
-$TARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
-NOVAS 3.1 Users Guide
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{C0C5F2ED-0110-404A-9237-569424D511C2}
-$TARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
-How to Migrate from Astro32
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{EB7F500E-2C93-4FB9-B5BB-76332590EFE5}
-$TARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
-Introduction to Developing ASCOM Drivers
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-
-
-
-|
-0|
-{871207C8-36DE-4D5E-905E-529B48FDB573}
-explorer.exe
-Sample script files
-$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
-
-/e, $TARGETDIR$\Sample Scripts
-
-
-|
-0|
-{85C67E31-AA84-4A75-98CB-79DC1C3444D7}
+{AC91EC4D-2E16-4FF8-972D-CAD6A45316C8}
 $TARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
 Video Driver Developer Documentation
 $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
@@ -3134,9 +3016,149 @@ $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 |
 0|
-{2D5DFE61-E46A-4914-86DC-7AD62BAAA426}
-$TARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
-ASCOM Settings Provider Documentation
+{1E6F71B8-755B-48E3-B7AA-F1AE6511DDF6}
+$TARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
+Platform 6 Client-Driver Interaction V2
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{79E73DF8-B21C-42B3-89EE-480C06F0DECE}
+$TARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
+Pointing State and Side of Pier
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{D5C5BD78-0F03-4FB1-8E2B-FD400466215D}
+$TARGETDIR$\Developer Documentation\Platform Evolution.pdf
+Platform Evolution
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{9B7994E4-6083-4153-BFAE-47AA125F9A4D}
+$TARGETDIR$\Developer Documentation\NOVAS_C3.0_Guide.pdf
+NOVAS 3 Users Guide
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{AA6D3A1C-8A6D-438C-9EA0-8F244065EFC3}
+$TARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
+Introduction to Developing ASCOM Drivers
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{98F3C24E-9522-48EE-904D-8AAFC7367FFE}
+$TARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
+How to create multiple versions of a driver
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{EF87D779-F836-4C8F-8A30-D4618D2FE024}
+$TARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
+How to create a local server  based driver
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{C950EFD4-6C8A-4780-81F2-77C16A47A889}
+$TARGETDIR$\Developer Documentation\Algorithms.pdf
+Fundamental Astrometry Theory Paper
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{04122420-C7F4-43C8-928B-2F287D504C2C}
+$TARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
+NOVAS 3.1 Users Guide
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{07AB0CA7-8D2B-470B-998F-557890EFFBCD}
+$TARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
+How to Migrate from Astro32
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{C54FB7DD-928D-44BF-84D4-CF967E507AE7}
+explorer.exe
+Sample script files
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+/e, $TARGETDIR$\Sample Scripts
+
+
+|
+0|
+{D1379E7D-7C30-4FA4-99AA-9A27276A01A1}
+$TARGETDIR$\Developer Documentation\Script56.chm
+Active Scripting Help
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{527C8DD3-C57F-4E3D-9237-E20535885395}
+$TARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
+ASCOM Developer Help
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
+
+
+
+
+|
+0|
+{A33BCF30-E50C-4185-B6C5-76FBC7EA079C}
+$TARGETDIR$\Developer Documentation\DriverInstallers.html|FALSE
+Creating Driver Installers with Inno
+$SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation|FALSE
+
+
+|FALSE
+$COMMONFILES$\ASCOM\Platform\ASCOM.ico|FALSE
+|
+0|
+{2D42CFFF-A462-45D5-9354-09683B6E6C43}
+$TARGETDIR$\Developer Documentation\wsh-56.chm
+Windows Scripting Host Help
 $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation
 
 
@@ -3587,6 +3609,12 @@ Update Developer Tools installation information in Profile
 {41E998E9-31B5-45B6-B6ED-26BDF6F47EA9}
 FALSE
 Copy of 
+{552CAB98-ECE0-4974-B624-E40A919DBFDD}
+TRUE
+Create shortcuts
+{06C6A054-29DF-4BE5-AE74-C5BBF1E83EF3}
+FALSE
+Copy of Copy of Copy of 
 {75C1980E-47A2-4860-960F-C1F7C552A32A}
 DISKSPACE
 C:
@@ -4136,6 +4164,12 @@ C
 
 
 
+
+
+
+
+
+
 C
 
 
@@ -4155,6 +4189,12 @@ C
 
 
 $
+
+
+
+
+
+
 
 
 

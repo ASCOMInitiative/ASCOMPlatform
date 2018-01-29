@@ -421,23 +421,9 @@ else
     Set Variable PROGRESSMODE to 
     Set Variable PROGRESS to 70
     Install Files ..\..\..\..\Help\Output\Developer\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Active Scripting Help to $TARGETDIR$\Developer Documentation\Script56.chm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\ASCOM Developer Help to $TARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Creating Driver Installers with Inno to $TARGETDIR$\Developer Documentation\DriverInstallers.html
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Fundamental Astrometry Theory Paper to $TARGETDIR$\Developer Documentation\Algorithms.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to create a local server  based driver to $TARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to create multiple versions of a driver to $TARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Introduction to Developing ASCOM Drivers to $TARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\NOVAS 3 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.0_Guide.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Platform Evolution to $TARGETDIR$\Developer Documentation\Platform Evolution.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Pointing State and Side of Pier to $TARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Windows Scripting Host Help to $TARGETDIR$\Developer Documentation\wsh-56.chm
     Comment: Platform 6 SP1 Documentation
     Install Files ..\..\..\..\NOVAS\NOVAS-31\NOVAS_C3.1_Guide.pdf to $TARGETDIR$\Developer Documentation
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\NOVAS 3.1 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
     Install Files ..\..\..\..\Help\Platform Supporting Documents\GuideToAstro32Migration.pdf to $TARGETDIR$\Developer Documentation
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to Migrate from Astro32 to $TARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
     Comment: Platform 6 SP2 Files
     Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-earth.js to $TARGETDIR$\Sample Scripts
     Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\check-planet.js to $TARGETDIR$\Sample Scripts
@@ -445,12 +431,9 @@ else
     Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\KepNovSample.vbs to $TARGETDIR$\Sample Scripts
     Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\LocalTopoToJ2000.js to $TARGETDIR$\Sample Scripts
     Install Files ..\..\..\..\ASCOM.Astrometry\Astrometry Test Scripts\TransformCheck.vbs to $TARGETDIR$\Sample Scripts
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Sample script files to explorer.exe
     Comment: Platform 6.1 Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM Video Developers Documentation.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Platform Supporting Documents\ASCOM Settings Provider.pdf to $TARGETDIR$\Developer Documentation
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Video Driver Developer Documentation to $TARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\ASCOM Settings Provider Documentation to $TARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
     [END REGION]
     [DEFINE REGION: Driver installer]
     Install Files ..\..\..\..\Doc\DriverInstallers.html to $TARGETDIR$\Developer Documentation
@@ -464,8 +447,6 @@ else
     Install Files ..\..\..\..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $TARGETDIR$\Installer Generator\Resources
     Install Files ..\..\..\..\Driver Inst\InstallerGen\Template\DriverInstallTemplate.iss to $TARGETDIR$\Installer Generator\Resources
     Install Files ..\..\..\..\Driver Inst\InstallerGen\Graphics\WizardImage.bmp to $TARGETDIR$\Installer Generator\Resources
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Driver Install Script Generator to $TARGETDIR$\Installer Generator\InstallerGen.exe
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
     [END REGION]
     [DEFINE REGION: Update Developer Tools installation information in Profile]
     Write Registry Key HKLM\SOFTWARE\ASCOM\Platform\Developer Tools Installation Date, $DATE$ $TIME$
@@ -486,7 +467,6 @@ else
     Write into Text File $SETUPLOG$ from Value Installing Project Templates (at end of file)
     Install Files ..\..\..\..\DriverTemplates\TemplateSources\*.zip to $TARGETDIR$\Templates
     Install Files ..\..\..\..\Doc\Templates.html to $TARGETDIR$\Developer Documentation
-    Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
     Comment: Support DLL for driver templates
     Install Assembly ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to Global Assembly Cache
     Install Files ..\..\..\..\DriverTemplates\ASCOM.Setup.TemplateWizard\bin\Release\ASCOM.Setup.TemplateWizard.dll to $TARGETDIR$\Platform 6 Developer Components\Installer Generator
@@ -507,6 +487,32 @@ else
     Set Variable MYPROGRESS to 60
   end
   [compiler end]
+   
+  [DEFINE REGION: Create shortcuts]
+  Comment: Create shortcuts through the native engine so that we can use variables in the icon path field.
+  Set Variable NATIVE_ENGINE to TRUE
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Sample script files to explorer.exe
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Active Scripting Help to $TARGETDIR$\Developer Documentation\Script56.chm
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\ASCOM Developer Help to $TARGETDIR$\Developer Documentation\PlatformDeveloperHelp.chm
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Windows Scripting Host Help to $TARGETDIR$\Developer Documentation\wsh-56.chm
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to Migrate from Astro32 to $TARGETDIR$\Developer Documentation\GuideToAstro32Migration.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\NOVAS 3.1 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.1_Guide.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Fundamental Astrometry Theory Paper to $TARGETDIR$\Developer Documentation\Algorithms.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to create a local server  based driver to $TARGETDIR$\Developer Documentation\Making a Local Server based Driver.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\How to create multiple versions of a driver to $TARGETDIR$\Developer Documentation\Generating Multiple ASCOM Drivers.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Introduction to Developing ASCOM Drivers to $TARGETDIR$\Developer Documentation\Introduction to Developing ASCOM Drivers.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\NOVAS 3 Users Guide to $TARGETDIR$\Developer Documentation\NOVAS_C3.0_Guide.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Platform Evolution to $TARGETDIR$\Developer Documentation\Platform Evolution.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Pointing State and Side of Pier to $TARGETDIR$\Developer Documentation\ASCOM SideOfPier Behaviour.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Platform 6 Client-Driver Interaction V2 to $TARGETDIR$\Developer Documentation\Platform 6 Client-Driver Interaction V2.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Video Driver Developer Documentation to $TARGETDIR$\Developer Documentation\ASCOM Video Developers Documentation.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\ASCOM Settings Provider Documentation to $TARGETDIR$\Developer Documentation\ASCOM Settings Provider.pdf
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Driver Install Script Generator to $TARGETDIR$\Installer Generator\InstallerGen.exe
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Tools\Inno Installer Web Site to http://www.jrsoftware.org/isinfo.php
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Creating Driver Installers with Inno to $TARGETDIR$\Developer Documentation\DriverInstallers.html
+  Create Shortcut $SHORTCUTFILES$\ASCOM Platform 6\Developer Documentation\Visual Studio Templates Readme to $TARGETDIR$\Developer Documentation\Templates.html
+  Set Variable NATIVE_ENGINE to FALSE
+  [END REGION]
    
   Comment: Run the VsiInstaller to install the templates, provided that it is present on the system.
   Set Variable RC to 
