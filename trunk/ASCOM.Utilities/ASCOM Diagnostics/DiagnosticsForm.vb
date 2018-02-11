@@ -419,6 +419,11 @@ Public Class DiagnosticsForm
                     Catch ex As Exception
                         LogException("AstroUtilsTests", ex.ToString)
                     End Try
+                    Try
+                        SOFATests() : Action("")
+                    Catch ex As Exception
+                        LogException("SOFATests", ex.ToString)
+                    End Try
                 End If
 
                 If TestSimulators Then
