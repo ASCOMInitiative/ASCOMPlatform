@@ -1,9 +1,11 @@
 Comment: ASCOM Platform 6 Developer Components Setup Project
 Set Variable PROGRAMDATA to 
+Set Variable UNINSTALLCODE to 
  
 Comment: Set the dialogue transition style: Empty / FADE / SLIDE
 Set Variable FX to 
 Set Variable MYPROGRESS to 0
+Set Variable PROGRESSMODETYPE to MARQUEE
  
 Comment: Remove the InstallAware Logo message
 Set Variable MYAHLOGO to TRUE
@@ -272,15 +274,17 @@ Comment: Remove previous version (MSI install)
 if Variable NEEDSUPGRADE Equals TRUE
   Set Variable REMOVEOLD to 
   Set Variable ERROROLD to 
-  Set Variable PROGRESSMODE to 
+  Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
    
   Display Dialog: progress, use as progress dialog (non-modal)
   Set Variable PROGRESSTEXT to Removing previous tools...
   Comment: Find location of our uninstaller and run it
   Set Variable UNINSTALLER to 
   Read Registry Key HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{4A195DC6-7DF9-459E-8F93-60B61EB45288}\UninstallString into UNINSTALLER
+  Write into Text File $SETUPLOG$ from Value Uninstaller location: $UNINSTALLER$ (at end of file)
   Run Program $UNINSTALLER$ /s MODIFY=FALSE REMOVE=TRUE UNINSTALL=YES (WAIT, get result into variable UNINSTALLCODE)
-  if Variable REMOVEOLD Equals ERROR
+  Write into Text File $SETUPLOG$ from Value Uninstaller error code: $UNINSTALLCODE$, Last error: $ERROROLD$ (at end of file)
+  if Variable UNINSTALLCODE not Equals 0
     MessageBox: $TITLE$ Setup, Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
     Terminate Installation
   end
@@ -346,7 +350,7 @@ else
   Write into Text File $SETUPLOG$ from Value Removing old template wizard dll  - Attempt 2 - Return Code: $RC$ (at end of file)
    
   [OFFLINE CONTENT]
-  Set Variable PROGRESSMODE to 
+  Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
   Set Variable PROGRESS to 30
   Get Component Developer Components Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
@@ -399,7 +403,7 @@ else
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 6\, $TARGETDIR$\Components\Platform6
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5.5\, $TARGETDIR$\Components\Platform55
     Write Registry Key HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\ASCOM Platform 5\, $TARGETDIR$\Components\Platform5
-    Set Variable PROGRESSMODE to 
+    Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
     Set Variable PROGRESS to 50
     [END REGION]
     [DEFINE REGION: Developer Documentation]
@@ -412,13 +416,13 @@ else
     Install Files ..\..\..\..\Help\Platform Supporting Documents\Platform Evolution.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\NOVAS\NOVAS-3\NOVAS_C3.0_Guide.pdf to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\NOVAS\Algorithms.pdf to $TARGETDIR$\Developer Documentation
-    Set Variable PROGRESSMODE to 
+    Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
     Set Variable PROGRESS to 60
     Install Files ..\..\..\..\Doc\tip.gif to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Doc\Bug72T-sm.jpg to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Script Help Files\Script56.chm to $TARGETDIR$\Developer Documentation
     Install Files ..\..\..\..\Help\Script Help Files\wsh-56.chm to $TARGETDIR$\Developer Documentation
-    Set Variable PROGRESSMODE to 
+    Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
     Set Variable PROGRESS to 70
     Install Files ..\..\..\..\Help\Output\Developer\PlatformDeveloperHelp.chm to $TARGETDIR$\Developer Documentation
     Comment: Platform 6 SP1 Documentation
@@ -441,7 +445,7 @@ else
     Install Files ..\..\..\..\Driver Inst\InstallerGen\bin\Release\InstallerGen.pdb to $TARGETDIR$\Installer Generator
     Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.dll to $TARGETDIR$\Installer Generator
     Install Files ..\..\..\..\Driver Inst\WinFormsExtras\bin\Release\Microsoft.Samples.WinForms.Extras.pdb to $TARGETDIR$\Installer Generator
-    Set Variable PROGRESSMODE to 
+    Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
     Set Variable PROGRESS to 80
     Install Files ..\..\..\..\Driver Inst\InstallerGen\Template\TemplateSubstitutionParameters.txt to $TARGETDIR$\Installer Generator
     Install Files ..\..\..\..\Driver Inst\InstallerGen\License\CreativeCommons.txt to $TARGETDIR$\Installer Generator\Resources
@@ -516,7 +520,7 @@ else
    
   Comment: Run the VsiInstaller to install the templates, provided that it is present on the system.
   Set Variable RC to 
-  Set Variable PROGRESSMODE to 
+  Set Variable PROGRESSMODE to $PROGRESSMODETYPE$
   Get Component Developer Components\Visual Studio Driver Templates Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
     Comment: Install templates
