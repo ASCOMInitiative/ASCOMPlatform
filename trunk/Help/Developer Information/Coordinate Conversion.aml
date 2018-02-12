@@ -4,16 +4,20 @@
 	<section address="Which Astrometry Component?">
 		<title>Which Astrometry Component?</title>
    		<content>
-      		<para>At Platform 6.1, the Platform has four astrometric components:
+      		<para>At Platform 6.4, the Platform has eight astrometric components:
 	      		<list class="bullet">
 	      			<listItem>Transform</listItem>
 		      		<listItem>SOFA</listItem>
-		      		<listItem>NOVASCOM</listItem>
+					<listItem>Kepler</listItem>
+					<listItem>NOVASCOM</listItem>
 		      		<listItem>NOVAS2</listItem>
+					<listItem>NOVAS2COM</listItem>
+					<listItem>NOVAS3</listItem>
+					<listItem>NOVAS31</listItem>
 		      	</list>
 		      	
 		      	<para>The ASCOM.Astrometry namespace of the Platform has become overcrowded with components that have similar capabilities but that differ in small ways from each
-		      	other (e.g. NOVAS2, NOVAS2COM, NOVAS3, NOVAS3.1). The recent realisation that some NOVAS routines use iterative algorithms that can fail, when in very close 
+		      	other (e.g. NOVAS2, NOVAS2COM, NOVAS3, NOVAS31). The recent realisation that some NOVAS routines use iterative algorithms that can fail, when in very close 
 		      	proximity to the poles, led to a search for an alternative and the SOFA Library was found to be an actively maintained and authoritative choice.</para>
 		      	
 		      	<para>The addition of a SOFA component brings the number of high precision astronomy libraries distributed within the Platform to 8! To reduce the maintenance burden, SOFA will 
@@ -21,7 +25,7 @@
 		      	However, the NOVAS routines provide functionality that is not present in SOFA e.g. major and minor planet ephemerides and consequently the NOVAS 3.1 component
 		      	will continue to be distributed with the Platform.</para>
 
-				The following NOVAS components will be removed from the Platform installer at the next major update and moved into a separate installer:
+				The following components will be removed from the Platform installer at the next major update and moved into a separate installer:
 				<list class="bullet">
 					<listItem>Kepler</listItem>
 					<listItem>NOVASCOM</listItem>
@@ -30,8 +34,8 @@
 					<listItem>NOVAS3</listItem>
 				</list>
 
-		      	<para>Surely an embarrassment of riches? In fact these components provide different capabilities and are 
-		      	targetted at different requirements and uses as described below.</para>
+		      	<para>Surely, still an embarrassment of riches? In fact these components provide different capabilities and are 
+		      	targeted at different requirements and uses as described below.</para>
 	      	</para>
       	</content>
     </section>
@@ -57,7 +61,7 @@
       		the SOFA Board, appointed through IAU Division A — Fundamental Astronomy. SOFA also works closely with the International Earth Rotation and 
       		Reference Systems Service (IERS).</para>
       		
-      		<para>This comnponent presents the latest SOFA routines so that they are accessible from both 32bit and 64bit COM and .NET applications. 
+      		<para>This component presents the latest SOFA routines so that they are accessible from both 32bit and 64bit COM and .NET applications. 
       		In 2014, ASCOM adopted SOFA as its primary technology for co-ordinate conversion. ASCOM's intention is that the ASCOM SOFA component will be updated 
       		as each new SOFA release is made rather than adding new components as was done for NOVAS 3.0 and NOVAS 3.1</para>
       	</content>

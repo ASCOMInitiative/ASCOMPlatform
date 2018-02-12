@@ -1,2 +1,0 @@
-System.NullReferenceException: Object reference not set to an instance of an object.
-   at devplex.Tools.Docx2UnitTestCodeGenerator.GenerateCode(String inputFileName, String inputFileContent)
