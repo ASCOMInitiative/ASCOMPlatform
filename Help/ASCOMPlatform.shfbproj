@@ -25,16 +25,17 @@
     <CopyrightText>Copyright &amp;#169%3b 2010-18, The ASCOM Initiative</CopyrightText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="ASCOM" isExposed="True">
-  <Filter entryType="Class" fullName="ASCOM.ActionNotImplementedException" filterName="ActionNotImplementedException" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.DriverAccessCOMException" filterName="DriverAccessCOMException" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.NotConnectedException" filterName="NotConnectedException" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.ParkedException" filterName="ParkedException" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.SlavedException" filterName="SlavedException" isExposed="False" />
-  <Filter entryType="Class" fullName="ASCOM.ValueNotSetException" filterName="ValueNotSetException" isExposed="False" />
-</Filter>
-<Filter entryType="Namespace" fullName="System" isExposed="True">
-  <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
-</Filter></ApiFilter>
+        <Filter entryType="Class" fullName="ASCOM.ActionNotImplementedException" filterName="ActionNotImplementedException" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.DriverAccessCOMException" filterName="DriverAccessCOMException" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.NotConnectedException" filterName="NotConnectedException" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.ParkedException" filterName="ParkedException" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.SlavedException" filterName="SlavedException" isExposed="False" />
+        <Filter entryType="Class" fullName="ASCOM.ValueNotSetException" filterName="ValueNotSetException" isExposed="False" />
+      </Filter>
+      <Filter entryType="Namespace" fullName="System" isExposed="True">
+        <Filter entryType="Class" fullName="System.Object" filterName="Object" isExposed="False" />
+      </Filter>
+    </ApiFilter>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
@@ -137,6 +138,7 @@
       <AlternateText>ForceCOMPort</AlternateText>
     </Image>
     <Content Include="styles\branding-Help1.css" />
+    <None Include="Version History\Version 6.4.aml" />
     <None Include="Version History\Version 6.3 SP1.aml" />
     <None Include="Version History\Version 6.3.aml" />
     <None Include="Version History\Version 6.2.aml" />
