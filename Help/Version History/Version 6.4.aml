@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="EF4E9405-610F-4353-B4C5-11885BF24898" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-      	<section address="Intro612">
+      	<section address="Intro64">
     		<title>Introduction</title>
       		<content>
 				<para>In line with previous Platform installers, 6.4 is a cumulative release that contains all enhancements and fixes from previous Platform releases and service packs.</para>
@@ -14,14 +14,14 @@
             </content>
 		</section>
 
-    	<section address="PreReqs">
+    	<section address="PreReqs64">
     		<title>Platform Prerequisites</title>
       		<content>
         		<para>Platform 6.4 requires the following .NET framework version and library:</para>
       			<list class="bullet">
 	      			<listItem>.NET Framework 4 Client or .NET Framework 4 Full Installation or later</listItem>
 	      			<listItem>For WIndows 8 and later the .NET Framework 3.5 option must be enabled in Control Panel / Programs and Features / Turn Windows Features On and Off</listItem>
-	      			<listItem>Visual C++ 10.0 libraries</listItem>
+	      			<listItem>Visual C++ 14.0 libraries</listItem>
 	  			</list>
 				<para>While previous Platforms required .NET Framework 3.5, Platform 6.4 requires that .NET Framework 4 or later is installed on your PC. Framework 4 has been available 
 				for a number of years and is provided for all operating systems that the Platform supports (Windows XP onwards). This change is to enable Platform components to take 
@@ -36,11 +36,11 @@
 					</externalLink>
 					please check under "Popular Downloads - Developer Tools" if Framework 4 is not otherwise listed.
 				</para>
-				<para>The Platform also requires Visual C++ 14 libraries and the installer will provide these if they are not already present on your PC.</para>
+				<para>The Platform setup will install the C++ 14 libraries if they are not already present on your PC.</para>
             </content>
 		</section>
    		
-    	<section address="Changes631">
+    	<section address="Changes64">
     		<title>Key Changes in 6.4 - For Everyone</title>
       		<content>
 				<list class="bullet">
@@ -48,9 +48,10 @@
 		      		are accepted with the target forced to the range 0 to 360. This matches the specification more accurately; thanks to Steve Barkes for finding this.</listItem>
 		      		<listItem>Focuser Simulator - Now has a short delay after a move before IsMoving returns false.</listItem>
 		      		<listItem>Focuser Simulator - Now has a logging function and check box to enable this.</listItem>
-	      			<listItem>DeltaT and DeltaUT prediction modelling was updated in January 2018 with the latest USNO data, which is considered good to the end of 2019.</listItem>
+	      			<listItem>DeltaT and DeltaUT prediction modelling was updated in February 2018 with the latest USNO data, which is considered good for at least 1 year.</listItem>
 	      			<listItem>Installer - Now names uninstall logs as such rather than naming them install logs, which was confusing.</listItem>
-	      			<listItem>Platform Documentation
+	      			<listItem>Diagnostics - Now has an option to automatically open the log file at the end of the test sequence.</listItem>
+	      			<listItem>Platform Documentation Changes
 						<list class="bullet">
 							<listItem>Telescope.DeclinationRate was updated to reference SI seconds as agreed on ASCOM Talk in March 2017.</listItem>
 							<listItem>Telescope.RightAscensionRate was updated to reference its units as seconds of RA per sidereal second as agreed on ASCOM Talk in March 2017.</listItem>
@@ -58,34 +59,51 @@
 							<listItem>Camera.CCDTemperature was updated to allow CCD temperature to be returned even if there is no cooler.</listItem>
 	      				</list>
 	      			</listItem>
+	      			<listItem>Platform Infrastructure and Maintainability Improvements
+						<list class="bullet">
+			      			<listItem>The ASCOM open source license text has been added to the Platform SubVersion repository to reflect Open Source norms.</listItem>
+							<listItem>All components are compiled with Visual Studio 2017 and built with the latest tool set.</listItem>
+							<listItem>The help compiler has been updated to the current version.</listItem>
+							<listItem>Installaware has been updated to a much more recent version (InstallAware X6), removing some bugs and allowing additional features to be employed.</listItem>
+							<listItem>The installer now has a splash screen.</listItem>
+							<listItem>Except when an error occurs, the Platform and Developer installers no longer produce baloon messages. Messages now appear on the setup dialogue instead. </listItem>
+							<listItem>The progress bars have been re-implemented so that they move consistently from 0 to 100%</listItem>
+							<listItem>All C++ executables have been recompiled against the VS2017 C++ libraries.</listItem>
+							<listItem>The C++ v10.0 library installers have been removed and replaced with v14.0 library installers.</listItem>
+							<listItem>The SOFA implementation has been refactored to improve maintainability and incorporated in the main Platform solution.</listItem>
+	      				</list>
+	      			</listItem>
 	      		</list>
             </content>
 		</section>
    		
-    	<section address="Changes631Dev">
+    	<section address="Changes64Dev">
 	     	<title>Key Changes in 6.4 - For Developers</title>
 	      	<content>
 	      		<list class="bullet">
 	      			<listItem>A gain control has been added to the Camera test application.</listItem>
 	      			<listItem>COM error numbers are now included in documentation so that these can be thrown directly if required, e.g. by a Delphi application.</listItem>
-	      			<listItem>The ASCOM open source license text has been added to the Platform SubVersion repository to reflect Open Source norms.</listItem>
-	      			<listItem>Template Wizard - Now uplevelled to v6.3.</listItem>
+	      			<listItem>The Template Wizard has been uplevelled to v6.4.</listItem>
+	      			<listItem>There is now an additional paragraph in the Time Relationships help section that clarifies how DeltaT, DeltaUT, UT and TT move relative to each other.</listItem>
+	      			<listItem>A new caching component (ASCOM.Utilities.Cache)has been added to make it easier for driver authors to build robust drivers that can handle the high polling rates that some 
+	      			applications utilise. The cache provides a time based expiry approach, where stale items are automatically removed after expiry. In addition the cache provides an easy to use
+	      			throttling mechanic that can slow aggressive application polling to acceptable rates for the driver and hardware. Further information is provided in the remarks section of the Cache class 
+	      			and the property / method documentation.</listItem>
 				</list>
       		</content>
    		</section>
 
-        <section address="IssuesFixedPlatform">
+        <section address="IssuesFixedPlatform64">
            	<title>Issues Fixed - Platform</title>
             <content>
       			<list class="bullet">
-	      			<listItem>DCOM permissions revised so that local servers operate with Microsoft's Spectre and Meltdown security updates.</listItem>
-	      			<listItem>Several components returned references to Platform 6.2 rather than Platform 6.3 when queried.</listItem>
+	      			<listItem>When queried, several components returned version number references to earlier Platforms rather than the current Platform.</listItem>
 	      			<listItem>The Diagnostics DeltaT test no longer throws false errors.</listItem>
 				</list>
    			</content>
    		</section>
    		
-        <section address="IssuesFixedDeveloper">
+        <section address="IssuesFixedDeveloper64">
            	<title>Issues Fixed - Developers</title>
             <content>
       			<list class="bullet">
@@ -94,7 +112,7 @@
    			</content>
    		</section>
 
-       <section address="KnownIssuesDevelopment">
+       <section address="KnownIssuesDevelopment64">
            	<title>Known Limitations - Developers</title>
             <content>
       			<list class="bullet">
@@ -112,7 +130,7 @@
    			</content>
    		</section>
    		
-   		<section address="BreakingChanges">
+   		<section address="BreakingChanges64">
            	<title>Breaking Changes (For Developers)</title>
             <content>
       			<list class="bullet">
@@ -120,7 +138,7 @@
 				</list>
    			</content>
    		</section>
-  		<section address="DeprecatedCapability">
+  		<section address="DeprecatedCapability64">
            	<title>Deprecated Capabilites (For Developers)</title>
             <content>
       			<list class="bullet">

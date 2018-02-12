@@ -122,7 +122,7 @@
     <Compile Include="IVideo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\AssemblyVersionInfo.vb">
-      <Link>My Project\AssemblyVersionInfo.cs</Link>
+      <Link>My Project\AssemblyVersionInfo.vb</Link>
     </Compile>
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
