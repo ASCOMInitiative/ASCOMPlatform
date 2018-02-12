@@ -14,8 +14,12 @@
         <!-- Base date from which the number of days is calculated to give the build version number (should stay at Jan 1 2011 - it's good till at least 2019) -->
         <BuildBaseDate>January 1,2011</BuildBaseDate>
 
-        <!-- Location of the Installaware build executable -->
+        <!-- Location of the InstallAware build executable -->
         <MIABuild>miabuild.exe</MIABuild>
+
+        <!-- Location of the InstallAware shared strings folder on the build machine -->
+        <MIALanguageFolder>C:\Program Files (x86)\InstallAware X6 Creators Update\trans</MIALanguageFolder>
+        <ASCOMSharedStringsDirectory>Releases\ASCOM 6\Translated InstallAware Shared Strings</ASCOMSharedStringsDirectory>
 
         <!-- Names and locations of solution and project files used by this build script-->
         <PlatformVSSolution>ASCOM Platform.sln</PlatformVSSolution>
@@ -93,6 +97,12 @@
             <Output TaskParameter="Revision" PropertyName="Revision" />
         </SvnExport>
         <Message Text="Revision Level: $(Revision)"/>
+
+        <!-- Copy the InstallAware shared text strings to the InstallAware program directory. This is the only way that IA will actually use the modified strings! Ugh - but there it is. -->
+        <ItemGroup>
+            <MIASharedStrings Include="$(CheckoutDirectory)\$(ASCOMSharedStringsDirectory)\*.*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(MIASharedStrings)" DestinationFolder="$(MIALanguageFolder)" />
 
         <!-- Get the Platform version numbers from the MasterPlatformVersion file in the Export-->
         <ReadLinesFromFile File="$(VersionFile)" >
