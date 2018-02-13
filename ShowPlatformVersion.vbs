@@ -21,7 +21,7 @@ Else ' 64bit computer so use 64bit key
 	regRoot = REGROOT64
 End If
 
-PB=SH.RegRead(regRoot & "Platform Build") ' Read the platform build version
+PB = SH.RegRead(regRoot & "Platform Version") ' Read the platform build version
 WScript.Echo "This PC is running ASCOM Platform " & UTL.PlatformVersion & ", build " & PB & VBcRlF & vbcRlF & "Please use the ASCOM Diagnostics tool to obtain further information."
 
 Set UTL = Nothing ' Clean up objects
