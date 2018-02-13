@@ -112,9 +112,6 @@
     <Import Include="System.Text" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CLSCompliant.vb">
-      <Link>CLSCompliant.vb</Link>
-    </Compile>
     <Compile Include="Driver.vb" />
     <Compile Include="GlobalVariables.vb" />
     <Compile Include="HandboxForm.Designer.vb">

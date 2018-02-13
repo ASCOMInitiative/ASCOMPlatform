@@ -1,1 +1,0 @@
-GACInstall policy.1.0.ASCOM.DriverAccess.dll

@@ -150,7 +150,7 @@ namespace ASCOM.Internal.GACInstall
             installReference[0].dwFlags = 0;
             installReference[0].guidScheme = AssemblyCache.FUSION_REFCOUNT_OPAQUE_STRING_GUID;
             installReference[0].szIdentifier = "GACInstall";
-            installReference[0].szNonCannonicalData = "Installed by Peter Simpson's GACInstall program";
+            installReference[0].szNonCannonicalData = "Installed by ASCOM's GACInstall program";
             installReference[0].cbSize = 40;
 
             // Get an IAssemblyCache interface

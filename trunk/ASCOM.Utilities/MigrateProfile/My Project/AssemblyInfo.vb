@@ -9,13 +9,14 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("MigrateProfile")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Simpson Household")> 
+<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyCompany("ASCOM")>
 <Assembly: AssemblyProduct("MigrateProfile")> 
 <Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2014")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
+<Assembly: CLSCompliant(True)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("a3fca333-0593-4b7a-b684-64c4fbe08700")> 
@@ -29,6 +30,5 @@ Imports System.Runtime.InteropServices
 '
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
-' <Assembly: AssemblyVersion("1.0.*")> 
 
 <Assembly: AssemblyVersion("6.0.0.0")>

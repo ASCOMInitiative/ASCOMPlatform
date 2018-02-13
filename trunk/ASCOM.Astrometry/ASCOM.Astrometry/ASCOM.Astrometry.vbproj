@@ -109,9 +109,6 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CLSCompliant.vb">
-      <Link>CLSCompliant.vb</Link>
-    </Compile>
     <Compile Include="AstrometryExceptions.vb" />
     <Compile Include="AstroUtils.vb" />
     <Compile Include="DeltaT.vb" />

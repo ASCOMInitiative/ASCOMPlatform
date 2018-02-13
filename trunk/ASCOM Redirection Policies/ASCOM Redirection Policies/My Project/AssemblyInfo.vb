@@ -9,8 +9,8 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("ASCOM Redirection Policies")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Simpson Household")> 
+<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyCompany("ASCOM")>
 <Assembly: AssemblyProduct("ASCOM Redirection Policies")> 
 <Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009, 2014")> 
 <Assembly: AssemblyTrademark("")> 
@@ -29,6 +29,5 @@ Imports System.Runtime.InteropServices
 '
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
-' <Assembly: AssemblyVersion("1.0.*")> 
 
 <Assembly: AssemblyVersion("6.0.0.0")> 
