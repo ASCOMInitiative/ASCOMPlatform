@@ -150,9 +150,6 @@
     <Compile Include="..\..\..\..\ASCOM.Utilities\ASCOM.Utilities\XMLAccess.vb">
       <Link>XMLAccess.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\..\CLSCompliant.vb">
-      <Link>CLSCompliant.vb</Link>
-    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="..\..\..\..\AssemblyVersionInfo.vb">
       <Link>My Project\AssemblyVersionInfo.cs</Link>

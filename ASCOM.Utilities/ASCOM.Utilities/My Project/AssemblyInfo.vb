@@ -1,3 +1,4 @@
+Imports System
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
@@ -13,6 +14,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyCopyright("Copyright © ASCOM Initiative 2009, 2014")> 
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
+
+<Assembly: CLSCompliant(True)>
 
 ' Version information for an assembly consists of the following four values:
 

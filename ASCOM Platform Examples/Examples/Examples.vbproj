@@ -117,9 +117,6 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CLSCompliant.vb">
-      <Link>CLSCompliant.vb</Link>
-    </Compile>
     <Compile Include="ChooserExamples.vb" />
     <Compile Include="EnvironmentExamples.vb" />
     <Compile Include="EphemerisExamples.vb" />
