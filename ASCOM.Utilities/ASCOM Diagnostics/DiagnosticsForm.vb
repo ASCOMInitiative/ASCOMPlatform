@@ -18,7 +18,15 @@ Imports System.Text
 
 Public Class DiagnosticsForm
 
-#Region "Constants and Variables"
+#Region "Constants and Enums"
+    ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
+    Private Const TEST_ASTROMETRY As Boolean = True
+    Private Const TEST_CACHE As Boolean = True
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
+    Private Const TEST_REGISTRY As Boolean = True
+    Private Const TEST_SIMULATORS As Boolean = True
+    Private Const TEST_UTILITIES As Boolean = True
+
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
     Private Const INST_DISPLAY_VERSION As String = "DisplayVersion"
@@ -42,6 +50,13 @@ Public Class DiagnosticsForm
     Private Const TOLERANCE_E7 As Double = 0.0000001 ' Used in evaluating precision match of double values
     Private Const TOLERANCE_E8 As Double = 0.00000001 ' Used in evaluating precision match of double values
     Private Const TOLERANCE_E9 As Double = 0.000000001
+    Private Const TOLERANCE_100_MILLISECONDS = 0.000027777778 ' 1 arc second in hours also 1 second in degrees
+    Private Const TOLERANCE_1_SECOND = 0.00027777778 ' 1 arc second in hours also 1 second in degrees
+    Private Const TOLERANCE_5_SECONDS = 0.00138888888 ' 1 arc second in hours also 1 second in degrees
+
+    Private Const RADIANS_TO_HOURS As Double = 12.0 / Math.PI
+    Private Const RADIANS_TO_DEGREES As Double = 180.0 / Math.PI
+
     Private Const DOME_SLEW_TIMEOUT As Integer = 240
     Private Const INST_UNINSTALL_STRING As String = "UninstallString"
     Private Const INST_DISPLAY_ICON As String = "DisplayIcon"
@@ -61,6 +76,21 @@ Public Class DiagnosticsForm
     Private Const OPTIONS_AUTOVIEW_REGISTRYKEY As String = "Diagnostics Auto View Log"
     Private Const OPTIONS_AUTOVIEW_REGISTRYKEY_DEFAULT As Boolean = False
 
+    Private Enum DoubleType
+        Number
+        Hours0To24
+        Hours0To24InRadians
+        HoursMinus12ToPlus12
+        HoursMinus12ToPlus12InRadians
+        Degrees0To360
+        Degrees0To360InRadians
+        DegreesMinus180ToPlus180
+        DegreesMinus180ToPlus180InRadians
+    End Enum
+
+#End Region
+
+#Region "Variables"
     Private NMatches, NNonMatches, NExceptions As Integer
     Private ErrorList As New Generic.List(Of String)
 
@@ -88,14 +118,6 @@ Public Class DiagnosticsForm
     Private IntArray1D(ArrayCopySize) As Integer, IntArray2D(ArrayCopySize, ArrayCopySize) As Integer, IntArray3D(ArrayCopySize, ArrayCopySize, ArrayCopySize) As Integer
 
     Private DiagnosticsVersion As Version ' Assembly version number of this executable
-
-    ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
-    Private Const TestRegistry As Boolean = True
-    Private Const TestLogsAndApplications As Boolean = True
-    Private Const TestUtilities As Boolean = True
-    Private Const TestAstrometry As Boolean = True
-    Private Const TestSimulators As Boolean = True
-    Private Const TestCache As Boolean = True
 
 #End Region
 
@@ -237,7 +259,7 @@ Public Class DiagnosticsForm
                     LogException("ScanSerial", ex.ToString)
                 End Try
 
-                If TestRegistry Then
+                If TEST_REGISTRY Then
                     'Scan registry security rights
                     Try
                         ScanRegistrySecurity()
@@ -315,7 +337,7 @@ Public Class DiagnosticsForm
                     End Try
                 End If
 
-                If TestLogsAndApplications Then
+                If TEST_LOGS_AND_APPLICATIONS Then
                     'List setup files
                     Try
                         ScanLogs()
@@ -350,7 +372,7 @@ Public Class DiagnosticsForm
                 TL.BlankLine()
                 TL.BlankLine()
 
-                If TestUtilities Then
+                If TEST_UTILITIES Then
                     Try
                         'Functional tests
                         UtilTests() : Action("")
@@ -374,7 +396,7 @@ Public Class DiagnosticsForm
                     End Try
                 End If
 
-                If TestCache Then
+                If TEST_CACHE Then
                     Try
                         CacheTests() : Action("")
                     Catch ex As Exception
@@ -382,7 +404,7 @@ Public Class DiagnosticsForm
                     End Try
                 End If
 
-                If TestAstrometry Then
+                If TEST_ASTROMETRY Then
                     Try
                         NovasComTests() : Action("")
                     Catch ex As Exception
@@ -426,13 +448,21 @@ Public Class DiagnosticsForm
                     End Try
                 End If
 
-                If TestSimulators Then
+                If TEST_SIMULATORS Then
                     Try
                         SimulatorTests() : Action("")
                     Catch ex As Exception
                         LogException("SimulatorTests", ex.ToString)
                     End Try
                 End If
+
+                ' Check that none of the debug assist flags are set!
+                CompareBoolean("Test Configuration", "Astrometry Tests Enabled", TEST_ASTROMETRY, True)
+                CompareBoolean("Test Configuration", "Cache Tests Enabled", TEST_CACHE, True)
+                CompareBoolean("Test Configuration", "Logs and Applications Tests Enabled", TEST_LOGS_AND_APPLICATIONS, True)
+                CompareBoolean("Test Configuration", "Registry Tests Enabled", TEST_REGISTRY, True)
+                CompareBoolean("Test Configuration", "Simulators Tests Enabled", TEST_SIMULATORS, True)
+                CompareBoolean("Test Configuration", "Utilities Tests Enabled", TEST_UTILITIES, True)
 
                 If (NNonMatches = 0) And (NExceptions = 0) Then
                     SuccessMessage = "Congratulations, all " & NMatches & " function tests passed!"
@@ -508,9 +538,9 @@ Public Class DiagnosticsForm
 
         SOFA.CelestialToIntermediate(rc, dc, pr, pd, px, rv, date1, date2, ri, di, eo)
 
-        CompareDouble("SOFATests", "CelestialToIntermediate-r1", ri, 2.7101215729690389, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "CelestialToIntermediate-r1", di, 0.17293713672182304, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "CelestialToIntermediate-r1", eo, -0.0029006187126573756, 0.00000000000001)
+        CompareDouble("SOFATests", "CelestialToIntermediate-ri", ri, 2.7101215729690389, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "CelestialToIntermediate-di", di, 0.17293713672182304, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
+        CompareDouble("SOFATests", "CelestialToIntermediate-eo", eo, -0.0029006187126573756, TOLERANCE_E8)
 
         'Atco13 tests
         rc = 2.71
@@ -534,12 +564,12 @@ Public Class DiagnosticsForm
 
         j = SOFA.CelestialToObserved(rc, dc, pr, pd, px, rv, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob, eo)
 
-        CompareDouble("SOFATests", "CelestialToObserved-aob", aob, 0.0925177448538656, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
-        CompareDouble("SOFATests", "CelestialToObserved-zob", zob, 1.4076614052567671, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
-        CompareDouble("SOFATests", "CelestialToObserved-hob", hob, -0.0926515443143121, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "CelestialToObserved-dob", dob, 0.17166265600755917, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
-        CompareDouble("SOFATests", "CelestialToObserved-rob", rob, 2.7102604535030976, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "CelestialToObserved-eo", eo, -0.0030205483548024128, 0.00000000000001)
+        CompareDouble("SOFATests", "CelestialToObserved-aob", aob, 0.0925177448538656, TOLERANCE_100_MILLISECONDS, DoubleType.Degrees0To360InRadians)
+        CompareDouble("SOFATests", "CelestialToObserved-zob", zob, 1.4076614052567671, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
+        CompareDouble("SOFATests", "CelestialToObserved-hob", hob, -0.0926515443143121, TOLERANCE_100_MILLISECONDS, DoubleType.HoursMinus12ToPlus12InRadians)
+        CompareDouble("SOFATests", "CelestialToObserved-dob", dob, 0.17166265600755917, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
+        CompareDouble("SOFATests", "CelestialToObserved-rob", rob, 2.7102604535030976, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "CelestialToObserved-eo", eo, -0.0030205483548024128, TOLERANCE_E8)
         CompareInteger("SOFATests", "CelestialToObserved-status", j, 0)
 
         'Dtf2d tests
@@ -562,8 +592,8 @@ Public Class DiagnosticsForm
 
         SOFA.IntermediateToCelestial(ri, di, date1, date2, rc, dc, eo)
 
-        CompareDouble("SOFATests", "IntermediateToCelestial-rc", rc, 2.7101265045313747, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "IntermediateToCelestial-dc", dc, 0.17406325376283424, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "IntermediateToCelestial-rc", rc, 2.7101265045313747, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "IntermediateToCelestial-dc", dc, 0.17406325376283424, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
         CompareDouble("SOFATests", "IntermediateToCelestial-eo", eo, -0.0029006187126573756, 0.00000000000001)
 
         'Atio13 tests
@@ -584,11 +614,11 @@ Public Class DiagnosticsForm
 
         j = SOFA.IntermediateToObserved(ri, di, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, aob, zob, hob, dob, rob)
 
-        CompareDouble("SOFATests", "IntermediateToObserved-aob", aob, 0.0923395222479499, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
-        CompareDouble("SOFATests", "IntermediateToObserved-zob", zob, 1.4077587045137225, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
-        CompareDouble("SOFATests", "IntermediateToObserved-hob", hob, -0.092476198797820056, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "IntermediateToObserved-dob", dob, 0.17176534357582651, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
-        CompareDouble("SOFATests", "IntermediateToObserved-rob", rob, 2.7100851079868864, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
+        CompareDouble("SOFATests", "IntermediateToObserved-aob", aob, 0.0923395222479499, TOLERANCE_100_MILLISECONDS, DoubleType.Degrees0To360InRadians)
+        CompareDouble("SOFATests", "IntermediateToObserved-zob", zob, 1.4077587045137225, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
+        CompareDouble("SOFATests", "IntermediateToObserved-hob", hob, -0.092476198797820056, TOLERANCE_100_MILLISECONDS, DoubleType.HoursMinus12ToPlus12InRadians)
+        CompareDouble("SOFATests", "IntermediateToObserved-dob", dob, 0.17176534357582651, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
+        CompareDouble("SOFATests", "IntermediateToObserved-rob", rob, 2.7100851079868864, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
         CompareInteger("SOFATests", "IntermediateToObserved-status", j, 0)
 
         'Atoc13 tests
@@ -608,22 +638,22 @@ Public Class DiagnosticsForm
         ob1 = 2.7100851079868864
         ob2 = 0.17176534357582651
         j = SOFA.ObservedToCelestial("R", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
-        CompareDouble("SOFATests", "ObservedToCelestial-R-rc", rc, 2.7099567446610004, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "ObservedToCelestial-R-dc", dc, 0.17416965008953986, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToCelestial-R-rc", rc, 2.7099567446610004, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "ObservedToCelestial-R-dc", dc, 0.17416965008953986, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
         CompareInteger("SOFATests", "ObservedToCelestial-R-status", j, 0)
 
         ob1 = -0.092476198797820056
         ob2 = 0.17176534357582651
         j = SOFA.ObservedToCelestial("H", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
-        CompareDouble("SOFATests", "ObservedToCelestial-H-rc", rc, 2.7099567446610004, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "ObservedToCelestial-H-dc", dc, 0.17416965008953986, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToCelestial-H-rc", rc, 2.7099567446610004, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "ObservedToCelestial-H-dc", dc, 0.17416965008953986, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
         CompareInteger("SOFATests", "ObservedToCelestial-H-status", j, 0)
 
         ob1 = 0.0923395222479499
         ob2 = 1.4077587045137225
         j = SOFA.ObservedToCelestial("A", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, rc, dc)
-        CompareDouble("SOFATests", "ObservedToCelestial-A-rc", rc, 2.7099567446610004, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "ObservedToCelestial-A-dc", dc, 0.17416965008953986, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToCelestial-A-rc", rc, 2.7099567446610004, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "ObservedToCelestial-A-dc", dc, 0.17416965008953986, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
         CompareInteger("SOFATests", "ObservedToCelestial-A-status", j, 0)
 
         'Atoi13 tests
@@ -643,22 +673,22 @@ Public Class DiagnosticsForm
         ob1 = 2.7100851079868864
         ob2 = 0.17176534357582651
         j = SOFA.ObservedToIntermediate("R", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
-        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
         CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
 
         ob1 = -0.092476198797820056
         ob2 = 0.17176534357582651
         j = SOFA.ObservedToIntermediate("H", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
-        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
         CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
 
         ob1 = 0.0923395222479499
         ob2 = 1.4077587045137225
         j = SOFA.ObservedToIntermediate("A", ob1, ob2, utc1, utc2, dut1, elong, phi, hm, xp, yp, phpa, tc, rh, wl, ri, di)
-        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, 0.000000000001, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, 0.000000000001, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("SOFATests", "ObservedToIntermediate-ri", ri, 2.7101215744491358, TOLERANCE_100_MILLISECONDS, DoubleType.Hours0To24InRadians)
+        CompareDouble("SOFATests", "ObservedToIntermediate-di", di, 0.17293718391145677, TOLERANCE_100_MILLISECONDS, DoubleType.DegreesMinus180ToPlus180InRadians)
         CompareInteger("SOFATests", "ObservedToIntermediate-status", j, 0)
 
         ' TaiTT tests
@@ -1356,7 +1386,7 @@ Public Class DiagnosticsForm
     End Sub
 
     Private Function DeviceTest(ByVal Device As String, ByVal Test As String) As Object
-        Dim RetVal As Object = Nothing, SiderealTime, RetValDouble As Double, StartTime As Date
+        Dim RetVal As Object = Nothing, SiderealTime, RetValDouble, TargetRA As Double, StartTime As Date
         Dim DeviceTrackingRates As Object
         Dim FocuserMax, FocuserPosition As Integer, FocuserUpperPortion, FocuserTargetPosition As Integer
 
@@ -1478,36 +1508,39 @@ Public Class DiagnosticsForm
                             SiderealTime = DeviceObject.SiderealTime
                             TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
                             RetValDouble = DeviceObject.SiderealTime
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, 0.000001)
+                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
                         Case "TargetDeclination"
                             DeviceObject.TargetDeclination = 0.0
                             RetValDouble = DeviceObject.TargetDeclination
-                            CompareDouble(Device, Test, RetValDouble, 0.0, TOLERANCE_E4)
+                            CompareDouble(Device, Test, RetValDouble, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
                         Case "TargetRightAscension"
                             SiderealTime = DeviceObject.SiderealTime
-                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
+                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
                             DeviceObject.TargetRightAscension = SiderealTime
                             TL.LogMessage(Device, "Target RA set to: " & DeviceObject.TargetRightAscension)
                             RetValDouble = DeviceObject.TargetRightAscension
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_E4)
+                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
                         Case "Slew"
                             DeviceObject.UnPark()
                             DeviceObject.Tracking = True
                             SiderealTime = DeviceObject.SiderealTime
-                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & SiderealTime)
-                            DeviceObject.TargetRightAscension = SiderealTime
-                            TL.LogMessage(Device, "Target RA set to: " & DeviceObject.TargetRightAscension)
+                            TL.LogMessage(Device, "Received Sidereal time from telescope: " & AscomUtil.HoursToHMS(SiderealTime, ":", ":", "", 3))
+                            TargetRA = AstroUtil.ConditionRA(SiderealTime - 1.0) ' Set the RA target to be 1 hour before zenith
+                            TL.LogMessage(Device, "Target RA calculated as: " & AscomUtil.HoursToHMS(TargetRA, ":", ":", "", 3))
+                            DeviceObject.TargetRightAscension = TargetRA
+                            TL.LogMessage(Device, "Target RA set to: " & AscomUtil.HoursToHMS(DeviceObject.TargetRightAscension, ":", ":", "", 3))
                             DeviceObject.TargetDeclination = 0.0
-                            TL.LogMessage(Device, "Pre slew RA is: " & DeviceObject.RightAscension)
+                            TL.LogMessage(Device, "Pre-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
                             DeviceObject.SlewToTarget()
-                            TL.LogMessage(Device, "Post slew RA is: " & DeviceObject.RightAscension)
-                            CompareDouble(Device, Test, DeviceObject.RightAscension, SiderealTime, TOLERANCE_E4)
-                            CompareDouble(Device, Test, DeviceObject.Declination, 0.0, TOLERANCE_E4)
+                            Thread.Sleep(1000) ' Wait a short while to ensure the simulator has stabilised
+                            TL.LogMessage(Device, "Post-slew RA is: " & AscomUtil.HoursToHMS(DeviceObject.RightAscension, ":", ":", "", 3))
+                            CompareDouble(Device, Test & " RA", DeviceObject.RightAscension, TargetRA, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
+                            CompareDouble(Device, Test & " Dec", DeviceObject.Declination, 0.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
                         Case "RightAscension"
                             SiderealTime = DeviceObject.SiderealTime
                             DeviceObject.TargetRightAscension = SiderealTime
                             RetValDouble = DeviceObject.TargetRightAscension
-                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_E4)
+                            CompareDouble(Device, Test, RetValDouble, SiderealTime, TOLERANCE_5_SECONDS, DoubleType.Hours0To24)
                         Case "TrackingRates"
                             Try
                                 DeviceTrackingRates = DeviceObject.TrackingRates
@@ -1570,7 +1603,7 @@ Public Class DiagnosticsForm
                                 Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
                             Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
                             Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                            CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, 0.00001)
+                            CompareDouble(Device, Test, DeviceObject.Altitude, 45.0, TOLERANCE_5_SECONDS, DoubleType.DegreesMinus180ToPlus180)
                         Case "SlewToAzimuth"
                             StartTime = Now
                             DeviceObject.SlewToAzimuth(225.0)
@@ -1580,7 +1613,7 @@ Public Class DiagnosticsForm
                                 Action(Test & " " & Now.Subtract(StartTime).Seconds & " seconds / " & DOME_SLEW_TIMEOUT)
                             Loop Until ((DeviceObject.Slewing = False) Or (Now.Subtract(StartTime).TotalSeconds) > DOME_SLEW_TIMEOUT)
                             Compare(Device, Test & " Not Complete", DeviceObject.Slewing.ToString, "False")
-                            CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, 0.00001)
+                            CompareDouble(Device, Test, DeviceObject.Azimuth, 225.0, TOLERANCE_5_SECONDS, DoubleType.Degrees0To360)
                         Case Else
                             LogException("DeviceTest", "Unknown Dome Test: " & Test)
                     End Select
@@ -1621,7 +1654,7 @@ Public Class DiagnosticsForm
         Return RetVal
     End Function
 
-    Enum NOVAS3Functions
+    Private Enum NOVAS3Functions
         PlanetEphemeris
         ReadEph
         SolarSystem
@@ -1699,7 +1732,7 @@ Public Class DiagnosticsForm
         Wobble
     End Enum
 
-    Sub NOVAS3Tests()
+    Private Sub NOVAS3Tests()
         Status("NOVAS 3 Tests")
 
         NOVAS3Test(NOVAS3Functions.PlanetEphemeris)
@@ -1782,7 +1815,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub CheckoutStarsFull()
+    Private Sub CheckoutStarsFull()
         'Port of the NOVAS 3 ChecoutStarsFull.c program to confirm correct iplementation
 
         Const N_STARS As Integer = 3
@@ -1870,7 +1903,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub NOVAS3Test(ByVal TestFunction As NOVAS3Functions)
+    Private Sub NOVAS3Test(ByVal TestFunction As NOVAS3Functions)
         Dim rc As Integer, CatEnt As New CatEntry3, ObjectJupiter As New Object3, Observer As New Observer, skypos, SkyPos1 As New SkyPos
         Dim OnSurf As New OnSurface
         Dim RA, Dec, Dis, JD, GST, JDTest As Double
@@ -2297,7 +2330,7 @@ Public Class DiagnosticsForm
                     NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
                     NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
                     rc = Nov3.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
-                    LogRCDouble(TestFunction, "Novas3", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E6)
+                    LogRCDouble(TestFunction, "Novas3", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E5)
                 Case NOVAS3Functions.Spin
                     rc = 0
                     Nov3.Spin(20.0, Pos1, Pos2)
@@ -2375,7 +2408,7 @@ Public Class DiagnosticsForm
         Action("")
     End Sub
 
-    Sub NOVAS31Tests()
+    Private Sub NOVAS31Tests()
         Status("NOVAS 3.1 Tests")
 
         NOVAS31Test(NOVAS3Functions.PlanetEphemeris)
@@ -2458,7 +2491,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub CheckoutStarsFull31()
+    Private Sub CheckoutStarsFull31()
         'Port of the NOVAS 3 ChecoutStarsFull.c program to confirm correct iplementation
 
         Const N_STARS As Integer = 3
@@ -2539,7 +2572,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub NOVAS31Test(ByVal TestFunction As NOVAS3Functions)
+    Private Sub NOVAS31Test(ByVal TestFunction As NOVAS3Functions)
         Dim rc As Integer, CatEnt As New CatEntry3, ObjectJupiter As New Object3, Observer As New Observer, skypos, SkyPos1 As New SkyPos
         Dim OnSurf As New OnSurface
         Dim RA, Dec, Dis, JD, GST, JDTest As Double
@@ -2969,7 +3002,7 @@ Public Class DiagnosticsForm
                     NOVAS.NOVAS2.EarthTilt(JD, MObl, TObl, ee, DPSI, DEps)
                     NOVAS.NOVAS2.SiderealTime(JD, 0.0, ee, GST2)
                     rc = Nov31.SiderealTime(JD, 0.0, DeltaT, GstType.GreenwichApparentSiderealTime, Method.EquinoxBased, Accuracy.Full, GST)
-                    LogRCDouble(TestFunction, "Novas31", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E6)
+                    LogRCDouble(TestFunction, "Novas31", "GAST Equinox          ", rc, GST, GST2, TOLERANCE_E5)
                 Case NOVAS3Functions.Spin
                     rc = 0
                     Nov31.Spin(20.0, Pos1, Pos2)
@@ -3049,7 +3082,7 @@ Public Class DiagnosticsForm
         Action("")
     End Sub
 
-    Sub LogRC31(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
+    Private Sub LogRC31(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
         Dim LMsg As String
         If Note <> "" Then
             Note = Note & ": "
@@ -3075,7 +3108,7 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
-    Sub LogRC(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
+    Private Sub LogRC(ByVal Test As NOVAS3Functions, ByVal Note As String, ByVal rc As Integer, ByVal msg As String, ByVal Comparison As String)
         Dim LMsg As String
         If Note <> "" Then
             Note = Note & ": "
@@ -3101,7 +3134,7 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
-    Sub LogRCDouble(ByVal Test As NOVAS3Functions, ByVal Component As String, ByVal Note As String, ByVal rc As Integer, ByVal msg As Double, ByVal Comparison As Double, ByVal Tolerance As Double)
+    Private Sub LogRCDouble(ByVal Test As NOVAS3Functions, ByVal Component As String, ByVal Note As String, ByVal rc As Integer, ByVal msg As Double, ByVal Comparison As Double, ByVal Tolerance As Double)
 
         If rc = Integer.MaxValue Then ' Test is not implemented
             TL.LogMessage(Component & " *****", "Test " & Test.ToString & " is not implemented")
@@ -3114,7 +3147,7 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
-    Enum NOVAS2Functions
+    Private Enum NOVAS2Functions
         Abberation
         App_Planet
         App_Star
@@ -3160,7 +3193,7 @@ Public Class DiagnosticsForm
         Sun_Eph
     End Enum
 
-    Sub NOVAS2Tests()
+    Private Sub NOVAS2Tests()
         Dim T As Transform.Transform = New Transform.Transform
         Dim u As New Util
         Dim EarthBody, SunBody As New BodyDescription, StarStruct As New CatEntry, LocationStruct As New SiteInfo
@@ -3204,45 +3237,45 @@ Public Class DiagnosticsForm
 
         NOVAS.NOVAS2.StarVectors(StarStruct, POS, VEL)
         NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
-        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("Novas2Tests", "J2000 RA Target", RATarget, StarRAJ2000, TOLERANCE_E9, DoubleType.Hours0To24)
+        CompareDouble("Novas2Tests", "J2000 Dec Target", DECTarget, StarDecJ2000, TOLERANCE_E9, DoubleType.Degrees0To360)
 
         NOVAS.NOVAS2.Precession(J2000, POS, u.JulianDate, POSNow)
         NOVAS.NOVAS2.Vector2RADec(POSNow, RANow, DECNow)
         RC = NOVAS.NOVAS2.TopoStar(JD, EarthBody, 0, StarStruct, LocationStruct, RANow, DECNow)
         Compare("Novas2Tests", "TopoStar RC", RC, 0)
-        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("Novas2Tests", "Topo RA", RANow, 12.0098595883453, TOLERANCE_E9, DoubleType.Hours0To24)
+        CompareDouble("Novas2Tests", "Topo Dec", DECNow, 29.933637435611, TOLERANCE_E9, DoubleType.Degrees0To360)
 
         NOVAS.NOVAS2.RADec2Vector(StarRAJ2000, StarDecJ2000, 10000000000.0, POS)
         NOVAS.NOVAS2.Vector2RADec(POS, RATarget, DECTarget)
-        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("Novas2Tests", "RADec2Vector", RATarget, StarRAJ2000, TOLERANCE_E9, DoubleType.Hours0To24)
+        CompareDouble("Novas2Tests", "RADec2Vector", DECTarget, StarDecJ2000, TOLERANCE_E9, DoubleType.Degrees0To360)
 
         CompareDouble("Novas2Tests", "JulianDate", NOVAS.NOVAS2.JulianDate(2010, 12, 30, 9.0), TestJulianDate, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.AstroPlanet(JD, SunBody, EarthBody, RATarget, DECTarget, Distance)
         Compare("Novas2Tests", "AstroPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("Novas2Tests", "AstroPlanet RA", RATarget, 18.6090529142058, TOLERANCE_E9, DoubleType.Hours0To24)
+        CompareDouble("Novas2Tests", "AstroPlanet Dec", DECTarget, -23.172110257017, TOLERANCE_E9, DoubleType.Degrees0To360)
         CompareDouble("Novas2Tests", "AstroPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.VirtualPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "VirtualPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("Novas2Tests", "VirtualPlanet RA", RANow, 18.6086339599669, TOLERANCE_E9, DoubleType.Hours0To24)
+        CompareDouble("Novas2Tests", "VirtualPlanet Dec", DECNow, -23.1724757087899, TOLERANCE_E9, DoubleType.Degrees0To360)
         CompareDouble("Novas2Tests", "VirtualPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.AppPlanet(JD, SunBody, EarthBody, RANow, DECNow, Distance)
         Compare("Novas2Tests", "AppPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("Novas2Tests", "AppPlanet RA", RANow, 18.620097981585, TOLERANCE_E9, DoubleType.Hours0To24)
+        CompareDouble("Novas2Tests", "AppPlanet Dec", DECNow, -23.162343811122, TOLERANCE_E9, DoubleType.Degrees0To360)
         CompareDouble("Novas2Tests", "AppPlanet Dist", Distance, 0.983376046291495, TOLERANCE_E9)
 
         RC = NOVAS.NOVAS2.TopoPlanet(JD, SunBody, EarthBody, 0.0, LocationStruct, RANow, DECNow, Distance)
         Compare("Novas2Tests", "TopoPlanet RC", RC, 0)
-        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, TOLERANCE_E9, DoubleDisplayAs.HoursMinutesSeconds)
-        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, TOLERANCE_E9, DoubleDisplayAs.DegreesMinutesSeconds)
+        CompareDouble("Novas2Tests", "TopoPlanet RA", RANow, 18.6201822342814, TOLERANCE_E9, DoubleType.Hours0To24)
+        CompareDouble("Novas2Tests", "TopoPlanet Dec", DECNow, -23.1645247136453, TOLERANCE_E9, DoubleType.Degrees0To360)
         CompareDouble("Novas2Tests", "TopoPlanet Dist", Distance, 0.983371860482251, TOLERANCE_E9)
         TL.BlankLine()
 
@@ -3402,11 +3435,11 @@ Public Class DiagnosticsForm
         TL.BlankLine()
     End Sub
 
-    Sub CheckRC(ByVal RC As Short, ByVal Section As String, ByVal Name As String)
+    Private Sub CheckRC(ByVal RC As Short, ByVal Section As String, ByVal Name As String)
         Compare(Section, Name & " Return Code", RC.ToString, "0")
     End Sub
 
-    Sub NOVAS2StaticTest(ByVal TestFunction As NOVAS2Functions)
+    Private Sub NOVAS2StaticTest(ByVal TestFunction As NOVAS2Functions)
         Dim RA, DEC, Dis, POS(2), VEL(2), POS2(2), VEL2(2), EarthVector(2), LightTime, Hour, MObl, TObl, Eq, DPsi, DEps As Double
         Dim RadVel, JD, TDB, DeltaT, x, y, ZD, Az, rar, decr, a(4) As Double, SiteInfo As New ASCOM.Astrometry.SiteInfo
         Dim Gast, MRA, MDEC, LongNutation, ObliqueNutation, TdtJD, SecDiff, ST As Double
@@ -3572,14 +3605,14 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub TransformTest()
+    Private Sub TransformTest()
         TransformTest2000("Deneb", "20:41:25.916", "45:16:49.23", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Polaris", "02:31:51.263", "89:15:50.68", TOLERANCE_E5, TOLERANCE_E4)
         TransformTest2000("Arcturus", "14:15:38.943", "19:10:37.93", TOLERANCE_E5, TOLERANCE_E4)
         TL.BlankLine()
     End Sub
 
-    Sub TransformTest2000(ByVal Name As String, ByVal AstroRAString As String, ByVal AstroDECString As String, ByVal RATolerance As Double, DecTolerance As Double)
+    Private Sub TransformTest2000(ByVal Name As String, ByVal AstroRAString As String, ByVal AstroDECString As String, ByVal RATolerance As Double, DecTolerance As Double)
         Dim Util As New Util
         Dim AstroRA, AstroDEC As Double
         Dim SiteLat, SiteLong, SiteElev As Double
@@ -3617,8 +3650,8 @@ Public Class DiagnosticsForm
             rc = Nov31.TopoStar(AstroUtil.JulianDateTT(0.0), AstroUtil.DeltaT, Cat3, OnSurface3, Accuracy.Full, RA, DEC)
             TL.LogMessage("TransformTest", Name & " Novas31 RA/DEC Actual  : " & Util.HoursToHMS(TR.RATopocentric, ":", ":", "", 3) & " " & Util.DegreesToDMS(TR.DECTopocentric, ":", ":", "", 3))
             TL.LogMessage("TransformTest", Name & " Novas31 RA/DEC Expected: " & Util.HoursToHMS(RA, ":", ":", "", 3) & " " & Util.DegreesToDMS(DEC, ":", ":", "", 3))
-            CompareDouble("TransformTest", Name & " Novas31 Topocentric RA", TR.RATopocentric, RA, RATolerance, DoubleDisplayAs.HoursMinutesSeconds)
-            CompareDouble("TransformTest", Name & " Novas31 Topocentric Dec", TR.DECTopocentric, DEC, DecTolerance, DoubleDisplayAs.DegreesMinutesSeconds)
+            CompareDouble("TransformTest", Name & " Novas31 Topocentric RA", TR.RATopocentric, RA, RATolerance, DoubleType.Hours0To24)
+            CompareDouble("TransformTest", Name & " Novas31 Topocentric Dec", TR.DECTopocentric, DEC, DecTolerance, DoubleType.Degrees0To360)
 
         Catch ex As Exception
             LogException("TransformTest2000 Exception", ex.ToString)
@@ -3626,7 +3659,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub NovasComTests()
+    Private Sub NovasComTests()
         Dim JD As Double
         Dim EA As New ASCOM.Astrometry.NOVASCOM.Earth
 
@@ -3765,7 +3798,7 @@ Public Class DiagnosticsForm
         Status("")
     End Sub
 
-    Sub ComparePosVec(ByVal TestName As String, ByVal st As NOVASCOM.Star, ByVal pv As NOVASCOM.PositionVector, ByVal Results() As Double, ByVal TestAzEl As Boolean, ByVal Tolerance As Double)
+    Private Sub ComparePosVec(ByVal TestName As String, ByVal st As NOVASCOM.Star, ByVal pv As NOVASCOM.PositionVector, ByVal Results() As Double, ByVal TestAzEl As Boolean, ByVal Tolerance As Double)
         CompareDouble(TestName, "RA Pos", pv.RightAscension, Results(0), Tolerance)
         CompareDouble(TestName, "DEC Pos", pv.Declination, Results(1), Tolerance)
         CompareDouble(TestName, "Dist", pv.Distance, Results(2), Tolerance)
@@ -3785,7 +3818,7 @@ Public Class DiagnosticsForm
         CompareDouble(TestName, "RadVel", st.RadialVelocity, Results(14), Tolerance)
     End Sub
 
-    Function TestJulianDate() As Double
+    Private Function TestJulianDate() As Double
         'Create the Julian date corresponding to the arbitary test date
         Dim Util As New ASCOM.Utilities.Util
         Dim JD As Double
@@ -3795,7 +3828,7 @@ Public Class DiagnosticsForm
         Return JD
     End Function
 
-    Sub NovasComTest(ByVal p_Name As String, ByVal p_Num As Double, ByVal JD As Double, ByVal Results() As Double, ByVal Tolerance As Double)
+    Private Sub NovasComTest(ByVal p_Name As String, ByVal p_Num As Double, ByVal JD As Double, ByVal Results() As Double, ByVal Tolerance As Double)
         Dim pl As New NOVASCOM.Planet
         Dim K, KE As New Kepler.Ephemeris
 
@@ -3849,7 +3882,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub KeplerTests()
+    Private Sub KeplerTests()
         Dim JD As Double
         Dim MercuryPosVecs(,) As Double = New Double(,) {{-0.273826054895093, -0.332907079792611, -0.149433886467295, 0.0168077277855921, -0.0131641564589086, -0.00877483629689174},
                                                  {0.341715100611224, -0.15606206441965, -0.118796704430727, 0.00818341889620433, 0.0231859105741514, 0.0115367662530341},
@@ -3862,7 +3895,7 @@ Public Class DiagnosticsForm
         TL.BlankLine()
     End Sub
 
-    Sub KeplerTest(ByVal p_Name As String, ByVal p_KepNum As Body, ByVal JD As Double, ByVal Results(,) As Double, ByVal Tolerance As Double)
+    Private Sub KeplerTest(ByVal p_Name As String, ByVal p_KepNum As Body, ByVal JD As Double, ByVal Results(,) As Double, ByVal Tolerance As Double)
         Dim K As New Kepler.Ephemeris
         Dim POSVEC() As Double
         Dim u As New Util
@@ -3933,7 +3966,7 @@ Public Class DiagnosticsForm
         '        Application.DoEvents()
     End Sub
 
-    Sub ProfileTests()
+    Private Sub ProfileTests()
         Dim RetVal As String = "", RetValProfileKey As New ASCOMProfile
 
         'Dim DrvHlpProf As Object
@@ -4318,7 +4351,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub CheckSimulator(ByVal Devices As ArrayList, ByVal DeviceType As String, ByVal DeviceName As String)
+    Private Sub CheckSimulator(ByVal Devices As ArrayList, ByVal DeviceType As String, ByVal DeviceName As String)
         Dim Found As Boolean = False
         For Each Device In Devices
             If Device.Key = DeviceName Then Found = True
@@ -4331,7 +4364,7 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
-    Sub ProfileThread(ByVal inst As Integer)
+    Private Sub ProfileThread(ByVal inst As Integer)
         Dim TL As New TraceLogger("", "ProfileTrace " & inst.ToString)
         Const ts As String = "Test Telescope"
         TL.Enabled = True
@@ -4421,74 +4454,140 @@ Public Class DiagnosticsForm
         End If
     End Sub
 
-    Private Enum DoubleDisplayAs
-        Number
-        HoursMinutesSeconds
-        DegreesMinutesSeconds
-    End Enum
-
     Private Sub CompareDouble(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Double, ByVal p_Orig As Double, ByVal p_Tolerance As Double)
-        CompareDouble(p_Section, p_Name, p_New, p_Orig, p_Tolerance, DoubleDisplayAs.Number)
+        CompareDouble(p_Section, p_Name, p_New, p_Orig, p_Tolerance, DoubleType.Number)
     End Sub
 
-    Private Sub CompareDouble(ByVal p_Section As String, ByVal p_Name As String, ByVal p_New As Double, ByVal p_Orig As Double, ByVal p_Tolerance As Double, p_DisplayAs As DoubleDisplayAs)
-        Dim ErrMsg As String, Divisor As Double
-        Dim DisplayNew, DisplayOriginal, DisplayTolerance As String
+    Private Sub CompareDouble(ByVal SectionName As String, ByVal ValueName As String, ByVal ActualValue As Double, ByVal ExpectedValue As Double, ByVal Tolerance As Double, CompareType As DoubleType)
+        Dim Divisor, ComparisonValue, LowerValue, HigherValue As Double
+        Dim DisplayNew As String = ""
+        Dim DisplayOriginal As String = ""
+        Dim DisplayTolerance As String = ""
 
-        Divisor = p_Orig
+        Divisor = ExpectedValue
         If Divisor = 0.0 Then Divisor = 1.0 'Deal withpossible divide by zero error
 
-        If System.Math.Abs((p_New - p_Orig) / Divisor) < p_Tolerance Then
-            Select Case p_DisplayAs
-                Case DoubleDisplayAs.DegreesMinutesSeconds
-                    DisplayNew = AscomUtil.DegreesToDMS(p_New, ":", ":", "", 3)
-                    DisplayTolerance = AscomUtil.DegreesToDMS(p_Tolerance, ":", ":", "", 3)
-                Case DoubleDisplayAs.HoursMinutesSeconds
-                    DisplayNew = AscomUtil.HoursToHMS(p_New, ":", ":", "", 3)
-                    DisplayTolerance = AscomUtil.HoursToHMS(p_Tolerance, ":", ":", "", 3)
-                Case DoubleDisplayAs.Number
-                    DisplayNew = p_New.ToString
-                    DisplayTolerance = p_Tolerance.ToString("0.0E0")
-                Case Else
-                    ErrMsg = "The DoubleDisplayAs value: " & p_DisplayAs.ToString & " is not configured in Sub CompareDouble"
-                    TL.LogMessage(p_Section, ErrMsg)
-                    NNonMatches += 1
-                    ErrorList.Add(p_Section & " - " & ErrMsg)
-                    DisplayNew = p_New.ToString
-                    DisplayTolerance = p_Tolerance.ToString
-            End Select
+        If (ActualValue > ExpectedValue) Then ' Get the values to be compared into lower and higher values for use in the HMS and DMS comparisons
+            HigherValue = ActualValue
+            LowerValue = ExpectedValue
+        Else
+            HigherValue = ExpectedValue
+            LowerValue = ActualValue
+        End If
 
-            TL.LogMessage(p_Section, "Matched " & p_Name & " = " & DisplayNew & " within tolerance of " & DisplayTolerance)
+        Select Case CompareType
+            Case DoubleType.Degrees0To360
+                If (HigherValue > 270.0) And (LowerValue < 90.0) Then ' We are comparing across the 0/360 degree discontinuity so we need to add the distances from 0/360 discontinuity of each value
+                    ComparisonValue = (360.0 - HigherValue) + LowerValue ' Calculate the distance of the high value from 360.0 degrees and add this to the lower value to get the difference between the two values.
+                Else
+                    ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
+                    ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
+                End If
+                DisplayNew = AscomUtil.DegreesToDMS(ActualValue, ":", ":", "", 3)
+                DisplayOriginal = AscomUtil.DegreesToDMS(ExpectedValue, ":", ":", "", 3)
+                DisplayTolerance = AscomUtil.DegreesToDMS(Tolerance, ":", ":", "", 3) & " Seconds"
+
+            Case DoubleType.Degrees0To360InRadians
+                ActualValue = ActualValue * RADIANS_TO_DEGREES ' Convert from radians to degrees
+                ExpectedValue = ExpectedValue * RADIANS_TO_DEGREES
+                If ((HigherValue > 270.0) And (LowerValue < 90.0)) Then ' We are comparing across the 0/2Pi radian discontinuity so we need to add the distances from 0/2Pi discontinuity of each value
+                    ComparisonValue = (360.0 - HigherValue) + LowerValue ' Calculate the distance of the high value from 360.0 degrees and add this to the lower value to get the difference between the two values.
+                Else
+                    ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
+                    ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
+                End If
+                DisplayNew = AscomUtil.DegreesToDMS(ActualValue, ":", ":", "", 3)
+                DisplayOriginal = AscomUtil.DegreesToDMS(ExpectedValue, ":", ":", "", 3)
+                DisplayTolerance = AscomUtil.DegreesToDMS(Tolerance, ":", ":", "", 3) & " Seconds"
+
+            Case DoubleType.DegreesMinus180ToPlus180
+                If (HigherValue > 90.0) And (LowerValue < -90.0) Then ' We are comparing across the -180/+180 degree discontinuity so we need to make both numbers fall onto a continuous stream
+                    ComparisonValue = (180.0 - HigherValue) + (180.0 + LowerValue) ' Calculate the distance of the high value from 180.0 degrees and add this to the lower value to get the difference between the two values.
+                Else
+                    ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
+                    ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
+                End If
+                DisplayNew = AscomUtil.DegreesToDMS(ActualValue, ":", ":", "", 3)
+                DisplayOriginal = AscomUtil.DegreesToDMS(ExpectedValue, ":", ":", "", 3)
+                DisplayTolerance = AscomUtil.DegreesToDMS(Tolerance, ":", ":", "", 3) & " Seconds"
+
+            Case DoubleType.DegreesMinus180ToPlus180InRadians
+                ActualValue = ActualValue * RADIANS_TO_DEGREES ' Convert from radians to degrees
+                ExpectedValue = ExpectedValue * RADIANS_TO_DEGREES
+                If (HigherValue > (0.5 * Math.PI)) And (LowerValue < -0.5 * Math.PI) Then ' We are comparing across the -Pi/+Pi degree discontinuity so we need to make both numbers fall onto a continuous stream
+                    ComparisonValue = (Math.PI - HigherValue) + (Math.PI + LowerValue) ' Calculate the distance of the high value from Pi radians and add this to the lower value to get the difference between the two values.
+                Else
+                    ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
+                    ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
+                End If
+                DisplayNew = AscomUtil.DegreesToDMS(ActualValue, ":", ":", "", 3)
+                DisplayOriginal = AscomUtil.DegreesToDMS(ExpectedValue, ":", ":", "", 3)
+                DisplayTolerance = AscomUtil.DegreesToDMS(Tolerance, ":", ":", "", 3) & " Seconds"
+
+            Case DoubleType.Hours0To24
+                If (HigherValue > 18.0) And (LowerValue < 6.0) Then ' We are comparing across the 0/24 hour discontinuity so we need to make both numbers fall onto a continuous stream
+                    ComparisonValue = (24.0 - HigherValue) + LowerValue  ' Calculate the distance of the high value from 24.0 hours and add this to the lower value to get the difference between the two values.
+                Else
+                    ' No need for special action because both numbers are on the same side of the 0/24 hour discontinuity
+                    ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
+                End If
+                DisplayNew = AscomUtil.HoursToHMS(ActualValue, ":", ":", "", 3)
+                DisplayOriginal = AscomUtil.HoursToHMS(ExpectedValue, ":", ":", "", 3)
+                DisplayTolerance = AscomUtil.HoursToHMS(Tolerance, ":", ":", "", 3) & " ArcSeconds"
+
+            Case DoubleType.Hours0To24InRadians
+                ActualValue = ActualValue * RADIANS_TO_HOURS ' Convert from radians to hours
+                ExpectedValue = ExpectedValue * RADIANS_TO_HOURS
+                If (HigherValue > 18.0) And (LowerValue < 6.0) Then ' We are comparing across the 0/24 hour discontinuity so we need to make both numbers fall onto a continuous stream
+                    ComparisonValue = (24.0 - HigherValue) + LowerValue  ' Calculate the distance of the high value from 24.0 hours and add this to the lower value to get the difference between the two values.
+                Else
+                    ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
+                    ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
+                End If
+                DisplayNew = AscomUtil.HoursToHMS(ActualValue, ":", ":", "", 3)
+                DisplayOriginal = AscomUtil.HoursToHMS(ExpectedValue, ":", ":", "", 3)
+                DisplayTolerance = AscomUtil.HoursToHMS(Tolerance, ":", ":", "", 3) & " ArcSeconds"
+
+            Case DoubleType.HoursMinus12ToPlus12
+                If (HigherValue > 6.0) And (LowerValue < -6.0) Then ' We are comparing across the -12.0/+12.0 hour discontinuity so we need to make both numbers fall onto a continuous stream
+                    ComparisonValue = (12.0 - HigherValue) + (12.0 + LowerValue) ' Calculate the distance of the high value from 12.0 hours and add this to the lower value to get the differnce between the two values.
+                Else
+                    ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
+                    ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
+                End If
+                DisplayNew = AscomUtil.HoursToHMS(ActualValue, ":", ":", "", 3)
+                DisplayOriginal = AscomUtil.HoursToHMS(ExpectedValue, ":", ":", "", 3)
+                DisplayTolerance = AscomUtil.HoursToHMS(Tolerance, ":", ":", "", 3) & " ArcSeconds"
+
+            Case DoubleType.HoursMinus12ToPlus12InRadians
+                ActualValue = ActualValue * RADIANS_TO_HOURS ' Convert from radians to hours
+                ExpectedValue = ExpectedValue * RADIANS_TO_HOURS
+                If (HigherValue > 6.0) And (LowerValue < -6.0) Then ' We are comparing across the -12.0/+12.0 hour discontinuity so we need to make both numbers fall onto a continuous stream
+                    ComparisonValue = (12.0 - HigherValue) + (12.0 + LowerValue) ' Calculate the distance of the high value from 12.0 hours and add this to the lower value to get the differnce between the two values.
+                Else
+                    ' No need for special action because both numbers are on the same side of the 0/360 degree discontinuity
+                    ComparisonValue = Math.Abs(ActualValue - ExpectedValue)
+                End If
+                DisplayNew = AscomUtil.HoursToHMS(ActualValue, ":", ":", "", 3)
+                DisplayOriginal = AscomUtil.HoursToHMS(ExpectedValue, ":", ":", "", 3)
+                DisplayTolerance = AscomUtil.HoursToHMS(Tolerance, ":", ":", "", 3) & " ArcSeconds"
+
+            Case DoubleType.Number
+                ComparisonValue = Math.Abs((ActualValue - ExpectedValue) / Divisor) ' For other numbers we will look at the % difference
+                DisplayNew = ActualValue.ToString
+                DisplayOriginal = ExpectedValue.ToString
+                DisplayTolerance = Tolerance.ToString("0.0E0")
+
+            Case Else
+                LogError(SectionName, String.Format("The DoubleType value: {0} is not configured in Sub CompareDouble - this must be fixed before release!", CompareType.ToString))
+                Exit Sub
+        End Select
+
+        If ComparisonValue < Tolerance Then
+            TL.LogMessage(SectionName, String.Format("Matched {0} {1} = {2} within tolerance of {3}", ValueName, DisplayNew, DisplayOriginal, DisplayTolerance))
             NMatches += 1
         Else
-
-            Select Case p_DisplayAs
-                Case DoubleDisplayAs.DegreesMinutesSeconds
-                    DisplayNew = AscomUtil.DegreesToDMS(p_New, ":", ":", "", 3)
-                    DisplayOriginal = AscomUtil.DegreesToDMS(p_Orig, ":", ":", "", 3)
-                    DisplayTolerance = AscomUtil.DegreesToDMS(p_Tolerance, ":", ":", "", 3)
-                Case DoubleDisplayAs.HoursMinutesSeconds
-                    DisplayNew = AscomUtil.HoursToHMS(p_New, ":", ":", "", 3)
-                    DisplayOriginal = AscomUtil.HoursToHMS(p_Orig, ":", ":", "", 3)
-                    DisplayTolerance = AscomUtil.HoursToHMS(p_Tolerance, ":", ":", "", 3)
-                Case DoubleDisplayAs.Number
-                    DisplayNew = p_New.ToString
-                    DisplayOriginal = p_Orig.ToString
-                    DisplayTolerance = p_Tolerance.ToString
-                Case Else
-                    ErrMsg = "The DoubleDisplayAs value: " & p_DisplayAs.ToString & " is not configured in Sub CompareDouble"
-                    TL.LogMessage(p_Section, ErrMsg)
-                    NNonMatches += 1
-                    ErrorList.Add(p_Section & " - " & ErrMsg)
-                    DisplayNew = p_New.ToString
-                    DisplayOriginal = p_Orig.ToString
-                    DisplayTolerance = p_Tolerance.ToString
-            End Select
-
-            ErrMsg = "##### NOT Matched - " & p_Name & " - Received: " & DisplayNew & ", Expected: " & DisplayOriginal & " within tolerance of " & DisplayTolerance
-            TL.LogMessage(p_Section, ErrMsg)
-            NNonMatches += 1
-            ErrorList.Add(p_Section & " - " & ErrMsg)
+            LogError(SectionName, String.Format("##### NOT Matched - {0} Received: {1}, Expected: {2} within tolerance of {3}", ValueName, DisplayNew, DisplayOriginal, DisplayTolerance))
         End If
     End Sub
 
@@ -4675,7 +4774,7 @@ Public Class DiagnosticsForm
     ''' </summary>
     ''' <param name="frame">The frame to initialise</param>
     ''' <remarks></remarks>
-    Sub InitFrame2D(ByRef frame As Integer(,))
+    Private Sub InitFrame2D(ByRef frame As Integer(,))
         Dim i, j As Integer
 
         For i = 0 To frame.GetUpperBound(0) - 1
@@ -4690,7 +4789,7 @@ Public Class DiagnosticsForm
     ''' </summary>
     ''' <param name="frame">The frame to initialise</param>
     ''' <remarks></remarks>
-    Sub InitFrame3D(ByRef frame As Integer(,,))
+    Private Sub InitFrame3D(ByRef frame As Integer(,,))
         Dim i, j, k As Integer
 
         For i = 0 To frame.GetUpperBound(0) - 1
@@ -4707,7 +4806,7 @@ Public Class DiagnosticsForm
     ''' </summary>
     ''' <param name="bm">The bitmap to initialise</param>
     ''' <remarks></remarks>
-    Sub InitBitMap(ByRef bm)
+    Private Sub InitBitMap(ByRef bm)
         bm = New Bitmap(Me.Icon.ToBitmap())
     End Sub
 
@@ -4716,7 +4815,7 @@ Public Class DiagnosticsForm
     ''' </summary>
     ''' <param name="byteArray">The byte array to initialise</param>
     ''' <remarks></remarks>
-    Sub ClearByteArray(ByRef byteArray As Byte())
+    Private Sub ClearByteArray(ByRef byteArray As Byte())
         Dim i As Integer
 
         For i = 0 To byteArray.LongLength - 1
@@ -4730,7 +4829,7 @@ Public Class DiagnosticsForm
     ''' <param name="frame">The frame to checksum</param>
     ''' <returns>The checksum of the frame</returns>
     ''' <remarks></remarks>
-    Function CheckSum2DFrame(frame As Integer(,)) As Int64
+    Private Function CheckSum2DFrame(frame As Integer(,)) As Int64
         Dim sum As Int64
 
         sum = 0
@@ -4749,7 +4848,7 @@ Public Class DiagnosticsForm
     ''' <param name="frame">The frame to checksum</param>
     ''' <returns>The checksum of the frame</returns>
     ''' <remarks></remarks>
-    Function CheckSum3DFrame(frame As Integer(,,)) As Int64
+    Private Function CheckSum3DFrame(frame As Integer(,,)) As Int64
         Dim sum As Int64
 
         sum = 0
@@ -4770,7 +4869,7 @@ Public Class DiagnosticsForm
     ''' <param name="byteArray">The byte array to checksum</param>
     ''' <returns>The checksum of the byte array</returns>
     ''' <remarks></remarks>
-    Function CheckSumByteArray(byteArray As Byte()) As Int64
+    Private Function CheckSumByteArray(byteArray As Byte()) As Int64
         Dim sum As Int64
 
         sum = 0
@@ -4781,11 +4880,11 @@ Public Class DiagnosticsForm
         Return sum
     End Function
 
-    Sub CacheTests()
+    Private Sub CacheTests()
         If CacheTest("CacheTest", False) Then CacheTest("CacheTestLogged", True)
     End Sub
 
-    Function CacheTest(TestName As String, LogCache As Boolean) As Boolean
+    Private Function CacheTest(TestName As String, LogCache As Boolean) As Boolean
         Dim cache As Cache, returnDouble As Double, returnInt As Integer, returnBool As Boolean, returnString As String, inputObject, returnObject As KeyValuePair
         Dim removedItemCount As Integer, errorOccured As Boolean = False, throttleLowerBound, throttleUpperBound, numerOfClearItemsToTest As Integer
         Const THROTTLE_TEST_LOWER_BOUND_NORMAL As Integer = 4900 ' Limits for real PCs
@@ -5311,7 +5410,7 @@ Public Class DiagnosticsForm
         Return errorOccured
     End Function
 
-    Sub UtilTests()
+    Private Sub UtilTests()
         Dim t As Double
         Dim ts As String
         Dim HelperType As Type
@@ -5820,7 +5919,7 @@ Public Class DiagnosticsForm
         End If
     End Function
 
-    Sub TimingTest(ByVal p_NumberOfMilliSeconds As Integer, ByVal Is64Bit As Boolean)
+    Private Sub TimingTest(ByVal p_NumberOfMilliSeconds As Integer, ByVal Is64Bit As Boolean)
         Action("TimingTest " & p_NumberOfMilliSeconds & "ms")
         s1 = Stopwatch.StartNew 'Test time using new ASCOM component
         AscomUtil.WaitForMilliseconds(p_NumberOfMilliSeconds)
@@ -5839,7 +5938,7 @@ Public Class DiagnosticsForm
         Application.DoEvents()
     End Sub
 
-    Sub ScanEventLog()
+    Private Sub ScanEventLog()
         Dim ELog As EventLog
         Dim Entries As EventLogEntryCollection
         Dim EventLogs() As EventLog
@@ -5939,7 +6038,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub ScanRegistrySecurity()
+    Private Sub ScanRegistrySecurity()
         Dim Key As RegistryKey
         Try
             Status("Scanning Registry Security")
@@ -5989,7 +6088,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub RecurseRegistrySecurity(ByVal Key As RegistryKey)
+    Private Sub RecurseRegistrySecurity(ByVal Key As RegistryKey)
         Dim SubKeys() As String
         Dim sec As System.Security.AccessControl.RegistrySecurity
         Dim FoundFullAccess As Boolean = False
@@ -6167,7 +6266,7 @@ Public Class DiagnosticsForm
         Return Group & "\" & Name
     End Function
 
-    Sub ScanRegistry()
+    Private Sub ScanRegistry()
         Dim Key As RegistryKey
         Status("Scanning Registry")
         'TL.LogMessage("ScanRegistry", "Start")
@@ -6225,7 +6324,7 @@ Public Class DiagnosticsForm
         TL.BlankLine()
     End Sub
 
-    Sub RecurseRegistry(ByVal Key As RegistryKey)
+    Private Sub RecurseRegistry(ByVal Key As RegistryKey)
         Dim ValueNames(), SubKeys(), DisplayName As String
         Try
             RecursionLevel += 1
@@ -6254,7 +6353,7 @@ Public Class DiagnosticsForm
         RecursionLevel -= 1
     End Sub
 
-    Sub ScanDrives()
+    Private Sub ScanDrives()
         Dim Drives() As String, Drive As DriveInfo
         Try
             Status("Scanning drives")
@@ -6273,7 +6372,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub ScanProgramFiles()
+    Private Sub ScanProgramFiles()
         Dim BaseDir As String
         Dim PathShell As New System.Text.StringBuilder(260)
         Try
@@ -6304,7 +6403,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub RecurseProgramFiles(ByVal Folder As String)
+    Private Sub RecurseProgramFiles(ByVal Folder As String)
         Dim DirInfo As DirectoryInfo
         Dim FileInfos() As FileInfo
         Dim DirInfos() As DirectoryInfo
@@ -6353,7 +6452,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub ScanProfile55Files()
+    Private Sub ScanProfile55Files()
         Dim ProfileStore As AllUsersFileSystemProvider, Files() As String
         Try
             Status("Scanning Profile 5.5 Files")
@@ -6373,7 +6472,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub RecurseProfile55Files(ByVal Folder As String)
+    Private Sub RecurseProfile55Files(ByVal Folder As String)
         Dim Files(), Directories() As String
 
         Try
@@ -6409,7 +6508,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub ScanFrameworks()
+    Private Sub ScanFrameworks()
         Dim FrameworkPath, FrameworkFile, FrameworkDirectories() As String
         Dim PathShell As New System.Text.StringBuilder(260)
 
@@ -6440,7 +6539,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub ScanPlatform6Logs()
+    Private Sub ScanPlatform6Logs()
 
         Dim fileList() As String
         Dim setupFiles As SortedList(Of DateTime, String) = New SortedList(Of DateTime, String)
@@ -6542,7 +6641,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub ScanLogs()
+    Private Sub ScanLogs()
         Const NumLine As Integer = 30 'Number of lines to read from file to see if it is an ASCOM log
 
         Dim TempFiles() As String
@@ -6609,7 +6708,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub ScanCOMRegistration()
+    Private Sub ScanCOMRegistration()
         Try
             Status("Scanning Registry")
             TL.LogMessage("COMRegistration", "") 'Report COM registation
@@ -6811,7 +6910,7 @@ Public Class DiagnosticsForm
         TL.LogMessage(Section, Message)
     End Sub
 
-    Sub ScanGac()
+    Private Sub ScanGac()
         Dim ae As IAssemblyEnum
         Dim an As IAssemblyName = Nothing
         Dim ass As Assembly
@@ -6943,7 +7042,7 @@ Public Class DiagnosticsForm
         Return AssName
     End Function
 
-    Sub ScanDeveloperFiles()
+    Private Sub ScanDeveloperFiles()
         Dim ASCOMPath As String = "C:\Program Files\ASCOM\Platform 6 Developer Components\" ' Default location
         Dim PathShell As New System.Text.StringBuilder(260)
         Dim ASCOMPathComponents5, ASCOMPathComponents55, ASCOMPathComponents6, ASCOMPathDocs, ASCOMPathInstallerGenerator, ASCOMPathResources As String
@@ -7022,7 +7121,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub ScanPlatformFiles(ByVal ASCOMPath As String)
+    Private Sub ScanPlatformFiles(ByVal ASCOMPath As String)
         Try
             Status("Scanning Platform Files")
 
@@ -7057,7 +7156,7 @@ Public Class DiagnosticsForm
         TL.BlankLine()
     End Sub
 
-    Sub FileDetails(ByVal FPath As String, ByVal FName As String)
+    Private Sub FileDetails(ByVal FPath As String, ByVal FName As String)
         Dim FullPath As String
         Dim Att As FileAttributes, FVInfo As FileVersionInfo, FInfo As FileInfo
         Dim Ass As Assembly, AssVer As String = "", CompareName As String
@@ -7137,7 +7236,7 @@ Public Class DiagnosticsForm
         TL.LogMessage("", "")
     End Sub
 
-    Sub GetCOMRegistration(ByVal ProgID As String)
+    Private Sub GetCOMRegistration(ByVal ProgID As String)
         Dim RKey As RegistryKey
         Try
             TL.LogMessage("ProgID", ProgID)
@@ -7158,7 +7257,7 @@ Public Class DiagnosticsForm
         TL.LogMessage("", "")
     End Sub
 
-    Sub ProcessSubKey(ByVal p_Key As RegistryKey, ByVal p_Depth As Integer, ByVal p_Container As String)
+    Private Sub ProcessSubKey(ByVal p_Key As RegistryKey, ByVal p_Depth As Integer, ByVal p_Container As String)
         Dim ValueNames(), SubKeys() As String
         Dim RKey As RegistryKey, ValueKind As RegistryValueKind
         Dim Container As String
@@ -7271,7 +7370,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub ScanSerial()
+    Private Sub ScanSerial()
         Dim SerialRegKey As RegistryKey = Nothing, SerialDevices() As String
         Try
             'First list out the ports we can see through .NET
@@ -7311,7 +7410,7 @@ Public Class DiagnosticsForm
 
     End Sub
 
-    Sub SerialPortDetails(ByVal PortNumber As Integer)
+    Private Sub SerialPortDetails(ByVal PortNumber As Integer)
         'List specific details of a particular serial port
         Dim PortName As String, SerPort As New System.IO.Ports.SerialPort
 
@@ -7330,7 +7429,7 @@ Public Class DiagnosticsForm
         SerPort = Nothing
     End Sub
 
-    Sub ScanProfile()
+    Private Sub ScanProfile()
         Dim ASCOMProfile As Utilities.Profile, DeviceTypes As ArrayList, Devices As ArrayList
         Dim CompatibiityMessage32Bit, CompatibiityMessage64Bit As String
         Try
@@ -7374,7 +7473,7 @@ Public Class DiagnosticsForm
         TL.BlankLine()
     End Sub
 
-    Sub RecurseProfile(ByVal ASCOMKey As String)
+    Private Sub RecurseProfile(ByVal ASCOMKey As String)
         Dim SubKeys, Values As New Generic.SortedList(Of String, String)
         Dim NextKey, DisplayName, DisplayValue As String
 
@@ -7594,7 +7693,7 @@ Public Class DiagnosticsForm
         Return RetVal
     End Function
 
-    Sub ScanASCOMDrivers()
+    Private Sub ScanASCOMDrivers()
         Dim BaseDir As String
         Dim PathShell As New System.Text.StringBuilder(260)
         Try
@@ -7648,7 +7747,7 @@ Public Class DiagnosticsForm
         End Try
     End Sub
 
-    Sub RecurseASCOMDrivers(ByVal Folder As String)
+    Private Sub RecurseASCOMDrivers(ByVal Folder As String)
         Dim Files(), Directories() As String
 
         Try
@@ -7818,7 +7917,7 @@ Public Class DiagnosticsForm
     End Function
 
 #Region "XML  test String"
-    Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf &
+    Private Const XMLTestString As String = "<?xml version=""1.0""?>" & vbCrLf &
                                     "<ASCOMProfile>" & vbCrLf &
                                     "  <SubKey>" & vbCrLf &
                                     "    <SubKeyName />" & vbCrLf &
@@ -8251,7 +8350,7 @@ Public Class DiagnosticsForm
 
     'DLL to provide the path to Program Files(x86)\Common Files folder location that is not avialable through the .NET framework
     <DllImport("shell32.dll")>
-    Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
+    Private Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
         <Out()> ByVal lpszPath As System.Text.StringBuilder,
         ByVal nFolder As Integer,
         ByVal fCreate As Boolean) As Boolean
