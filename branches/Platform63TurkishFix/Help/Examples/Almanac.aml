@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1c04e43b-7893-477c-be60-7eb8a14f2b85" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  	<introduction>
+		<para>Example of how to use AstroUtils.Event to create a year long almanac for a particular event.</para>
+	</introduction>
+    <section address="AstroUtils.Event Examples">
+		<title>Using AstroUtils.Event to create an almanac</title>
+   		<content>
+      		<para>
+      		<code lang="vbnet" title="ASCOM AstroUtils.Event Example" 
+      		source="..\ASCOM Platform Examples\Examples\EphemerisExamples.vb" />
+      		</para>
+      	</content>
+    </section>
+  </developerConceptualDocument>
+</topic>

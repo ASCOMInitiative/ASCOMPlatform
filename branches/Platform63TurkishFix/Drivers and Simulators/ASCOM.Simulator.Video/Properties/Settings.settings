@@ -1,0 +1,84 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ASCOM.Simulator.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="VideoCaptureDeviceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Simulated Video Capture Device</Value>
+    </Setting>
+    <Setting Name="SupportedActionsList" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SimulatedAction1#;SimulatedAction2</Value>
+    </Setting>
+    <Setting Name="SupportedExposuresList" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0.04#;0.08#;0.16#;0.32#;0.64#;1.28#;2.56#;5.12#;10.24</Value>
+    </Setting>
+    <Setting Name="ExposureMax" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="ExposureMin" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.033</Value>
+    </Setting>
+    <Setting Name="CameraType" Type="ASCOM.Simulator.Properties.SimulatedCameraType" Scope="User">
+      <Value Profile="(Default)">AnalogueIntegrating</Value>
+    </Setting>
+    <Setting Name="CameraFrameRate" Type="ASCOM.Simulator.Properties.AnalogueCameraFrameRate" Scope="User">
+      <Value Profile="(Default)">PAL</Value>
+    </Setting>
+    <Setting Name="SensorName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ICX285AL</Value>
+    </Setting>
+    <Setting Name="SensorType" Type="ASCOM.DeviceInterface.SensorType" Scope="User">
+      <Value Profile="(Default)">Monochrome</Value>
+    </Setting>
+    <Setting Name="BitDepth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="SourceBitmapFilesLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="VideoFileFormat" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AVI</Value>
+    </Setting>
+    <Setting Name="GainMin" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="GainMax" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">32</Value>
+    </Setting>
+    <Setting Name="Gains" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Gammas" Type="System.String" Scope="User">
+      <Value Profile="(Default)">OFF#;LO#;HI</Value>
+    </Setting>
+    <Setting Name="SupportsGainRange" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PixelSizeX" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="PixelSizeY" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="UseEmbeddedVideoSource" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UseBuffering" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="BufferSize" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">32</Value>
+    </Setting>
+    <Setting Name="SupportsGammaRange" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="GammaMin" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="GammaMax" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">256</Value>
+    </Setting>
+    <Setting Name="TraceLevel" Type="System.Diagnostics.TraceLevel" Scope="User">
+      <Value Profile="(Default)">Error</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<title>COM Port Management</title>
+		<style type="text/css" lang="en">
+			<!--
+			body { 
+				background: white;
+				font-size: 80%;
+				font-family: Verdana, Arial, Helvetica, sans-serif; 
+				color: black;
+			} 
+			p {
+				margin-top: 6pt; 
+				margin-bottom: 6pt;
+			} 
+			h1 {
+				font-family: Arial, Helvetica, sans-serif; 
+			    font-size: 180%;
+				line-height: 125%;
+				color : #990000;
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			}
+			h2 {
+				font-family: Arial, Helvetica, sans-serif; 
+				font-size: 140%;
+				color : #990000;
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			} 
+
+			ul, ol {
+				margin-top: 6pt;
+				margin-bottom: 6pt;
+			} 
+			li {
+				margin-top: 4pt;
+				color : White;
+			} 
+			i.y {
+				color: yellow;
+			}
+			-->
+		</style>
+	</head>
+	<body>
+	<h1>COM Port Management</h1>
+
+<p>The serial interface component in the ASCOM Platform is limited to COM ports 1 to 16. With the advent of plug-and-play USB to Serial converters and other devices that emulate or provide COM ports, it is possible for COM ports up to COM 255 to exist. Since most drivers in the ASCOM Platform use the Serial component, this means that serial-based astronomy devices accessed by Platform drivers must be assigned to COM ports 1 through 16.</p>
+
+<h2>Managing COM Port Assignments</h2>
+
+<p>Fortunately, it is possible to move COM ports around in Windows. To change the COM port assignment of a particular interface device (real serial port, USB to Serial converter, etc.), use the Windows Device Manager. Use your operating system help to find out how to start the device manager. On Windows 2000 and XP, right click on My Computer and select Manage. This will open the Computer Management window. If needed, expand System tools then click on Device Manager. The right pane will now display the device manager tree as shown below: </p>
+
+<div align="center"><img src="DevMgr.gif" height="534" width="524" alt="DevMgr"></div>
+
+<p>Once you have the device manager's tree visible, expand the Ports (COM &amp; LPT) branch. You should see something like the image below:</p>
+
+<div align="center"><img src="comtree.gif" height="67" width="240" alt="comtree"></div>
+
+<p>Pick the port you want to reassign and double-click it. Select the Port Settings tab in the property sheet that appears, then click the Advanced... button. The result should be something like the image below:</p>
+
+<div align="center"><img src="portset.gif" height="588" width="646" alt="portset"></div>
+
+<p>At the bottom of the Advanced Settings window, note the COM port selector. Change this to the COM port you want for the interface device. You may first have to move another device out of the way (to some other COM port). Move your astronomy interfaces into the range of COM1 through COM 16 and you'll be all set. Be sure and reconfigure other programs (Palm Hot Sync, etc.) after moving their COM ports.</p>
+
+<div style="background: yellow; margin: 20px;"><img src="tip.gif" height="32" width="23" alt="tip" align="left"> If you get an error when trying to change the COM port assignment, it means that either the current port or the desired port is in use. Palm Hot Sync, for example, keeps its port open all the time. Find out what program is using the port, kill it, then reassign.</div><br clear="all">
+
+	</body>
+</html>

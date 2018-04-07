@@ -1,0 +1,24 @@
+LIBRARY
+
+EXPORTS
+    ; Explicit exports can go here
+
+	GetBitmapPixels
+	GetColourBitmapPixels
+	GetRGGBBayerBitmapPixels
+	GetMonochromePixelsFromBitmap
+	GetColourPixelsFromBitmap
+	GetRGGBBayerPixelsFromBitmap
+	GetBitmapBytes
+
+	SetGamma
+	ApplyGammaBrightness
+	InitFrameIntegration
+	AddFrameForIntegration
+	GetResultingIntegratedFrame
+	CreateNewAviFile
+	GetLastAviFileError
+	AviFileAddFrame
+	AviFileClose
+	GetUsedAviCompression
+	SetWhiteBalance

@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <assembly>
+    <name>ASCOM.Utilities</name>
+    <summary>
+      Provides a core suite of useful utiilties for ASCOM driver and application developers
+    </summary>
+  </assembly>
+  
+  <members>
+    <member name="G:ASCOM">
+      <summary>
+        This namespace contains the core platform components, platform utilities and the VB6 COM based Helper components
+      </summary>
+    </member>
+
+    <member name="G:ASCOM.Utilities">
+      <summary>    
+        <h2>ASCOM.Utilities Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace provides a core suite of useful utiilties for ASCOM driver and application developers
+        </p>
+      </summary>
+    </member>
+
+    <member name="R:Project">
+      <summary>
+        This project contains the core platform components, platform utilities and the VB6 COM based Helper components
+      </summary>
+    </member>
+
+    <member name="N:ASCOM">
+      <summary>
+        <h2>ASCOM</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all ASCOM components and applications
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Controls">
+      <summary>
+        <h2>ASCOM.Controls Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains components to enhance the user's visual experience.
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.DeviceInterface">
+      <summary>
+        <h2>ASCOM.DeviceInterface Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains master device interface definitions and is considered authoritative within the ASCOM community.
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.DriverAccess">
+      <summary>
+        <h2>ASCOM.DriverAccess Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains a class that provides easy access for .NET programs to device drivers. It handles differences 
+          between device interface versions transparently so that the client does not need to be concerned about these and sees a 
+          single cocnsistent interface to each device type.
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Utilities">
+      <summary>
+        <h2>ASCOM.Utilities</h2>
+        <h3>Summary</h3>
+        <p>
+           This namespace contains the core platform utilities
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Utilities.Exceptions">
+      <summary>
+        <h2>ASCOM.Utilities.Exceptions Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains all utility and tool related exceptions
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Utilities.Interfaces">
+      <summary>
+        <h2>ASCOM.Utilties.Interfaces Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains interfaces for the core utilities
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Utilities.Internal">
+      <summary>
+        <h2>ASCOM.Internal Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains private classes that are used internally within the ASCOM Platform, the platform installer and related items.
+          Developers should not use any items defined in this namespace. The items defined here carry no guarantees and are subject to change
+          at any time without notice, including the possibility of breaking changes. Use of this code is explicitly not supported.
+        </p>
+        <p>
+          If you wish to use code in this namespace, you may obtain a copy of the source code, either from the ASCOM Subversion repository, or
+          by using .NET Reflector to reverse-engineer the code. You may then copy the source code to your own project. You then assume all
+          responsibility for supporting the code.
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Conform">
+      <summary>
+        <h2>ASCOM.Conform Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains the IConform interface and associated classes that enable drivers
+          to tell Conform which commands to send through the CommandXXX functions and the expected 
+          responses. The CommandXXX commands are of necessity hardware specific, hence this mechanic 
+          to allow Conform to send valid commands.
+        </p>
+      </summary>
+    </member>
+
+    <member name="N:ASCOM.Astrometry.SOFA">
+      <summary>
+        <h2>ASCOM.Astrometry.SOFA Namespace</h2>
+        <h3>Summary</h3>
+        <p>
+          This namespace contains funcitonality based around SOFA (Standards of Fundamental Astronomy) routines in forms that are easily accessible from both 32bit and 64bit .NET and COM applications
+        </p>
+      </summary>
+    </member>
+
+  </members>
+
+</doc>

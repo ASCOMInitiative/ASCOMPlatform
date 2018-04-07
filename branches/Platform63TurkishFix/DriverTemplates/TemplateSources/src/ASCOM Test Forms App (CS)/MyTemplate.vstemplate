@@ -1,0 +1,39 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name> ASCOM Driver Test Forms Application (C#)</Name>
+    <Description>ASCOM driver test forms application. Select the driver type in the wizard.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+      ASCOM6
+    </ProjectSubType>
+    <SortOrder>1020</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>Driver Test Forms Application Template CSharp</DefaultName>
+    <ProvideDefaultName>false</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>CSharpASCOM.ico</Icon>
+    <PreviewImage>__PreviewImage.png</PreviewImage>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ASCOM Test Forms App CS).csproj" File="ASCOM Test Forms App (CS).csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Form1.cs">Form1.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Form1.Designer.cs">Form1.Designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Form1.resx">Form1.resx</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="PlaceholderClass.cs">PlaceholderClass.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Resources.Designer.cs">Resources.Designer.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>ASCOM.Setup.TemplateWizard, Version=6.2.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
+    <FullClassName>ASCOM.Setup.DriverWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>
