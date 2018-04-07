@@ -1823,7 +1823,7 @@ Public Class Serial
             xs = x.ToString 'Make sure we are working with strings
             ys = y.ToString
             If (Len(xs) >= 4) And (Len(ys) >= 4) Then 'Ensure that we have at least enough characters for COMn format
-                If (Left(xs, 3).ToUpper = "COM") And (Left(ys, 3).ToUpper = "COM") Then 'Test whether we have COMnnn format
+                If (Left(xs, 3).ToUpperInvariant = "COM") And (Left(ys, 3).ToUpperInvariant = "COM") Then 'Test whether we have COMnnn format
                     If IsNumeric(Mid(xs, 4)) And IsNumeric(Mid(ys, 4)) Then ' We have numeric values so compare based on these
                         Return Comparer.Default.Compare(CInt(Mid(xs, 4)), CInt(Mid(ys, 4))) 'Compare based on port numbers
                     End If

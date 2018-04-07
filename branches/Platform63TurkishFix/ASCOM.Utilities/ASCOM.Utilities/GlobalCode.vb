@@ -509,9 +509,9 @@ Module VersionCode
     ''' <returns>If the function succeeds, the return value is a nonzero value. If the function fails, the return value is zero. To get extended 
     ''' error information, call GetLastError.</returns>
     ''' <remarks></remarks>
-    <DllImport("Kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)> _
-    Private Function IsWow64Process( _
-              ByVal hProcess As System.IntPtr, _
+    <DllImport("Kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)>
+    Private Function IsWow64Process(
+              ByVal hProcess As System.IntPtr,
               ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
     End Function
 
@@ -562,7 +562,7 @@ Module VersionCode
                         CodeBase = RKInprocServer32.GetValue("CodeBase", "").ToString 'Get the codebase if present to override the default value
                         If CodeBase <> "" Then InprocFilePath = CodeBase
 
-                        If (Trim(InprocFilePath).ToUpper = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
+                        If (Trim(InprocFilePath).ToUpperInvariant = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
                             'If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assmbly name, 
                             TL.LogMessage("DriverCompatibility", "     Found MSCOREE.DLL")
 
@@ -636,7 +636,7 @@ Module VersionCode
                             End If
                         End If
 
-                        If (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We have a path to the server and it is a dll
+                        If (Right(Trim(InprocFilePath), 4).ToUpperInvariant = ".DLL") Then ' We have a path to the server and it is a dll
                             ' We have an assembly or other technology DLL, outside the GAC, in the file system
                             Try
                                 InProcServer = New PEReader(InprocFilePath, TL) 'Get hold of the executable so we can determine its characteristics
@@ -722,7 +722,7 @@ Module VersionCode
                         CodeBase = RKInprocServer32.GetValue("CodeBase", "").ToString 'Get the codebase if present to override the default value
                         If CodeBase <> "" Then InprocFilePath = CodeBase
 
-                        If (Trim(InprocFilePath).ToUpper = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
+                        If (Trim(InprocFilePath).ToUpperInvariant = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
                             'If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assmbly name, 
                             TL.LogMessage("DriverCompatibility", "     Found MSCOREE.DLL")
 
@@ -796,7 +796,7 @@ Module VersionCode
                             End If
                         End If
 
-                        If (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We do have a path to the server and it is a dll
+                        If (Right(Trim(InprocFilePath), 4).ToUpperInvariant = ".DLL") Then ' We do have a path to the server and it is a dll
                             ' We have an assembly or other technology DLL, outside the GAC, in the file system
                             Try
                                 InProcServer = New PEReader(InprocFilePath, TL) 'Get hold of the executable so we can determine its characteristics
@@ -879,9 +879,9 @@ Module AscomSharedCode
         ConditionPlatformVersion = PlatformVersion ' Set default action to return the supplied vaue
         Try
             ModuleFileName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) 'Get the name of the executable without path or file extension
-            If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ModuleFileName: """ & ModuleFileName & """ """ & _
+            If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ModuleFileName: """ & ModuleFileName & """ """ &
                                                     Process.GetCurrentProcess().MainModule.FileName & """")
-            If Left(ModuleFileName.ToUpper, 3) = "IS-" Then ' Likely to be an old Inno installer so try and get the parent's name
+            If Left(ModuleFileName.ToUpperInvariant, 3) = "IS-" Then ' Likely to be an old Inno installer so try and get the parent's name
                 If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "    Inno installer temporary executable detected, searching for parent process!")
                 If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "    Old Module Filename: " & ModuleFileName)
                 PC = New PerformanceCounter("Process", "Creating Process ID", Process.GetCurrentProcess().ProcessName)
@@ -895,12 +895,12 @@ Module AscomSharedCode
             ForcedFileNames = Profile.EnumProfile(PLATFORM_VERSION_EXCEPTIONS) 'Get the list of filenames requiring specific versions
 
             For Each ForcedFileName As KeyValuePair(Of String, String) In ForcedFileNames ' Check each forced file in turn 
-                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedFileName.Key & """ """ & _
-                                                        ForcedFileName.Value & """ """ & _
-                                                        UCase(Path.GetFileNameWithoutExtension(ForcedFileName.Key)) & """ """ & _
-                                                        UCase(Path.GetFileName(ForcedFileName.Key)) & """ """ & _
-                                                        UCase(ForcedFileName.Key) & """ """ & _
-                                                        ForcedFileName.Key & """ """ & _
+                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedFileName.Key & """ """ &
+                                                        ForcedFileName.Value & """ """ &
+                                                        UCase(Path.GetFileNameWithoutExtension(ForcedFileName.Key)) & """ """ &
+                                                        UCase(Path.GetFileName(ForcedFileName.Key)) & """ """ &
+                                                        UCase(ForcedFileName.Key) & """ """ &
+                                                        ForcedFileName.Key & """ """ &
                                                         UCase(ModuleFileName) & """")
                 If ForcedFileName.Key.Contains(".") Then
                     ForcedFileNameKey = Path.GetFileNameWithoutExtension(ForcedFileName.Key)
@@ -911,7 +911,8 @@ Module AscomSharedCode
                 ' If the current file matches a forced file name then return the required Platform version
                 ' 6.0 SP1 Check now uses StartsWith in order to catch situations where people rename the installer after download
                 If ForcedFileNameKey <> "" Then ' Ignore the empty string "Default" value name
-                    If UCase(ModuleFileName).StartsWith(UCase(ForcedFileNameKey)) Then
+                    ' Test made completely local independent to fix an issue in the Turkish locale where capital I is returned as a dotted i. Line below was: If UCase(ModuleFileName).StartsWith(UCase(ForcedFileNameKey)) Then
+                    If ModuleFileName.StartsWith(ForcedFileNameKey, StringComparison.OrdinalIgnoreCase) Then ' Should now be completely locale independent, including the Turkish locale.
                         ConditionPlatformVersion = ForcedFileName.Value
                         If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Matched file: """ & ModuleFileName & """ """ & ForcedFileNameKey & """")
                     End If
@@ -921,12 +922,12 @@ Module AscomSharedCode
             ForcedSeparators = Profile.EnumProfile(PLATFORM_VERSION_SEPARATOR_EXCEPTIONS) 'Get the list of filenames requiring specific versions
 
             For Each ForcedSeparator As KeyValuePair(Of String, String) In ForcedSeparators ' Check each forced file in turn 
-                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedSeparator.Key & """ """ & _
-                                                        ForcedSeparator.Value & """ """ & _
-                                                        UCase(Path.GetFileNameWithoutExtension(ForcedSeparator.Key)) & """ """ & _
-                                                        UCase(Path.GetFileName(ForcedSeparator.Key)) & """ """ & _
-                                                        UCase(ForcedSeparator.Key) & """ """ & _
-                                                        ForcedSeparator.Key & """ """ & _
+                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedSeparator.Key & """ """ &
+                                                        ForcedSeparator.Value & """ """ &
+                                                        UCase(Path.GetFileNameWithoutExtension(ForcedSeparator.Key)) & """ """ &
+                                                        UCase(Path.GetFileName(ForcedSeparator.Key)) & """ """ &
+                                                        UCase(ForcedSeparator.Key) & """ """ &
+                                                        ForcedSeparator.Key & """ """ &
                                                         UCase(ModuleFileName) & """")
                 If ForcedSeparator.Key.Contains(".") Then
                 Else
@@ -1020,7 +1021,7 @@ Friend Class PEReader
 
 #Region "Structs"
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_DOS_HEADER
         Friend e_magic As UInt16 'Magic number
         Friend e_cblp As UInt16 'Bytes on last page of file
@@ -1036,16 +1037,16 @@ Friend Class PEReader
         Friend e_cs As UInt16 'Initial (relative) CS value
         Friend e_lfarlc As UInt16 'File address of relocation table
         Friend e_ovno As UInt16 'Overlay number
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=4)> _
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=4)>
         Friend e_res1 As UInt16() 'Reserved words
         Friend e_oemid As UInt16 'OEM identifier (for e_oeminfo)
         Friend e_oeminfo As UInt16 '
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=10)> _
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=10)>
         Friend e_res2 As UInt16() 'Reserved words
         Friend e_lfanew As UInt32 'File address of new exe header
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_NT_HEADERS
         Friend Signature As UInt32
         Friend FileHeader As IMAGE_FILE_HEADER
@@ -1053,7 +1054,7 @@ Friend Class PEReader
         Friend OptionalHeader64 As IMAGE_OPTIONAL_HEADER64
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_FILE_HEADER
         Friend Machine As UInt16
         Friend NumberOfSections As UInt16
@@ -1064,7 +1065,7 @@ Friend Class PEReader
         Friend Characteristics As UInt16
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_OPTIONAL_HEADER32
         Friend Magic As UInt16
         Friend MajorLinkerVersion As [Byte]
@@ -1096,11 +1097,11 @@ Friend Class PEReader
         Friend SizeOfHeapCommit As UInt32
         Friend LoaderFlags As UInt32
         Friend NumberOfRvaAndSizes As UInt32
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=16)> _
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=16)>
         Friend DataDirectory As IMAGE_DATA_DIRECTORY()
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_OPTIONAL_HEADER64
         Friend Magic As UInt16
         Friend MajorLinkerVersion As [Byte]
@@ -1131,19 +1132,19 @@ Friend Class PEReader
         Friend SizeOfHeapCommit As UInt64
         Friend LoaderFlags As UInt32
         Friend NumberOfRvaAndSizes As UInt32
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=16)> _
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=16)>
         Friend DataDirectory As IMAGE_DATA_DIRECTORY()
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_DATA_DIRECTORY
         Friend VirtualAddress As UInt32
         Friend Size As UInt32
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_SECTION_HEADER
-        <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=8)> _
+        <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=8)>
         Friend Name As String
         Friend Misc As Misc
         Friend VirtualAddress As UInt32
@@ -1156,15 +1157,15 @@ Friend Class PEReader
         Friend Characteristics As UInt32
     End Structure
 
-    <StructLayout(LayoutKind.Explicit)> _
+    <StructLayout(LayoutKind.Explicit)>
     Friend Structure Misc
-        <FieldOffset(0)> _
+        <FieldOffset(0)>
         Friend PhysicalAddress As UInt32
-        <FieldOffset(0)> _
+        <FieldOffset(0)>
         Friend VirtualSize As UInt32
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_COR20_HEADER
         Friend cb As UInt32
         Friend MajorRuntimeVersion As UInt16
@@ -1204,7 +1205,7 @@ Friend Class PEReader
 
         TL.LogMessage("PEReader", "Running within CLR version: " & RuntimeEnvironment.GetSystemVersion())
 
-        If Left(FileName, 5).ToUpper = "FILE:" Then
+        If Left(FileName, 5).ToUpperInvariant = "FILE:" Then
             'Convert uri to local path if required, uri paths are not supported by FileStream - this method allows file names with # characters to be passed through
             Dim u As Uri = New Uri(FileName)
             FileName = u.LocalPath + Uri.UnescapeDataString(u.Fragment).Replace("/", "\\")
@@ -1363,14 +1364,14 @@ Friend Class PEReader
             If OS32BitCompatible Then ' Could be an x86 or MSIL assembly so determine which
                 If ((CLR.Flags And CLR_FLAGS.CLR_FLAGS_32BITREQUIRED) > 0) Then
                     TL.LogMessage("PEReader.Bitness", "Found ""32bit Required"" assembly")
-                    ExecutableBitness = BitNess.Bits32
+                    ExecutableBitness = Bitness.Bits32
                 Else
                     TL.LogMessage("PEReader.Bitness", "Found ""MSIL"" assembly")
-                    ExecutableBitness = BitNess.BitsMSIL
+                    ExecutableBitness = Bitness.BitsMSIL
                 End If
             Else ' Must be an x64 assmebly
                 TL.LogMessage("PEReader.Bitness", "Found ""64bit Required"" assembly")
-                ExecutableBitness = BitNess.Bits64
+                ExecutableBitness = Bitness.Bits64
             End If
 
             TL.LogMessage("PEReader", "Assembly required Runtime version: " & CLR.MajorRuntimeVersion & "." & CLR.MinorRuntimeVersion)
@@ -1378,10 +1379,10 @@ Friend Class PEReader
             TL.LogMessage("PEReader", "This is not an assembly, determining Bitness through the executable bitness flag")
             If OS32BitCompatible Then
                 TL.LogMessage("PEReader.Bitness", "Found 32bit executable")
-                ExecutableBitness = BitNess.Bits32
+                ExecutableBitness = Bitness.Bits32
             Else
                 TL.LogMessage("PEReader.Bitness", "Found 64bit executable")
-                ExecutableBitness = BitNess.Bits64
+                ExecutableBitness = Bitness.Bits64
             End If
 
         End If
