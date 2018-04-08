@@ -21,7 +21,7 @@ Public Class Form1
     Const CSIDL_PROGRAM_FILES_COMMON = 43 ' 0x002b 
     Const CSIDL_PROGRAM_FILES_COMMONX86 As Integer = 44    ' 0x002c
 
-    <DllImport("Shell32.dll")> _
+    <DllImport("Shell32.dll")>
     Private Shared Function SHGetSpecialFolderPath(<[In]()> hwndOwner As IntPtr, <Out()> lpszPath As StringBuilder, <[In]()> nFolder As Integer, <[In]()> fCreate As Integer) As Integer
     End Function
 
@@ -30,7 +30,7 @@ Public Class Form1
     Const REMOVE_INSTALLER_COMBO_TEXT As String = "Platform and Installer only (Recommended)"
     Dim REMOVE_INSTALLER_BACK_COLOUR As Color = Color.Yellow
     Dim REMOVE_INSTALLER_FORE_COLOUR As Color = Color.Black
-    Const REMOVE_INSTALLER_TEXT As String = vbCrLf & "WARNING!" & vbCrLf & vbCrLf & _
+    Const REMOVE_INSTALLER_TEXT As String = vbCrLf & "WARNING!" & vbCrLf & vbCrLf &
                                             "This option will remove the ASCOM Platform and its installer." & vbCrLf & vbCrLf &
                                             "If unsuccessful, use the """ & REMOVE_ALL_COMBO_TEXT & """ option as a last resort"
     Const REMOVE_INSTALLER_CONFIRMATION_MESSAGE = "Are you sure you want to remove your ASCOM Platform?"
@@ -38,11 +38,11 @@ Public Class Form1
     Const REMOVE_ALL_COMBO_TEXT As String = "Platform, Installer, Profile and 3rd Party Drivers"
     Dim REMOVE_ALL_BACK_COLOUR As Color = Color.Red
     Dim REMOVE_ALL_FORE_COLOUR As Color = Color.White
-    Const REMOVE_ALL_TEXT As String = vbCrLf & "WARNING!" & vbCrLf & vbCrLf & _
-                                      "This option will forcibly remove your entire ASCOM Platform including your drivers and Profile." & vbCrLf & vbCrLf & _
+    Const REMOVE_ALL_TEXT As String = vbCrLf & "WARNING!" & vbCrLf & vbCrLf &
+                                      "This option will forcibly remove your entire ASCOM Platform including your drivers and Profile." & vbCrLf & vbCrLf &
                                       "Please use it only as a last resort."
     Const REMOVE_ALL_CONFIRMATION_MESSAGE As String = "Are you sure you want to FORCE remove your entire ASCOM Platform, Profile and 3rd Party drivers?"
-    Const REMOVAL_COMPLETE_MESSAGE As String = "The current Platform has been removed, press OK to continue with new Platform installation"
+    Const REMOVAL_COMPLETE_MESSAGE As String = "The current Platform has been removed, press OK to end this program."
 
     Const ASCOM_TARGET_DIRECTORY_PLATFORM As String = "\ASCOM\Platform 6"
     Const ASCOM_TARGET_DIRECTORY_DEVELOPER As String = "\ASCOM\Platform 6 Developer Components"
@@ -1001,7 +1001,10 @@ Public Class Form1
 
     'run the uninstaller
     Private Sub RunProcess(ByVal InstallerName As String, ByVal processToRun As String, ByVal args As String)
-        Dim startInfo As ProcessStartInfo, myProcess As Process
+        Dim startInfo As ProcessStartInfo, myProcess As Process, ProcessTimeout, elapsedTime As TimeSpan
+        Const PROCESS_TIMEOUT_MINUTES As Integer = 3 ' Define a timeout in minutes for this process after which it will be cancelled
+
+        ProcessTimeout = TimeSpan.FromMinutes(PROCESS_TIMEOUT_MINUTES)
 
         Try
             TL.LogMessage("RunProcess", "  Process: " & processToRun)
@@ -1015,20 +1018,28 @@ Public Class Form1
             StartTime = Now
             myProcess = Process.Start(startInfo)
             Do
+                elapsedTime = Now.Subtract(StartTime)
                 Threading.Thread.Sleep(10)
-                Action("Removing: " & InstallerName & " - " & Now.Subtract(StartTime).Seconds)
+                Action(String.Format("Removing: {0} - {1} / {2} seconds", InstallerName, elapsedTime.TotalSeconds.ToString("0"), ProcessTimeout.TotalSeconds.ToString("0")))
                 Application.DoEvents()
-            Loop Until myProcess.HasExited
+            Loop Until myProcess.HasExited Or (elapsedTime > ProcessTimeout)
 
-            myProcess.WaitForExit()
+            If (myProcess.HasExited) Then ' The uninmstaller ran OK and terminated
+                TL.LogMessage("RunProcess", "  Completed - exit code: " & myProcess.ExitCode.ToString)
+            Else ' The installer appears to be stuck so kill the process and continue
+                TL.LogMessage("RunProcess", "  Installer did not complete in the allowed time - killing the process")
+                myProcess.Kill()
+                TL.LogMessage("RunProcess", "  Installer process killed")
+            End If
 
-            TL.LogMessage("RunProcess", "  Completed - exit code: " & myProcess.ExitCode.ToString)
-
-            myProcess.Close()
-            myProcess.Dispose()
-            myProcess = Nothing
+            Try ' Close the process and ignore any errors
+                myProcess.Close()
+                myProcess.Dispose()
+                myProcess = Nothing
+            Catch
+            End Try
         Catch e As Exception
-            TL.LogMessageCrLf("RunProcess", "Exception: " & e.ToString())
+                TL.LogMessageCrLf("RunProcess", "Exception: " & e.ToString())
         End Try
     End Sub
 
