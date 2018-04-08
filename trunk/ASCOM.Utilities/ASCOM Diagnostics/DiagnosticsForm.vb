@@ -21,11 +21,11 @@ Public Class DiagnosticsForm
 #Region "Constants and Enums"
     ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
     Private Const TEST_ASTROMETRY As Boolean = True
-    Private Const TEST_CACHE As Boolean = True
-    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
-    Private Const TEST_REGISTRY As Boolean = True
-    Private Const TEST_SIMULATORS As Boolean = True
-    Private Const TEST_UTILITIES As Boolean = True
+    Private Const TEST_CACHE As Boolean = False
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = False
+    Private Const TEST_REGISTRY As Boolean = False
+    Private Const TEST_SIMULATORS As Boolean = False
+    Private Const TEST_UTILITIES As Boolean = False
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
@@ -118,6 +118,8 @@ Public Class DiagnosticsForm
     Private IntArray1D(ArrayCopySize) As Integer, IntArray2D(ArrayCopySize, ArrayCopySize) As Integer, IntArray3D(ArrayCopySize, ArrayCopySize, ArrayCopySize) As Integer
 
     Private DiagnosticsVersion As Version ' Assembly version number of this executable
+
+    Private ERDForm As EarthRotationDataForm ' Variable to hold the earth rotation data form handle so that we can ensure that a new instance of the form is always used
 
 #End Region
 
@@ -7789,8 +7791,14 @@ Public Class DiagnosticsForm
             Status("Running Astro Utilities functional tests")
             TL.LogMessage("AstroUtilTests", "Creating ASCOM.Astrometry.AstroUtils.AstroUtils")
             sw.Reset() : sw.Start()
-            Dim AstroUtil2 As New ASCOM.Astrometry.AstroUtils.AstroUtils
+            Dim AstroUtil2 As New AstroUtils.AstroUtils
             TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
+
+            ' Earth rotation data tests
+            CompareInteger("AstroUtilTests", "Historic Offset Development Test Value", GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0)
+            CompareInteger("AstroUtilTests", "UTC Days Offset Development Test Value", GlobalItems.TEST_UTC_DAYS_OFFSET, 0)
+            CompareInteger("AstroUtilTests", "UTC Hours Offset Development Test Value", GlobalItems.TEST_UTC_HOURS_OFFSET, 0)
+            CompareInteger("AstroUtilTests", "UTC Minutes Offset Development Test Value", GlobalItems.TEST_UTC_MINUTES_OFFSET, 0)
 
             'Range Tests
             CompareDouble("AstroUtilTests", "ConditionHA -12.0", AstroUtil2.ConditionHA(-12.0), -12.0, TOLERANCE_E6)
@@ -8182,6 +8190,7 @@ Public Class DiagnosticsForm
         MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
         MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
         MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
+        MenuEarthRotationScheduledJobTraceEnabled.Checked = GetBool(TRACE_EARTHROTATION_SCHEDULED_JOB, TRACE_EARTHROTATION_SCHEDULED_JOB_DEFAULT)
 
         TypeOfWait = GetWaitType(SERIAL_WAIT_TYPE, SERIAL_WAIT_TYPE_DEFAULT)
 
@@ -8304,6 +8313,20 @@ Public Class DiagnosticsForm
     Private Sub MenuNovasTraceEnabled_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuNovasTraceEnabled.Click
         MenuNovasTraceEnabled.Checked = Not MenuNovasTraceEnabled.Checked 'Invert selection
         SetName(NOVAS_TRACE, MenuNovasTraceEnabled.Checked.ToString)
+    End Sub
+
+    Private Sub EarthRotationDataUpdateToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EarthRotationDataUpdateToolStripMenuItem.Click
+        If Not ERDForm Is Nothing Then ' We always want a fresh instance of this form so remove any previously used instance
+            Try : ERDForm.Dispose() : Catch : End Try
+            Try : ERDForm = Nothing : Catch : End Try
+        End If
+        ERDForm = New EarthRotationDataForm() ' Create a new instance and display it
+        ERDForm.ShowDialog()
+    End Sub
+
+    Private Sub MenuEarthRotationScheduledJobTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuEarthRotationScheduledJobTraceEnabled.Click
+        MenuEarthRotationScheduledJobTraceEnabled.Checked = Not MenuEarthRotationScheduledJobTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_EARTHROTATION_SCHEDULED_JOB, MenuEarthRotationScheduledJobTraceEnabled.Checked.ToString)
     End Sub
 
     Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click

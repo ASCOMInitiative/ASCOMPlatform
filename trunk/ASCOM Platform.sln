@@ -257,6 +257,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sofa Library", "SOFA\Sofa L
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sofa Test Application", "SOFA\Sofa Test Application\SofaTest.vcxproj", "{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EarthRotationUpdate", "ASCOM.Astrometry\EarthRotationUpdate\EarthRotationUpdate.csproj", "{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Quick|Any CPU = Debug Quick|Any CPU
@@ -2827,6 +2829,54 @@ Global
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Release|x64.Build.0 = Release|x64
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Release|x86.ActiveCfg = Release|Win32
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Release|x86.Build.0 = Release|Win32
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|Any CPU.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|Mixed Platforms.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|Win32.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|Win32.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|x64.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|x64.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug Quick|x86.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|Win32.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|x64.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Debug|x86.Build.0 = Debug|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|Any CPU.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|Any CPU.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|Mixed Platforms.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|Win32.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|Win32.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|x64.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|x64.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|x86.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.MakeDynamicLists|x86.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|Any CPU.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|Any CPU.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|Mixed Platforms.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|Win32.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|Win32.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|x64.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|x64.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|x86.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release 64bit|x86.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release|Win32.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release|x64.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release|x86.ActiveCfg = Release|Any CPU
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2925,16 +2975,17 @@ Global
 		{E1FCCE89-BD43-4625-83AB-44C9A5ADB826} = {0B492F73-66F9-460E-BD84-A6CB1FC588C6}
 		{82D4A273-6125-40F5-BF29-9445D302A407} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
+		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Reflector0DestinationAssemblyName = 
-		Reflector0DestinationVersion = 4.0.812.4
-		Reflector0DestinationName = Moq
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0SourceAssemblyName = 
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceName = Moq
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
 		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		Reflector0SourceName = Moq
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceAssemblyName = 
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0DestinationName = Moq
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationAssemblyName = 
 	EndGlobalSection
 EndGlobal

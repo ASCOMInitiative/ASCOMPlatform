@@ -9,14 +9,14 @@ Namespace AstroUtils
     ''' A number of these routines are provided to support migration from the Astro32.dll. Unlike Astro32, these routines will work in 
     ''' both 32bit and 64bit applications.
     ''' </remarks>
-    <Guid("5679F94A-D4D1-40D3-A0F8-7CE61100A691"), _
-        ClassInterface(ClassInterfaceType.None), _
-        ComVisible(True)> _
+    <Guid("5679F94A-D4D1-40D3-A0F8-7CE61100A691"),
+        ClassInterface(ClassInterfaceType.None),
+        ComVisible(True)>
     Public Class AstroUtils
         Implements IAstroUtils, IDisposable
 
         Private TL As TraceLogger, Utl As Util, Nov31 As NOVAS.NOVAS31, RegAccess As RegistryAccess
-        Private UtcTaiOffset As Integer
+        Private Parameters As EarthRotationParameters
 
         Friend Structure BodyInfo
             Public Altitude As Double
@@ -32,9 +32,8 @@ Namespace AstroUtils
             Nov31 = New NOVAS.NOVAS31
             RegAccess = New RegistryAccess
             TL.LogMessage("New", "AstroUtils created Utilities component OK")
-            'Set the current number of leap seconds once for this instance
-            UtcTaiOffset = CInt(RegAccess.GetProfile(ASTROMETRY_SUBKEY, UTC_TAI_OFFSET_VALUENAME, TAI_UTC_OFFSET.ToString))
-            TL.LogMessage("New", "Leap seconds: " & UtcTaiOffset)
+            Parameters = New EarthRotationParameters()
+            TL.LogMessage("New", "AstroUtils created Earth Rotation Paraemters object OK")
             TL.LogMessage("New", "Finished initialisation OK")
         End Sub
         Private disposedValue As Boolean ' To detect redundant calls
@@ -221,7 +220,7 @@ Namespace AstroUtils
                 TTDate = UT1Date.Add(DeltaTTimespan) 'Add delta-t to UT1 to yield TT
             Else ' No value provided so get to TT through TAI
                 ' Computation method TT = UTC + ΔAT + 32.184s. ΔAT = 35.0 leap seconds in June 2012
-                TTDate = UTCDate.Add(TimeSpan.FromSeconds(CDbl(UtcTaiOffset) + TT_TAI_OFFSET))
+                TTDate = UTCDate.Add(TimeSpan.FromSeconds(GetCurrentLeapSeconds() + TT_TAI_OFFSET))
             End If
 
             JD = Nov31.JulianDate(Convert.ToInt16(TTDate.Year), Convert.ToInt16(TTDate.Month), Convert.ToInt16(TTDate.Day), TTDate.TimeOfDay.TotalHours)
@@ -256,7 +255,7 @@ Namespace AstroUtils
             Else
                 ' Calculation UT1 = TT - DeltaT = UTC + ΔAT + 32.184s - DeltaT
                 DeltaT = DeltaTCalc(Nov31.JulianDate(Convert.ToInt16(UTCDate.Year), Convert.ToInt16(UTCDate.Month), Convert.ToInt16(UTCDate.Day), UTCDate.TimeOfDay.TotalHours))
-                TTDate = UTCDate.Add(TimeSpan.FromSeconds(CDbl(UtcTaiOffset) + TT_TAI_OFFSET))
+                TTDate = UTCDate.Add(TimeSpan.FromSeconds(GetCurrentLeapSeconds() + TT_TAI_OFFSET))
                 UT1Date = TTDate.Subtract(TimeSpan.FromSeconds(DeltaT))
             End If
 
@@ -279,8 +278,8 @@ Namespace AstroUtils
         ''' reduction of precise observations.
         ''' <para>Note: Unlike the NOVAS Refract method, Unrefract returns the unrefracted zenith distance itself rather than 
         ''' the difference between the refracted and unrefracted zenith distances.</para></remarks>
-        Public Function UnRefract(ByVal Location As OnSurface, _
-                                                ByVal RefOption As RefractionOption, _
+        Public Function UnRefract(ByVal Location As OnSurface,
+                                                ByVal RefOption As RefractionOption,
                                                 ByVal ZdObs As Double) As Double Implements IAstroUtils.UnRefract
             Dim LoopCount As Integer, RefractedPosition, UnrefractedPosition As Double
 
@@ -370,10 +369,45 @@ Namespace AstroUtils
         ''' <returns>Double DeltaUT in seconds</returns>
         ''' <remarks>DeltaUT varies only slowly, so the Julian date can be based on UTC, UT1 or Terrestrial Time.</remarks>
         Public Function DeltaUT(JulianDate As Double) As Double Implements IAstroUtils.DeltaUT1
-            Dim DUT1 As Double
-            DUT1 = CDbl(UtcTaiOffset) + TT_TAI_OFFSET - DeltaTCalc(JulianDate)
-            TL.LogMessage("DeltaUT", "Returning: " & DUT1 & " at Julian date: " & JulianDate)
-            Return DUT1
+            Dim RetVal As Double, DeltaUT1String As String
+
+            Select Case Parameters.UpdateType
+                Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
+                    ' Approach
+                    ' Determine whether a downloaded DeltaUT1 value exists for today (in UTC time)
+                    '    if yes then 
+                    '        Determine whether the value is a valid double number
+                    '        If it is then return this
+                    '        If not then fall back to the predicted value
+                    '    if no then fdall back to the predicted value
+                    Dim deltaUT1ValueName As String = String.Format(GlobalItems.DELTAUT1_VALUE_NAME_FORMAT,
+                                                                    DateTime.UtcNow.Year.ToString(GlobalItems.DELTAUT1_VALUE_NAME_YEAR_FORMAT),
+                                                                    DateTime.UtcNow.Month.ToString(GlobalItems.DELTAUT1_VALUE_NAME_MONTH_FORMAT),
+                                                                    DateTime.UtcNow.Day.ToString(GlobalItems.DELTAUT1_VALUE_NAME_DAY_FORMAT))
+
+                    DeltaUT1String = RegAccess.GetProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, deltaUT1ValueName)
+                    If deltaUT1ValueName <> "" Then ' We have got something back from the Profile so test whether it is a valid double number
+                    Else ' No value for this date so 
+                    End If
+
+
+
+
+                Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
+                    RetVal = GetCurrentLeapSeconds() + TT_TAI_OFFSET - DeltaTCalc(JulianDate)
+                    TL.LogMessage("DeltaUT", String.Format("Predicted DeltaUT1 is required so returning value determined from DeltaT calculation: {0} at Julian date: {1}", RetVal, JulianDate))
+                Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
+                    RetVal = Parameters.ManualDeltaUT1
+                    TL.LogMessage("DeltaUT", String.Format("Manual DeltaUT1 is required so returning manually configured value: {0}", RetVal))
+                Case Else
+                    TL.LogMessage("DeltaUT", "Unknown Parameters.UpdateType: " & Parameters.UpdateType)
+                    MsgBox("AstroUtils.DeltaUT - Unknown Parameters.UpdateType: " & Parameters.UpdateType)
+            End Select
+
+
+
+
+            Return RetVal
         End Function
 
         ''' <summary>
@@ -414,11 +448,10 @@ Namespace AstroUtils
         ''' here: ftp://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat</para> </remarks>
         Public Property LeapSeconds As Integer Implements IAstroUtils.LeapSeconds
             Get
-                Return UtcTaiOffset
+                Return CInt(GetCurrentLeapSeconds())
             End Get
             Set(value As Integer)
-                UtcTaiOffset = value
-                RegAccess.WriteProfile(ASTROMETRY_SUBKEY, UTC_TAI_OFFSET_VALUENAME, value.ToString)
+                Parameters.ManualLeapSeconds = value
             End Set
         End Property
 
@@ -680,7 +713,7 @@ Namespace AstroUtils
             rc = Nov31.SiderealTime(Instant, 0.0, DeltaT, ASCOM.Astrometry.GstType.GreenwichApparentSiderealTime, ASCOM.Astrometry.Method.EquinoxBased, ASCOM.Astrometry.Accuracy.Full, Gmst)
 
             Tau = HOURS2DEG * (Range(Gmst + Longitude * DEG2HOURS, 0, True, 24.0, False) - SkyPosition.RA) ' East longitude is  positive
-            Retval.Altitude = Math.Asin(Math.Sin(Latitude * DEG2RAD) * Math.Sin(SkyPosition.Dec * DEG2RAD) + _
+            Retval.Altitude = Math.Asin(Math.Sin(Latitude * DEG2RAD) * Math.Sin(SkyPosition.Dec * DEG2RAD) +
                                         Math.Cos(Latitude * DEG2RAD) * Math.Cos(SkyPosition.Dec * DEG2RAD) * Math.Cos(Tau * DEG2RAD)) * RAD2DEG
 
             Select Case TypeOfEvent
@@ -747,7 +780,7 @@ Namespace AstroUtils
             Nov31.Place(JD + DeltaT * SECONDS2DAYS, Obj3, Obs, DeltaT, ASCOM.Astrometry.CoordSys.EquinoxOfDate, ASCOM.Astrometry.Accuracy.Full, SunPosition)
 
             ' Calculate geocentriic elongation of the Moon
-            Phi = Math.Acos(Math.Sin(SunPosition.Dec * DEG2RAD) * Math.Sin(MoonPosition.Dec * DEG2RAD) + _
+            Phi = Math.Acos(Math.Sin(SunPosition.Dec * DEG2RAD) * Math.Sin(MoonPosition.Dec * DEG2RAD) +
                             Math.Cos(SunPosition.Dec * DEG2RAD) * Math.Cos(MoonPosition.Dec * DEG2RAD) * Math.Cos((SunPosition.RA - MoonPosition.RA) * HOURS2DEG * DEG2RAD))
 
             'Calculate the phase angle of the Moon
@@ -827,6 +860,68 @@ Namespace AstroUtils
 
             Return PositionAngle
 
+        End Function
+
+        Private Function GetCurrentLeapSeconds() As Double
+            Dim EffectiveDate As DateTime, RetVal As Double
+
+            'Set the current number of leap seconds once for this instance using manual or automatic values as appropriate
+            Select Case Parameters.UpdateType
+                Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
+                    ' Approach to returning a leap second value:
+                    ' Test whether the Next Leap Second Date is available
+                    '     If yes then test whether we are past the next leap second date - measured in UTC time because leap seconds are applied at 00:00:00 UTC. 
+                    '         If yes Then test whether the Next Leap Seconds value Is available
+                    '             If yes then use it
+                    '             If no then fall back To the manual value.
+                    '         If no then test whether the Automatic Leap Seconds value is available
+                    '             If yes then use it
+                    '             If no then fall back To the manual value.
+                    '     If no then test whether the Automatic Leap Seconds value is available
+                    '         If yes then use it
+                    '         If no then fall back To the manual value.
+                    If Parameters.NextLeapSecondsDate = DATE_VALUE_NOT_AVAILABLE Then ' A future leap second change date has not been published
+                        If Parameters.AutomaticLeapSeconds <> DOUBLE_VALUE_NOT_AVAILABLE Then ' We have a good automatic leap second value so use this
+                            RetVal = Parameters.AutomaticLeapSeconds
+                            TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required and a valid value is available: {0}", RetVal))
+                        Else ' We do not have a downloaded leap second value so fall back to the Manual value
+                            RetVal = Parameters.ManualLeapSeconds
+                            TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required but a valid value is not available - returning the manual leap seconds value instead: {0}", RetVal))
+                        End If
+                    Else ' A future leap second date has been published
+                        EffectiveDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0)) ' This is used to support development testing
+                        TL.LogMessage("GetCurrentLeapSeconds", String.Format("Effective date: {0}, NextLeapSecondsDate: {1}", EffectiveDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), Parameters.NextLeapSecondsDate.ToUniversalTime.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
+
+                        If EffectiveDate > Parameters.NextLeapSecondsDate.ToUniversalTime Then ' We are beyond the next leap second implementation date/time so use the next leap second value
+                            If Parameters.NextLeapSeconds <> DOUBLE_VALUE_NOT_AVAILABLE Then ' We have a good next leap seconds value so use it
+                                RetVal = Parameters.NextLeapSeconds
+                                TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required, current time is after the next leap second implementation time and a valid next leap seconds value is available: {0}", RetVal))
+                            Else ' We don't have a good next leap seconds value so fall back to the manual leap seconds value
+                                RetVal = Parameters.ManualLeapSeconds
+                                TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required, current time is after the next leap second implementation time but a valid next leap seconds value is not available - returning the manual leap seconds value instead: {0}", RetVal))
+                            End If
+                        Else ' We are not beyond the next leap second implementation date so use the automatic leap second value
+                            If Parameters.AutomaticLeapSeconds <> DOUBLE_VALUE_NOT_AVAILABLE Then ' We have a good automatic leap seconds value so use it
+                                RetVal = Parameters.AutomaticLeapSeconds
+                                TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required, current time is before the next leap second implementation time and a valid automatic leap seconds value is available: {0}", RetVal))
+                            Else ' We don't have a good automatic leap seconds value so fall back to the manual leap seconds value
+                                RetVal = Parameters.ManualLeapSeconds
+                                TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required, current time is before the next leap second implementation time but a valid automatic leap seconds value is not available - returning the manual leap seconds value instead: {0}", RetVal))
+                            End If
+                        End If
+                    End If
+                Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
+                    RetVal = Parameters.ManualLeapSeconds
+                    TL.LogMessage("GetCurrentLeapSeconds", String.Format("Manual leap seconds and delta UT1 are required, returning the manual leap seconds value: {0}", RetVal))
+                Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
+                    RetVal = Parameters.ManualLeapSeconds
+                    TL.LogMessage("GetCurrentLeapSeconds", String.Format("Manual leap seconds and predicted delta UT1 are required, returning the manual leap seconds value: {0}", RetVal))
+                Case Else
+                    TL.LogMessage("GetCurrentLeapSeconds", "Unknown Parameters.UpdateType: " & Parameters.UpdateType)
+                    MsgBox("AstroUtils.GetCurrentLeapSeconds - Unknown Parameters.UpdateType: " & Parameters.UpdateType)
+            End Select
+
+            Return RetVal ' Return the assigned value
         End Function
 
     End Class

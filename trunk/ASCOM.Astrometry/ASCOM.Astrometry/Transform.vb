@@ -24,9 +24,9 @@ Namespace Transform
     ''' and the NOVAS 3.1 user guide is included in the ASCOM Developer Components install.
     ''' </para>
     ''' </remarks>
-    <Guid("779CD957-5502-4939-A661-EBEE9E1F485E"), _
-    ClassInterface(ClassInterfaceType.None), _
-    ComVisible(True)> _
+    <Guid("779CD957-5502-4939-A661-EBEE9E1F485E"),
+    ClassInterface(ClassInterfaceType.None),
+    ComVisible(True)>
     Public Class Transform
         Implements ITransform, IDisposable
         Private disposedValue As Boolean = False        ' To detect redundant calls
@@ -538,10 +538,10 @@ Namespace Transform
             Sw.Reset() : Sw.Start()
 
             If RefracValue Then ' Include refraction
-                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1, _
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1,
                                          SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 1000.0, SiteTempValue, 0.8, 0.57, aob, zob, hob, dob, rob, eo)
             Else ' No refraction
-                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1, _
+                SOFA.CelestialToObserved(RAJ2000Value * HOURS2RADIANS, DECJ2000Value * DEGREES2RADIANS, 0.0, 0.0, 0.0, 0.0, JDUTCSofa, 0.0, DUT1,
                                          SiteLongValue * DEGREES2RADIANS, SiteLatValue * DEGREES2RADIANS, SiteElevValue, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, aob, zob, hob, dob, rob, eo)
             End If
 
@@ -635,9 +635,9 @@ Namespace Transform
                     Case SetBy.J2000 'J2000 coordinates have bee set so calculate apparent and topocentric coords
                         TL.LogMessage("  Recalculate", "  Values last set by SetJ2000")
                         'Check whether required topo values have been set
-                        If (Not Double.IsNaN(SiteLatValue)) And _
-                           (Not Double.IsNaN(SiteLongValue)) And _
-                           (Not Double.IsNaN(SiteElevValue)) And _
+                        If (Not Double.IsNaN(SiteLatValue)) And
+                           (Not Double.IsNaN(SiteLongValue)) And
+                           (Not Double.IsNaN(SiteElevValue)) And
                            (Not Double.IsNaN(SiteTempValue)) Then
                             J2000ToTopo() 'All required site values present so calc Topo values
                         Else 'Set to NaN
@@ -650,9 +650,9 @@ Namespace Transform
                     Case SetBy.Topocentric 'Topocentric co-ordinates have been set so calculate J2000 and apparent coords
                         TL.LogMessage("  Recalculate", "  Values last set by SetTopocentric")
                         'Check whether required topo values have been set
-                        If (Not Double.IsNaN(SiteLatValue)) And _
-                           (Not Double.IsNaN(SiteLongValue)) And _
-                           (Not Double.IsNaN(SiteElevValue)) And _
+                        If (Not Double.IsNaN(SiteLatValue)) And
+                           (Not Double.IsNaN(SiteLongValue)) And
+                           (Not Double.IsNaN(SiteElevValue)) And
                            (Not Double.IsNaN(SiteTempValue)) Then 'They have so calculate remaining values
                             Call TopoToJ2000()
                             Call J2000ToApparent()
@@ -668,9 +668,9 @@ Namespace Transform
                         TL.LogMessage("  Recalculate", "  Values last set by SetApparent")
                         Call ApparentToJ2000() 'Calculate J2000 value
                         'Check whether required topo values have been set
-                        If (Not Double.IsNaN(SiteLatValue)) And _
-                           (Not Double.IsNaN(SiteLongValue)) And _
-                           (Not Double.IsNaN(SiteElevValue)) And _
+                        If (Not Double.IsNaN(SiteLatValue)) And
+                           (Not Double.IsNaN(SiteLongValue)) And
+                           (Not Double.IsNaN(SiteElevValue)) And
                            (Not Double.IsNaN(SiteTempValue)) Then
                             J2000ToTopo() 'All required site values present so calc Topo values
                         Else
@@ -681,9 +681,9 @@ Namespace Transform
                         End If
                     Case SetBy.AzimuthElevation
                         TL.LogMessage("  Recalculate", "  Values last set by AzimuthElevation")
-                        If (Not Double.IsNaN(SiteLatValue)) And _
-                           (Not Double.IsNaN(SiteLongValue)) And _
-                           (Not Double.IsNaN(SiteElevValue)) And _
+                        If (Not Double.IsNaN(SiteLatValue)) And
+                           (Not Double.IsNaN(SiteLongValue)) And
+                           (Not Double.IsNaN(SiteElevValue)) And
                            (Not Double.IsNaN(SiteTempValue)) Then
                             Call AzElToJ2000()
                             Call J2000ToTopo()
@@ -740,13 +740,14 @@ Namespace Transform
         Private Function GetJDUTCSofa() As Double
             Dim Retval, utc1, utc2 As Double, Now As DateTime
 
-            If JulianDateUTCValue = 0.0 Then
-                Now = Date.UtcNow
-                If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
-                Retval = utc1 + utc2
-            Else
-                Retval = JulianDateUTCValue
-            End If
+            ' Platform 6.4 - 6/4/2018 - Caching removed so that the Julian date will be accurate to the millisecond
+            'If JulianDateUTCValue = 0.0 Then
+            Now = Date.UtcNow
+            If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+            Retval = utc1 + utc2
+            ' Else
+            ' Retval = JulianDateUTCValue
+            ' End If
             TL.LogMessage("  GetJDUTCSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString(DATE_FORMAT))
             Return Retval
         End Function
@@ -754,18 +755,19 @@ Namespace Transform
         Private Function GetJDTTSofa() As Double
             Dim Retval, utc1, utc2, tai1, tai2, tt1, tt2 As Double, Now As DateTime
 
-            If JulianDateTTValue = 0.0 Then
-                Now = Date.UtcNow
+            ' Platform 6.4 - 6/4/2018 - Caching removed so that the Julian date will be accurate to the millisecond
+            'If JulianDateTTValue = 0.0 Then
+            Now = Date.UtcNow
 
-                If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+            If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
 
-                If (SOFA.UtcTai(utc1, utc2, tai1, tai2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Utctai - Bad return code")
-                If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Taitt - Bad return code")
+            If (SOFA.UtcTai(utc1, utc2, tai1, tai2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Utctai - Bad return code")
+            If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Taitt - Bad return code")
 
-                Retval = tt1 + tt2
-            Else
-                Retval = JulianDateTTValue
-            End If
+            Retval = tt1 + tt2
+            'Else
+            'Retval = JulianDateTTValue
+            'End If
             TL.LogMessage("  GetJDTTSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString(DATE_FORMAT))
             Return Retval
         End Function
