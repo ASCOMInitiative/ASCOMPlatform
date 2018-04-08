@@ -217,7 +217,7 @@ Public Class frmProfileExplorer
         Res = MsgBox("Are you sure you want to delete this row?", MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation, "Confirm delete")
         If Res = MsgBoxResult.Ok Then
             Try
-                MsgBox("Deleting: " & KeyPath & "#" & KeyValues.Rows(e.Row.Index).Cells(0).Value.ToString & "#")
+                'MsgBox("Deleting: " & KeyPath & "#" & KeyValues.Rows(e.Row.Index).Cells(0).Value.ToString & "#")
                 If KeyValues.Rows(e.Row.Index).Cells(0).Value.ToString = REGISTRY_DEFAULT Then
                     Prof.DeleteProfile(KeyPath, "")
                 Else
