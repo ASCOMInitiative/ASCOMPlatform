@@ -108,6 +108,7 @@
             <content>
       			<list class="bullet">
 	      			<listItem>The Developer components installer will now recognise a VS2017 install and offer to install the ASCOM driver templates.</listItem>
+	      			<listItem>TraceLogger.LogFileName now returns the full trace file path instead of an empty string when a specific log file name has been set ..</listItem>
 	      		</list>
    			</content>
    		</section>

@@ -510,9 +510,9 @@ Module VersionCode
     ''' <returns>If the function succeeds, the return value is a nonzero value. If the function fails, the return value is zero. To get extended 
     ''' error information, call GetLastError.</returns>
     ''' <remarks></remarks>
-    <DllImport("Kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)> _
-    Private Function IsWow64Process( _
-              ByVal hProcess As System.IntPtr, _
+    <DllImport("Kernel32.dll", SetLastError:=True, CallingConvention:=CallingConvention.Winapi)>
+    Private Function IsWow64Process(
+              ByVal hProcess As System.IntPtr,
               ByRef wow64Process As Boolean) As <MarshalAs(UnmanagedType.Bool)> Boolean
     End Function
 
@@ -880,7 +880,7 @@ Module AscomSharedCode
         ConditionPlatformVersion = PlatformVersion ' Set default action to return the supplied vaue
         Try
             ModuleFileName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) 'Get the name of the executable without path or file extension
-            If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ModuleFileName: """ & ModuleFileName & """ """ & _
+            If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ModuleFileName: """ & ModuleFileName & """ """ &
                                                     Process.GetCurrentProcess().MainModule.FileName & """")
             If Left(ModuleFileName.ToUpper, 3) = "IS-" Then ' Likely to be an old Inno installer so try and get the parent's name
                 If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "    Inno installer temporary executable detected, searching for parent process!")
@@ -896,12 +896,12 @@ Module AscomSharedCode
             ForcedFileNames = Profile.EnumProfile(PLATFORM_VERSION_EXCEPTIONS) 'Get the list of filenames requiring specific versions
 
             For Each ForcedFileName As KeyValuePair(Of String, String) In ForcedFileNames ' Check each forced file in turn 
-                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedFileName.Key & """ """ & _
-                                                        ForcedFileName.Value & """ """ & _
-                                                        UCase(Path.GetFileNameWithoutExtension(ForcedFileName.Key)) & """ """ & _
-                                                        UCase(Path.GetFileName(ForcedFileName.Key)) & """ """ & _
-                                                        UCase(ForcedFileName.Key) & """ """ & _
-                                                        ForcedFileName.Key & """ """ & _
+                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedFileName.Key & """ """ &
+                                                        ForcedFileName.Value & """ """ &
+                                                        UCase(Path.GetFileNameWithoutExtension(ForcedFileName.Key)) & """ """ &
+                                                        UCase(Path.GetFileName(ForcedFileName.Key)) & """ """ &
+                                                        UCase(ForcedFileName.Key) & """ """ &
+                                                        ForcedFileName.Key & """ """ &
                                                         UCase(ModuleFileName) & """")
                 If ForcedFileName.Key.Contains(".") Then
                     ForcedFileNameKey = Path.GetFileNameWithoutExtension(ForcedFileName.Key)
@@ -922,12 +922,12 @@ Module AscomSharedCode
             ForcedSeparators = Profile.EnumProfile(PLATFORM_VERSION_SEPARATOR_EXCEPTIONS) 'Get the list of filenames requiring specific versions
 
             For Each ForcedSeparator As KeyValuePair(Of String, String) In ForcedSeparators ' Check each forced file in turn 
-                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedSeparator.Key & """ """ & _
-                                                        ForcedSeparator.Value & """ """ & _
-                                                        UCase(Path.GetFileNameWithoutExtension(ForcedSeparator.Key)) & """ """ & _
-                                                        UCase(Path.GetFileName(ForcedSeparator.Key)) & """ """ & _
-                                                        UCase(ForcedSeparator.Key) & """ """ & _
-                                                        ForcedSeparator.Key & """ """ & _
+                If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ForcedFileName: """ & ForcedSeparator.Key & """ """ &
+                                                        ForcedSeparator.Value & """ """ &
+                                                        UCase(Path.GetFileNameWithoutExtension(ForcedSeparator.Key)) & """ """ &
+                                                        UCase(Path.GetFileName(ForcedSeparator.Key)) & """ """ &
+                                                        UCase(ForcedSeparator.Key) & """ """ &
+                                                        ForcedSeparator.Key & """ """ &
                                                         UCase(ModuleFileName) & """")
                 If ForcedSeparator.Key.Contains(".") Then
                 Else
@@ -954,6 +954,8 @@ Module AscomSharedCode
     End Function
 End Module
 #End Region
+
+#Region "PeReader"
 
 ''' <summary>
 ''' 
@@ -1021,7 +1023,7 @@ Friend Class PEReader
 
 #Region "Structs"
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_DOS_HEADER
         Friend e_magic As UInt16 'Magic number
         Friend e_cblp As UInt16 'Bytes on last page of file
@@ -1037,16 +1039,16 @@ Friend Class PEReader
         Friend e_cs As UInt16 'Initial (relative) CS value
         Friend e_lfarlc As UInt16 'File address of relocation table
         Friend e_ovno As UInt16 'Overlay number
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=4)> _
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=4)>
         Friend e_res1 As UInt16() 'Reserved words
         Friend e_oemid As UInt16 'OEM identifier (for e_oeminfo)
         Friend e_oeminfo As UInt16 '
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=10)> _
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=10)>
         Friend e_res2 As UInt16() 'Reserved words
         Friend e_lfanew As UInt32 'File address of new exe header
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_NT_HEADERS
         Friend Signature As UInt32
         Friend FileHeader As IMAGE_FILE_HEADER
@@ -1054,7 +1056,7 @@ Friend Class PEReader
         Friend OptionalHeader64 As IMAGE_OPTIONAL_HEADER64
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_FILE_HEADER
         Friend Machine As UInt16
         Friend NumberOfSections As UInt16
@@ -1065,7 +1067,7 @@ Friend Class PEReader
         Friend Characteristics As UInt16
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_OPTIONAL_HEADER32
         Friend Magic As UInt16
         Friend MajorLinkerVersion As [Byte]
@@ -1097,11 +1099,11 @@ Friend Class PEReader
         Friend SizeOfHeapCommit As UInt32
         Friend LoaderFlags As UInt32
         Friend NumberOfRvaAndSizes As UInt32
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=16)> _
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=16)>
         Friend DataDirectory As IMAGE_DATA_DIRECTORY()
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_OPTIONAL_HEADER64
         Friend Magic As UInt16
         Friend MajorLinkerVersion As [Byte]
@@ -1132,19 +1134,19 @@ Friend Class PEReader
         Friend SizeOfHeapCommit As UInt64
         Friend LoaderFlags As UInt32
         Friend NumberOfRvaAndSizes As UInt32
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=16)> _
+        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=16)>
         Friend DataDirectory As IMAGE_DATA_DIRECTORY()
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_DATA_DIRECTORY
         Friend VirtualAddress As UInt32
         Friend Size As UInt32
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_SECTION_HEADER
-        <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=8)> _
+        <MarshalAs(UnmanagedType.ByValTStr, SizeConst:=8)>
         Friend Name As String
         Friend Misc As Misc
         Friend VirtualAddress As UInt32
@@ -1157,15 +1159,15 @@ Friend Class PEReader
         Friend Characteristics As UInt32
     End Structure
 
-    <StructLayout(LayoutKind.Explicit)> _
+    <StructLayout(LayoutKind.Explicit)>
     Friend Structure Misc
-        <FieldOffset(0)> _
+        <FieldOffset(0)>
         Friend PhysicalAddress As UInt32
-        <FieldOffset(0)> _
+        <FieldOffset(0)>
         Friend VirtualSize As UInt32
     End Structure
 
-    <StructLayout(LayoutKind.Sequential)> _
+    <StructLayout(LayoutKind.Sequential)>
     Friend Structure IMAGE_COR20_HEADER
         Friend cb As UInt32
         Friend MajorRuntimeVersion As UInt16
@@ -1364,14 +1366,14 @@ Friend Class PEReader
             If OS32BitCompatible Then ' Could be an x86 or MSIL assembly so determine which
                 If ((CLR.Flags And CLR_FLAGS.CLR_FLAGS_32BITREQUIRED) > 0) Then
                     TL.LogMessage("PEReader.Bitness", "Found ""32bit Required"" assembly")
-                    ExecutableBitness = BitNess.Bits32
+                    ExecutableBitness = Bitness.Bits32
                 Else
                     TL.LogMessage("PEReader.Bitness", "Found ""MSIL"" assembly")
-                    ExecutableBitness = BitNess.BitsMSIL
+                    ExecutableBitness = Bitness.BitsMSIL
                 End If
             Else ' Must be an x64 assmebly
                 TL.LogMessage("PEReader.Bitness", "Found ""64bit Required"" assembly")
-                ExecutableBitness = BitNess.Bits64
+                ExecutableBitness = Bitness.Bits64
             End If
 
             TL.LogMessage("PEReader", "Assembly required Runtime version: " & CLR.MajorRuntimeVersion & "." & CLR.MinorRuntimeVersion)
@@ -1379,10 +1381,10 @@ Friend Class PEReader
             TL.LogMessage("PEReader", "This is not an assembly, determining Bitness through the executable bitness flag")
             If OS32BitCompatible Then
                 TL.LogMessage("PEReader.Bitness", "Found 32bit executable")
-                ExecutableBitness = BitNess.Bits32
+                ExecutableBitness = Bitness.Bits32
             Else
                 TL.LogMessage("PEReader.Bitness", "Found 64bit executable")
-                ExecutableBitness = BitNess.Bits64
+                ExecutableBitness = Bitness.Bits64
             End If
 
         End If
@@ -1452,6 +1454,8 @@ Friend Class PEReader
         Dispose(True)
         GC.SuppressFinalize(Me)
     End Sub
+#End Region
+
 #End Region
 
 End Class

@@ -11,6 +11,8 @@ Module DeltatCode
     ''' Post 2011, calculation is effected throgh a 2nd order polynomial best fit to real DeltaT data from: http://maia.usno.navy.mil/ser7/deltat.data 
     ''' together with projections of DeltaT from: http://maia.usno.navy.mil/ser7/deltat.preds
     ''' The analysis spreadsheets for DeltaT values at dates post 2011 are stored in the \NOVAS\DeltaT Predictions folder of the ASCOM source tree.
+    ''' 
+    ''' To esnure that leap second and DeltaUT1 transitions are handled correctly and occur at 00:00:00 UTC, the supplied Julian date should be in UTC time
     ''' </remarks>
     Function DeltaTCalc(ByVal tjd As Double) As Double
 

@@ -477,6 +477,11 @@ Friend Class ChooserForm
         SetName(TRACE_CACHE, MenuCacheTraceEnabled.Checked.ToString)
     End Sub
 
+    Private Sub MenuEarthRotationScheduledJobTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuEarthRotationScheduledJobTraceEnabled.Click
+        MenuEarthRotationScheduledJobTraceEnabled.Checked = Not MenuEarthRotationScheduledJobTraceEnabled.Checked 'Invert selection
+        SetName(TRACE_EARTHROTATION_SCHEDULED_JOB, MenuEarthRotationScheduledJobTraceEnabled.Checked.ToString)
+    End Sub
+
     Private Sub MenuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTrace.DropDownOpening
         RefreshTraceMenu()
     End Sub

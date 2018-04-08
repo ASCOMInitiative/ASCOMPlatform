@@ -47,8 +47,9 @@
         Me.MenuTransformTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuNovasTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuAstroUtilsTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
         Me.MenuCacheTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SerialTraceFileName = New System.Windows.Forms.SaveFileDialog()
+        Me.MenuEarthRotationScheduledJobTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picASCOM, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ChooserMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -157,7 +158,7 @@
         '
         'MenuTrace
         '
-        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled})
+        Me.MenuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NormallyLeaveTheseDisabledToolStripMenuItem, Me.ToolStripSeparator1, Me.MenuSerialTraceEnabled, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled, Me.MenuEarthRotationScheduledJobTraceEnabled})
         Me.MenuTrace.Name = "MenuTrace"
         Me.MenuTrace.Size = New System.Drawing.Size(47, 20)
         Me.MenuTrace.Text = "Trace"
@@ -165,67 +166,73 @@
         'NormallyLeaveTheseDisabledToolStripMenuItem
         '
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Name = "NormallyLeaveTheseDisabledToolStripMenuItem"
-        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
+        Me.NormallyLeaveTheseDisabledToolStripMenuItem.Size = New System.Drawing.Size(304, 22)
         Me.NormallyLeaveTheseDisabledToolStripMenuItem.Text = "Normally leave these disabled"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(229, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(301, 6)
         '
         'MenuSerialTraceEnabled
         '
         Me.MenuSerialTraceEnabled.Name = "MenuSerialTraceEnabled"
-        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuSerialTraceEnabled.Text = "Serial Trace Enabled"
         '
         'MenuProfileTraceEnabled
         '
         Me.MenuProfileTraceEnabled.Name = "MenuProfileTraceEnabled"
-        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
         'MenuUtilTraceEnabled
         '
         Me.MenuUtilTraceEnabled.Name = "MenuUtilTraceEnabled"
-        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuUtilTraceEnabled.Text = "Util Trace Enabled"
         '
         'MenuSimulatorTraceEnabled
         '
         Me.MenuSimulatorTraceEnabled.Name = "MenuSimulatorTraceEnabled"
-        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuSimulatorTraceEnabled.Text = "Simulator Trace Enabled"
         '
         'MenuDriverAccessTraceEnabled
         '
         Me.MenuDriverAccessTraceEnabled.Name = "MenuDriverAccessTraceEnabled"
-        Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuDriverAccessTraceEnabled.Text = "DriverAccess Trace Enabled"
         '
         'MenuTransformTraceEnabled
         '
         Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
-        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
         '
         'MenuNovasTraceEnabled
         '
         Me.MenuNovasTraceEnabled.Name = "MenuNovasTraceEnabled"
-        Me.MenuNovasTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuNovasTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuNovasTraceEnabled.Text = "NOVAS (Partial) Trace Enabled"
         '
         'MenuAstroUtilsTraceEnabled
         '
         Me.MenuAstroUtilsTraceEnabled.Name = "MenuAstroUtilsTraceEnabled"
-        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled"
         '
         'MenuCacheTraceEnabled
         '
         Me.MenuCacheTraceEnabled.Name = "MenuCacheTraceEnabled"
-        Me.MenuCacheTraceEnabled.Size = New System.Drawing.Size(232, 22)
+        Me.MenuCacheTraceEnabled.Size = New System.Drawing.Size(304, 22)
         Me.MenuCacheTraceEnabled.Text = "Cache Trace Enabled"
+        '
+        'MenuEarthRotationScheduledJobTraceEnabled
+        '
+        Me.MenuEarthRotationScheduledJobTraceEnabled.Name = "MenuEarthRotationScheduledJobTraceEnabled"
+        Me.MenuEarthRotationScheduledJobTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuEarthRotationScheduledJobTraceEnabled.Text = "Earth Rotation Scheduled Job Trace Enabled"
         '
         'ChooserForm
         '
@@ -273,5 +280,6 @@
     Friend WithEvents MenuAstroUtilsTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuNovasTraceEnabled As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuCacheTraceEnabled As ToolStripMenuItem
+    Friend WithEvents MenuEarthRotationScheduledJobTraceEnabled As ToolStripMenuItem
 #End Region
 End Class
