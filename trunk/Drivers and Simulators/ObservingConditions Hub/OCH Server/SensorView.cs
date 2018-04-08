@@ -59,7 +59,7 @@ namespace ASCOM.Simulator
                         sensor.ProgID = ProgId;
                         break;
                 }
-                if (ProgId.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase))
+                if (ProgId.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.OrdinalIgnoreCase))
                 {
                     sensor.SwitchNumber = (int)upDownSwitch.Value;
                 }
@@ -142,7 +142,7 @@ namespace ASCOM.Simulator
             var progId = SetupDialogForm.allDevices[cmbDevice.SelectedIndex].Key;
             Hub.TL.LogMessage("cmbDevice_SelectedIndexChanged", "{0} Event has fired, ProgID: {1}", SensorName, progId);
 
-            if (progId.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) // Enable or disable the property's Switch name combo 
+            if (progId.EndsWith("." + Hub.SWITCH_DEVICE_NAME, StringComparison.OrdinalIgnoreCase)) // Enable or disable the property's Switch name combo 
             {
                 // handle switch drivers
                 Hub.TL.LogMessage("cmbDevice_Index", "Switch found - ProgID: {0}", progId);
@@ -205,7 +205,7 @@ namespace ASCOM.Simulator
                     MessageBox.Show("Exception: " + ex.Message);
                 }
             }
-            else if (progId.EndsWith("." + Hub.OBSERVING_CONDITIONS_DEVICE_TYPE, StringComparison.InvariantCultureIgnoreCase))
+            else if (progId.EndsWith("." + Hub.OBSERVING_CONDITIONS_DEVICE_TYPE, StringComparison.OrdinalIgnoreCase))
             {
                 Hub.TL.LogMessage("cmbDevice_Index", "ObservingConditions device found - ProgID: {0}", progId);
 

@@ -163,9 +163,8 @@ namespace Simulator.VideoCameraImpl
 			{
 				if (!string.IsNullOrEmpty(NewIntegrationRate))
 				{
-					float frameRateValue;
-					int integrationValue;
-					if (float.TryParse(NewIntegrationRate, NumberStyles.Number, CultureInfo.InvariantCulture, out frameRateValue))
+                    int integrationValue;
+                    if (float.TryParse(NewIntegrationRate, NumberStyles.Number, CultureInfo.InvariantCulture, out float frameRateValue))
 					{
 						if (Settings.Default.CameraFrameRate == AnalogueCameraFrameRate.NTSC)
 							integrationValue = (int) Math.Round(frameRateValue * 29.97);
@@ -176,7 +175,7 @@ namespace Simulator.VideoCameraImpl
 						selectedIntegrationRate = NewIntegrationRate;
 					}
 					else if (
-						NewIntegrationRate.StartsWith("x", true, CultureInfo.InvariantCulture) &&
+						NewIntegrationRate.StartsWith("x",StringComparison.OrdinalIgnoreCase) &&
 						int.TryParse(NewIntegrationRate, NumberStyles.Number, CultureInfo.InvariantCulture, out integrationValue))
 					{
 						bitmapPlayer.SetIntegration(integrationValue);
@@ -221,21 +220,20 @@ namespace Simulator.VideoCameraImpl
 		{
 			if (!maxSupportedGain.HasValue)
 			{
-				short maxGain;
-				if (!Settings.Default.SupportsGainRange &&
-					supportedGains.Count > 0 &&
-					short.TryParse(supportedGains[supportedGains.Count - 1], NumberStyles.Number, CultureInfo.InvariantCulture, out maxGain))
-				{
-					maxSupportedGain = maxGain;
-					return maxSupportedGain.Value;
-				}
-				else if (Settings.Default.SupportsGainRange)
-				{
-					maxSupportedGain = Settings.Default.GainMax;
-					return maxSupportedGain.Value;
-				}
-					
-				return 0;
+                if (!Settings.Default.SupportsGainRange &&
+                    supportedGains.Count > 0 &&
+                    short.TryParse(supportedGains[supportedGains.Count - 1], NumberStyles.Number, CultureInfo.InvariantCulture, out short maxGain))
+                {
+                    maxSupportedGain = maxGain;
+                    return maxSupportedGain.Value;
+                }
+                else if (Settings.Default.SupportsGainRange)
+                {
+                    maxSupportedGain = Settings.Default.GainMax;
+                    return maxSupportedGain.Value;
+                }
+
+                return 0;
 			}
 			else
 				return maxSupportedGain.Value;
@@ -281,34 +279,33 @@ namespace Simulator.VideoCameraImpl
 
 		public double GetCurrentGammaValue()
 		{
-			double gammaVal;
 
-			if (selectedDiscreteGammaIndex >=0 && selectedDiscreteGammaIndex < supportedGammas.Count)
-			{
-				string gamma = supportedGammas[selectedDiscreteGammaIndex];
-				if (double.TryParse(gamma, NumberStyles.Number, CultureInfo.InvariantCulture, out gammaVal))
-					return gammaVal;
+            if (selectedDiscreteGammaIndex >= 0 && selectedDiscreteGammaIndex < supportedGammas.Count)
+            {
+                string gamma = supportedGammas[selectedDiscreteGammaIndex];
+                if (double.TryParse(gamma, NumberStyles.Number, CultureInfo.InvariantCulture, out double gammaVal))
+                    return gammaVal;
 
-				if (gamma != null)
-				{
-					if (gamma.StartsWith("HI", StringComparison.InvariantCultureIgnoreCase))
-						return 0.35;
-					else if (gamma.StartsWith("LO", StringComparison.InvariantCultureIgnoreCase))
-						return 0.45;
-					else if (gamma.StartsWith("OFF", StringComparison.InvariantCultureIgnoreCase))
-						return 1.00;
+                if (gamma != null)
+                {
+                    if (gamma.StartsWith("HI", StringComparison.OrdinalIgnoreCase))
+                        return 0.35;
+                    else if (gamma.StartsWith("LO", StringComparison.OrdinalIgnoreCase))
+                        return 0.45;
+                    else if (gamma.StartsWith("OFF", StringComparison.OrdinalIgnoreCase))
+                        return 1.00;
 
-					Match regexMatch = GAMMA_REGEX.Match(gamma);
-					if (regexMatch.Success && 
-						regexMatch.Groups["InBracketsValue"].Success)
-					{
-						if (double.TryParse(regexMatch.Groups["InBracketsValue"].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out gammaVal))
-							return gammaVal;
-					}
-				}
-			}
+                    Match regexMatch = GAMMA_REGEX.Match(gamma);
+                    if (regexMatch.Success &&
+                        regexMatch.Groups["InBracketsValue"].Success)
+                    {
+                        if (double.TryParse(regexMatch.Groups["InBracketsValue"].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out gammaVal))
+                            return gammaVal;
+                    }
+                }
+            }
 
-			return 1.0;
+            return 1.0;
 		}
 
 		private static string[] LIST_ITEM_SEPARATOR = new string[] { "#;" };
@@ -328,7 +325,7 @@ namespace Simulator.VideoCameraImpl
 
 				supportedUpperCaseActionNames.AddRange(
 					supportedActionNames
-						.Select(x => x.ToUpper())
+						.Select(x => x.ToUpperInvariant())
 					);
 			}
 
@@ -344,7 +341,7 @@ namespace Simulator.VideoCameraImpl
 
 				supportedUpperCaseExposureRates.AddRange(
 					supportedIntegrationRates
-						.Select(x => x.ToUpper()));
+						.Select(x => x.ToUpperInvariant()));
 			}
 
 			supportedGains.Clear();
@@ -399,7 +396,7 @@ namespace Simulator.VideoCameraImpl
 		public bool IsActionSupported(string actionName)
 		{
 			return
-				supportedUpperCaseActionNames.IndexOf(actionName.ToUpper()) > -1;
+				supportedUpperCaseActionNames.IndexOf(actionName.ToUpperInvariant()) > -1;
 		}
 
 		public string PerformAction(string actionName, string actionParameters)
@@ -508,13 +505,10 @@ namespace Simulator.VideoCameraImpl
 
 			if (bitmapPlayer.Running)
 			{
-				long currentFrameNo;
-				int[,] currentFrame;
-				byte[] previewBitmapBytes;
 
-				bitmapPlayer.GetCurrentImage(out currentFrame, out currentFrameNo, out previewBitmapBytes);
+                bitmapPlayer.GetCurrentImage(out int[,] currentFrame, out long currentFrameNo, out byte[] previewBitmapBytes);
 
-				short currentGain = GetCurrentGain();
+                short currentGain = GetCurrentGain();
 				double currentGamma = GetCurrentGammaValue();
 				int currentWhiteBalance = GetWhiteBalance();
 

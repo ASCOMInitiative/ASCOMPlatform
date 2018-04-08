@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Timers;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -95,7 +96,7 @@ namespace ASCOM.Simulator
                     BindingFlags.SetProperty,
                     null,
                     control,
-                    new object[] { propertyValue });
+                    new object[] { propertyValue },CultureInfo.InvariantCulture);
             }
         }
 

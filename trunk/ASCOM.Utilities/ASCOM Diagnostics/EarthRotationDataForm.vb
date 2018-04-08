@@ -200,7 +200,7 @@ Public Class EarthRotationDataForm
         ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
         DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
 
-        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpper())
+        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpperInvariant())
 
     End Sub
 
@@ -499,9 +499,9 @@ Public Class EarthRotationDataForm
         Dim combo As ComboBox = CType(sender, ComboBox), UriValid As Boolean
 
         UriValid = False ' Set the valid flag false, then set to true if the download source starts with a supported URI prefix
-        If combo.Text.ToLower().StartsWith(URI_PREFIX_HTTP) Then UriValid = True
-        If combo.Text.ToLower().StartsWith(URI_PREFIX_HTTPS) Then UriValid = True
-        If combo.Text.ToLower().StartsWith(URI_PREFIX_FTP) Then UriValid = True
+        If combo.Text.StartsWith(URI_PREFIX_HTTP, StringComparison.OrdinalIgnoreCase) Then UriValid = True
+        If combo.Text.StartsWith(URI_PREFIX_HTTPS, StringComparison.OrdinalIgnoreCase) Then UriValid = True
+        If combo.Text.StartsWith(URI_PREFIX_FTP, StringComparison.OrdinalIgnoreCase) Then UriValid = True
         If UriValid Then
             ErrorProvider1.SetError(CmbDataSource, "")
             BtnOK.Enabled = True

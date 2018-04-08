@@ -22,19 +22,19 @@ namespace ASCOM.Internal.SuppressWinErrors
             if (args.Length == 0) help = true; // No arguments will print a help message
             if (args.Length == 1) // One argument could be /H /V or a filename
             {
-                if (string.Compare(args[0], "/H", true) == 0) help = true; // Test for help switch
-                if (string.Compare(args[0], "-H", true) == 0) help = true;
-                if (string.Compare(args[0], "/V", true) == 0) versions = true; // Test for version switch
-                if (string.Compare(args[0], "-V", true) == 0) versions = true;
-                action = args[0].ToUpper();
+                if (string.Compare(args[0], "/H", StringComparison.OrdinalIgnoreCase) == 0) help = true; // Test for help switch
+                if (string.Compare(args[0], "-H", StringComparison.OrdinalIgnoreCase) == 0) help = true;
+                if (string.Compare(args[0], "/V", StringComparison.OrdinalIgnoreCase) == 0) versions = true; // Test for version switch
+                if (string.Compare(args[0], "-V", StringComparison.OrdinalIgnoreCase) == 0) versions = true;
+                action = args[0].ToUpperInvariant();
             }
 
             if (args.Length == 2)
             {
-                if (string.Compare(args[1], "/H", true) == 0) help = true; // Test for help switch
-                if (string.Compare(args[1], "-H", true) == 0) help = true;
-                if (string.Compare(args[1], "/V", true) == 0) versions = true; // Test for version switch
-                if (string.Compare(args[1], "-V", true) == 0) versions = true;
+                if (string.Compare(args[1], "/H", StringComparison.OrdinalIgnoreCase) == 0) help = true; // Test for help switch
+                if (string.Compare(args[1], "-H", StringComparison.OrdinalIgnoreCase) == 0) help = true;
+                if (string.Compare(args[1], "/V", StringComparison.OrdinalIgnoreCase) == 0) versions = true; // Test for version switch
+                if (string.Compare(args[1], "-V", StringComparison.OrdinalIgnoreCase) == 0) versions = true;
 
             }
 

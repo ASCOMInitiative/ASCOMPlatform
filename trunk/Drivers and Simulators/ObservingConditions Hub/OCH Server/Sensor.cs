@@ -39,8 +39,8 @@ namespace ASCOM.Simulator
         {
             get
             {
-                if (ProgID.EndsWith(Hub.SWITCH_DEVICE_NAME, StringComparison.InvariantCultureIgnoreCase)) return Hub.DeviceType.Switch;
-                if (ProgID.EndsWith(Hub.DEVICE_TYPE, StringComparison.InvariantCultureIgnoreCase)) return Hub.DeviceType.ObservingConditions;
+                if (ProgID.EndsWith(Hub.SWITCH_DEVICE_NAME, StringComparison.OrdinalIgnoreCase)) return Hub.DeviceType.Switch;
+                if (ProgID.EndsWith(Hub.DEVICE_TYPE, StringComparison.OrdinalIgnoreCase)) return Hub.DeviceType.ObservingConditions;
                 if (ProgID == "") throw new InvalidValueException("Sensor.DeviceType - DeviceType called before ProgID has not been set");
                 throw new InvalidValueException("Sensor.DeviceType - Unknown device type: " + ProgID);
             }

@@ -75,7 +75,7 @@ namespace ASCOM.Simulator
 
         public string Action(string actionName, string actionParameters)
         {
-            if (actionName.ToUpper() == "SETTESTMODE")
+            if (actionName.ToUpperInvariant() == "SETTESTMODE")
             {
                 testMode = true;
                 TL.LogMessage(clientNumber, "Action", "SETTESTMODE received: Test mode now active");

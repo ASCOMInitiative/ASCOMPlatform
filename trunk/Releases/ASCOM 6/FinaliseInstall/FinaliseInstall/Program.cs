@@ -14,6 +14,7 @@ using System.Management;
 using System.Security;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Globalization;
 
 namespace ConsoleApplication1
 {
@@ -172,7 +173,7 @@ namespace ConsoleApplication1
                     rkAddRem.DeleteSubKeyTree("ASCOM Platform 4.0");
                 }
                 catch (Exception) { }
-                finally { if (rkAddRem != null) 	rkAddRem.Close(); }
+                finally { if (rkAddRem != null) rkAddRem.Close(); }
 
                 //
                 // Attempt to remove some old Platform Start Menu items
@@ -316,8 +317,7 @@ namespace ConsoleApplication1
         static private void AddAppID(string progID, string exeName, string sAPPID)
         {
             LogMessage("AddAppID", "ProgID: " + progID + ", ExeName: " + exeName + ", Appid: " + sAPPID);
-            Guid gCLSID;
-            int hr = CLSIDFromProgID(progID, out gCLSID);
+            int hr = CLSIDFromProgID(progID, out Guid gCLSID);
             string sCLSID = "{" + new GuidConverter().ConvertToString(gCLSID) + "}";
             LogMessage("AddAppID", "  CLSID: " + sCLSID);
 
@@ -450,12 +450,14 @@ namespace ConsoleApplication1
                 LogMessage("RegAscom", "  Setting device type");
                 tProfile.InvokeMember("DeviceType",
                     BindingFlags.Default | BindingFlags.SetProperty,
-                    null, oProfile, new object[] { sType });
+                    null, oProfile, new object[] { sType },
+                    CultureInfo.InvariantCulture);
 
                 LogMessage("RegAscom", "  Registering device");
                 tProfile.InvokeMember("Register",
                     BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, oProfile, new object[] { ProgID, Desc });
+                    null, oProfile, new object[] { ProgID, Desc },
+                    CultureInfo.InvariantCulture);
             }
             catch (Exception ex)
             {
@@ -472,11 +474,13 @@ namespace ConsoleApplication1
             {
                 tProfile.InvokeMember("DeviceType",
                     BindingFlags.Default | BindingFlags.SetProperty,
-                    null, oProfile, new object[] { sType });
+                    null, oProfile, new object[] { sType },
+                    CultureInfo.InvariantCulture);
 
                 tProfile.InvokeMember("Unregister",
                     BindingFlags.Default | BindingFlags.InvokeMethod,
-                    null, oProfile, new object[] { ProgID });
+                    null, oProfile, new object[] { ProgID },
+                    CultureInfo.InvariantCulture);
             }
             catch (Exception ex)
             {
@@ -607,39 +611,43 @@ namespace ConsoleApplication1
                     LogMessage("CheckHKCRPermissions", "Found rule: " + RegRule.AccessControlType.ToString() + " " + RegRule.IdentityReference.ToString() + " " + Rights.ToString() + " / " + (RegRule.IsInherited ? "Inherited" : "NotInherited") + " / " + RegRule.InheritanceFlags.ToString() + " / " + RegRule.PropagationFlags.ToString());
 
                     // Allow CREATOR OWNER GenericAll / NotInherited / ContainerInherit / InheritOnly
-                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(CreatorOwnerSID).ToUpper()) &
-                         Rights == AccessRights.GenericAll & RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
+                    if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(CreatorOwnerSID), StringComparison.OrdinalIgnoreCase)) &
+                         Rights == AccessRights.GenericAll &
+                         RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
                          RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundCreatorOwnerGenericAccess = true;
 
                     // Allow NT AUTHORITY\SYSTEM GenericAll / NotInherited / ContainerInherit / InheritOnly
-                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(NTAuthoritySystemSID).ToUpper()) &
-                         Rights == AccessRights.GenericAll & RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
+                    if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(NTAuthoritySystemSID), StringComparison.OrdinalIgnoreCase)) &
+                         Rights == AccessRights.GenericAll & 
+                         RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
                          RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundSystemGenericAccess = true;
 
                     // Allow NT AUTHORITY\SYSTEM Query, SetKey, CreateSubKey, EnumSubkey, Notify, CreateLink, StandardDelete, StandardReadControl, StandardWriteDAC, StandardWriteOwner / NotInherited / None / None
-                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(NTAuthoritySystemSID).ToUpper()) &
+                    if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(NTAuthoritySystemSID), StringComparison.OrdinalIgnoreCase)) &
                          Rights == FullRights &
                          RegRule.InheritanceFlags == InheritanceFlags.None &
                          RegRule.PropagationFlags == PropagationFlags.None) FoundSystemSpecificAccess = true;
 
                     // Allow BUILTIN\Administrators GenericAll / NotInherited / ContainerInherit / InheritOnly
-                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(BuiltInAdministratorsSID).ToUpper()) &
-                         Rights == AccessRights.GenericAll & RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
+                    if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(BuiltInAdministratorsSID), StringComparison.OrdinalIgnoreCase)) &
+                         Rights == AccessRights.GenericAll & 
+                         RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
                          RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundAdministratorGenericAccess = true;
 
                     // Allow BUILTIN\Administrators Query, SetKey, CreateSubKey, EnumSubkey, Notify, CreateLink, StandardDelete, StandardReadControl, StandardWriteDAC, StandardWriteOwner / NotInherited / None / None
-                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(BuiltInAdministratorsSID).ToUpper()) &
+                    if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(BuiltInAdministratorsSID), StringComparison.OrdinalIgnoreCase)) &
                          Rights == FullRights &
                          RegRule.InheritanceFlags == InheritanceFlags.None &
                          RegRule.PropagationFlags == PropagationFlags.None) FoundAdministratorSpecificAccess = true;
 
                     // Allow BUILTIN\Users GenericRead / NotInherited / ContainerInherit / InheritOnly
-                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(BuiltInUsersSID).ToUpper()) &
-                         Rights == AccessRights.GenericRead & RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
+                    if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(BuiltInUsersSID), StringComparison.OrdinalIgnoreCase)) &
+                         Rights == AccessRights.GenericRead & 
+                         RegRule.InheritanceFlags == InheritanceFlags.ContainerInherit &
                          RegRule.PropagationFlags == PropagationFlags.InheritOnly) FoundUserGenericAccess = true;
 
                     // Allow BUILTIN\Users Query, EnumSubkey, Notify, StandardReadControl / NotInherited / None / None
-                    if ((RegRule.IdentityReference.ToString().ToUpper() == GetLocalAccountName(BuiltInUsersSID).ToUpper()) &
+                    if ((RegRule.IdentityReference.ToString().Equals(GetLocalAccountName(BuiltInUsersSID), StringComparison.OrdinalIgnoreCase)) &
                          Rights == ReadRights &
                          RegRule.InheritanceFlags == InheritanceFlags.None &
                          RegRule.PropagationFlags == PropagationFlags.None) FoundUserSpecificAccess = true;

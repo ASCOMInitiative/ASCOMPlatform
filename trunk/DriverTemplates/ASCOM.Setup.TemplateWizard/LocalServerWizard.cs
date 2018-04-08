@@ -40,7 +40,7 @@ namespace ASCOM.Setup
 			ProjectItems items = project.ProjectItems;
 			foreach (ProjectItem item in items)
 			{
-				if (item.Name.StartsWith("Placeholder"))
+				if (item.Name.StartsWith("Placeholder",StringComparison.OrdinalIgnoreCase))
 				{
 					item.Delete();
 				}

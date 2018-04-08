@@ -254,7 +254,7 @@ namespace MakeDynamicLists
                     Match m = regexInstallFile.Match(line); // Use the regular expression to search for a match
                     if (m.Success) // We have found an installed file
                     {
-                        if (!m.Groups["Comment"].ToString().ToUpper().Contains("COMMENT:")) // Process non comment lines
+                        if (!m.Groups["Comment"].ToString().ToUpperInvariant().Contains("COMMENT:")) // Process non comment lines
                         {
                             TL.LogMessage("FindInstalledFiles", "Found installed file: " + m.Groups["FileName"].ToString() + " " + m.Groups["InstallPath"].ToString());
 
@@ -262,7 +262,7 @@ namespace MakeDynamicLists
                             Match mVar = regexInstallerVariables.Match(m.Groups["InstallPath"].ToString());
                             if (mVar.Success) // Yes, we have a compiler variable
                             {
-                                switch (mVar.Groups["CompVar"].ToString().ToUpper()) // Check that the variable is recognised 
+                                switch (mVar.Groups["CompVar"].ToString().ToUpperInvariant()) // Check that the variable is recognised 
                                 {
                                     case "TARGETDIR": // These are the recognised variables for files that should be cleaned up by RemoveASCOM
                                     case "COMMONFILES":

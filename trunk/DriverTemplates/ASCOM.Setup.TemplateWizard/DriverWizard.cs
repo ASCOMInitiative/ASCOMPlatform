@@ -187,7 +187,7 @@ namespace ASCOM.Setup
                 foreach (ProjectItem projectItem in project.ProjectItems)
                 {
                     TL.LogMessage("ProjectFinishedGenerating", "Item name: " + projectItem.Name);
-                    if ((projectItem.Name.ToUpper() == "DRIVER.CS") | (projectItem.Name.ToUpper() == "DRIVER.VB"))
+                    if ((projectItem.Name.ToUpperInvariant() == "DRIVER.CS") | (projectItem.Name.ToUpperInvariant() == "DRIVER.VB"))
                     {
                         myProjectItem = projectItem; // Save the driver item
                         // This is a driver template
@@ -223,7 +223,7 @@ namespace ASCOM.Setup
                         // These lines are only there to make the file error free in the template develpment project and are not required here
                         documentSelection.SelectLine(); // Select the current line
                         TL.LogMessage("ProjectFinishedGenerating", "Selected initial line: " + documentSelection.Text);
-                        while (!documentSelection.Text.ToUpper().Contains("#REGION"))
+                        while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
                         {
                             TL.LogMessage("ProjectFinishedGenerating", "Deleting start line: " + documentSelection.Text);
                             documentSelection.Delete(); // Delete the current line
@@ -238,7 +238,7 @@ namespace ASCOM.Setup
                         // Delete the marker line and the last 2 lines from the inserted file
                         documentSelection.SelectLine();
                         TL.LogMessage("ProjectFinishedGenerating", "Found end line: " + documentSelection.Text);
-                        while (!documentSelection.Text.ToUpper().Contains("#REGION"))
+                        while (!documentSelection.Text.ToUpperInvariant().Contains("#REGION"))
                         {
                             TL.LogMessage("ProjectFinishedGenerating", "Deleting end line: " + documentSelection.Text);
                             documentSelection.Delete(); // Delete the current line

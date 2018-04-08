@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Timers;
+using System.Globalization;
 
 namespace ASCOM.Simulator
 {
@@ -111,7 +112,7 @@ namespace ASCOM.Simulator
             }
             else
             {
-                control.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, control, new object[] { propertyValue });
+                control.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, control, new object[] { propertyValue },CultureInfo.InvariantCulture);
             }
         }
 

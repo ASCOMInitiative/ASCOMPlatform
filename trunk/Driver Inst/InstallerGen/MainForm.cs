@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace ASCOM.InstallerGen
 {
@@ -64,7 +65,7 @@ namespace ASCOM.InstallerGen
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = "In-Proc Drivers (*.dll)|*.dll|Local Servers (*.exe)|*.exe|All Files (*.*)|*.*"; // Filter files by extension
-            if (cbDriverTechnology.Text.ToLower().Contains("local server"))
+            if (cbDriverTechnology.Text.ToUpperInvariant().Contains("LOCAL SERVER"))
             {
                 dlg.DefaultExt = ".exe";
                 dlg.FilterIndex = 2;
@@ -168,7 +169,7 @@ namespace ASCOM.InstallerGen
             bool bOK = (this.txtSourceFolder.Text != "");
             this.cmdBrowseDriverFile.Enabled = bOK;
             this.cmdBrowseReadMe.Enabled = bOK;
-            if (this.cbDriverTechnology.Text.StartsWith(".NET"))
+            if (this.cbDriverTechnology.Text.StartsWith(".NET",StringComparison.OrdinalIgnoreCase))
             {
                 this.txtDriverName.Text = "(set by .NET driver's ASCOM reg. info)";
                 this.txtDriverName.Enabled = false;
@@ -179,7 +180,7 @@ namespace ASCOM.InstallerGen
                     this.txtDriverName.Text = "";
                 this.txtDriverName.Enabled = true;
             }
-            this.cbDriverType2.Enabled = this.cbDriverTechnology.Text.StartsWith("Local server");
+            this.cbDriverType2.Enabled = this.cbDriverTechnology.Text.StartsWith("Local server", StringComparison.OrdinalIgnoreCase);
             if (this.txtDeveloperEmail.Text != "" && this.txtDeveloperName.Text != "" &&
                     this.txtDriverFile.Text != "" && this.txtDriverName.Text != "" &&
                     this.txtDriverVersion.Text != "" && this.txtDrvrShortName.Text != "" &&
@@ -197,7 +198,7 @@ namespace ASCOM.InstallerGen
         {
             string classId = "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}";						// Default primary CLSID for driver not reg'd on developer's system
             string classId2 = "{yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy}";						// Default secondary CLSID for driver not reg'd on developer's system
-            if (this.cbDriverTechnology.Text.StartsWith("Local server"))					// COM Local Server only, for AppId stuff
+            if (this.cbDriverTechnology.Text.StartsWith("Local server", StringComparison.OrdinalIgnoreCase))					// COM Local Server only, for AppId stuff
             {
                 string progId = this.txtDrvrShortName.Text + "." + this.cbDriverType.Text;
                 Type drvrType = Type.GetTypeFromProgID(progId);
@@ -243,11 +244,11 @@ namespace ASCOM.InstallerGen
             tBuf = tBuf.Replace("%rscf%", rsrcPath);
             tBuf = tBuf.Replace("%cid1%", classId);
             tBuf = tBuf.Replace("%cid2%", classId2);
-            tBuf = tBuf.Replace("%rs32%", (this.cbDriverTechnology.Text.StartsWith("In-process COM") ? ";AfterInstall: RegASCOM(); Flags: regserver" : ";AfterInstall: RegASCOM()"));
+            tBuf = tBuf.Replace("%rs32%", (this.cbDriverTechnology.Text.StartsWith("In-process COM", StringComparison.OrdinalIgnoreCase) ? ";AfterInstall: RegASCOM(); Flags: regserver" : ";AfterInstall: RegASCOM()"));
             tBuf = tBuf.Replace("%appid%", Guid.NewGuid().ToString());
 
             // Deal with drivers that target Framwork 2 as well as those that target Framework 4
-            if (this.cbDriverTechnology.Text.StartsWith(".NET assembly")) // We have a .NET in-process assembly
+            if (this.cbDriverTechnology.Text.StartsWith(".NET assembly", StringComparison.OrdinalIgnoreCase)) // We have a .NET in-process assembly
             {
                 string dotNet32 = "dotnet2032"; // Initialise to Inno framework 2 values
                 string dotNet64 = "dotnet2064";
@@ -278,12 +279,12 @@ namespace ASCOM.InstallerGen
 
             // DEPENDS ON txtTechnologyTypes! Cheesy, but this is a quickie anyway
             tBuf = CondLine(tBuf, "coms", this.cbDriverTechnology.Text.Contains("COM"));
-            tBuf = CondLine(tBuf, "cdll", this.cbDriverTechnology.Text.StartsWith("In-process"));
-            tBuf = CondLine(tBuf, "cexe", this.cbDriverTechnology.Text.StartsWith("Local server"));
-            tBuf = CondLine(tBuf, "cex2", this.cbDriverTechnology.Text.StartsWith("Local server") && this.cbDriverType2.Text != "(none)");
-            tBuf = CondLine(tBuf, "nbth", this.cbDriverTechnology.Text.StartsWith(".NET"));
-            tBuf = CondLine(tBuf, "nasm", this.cbDriverTechnology.Text.StartsWith(".NET assembly"));
-            tBuf = CondLine(tBuf, "nlcs", this.cbDriverTechnology.Text.StartsWith(".NET local server"));
+            tBuf = CondLine(tBuf, "cdll", this.cbDriverTechnology.Text.StartsWith("In-process", StringComparison.OrdinalIgnoreCase));
+            tBuf = CondLine(tBuf, "cexe", this.cbDriverTechnology.Text.StartsWith("Local server", StringComparison.OrdinalIgnoreCase));
+            tBuf = CondLine(tBuf, "cex2", this.cbDriverTechnology.Text.StartsWith("Local server", StringComparison.OrdinalIgnoreCase) && this.cbDriverType2.Text != "(none)");
+            tBuf = CondLine(tBuf, "nbth", this.cbDriverTechnology.Text.StartsWith(".NET", StringComparison.OrdinalIgnoreCase));
+            tBuf = CondLine(tBuf, "nasm", this.cbDriverTechnology.Text.StartsWith(".NET assembly", StringComparison.OrdinalIgnoreCase));
+            tBuf = CondLine(tBuf, "nlcs", this.cbDriverTechnology.Text.StartsWith(".NET local server", StringComparison.OrdinalIgnoreCase));
             tBuf = CondLine(tBuf, "srce", this.checkBox1.Checked);	// Rename-refactor failed miserably!
             string scrptPath = this.txtSourceFolder.Text + "\\" + this.txtDrvrShortName.Text + " Setup.iss";
             StreamWriter strmScript = new StreamWriter(scrptPath);
@@ -294,7 +295,7 @@ namespace ASCOM.InstallerGen
             StreamWriter testScript = new StreamWriter(testPath);
             testScript.WriteLine("//*** CHECK THIS ProgID ***");
             string buf = "var X = new ActiveXObject(\"";
-            if (this.cbDriverTechnology.Text.StartsWith(".NET"))
+            if (this.cbDriverTechnology.Text.StartsWith(".NET", StringComparison.OrdinalIgnoreCase))
                 buf += "ASCOM.";
             buf += this.txtDrvrShortName.Text + "." + this.cbDriverType.Text;
             buf += "\");";
