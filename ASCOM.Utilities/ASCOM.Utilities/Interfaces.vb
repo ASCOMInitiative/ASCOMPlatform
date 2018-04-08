@@ -158,6 +158,22 @@ Namespace Interfaces
         ''' </remarks>
         <DispId(10)> Sub LogMessageCrLf(ByVal Identifier As String, ByVal Message As String) ' Append a full hex dump of the supplied string with a new line
 
+        ''' <summary>
+        ''' Set or return the path to a directory in which the log file will be created
+        ''' </summary>
+        ''' <value>Path to the log directory</value>
+        ''' <returns>String path</returns>
+        ''' <remarks>Introduced with Platform 6.4.<para>If set, this path will be used instead of the the user's Documents directory default path. This must be Set before the first message Is logged.</para></remarks>
+        <DispId(11)> Property LogFilePath() As String
+
+        ''' <summary>
+        ''' Set or return the width of the identifier field in the log message
+        ''' </summary>
+        ''' <value>Width of the identifier field</value>
+        ''' <returns>Integer width</returns>
+        ''' <remarks>Introduced with Platform 6.4.<para>If set, this width will be used instead of the default identifier field width.</para></remarks>
+        <DispId(12)> Property IdentifierWidth() As Integer
+
     End Interface ' Interface to Utilities.TraceLogger
 
     ''' <summary>
