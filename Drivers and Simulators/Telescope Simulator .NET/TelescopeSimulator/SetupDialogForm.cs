@@ -104,8 +104,7 @@ namespace ASCOM.Simulator
         {
             get 
             {
-                double elevation;
-                if (!double.TryParse(textBoxElevation.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out elevation))
+                if (!double.TryParse(textBoxElevation.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out double elevation))
                     elevation = double.NaN;
                 return elevation;
                 
@@ -149,7 +148,7 @@ namespace ASCOM.Simulator
                 try
                 {
                     log = double.Parse(textBoxLongitudeDegrees.Text, CultureInfo.CurrentCulture) + double.Parse(textBoxLongitudeMinutes.Text, CultureInfo.CurrentCulture) / 60;
-                    if (comboBoxLongitude.SelectedItem.ToString().ToUpper() == "W") { log = -log; }
+                    if (comboBoxLongitude.SelectedItem.ToString().ToUpperInvariant() == "W") { log = -log; }
                 }
                 catch { }
                 return log;
@@ -368,8 +367,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                double area;
-                if (!double.TryParse(textBoxApertureArea.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out area))
+                if (!double.TryParse(textBoxApertureArea.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out double area))
                     area = -1;  // indicates an error - for now
                 return area; 
             }
@@ -380,8 +378,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                double aperture;
-                if (!double.TryParse(textBoxAperture.Text, NumberStyles.Float | NumberStyles.AllowThousands , CultureInfo.CurrentCulture, out aperture))
+                if (!double.TryParse(textBoxAperture.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out double aperture))
                     aperture = -1;
                 return aperture;
             }
@@ -392,8 +389,7 @@ namespace ASCOM.Simulator
         {
             get
             {
-                double focal;
-                if (!double.TryParse(textBoxFocalLength.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out focal))
+                if (!double.TryParse(textBoxFocalLength.Text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out double focal))
                     focal = -1;
                 return focal;
             }

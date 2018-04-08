@@ -563,7 +563,7 @@ Module VersionCode
                         CodeBase = RKInprocServer32.GetValue("CodeBase", "").ToString 'Get the codebase if present to override the default value
                         If CodeBase <> "" Then InprocFilePath = CodeBase
 
-                        If (Trim(InprocFilePath).ToUpper = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
+                        If (Trim(InprocFilePath).ToUpperInvariant = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
                             'If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assmbly name, 
                             TL.LogMessage("DriverCompatibility", "     Found MSCOREE.DLL")
 
@@ -637,7 +637,7 @@ Module VersionCode
                             End If
                         End If
 
-                        If (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We have a path to the server and it is a dll
+                        If (Right(Trim(InprocFilePath), 4).ToUpperInvariant = ".DLL") Then ' We have a path to the server and it is a dll
                             ' We have an assembly or other technology DLL, outside the GAC, in the file system
                             Try
                                 InProcServer = New PEReader(InprocFilePath, TL) 'Get hold of the executable so we can determine its characteristics
@@ -723,7 +723,7 @@ Module VersionCode
                         CodeBase = RKInprocServer32.GetValue("CodeBase", "").ToString 'Get the codebase if present to override the default value
                         If CodeBase <> "" Then InprocFilePath = CodeBase
 
-                        If (Trim(InprocFilePath).ToUpper = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
+                        If (Trim(InprocFilePath).ToUpperInvariant = "MSCOREE.DLL") Then ' We have an assembly, most likely in the GAC so get the actual file location of the assembly
                             'If this assembly is in the GAC, we should have an "Assembly" registry entry with the full assmbly name, 
                             TL.LogMessage("DriverCompatibility", "     Found MSCOREE.DLL")
 
@@ -797,7 +797,7 @@ Module VersionCode
                             End If
                         End If
 
-                        If (Right(Trim(InprocFilePath), 4).ToUpper = ".DLL") Then ' We do have a path to the server and it is a dll
+                        If (Right(Trim(InprocFilePath), 4).ToUpperInvariant = ".DLL") Then ' We do have a path to the server and it is a dll
                             ' We have an assembly or other technology DLL, outside the GAC, in the file system
                             Try
                                 InProcServer = New PEReader(InprocFilePath, TL) 'Get hold of the executable so we can determine its characteristics
@@ -882,7 +882,7 @@ Module AscomSharedCode
             ModuleFileName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) 'Get the name of the executable without path or file extension
             If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  ModuleFileName: """ & ModuleFileName & """ """ &
                                                     Process.GetCurrentProcess().MainModule.FileName & """")
-            If Left(ModuleFileName.ToUpper, 3) = "IS-" Then ' Likely to be an old Inno installer so try and get the parent's name
+            If Left(ModuleFileName.ToUpperInvariant, 3) = "IS-" Then ' Likely to be an old Inno installer so try and get the parent's name
                 If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "    Inno installer temporary executable detected, searching for parent process!")
                 If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "    Old Module Filename: " & ModuleFileName)
                 PC = New PerformanceCounter("Process", "Creating Process ID", Process.GetCurrentProcess().ProcessName)
@@ -912,7 +912,7 @@ Module AscomSharedCode
                 ' If the current file matches a forced file name then return the required Platform version
                 ' 6.0 SP1 Check now uses StartsWith in order to catch situations where people rename the installer after download
                 If ForcedFileNameKey <> "" Then ' Ignore the empty string "Default" value name
-                    If UCase(ModuleFileName).StartsWith(UCase(ForcedFileNameKey)) Then
+                    If ModuleFileName.StartsWith(ForcedFileNameKey, StringComparison.OrdinalIgnoreCase) Then
                         ConditionPlatformVersion = ForcedFileName.Value
                         If Not TL Is Nothing Then TL.LogMessage("ConditionPlatformVersion", "  Matched file: """ & ModuleFileName & """ """ & ForcedFileNameKey & """")
                     End If
@@ -1207,7 +1207,7 @@ Friend Class PEReader
 
         TL.LogMessage("PEReader", "Running within CLR version: " & RuntimeEnvironment.GetSystemVersion())
 
-        If Left(FileName, 5).ToUpper = "FILE:" Then
+        If Left(FileName, 5).ToUpperInvariant = "FILE:" Then
             'Convert uri to local path if required, uri paths are not supported by FileStream - this method allows file names with # characters to be passed through
             Dim u As Uri = New Uri(FileName)
             FileName = u.LocalPath + Uri.UnescapeDataString(u.Fragment).Replace("/", "\\")

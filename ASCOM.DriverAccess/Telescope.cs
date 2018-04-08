@@ -1298,7 +1298,8 @@ namespace ASCOM.DriverAccess
         {
             objRateLateBound = objTypeAxisRates.InvokeMember("Item",
                         BindingFlags.Default | BindingFlags.GetProperty,
-                        null, objAxisRatesLateBound, new object[] { index });
+                        null, objAxisRatesLateBound, new object[] { index },
+                        CultureInfo.InvariantCulture);
             if (objRateLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of a Rate object");
             objTypeRate = objRateLateBound.GetType();
         }
@@ -1319,13 +1320,15 @@ namespace ASCOM.DriverAccess
             {
                 return (double)objTypeRate.InvokeMember("Maximum",
                             BindingFlags.Default | BindingFlags.GetProperty,
-                            null, objRateLateBound, new object[] { });
+                            null, objRateLateBound, new object[] { },
+                            CultureInfo.InvariantCulture);
             }
             set
             {
                 objTypeRate.InvokeMember("Maximum",
                             BindingFlags.Default | BindingFlags.SetProperty,
-                            null, objRateLateBound, new object[] { value });
+                            null, objRateLateBound, new object[] { value },
+                            CultureInfo.InvariantCulture);
             }
         }
 
@@ -1339,13 +1342,15 @@ namespace ASCOM.DriverAccess
             {
                 return (double)objTypeRate.InvokeMember("Minimum",
                             BindingFlags.Default | BindingFlags.GetProperty,
-                            null, objRateLateBound, new object[] { });
+                            null, objRateLateBound, new object[] { },
+                            CultureInfo.InvariantCulture);
             }
             set
             {
                 objTypeRate.InvokeMember("Minimum",
                             BindingFlags.Default | BindingFlags.SetProperty,
-                            null, objRateLateBound, new object[] { value });
+                            null, objRateLateBound, new object[] { value },
+                            CultureInfo.InvariantCulture);
             }
         }
 
@@ -1385,7 +1390,8 @@ namespace ASCOM.DriverAccess
             //this.objAxisRatesLateBound = objAxisRatesLateBound;
             objEnumerator = (IEnumerator)objTypeAxisRates.InvokeMember("GetEnumerator",
                         BindingFlags.Default | BindingFlags.InvokeMethod,
-                        null, objAxisRatesLateBound, new object[] { });
+                        null, objAxisRatesLateBound, new object[] { },
+                        CultureInfo.InvariantCulture);
         }
 
         public void Reset()
@@ -1433,7 +1439,8 @@ namespace ASCOM.DriverAccess
         {
             objAxisRatesLateBound = objTypeScope.InvokeMember("AxisRates",
                         BindingFlags.Default | BindingFlags.InvokeMethod,
-                        null, objScopeLateBound, new object[] { (int)Axis });
+                        null, objScopeLateBound, new object[] { (int)Axis },
+                        CultureInfo.InvariantCulture);
             if (objAxisRatesLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of an AxisRates object for axis " + Axis.ToString());
             objTypeAxisRates = objAxisRatesLateBound.GetType();
             CurrentAxis = Axis;
@@ -1463,7 +1470,8 @@ namespace ASCOM.DriverAccess
             {
                 int retval = (int)objTypeAxisRates.InvokeMember("Count",
                             BindingFlags.Default | BindingFlags.GetProperty,
-                            null, objAxisRatesLateBound, new object[] { });
+                            null, objAxisRatesLateBound, new object[] { },
+                            CultureInfo.InvariantCulture);
                 TL.LogMessage("AxisRates Class", "Count(" + CurrentAxis.ToString() + ") = " + retval);
                 return retval;
             }
@@ -1505,7 +1513,8 @@ namespace ASCOM.DriverAccess
                                                                   BindingFlags.Default | BindingFlags.GetProperty,
                                                                   null,
                                                                   objScopeLateBound,
-                                                                  new object[] { });
+                                                                  new object[] { },
+                                                                  CultureInfo.InvariantCulture);
             if (objTrackingRatesLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of an TrackingRates object");
             objTypeTrackingRates = objTrackingRatesLateBound.GetType();
             TL = TraceLog; // Save the trace logger reference
@@ -1525,7 +1534,8 @@ namespace ASCOM.DriverAccess
                                                                      BindingFlags.Default | BindingFlags.GetProperty,
                                                                      null,
                                                                      objTrackingRatesLateBound,
-                                                                     new object[] { index });
+                                                                     new object[] { index },
+                                                                     CultureInfo.InvariantCulture);
                 TL.LogMessage("TrackingRates Class", "DriveRates[" + index + "] " + retval.ToString());
                 return retval;
             }
@@ -1543,7 +1553,8 @@ namespace ASCOM.DriverAccess
                                                                                   BindingFlags.Default | BindingFlags.InvokeMethod,
                                                                                   null,
                                                                                   objTrackingRatesLateBound,
-                                                                                  new object[] { });
+                                                                                  new object[] { },
+                                                                                  CultureInfo.InvariantCulture);
             IEnumerator enumerator = (IEnumerator)enumeratorobj;
             TL.LogMessage("TrackingRates Class", "Enumerator: " + enumerator.ToString());
             return enumerator;
@@ -1560,7 +1571,8 @@ namespace ASCOM.DriverAccess
                                                                BindingFlags.Default | BindingFlags.GetProperty,
                                                                null,
                                                                objTrackingRatesLateBound,
-                                                               new object[] { });
+                                                               new object[] { },
+                                                               CultureInfo.InvariantCulture);
                 TL.LogMessage("TrackingRates Class", "Count: " + retval);
                 return retval;
             }

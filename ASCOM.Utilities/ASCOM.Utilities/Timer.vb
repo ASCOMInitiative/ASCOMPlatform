@@ -127,13 +127,13 @@ Public Class [Timer]
         ForceTimer = Not CurrentIsForm 'Set up default return value to supplied value. ForceTimer is opposite logic to IsForm, hence use of Not
         TL.LogMessage("ForceTimer", "Current IsForm: " & CurrentIsForm.ToString & ", this makes the default ForceTimer value: " & ForceTimer)
 
-        ProcessFileName = Process.GetCurrentProcess.MainModule.FileName.ToUpper 'Get the current process processname
+        ProcessFileName = Process.GetCurrentProcess.MainModule.FileName.ToUpperInvariant 'Get the current process processname
         TL.LogMessage("ForceTimer", "Main process file name: " & ProcessFileName)
 
         MatchedName = False
         ForcedSystemTimers = Profile.EnumProfile(FORCE_SYSTEM_TIMER) 'Get the list of applications requiring special timer handling
         For Each ForcedFileName As Generic.KeyValuePair(Of String, String) In ForcedSystemTimers ' Check each forced file in turn 
-            If ProcessFileName.Contains(Trim(ForcedFileName.Key.ToUpper)) Then ' We have matched the filename
+            If ProcessFileName.Contains(Trim(ForcedFileName.Key.ToUpperInvariant)) Then ' We have matched the filename
                 TL.LogMessage("ForceTimer", "  Found: """ & ForcedFileName.Key & """ = """ & ForcedFileName.Value & """")
                 MatchedName = True
                 If Boolean.TryParse(ForcedFileName.Value, ForceSystemTimer) Then

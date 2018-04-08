@@ -464,9 +464,9 @@ Public Class EarthRotationParameters : Implements IDisposable
 
         OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_DATA_SOURCE_VALUE_NAME, DOWNLOAD_TASK_DATA_UPDATE_SOURCE_DEFAULT)
         UriValid = False ' Set the valid flag false, then set to true if the download source starts with a supported URI prefix
-        If OriginalProfileValue.ToLower().StartsWith(URI_PREFIX_HTTP) Then UriValid = True
-        If OriginalProfileValue.ToLower().StartsWith(URI_PREFIX_HTTPS) Then UriValid = True
-        If OriginalProfileValue.ToLower().StartsWith(URI_PREFIX_FTP) Then UriValid = True
+        If OriginalProfileValue.StartsWith(URI_PREFIX_HTTP, StringComparison.OrdinalIgnoreCase) Then UriValid = True
+        If OriginalProfileValue.StartsWith(URI_PREFIX_HTTPS, StringComparison.OrdinalIgnoreCase) Then UriValid = True
+        If OriginalProfileValue.StartsWith(URI_PREFIX_FTP, StringComparison.OrdinalIgnoreCase) Then UriValid = True
 
         If UriValid Then
             DownloadTaskDataSourceValue = OriginalProfileValue

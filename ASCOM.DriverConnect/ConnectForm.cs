@@ -76,37 +76,37 @@ namespace ASCOM.DriverConnect
                 foreach (string DeviceType in DeviceTypes) // Populate the sorted array and the UI combo boxwith the default driver values
                 {
                     cmbDeviceType.Items.Add(DeviceType);
-                    switch (DeviceType.ToUpper())
+                    switch (DeviceType.ToUpperInvariant())
                     {
                         case "TELESCOPE":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_TELESCOPE);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_TELESCOPE);
                             break;
                         case "FOCUSER":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_FOCUSER);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_FOCUSER);
                             break;
                         case "FILTERWHEEL":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_FILTER_WHEEL);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_FILTER_WHEEL);
                             break;
                         case "ROTATOR":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_ROTATOR);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_ROTATOR);
                             break;
                         case "DOME":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_DOME);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_DOME);
                             break;
                         case "CAMERA":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_CAMERA);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_CAMERA);
                             break;
                         case "VIDEO":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_VIDEO);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_VIDEO);
                             break;
                         case "SWITCH":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_SWITCH);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_SWITCH);
                             break;
                         case "SAFETYMONITOR":
-                            DefaultDevices.Add(DeviceType.ToUpper(), DEFAULT_DEVICE_SAFETY_MONITOR);
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), DEFAULT_DEVICE_SAFETY_MONITOR);
                             break;
                         default:
-                            DefaultDevices.Add(DeviceType.ToUpper(), "");
+                            DefaultDevices.Add(DeviceType.ToUpperInvariant(), "");
                             break;
                     }
                 }
@@ -159,8 +159,8 @@ namespace ASCOM.DriverConnect
 
             if (string.IsNullOrEmpty(CurrentDevice))
             {
-                CurrentDevice = DefaultDevices[CurrentDeviceType.ToUpper()];
-                txtDevice.Text = DefaultDevices[CurrentDeviceType.ToUpper()];
+                CurrentDevice = DefaultDevices[CurrentDeviceType.ToUpperInvariant()];
+                txtDevice.Text = DefaultDevices[CurrentDeviceType.ToUpperInvariant()];
             }
 
             NewDevice = chooser.Choose(CurrentDevice);
@@ -246,7 +246,7 @@ namespace ASCOM.DriverConnect
                 Type type = Type.GetTypeFromProgID(CurrentDevice);
                 driver = Activator.CreateInstance(type);
                 LogMsg("Connected", "Connecting to device");
-                if (CurrentDeviceType.ToUpper() == "FOCUSER")
+                if (CurrentDeviceType.ToUpperInvariant() == "FOCUSER")
                 {
                     try
                     {
@@ -279,7 +279,7 @@ namespace ASCOM.DriverConnect
                 catch (Exception ex) { LogMsg("InterfaceVersion", "Property not available - " + ex.Message); ex.ToString(); }
 
                 // Device specific commands
-                switch (CurrentDeviceType.ToUpper())
+                switch (CurrentDeviceType.ToUpperInvariant())
                 {
                     case "TELESCOPE":
                         try { LogMsg("RA, Dec", Util.HoursToHMS(driver.RightAscension, ":", ":", "", 3) + " " + Util.DegreesToDMS(driver.Declination, ":", ":", "", 3)); }
@@ -492,8 +492,8 @@ namespace ASCOM.DriverConnect
         void cmbDeviceType_SelectedIndexChanged(object sender, EventArgs e)
         {
             CurrentDeviceType = cmbDeviceType.SelectedItem.ToString();
-            CurrentDevice = DefaultDevices[CurrentDeviceType.ToUpper()];
-            txtDevice.Text = DefaultDevices[CurrentDeviceType.ToUpper()];
+            CurrentDevice = DefaultDevices[CurrentDeviceType.ToUpperInvariant()];
+            txtDevice.Text = DefaultDevices[CurrentDeviceType.ToUpperInvariant()];
         }
 
         #endregion

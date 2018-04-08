@@ -68,7 +68,7 @@ namespace EarthRotationUpdate
                 // If we have been provided with an "Initialise" paramter then stop here after having set up all the default profile values by creating the EarthRotationParameters object
                 if (args.Length == 1)
                 {
-                    if (args[0].Trim(' ', '-', '\\', '/').ToUpper() == "INITIALISE") // Test for the presence of and act on the initialise argument ignoring everything else
+                    if (args[0].Trim(' ', '-', '\\', '/').Equals("INITIALISE", StringComparison.OrdinalIgnoreCase)) // Test for the presence of and act on the initialise argument ignoring everything else
                     {
                         TL.LogMessage("EarthRotationUpdate", string.Format("Earth rotation parameter initialisation run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem));
                         LogEvent(string.Format("Earth rotation parameter initialisation run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem), EventLogEntryType.Information);
@@ -79,14 +79,14 @@ namespace EarthRotationUpdate
                 // If we have been provided with a "DatSource" override paramter then apply the new URI otherwise read it from the Profile
                 if (args.Length == 2)
                 {
-                    if (args[0].Trim(' ', '-', '\\', '/').ToUpper() == "DATASOURCE") // Test for the presence of and act on the data source argument ignoring everything else
+                    if (args[0].Trim(' ', '-', '\\', '/').Equals("DATASOURCE", StringComparison.OrdinalIgnoreCase)) // Test for the presence of and act on the data source argument ignoring everything else
                     {
                         TL.LogMessage("EarthRotationUpdate", string.Format("Data source override parameter provided: {0}", args[1]));
                         string overrideDataSource = args[1].Trim(' ', '"');
                         bool UriValid = false; // Set the valid flag false, then set to true if the download source starts with a supported URI prefix
-                        if (overrideDataSource.ToLower().StartsWith(GlobalItems.URI_PREFIX_HTTP)) UriValid = true;
-                        if (overrideDataSource.ToLower().StartsWith(GlobalItems.URI_PREFIX_HTTPS)) UriValid = true;
-                        if (overrideDataSource.ToLower().StartsWith(GlobalItems.URI_PREFIX_FTP)) UriValid = true;
+                        if (overrideDataSource.StartsWith(GlobalItems.URI_PREFIX_HTTP, StringComparison.OrdinalIgnoreCase)) UriValid = true;
+                        if (overrideDataSource.StartsWith(GlobalItems.URI_PREFIX_HTTPS, StringComparison.OrdinalIgnoreCase)) UriValid = true;
+                        if (overrideDataSource.StartsWith(GlobalItems.URI_PREFIX_FTP, StringComparison.OrdinalIgnoreCase)) UriValid = true;
 
                         if (UriValid)
                         {
@@ -272,7 +272,7 @@ namespace EarthRotationUpdate
                                         bool leapSecondsOK = double.TryParse(leapSecondsString, out double leapSeconds);
 
                                         // Get the month number by triming the month string, converting to lower case then titlecase then looking up the index in the abbreviated months array
-                                        int month = Array.IndexOf(monthAbbrev, invariantTextInfo.ToTitleCase(monthString.Trim(' ').ToLower())) + 1;
+                                        int month = Array.IndexOf(monthAbbrev, invariantTextInfo.ToTitleCase(monthString.Trim(' ').ToLower(CultureInfo.InvariantCulture))) + 1;
 
                                         if (yearOK & (month > 0) & dayOK & julianDateOK & leapSecondsOK) // Check that all elements are valid
                                         {

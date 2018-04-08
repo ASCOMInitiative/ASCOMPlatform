@@ -237,8 +237,8 @@ namespace ASCOM.OpenWeatherMap
                 }
                 catch
                 {
-                    if (weatherData.weather[0].main.ToLowerInvariant().Contains("rain") ||
-                        weatherData.weather[0].main.ToLowerInvariant().Contains("snow"))
+                    if (weatherData.weather[0].main.ToUpperInvariant().Contains("RAIN") ||
+                        weatherData.weather[0].main.ToUpperInvariant().Contains("SNOW"))
                         return 1;
                     return 0;
                 }

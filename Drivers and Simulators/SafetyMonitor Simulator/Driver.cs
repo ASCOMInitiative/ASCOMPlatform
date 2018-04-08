@@ -270,7 +270,7 @@ namespace ASCOM.Simulator
         /// </summary>
         private static bool CheckSafetyMonitorKeyValue()
         {
-            string s = Profile.GetValue(sCsDriverId, "SafetyMonitor").ToUpper();
+            string s = Profile.GetValue(sCsDriverId, "SafetyMonitor").ToUpperInvariant();
             if (s != "TRUE" & s != "FALSE")
             {
                 //found something wrong, delete evertyhing

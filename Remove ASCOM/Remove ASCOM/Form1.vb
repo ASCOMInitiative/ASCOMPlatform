@@ -345,7 +345,7 @@ Public Class Form1
             SubKeys = RKey.GetSubKeyNames
             For Each SubKey As String In SubKeys
                 Try
-                    If SubKey.ToUpper.Contains("ASCOM PLATFORM") Then
+                    If SubKey.ToUpperInvariant.Contains("ASCOM PLATFORM") Then
                         Action("Removing installer reference: " & SubKey)
                         TL.LogMessage("RemoveInstallers", "Removing Platform installer reference: " & SubKey)
                         RKey.DeleteSubKeyTree(SubKey)
@@ -365,7 +365,7 @@ Public Class Form1
                 For Each SubKey In SubKeys
                     ProductDescription = RKey.OpenSubKey(SubKey).GetValue("ProductName", "Product description not present")
                     TL.LogMessage("RemoveInstallers", "Found Product: " & ProductDescription)
-                    If ProductDescription.ToUpper.Contains("ASCOM PLATFORM") Then
+                    If ProductDescription.ToUpperInvariant.Contains("ASCOM PLATFORM") Then
                         Action("Removing installer: " & ProductDescription)
                         TL.LogMessage("RemoveInstallers", "  Deleting: " & ProductDescription)
                         RKey.DeleteSubKeyTree(SubKey)
@@ -490,7 +490,7 @@ Public Class Form1
                 'TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
                 mVar = regexInstallerVariables.Match(fileFullName)
                 If mVar.Success Then ' We have found a compiler variable so process it
-                    Select Case mVar.Groups("CompVar").ToString().ToUpper()
+                    Select Case mVar.Groups("CompVar").ToString().ToUpperInvariant()
                         Case "TARGETDIR"
                             fileFullName = fileFullName.Replace("$TARGETDIR$", TargetDirectoryPlatform)
                             DeleteFile(fileFullName)
@@ -524,7 +524,7 @@ Public Class Form1
                 'TL.LogMessage("RemovePlatformFiles", "Removing file: " & fileFullName)
                 mVar = regexInstallerVariables.Match(fileFullName)
                 If mVar.Success Then ' We have found a compiler variable so process it
-                    Select Case mVar.Groups("CompVar").ToString().ToUpper()
+                    Select Case mVar.Groups("CompVar").ToString().ToUpperInvariant()
                         Case "TARGETDIR"
                             fileFullName = fileFullName.Replace("$TARGETDIR$", TargetDirectoryDeveloper)
                             DeleteFile(fileFullName)
@@ -669,7 +669,7 @@ Public Class Form1
                             For Each MyFile As FileInfo In FileInfos ' Now delete them
                                 TL.LogMessageCrLf("RemoveDirectories", "  Processing file - " & "#" & MyFile.Name & "#" & MyFile.FullName & "#")
 
-                                If MyFile.Name.ToUpper = PLATFORM6_INSTALL_KEY.ToUpper Then
+                                If MyFile.Name.ToUpperInvariant = PLATFORM6_INSTALL_KEY.ToUpperInvariant() Then
                                     Found = True
                                     TL.LogMessageCrLf("RemoveDirectories", "  Found install directory directory - " & DirInfo.Name)
                                 End If
@@ -718,7 +718,7 @@ Public Class Form1
             SubKeys = RKey.GetSubKeyNames
             For Each SubKey As String In SubKeys
                 Try
-                    If SubKey.ToUpper.Contains("ASCOM") Then
+                    If SubKey.ToUpperInvariant.Contains("ASCOM") Then
                         TL.LogMessage("RemoveGAC", "Removing application reference: " & SubKey)
                         RKey.DeleteSubKeyTree(SubKey)
                     End If
@@ -733,7 +733,7 @@ Public Class Form1
             Values = RKey.GetValueNames
             For Each Value As String In Values
                 Try
-                    If Value.ToUpper.Contains("ASCOM") Then
+                    If Value.ToUpperInvariant.Contains("ASCOM") Then
                         TL.LogMessage("RemoveGAC", "Removing global value: " & Value)
                         RKey.DeleteValue(Value)
                     End If

@@ -135,7 +135,7 @@ namespace ASCOM.Utilities.Video
                     Convert.ToString((char)(fourcc & 0xFF)),
                     Convert.ToString((char)((fourcc >> 8) & 0xFF)),
                     Convert.ToString((char)((fourcc >> 16) & 0xFF)),
-                    Convert.ToString((char)((fourcc >> 24) & 0xFF))).ToUpper();
+                    Convert.ToString((char)((fourcc >> 24) & 0xFF))).ToUpperInvariant();
         }
     }
 }

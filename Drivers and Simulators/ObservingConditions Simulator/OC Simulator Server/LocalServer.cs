@@ -572,24 +572,24 @@ namespace ASCOM.Simulator
             if (args.Length > 0)
             {
 
-                switch (args[0].ToLower())
+                switch (args[0].ToUpperInvariant())
                 {
-                    case "-embedding":
+                    case "-EMBEDDING":
                         StartedByCOM = true;										// Indicate COM started us
                         break;
 
-                    case "-register":
-                    case @"/register":
-                    case "-regserver":											// Emulate VB6
-                    case @"/regserver":
+                    case "-REGISTER":
+                    case @"/REGISTER":
+                    case "-REGSERVER":											// Emulate VB6
+                    case @"/REGSERVER":
                         RegisterObjects();										// Register each served object
                         bRet = false;
                         break;
 
-                    case "-unregister":
-                    case @"/unregister":
-                    case "-unregserver":										// Emulate VB6
-                    case @"/unregserver":
+                    case "-UNREGISTER":
+                    case @"/UNREGISTER":
+                    case "-UNREGSERVER":										// Emulate VB6
+                    case @"/UNREGSERVER":
                         UnregisterObjects();									//Unregister each served object
                         bRet = false;
                         break;

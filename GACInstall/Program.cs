@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Globalization;
 
 //// Artinsoft
 //// Author: Mauricio Rojas orellabac@gmail.com mrojas@artinsoft.com
@@ -35,23 +36,23 @@ namespace ASCOM.Internal.GACInstall
             if (args.Length == 0) help = true; // No arguments will print a help message
             if (args.Length == 1) // One argument could be /H /V or /L a filename
             {
-                if (string.Compare(args[0], "/H", true) == 0) help = true; // Test for help switch
-                if (string.Compare(args[0], "-H", true) == 0) help = true;
-                if (string.Compare(args[0], "/V", true) == 0) versions = true; // Test for help switch
-                if (string.Compare(args[0], "-V", true) == 0) versions = true;
-                if (string.Compare(args[0], "/L", true) == 0) list = true; // Test for list switch
-                if (string.Compare(args[0], "-L", true) == 0) list = true;
+                if (string.Compare(args[0], "/H", StringComparison.OrdinalIgnoreCase) == 0) help = true; // Test for help switch
+                if (string.Compare(args[0], "-H", StringComparison.OrdinalIgnoreCase) == 0) help = true;
+                if (string.Compare(args[0], "/V", StringComparison.OrdinalIgnoreCase) == 0) versions = true; // Test for help switch
+                if (string.Compare(args[0], "-V", StringComparison.OrdinalIgnoreCase) == 0) versions = true;
+                if (string.Compare(args[0], "/L", StringComparison.OrdinalIgnoreCase) == 0) list = true; // Test for list switch
+                if (string.Compare(args[0], "-L", StringComparison.OrdinalIgnoreCase) == 0) list = true;
                 filename = args[0];
             }
 
             if (args.Length == 2)
             {
-                if (string.Compare(args[0], "/H", true) == 0) help = true; // Test for help switch
-                if (string.Compare(args[0], "-H", true) == 0) help = true;
-                if (string.Compare(args[1], "/H", true) == 0) help = true;
-                if (string.Compare(args[1], "-H", true) == 0) help = true;
+                if (string.Compare(args[0], "/H", StringComparison.OrdinalIgnoreCase) == 0) help = true; // Test for help switch
+                if (string.Compare(args[0], "-H", StringComparison.OrdinalIgnoreCase) == 0) help = true;
+                if (string.Compare(args[1], "/H", StringComparison.OrdinalIgnoreCase) == 0) help = true;
+                if (string.Compare(args[1], "-H", StringComparison.OrdinalIgnoreCase) == 0) help = true;
 
-                if ((string.Compare(args[0], "/U", true) == 0) || (string.Compare(args[0], "-U", true) == 0))
+                if ((string.Compare(args[0], "/U", StringComparison.OrdinalIgnoreCase) == 0) || (string.Compare(args[0], "-U", StringComparison.OrdinalIgnoreCase) == 0))
                 { // Found uninstall switch in first argument
                     install = false;
                     filename = args[1]; // Filename must be second argument
@@ -59,7 +60,7 @@ namespace ASCOM.Internal.GACInstall
                 else
                 {
                     filename = args[0]; // Filename must be first argument
-                    if ((string.Compare(args[1], "/U", true) == 0) || (string.Compare(args[1], "-U", true) == 0))
+                    if ((string.Compare(args[1], "/U", StringComparison.OrdinalIgnoreCase) == 0) || (string.Compare(args[1], "-U", StringComparison.OrdinalIgnoreCase) == 0))
                     {
                         install = false; // Uninstall switch found as second argument
                     }
@@ -128,7 +129,7 @@ namespace ASCOM.Internal.GACInstall
                     //  Process each assembly in turn
                     try
                     {
-                        if (((assemblyName.Key.IndexOf("ASCOM") + 1) > 0) || (assemblyName.Key.Contains("565de7938946fba7")))
+                        if (((assemblyName.Key.IndexOf("ASCOM", StringComparison.OrdinalIgnoreCase) + 1) > 0) || (assemblyName.Key.Contains("565de7938946fba7")))
                         {
                             Console.WriteLine(assemblyName.Key);
                         }

@@ -43,7 +43,7 @@ namespace ASCOM.DriverAccess
             TL.LogMessage("AscomDriver", "Device ProgID: " + deviceProgId);
 
             //deviceType = deviceProgId.Substring(deviceProgId.LastIndexOf(".") + 1).ToUpper();
-            deviceType = this.GetType().Name.ToUpper();
+            deviceType = this.GetType().Name.ToUpperInvariant();
             TL.LogMessage("AscomDriver", "Device type: " + this.GetType().Name);
 
             memberFactory = new MemberFactory(deviceProgId, TL); // Create a memberfactory object and pass in the TraceLogger

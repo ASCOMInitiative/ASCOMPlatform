@@ -214,7 +214,7 @@ Public Class DiagnosticsForm
             Try
                 Try
                     ApplicationPath = Assembly.GetEntryAssembly.Location
-                    ApplicationPath = ApplicationPath.Remove(ApplicationPath.LastIndexOf("\"))
+                    ApplicationPath = ApplicationPath.Remove(ApplicationPath.LastIndexOf("\", StringComparison.OrdinalIgnoreCase))
                     Directory.SetCurrentDirectory(ApplicationPath)
                 Catch ex As Exception
                     TL.LogMessage("Diagnostics", "ERROR - Unexpected exception setting current directory. You are likely to get four fails in ReadEph as a result.")
@@ -5955,7 +5955,7 @@ Public Class DiagnosticsForm
             For Each EventLog As EventLog In EventLogs
                 Try
                     TL.LogMessage("ScanEventLog", "Found log: " & EventLog.LogDisplayName)
-                    If EventLog.LogDisplayName.ToUpper = "ASCOM" Then Found = True
+                    If EventLog.LogDisplayName.ToUpperInvariant = "ASCOM" Then Found = True
                 Catch
                 End Try
             Next
@@ -6098,7 +6098,7 @@ Public Class DiagnosticsForm
         Dim builtInUsers As String
 
         Try
-            builtInUsers = GetBuiltInUsers().ToUpper()
+            builtInUsers = GetBuiltInUsers().ToUpperInvariant()
             RecursionLevel += 1
 
             Try
@@ -6120,7 +6120,7 @@ Public Class DiagnosticsForm
                                                       RegRule.PropagationFlags.ToString())
                         TL.LogMessage("RegistrySecurityDbg", "After printing rule")
                     End If
-                    If (RegRule.IdentityReference.ToString.ToUpper = builtInUsers) And (RegRule.RegistryRights = Global.System.Security.AccessControl.RegistryRights.FullControl) Then
+                    If (RegRule.IdentityReference.ToString.ToUpperInvariant = builtInUsers) And (RegRule.RegistryRights = Global.System.Security.AccessControl.RegistryRights.FullControl) Then
                         FoundFullAccess = True
                     End If
                     If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "After testing for FullAccess")
@@ -6167,7 +6167,7 @@ Public Class DiagnosticsForm
         Dim builtInUsers As String
 
         Try
-            builtInUsers = GetBuiltInUsers().ToUpper()
+            builtInUsers = GetBuiltInUsers().ToUpperInvariant()
             If (debugSwitch) Then TL.LogMessage("RegistrySecurityDbg", "Entered ReadRegistryRights")
             TL.LogMessage("RegistryRights", IIf(SubKey = "", Key.Name.ToString, Key.Name.ToString & "\" & SubKey))
             If (SubKey = "") Or (SubKey = ASCOM_ROOT_KEY) Then
@@ -6194,7 +6194,7 @@ Public Class DiagnosticsForm
                     LogException("RegistryRights", "Issue formatting registry rights: " & ex1.ToString)
                 End Try
 
-                If (RegRule.IdentityReference.ToString.ToUpper = builtInUsers) And (RegRule.RegistryRights = Global.System.Security.AccessControl.RegistryRights.FullControl) Then
+                If (RegRule.IdentityReference.ToString.ToUpperInvariant = builtInUsers) And (RegRule.RegistryRights = Global.System.Security.AccessControl.RegistryRights.FullControl) Then
                     foundFullAccess = True
                 End If
                 If (debugSwitch) Then TL.LogMessage("RegistryRightsDbg", "After testing for FullAccess")
@@ -6416,10 +6416,10 @@ Public Class DiagnosticsForm
             Try ' Get file details for files in this folder
                 FileInfos = DirInfo.GetFiles
                 For Each MyFile As FileInfo In FileInfos
-                    If MyFile.FullName.ToUpper.EndsWith("\HELPER.DLL") Then
+                    If MyFile.FullName.EndsWith("\HELPER.DLL", StringComparison.OrdinalIgnoreCase) Then
                         FileDetails(Folder & "\", "Helper.dll")
                     End If
-                    If MyFile.FullName.ToUpper.EndsWith("\HELPER2.DLL") Then
+                    If MyFile.FullName.EndsWith("\HELPER2.DLL", StringComparison.OrdinalIgnoreCase) Then
                         FileDetails(Folder & "\", "Helper2.dll")
                     End If
                 Next
@@ -6675,8 +6675,8 @@ Public Class DiagnosticsForm
                     Do Until (LineCount = NumLine) Or SR.EndOfStream
                         LineCount += 1
                         Lines(LineCount) = SR.ReadLine
-                        If InStr(Lines(LineCount).ToUpper, "ASCOM") > 0 Then ASCOMFile = True
-                        If InStr(Lines(LineCount).ToUpper, "CONFORM") > 0 Then ASCOMFile = True
+                        If InStr(Lines(LineCount).ToUpperInvariant, "ASCOM") > 0 Then ASCOMFile = True
+                        If InStr(Lines(LineCount).ToUpperInvariant, "CONFORM") > 0 Then ASCOMFile = True
                     Loop
 
                     If ASCOMFile Then 'This is an ASCOM setup so list it
@@ -6957,10 +6957,10 @@ Public Class DiagnosticsForm
                         Try
                             assemblyURI = New Uri(ass.GetName.CodeBase)
                             localPath = assemblyURI.LocalPath
-                            If (localPath.ToUpper.Contains("\ASCOM.DRIVERACCESS\6") Or
-                                localPath.ToUpper.Contains("\ASCOM.UTILITIES\6") Or
-                                localPath.ToUpper.Contains("\ASCOM.ASTROMETRY\6") Or
-                                localPath.ToUpper.Contains("\ASCOM.DEVICEINTERFACES\6")) Then
+                            If (localPath.ToUpperInvariant.Contains("\ASCOM.DRIVERACCESS\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.UTILITIES\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.ASTROMETRY\6") Or
+                                localPath.ToUpperInvariant.Contains("\ASCOM.DEVICEINTERFACES\6")) Then
                                 AscomGACPaths.Add(localPath)
                             End If
                             FileDetails(Path.GetDirectoryName(localPath) & "\", Path.GetFileName(localPath))
@@ -7178,7 +7178,7 @@ Public Class DiagnosticsForm
                     ReflectionAssemblies = AppDomain.CurrentDomain.ReflectionOnlyGetAssemblies() ' Get list of assemblies already loaded to the reflection only context
                     CompareName = Path.GetFileNameWithoutExtension(FName)
                     For Each ReflectionAss As Assembly In ReflectionAssemblies ' Find the assembly already there and get its full name
-                        If ReflectionAss.FullName.ToUpper.Contains(CompareName.ToUpper) Then
+                        If ReflectionAss.FullName.ToUpperInvariant.Contains(CompareName.ToUpperInvariant) Then
                             AssVer = ReflectionAss.FullName
                         End If
                     Next
@@ -7273,7 +7273,7 @@ Public Class DiagnosticsForm
                 'TL.LogMessage("Start of ProcessSubKey", "Found " & ValueNames.Length & " values")
                 For Each ValueName As String In ValueNames
                     ValueKind = p_Key.GetValueKind(ValueName)
-                    Select Case ValueName.ToUpper
+                    Select Case ValueName.ToUpperInvariant
                         Case ""
                             TL.LogMessage("KeyValue", Space(p_Depth * INDENT) & "*** Default *** = " & p_Key.GetValue(ValueName))
                         Case "APPID"
@@ -7294,7 +7294,7 @@ Public Class DiagnosticsForm
                     If ValueKind <> RegistryValueKind.MultiString Then 'Don't try and process these, they don't lead anywhere anyway!
                         If Microsoft.VisualBasic.Left(p_Key.GetValue(ValueName), 1) = "{" Then
                             'TL.LogMessage("ClassExpand", "Expanding " & p_Key.GetValue(ValueName))
-                            Select Case p_Container.ToUpper
+                            Select Case p_Container.ToUpperInvariant
                                 Case "CLSID"
                                     RKey = Registry.ClassesRoot.OpenSubKey("CLSID").OpenSubKey(p_Key.GetValue(ValueName))
                                     If RKey Is Nothing Then 'Check in 32 bit registry on a 64bit system
@@ -7337,7 +7337,7 @@ Public Class DiagnosticsForm
                 For Each SubKey In SubKeys
                     TL.LogMessage("ProcessSubKey", Space(p_Depth * INDENT) & SubKey)
                     RKey = p_Key.OpenSubKey(SubKey)
-                    Select Case SubKey.ToUpper
+                    Select Case SubKey.ToUpperInvariant
                         Case "TYPELIB"
                             'TL.LogMessage("Container", "TypeLib...")
                             Container = "TypeLib"
@@ -7756,7 +7756,7 @@ Public Class DiagnosticsForm
             Action(Microsoft.VisualBasic.Left(Folder, 70))
             Files = Directory.GetFiles(Folder)
             For Each MyFile As String In Files
-                If MyFile.ToUpper.Contains(".EXE") Or MyFile.ToUpper.Contains(".DLL") Then
+                If MyFile.ToUpperInvariant.Contains(".EXE") Or MyFile.ToUpperInvariant.Contains(".DLL") Then
                     'TL.LogMessage("Driver", MyFile)
                     'FileDetails(Folder & "\", MyFile)
                     FileDetails("", MyFile)

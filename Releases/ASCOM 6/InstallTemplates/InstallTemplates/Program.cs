@@ -281,12 +281,12 @@ namespace InstallTemplates
 
             foreach (string item in Directory.GetFiles(TemplateSourceDirectory, "*.zip"))
             {
-                if (item.ToUpper().Contains("CS")) // CSharp item
+                if (item.ToUpperInvariant().Contains("CS")) // CSharp item
                 {
                     LogMessage("InstallTemplates", spaces + "Copying C# template: " + item + " as: " + Platform6CSharp + Path.GetFileName(item));
                     File.Copy(item, Platform6CSharp + Path.GetFileName(item), true);
                 }
-                if (item.ToUpper().Contains("VB")) // VBitem
+                if (item.ToUpperInvariant().Contains("VB")) // VBitem
                 {
                     LogMessage("InstallTemplates", spaces + "Copying VB template: " + item + " as: " + Platform6VB + Path.GetFileName(item));
                     File.Copy(item, Platform6VB + Path.GetFileName(item), true);

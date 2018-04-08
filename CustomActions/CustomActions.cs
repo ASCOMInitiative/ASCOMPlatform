@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using System.Globalization;
 
 namespace ASCOM.PlatformInstaller
 {
@@ -31,9 +32,8 @@ namespace ASCOM.PlatformInstaller
 		//
 		private void AddAppID(string progID, string exeName, string sAPPID)
 		{
-			Guid gCLSID;
-			int hr = CLSIDFromProgID(progID, out gCLSID);
-			string sCLSID = "{" + new GuidConverter().ConvertToString(gCLSID) + "}";
+            int hr = CLSIDFromProgID(progID, out Guid gCLSID);
+            string sCLSID = "{" + new GuidConverter().ConvertToString(gCLSID) + "}";
 
 			RegistryKey rkCLSID = null;
 			RegistryKey rkAPPID = null;
@@ -163,11 +163,11 @@ namespace ASCOM.PlatformInstaller
 			{
 				tProfile.InvokeMember("DeviceType",
 					BindingFlags.Default | BindingFlags.SetProperty,
-					null, oProfile, new object[] { sType });
+					null, oProfile, new object[] { sType },CultureInfo.InvariantCulture);
 
 				tProfile.InvokeMember("Register",
 					BindingFlags.Default | BindingFlags.InvokeMethod,
-					null, oProfile, new object[] { ProgID, Desc });
+					null, oProfile, new object[] { ProgID, Desc }, CultureInfo.InvariantCulture);
 			}
 			catch (Exception ex)
 			{
@@ -186,11 +186,11 @@ namespace ASCOM.PlatformInstaller
 			{
 				tProfile.InvokeMember("DeviceType",
 					BindingFlags.Default | BindingFlags.SetProperty,
-					null, oProfile, new object[] { sType });
+					null, oProfile, new object[] { sType }, CultureInfo.InvariantCulture);
 
 			tProfile.InvokeMember("Unregister",
 				BindingFlags.Default | BindingFlags.InvokeMethod,
-				null, oProfile, new object[] { ProgID });
+				null, oProfile, new object[] { ProgID }, CultureInfo.InvariantCulture);
 			}
 			catch (Exception ex)
 			{
