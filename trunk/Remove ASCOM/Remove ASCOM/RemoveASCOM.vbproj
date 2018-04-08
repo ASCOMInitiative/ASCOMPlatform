@@ -116,6 +116,7 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="DynamicLists.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
