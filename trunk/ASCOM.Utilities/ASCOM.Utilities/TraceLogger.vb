@@ -25,12 +25,16 @@ ClassInterface(ClassInterfaceType.None)>
 Public Class TraceLogger
     Implements ITraceLogger, ITraceLoggerExtra, IDisposable
 
+    Private Const IDENTIFIER_WIDTH_DEFAULT As Integer = 25 ' Default width of the identifier field. The width can be changed through the TraceLogger.IdentifierWidth property
+
     Private g_LogFileName, g_LogFileType As String
     Private g_LogFile As System.IO.StreamWriter
     Private g_LineStarted As Boolean
     Private g_Enabled As Boolean
-    Private g_LogFilePath As String
+    Private g_DefaultLogFilePath As String ' Variable to hold the default log file path determined by TraceLogger at run time
     Private g_LogFileActualName As String 'Full name of the log file being created (includes automatic file name)
+    Private g_LogFilePath As String ' Variable to hold a user specified log file path
+    Private g_IdentifierWidth As Integer ' Variable to hold the current identifer field width
 
     Private mut As System.Threading.Mutex
     Private GotMutex As Boolean
@@ -46,10 +50,11 @@ Public Class TraceLogger
     ''' <para>This call enables automatic logging and sets the filetype to "Default".</para></remarks>
     Public Sub New()
         MyBase.New()
+        g_IdentifierWidth = IDENTIFIER_WIDTH_DEFAULT
         g_LogFileName = "" 'Set automatic filenames as default
         g_LogFileType = "Default" '"Set an arbitary name inc case someone forgets to call SetTraceLog
-        g_LogFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
-        mut = New System.Threading.Mutex(False, "TraceLoggerMutex")
+        g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & TRACE_LOGGER_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
+        mut = New Threading.Mutex(False, "TraceLoggerMutex")
     End Sub
 
     ''' <summary>
@@ -60,10 +65,11 @@ Public Class TraceLogger
     ''' <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
     Public Sub New(ByVal LogFileName As String, ByVal LogFileType As String)
         MyBase.New()
+        g_IdentifierWidth = IDENTIFIER_WIDTH_DEFAULT
         g_LogFileName = LogFileName 'Save parameters to use when the first call to write a record is made
         g_LogFileType = LogFileType
-        g_LogFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
-        mut = New System.Threading.Mutex
+        g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & TRACE_LOGGER_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
+        mut = New Threading.Mutex
     End Sub
 
     ''' <summary>
@@ -73,10 +79,11 @@ Public Class TraceLogger
     ''' <remarks>The LogFileType is used in the file name to allow you to quickly identify which of several logs contains the information of interest.</remarks>
     Public Sub New(ByVal LogFileType As String)
         MyBase.New()
+        g_IdentifierWidth = IDENTIFIER_WIDTH_DEFAULT
         g_LogFileName = "" 'Set automatic filenames as default
         g_LogFileType = LogFileType
-        g_LogFilePath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM\Logs " & Format(Now, "yyyy-MM-dd")
-        mut = New System.Threading.Mutex
+        g_DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & TRACE_LOGGER_PATH & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT)
+        mut = New Threading.Mutex
         g_Enabled = True ' Enable the log
     End Sub
 
@@ -329,6 +336,34 @@ Public Class TraceLogger
         End Get
     End Property
 
+    ''' <summary>
+    ''' Set or return the path to a directory in which the log file will be created
+    ''' </summary>
+    ''' <returns>String path</returns>
+    ''' <remarks>Introduced with Platform 6.4.<para>If set, this path will be used instead of the the user's Documents directory default path. This must be Set before the first message Is logged.</para></remarks>
+    Public Property LogFilePath() As String Implements ITraceLogger.LogFilePath
+        Get
+            Return g_LogFilePath
+        End Get
+        Set(value As String)
+            g_LogFilePath = value.TrimEnd("\".ToCharArray) ' Save the value and remove any trailing \ characters that will mess up file name creation later
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Set or return the width of the identifier field in the log message
+    ''' </summary>
+    ''' <value>Width of the identifier field</value>
+    ''' <returns>Integer width</returns>
+    ''' <remarks>Introduced with Platform 6.4.<para>If set, this width will be used instead of the default identifier field width.</para></remarks>
+    Public Property IdentifierWidth As Integer Implements ITraceLogger.IdentifierWidth
+        Get
+            Return g_IdentifierWidth
+        End Get
+        Set(value As Integer)
+            g_IdentifierWidth = value
+        End Set
+    End Property
 #End Region
 
 #Region "ITraceLoggerExtra Implementation"
@@ -423,14 +458,20 @@ Public Class TraceLogger
 
 #Region "TraceLogger Support"
     Private Sub CreateLogFile()
-        Dim FileNameSuffix As Integer = 0, ok As Boolean = False, FileNameBase As String
+        Dim FileNameSuffix As Integer = 0, ok As Boolean = False, FileNameBase, TodaysLogFilePath As String
         Select Case g_LogFileName
             'Case "" 'Do nothing - no log required
             '    Throw New HelperException("TRACELOGGER.CREATELOGFILE - Call made but no log filename has been set")
             Case "", SERIAL_AUTO_FILENAME
                 If g_LogFileType = "" Then Throw New ValueNotSetException("TRACELOGGER.CREATELOGFILE - Call made but no log filetype has been set")
-                My.Computer.FileSystem.CreateDirectory(g_LogFilePath) 'Create the directory if it doesn't exist
-                FileNameBase = g_LogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff")
+                If g_LogFilePath = "" Then ' Default behaviour using the current user's Document directry
+                    My.Computer.FileSystem.CreateDirectory(g_DefaultLogFilePath) 'Create the directory if it doesn't exist
+                    FileNameBase = g_DefaultLogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff")
+                Else ' User has given a specific path so use that
+                    TodaysLogFilePath = g_LogFilePath & TRACE_LOGGER_FILENAME_BASE & Format(Now, TRACE_LOGGER_FILE_NAME_DATE_FORMAT) ' Append Logs yyyy-mm-dd to the user supplied log file file
+                    My.Computer.FileSystem.CreateDirectory(TodaysLogFilePath) 'Create the directory if it doesn't exist
+                    FileNameBase = TodaysLogFilePath & "\ASCOM." & g_LogFileType & "." & Format(Now, "HHmm.ssfff")
+                End If
                 Do 'Create a unique log file name based on date, time and required name
                     g_LogFileActualName = FileNameBase & FileNameSuffix.ToString & ".txt"
                     FileNameSuffix += 1 'Increment counter that ensures that no logfile can have the same name as any other
@@ -457,6 +498,7 @@ Public Class TraceLogger
                 Try
                     g_LogFile = New StreamWriter(g_LogFileName & ".txt", False)
                     g_LogFile.AutoFlush = True
+                    g_LogFileActualName = g_LogFileName & ".txt"
                 Catch ex As Exception
                     MsgBox("CreateLogFile Exception - #" & g_LogFileName & "# " & ex.ToString)
                     Throw
@@ -503,7 +545,7 @@ Public Class TraceLogger
     Private Sub LogMsgFormatter(ByVal p_Test As String, ByVal p_Msg As String, ByVal p_NewLine As Boolean, ByVal p_RespectCrLf As Boolean)
         Dim l_Msg As String = ""
         Try
-            p_Test = Left(p_Test & Microsoft.VisualBasic.StrDup(30, " "), 25)
+            p_Test = Left(p_Test & StrDup(g_IdentifierWidth, " "), g_IdentifierWidth)
 
             l_Msg = Format(Now(), "HH:mm:ss.fff") & " " & MakePrintable(p_Test, p_RespectCrLf) & " " & MakePrintable(p_Msg, p_RespectCrLf)
             If Not g_LogFile Is Nothing Then

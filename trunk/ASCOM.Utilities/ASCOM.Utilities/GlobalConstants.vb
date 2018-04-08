@@ -32,6 +32,7 @@ Module GlobalConstants
     Friend Const TRACE_TRANSFORM As String = "Trace Transform", TRACE_TRANSFORM_DEFAULT As Boolean = False
     Friend Const REGISTRY_UTILITIES_FOLDER As String = "Software\ASCOM\Utilities"
     Friend Const TRACE_CACHE As String = "Trace Cache", TRACE_CACHE_DEFAULT As Boolean = False
+    Friend Const TRACE_EARTHROTATION_SCHEDULED_JOB As String = "Trace Earth Rotation Scheduled Job", TRACE_EARTHROTATION_SCHEDULED_JOB_DEFAULT As Boolean = False
 
     'Settings for the ASCOM Windows event log
     Friend Const EVENT_SOURCE As String = "ASCOM Platform" 'Name of the the event source
@@ -91,6 +92,9 @@ Module GlobalConstants
 
     ' Other constants
     Friend Const ABSOLUTE_ZERO_CELSIUS As Double = -273.15
+    Friend Const TRACE_LOGGER_PATH As String = "\ASCOM" ' Path to TraceLogger directory from My Documents
+    Friend Const TRACE_LOGGER_FILENAME_BASE As String = "\Logs " ' Fixed part of TraceLogger file name.  Note: The trailing space must be retained!
+    Friend Const TRACE_LOGGER_FILE_NAME_DATE_FORMAT As String = "yyyy-MM-dd"
 
     Friend Enum EventLogErrors As Integer
         EventLogCreated = 0
@@ -125,5 +129,6 @@ Module GlobalConstants
         TraceLoggerMutexTimeOut = 29
         TraceLoggerMutexAbandoned = 30
         RegistryProfileMutexAbandoned = 31
+        EarthRotationUpdate = 32
     End Enum
 End Module
