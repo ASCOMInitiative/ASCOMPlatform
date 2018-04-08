@@ -189,7 +189,7 @@ namespace ASCOM.DriverAccess
                         {
                             for (int i = 1; i <= AxisRatesP6.Count; i++)
                             {
-                                TL.LogMessage("AxisRates", "Found Minimim: " + AxisRatesP6[i].Minimum + ", Maximum: " + AxisRatesP6[i].Maximum);
+                                TL.LogMessage("AxisRates", "Found Minimum: " + AxisRatesP6[i].Minimum + ", Maximum: " + AxisRatesP6[i].Maximum);
                             }
                         }
                     }
@@ -215,7 +215,7 @@ namespace ASCOM.DriverAccess
                         {
                             for (int i = 1; i <= AxisRatesP5.Count; i++)
                             {
-                                TL.LogMessage("AxisRates", "Found Minimim: " + AxisRatesP5[i].Minimum + ", Maximum: " + AxisRatesP5[i].Maximum);
+                                TL.LogMessage("AxisRates", "Found Minimum: " + AxisRatesP5[i].Minimum + ", Maximum: " + AxisRatesP5[i].Maximum);
                             }
                         }
                     }
@@ -246,7 +246,7 @@ namespace ASCOM.DriverAccess
                     {
                         for (int i = 1; i <= ReturnValue.Count; i++)
                         {
-                            TL.LogMessage("AxisRates", "Found Minimim: " + ReturnValue[i].Minimum + ", Maximum: " + ReturnValue[i].Maximum);
+                            TL.LogMessage("AxisRates", "Found Minimum: " + ReturnValue[i].Minimum + ", Maximum: " + ReturnValue[i].Maximum);
                         }
                     }
                 }
