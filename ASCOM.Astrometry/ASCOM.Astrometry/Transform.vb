@@ -518,9 +518,8 @@ Namespace Transform
         End Sub
 
         Private Sub J2000ToTopo()
-            Dim DeltaT, DUT1, JDUTCSofa As Double
+            Dim DUT1, JDUTCSofa As Double
             Dim aob, zob, hob, dob, rob, eo As Double
-            Dim JDUTCSofaDateTime As DateTime
 
             If Double.IsNaN(SiteElevValue) Then Throw New Exceptions.TransformUninitialisedException("Site elevation has not been set")
             If Double.IsNaN(SiteLatValue) Then Throw New Exceptions.TransformUninitialisedException("Site latitude has not been set")
@@ -530,10 +529,7 @@ Namespace Transform
             Sw.Reset() : Sw.Start()
 
             JDUTCSofa = GetJDUTCSofa()
-            DeltaT = DeltaTCalc(JDUTCSofa)
             DUT1 = AstroUtl.DeltaUT(JDUTCSofa)
-
-            JDUTCSofaDateTime = Julian2DateTime(JDUTCSofa)
 
             Sw.Reset() : Sw.Start()
 
@@ -709,7 +705,7 @@ Namespace Transform
         End Sub
 
         Private Sub AzElToJ2000()
-            Dim RetCode As Integer, JulianDateUTCSofa, JulianDateTTSofa, RACelestial, DecCelestial, DUT1 As Double
+            Dim RetCode As Integer, JulianDateUTCSofa, RACelestial, DecCelestial, DUT1 As Double
 
             Sw.Reset() : Sw.Start()
 
@@ -719,7 +715,6 @@ Namespace Transform
             If Double.IsNaN(SiteTempValue) Then Throw New Exceptions.TransformUninitialisedException("Site temperature has not been set")
 
             JulianDateUTCSofa = GetJDUTCSofa()
-            JulianDateTTSofa = GetJDTTSofa()
             DUT1 = AstroUtl.DeltaUT(JulianDateUTCSofa)
 
             If RefracValue Then ' Refraction is requuired
@@ -740,14 +735,13 @@ Namespace Transform
         Private Function GetJDUTCSofa() As Double
             Dim Retval, utc1, utc2 As Double, Now As DateTime
 
-            ' Platform 6.4 - 6/4/2018 - Caching removed so that the Julian date will be accurate to the millisecond
-            'If JulianDateUTCValue = 0.0 Then
-            Now = Date.UtcNow
-            If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
-            Retval = utc1 + utc2
-            ' Else
-            ' Retval = JulianDateUTCValue
-            ' End If
+            If JulianDateUTCValue = 0.0 Then ' No specific UTC date / time has been set so use the current date / time
+                Now = Date.UtcNow
+                If (SOFA.Dtf2d("UTC", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+                Retval = utc1 + utc2
+            Else ' A specific UTC date / time has been set so use it
+                Retval = JulianDateUTCValue
+            End If
             TL.LogMessage("  GetJDUTCSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString(DATE_FORMAT))
             Return Retval
         End Function
@@ -755,19 +749,18 @@ Namespace Transform
         Private Function GetJDTTSofa() As Double
             Dim Retval, utc1, utc2, tai1, tai2, tt1, tt2 As Double, Now As DateTime
 
-            ' Platform 6.4 - 6/4/2018 - Caching removed so that the Julian date will be accurate to the millisecond
-            'If JulianDateTTValue = 0.0 Then
-            Now = Date.UtcNow
+            If JulianDateTTValue = 0.0 Then ' No specific TT date / time has been set so use the current date / time
+                Now = Date.UtcNow
 
-            If (SOFA.Dtf2d("", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+                ' First calculate the UTC Julian date, then convert this to the equivalent TAI Julian date then convert this to the equivalent TT Julian date
+                If (SOFA.Dtf2d("UTC", Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, CDbl(Now.Second) + CDbl(Now.Millisecond) / 1000.0, utc1, utc2) <> 0) Then TL.LogMessage("Dtf2d", "Bad return code")
+                If (SOFA.UtcTai(utc1, utc2, tai1, tai2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Utctai - Bad return code")
+                If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Taitt - Bad return code")
 
-            If (SOFA.UtcTai(utc1, utc2, tai1, tai2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Utctai - Bad return code")
-            If (SOFA.TaiTt(tai1, tai2, tt1, tt2) <> 0) Then TL.LogMessage("GetJDTTSofa", "Taitt - Bad return code")
-
-            Retval = tt1 + tt2
-            'Else
-            'Retval = JulianDateTTValue
-            'End If
+                Retval = tt1 + tt2
+            Else ' A specific TT date / time has been set so use it
+                Retval = JulianDateTTValue
+            End If
             TL.LogMessage("  GetJDTTSofa", "  " & Retval.ToString & " " & Julian2DateTime(Retval).ToString(DATE_FORMAT))
             Return Retval
         End Function
