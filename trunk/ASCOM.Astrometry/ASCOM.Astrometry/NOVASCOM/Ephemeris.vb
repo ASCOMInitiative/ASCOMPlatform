@@ -324,7 +324,7 @@ Module EphemerisCode
                 qjd = tjd + (CDbl(i) - 1.0) * 0.1
                 sun_eph_nov(qjd, ras, decs, diss)
                 RADec2Vector(ras, decs, diss, pos1)
-                Precession(qjd, pos1, T0, pos)
+                Precession(qjd, pos1, J2000BASE, pos)
                 p(i, 0) = -pos(0)
                 p(i, 1) = -pos(1)
                 p(i, 2) = -pos(2)
@@ -359,7 +359,7 @@ Module EphemerisCode
                 '*/
 
                 For i = 0 To 3
-                    dlon = pl(i) + pn(i) * (tjd - T0)
+                    dlon = pl(i) + pn(i) * (tjd - J2000BASE)
                     dlon = dlon Mod TWOPI
                     sinl = Sin(dlon)
                     cosl = Cos(dlon)
@@ -471,7 +471,7 @@ Module EphemerisCode
         'from J2000.0.
         '*/
 
-        u = (jd - T0) / 3652500.0
+        u = (jd - J2000BASE) / 3652500.0
 
         '/*
         'Compute longitude and distance terms from the series.

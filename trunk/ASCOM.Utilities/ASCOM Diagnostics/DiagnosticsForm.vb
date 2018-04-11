@@ -191,7 +191,7 @@ Public Class DiagnosticsForm
             TL.LogMessage("TimeZoneName", GetTimeZoneName)
             TL.LogMessage("TimeZoneOffset", TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours)
             TL.LogMessage("UTCDate", Date.UtcNow)
-            TL.LogMessage("Julian date", Date.UtcNow.ToOADate() + 2415018.5)
+            TL.LogMessage("Julian date", Date.UtcNow.ToOADate() + OLE_AUTOMATION_JULIAN_DATE_OFFSET)
             TL.BlankLine()
             TL.LogMessage("CurrentCulture", CultureInfo.CurrentCulture.EnglishName &
                                             " " & CultureInfo.CurrentCulture.Name &
@@ -1661,6 +1661,7 @@ Public Class DiagnosticsForm
         ReadEph
         SolarSystem
         State
+        DeltaT
         '=============================================
         CheckoutStarsFull
         '=============================================
@@ -2417,6 +2418,7 @@ Public Class DiagnosticsForm
         NOVAS31Test(NOVAS3Functions.ReadEph)
         NOVAS31Test(NOVAS3Functions.SolarSystem)
         NOVAS31Test(NOVAS3Functions.State)
+        NOVAS31Test(NOVAS3Functions.DeltaT)
 
         NOVAS31Test(NOVAS3Functions.Aberration)
         NOVAS31Test(NOVAS3Functions.AppPlanet)
@@ -2577,7 +2579,7 @@ Public Class DiagnosticsForm
     Private Sub NOVAS31Test(ByVal TestFunction As NOVAS3Functions)
         Dim rc As Integer, CatEnt As New CatEntry3, ObjectJupiter As New Object3, Observer As New Observer, skypos, SkyPos1 As New SkyPos
         Dim OnSurf As New OnSurface
-        Dim RA, Dec, Dis, JD, GST, JDTest As Double
+        Dim RA, Dec, Dis, JD, GST, JDTest, DeltaTResult1, DeltaTResult2 As Double
         Dim BodyJupiter, BodyEarth As New BodyDescription
         Dim Si As New SiteInfo, Pos(2), Pos1(2), Pos2(2), Vel(2), PosObj(2), PosObs(2), PosBody(2), VelObs(2) As Double
         Dim Utl As New Util
@@ -2679,6 +2681,10 @@ Public Class DiagnosticsForm
                     JDArr(1) = 0
                     rc = Nov31.State(JDArr, Target.Pluto, Pos, Vel)
                     LogRC31(TestFunction, "Pluto", rc, Format(Pos(0), "0.0000000000") & " " & Format(Pos(1), "0.0000000000") & " " & Format(Pos(2), "0.0000000000") & " " & Format(Vel(0), "0.0000000000") & " " & Format(Vel(1), "0.0000000000") & " " & Format(Vel(2), "0.0000000000"), "")
+                Case NOVAS3Functions.DeltaT
+                    DeltaTResult1 = Nov31.DeltaT(JDTest)
+                    DeltaTResult2 = Nov31.DeltaT(AstroUtil.JulianDateUtc)
+                    TL.LogMessage("NOVAS31DeltaT", String.Format("DeltaT (JD {0}): {1}, DeltaT (JD {2}): {3}", JDTest, DeltaTResult1, AstroUtil.JulianDateUtc, DeltaTResult2))
                 Case NOVAS3Functions.Aberration
                     rc = 0
                     Nov31.RaDec2Vector(20.0, 40.0, 100, Pos)
@@ -3755,13 +3761,13 @@ Public Class DiagnosticsForm
             Dim TopoNoReractResults() As Double = New Double() {9.01140781883559, 24.9535152700125, 2062648062470.13, 14.2403113213804, 11912861640.6606, -1326304233902.68, 1318405625773.8, 870195790998.564,
                                         9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
             pv = st.GetTopocentricPosition(JD, s, False)
-            ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, True, TOLERANCE_E9)
+            ComparePosVec("NovasCom Topo/NoRefract", st, pv, TopoNoReractResults, True, TOLERANCE_E7)
             pv = st.GetTopocentricPosition(JD, s, True)
 
             Dim TopoReractResults() As Double = New Double() {9.01438008140491, 25.0016930437008, 2062648062470.13, 14.3031953401364, 11912861640.6606, -1326809918883.5, 1316857267239.29, 871767977436.204,
                                                               9.0, 25.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 
-            ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, True, TOLERANCE_E9)
+            ComparePosVec("NovasCom Topo/Refract", st, pv, TopoReractResults, True, TOLERANCE_E7)
 
             NovasComTest("Mercury", Body.Mercury, JD, Mercury, TOLERANCE_E6) 'Test Neptune prediction
             NovasComTest("Venus", Body.Venus, JD, Venus, TOLERANCE_E7) 'Test Neptune prediction
@@ -5494,7 +5500,7 @@ Public Class DiagnosticsForm
                 Compare("UtilTests", "TimeZoneName", Utl.TimeZoneName.ToString, GetTimeZoneName)
                 CompareDouble("UtilTests", "TimeZoneOffset", Utl.TimeZoneOffset, -CDbl(TimeZone.CurrentTimeZone.GetUtcOffset(Now).Hours), 0.017) '1 minute tolerance
                 Compare("UtilTests", "UTCDate", Utl.UTCDate.ToString, Date.UtcNow)
-                CompareDouble("UtilTests", "Julian date", Utl.JulianDate, Date.UtcNow.ToOADate() + 2415018.5, 0.00002) '1 second tolerance
+                CompareDouble("UtilTests", "Julian date", Utl.JulianDate, Date.UtcNow.ToOADate() + OLE_AUTOMATION_JULIAN_DATE_OFFSET, 0.00002) '1 second tolerance
                 TL.BlankLine()
 
                 Compare("UtilTests", "DateJulianToLocal", Format(Utl.DateJulianToLocal(TestJulianDate).Subtract(TimeZone.CurrentTimeZone.GetUtcOffset(Now)), "dd MMM yyyy hh:mm:ss.ffff"), "20 " & AbbreviatedMonthNames(11) & " 2010 12:00:00.0000")
@@ -7786,6 +7792,7 @@ Public Class DiagnosticsForm
     Private Sub AstroUtilsTests()
         Dim Events As RiseSet
         Dim Nov31 As New NOVAS.NOVAS31
+        Dim TimeDifference, DUT1, DT0, DTDUT1, JDUtc As Double
 
         Try
             Status("Running Astro Utilities functional tests")
@@ -7794,11 +7801,33 @@ Public Class DiagnosticsForm
             Dim AstroUtil2 As New AstroUtils.AstroUtils
             TL.LogMessage("AstroUtilTests", "ASCOM.Astrometry.AstroUtils.AstroUtils Created OK in " & sw.ElapsedMilliseconds & " milliseconds")
 
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.DeltaT: {0}", AstroUtil2.DeltaT))
+
             ' Earth rotation data tests
             CompareInteger("AstroUtilTests", "Historic Offset Development Test Value", GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0)
             CompareInteger("AstroUtilTests", "UTC Days Offset Development Test Value", GlobalItems.TEST_UTC_DAYS_OFFSET, 0)
             CompareInteger("AstroUtilTests", "UTC Hours Offset Development Test Value", GlobalItems.TEST_UTC_HOURS_OFFSET, 0)
             CompareInteger("AstroUtilTests", "UTC Minutes Offset Development Test Value", GlobalItems.TEST_UTC_MINUTES_OFFSET, 0)
+
+            JDUtc = AstroUtil2.JulianDateUtc
+            DUT1 = AstroUtil2.DeltaUT(JDUtc)
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.DeltaUT1: {0}", DUT1))
+
+            DT0 = AstroUtil2.JulianDateUT1(0.0)
+            DTDUT1 = AstroUtil2.JulianDateUT1(DUT1)
+            TimeDifference = (DT0 - DTDUT1) * 24.0 * 60.0 * 60.0
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1(0.0): {0}", DT0))
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1(DeltaUT1): {0}", DTDUT1))
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1 Difference: {0} seconds", TimeDifference))
+            CompareDouble("AstroUtilTests", "JulianDateUT1", DT0, DTDUT1, TOLERANCE_E3)
+
+            DT0 = AstroUtil2.JulianDateTT(0.0)
+            DTDUT1 = AstroUtil2.JulianDateTT(DUT1)
+            TimeDifference = (DT0 - DTDUT1) * 24.0 * 60.0 * 60.0
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT(0.0): {0}", DT0))
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT(DeltaUT1): {0}", DTDUT1))
+            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT Difference: {0} seconds", TimeDifference))
+            CompareDouble("AstroUtilTests", "JulianDateTT", DT0, DTDUT1, TOLERANCE_E3)
 
             'Range Tests
             CompareDouble("AstroUtilTests", "ConditionHA -12.0", AstroUtil2.ConditionHA(-12.0), -12.0, TOLERANCE_E6)
@@ -7865,6 +7894,35 @@ Public Class DiagnosticsForm
 
             CompareDouble("AstroUtilTests", "Moon Illumination", AstroUtil2.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
             CompareDouble("AstroUtilTests", "Moon Phase", AstroUtil2.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)
+
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second January 1961", AstroUtil2.DeltaUT(2437300.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second March 1965", AstroUtil2.DeltaUT(2438820.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second January 1966", AstroUtil2.DeltaUT(2439126.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 10", AstroUtil2.DeltaUT(2441317.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 15", AstroUtil2.DeltaUT(2442777.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 15", AstroUtil2.DeltaUT(2442778.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 20", AstroUtil2.DeltaUT(2444785.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 20", AstroUtil2.DeltaUT(2444786.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 25", AstroUtil2.DeltaUT(2447891.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 25", AstroUtil2.DeltaUT(2447892.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 30", AstroUtil2.DeltaUT(2450082.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 30", AstroUtil2.DeltaUT(2450083.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 35", AstroUtil2.DeltaUT(2456108.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 35", AstroUtil2.DeltaUT(2456109.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day before leap second 37", AstroUtil2.DeltaUT(2457753.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Day of start of leap second 37", AstroUtil2.DeltaUT(2457754.5), -0.9, 0.9)
+            CompareWithin("AstroUtilTests", "DeltaUT1 - Today", AstroUtil2.DeltaUT(AstroUtil2.JulianDateUtc), -0.9, 0.9)
+
+            Dim parameters As New EarthRotationParameters()
+
+            For Each HistoricLeapSecond As KeyValuePair(Of Double, Double) In parameters.HistoricLeapSeconds
+                Dim LeapSecondDateTime As DateTime = DateTime.FromOADate(HistoricLeapSecond.Key - OLE_AUTOMATION_JULIAN_DATE_OFFSET)
+                TL.LogMessage("AstroUtilTests", String.Format("Found historic leap second value {0} which came into effect on JD {1} ({2})", HistoricLeapSecond.Value, HistoricLeapSecond.Key, LeapSecondDateTime.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
+            Next
+
+            parameters.Dispose()
+            parameters = Nothing
+
             TL.BlankLine()
 
             Try

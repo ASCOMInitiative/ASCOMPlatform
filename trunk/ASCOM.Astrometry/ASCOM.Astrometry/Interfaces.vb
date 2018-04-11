@@ -21,8 +21,8 @@ Namespace Transform
     ''' http://www.usno.navy.mil/USNO/astronomical-applications/software-products/novas/novas-fortran/novas-fortran 
     ''' </para>
     ''' </remarks>
-    <Guid("6F38768E-C52D-41c7-9E0F-B8E4AFE341A7"), _
-    ComVisible(True)> _
+    <Guid("6F38768E-C52D-41c7-9E0F-B8E4AFE341A7"),
+    ComVisible(True)>
     Public Interface ITransform
         ''' <summary>
         ''' Gets or sets the site latitude
@@ -269,8 +269,8 @@ Namespace Kepler
     ''' TT clock. It differs from UT1 by an amount called "delta-t", which slowly increases with time, 
     ''' and is about 60 seconds right now (2001). </para>
     ''' </remarks>
-    <Guid("54A8F586-C7B7-4899-8AA1-6044BDE4ABFA"), _
-    ComVisible(True)> _
+    <Guid("54A8F586-C7B7-4899-8AA1-6044BDE4ABFA"),
+    ComVisible(True)>
     Public Interface IEphemeris
         ''' <summary>
         ''' Compute rectangular (x/y/z) heliocentric J2000 equatorial coordinates of position (AU) and 
@@ -419,9 +419,9 @@ Namespace NOVASCOM
     ''' (KM/sec.). In addition, it must support three read/write properties BodyType, Name, and Number, 
     ''' which correspond to the Type, Name, and Number properties of Novas.Planet. 
     ''' </para></remarks>
-    <Guid("FF6DA248-BA2A-4a62-BA0A-AAD433EAAC85"), _
-    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
-    ComVisible(True)> _
+    <Guid("FF6DA248-BA2A-4a62-BA0A-AAD433EAAC85"),
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
+    ComVisible(True)>
     Public Interface IEarth
         ''' <summary>
         ''' Initialize the Earth object for given terrestrial Julian date
@@ -540,9 +540,9 @@ Namespace NOVASCOM
     ''' which correspond to the Type, Name, and Number properties of Novas.Planet. 
     ''' </para>
     '''</remarks>
-    <Guid("CAE65556-EA7A-4252-BF28-D0E967AEF04D"), _
-    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
-    ComVisible(True)> _
+    <Guid("CAE65556-EA7A-4252-BF28-D0E967AEF04D"),
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
+    ComVisible(True)>
     Public Interface IPlanet
         ''' <summary>
         ''' Get an apparent position for given time
@@ -645,9 +645,9 @@ Namespace NOVASCOM
     ''' proper motion. Thus, a PositionVector object gives access to some of the lower-level NOVAS functions. 
     ''' <para><b>Note:</b> The equatorial coordinate properties of this object are dependent variables, and thus are read-only. Changing any cartesian coordinate will cause the equatorial coordinates to be recalculated. 
     ''' </para></remarks>
-    <Guid("A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA"), _
-    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
-    ComVisible(True)> _
+    <Guid("A3B6F9AA-B331-47c7-B8F0-4FBECF0638AA"),
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
+    ComVisible(True)>
     Public Interface IPositionVector
         ''' <summary>
         ''' Adjust the position vector of an object for aberration of light
@@ -773,7 +773,7 @@ Namespace NOVASCOM
     ''' Interface for PositionVector methods that are only accessible through .NET and not through COM
     ''' </summary>
     ''' <remarks></remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Interface IPositionVectorExtra
         ''' <summary>
         ''' Initialize the PositionVector from a Site object using UTC Julian date
@@ -797,9 +797,9 @@ Namespace NOVASCOM
     ''' ellipsoid. Properties are latitude, longitude, height above mean sea level, the ambient temperature 
     ''' and the sea-level barmetric pressure. The latter two are used only for optional refraction corrections. 
     ''' Latitude and longitude are (common) geodetic, not geocentric. </remarks>
-    <Guid("2414C071-8A5B-4d53-89BC-CAF30BA7123B"), _
-    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
-    ComVisible(True)> _
+    <Guid("2414C071-8A5B-4d53-89BC-CAF30BA7123B"),
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
+    ComVisible(True)>
     Public Interface ISite
         ''' <summary>
         ''' Set all site properties in one method call
@@ -859,9 +859,9 @@ Namespace NOVASCOM
     ''' time, the (optionally refracted) alt-az coordinates are calculated, and are also contained within 
     ''' the returned PositionVector. <b>Note that Alt/Az is available in PositionVectors returned from calling 
     ''' GetTopocentricPosition().</b></para></remarks>
-    <Guid("89145C95-9B78-494e-99FE-BD2EF4386096"), _
-    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
-    ComVisible(True)> _
+    <Guid("89145C95-9B78-494e-99FE-BD2EF4386096"),
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
+    ComVisible(True)>
     Public Interface IStar
         ''' <summary>
         ''' Initialize all star properties with one call
@@ -1017,9 +1017,9 @@ Namespace NOVASCOM
     ''' a Star object (essentially an FK5 or HIP catalog entry) or a Site (lat/long/height). For the star 
     ''' object the proper motions, distance and radial velocity are used, for a site, the velocity is that 
     ''' of the observer with respect to the Earth's center of mass. </remarks>
-    <Guid("8DD80835-29C6-49d6-8E4D-8887B20E707E"), _
-    InterfaceType(ComInterfaceType.InterfaceIsIDispatch), _
-    ComVisible(True)> _
+    <Guid("8DD80835-29C6-49d6-8E4D-8887B20E707E"),
+    InterfaceType(ComInterfaceType.InterfaceIsIDispatch),
+    ComVisible(True)>
     Public Interface IVelocityVector
         ''' <summary>
         ''' Initialize the VelocityVector from a Site object and Greenwich Apparent Sdereal Time.
@@ -1099,7 +1099,7 @@ Namespace NOVASCOM
     ''' Interface for VelocityVector methods that are only accessible through .NET and not through COM
     ''' </summary>
     ''' <remarks></remarks>
-    <ComVisible(False)> _
+    <ComVisible(False)>
     Public Interface IVelocityVectorExtra
         ''' <summary>
         ''' Initialize the VelocityVector from a Site object using UTC Julian Date
@@ -1127,8 +1127,8 @@ Namespace NOVAS
     ''' Interface to the NOVAS2 component
     ''' </summary>
     ''' <remarks>Implemented by the NOVAS2COM component</remarks>
-    <Guid("3D201554-007C-47e6-805D-F66D1CA35543"), _
-        ComVisible(True)> _
+    <Guid("3D201554-007C-47e6-805D-F66D1CA35543"),
+        ComVisible(True)>
     Public Interface INOVAS2
         ''' <summary>
         ''' Computes the apparent place of a star 
@@ -1142,10 +1142,10 @@ Namespace NOVAS
         '''  0...Everything OK
         ''' >0...Error code from function 'solarsystem'.</pre></returns>
         ''' <remarks></remarks>
-        <DispId(1)> Function AppStar(ByVal tjd As Double, _
-                                            ByRef earth As BodyDescription, _
-                                            ByRef star As CatEntry, _
-                                            ByRef ra As Double, _
+        <DispId(1)> Function AppStar(ByVal tjd As Double,
+                                            ByRef earth As BodyDescription,
+                                            ByRef star As CatEntry,
+                                            ByRef ra As Double,
                                             ByRef dec As Double) As Short
         ''' <summary>
         ''' Computes the topocentric place of a star
@@ -1161,12 +1161,12 @@ Namespace NOVAS
         '''  0...Everything OK.
         ''' >0...Error code from function 'solarsystem'.</pre></returns>
         ''' <remarks></remarks>
-        <DispId(2)> Function TopoStar(ByVal tjd As Double, _
-                                         ByRef earth As BodyDescription, _
-                                         ByVal deltat As Double, _
-                                         ByRef star As CatEntry, _
-                                         ByRef location As SiteInfo, _
-                                         ByRef ra As Double, _
+        <DispId(2)> Function TopoStar(ByVal tjd As Double,
+                                         ByRef earth As BodyDescription,
+                                         ByVal deltat As Double,
+                                         ByRef star As CatEntry,
+                                         ByRef location As SiteInfo,
+                                         ByRef ra As Double,
                                          ByRef dec As Double) As Short
 
         ''' <summary>
@@ -1187,11 +1187,11 @@ Namespace NOVAS
         ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
         ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         ''' </remarks>
-        <DispId(3)> Function AppPlanet(ByVal tjd As Double, _
-                                          ByRef ss_object As BodyDescription, _
-                                          ByRef earth As BodyDescription, _
-                                          ByRef ra As Double, _
-                                          ByRef dec As Double, _
+        <DispId(3)> Function AppPlanet(ByVal tjd As Double,
+                                          ByRef ss_object As BodyDescription,
+                                          ByRef earth As BodyDescription,
+                                          ByRef ra As Double,
+                                          ByRef dec As Double,
                                           ByRef dis As Double) As Short
 
         ''' <summary>
@@ -1214,13 +1214,13 @@ Namespace NOVAS
         ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
         ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         ''' </remarks>
-        <DispId(4)> Function TopoPlanet(ByVal tjd As Double, _
-                                           ByRef ss_object As BodyDescription, _
-                                           ByRef earth As BodyDescription, _
-                                           ByVal deltat As Double, _
-                                           ByRef location As SiteInfo, _
-                                           ByRef ra As Double, _
-                                           ByRef dec As Double, _
+        <DispId(4)> Function TopoPlanet(ByVal tjd As Double,
+                                           ByRef ss_object As BodyDescription,
+                                           ByRef earth As BodyDescription,
+                                           ByVal deltat As Double,
+                                           ByRef location As SiteInfo,
+                                           ByRef ra As Double,
+                                           ByRef dec As Double,
                                            ByRef dis As Double) As Short
 
         ''' <summary>
@@ -1238,10 +1238,10 @@ Namespace NOVAS
         ''' <remarks>
         ''' Computes the virtual place of a star at date 'tjd', given its 
         ''' mean place, proper motion, parallax, and radial velocity for J2000.0.</remarks>
-        <DispId(5)> Function VirtualStar(ByVal tjd As Double, _
-                                                ByRef earth As BodyDescription, _
-                                                ByRef star As CatEntry, _
-                                                ByRef ra As Double, _
+        <DispId(5)> Function VirtualStar(ByVal tjd As Double,
+                                                ByRef earth As BodyDescription,
+                                                ByRef star As CatEntry,
+                                                ByRef ra As Double,
                                                 ByRef dec As Double) As Short
 
         ''' <summary>
@@ -1259,12 +1259,12 @@ Namespace NOVAS
         ''' >0...Error code from function 'solarsystem'.
         '''</pre></returns>
         ''' <remarks></remarks>
-        <DispId(6)> Function LocalStar(ByVal tjd As Double, _
-                                              ByRef earth As BodyDescription, _
-                                              ByVal deltat As Double, _
-                                              ByRef star As CatEntry, _
-                                              ByRef location As SiteInfo, _
-                                              ByRef ra As Double, _
+        <DispId(6)> Function LocalStar(ByVal tjd As Double,
+                                              ByRef earth As BodyDescription,
+                                              ByVal deltat As Double,
+                                              ByRef star As CatEntry,
+                                              ByRef location As SiteInfo,
+                                              ByRef ra As Double,
                                               ByRef dec As Double) As Short
 
         ''' <summary>
@@ -1285,11 +1285,11 @@ Namespace NOVAS
         ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
         ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         ''' </remarks>
-        <DispId(7)> Function VirtualPlanet(ByVal tjd As Double, _
-                                                  ByRef ss_object As BodyDescription, _
-                                                  ByRef earth As BodyDescription, _
-                                                  ByRef ra As Double, _
-                                                  ByRef dec As Double, _
+        <DispId(7)> Function VirtualPlanet(ByVal tjd As Double,
+                                                  ByRef ss_object As BodyDescription,
+                                                  ByRef earth As BodyDescription,
+                                                  ByRef ra As Double,
+                                                  ByRef dec As Double,
                                                   ByRef dis As Double) As Short
 
         ''' <summary>
@@ -1312,13 +1312,13 @@ Namespace NOVAS
         ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
         ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         ''' </remarks>
-        <DispId(8)> Function LocalPlanet(ByVal tjd As Double, _
-                                                ByRef ss_object As BodyDescription, _
-                                                ByRef earth As BodyDescription, _
-                                                ByVal deltat As Double, _
-                                                ByRef location As SiteInfo, _
-                                                ByRef ra As Double, _
-                                                ByRef dec As Double, _
+        <DispId(8)> Function LocalPlanet(ByVal tjd As Double,
+                                                ByRef ss_object As BodyDescription,
+                                                ByRef earth As BodyDescription,
+                                                ByVal deltat As Double,
+                                                ByRef location As SiteInfo,
+                                                ByRef ra As Double,
+                                                ByRef dec As Double,
                                                 ByRef dis As Double) As Short
 
         ''' <summary>
@@ -1334,10 +1334,10 @@ Namespace NOVAS
         ''' >0...Error code from function 'solarsystem'.
         ''' </pre></returns>
         ''' <remarks>     Computes the astrometric place of a star, given its mean place, proper motion, parallax, and radial velocity for J2000.0.</remarks>
-        <DispId(9)> Function AstroStar(ByVal tjd As Double, _
-                                              ByRef earth As BodyDescription, _
-                                              ByRef star As CatEntry, _
-                                              ByRef ra As Double, _
+        <DispId(9)> Function AstroStar(ByVal tjd As Double,
+                                              ByRef earth As BodyDescription,
+                                              ByRef star As CatEntry,
+                                              ByRef ra As Double,
                                               ByRef dec As Double) As Short
 
         ''' <summary>
@@ -1357,11 +1357,11 @@ Namespace NOVAS
         ''' used. Please use the NOVAS3.1 or later classes in applications that require planetary or moon ephemeredes as these classes 
         ''' can access the JPL 421 planetary ephemeris data provided as part of the ASCOM distribution.
         ''' </remarks>
-        <DispId(10)> Function AstroPlanet(ByVal tjd As Double, _
-                                                ByRef ss_object As BodyDescription, _
-                                                ByRef earth As BodyDescription, _
-                                                ByRef ra As Double, _
-                                                ByRef dec As Double, _
+        <DispId(10)> Function AstroPlanet(ByVal tjd As Double,
+                                                ByRef ss_object As BodyDescription,
+                                                ByRef earth As BodyDescription,
+                                                ByRef ra As Double,
+                                                ByRef dec As Double,
                                                 ByRef dis As Double) As Short
 
         ''' <summary>
@@ -1385,17 +1385,17 @@ Namespace NOVAS
         ''' for polar motion, which is significant at the sub-arcsecond 
         ''' level.  This function can also adjust coordinates for atmospheric 
         ''' refraction.</remarks>
-        <DispId(11)> Sub Equ2Hor(ByVal tjd As Double, _
-                                      ByVal deltat As Double, _
-                                      ByVal x As Double, _
-                                      ByVal y As Double, _
-                                      ByRef location As SiteInfo, _
-                                      ByVal ra As Double, _
-                                      ByVal dec As Double, _
-                                      ByVal ref_option As RefractionOption, _
-                                      ByRef zd As Double, _
-                                      ByRef az As Double, _
-                                      ByRef rar As Double, _
+        <DispId(11)> Sub Equ2Hor(ByVal tjd As Double,
+                                      ByVal deltat As Double,
+                                      ByVal x As Double,
+                                      ByVal y As Double,
+                                      ByRef location As SiteInfo,
+                                      ByVal ra As Double,
+                                      ByVal dec As Double,
+                                      ByVal ref_option As RefractionOption,
+                                      ByRef zd As Double,
+                                      ByRef az As Double,
+                                      ByRef rar As Double,
                                       ByRef decr As Double)
 
         ''' <summary>
@@ -1423,7 +1423,7 @@ Namespace NOVAS
         '''    Parallax: arcseconds
         '''    Radial velocity: kilometers per second
         '''</pre></para></remarks>
-        <DispId(12)> Sub TransformHip(ByRef hipparcos As CatEntry, _
+        <DispId(12)> Sub TransformHip(ByRef hipparcos As CatEntry,
                                             ByRef fk5 As CatEntry)
 
         ''' <summary>
@@ -1458,11 +1458,11 @@ Namespace NOVAS
         ''' 4. This function uses TDB Julian dates internally, but no 
         '''    distinction between TDB and TT is necessary.
         '''</pre></remarks>
-        <DispId(13)> Sub TransformCat(ByVal [option] As TransformationOption, _
-                                            ByVal date_incat As Double, _
-                                            ByRef incat As CatEntry, _
-                                            ByVal date_newcat As Double, _
-                                            ByRef newcat_id As Byte(), _
+        <DispId(13)> Sub TransformCat(ByVal [option] As TransformationOption,
+                                            ByVal date_incat As Double,
+                                            ByRef incat As CatEntry,
+                                            ByVal date_newcat As Double,
+                                            ByRef newcat_id As Byte(),
                                             ByRef newcat As CatEntry)
 
         ''' <summary>
@@ -1473,9 +1473,9 @@ Namespace NOVAS
         ''' <param name="ee"> Equation of the equinoxes (seconds of time). [Note: this  quantity is computed by function 'earthtilt'.]</param>
         ''' <param name="gst">Greenwich apparent sidereal time, in hours.</param>
         ''' <remarks></remarks>
-        <DispId(14)> Sub SiderealTime(ByVal jd_high As Double, _
-                                            ByVal jd_low As Double, _
-                                            ByVal ee As Double, _
+        <DispId(14)> Sub SiderealTime(ByVal jd_high As Double,
+                                            ByVal jd_low As Double,
+                                            ByVal ee As Double,
                                             ByRef gst As Double)
 
         ''' <summary>
@@ -1498,11 +1498,11 @@ Namespace NOVAS
         ''' <param name="dpsi">OUT: Nutation in longitude in arcseconds at 'tjd'.</param>
         ''' <param name="deps">OUT: Nutation in obliquity in arcseconds at 'tjd'.</param>
         ''' <remarks></remarks>
-        <DispId(16)> Sub EarthTilt(ByVal tjd As Double, _
-                                        ByRef mobl As Double, _
-                                        ByRef tobl As Double, _
-                                        ByRef eq As Double, _
-                                        ByRef dpsi As Double, _
+        <DispId(16)> Sub EarthTilt(ByVal tjd As Double,
+                                        ByRef mobl As Double,
+                                        ByRef tobl As Double,
+                                        ByRef eq As Double,
+                                        ByRef dpsi As Double,
                                         ByRef deps As Double)
 
         ''' <summary>
@@ -1516,7 +1516,7 @@ Namespace NOVAS
         ''' <para>3. Daily values of the offsets are published, for example, in IERS Bulletins A and B.</para>
         ''' <para>4. This function is the "C" version of Fortran NOVAS routine "celpol".</para>
         ''' </remarks>
-        <DispId(17)> Sub CelPole(ByVal del_dpsi As Double, _
+        <DispId(17)> Sub CelPole(ByVal del_dpsi As Double,
                                       ByVal del_deps As Double)
 
         ''' <summary>
@@ -1535,10 +1535,10 @@ Namespace NOVAS
         ''' 10+n ... where n is the error code from 'solarsystem'.
         ''' 20+n ... where n is the error code from 'readeph'.</pre></returns>
         ''' <remarks></remarks>
-        <DispId(18)> Function Ephemeris(ByVal tjd As Double, _
-                                        ByRef cel_obj As BodyDescription, _
-                                        ByVal origin As Origin, _
-                                        ByRef pos As Double(), _
+        <DispId(18)> Function Ephemeris(ByVal tjd As Double,
+                                        ByRef cel_obj As BodyDescription,
+                                        ByVal origin As Origin,
+                                        ByRef pos As Double(),
                                         ByRef vel As Double()) As Short
 
         ''' <summary>
@@ -1559,10 +1559,10 @@ Namespace NOVAS
         ''' 2...Invalid value of 'body'.
         '''</pre></returns>
         ''' <remarks> Provides the position and velocity of the Earth at epoch 'tjd' by evaluating a closed-form theory without reference to an  external file.  This function can also provide the position and velocity of the Sun.</remarks>
-        <DispId(19)> Function SolarSystem(ByVal tjd As Double, _
-                                               ByVal body As Body, _
-                                               ByVal origin As Origin, _
-                                               ByRef pos As Double(), _
+        <DispId(19)> Function SolarSystem(ByVal tjd As Double,
+                                               ByVal body As Body,
+                                               ByVal origin As Origin,
+                                               ByRef pos As Double(),
                                                ByRef vel As Double()) As Short
 
         ''' <summary>
@@ -1577,8 +1577,8 @@ Namespace NOVAS
         ''' 2...Both vec[0] and vec[1] are zero, but vec[2] is nonzero; 'ra' is indeterminate.</pre>
         ''' </returns>
         ''' <remarks></remarks>
-        <DispId(20)> Function Vector2RADec(ByVal pos As Double(), _
-                                                ByRef ra As Double, _
+        <DispId(20)> Function Vector2RADec(ByVal pos As Double(),
+                                                ByRef ra As Double,
                                                 ByRef dec As Double) As Short
 
         ''' <summary>
@@ -1598,9 +1598,9 @@ Namespace NOVAS
         ''' <param name="dist">Distance</param>
         ''' <param name="pos">Position vector, equatorial rectangular coordinates (AU).</param>
         ''' <remarks></remarks>
-        <DispId(22)> Sub RADec2Vector(ByVal ra As Double, _
-                                              ByVal dec As Double, _
-                                              ByVal dist As Double, _
+        <DispId(22)> Sub RADec2Vector(ByVal ra As Double,
+                                              ByVal dec As Double,
+                                              ByVal dist As Double,
                                               ByRef pos As Double())
 
 
@@ -1619,12 +1619,12 @@ Namespace NOVAS
         ''' >0...Error code from function 'solarsystem'.</pre>
         ''' </returns>
         ''' <remarks></remarks>
-        <DispId(23)> Function GetEarth(ByVal tjd As Double, _
-                                            ByRef earth As BodyDescription, _
-                                            ByRef tdb As Double, _
-                                            ByRef bary_earthp As Double(), _
-                                            ByRef bary_earthv As Double(), _
-                                            ByRef helio_earthp As Double(), _
+        <DispId(23)> Function GetEarth(ByVal tjd As Double,
+                                            ByRef earth As BodyDescription,
+                                            ByRef tdb As Double,
+                                            ByRef bary_earthp As Double(),
+                                            ByRef bary_earthv As Double(),
+                                            ByRef helio_earthp As Double(),
                                             ByRef helio_earthv As Double()) As Short
 
         '
@@ -1647,11 +1647,11 @@ Namespace NOVAS
         ''' place at date 'tjd'.  Proper motion, parallax and radial velocity 
         ''' are assumed to be zero.
         '''</remarks>
-        <DispId(24)> Function MeanStar(ByVal tjd As Double, _
-                                                ByRef earth As BodyDescription, _
-                                                ByVal ra As Double, _
-                                                ByVal dec As Double, _
-                                                ByRef mra As Double, _
+        <DispId(24)> Function MeanStar(ByVal tjd As Double,
+                                                ByRef earth As BodyDescription,
+                                                ByVal ra As Double,
+                                                ByVal dec As Double,
+                                                ByRef mra As Double,
                                                 ByRef mdec As Double) As Short
 
         ''' <summary>
@@ -1664,11 +1664,11 @@ Namespace NOVAS
         ''' <param name="vece"> Vector in geocentric rectangular Earth-fixed system, referred to geographic equator and Greenwich meridian.</param>
         ''' <param name="vecs">OUT: Vector in geocentric rectangular space-fixed system, referred to mean equator and equinox of J2000.0.</param>
         ''' <remarks>Transforms a vector from an Earth-fixed geographic system to a space-fixed system based on mean equator and equinox of J2000.0; applies rotations for wobble, spin, nutation, and precession.</remarks>
-        <DispId(25)> Sub Pnsw(ByVal tjd As Double, _
-                                   ByVal gast As Double, _
-                                   ByVal x As Double, _
-                                   ByVal y As Double, _
-                                   ByVal vece As Double(), _
+        <DispId(25)> Sub Pnsw(ByVal tjd As Double,
+                                   ByVal gast As Double,
+                                   ByVal x As Double,
+                                   ByVal y As Double,
+                                   ByVal vece As Double(),
                                    ByRef vecs As Double())
 
         ''' <summary>
@@ -1678,8 +1678,8 @@ Namespace NOVAS
         ''' <param name="pos1">Vector in geocentric rectangular rotating system, referred to rotational equator and orthogonal reference meridian.</param>
         ''' <param name="pos2">OUT: Vector in geocentric rectangular non-rotating system, referred to true equator and equinox of date.</param>
         ''' <remarks>Transforms geocentric rectangular coordinates from rotating system based on rotational equator and orthogonal reference meridian to  non-rotating system based on true equator and equinox of date.</remarks>
-        <DispId(26)> Sub Spin(ByVal st As Double, _
-                                   ByVal pos1 As Double(), _
+        <DispId(26)> Sub Spin(ByVal st As Double,
+                                   ByVal pos1 As Double(),
                                    ByRef pos2 As Double())
 
 
@@ -1691,9 +1691,9 @@ Namespace NOVAS
         ''' <param name="pos1">Vector in geocentric rectangular Earth-fixed system, referred to geographic equator and Greenwich meridian.</param>
         ''' <param name="pos2">OUT: Vector in geocentric rectangular rotating system, referred to rotational equator and orthogonal Greenwich meridian</param>
         ''' <remarks>Corrects Earth-fixed geocentric rectangular coordinates for polar motion.  Transforms a vector from Earth-fixed geographic system to rotating system based on rotational equator and orthogonal Greenwich meridian through axis of rotation.</remarks>
-        <DispId(27)> Sub Wobble(ByVal x As Double, _
-                                        ByVal y As Double, _
-                                        ByVal pos1 As Double(), _
+        <DispId(27)> Sub Wobble(ByVal x As Double,
+                                        ByVal y As Double,
+                                        ByVal pos1 As Double(),
                                         ByRef pos2 As Double())
 
         ''' <summary>
@@ -1704,9 +1704,9 @@ Namespace NOVAS
         ''' <param name="pos"> Position vector of observer with respect to center of Earth, equatorial rectangular coordinates, referred to true equator and equinox of date, components in AU.</param>
         ''' <param name="vel"> Velocity vector of observer with respect to center of Earth, equatorial rectangular coordinates, referred to true equator and equinox of date, components in AU/Day.</param>
         ''' <remarks></remarks>
-        <DispId(28)> Sub Terra(ByRef locale As SiteInfo, _
-                                       ByVal st As Double, _
-                                       ByRef pos As Double(), _
+        <DispId(28)> Sub Terra(ByRef locale As SiteInfo,
+                                       ByVal st As Double,
+                                       ByRef pos As Double(),
                                        ByRef vel As Double())
 
 
@@ -1719,10 +1719,10 @@ Namespace NOVAS
         ''' <param name="tjd2">TDB Julian date of second epoch.</param>
         ''' <param name="pos2">OUT: Position vector at second epoch.</param>
         ''' <remarks></remarks>
-        <DispId(29)> Sub ProperMotion(ByVal tjd1 As Double, _
-                                            ByVal pos As Double(), _
-                                            ByVal vel As Double(), _
-                                            ByVal tjd2 As Double, _
+        <DispId(29)> Sub ProperMotion(ByVal tjd1 As Double,
+                                            ByVal pos As Double(),
+                                            ByVal vel As Double(),
+                                            ByVal tjd2 As Double,
                                             ByRef pos2 As Double())
 
         ''' <summary>
@@ -1733,9 +1733,9 @@ Namespace NOVAS
         ''' <param name="pos2">OUT: Position vector, referred to origin at center of mass of the Earth, components in AU.</param>
         ''' <param name="lighttime">OUT: Light time from body to Earth in days.</param>
         ''' <remarks>This corrects for parallax.</remarks>
-        <DispId(30)> Sub BaryToGeo(ByVal pos As Double(), _
-                                          ByVal earthvector As Double(), _
-                                          ByRef pos2 As Double(), _
+        <DispId(30)> Sub BaryToGeo(ByVal pos As Double(),
+                                          ByVal earthvector As Double(),
+                                          ByRef pos2 As Double(),
                                           ByRef lighttime As Double)
 
         ''' <summary>
@@ -1746,8 +1746,8 @@ Namespace NOVAS
         ''' <param name="pos2">Position vector, referred to origin at center of mass of the Earth, corrected for gravitational deflection, components in AU.</param>
         ''' <returns>0...Everything OK.</returns>
         ''' <remarks>This function is valid for bodies within the solar system as well as for stars.</remarks>
-        <DispId(31)> Function SunField(ByVal pos As Double(), _
-                                             ByVal earthvector As Double(), _
+        <DispId(31)> Function SunField(ByVal pos As Double(),
+                                             ByVal earthvector As Double(),
                                              ByRef pos2 As Double()) As Short
 
         ''' <summary>
@@ -1759,9 +1759,9 @@ Namespace NOVAS
         ''' <param name="pos2">OUT: Position vector, referred to origin at center of mass of the Earth, corrected for aberration, components in AU</param>
         ''' <returns>0...Everything OK.</returns>
         ''' <remarks>Algorithm includes relativistic terms.</remarks>
-        <DispId(32)> Function Aberration(ByVal pos As Double(), _
-                                              ByVal vel As Double(), _
-                                              ByVal lighttime As Double, _
+        <DispId(32)> Function Aberration(ByVal pos As Double(),
+                                              ByVal vel As Double(),
+                                              ByVal lighttime As Double,
                                               ByRef pos2 As Double()) As Short
 
         ''' <summary>
@@ -1775,9 +1775,9 @@ Namespace NOVAS
         ''' <param name="pos2">OUT: Position vector, geocentric equatorial rectangular coordinates, referred to true equator and equinox of epoch.</param>
         ''' <returns>0...Everything OK.</returns>
         ''' <remarks>Inverse transformation may be applied by setting flag 'fn'.</remarks>
-        <DispId(33)> Function Nutate(ByVal tjd As Double, _
-                                          ByVal fn As NutationDirection, _
-                                          ByVal pos As Double(), _
+        <DispId(33)> Function Nutate(ByVal tjd As Double,
+                                          ByVal fn As NutationDirection,
+                                          ByVal pos As Double(),
                                           ByRef pos2 As Double()) As Short
 
         ''' <summary>
@@ -1788,8 +1788,8 @@ Namespace NOVAS
         ''' <param name="obliqnutation">OUT: Nutation in obliquity in arcseconds.</param>
         ''' <returns>0...Everything OK.</returns>
         ''' <remarks></remarks>
-        <DispId(34)> Function NutationAngles(ByVal tdbtime As Double, _
-                                                   ByRef longnutation As Double, _
+        <DispId(34)> Function NutationAngles(ByVal tdbtime As Double,
+                                                   ByRef longnutation As Double,
                                                    ByRef obliqnutation As Double) As Short
 
         ''' <summary>
@@ -1803,7 +1803,7 @@ Namespace NOVAS
         '''   a[3] = D (mean elongation of the Moon from the Sun)
         '''   a[4] = omega (mean longitude of the Moon's ascending node)</pre></param>
         ''' <remarks></remarks>
-        <DispId(35)> Sub FundArgs(ByVal t As Double, _
+        <DispId(35)> Sub FundArgs(ByVal t As Double,
                                         ByRef a As Double())
 
         ''' <summary>
@@ -1813,8 +1813,8 @@ Namespace NOVAS
         ''' <param name="tdtjd">OUT: TT (or TDT) Julian date.</param>
         ''' <param name="secdiff">OUT: Difference tdbjd-tdtjd, in seconds.</param>
         ''' <remarks>Computes the terrestrial time (TT) or terrestrial dynamical time (TDT) Julian date corresponding to a barycentric dynamical time (TDB) Julian date.</remarks>
-        <DispId(36)> Sub Tdb2Tdt(ByVal tdb As Double, _
-                                      ByRef tdtjd As Double, _
+        <DispId(36)> Sub Tdb2Tdt(ByVal tdb As Double,
+                                      ByRef tdtjd As Double,
                                       ByRef secdiff As Double)
 
         ''' <summary>
@@ -1830,9 +1830,9 @@ Namespace NOVAS
         ''' = 2 ... 'number' out of range
         '''</pre></returns>
         ''' <remarks></remarks>
-        <DispId(37)> Function SetBody(ByVal type As BodyType, _
-                                            ByVal number As Body, _
-                                            ByVal name As String, _
+        <DispId(37)> Function SetBody(ByVal type As BodyType,
+                                            ByVal number As Body,
+                                            ByVal name As String,
                                             ByRef cel_obj As BodyDescription) As Short
 
         'Public Shared Function readeph(ByVal mp As Integer, _
@@ -1855,15 +1855,15 @@ Namespace NOVAS
         ''' <param name="rad_vel">Radial velocity.</param>
         ''' <param name="star">OUT: Structure containing the input data</param>
         ''' <remarks></remarks>
-        <DispId(38)> Sub MakeCatEntry(ByVal catalog As String, _
-                                             ByVal star_name As String, _
-                                             ByVal star_num As Integer, _
-                                             ByVal ra As Double, _
-                                             ByVal dec As Double, _
-                                             ByVal pm_ra As Double, _
-                                             ByVal pm_dec As Double, _
-                                             ByVal parallax As Double, _
-                                             ByVal rad_vel As Double, _
+        <DispId(38)> Sub MakeCatEntry(ByVal catalog As String,
+                                             ByVal star_name As String,
+                                             ByVal star_num As Integer,
+                                             ByVal ra As Double,
+                                             ByVal dec As Double,
+                                             ByVal pm_ra As Double,
+                                             ByVal pm_dec As Double,
+                                             ByVal parallax As Double,
+                                             ByVal rad_vel As Double,
                                              ByRef star As CatEntry)
 
         ''' <summary>
@@ -1874,8 +1874,8 @@ Namespace NOVAS
         ''' <param name="zd_obs">bserved zenith distance, in degrees.</param>
         ''' <returns>Atmospheric refraction, in degrees.</returns>
         ''' <remarks>This version computes approximate refraction for optical wavelengths.</remarks>
-        <DispId(39)> Function Refract(ByRef location As SiteInfo, _
-                                           ByVal ref_option As Short, _
+        <DispId(39)> Function Refract(ByRef location As SiteInfo,
+                                           ByVal ref_option As Short,
                                            ByVal zd_obs As Double) As Double
 
         ''' <summary>
@@ -1887,9 +1887,9 @@ Namespace NOVAS
         ''' <param name="hour">Time in hours</param>
         ''' <returns>OUT: Julian date.</returns>
         ''' <remarks></remarks>
-        <DispId(40)> Function JulianDate(ByVal year As Short, _
-                                               ByVal month As Short, _
-                                               ByVal day As Short, _
+        <DispId(40)> Function JulianDate(ByVal year As Short,
+                                               ByVal month As Short,
+                                               ByVal day As Short,
                                                ByVal hour As Double) As Double
 
         ''' <summary>
@@ -1901,10 +1901,10 @@ Namespace NOVAS
         ''' <param name="day">OUT: Day number</param>
         ''' <param name="hour">OUT: Time in hours</param>
         ''' <remarks></remarks>
-        <DispId(41)> Sub CalDate(ByVal tjd As Double, _
-                                       ByRef year As Short, _
-                                       ByRef month As Short, _
-                                       ByRef day As Short, _
+        <DispId(41)> Sub CalDate(ByVal tjd As Double,
+                                       ByRef year As Short,
+                                       ByRef month As Short,
+                                       ByRef day As Short,
                                        ByRef hour As Double)
 
         ''' <summary>
@@ -1915,9 +1915,9 @@ Namespace NOVAS
         ''' <param name="dec">OUT: Declination referred to mean equator and equinox of date  (degrees).</param>
         ''' <param name="dis">OUT: Geocentric distance (AU).</param>
         ''' <remarks></remarks>
-        <DispId(42)> Sub SunEph(ByVal jd As Double, _
-                                           ByRef ra As Double, _
-                                           ByRef dec As Double, _
+        <DispId(42)> Sub SunEph(ByVal jd As Double,
+                                           ByRef ra As Double,
+                                           ByRef dec As Double,
                                            ByRef dis As Double)
 
         ''' <summary>
@@ -1941,7 +1941,7 @@ Namespace NOVAS
     ''' <remarks>Implemented by the NOVAS3 component
     ''' <para><b>Note: </b>This interface is now deprecated, please use INOVAS31 instead.</para>
     '''</remarks>
-    <Guid("5EF15982-D79E-42f7-B20B-E83232E2B86B"), ComVisible(True)> _
+    <Guid("5EF15982-D79E-42f7-B20B-E83232E2B86B"), ComVisible(True)>
     Public Interface INOVAS3
 
         ' PlanetEphemeris, ReadEph, SolarSystem and State relate to reading ephemeris values
@@ -1962,10 +1962,10 @@ Namespace NOVAS
         ''' </returns>
         ''' <remarks>This function accesses the JPL planetary ephemeris to give the position and velocity of the target 
         ''' object with respect to the center object.</remarks>
-        <DispId(1)> Function PlanetEphemeris(ByRef Tjd() As Double, _
-                                                     ByVal Target As Target, _
-                                                     ByVal Center As Target, _
-                                                     ByRef Position() As Double, _
+        <DispId(1)> Function PlanetEphemeris(ByRef Tjd() As Double,
+                                                     ByVal Target As Target,
+                                                     ByVal Center As Target,
+                                                     ByRef Position() As Double,
                                                      ByRef Velocity() As Double) As Short
 
         ''' <summary>
@@ -1983,9 +1983,9 @@ Namespace NOVAS
         ''' when NOVAS-C is used without the minor planet ephemerides.  If this function is called, an error of 9 will be returned.
         ''' </para>
         ''' </remarks>
-        <DispId(2)> Function ReadEph(ByVal Mp As Integer, _
-                                             ByVal Name As String, _
-                                             ByVal Jd As Double, _
+        <DispId(2)> Function ReadEph(ByVal Mp As Integer,
+                                             ByVal Name As String,
+                                             ByVal Jd As Double,
                                              ByRef Err As Integer) As Double()
 
         ''' <summary>
@@ -1999,10 +1999,10 @@ Namespace NOVAS
         ''' <param name="Vel">Velocity vector of 'body' at tjd; equatorial rectangular system referred to the ICRS.</param>
         ''' <returns>Always returns 0</returns>
         ''' <remarks></remarks>
-        <DispId(3)> Function SolarSystem(ByVal Tjd As Double, _
-                                                 ByVal Body As Body, _
-                                                 ByVal Origin As Origin, _
-                                                 ByRef Pos() As Double, _
+        <DispId(3)> Function SolarSystem(ByVal Tjd As Double,
+                                                 ByVal Body As Body,
+                                                 ByVal Origin As Origin,
+                                                 ByRef Pos() As Double,
                                                  ByRef Vel() As Double) As Short
 
         ''' <summary>
@@ -2036,9 +2036,9 @@ Namespace NOVAS
         ''' between then and epoch.
         ''' </para>
         ''' </remarks>
-        <DispId(4)> Function State(ByRef Jed() As Double, _
-                                           ByVal Target As Target, _
-                                           ByRef TargetPos() As Double, _
+        <DispId(4)> Function State(ByRef Jed() As Double,
+                                           ByVal Target As Target,
+                                           ByRef TargetPos() As Double,
                                            ByRef TargetVel() As Double) As Short
 
         ' The following methods come from NOVAS3
@@ -2051,9 +2051,9 @@ Namespace NOVAS
         ''' <param name="LightTime"> Light time from object to Earth in days.</param>
         ''' <param name="Pos2"> Position vector, referred to origin at center of mass of the Earth, corrected for aberration, components in AU</param>
         ''' <remarks>If 'lighttime' = 0 on input, this function will compute it.</remarks>
-        <DispId(5)> Sub Aberration(ByVal Pos() As Double, _
-                                            ByVal Vel() As Double, _
-                                            ByVal LightTime As Double, _
+        <DispId(5)> Sub Aberration(ByVal Pos() As Double,
+                                            ByVal Vel() As Double,
+                                            ByVal LightTime As Double,
                                             ByRef Pos2() As Double)
 
         ''' <summary>
@@ -2071,11 +2071,11 @@ Namespace NOVAS
         ''' > 10 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(6)> Function AppPlanet(ByVal JdTt As Double, _
-                                               ByVal SsBody As Object3, _
-                                               ByVal Accuracy As Accuracy, _
-                                               ByRef Ra As Double, _
-                                               ByRef Dec As Double, _
+        <DispId(6)> Function AppPlanet(ByVal JdTt As Double,
+                                               ByVal SsBody As Object3,
+                                               ByVal Accuracy As Accuracy,
+                                               ByRef Ra As Double,
+                                               ByRef Dec As Double,
                                                ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -2093,10 +2093,10 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(7)> Function AppStar(ByVal JdTt As Double, _
-                                             ByVal Star As CatEntry3, _
-                                             ByVal Accuracy As Accuracy, _
-                                             ByRef Ra As Double, _
+        <DispId(7)> Function AppStar(ByVal JdTt As Double,
+                                             ByVal Star As CatEntry3,
+                                             ByVal Accuracy As Accuracy,
+                                             ByRef Ra As Double,
                                              ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -2115,11 +2115,11 @@ Namespace NOVAS
         ''' > 10 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(8)> Function AstroPlanet(ByVal JdTt As Double, _
-                                                 ByVal SsBody As Object3, _
-                                                 ByVal Accuracy As Accuracy, _
-                                                 ByRef Ra As Double, _
-                                                 ByRef Dec As Double, _
+        <DispId(8)> Function AstroPlanet(ByVal JdTt As Double,
+                                                 ByVal SsBody As Object3,
+                                                 ByVal Accuracy As Accuracy,
+                                                 ByRef Ra As Double,
+                                                 ByRef Dec As Double,
                                                  ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -2136,10 +2136,10 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(9)> Function AstroStar(ByVal JdTt As Double, _
-                                               ByVal Star As CatEntry3, _
-                                               ByVal Accuracy As Accuracy, _
-                                               ByRef Ra As Double, _
+        <DispId(9)> Function AstroStar(ByVal JdTt As Double,
+                                               ByVal Star As CatEntry3,
+                                               ByVal Accuracy As Accuracy,
+                                               ByRef Ra As Double,
                                                ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -2150,9 +2150,9 @@ Namespace NOVAS
         ''' <param name="Pos2"> Position vector, referred to origin at center of mass of the Earth, components in AU.</param>
         ''' <param name="Lighttime">Light time from object to Earth in days.</param>
         ''' <remarks></remarks>
-        <DispId(10)> Sub Bary2Obs(ByVal Pos() As Double, _
-                                          ByVal PosObs() As Double, _
-                                          ByRef Pos2() As Double, _
+        <DispId(10)> Sub Bary2Obs(ByVal Pos() As Double,
+                                          ByVal PosObs() As Double,
+                                          ByRef Pos2() As Double,
                                           ByRef Lighttime As Double)
 
         ''' <summary>
@@ -2164,10 +2164,10 @@ Namespace NOVAS
         ''' <param name="Day">day number</param>
         ''' <param name="Hour">Fractional hour of the day</param>
         ''' <remarks></remarks>
-        <DispId(11)> Sub CalDate(ByVal Tjd As Double, _
-                                         ByRef Year As Short, _
-                                         ByRef Month As Short, _
-                                         ByRef Day As Short, _
+        <DispId(11)> Sub CalDate(ByVal Tjd As Double,
+                                         ByRef Year As Short,
+                                         ByRef Month As Short,
+                                         ByRef Day As Short,
                                          ByRef Hour As Double)
 
         ''' <summary>
@@ -2182,9 +2182,9 @@ Namespace NOVAS
         ''' 1 ... Invalid value of 'Type'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(12)> Function CelPole(ByVal Tjd As Double, _
-                                              ByVal Type As PoleOffsetCorrection, _
-                                              ByVal Dpole1 As Double, _
+        <DispId(12)> Function CelPole(ByVal Tjd As Double,
+                                              ByVal Type As PoleOffsetCorrection,
+                                              ByVal Dpole1 As Double,
                                               ByVal Dpole2 As Double) As Short
 
         ''' <summary>
@@ -2222,8 +2222,8 @@ Namespace NOVAS
         ''' </code>
         ''' </example>
         ''' </remarks>
-        <DispId(13)> Function CioArray(ByVal JdTdb As Double, _
-                                                ByVal NPts As Integer, _
+        <DispId(13)> Function CioArray(ByVal JdTdb As Double,
+                                                ByVal NPts As Integer,
                                                 ByRef Cio As ArrayList) As Short
 
         ''' <summary>
@@ -2247,12 +2247,12 @@ Namespace NOVAS
         ''' right ascension of the CIO at that date is required as input.  The right ascension of the CIO 
         ''' can be with respect to either the GCRS origin or the true equinox of date -- different algorithms 
         ''' are used in the two cases.</remarks>
-        <DispId(14)> Function CioBasis(ByVal JdTdbEquionx As Double, _
-                                               ByVal RaCioEquionx As Double, _
-                                               ByVal RefSys As ReferenceSystem, _
-                                               ByVal Accuracy As Accuracy, _
-                                               ByRef x As Double, _
-                                               ByRef y As Double, _
+        <DispId(14)> Function CioBasis(ByVal JdTdbEquionx As Double,
+                                               ByVal RaCioEquionx As Double,
+                                               ByVal RefSys As ReferenceSystem,
+                                               ByVal Accuracy As Accuracy,
+                                               ByRef x As Double,
+                                               ByRef y As Double,
                                                ByRef z As Double) As Short
 
         ''' <summary>
@@ -2268,9 +2268,9 @@ Namespace NOVAS
         ''' > 10 ... 10 + the error code from function 'CioArray'.
         ''' </pre></returns>
         ''' <remarks>  This function returns the location of the celestial intermediate origin (CIO) for a given Julian date, as a right ascension with respect to either the GCRS (geocentric ICRS) origin or the true equinox of date.  The CIO is always located on the true equator (= intermediate equator) of date.</remarks>
-        <DispId(15)> Function CioLocation(ByVal JdTdb As Double, _
-                                                  ByVal Accuracy As Accuracy, _
-                                                  ByRef RaCio As Double, _
+        <DispId(15)> Function CioLocation(ByVal JdTdb As Double,
+                                                  ByVal Accuracy As Accuracy,
+                                                  ByRef RaCio As Double,
                                                   ByRef RefSys As ReferenceSystem) As Short
 
         ''' <summary>
@@ -2287,8 +2287,8 @@ Namespace NOVAS
         ''' > 20 ... 20 + the error code from function 'CioBasis'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(16)> Function CioRa(ByVal JdTt As Double, _
-                                            ByVal Accuracy As Accuracy, _
+        <DispId(16)> Function CioRa(ByVal JdTt As Double,
+                                            ByVal Accuracy As Accuracy,
                                             ByRef RaCio As Double) As Short
 
         ''' <summary>
@@ -2306,7 +2306,7 @@ Namespace NOVAS
         ''' that is closest to solar system body (positive if light passes body before hitting observer, i.e., if 
         ''' 'Pos1' is within 90 degrees of 'PosObs').
         ''' </remarks>
-        <DispId(17)> Function DLight(ByVal Pos1() As Double, _
+        <DispId(17)> Function DLight(ByVal Pos1() As Double,
                                              ByVal PosObs() As Double) As Double
 
         ''' <summary>
@@ -2326,10 +2326,10 @@ Namespace NOVAS
         ''' set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. 
         ''' Except for the output from this case, all vectors are assumed to be with respect to a dynamical system.
         ''' </remarks>
-        <DispId(18)> Function Ecl2EquVec(ByVal JdTt As Double, _
-                                                 ByVal CoordSys As CoordSys, _
-                                                 ByVal Accuracy As Accuracy, _
-                                                 ByVal Pos1() As Double, _
+        <DispId(18)> Function Ecl2EquVec(ByVal JdTt As Double,
+                                                 ByVal CoordSys As CoordSys,
+                                                 ByVal Accuracy As Accuracy,
+                                                 ByVal Pos1() As Double,
                                                  ByRef Pos2() As Double) As Short
 
         ''' <summary>
@@ -2343,8 +2343,8 @@ Namespace NOVAS
         ''' Series from IERS Conventions (2003), Chapter 5, Table 5.2C, with some adjustments to coefficient values 
         ''' copied from IERS function 'eect2000', which has a more complete series.
         ''' </remarks>
-        <DispId(19)> Function EeCt(ByVal JdHigh As Double, _
-                                           ByVal JdLow As Double, _
+        <DispId(19)> Function EeCt(ByVal JdHigh As Double,
+                                           ByVal JdLow As Double,
                                            ByVal Accuracy As Accuracy) As Double
 
         ''' <summary>
@@ -2365,11 +2365,11 @@ Namespace NOVAS
         ''' 20+n ... where n is the error code from 'ReadEph'.
         ''' </pre></returns>
         ''' <remarks>It is recommended that the input structure 'cel_obj' be created using function 'MakeObject' in file novas.c.</remarks>
-        <DispId(20)> Function Ephemeris(ByVal Jd() As Double, _
-                                                ByVal CelObj As Object3, _
-                                                ByVal Origin As Origin, _
-                                                ByVal Accuracy As Accuracy, _
-                                                ByRef Pos() As Double, _
+        <DispId(20)> Function Ephemeris(ByVal Jd() As Double,
+                                                ByVal CelObj As Object3,
+                                                ByVal Origin As Origin,
+                                                ByVal Accuracy As Accuracy,
+                                                ByRef Pos() As Double,
                                                 ByRef Vel() As Double) As Short
 
         ''' <summary>
@@ -2391,12 +2391,12 @@ Namespace NOVAS
         ''' set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. 
         ''' Except for the input to this case, all input coordinates are dynamical.
         ''' </remarks>
-        <DispId(21)> Function Equ2Ecl(ByVal JdTt As Double, _
-                                              ByVal CoordSys As CoordSys, _
-                                              ByVal Accuracy As Accuracy, _
-                                              ByVal Ra As Double, _
-                                              ByVal Dec As Double, _
-                                              ByRef ELon As Double, _
+        <DispId(21)> Function Equ2Ecl(ByVal JdTt As Double,
+                                              ByVal CoordSys As CoordSys,
+                                              ByVal Accuracy As Accuracy,
+                                              ByVal Ra As Double,
+                                              ByVal Dec As Double,
+                                              ByRef ELon As Double,
                                               ByRef ELat As Double) As Short
 
         ''' <summary>
@@ -2414,10 +2414,10 @@ Namespace NOVAS
         ''' <remarks>To convert an ICRS vector to an ecliptic vector (mean ecliptic and equinox of J2000.0 only), 
         ''' set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. Except for 
         ''' the input to this case, all vectors are assumed to be with respect to a dynamical system.</remarks>
-        <DispId(22)> Function Equ2EclVec(ByVal JdTt As Double, _
-                                                 ByVal CoordSys As CoordSys, _
-                                                 ByVal Accuracy As Accuracy, _
-                                                 ByVal Pos1() As Double, _
+        <DispId(22)> Function Equ2EclVec(ByVal JdTt As Double,
+                                                 ByVal CoordSys As CoordSys,
+                                                 ByVal Accuracy As Accuracy,
+                                                 ByVal Pos1() As Double,
                                                  ByRef Pos2() As Double) As Short
 
         ''' <summary>
@@ -2428,9 +2428,9 @@ Namespace NOVAS
         ''' <param name="GLon">Galactic longitude in degrees.</param>
         ''' <param name="GLat">Galactic latitude in degrees.</param>
         ''' <remarks></remarks>
-        <DispId(23)> Sub Equ2Gal(ByVal RaI As Double, _
-                                         ByVal DecI As Double, _
-                                         ByRef GLon As Double, _
+        <DispId(23)> Sub Equ2Gal(ByVal RaI As Double,
+                                         ByVal DecI As Double,
+                                         ByRef GLon As Double,
                                          ByRef GLat As Double)
 
         ''' <summary>
@@ -2455,18 +2455,18 @@ Namespace NOVAS
         ''' <remarks>This function transforms topocentric right ascension and declination to zenith distance and azimuth.  
         ''' It uses a method that properly accounts for polar motion, which is significant at the sub-arcsecond level.  
         ''' This function can also adjust coordinates for atmospheric refraction.</remarks>
-        <DispId(24)> Sub Equ2Hor(ByVal Jd_Ut1 As Double, _
-                                         ByVal DeltT As Double, _
-                                         ByVal Accuracy As Accuracy, _
-                                         ByVal x As Double, _
-                                         ByVal y As Double, _
-                                         ByVal Location As OnSurface, _
-                                         ByVal Ra As Double, _
-                                         ByVal Dec As Double, _
-                                         ByVal RefOption As RefractionOption, _
-                                         ByRef Zd As Double, _
-                                         ByRef Az As Double, _
-                                         ByRef RaR As Double, _
+        <DispId(24)> Sub Equ2Hor(ByVal Jd_Ut1 As Double,
+                                         ByVal DeltT As Double,
+                                         ByVal Accuracy As Accuracy,
+                                         ByVal x As Double,
+                                         ByVal y As Double,
+                                         ByVal Location As OnSurface,
+                                         ByVal Ra As Double,
+                                         ByVal Dec As Double,
+                                         ByVal RefOption As RefractionOption,
+                                         ByRef Zd As Double,
+                                         ByRef Az As Double,
+                                         ByRef RaR As Double,
                                          ByRef DecR As Double)
 
         ''' <summary>
@@ -2480,7 +2480,7 @@ Namespace NOVAS
         ''' in days from J2000 (t = JdHigh + JdLow - T0), but it avoids many two-PI 'wraps' that 
         ''' decrease precision (adopted from SOFA Fortran routine iau_era00; see also expression at top 
         ''' of page 35 of IERS Conventions (1996)).</remarks>
-        <DispId(25)> Function Era(ByVal JdHigh As Double, _
+        <DispId(25)> Function Era(ByVal JdHigh As Double,
                                           ByVal JdLow As Double) As Double
 
         ''' <summary>
@@ -2495,12 +2495,12 @@ Namespace NOVAS
         ''' <param name="Deps">Nutation in obliquity in arcseconds at 'JdTdb'.</param>
         ''' <remarks>Values of the celestial pole offsets 'PSI_COR' and 'EPS_COR' are set using function 'cel_pole', 
         ''' if desired.  See the prolog of 'cel_pole' for details.</remarks>
-        <DispId(26)> Sub ETilt(ByVal JdTdb As Double, _
-                                       ByVal Accuracy As Accuracy, _
-                                       ByRef Mobl As Double, _
-                                       ByRef Tobl As Double, _
-                                       ByRef Ee As Double, _
-                                       ByRef Dpsi As Double, _
+        <DispId(26)> Sub ETilt(ByVal JdTdb As Double,
+                                       ByVal Accuracy As Accuracy,
+                                       ByRef Mobl As Double,
+                                       ByRef Tobl As Double,
+                                       ByRef Ee As Double,
+                                       ByRef Dpsi As Double,
                                        ByRef Deps As Double)
 
         ''' <summary>
@@ -2511,8 +2511,8 @@ Namespace NOVAS
         ''' ICRS to dynamical transformation.</param>
         ''' <param name="Pos2">Position vector, equatorial rectangular coordinates.</param>
         ''' <remarks></remarks>
-        <DispId(27)> Sub FrameTie(ByVal Pos1() As Double, _
-                                          ByVal Direction As FrameConversionDirection, _
+        <DispId(27)> Sub FrameTie(ByVal Pos1() As Double,
+                                          ByVal Direction As FrameConversionDirection,
                                           ByRef Pos2() As Double)
 
         ''' <summary>
@@ -2532,7 +2532,7 @@ Namespace NOVAS
         '''                precession = 5028.8200 arcsec/cy)
         ''' </pre>
         ''' </remarks>
-        <DispId(28)> Sub FundArgs(ByVal t As Double, _
+        <DispId(28)> Sub FundArgs(ByVal t As Double,
                                           ByRef a() As Double)
 
         ''' <summary>
@@ -2555,12 +2555,12 @@ Namespace NOVAS
         ''' </pre>></returns>
         ''' <remarks>For coordinates with respect to the true equator of date, the origin of right ascension can be either the true equinox or the celestial intermediate origin (CIO).
         ''' <para> This function only supports the CIO-based method.</para></remarks>
-        <DispId(29)> Function Gcrs2Equ(ByVal JdTt As Double, _
-                                               ByVal CoordSys As CoordSys, _
-                                               ByVal Accuracy As Accuracy, _
-                                               ByVal RaG As Double, _
-                                               ByVal DecG As Double, _
-                                               ByRef Ra As Double, _
+        <DispId(29)> Function Gcrs2Equ(ByVal JdTt As Double,
+                                               ByVal CoordSys As CoordSys,
+                                               ByVal Accuracy As Accuracy,
+                                               ByVal RaG As Double,
+                                               ByVal DecG As Double,
+                                               ByRef Ra As Double,
                                                ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -2580,11 +2580,11 @@ Namespace NOVAS
         ''' 1 ... invalid value of 'Accuracy'.
         ''' </pre></returns>
         ''' <remarks>The final vectors are expressed in the GCRS.</remarks>
-        <DispId(30)> Function GeoPosVel(ByVal JdTt As Double, _
-                                        ByVal DeltaT As Double, _
-                                        ByVal Accuracy As Accuracy, _
-                                        ByVal Obs As Observer, _
-                                        ByRef Pos() As Double, _
+        <DispId(30)> Function GeoPosVel(ByVal JdTt As Double,
+                                        ByVal DeltaT As Double,
+                                        ByVal Accuracy As Accuracy,
+                                        ByVal Obs As Observer,
+                                        ByRef Pos() As Double,
                                         ByRef Vel() As Double) As Short
 
         ''' <summary>
@@ -2611,11 +2611,11 @@ Namespace NOVAS
         ''' calculation.  In both cases, if the observer is not at the geocenter, the deflection due to the Earth is included.
         ''' </para>
         ''' </remarks>
-        <DispId(31)> Function GravDef(ByVal JdTdb As Double, _
-                                              ByVal LocCode As EarthDeflection, _
-                                              ByVal Accuracy As Accuracy, _
-                                              ByVal Pos1() As Double, _
-                                              ByVal PosObs() As Double, _
+        <DispId(31)> Function GravDef(ByVal JdTdb As Double,
+                                              ByVal LocCode As EarthDeflection,
+                                              ByVal Accuracy As Accuracy,
+                                              ByVal Pos1() As Double,
+                                              ByVal PosObs() As Double,
                                               ByRef Pos2() As Double) As Short
 
         ''' <summary>
@@ -2632,10 +2632,10 @@ Namespace NOVAS
         ''' <param name="Pos2">Position vector of observed object, with respect to origin at observer 
         ''' (or the geocenter), corrected for gravitational deflection, components in AU.</param>
         ''' <remarks>This function valid for an observed body within the solar system as well as for a star.</remarks>
-        <DispId(32)> Sub GravVec(ByVal Pos1() As Double, _
-                                         ByVal PosObs() As Double, _
-                                         ByVal PosBody() As Double, _
-                                         ByVal RMass As Double, _
+        <DispId(32)> Sub GravVec(ByVal Pos1() As Double,
+                                         ByVal PosObs() As Double,
+                                         ByVal PosBody() As Double,
+                                         ByVal RMass As Double,
                                          ByRef Pos2() As Double)
 
         ''' <summary>
@@ -2647,8 +2647,8 @@ Namespace NOVAS
         ''' <returns>Intermediate right ascension of the equinox, in hours (+ or -). If 'equinox' = 1 
         ''' (i.e true equinox), then the returned value is the equation of the origins.</returns>
         ''' <remarks></remarks>
-        <DispId(33)> Function IraEquinox(ByVal JdTdb As Double, _
-                                                ByVal Equinox As EquinoxType, _
+        <DispId(33)> Function IraEquinox(ByVal JdTdb As Double,
+                                                ByVal Equinox As EquinoxType,
                                                 ByVal Accuracy As Accuracy) As Double
 
         ''' <summary>
@@ -2662,9 +2662,9 @@ Namespace NOVAS
         ''' <remarks>This function makes no checks for a valid input calendar date. The input calendar date 
         ''' must be Gregorian. The input time value can be based on any UT-like time scale (UTC, UT1, TT, etc.) 
         ''' - output Julian date will have the same basis.</remarks>
-        <DispId(34)> Function JulianDate(ByVal Year As Short, _
-                                                 ByVal Month As Short, _
-                                                 ByVal Day As Short, _
+        <DispId(34)> Function JulianDate(ByVal Year As Short,
+                                                 ByVal Month As Short,
+                                                 ByVal Day As Short,
                                                  ByVal Hour As Double) As Double
 
         ''' <summary>
@@ -2685,12 +2685,12 @@ Namespace NOVAS
         ''' <![CDATA[>]]> 10 ... error is 10 + error from function 'SolarSystem'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(35)> Function LightTime(ByVal JdTdb As Double, _
-                                                ByVal SsObject As Object3, _
-                                                ByVal PosObs() As Double, _
-                                                ByVal TLight0 As Double, _
-                                                ByVal Accuracy As Accuracy, _
-                                                ByRef Pos() As Double, _
+        <DispId(35)> Function LightTime(ByVal JdTdb As Double,
+                                                ByVal SsObject As Object3,
+                                                ByVal PosObs() As Double,
+                                                ByVal TLight0 As Double,
+                                                ByVal Accuracy As Accuracy,
+                                                ByRef Pos() As Double,
                                                 ByRef TLight As Double) As Short
 
         ''' <summary>
@@ -2707,9 +2707,9 @@ Namespace NOVAS
         ''' refraction or oblateness is included).  The observer can be on or above the Earth.  
         ''' For an observer on the surface of the Earth, this function returns the approximate unrefracted 
         ''' altitude.</remarks>
-        <DispId(36)> Sub LimbAngle(ByVal PosObj() As Double, _
-                                           ByVal PosObs() As Double, _
-                                           ByRef LimbAng As Double, _
+        <DispId(36)> Sub LimbAngle(ByVal PosObj() As Double,
+                                           ByVal PosObs() As Double,
+                                           ByRef LimbAng As Double,
                                            ByRef NadirAng As Double)
 
         ''' <summary>
@@ -2729,13 +2729,13 @@ Namespace NOVAS
         ''' <![CDATA[>]]> 10 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(37)> Function LocalPlanet(ByVal JdTt As Double, _
-                                                  ByVal SsBody As Object3, _
-                                                  ByVal DeltaT As Double, _
-                                                  ByVal Position As OnSurface, _
-                                                  ByVal Accuracy As Accuracy, _
-                                                  ByRef Ra As Double, _
-                                                  ByRef Dec As Double, _
+        <DispId(37)> Function LocalPlanet(ByVal JdTt As Double,
+                                                  ByVal SsBody As Object3,
+                                                  ByVal DeltaT As Double,
+                                                  ByVal Position As OnSurface,
+                                                  ByVal Accuracy As Accuracy,
+                                                  ByRef Ra As Double,
+                                                  ByRef Dec As Double,
                                                   ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -2755,12 +2755,12 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(38)> Function LocalStar(ByVal JdTt As Double, _
-                                            ByVal DeltaT As Double, _
-                                            ByVal Star As CatEntry3, _
-                                            ByVal Position As OnSurface, _
-                                            ByVal Accuracy As Accuracy, _
-                                            ByRef Ra As Double, _
+        <DispId(38)> Function LocalStar(ByVal JdTt As Double,
+                                            ByVal DeltaT As Double,
+                                            ByVal Star As CatEntry3,
+                                            ByVal Position As OnSurface,
+                                            ByVal Accuracy As Accuracy,
+                                            ByRef Ra As Double,
                                             ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -2777,15 +2777,15 @@ Namespace NOVAS
         ''' <param name="RadVel">Radial velocity (kilometers/second).</param>
         ''' <param name="Star">CatEntry3 structure containing the input data</param>
         ''' <remarks></remarks>
-        <DispId(39)> Sub MakeCatEntry(ByVal StarName As String, _
-                                        ByVal Catalog As String, _
-                                        ByVal StarNum As Integer, _
-                                        ByVal Ra As Double, _
-                                        ByVal Dec As Double, _
-                                        ByVal PmRa As Double, _
-                                        ByVal PmDec As Double, _
-                                        ByVal Parallax As Double, _
-                                        ByVal RadVel As Double, _
+        <DispId(39)> Sub MakeCatEntry(ByVal StarName As String,
+                                        ByVal Catalog As String,
+                                        ByVal StarNum As Integer,
+                                        ByVal Ra As Double,
+                                        ByVal Dec As Double,
+                                        ByVal PmRa As Double,
+                                        ByVal PmDec As Double,
+                                        ByVal Parallax As Double,
+                                        ByVal RadVel As Double,
                                         ByRef Star As CatEntry3)
 
         ''' <summary>
@@ -2797,8 +2797,8 @@ Namespace NOVAS
         ''' <param name="ObsSpace">InSpace structure containing the position and velocity of an observer situated 
         ''' on a near-Earth spacecraft</param>
         ''' <remarks></remarks>
-        <DispId(40)> Sub MakeInSpace(ByVal ScPos() As Double, _
-                                         ByVal ScVel() As Double, _
+        <DispId(40)> Sub MakeInSpace(ByVal ScPos() As Double,
+                                         ByVal ScVel() As Double,
                                          ByRef ObsSpace As InSpace)
 
         ''' <summary>
@@ -2818,10 +2818,10 @@ Namespace NOVAS
         ''' 2 ... 'Number' out of range
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(41)> Function MakeObject(ByVal Type As ObjectType, _
-                                               ByVal Number As Short, _
-                                               ByVal Name As String, _
-                                               ByVal StarData As CatEntry3, _
+        <DispId(41)> Function MakeObject(ByVal Type As ObjectType,
+                                               ByVal Number As Short,
+                                               ByVal Name As String,
+                                               ByVal StarData As CatEntry3,
                                                ByRef CelObj As Object3) As Short
 
         ''' <summary>
@@ -2839,9 +2839,9 @@ Namespace NOVAS
         ''' 1 ... input value of 'Where' is out-of-range.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(42)> Function MakeObserver(ByVal Where As ObserverLocation, _
-                                              ByVal ObsSurface As OnSurface, _
-                                              ByVal ObsSpace As InSpace, _
+        <DispId(42)> Function MakeObserver(ByVal Where As ObserverLocation,
+                                              ByVal ObsSurface As OnSurface,
+                                              ByVal ObsSpace As InSpace,
                                               ByRef Obs As Observer) As Short
 
         ''' <summary>
@@ -2860,8 +2860,8 @@ Namespace NOVAS
         ''' <param name="ObsInSpace">Structure containing the position and velocity of an observer 
         ''' situated on a near-Earth spacecraft</param>
         ''' <remarks>Both input vectors are with respect to true equator and equinox of date.</remarks>
-        <DispId(44)> Sub MakeObserverInSpace(ByVal ScPos() As Double, _
-                                                ByVal ScVel() As Double, _
+        <DispId(44)> Sub MakeObserverInSpace(ByVal ScPos() As Double,
+                                                ByVal ScVel() As Double,
                                                 ByRef ObsInSpace As Observer)
 
         ''' <summary>
@@ -2876,11 +2876,11 @@ Namespace NOVAS
         ''' <param name="ObsOnSurface">Structure containing the location of and weather for an observer on 
         ''' the surface of the Earth</param>
         ''' <remarks></remarks>
-        <DispId(45)> Sub MakeObserverOnSurface(ByVal Latitude As Double, _
-                                                ByVal Longitude As Double, _
-                                                ByVal Height As Double, _
-                                                ByVal Temperature As Double, _
-                                                ByVal Pressure As Double, _
+        <DispId(45)> Sub MakeObserverOnSurface(ByVal Latitude As Double,
+                                                ByVal Longitude As Double,
+                                                ByVal Height As Double,
+                                                ByVal Temperature As Double,
+                                                ByVal Pressure As Double,
                                                 ByRef ObsOnSurface As Observer)
 
         ''' <summary>
@@ -2895,11 +2895,11 @@ Namespace NOVAS
         ''' <param name="ObsSurface">Structure containing the location of and weather for an 
         ''' observer on the surface of the Earth.</param>
         ''' <remarks></remarks>
-        <DispId(46)> Sub MakeOnSurface(ByVal Latitude As Double, _
-                                        ByVal Longitude As Double, _
-                                        ByVal Height As Double, _
-                                        ByVal Temperature As Double, _
-                                        ByVal Pressure As Double, _
+        <DispId(46)> Sub MakeOnSurface(ByVal Latitude As Double,
+                                        ByVal Longitude As Double,
+                                        ByVal Height As Double,
+                                        ByVal Temperature As Double,
+                                        ByVal Pressure As Double,
                                         ByRef ObsSurface As OnSurface)
 
         ''' <summary>
@@ -2927,11 +2927,11 @@ Namespace NOVAS
         ''' > 20 ... Error from function 'AppStar'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(48)> Function MeanStar(ByVal JdTt As Double, _
-                                          ByVal Ra As Double, _
-                                          ByVal Dec As Double, _
-                                          ByVal Accuracy As Accuracy, _
-                                          ByRef IRa As Double, _
+        <DispId(48)> Function MeanStar(ByVal JdTt As Double,
+                                          ByVal Ra As Double,
+                                          ByVal Dec As Double,
+                                          ByVal Accuracy As Accuracy,
+                                          ByRef IRa As Double,
                                           ByRef IDec As Double) As Short
 
         ''' <summary>
@@ -2954,10 +2954,10 @@ Namespace NOVAS
         ''' <param name="Pos2">Position vector, geocentric equatorial rectangular coordinates, referred to 
         ''' true equator and equinox of epoch.</param>
         ''' <remarks> Inverse transformation may be applied by setting flag 'direction'</remarks>
-        <DispId(50)> Sub Nutation(ByVal JdTdb As Double, _
-                                      ByVal Direction As NutationDirection, _
-                                      ByVal Accuracy As Accuracy, _
-                                      ByVal Pos() As Double, _
+        <DispId(50)> Sub Nutation(ByVal JdTdb As Double,
+                                      ByVal Direction As NutationDirection,
+                                      ByVal Accuracy As Accuracy,
+                                      ByVal Pos() As Double,
                                       ByRef Pos2() As Double)
 
         ''' <summary>
@@ -2974,9 +2974,9 @@ Namespace NOVAS
         ''' a specially truncated (and therefore faster) version of IAU 2000A, called 'NU2000K' is used.
         ''' </para>
         ''' </remarks>
-        <DispId(51)> Sub NutationAngles(ByVal t As Double, _
-                                          ByVal Accuracy As Accuracy, _
-                                          ByRef DPsi As Double, _
+        <DispId(51)> Sub NutationAngles(ByVal t As Double,
+                                          ByVal Accuracy As Accuracy,
+                                          ByRef DPsi As Double,
                                           ByRef DEps As Double)
 
         ''' <summary>
@@ -3020,12 +3020,12 @@ Namespace NOVAS
         ''' on surface of Earth or in a near-Earth satellite). </para>
         ''' <remarks>
         ''' </remarks>
-        <DispId(52)> Function Place(ByVal JdTt As Double, _
-                                       ByVal CelObject As Object3, _
-                                       ByVal Location As Observer, _
-                                       ByVal DeltaT As Double, _
-                                       ByVal CoordSys As CoordSys, _
-                                       ByVal Accuracy As Accuracy, _
+        <DispId(52)> Function Place(ByVal JdTt As Double,
+                                       ByVal CelObject As Object3,
+                                       ByVal Location As Observer,
+                                       ByVal DeltaT As Double,
+                                       ByVal CoordSys As CoordSys,
+                                       ByVal Accuracy As Accuracy,
                                        ByRef Output As SkyPos) As Short
 
         ''' <summary>
@@ -3040,9 +3040,9 @@ Namespace NOVAS
         ''' 1 ... Precession not to or from J2000.0; 'JdTdb1' or 'JdTdb2' not 2451545.0.
         ''' </pre></returns>
         ''' <remarks> One of the two epochs must be J2000.0.  The coordinates are referred to the mean dynamical equator and equinox of the two respective epochs.</remarks>
-        <DispId(53)> Function Precession(ByVal JdTdb1 As Double, _
-                                           ByVal Pos1() As Double, _
-                                           ByVal JdTdb2 As Double, _
+        <DispId(53)> Function Precession(ByVal JdTdb1 As Double,
+                                           ByVal Pos1() As Double,
+                                           ByVal JdTdb2 As Double,
                                            ByRef Pos2() As Double) As Short
 
         ''' <summary>
@@ -3054,10 +3054,10 @@ Namespace NOVAS
         ''' <param name="JdTdb2">TDB Julian date of second epoch.</param>
         ''' <param name="Pos2">Position vector at second epoch.</param>
         ''' <remarks></remarks>
-        <DispId(54)> Sub ProperMotion(ByVal JdTdb1 As Double, _
-                                       ByVal Pos() As Double, _
-                                       ByVal Vel() As Double, _
-                                       ByVal JdTdb2 As Double, _
+        <DispId(54)> Sub ProperMotion(ByVal JdTdb1 As Double,
+                                       ByVal Pos() As Double,
+                                       ByVal Vel() As Double,
+                                       ByVal JdTdb2 As Double,
                                        ByRef Pos2() As Double)
 
         ''' <summary>
@@ -3068,9 +3068,9 @@ Namespace NOVAS
         ''' <param name="Dist">Distance in AU</param>
         ''' <param name="Vector">Position vector, equatorial rectangular coordinates (AU).</param>
         ''' <remarks></remarks>
-        <DispId(55)> Sub RaDec2Vector(ByVal Ra As Double, _
-                                      ByVal Dec As Double, _
-                                      ByVal Dist As Double, _
+        <DispId(55)> Sub RaDec2Vector(ByVal Ra As Double,
+                                      ByVal Dec As Double,
+                                      ByVal Dist As Double,
                                       ByRef Vector() As Double)
 
         ''' <summary>
@@ -3091,13 +3091,13 @@ Namespace NOVAS
         ''' barycentric radial velocity measure, a scalar derived from spectroscopy.  Nearby stars with a known 
         ''' kinematic velocity vector (obtained independently of spectroscopy) can be treated like 
         ''' solar system objects.</remarks>
-        <DispId(56)> Sub RadVel(ByVal CelObject As Object3, _
-                                   ByVal Pos() As Double, _
-                                   ByVal Vel() As Double, _
-                                   ByVal VelObs() As Double, _
-                                   ByVal DObsGeo As Double, _
-                                   ByVal DObsSun As Double, _
-                                   ByVal DObjSun As Double, _
+        <DispId(56)> Sub RadVel(ByVal CelObject As Object3,
+                                   ByVal Pos() As Double,
+                                   ByVal Vel() As Double,
+                                   ByVal VelObs() As Double,
+                                   ByVal DObsGeo As Double,
+                                   ByVal DObsSun As Double,
+                                   ByVal DObjSun As Double,
                                    ByRef Rv As Double)
 
         ''' <summary>
@@ -3111,8 +3111,8 @@ Namespace NOVAS
         ''' <remarks>This version computes approximate refraction for optical wavelengths. This function 
         ''' can be used for planning observations or telescope pointing, but should not be used for the 
         ''' reduction of precise observations.</remarks>
-        <DispId(57)> Function Refract(ByVal Location As OnSurface, _
-                                        ByVal RefOption As RefractionOption, _
+        <DispId(57)> Function Refract(ByVal Location As OnSurface,
+                                        ByVal RefOption As RefractionOption,
                                         ByVal ZdObs As Double) As Double
 
         ''' <summary>
@@ -3133,12 +3133,12 @@ Namespace NOVAS
         ''' </pre></returns>
         ''' <remarks> The Julian date may be split at any point, but for highest precision, set 'JdHigh' 
         ''' to be the integral part of the Julian date, and set 'JdLow' to be the fractional part.</remarks>
-        <DispId(58)> Function SiderealTime(ByVal JdHigh As Double, _
-                                           ByVal JdLow As Double, _
-                                           ByVal DeltaT As Double, _
-                                           ByVal GstType As GstType, _
-                                           ByVal Method As Method, _
-                                           ByVal Accuracy As Accuracy, _
+        <DispId(58)> Function SiderealTime(ByVal JdHigh As Double,
+                                           ByVal JdLow As Double,
+                                           ByVal DeltaT As Double,
+                                           ByVal GstType As GstType,
+                                           ByVal Method As Method,
+                                           ByVal Accuracy As Accuracy,
                                            ByRef Gst As Double) As Short
 
         ''' <summary>
@@ -3148,8 +3148,8 @@ Namespace NOVAS
         ''' <param name="Pos1">Position vector.</param>
         ''' <param name="Pos2">Position vector expressed in new coordinate system rotated about z by 'angle'.</param>
         ''' <remarks></remarks>
-        <DispId(59)> Sub Spin(ByVal Angle As Double, _
-                              ByVal Pos1() As Double, _
+        <DispId(59)> Sub Spin(ByVal Angle As Double,
+                              ByVal Pos1() As Double,
                               ByRef Pos2() As Double)
 
         ''' <summary>
@@ -3159,8 +3159,8 @@ Namespace NOVAS
         ''' <param name="Pos">Position vector, equatorial rectangular coordinates, components in AU.</param>
         ''' <param name="Vel">Velocity vector, equatorial rectangular coordinates, components in AU/Day.</param>
         ''' <remarks></remarks>
-        <DispId(60)> Sub StarVectors(ByVal Star As CatEntry3, _
-                                      ByRef Pos() As Double, _
+        <DispId(60)> Sub StarVectors(ByVal Star As CatEntry3,
+                                      ByRef Pos() As Double,
                                       ByRef Vel() As Double)
 
         ''' <summary>
@@ -3173,8 +3173,8 @@ Namespace NOVAS
         ''' <remarks>Expression used in this function is a truncated form of a longer and more precise 
         ''' series given in: Explanatory Supplement to the Astronomical Almanac, pp. 42-44 and p. 316. 
         ''' The result is good to about 10 microseconds.</remarks>
-        <DispId(61)> Sub Tdb2Tt(ByVal TdbJd As Double, _
-                                    ByRef TtJd As Double, _
+        <DispId(61)> Sub Tdb2Tt(ByVal TdbJd As Double,
+                                    ByRef TtJd As Double,
                                     ByRef SecDiff As Double)
 
         ''' <summary>
@@ -3206,15 +3206,15 @@ Namespace NOVAS
         ''' <para>
         ''' The 'option' flag only works for the equinox-based method.
         '''</para></remarks>
-        <DispId(62)> Function Ter2Cel(ByVal JdHigh As Double, _
-                                        ByVal JdLow As Double, _
-                                        ByVal DeltaT As Double, _
-                                        ByVal Method As Method, _
-                                        ByVal Accuracy As Accuracy, _
-                                        ByVal OutputOption As OutputVectorOption, _
-                                        ByVal x As Double, _
-                                        ByVal y As Double, _
-                                        ByVal VecT() As Double, _
+        <DispId(62)> Function Ter2Cel(ByVal JdHigh As Double,
+                                        ByVal JdLow As Double,
+                                        ByVal DeltaT As Double,
+                                        ByVal Method As Method,
+                                        ByVal Accuracy As Accuracy,
+                                        ByVal OutputOption As OutputVectorOption,
+                                        ByVal x As Double,
+                                        ByVal y As Double,
+                                        ByVal VecT() As Double,
                                         ByRef VecC() As Double) As Short
 
         ''' <summary>
@@ -3234,9 +3234,9 @@ Namespace NOVAS
         ''' to an inertial system, the very small velocity component (several meters/day) due to the precession 
         ''' and nutation of the Earth's axis is not accounted for here.</para>
         ''' </remarks>
-        <DispId(63)> Sub Terra(ByVal Location As OnSurface, _
-                               ByVal St As Double, _
-                               ByRef Pos() As Double, _
+        <DispId(63)> Sub Terra(ByVal Location As OnSurface,
+                               ByVal St As Double,
+                               ByRef Pos() As Double,
                                ByRef Vel() As Double)
 
         ''' <summary>
@@ -3256,13 +3256,13 @@ Namespace NOVAS
         ''' > 10 ... Error code from function 'Place'.
         '''</pre></returns>
         ''' <remarks></remarks>
-        <DispId(64)> Function TopoPlanet(ByVal JdTt As Double, _
-                                            ByVal SsBody As Object3, _
-                                            ByVal DeltaT As Double, _
-                                            ByVal Position As OnSurface, _
-                                            ByVal Accuracy As Accuracy, _
-                                            ByRef Ra As Double, _
-                                            ByRef Dec As Double, _
+        <DispId(64)> Function TopoPlanet(ByVal JdTt As Double,
+                                            ByVal SsBody As Object3,
+                                            ByVal DeltaT As Double,
+                                            ByVal Position As OnSurface,
+                                            ByVal Accuracy As Accuracy,
+                                            ByRef Ra As Double,
+                                            ByRef Dec As Double,
                                             ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -3282,12 +3282,12 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(65)> Function TopoStar(ByVal JdTt As Double, _
-                                          ByVal DeltaT As Double, _
-                                          ByVal Star As CatEntry3, _
-                                          ByVal Position As OnSurface, _
-                                          ByVal Accuracy As Accuracy, _
-                                          ByRef Ra As Double, _
+        <DispId(65)> Function TopoStar(ByVal JdTt As Double,
+                                          ByVal DeltaT As Double,
+                                          ByVal Star As CatEntry3,
+                                          ByVal Position As OnSurface,
+                                          ByVal Accuracy As Accuracy,
+                                          ByRef Ra As Double,
                                           ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -3324,11 +3324,11 @@ Namespace NOVAS
         ''' with modern values.  In particular, it should not be used for catalogs whose positions and 
         ''' proper motions were derived by assuming a precession constant significantly different from 
         ''' the value implicit in function 'precession'.</para></remarks>
-        <DispId(66)> Function TransformCat(ByVal TransformOption As TransformationOption3, _
-                                            ByVal DateInCat As Double, _
-                                            ByVal InCat As CatEntry3, _
-                                            ByVal DateNewCat As Double, _
-                                            ByVal NewCatId As String, _
+        <DispId(66)> Function TransformCat(ByVal TransformOption As TransformationOption3,
+                                            ByVal DateInCat As Double,
+                                            ByVal InCat As CatEntry3,
+                                            ByVal DateNewCat As Double,
+                                            ByVal NewCatId As String,
                                             ByRef NewCat As CatEntry3) As Short
 
         ''' <summary>
@@ -3364,7 +3364,7 @@ Namespace NOVAS
         ''' </list>>
         ''' </para>
         ''' </remarks>
-        <DispId(67)> Sub TransformHip(ByVal Hipparcos As CatEntry3, _
+        <DispId(67)> Sub TransformHip(ByVal Hipparcos As CatEntry3,
                                           ByRef Hip2000 As CatEntry3)
 
         ''' <summary>
@@ -3380,8 +3380,8 @@ Namespace NOVAS
         ''' = 2 ... Both Pos[0] and Pos[1] are zero, but Pos[2] is nonzero; 'Ra' is indeterminate.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(68)> Function Vector2RaDec(ByVal Pos() As Double, _
-                                              ByRef Ra As Double, _
+        <DispId(68)> Function Vector2RaDec(ByVal Pos() As Double,
+                                              ByRef Ra As Double,
                                               ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -3400,11 +3400,11 @@ Namespace NOVAS
         ''' > 10 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(69)> Function VirtualPlanet(ByVal JdTt As Double, _
-                                              ByVal SsBody As Object3, _
-                                              ByVal Accuracy As Accuracy, _
-                                              ByRef Ra As Double, _
-                                              ByRef Dec As Double, _
+        <DispId(69)> Function VirtualPlanet(ByVal JdTt As Double,
+                                              ByVal SsBody As Object3,
+                                              ByVal Accuracy As Accuracy,
+                                              ByRef Ra As Double,
+                                              ByRef Dec As Double,
                                               ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -3422,10 +3422,10 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(70)> Function VirtualStar(ByVal JdTt As Double, _
-                                             ByVal Star As CatEntry3, _
-                                             ByVal Accuracy As Accuracy, _
-                                             ByRef Ra As Double, _
+        <DispId(70)> Function VirtualStar(ByVal JdTt As Double,
+                                             ByVal Star As CatEntry3,
+                                             ByVal Accuracy As Accuracy,
+                                             ByRef Ra As Double,
                                              ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -3442,10 +3442,10 @@ Namespace NOVAS
         ''' <param name="Pos2">Position vector, geocentric equatorial rectangular coordinates, 
         ''' referred to true equator and TIO.</param>
         ''' <remarks></remarks>
-        <DispId(71)> Sub Wobble(ByVal Tjd As Double, _
-                                 ByVal x As Double, _
-                                 ByVal y As Double, _
-                                 ByVal Pos1() As Double, _
+        <DispId(71)> Sub Wobble(ByVal Tjd As Double,
+                                 ByVal x As Double,
+                                 ByVal y As Double,
+                                 ByVal Pos1() As Double,
                                  ByRef Pos2() As Double)
 
         ''' <summary>
@@ -3466,7 +3466,7 @@ Namespace NOVAS
     ''' Interface to the NOVAS31 component
     ''' </summary>
     ''' <remarks>Implemented by the NOVAS31 component</remarks>
-    <Guid("A9C1E5CF-2AA4-404D-B16A-79F5C8B1062F"), ComVisible(True)> _
+    <Guid("A9C1E5CF-2AA4-404D-B16A-79F5C8B1062F"), ComVisible(True)>
     Public Interface INOVAS31
 
         ' PlanetEphemeris, ReadEph, SolarSystem and State relate to reading ephemeris values
@@ -3487,10 +3487,10 @@ Namespace NOVAS
         ''' </returns>
         ''' <remarks>This function accesses the JPL planetary ephemeris to give the position and velocity of the target 
         ''' object with respect to the center object.</remarks>
-        <DispId(1)> Function PlanetEphemeris(ByRef Tjd() As Double, _
-                                                     ByVal Target As Target, _
-                                                     ByVal Center As Target, _
-                                                     ByRef Position() As Double, _
+        <DispId(1)> Function PlanetEphemeris(ByRef Tjd() As Double,
+                                                     ByVal Target As Target,
+                                                     ByVal Center As Target,
+                                                     ByRef Position() As Double,
                                                      ByRef Velocity() As Double) As Short
 
         ''' <summary>
@@ -3508,9 +3508,9 @@ Namespace NOVAS
         ''' when NOVAS-C is used without the minor planet ephemerides.  If this function is called, an error of 9 will be returned.
         ''' </para>
         ''' </remarks>
-        <DispId(2)> Function ReadEph(ByVal Mp As Integer, _
-                                             ByVal Name As String, _
-                                             ByVal Jd As Double, _
+        <DispId(2)> Function ReadEph(ByVal Mp As Integer,
+                                             ByVal Name As String,
+                                             ByVal Jd As Double,
                                              ByRef Err As Integer) As Double()
 
         ''' <summary>
@@ -3524,10 +3524,10 @@ Namespace NOVAS
         ''' <param name="Vel">Velocity vector of 'body' at tjd; equatorial rectangular system referred to the ICRS.</param>
         ''' <returns>Always returns 0</returns>
         ''' <remarks></remarks>
-        <DispId(3)> Function SolarSystem(ByVal Tjd As Double, _
-                                                 ByVal Body As Body, _
-                                                 ByVal Origin As Origin, _
-                                                 ByRef Pos() As Double, _
+        <DispId(3)> Function SolarSystem(ByVal Tjd As Double,
+                                                 ByVal Body As Body,
+                                                 ByVal Origin As Origin,
+                                                 ByRef Pos() As Double,
                                                  ByRef Vel() As Double) As Short
 
         ''' <summary>
@@ -3561,9 +3561,9 @@ Namespace NOVAS
         ''' between then and epoch.
         ''' </para>
         ''' </remarks>
-        <DispId(4)> Function State(ByRef Jed() As Double, _
-                                           ByVal Target As Target, _
-                                           ByRef TargetPos() As Double, _
+        <DispId(4)> Function State(ByRef Jed() As Double,
+                                           ByVal Target As Target,
+                                           ByRef TargetPos() As Double,
                                            ByRef TargetVel() As Double) As Short
 
         ' The following methods come from NOVAS3
@@ -3576,9 +3576,9 @@ Namespace NOVAS
         ''' <param name="LightTime"> Light time from object to Earth in days.</param>
         ''' <param name="Pos2"> Position vector, referred to origin at center of mass of the Earth, corrected for aberration, components in AU</param>
         ''' <remarks>If 'lighttime' = 0 on input, this function will compute it.</remarks>
-        <DispId(5)> Sub Aberration(ByVal Pos() As Double, _
-                                            ByVal Vel() As Double, _
-                                            ByVal LightTime As Double, _
+        <DispId(5)> Sub Aberration(ByVal Pos() As Double,
+                                            ByVal Vel() As Double,
+                                            ByVal LightTime As Double,
                                             ByRef Pos2() As Double)
 
         ''' <summary>
@@ -3596,11 +3596,11 @@ Namespace NOVAS
         ''' > 10 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(6)> Function AppPlanet(ByVal JdTt As Double, _
-                                               ByVal SsBody As Object3, _
-                                               ByVal Accuracy As Accuracy, _
-                                               ByRef Ra As Double, _
-                                               ByRef Dec As Double, _
+        <DispId(6)> Function AppPlanet(ByVal JdTt As Double,
+                                               ByVal SsBody As Object3,
+                                               ByVal Accuracy As Accuracy,
+                                               ByRef Ra As Double,
+                                               ByRef Dec As Double,
                                                ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -3618,10 +3618,10 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(7)> Function AppStar(ByVal JdTt As Double, _
-                                             ByVal Star As CatEntry3, _
-                                             ByVal Accuracy As Accuracy, _
-                                             ByRef Ra As Double, _
+        <DispId(7)> Function AppStar(ByVal JdTt As Double,
+                                             ByVal Star As CatEntry3,
+                                             ByVal Accuracy As Accuracy,
+                                             ByRef Ra As Double,
                                              ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -3640,11 +3640,11 @@ Namespace NOVAS
         ''' > 10 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(8)> Function AstroPlanet(ByVal JdTt As Double, _
-                                                 ByVal SsBody As Object3, _
-                                                 ByVal Accuracy As Accuracy, _
-                                                 ByRef Ra As Double, _
-                                                 ByRef Dec As Double, _
+        <DispId(8)> Function AstroPlanet(ByVal JdTt As Double,
+                                                 ByVal SsBody As Object3,
+                                                 ByVal Accuracy As Accuracy,
+                                                 ByRef Ra As Double,
+                                                 ByRef Dec As Double,
                                                  ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -3661,10 +3661,10 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(9)> Function AstroStar(ByVal JdTt As Double, _
-                                               ByVal Star As CatEntry3, _
-                                               ByVal Accuracy As Accuracy, _
-                                               ByRef Ra As Double, _
+        <DispId(9)> Function AstroStar(ByVal JdTt As Double,
+                                               ByVal Star As CatEntry3,
+                                               ByVal Accuracy As Accuracy,
+                                               ByRef Ra As Double,
                                                ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -3675,9 +3675,9 @@ Namespace NOVAS
         ''' <param name="Pos2"> Position vector, referred to origin at center of mass of the Earth, components in AU.</param>
         ''' <param name="Lighttime">Light time from object to Earth in days.</param>
         ''' <remarks></remarks>
-        <DispId(10)> Sub Bary2Obs(ByVal Pos() As Double, _
-                                          ByVal PosObs() As Double, _
-                                          ByRef Pos2() As Double, _
+        <DispId(10)> Sub Bary2Obs(ByVal Pos() As Double,
+                                          ByVal PosObs() As Double,
+                                          ByRef Pos2() As Double,
                                           ByRef Lighttime As Double)
 
         ''' <summary>
@@ -3689,10 +3689,10 @@ Namespace NOVAS
         ''' <param name="Day">day number</param>
         ''' <param name="Hour">Fractional hour of the day</param>
         ''' <remarks></remarks>
-        <DispId(11)> Sub CalDate(ByVal Tjd As Double, _
-                                         ByRef Year As Short, _
-                                         ByRef Month As Short, _
-                                         ByRef Day As Short, _
+        <DispId(11)> Sub CalDate(ByVal Tjd As Double,
+                                         ByRef Year As Short,
+                                         ByRef Month As Short,
+                                         ByRef Day As Short,
                                          ByRef Hour As Double)
 
         ''' <summary>
@@ -3727,15 +3727,15 @@ Namespace NOVAS
         ''' <para>
         ''' Note2: 'option' = 1 only works for the equinox-based method.
         '''</para></remarks>
-        <DispId(12)> Function Cel2Ter(ByVal JdHigh As Double, _
-                                        ByVal JdLow As Double, _
-                                        ByVal DeltaT As Double, _
-                                        ByVal Method As Method, _
-                                        ByVal Accuracy As Accuracy, _
-                                        ByVal OutputOption As OutputVectorOption, _
-                                        ByVal x As Double, _
-                                        ByVal y As Double, _
-                                        ByVal VecT() As Double, _
+        <DispId(12)> Function Cel2Ter(ByVal JdHigh As Double,
+                                        ByVal JdLow As Double,
+                                        ByVal DeltaT As Double,
+                                        ByVal Method As Method,
+                                        ByVal Accuracy As Accuracy,
+                                        ByVal OutputOption As OutputVectorOption,
+                                        ByVal x As Double,
+                                        ByVal y As Double,
+                                        ByVal VecT() As Double,
                                         ByRef VecC() As Double) As Short
 
 
@@ -3751,9 +3751,9 @@ Namespace NOVAS
         ''' 1 ... Invalid value of 'Type'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(13)> Function CelPole(ByVal Tjd As Double, _
-                                              ByVal Type As PoleOffsetCorrection, _
-                                              ByVal Dpole1 As Double, _
+        <DispId(13)> Function CelPole(ByVal Tjd As Double,
+                                              ByVal Type As PoleOffsetCorrection,
+                                              ByVal Dpole1 As Double,
                                               ByVal Dpole2 As Double) As Short
 
         ''' <summary>
@@ -3791,8 +3791,8 @@ Namespace NOVAS
         ''' </code>
         ''' </example>
         ''' </remarks>
-        <DispId(14)> Function CioArray(ByVal JdTdb As Double, _
-                                                ByVal NPts As Integer, _
+        <DispId(14)> Function CioArray(ByVal JdTdb As Double,
+                                                ByVal NPts As Integer,
                                                 ByRef Cio As ArrayList) As Short
 
         ''' <summary>
@@ -3816,12 +3816,12 @@ Namespace NOVAS
         ''' right ascension of the CIO at that date is required as input.  The right ascension of the CIO 
         ''' can be with respect to either the GCRS origin or the true equinox of date -- different algorithms 
         ''' are used in the two cases.</remarks>
-        <DispId(15)> Function CioBasis(ByVal JdTdbEquionx As Double, _
-                                               ByVal RaCioEquionx As Double, _
-                                               ByVal RefSys As ReferenceSystem, _
-                                               ByVal Accuracy As Accuracy, _
-                                               ByRef x As Double, _
-                                               ByRef y As Double, _
+        <DispId(15)> Function CioBasis(ByVal JdTdbEquionx As Double,
+                                               ByVal RaCioEquionx As Double,
+                                               ByVal RefSys As ReferenceSystem,
+                                               ByVal Accuracy As Accuracy,
+                                               ByRef x As Double,
+                                               ByRef y As Double,
                                                ByRef z As Double) As Short
 
         ''' <summary>
@@ -3837,9 +3837,9 @@ Namespace NOVAS
         ''' > 10 ... 10 + the error code from function 'CioArray'.
         ''' </pre></returns>
         ''' <remarks>  This function returns the location of the celestial intermediate origin (CIO) for a given Julian date, as a right ascension with respect to either the GCRS (geocentric ICRS) origin or the true equinox of date.  The CIO is always located on the true equator (= intermediate equator) of date.</remarks>
-        <DispId(16)> Function CioLocation(ByVal JdTdb As Double, _
-                                                  ByVal Accuracy As Accuracy, _
-                                                  ByRef RaCio As Double, _
+        <DispId(16)> Function CioLocation(ByVal JdTdb As Double,
+                                                  ByVal Accuracy As Accuracy,
+                                                  ByRef RaCio As Double,
                                                   ByRef RefSys As ReferenceSystem) As Short
 
         ''' <summary>
@@ -3856,8 +3856,8 @@ Namespace NOVAS
         ''' > 20 ... 20 + the error code from function 'CioBasis'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(17)> Function CioRa(ByVal JdTt As Double, _
-                                            ByVal Accuracy As Accuracy, _
+        <DispId(17)> Function CioRa(ByVal JdTt As Double,
+                                            ByVal Accuracy As Accuracy,
                                             ByRef RaCio As Double) As Short
 
         ''' <summary>
@@ -3875,7 +3875,7 @@ Namespace NOVAS
         ''' that is closest to solar system body (positive if light passes body before hitting observer, i.e., if 
         ''' 'Pos1' is within 90 degrees of 'PosObs').
         ''' </remarks>
-        <DispId(18)> Function DLight(ByVal Pos1() As Double, _
+        <DispId(18)> Function DLight(ByVal Pos1() As Double,
                                              ByVal PosObs() As Double) As Double
 
         ''' <summary>
@@ -3895,10 +3895,10 @@ Namespace NOVAS
         ''' set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. 
         ''' Except for the output from this case, all vectors are assumed to be with respect to a dynamical system.
         ''' </remarks>
-        <DispId(19)> Function Ecl2EquVec(ByVal JdTt As Double, _
-                                                 ByVal CoordSys As CoordSys, _
-                                                 ByVal Accuracy As Accuracy, _
-                                                 ByVal Pos1() As Double, _
+        <DispId(19)> Function Ecl2EquVec(ByVal JdTt As Double,
+                                                 ByVal CoordSys As CoordSys,
+                                                 ByVal Accuracy As Accuracy,
+                                                 ByVal Pos1() As Double,
                                                  ByRef Pos2() As Double) As Short
 
         ''' <summary>
@@ -3916,8 +3916,8 @@ Namespace NOVAS
         ''' smaller than 2 microarcseconds have been omitted.</para>
         ''' <para>3. This function is based on NOVAS Fortran routine 'eect2000', with the low-accuracy formula taken from NOVAS Fortran routine 'etilt'.</para>
         ''' </remarks>
-        <DispId(20)> Function EeCt(ByVal JdHigh As Double, _
-                                           ByVal JdLow As Double, _
+        <DispId(20)> Function EeCt(ByVal JdHigh As Double,
+                                           ByVal JdLow As Double,
                                            ByVal Accuracy As Accuracy) As Double
 
         ''' <summary>
@@ -3938,11 +3938,11 @@ Namespace NOVAS
         ''' 20+n ... where n is the error code from 'ReadEph'.
         ''' </pre></returns>
         ''' <remarks>It is recommended that the input structure 'cel_obj' be created using function 'MakeObject' in file novas.c.</remarks>
-        <DispId(21)> Function Ephemeris(ByVal Jd() As Double, _
-                                                ByVal CelObj As Object3, _
-                                                ByVal Origin As Origin, _
-                                                ByVal Accuracy As Accuracy, _
-                                                ByRef Pos() As Double, _
+        <DispId(21)> Function Ephemeris(ByVal Jd() As Double,
+                                                ByVal CelObj As Object3,
+                                                ByVal Origin As Origin,
+                                                ByVal Accuracy As Accuracy,
+                                                ByRef Pos() As Double,
                                                 ByRef Vel() As Double) As Short
 
         ''' <summary>
@@ -3964,12 +3964,12 @@ Namespace NOVAS
         ''' set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. 
         ''' Except for the input to this case, all input coordinates are dynamical.
         ''' </remarks>
-        <DispId(22)> Function Equ2Ecl(ByVal JdTt As Double, _
-                                              ByVal CoordSys As CoordSys, _
-                                              ByVal Accuracy As Accuracy, _
-                                              ByVal Ra As Double, _
-                                              ByVal Dec As Double, _
-                                              ByRef ELon As Double, _
+        <DispId(22)> Function Equ2Ecl(ByVal JdTt As Double,
+                                              ByVal CoordSys As CoordSys,
+                                              ByVal Accuracy As Accuracy,
+                                              ByVal Ra As Double,
+                                              ByVal Dec As Double,
+                                              ByRef ELon As Double,
                                               ByRef ELat As Double) As Short
 
         ''' <summary>
@@ -3987,10 +3987,10 @@ Namespace NOVAS
         ''' <remarks>To convert an ICRS vector to an ecliptic vector (mean ecliptic and equinox of J2000.0 only), 
         ''' set 'CoordSys' = 2; the value of 'JdTt' can be set to anything, since J2000.0 is assumed. Except for 
         ''' the input to this case, all vectors are assumed to be with respect to a dynamical system.</remarks>
-        <DispId(23)> Function Equ2EclVec(ByVal JdTt As Double, _
-                                                 ByVal CoordSys As CoordSys, _
-                                                 ByVal Accuracy As Accuracy, _
-                                                 ByVal Pos1() As Double, _
+        <DispId(23)> Function Equ2EclVec(ByVal JdTt As Double,
+                                                 ByVal CoordSys As CoordSys,
+                                                 ByVal Accuracy As Accuracy,
+                                                 ByVal Pos1() As Double,
                                                  ByRef Pos2() As Double) As Short
 
         ''' <summary>
@@ -4001,9 +4001,9 @@ Namespace NOVAS
         ''' <param name="GLon">Galactic longitude in degrees.</param>
         ''' <param name="GLat">Galactic latitude in degrees.</param>
         ''' <remarks></remarks>
-        <DispId(24)> Sub Equ2Gal(ByVal RaI As Double, _
-                                         ByVal DecI As Double, _
-                                         ByRef GLon As Double, _
+        <DispId(24)> Sub Equ2Gal(ByVal RaI As Double,
+                                         ByVal DecI As Double,
+                                         ByRef GLon As Double,
                                          ByRef GLat As Double)
 
         ''' <summary>
@@ -4028,18 +4028,18 @@ Namespace NOVAS
         ''' <remarks>This function transforms topocentric right ascension and declination to zenith distance and azimuth.  
         ''' It uses a method that properly accounts for polar motion, which is significant at the sub-arcsecond level.  
         ''' This function can also adjust coordinates for atmospheric refraction.</remarks>
-        <DispId(25)> Sub Equ2Hor(ByVal Jd_Ut1 As Double, _
-                                         ByVal DeltT As Double, _
-                                         ByVal Accuracy As Accuracy, _
-                                         ByVal x As Double, _
-                                         ByVal y As Double, _
-                                         ByVal Location As OnSurface, _
-                                         ByVal Ra As Double, _
-                                         ByVal Dec As Double, _
-                                         ByVal RefOption As RefractionOption, _
-                                         ByRef Zd As Double, _
-                                         ByRef Az As Double, _
-                                         ByRef RaR As Double, _
+        <DispId(25)> Sub Equ2Hor(ByVal Jd_Ut1 As Double,
+                                         ByVal DeltT As Double,
+                                         ByVal Accuracy As Accuracy,
+                                         ByVal x As Double,
+                                         ByVal y As Double,
+                                         ByVal Location As OnSurface,
+                                         ByVal Ra As Double,
+                                         ByVal Dec As Double,
+                                         ByVal RefOption As RefractionOption,
+                                         ByRef Zd As Double,
+                                         ByRef Az As Double,
+                                         ByRef RaR As Double,
                                          ByRef DecR As Double)
 
         ''' <summary>
@@ -4053,7 +4053,7 @@ Namespace NOVAS
         ''' in days from J2000 (t = JdHigh + JdLow - T0), but it avoids many two-PI 'wraps' that 
         ''' decrease precision (adopted from SOFA Fortran routine iau_era00; see also expression at top 
         ''' of page 35 of IERS Conventions (1996)).</remarks>
-        <DispId(26)> Function Era(ByVal JdHigh As Double, _
+        <DispId(26)> Function Era(ByVal JdHigh As Double,
                                           ByVal JdLow As Double) As Double
 
         ''' <summary>
@@ -4068,12 +4068,12 @@ Namespace NOVAS
         ''' <param name="Deps">Nutation in obliquity in arcseconds at 'JdTdb'.</param>
         ''' <remarks>Values of the celestial pole offsets 'PSI_COR' and 'EPS_COR' are set using function 'cel_pole', 
         ''' if desired.  See the prolog of 'cel_pole' for details.</remarks>
-        <DispId(27)> Sub ETilt(ByVal JdTdb As Double, _
-                                       ByVal Accuracy As Accuracy, _
-                                       ByRef Mobl As Double, _
-                                       ByRef Tobl As Double, _
-                                       ByRef Ee As Double, _
-                                       ByRef Dpsi As Double, _
+        <DispId(27)> Sub ETilt(ByVal JdTdb As Double,
+                                       ByVal Accuracy As Accuracy,
+                                       ByRef Mobl As Double,
+                                       ByRef Tobl As Double,
+                                       ByRef Ee As Double,
+                                       ByRef Dpsi As Double,
                                        ByRef Deps As Double)
 
         ''' <summary>
@@ -4084,8 +4084,8 @@ Namespace NOVAS
         ''' ICRS to dynamical transformation.</param>
         ''' <param name="Pos2">Position vector, equatorial rectangular coordinates.</param>
         ''' <remarks></remarks>
-        <DispId(28)> Sub FrameTie(ByVal Pos1() As Double, _
-                                          ByVal Direction As FrameConversionDirection, _
+        <DispId(28)> Sub FrameTie(ByVal Pos1() As Double,
+                                          ByVal Direction As FrameConversionDirection,
                                           ByRef Pos2() As Double)
 
         ''' <summary>
@@ -4105,7 +4105,7 @@ Namespace NOVAS
         '''                precession = 5028.8200 arcsec/cy)
         ''' </pre>
         ''' </remarks>
-        <DispId(29)> Sub FundArgs(ByVal t As Double, _
+        <DispId(29)> Sub FundArgs(ByVal t As Double,
                                           ByRef a() As Double)
 
         ''' <summary>
@@ -4128,12 +4128,12 @@ Namespace NOVAS
         ''' </pre>></returns>
         ''' <remarks>For coordinates with respect to the true equator of date, the origin of right ascension can be either the true equinox or the celestial intermediate origin (CIO).
         ''' <para> This function only supports the CIO-based method.</para></remarks>
-        <DispId(30)> Function Gcrs2Equ(ByVal JdTt As Double, _
-                                               ByVal CoordSys As CoordSys, _
-                                               ByVal Accuracy As Accuracy, _
-                                               ByVal RaG As Double, _
-                                               ByVal DecG As Double, _
-                                               ByRef Ra As Double, _
+        <DispId(30)> Function Gcrs2Equ(ByVal JdTt As Double,
+                                               ByVal CoordSys As CoordSys,
+                                               ByVal Accuracy As Accuracy,
+                                               ByVal RaG As Double,
+                                               ByVal DecG As Double,
+                                               ByRef Ra As Double,
                                                ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -4153,11 +4153,11 @@ Namespace NOVAS
         ''' 1 ... invalid value of 'Accuracy'.
         ''' </pre></returns>
         ''' <remarks>The final vectors are expressed in the GCRS.</remarks>
-        <DispId(31)> Function GeoPosVel(ByVal JdTt As Double, _
-                                        ByVal DeltaT As Double, _
-                                        ByVal Accuracy As Accuracy, _
-                                        ByVal Obs As Observer, _
-                                        ByRef Pos() As Double, _
+        <DispId(31)> Function GeoPosVel(ByVal JdTt As Double,
+                                        ByVal DeltaT As Double,
+                                        ByVal Accuracy As Accuracy,
+                                        ByVal Obs As Observer,
+                                        ByRef Pos() As Double,
                                         ByRef Vel() As Double) As Short
 
         ''' <summary>
@@ -4184,11 +4184,11 @@ Namespace NOVAS
         ''' calculation.  In both cases, if the observer is not at the geocenter, the deflection due to the Earth is included.
         ''' </para>
         ''' </remarks>
-        <DispId(32)> Function GravDef(ByVal JdTdb As Double, _
-                                              ByVal LocCode As EarthDeflection, _
-                                              ByVal Accuracy As Accuracy, _
-                                              ByVal Pos1() As Double, _
-                                              ByVal PosObs() As Double, _
+        <DispId(32)> Function GravDef(ByVal JdTdb As Double,
+                                              ByVal LocCode As EarthDeflection,
+                                              ByVal Accuracy As Accuracy,
+                                              ByVal Pos1() As Double,
+                                              ByVal PosObs() As Double,
                                               ByRef Pos2() As Double) As Short
 
         ''' <summary>
@@ -4205,10 +4205,10 @@ Namespace NOVAS
         ''' <param name="Pos2">Position vector of observed object, with respect to origin at observer 
         ''' (or the geocenter), corrected for gravitational deflection, components in AU.</param>
         ''' <remarks>This function valid for an observed body within the solar system as well as for a star.</remarks>
-        <DispId(33)> Sub GravVec(ByVal Pos1() As Double, _
-                                         ByVal PosObs() As Double, _
-                                         ByVal PosBody() As Double, _
-                                         ByVal RMass As Double, _
+        <DispId(33)> Sub GravVec(ByVal Pos1() As Double,
+                                         ByVal PosObs() As Double,
+                                         ByVal PosBody() As Double,
+                                         ByVal RMass As Double,
                                          ByRef Pos2() As Double)
 
         ''' <summary>
@@ -4220,8 +4220,8 @@ Namespace NOVAS
         ''' <returns>Intermediate right ascension of the equinox, in hours (+ or -). If 'equinox' = 1 
         ''' (i.e true equinox), then the returned value is the equation of the origins.</returns>
         ''' <remarks></remarks>
-        <DispId(34)> Function IraEquinox(ByVal JdTdb As Double, _
-                                                ByVal Equinox As EquinoxType, _
+        <DispId(34)> Function IraEquinox(ByVal JdTdb As Double,
+                                                ByVal Equinox As EquinoxType,
                                                 ByVal Accuracy As Accuracy) As Double
 
         ''' <summary>
@@ -4235,9 +4235,9 @@ Namespace NOVAS
         ''' <remarks>This function makes no checks for a valid input calendar date. The input calendar date 
         ''' must be Gregorian. The input time value can be based on any UT-like time scale (UTC, UT1, TT, etc.) 
         ''' - output Julian date will have the same basis.</remarks>
-        <DispId(35)> Function JulianDate(ByVal Year As Short, _
-                                                 ByVal Month As Short, _
-                                                 ByVal Day As Short, _
+        <DispId(35)> Function JulianDate(ByVal Year As Short,
+                                                 ByVal Month As Short,
+                                                 ByVal Day As Short,
                                                  ByVal Hour As Double) As Double
 
         ''' <summary>
@@ -4258,12 +4258,12 @@ Namespace NOVAS
         ''' <![CDATA[>]]> 10 ... error is 10 + error from function 'SolarSystem'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(36)> Function LightTime(ByVal JdTdb As Double, _
-                                                ByVal SsObject As Object3, _
-                                                ByVal PosObs() As Double, _
-                                                ByVal TLight0 As Double, _
-                                                ByVal Accuracy As Accuracy, _
-                                                ByRef Pos() As Double, _
+        <DispId(36)> Function LightTime(ByVal JdTdb As Double,
+                                                ByVal SsObject As Object3,
+                                                ByVal PosObs() As Double,
+                                                ByVal TLight0 As Double,
+                                                ByVal Accuracy As Accuracy,
+                                                ByRef Pos() As Double,
                                                 ByRef TLight As Double) As Short
 
         ''' <summary>
@@ -4280,9 +4280,9 @@ Namespace NOVAS
         ''' refraction or oblateness is included).  The observer can be on or above the Earth.  
         ''' For an observer on the surface of the Earth, this function returns the approximate unrefracted 
         ''' altitude.</remarks>
-        <DispId(37)> Sub LimbAngle(ByVal PosObj() As Double, _
-                                           ByVal PosObs() As Double, _
-                                           ByRef LimbAng As Double, _
+        <DispId(37)> Sub LimbAngle(ByVal PosObj() As Double,
+                                           ByVal PosObs() As Double,
+                                           ByRef LimbAng As Double,
                                            ByRef NadirAng As Double)
 
         ''' <summary>
@@ -4302,13 +4302,13 @@ Namespace NOVAS
         ''' <![CDATA[>]]> 10 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(38)> Function LocalPlanet(ByVal JdTt As Double, _
-                                                  ByVal SsBody As Object3, _
-                                                  ByVal DeltaT As Double, _
-                                                  ByVal Position As OnSurface, _
-                                                  ByVal Accuracy As Accuracy, _
-                                                  ByRef Ra As Double, _
-                                                  ByRef Dec As Double, _
+        <DispId(38)> Function LocalPlanet(ByVal JdTt As Double,
+                                                  ByVal SsBody As Object3,
+                                                  ByVal DeltaT As Double,
+                                                  ByVal Position As OnSurface,
+                                                  ByVal Accuracy As Accuracy,
+                                                  ByRef Ra As Double,
+                                                  ByRef Dec As Double,
                                                   ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -4328,12 +4328,12 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(39)> Function LocalStar(ByVal JdTt As Double, _
-                                            ByVal DeltaT As Double, _
-                                            ByVal Star As CatEntry3, _
-                                            ByVal Position As OnSurface, _
-                                            ByVal Accuracy As Accuracy, _
-                                            ByRef Ra As Double, _
+        <DispId(39)> Function LocalStar(ByVal JdTt As Double,
+                                            ByVal DeltaT As Double,
+                                            ByVal Star As CatEntry3,
+                                            ByVal Position As OnSurface,
+                                            ByVal Accuracy As Accuracy,
+                                            ByRef Ra As Double,
                                             ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -4350,15 +4350,15 @@ Namespace NOVAS
         ''' <param name="RadVel">Radial velocity (kilometers/second).</param>
         ''' <param name="Star">CatEntry3 structure containing the input data</param>
         ''' <remarks></remarks>
-        <DispId(40)> Sub MakeCatEntry(ByVal StarName As String, _
-                                        ByVal Catalog As String, _
-                                        ByVal StarNum As Integer, _
-                                        ByVal Ra As Double, _
-                                        ByVal Dec As Double, _
-                                        ByVal PmRa As Double, _
-                                        ByVal PmDec As Double, _
-                                        ByVal Parallax As Double, _
-                                        ByVal RadVel As Double, _
+        <DispId(40)> Sub MakeCatEntry(ByVal StarName As String,
+                                        ByVal Catalog As String,
+                                        ByVal StarNum As Integer,
+                                        ByVal Ra As Double,
+                                        ByVal Dec As Double,
+                                        ByVal PmRa As Double,
+                                        ByVal PmDec As Double,
+                                        ByVal Parallax As Double,
+                                        ByVal RadVel As Double,
                                         ByRef Star As CatEntry3)
 
         ''' <summary>
@@ -4370,8 +4370,8 @@ Namespace NOVAS
         ''' <param name="ObsSpace">InSpace structure containing the position and velocity of an observer situated 
         ''' on a near-Earth spacecraft</param>
         ''' <remarks></remarks>
-        <DispId(41)> Sub MakeInSpace(ByVal ScPos() As Double, _
-                                         ByVal ScVel() As Double, _
+        <DispId(41)> Sub MakeInSpace(ByVal ScPos() As Double,
+                                         ByVal ScVel() As Double,
                                          ByRef ObsSpace As InSpace)
 
         ''' <summary>
@@ -4391,10 +4391,10 @@ Namespace NOVAS
         ''' 2 ... 'Number' out of range
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(42)> Function MakeObject(ByVal Type As ObjectType, _
-                                               ByVal Number As Short, _
-                                               ByVal Name As String, _
-                                               ByVal StarData As CatEntry3, _
+        <DispId(42)> Function MakeObject(ByVal Type As ObjectType,
+                                               ByVal Number As Short,
+                                               ByVal Name As String,
+                                               ByVal StarData As CatEntry3,
                                                ByRef CelObj As Object3) As Short
 
         ''' <summary>
@@ -4412,9 +4412,9 @@ Namespace NOVAS
         ''' 1 ... input value of 'Where' is out-of-range.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(43)> Function MakeObserver(ByVal Where As ObserverLocation, _
-                                              ByVal ObsSurface As OnSurface, _
-                                              ByVal ObsSpace As InSpace, _
+        <DispId(43)> Function MakeObserver(ByVal Where As ObserverLocation,
+                                              ByVal ObsSurface As OnSurface,
+                                              ByVal ObsSpace As InSpace,
                                               ByRef Obs As Observer) As Short
 
         ''' <summary>
@@ -4433,8 +4433,8 @@ Namespace NOVAS
         ''' <param name="ObsInSpace">Structure containing the position and velocity of an observer 
         ''' situated on a near-Earth spacecraft</param>
         ''' <remarks>Both input vectors are with respect to true equator and equinox of date.</remarks>
-        <DispId(45)> Sub MakeObserverInSpace(ByVal ScPos() As Double, _
-                                                ByVal ScVel() As Double, _
+        <DispId(45)> Sub MakeObserverInSpace(ByVal ScPos() As Double,
+                                                ByVal ScVel() As Double,
                                                 ByRef ObsInSpace As Observer)
 
         ''' <summary>
@@ -4449,11 +4449,11 @@ Namespace NOVAS
         ''' <param name="ObsOnSurface">Structure containing the location of and weather for an observer on 
         ''' the surface of the Earth</param>
         ''' <remarks></remarks>
-        <DispId(46)> Sub MakeObserverOnSurface(ByVal Latitude As Double, _
-                                                ByVal Longitude As Double, _
-                                                ByVal Height As Double, _
-                                                ByVal Temperature As Double, _
-                                                ByVal Pressure As Double, _
+        <DispId(46)> Sub MakeObserverOnSurface(ByVal Latitude As Double,
+                                                ByVal Longitude As Double,
+                                                ByVal Height As Double,
+                                                ByVal Temperature As Double,
+                                                ByVal Pressure As Double,
                                                 ByRef ObsOnSurface As Observer)
 
         ''' <summary>
@@ -4468,11 +4468,11 @@ Namespace NOVAS
         ''' <param name="ObsSurface">Structure containing the location of and weather for an 
         ''' observer on the surface of the Earth.</param>
         ''' <remarks></remarks>
-        <DispId(47)> Sub MakeOnSurface(ByVal Latitude As Double, _
-                                        ByVal Longitude As Double, _
-                                        ByVal Height As Double, _
-                                        ByVal Temperature As Double, _
-                                        ByVal Pressure As Double, _
+        <DispId(47)> Sub MakeOnSurface(ByVal Latitude As Double,
+                                        ByVal Longitude As Double,
+                                        ByVal Height As Double,
+                                        ByVal Temperature As Double,
+                                        ByVal Pressure As Double,
                                         ByRef ObsSurface As OnSurface)
 
         ''' <summary>
@@ -4500,11 +4500,11 @@ Namespace NOVAS
         ''' > 20 ... Error from function 'AppStar'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(49)> Function MeanStar(ByVal JdTt As Double, _
-                                          ByVal Ra As Double, _
-                                          ByVal Dec As Double, _
-                                          ByVal Accuracy As Accuracy, _
-                                          ByRef IRa As Double, _
+        <DispId(49)> Function MeanStar(ByVal JdTt As Double,
+                                          ByVal Ra As Double,
+                                          ByVal Dec As Double,
+                                          ByVal Accuracy As Accuracy,
+                                          ByRef IRa As Double,
                                           ByRef IDec As Double) As Short
 
         ''' <summary>
@@ -4527,10 +4527,10 @@ Namespace NOVAS
         ''' <param name="Pos2">Position vector, geocentric equatorial rectangular coordinates, referred to 
         ''' true equator and equinox of epoch.</param>
         ''' <remarks> Inverse transformation may be applied by setting flag 'direction'</remarks>
-        <DispId(51)> Sub Nutation(ByVal JdTdb As Double, _
-                                      ByVal Direction As NutationDirection, _
-                                      ByVal Accuracy As Accuracy, _
-                                      ByVal Pos() As Double, _
+        <DispId(51)> Sub Nutation(ByVal JdTdb As Double,
+                                      ByVal Direction As NutationDirection,
+                                      ByVal Accuracy As Accuracy,
+                                      ByVal Pos() As Double,
                                       ByRef Pos2() As Double)
 
         ''' <summary>
@@ -4547,9 +4547,9 @@ Namespace NOVAS
         ''' a specially truncated (and therefore faster) version of IAU 2000A, called 'NU2000K' is used.
         ''' </para>
         ''' </remarks>
-        <DispId(52)> Sub NutationAngles(ByVal t As Double, _
-                                          ByVal Accuracy As Accuracy, _
-                                          ByRef DPsi As Double, _
+        <DispId(52)> Sub NutationAngles(ByVal t As Double,
+                                          ByVal Accuracy As Accuracy,
+                                          ByRef DPsi As Double,
                                           ByRef DEps As Double)
 
         ''' <summary>
@@ -4593,12 +4593,12 @@ Namespace NOVAS
         ''' on surface of Earth or in a near-Earth satellite). </para>
         ''' <remarks>
         ''' </remarks>
-        <DispId(53)> Function Place(ByVal JdTt As Double, _
-                                       ByVal CelObject As Object3, _
-                                       ByVal Location As Observer, _
-                                       ByVal DeltaT As Double, _
-                                       ByVal CoordSys As CoordSys, _
-                                       ByVal Accuracy As Accuracy, _
+        <DispId(53)> Function Place(ByVal JdTt As Double,
+                                       ByVal CelObject As Object3,
+                                       ByVal Location As Observer,
+                                       ByVal DeltaT As Double,
+                                       ByVal CoordSys As CoordSys,
+                                       ByVal Accuracy As Accuracy,
                                        ByRef Output As SkyPos) As Short
 
         ''' <summary>
@@ -4613,9 +4613,9 @@ Namespace NOVAS
         ''' 1 ... Precession not to or from J2000.0; 'JdTdb1' or 'JdTdb2' not 2451545.0.
         ''' </pre></returns>
         ''' <remarks> One of the two epochs must be J2000.0.  The coordinates are referred to the mean dynamical equator and equinox of the two respective epochs.</remarks>
-        <DispId(54)> Function Precession(ByVal JdTdb1 As Double, _
-                                           ByVal Pos1() As Double, _
-                                           ByVal JdTdb2 As Double, _
+        <DispId(54)> Function Precession(ByVal JdTdb1 As Double,
+                                           ByVal Pos1() As Double,
+                                           ByVal JdTdb2 As Double,
                                            ByRef Pos2() As Double) As Short
 
         ''' <summary>
@@ -4627,10 +4627,10 @@ Namespace NOVAS
         ''' <param name="JdTdb2">TDB Julian date of second epoch.</param>
         ''' <param name="Pos2">Position vector at second epoch.</param>
         ''' <remarks></remarks>
-        <DispId(55)> Sub ProperMotion(ByVal JdTdb1 As Double, _
-                                       ByVal Pos() As Double, _
-                                       ByVal Vel() As Double, _
-                                       ByVal JdTdb2 As Double, _
+        <DispId(55)> Sub ProperMotion(ByVal JdTdb1 As Double,
+                                       ByVal Pos() As Double,
+                                       ByVal Vel() As Double,
+                                       ByVal JdTdb2 As Double,
                                        ByRef Pos2() As Double)
 
         ''' <summary>
@@ -4641,9 +4641,9 @@ Namespace NOVAS
         ''' <param name="Dist">Distance in AU</param>
         ''' <param name="Vector">Position vector, equatorial rectangular coordinates (AU).</param>
         ''' <remarks></remarks>
-        <DispId(56)> Sub RaDec2Vector(ByVal Ra As Double, _
-                                      ByVal Dec As Double, _
-                                      ByVal Dist As Double, _
+        <DispId(56)> Sub RaDec2Vector(ByVal Ra As Double,
+                                      ByVal Dec As Double,
+                                      ByVal Dist As Double,
                                       ByRef Vector() As Double)
 
         ''' <summary>
@@ -4664,13 +4664,13 @@ Namespace NOVAS
         ''' barycentric radial velocity measure, a scalar derived from spectroscopy.  Nearby stars with a known 
         ''' kinematic velocity vector (obtained independently of spectroscopy) can be treated like 
         ''' solar system objects.</remarks>
-        <DispId(57)> Sub RadVel(ByVal CelObject As Object3, _
-                                   ByVal Pos() As Double, _
-                                   ByVal Vel() As Double, _
-                                   ByVal VelObs() As Double, _
-                                   ByVal DObsGeo As Double, _
-                                   ByVal DObsSun As Double, _
-                                   ByVal DObjSun As Double, _
+        <DispId(57)> Sub RadVel(ByVal CelObject As Object3,
+                                   ByVal Pos() As Double,
+                                   ByVal Vel() As Double,
+                                   ByVal VelObs() As Double,
+                                   ByVal DObsGeo As Double,
+                                   ByVal DObsSun As Double,
+                                   ByVal DObjSun As Double,
                                    ByRef Rv As Double)
 
         ''' <summary>
@@ -4684,8 +4684,8 @@ Namespace NOVAS
         ''' <remarks>This version computes approximate refraction for optical wavelengths. This function 
         ''' can be used for planning observations or telescope pointing, but should not be used for the 
         ''' reduction of precise observations.</remarks>
-        <DispId(58)> Function Refract(ByVal Location As OnSurface, _
-                                        ByVal RefOption As RefractionOption, _
+        <DispId(58)> Function Refract(ByVal Location As OnSurface,
+                                        ByVal RefOption As RefractionOption,
                                         ByVal ZdObs As Double) As Double
 
         ''' <summary>
@@ -4706,12 +4706,12 @@ Namespace NOVAS
         ''' </pre></returns>
         ''' <remarks> The Julian date may be split at any point, but for highest precision, set 'JdHigh' 
         ''' to be the integral part of the Julian date, and set 'JdLow' to be the fractional part.</remarks>
-        <DispId(59)> Function SiderealTime(ByVal JdHigh As Double, _
-                                           ByVal JdLow As Double, _
-                                           ByVal DeltaT As Double, _
-                                           ByVal GstType As GstType, _
-                                           ByVal Method As Method, _
-                                           ByVal Accuracy As Accuracy, _
+        <DispId(59)> Function SiderealTime(ByVal JdHigh As Double,
+                                           ByVal JdLow As Double,
+                                           ByVal DeltaT As Double,
+                                           ByVal GstType As GstType,
+                                           ByVal Method As Method,
+                                           ByVal Accuracy As Accuracy,
                                            ByRef Gst As Double) As Short
 
         ''' <summary>
@@ -4721,8 +4721,8 @@ Namespace NOVAS
         ''' <param name="Pos1">Position vector.</param>
         ''' <param name="Pos2">Position vector expressed in new coordinate system rotated about z by 'angle'.</param>
         ''' <remarks></remarks>
-        <DispId(60)> Sub Spin(ByVal Angle As Double, _
-                              ByVal Pos1() As Double, _
+        <DispId(60)> Sub Spin(ByVal Angle As Double,
+                              ByVal Pos1() As Double,
                               ByRef Pos2() As Double)
 
         ''' <summary>
@@ -4732,8 +4732,8 @@ Namespace NOVAS
         ''' <param name="Pos">Position vector, equatorial rectangular coordinates, components in AU.</param>
         ''' <param name="Vel">Velocity vector, equatorial rectangular coordinates, components in AU/Day.</param>
         ''' <remarks></remarks>
-        <DispId(61)> Sub StarVectors(ByVal Star As CatEntry3, _
-                                      ByRef Pos() As Double, _
+        <DispId(61)> Sub StarVectors(ByVal Star As CatEntry3,
+                                      ByRef Pos() As Double,
                                       ByRef Vel() As Double)
 
         ''' <summary>
@@ -4746,8 +4746,8 @@ Namespace NOVAS
         ''' <remarks>Expression used in this function is a truncated form of a longer and more precise 
         ''' series given in: Explanatory Supplement to the Astronomical Almanac, pp. 42-44 and p. 316. 
         ''' The result is good to about 10 microseconds.</remarks>
-        <DispId(62)> Sub Tdb2Tt(ByVal TdbJd As Double, _
-                                    ByRef TtJd As Double, _
+        <DispId(62)> Sub Tdb2Tt(ByVal TdbJd As Double,
+                                    ByRef TtJd As Double,
                                     ByRef SecDiff As Double)
 
         ''' <summary>
@@ -4779,15 +4779,15 @@ Namespace NOVAS
         ''' <para>
         ''' The 'option' flag only works for the equinox-based method.
         '''</para></remarks>
-        <DispId(63)> Function Ter2Cel(ByVal JdHigh As Double, _
-                                        ByVal JdLow As Double, _
-                                        ByVal DeltaT As Double, _
-                                        ByVal Method As Method, _
-                                        ByVal Accuracy As Accuracy, _
-                                        ByVal OutputOption As OutputVectorOption, _
-                                        ByVal x As Double, _
-                                        ByVal y As Double, _
-                                        ByVal VecT() As Double, _
+        <DispId(63)> Function Ter2Cel(ByVal JdHigh As Double,
+                                        ByVal JdLow As Double,
+                                        ByVal DeltaT As Double,
+                                        ByVal Method As Method,
+                                        ByVal Accuracy As Accuracy,
+                                        ByVal OutputOption As OutputVectorOption,
+                                        ByVal x As Double,
+                                        ByVal y As Double,
+                                        ByVal VecT() As Double,
                                         ByRef VecC() As Double) As Short
 
         ''' <summary>
@@ -4807,9 +4807,9 @@ Namespace NOVAS
         ''' to an inertial system, the very small velocity component (several meters/day) due to the precession 
         ''' and nutation of the Earth's axis is not accounted for here.</para>
         ''' </remarks>
-        <DispId(64)> Sub Terra(ByVal Location As OnSurface, _
-                               ByVal St As Double, _
-                               ByRef Pos() As Double, _
+        <DispId(64)> Sub Terra(ByVal Location As OnSurface,
+                               ByVal St As Double,
+                               ByRef Pos() As Double,
                                ByRef Vel() As Double)
 
         ''' <summary>
@@ -4829,13 +4829,13 @@ Namespace NOVAS
         ''' > 10 ... Error code from function 'Place'.
         '''</pre></returns>
         ''' <remarks></remarks>
-        <DispId(65)> Function TopoPlanet(ByVal JdTt As Double, _
-                                            ByVal SsBody As Object3, _
-                                            ByVal DeltaT As Double, _
-                                            ByVal Position As OnSurface, _
-                                            ByVal Accuracy As Accuracy, _
-                                            ByRef Ra As Double, _
-                                            ByRef Dec As Double, _
+        <DispId(65)> Function TopoPlanet(ByVal JdTt As Double,
+                                            ByVal SsBody As Object3,
+                                            ByVal DeltaT As Double,
+                                            ByVal Position As OnSurface,
+                                            ByVal Accuracy As Accuracy,
+                                            ByRef Ra As Double,
+                                            ByRef Dec As Double,
                                             ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -4855,12 +4855,12 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(66)> Function TopoStar(ByVal JdTt As Double, _
-                                          ByVal DeltaT As Double, _
-                                          ByVal Star As CatEntry3, _
-                                          ByVal Position As OnSurface, _
-                                          ByVal Accuracy As Accuracy, _
-                                          ByRef Ra As Double, _
+        <DispId(66)> Function TopoStar(ByVal JdTt As Double,
+                                          ByVal DeltaT As Double,
+                                          ByVal Star As CatEntry3,
+                                          ByVal Position As OnSurface,
+                                          ByVal Accuracy As Accuracy,
+                                          ByRef Ra As Double,
                                           ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -4897,11 +4897,11 @@ Namespace NOVAS
         ''' with modern values.  In particular, it should not be used for catalogs whose positions and 
         ''' proper motions were derived by assuming a precession constant significantly different from 
         ''' the value implicit in function 'precession'.</para></remarks>
-        <DispId(67)> Function TransformCat(ByVal TransformOption As TransformationOption3, _
-                                            ByVal DateInCat As Double, _
-                                            ByVal InCat As CatEntry3, _
-                                            ByVal DateNewCat As Double, _
-                                            ByVal NewCatId As String, _
+        <DispId(67)> Function TransformCat(ByVal TransformOption As TransformationOption3,
+                                            ByVal DateInCat As Double,
+                                            ByVal InCat As CatEntry3,
+                                            ByVal DateNewCat As Double,
+                                            ByVal NewCatId As String,
                                             ByRef NewCat As CatEntry3) As Short
 
         ''' <summary>
@@ -4937,7 +4937,7 @@ Namespace NOVAS
         ''' </list>>
         ''' </para>
         ''' </remarks>
-        <DispId(68)> Sub TransformHip(ByVal Hipparcos As CatEntry3, _
+        <DispId(68)> Sub TransformHip(ByVal Hipparcos As CatEntry3,
                                           ByRef Hip2000 As CatEntry3)
 
         ''' <summary>
@@ -4953,8 +4953,8 @@ Namespace NOVAS
         ''' = 2 ... Both Pos[0] and Pos[1] are zero, but Pos[2] is nonzero; 'Ra' is indeterminate.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(69)> Function Vector2RaDec(ByVal Pos() As Double, _
-                                              ByRef Ra As Double, _
+        <DispId(69)> Function Vector2RaDec(ByVal Pos() As Double,
+                                              ByRef Ra As Double,
                                               ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -4973,11 +4973,11 @@ Namespace NOVAS
         ''' > 10 ... Error code from function 'Place'.
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(70)> Function VirtualPlanet(ByVal JdTt As Double, _
-                                              ByVal SsBody As Object3, _
-                                              ByVal Accuracy As Accuracy, _
-                                              ByRef Ra As Double, _
-                                              ByRef Dec As Double, _
+        <DispId(70)> Function VirtualPlanet(ByVal JdTt As Double,
+                                              ByVal SsBody As Object3,
+                                              ByVal Accuracy As Accuracy,
+                                              ByRef Ra As Double,
+                                              ByRef Dec As Double,
                                               ByRef Dis As Double) As Short
 
         ''' <summary>
@@ -4995,10 +4995,10 @@ Namespace NOVAS
         ''' > 20 ... Error code from function 'Place'
         ''' </pre></returns>
         ''' <remarks></remarks>
-        <DispId(71)> Function VirtualStar(ByVal JdTt As Double, _
-                                             ByVal Star As CatEntry3, _
-                                             ByVal Accuracy As Accuracy, _
-                                             ByRef Ra As Double, _
+        <DispId(71)> Function VirtualStar(ByVal JdTt As Double,
+                                             ByVal Star As CatEntry3,
+                                             ByVal Accuracy As Accuracy,
+                                             ByRef Ra As Double,
                                              ByRef Dec As Double) As Short
 
         ''' <summary>
@@ -5019,11 +5019,11 @@ Namespace NOVAS
         ''' <param name="Pos2">Position vector, geocentric equatorial rectangular coordinates, 
         ''' referred to true equator and TIO.</param>
         ''' <remarks></remarks>
-        <DispId(72)> Sub Wobble(ByVal Tjd As Double, _
-                                 ByVal Direction As TransformationDirection, _
-                                 ByVal x As Double, _
-                                 ByVal y As Double, _
-                                 ByVal Pos1() As Double, _
+        <DispId(72)> Sub Wobble(ByVal Tjd As Double,
+                                 ByVal Direction As TransformationDirection,
+                                 ByVal x As Double,
+                                 ByVal y As Double,
+                                 ByVal Pos1() As Double,
                                  ByRef Pos2() As Double)
 
         ''' <summary>
@@ -5039,7 +5039,7 @@ End Namespace
 
 #Region "AstroUtils Interface"
 Namespace AstroUtils
-    <ComVisible(True), Guid("143068F6-ADC9-4751-AC39-924111396F0F"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
+    <ComVisible(True), Guid("143068F6-ADC9-4751-AC39-924111396F0F"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)>
     Public Interface IAstroUtils
         <DispId(1)> Function ConditionRA(RA As Double) As Double
         <DispId(2)> Function ConditionHA(HA As Double) As Double
@@ -5231,27 +5231,26 @@ Namespace SOFA
     ''' Interface to the SOFA component
     ''' </summary>
     ''' <remarks>Implemented by the SOFA component</remarks>
-    <Guid("8E322A40-8E75-49FC-B75B-984A45D35C0A"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> _
+    <Guid("8E322A40-8E75-49FC-B75B-984A45D35C0A"), ComVisible(True), InterfaceType(ComInterfaceType.InterfaceIsIDispatch)>
     Public Interface ISOFA
-        Function Af2a(s As String, ideg As Integer, iamin As Integer, asec As Double, ByRef rad As Double) As Integer
-        Function Anp(a As Double) As Double
-        Sub Atci13(rc As Double, dc As Double, pr As Double, pd As Double, px As Double, rv As Double, date1 As Double, date2 As Double, ByRef ri As Double, ByRef di As Double, ByRef eo As Double)
-        Sub Atic13(ri As Double, di As Double, date1 As Double, date2 As Double, ByRef rc As Double, ByRef dc As Double, ByRef eo As Double)
-        Function Atco13(rc As Double, dc As Double, pr As Double, pd As Double, px As Double, rv As Double, utc1 As Double, utc2 As Double, dut1 As Double, elong As Double, phi As Double, hm As Double, xp As Double, yp As Double, phpa As Double, tc As Double, rh As Double, wl As Double, ByRef aob As Double, ByRef zob As Double, ByRef hob As Double, ByRef dob As Double, ByRef rob As Double, ByRef eo As Double) As Integer
-        Function Atio13(ri As Double, di As Double, utc1 As Double, utc2 As Double, dut1 As Double, elong As Double, phi As Double, hm As Double, xp As Double, yp As Double, phpa As Double, tc As Double, rh As Double, wl As Double, ByRef aob As Double, ByRef zob As Double, ByRef hob As Double, ByRef dob As Double, ByRef rob As Double) As Integer
-        Function Atoc13(type As String, ob1 As Double, ob2 As Double, utc1 As Double, utc2 As Double, dut1 As Double, elong As Double, phi As Double, hm As Double, xp As Double, yp As Double, phpa As Double, tc As Double, rh As Double, wl As Double, ByRef rc As Double, ByRef dc As Double) As Integer
-        Function Atoi13(type As String, ob1 As Double, ob2 As Double, utc1 As Double, utc2 As Double, dut1 As Double, elong As Double, phi As Double, hm As Double, xp As Double, yp As Double, phpa As Double, tc As Double, rh As Double, wl As Double, ByRef ri As Double, ByRef di As Double) As Integer
-        Function Dtf2d(scale As String, iy As Integer, im As Integer, id As Integer, ihr As Integer, imn As Integer, sec As Double, ByRef d1 As Double, ByRef d2 As Double) As Integer
-        Function Eo06a(date1 As Double, date2 As Double) As Double
-        Function SofaReleaseNumber() As Integer
-        Function SofaIssueDate() As String
-        Function SofaRevisionDate() As String
-        Function TaiTt(tai1 As Double, tai2 As Double, ByRef tt1 As Double, ByRef tt2 As Double) As Integer
-        Function TaiUtc(tai1 As Double, tai2 As Double, ByRef utc1 As Double, ByRef utc2 As Double) As Integer
-        Function Tf2a(s As String, ihour As Integer, imin As Integer, sec As Double, ByRef rad As Double) As Integer
-        Function TtTai(tt1 As Double, tt2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer
-        Function UtcTai(utc1 As Double, utc2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer
-
+        <DispId(1)> Function Af2a(s As String, ideg As Integer, iamin As Integer, asec As Double, ByRef rad As Double) As Integer
+        <DispId(2)> Function Anp(a As Double) As Double
+        <DispId(3)> Sub Atci13(rc As Double, dc As Double, pr As Double, pd As Double, px As Double, rv As Double, date1 As Double, date2 As Double, ByRef ri As Double, ByRef di As Double, ByRef eo As Double)
+        <DispId(4)> Sub Atic13(ri As Double, di As Double, date1 As Double, date2 As Double, ByRef rc As Double, ByRef dc As Double, ByRef eo As Double)
+        <DispId(5)> Function Atco13(rc As Double, dc As Double, pr As Double, pd As Double, px As Double, rv As Double, utc1 As Double, utc2 As Double, dut1 As Double, elong As Double, phi As Double, hm As Double, xp As Double, yp As Double, phpa As Double, tc As Double, rh As Double, wl As Double, ByRef aob As Double, ByRef zob As Double, ByRef hob As Double, ByRef dob As Double, ByRef rob As Double, ByRef eo As Double) As Integer
+        <DispId(6)> Function Atio13(ri As Double, di As Double, utc1 As Double, utc2 As Double, dut1 As Double, elong As Double, phi As Double, hm As Double, xp As Double, yp As Double, phpa As Double, tc As Double, rh As Double, wl As Double, ByRef aob As Double, ByRef zob As Double, ByRef hob As Double, ByRef dob As Double, ByRef rob As Double) As Integer
+        <DispId(7)> Function Atoc13(type As String, ob1 As Double, ob2 As Double, utc1 As Double, utc2 As Double, dut1 As Double, elong As Double, phi As Double, hm As Double, xp As Double, yp As Double, phpa As Double, tc As Double, rh As Double, wl As Double, ByRef rc As Double, ByRef dc As Double) As Integer
+        <DispId(8)> Function Atoi13(type As String, ob1 As Double, ob2 As Double, utc1 As Double, utc2 As Double, dut1 As Double, elong As Double, phi As Double, hm As Double, xp As Double, yp As Double, phpa As Double, tc As Double, rh As Double, wl As Double, ByRef ri As Double, ByRef di As Double) As Integer
+        <DispId(9)> Function Dtf2d(scale As String, iy As Integer, im As Integer, id As Integer, ihr As Integer, imn As Integer, sec As Double, ByRef d1 As Double, ByRef d2 As Double) As Integer
+        <DispId(10)> Function Eo06a(date1 As Double, date2 As Double) As Double
+        <DispId(11)> Function SofaReleaseNumber() As Integer
+        <DispId(12)> Function SofaIssueDate() As String
+        <DispId(13)> Function SofaRevisionDate() As String
+        <DispId(14)> Function TaiTt(tai1 As Double, tai2 As Double, ByRef tt1 As Double, ByRef tt2 As Double) As Integer
+        <DispId(15)> Function TaiUtc(tai1 As Double, tai2 As Double, ByRef utc1 As Double, ByRef utc2 As Double) As Integer
+        <DispId(16)> Function Tf2a(s As String, ihour As Integer, imin As Integer, sec As Double, ByRef rad As Double) As Integer
+        <DispId(17)> Function TtTai(tt1 As Double, tt2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer
+        <DispId(18)> Function UtcTai(utc1 As Double, utc2 As Double, ByRef tai1 As Double, ByRef tai2 As Double) As Integer
     End Interface
 End Namespace
 #End Region

@@ -192,7 +192,7 @@ Public Class EarthRotationDataForm
         TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
         TxtCurrentLeapSeconds.Text = Parameters.AutomaticLeapSecondsString
         TxtNextLeapSeconds.Text = Parameters.NextLeapSecondsString
-        TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & " UTC"
+        TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf(Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE, "", "UTC")
         TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString()
         jdUtc = aUtils.JulianDateUtc
         TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString()
