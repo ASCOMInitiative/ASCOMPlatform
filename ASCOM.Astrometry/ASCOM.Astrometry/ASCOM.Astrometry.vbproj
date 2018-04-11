@@ -112,7 +112,7 @@
   <ItemGroup>
     <Compile Include="AstrometryExceptions.vb" />
     <Compile Include="AstroUtils.vb" />
-    <Compile Include="DeltaT.vb" />
+    <Compile Include="EarthRotationParameters.vb" />
     <Compile Include="GlobalItems.vb" />
     <Compile Include="Interfaces.vb" />
     <Compile Include="Kepler\KeplerEphemeris.vb" />

@@ -255,7 +255,7 @@ Partial Class EarthRotationDataForm
         Me.TxtNextLeapSeconds.Location = New System.Drawing.Point(195, 184)
         Me.TxtNextLeapSeconds.Name = "TxtNextLeapSeconds"
         Me.TxtNextLeapSeconds.ReadOnly = True
-        Me.TxtNextLeapSeconds.Size = New System.Drawing.Size(45, 20)
+        Me.TxtNextLeapSeconds.Size = New System.Drawing.Size(100, 20)
         Me.TxtNextLeapSeconds.TabIndex = 22
         '
         'TxtNextLeapSecondsDate

@@ -427,7 +427,7 @@ Namespace NOVASCOM
                 '//
                 SunField(pos2, pes, pos3)
                 Aberration(pos3, veb, lighttime, pos4)
-                Precession(T0, pos4, tdb, pos5)
+                Precession(J2000BASE, pos4, tdb, pos5)
                 Nutate(tdb, NutationDirection.MeanToTrue, pos5, vec)
 
                 pv = New PositionVector
@@ -615,10 +615,10 @@ Namespace NOVASCOM
                 SiderealTime(ujd, 0.0, eqeq, gast)
                 Terra(st, gast, pos1, vel1)
                 Nutate(tdb, NutationDirection.TrueToMean, pos1, pos2)
-                Precession(tdb, pos2, T0, pog)
+                Precession(tdb, pos2, J2000BASE, pog)
 
                 Nutate(tdb, NutationDirection.TrueToMean, vel1, vel2)
-                Precession(tdb, vel2, T0, vog)
+                Precession(tdb, vel2, J2000BASE, vog)
 
                 '//
                 '// Get position and velocity of observer wrt barycenter of solar 
@@ -756,10 +756,10 @@ Namespace NOVASCOM
                 SiderealTime(ujd, 0.0, eqeq, gast)
                 Terra(st, gast, pos1, vel1)
                 Nutate(tdb, NutationDirection.TrueToMean, pos1, pos2)
-                Precession(tdb, pos2, T0, pog)
+                Precession(tdb, pos2, J2000BASE, pog)
 
                 Nutate(tdb, NutationDirection.TrueToMean, vel1, vel2)
-                Precession(tdb, vel2, T0, vog)
+                Precession(tdb, vel2, J2000BASE, vog)
 
                 '//
                 '// Get position and velocity of observer wrt barycenter of solar system
@@ -799,7 +799,7 @@ Namespace NOVASCOM
                 '//
                 SunField(pos2, pos, pos4)
                 Aberration(pos4, vob, lighttime, pos5)
-                Precession(T0, pos5, tdb, pos6)
+                Precession(J2000BASE, pos5, tdb, pos6)
                 Nutate(tdb, NutationDirection.MeanToTrue, pos6, vec)
 
                 '//
@@ -1803,12 +1803,12 @@ Namespace NOVASCOM
             cat.RadialVelocity = m_rv
 
             StarVectors(cat, pos1, vel1)
-            ProperMotion(T0, pos1, vel1, tdb, pos2)
+            ProperMotion(J2000BASE, pos1, vel1, tdb, pos2)
 
             BaryToGeo(pos2, peb, pos3, time2)
             SunField(pos3, pes, pos4)
             Aberration(pos4, veb, time2, pos5)
-            Precession(T0, pos5, tdb, pos6)
+            Precession(J2000BASE, pos5, tdb, pos6)
             Nutate(tdb, NutationDirection.MeanToTrue, pos6, vec)
             PV.x = vec(0)
             PV.y = vec(1)
@@ -1861,7 +1861,7 @@ Namespace NOVASCOM
             '//
 
             StarVectors(cat, pos1, vel1)
-            ProperMotion(T0, pos1, vel1, tdb, pos2)
+            ProperMotion(J2000BASE, pos1, vel1, tdb, pos2)
             BaryToGeo(pos2, peb, vec, lighttime)
 
             PV.x = vec(0)
@@ -1943,10 +1943,10 @@ Namespace NOVASCOM
             SiderealTime(ujd, 0.0, eqeq, gast)
             Terra(st, gast, pos1, vel1)
             Nutate(tdb, NutationDirection.TrueToMean, pos1, pos2)
-            Precession(tdb, pos2, T0, pog)
+            Precession(tdb, pos2, J2000BASE, pog)
 
             Nutate(tdb, NutationDirection.TrueToMean, vel1, vel2)
-            Precession(tdb, vel2, T0, vog)
+            Precession(tdb, vel2, J2000BASE, vog)
 
             For j = 0 To 2
 
@@ -1961,7 +1961,7 @@ Namespace NOVASCOM
             '//
 
             StarVectors(cat, pos1, vel1)
-            ProperMotion(T0, pos1, vel1, tdb, pos2)
+            ProperMotion(J2000BASE, pos1, vel1, tdb, pos2)
             BaryToGeo(pos2, pb, pos3, lighttime)
             SunField(pos3, ps, pos4)
             Aberration(pos4, vb, lighttime, vec)
@@ -2047,10 +2047,10 @@ Namespace NOVASCOM
             SiderealTime(ujd, 0.0, eqeq, gast)
             Terra(st, gast, pos1, vel1)
             Nutate(tdb, NutationDirection.TrueToMean, pos1, pos2)
-            Precession(tdb, pos2, T0, pog)
+            Precession(tdb, pos2, J2000BASE, pog)
 
             Nutate(tdb, NutationDirection.TrueToMean, vel1, vel2)
-            Precession(tdb, vel2, T0, vog)
+            Precession(tdb, vel2, J2000BASE, vog)
 
             For j = 0 To 2
                 pob(j) = peb(j) + pog(j)
@@ -2072,11 +2072,11 @@ Namespace NOVASCOM
             '//
             '// Finish topocentric place calculation.
             '//
-            ProperMotion(T0, pos1, vel1, tdb, pos2)
+            ProperMotion(J2000BASE, pos1, vel1, tdb, pos2)
             BaryToGeo(pos2, pob, pos3, lighttime)
             SunField(pos3, pos, pos4)
             Aberration(pos4, vob, lighttime, pos5)
-            Precession(T0, pos5, tdb, pos6)
+            Precession(J2000BASE, pos5, tdb, pos6)
             Nutate(tdb, NutationDirection.MeanToTrue, pos6, vec)
 
             '//
@@ -2179,7 +2179,7 @@ Namespace NOVASCOM
             '// Compute virtual place.
             '//
             StarVectors(cat, pos1, vel1)
-            ProperMotion(T0, pos1, vel1, tdb, pos2)
+            ProperMotion(J2000BASE, pos1, vel1, tdb, pos2)
             BaryToGeo(pos2, peb, pos3, lighttime)
             SunField(pos3, pes, pos4)
             Aberration(pos4, veb, lighttime, vec)

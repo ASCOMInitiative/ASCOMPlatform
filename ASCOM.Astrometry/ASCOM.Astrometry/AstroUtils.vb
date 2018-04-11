@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.InteropServices
 Imports ASCOM.Utilities
+Imports ASCOM.Astrometry.GlobalItems
 
 Namespace AstroUtils
     ''' <summary>
@@ -15,7 +16,7 @@ Namespace AstroUtils
     Public Class AstroUtils
         Implements IAstroUtils, IDisposable
 
-        Private TL As TraceLogger, Utl As Util, Nov31 As NOVAS.NOVAS31, RegAccess As RegistryAccess
+        Private TL As TraceLogger, Utl As Util, Nov31 As NOVAS.NOVAS31, RegAccess As RegistryAccess, Sofa As SOFA.SOFA
         Private Parameters As EarthRotationParameters
 
         Friend Structure BodyInfo
@@ -30,9 +31,10 @@ Namespace AstroUtils
             TL.Enabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
             Utl = New Util
             Nov31 = New NOVAS.NOVAS31
+            Sofa = New SOFA.SOFA()
             RegAccess = New RegistryAccess
             TL.LogMessage("New", "AstroUtils created Utilities component OK")
-            Parameters = New EarthRotationParameters()
+            Parameters = New EarthRotationParameters(TL)
             TL.LogMessage("New", "AstroUtils created Earth Rotation Paraemters object OK")
             TL.LogMessage("New", "Finished initialisation OK")
         End Sub
@@ -59,6 +61,10 @@ Namespace AstroUtils
                 If Not (RegAccess Is Nothing) Then
                     RegAccess.Dispose()
                     RegAccess = Nothing
+                End If
+                If Not (Sofa Is Nothing) Then
+                    Sofa.Dispose()
+                    Sofa = Nothing
                 End If
             End If
             Me.disposedValue = True
@@ -168,13 +174,14 @@ Namespace AstroUtils
         ''' <returns>DeltaT in seconds</returns>
         ''' <remarks>DeltaT is the difference between terrestrial time and the UT1 variant of universal time. ie.e TT = UT1 + DeltaT</remarks>
         Public Function DeltaT() As Double Implements IAstroUtils.DeltaT
-            Dim RetVal, JD As Double
+            Dim CurrentUTCDate As Date, JDUtc, DeltaTValue As Double
 
-            JD = Utl.JulianDate
-            RetVal = DeltaTCalc(JD)
+            CurrentUTCDate = Date.UtcNow
+            JDUtc = UTCJulianDate(CurrentUTCDate)
+            DeltaTValue = Parameters.DeltaT()
+            TL.LogMessage("DeltaT", String.Format("Returning DeltaT: {0} at Julian date: {1} ({2})", DeltaTValue, JDUtc, CurrentUTCDate.ToString("dddd dd MMMM yyyy HH:mm:ss.fff")))
 
-            TL.LogMessage("DeltaT", "Returned: " & RetVal & " at Julian date: " & JD)
-            Return RetVal
+            Return DeltaTValue
         End Function
 
         ''' <summary>
@@ -185,12 +192,13 @@ Namespace AstroUtils
         ''' <remarks></remarks>
         Public ReadOnly Property JulianDateUtc As Double Implements IAstroUtils.JulianDateUtc
             Get
-                Dim CurrentDate As Date, JD As Double
+                Dim CurrentUTCDate As Date, JDUtc As Double
 
-                CurrentDate = Date.UtcNow
-                JD = Nov31.JulianDate(Convert.ToInt16(CurrentDate.Year), Convert.ToInt16(CurrentDate.Month), Convert.ToInt16(CurrentDate.Day), CurrentDate.TimeOfDay.TotalHours)
-                TL.LogMessage("JulianDateUtc", "Returning: " & JD & " at UTC: " & Format(CurrentDate, "dddd dd MMMM yyyy HH:mm:ss.fff"))
-                Return JD
+                CurrentUTCDate = Date.UtcNow
+                JDUtc = UTCJulianDate(CurrentUTCDate)
+                TL.LogMessage("JulianDateUtc", String.Format("Returning Julian date (UTC): {0} at UTC: {1}", JDUtc, CurrentUTCDate.ToString("dddd dd MMMM yyyy HH:mm:ss.fff")))
+
+                Return JDUtc
             End Get
         End Property
 
@@ -220,7 +228,7 @@ Namespace AstroUtils
                 TTDate = UT1Date.Add(DeltaTTimespan) 'Add delta-t to UT1 to yield TT
             Else ' No value provided so get to TT through TAI
                 ' Computation method TT = UTC + ΔAT + 32.184s. ΔAT = 35.0 leap seconds in June 2012
-                TTDate = UTCDate.Add(TimeSpan.FromSeconds(GetCurrentLeapSeconds() + TT_TAI_OFFSET))
+                TTDate = UTCDate.Add(TimeSpan.FromSeconds(Parameters.LeapSeconds + TT_TAI_OFFSET))
             End If
 
             JD = Nov31.JulianDate(Convert.ToInt16(TTDate.Year), Convert.ToInt16(TTDate.Month), Convert.ToInt16(TTDate.Day), TTDate.TimeOfDay.TotalHours)
@@ -243,24 +251,30 @@ Namespace AstroUtils
         ''' <para>Forecast values of DUT1 are published by IERS Bulletin A at http://maia.usno.navy.mil/ser7/ser7.dat
         ''' </para></remarks>
         Public Function JulianDateUT1(DeltaUT1 As Double) As Double Implements IAstroUtils.JulianDateUT1
-            Dim UTCDate, UT1Date, TTDate As Date, JD, DeltaT As Double, DeltaUT1Timespan As TimeSpan
+            Dim CurrentUTCDate, UT1Date, TTDate As Date, JDUtc, JD, jd1, jd2, DeltaT As Double, DeltaUT1Timespan As TimeSpan, rc As Integer
 
             If (DeltaUT1 < -0.9) Or (DeltaUT1 > 0.9) Then Throw New ASCOM.InvalidValueException("JulianDateUT1", DeltaUT1.ToString, "-0.9 to +0.9")
 
-            UTCDate = Date.UtcNow
+            CurrentUTCDate = Date.UtcNow
 
             If DeltaUT1 <> 0.0 Then ' Calculate as UT1 = UTC - DeltaUT1
                 DeltaUT1Timespan = TimeSpan.FromSeconds(DeltaUT1) 'Convert DeltaUT1 to a timesapn
-                UT1Date = UTCDate.Add(DeltaUT1Timespan) 'Add delta-ut1 to UTC to yield UT1
+                UT1Date = CurrentUTCDate.Add(DeltaUT1Timespan) 'Add delta-ut1 to UTC to yield UT1
             Else
                 ' Calculation UT1 = TT - DeltaT = UTC + ΔAT + 32.184s - DeltaT
-                DeltaT = DeltaTCalc(Nov31.JulianDate(Convert.ToInt16(UTCDate.Year), Convert.ToInt16(UTCDate.Month), Convert.ToInt16(UTCDate.Day), UTCDate.TimeOfDay.TotalHours))
-                TTDate = UTCDate.Add(TimeSpan.FromSeconds(GetCurrentLeapSeconds() + TT_TAI_OFFSET))
+                JDUtc = UTCJulianDate(CurrentUTCDate)
+                'DeltaT = DeltaTCalc(JDUtc)
+                DeltaT = Parameters.DeltaT()
+                TTDate = CurrentUTCDate.Add(TimeSpan.FromSeconds(Parameters.LeapSeconds() + TT_TAI_OFFSET))
                 UT1Date = TTDate.Subtract(TimeSpan.FromSeconds(DeltaT))
             End If
 
-            JD = Nov31.JulianDate(Convert.ToInt16(UT1Date.Year), Convert.ToInt16(UT1Date.Month), Convert.ToInt16(UT1Date.Day), UT1Date.TimeOfDay.TotalHours)
-            TL.LogMessage("JulianDateUT1", "Returning: " & JD & "at UT1: " & Format(UT1Date, "dddd dd MMMM yyyy HH:mm:ss.fff") & ", at UTC: " & Format(UTCDate, "dddd dd MMMM yyyy HH:mm:ss.fff"))
+            ' Revised to use SOFA to calculate the Julian date
+            rc = Sofa.Dtf2d("UTC", UT1Date.Year, UT1Date.Month, UT1Date.Day, UT1Date.Hour, UT1Date.Minute, CDbl(UT1Date.Second) + CDbl(UT1Date.Millisecond) / 1000.0, jd1, jd2)
+            If rc <> 0 Then TL.LogMessage("JulianDateUT1", String.Format("Bad return code from Sofa.Dtf2d: {0} for UT1 date: {1}", rc, UT1Date.ToString("dddd dd MMMM yyyy HH:mm:ss.fff")))
+
+            JD = jd1 + jd2
+            TL.LogMessage("JulianDateUT1", String.Format("Returning Julian date: {0} at UT1: {1} and UTC: {2}", JD, Format(UT1Date, "dddd dd MMMM yyyy HH:mm:ss.fff"), CurrentUTCDate.ToString("dddd dd MMMM yyyy HH:mm:ss.fff")))
 
             Return JD
         End Function
@@ -310,7 +324,7 @@ Namespace AstroUtils
         Public Function CalendarToMJD(Day As Integer, Month As Integer, Year As Integer) As Double Implements IAstroUtils.CalendarToMJD
             Dim JD, MJD As Double
             JD = Nov31.JulianDate(Convert.ToInt16(Year), Convert.ToInt16(Month), Convert.ToInt16(Day), 0.0)
-            MJD = JD - MJDBASE
+            MJD = JD - MODIFIED_JULIAN_DAY_OFFSET
             Return MJD
         End Function
 
@@ -323,7 +337,7 @@ Namespace AstroUtils
         Public Function MJDToOADate(MJD As Double) As Double Implements IAstroUtils.MJDToOADate
             Dim JulianDate As Date, JulianOADate As Double
 
-            JulianDate = Utl.DateJulianToLocal(MJD + MJDBASE)
+            JulianDate = Utl.DateJulianToLocal(MJD + MODIFIED_JULIAN_DAY_OFFSET)
             JulianOADate = JulianDate.ToOADate
 
             Return JulianOADate
@@ -339,7 +353,7 @@ Namespace AstroUtils
         Public Function MJDToDate(MJD As Double) As Date Implements IAstroUtils.MJDToDate
             Dim JulianDate As Date
 
-            JulianDate = Utl.DateJulianToLocal(MJD + MJDBASE)
+            JulianDate = Utl.DateJulianToLocal(MJD + MODIFIED_JULIAN_DAY_OFFSET)
 
             Return JulianDate
 
@@ -369,45 +383,11 @@ Namespace AstroUtils
         ''' <returns>Double DeltaUT in seconds</returns>
         ''' <remarks>DeltaUT varies only slowly, so the Julian date can be based on UTC, UT1 or Terrestrial Time.</remarks>
         Public Function DeltaUT(JulianDate As Double) As Double Implements IAstroUtils.DeltaUT1
-            Dim RetVal As Double, DeltaUT1String As String
 
-            Select Case Parameters.UpdateType
-                Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
-                    ' Approach
-                    ' Determine whether a downloaded DeltaUT1 value exists for today (in UTC time)
-                    '    if yes then 
-                    '        Determine whether the value is a valid double number
-                    '        If it is then return this
-                    '        If not then fall back to the predicted value
-                    '    if no then fdall back to the predicted value
-                    Dim deltaUT1ValueName As String = String.Format(GlobalItems.DELTAUT1_VALUE_NAME_FORMAT,
-                                                                    DateTime.UtcNow.Year.ToString(GlobalItems.DELTAUT1_VALUE_NAME_YEAR_FORMAT),
-                                                                    DateTime.UtcNow.Month.ToString(GlobalItems.DELTAUT1_VALUE_NAME_MONTH_FORMAT),
-                                                                    DateTime.UtcNow.Day.ToString(GlobalItems.DELTAUT1_VALUE_NAME_DAY_FORMAT))
+            TL.LogMessage("AstroUtils.DeltaUT", String.Format("DeltaUT1 required for Julian date: {0}", JulianDate))
 
-                    DeltaUT1String = RegAccess.GetProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, deltaUT1ValueName)
-                    If deltaUT1ValueName <> "" Then ' We have got something back from the Profile so test whether it is a valid double number
-                    Else ' No value for this date so 
-                    End If
+            Return Parameters.DeltaUT1(JulianDate)
 
-
-
-
-                Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
-                    RetVal = GetCurrentLeapSeconds() + TT_TAI_OFFSET - DeltaTCalc(JulianDate)
-                    TL.LogMessage("DeltaUT", String.Format("Predicted DeltaUT1 is required so returning value determined from DeltaT calculation: {0} at Julian date: {1}", RetVal, JulianDate))
-                Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
-                    RetVal = Parameters.ManualDeltaUT1
-                    TL.LogMessage("DeltaUT", String.Format("Manual DeltaUT1 is required so returning manually configured value: {0}", RetVal))
-                Case Else
-                    TL.LogMessage("DeltaUT", "Unknown Parameters.UpdateType: " & Parameters.UpdateType)
-                    MsgBox("AstroUtils.DeltaUT - Unknown Parameters.UpdateType: " & Parameters.UpdateType)
-            End Select
-
-
-
-
-            Return RetVal
         End Function
 
         ''' <summary>
@@ -448,7 +428,7 @@ Namespace AstroUtils
         ''' here: ftp://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat</para> </remarks>
         Public Property LeapSeconds As Integer Implements IAstroUtils.LeapSeconds
             Get
-                Return CInt(GetCurrentLeapSeconds())
+                Return CInt(Parameters.LeapSeconds())
             End Get
             Set(value As Integer)
                 Parameters.ManualLeapSeconds = value
@@ -674,7 +654,8 @@ Namespace AstroUtils
             Dim Retval As New BodyInfo
 
             Instant = JD + Hour / 24.0 ' Add the hour to the whole Julian day number
-            DeltaT = DeltaTCalc(JD)
+            'DeltaT = DeltaTCalc(JD)
+            DeltaT = Parameters.DeltaT(JD)
 
             Select Case TypeOfEvent
                 Case EventType.MercuryRiseSet
@@ -758,7 +739,8 @@ Namespace AstroUtils
             Dim Obs As New ASCOM.Astrometry.Observer
             Dim Phi, Inc, k, DeltaT As Double
 
-            DeltaT = DeltaTCalc(JD)
+            'DeltaT = DeltaTCalc(JD)
+            DeltaT = Parameters.DeltaT(JD)
 
             ' Calculate Moon RA, Dec and distance
             Obj3.Name = "Moon"
@@ -834,7 +816,8 @@ Namespace AstroUtils
             Dim Obs As New ASCOM.Astrometry.Observer
             Dim PositionAngle, DeltaT As Double
 
-            DeltaT = DeltaTCalc(JD)
+            'DeltaT = DeltaTCalc(JD)
+            DeltaT = Parameters.DeltaT(JD)
 
             ' Calculate Moon RA, Dec and distance
             Obj3.Name = "Moon"
@@ -862,66 +845,16 @@ Namespace AstroUtils
 
         End Function
 
-        Private Function GetCurrentLeapSeconds() As Double
-            Dim EffectiveDate As DateTime, RetVal As Double
+        Private Function UTCJulianDate(UTCJDate As DateTime) As Double
+            Dim jd1, jd2 As Double, rc As Integer
 
-            'Set the current number of leap seconds once for this instance using manual or automatic values as appropriate
-            Select Case Parameters.UpdateType
-                Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
-                    ' Approach to returning a leap second value:
-                    ' Test whether the Next Leap Second Date is available
-                    '     If yes then test whether we are past the next leap second date - measured in UTC time because leap seconds are applied at 00:00:00 UTC. 
-                    '         If yes Then test whether the Next Leap Seconds value Is available
-                    '             If yes then use it
-                    '             If no then fall back To the manual value.
-                    '         If no then test whether the Automatic Leap Seconds value is available
-                    '             If yes then use it
-                    '             If no then fall back To the manual value.
-                    '     If no then test whether the Automatic Leap Seconds value is available
-                    '         If yes then use it
-                    '         If no then fall back To the manual value.
-                    If Parameters.NextLeapSecondsDate = DATE_VALUE_NOT_AVAILABLE Then ' A future leap second change date has not been published
-                        If Parameters.AutomaticLeapSeconds <> DOUBLE_VALUE_NOT_AVAILABLE Then ' We have a good automatic leap second value so use this
-                            RetVal = Parameters.AutomaticLeapSeconds
-                            TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required and a valid value is available: {0}", RetVal))
-                        Else ' We do not have a downloaded leap second value so fall back to the Manual value
-                            RetVal = Parameters.ManualLeapSeconds
-                            TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required but a valid value is not available - returning the manual leap seconds value instead: {0}", RetVal))
-                        End If
-                    Else ' A future leap second date has been published
-                        EffectiveDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0)) ' This is used to support development testing
-                        TL.LogMessage("GetCurrentLeapSeconds", String.Format("Effective date: {0}, NextLeapSecondsDate: {1}", EffectiveDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), Parameters.NextLeapSecondsDate.ToUniversalTime.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
+            ' Revised to use SOFA to calculate the Julian date
+            rc = Sofa.Dtf2d("UTC", UTCJDate.Year, UTCJDate.Month, UTCJDate.Day, UTCJDate.Hour, UTCJDate.Minute, CDbl(UTCJDate.Second) + CDbl(UTCJDate.Millisecond) / 1000.0, jd1, jd2)
+            If rc <> 0 Then TL.LogMessage("UTCJulianDate", String.Format("Bad return code from Sofa.Dtf2d: {0} for date: {1}", rc, UTCJDate.ToString("dddd dd MMMM yyyy HH:mm:ss.fff")))
+            ' TL.LogMessage("UTCJulianDate", String.Format("Returning Julian date of {0} for date: {1}", jd1 + jd2, UTCJDate.ToString("dddd dd MMMM yyyy HH:mm:ss.fff")))
 
-                        If EffectiveDate > Parameters.NextLeapSecondsDate.ToUniversalTime Then ' We are beyond the next leap second implementation date/time so use the next leap second value
-                            If Parameters.NextLeapSeconds <> DOUBLE_VALUE_NOT_AVAILABLE Then ' We have a good next leap seconds value so use it
-                                RetVal = Parameters.NextLeapSeconds
-                                TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required, current time is after the next leap second implementation time and a valid next leap seconds value is available: {0}", RetVal))
-                            Else ' We don't have a good next leap seconds value so fall back to the manual leap seconds value
-                                RetVal = Parameters.ManualLeapSeconds
-                                TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required, current time is after the next leap second implementation time but a valid next leap seconds value is not available - returning the manual leap seconds value instead: {0}", RetVal))
-                            End If
-                        Else ' We are not beyond the next leap second implementation date so use the automatic leap second value
-                            If Parameters.AutomaticLeapSeconds <> DOUBLE_VALUE_NOT_AVAILABLE Then ' We have a good automatic leap seconds value so use it
-                                RetVal = Parameters.AutomaticLeapSeconds
-                                TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required, current time is before the next leap second implementation time and a valid automatic leap seconds value is available: {0}", RetVal))
-                            Else ' We don't have a good automatic leap seconds value so fall back to the manual leap seconds value
-                                RetVal = Parameters.ManualLeapSeconds
-                                TL.LogMessage("GetCurrentLeapSeconds", String.Format("Automatic leap seconds are required, current time is before the next leap second implementation time but a valid automatic leap seconds value is not available - returning the manual leap seconds value instead: {0}", RetVal))
-                            End If
-                        End If
-                    End If
-                Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
-                    RetVal = Parameters.ManualLeapSeconds
-                    TL.LogMessage("GetCurrentLeapSeconds", String.Format("Manual leap seconds and delta UT1 are required, returning the manual leap seconds value: {0}", RetVal))
-                Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
-                    RetVal = Parameters.ManualLeapSeconds
-                    TL.LogMessage("GetCurrentLeapSeconds", String.Format("Manual leap seconds and predicted delta UT1 are required, returning the manual leap seconds value: {0}", RetVal))
-                Case Else
-                    TL.LogMessage("GetCurrentLeapSeconds", "Unknown Parameters.UpdateType: " & Parameters.UpdateType)
-                    MsgBox("AstroUtils.GetCurrentLeapSeconds - Unknown Parameters.UpdateType: " & Parameters.UpdateType)
-            End Select
+            Return jd1 + jd2
 
-            Return RetVal ' Return the assigned value
         End Function
 
     End Class

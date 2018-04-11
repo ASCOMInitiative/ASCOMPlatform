@@ -100,11 +100,6 @@ namespace EarthRotationUpdate
                     }
                 }
 
-
-
-
-
-
                 LogEvent(string.Format("Run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem), EventLogEntryType.Information);
                 TL.LogMessage("EarthRotationUpdate", string.Format("Run on {0} by {1}, IsSystem: {2}", runDate, runBy, isSystem));
                 TL.BlankLine();
@@ -113,11 +108,7 @@ namespace EarthRotationUpdate
                 TL.LogMessage("EarthRotationUpdate", string.Format("Earth rotation data last updated: {0}", parameters.EarthRotationDataLastUpdatedString));
                 TL.LogMessage("EarthRotationUpdate", string.Format("Data source: {0}", hostURIString));
 
-
-
                 DownloadTimeout = parameters.DownloadTaskTimeOut;
-
-
 
                 WebClient client = new WebClient();
 
@@ -189,10 +180,12 @@ namespace EarthRotationUpdate
 
                                         if (yearOK & monthOK & dayOK & julianDateOK & dut1OK)
                                         {
+                                            //TL.LogMessage("DeltaUT1", string.Format("Found good DUT1 value: {0} on JD: {1}", dUT1, julianDate));
+
                                             year = invariantCulture.Calendar.ToFourDigitYear(year); // Convert the two digit year to a four digit year
                                             date = new DateTime(year, month, day);
 
-                                            if (date.Date >= DateTime.Now.Date)
+                                            if (date.Date >= DateTime.Now.Date.Subtract(new TimeSpan(GlobalItems.NUMBER_OF_BACK_DAYS_OF_DELTAUT1_DATA_TO_LOAD, 0, 0, 0)))
                                             {
                                                 string deltaUT1ValueName = string.Format(GlobalItems.DELTAUT1_VALUE_NAME_FORMAT,
                                                                                          date.Year.ToString(GlobalItems.DELTAUT1_VALUE_NAME_YEAR_FORMAT),
@@ -244,6 +237,10 @@ namespace EarthRotationUpdate
                         TL.LogMessage("LeapSeconds", string.Format("Leap seconds start position: {0}, Leap seconds string length: {1}", GlobalItems.LEAP_SECONDS_LEAPSECONDS_START, GlobalItems.LEAP_SECONDS_LEAPSECONDS_LENGTH));
                         TL.BlankLine();
 
+                        profile.DeleteKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME);
+                        profile.CreateKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME);
+                        profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, "", "Julian Day - Leap Seconds");
+
                         using (var filestream = new FileStream(leapSecondsfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             double currentLeapSeconds = 0.0;
@@ -272,12 +269,15 @@ namespace EarthRotationUpdate
                                         bool leapSecondsOK = double.TryParse(leapSecondsString, out double leapSeconds);
 
                                         // Get the month number by triming the month string, converting to lower case then titlecase then looking up the index in the abbreviated months array
-                                        int month = Array.IndexOf(monthAbbrev, invariantTextInfo.ToTitleCase(monthString.Trim(' ').ToLower(CultureInfo.InvariantCulture))) + 1;
+                                        int month = Array.IndexOf(monthAbbrev, invariantTextInfo.ToTitleCase(monthString.Trim(' ').ToLower(CultureInfo.InvariantCulture))) + 1; // If IndexOf fails, it returns -1 so the resultant month number will be zero and this is checked below
 
                                         if (yearOK & (month > 0) & dayOK & julianDateOK & leapSecondsOK) // Check that all elements are valid
                                         {
-                                            double modifiedJulianDate = julianDate - GlobalItems.MJDBASE;
+                                            double modifiedJulianDate = julianDate - GlobalItems.MODIFIED_JULIAN_DAY_OFFSET;
                                             leapSecondDate = new DateTime(year, month, day);
+
+                                            // Write all leap second values and julian dates that they become effective to the leap second history subkey
+                                            profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, julianDate.ToString(parameters.DownloadTaskCulture), leapSeconds.ToString(parameters.DownloadTaskCulture));
 
                                             if ((leapSecondDate.Date >= latestLeapSecondDate) & (leapSecondDate.Date <= DateTime.UtcNow.Date.Subtract(new TimeSpan(GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0, 0, 0)))) currentLeapSeconds = leapSeconds;
                                             if ((leapSecondDate.Date > DateTime.UtcNow.Date.Subtract(new TimeSpan(GlobalItems.TEST_HISTORIC_DAYS_OFFSET, 0, 0, 0))) & (nextleapSecondsDate == DateTime.MinValue)) // Record the next leap seconds value in the file
@@ -290,7 +290,7 @@ namespace EarthRotationUpdate
                                         }
                                         else
                                         {
-                                            TL.LogMessage("LeapSeconds", string.Format("Unable to parse Delta UT1 values from the line below - Year: {0}, Month: {1}, Day: {2}, Julian Day: {3},Leap seconds: {4}",
+                                            TL.LogMessage("LeapSeconds", string.Format("Unable to parse leap second values from the line below - Year: {0}, Month: {1}, Day: {2}, Julian Day: {3},Leap seconds: {4}",
                                                           yearString, monthString, dayString, julianDateString, leapSecondsString));
                                             TL.LogMessage("LeapSeconds", string.Format("Corrupt line: {0}", lineOfText));
                                         }
@@ -301,6 +301,7 @@ namespace EarthRotationUpdate
                                     }
                                 }
                             }
+                            TL.BlankLine();
 
                             parameters.AutomaticLeapSecondsString = currentLeapSeconds.ToString(parameters.DownloadTaskCulture); // Persist the new TAI_UTC offset value (leap seconds) to the Profile
 
@@ -325,6 +326,9 @@ namespace EarthRotationUpdate
                     }
 
                     parameters.EarthRotationDataLastUpdatedString = runDate; // Save a new last run time to the Profile
+
+                    TL.BlankLine();
+                    TL.LogMessage("LeapSeconds", string.Format("Task completed."));
 
                     File.Delete(leapSecondsfileName);
                     parameters.Dispose();
