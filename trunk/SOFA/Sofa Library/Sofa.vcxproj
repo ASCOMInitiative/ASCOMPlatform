@@ -70,6 +70,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)\Intermediate Files\</IntDir>
+    <TargetName>SOFA</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -98,6 +101,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /q /y /c "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)SOFA\Sofa Test Application\$(Platform)\$(Configuration)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -152,11 +158,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\ASCOM Sofa  Files\ASCOMDat.h" />
     <ClInclude Include="..\Currrent Source Code\sofa.h" />
     <ClInclude Include="..\Currrent Source Code\sofam.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ASCOM Sofa  Files\ASCOMDat.c" />
     <ClCompile Include="..\Currrent Source Code\a2af.c" />
     <ClCompile Include="..\Currrent Source Code\a2tf.c" />
     <ClCompile Include="..\Currrent Source Code\ab.c" />
@@ -213,7 +221,6 @@
     <ClCompile Include="..\Currrent Source Code\cr.c" />
     <ClCompile Include="..\Currrent Source Code\d2dtf.c" />
     <ClCompile Include="..\Currrent Source Code\d2tf.c" />
-    <ClCompile Include="..\Currrent Source Code\dat.c" />
     <ClCompile Include="..\Currrent Source Code\dtdb.c" />
     <ClCompile Include="..\Currrent Source Code\dtf2d.c" />
     <ClCompile Include="..\Currrent Source Code\eceq06.c" />

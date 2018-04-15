@@ -181,7 +181,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         Set
             AutomaticLeapSecondsStringValue = Value
             LogDebugMessage("AutomaticLeapSeconds Write", String.Format("AutomaticLeapSeconds = {0}", AutomaticLeapSecondsStringValue))
-            profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, GlobalItems.AUTOMATIC_LEAP_SECONDS_VALUENAME, AutomaticLeapSecondsStringValue)
+            profile.WriteProfile(GlobalItems.ASTROMETRY_SUBKEY, GlobalItems.AUTOMATIC_LEAP_SECONDS_VALUENAME, AutomaticLeapSecondsStringValue)
         End Set
     End Property
 
@@ -198,7 +198,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         Set
             NextLeapSecondsStringValue = Value
             LogDebugMessage("NextLeapSeconds Write", String.Format("NextLeapSeconds = {0}", NextLeapSecondsStringValue))
-            profile.WriteProfile(AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, NEXT_LEAP_SECONDS_VALUENAME, NextLeapSecondsStringValue)
+            profile.WriteProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_VALUENAME, NextLeapSecondsStringValue)
         End Set
     End Property
 
@@ -215,7 +215,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         Set
             NextLeapSecondsDateStringValue = Value
             LogDebugMessage("NextLeapSecondsDate Write", String.Format("NextLeapSecondsDate = {0}", NextLeapSecondsDateStringValue))
-            profile.WriteProfile(AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, NEXT_LEAP_SECONDS_DATE_VALUENAME, NextLeapSecondsDateStringValue)
+            profile.WriteProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_DATE_VALUENAME, NextLeapSecondsDateStringValue)
         End Set
     End Property
 
@@ -415,6 +415,12 @@ Public Class EarthRotationParameters : Implements IDisposable
                                                                      ReturnValue,
                                                                      RequiredLeapSecondJulianDate,
                                                                      DateTime.FromOADate(RequiredLeapSecondJulianDate - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
+                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                    ReturnValue = ManualLeapSecondsValue
+                    LogDebugMessage("LeapSeconds(JD)", String.Format("Built-in leap seconds and delta UT1 are required, returning the manual leap seconds value: {0} for JD {1} ({2})",
+                                                                     ReturnValue,
+                                                                     RequiredLeapSecondJulianDate,
+                                                                     DateTime.FromOADate(RequiredLeapSecondJulianDate - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
                 Case Else
                     LogDebugMessage("LeapSeconds(JD)", "Unknown UpdateTypeValue: " & UpdateTypeValue)
                     MsgBox("AstroUtils.LeapSeconds(JD) - Unknown UpdateTypeValue: " & UpdateTypeValue)
@@ -572,6 +578,13 @@ Public Class EarthRotationParameters : Implements IDisposable
                                                             RequiredDeltaTJulianDateUTC,
                                                             DateTime.FromOADate(RequiredDeltaTJulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
                 Exit Select
+
+            Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                LogDebugMessage("DeltaT(JD)", String.Format("Built-in leap seconds and predicted delta UT1 are required, so falling through to the predicted approach for Julian day: {0} ({1})",
+                                                            RequiredDeltaTJulianDateUTC,
+                                                            DateTime.FromOADate(RequiredDeltaTJulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
+                Exit Select
+
             Case Else
                 LogDebugMessage("DeltaT(JD)", "Unknown UpdateTypeValue: " & UpdateTypeValue)
                 MsgBox("AstroUtils.DeltaT(JD) - Unknown UpdateTypeValue: " & UpdateTypeValue)
@@ -710,6 +723,16 @@ Public Class EarthRotationParameters : Implements IDisposable
                                                        RequiredDeltaUT1JulianDateUTC,
                                                        DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
 
+            Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                LogDebugMessage("DeltaUT1(JD)", String.Format("Built-in DeltaUT1 is required so returning value determined from DeltaT calculation at Julian date: {0} ({1})",
+                                                       RequiredDeltaUT1JulianDateUTC,
+                                                       DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
+                ReturnValue = Me.LeapSeconds(RequiredDeltaUT1JulianDateUTC) + TT_TAI_OFFSET - Me.DeltaT(RequiredDeltaUT1JulianDateUTC)
+                LogDebugMessage("DeltaUT1(JD)", String.Format("Return value: {0} for Julian day: {1} ({2})",
+                                                                   ReturnValue,
+                                                                   RequiredDeltaUT1JulianDateUTC,
+                                                                   DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
+
             Case Else
                 LogMessage("DeltaUT1(JD)", "Unknown Parameters.UpdateType: " & UpdateTypeValue)
                 MsgBox("AstroUtils.DeltaUT1 - Unknown Parameters.UpdateType: " & UpdateTypeValue)
@@ -738,8 +761,6 @@ Public Class EarthRotationParameters : Implements IDisposable
 
         LogDebugMessage("RefreshState", "")
         LogDebugMessage("RefreshState", "Start of Refresh")
-
-        LastLeapSecondJulianDate = DOUBLE_VALUE_NOT_AVAILABLE ' Invalidate the cahce so that any new value will be read
 
         ' Read all values from the Profile and validate them where possible. If they are corrupt then replace with default values
 
@@ -875,7 +896,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         End If
 
         AutomaticLeapSecondsValue = DOUBLE_VALUE_NOT_AVAILABLE ' Initialise value as not available
-        OriginalProfileValue = profile.GetProfile(AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, AUTOMATIC_LEAP_SECONDS_VALUENAME, AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE)
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, AUTOMATIC_LEAP_SECONDS_VALUENAME, AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE)
         If OriginalProfileValue = AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE Then ' Has the default value so is OK
             AutomaticLeapSecondsStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("AutomaticLeapSecondsStringValue: {0}", AutomaticLeapSecondsStringValue))
@@ -891,7 +912,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         End If
 
         NextLeapSecondsValue = DOUBLE_VALUE_NOT_AVAILABLE ' Initialise value as not available
-        OriginalProfileValue = profile.GetProfile(AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, NEXT_LEAP_SECONDS_VALUENAME, NEXT_LEAP_SECONDS_NOT_AVAILABLE)
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_VALUENAME, NEXT_LEAP_SECONDS_NOT_AVAILABLE)
         If (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_AVAILABLE) Or (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
             NextLeapSecondsStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("NextLeapSecondsStringValue: {0}", NextLeapSecondsStringValue))
@@ -907,8 +928,8 @@ Public Class EarthRotationParameters : Implements IDisposable
         End If
 
         NextLeapSecondsDateValue = DATE_VALUE_NOT_AVAILABLE ' Initialise value as not available
-        OriginalProfileValue = profile.GetProfile(AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, NEXT_LEAP_SECONDS_DATE_VALUENAME, NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE)
-        If (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Or (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_DATE_VALUENAME, NEXT_LEAP_SECONDS_DATE_DEFAULT)
+        If (OriginalProfileValue = NEXT_LEAP_SECONDS_DATE_DEFAULT) Or (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
             NextLeapSecondsDateStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("AutomaticNextTaiUtcOffsetDateValue = {0}", NextLeapSecondsDateStringValue))
         Else ' Not default so it should be parseable
@@ -939,13 +960,20 @@ Public Class EarthRotationParameters : Implements IDisposable
         End Try
         LogDebugMessage("RefreshState", String.Format("Found {0} leap second values in the Profile", ProfileLeapSecondsValueStrings.Count))
 
+        ' Parse the JulianDate-LeapSecond string pairs into double values and save them if they are valid
         For Each ProfileLeapSecondKeyValuePair As KeyValuePair(Of String, String) In ProfileLeapSecondsValueStrings
-            ProfileLeapSecondDateOk = Double.TryParse(ProfileLeapSecondKeyValuePair.Key, ProfileLeapSecondDate) ' Validate the Julian date as a double
-            ProfileLeapSecondValueOk = Double.TryParse(ProfileLeapSecondKeyValuePair.Value, ProfileLeapSecondsValue) ' Validate tyhe leap seconds value as a double
+            ProfileLeapSecondDateOk = Double.TryParse(ProfileLeapSecondKeyValuePair.Key, NumberStyles.Float, DownloadTaskCultureValue, ProfileLeapSecondDate) ' Validate the Julian date as a double
+            If ProfileLeapSecondDateOk Then ' Check that it is in the valid range to be use with dateTime.FromOADate
+                If (ProfileLeapSecondDate < -657435.0) Or (ProfileLeapSecondDate >= 2958466.0) Then
+                    ProfileLeapSecondDateOk = False
+                    LogMessage("RefreshState", String.Format("Invalid leap second date: {0}, the valid range is -657435.0 to 2958465.999999", ProfileLeapSecondDate))
+                End If
+            End If
+            ProfileLeapSecondValueOk = Double.TryParse(ProfileLeapSecondKeyValuePair.Value, NumberStyles.Float, DownloadTaskCultureValue, ProfileLeapSecondsValue) ' Validate tyhe leap seconds value as a double
             If ProfileLeapSecondDateOk And ProfileLeapSecondValueOk Then ' Both values are valid doubles so add them to the collection
                 ProfileLeapSecondsValues.Add(ProfileLeapSecondDate, ProfileLeapSecondsValue)
             Else
-                LogDebugMessage("RefreshState", String.Format("Omitted Profile leap Second value JD: {0}, LeapSeconds: {1}, {2} {3}", ProfileLeapSecondKeyValuePair.Key, ProfileLeapSecondKeyValuePair.Value, ProfileLeapSecondDateOk, ProfileLeapSecondValueOk))
+                LogMessage("RefreshState", String.Format("Omitted Profile leap Second value JD: {0}, LeapSeconds: {1}, {2} {3}", ProfileLeapSecondKeyValuePair.Key, ProfileLeapSecondKeyValuePair.Value, ProfileLeapSecondDateOk, ProfileLeapSecondValueOk))
             End If
         Next
 
@@ -965,6 +993,11 @@ Public Class EarthRotationParameters : Implements IDisposable
             HistoricLeapSecondValues = ProfileLeapSecondsValues ' Save the them for future use
             LogDebugMessage("RefreshState", String.Format("Profile values ({0}) saved to HistoricLeapSecondValues.", HistoricLeapSecondValues.Count))
         End If
+
+        ' Invalidate caches
+        LastLeapSecondJulianDate = DOUBLE_VALUE_NOT_AVAILABLE ' Invalidate the cahce so that any new value will be read
+        LastDeltaTJulianDate = DOUBLE_VALUE_NOT_AVAILABLE
+        LastDeltaUT1JulianDate = DOUBLE_VALUE_NOT_AVAILABLE
 
         LogDebugMessage("RefreshState", "End of Refresh")
         LogDebugMessage("RefreshState", "")

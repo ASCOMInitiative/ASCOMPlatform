@@ -34,8 +34,9 @@ Public Class EarthRotationDataForm
                                                              EARTH_ROTATION_DATA_SOURCE_3,
                                                              EARTH_ROTATION_DATA_SOURCE_4}
 
-    Private ut1Sources As New List(Of String) From {UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1,
+    Private ut1Sources As New List(Of String) From {UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1,
                                                     UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1,
+                                                    UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1,
                                                     UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1}
 
     Private scheduleRepeatOptions As New List(Of String) From {SCHEDULE_REPEAT_NONE,
@@ -43,49 +44,6 @@ Public Class EarthRotationDataForm
                                                                SCHEDULE_REPEAT_WEEKLY,
                                                                SCHEDULE_REPEAT_MONTHLY}
 
-    ''' <summary>
-    ''' Event handler to paint the device list combo box in the "DropDown" rather than "DropDownList" style
-    ''' </summary>
-    ''' <param name="sender">Device to be painted</param>
-    ''' <param name="e">Draw event arguments object</param>
-    Private Sub ComboBox_DrawItem(sender As Object, e As DrawItemEventArgs) Handles CmbScheduleRepeat.DrawItem, CmbUpdateType.DrawItem
-        Dim DisabledForeColour, DisabledBackColour As Color
-        Dim combo As ComboBox = CType(sender, ComboBox)
-
-        If (e.Index < 0) Then Return
-
-        DisabledForeColour = SystemColors.GrayText
-        DisabledBackColour = SystemColors.ButtonFace
-
-
-        If ((e.State And DrawItemState.Selected) = DrawItemState.Selected) Then ' Draw Then the selected item In menu highlight colour
-
-            If combo.Enabled Then
-                e.Graphics.FillRectangle(New SolidBrush(SystemColors.MenuHighlight), e.Bounds)
-                e.Graphics.DrawString(combo.Items(e.Index).ToString(), e.Font, New SolidBrush(SystemColors.HighlightText), New Point(e.Bounds.X, e.Bounds.Y))
-            Else
-                e.Graphics.FillRectangle(New SolidBrush(DisabledBackColour), e.Bounds)
-                e.Graphics.DrawString(combo.Items(e.Index).ToString(), e.Font, New SolidBrush(DisabledForeColour), New Point(e.Bounds.X, e.Bounds.Y))
-            End If
-
-        Else
-            If combo.Enabled Then
-                e.Graphics.FillRectangle(New SolidBrush(SystemColors.Window), e.Bounds)
-                e.Graphics.DrawString(combo.Items(e.Index).ToString(), e.Font, New SolidBrush(combo.ForeColor), New Point(e.Bounds.X, e.Bounds.Y))
-            Else
-                e.Graphics.FillRectangle(New SolidBrush(DisabledBackColour), e.Bounds)
-                e.Graphics.DrawString(combo.Items(e.Index).ToString(), e.Font, New SolidBrush(DisabledForeColour), New Point(e.Bounds.X, e.Bounds.Y))
-
-            End If
-        End If
-
-        e.DrawFocusRectangle()
-    End Sub
-
-
-
-
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
     Private Sub EarthRotationDataForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         TL = New TraceLogger("", "EarthRotation")
         TL.Enabled = True
@@ -180,134 +138,13 @@ Public Class EarthRotationDataForm
         End Try
     End Sub
 
-    Private Sub TimerEventProcessor(myObject As Object, ByVal myEventArgs As EventArgs) Handles NowTimer.Tick
-        UpdateStatus()
-    End Sub
-
-    Private Sub UpdateStatus()
-        Dim DisplayDate As DateTime, jdUtc As Double
-
-        Parameters.RefreshState() ' Refresh parameter values in case they have changed while we are running
-
-        TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
-        TxtCurrentLeapSeconds.Text = Parameters.AutomaticLeapSecondsString
-        TxtNextLeapSeconds.Text = Parameters.NextLeapSecondsString
-        TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf(Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE, "", "UTC")
-        TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString()
-        jdUtc = aUtils.JulianDateUtc
-        TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString()
-
-        ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
-        DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
-
-        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpperInvariant())
-
-    End Sub
-
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
-    Private Sub CmbUpdateType_Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbUpdateType.SelectedIndexChanged
-        Dim comboBox As ComboBox = CType(sender, ComboBox)
-        EarthRotationDataUpdateType = CType(comboBox.SelectedItem, String)
-        EnableControlsAsRequired()
-    End Sub
-
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
-    Private Sub EnableControlsAsRequired()
-        Select Case EarthRotationDataUpdateType
-            Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
-                TxtManualLeapSeconds.Enabled = True
-                TxtManualDeltaUT1.Enabled = True
-                TxtDownloadTimeout.Enabled = False
-                CmbDataSource.Enabled = False
-                DateScheduleRun.Enabled = False
-                CmbScheduleRepeat.Enabled = False
-                TxtTraceFilePath.Enabled = False
-                ChkTraceEnabled.Enabled = False
-                BtnSetTraceDirectory.Enabled = False
-                TxtRunStatus.Enabled = False
-                BtnRunAutomaticUpdate.Enabled = False
-                TxtCurrentLeapSeconds.Enabled = False
-                TxtNextLeapSeconds.Enabled = False
-                TxtNextLeapSecondsDate.Enabled = False
-                LblCurrentLeapSeconds.Enabled = False
-                LblNextLeapSeconds.Enabled = False
-                LblNextLeapSecondsDate.Enabled = False
-                TxtLastRun.Enabled = False
-                LblTraceEnabled.Enabled = False
-                LblLastRun.Enabled = False
-                LblRunStatus.Enabled = False
-            Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
-                TxtManualLeapSeconds.Enabled = True
-                TxtManualDeltaUT1.Enabled = False
-                TxtDownloadTimeout.Enabled = False
-                CmbDataSource.Enabled = False
-                DateScheduleRun.Enabled = False
-                CmbScheduleRepeat.Enabled = False
-                TxtTraceFilePath.Enabled = False
-                ChkTraceEnabled.Enabled = False
-                BtnSetTraceDirectory.Enabled = False
-                TxtRunStatus.Enabled = False
-                BtnRunAutomaticUpdate.Enabled = False
-                TxtCurrentLeapSeconds.Enabled = False
-                TxtNextLeapSeconds.Enabled = False
-                TxtNextLeapSecondsDate.Enabled = False
-                LblCurrentLeapSeconds.Enabled = False
-                LblNextLeapSeconds.Enabled = False
-                LblNextLeapSecondsDate.Enabled = False
-                TxtLastRun.Enabled = False
-                LblTraceEnabled.Enabled = False
-                LblLastRun.Enabled = False
-                LblRunStatus.Enabled = False
-            Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
-                TxtManualLeapSeconds.Enabled = False
-                TxtManualDeltaUT1.Enabled = False
-                TxtDownloadTimeout.Enabled = True
-                CmbDataSource.Enabled = True
-                DateScheduleRun.Enabled = True
-                CmbScheduleRepeat.Enabled = True
-                TxtTraceFilePath.Enabled = True
-                ChkTraceEnabled.Enabled = True
-                BtnSetTraceDirectory.Enabled = True
-                TxtRunStatus.Enabled = True
-                BtnRunAutomaticUpdate.Enabled = True
-                TxtCurrentLeapSeconds.Enabled = True
-                TxtNextLeapSeconds.Enabled = True
-                TxtNextLeapSecondsDate.Enabled = True
-                LblCurrentLeapSeconds.Enabled = True
-                LblNextLeapSeconds.Enabled = True
-                LblNextLeapSecondsDate.Enabled = True
-                TxtLastRun.Enabled = True
-                LblTraceEnabled.Enabled = True
-                LblLastRun.Enabled = True
-                LblRunStatus.Enabled = True
-            Case Else
-                MsgBox("Unkown EarthRotationDataUpdateType: " & EarthRotationDataUpdateType)
-        End Select
-        GrpAutomaticUpdate.Refresh()
-        GrpManualUpdate.Refresh()
-        GrpUpdateType.Refresh()
-        GrpStatus.Refresh()
-    End Sub
-
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
-    Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles BtnOK.Click
-        ApplyChanges()
-        Me.Close()
-    End Sub
-
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
-    Private Sub BtnApply_Click(sender As Object, e As EventArgs) Handles BtnApply.Click
-        ApplyChanges()
-    End Sub
-
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
     Private Sub ApplyChanges()
         Dim taskDefinition As TaskDefinition, taskTrigger As Trigger = Nothing, executablePath As String
 
         Try
             ' Get values from UI components into the relvant variables
             UtcTaiOffset = Double.Parse(TxtManualLeapSeconds.Text)
-            EarthRotationDataUpdateType = CmbUpdateType.Text
+            EarthRotationDataUpdateType = CmbUpdateType.SelectedItem.ToString()
             EarthRotationDataSource = CmbDataSource.Text
             DeltaUT1ManualValue = TxtManualDeltaUT1.Text
             DownloadTimeout = Double.Parse(TxtDownloadTimeout.Text)
@@ -326,6 +163,8 @@ Public Class EarthRotationDataForm
             Parameters.DownloadTaskRepeatFrequency = AutomaticScheduleJobRepeatFrequency
             Parameters.DownloadTaskTracePath = TraceFilePath
             Parameters.DownloadTaskTraceEnabled = TraceEnabled
+
+            Parameters.RefreshState() ' Refresh parameter values in case they have changed while we are running
 
             ' Parameters have been updated so get a new AstroUntils object that will use the revised configuration
             Try : aUtils.Dispose() : Catch : End Try
@@ -369,7 +208,7 @@ Public Class EarthRotationDataForm
                 TL.BlankLine()
 
                 Select Case EarthRotationDataUpdateType
-                    Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1 ' Just remove the update job if it exists so that it can't run
+                    Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1 ' Just remove the update job if it exists so that it can't run
                         If (Not (ASCOMTask Is Nothing)) Then
                             TL.LogMessage("OK", String.Format("Update type is {0} and {1} task exists so it will be deleted.", EarthRotationDataUpdateType, DOWNLOAD_SCHEDULE_TASK_NAME))
                             service.RootFolder.DeleteTask(DOWNLOAD_SCHEDULE_TASK_NAME)
@@ -458,7 +297,120 @@ Public Class EarthRotationDataForm
         TL.LogMessage("OK", String.Format("Earth rotation data update configuration changes completed."))
     End Sub
 
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
+    Private Sub BtnApply_Click(sender As Object, e As EventArgs) Handles BtnApply.Click
+        ApplyChanges()
+    End Sub
+
+    Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles BtnOK.Click
+        ApplyChanges()
+        Me.Close()
+    End Sub
+
+    Private Sub CmbUpdateType_Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbUpdateType.SelectedIndexChanged
+        Dim comboBox As ComboBox = CType(sender, ComboBox)
+        EarthRotationDataUpdateType = CType(comboBox.SelectedItem, String)
+        EnableControlsAsRequired()
+    End Sub
+
+    Private Sub EnableControlsAsRequired()
+        Select Case EarthRotationDataUpdateType
+            Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                TxtManualLeapSeconds.Enabled = False
+                TxtManualDeltaUT1.Enabled = False
+                TxtDownloadTimeout.Enabled = False
+                CmbDataSource.Enabled = False
+                DateScheduleRun.Enabled = False
+                CmbScheduleRepeat.Enabled = False
+                TxtTraceFilePath.Enabled = False
+                ChkTraceEnabled.Enabled = False
+                BtnSetTraceDirectory.Enabled = False
+                TxtRunStatus.Enabled = False
+                BtnRunAutomaticUpdate.Enabled = False
+                TxtCurrentLeapSeconds.Enabled = False
+                TxtNextLeapSeconds.Enabled = False
+                TxtNextLeapSecondsDate.Enabled = False
+                LblCurrentLeapSeconds.Enabled = False
+                LblNextLeapSeconds.Enabled = False
+                LblNextLeapSecondsDate.Enabled = False
+                TxtLastRun.Enabled = False
+                LblTraceEnabled.Enabled = False
+                LblLastRun.Enabled = False
+                LblRunStatus.Enabled = False
+            Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
+                TxtManualLeapSeconds.Enabled = True
+                TxtManualDeltaUT1.Enabled = True
+                TxtDownloadTimeout.Enabled = False
+                CmbDataSource.Enabled = False
+                DateScheduleRun.Enabled = False
+                CmbScheduleRepeat.Enabled = False
+                TxtTraceFilePath.Enabled = False
+                ChkTraceEnabled.Enabled = False
+                BtnSetTraceDirectory.Enabled = False
+                TxtRunStatus.Enabled = False
+                BtnRunAutomaticUpdate.Enabled = False
+                TxtCurrentLeapSeconds.Enabled = False
+                TxtNextLeapSeconds.Enabled = False
+                TxtNextLeapSecondsDate.Enabled = False
+                LblCurrentLeapSeconds.Enabled = False
+                LblNextLeapSeconds.Enabled = False
+                LblNextLeapSecondsDate.Enabled = False
+                TxtLastRun.Enabled = False
+                LblTraceEnabled.Enabled = False
+                LblLastRun.Enabled = False
+                LblRunStatus.Enabled = False
+            Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
+                TxtManualLeapSeconds.Enabled = True
+                TxtManualDeltaUT1.Enabled = False
+                TxtDownloadTimeout.Enabled = False
+                CmbDataSource.Enabled = False
+                DateScheduleRun.Enabled = False
+                CmbScheduleRepeat.Enabled = False
+                TxtTraceFilePath.Enabled = False
+                ChkTraceEnabled.Enabled = False
+                BtnSetTraceDirectory.Enabled = False
+                TxtRunStatus.Enabled = False
+                BtnRunAutomaticUpdate.Enabled = False
+                TxtCurrentLeapSeconds.Enabled = False
+                TxtNextLeapSeconds.Enabled = False
+                TxtNextLeapSecondsDate.Enabled = False
+                LblCurrentLeapSeconds.Enabled = False
+                LblNextLeapSeconds.Enabled = False
+                LblNextLeapSecondsDate.Enabled = False
+                TxtLastRun.Enabled = False
+                LblTraceEnabled.Enabled = False
+                LblLastRun.Enabled = False
+                LblRunStatus.Enabled = False
+            Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
+                TxtManualLeapSeconds.Enabled = False
+                TxtManualDeltaUT1.Enabled = False
+                TxtDownloadTimeout.Enabled = True
+                CmbDataSource.Enabled = True
+                DateScheduleRun.Enabled = True
+                CmbScheduleRepeat.Enabled = True
+                TxtTraceFilePath.Enabled = True
+                ChkTraceEnabled.Enabled = True
+                BtnSetTraceDirectory.Enabled = True
+                TxtRunStatus.Enabled = True
+                BtnRunAutomaticUpdate.Enabled = True
+                TxtCurrentLeapSeconds.Enabled = True
+                TxtNextLeapSeconds.Enabled = True
+                TxtNextLeapSecondsDate.Enabled = True
+                LblCurrentLeapSeconds.Enabled = True
+                LblNextLeapSeconds.Enabled = True
+                LblNextLeapSecondsDate.Enabled = True
+                TxtLastRun.Enabled = True
+                LblTraceEnabled.Enabled = True
+                LblLastRun.Enabled = True
+                LblRunStatus.Enabled = True
+            Case Else
+                MsgBox("Unknown EarthRotationDataUpdateType: " & EarthRotationDataUpdateType)
+        End Select
+        GrpAutomaticUpdate.Refresh()
+        GrpManualUpdate.Refresh()
+        GrpUpdateType.Refresh()
+        GrpStatus.Refresh()
+    End Sub
+
     Private Sub TxtDownloadTimeout_Validating(sender As Object, e As KeyEventArgs) Handles TxtDownloadTimeout.KeyUp
         Dim DoubleValue As Double = 0.0
 
@@ -472,7 +424,6 @@ Public Class EarthRotationDataForm
         End If
     End Sub
 
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
     Private Sub TxtLeapSeconds_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualLeapSeconds.KeyUp
         Dim IntValue As Integer = 0.0
 
@@ -486,7 +437,6 @@ Public Class EarthRotationDataForm
         End If
     End Sub
 
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
     Private Sub CmbDataSource_Validating(sender As Object, e As KeyEventArgs) Handles CmbDataSource.KeyUp
         ValidateURI(sender)
     End Sub
@@ -511,8 +461,6 @@ Public Class EarthRotationDataForm
         End If
     End Sub
 
-
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
     Private Sub TxtDeltaUT1Manuals_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualDeltaUT1.KeyUp
         Dim DoubleValue As Double = 0.0
 
@@ -526,10 +474,6 @@ Public Class EarthRotationDataForm
         End If
     End Sub
 
-
-
-
-    <MethodImplAttribute(MethodImplOptions.NoOptimization And MethodImplOptions.NoInlining)>
     Private Sub GroupBox_Paint(sender As Object, e As PaintEventArgs) Handles GrpAutomaticUpdate.Paint, GrpManualUpdate.Paint, GrpUpdateType.Paint, GrpStatus.Paint
         Const HEIGHT_OFFSET As Integer = 8
         Const WIDTH_OFFSET As Integer = 1
@@ -546,6 +490,8 @@ Public Class EarthRotationDataForm
 
         If sender Is GrpAutomaticUpdate Then
             Select Case EarthRotationDataUpdateType
+                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                    borderColour = inactiveBorder
                 Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
                     borderColour = inactiveBorder
                 Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
@@ -562,6 +508,8 @@ Public Class EarthRotationDataForm
             LblAutoSeconds.Enabled = borderColour = activeBorder
         ElseIf sender Is GrpManualUpdate Then
             Select Case EarthRotationDataUpdateType
+                Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                    borderColour = inactiveBorder
                 Case UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
                     borderColour = activeBorder
                 Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1
@@ -652,8 +600,70 @@ Public Class EarthRotationDataForm
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Event handler to paint the device list combo box in the "DropDown" rather than "DropDownList" style
+    ''' </summary>
+    ''' <param name="sender">Device to be painted</param>
+    ''' <param name="e">Draw event arguments object</param>
+    Private Sub ComboBox_DrawItem(sender As Object, e As DrawItemEventArgs) Handles CmbScheduleRepeat.DrawItem, CmbUpdateType.DrawItem
+        Dim DisabledForeColour, DisabledBackColour As Color
+        Dim combo As ComboBox = CType(sender, ComboBox)
+
+        If (e.Index < 0) Then Return
+
+        DisabledForeColour = SystemColors.GrayText
+        DisabledBackColour = SystemColors.ButtonFace
+
+
+        If ((e.State And DrawItemState.Selected) = DrawItemState.Selected) Then ' Draw Then the selected item In menu highlight colour
+
+            If combo.Enabled Then
+                e.Graphics.FillRectangle(New SolidBrush(SystemColors.MenuHighlight), e.Bounds)
+                e.Graphics.DrawString(combo.Items(e.Index).ToString(), e.Font, New SolidBrush(SystemColors.HighlightText), New Point(e.Bounds.X, e.Bounds.Y))
+            Else
+                e.Graphics.FillRectangle(New SolidBrush(DisabledBackColour), e.Bounds)
+                e.Graphics.DrawString(combo.Items(e.Index).ToString(), e.Font, New SolidBrush(DisabledForeColour), New Point(e.Bounds.X, e.Bounds.Y))
+            End If
+
+        Else
+            If combo.Enabled Then
+                e.Graphics.FillRectangle(New SolidBrush(SystemColors.Window), e.Bounds)
+                e.Graphics.DrawString(combo.Items(e.Index).ToString(), e.Font, New SolidBrush(combo.ForeColor), New Point(e.Bounds.X, e.Bounds.Y))
+            Else
+                e.Graphics.FillRectangle(New SolidBrush(DisabledBackColour), e.Bounds)
+                e.Graphics.DrawString(combo.Items(e.Index).ToString(), e.Font, New SolidBrush(DisabledForeColour), New Point(e.Bounds.X, e.Bounds.Y))
+
+            End If
+        End If
+
+        e.DrawFocusRectangle()
+    End Sub
+
+    Private Sub TimerEventProcessor(myObject As Object, ByVal myEventArgs As EventArgs) Handles NowTimer.Tick
+        UpdateStatus()
+    End Sub
+
     Private Sub LogRunMessage(message As String)
         TL.LogMessageCrLf("RunAutomaticUpdate", message)
         TxtRunStatus.Text = message
     End Sub
+
+    Private Sub UpdateStatus()
+        Dim DisplayDate As DateTime, jdUtc As Double
+
+        TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
+        TxtCurrentLeapSeconds.Text = Parameters.AutomaticLeapSecondsString
+        TxtNextLeapSeconds.Text = Parameters.NextLeapSecondsString
+        TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf((Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Or (Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_DATE_DEFAULT), "", "UTC")
+        TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString()
+        jdUtc = aUtils.JulianDateUtc
+        TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString("0.000")
+
+        ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
+        DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
+
+        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpperInvariant())
+
+    End Sub
+
 End Class

@@ -241,6 +241,13 @@ namespace EarthRotationUpdate
                         profile.CreateKey(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME);
                         profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, "", "Julian Day - Leap Seconds");
 
+                        // Include a value that is in the SOFA library defaults but is not in the USNO files. It predates the start of UTC but I am assuming that IAU is correct on this occasion
+                        profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, double.Parse("2436934.5",CultureInfo.InvariantCulture).ToString(parameters.DownloadTaskCulture), double.Parse("1.4178180",CultureInfo.InvariantCulture).ToString(parameters.DownloadTaskCulture));
+
+
+                        // 		{ 1960,  1,  1.4178180 }, 
+
+
                         using (var filestream = new FileStream(leapSecondsfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             double currentLeapSeconds = 0.0;
