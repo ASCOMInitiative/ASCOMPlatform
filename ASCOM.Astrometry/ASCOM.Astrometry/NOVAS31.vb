@@ -56,6 +56,8 @@ Namespace NOVAS
             TL = New TraceLogger("", "NOVAS31")
             TL.Enabled = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
             Novas31Mutex = New Mutex(False, NOVAS31_MUTEX_NAME) ' Create a mutex that will ensure that only one NOVAS31 initialisation can occur at a time
+            JPLEphFile = ""
+
             Try
                 TL.LogMessage("New", "Creating EarthRotationParameters object")
                 Parameters = New EarthRotationParameters(TL)
@@ -95,6 +97,8 @@ Namespace NOVAS
 
                 ' Open the ephemerides file and set its applicable date range
                 rc1 = Ephem_Open(JPLEphFile, JPL_EPHEM_START_DATE, JPL_EPHEM_END_DATE, DENumber)
+            Catch ex As Exception
+                TL.LogMessageCrLf("New", "Exception: " & ex.ToString())
             Finally
                 Novas31Mutex.ReleaseMutex() ' Release the initialisation mutex
             End Try

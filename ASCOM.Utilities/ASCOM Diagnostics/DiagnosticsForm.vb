@@ -21,11 +21,11 @@ Public Class DiagnosticsForm
 #Region "Constants and Enums"
     ' Controls to reduce the scope of tests to be run - only set to false to speed up testing during development. Must all be set True for production builds!
     Private Const TEST_ASTROMETRY As Boolean = True
-    Private Const TEST_CACHE As Boolean = False
-    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = False
-    Private Const TEST_REGISTRY As Boolean = False
-    Private Const TEST_SIMULATORS As Boolean = False
-    Private Const TEST_UTILITIES As Boolean = False
+    Private Const TEST_CACHE As Boolean = True
+    Private Const TEST_LOGS_AND_APPLICATIONS As Boolean = True
+    Private Const TEST_REGISTRY As Boolean = True
+    Private Const TEST_SIMULATORS As Boolean = True
+    Private Const TEST_UTILITIES As Boolean = True
 
     Private Const ASCOM_PLATFORM_NAME As String = "ASCOM Platform 6"
     Private Const INST_DISPLAY_NAME As String = "DisplayName"
@@ -7811,23 +7811,27 @@ Public Class DiagnosticsForm
 
             JDUtc = AstroUtil2.JulianDateUtc
             DUT1 = AstroUtil2.DeltaUT(JDUtc)
-            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.DeltaUT1: {0}", DUT1))
+            If (DUT1 > -0.9) And (DUT1 < 0.9) Then ' We have a valid value so proceed to test
+                TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.DeltaUT1 returned a valid value: {0}", DUT1))
+                DT0 = AstroUtil2.JulianDateUT1(0.0)
+                DTDUT1 = AstroUtil2.JulianDateUT1(DUT1)
+                TimeDifference = (DT0 - DTDUT1) * 24.0 * 60.0 * 60.0
+                TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1(0.0): {0}", DT0))
+                TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1(DeltaUT1): {0}", DTDUT1))
+                TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1 Difference: {0} seconds", TimeDifference))
+                CompareDouble("AstroUtilTests", "JulianDateUT1", DT0, DTDUT1, TOLERANCE_E3)
 
-            DT0 = AstroUtil2.JulianDateUT1(0.0)
-            DTDUT1 = AstroUtil2.JulianDateUT1(DUT1)
-            TimeDifference = (DT0 - DTDUT1) * 24.0 * 60.0 * 60.0
-            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1(0.0): {0}", DT0))
-            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1(DeltaUT1): {0}", DTDUT1))
-            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateUT1 Difference: {0} seconds", TimeDifference))
-            CompareDouble("AstroUtilTests", "JulianDateUT1", DT0, DTDUT1, TOLERANCE_E3)
-
-            DT0 = AstroUtil2.JulianDateTT(0.0)
-            DTDUT1 = AstroUtil2.JulianDateTT(DUT1)
-            TimeDifference = (DT0 - DTDUT1) * 24.0 * 60.0 * 60.0
-            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT(0.0): {0}", DT0))
-            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT(DeltaUT1): {0}", DTDUT1))
-            TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT Difference: {0} seconds", TimeDifference))
-            CompareDouble("AstroUtilTests", "JulianDateTT", DT0, DTDUT1, TOLERANCE_E3)
+                DT0 = AstroUtil2.JulianDateTT(0.0)
+                DTDUT1 = AstroUtil2.JulianDateTT(DUT1)
+                TimeDifference = (DT0 - DTDUT1) * 24.0 * 60.0 * 60.0
+                TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT(0.0): {0}", DT0))
+                TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT(DeltaUT1): {0}", DTDUT1))
+                TL.LogMessage("AstroUtilTests", String.Format("AstroUtils.JulianDateTT Difference: {0} seconds", TimeDifference))
+                CompareDouble("AstroUtilTests", "JulianDateTT", DT0, DTDUT1, TOLERANCE_E3)
+            Else ' Invalid value produced so skip this test, which will raise an exception if DUT1 is outside the valid range
+                TL.LogMessage("AstroUtilTests", String.Format("DeltaUT1 tests skipped because the returned value for DeltaUT1 is outside the valid range -0.9 to +0.9: {0}", DUT1))
+            End If
+            TL.LogMessage("", "")
 
             'Range Tests
             CompareDouble("AstroUtilTests", "ConditionHA -12.0", AstroUtil2.ConditionHA(-12.0), -12.0, TOLERANCE_E6)

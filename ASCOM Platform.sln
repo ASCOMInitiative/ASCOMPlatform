@@ -1424,6 +1424,7 @@ Global
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Debug Quick|x86.Build.0 = Debug|x86
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{81091BA8-725D-465D-AC6B-A36912B73AA7}.Debug|Win32.ActiveCfg = Debug|Any CPU
@@ -1802,7 +1803,6 @@ Global
 		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug Quick|x64.ActiveCfg = Debug|Any CPU
 		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug Quick|x86.ActiveCfg = Debug|Any CPU
 		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{84D4BDDD-845A-4F9E-A62E-B5CC3EF036E4}.Debug|Win32.ActiveCfg = Debug|Any CPU
@@ -1834,7 +1834,6 @@ Global
 		{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9}.Debug Quick|x86.Build.0 = Debug|x86
 		{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{EF66A901-9EE0-4433-9F67-6E71D1CF3BF9}.Debug|Win32.ActiveCfg = Debug|Any CPU
@@ -2071,6 +2070,7 @@ Global
 		{D2A70AD3-B305-4609-B1E1-0EE5449B5353}.Debug Quick|x64.Build.0 = Debug|x64
 		{D2A70AD3-B305-4609-B1E1-0EE5449B5353}.Debug Quick|x86.ActiveCfg = Debug|Win32
 		{D2A70AD3-B305-4609-B1E1-0EE5449B5353}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{D2A70AD3-B305-4609-B1E1-0EE5449B5353}.Debug|Any CPU.Build.0 = Debug|Win32
 		{D2A70AD3-B305-4609-B1E1-0EE5449B5353}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{D2A70AD3-B305-4609-B1E1-0EE5449B5353}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{D2A70AD3-B305-4609-B1E1-0EE5449B5353}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -2146,6 +2146,7 @@ Global
 		{D614CB03-20EC-47EB-94F6-A6E3C6F47ABA}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{D614CB03-20EC-47EB-94F6-A6E3C6F47ABA}.Debug Quick|x86.Build.0 = Debug|x86
 		{D614CB03-20EC-47EB-94F6-A6E3C6F47ABA}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D614CB03-20EC-47EB-94F6-A6E3C6F47ABA}.Debug|Any CPU.Build.0 = Debug|x86
 		{D614CB03-20EC-47EB-94F6-A6E3C6F47ABA}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{D614CB03-20EC-47EB-94F6-A6E3C6F47ABA}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{D614CB03-20EC-47EB-94F6-A6E3C6F47ABA}.Debug|Win32.ActiveCfg = Debug|x86
@@ -2182,6 +2183,7 @@ Global
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Debug Quick|x86.Build.0 = Debug|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Debug|Any CPU.Build.0 = Debug|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{227ED9A5-66AD-470D-976F-57442AA2C73C}.Debug|Win32.ActiveCfg = Debug|x86
@@ -2286,6 +2288,7 @@ Global
 		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug Quick|x86.Build.0 = Debug|x86
 		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Any CPU.Build.0 = Debug|x86
 		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{DD23E159-2FFB-40FE-B73D-E50653F8A17C}.Debug|Win32.ActiveCfg = Debug|x86
@@ -2322,6 +2325,7 @@ Global
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Debug Quick|x86.Build.0 = Debug|x86
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Debug|Any CPU.Build.0 = Debug|x86
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{E39CFF76-C086-425A-93FD-E60BA491D45C}.Debug|Win32.ActiveCfg = Debug|x86
@@ -2425,6 +2429,7 @@ Global
 		{8E8D406C-1838-4914-867D-AB602D0EAF3E}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{8E8D406C-1838-4914-867D-AB602D0EAF3E}.Debug Quick|x86.Build.0 = Debug|x86
 		{8E8D406C-1838-4914-867D-AB602D0EAF3E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{8E8D406C-1838-4914-867D-AB602D0EAF3E}.Debug|Any CPU.Build.0 = Debug|x86
 		{8E8D406C-1838-4914-867D-AB602D0EAF3E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{8E8D406C-1838-4914-867D-AB602D0EAF3E}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{8E8D406C-1838-4914-867D-AB602D0EAF3E}.Debug|Win32.ActiveCfg = Debug|x86
@@ -2558,6 +2563,7 @@ Global
 		{7DF15865-2F46-4257-B2A8-3B96CEE65E08}.Debug Quick|x86.ActiveCfg = Debug|x86
 		{7DF15865-2F46-4257-B2A8-3B96CEE65E08}.Debug Quick|x86.Build.0 = Debug|x86
 		{7DF15865-2F46-4257-B2A8-3B96CEE65E08}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7DF15865-2F46-4257-B2A8-3B96CEE65E08}.Debug|Any CPU.Build.0 = Debug|x86
 		{7DF15865-2F46-4257-B2A8-3B96CEE65E08}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{7DF15865-2F46-4257-B2A8-3B96CEE65E08}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{7DF15865-2F46-4257-B2A8-3B96CEE65E08}.Debug|Win32.ActiveCfg = Debug|x86
@@ -2744,6 +2750,7 @@ Global
 		{82D4A273-6125-40F5-BF29-9445D302A407}.Debug Quick|x86.ActiveCfg = Debug|Win32
 		{82D4A273-6125-40F5-BF29-9445D302A407}.Debug Quick|x86.Build.0 = Debug|Win32
 		{82D4A273-6125-40F5-BF29-9445D302A407}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{82D4A273-6125-40F5-BF29-9445D302A407}.Debug|Any CPU.Build.0 = Debug|Win32
 		{82D4A273-6125-40F5-BF29-9445D302A407}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{82D4A273-6125-40F5-BF29-9445D302A407}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{82D4A273-6125-40F5-BF29-9445D302A407}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -2792,6 +2799,7 @@ Global
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Debug Quick|x86.ActiveCfg = Debug|Win32
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Debug Quick|x86.Build.0 = Debug|Win32
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Debug|Any CPU.Build.0 = Debug|Win32
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{CDEAFC7B-49C3-4622-BD13-F1039BAB131D}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -2976,14 +2984,14 @@ Global
 		{70E565CC-8B9D-45A4-AF13-FD1CB9213C6E} = {E100639A-B65F-4B34-A733-D6344AF2EF46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
-		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
-		Reflector0SourceName = Moq
-		Reflector0SourceVersion = 4.0.812.4
-		Reflector0SourceAssemblyName = 
-		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
-		Reflector0DestinationName = Moq
-		Reflector0DestinationVersion = 4.0.812.4
 		Reflector0DestinationAssemblyName = 
+		Reflector0DestinationVersion = 4.0.812.4
+		Reflector0DestinationName = Moq
+		Reflector0DestinationLocation = C:\Users\Tim\Visual Studio Projects\ASCOM Platform 6.0 trunk\External Dependencies\Moq\Moq.dll
+		Reflector0SourceAssemblyName = 
+		Reflector0SourceVersion = 4.0.812.4
+		Reflector0SourceName = Moq
+		Reflector0SourceLocation = C:\Users\Tim\Programs\Reflector for .net\Regenerated Assemblies\Moq.dll
+		SolutionGuid = {EF732E96-7FA0-4C42-96B4-861ED5E48814}
 	EndGlobalSection
 EndGlobal

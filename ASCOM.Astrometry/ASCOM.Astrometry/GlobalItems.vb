@@ -60,12 +60,12 @@ Module GlobalItems
 
     'Profile store Key names
     Friend Const ASTROMETRY_SUBKEY = "Astrometry"
-    Friend Const AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME = ASTROMETRY_SUBKEY & "\Latest Earth Rotation Data" ' Name of the Profile\Astrometry subkey in which automatically downloaded Delta UT1 predicted values will be stored
-    Friend Const AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME = ASTROMETRY_SUBKEY & "\Leap Second History" ' Name of the Profile\Astrometry subkey in which automatically downloaded historic leap second values will be stored
+    Friend Const AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME = ASTROMETRY_SUBKEY & "\Latest Delta UT1 Data" ' Name of the Profile\Astrometry subkey in which automatically downloaded Delta UT1 predicted values will be stored
+    Friend Const AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME = ASTROMETRY_SUBKEY & "\Latest Leap Second Data" ' Name of the Profile\Astrometry subkey in which automatically downloaded historic leap second values will be stored
 
     'Profile store value names
-    Friend Const UPDATE_TYPE_VALUE_NAME As String = "Earth Rotation Data Update Method" ' Value name in Profile/Astrometry that determines how earth rotation data is updated: None, Automatic download, Manual entry, Built-in prediction.
-    Friend Const EARTH_ROTATION_DATA_LAST_UPDATED_VALUE_NAME As String = "Earth Rotation Data Last Updated" ' Value name for the date and time that the scheduled task was last run
+    Friend Const UPDATE_TYPE_VALUE_NAME As String = "UTC and UT1 Data Update Method" ' Value name in Profile/Astrometry that determines how earth rotation data is updated: None, Automatic download, Manual entry, Built-in prediction.
+    Friend Const EARTH_ROTATION_DATA_LAST_UPDATED_VALUE_NAME As String = "Automatic Data Last Updated" ' Value name for the date and time that the scheduled task was last run
     Friend Const MANUAL_LEAP_SECONDS_VALUENAME As String = "Manual Leap Seconds" ' Name of the manually updated leap second value
     Friend Const MANUAL_DELTAUT1_VALUE_NAME As String = "Manual Delta UT1" ' Value name in Astrometry for manually entered Delta UT1 values
     Friend Const AUTOMATIC_LEAP_SECONDS_VALUENAME As String = "Automatic Leap Seconds" ' Name of the automatically updated leap second value
@@ -84,6 +84,7 @@ Module GlobalItems
     Friend Const DOWNLOAD_TASK_CULTURE_VALUE_NAME As String = "Download Task Culture" ' Value name for the path to the scheduled job trace file
 
     ' Earth rotation data source names
+    Friend Const UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1 As String = "Built-in leap seconds and predicted delta UT1" ' Alternative value for earth rotation data source
     Friend Const UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1 As String = "Manual leap seconds and manual delta UT1" ' Alternative value for earth rotation data source
     Friend Const UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1 As String = "Manual leap seconds and predicted delta UT1" ' Alternative value for earth rotation data source
     Friend Const UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 As String = "Automatic leap seconds and delta UT1" ' Alternative value for earth rotation data source
@@ -135,12 +136,13 @@ Module GlobalItems
     Friend Const TEST_UTC_MINUTES_OFFSET As Integer = 0 '48 ' Offset in minutes to force the current time to appear earlier than present in order to test correct leap second and DeltaUT1 values when leap seconds change
 
     ' Default values
-    Friend Const UPDATE_TYPE_DEFAULT As String = UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1 ' Default value for earth rotation data source
+    Friend Const UPDATE_TYPE_DEFAULT As String = UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1 ' Default value for earth rotation data source
     Friend Const EARTH_ROTATION_DATA_NEVER_UPDATED As String = "Never" ' Default value for the scheduled job run time
     Friend Const MANUAL_LEAP_SECONDS_DEFAULT As Integer = 37 ' Current TAI - UTC offset (= leap seconds). Revised to 37 at 31st December 2016
     Friend Const MANUAL_DELTAUT1_DEFAULT As Double = 0.0
     Friend Const AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE As String = "Not downloaded" ' Default value for the next number of leap seconds
     Friend Const NEXT_LEAP_SECONDS_NOT_AVAILABLE As String = "Not downloaded" ' Default value for the current number of leap seconds
+    Friend Const NEXT_LEAP_SECONDS_DATE_DEFAULT As String = "Not downloaded" ' Value to use for next leap seconds and its effective date before these are published
     Friend Const DOWNLOAD_TASK_DATA_UPDATE_SOURCE_DEFAULT As String = EARTH_ROTATION_DATA_SOURCE_0 ' Default source for earth rotation files
     Friend Const DOWNLOAD_TASK_REPEAT_DEFAULT As String = SCHEDULE_REPEAT_DAILY
     Friend Const DOWNLOAD_TASK_TIMEOUT_DEFAULT As Double = 60.0 ' Default timeout in seconds for data transfers from earth rotation data sources

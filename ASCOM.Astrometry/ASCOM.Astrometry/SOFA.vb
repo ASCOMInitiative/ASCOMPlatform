@@ -31,7 +31,7 @@ Namespace SOFA
     ''' The susbset of these tests that is relevant to the routines presented in this component have also been incorporated in the ASCOM Diagnostics tool and expected operation of the SOFA routnines can be confirmed through this tool.</para>
     ''' <para>Further information on the full library of SOFA routines is available here: http://www.iausofa.org/ </para>
     ''' </remarks>
-    <Guid("DF65E97B-ED0E-4F48-BBC9-4A8854C0EF6E"), ClassInterface(ClassInterfaceType.None), ComVisible(True)> _
+    <Guid("DF65E97B-ED0E-4F48-BBC9-4A8854C0EF6E"), ClassInterface(ClassInterfaceType.None), ComVisible(True)>
     Public Class SOFA
         Implements ISOFA, IDisposable
 
@@ -45,9 +45,23 @@ Namespace SOFA
         Private Const SOFA_REVISION_NUMBER As Integer = 0 ' Not presented in the interface, maintained here for reference
         Private Const SOFA_REVISION_DATE As String = "2018-02-30"
 
+        Private Const MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES As Integer = 100
+
         Private TL As TraceLogger
         Private Utl As Util
         Private SofaDllHandle As IntPtr
+
+        Private Parameters As EarthRotationParameters
+
+        <StructLayout(LayoutKind.Sequential)>
+        Structure LeapSecondDataStruct
+            Dim Year As Integer
+            Dim Month As Integer
+            Dim DelAt As Double
+        End Structure
+
+        Dim RevisedData(MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES - 1) As LeapSecondDataStruct
+
 
 #Region "New and IDisposable"
         ''' <summary>
@@ -56,13 +70,22 @@ Namespace SOFA
         ''' <exception cref="HelperException">Thrown if the SOFA support library DLL cannot be loaded</exception>
         ''' <remarks></remarks>
         Sub New()
-            Dim rc As Boolean, SofaDllFile As String, ReturnedPath As New System.Text.StringBuilder(260), LastError As Integer
+            Dim rc As Boolean, SofaDllFile As String, ReturnedPath As New System.Text.StringBuilder(260), LastError, Count, NumberOfSOFALeapSecondValues As Integer, JulianDateUtc As DateTime
 
             TL = New TraceLogger("", "SOFA")
             TL.Enabled = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
 
             Utl = New Util
 
+            Dim LeapSecondArray(100) As LeapSecondDataStruct, RecordCount As Integer, HasBeenUpdated As Boolean, UTCNow As DateTime
+
+#If DEBUG Then
+            ' In the DEBUG environment load the DLL from the application directory where the latest verion will have been copied.
+            ' This assumes that debugging is only undertaken using 32bit applications
+            rc = False ' Just to Suppress a compiler warning
+            SofaDllFile = String.Format("{0}\..\..\..\..\SOFA\Sofa Library\Win32\Debug\{1}", Environment.CurrentDirectory, SOFA32DLL)
+            TL.LogMessage("New", "DEBUG build")
+#Else
             'Find the root location of the common files directory containing the ASCOM support files.
             'On a 32bit system this is \Program Files\Common Files
             'On a 64bit system this is \Program Files (x86)\Common Files
@@ -72,6 +95,8 @@ Namespace SOFA
             Else '32bit application so just go with the .NET returned value
                 SofaDllFile = GetFolderPath(SpecialFolder.CommonProgramFiles) & SOFA_DLL_LOCATION & SOFA32DLL
             End If
+            TL.LogMessage("New", "PRODUCTION build")
+#End If
 
             TL.LogMessage("New", "Loading SOFA library DLL: " + SofaDllFile)
 
@@ -80,6 +105,94 @@ Namespace SOFA
 
             If SofaDllHandle <> IntPtr.Zero Then ' Loaded successfully
                 TL.LogMessage("New", "Loaded SOFA library OK")
+
+                ' Update the SOFA DLL leap second data with any updated values downloaded from the web
+                Try
+
+                    Dim InBuiltLeapSeconds(100) As LeapSecondDataStruct
+
+                    TL.LogMessage("New", String.Format("HasUpdatedData: {0}", UsingUpdatedData().ToString()))
+
+                    Count = 0 ' Counter for the number of leap second values found
+                    Using Parameters = New EarthRotationParameters() ' Get the data from the EarthRotationParameters class
+
+                        NumberOfSOFALeapSecondValues = NumberOfBuiltInLeapSecondValues()
+
+                        Select Case Parameters.UpdateType
+                            Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
+                                TL.LogMessage("New-BuiltIn", "No leap second values available so use SOFA's built-in defaults")
+
+                            Case UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1, UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1
+                                TL.LogMessage("New-Manual", "No leap second values available so use SOFA's built-in defaults. UpdateType: " & Parameters.UpdateType)
+
+                                If Not UsingUpdatedData() Then ' First time round so add the manual value at the end of the list
+                                    RecordCount = GetLeapSecondData(LeapSecondArray, HasBeenUpdated)
+                                    UTCNow = DateTime.UtcNow ' Save the UTC time so that the year month and day values are consistent if SOFA is run across a day/month/year change point
+
+                                    ' Add today's month to the end of the list with the configured number of leap seconds. This will force SOFA to use the configured value for today's calculations
+                                    LeapSecondArray(RecordCount).Year = UTCNow.Year
+                                    LeapSecondArray(RecordCount).Month = UTCNow.Month
+                                    LeapSecondArray(RecordCount).DelAt = Parameters.ManualLeapSeconds
+
+                                    LastError = UpdateLeapSecondData(LeapSecondArray) ' Send the revised data to the SOFA DLL
+                                    If LastError = 0 Then ' First time initialisation of the DLL data
+                                        TL.LogMessage("New-Manual", "SOFA leap second data initialised. Return code: " & LastError)
+                                    ElseIf LastError = 1 Then
+                                        TL.LogMessage("New-Manual", "SOFA leap second data already initialised - no action taken. Return code: " & LastError)
+                                    ElseIf LastError = 2 Then
+                                        TL.LogMessage("New-Manual", "SOFA leap second data rejected because 100 or more records were supplied. Using built-in leap second values. Return code: " & LastError)
+                                    Else ' Initialisation has already been made for this instance oif the DLL - no need to do it again
+                                        TL.LogMessage("New-Manual", "Unknown return code: " & LastError)
+                                    End If
+
+                                End If
+
+                            Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
+                                ' Act according to the number of updated leap second values that are available
+                                Select Case Parameters.HistoricLeapSeconds.Count
+                                    Case 0 ' No values have been downloaded so run with built-in SOFA leap second values
+                                        TL.LogMessage("New-AutoUpdate", "No leap second values in Parameters.HistoricLeapSeconds - Relying on SOFA's built-in defaults")
+
+                                    Case 1 To NumberOfSOFALeapSecondValues ' The same or less number of values have been downloaded compared to the builtin number in the SOFA DLL so run with the built-in SOFA leap second values
+                                        TL.LogMessage("AutoUpdate", String.Format("Parameters.HistoricLeapSeconds has {0} leap second values, which is less or equal to than the number built-in to SOFA ({1}) - Relying on SOFA's built-in defaults", Count, NumberOfSOFALeapSecondValues))
+
+                                    Case NumberOfSOFALeapSecondValues + 1 To MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES ' We have sufficient values to warrant overriding the SOFA vaslues
+                                        For Each LeapSecond As KeyValuePair(Of Double, Double) In Parameters.HistoricLeapSeconds ' Retrieve each individual leap second record
+                                            JulianDateUtc = DateTime.FromOADate(LeapSecond.Key - OLE_AUTOMATION_JULIAN_DATE_OFFSET) ' Turn the Julian date into a DateTime value
+                                            LeapSecondArray(Count).Year = JulianDateUtc.Year ' Save the year and month from the JulianDate DateTime value
+                                            LeapSecondArray(Count).Month = JulianDateUtc.Month
+                                            LeapSecondArray(Count).DelAt = LeapSecond.Value ' Save the number of leap seconds
+                                            Count += 1 ' Increment the count ready for the next leap second value
+                                        Next
+
+                                        LastError = UpdateLeapSecondData(LeapSecondArray) ' Send the revised data to the SOFA DLL
+                                        If LastError = 0 Then ' First time initialisation of the DLL data
+                                            TL.LogMessage("AutoUpdate", "SOFA leap second data initialised. Return code: " & LastError)
+                                        ElseIf LastError = 1 Then
+                                            TL.LogMessage("AutoUpdate", "SOFA leap second data already initialised - no action taken. Return code: " & LastError)
+                                        ElseIf LastError = 2 Then
+                                            TL.LogMessage("AutoUpdate", "SOFA leap second data rejected because 100 or more records were supplied. Using built-in leap second values. Return code: " & LastError)
+                                        Else ' Initialisation has already been made for this instance oif the DLL - no need to do it again
+                                            TL.LogMessage("AutoUpdate", "Unknown return code: " & LastError)
+                                        End If
+
+                                    Case Else ' We have more values than can be stored in the allocated capacity within the SOFA DLL so don't try!
+                                        TL.LogMessage("AutoUpdate", String.Format("Parameters.HistoricLeapSeconds has {0} leap second values, which is greater than the cpacity of the SOFA's leap second array({1}), data not sent - Relying on SOFA's built-in defaults", Count, NumberOfSOFALeapSecondValues))
+
+                                End Select
+                            Case Else
+                                MsgBox("SOFA.New - Unknown Parameters.UpdateType value: " & Parameters.UpdateType)
+                        End Select
+
+                    End Using
+
+                    TL.LogMessage("New", String.Format("After HasUpdatedData: {0}", UsingUpdatedData.ToString()))
+
+                Catch ex As Exception
+                    TL.LogMessageCrLf("New", "Exception: " & ex.ToString())
+                    MsgBox("SOFA exception " & ex.ToString())
+                End Try
+
             Else ' Did not load 
                 TL.LogMessage("New", "Error loading SOFA library: " & LastError.ToString("X8"))
                 Throw New HelperException("Error code returned from LoadLibrary when loading SOFA library: " & LastError.ToString("X8"))
@@ -1171,8 +1284,68 @@ Namespace SOFA
 
 #End Region
 
+#Region "Private SOFA DLL access Functions"
+
+        Private Function UpdateLeapSecondData(LeapSecondArray() As LeapSecondDataStruct) As Integer
+            Dim RetCode As Short
+            If Is64Bit() Then ' Call the appropriate 32 or 64 bit DLL depending on the application bitness.
+                RetCode = UpdateLeapSecondData64(LeapSecondArray)
+            Else
+                RetCode = UpdateLeapSecondData32(LeapSecondArray)
+            End If
+
+            Return RetCode
+        End Function
+
+        Private Function GetLeapSecondData(LeapSecondArray() As LeapSecondDataStruct, ByRef HasUpdatedData As Boolean) As Integer
+            Dim RetCode As Short, UpdatedDataInt As Integer
+            If Is64Bit() Then ' Call the appropriate 32 or 64 bit DLL depending on the application bitness.
+                RetCode = GetLeapSecondData64(LeapSecondArray, UpdatedDataInt)
+            Else
+                RetCode = GetLeapSecondData32(LeapSecondArray, UpdatedDataInt)
+            End If
+            HasUpdatedData = Convert.ToBoolean(UpdatedDataInt)
+            Return RetCode
+        End Function
+
+        Private Function UsingUpdatedData() As Boolean
+            Dim RetCode As Short, BooleanValue As Boolean
+            If Is64Bit() Then ' Call the appropriate 32 or 64 bit DLL depending on the application bitness.
+                RetCode = UsingUpdatedData64()
+            Else
+                RetCode = UsingUpdatedData32()
+            End If
+            BooleanValue = Convert.ToBoolean(RetCode)
+            Return BooleanValue
+        End Function
+
+        Private Function LeapSeconds(Year As Integer, Month As Integer, Day As Integer, DayFraction As Double) As Integer
+            Dim RetCode As Short, LeapSecondValue As Double
+            If Is64Bit() Then ' Call the appropriate 32 or 64 bit DLL depending on the application bitness.
+                RetCode = LeapSeconds64(Year, Month, Day, DayFraction, LeapSecondValue)
+            Else
+                RetCode = LeapSeconds32(Year, Month, Day, DayFraction, LeapSecondValue)
+            End If
+
+            Return RetCode
+        End Function
+
+        Private Function NumberOfBuiltInLeapSecondValues() As Integer
+            Dim RetCode As Short
+
+            If Is64Bit() Then
+                RetCode = NumberOfBuiltInLeapSecondValues64()
+            Else
+                RetCode = NumberOfBuiltInLeapSecondValues32()
+            End If
+
+            Return RetCode
+        End Function
+
+#End Region
+
 #Region "DLL Entry Points SOFA (32bit)"
-        <DllImport(SOFA32DLL, EntryPoint:="iauAf2a")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauAf2a")>
         Private Shared Function Af2a32(s As Char,
                                       ideg As Short,
                                       iamin As Short,
@@ -1180,11 +1353,11 @@ Namespace SOFA
                                       ByRef rad As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauAnp")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauAnp")>
         Private Shared Function Anp32(a As Double) As Double
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauAtci13")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauAtci13")>
         Private Shared Sub Atci1332(rc As Double,
                                    dc As Double,
                                    pr As Double,
@@ -1198,7 +1371,7 @@ Namespace SOFA
                                    ByRef eo As Double)
         End Sub
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauAtco13")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauAtco13")>
         Private Shared Function Atco1332(rc As Double,
                                         dc As Double,
                                         pr As Double,
@@ -1225,7 +1398,7 @@ Namespace SOFA
                                         ByRef eo As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauAtic13")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauAtic13")>
         Private Shared Sub Atic1332(ri As Double,
                                    di As Double,
                                    date1 As Double,
@@ -1235,7 +1408,7 @@ Namespace SOFA
                                    ByRef eo As Double)
         End Sub
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauAtoc13")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauAtoc13")>
         Private Shared Function Atoc1332(type As String,
                                          ob1 As Double,
                                          ob2 As Double,
@@ -1255,7 +1428,7 @@ Namespace SOFA
                                          ByRef dc As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauAtio13")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauAtio13")>
         Private Shared Function Atio1332(ri As Double,
                                          di As Double,
                                          utc1 As Double,
@@ -1277,7 +1450,7 @@ Namespace SOFA
                                          ByRef rob As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauAtoi13")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauAtoi13")>
         Private Shared Function Atoi1332(type As String,
                                          ob1 As Double,
                                          ob2 As Double,
@@ -1297,7 +1470,7 @@ Namespace SOFA
                                          ByRef di As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauDtf2d")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauDtf2d")>
         Private Shared Function Dtf2d32(scale As String,
                                        iy As Integer,
                                        im As Integer,
@@ -1309,26 +1482,26 @@ Namespace SOFA
                                        ByRef d2 As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauEo06a")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauEo06a")>
         Private Shared Function Eo06a32(date1 As Double,
                                        date2 As Double) As Double
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauTaitt")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauTaitt")>
         Private Shared Function Taitt32(tai1 As Double,
                                        tai2 As Double,
                                        ByRef tt1 As Double,
                                        ByRef tt2 As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauTttai")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauTttai")>
         Private Shared Function Tttai32(tt1 As Double,
                                        tt2 As Double,
                                        ByRef tai1 As Double,
                                        ByRef tai2 As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauTf2a")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauTf2a")>
         Private Shared Function Tf2a32(s As Char,
                                       ihour As Short,
                                       imin As Short,
@@ -1336,24 +1509,48 @@ Namespace SOFA
                                       ByRef rad As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauUtctai")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauUtctai")>
         Private Shared Function Utctai32(utc1 As Double,
                                         utc2 As Double,
                                         ByRef tai1 As Double,
                                         ByRef tai2 As Double) As Short
         End Function
 
-        <DllImport(SOFA32DLL, EntryPoint:="iauTaiutc")> _
+        <DllImport(SOFA32DLL, EntryPoint:="iauTaiutc")>
         Private Shared Function Taiutc32(tai1 As Double,
                                         tai2 As Double,
                                         ByRef utc1 As Double,
                                         ByRef utc2 As Double) As Short
         End Function
 
+        <DllImport(SOFA32DLL, EntryPoint:="UpdateLeapSecondData")>
+        Private Shared Function UpdateLeapSecondData32(arr() As LeapSecondDataStruct) As Short
+        End Function
+
+        <DllImport(SOFA32DLL, EntryPoint:="GetLeapSecondData")>
+        Private Shared Function GetLeapSecondData32(<Out()> arr() As LeapSecondDataStruct, ByRef HasUpdatedData As Integer) As Short
+        End Function
+
+        <DllImport(SOFA32DLL, EntryPoint:="UsingUpdatedData")>
+        Private Shared Function UsingUpdatedData32() As Short
+        End Function
+
+        <DllImport(SOFA32DLL, EntryPoint:="iauDat")> 'int iauDat(int iy, int im, int id, double fd, double *deltat)
+        Private Shared Function LeapSeconds32(Year As Integer,
+                                              Month As Integer,
+                                              Day As Integer,
+                                              DayFraction As Double,
+                                              ByRef ReturnedLeapSeconds As Double) As Short
+        End Function
+
+        <DllImport(SOFA32DLL, EntryPoint:="NumberOfBuiltInLeapSecondValues")>
+        Private Shared Function NumberOfBuiltInLeapSecondValues32() As Short
+        End Function
+
 #End Region
 
 #Region "DLL Entry Points SOFA (64bit)"
-        <DllImport(SOFA64DLL, EntryPoint:="iauAf2a")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauAf2a")>
         Private Shared Function Af2a64(s As Char,
                                       ideg As Short,
                                       iamin As Short,
@@ -1361,11 +1558,11 @@ Namespace SOFA
                                       ByRef rad As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauAnp")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauAnp")>
         Private Shared Function Anp64(a As Double) As Double
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauAtci13")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauAtci13")>
         Private Shared Sub Atci1364(rc As Double,
                                    dc As Double,
                                    pr As Double,
@@ -1379,7 +1576,7 @@ Namespace SOFA
                                    ByRef eo As Double)
         End Sub
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauAtco13")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauAtco13")>
         Private Shared Function Atco1364(rc As Double,
                                         dc As Double,
                                         pr As Double,
@@ -1406,7 +1603,7 @@ Namespace SOFA
                                         ByRef eo As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauAtic13")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauAtic13")>
         Private Shared Sub Atic1364(ri As Double,
                                    di As Double,
                                    date1 As Double,
@@ -1416,7 +1613,7 @@ Namespace SOFA
                                    ByRef eo As Double)
         End Sub
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauAtoc13")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauAtoc13")>
         Private Shared Function Atoc1364(type As String,
                                          ob1 As Double,
                                          ob2 As Double,
@@ -1436,7 +1633,7 @@ Namespace SOFA
                                          ByRef dc As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauAtio13")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauAtio13")>
         Private Shared Function Atio1364(ri As Double,
                                          di As Double,
                                          utc1 As Double,
@@ -1458,7 +1655,7 @@ Namespace SOFA
                                          ByRef rob As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauAtoi13")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauAtoi13")>
         Private Shared Function Atoi1364(type As String,
                                          ob1 As Double,
                                          ob2 As Double,
@@ -1478,7 +1675,7 @@ Namespace SOFA
                                          ByRef di As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauDtf2d")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauDtf2d")>
         Private Shared Function Dtf2d64(scale As String,
                                        iy As Integer,
                                        im As Integer,
@@ -1490,26 +1687,26 @@ Namespace SOFA
                                        ByRef d2 As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauEo06a")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauEo06a")>
         Private Shared Function Eo06a64(date1 As Double,
                                        date2 As Double) As Double
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauTaitt")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauTaitt")>
         Private Shared Function Taitt64(tai1 As Double,
                                        tai2 As Double,
                                        ByRef tt1 As Double,
                                        ByRef tt2 As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauTttai")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauTttai")>
         Private Shared Function Tttai64(tt1 As Double,
                                        tt2 As Double,
                                        ByRef tai1 As Double,
                                        ByRef tai2 As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauTf2a")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauTf2a")>
         Private Shared Function Tf2a64(s As Char,
                                       ihour As Short,
                                       imin As Short,
@@ -1517,18 +1714,42 @@ Namespace SOFA
                                       ByRef rad As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauUtctai")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauUtctai")>
         Private Shared Function Utctai64(utc1 As Double,
                                         utc2 As Double,
                                         ByRef tai1 As Double,
                                         ByRef tai2 As Double) As Short
         End Function
 
-        <DllImport(SOFA64DLL, EntryPoint:="iauTaiutc")> _
+        <DllImport(SOFA64DLL, EntryPoint:="iauTaiutc")>
         Private Shared Function Taiutc64(tai1 As Double,
                                         tai2 As Double,
                                         ByRef utc1 As Double,
                                         ByRef utc2 As Double) As Short
+        End Function
+
+        <DllImport(SOFA64DLL, EntryPoint:="UpdateLeapSecondData")>
+        Private Shared Function UpdateLeapSecondData64(arr() As LeapSecondDataStruct) As Short
+        End Function
+
+        <DllImport(SOFA64DLL, EntryPoint:="GetLeapSecondData")>
+        Private Shared Function GetLeapSecondData64(<Out()> arr() As LeapSecondDataStruct, ByRef HasUpdatedData As Integer) As Short
+        End Function
+
+        <DllImport(SOFA64DLL, EntryPoint:="UsingUpdatedData")>
+        Private Shared Function UsingUpdatedData64() As Short
+        End Function
+
+        <DllImport(SOFA64DLL, EntryPoint:="iauDat")>
+        Private Shared Function LeapSeconds64(Year As Integer,
+                                              Month As Integer,
+                                              Day As Integer,
+                                              DayFraction As Double,
+                                              ByRef ReturnedLeapSeconds As Double) As Short
+        End Function
+
+        <DllImport(SOFA64DLL, EntryPoint:="NumberOfBuiltInLeapSecondValues")>
+        Private Shared Function NumberOfBuiltInLeapSecondValues64() As Short
         End Function
 
 #End Region
@@ -1551,10 +1772,10 @@ Namespace SOFA
         ''' the folder is created. If this value is zero, the folder is not created</param>
         ''' <returns>TRUE if successful; otherwise, FALSE.</returns>
         ''' <remarks></remarks>
-        <DllImport("shell32.dll")> _
-        Private Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
-                                               <Out()> ByVal lpszPath As System.Text.StringBuilder, _
-                                               ByVal nFolder As Integer, _
+        <DllImport("shell32.dll")>
+        Private Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
+                                               <Out()> ByVal lpszPath As System.Text.StringBuilder,
+                                               ByVal nFolder As Integer,
                                                ByVal fCreate As Boolean) As Boolean
         End Function
 

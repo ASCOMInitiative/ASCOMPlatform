@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ASCOM Source Files">
+      <UniqueIdentifier>{879ca41c-783c-4302-b7c8-15c8c39104c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Currrent Source Code\sofa.h">
@@ -22,6 +25,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ASCOM Sofa  Files\ASCOMDat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -192,9 +198,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\d2tf.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Currrent Source Code\dat.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\dtdb.c">
@@ -745,6 +748,9 @@
     </ClCompile>
     <ClCompile Include="..\Currrent Source Code\zr.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ASCOM Sofa  Files\ASCOMDat.c">
+      <Filter>ASCOM Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
