@@ -476,9 +476,9 @@ Public Class DiagnosticsForm
                         TL.LogMessageCrLf("Error", ErrorMessage)
                     Next
                     TL.BlankLine()
-                    TL.BlankLine()
                 End If
 
+                TL.BlankLine()
                 TL.LogMessage("Diagnostics", SuccessMessage)
                 TL.Enabled = False
                 TL.Dispose()
@@ -7890,11 +7890,11 @@ Public Class DiagnosticsForm
 
             Events = GetEvents(ASCOM.Astrometry.EventType.AstronomicalTwilight, 18, 5, 2012, 51.0, 0.0, 0.0)
 
-            CompareBoolean("AstroUtilTests", "Events Astronomical Twighlight Sun Risen at Midnight", Events.RisenAtMidnight, False)
-            CompareInteger("AstroUtilTests", "Events Astronomical Twighlight Start Count", Events.RiseTime.Count, 1)
-            CompareInteger("AstroUtilTests", "Events Astronomical Twighlight End Count", Events.SetTime.Count, 1)
-            CompareDouble("AstroUtilTests", "Events Astronomical Twighlight Start", Events.RiseTime(0), 1.01115193589165, TOLERANCE_E4)
-            CompareDouble("AstroUtilTests", "Events Astronomical Twighlight End", Events.SetTime(0), 22.9472021943943, TOLERANCE_E5)
+            CompareBoolean("AstroUtilTests", "Events Astronomical Twilight Sun Risen at Midnight", Events.RisenAtMidnight, False)
+            CompareInteger("AstroUtilTests", "Events Astronomical Twilight Start Count", Events.RiseTime.Count, 1)
+            CompareInteger("AstroUtilTests", "Events Astronomical Twilight End Count", Events.SetTime.Count, 1)
+            CompareDouble("AstroUtilTests", "Events Astronomical Twilight Start", Events.RiseTime(0), 1.01115193589165, TOLERANCE_E4)
+            CompareDouble("AstroUtilTests", "Events Astronomical Twilight End", Events.SetTime(0), 22.9472021943943, TOLERANCE_E5)
 
             CompareDouble("AstroUtilTests", "Moon Illumination", AstroUtil2.MoonIllumination(Nov31.JulianDate(2012, 8, 5, 12.0)), 0.872250725459045, TOLERANCE_E5)
             CompareDouble("AstroUtilTests", "Moon Phase", AstroUtil2.MoonPhase(Nov31.JulianDate(2012, 8, 5, 12.0)), -142.145753888332, TOLERANCE_E5)

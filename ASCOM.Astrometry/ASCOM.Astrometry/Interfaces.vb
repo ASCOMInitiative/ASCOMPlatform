@@ -5127,7 +5127,7 @@ Namespace AstroUtils
         ''' <summary>
         ''' Function that returns a list of rise and set events of a particular type that occur on a particular day at a given latitude, longitude and time zone
         ''' </summary>
-        ''' <param name="TypeofEvent">Type of event e.g. Sunrise or Astronomical twighlight</param>
+        ''' <param name="TypeofEvent">Type of event e.g. Sunrise or Astronomical twilight</param>
         ''' <param name="Day">Integer Day number</param>
         ''' <param name="Month">Integer Month number</param>
         ''' <param name="Year">Integer Year number</param>
@@ -5138,7 +5138,7 @@ Namespace AstroUtils
         '''</returns>
         ''' <exception cref="ASCOM.InvalidValueException">If the combination of day, month and year is invalid e.g. 31st September.</exception>
         ''' <remarks>
-        ''' <para>The definitions of sunrise, sunset and the various twighlights that are used in this method are taken from the 
+        ''' <para>The definitions of sunrise, sunset and the various twilights that are used in this method are taken from the 
         ''' <a href="http://aa.usno.navy.mil/faq/docs/RST_defs.php">US Naval Observatory Definitions</a>.
         ''' </para>
         ''' <para>The dynamics of the sun, Earth and Moon can result at some latitudes in days where there may be no, 1 or 2 rise or set events during 
@@ -5162,7 +5162,7 @@ Namespace AstroUtils
         ''' <para>High precision ephemeredes for the Sun, Moon and Earth and other planets from the JPL DE421 series are employed as delivered by the 
         ''' ASCOM NOVAS 3.1 component rather than using the lower precision ephemeredes employed by Montenbruck and Pfleger.
         ''' </para>
-        ''' <para><b>Accuracy</b> Whole year almanacs for Sunrise/Sunset, Moonrise/Moonset and the various twighlights every 5 degrees from the 
+        ''' <para><b>Accuracy</b> Whole year almanacs for Sunrise/Sunset, Moonrise/Moonset and the various twilights every 5 degrees from the 
         ''' North pole to the South Pole at a variety of longitudes, timezones and dates have been compared to data from
         ''' the <a href="http://aa.usno.navy.mil/data/docs/RS_OneYear.php">US Naval Observatory Astronomical Data</a> web site. The RMS error has been found to be 
         ''' better than 0.5 minute over the latitude range 80 degrees North to 80 degrees South and better than 5 minutes from 80 degrees to the relevant pole.

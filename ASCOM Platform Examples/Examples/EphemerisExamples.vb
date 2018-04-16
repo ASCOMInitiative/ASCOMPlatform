@@ -31,7 +31,7 @@ Public Class EphemerisExamples
         Const Longitude As Double = -75.0 ' Positive to the East
         Const TimeZone As Double = -5.0 ' Positive to the East
 
-        ' Set the event for which the Almanac is required: Sunrise/set, Moonrise/set, Civil, Nautical, Amateur Astronomical or Astronomical twighlight
+        ' Set the event for which the Almanac is required: Sunrise/set, Moonrise/set, Civil, Nautical, Amateur Astronomical or Astronomical twilight
         ' or planet rise/set
         Const TypeOfEvent As EventType = EventType.MoonRiseMoonSet
 
