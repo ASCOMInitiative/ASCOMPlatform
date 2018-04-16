@@ -19,10 +19,10 @@ Module GlobalItems
 
     ' Fixed event definitions
     Friend Const SUN_RISE As Double = -50.0 / 60.0 ' Degrees
-    Friend Const CIVIL_TWIGHLIGHT As Double = -6.0 ' Degrees
-    Friend Const NAUTICAL_TWIGHLIGHT As Double = -12.0 ' Degrees
-    Friend Const AMATEUR_ASRONOMICAL_TWIGHLIGHT As Double = -15.0 ' Degrees
-    Friend Const ASTRONOMICAL_TWIGHLIGHT As Double = -18.0 ' Degrees
+    Friend Const CIVIL_TWILIGHT As Double = -6.0 ' Degrees
+    Friend Const NAUTICAL_TWILIGHT As Double = -12.0 ' Degrees
+    Friend Const AMATEUR_ASRONOMICAL_TWILIGHT As Double = -15.0 ' Degrees
+    Friend Const ASTRONOMICAL_TWILIGHT As Double = -18.0 ' Degrees
 
     ' Conversion factors
     Friend Const HOURS2DEG As Double = 15.0
