@@ -1450,7 +1450,6 @@ namespace ASCOM.Simulator
             m_TrackingRatesSimple = null;
             m_Util.Dispose();
             m_Util = null;
-            // throw new System.NotImplementedException();
         }
 
         #endregion

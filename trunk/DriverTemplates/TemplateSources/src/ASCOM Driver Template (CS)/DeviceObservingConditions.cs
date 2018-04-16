@@ -126,7 +126,7 @@ class DeviceObservingConditions
     /// </summary>
     public void Refresh()
     {
-        throw new System.NotImplementedException();
+        throw new ASCOM.MethodNotImplementedException();
     }
 
     /// <summary>

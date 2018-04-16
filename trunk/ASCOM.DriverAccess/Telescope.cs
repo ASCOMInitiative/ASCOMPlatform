@@ -1515,7 +1515,7 @@ namespace ASCOM.DriverAccess
                                                                   objScopeLateBound,
                                                                   new object[] { },
                                                                   CultureInfo.InvariantCulture);
-            if (objTrackingRatesLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of an TrackingRates object");
+            if (objTrackingRatesLateBound == null) throw new NullReferenceException("Driver returned a null reference instead of a TrackingRates object");
             objTypeTrackingRates = objTrackingRatesLateBound.GetType();
             TL = TraceLog; // Save the trace logger reference
             TL.LogMessage("TrackingRates Class", "Created object: " + objTypeTrackingRates.FullName);
@@ -1701,7 +1701,6 @@ namespace ASCOM.DriverAccess
         /// </summary>
         public void Dispose()
         {
-            // throw new System.NotImplementedException(); Nothing to dispose in this class
         }
 
         /// <summary>

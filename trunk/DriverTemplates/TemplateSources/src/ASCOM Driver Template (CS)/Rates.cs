@@ -11,13 +11,13 @@ namespace ASCOM.TEMPLATEDEVICENAME
 {
     #region Rate class
     //
-	// The Rate class implements IRate, and is used to hold values
-	// for AxisRates. You do not need to change this class.
-	//
+    // The Rate class implements IRate, and is used to hold values
+    // for AxisRates. You do not need to change this class.
+    //
     // The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.Rate
-	// The ClassInterface/None addribute prevents an empty interface called
-	// _Rate from being created and used as the [default] interface
-	//
+    // The ClassInterface/None addribute prevents an empty interface called
+    // _Rate from being created and used as the [default] interface
+    //
     [Guid("AD6248B3-3F51-4FFF-B62B-E3E942DD817E")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
@@ -40,7 +40,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            // TODO Add any required object cleanup here
         }
 
         public double Maximum
@@ -61,14 +61,14 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
     #region AxisRates
     //
-	// AxisRates is a strongly-typed collection that must be enumerable by
-	// both COM and .NET. The IAxisRates and IEnumerable interfaces provide
-	// this polymorphism. 
-	//
+    // AxisRates is a strongly-typed collection that must be enumerable by
+    // both COM and .NET. The IAxisRates and IEnumerable interfaces provide
+    // this polymorphism. 
+    //
     // The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.AxisRates
-	// The ClassInterface/None addribute prevents an empty interface called
-	// _AxisRates from being created and used as the [default] interface
-	//
+    // The ClassInterface/None addribute prevents an empty interface called
+    // _AxisRates from being created and used as the [default] interface
+    //
     [Guid("99DB28A6-0132-43BF-91C0-D723124813C8")]
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
@@ -121,7 +121,7 @@ namespace ASCOM.TEMPLATEDEVICENAME
 
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            // TODO Add any required object cleanup here
         }
 
         public IEnumerator GetEnumerator()
@@ -139,69 +139,69 @@ namespace ASCOM.TEMPLATEDEVICENAME
     #endregion
 
     #region TrackingRates
-	//
-	// TrackingRates is a strongly-typed collection that must be enumerable by
-	// both COM and .NET. The ITrackingRates and IEnumerable interfaces provide
-	// this polymorphism. 
-	//
+    //
+    // TrackingRates is a strongly-typed collection that must be enumerable by
+    // both COM and .NET. The ITrackingRates and IEnumerable interfaces provide
+    // this polymorphism. 
+    //
     // The Guid attribute sets the CLSID for ASCOM.TEMPLATEDEVICENAME.TrackingRates
-	// The ClassInterface/None addribute prevents an empty interface called
-	// _TrackingRates from being created and used as the [default] interface
-	//
+    // The ClassInterface/None addribute prevents an empty interface called
+    // _TrackingRates from being created and used as the [default] interface
+    //
     // This class is implemented in this way so that applications based on .NET 3.5
     // will work with this .NET 4.0 object.  Changes to this have proved to be challenging
     // and it is strongly suggested that it isn't changed.
     //
     [Guid("49A4CA43-46B2-4D66-B9D3-FBE3ABE13DEB")]
-	[ClassInterface(ClassInterfaceType.None)]
+    [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
-	public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
-	{
-		private readonly DriveRates[] trackingRates;
+    public class TrackingRates : ITrackingRates, IEnumerable, IEnumerator
+    {
+        private readonly DriveRates[] trackingRates;
 
         // this is used to make the index thread safe
         private readonly ThreadLocal<int> pos = new ThreadLocal<int>(() => { return -1; });
         private static readonly object lockObj = new object();
 
-		//
-		// Default constructor - Internal prevents public creation
-		// of instances. Returned by Telescope.AxisRates.
-		//
-		internal TrackingRates() 
-		{
-			//
-			// This array must hold ONE or more DriveRates values, indicating
-			// the tracking rates supported by your telescope. The one value
-			// (tracking rate) that MUST be supported is driveSidereal!
-			//
-            this.trackingRates = new[] { DriveRates.driveSidereal };	
-			// TODO Initialize this array with any additional tracking rates that your driver may provide
-		}
+        //
+        // Default constructor - Internal prevents public creation
+        // of instances. Returned by Telescope.AxisRates.
+        //
+        internal TrackingRates()
+        {
+            //
+            // This array must hold ONE or more DriveRates values, indicating
+            // the tracking rates supported by your telescope. The one value
+            // (tracking rate) that MUST be supported is driveSidereal!
+            //
+            this.trackingRates = new[] { DriveRates.driveSidereal };
+            // TODO Initialize this array with any additional tracking rates that your driver may provide
+        }
 
-		#region ITrackingRates Members
+        #region ITrackingRates Members
 
-		public int Count
-		{
+        public int Count
+        {
             get { return this.trackingRates.Length; }
-		}
+        }
 
-		public IEnumerator GetEnumerator()
-		{
+        public IEnumerator GetEnumerator()
+        {
             pos.Value = -1;
             return this as IEnumerator;
         }
 
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            // TODO Add any required object cleanup here
         }
 
         public DriveRates this[int index]
-		{
-            get { return this.trackingRates[index - 1]; }	// 1-based
-		}
+        {
+            get { return this.trackingRates[index - 1]; }   // 1-based
+        }
 
-		#endregion
+        #endregion
 
         #region IEnumerable members
 
