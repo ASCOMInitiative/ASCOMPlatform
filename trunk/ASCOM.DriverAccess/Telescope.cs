@@ -23,9 +23,9 @@ namespace ASCOM.DriverAccess
     /// </summary>
     public class Telescope : AscomDriver, ITelescopeV3
     {
-        private MemberFactory memberFactory;
-        private bool isPlatform6Telescope = false;
-        private bool isPlatform5Telescope = false;
+        internal MemberFactory memberFactory;
+        internal bool isPlatform6Telescope = false;
+        internal bool isPlatform5Telescope = false;
 
         #region Telescope constructors
 
