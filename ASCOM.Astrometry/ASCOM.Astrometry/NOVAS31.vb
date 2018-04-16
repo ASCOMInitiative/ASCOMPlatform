@@ -3652,7 +3652,7 @@ Namespace NOVAS
         ''' <returns>TRUE if successful; otherwise, FALSE.</returns>
         ''' <remarks></remarks>
         <DllImport("shell32.dll")>
-        Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
+        Private Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
                                                <Out()> ByVal lpszPath As System.Text.StringBuilder,
                                                ByVal nFolder As Integer,
                                                ByVal fCreate As Boolean) As Boolean
@@ -3665,7 +3665,7 @@ Namespace NOVAS
         ''' <returns>A pointer to the loaded DLL image</returns>
         ''' <remarks>This is a wrapper for the Windows kernel32 function LoadLibraryA</remarks>
         <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="LoadLibraryA")>
-        Public Shared Function LoadLibrary(ByVal lpFileName As String) As IntPtr
+        Private Shared Function LoadLibrary(ByVal lpFileName As String) As IntPtr
         End Function
 
         ''' <summary>
@@ -3675,7 +3675,7 @@ Namespace NOVAS
         ''' <returns>True or false depending on whether the library was released.</returns>
         ''' <remarks></remarks>
         <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="FreeLibrary")>
-        Public Shared Function FreeLibrary(ByVal hModule As IntPtr) As Boolean
+        Private Shared Function FreeLibrary(ByVal hModule As IntPtr) As Boolean
         End Function
 
         Private Shared Function Is64Bit() As Boolean

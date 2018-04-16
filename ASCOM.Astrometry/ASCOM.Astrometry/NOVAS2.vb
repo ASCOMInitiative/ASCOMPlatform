@@ -1823,10 +1823,10 @@ Namespace NOVAS
         ''' the folder is created. If this value is zero, the folder is not created</param>
         ''' <returns>TRUE if successful; otherwise, FALSE.</returns>
         ''' <remarks></remarks>
-        <DllImport("shell32.dll")> _
-        Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
-                                               <Out()> ByVal lpszPath As System.Text.StringBuilder, _
-                                               ByVal nFolder As Integer, _
+        <DllImport("shell32.dll")>
+        Private Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
+                                               <Out()> ByVal lpszPath As System.Text.StringBuilder,
+                                               ByVal nFolder As Integer,
                                                ByVal fCreate As Boolean) As Boolean
         End Function
 

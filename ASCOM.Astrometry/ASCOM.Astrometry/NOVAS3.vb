@@ -3423,10 +3423,10 @@ Namespace NOVAS
         ''' the folder is created. If this value is zero, the folder is not created</param>
         ''' <returns>TRUE if successful; otherwise, FALSE.</returns>
         ''' <remarks></remarks>
-        <DllImport("shell32.dll")> _
-        Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr, _
-                                               <Out()> ByVal lpszPath As System.Text.StringBuilder, _
-                                               ByVal nFolder As Integer, _
+        <DllImport("shell32.dll")>
+        Private Shared Function SHGetSpecialFolderPath(ByVal hwndOwner As IntPtr,
+                                               <Out()> ByVal lpszPath As System.Text.StringBuilder,
+                                               ByVal nFolder As Integer,
                                                ByVal fCreate As Boolean) As Boolean
         End Function
 
@@ -3436,8 +3436,8 @@ Namespace NOVAS
         ''' <param name="lpFileName">Full path to the file to load</param>
         ''' <returns>A pointer to the loaded DLL image</returns>
         ''' <remarks>This is a wrapper for the Windows kernel32 function LoadLibraryA</remarks>
-        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="LoadLibraryA")> _
-        Public Shared Function LoadLibrary(ByVal lpFileName As String) As IntPtr
+        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="LoadLibraryA")>
+        Private Shared Function LoadLibrary(ByVal lpFileName As String) As IntPtr
         End Function
 
         ''' <summary>
@@ -3446,8 +3446,8 @@ Namespace NOVAS
         ''' <param name="hModule">Pointer to the loaded library returned by the LoadLibrary function.</param>
         ''' <returns>True or false depending on whether the library was released.</returns>
         ''' <remarks></remarks>
-        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="FreeLibrary")> _
-        Public Shared Function FreeLibrary(ByVal hModule As IntPtr) As Boolean
+        <DllImport("kernel32.dll", SetLastError:=True, EntryPoint:="FreeLibrary")>
+        Private Shared Function FreeLibrary(ByVal hModule As IntPtr) As Boolean
         End Function
 
         Private Shared Function Is64Bit() As Boolean
