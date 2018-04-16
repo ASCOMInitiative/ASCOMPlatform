@@ -31,7 +31,7 @@ Public Class Rate
 #Region "IRate Members"
 
     Public Sub Dispose() Implements IRate.Dispose
-        Throw New System.NotImplementedException()
+        ' TODO Add any required object cleanup here
     End Sub
 
     Public Property Maximum() As Double Implements IRate.Maximum
@@ -119,7 +119,7 @@ Public Class AxisRates
     End Property
 
     Public Sub Dispose() Implements IAxisRates.Dispose
-        Throw New System.NotImplementedException()
+        ' TODO Add any required object cleanup here
     End Sub
 
     Public Function GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator, IAxisRates.GetEnumerator
@@ -195,7 +195,6 @@ Public Class TrackingRates
 
     Public Sub Dispose() Implements ITrackingRates.Dispose
         pos.Dispose()
-        'Throw New System.NotImplementedException()
     End Sub
 
     Default Public ReadOnly Property Item(ByVal Index As Integer) As DriveRates Implements ITrackingRates.Item

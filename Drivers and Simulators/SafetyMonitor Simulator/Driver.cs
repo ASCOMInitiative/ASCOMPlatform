@@ -180,7 +180,6 @@ namespace ASCOM.Simulator
 
         private static void Dispose()
         {
-            throw new System.NotImplementedException();
         }
         
         void IDisposable.Dispose()

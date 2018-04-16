@@ -19,22 +19,22 @@ class AxisRates : IAxisRates
 
     public int Count
     {
-        get { throw new System.NotImplementedException(); }
+        get { throw new ASCOM.PropertyNotImplementedException(); }
     }
 
     public void Dispose()
     {
-        throw new System.NotImplementedException();
+        throw new ASCOM.MethodNotImplementedException();
     }
 
     public System.Collections.IEnumerator GetEnumerator()
     {
-        throw new System.NotImplementedException();
+        throw new ASCOM.MethodNotImplementedException();
     }
 
     public IRate this[int index]
     {
-        get { throw new System.NotImplementedException(); }
+        get { throw new ASCOM.PropertyNotImplementedException(); }
     }
 }
 
@@ -43,21 +43,21 @@ class TrackingRates : ITrackingRates
 {
     public int Count
     {
-        get { throw new System.NotImplementedException(); }
+        get { throw new ASCOM.PropertyNotImplementedException(); }
     }
 
     public void Dispose()
     {
-        throw new System.NotImplementedException();
+        throw new ASCOM.MethodNotImplementedException();
     }
 
     public System.Collections.IEnumerator GetEnumerator()
     {
-        throw new System.NotImplementedException();
+        throw new ASCOM.MethodNotImplementedException();
     }
 
     public DriveRates this[int index]
     {
-        get { throw new System.NotImplementedException(); }
+        get { throw new ASCOM.PropertyNotImplementedException(); }
     }
 }
