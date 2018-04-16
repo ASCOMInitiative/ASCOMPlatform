@@ -50,7 +50,7 @@
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>ASCOM.Setup.TemplateWizard, Version=6.2.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
+    <Assembly>ASCOM.Setup.TemplateWizard, Version=6.0.0.0, Culture=Neutral, PublicKeyToken=565de7938946fba7</Assembly>
     <FullClassName>ASCOM.Setup.DriverWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>

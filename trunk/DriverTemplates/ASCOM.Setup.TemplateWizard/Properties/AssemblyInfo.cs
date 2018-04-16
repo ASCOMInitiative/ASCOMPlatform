@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ASCOM Driver Template Wizard")]
 [assembly: AssemblyDescription("Provides logic to create new ASCOM driver projects based on user selections.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright © 2009 TiGra Astronomy, Copyright © ASCOM Initiative 2014")]
+[assembly: AssemblyCopyright("Copyright © 2009 TiGra Astronomy, Copyright © ASCOM Initiative 2018")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -21,4 +21,4 @@ using System.Runtime.InteropServices;
 // Version information for platform components is set globally
 // (do not add an AssemblyVersion here).
 // AssemblyFileVersion is set globally (do not add an AssemblyFileVersion here).
-[assembly: AssemblyVersion("6.4.0.0")]
+[assembly: AssemblyVersion("6.0.0.0")]
