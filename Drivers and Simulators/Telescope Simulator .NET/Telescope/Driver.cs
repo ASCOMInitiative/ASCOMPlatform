@@ -1733,7 +1733,13 @@ namespace ASCOM.Simulator
             if (disposing)
             {
                 // free managed resources
+                /* Following code commented out in Platform 6.4 because m_TrackingRates is a global variable for the whole driver and there could be more than one 
+                 * instance of the TrackingRates class (created by the calling application). One instance should not invalidate the variable that could be in use
+                 * by other instances of which this one is unaware.
+
                 m_TrackingRates = null;
+
+                */
             }
         }
         #endregion
@@ -1822,10 +1828,15 @@ namespace ASCOM.Simulator
             if (disposing)
             {
                 // free managed resources
+                /* Following code commented out in Platform 6.4 because m_TrackingRates is a global variable for the whole driver and there could be more than one 
+                 * instance of the TrackingRatesSimple class (created by the calling application). One instance should not invalidate the variable that could be in use
+                 * by other instances of which this one is unaware.
+
                 if (m_TrackingRates != null)
                 {
                     m_TrackingRates = null;
                 }
+                */
             }
         }
         #endregion
