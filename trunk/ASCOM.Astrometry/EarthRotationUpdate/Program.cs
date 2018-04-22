@@ -29,7 +29,6 @@ namespace EarthRotationUpdate
         static void Main(string[] args)
         {
             const string USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063";
-            const string TRACE_LOG_FILETYPE = "EarthRotationUpdate";
             const int TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH = 35;
 
 
@@ -42,9 +41,22 @@ namespace EarthRotationUpdate
 
                 // Get access to the ASCOM Profile store and retireve the trace logger configuration
                 RegistryAccess profile = new RegistryAccess();
+                string traceFileName = "";
+                string traceBasePath = "";
+                if (isSystem) // If we are running as user SYSTEM, create our own trace file name so that all scheduled job trace files end up in the same directory
+                {
+                    // Get the configured trace file directory and make sure that it exists
+                    traceBasePath = profile.GetProfile(GlobalItems.ASTROMETRY_SUBKEY,
+                                                              GlobalItems.DOWNLOAD_TASK_TRACE_PATH_VALUE_NAME,
+                                                              string.Format(GlobalItems.DOWNLOAD_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+                                                              ).TrimEnd('\\');
+                    Directory.CreateDirectory(traceBasePath);
+                    // Now make the full trace file name from the path above and the file name format template
+                    traceFileName = string.Format(GlobalItems.DOWNLOAD_TRACE_FILE_NAME_FORMAT, traceBasePath, now.Year, now.Month, now.Day, now.Hour.ToString("00"), now.Minute.ToString("00"), now.Second.ToString("00"));
+                }
 
-                // Enable the trace logger if required
-                TL = new TraceLogger("", TRACE_LOG_FILETYPE);
+                // Create the trace logger with either the supplied fully qualified name if running as SYSTEM or an automatic file name if running as a normal user
+                TL = new TraceLogger(traceFileName, GlobalItems.TRACE_LOG_FILETYPE);
                 TL.Enabled = true; // Set the trace state
                 TL.IdentifierWidth = TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH;
 
@@ -242,7 +254,7 @@ namespace EarthRotationUpdate
                         profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, "", "Julian Day - Leap Seconds");
 
                         // Include a value that is in the SOFA library defaults but is not in the USNO files. It predates the start of UTC but I am assuming that IAU is correct on this occasion
-                        profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, double.Parse("2436934.5",CultureInfo.InvariantCulture).ToString(parameters.DownloadTaskCulture), double.Parse("1.4178180",CultureInfo.InvariantCulture).ToString(parameters.DownloadTaskCulture));
+                        profile.WriteProfile(GlobalItems.AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME, double.Parse("2436934.5", CultureInfo.InvariantCulture).ToString(parameters.DownloadTaskCulture), double.Parse("1.4178180", CultureInfo.InvariantCulture).ToString(parameters.DownloadTaskCulture));
 
 
                         // 		{ 1960,  1,  1.4178180 }, 

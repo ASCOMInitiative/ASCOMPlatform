@@ -77,7 +77,7 @@ Module GlobalItems
     Friend Const DELTAUT1_VALUE_NAME_DAY_FORMAT As String = "00" ' Format string for the day component of automatically downloaded delta UT1 value names.
     Friend Const DOWNLOAD_TASK_DATA_SOURCE_VALUE_NAME As String = "Download Task Data Source" ' Name of the automatic data data source profile value
     Friend Const DOWNLOAD_TASK_TIMEOUT_VALUE_NAME As String = "Download Task Timeout" ' Name of the automatic update timeout profile value
-    Friend Const DOWNLOAD_TASK_RUN_TIME_VALUE_NAME As String = "Download Task Run Time" ' Value name for the scheduled job run time
+    Friend Const DOWNLOAD_TASK_SCHEDULED_TIME_VALUE_NAME As String = "Download Task Scheduled Time" ' Value name for the scheduled job run time
     Friend Const DOWNLOAD_TASK_REPEAT_FREQUENCY_VALUE_NAME As String = "Download Task Repeat Frequency" ' Value name for the scheduled job run time
     Friend Const DOWNLOAD_TASK_TRACE_ENABLED_VALUE_NAME As String = "Download Task Trace Enabled" ' Value name for the scheduled job run time
     Friend Const DOWNLOAD_TASK_TRACE_PATH_VALUE_NAME As String = "Download Task Trace Path" ' Value name for the path to the scheduled job trace file
@@ -123,11 +123,14 @@ Module GlobalItems
     Friend Const NUMBER_OF_BACK_DAYS_OF_DELTAUT1_DATA_TO_LOAD As Integer = 20
 
     ' Download task configuration
+    Friend Const TRACE_LOG_FILETYPE As String = "EarthRotationUpdate"
     Friend Const DOWNLOAD_SCHEDULE_TASK_NAME As String = "ASCOM - Update Earth Rotation Data" ' Name of the schedule job that runs the automatic download task
     Friend Const DOWNLOAD_SCHEDULE_TASK_PATH As String = "\" + DOWNLOAD_SCHEDULE_TASK_NAME ' Full schedule job path within the scheduler job tree. Has to be in the root for backward compatibilty with XP!
     Friend Const DOWNLOAD_EXECUTABLE_NAME As String = "\ASCOM\Platform 6\Tools\EarthRotationUpdate.exe" ' File system location of the automatic download executable that is started by the scheduled task. The exe is placed here by the installer
     Friend Const NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE As String = "Not published" ' Value to use for next leap seconds and its effective date before these are published
     Friend Const DOWNLOAD_TASK_TIME_FORMAT = "dddd dd MMM yyyy - HH:mm:ss"
+    Friend Const DOWNLOAD_TRACE_DEFAULT_PATH_FORMAT = "{0}\ASCOM\" + TRACE_LOG_FILETYPE 'EarthRotationUpdate"
+    Friend Const DOWNLOAD_TRACE_FILE_NAME_FORMAT = "{0}\Log {1}-{2}-{3} {4}{5}{6}"
 
     ' Automatic update test configuration parameters - MUST BE SET TO 0 FOR PRODUCTION BUILDS!
     Friend Const TEST_HISTORIC_DAYS_OFFSET As Integer = 0 '1700 ' Offset in days to force the automatic update program to interpret historic leap second values as current and future values
@@ -147,7 +150,6 @@ Module GlobalItems
     Friend Const DOWNLOAD_TASK_REPEAT_DEFAULT As String = SCHEDULE_REPEAT_DAILY
     Friend Const DOWNLOAD_TASK_TIMEOUT_DEFAULT As Double = 60.0 ' Default timeout in seconds for data transfers from earth rotation data sources
     Friend Const DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT As Boolean = False ' Initial state for download task trace output
-    Friend Const DOWNLOAD_TASK_TRACE_PATH_DEFAULT_FORMAT As String = "{0}\ASCOM" ' String format for default trace log path base. Log files go into directories \Logs yyyy mm dd in this folder
     Friend Const DOUBLE_VALUE_NOT_AVAILABLE As Double = Double.MinValue
     Friend ReadOnly DATE_VALUE_NOT_AVAILABLE As DateTime = New DateTime(1, 1, 1)
 End Module
