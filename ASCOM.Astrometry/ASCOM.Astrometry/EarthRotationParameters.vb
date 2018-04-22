@@ -17,7 +17,7 @@ Public Class EarthRotationParameters : Implements IDisposable
     Private DownloadTaskRepeatFrequencyValue As String
     Private DownloadTaskTraceEnabledValue As Boolean
     Private DownloadTaskTracePathValue As String
-    Private DownloadTaskRunTimeValue As DateTime
+    Private DownloadTaskScheduledTimeValue As DateTime
     Private EarthRotationDataLastUpdatedValue As String
     Private DownloadTaskCultureValue As CultureInfo
 
@@ -124,14 +124,14 @@ Public Class EarthRotationParameters : Implements IDisposable
     End Sub
 #End Region
 
-    Public Property DownloadTaskRunTime As DateTime
+    Public Property DownloadTaskScheduledTime As DateTime
         Get
-            Return DownloadTaskRunTimeValue
+            Return DownloadTaskScheduledTimeValue
         End Get
         Set
-            DownloadTaskRunTimeValue = Value
-            LogDebugMessage("DownloadTaskRunTime Write", String.Format("DownloadTaskRunTime = {0}", DownloadTaskRunTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
-            profile.WriteProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_RUN_TIME_VALUE_NAME, DownloadTaskRunTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue))
+            DownloadTaskScheduledTimeValue = Value
+            LogDebugMessage("DownloadTaskRunTime Write", String.Format("DownloadTaskRunTime = {0}", DownloadTaskScheduledTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
+            profile.WriteProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_SCHEDULED_TIME_VALUE_NAME, DownloadTaskScheduledTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue))
         End Set
     End Property
 
@@ -750,7 +750,8 @@ Public Class EarthRotationParameters : Implements IDisposable
     Public Sub RefreshState()
         Dim DownloadTaskCultureName, OriginalProfileValue As String, AutomaticScheduleTimeDefault As DateTime, FoundCulture, UriValid As Boolean, InstalledCultures As CultureInfo()
 
-        Dim UpdateTypes As New List(Of String) From {UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1,
+        Dim UpdateTypes As New List(Of String) From {UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1,
+                                                     UPDATE_MANUAL_LEAP_SECONDS_MANUAL_DELTAUT1,
                                                      UPDATE_MANUAL_LEAP_SECONDS_PREDICTED_DELTAUT1,
                                                      UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1}
 
@@ -789,16 +790,15 @@ Public Class EarthRotationParameters : Implements IDisposable
             AutomaticScheduleTimeDefault = Date.Today.AddHours(36)
         End If
 
-        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_RUN_TIME_VALUE_NAME, AutomaticScheduleTimeDefault.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue))
-        If DateTime.TryParseExact(OriginalProfileValue, DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue, DateTimeStyles.None, DownloadTaskRunTimeValue) Then
-            LogDebugMessage("RefreshState", String.Format("DownloadTaskRunTimeValue = {0}", DownloadTaskRunTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_SCHEDULED_TIME_VALUE_NAME, AutomaticScheduleTimeDefault.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue))
+        If DateTime.TryParseExact(OriginalProfileValue, DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue, DateTimeStyles.None, DownloadTaskScheduledTimeValue) Then
+            LogDebugMessage("RefreshState", String.Format("DownloadTaskRunTimeValue = {0}", DownloadTaskScheduledTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
         Else
-            DownloadTaskRunTime = AutomaticScheduleTimeDefault
-            LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter DownloadTaskRunTimeValue is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskRunTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
-            LogEvent(String.Format("EarthRoationParameter DownloadTaskRunTimeValue is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskRunTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
+            DownloadTaskScheduledTime = AutomaticScheduleTimeDefault
+            LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter DownloadTaskRunTimeValue is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskScheduledTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
+            LogEvent(String.Format("EarthRoationParameter DownloadTaskRunTimeValue is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskScheduledTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
         End If
 
-        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, UPDATE_TYPE_VALUE_NAME, UPDATE_TYPE_DEFAULT)
         If UpdateTypes.Contains(OriginalProfileValue) Then ' The Profile value is one of the permitted values so we're done
             UpdateTypeValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("UpdateTypeValue = {0}", UpdateTypeValue))
@@ -885,15 +885,21 @@ Public Class EarthRotationParameters : Implements IDisposable
             LogEvent(String.Format("EarthRoationParameter DownloadTaskTraceEnabled is corrupt: {0}, default value has been set: {1}", DownloadTaskTraceEnabledString, DownloadTaskTraceEnabledValue))
         End If
 
-        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_TRACE_PATH_VALUE_NAME, String.Format(DOWNLOAD_TASK_TRACE_PATH_DEFAULT_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)))
-        If Directory.Exists(OriginalProfileValue) Then
+        ' Get the configured trace file directory And make sure that it exists
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY,
+                                                  DOWNLOAD_TASK_TRACE_PATH_VALUE_NAME,
+                                                  String.Format(DOWNLOAD_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+                                                  ).TrimEnd(CChar("\"))
+        Try
+            Directory.CreateDirectory(OriginalProfileValue) ' Make sure we can create the directory or it already exists
             DownloadTaskTracePathValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("DownloadTaskTracePathValue = {0}", DownloadTaskTracePathValue))
-        Else
-            DownloadTaskTracePath = String.Format(DOWNLOAD_TASK_TRACE_PATH_DEFAULT_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-            LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter DownloadTaskTracePath is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskTracePathValue))
+        Catch ex As Exception ' Something went wrong so restore the default value
+            LogMessage("EarthRotParm CORRUPT!", String.Format("Exception thrown: {0}", ex.ToString()))
+            LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter DownloadTaskTracePath is corrupt: {0}, default value will be set: {1}", OriginalProfileValue, DownloadTaskTracePathValue))
             LogEvent(String.Format("EarthRoationParameter DownloadTaskTracePath is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskTracePathValue))
-        End If
+            DownloadTaskTracePath = String.Format(DOWNLOAD_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)).TrimEnd(CChar("\")) ' restore the default path
+        End Try
 
         AutomaticLeapSecondsValue = DOUBLE_VALUE_NOT_AVAILABLE ' Initialise value as not available
         OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, AUTOMATIC_LEAP_SECONDS_VALUENAME, AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE)

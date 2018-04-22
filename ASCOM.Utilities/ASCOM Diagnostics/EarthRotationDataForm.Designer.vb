@@ -79,7 +79,7 @@ Partial Class EarthRotationDataForm
         '
         Me.CmbDataSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CmbDataSource.FormattingEnabled = True
-        Me.CmbDataSource.Location = New System.Drawing.Point(195, 36)
+        Me.CmbDataSource.Location = New System.Drawing.Point(184, 36)
         Me.CmbDataSource.Name = "CmbDataSource"
         Me.CmbDataSource.Size = New System.Drawing.Size(250, 21)
         Me.CmbDataSource.TabIndex = 2
@@ -89,7 +89,7 @@ Partial Class EarthRotationDataForm
         Me.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.BtnCancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnCancel.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnCancel.Location = New System.Drawing.Point(686, 500)
+        Me.BtnCancel.Location = New System.Drawing.Point(719, 547)
         Me.BtnCancel.Name = "BtnCancel"
         Me.BtnCancel.Size = New System.Drawing.Size(75, 23)
         Me.BtnCancel.TabIndex = 1
@@ -180,7 +180,7 @@ Partial Class EarthRotationDataForm
         Me.GrpAutomaticUpdate.ForeColor = System.Drawing.SystemColors.Highlight
         Me.GrpAutomaticUpdate.Location = New System.Drawing.Point(14, 238)
         Me.GrpAutomaticUpdate.Name = "GrpAutomaticUpdate"
-        Me.GrpAutomaticUpdate.Size = New System.Drawing.Size(909, 256)
+        Me.GrpAutomaticUpdate.Size = New System.Drawing.Size(942, 294)
         Me.GrpAutomaticUpdate.TabIndex = 7
         Me.GrpAutomaticUpdate.TabStop = False
         Me.GrpAutomaticUpdate.Text = "Automatic Update"
@@ -190,7 +190,7 @@ Partial Class EarthRotationDataForm
         Me.LblRunStatus.AutoSize = True
         Me.LblRunStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblRunStatus.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblRunStatus.Location = New System.Drawing.Point(502, 161)
+        Me.LblRunStatus.Location = New System.Drawing.Point(105, 257)
         Me.LblRunStatus.Name = "LblRunStatus"
         Me.LblRunStatus.Size = New System.Drawing.Size(73, 13)
         Me.LblRunStatus.TabIndex = 27
@@ -199,17 +199,17 @@ Partial Class EarthRotationDataForm
         'TxtRunStatus
         '
         Me.TxtRunStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtRunStatus.Location = New System.Drawing.Point(581, 158)
+        Me.TxtRunStatus.Location = New System.Drawing.Point(184, 254)
         Me.TxtRunStatus.Name = "TxtRunStatus"
         Me.TxtRunStatus.ReadOnly = True
-        Me.TxtRunStatus.Size = New System.Drawing.Size(301, 20)
+        Me.TxtRunStatus.Size = New System.Drawing.Size(321, 20)
         Me.TxtRunStatus.TabIndex = 26
         '
         'BtnRunAutomaticUpdate
         '
         Me.BtnRunAutomaticUpdate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnRunAutomaticUpdate.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnRunAutomaticUpdate.Location = New System.Drawing.Point(807, 182)
+        Me.BtnRunAutomaticUpdate.Location = New System.Drawing.Point(511, 226)
         Me.BtnRunAutomaticUpdate.Name = "BtnRunAutomaticUpdate"
         Me.BtnRunAutomaticUpdate.Size = New System.Drawing.Size(75, 23)
         Me.BtnRunAutomaticUpdate.TabIndex = 24
@@ -221,18 +221,18 @@ Partial Class EarthRotationDataForm
         Me.LblNextLeapSecondsDate.AutoSize = True
         Me.LblNextLeapSecondsDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblNextLeapSecondsDate.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblNextLeapSecondsDate.Location = New System.Drawing.Point(25, 213)
+        Me.LblNextLeapSecondsDate.Location = New System.Drawing.Point(536, 91)
         Me.LblNextLeapSecondsDate.Name = "LblNextLeapSecondsDate"
-        Me.LblNextLeapSecondsDate.Size = New System.Drawing.Size(164, 13)
+        Me.LblNextLeapSecondsDate.Size = New System.Drawing.Size(130, 13)
         Me.LblNextLeapSecondsDate.TabIndex = 21
-        Me.LblNextLeapSecondsDate.Text = "Next leap seconds take effect on"
+        Me.LblNextLeapSecondsDate.Text = "Start of next leap seconds"
         '
         'LblNextLeapSeconds
         '
         Me.LblNextLeapSeconds.AutoSize = True
         Me.LblNextLeapSeconds.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblNextLeapSeconds.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblNextLeapSeconds.Location = New System.Drawing.Point(94, 187)
+        Me.LblNextLeapSeconds.Location = New System.Drawing.Point(571, 65)
         Me.LblNextLeapSeconds.Name = "LblNextLeapSeconds"
         Me.LblNextLeapSeconds.Size = New System.Drawing.Size(95, 13)
         Me.LblNextLeapSeconds.TabIndex = 23
@@ -243,7 +243,7 @@ Partial Class EarthRotationDataForm
         Me.LblCurrentLeapSeconds.AutoSize = True
         Me.LblCurrentLeapSeconds.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblCurrentLeapSeconds.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblCurrentLeapSeconds.Location = New System.Drawing.Point(82, 161)
+        Me.LblCurrentLeapSeconds.Location = New System.Drawing.Point(559, 39)
         Me.LblCurrentLeapSeconds.Name = "LblCurrentLeapSeconds"
         Me.LblCurrentLeapSeconds.Size = New System.Drawing.Size(107, 13)
         Me.LblCurrentLeapSeconds.TabIndex = 25
@@ -252,7 +252,7 @@ Partial Class EarthRotationDataForm
         'TxtNextLeapSeconds
         '
         Me.TxtNextLeapSeconds.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtNextLeapSeconds.Location = New System.Drawing.Point(195, 184)
+        Me.TxtNextLeapSeconds.Location = New System.Drawing.Point(672, 62)
         Me.TxtNextLeapSeconds.Name = "TxtNextLeapSeconds"
         Me.TxtNextLeapSeconds.ReadOnly = True
         Me.TxtNextLeapSeconds.Size = New System.Drawing.Size(100, 20)
@@ -261,7 +261,7 @@ Partial Class EarthRotationDataForm
         'TxtNextLeapSecondsDate
         '
         Me.TxtNextLeapSecondsDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtNextLeapSecondsDate.Location = New System.Drawing.Point(195, 210)
+        Me.TxtNextLeapSecondsDate.Location = New System.Drawing.Point(672, 88)
         Me.TxtNextLeapSecondsDate.Name = "TxtNextLeapSecondsDate"
         Me.TxtNextLeapSecondsDate.ReadOnly = True
         Me.TxtNextLeapSecondsDate.Size = New System.Drawing.Size(250, 20)
@@ -272,7 +272,7 @@ Partial Class EarthRotationDataForm
         Me.LblTraceEnabled.AutoSize = True
         Me.LblTraceEnabled.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblTraceEnabled.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblTraceEnabled.Location = New System.Drawing.Point(498, 92)
+        Me.LblTraceEnabled.Location = New System.Drawing.Point(101, 145)
         Me.LblTraceEnabled.Name = "LblTraceEnabled"
         Me.LblTraceEnabled.Size = New System.Drawing.Size(77, 13)
         Me.LblTraceEnabled.TabIndex = 22
@@ -281,7 +281,7 @@ Partial Class EarthRotationDataForm
         'TxtCurrentLeapSeconds
         '
         Me.TxtCurrentLeapSeconds.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtCurrentLeapSeconds.Location = New System.Drawing.Point(195, 158)
+        Me.TxtCurrentLeapSeconds.Location = New System.Drawing.Point(672, 36)
         Me.TxtCurrentLeapSeconds.Name = "TxtCurrentLeapSeconds"
         Me.TxtCurrentLeapSeconds.ReadOnly = True
         Me.TxtCurrentLeapSeconds.Size = New System.Drawing.Size(45, 20)
@@ -290,7 +290,7 @@ Partial Class EarthRotationDataForm
         'ChkTraceEnabled
         '
         Me.ChkTraceEnabled.AutoSize = True
-        Me.ChkTraceEnabled.Location = New System.Drawing.Point(581, 92)
+        Me.ChkTraceEnabled.Location = New System.Drawing.Point(184, 145)
         Me.ChkTraceEnabled.Name = "ChkTraceEnabled"
         Me.ChkTraceEnabled.Size = New System.Drawing.Size(15, 14)
         Me.ChkTraceEnabled.TabIndex = 21
@@ -299,17 +299,17 @@ Partial Class EarthRotationDataForm
         'TxtTraceFilePath
         '
         Me.TxtTraceFilePath.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtTraceFilePath.Location = New System.Drawing.Point(195, 89)
+        Me.TxtTraceFilePath.Location = New System.Drawing.Point(184, 165)
         Me.TxtTraceFilePath.Name = "TxtTraceFilePath"
         Me.TxtTraceFilePath.ReadOnly = True
-        Me.TxtTraceFilePath.Size = New System.Drawing.Size(250, 20)
+        Me.TxtTraceFilePath.Size = New System.Drawing.Size(321, 20)
         Me.TxtTraceFilePath.TabIndex = 19
         '
         'BtnSetTraceDirectory
         '
         Me.BtnSetTraceDirectory.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnSetTraceDirectory.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnSetTraceDirectory.Location = New System.Drawing.Point(67, 87)
+        Me.BtnSetTraceDirectory.Location = New System.Drawing.Point(56, 163)
         Me.BtnSetTraceDirectory.Name = "BtnSetTraceDirectory"
         Me.BtnSetTraceDirectory.Size = New System.Drawing.Size(122, 23)
         Me.BtnSetTraceDirectory.TabIndex = 18
@@ -321,7 +321,7 @@ Partial Class EarthRotationDataForm
         Me.LblAutoSeconds.AutoSize = True
         Me.LblAutoSeconds.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblAutoSeconds.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblAutoSeconds.Location = New System.Drawing.Point(641, 39)
+        Me.LblAutoSeconds.Location = New System.Drawing.Point(244, 92)
         Me.LblAutoSeconds.Name = "LblAutoSeconds"
         Me.LblAutoSeconds.Size = New System.Drawing.Size(49, 13)
         Me.LblAutoSeconds.TabIndex = 17
@@ -330,10 +330,10 @@ Partial Class EarthRotationDataForm
         'TxtLastRun
         '
         Me.TxtLastRun.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtLastRun.Location = New System.Drawing.Point(581, 184)
+        Me.TxtLastRun.Location = New System.Drawing.Point(184, 228)
         Me.TxtLastRun.Name = "TxtLastRun"
         Me.TxtLastRun.ReadOnly = True
-        Me.TxtLastRun.Size = New System.Drawing.Size(220, 20)
+        Me.TxtLastRun.Size = New System.Drawing.Size(321, 20)
         Me.TxtLastRun.TabIndex = 19
         '
         'LblLastRun
@@ -341,18 +341,18 @@ Partial Class EarthRotationDataForm
         Me.LblLastRun.AutoSize = True
         Me.LblLastRun.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblLastRun.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblLastRun.Location = New System.Drawing.Point(530, 187)
+        Me.LblLastRun.Location = New System.Drawing.Point(115, 231)
         Me.LblLastRun.Name = "LblLastRun"
-        Me.LblLastRun.Size = New System.Drawing.Size(45, 13)
+        Me.LblLastRun.Size = New System.Drawing.Size(63, 13)
         Me.LblLastRun.TabIndex = 18
-        Me.LblLastRun.Text = "Last run"
+        Me.LblLastRun.Text = "Last update"
         '
         'LblAutoRepeatFrequency
         '
         Me.LblAutoRepeatFrequency.AutoSize = True
         Me.LblAutoRepeatFrequency.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblAutoRepeatFrequency.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblAutoRepeatFrequency.Location = New System.Drawing.Point(480, 66)
+        Me.LblAutoRepeatFrequency.Location = New System.Drawing.Point(83, 119)
         Me.LblAutoRepeatFrequency.Name = "LblAutoRepeatFrequency"
         Me.LblAutoRepeatFrequency.Size = New System.Drawing.Size(95, 13)
         Me.LblAutoRepeatFrequency.TabIndex = 16
@@ -363,7 +363,7 @@ Partial Class EarthRotationDataForm
         Me.LblAutoDownloadTime.AutoSize = True
         Me.LblAutoDownloadTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblAutoDownloadTime.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblAutoDownloadTime.Location = New System.Drawing.Point(34, 66)
+        Me.LblAutoDownloadTime.Location = New System.Drawing.Point(23, 66)
         Me.LblAutoDownloadTime.Name = "LblAutoDownloadTime"
         Me.LblAutoDownloadTime.Size = New System.Drawing.Size(155, 13)
         Me.LblAutoDownloadTime.TabIndex = 15
@@ -374,7 +374,7 @@ Partial Class EarthRotationDataForm
         Me.CmbScheduleRepeat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CmbScheduleRepeat.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CmbScheduleRepeat.FormattingEnabled = True
-        Me.CmbScheduleRepeat.Location = New System.Drawing.Point(581, 63)
+        Me.CmbScheduleRepeat.Location = New System.Drawing.Point(184, 116)
         Me.CmbScheduleRepeat.Name = "CmbScheduleRepeat"
         Me.CmbScheduleRepeat.Size = New System.Drawing.Size(100, 21)
         Me.CmbScheduleRepeat.TabIndex = 12
@@ -384,7 +384,7 @@ Partial Class EarthRotationDataForm
         Me.LblAutoTimeout.AutoSize = True
         Me.LblAutoTimeout.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblAutoTimeout.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblAutoTimeout.Location = New System.Drawing.Point(483, 39)
+        Me.LblAutoTimeout.Location = New System.Drawing.Point(86, 92)
         Me.LblAutoTimeout.Name = "LblAutoTimeout"
         Me.LblAutoTimeout.Size = New System.Drawing.Size(92, 13)
         Me.LblAutoTimeout.TabIndex = 13
@@ -395,7 +395,7 @@ Partial Class EarthRotationDataForm
         Me.DateScheduleRun.CustomFormat = "dddd dd MMM yyyy  -  HH:mm:ss"
         Me.DateScheduleRun.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DateScheduleRun.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.DateScheduleRun.Location = New System.Drawing.Point(195, 63)
+        Me.DateScheduleRun.Location = New System.Drawing.Point(184, 63)
         Me.DateScheduleRun.Name = "DateScheduleRun"
         Me.DateScheduleRun.Size = New System.Drawing.Size(250, 20)
         Me.DateScheduleRun.TabIndex = 11
@@ -405,7 +405,7 @@ Partial Class EarthRotationDataForm
         Me.LblAutoDataSource.AutoSize = True
         Me.LblAutoDataSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LblAutoDataSource.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.LblAutoDataSource.Location = New System.Drawing.Point(51, 39)
+        Me.LblAutoDataSource.Location = New System.Drawing.Point(40, 39)
         Me.LblAutoDataSource.Name = "LblAutoDataSource"
         Me.LblAutoDataSource.Size = New System.Drawing.Size(138, 13)
         Me.LblAutoDataSource.TabIndex = 14
@@ -414,7 +414,7 @@ Partial Class EarthRotationDataForm
         'TxtDownloadTimeout
         '
         Me.TxtDownloadTimeout.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtDownloadTimeout.Location = New System.Drawing.Point(581, 36)
+        Me.TxtDownloadTimeout.Location = New System.Drawing.Point(184, 89)
         Me.TxtDownloadTimeout.Name = "TxtDownloadTimeout"
         Me.TxtDownloadTimeout.Size = New System.Drawing.Size(45, 20)
         Me.TxtDownloadTimeout.TabIndex = 4
@@ -423,7 +423,7 @@ Partial Class EarthRotationDataForm
         '
         Me.BtnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnOK.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnOK.Location = New System.Drawing.Point(848, 500)
+        Me.BtnOK.Location = New System.Drawing.Point(881, 547)
         Me.BtnOK.Name = "BtnOK"
         Me.BtnOK.Size = New System.Drawing.Size(75, 23)
         Me.BtnOK.TabIndex = 5
@@ -472,7 +472,7 @@ Partial Class EarthRotationDataForm
         Me.GrpStatus.Controls.Add(Me.Label2)
         Me.GrpStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GrpStatus.ForeColor = System.Drawing.SystemColors.Highlight
-        Me.GrpStatus.Location = New System.Drawing.Point(587, 113)
+        Me.GrpStatus.Location = New System.Drawing.Point(588, 60)
         Me.GrpStatus.Name = "GrpStatus"
         Me.GrpStatus.Size = New System.Drawing.Size(336, 119)
         Me.GrpStatus.TabIndex = 26
@@ -543,7 +543,7 @@ Partial Class EarthRotationDataForm
         '
         Me.BtnApply.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnApply.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnApply.Location = New System.Drawing.Point(767, 500)
+        Me.BtnApply.Location = New System.Drawing.Point(800, 547)
         Me.BtnApply.Name = "BtnApply"
         Me.BtnApply.Size = New System.Drawing.Size(75, 23)
         Me.BtnApply.TabIndex = 27
@@ -556,11 +556,11 @@ Partial Class EarthRotationDataForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.BtnCancel
-        Me.ClientSize = New System.Drawing.Size(938, 533)
+        Me.ClientSize = New System.Drawing.Size(971, 582)
         Me.Controls.Add(Me.BtnApply)
+        Me.Controls.Add(Me.BtnCancel)
         Me.Controls.Add(Me.GrpStatus)
         Me.Controls.Add(Me.GrpUpdateType)
-        Me.Controls.Add(Me.BtnCancel)
         Me.Controls.Add(Me.GrpAutomaticUpdate)
         Me.Controls.Add(Me.GrpManualUpdate)
         Me.Controls.Add(Me.BtnOK)

@@ -95,14 +95,14 @@ Public Class EarthRotationDataForm
             Dim cult As CultureInfo = CultureInfo.GetCultureInfo(cultname)
             TL.LogMessage("Form Load", String.Format("Current UI culture name: {0}. ToString version: {1}, New culture name: {2}, new culture string: {2}", cultname, cultnamestring, cult.Name, cult.ToString()))
 
-            AutomaticScheduleJobRunTime = Parameters.DownloadTaskRunTime             ' DateTime.Parse(earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_RUN_TIME_VALUE_NAME, AutomaticScheduleTimeDefault.ToString(CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture)
-            AutomaticScheduleJobRepeatFrequency = Parameters.DownloadTaskRepeatFrequency                    'earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_REPEAT_FREQUENCY_VALUE_NAME, DOWNLOAD_TASK_REPEAT_DEFAULT)
-            AutomaticScheduleJobLastUpdateTime = Parameters.EarthRotationDataLastUpdatedString ' earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, EARTH_ROTATION_DATA_LAST_UPDATED_VALUE_NAME, EARTH_ROTATION_DATA_LAST_UPDATED_DEFAULT)
-            TraceFilePath = Parameters.DownloadTaskTracePath              ' earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_TRACE_PATH_VALUE_NAME, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM")
-            TraceEnabled = Parameters.DownloadTaskTraceEnabled                'Convert.ToBoolean(earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_TRACE_ENABLED_VALUE_NAME, DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT))
-            CurrentLeapSeconds = Parameters.AutomaticLeapSecondsString          ' earthRotationConfiguration.GetProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, GlobalItems.AUTOMATIC_UTC_TAI_OFFSET_VALUENAME, GlobalItems.AUTOMATIC_UTC_TAI_OFFSET_DEFAULT)
-            NextLeapSeconds = Parameters.NextLeapSecondsString         'earthRotationConfiguration.GetProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, GlobalItems.AUTOMATIC_NEXT_UTC_TAI_OFFSET_VALUENAME, GlobalItems.AUTOMATIC_NEXT_UTC_TAI_OFFSET_DEFAULT)
-            NextLeapSecondsDate = Parameters.NextLeapSecondsDateString       'earthRotationConfiguration.GetProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, GlobalItems.AUTOMATIC_NEXT_UTC_TAI_OFFSET_DATE_VALUENAME, GlobalItems.AUTOMATIC_NEXT_UTC_TAI_OFFSET_DATE_DEFAULT)
+            AutomaticScheduleJobRunTime = Parameters.DownloadTaskScheduledTime
+            AutomaticScheduleJobRepeatFrequency = Parameters.DownloadTaskRepeatFrequency
+            AutomaticScheduleJobLastUpdateTime = Parameters.EarthRotationDataLastUpdatedString
+            TraceFilePath = Parameters.DownloadTaskTracePath
+            TraceEnabled = Parameters.DownloadTaskTraceEnabled
+            CurrentLeapSeconds = Parameters.AutomaticLeapSecondsString
+            NextLeapSeconds = Parameters.NextLeapSecondsString
+            NextLeapSecondsDate = Parameters.NextLeapSecondsDateString
 
             TL.LogMessage("Form Load", "Current leap seconds: " & UtcTaiOffset)
             TL.LogMessage("Form Load", "Current download timeout: " & DownloadTimeout)
@@ -159,7 +159,7 @@ Public Class EarthRotationDataForm
             Parameters.ManualLeapSeconds = UtcTaiOffset
             Parameters.DownloadTaskDataSource = EarthRotationDataSource
             Parameters.DownloadTaskTimeOut = DownloadTimeout
-            Parameters.DownloadTaskRunTime = AutomaticScheduleJobRunTime
+            Parameters.DownloadTaskScheduledTime = AutomaticScheduleJobRunTime
             Parameters.DownloadTaskRepeatFrequency = AutomaticScheduleJobRepeatFrequency
             Parameters.DownloadTaskTracePath = TraceFilePath
             Parameters.DownloadTaskTraceEnabled = TraceEnabled
@@ -463,14 +463,15 @@ Public Class EarthRotationDataForm
 
     Private Sub TxtDeltaUT1Manuals_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualDeltaUT1.KeyUp
         Dim DoubleValue As Double = 0.0
+        Const DELTAUT1_ACCEPTABLE_RANGE As Double = 0.9
 
         Dim IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, DoubleValue)
-        If IsDouble And (DoubleValue >= -0.5) And (DoubleValue <= +0.5) Then
+        If IsDouble And (DoubleValue >= -DELTAUT1_ACCEPTABLE_RANGE) And (DoubleValue <= +DELTAUT1_ACCEPTABLE_RANGE) Then
             ErrorProvider1.SetError(TxtManualDeltaUT1, "")
             BtnOK.Enabled = True
         Else
             BtnOK.Enabled = False
-            ErrorProvider1.SetError(TxtManualDeltaUT1, "Must be in the range -0.5 to +0.5!")
+            ErrorProvider1.SetError(TxtManualDeltaUT1, String.Format("Must be in the range -{0} to +{0}!", DELTAUT1_ACCEPTABLE_RANGE))
         End If
     End Sub
 
@@ -540,10 +541,10 @@ Public Class EarthRotationDataForm
     Private Sub BtnSetTraceDirectory_Click(sender As Object, e As EventArgs) Handles BtnSetTraceDirectory.Click
         Dim result As DialogResult
         FolderBrowser.RootFolder = Environment.SpecialFolder.Desktop
-        FolderBrowser.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\ASCOM"
-
+        FolderBrowser.SelectedPath = Parameters.DownloadTaskTracePath
         result = FolderBrowser.ShowDialog()
         If result = DialogResult.OK Then
+            Parameters.DownloadTaskTracePath = FolderBrowser.SelectedPath
             TxtTraceFilePath.Text = FolderBrowser.SelectedPath
         End If
     End Sub
@@ -640,7 +641,17 @@ Public Class EarthRotationDataForm
     End Sub
 
     Private Sub TimerEventProcessor(myObject As Object, ByVal myEventArgs As EventArgs) Handles NowTimer.Tick
-        UpdateStatus()
+        Dim DisplayDate As DateTime, jdUtc As Double
+
+        ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
+        DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
+        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpperInvariant())
+
+        jdUtc = aUtils.JulianDateUtc
+        TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString("0.000")
+
+        TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString()
+
     End Sub
 
     Private Sub LogRunMessage(message As String)
@@ -649,20 +660,13 @@ Public Class EarthRotationDataForm
     End Sub
 
     Private Sub UpdateStatus()
-        Dim DisplayDate As DateTime, jdUtc As Double
 
+        Parameters.RefreshState() ' Make sure we have the latest values, in case any have been updated
         TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
         TxtCurrentLeapSeconds.Text = Parameters.AutomaticLeapSecondsString
         TxtNextLeapSeconds.Text = Parameters.NextLeapSecondsString
         TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf((Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Or (Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_DATE_DEFAULT), "", "UTC")
-        TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString()
-        jdUtc = aUtils.JulianDateUtc
-        TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString("0.000")
-
-        ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
-        DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
-
-        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpperInvariant())
+        TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
 
     End Sub
 
