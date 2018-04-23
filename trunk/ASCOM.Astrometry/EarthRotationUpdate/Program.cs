@@ -17,9 +17,7 @@ namespace EarthRotationUpdate
         private static TraceLogger TL;
         private static bool DownloadComplete;
         private static double DownloadTimeout;
-        //private static bool traceState;
         private static string hostURIString;
-        //private static string logFilePath;
         private static EarthRotationParameters parameters;
         private static CultureInfo invariantCulture;
         private static TextInfo invariantTextInfo;
@@ -28,10 +26,6 @@ namespace EarthRotationUpdate
 
         static void Main(string[] args)
         {
-            const string USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063";
-            const int TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH = 35;
-
-
             try
             {
                 // Get some basic details for this run
@@ -48,17 +42,17 @@ namespace EarthRotationUpdate
                     // Get the configured trace file directory and make sure that it exists
                     traceBasePath = profile.GetProfile(GlobalItems.ASTROMETRY_SUBKEY,
                                                               GlobalItems.DOWNLOAD_TASK_TRACE_PATH_VALUE_NAME,
-                                                              string.Format(GlobalItems.DOWNLOAD_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+                                                              string.Format(GlobalItems.DOWNLOAD_TASK_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
                                                               ).TrimEnd('\\');
                     Directory.CreateDirectory(traceBasePath);
                     // Now make the full trace file name from the path above and the file name format template
-                    traceFileName = string.Format(GlobalItems.DOWNLOAD_TRACE_FILE_NAME_FORMAT, traceBasePath, now.Year, now.Month, now.Day, now.Hour.ToString("00"), now.Minute.ToString("00"), now.Second.ToString("00"));
+                    traceFileName = string.Format(GlobalItems.DOWNLOAD_TASK_TRACE_FILE_NAME_FORMAT, traceBasePath, now.Year, now.Month, now.Day, now.Hour.ToString("00"), now.Minute.ToString("00"), now.Second.ToString("00"));
                 }
 
                 // Create the trace logger with either the supplied fully qualified name if running as SYSTEM or an automatic file name if running as a normal user
-                TL = new TraceLogger(traceFileName, GlobalItems.TRACE_LOG_FILETYPE);
+                TL = new TraceLogger(traceFileName, GlobalItems.DOWNLOAD_TASK_TRACE_LOG_FILETYPE);
                 TL.Enabled = true; // Set the trace state
-                TL.IdentifierWidth = TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH;
+                TL.IdentifierWidth = GlobalItems.DOWNLOAD_TASK_TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH;
 
                 invariantCulture = new CultureInfo("");
                 invariantCulture.Calendar.TwoDigitYearMax = 2117; // Specify that two digit years will be converted to the range 2018-2117 - Likely to outlast ASCOM Platform and me!
@@ -142,7 +136,7 @@ namespace EarthRotationUpdate
                     TL.LogMessage("EarthRotationUpdate", "Using proxy server: " + WebRequest.DefaultWebProxy.GetProxy(hostURI).ToString());
                 }
 
-                client.Headers.Add("user-agent", USER_AGENT);
+                client.Headers.Add("user-agent", GlobalItems.DOWNLOAD_TASK_USER_AGENT);
                 client.Headers.Add("Accept", "text/plain");
                 client.Encoding = Encoding.ASCII;
                 client.BaseAddress = hostURIString;
@@ -327,8 +321,8 @@ namespace EarthRotationUpdate
                             // Persist the next leap second value and its implementation date if these have been announced
                             if (nextleapSecondsDate == DateTime.MinValue)
                             {
-                                parameters.NextLeapSecondsString = GlobalItems.NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
-                                parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
+                                parameters.NextLeapSecondsString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
+                                parameters.NextLeapSecondsDateString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE;
                             }
                             else
                             {

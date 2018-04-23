@@ -123,14 +123,16 @@ Module GlobalItems
     Friend Const NUMBER_OF_BACK_DAYS_OF_DELTAUT1_DATA_TO_LOAD As Integer = 20
 
     ' Download task configuration
-    Friend Const TRACE_LOG_FILETYPE As String = "EarthRotationUpdate"
+    Friend Const DOWNLOAD_TASK_TRACE_LOG_FILETYPE As String = "EarthRotationUpdate"
     Friend Const DOWNLOAD_SCHEDULE_TASK_NAME As String = "ASCOM - Update Earth Rotation Data" ' Name of the schedule job that runs the automatic download task
     Friend Const DOWNLOAD_SCHEDULE_TASK_PATH As String = "\" + DOWNLOAD_SCHEDULE_TASK_NAME ' Full schedule job path within the scheduler job tree. Has to be in the root for backward compatibilty with XP!
-    Friend Const DOWNLOAD_EXECUTABLE_NAME As String = "\ASCOM\Platform 6\Tools\EarthRotationUpdate.exe" ' File system location of the automatic download executable that is started by the scheduled task. The exe is placed here by the installer
-    Friend Const NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE As String = "Not published" ' Value to use for next leap seconds and its effective date before these are published
+    Friend Const DOWNLOAD_TASK_EXECUTABLE_NAME As String = "\ASCOM\Platform 6\Tools\EarthRotationUpdate.exe" ' File system location of the automatic download executable that is started by the scheduled task. The exe is placed here by the installer
+    Friend Const DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE As String = "Not published" ' Value to use for next leap seconds and its effective date before these are published
     Friend Const DOWNLOAD_TASK_TIME_FORMAT = "dddd dd MMM yyyy - HH:mm:ss"
-    Friend Const DOWNLOAD_TRACE_DEFAULT_PATH_FORMAT = "{0}\ASCOM\" + TRACE_LOG_FILETYPE 'EarthRotationUpdate"
-    Friend Const DOWNLOAD_TRACE_FILE_NAME_FORMAT = "{0}\Log {1}-{2}-{3} {4}{5}{6}"
+    Friend Const DOWNLOAD_TASK_TRACE_DEFAULT_PATH_FORMAT = "{0}\ASCOM\" + DOWNLOAD_TASK_TRACE_LOG_FILETYPE 'EarthRotationUpdate"
+    Friend Const DOWNLOAD_TASK_TRACE_FILE_NAME_FORMAT = "{0}\Log {1}-{2}-{3} {4}{5}{6}"
+    Friend Const DOWNLOAD_TASK_USER_AGENT As String = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063"
+    Friend Const DOWNLOAD_TASK_TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH As Integer = 35
 
     ' Automatic update test configuration parameters - MUST BE SET TO 0 FOR PRODUCTION BUILDS!
     Friend Const TEST_HISTORIC_DAYS_OFFSET As Integer = 0 '1700 ' Offset in days to force the automatic update program to interpret historic leap second values as current and future values

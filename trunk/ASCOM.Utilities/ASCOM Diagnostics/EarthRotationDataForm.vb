@@ -8,7 +8,7 @@ Imports System.Security.Principal
 
 Public Class EarthRotationDataForm
     Private Const TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH As Integer = 35
-    Private Const UPDATE_DATA_PROCESS_TIMEOUT As Double = 60.0
+    Private Const UPDATE_DATA_PROCESS_TIMEOUT As Double = 60.0 ' Timeout for the "Update now" function provided by this form
 
     Private TL As TraceLogger
     Private EarthRotationDataUpdateType As String
@@ -28,6 +28,7 @@ Public Class EarthRotationDataForm
     Private WithEvents NowTimer As Windows.Forms.Timer
     Private aUtils As AstroUtils.AstroUtils
 
+    ' Dropdown list options
     Private dataDownloadSources As New List(Of String) From {EARTH_ROTATION_DATA_SOURCE_0,
                                                              EARTH_ROTATION_DATA_SOURCE_1,
                                                              EARTH_ROTATION_DATA_SOURCE_2,
@@ -44,25 +45,38 @@ Public Class EarthRotationDataForm
                                                                SCHEDULE_REPEAT_WEEKLY,
                                                                SCHEDULE_REPEAT_MONTHLY}
 
+#Region "New and form load"
+
     Private Sub EarthRotationDataForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        TL = New TraceLogger("", "EarthRotation")
-        TL.Enabled = True
-        TL.IdentifierWidth = TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH
-
-        TL.LogMessage("Form Load", "Start of form load")
-        TL.LogMessage("Form Load", String.Format("Log file name: {0}", TL.LogFileName))
-
-        Parameters = New EarthRotationParameters(TL)
-        aUtils = New AstroUtils.AstroUtils()
-
-        NowTimer = New Windows.Forms.Timer
-        NowTimer.Interval = 1000
-        NowTimer.Start()
+        Dim AutomaticScheduleTimeDefault As DateTime
 
         Try
+            TL = New TraceLogger("", "EarthRotation")
+            TL.Enabled = GetBool(TRACE_EARTHROTATION_DATA_FORM, TRACE_EARTHROTATION_DATA_FORM_DEFAULT)
+            TL.IdentifierWidth = TRACE_LOGGER_IDENTIFIER_FIELD_WIDTH
+
+            TL.LogMessage("Form Load", "Start of form load")
+            TL.LogMessage("Form Load", String.Format("Log file name: {0}", TL.LogFileName))
+
+            Parameters = New EarthRotationParameters(TL)
+            aUtils = New AstroUtils.AstroUtils()
+
+            NowTimer = New Windows.Forms.Timer
+            NowTimer.Interval = 1000
+            NowTimer.Start()
+
+            ' Specify that these combo boxes wil be painted by code in this form so that the backgrounds will be white rather than grey 
             CmbUpdateType.DrawMode = DrawMode.OwnerDrawFixed
             CmbScheduleRepeat.DrawMode = DrawMode.OwnerDrawFixed
 
+            ' Create a default schedule time for use in case a time hasn't been set yet
+            If DateTime.Now.Hour < 12 Then
+                AutomaticScheduleTimeDefault = Date.Today.AddHours(12)
+            Else
+                AutomaticScheduleTimeDefault = Date.Today.AddHours(36)
+            End If
+
+            ' Populate the combo boxe lists
             CmbDataSource.Items.Clear()
             CmbDataSource.Items.AddRange(dataDownloadSources.ToArray())
             CmbDataSource.SelectedIndex = 0
@@ -75,26 +89,14 @@ Public Class EarthRotationDataForm
             CmbScheduleRepeat.Items.AddRange(scheduleRepeatOptions.ToArray())
             CmbScheduleRepeat.SelectedIndex = 0
 
-            'earthRotationConfiguration = New RegistryAccess
-            UtcTaiOffset = Parameters.ManualLeapSeconds '    Convert.ToDouble(earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, MANUAL_TAI_UTC_OFFSET_VALUENAME, MANUAL_TAI_UTC_OFFSET_DEFAULT.ToString))
-            DownloadTimeout = Parameters.DownloadTaskTimeOut     'Convert.ToDouble(earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_TIMEOUT_VALUE_NAME, DOWNLOAD_TASK_TIMEOUT_DEFAULT.ToString))
-            EarthRotationDataSource = Parameters.DownloadTaskDataSource  ' earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_DATA_SOURCE_VALUE_NAME, DOWNLOAD_TASK_DATA_UPDATE_SOURCE_DEFAULT.ToString)
-            EarthRotationDataUpdateType = Parameters.UpdateType   ' earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, EARTH_ROTATION_DATA_UPDATE_TYPE_VALUE_NAME, EARTH_ROTATION_DATA_UPDATE_TYPE_DEFAULT)
-            DeltaUT1ManualValue = Parameters.ManualDeltaUT1     ' Convert.ToDouble(earthRotationConfiguration.GetProfile(ASTROMETRY_SUBKEY, MANUAL_DELTAUT1_VALUE_NAME, MANUAL_DELTAUT1_DEFAULT.ToString()))
+            TL.LogMessage("Form Load", String.Format("Current UI culture: {0}, Current culture: {1}", CultureInfo.CurrentUICulture.Name, CultureInfo.CurrentCulture.Name))
 
-            ' Create a default schedule time for use in case a time hasn't been set yet
-            Dim AutomaticScheduleTimeDefault As DateTime
-            If DateTime.Now.Hour < 12 Then
-                AutomaticScheduleTimeDefault = Date.Today.AddHours(12)
-            Else
-                AutomaticScheduleTimeDefault = Date.Today.AddHours(36)
-            End If
-
-            Dim cultname As String = CultureInfo.CurrentUICulture.Name
-            Dim cultnamestring As String = CultureInfo.CurrentUICulture.ToString()
-            Dim cult As CultureInfo = CultureInfo.GetCultureInfo(cultname)
-            TL.LogMessage("Form Load", String.Format("Current UI culture name: {0}. ToString version: {1}, New culture name: {2}, new culture string: {2}", cultname, cultnamestring, cult.Name, cult.ToString()))
-
+            ' Get the current state from the Profile
+            UtcTaiOffset = Parameters.ManualLeapSeconds
+            DownloadTimeout = Parameters.DownloadTaskTimeOut
+            EarthRotationDataSource = Parameters.DownloadTaskDataSource
+            EarthRotationDataUpdateType = Parameters.UpdateType
+            DeltaUT1ManualValue = Parameters.ManualDeltaUT1
             AutomaticScheduleJobRunTime = Parameters.DownloadTaskScheduledTime
             AutomaticScheduleJobRepeatFrequency = Parameters.DownloadTaskRepeatFrequency
             AutomaticScheduleJobLastUpdateTime = Parameters.EarthRotationDataLastUpdatedString
@@ -118,11 +120,10 @@ Public Class EarthRotationDataForm
                 TL.LogMessage("Form Load", "Available data source: " & dataSource)
             Next
 
+            ' Initialise display controls
             CmbUpdateType.SelectedItem = EarthRotationDataUpdateType
-
             TxtManualDeltaUT1.Text = DeltaUT1ManualValue.ToString()
             TxtManualLeapSeconds.Text = UtcTaiOffset.ToString()
-
             If Not dataDownloadSources.Contains(EarthRotationDataSource) Then CmbDataSource.Items.Add(EarthRotationDataSource)
             CmbDataSource.SelectedItem = EarthRotationDataSource
             TxtDownloadTimeout.Text = DownloadTimeout.ToString()
@@ -130,13 +131,18 @@ Public Class EarthRotationDataForm
             CmbScheduleRepeat.SelectedItem = AutomaticScheduleJobRepeatFrequency
             TxtTraceFilePath.Text = TraceFilePath
             ChkTraceEnabled.Checked = TraceEnabled
+
             UpdateStatus()
             EnableControlsAsRequired()
+            UpdateCurrentLeapSecondsAndDeltaUT1(New Object, New EventArgs()) ' Update the current leap second and deltaUT1 displays so they have current valuyes when the form appears
+
         Catch ex As Exception
             TL.LogMessageCrLf("Form Load", ex.ToString())
             MessageBox.Show("Something went wrong when loading the configuration form, please report this on the ASCOM Talk Yahoo forum, including the ASCOM.EarthRotation.xx.yy.txt log file from your Documents\ASCOM\Logs yyyy-mm-dd folder." & vbCrLf & ex.ToString())
         End Try
     End Sub
+
+#End Region
 
     Private Sub ApplyChanges()
         Dim taskDefinition As TaskDefinition, taskTrigger As Trigger = Nothing, executablePath As String
@@ -230,7 +236,7 @@ Public Class EarthRotationDataForm
 
                         taskDefinition.RegistrationInfo.Description = "ASCOM scheduled job to update earth rotation data: leap seconds and delta UT1. This job is managed through the ASCOM Diagnostics application and should not be manually edited."
 
-                        executablePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_EXECUTABLE_NAME
+                        executablePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_TASK_EXECUTABLE_NAME
                         taskDefinition.Actions.Clear() ' Remove any existing actions and add the current one
                         taskDefinition.Actions.Add(New ExecAction(executablePath, Nothing, Nothing)) ' Add an action that will launch Notepad whenever the trigger fires
                         'TL.LogMessage("OK", String.Format("", ))
@@ -295,21 +301,6 @@ Public Class EarthRotationDataForm
 
         TL.BlankLine()
         TL.LogMessage("OK", String.Format("Earth rotation data update configuration changes completed."))
-    End Sub
-
-    Private Sub BtnApply_Click(sender As Object, e As EventArgs) Handles BtnApply.Click
-        ApplyChanges()
-    End Sub
-
-    Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles BtnOK.Click
-        ApplyChanges()
-        Me.Close()
-    End Sub
-
-    Private Sub CmbUpdateType_Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbUpdateType.SelectedIndexChanged
-        Dim comboBox As ComboBox = CType(sender, ComboBox)
-        EarthRotationDataUpdateType = CType(comboBox.SelectedItem, String)
-        EnableControlsAsRequired()
     End Sub
 
     Private Sub EnableControlsAsRequired()
@@ -411,6 +402,128 @@ Public Class EarthRotationDataForm
         GrpStatus.Refresh()
     End Sub
 
+    Private Sub UpdateStatus()
+
+        Parameters.RefreshState() ' Make sure we have the latest values, in case any have been updated
+        TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
+        TxtCurrentLeapSeconds.Text = Parameters.AutomaticLeapSecondsString
+        TxtNextLeapSeconds.Text = Parameters.NextLeapSecondsString
+        TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf((Parameters.NextLeapSecondsDateString = GlobalItems.DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Or (Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_DATE_DEFAULT), "", "UTC")
+        TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
+
+    End Sub
+
+    Private Sub LogRunMessage(message As String)
+        TL.LogMessageCrLf("RunAutomaticUpdate", message)
+        TxtRunStatus.Text = message
+    End Sub
+
+#Region "Event handlers"
+
+    Private Sub BtnApply_Click(sender As Object, e As EventArgs) Handles BtnApply.Click
+        ApplyChanges()
+    End Sub
+
+    Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles BtnOK.Click
+        ApplyChanges()
+        Me.Close()
+    End Sub
+
+    Private Sub BtnSetTraceDirectory_Click(sender As Object, e As EventArgs) Handles BtnSetTraceDirectory.Click
+        Dim result As DialogResult
+        FolderBrowser.RootFolder = Environment.SpecialFolder.Desktop
+        FolderBrowser.SelectedPath = Parameters.DownloadTaskTracePath
+        result = FolderBrowser.ShowDialog()
+        If result = DialogResult.OK Then
+            Parameters.DownloadTaskTracePath = FolderBrowser.SelectedPath
+            TxtTraceFilePath.Text = FolderBrowser.SelectedPath
+        End If
+    End Sub
+
+    Private Sub BtnRunAutomaticUpdate_Click(sender As Object, e As EventArgs) Handles BtnRunAutomaticUpdate.Click
+        Dim psi As ProcessStartInfo, proc As Process, CancelButtonState, OKButtonState, UpdateCompleted As Boolean, RunTimer As Stopwatch
+        Try
+            RunTimer = New Stopwatch()
+            CancelButtonState = BtnCancel.Enabled ' Save the current button enabled states so they can be restored later
+            OKButtonState = BtnOK.Enabled
+            LogRunMessage(String.Format("Cancel button state: {0}, OK button state: {1}", CancelButtonState, OKButtonState))
+            BtnCancel.Enabled = False
+            BtnOK.Enabled = False
+            BtnRunAutomaticUpdate.Enabled = False
+
+            LogRunMessage(String.Format("Creating process info"))
+            psi = New ProcessStartInfo()
+            psi.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_TASK_EXECUTABLE_NAME
+            psi.Arguments = "/datasource " & CmbDataSource.SelectedItem.ToString()
+            psi.WindowStyle = ProcessWindowStyle.Hidden
+            LogRunMessage(String.Format("ProcessInfo Filename: {0}, Arguments: {1}", psi.FileName, psi.Arguments))
+
+            RunTimer.Start()
+            proc = Process.Start(psi)
+            LogRunMessage(String.Format("Started process on {0} as {1}", proc.MachineName, proc.ProcessName))
+
+            UpdateCompleted = False
+            Do
+                UpdateCompleted = proc.WaitForExit(200)
+                Application.DoEvents()
+                LogRunMessage(String.Format("Job running - {0} / {1} seconds", RunTimer.Elapsed.TotalSeconds.ToString("0"), UPDATE_DATA_PROCESS_TIMEOUT))
+            Loop Until UpdateCompleted Or (RunTimer.Elapsed.TotalSeconds > UPDATE_DATA_PROCESS_TIMEOUT)
+            RunTimer.Stop()
+
+            If UpdateCompleted Then
+                LogRunMessage(String.Format("Job completed OK in {0} seconds.", RunTimer.Elapsed.TotalSeconds.ToString("0.0")))
+            Else
+                LogRunMessage(String.Format("Job timed out after {0} seconds, data not updated", RunTimer.Elapsed.TotalSeconds.ToString("0.0")))
+                LogRunMessage(String.Format("Killing process"))
+                Try
+                    proc.Kill()
+                Catch ex As Exception
+                    LogRunMessage("Exception killing process: " & ex.ToString())
+                End Try
+            End If
+
+        Catch ex As Exception
+            TL.LogMessageCrLf("RunAutomaticUpdate", "Exception running process: " & ex.ToString())
+        Finally
+            BtnCancel.Enabled = CancelButtonState ' Ensure that the original button states are restored
+            BtnOK.Enabled = OKButtonState
+            BtnRunAutomaticUpdate.Enabled = True
+            UpdateStatus()
+        End Try
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbDataSource.SelectedIndexChanged
+        ValidateURI(sender)
+    End Sub
+
+    Private Sub CmbUpdateType_Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbUpdateType.SelectedIndexChanged
+        Dim comboBox As ComboBox = CType(sender, ComboBox)
+        Dim orig As String
+        orig = EarthRotationDataUpdateType
+        EarthRotationDataUpdateType = CType(comboBox.SelectedItem, String)
+        EnableControlsAsRequired()
+
+        TL.LogMessage("CmbUpdateType_Changed", String.Format("EarthRotationDataUpdateType original: {0}, Updated: {1}",orig,EarthRotationDataUpdateType))
+    End Sub
+
+    Private Sub UpdateCurrentLeapSecondsAndDeltaUT1(myObject As Object, ByVal myEventArgs As EventArgs) Handles NowTimer.Tick
+        Dim DisplayDate As DateTime, jdUtc As Double
+
+        ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
+        DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
+        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpperInvariant())
+
+        jdUtc = aUtils.JulianDateUtc
+        TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString("0.000")
+
+        TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString()
+
+    End Sub
+
+#End Region
+
+#Region "Input validation routines"
+
     Private Sub TxtDownloadTimeout_Validating(sender As Object, e As KeyEventArgs) Handles TxtDownloadTimeout.KeyUp
         Dim DoubleValue As Double = 0.0
 
@@ -441,8 +554,18 @@ Public Class EarthRotationDataForm
         ValidateURI(sender)
     End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CmbDataSource.SelectedIndexChanged
-        ValidateURI(sender)
+    Private Sub TxtDeltaUT1Manuals_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualDeltaUT1.KeyUp
+        Dim DoubleValue As Double = 0.0
+        Const DELTAUT1_ACCEPTABLE_RANGE As Double = 0.9
+
+        Dim IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, DoubleValue)
+        If IsDouble And (DoubleValue >= -DELTAUT1_ACCEPTABLE_RANGE) And (DoubleValue <= +DELTAUT1_ACCEPTABLE_RANGE) Then
+            ErrorProvider1.SetError(TxtManualDeltaUT1, "")
+            BtnOK.Enabled = True
+        Else
+            BtnOK.Enabled = False
+            ErrorProvider1.SetError(TxtManualDeltaUT1, String.Format("Must be in the range -{0} to +{0}!", DELTAUT1_ACCEPTABLE_RANGE))
+        End If
     End Sub
 
     Private Sub ValidateURI(sender As Object)
@@ -461,19 +584,9 @@ Public Class EarthRotationDataForm
         End If
     End Sub
 
-    Private Sub TxtDeltaUT1Manuals_Validating(sender As Object, e As KeyEventArgs) Handles TxtManualDeltaUT1.KeyUp
-        Dim DoubleValue As Double = 0.0
-        Const DELTAUT1_ACCEPTABLE_RANGE As Double = 0.9
+#End Region
 
-        Dim IsDouble = Double.TryParse(TxtManualDeltaUT1.Text, DoubleValue)
-        If IsDouble And (DoubleValue >= -DELTAUT1_ACCEPTABLE_RANGE) And (DoubleValue <= +DELTAUT1_ACCEPTABLE_RANGE) Then
-            ErrorProvider1.SetError(TxtManualDeltaUT1, "")
-            BtnOK.Enabled = True
-        Else
-            BtnOK.Enabled = False
-            ErrorProvider1.SetError(TxtManualDeltaUT1, String.Format("Must be in the range -{0} to +{0}!", DELTAUT1_ACCEPTABLE_RANGE))
-        End If
-    End Sub
+#Region "Display drawing event handlers"
 
     Private Sub GroupBox_Paint(sender As Object, e As PaintEventArgs) Handles GrpAutomaticUpdate.Paint, GrpManualUpdate.Paint, GrpUpdateType.Paint, GrpStatus.Paint
         Const HEIGHT_OFFSET As Integer = 8
@@ -538,69 +651,6 @@ Public Class EarthRotationDataForm
 
     End Sub
 
-    Private Sub BtnSetTraceDirectory_Click(sender As Object, e As EventArgs) Handles BtnSetTraceDirectory.Click
-        Dim result As DialogResult
-        FolderBrowser.RootFolder = Environment.SpecialFolder.Desktop
-        FolderBrowser.SelectedPath = Parameters.DownloadTaskTracePath
-        result = FolderBrowser.ShowDialog()
-        If result = DialogResult.OK Then
-            Parameters.DownloadTaskTracePath = FolderBrowser.SelectedPath
-            TxtTraceFilePath.Text = FolderBrowser.SelectedPath
-        End If
-    End Sub
-
-    Private Sub BtnRunAutomaticUpdate_Click(sender As Object, e As EventArgs) Handles BtnRunAutomaticUpdate.Click
-        Dim psi As ProcessStartInfo, proc As Process, CancelButtonState, OKButtonState, UpdateCompleted As Boolean, RunTimer As Stopwatch
-        Try
-            RunTimer = New Stopwatch()
-            CancelButtonState = BtnCancel.Enabled ' Save the current button enabled states so they can be restored later
-            OKButtonState = BtnOK.Enabled
-            LogRunMessage(String.Format("Cancel button state: {0}, OK button state: {1}", CancelButtonState, OKButtonState))
-            BtnCancel.Enabled = False
-            BtnOK.Enabled = False
-            BtnRunAutomaticUpdate.Enabled = False
-
-            LogRunMessage(String.Format("Creating process info"))
-            psi = New ProcessStartInfo()
-            psi.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & DOWNLOAD_EXECUTABLE_NAME
-            psi.Arguments = "/datasource " & CmbDataSource.SelectedItem.ToString()
-            psi.WindowStyle = ProcessWindowStyle.Hidden
-            LogRunMessage(String.Format("ProcessInfo Filename: {0}, Arguments: {1}", psi.FileName, psi.Arguments))
-
-            RunTimer.Start()
-            proc = Process.Start(psi)
-            LogRunMessage(String.Format("Started process on {0} as {1}", proc.MachineName, proc.ProcessName))
-
-            UpdateCompleted = False
-            Do
-                UpdateCompleted = proc.WaitForExit(200)
-                Application.DoEvents()
-                LogRunMessage(String.Format("Job running - {0} / {1} seconds", RunTimer.Elapsed.TotalSeconds.ToString("0"), UPDATE_DATA_PROCESS_TIMEOUT))
-            Loop Until UpdateCompleted Or (RunTimer.Elapsed.TotalSeconds > UPDATE_DATA_PROCESS_TIMEOUT)
-            RunTimer.Stop()
-
-            If UpdateCompleted Then
-                LogRunMessage(String.Format("Job completed OK in {0} seconds.", RunTimer.Elapsed.TotalSeconds.ToString("0.0")))
-            Else
-                LogRunMessage(String.Format("Job timed out after {0} seconds, data not updated", RunTimer.Elapsed.TotalSeconds.ToString("0.0")))
-                LogRunMessage(String.Format("Killing process"))
-                Try
-                    proc.Kill()
-                Catch ex As Exception
-                    LogRunMessage("Exception killing process: " & ex.ToString())
-                End Try
-            End If
-
-        Catch ex As Exception
-            TL.LogMessageCrLf("RunAutomaticUpdate", "Exception running process: " & ex.ToString())
-        Finally
-            BtnCancel.Enabled = CancelButtonState ' Ensure that the original button states are restored
-            BtnOK.Enabled = OKButtonState
-            BtnRunAutomaticUpdate.Enabled = True
-            UpdateStatus()
-        End Try
-    End Sub
-
     ''' <summary>
     ''' Event handler to paint the device list combo box in the "DropDown" rather than "DropDownList" style
     ''' </summary>
@@ -640,34 +690,6 @@ Public Class EarthRotationDataForm
         e.DrawFocusRectangle()
     End Sub
 
-    Private Sub TimerEventProcessor(myObject As Object, ByVal myEventArgs As EventArgs) Handles NowTimer.Tick
-        Dim DisplayDate As DateTime, jdUtc As Double
-
-        ' Calaculate the display date, allowing for development test offsets if present. In production offsets wil be 0 so DisplayDate will have a value of DateTime.Now as a UTC
-        DisplayDate = DateTime.UtcNow.Subtract(New TimeSpan(TEST_UTC_DAYS_OFFSET, TEST_UTC_HOURS_OFFSET, TEST_UTC_MINUTES_OFFSET, 0))
-        TxtNow.Text = String.Format("{0} {1}", DisplayDate.ToString(DOWNLOAD_TASK_TIME_FORMAT), DisplayDate.Kind.ToString().ToUpperInvariant())
-
-        jdUtc = aUtils.JulianDateUtc
-        TxtEffectiveDeltaUT1.Text = aUtils.DeltaUT(jdUtc).ToString("0.000")
-
-        TxtEffectiveLeapSeconds.Text = aUtils.LeapSeconds.ToString()
-
-    End Sub
-
-    Private Sub LogRunMessage(message As String)
-        TL.LogMessageCrLf("RunAutomaticUpdate", message)
-        TxtRunStatus.Text = message
-    End Sub
-
-    Private Sub UpdateStatus()
-
-        Parameters.RefreshState() ' Make sure we have the latest values, in case any have been updated
-        TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
-        TxtCurrentLeapSeconds.Text = Parameters.AutomaticLeapSecondsString
-        TxtNextLeapSeconds.Text = Parameters.NextLeapSecondsString
-        TxtNextLeapSecondsDate.Text = Parameters.NextLeapSecondsDateString & IIf((Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Or (Parameters.NextLeapSecondsDateString = GlobalItems.NEXT_LEAP_SECONDS_DATE_DEFAULT), "", "UTC")
-        TxtLastRun.Text = Parameters.EarthRotationDataLastUpdatedString
-
-    End Sub
+#End Region
 
 End Class

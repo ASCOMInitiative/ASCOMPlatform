@@ -171,6 +171,8 @@ Friend Class ChooserForm
             MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
             MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
             MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
+            MenuEarthRotationDataFormTraceEnabled.Checked = GetBool(TRACE_EARTHROTATION_DATA_FORM, TRACE_EARTHROTATION_DATA_FORM_DEFAULT)
+
         End Using
     End Sub
 
@@ -477,9 +479,9 @@ Friend Class ChooserForm
         SetName(TRACE_CACHE, MenuCacheTraceEnabled.Checked.ToString)
     End Sub
 
-    Private Sub MenuEarthRotationScheduledJobTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuEarthRotationScheduledJobTraceEnabled.Click
-        MenuEarthRotationScheduledJobTraceEnabled.Checked = Not MenuEarthRotationScheduledJobTraceEnabled.Checked 'Invert selection
-        SetName(TRACE_EARTHROTATION_SCHEDULED_JOB, MenuEarthRotationScheduledJobTraceEnabled.Checked.ToString)
+    Private Sub MenuEarthRotationDataTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuEarthRotationDataFormTraceEnabled.Click
+        MenuEarthRotationDataFormTraceEnabled.Checked = Not MenuEarthRotationDataFormTraceEnabled.Checked 'Invert selection
+        SetName(TRACE_EARTHROTATION_DATA_FORM, MenuEarthRotationDataFormTraceEnabled.Checked.ToString)
     End Sub
 
     Private Sub MenuTrace_DropDownOpening(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuTrace.DropDownOpening
