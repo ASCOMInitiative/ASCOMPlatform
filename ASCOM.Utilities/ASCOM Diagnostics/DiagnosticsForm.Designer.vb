@@ -53,12 +53,12 @@ Partial Class DiagnosticsForm
         Me.MenuNovasTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuAstroUtilsTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuCacheTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuEarthRotationDataFormTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuThrowAbandonedMutexExceptions = New System.Windows.Forms.ToolStripMenuItem()
         Me.SerialWaitTypeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuWaitTypeManualResetEvent = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuWaitTypeSleep = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuWaitTypeWaitForSingleObject = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuEarthRotationScheduledJobTraceEnabled = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuAutoViewLog = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -183,7 +183,7 @@ Partial Class DiagnosticsForm
         '
         'mnuTrace
         '
-        Me.mnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeaveUnset, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTimerTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled, Me.MenuEarthRotationScheduledJobTraceEnabled, Me.MenuThrowAbandonedMutexExceptions, Me.SerialWaitTypeToolStripMenuItem})
+        Me.mnuTrace.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeaveUnset, Me.ToolStripSeparator1, Me.MenuUseTraceAutoFilenames, Me.MenuUseTraceManualFilename, Me.MenuSerialTraceEnabled, Me.MenuIncludeSerialTraceDebugInformation, Me.MenuProfileTraceEnabled, Me.MenuUtilTraceEnabled, Me.MenuTimerTraceEnabled, Me.MenuSimulatorTraceEnabled, Me.MenuDriverAccessTraceEnabled, Me.MenuTransformTraceEnabled, Me.MenuNovasTraceEnabled, Me.MenuAstroUtilsTraceEnabled, Me.MenuCacheTraceEnabled, Me.MenuEarthRotationDataFormTraceEnabled, Me.MenuThrowAbandonedMutexExceptions, Me.SerialWaitTypeToolStripMenuItem})
         Me.mnuTrace.Name = "mnuTrace"
         Me.mnuTrace.Size = New System.Drawing.Size(47, 20)
         Me.mnuTrace.Text = "Trace"
@@ -191,103 +191,109 @@ Partial Class DiagnosticsForm
         'mnuLeaveUnset
         '
         Me.mnuLeaveUnset.Name = "mnuLeaveUnset"
-        Me.mnuLeaveUnset.Size = New System.Drawing.Size(304, 22)
+        Me.mnuLeaveUnset.Size = New System.Drawing.Size(283, 22)
         Me.mnuLeaveUnset.Text = "Normally leave these options disabled"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(301, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(280, 6)
         '
         'MenuUseTraceAutoFilenames
         '
         Me.MenuUseTraceAutoFilenames.Name = "MenuUseTraceAutoFilenames"
-        Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(304, 22)
+        Me.MenuUseTraceAutoFilenames.Size = New System.Drawing.Size(283, 22)
         Me.MenuUseTraceAutoFilenames.Text = "Use Automatic Serial Trace Filenames"
         '
         'MenuUseTraceManualFilename
         '
         Me.MenuUseTraceManualFilename.Name = "MenuUseTraceManualFilename"
-        Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(304, 22)
+        Me.MenuUseTraceManualFilename.Size = New System.Drawing.Size(283, 22)
         Me.MenuUseTraceManualFilename.Text = "Use a Manual Serial Trace Filename"
         '
         'MenuSerialTraceEnabled
         '
         Me.MenuSerialTraceEnabled.Name = "MenuSerialTraceEnabled"
-        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuSerialTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuSerialTraceEnabled.Text = "Serial Trace Enabled"
         '
         'MenuIncludeSerialTraceDebugInformation
         '
         Me.MenuIncludeSerialTraceDebugInformation.Name = "MenuIncludeSerialTraceDebugInformation"
-        Me.MenuIncludeSerialTraceDebugInformation.Size = New System.Drawing.Size(304, 22)
+        Me.MenuIncludeSerialTraceDebugInformation.Size = New System.Drawing.Size(283, 22)
         Me.MenuIncludeSerialTraceDebugInformation.Text = "Include Serial Trace Debug Information"
         '
         'MenuProfileTraceEnabled
         '
         Me.MenuProfileTraceEnabled.Name = "MenuProfileTraceEnabled"
-        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuProfileTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuProfileTraceEnabled.Text = "Profile Trace Enabled"
         '
         'MenuUtilTraceEnabled
         '
         Me.MenuUtilTraceEnabled.Name = "MenuUtilTraceEnabled"
-        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuUtilTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuUtilTraceEnabled.Text = "Util Trace Enabled"
         '
         'MenuTimerTraceEnabled
         '
         Me.MenuTimerTraceEnabled.Name = "MenuTimerTraceEnabled"
-        Me.MenuTimerTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuTimerTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuTimerTraceEnabled.Text = "Timer Timer Enabled"
         '
         'MenuSimulatorTraceEnabled
         '
         Me.MenuSimulatorTraceEnabled.Name = "MenuSimulatorTraceEnabled"
-        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuSimulatorTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuSimulatorTraceEnabled.Text = "Simulator Trace Enabled"
         '
         'MenuDriverAccessTraceEnabled
         '
         Me.MenuDriverAccessTraceEnabled.Name = "MenuDriverAccessTraceEnabled"
-        Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuDriverAccessTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuDriverAccessTraceEnabled.Text = "DriverAccess Trace Enabled"
         '
         'MenuTransformTraceEnabled
         '
         Me.MenuTransformTraceEnabled.Name = "MenuTransformTraceEnabled"
-        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuTransformTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuTransformTraceEnabled.Text = "Transform Trace Enabled"
         '
         'MenuNovasTraceEnabled
         '
         Me.MenuNovasTraceEnabled.Name = "MenuNovasTraceEnabled"
-        Me.MenuNovasTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuNovasTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuNovasTraceEnabled.Text = "NOVAS (Partial) Trace Enabled"
         '
         'MenuAstroUtilsTraceEnabled
         '
         Me.MenuAstroUtilsTraceEnabled.Name = "MenuAstroUtilsTraceEnabled"
-        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuAstroUtilsTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuAstroUtilsTraceEnabled.Text = "AstroUtils Trace Enabled"
         '
         'MenuCacheTraceEnabled
         '
         Me.MenuCacheTraceEnabled.Name = "MenuCacheTraceEnabled"
-        Me.MenuCacheTraceEnabled.Size = New System.Drawing.Size(304, 22)
+        Me.MenuCacheTraceEnabled.Size = New System.Drawing.Size(283, 22)
         Me.MenuCacheTraceEnabled.Text = "Cache Trace Enabled"
+        '
+        'MenuEarthRotationDataFormTraceEnabled
+        '
+        Me.MenuEarthRotationDataFormTraceEnabled.Name = "MenuEarthRotationDataFormTraceEnabled"
+        Me.MenuEarthRotationDataFormTraceEnabled.Size = New System.Drawing.Size(283, 22)
+        Me.MenuEarthRotationDataFormTraceEnabled.Text = "Earth Rotation Data Form Trace Enabled"
         '
         'MenuThrowAbandonedMutexExceptions
         '
         Me.MenuThrowAbandonedMutexExceptions.Name = "MenuThrowAbandonedMutexExceptions"
-        Me.MenuThrowAbandonedMutexExceptions.Size = New System.Drawing.Size(304, 22)
+        Me.MenuThrowAbandonedMutexExceptions.Size = New System.Drawing.Size(283, 22)
         Me.MenuThrowAbandonedMutexExceptions.Text = "Throw Abandoned Mutex Exceptions"
         '
         'SerialWaitTypeToolStripMenuItem
         '
         Me.SerialWaitTypeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuWaitTypeManualResetEvent, Me.MenuWaitTypeSleep, Me.MenuWaitTypeWaitForSingleObject})
         Me.SerialWaitTypeToolStripMenuItem.Name = "SerialWaitTypeToolStripMenuItem"
-        Me.SerialWaitTypeToolStripMenuItem.Size = New System.Drawing.Size(304, 22)
+        Me.SerialWaitTypeToolStripMenuItem.Size = New System.Drawing.Size(283, 22)
         Me.SerialWaitTypeToolStripMenuItem.Text = "Serial Wait Type"
         '
         'MenuWaitTypeManualResetEvent
@@ -307,12 +313,6 @@ Partial Class DiagnosticsForm
         Me.MenuWaitTypeWaitForSingleObject.Name = "MenuWaitTypeWaitForSingleObject"
         Me.MenuWaitTypeWaitForSingleObject.Size = New System.Drawing.Size(182, 22)
         Me.MenuWaitTypeWaitForSingleObject.Text = "WaitForSingleObject"
-        '
-        'MenuEarthRotationScheduledJobTraceEnabled
-        '
-        Me.MenuEarthRotationScheduledJobTraceEnabled.Name = "MenuEarthRotationScheduledJobTraceEnabled"
-        Me.MenuEarthRotationScheduledJobTraceEnabled.Size = New System.Drawing.Size(304, 22)
-        Me.MenuEarthRotationScheduledJobTraceEnabled.Text = "Earth Rotation Scheduled Job Trace Enabled"
         '
         'OptionsToolStripMenuItem
         '
@@ -421,5 +421,5 @@ Partial Class DiagnosticsForm
     Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MenuAutoViewLog As ToolStripMenuItem
     Friend WithEvents EarthRotationDataUpdateToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents MenuEarthRotationScheduledJobTraceEnabled As ToolStripMenuItem
+    Friend WithEvents MenuEarthRotationDataFormTraceEnabled As ToolStripMenuItem
 End Class

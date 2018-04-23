@@ -3,6 +3,9 @@ Imports System.Globalization
 Imports System.IO
 
 Public Class EarthRotationParameters : Implements IDisposable
+
+#Region "Variables and constants"
+
     Private UpdateTypeValue As String
     Private ManualDeltaUT1Value As Double
     Private ManualLeapSecondsValue As Double
@@ -90,6 +93,8 @@ Public Class EarthRotationParameters : Implements IDisposable
                                                       {2457754.5, 37.0}
                                                     }
 
+#End Region
+
 #Region "New and IDisposable Support"
     Public Sub New()
         Me.New(Nothing) ' Call the main initialisation routine with no trace logger refernce
@@ -123,6 +128,8 @@ Public Class EarthRotationParameters : Implements IDisposable
         Dispose(True)
     End Sub
 #End Region
+
+#Region "Public properties"
 
     Public Property DownloadTaskScheduledTime As DateTime
         Get
@@ -799,6 +806,7 @@ Public Class EarthRotationParameters : Implements IDisposable
             LogEvent(String.Format("EarthRoationParameter DownloadTaskRunTimeValue is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskScheduledTimeValue.ToString(DOWNLOAD_TASK_TIME_FORMAT, DownloadTaskCultureValue)))
         End If
 
+        OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, UPDATE_TYPE_VALUE_NAME, UPDATE_TYPE_DEFAULT)
         If UpdateTypes.Contains(OriginalProfileValue) Then ' The Profile value is one of the permitted values so we're done
             UpdateTypeValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("UpdateTypeValue = {0}", UpdateTypeValue))
@@ -888,7 +896,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         ' Get the configured trace file directory And make sure that it exists
         OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY,
                                                   DOWNLOAD_TASK_TRACE_PATH_VALUE_NAME,
-                                                  String.Format(DOWNLOAD_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+                                                  String.Format(DOWNLOAD_TASK_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
                                                   ).TrimEnd(CChar("\"))
         Try
             Directory.CreateDirectory(OriginalProfileValue) ' Make sure we can create the directory or it already exists
@@ -898,7 +906,7 @@ Public Class EarthRotationParameters : Implements IDisposable
             LogMessage("EarthRotParm CORRUPT!", String.Format("Exception thrown: {0}", ex.ToString()))
             LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter DownloadTaskTracePath is corrupt: {0}, default value will be set: {1}", OriginalProfileValue, DownloadTaskTracePathValue))
             LogEvent(String.Format("EarthRoationParameter DownloadTaskTracePath is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, DownloadTaskTracePathValue))
-            DownloadTaskTracePath = String.Format(DOWNLOAD_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)).TrimEnd(CChar("\")) ' restore the default path
+            DownloadTaskTracePath = String.Format(DOWNLOAD_TASK_TRACE_DEFAULT_PATH_FORMAT, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)).TrimEnd(CChar("\")) ' restore the default path
         End Try
 
         AutomaticLeapSecondsValue = DOUBLE_VALUE_NOT_AVAILABLE ' Initialise value as not available
@@ -919,7 +927,7 @@ Public Class EarthRotationParameters : Implements IDisposable
 
         NextLeapSecondsValue = DOUBLE_VALUE_NOT_AVAILABLE ' Initialise value as not available
         OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_VALUENAME, NEXT_LEAP_SECONDS_NOT_AVAILABLE)
-        If (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_AVAILABLE) Or (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
+        If (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_AVAILABLE) Or (OriginalProfileValue = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
             NextLeapSecondsStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("NextLeapSecondsStringValue: {0}", NextLeapSecondsStringValue))
         Else ' Not default so it should be parseable
@@ -935,7 +943,7 @@ Public Class EarthRotationParameters : Implements IDisposable
 
         NextLeapSecondsDateValue = DATE_VALUE_NOT_AVAILABLE ' Initialise value as not available
         OriginalProfileValue = profile.GetProfile(ASTROMETRY_SUBKEY, NEXT_LEAP_SECONDS_DATE_VALUENAME, NEXT_LEAP_SECONDS_DATE_DEFAULT)
-        If (OriginalProfileValue = NEXT_LEAP_SECONDS_DATE_DEFAULT) Or (OriginalProfileValue = NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
+        If (OriginalProfileValue = NEXT_LEAP_SECONDS_DATE_DEFAULT) Or (OriginalProfileValue = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE) Then ' Has the default or not published value so is OK
             NextLeapSecondsDateStringValue = OriginalProfileValue
             LogDebugMessage("RefreshState", String.Format("AutomaticNextTaiUtcOffsetDateValue = {0}", NextLeapSecondsDateStringValue))
         Else ' Not default so it should be parseable
@@ -943,7 +951,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                 NextLeapSecondsDateStringValue = OriginalProfileValue
                 LogDebugMessage("RefreshState", String.Format("NextLeapSecondsDateStringValue = {0}, NextLeapSecondsDateValue: {1}", NextLeapSecondsDateStringValue, NextLeapSecondsDateValue.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
             Else
-                NextLeapSecondsDateString = NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE
+                NextLeapSecondsDateString = DOWNLOAD_TASK_NEXT_LEAP_SECONDS_NOT_PUBLISHED_MESSAGE
                 LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter NextLeapSecondsDateStringValue is corrupt: {0}, default value has been set: {1}, NextLeapSecondsDateValue: {2}", OriginalProfileValue, NextLeapSecondsDateStringValue, NextLeapSecondsDateValue.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
                 LogEvent(String.Format("EarthRoationParameter NextLeapSecondsDateStringValue is corrupt: {0}, default value has been set: {1}", OriginalProfileValue, NextLeapSecondsDateStringValue))
             End If
@@ -1015,6 +1023,8 @@ Public Class EarthRotationParameters : Implements IDisposable
             Return HistoricLeapSecondValues
         End Get
     End Property
+
+#End Region
 
 #Region "Support code"
 

@@ -8252,7 +8252,7 @@ Public Class DiagnosticsForm
         MenuAstroUtilsTraceEnabled.Checked = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
         MenuNovasTraceEnabled.Checked = GetBool(NOVAS_TRACE, NOVAS_TRACE_DEFAULT)
         MenuCacheTraceEnabled.Checked = GetBool(TRACE_CACHE, TRACE_CACHE_DEFAULT)
-        MenuEarthRotationScheduledJobTraceEnabled.Checked = GetBool(TRACE_EARTHROTATION_SCHEDULED_JOB, TRACE_EARTHROTATION_SCHEDULED_JOB_DEFAULT)
+        MenuEarthRotationDataFormTraceEnabled.Checked = GetBool(TRACE_EARTHROTATION_DATA_FORM, TRACE_EARTHROTATION_DATA_FORM_DEFAULT)
 
         TypeOfWait = GetWaitType(SERIAL_WAIT_TYPE, SERIAL_WAIT_TYPE_DEFAULT)
 
@@ -8386,9 +8386,9 @@ Public Class DiagnosticsForm
         ERDForm.ShowDialog()
     End Sub
 
-    Private Sub MenuEarthRotationScheduledJobTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuEarthRotationScheduledJobTraceEnabled.Click
-        MenuEarthRotationScheduledJobTraceEnabled.Checked = Not MenuEarthRotationScheduledJobTraceEnabled.Checked 'Invert the selection
-        SetName(TRACE_EARTHROTATION_SCHEDULED_JOB, MenuEarthRotationScheduledJobTraceEnabled.Checked.ToString)
+    Private Sub MenuEarthRotationScheduledJobTraceEnabled_Click(sender As Object, e As EventArgs) Handles MenuEarthRotationDataFormTraceEnabled.Click
+        MenuEarthRotationDataFormTraceEnabled.Checked = Not MenuEarthRotationDataFormTraceEnabled.Checked 'Invert the selection
+        SetName(TRACE_EARTHROTATION_DATA_FORM, MenuEarthRotationDataFormTraceEnabled.Checked.ToString)
     End Sub
 
     Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
