@@ -4,6 +4,53 @@ Imports ASCOM.Utilities
 Imports System.IO
 
 Module GlobalItems
+
+    ' Built-in historic leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
+    Friend BuiltInLeapSeconds As SortedList(Of Double, Double) = New SortedList(Of Double, Double) From
+        {
+            {2437300.5, 1.422818},
+            {2437512.5, 1.372818},
+            {2437665.5, 1.845858},
+            {2438334.5, 1.945858},
+            {2438395.5, 3.24013},
+            {2438486.5, 3.34013},
+            {2438639.5, 3.44013},
+            {2438761.5, 3.54013},
+            {2438820.5, 3.64013},
+            {2438942.5, 3.74013},
+            {2439004.5, 3.84013},
+            {2439126.5, 4.31317},
+            {2439887.5, 4.21317},
+            {2441317.5, 10.0},
+            {2441499.5, 11.0},
+            {2441683.5, 12.0},
+            {2442048.5, 13.0},
+            {2442413.5, 14.0},
+            {2442778.5, 15.0},
+            {2443144.5, 16.0},
+            {2443509.5, 17.0},
+            {2443874.5, 18.0},
+            {2444239.5, 19.0},
+            {2444786.5, 20.0},
+            {2445151.5, 21.0},
+            {2445516.5, 22.0},
+            {2446247.5, 23.0},
+            {2447161.5, 24.0},
+            {2447892.5, 25.0},
+            {2448257.5, 26.0},
+            {2448804.5, 27.0},
+            {2449169.5, 28.0},
+            {2449534.5, 29.0},
+            {2450083.5, 30.0},
+            {2450630.5, 31.0},
+            {2451179.5, 32.0},
+            {2453736.5, 33.0},
+            {2454832.5, 34.0},
+            {2456109.5, 35.0},
+            {2457204.5, 36.0},
+            {2457754.5, 37.0}
+        }
+
     ' Physical contants
     Friend Const MOON_RADIUS As Double = 1737.0 ' km
     Friend Const EARTH_RADIUS As Double = 6378.0 ' km
@@ -143,7 +190,6 @@ Module GlobalItems
     ' Default values
     Friend Const UPDATE_TYPE_DEFAULT As String = UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1 ' Default value for earth rotation data source
     Friend Const EARTH_ROTATION_DATA_NEVER_UPDATED As String = "Never" ' Default value for the scheduled job run time
-    Friend Const MANUAL_LEAP_SECONDS_DEFAULT As Integer = 37 ' Current TAI - UTC offset (= leap seconds). Revised to 37 at 31st December 2016
     Friend Const MANUAL_DELTAUT1_DEFAULT As Double = 0.0
     Friend Const AUTOMATIC_LEAP_SECONDS_NOT_AVAILABLE As String = "Not downloaded" ' Default value for the next number of leap seconds
     Friend Const NEXT_LEAP_SECONDS_NOT_AVAILABLE As String = "Not downloaded" ' Default value for the current number of leap seconds

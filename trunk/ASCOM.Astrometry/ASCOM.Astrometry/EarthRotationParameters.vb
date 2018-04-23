@@ -42,56 +42,15 @@ Public Class EarthRotationParameters : Implements IDisposable
     Private Shared LastDeltaUT1JulianDate As Double = DOUBLE_VALUE_NOT_AVAILABLE
     Private Shared LastDeltaUT1Value As Double
 
-    ' Constants to reference columns in the HistoricLeapSecondValues array 
+    ' Constants to reference columns in the DownloadedLeapSecondValues array 
     Private Const JULIAN_DATE As Integer = 0
     Private Const YEAR As Integer = 1
     Private Const MONTH As Integer = 2
     Private Const LEAP_SECONDS As Integer = 3
 
-    ' Built-in historic leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
-    Private HistoricLeapSecondValues As SortedList(Of Double, Double) = New SortedList(Of Double, Double) From {
-                                                      {2437300.5, 1.422818},
-                                                      {2437512.5, 1.372818},
-                                                      {2437665.5, 1.845858},
-                                                      {2438334.5, 1.945858},
-                                                      {2438395.5, 3.24013},
-                                                      {2438486.5, 3.34013},
-                                                      {2438639.5, 3.44013},
-                                                      {2438761.5, 3.54013},
-                                                      {2438820.5, 3.64013},
-                                                      {2438942.5, 3.74013},
-                                                      {2439004.5, 3.84013},
-                                                      {2439126.5, 4.31317},
-                                                      {2439887.5, 4.21317},
-                                                      {2441317.5, 10.0},
-                                                      {2441499.5, 11.0},
-                                                      {2441683.5, 12.0},
-                                                      {2442048.5, 13.0},
-                                                      {2442413.5, 14.0},
-                                                      {2442778.5, 15.0},
-                                                      {2443144.5, 16.0},
-                                                      {2443509.5, 17.0},
-                                                      {2443874.5, 18.0},
-                                                      {2444239.5, 19.0},
-                                                      {2444786.5, 20.0},
-                                                      {2445151.5, 21.0},
-                                                      {2445516.5, 22.0},
-                                                      {2446247.5, 23.0},
-                                                      {2447161.5, 24.0},
-                                                      {2447892.5, 25.0},
-                                                      {2448257.5, 26.0},
-                                                      {2448804.5, 27.0},
-                                                      {2449169.5, 28.0},
-                                                      {2449534.5, 29.0},
-                                                      {2450083.5, 30.0},
-                                                      {2450630.5, 31.0},
-                                                      {2451179.5, 32.0},
-                                                      {2453736.5, 33.0},
-                                                      {2454832.5, 34.0},
-                                                      {2456109.5, 35.0},
-                                                      {2457204.5, 36.0},
-                                                      {2457754.5, 37.0}
-                                                    }
+    ' Downloaded leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
+    Private DownloadedLeapSecondValues As SortedList(Of Double, Double) = New SortedList(Of Double, Double) ' Initialise to an empty list
+
 
 #End Region
 
@@ -309,7 +268,7 @@ Public Class EarthRotationParameters : Implements IDisposable
     ''' <returns>Current leap seconds as a double</returns>
     Public Overloads Function LeapSeconds() As Double
         Dim CurrentJulianDate As Double
-        CurrentJulianDate = DateTime.UtcNow.ToOADate() + GlobalItems.OLE_AUTOMATION_JULIAN_DATE_OFFSET ' Calculate today's Julian date
+        CurrentJulianDate = DateTime.UtcNow.ToOADate() + OLE_AUTOMATION_JULIAN_DATE_OFFSET ' Calculate today's Julian date
 
         SyncLock LeapSecondLockObject
             If Math.Truncate(CurrentJulianDate - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call
@@ -329,6 +288,7 @@ Public Class EarthRotationParameters : Implements IDisposable
     ''' <returns>Leap seconds as a double</returns>
     Public Overloads Function LeapSeconds(RequiredLeapSecondJulianDate As Double) As Double
         Dim EffectiveDate As DateTime, ReturnValue, TodayJulianDate As Double
+        Dim ActiveLeapSeconds As SortedList(Of Double, Double) ' Variable to hold either downloaded or built-in leap second values
 
         SyncLock LeapSecondLockObject
             If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) = Math.Truncate(LastLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) Then ' Return the cached value if its availahble otherwise calculate it and save the value for the next call
@@ -423,24 +383,41 @@ Public Class EarthRotationParameters : Implements IDisposable
                                                                      RequiredLeapSecondJulianDate,
                                                                      DateTime.FromOADate(RequiredLeapSecondJulianDate - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
                 Case UPDATE_BUILTIN_LEAP_SECONDS_PREDICTED_DELTAUT1
-                    ReturnValue = ManualLeapSecondsValue
-                    LogDebugMessage("LeapSeconds(JD)", String.Format("Built-in leap seconds and delta UT1 are required, returning the manual leap seconds value: {0} for JD {1} ({2})",
+                    ' Find the leap second value from the built-in table of historic values
+                    For i As Integer = BuiltInLeapSeconds.Count - 1 To 0 Step -1
+                        LogDebugMessage("LeapSeconds(JD)", String.Format("Searching built-in JD {0} with leap second: {1}", BuiltInLeapSeconds.Keys(i), BuiltInLeapSeconds.Values(i)))
+
+                        If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) >= Math.Truncate(BuiltInLeapSeconds.Keys(i) - MODIFIED_JULIAN_DAY_OFFSET) Then ' Found a match
+                            ReturnValue = BuiltInLeapSeconds.Values(i)
+                            LogDebugMessage("LeapSeconds(JD)", String.Format("Found built-in leap second: {0} set on JD {1}", BuiltInLeapSeconds.Values(i), BuiltInLeapSeconds.Keys(i)))
+                            Exit For
+                        End If
+                    Next
+                    LogDebugMessage("LeapSeconds(JD)", String.Format("Built-in leap seconds and delta UT1 are required, returning the built-in leap seconds value: {0} for JD {1} ({2})",
                                                                      ReturnValue,
                                                                      RequiredLeapSecondJulianDate,
                                                                      DateTime.FromOADate(RequiredLeapSecondJulianDate - OLE_AUTOMATION_JULIAN_DATE_OFFSET).ToString(DOWNLOAD_TASK_TIME_FORMAT)))
                 Case Else
                     LogDebugMessage("LeapSeconds(JD)", "Unknown UpdateTypeValue: " & UpdateTypeValue)
-                    MsgBox("AstroUtils.LeapSeconds(JD) - Unknown UpdateTypeValue: " & UpdateTypeValue)
+                    MsgBox("EarthRotationParameters.LeapSeconds(JD) - Unknown UpdateTypeValue: " & UpdateTypeValue)
             End Select
-        Else ' Request is not for today so fall back to historic values if available from download otherwise use internal data
 
+        Else ' Request is not for today so find value from downloaded values, if available, or fall back to built-in values
 
-            For i As Integer = HistoricLeapSecondValues.Count - 1 To 0 Step -1
-                LogDebugMessage("LeapSeconds(JD)", String.Format("Searching historic JD {0} with leap second: {1}", HistoricLeapSecondValues.Keys(i), HistoricLeapSecondValues.Values(i)))
+            If DownloadedLeapSecondValues.Count > 0 Then ' We have downloaded values so use them
+                LogDebugMessage("LeapSeconds(JD)", String.Format("Historic leap second value required. Searching in {0} downloaded leap second values.", DownloadedLeapSecondValues.Count))
+                ActiveLeapSeconds = DownloadedLeapSecondValues
+            Else ' No dowloaded values so fall back to built-in values
+                LogDebugMessage("LeapSeconds(JD)", String.Format("Historic leap second value required. Searching in {0} built-in leap second values.", BuiltInLeapSeconds.Count))
+                ActiveLeapSeconds = BuiltInLeapSeconds
+            End If
 
-                If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) >= Math.Truncate(HistoricLeapSecondValues.Keys(i) - MODIFIED_JULIAN_DAY_OFFSET) Then ' Request is for the current day so process using all the options
-                    ReturnValue = HistoricLeapSecondValues.Values(i)
-                    LogDebugMessage("LeapSeconds(JD)", String.Format("Found leap second: {0} set on JD {1}", HistoricLeapSecondValues.Values(i), HistoricLeapSecondValues.Keys(i)))
+            For i As Integer = ActiveLeapSeconds.Count - 1 To 0 Step -1
+                LogDebugMessage("LeapSeconds(JD)", String.Format("Searching downloaded JD {0} with leap second: {1}", ActiveLeapSeconds.Keys(i), ActiveLeapSeconds.Values(i)))
+
+                If Math.Truncate(RequiredLeapSecondJulianDate - MODIFIED_JULIAN_DAY_OFFSET) >= Math.Truncate(ActiveLeapSeconds.Keys(i) - MODIFIED_JULIAN_DAY_OFFSET) Then ' Found a match
+                    ReturnValue = ActiveLeapSeconds.Values(i)
+                    LogDebugMessage("LeapSeconds(JD)", String.Format("Found downloaded leap second: {0} set on JD {1}", ActiveLeapSeconds.Values(i), ActiveLeapSeconds.Keys(i)))
                     Exit For
                 End If
             Next
@@ -825,11 +802,26 @@ Public Class EarthRotationParameters : Implements IDisposable
             LogEvent(String.Format("EarthRoationParameter ManualDeltaUT1 is corrupt: {0}, default value has been set: {1}", ManualDeltaUT1String, ManualDeltaUT1Value))
         End If
 
-        Dim ManualTaiUtcOffsetString As String = profile.GetProfile(ASTROMETRY_SUBKEY, MANUAL_LEAP_SECONDS_VALUENAME, MANUAL_LEAP_SECONDS_DEFAULT.ToString(DownloadTaskCultureValue))
+
+        Dim NowJulian, CurrentLeapSeconds As Double
+        NowJulian = DateTime.UtcNow.ToOADate + OLE_AUTOMATION_JULIAN_DATE_OFFSET
+
+        ' Find the leap second value from the built-in table of historic values
+        For i As Integer = BuiltInLeapSeconds.Count - 1 To 0 Step -1
+            LogDebugMessage("RefreshState", String.Format("Leap second default - searching built-in JD {0} with leap second: {1}", BuiltInLeapSeconds.Keys(i), BuiltInLeapSeconds.Values(i)))
+
+            If Math.Truncate(NowJulian - MODIFIED_JULIAN_DAY_OFFSET) >= Math.Truncate(BuiltInLeapSeconds.Keys(i) - MODIFIED_JULIAN_DAY_OFFSET) Then ' Found a match
+                CurrentLeapSeconds = BuiltInLeapSeconds.Values(i)
+                LogDebugMessage("RefreshState", String.Format("Leap second default - found built-in leap second: {0} set on JD {1}", BuiltInLeapSeconds.Values(i), BuiltInLeapSeconds.Keys(i)))
+                Exit For
+            End If
+        Next
+
+        Dim ManualTaiUtcOffsetString As String = profile.GetProfile(ASTROMETRY_SUBKEY, MANUAL_LEAP_SECONDS_VALUENAME, CurrentLeapSeconds.ToString(DownloadTaskCultureValue))
         If (Double.TryParse(ManualTaiUtcOffsetString, NumberStyles.Float, DownloadTaskCultureValue, ManualLeapSecondsValue)) Then ' String parsed OK so list value if debug is enabled
             LogDebugMessage("RefreshState", String.Format("ManualTaiUtcOffsetString = {0}, ManualTaiUtcOffsetValue: {1}", ManualTaiUtcOffsetString, ManualLeapSecondsValue))
         Else 'Returned string doesn't represent a number so reapply the default
-            ManualLeapSeconds = MANUAL_LEAP_SECONDS_DEFAULT
+            ManualLeapSeconds = CurrentLeapSeconds
             LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter ManualTaiUtcOffset is corrupt: {0}, default value has been set: {1}", ManualTaiUtcOffsetString, ManualLeapSecondsValue))
             LogEvent(String.Format("EarthRoationParameter ManualTaiUtcOffset is corrupt: {0}, default value has been set: {1}", ManualTaiUtcOffsetString, ManualLeapSecondsValue))
         End If
@@ -970,7 +962,7 @@ Public Class EarthRotationParameters : Implements IDisposable
             ProfileLeapSecondsValueStrings = profile.EnumProfile(AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME)
         Catch ex As NullReferenceException ' Key does not exist so supply an empty sorted list
             LogDebugMessage("RefreshState", String.Format("Profile key does not exist - there are no downloaded leap second values"))
-            HistoricLeapSecondValues = New SortedList(Of Double, Double)
+            DownloadedLeapSecondValues = New SortedList(Of Double, Double)
         End Try
         LogDebugMessage("RefreshState", String.Format("Found {0} leap second values in the Profile", ProfileLeapSecondsValueStrings.Count))
 
@@ -992,7 +984,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         Next
 
         ' List the current contents of the historic leap second list
-        For Each LeapSecond As KeyValuePair(Of Double, Double) In HistoricLeapSecondValues
+        For Each LeapSecond As KeyValuePair(Of Double, Double) In DownloadedLeapSecondValues
             Dim LeapSecondDateTime As DateTime = DateTime.FromOADate(LeapSecond.Key - OLE_AUTOMATION_JULIAN_DATE_OFFSET)
             LogDebugMessage("RefreshState", String.Format("Found historic leap second value {0} implemented on JD {1} ({2})", LeapSecond.Value, LeapSecond.Key, LeapSecondDateTime.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
         Next
@@ -1004,12 +996,12 @@ Public Class EarthRotationParameters : Implements IDisposable
         Next
 
         If ProfileLeapSecondsValues.Count > 0 Then ' If there are any values in the Profile
-            HistoricLeapSecondValues = ProfileLeapSecondsValues ' Save the them for future use
-            LogDebugMessage("RefreshState", String.Format("Profile values ({0}) saved to HistoricLeapSecondValues.", HistoricLeapSecondValues.Count))
+            DownloadedLeapSecondValues = ProfileLeapSecondsValues ' Save the them for future use
+            LogDebugMessage("RefreshState", String.Format("Profile values ({0}) saved to HistoricLeapSecondValues.", DownloadedLeapSecondValues.Count))
         End If
 
         ' Invalidate caches
-        LastLeapSecondJulianDate = DOUBLE_VALUE_NOT_AVAILABLE ' Invalidate the cahce so that any new value will be read
+        LastLeapSecondJulianDate = DOUBLE_VALUE_NOT_AVAILABLE ' Invalidate the cache so that any new values will be used
         LastDeltaTJulianDate = DOUBLE_VALUE_NOT_AVAILABLE
         LastDeltaUT1JulianDate = DOUBLE_VALUE_NOT_AVAILABLE
 
@@ -1018,9 +1010,9 @@ Public Class EarthRotationParameters : Implements IDisposable
 
     End Sub
 
-    Public ReadOnly Property HistoricLeapSeconds As SortedList(Of Double, Double)
+    Public ReadOnly Property DownloadedLeapSeconds As SortedList(Of Double, Double)
         Get
-            Return HistoricLeapSecondValues
+            Return DownloadedLeapSecondValues
         End Get
     End Property
 

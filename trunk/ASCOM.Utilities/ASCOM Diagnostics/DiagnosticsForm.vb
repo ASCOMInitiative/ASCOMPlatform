@@ -7919,7 +7919,7 @@ Public Class DiagnosticsForm
 
             Dim parameters As New EarthRotationParameters()
 
-            For Each HistoricLeapSecond As KeyValuePair(Of Double, Double) In parameters.HistoricLeapSeconds
+            For Each HistoricLeapSecond As KeyValuePair(Of Double, Double) In parameters.DownloadedLeapSeconds
                 Dim LeapSecondDateTime As DateTime = DateTime.FromOADate(HistoricLeapSecond.Key - OLE_AUTOMATION_JULIAN_DATE_OFFSET)
                 TL.LogMessage("AstroUtilTests", String.Format("Found historic leap second value {0} which came into effect on JD {1} ({2})", HistoricLeapSecond.Value, HistoricLeapSecond.Key, LeapSecondDateTime.ToString(DOWNLOAD_TASK_TIME_FORMAT)))
             Next

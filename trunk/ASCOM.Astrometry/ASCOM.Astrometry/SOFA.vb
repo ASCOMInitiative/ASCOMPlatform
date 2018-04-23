@@ -149,7 +149,7 @@ Namespace SOFA
 
                             Case UPDATE_AUTOMATIC_LEAP_SECONDS_AND_DELTAUT1
                                 ' Act according to the number of updated leap second values that are available
-                                Select Case Parameters.HistoricLeapSeconds.Count
+                                Select Case Parameters.DownloadedLeapSeconds.Count
                                     Case 0 ' No values have been downloaded so run with built-in SOFA leap second values
                                         TL.LogMessage("New-AutoUpdate", "No leap second values in Parameters.HistoricLeapSeconds - Relying on SOFA's built-in defaults")
 
@@ -157,7 +157,7 @@ Namespace SOFA
                                         TL.LogMessage("AutoUpdate", String.Format("Parameters.HistoricLeapSeconds has {0} leap second values, which is less or equal to than the number built-in to SOFA ({1}) - Relying on SOFA's built-in defaults", Count, NumberOfSOFALeapSecondValues))
 
                                     Case NumberOfSOFALeapSecondValues + 1 To MAXIMUM_NUMBER_OF_UPDATED_LEAP_SECOPND_VALUES ' We have sufficient values to warrant overriding the SOFA vaslues
-                                        For Each LeapSecond As KeyValuePair(Of Double, Double) In Parameters.HistoricLeapSeconds ' Retrieve each individual leap second record
+                                        For Each LeapSecond As KeyValuePair(Of Double, Double) In Parameters.DownloadedLeapSeconds ' Retrieve each individual leap second record
                                             JulianDateUtc = DateTime.FromOADate(LeapSecond.Key - OLE_AUTOMATION_JULIAN_DATE_OFFSET) ' Turn the Julian date into a DateTime value
                                             LeapSecondArray(Count).Year = JulianDateUtc.Year ' Save the year and month from the JulianDate DateTime value
                                             LeapSecondArray(Count).Month = JulianDateUtc.Month
