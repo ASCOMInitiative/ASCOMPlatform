@@ -22,7 +22,7 @@
 
 double s_CurrentGamma = 1.0;
 int s_GammaMap256[256];
-int s_GammaMap4096[4096]; 
+int s_GammaMap4096[4096];
 
 HRESULT SetGamma(double gamma)
 {
@@ -76,7 +76,7 @@ HRESULT ApplyGammaBrightness(long width, long height, long bpp, long* pixelsIn, 
 {
 	int minValue, maxValue;
 	GetMinMaxValuesForBpp(bpp, &minValue, &maxValue);
-	
+
 	if (brightness < -255) brightness = -255;
 	if (brightness > 255) brightness = 255;
 
@@ -90,11 +90,11 @@ HRESULT ApplyGammaBrightness(long width, long height, long bpp, long* pixelsIn, 
 
 	long* pPixels = pixelsOut;
 
-	double normGammaValue = s_CurrentGamma != 1.0 
+	double normGammaValue = s_CurrentGamma != 1.0
 		? pow(maxValue, s_CurrentGamma)
 		: 0;
 
-	while(totalPixels--)
+	while (totalPixels--)
 	{
 		double pixel = *pPixels;
 
@@ -110,21 +110,21 @@ HRESULT ApplyGammaBrightness(long width, long height, long bpp, long* pixelsIn, 
 			}
 			else
 				pixel = (long)(1.0 * maxValue * pow(pixel, s_CurrentGamma) / normGammaValue);
-		
+
 			if (pixel < minValue) pixel = minValue;
-			if (pixel > maxValue) pixel = maxValue;	
+			if (pixel > maxValue) pixel = maxValue;
 		}
 
 		pixel = pixel + bppBrightness;
 		if (pixel < minValue) pixel = minValue;
 		if (pixel > maxValue) pixel = maxValue;
-		
+
 		if (pixel > s_WhiteBalance)
 			pixel = maxValue;
 
 		*pPixels = (long)pixel;
 
- 		pPixels++;
+		pPixels++;
 	}
 
 	return S_OK;
@@ -153,7 +153,7 @@ HRESULT InitFrameIntegration(long width, long height, long bpp)
 		s_Pixels = NULL;
 	}
 
-	s_Pixels = (double*) malloc(sizeof(double) * s_NumPixels);
+	s_Pixels = (double*)malloc(sizeof(double) * s_NumPixels);
 	::ZeroMemory(s_Pixels, sizeof(double) * s_NumPixels);
 
 	return S_OK;
@@ -204,14 +204,14 @@ HRESULT GetResultingIntegratedFrame(long* pixels)
 
 		for (int i = 0; i < s_NumPixels; i++)
 		{
-			long integratedVal = (long)(*destItt * brightnessCoeff); 
+			long integratedVal = (long)(*destItt * brightnessCoeff);
 
 			if (integratedVal < s_MinPixelVal)
 				integratedVal = s_MinPixelVal;
 
 			if (integratedVal > s_MaxPixelVal)
 				integratedVal = s_MaxPixelVal;
-			
+
 			*itt = integratedVal;
 
 			destItt++;
@@ -264,8 +264,8 @@ HRESULT CreateNewAviFile(LPCTSTR szFileName, long width, long height, long bpp, 
 	HRESULT rv = S_OK;
 
 	EnsureAviFileClosed();
-	
-	s_AviFile = new Avi(szFileName, static_cast<int>(1000.0/fps), 0);
+
+	s_AviFile = new Avi(szFileName, static_cast<int>(1000.0 / fps), 0);
 
 	s_AviFrameNo = 0;
 	s_AviFrameWidth = width;
@@ -283,15 +283,15 @@ HRESULT CreateNewAviFile(LPCTSTR szFileName, long width, long height, long bpp, 
 
 HRESULT SetAviFileCompression(HBITMAP* bmp)
 {
-	AVICOMPRESSOPTIONS opts; 
-	ZeroMemory(&opts,sizeof(opts));
+	AVICOMPRESSOPTIONS opts;
+	ZeroMemory(&opts, sizeof(opts));
 	// Use uncompressed by default
-	opts.fccHandler= mmioFOURCC('D','I','B',' '); //0x20424944
+	opts.fccHandler = mmioFOURCC('D', 'I', 'B', ' '); //0x20424944
 	opts.dwFlags = AVICOMPRESSF_VALID;
 
 	HRESULT rv = s_AviFile->compression(*bmp, &opts, s_ShowCompressionDialog, 0);
-	
-	if (rv != S_OK) 
+
+	if (rv != S_OK)
 	{
 		rv = s_AviFile->compression(*bmp, 0, false, 0);
 		s_UsedCompression = 0;
@@ -301,7 +301,7 @@ HRESULT SetAviFileCompression(HBITMAP* bmp)
 		s_UsedCompression = opts.fccHandler;
 	}
 
-	if (rv != S_OK) 
+	if (rv != S_OK)
 		FormatAviMessage(rv, s_LastAviErrorMessage, ERROR_BUFFER_SIZE);
 
 	return rv;
@@ -309,11 +309,13 @@ HRESULT SetAviFileCompression(HBITMAP* bmp)
 
 HRESULT GetLastAviFileError(char* szErrorMessage)
 {
-	strncpy(szErrorMessage, s_LastAviErrorMessage, ERROR_BUFFER_SIZE);
+	unsigned int mlen = (unsigned int)strlen(szErrorMessage);
+
+	// strncpy(szErrorMessage, s_LastAviErrorMessage, ERROR_BUFFER_SIZE); Changed by Peter Simpson to remove compiler warning C4996 which states that this version is insecure
+	strncpy_s(szErrorMessage, mlen, s_LastAviErrorMessage, ERROR_BUFFER_SIZE);
 
 	return S_OK;
 }
-
 
 BYTE* BuildBitmap(long width, long height, long bpp, long* pixels)
 {
@@ -322,15 +324,15 @@ BYTE* BuildBitmap(long width, long height, long bpp, long* pixels)
 
 	// define the bitmap information header 
 	BITMAPINFOHEADER bih;
-	bih.biSize = sizeof(BITMAPINFOHEADER); 
-	bih.biPlanes = 1; 
+	bih.biSize = sizeof(BITMAPINFOHEADER);
+	bih.biPlanes = 1;
 	bih.biBitCount = 24;                          // 24-bit 
 	bih.biCompression = BI_RGB;                   // no compression 
 	bih.biSizeImage = width * abs(height) * 3;    // width * height * (RGB bytes) 
-	bih.biXPelsPerMeter = 0; 
-	bih.biYPelsPerMeter = 0; 
-	bih.biClrUsed = 0; 
-	bih.biClrImportant = 0; 
+	bih.biXPelsPerMeter = 0;
+	bih.biYPelsPerMeter = 0;
+	bih.biClrUsed = 0;
+	bih.biClrImportant = 0;
 	bih.biWidth = width;                          // bitmap width 
 	bih.biHeight = height;                        // bitmap height 
 
@@ -339,11 +341,11 @@ BYTE* BuildBitmap(long width, long height, long bpp, long* pixels)
 	RtlMoveMemory(memBitmapInfo, &bih, sizeof(bih));
 
 	BITMAPFILEHEADER bfh;
-	bfh.bfType=19778;    //BM header
-	bfh.bfSize=55 + bih.biSizeImage;
-	bfh.bfReserved1=0;
-	bfh.bfReserved2=0;
-	bfh.bfOffBits=sizeof(BITMAPINFOHEADER) + sizeof(BITMAPFILEHEADER); //54
+	bfh.bfType = 19778;    //BM header
+	bfh.bfSize = 55 + bih.biSizeImage;
+	bfh.bfReserved1 = 0;
+	bfh.bfReserved2 = 0;
+	bfh.bfOffBits = sizeof(BITMAPINFOHEADER) + sizeof(BITMAPFILEHEADER); //54
 
 	// Copy the display bitmap including the header
 	RtlMoveMemory(bitmapPixels, &bfh, sizeof(bfh));
@@ -353,17 +355,17 @@ BYTE* BuildBitmap(long width, long height, long bpp, long* pixels)
 
 	long currLinePos = 0;
 	int length = width * height;
-	bitmapPixels+=3 * (length + width);
+	bitmapPixels += 3 * (length + width);
 
 	int shiftVal = bpp == 12 ? 4 : 8;
 
 	int total = width * height;
-	while(total--)
+	while (total--)
 	{
-		if (currLinePos == 0) 
+		if (currLinePos == 0)
 		{
 			currLinePos = width;
-			bitmapPixels-=6*width;
+			bitmapPixels -= 6 * width;
 		};
 
 		unsigned int val = *pixels;
@@ -378,14 +380,14 @@ BYTE* BuildBitmap(long width, long height, long bpp, long* pixels)
 		{
 			dblVal = val >> shiftVal;
 		}
-		 
+
 
 		BYTE btVal = (BYTE)(dblVal & 0xFF);
-		
+
 		*bitmapPixels = btVal;
 		*(bitmapPixels + 1) = btVal;
 		*(bitmapPixels + 2) = btVal;
-		bitmapPixels+=3;
+		bitmapPixels += 3;
 
 		currLinePos--;
 	}
@@ -398,13 +400,13 @@ HRESULT AviFileAddFrame(long* pixels)
 	HRESULT rv = S_OK;
 
 	BYTE* bitmapPixels = BuildBitmap(s_AviFrameWidth, s_AviFrameHeight, s_AviFrameBpp, pixels);
-	
-	if(s_pStream)
+
+	if (s_pStream)
 	{
 		s_pStream->Revert();
 
 		rv = s_pStream->Write(&bitmapPixels[0], ULONG(sizeof(BYTE) * ((s_AviFrameWidth * s_AviFrameHeight * 3) + 40 + 14 + 1)), NULL);
-		if(rv == S_OK)
+		if (rv == S_OK)
 		{
 			HBITMAP hbmp = NULL;
 			Gdiplus::Bitmap* pBitmap = Gdiplus::Bitmap::FromStream(s_pStream);
@@ -418,7 +420,7 @@ HRESULT AviFileAddFrame(long* pixels)
 				s_AddedFrames++;
 
 				if (rv != S_OK)
-				  FormatAviMessage(rv, s_LastAviErrorMessage, ERROR_BUFFER_SIZE);
+					FormatAviMessage(rv, s_LastAviErrorMessage, ERROR_BUFFER_SIZE);
 
 				::DeleteObject(pBitmap);
 			}
