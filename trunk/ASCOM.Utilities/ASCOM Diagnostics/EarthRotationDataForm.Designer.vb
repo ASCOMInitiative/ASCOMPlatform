@@ -25,7 +25,6 @@ Partial Class EarthRotationDataForm
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EarthRotationDataForm))
         Me.CmbDataSource = New System.Windows.Forms.ComboBox()
-        Me.BtnCancel = New System.Windows.Forms.Button()
         Me.GrpManualUpdate = New System.Windows.Forms.GroupBox()
         Me.LblManualDeltaUT1 = New System.Windows.Forms.Label()
         Me.LblManualLeapSeconds = New System.Windows.Forms.Label()
@@ -55,7 +54,7 @@ Partial Class EarthRotationDataForm
         Me.DateScheduleRun = New System.Windows.Forms.DateTimePicker()
         Me.LblAutoDataSource = New System.Windows.Forms.Label()
         Me.TxtDownloadTimeout = New System.Windows.Forms.TextBox()
-        Me.BtnOK = New System.Windows.Forms.Button()
+        Me.BtnClose = New System.Windows.Forms.Button()
         Me.ErrorProvider1 = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.CmbUpdateType = New System.Windows.Forms.ComboBox()
         Me.GrpUpdateType = New System.Windows.Forms.GroupBox()
@@ -67,7 +66,6 @@ Partial Class EarthRotationDataForm
         Me.TxtEffectiveLeapSeconds = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.BtnApply = New System.Windows.Forms.Button()
         Me.GrpManualUpdate.SuspendLayout()
         Me.GrpAutomaticUpdate.SuspendLayout()
         CType(Me.ErrorProvider1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -84,18 +82,6 @@ Partial Class EarthRotationDataForm
         Me.CmbDataSource.Size = New System.Drawing.Size(250, 21)
         Me.CmbDataSource.TabIndex = 2
         '
-        'BtnCancel
-        '
-        Me.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.BtnCancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnCancel.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnCancel.Location = New System.Drawing.Point(719, 547)
-        Me.BtnCancel.Name = "BtnCancel"
-        Me.BtnCancel.Size = New System.Drawing.Size(75, 23)
-        Me.BtnCancel.TabIndex = 1
-        Me.BtnCancel.Text = "Cancel"
-        Me.BtnCancel.UseVisualStyleBackColor = True
-        '
         'GrpManualUpdate
         '
         Me.GrpManualUpdate.Controls.Add(Me.LblManualDeltaUT1)
@@ -106,7 +92,7 @@ Partial Class EarthRotationDataForm
         Me.GrpManualUpdate.ForeColor = System.Drawing.SystemColors.Highlight
         Me.GrpManualUpdate.Location = New System.Drawing.Point(14, 113)
         Me.GrpManualUpdate.Name = "GrpManualUpdate"
-        Me.GrpManualUpdate.Size = New System.Drawing.Size(323, 93)
+        Me.GrpManualUpdate.Size = New System.Drawing.Size(434, 93)
         Me.GrpManualUpdate.TabIndex = 3
         Me.GrpManualUpdate.TabStop = False
         Me.GrpManualUpdate.Text = "Manual Entry"
@@ -284,7 +270,7 @@ Partial Class EarthRotationDataForm
         Me.TxtCurrentLeapSeconds.Location = New System.Drawing.Point(672, 36)
         Me.TxtCurrentLeapSeconds.Name = "TxtCurrentLeapSeconds"
         Me.TxtCurrentLeapSeconds.ReadOnly = True
-        Me.TxtCurrentLeapSeconds.Size = New System.Drawing.Size(45, 20)
+        Me.TxtCurrentLeapSeconds.Size = New System.Drawing.Size(100, 20)
         Me.TxtCurrentLeapSeconds.TabIndex = 24
         '
         'ChkTraceEnabled
@@ -419,16 +405,16 @@ Partial Class EarthRotationDataForm
         Me.TxtDownloadTimeout.Size = New System.Drawing.Size(45, 20)
         Me.TxtDownloadTimeout.TabIndex = 4
         '
-        'BtnOK
+        'BtnClose
         '
-        Me.BtnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnOK.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnOK.Location = New System.Drawing.Point(881, 547)
-        Me.BtnOK.Name = "BtnOK"
-        Me.BtnOK.Size = New System.Drawing.Size(75, 23)
-        Me.BtnOK.TabIndex = 5
-        Me.BtnOK.Text = "OK"
-        Me.BtnOK.UseVisualStyleBackColor = True
+        Me.BtnClose.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnClose.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.BtnClose.Location = New System.Drawing.Point(881, 547)
+        Me.BtnClose.Name = "BtnClose"
+        Me.BtnClose.Size = New System.Drawing.Size(75, 23)
+        Me.BtnClose.TabIndex = 5
+        Me.BtnClose.Text = "Close"
+        Me.BtnClose.UseVisualStyleBackColor = True
         '
         'ErrorProvider1
         '
@@ -539,31 +525,16 @@ Partial Class EarthRotationDataForm
         Me.Label2.TabIndex = 26
         Me.Label2.Text = "Delta UT1"
         '
-        'BtnApply
-        '
-        Me.BtnApply.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnApply.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.BtnApply.Location = New System.Drawing.Point(800, 547)
-        Me.BtnApply.Name = "BtnApply"
-        Me.BtnApply.Size = New System.Drawing.Size(75, 23)
-        Me.BtnApply.TabIndex = 27
-        Me.BtnApply.Text = "Apply"
-        Me.BtnApply.UseVisualStyleBackColor = True
-        '
         'EarthRotationDataForm
         '
-        Me.AcceptButton = Me.BtnApply
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.BtnCancel
         Me.ClientSize = New System.Drawing.Size(971, 582)
-        Me.Controls.Add(Me.BtnApply)
-        Me.Controls.Add(Me.BtnCancel)
         Me.Controls.Add(Me.GrpStatus)
         Me.Controls.Add(Me.GrpUpdateType)
         Me.Controls.Add(Me.GrpAutomaticUpdate)
         Me.Controls.Add(Me.GrpManualUpdate)
-        Me.Controls.Add(Me.BtnOK)
+        Me.Controls.Add(Me.BtnClose)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "EarthRotationDataForm"
@@ -581,10 +552,9 @@ Partial Class EarthRotationDataForm
     End Sub
 
     Friend WithEvents CmbDataSource As ComboBox
-    Friend WithEvents BtnCancel As Button
     Friend WithEvents GrpManualUpdate As GroupBox
     Friend WithEvents GrpAutomaticUpdate As GroupBox
-    Friend WithEvents BtnOK As Button
+    Friend WithEvents BtnClose As Button
     Friend WithEvents TxtDownloadTimeout As TextBox
     Friend WithEvents ErrorProvider1 As ErrorProvider
     Friend WithEvents TxtManualLeapSeconds As TextBox
@@ -617,7 +587,6 @@ Partial Class EarthRotationDataForm
     Friend WithEvents BtnRunAutomaticUpdate As Button
     Friend WithEvents LblRunStatus As Label
     Friend WithEvents TxtRunStatus As TextBox
-    Friend WithEvents BtnApply As Button
     Friend WithEvents TxtEffectiveDeltaUT1 As TextBox
     Friend WithEvents TxtEffectiveLeapSeconds As TextBox
     Friend WithEvents Label6 As Label

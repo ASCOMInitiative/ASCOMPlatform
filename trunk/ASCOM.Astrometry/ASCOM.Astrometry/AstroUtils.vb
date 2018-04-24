@@ -18,6 +18,8 @@ Namespace AstroUtils
 
         Private TL As TraceLogger, Utl As Util, Nov31 As NOVAS.NOVAS31, RegAccess As RegistryAccess, Sofa As SOFA.SOFA
         Private Parameters As EarthRotationParameters
+        Private DisposeTraceLogger As Boolean
+        Private disposedValue As Boolean ' To detect redundant Dispose calls
 
         Friend Structure BodyInfo
             Public Altitude As Double
@@ -26,9 +28,20 @@ Namespace AstroUtils
         End Structure
 
 #Region "New and IDisposable Support"
-        Sub New()
+        Public Sub New() ' Create own trace logger
             TL = New TraceLogger("", "AstroUtils")
             TL.Enabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) 'Get enabled / disabled state from the user registry
+            DisposeTraceLogger = True
+            InitialiseAstroUtils()
+        End Sub
+
+        Friend Sub New(SuppliedTL As TraceLogger) ' Use the supplied tracelogger
+            TL = SuppliedTL
+            DisposeTraceLogger = False
+            InitialiseAstroUtils()
+        End Sub
+
+        Private Sub InitialiseAstroUtils()
             Utl = New Util
             Nov31 = New NOVAS.NOVAS31
             Sofa = New SOFA.SOFA()
@@ -38,13 +51,12 @@ Namespace AstroUtils
             TL.LogMessage("New", "AstroUtils created Earth Rotation Paraemters object OK")
             TL.LogMessage("New", "Finished initialisation OK")
         End Sub
-        Private disposedValue As Boolean ' To detect redundant calls
 
         ' IDisposable
         Protected Overridable Sub Dispose(disposing As Boolean)
             If Not Me.disposedValue Then
                 If disposing Then
-                    If Not (TL Is Nothing) Then
+                    If (Not (TL Is Nothing)) And DisposeTraceLogger Then ' Only dispose of the tracelogger if we created it
                         TL.Enabled = False
                         TL.Dispose()
                         TL = Nothing
@@ -383,11 +395,12 @@ Namespace AstroUtils
         ''' <returns>Double DeltaUT in seconds</returns>
         ''' <remarks>DeltaUT varies only slowly, so the Julian date can be based on UTC, UT1 or Terrestrial Time.</remarks>
         Public Function DeltaUT(JulianDate As Double) As Double Implements IAstroUtils.DeltaUT1
+            Dim deltaUT1 As Double
 
-            TL.LogMessage("AstroUtils.DeltaUT", String.Format("DeltaUT1 required for Julian date: {0}", JulianDate))
+            deltaUT1 = Parameters.DeltaUT1(JulianDate)
+            If Not DisposeTraceLogger Then TL.LogMessage("AstroUtils.DeltaUT", String.Format("DeltaUT1 = {0} on Julian date {1}", deltaUT1.ToString("+0.000;-0.000;0.000"), JulianDate)) ' Only log this message for internal applications
 
-            Return Parameters.DeltaUT1(JulianDate)
-
+            Return deltaUT1
         End Function
 
         ''' <summary>
@@ -428,7 +441,10 @@ Namespace AstroUtils
         ''' here: ftp://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat</para> </remarks>
         Public Property LeapSeconds As Integer Implements IAstroUtils.LeapSeconds
             Get
-                Return CInt(Parameters.LeapSeconds())
+                Dim leapSecondsValue As Double
+                leapSecondsValue = Parameters.LeapSeconds
+                If Not DisposeTraceLogger Then TL.LogMessage("AstroUtils.LeapSeconds", String.Format("Current leap seconds = {0}", leapSecondsValue)) ' Only log this message for internal applications
+                Return CInt(leapSecondsValue)
             End Get
             Set(value As Integer)
                 Parameters.ManualLeapSeconds = value
@@ -856,6 +872,13 @@ Namespace AstroUtils
             Return jd1 + jd2
 
         End Function
+
+        ''' <summary>
+        ''' Refresh to parameter values and invalidate caches in the parameters object so that any new values wil be used
+        ''' </summary>
+        Friend Sub Refresh()
+            Parameters.RefreshState()
+        End Sub
 
     End Class
 End Namespace

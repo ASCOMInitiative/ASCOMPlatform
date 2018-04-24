@@ -107,7 +107,7 @@ Module GlobalItems
 
     'Profile store Key names
     Friend Const ASTROMETRY_SUBKEY = "Astrometry"
-    Friend Const AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME = ASTROMETRY_SUBKEY & "\Latest Delta UT1 Data" ' Name of the Profile\Astrometry subkey in which automatically downloaded Delta UT1 predicted values will be stored
+    Friend Const AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME = ASTROMETRY_SUBKEY & "\Latest Delta UT1 Data" ' Name of the Profile\Astrometry subkey in which automatically downloaded Delta UT1 predicted values will be stored
     Friend Const AUTOMATIC_UPDATE_LEAP_SECOND_HISTORY_SUBKEY_NAME = ASTROMETRY_SUBKEY & "\Latest Leap Second Data" ' Name of the Profile\Astrometry subkey in which automatically downloaded historic leap second values will be stored
 
     'Profile store value names

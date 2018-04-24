@@ -25,7 +25,7 @@ Public Class EarthRotationParameters : Implements IDisposable
     Private DownloadTaskCultureValue As CultureInfo
 
     Private TL As TraceLogger
-    Private DebugTraceEnabled As Boolean = True
+    Private DebugTraceEnabled As Boolean = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT)
     Private profile As RegistryAccess
     Private disposedValue As Boolean ' To detect redundant calls
 
@@ -51,7 +51,6 @@ Public Class EarthRotationParameters : Implements IDisposable
     ' Downloaded leap second data. Format:  JulianDate, Year, Month, Day LeapSeconds
     Private DownloadedLeapSecondValues As SortedList(Of Double, Double) = New SortedList(Of Double, Double) ' Initialise to an empty list
 
-
 #End Region
 
 #Region "New and IDisposable Support"
@@ -62,6 +61,7 @@ Public Class EarthRotationParameters : Implements IDisposable
     Public Sub New(SuppliedTraceLogger As TraceLogger)
         TL = SuppliedTraceLogger ' Save the reference to the caller's trace logger so we can write to it
         profile = New RegistryAccess()
+        DebugTraceEnabled = GetBool(ASTROUTILS_TRACE, ASTROUTILS_TRACE_DEFAULT) ' Get our debug trace value
 
         ' Initialise lock objects
         LeapSecondLockObject = New Object()
@@ -485,7 +485,7 @@ Public Class EarthRotationParameters : Implements IDisposable
 
                 UTCDate = DateTime.FromOADate(RequiredDeltaTJulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET) ' Convert the Julian day into a DateTime
                 DeltaUT1ValueName = String.Format(DELTAUT1_VALUE_NAME_FORMAT, UTCDate.Year.ToString(DELTAUT1_VALUE_NAME_YEAR_FORMAT), UTCDate.Month.ToString(DELTAUT1_VALUE_NAME_MONTH_FORMAT), UTCDate.Day.ToString(DELTAUT1_VALUE_NAME_DAY_FORMAT))
-                DeltaUT1String = profile.GetProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, DeltaUT1ValueName)
+                DeltaUT1String = profile.GetProfile(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME, DeltaUT1ValueName)
                 If DeltaUT1String <> "" Then ' We have got something back from the Profile so test whether it is a valid double number
                     If Double.TryParse(DeltaUT1String, NumberStyles.Float, DownloadTaskCultureValue, DeltaUT1) Then ' We have a valid double number so check that it is the acceptable range
                         If (DeltaUT1 >= GlobalItems.DELTAUT1_LOWER_BOUND) And (DeltaUT1 <= GlobalItems.DELTAUT1_UPPER_BOUND) Then
@@ -645,7 +645,7 @@ Public Class EarthRotationParameters : Implements IDisposable
                 UTCDate = DateTime.FromOADate(RequiredDeltaUT1JulianDateUTC - OLE_AUTOMATION_JULIAN_DATE_OFFSET) ' Convert the Julian day into a DateTime
                 DeltaUT1ValueName = String.Format(DELTAUT1_VALUE_NAME_FORMAT, UTCDate.Year.ToString(DELTAUT1_VALUE_NAME_YEAR_FORMAT), UTCDate.Month.ToString(DELTAUT1_VALUE_NAME_MONTH_FORMAT), UTCDate.Day.ToString(DELTAUT1_VALUE_NAME_DAY_FORMAT))
 
-                DeltaUT1String = profile.GetProfile(GlobalItems.AUTOMATIC_UPDATE_EARTH_ROTATION_DATA_SUBKEY_NAME, DeltaUT1ValueName)
+                DeltaUT1String = profile.GetProfile(GlobalItems.AUTOMATIC_UPDATE_DELTAUT1_SUBKEY_NAME, DeltaUT1ValueName)
                 If DeltaUT1String <> "" Then ' We have got something back from the Profile so test whether it is a valid double number
                     If Double.TryParse(DeltaUT1String, ProfileValue) Then ' We have a valid double number so check that it is the acceptable range
                         If (ProfileValue >= GlobalItems.DELTAUT1_LOWER_BOUND) And (ProfileValue <= GlobalItems.DELTAUT1_UPPER_BOUND) Then
@@ -879,7 +879,7 @@ Public Class EarthRotationParameters : Implements IDisposable
         Dim DownloadTaskTraceEnabledString = profile.GetProfile(ASTROMETRY_SUBKEY, DOWNLOAD_TASK_TRACE_ENABLED_VALUE_NAME, DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT.ToString(DownloadTaskCultureValue))
         If (Boolean.TryParse(DownloadTaskTraceEnabledString, DownloadTaskTraceEnabledValue)) Then ' String parsed OK so list value if debug is enabled
             LogDebugMessage("RefreshState", String.Format("DownloadTaskTraceEnabledString = {0}, DownloadTaskTraceEnabledValue: {1}", DownloadTaskTraceEnabledString, DownloadTaskTraceEnabledValue))
-        Else 'Returned string doesn't represent a number so reapply the default
+        Else 'Returned string doesn't represent a boolean so reapply the default
             DownloadTaskTraceEnabled = DOWNLOAD_TASK_TRACE_ENABLED_DEFAULT
             LogMessage("EarthRotParm CORRUPT!", String.Format("EarthRoationParameter DownloadTaskTraceEnabled is corrupt: {0}, default value has been set: {1}", DownloadTaskTraceEnabledString, DownloadTaskTraceEnabledValue))
             LogEvent(String.Format("EarthRoationParameter DownloadTaskTraceEnabled is corrupt: {0}, default value has been set: {1}", DownloadTaskTraceEnabledString, DownloadTaskTraceEnabledValue))
